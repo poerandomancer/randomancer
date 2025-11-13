@@ -1,0 +1,642 @@
+{
+  "Version": "v0.8.0",
+  "Classes": {
+    "Warrior": {
+      "ascendancies": [
+        "Titan",
+        "Warbringer",
+        "Smith of Kitava"
+      ],
+      "attributes": {
+        "strength": 1.0
+      }
+    },
+    "Mercenary": {
+      "ascendancies": [
+        "Tactician",
+        "Witch Hunter",
+        "Gemling Legionnaire"
+      ],
+      "attributes": {
+        "strength": 0.5,
+        "dexterity": 0.5
+      }
+    },
+    "Ranger": {
+      "ascendancies": [
+        "Deadeye",
+        "Pathfinder"
+      ],
+      "attributes": {
+        "dexterity": 1.0
+      }
+    },
+    "Huntress": {
+      "ascendancies": [
+        "Amazon",
+        "Ritualist"
+      ],
+      "attributes": {
+        "dexterity": 1.0
+      }
+    },
+    "Witch": {
+      "ascendancies": [
+        "Blood Mage",
+        "Lich",
+        "Infernalist",
+        "Abyssal Lich"
+      ],
+      "attributes": {
+        "intelligence": 1.0
+      }
+    },
+    "Sorceress": {
+      "ascendancies": [
+        "Chronomancer",
+        "Stormweaver"
+      ],
+      "attributes": {
+        "intelligence": 1.0
+      }
+    },
+    "Monk": {
+      "ascendancies": [
+        "Invoker",
+        "Acolyte of Chayula"
+      ],
+      "attributes": {
+        "dexterity": 0.5,
+        "intelligence": 0.5
+      }
+    }
+  },
+  "Weapons": {
+    "Two-Handed": [
+      {
+        "name": "Two-handed Mace",
+        "tags": [
+          "mace",
+          "melee"
+        ],
+        "attributes": {
+          "strength": 1.0
+        }
+      },
+      {
+        "name": "Quarterstaff",
+        "tags": [
+          "quarterstaff",
+          "melee"
+        ],
+        "attributes": {
+          "dexterity": 0.75,
+          "intelligence": 0.25
+        }
+      },
+      {
+        "name": "Bow",
+        "tags": [
+          "bow",
+          "ranged"
+        ],
+        "attributes": {
+          "dexterity": 1.0
+        }
+      },
+      {
+        "name": "Crossbow",
+        "tags": [
+          "crossbow",
+          "ranged"
+        ],
+        "attributes": {
+          "strength": 0.5,
+          "dexterity": 0.5
+        }
+      },
+      {
+        "name": "Staff",
+        "tags": [
+          "staff",
+          "elemental",
+          "spell",
+          "ranged"
+        ],
+        "attributes": {
+          "intelligence": 1.0
+        }
+      }
+    ],
+    "One-Handed": [
+      {
+        "name": "One-handed Mace",
+        "tags": [
+          "mace",
+          "melee"
+        ],
+        "attributes": {
+          "strength": 1.0
+        }
+      },
+      {
+        "name": "Wand",
+        "tags": [
+          "wand",
+          "elemental",
+          "spell",
+          "ranged"
+        ],
+        "attributes": {
+          "intelligence": 1.0
+        }
+      },
+      {
+        "name": "Sceptre",
+        "tags": [
+          "sceptre",
+          "occult",
+          "spell",
+          "ranged"
+        ],
+        "attributes": {
+          "strength": 0.5,
+          "intelligence": 0.5
+        }
+      },
+      {
+        "name": "Spear",
+        "tags": [
+          "spear",
+          "melee"
+        ],
+        "attributes": {
+          "strength": 0.25,
+          "dexterity": 0.75
+        }
+      }
+    ],
+    "Off-Hand": [
+      {
+        "name": "Shield",
+        "one-handed": [
+          "One-handed Mace",
+          "Spear",
+          "Wand",
+          "Sceptre"
+        ],
+        "tags": [
+          "shield",
+          "defense",
+          "block"
+        ],
+        "attributes": {
+          "strength": 0.33,
+          "dexterity": 0.33,
+          "intelligence": 0.33
+        }
+      },
+      {
+        "name": "Buckler",
+        "one-handed": [
+          "One-handed Mace",
+          "Spear",
+          "Wand",
+          "Sceptre"
+        ],
+        "tags": [
+          "buckler",
+          "defense",
+          "block"
+        ],
+        "attributes": {
+          "dexterity": 1.0
+        }
+      },
+      {
+        "name": "Focus",
+        "one-handed": [
+          "One-handed Mace",
+          "Spear",
+          "Wand",
+          "Sceptre"
+        ],
+        "tags": [
+          "focus"
+        ],
+        "attributes": {
+          "intelligence": 1.0
+        }
+      },
+      {
+        "name": "Wand",
+        "one-handed": [
+          "Sceptre"
+        ],
+        "tags": [
+          "wand",
+          "elemental",
+          "spell",
+          "ranged"
+        ],
+        "attributes": {
+          "intelligence": 1.0
+        }
+      },
+      {
+        "name": "Sceptre",
+        "one-handed": [
+          "Spear",
+          "Wand"
+        ],
+        "tags": [
+          "sceptre",
+          "occult",
+          "spell",
+          "ranged"
+        ],
+        "attributes": {
+          "strength": 0.5,
+          "intelligence": 0.5
+        }
+      },
+      {
+        "name": "One-handed Mace",
+        "one-handed": [
+          "One-handed Mace"
+        ],
+        "tags": [
+          "mace",
+          "melee"
+        ],
+        "attributes": {
+          "strength": 1.0
+        }
+      }
+    ]
+  },
+  "Defense": [
+    {
+      "name": "Armour",
+      "attributes": {
+        "strength": 1.0
+      }
+    },
+    {
+      "name": "Evasion",
+      "attributes": {
+        "dexterity": 1.0
+      }
+    },
+    {
+      "name": "Energy Shield",
+      "attributes": {
+        "intelligence": 1.0
+      }
+    },
+    {
+      "name": "Armour & Evasion",
+      "attributes": {
+        "strength": 0.5,
+        "dexterity": 0.5
+      }
+    },
+    {
+      "name": "Armour & Energy Shield",
+      "attributes": {
+        "strength": 0.5,
+        "intelligence": 0.5
+      }
+    },
+    {
+      "name": "Evasion & Energy Shield",
+      "attributes": {
+        "dexterity": 0.5,
+        "intelligence": 0.5
+      }
+    }
+  ],
+  "Ailments": [
+    {
+      "name": "Freeze",
+      "tags": [
+        "chill",
+        "cold",
+        "freeze"
+      ],
+      "attributes": {
+        "dexterity": 0.5,
+        "intelligence": 0.5
+      }
+    },
+    {
+      "name": "Ignite",
+      "tags": [
+        "fire",
+        "ignite"
+      ],
+      "attributes": {
+        "strength": 0.5,
+        "intelligence": 0.5
+      }
+    },
+    {
+      "name": "Shock",
+      "tags": [
+        "lightning",
+        "shock",
+        "electrocute"
+      ],
+      "attributes": {
+        "dexterity": 0.5,
+        "intelligence": 0.5
+      }
+    },
+    {
+      "name": "Poison",
+      "tags": [
+        "chaos",
+        "poison"
+      ],
+      "attributes": {
+        "strength": 0.5,
+        "dexterity": 0.5
+      }
+    },
+    {
+      "name": "Bleed",
+      "tags": [
+        "bleed",
+        "physical"
+      ],
+      "attributes": {
+        "strength": 0.5,
+        "dexterity": 0.5
+      }
+    }
+  ],
+  "Tactics": [
+    {
+      "name": "Heavy Stun",
+      "tags": [
+        "heavystun",
+        "physical",
+        "stun"
+      ],
+      "attributes": {
+        "strength": 0.5,
+        "dexterity": 0.5
+      }
+    },
+    {
+      "name": "Armour Break",
+      "tags": [
+        "armourbreak"
+      ],
+      "attributes": {
+        "strength": 0.5,
+        "dexterity": 0.25,
+        "intelligence": 0.25
+      }
+    },
+    {
+      "name": "Critical Hit",
+      "tags": [
+        "crit",
+        "critical"
+      ],
+      "attributes": {
+        "strength": 0.33,
+        "dexterity": 0.33,
+        "intelligence": 0.33
+      }
+    },
+    {
+      "name": "Totems",
+      "tags": [
+        "totem",
+        "totems"
+      ],
+      "attributes": {
+        "strength": 0.5,
+        "intelligence": 0.5
+      }
+    },
+    {
+      "name": "Warcry",
+      "tags": [
+        "warcry"
+      ],
+      "attributes": {
+        "strength": 1.0
+      }
+    },
+    {
+      "name": "Marks",
+      "tags": [
+        "mark",
+        "marks"
+      ],
+      "attributes": {
+        "dexterity": 1.0
+      }
+    },
+    {
+      "name": "Curses",
+      "tags": [
+        "curse",
+        "curses"
+      ],
+      "attributes": {
+        "intelligence": 1.0
+      }
+    },
+    {
+      "name": "Minions",
+      "tags": [
+        "minion",
+        "minions"
+      ],
+      "attributes": {
+        "intelligence": 1.0
+      }
+    },
+    {
+      "name": "Companions",
+      "tags": [
+        "companion",
+        "companions"
+      ],
+      "attributes": {
+        "dexterity": 1.0
+      }
+    },
+    {
+      "name": "Thorns",
+      "tags": [
+        "thorns"
+      ],
+      "attributes": {
+        "strength": 1.0
+      }
+    },
+    {
+      "name": "Culling Strike",
+      "tags": [
+        "culling strike",
+        "cull",
+        "culling"
+      ],
+      "attributes": {
+        "strength": 0.33,
+        "dexterity": 0.33,
+        "intelligence": 0.33
+      }
+    },
+    {
+      "name": "Slow/Maim/Hinder",
+      "tags": [
+        "slow",
+        "maim",
+        "hinder"
+      ],
+      "attributes": {
+        "strength": 0.33,
+        "dexterity": 0.33,
+        "intelligence": 0.33
+      }
+    },
+    {
+      "name": "Elemental Infusions",
+      "tags": [
+        "infusions",
+        "infusion",
+        "elemental infusion",
+        "elemental infusions"
+      ],
+      "attributes": {
+        "strength": 0.25,
+        "dexterity": 0.25,
+        "intelligence": 0.5
+      }
+    },
+    {
+      "name": "Chaos Damage Over Time",
+      "tags": [
+        "chaos",
+        "chaos damage",
+        "chaos dot",
+        "chaos damage over time"
+      ],
+      "attributes": {
+        "strength": 0.25,
+        "dexterity": 0.25,
+        "intelligence": 0.5
+      }
+    }
+  ],
+  "DefensiveStrategies": [
+    {
+      "name": "Block",
+      "tags": [
+        "block"
+      ],
+      "attributes": {
+        "strength": 0.33,
+        "dexterity": 0.33,
+        "intelligence": 0.33
+      }
+    },
+    {
+      "name": "Deflection",
+      "tags": [
+        "deflection",
+        "deflect"
+      ],
+      "attributes": {
+        "dexterity": 1.0
+      }
+    },
+    {
+      "name": "Leech",
+      "tags": [
+        "leech",
+        "life leech",
+        "lifeleech"
+      ],
+      "attributes": {
+        "strength": 0.5,
+        "dexterity": 0.5
+      }
+    },
+    {
+      "name": "Recoup",
+      "tags": [
+        "recoup",
+        "recouplife"
+      ],
+      "attributes": {
+        "strength": 0.25,
+        "intelligence": 0.75
+      }
+    },
+    {
+      "name": "Life Regeneration",
+      "tags": [
+        "regen",
+        "liferegen",
+        "liferegeneration"
+      ],
+      "attributes": {
+        "strength": 0.33,
+        "dexterity": 0.33,
+        "intelligence": 0.33
+      }
+    }
+  ],
+  "Config": {
+    "rules": {
+      "useEnginePostValidator": false,
+      "enableDeflectionDefenseRule": true,
+      "deflectionRequiresEvasion": [
+        "Evasion",
+        "Armour & Evasion",
+        "Evasion & Energy Shield"
+      ],
+      "enableMinionsWeaponRule": true,
+      "minionsRequiresWeapon": [
+        "Sceptre"
+      ],
+      "enableBlockOffhandRule": true,
+      "blockRequiresOffhand": [
+        "Shield",
+        "Buckler"
+      ],
+      "enableOneHandedOffhandCombos": true,
+      "twoHandedWeapons": [
+        "Bow",
+        "Staff",
+        "Spear",
+        "Two-Handed Axe",
+        "Two-Handed Sword",
+        "Two-Handed Mace"
+      ],
+      "allowedOffhandsForOneHanded": [
+        "Shield",
+        "Buckler"
+      ],
+      "blockedOffhandsForTwoHanded": [
+        "Shield",
+        "Buckler"
+      ],
+      "enablePreGate": true
+    },
+    "synergy": {
+      "tacticsWeight": 1.0,
+      "ailmentsWeight": 1.0,
+      "attributesWeight": 1.0,
+      "normalization": "legacy",
+      "useNewScorer": true
+    }
+  }
+}

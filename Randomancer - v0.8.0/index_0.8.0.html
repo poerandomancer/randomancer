@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="images/dice.png">
+  <link rel="apple-touch-icon" href="images/dice.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Randomancer — 0.8.0</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Cormorant+Infant:ital,wght@1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles_0.8.0.css?v=0.8.0"/>
+</head>
+<body>
+  <button id="info-fab" class="rm-info-fab" aria-label="About this tool" title="About">?</button>
+  <!-- Info Lightbox -->
+  <div id="rm-info-overlay" class="rm-info-overlay" hidden>
+    <div class="rm-info-backdrop" data-close="1"></div>
+    <div class="rm-info-dialog" role="dialog" aria-modal="true" aria-labelledby="rm-info-title">
+      <div class="rm-info-head">
+        <h3 id="rm-info-title">A Note from the Randomancer</h3>
+        <button id="rm-info-close" class="rm-info-close" aria-label="Close">×</button>
+      </div>
+      <div id="rm-info-content" class="rm-info-content">
+<h4>About this Tool</h4>
+<p>This build-randomizing tool is intended to inspire creativity and experimentation within the world of Path of Exile 2. Hopefully it will provide some relief to the general 'meta fatigue' and unlock more possibilities and fun within the game.  Feel free to use this to set a challenge for yourself, or as more of a springboard for some new build ideas.</p>
+<p>The tool itself is hopefully self-explanatory. Clicking the 'Roll Your Fate' button will conjure up a randomized build, selecting a class, ascendancy, weapon(s), common ailments and tactics, primary defensive layer, and a secondary defensive layer. The randomness or cohesion of these selections can be customized with the slider at the top of the page for a more streamlined build vs. a more creative build. Along with these selections is a display indicating which attributes a build leans toward, a pair of recommended skill gems, and a set of possibly helpful unique items that may go well with the build.</p>
+<p>Now this tool is far from perfect.  The data this sits on top of may not be perfectly accurate, and it is possible you may see skill or unique items that don't align 100% with what's in the live game. However, it's probably 90% there. This is more of a fun prototype that I've been playing around with.</p>
+<p>If you have any thoughts, feedback, suggestions for features, bugs, etc. feel free to reach out to <a href="mailto:poerandomancer@gmail.com">poerandomancer@gmail.com</a>. I would love to hear your thoughts.</p>
+
+<h4>About Me</h4>
+<p>I found myself daydreaming about my Path of Exile 2 'LeechBreak Crossbow Titan' build one Tuesday afternoon, during a very slow and very boring sprint planning meeting at work. Like many of you I am a recent Path of Exile 2 convert (the 1st one didn’t quite hook me) and now often find myself obsessing over complex and enigmatic mathematical interactions between obscure mechanics and poorly-explained optimization opportunities, all draped in fantastical grimdark pageantry.  My dorky imagination has truly been hijacked by this incredible game.</p>
+<p>Several months ago, I slowly began to realize the true open-ended potential of buildcrafting and theorycrafting, and why so many people have been enjoying the first Path of Exile for so many years.  And seeking inspiration for unusual and creative approaches to playing the game, I stumbled upon the asmology Build Roulette tool (found here: <a href="https://www.asmology.com/path-of-exile-ii/build-roulette/" target="_blank" rel="noopener">https://www.asmology.com/path-of-exile-ii/build-roulette/</a>). A nifty little online widget to randomize one ascendancy and one skill, to inject some challenge and creativity into the experience for those burned out on the same “Super-Meta” “S-Tier” build guides.</p>
+<p>Back to my boring Tuesday afternoon meeting, it occurred to me that there is some more opportunity here for creative inspiration. The breadth of interactions to explore within POE2 feel nearly endless, and I was looking for something new to try.</p>
+<p>So I made this.</p>
+<p>The goal is to provide a springboard for the imagination, and bring some possibilities to the surface. While this is mostly random, there is a bit of logic in place to try and prevent truly heinous or impractical combinations. Such as a monk using a two-handed mace with armor for defense and a minion-focused build. Some gentle guide rails are in place, but the idea is to remain as open-ended as possible.</p>
+<p>Simultaneous to my rumination on the intricacies of this all-absorbing videogame, I had a general curiosity regarding the software capabilities of ChatGPT. Yes, this was built with the aid of AI. Sorry. I am a software developer by trade, and I had a clear vision and general technical notion of how I would accomplish this, so it seemed like a decent sandbox to see what all the fuss was about. Turns out, if you have a very specific end goal in mind and a fairly simple project, AI is kinda like having a junior developer in your back pocket. A junior developer who is great at brainstorming, but also has debilitating short-term memory loss and a frustratingly unshakable misplaced optimistic confidence. Great for a quick dry-run on concepts, horrific at iteration and refinement. I ended up needing to intervene at several points with some manual refactors, but ultimately... this is what I ended up with. A pretty fun little project, and an interesting development cycle.</p>
+
+<hr class="rm-info-hr">
+
+<p class="rm-disclaimer"><small>This is a non-profit, fan-made project and is in no way affiliated with or endorsed by Grinding Gear Games the creators of Path of Exile and Path of Exile 2. All rights to the original intellectual property (IP), including but not limited to characters, settings, and storylines, belong to their respective owners. We do not claim ownership of the original IP. This work is created for entertainment and transformational purposes only, under the principles of Fair Use. No commercial use or profit is being made from this project.</small></p>
+</div>
+    </div>
+  </div>
+  <div id="intro" class="intro-screen">
+    <div class="intro-content">
+      <p id="intro-line"></p>
+      <button id="intro-roll" class="roll-btn roll-btn"><img src="images/dice.png" alt="" class="btn-ico"> Roll Your Fate</button>
+    </div>
+  </div>
+
+  <div id="asc-art" class="asc-art" aria-hidden="true"></div>
+  <div id="app" class="hidden">
+    <header>
+      <h1 class="title">The Randomancer</h1>
+      <h2 class="subtitle">Conjure the Impossible. Defy the Meta.</h2>
+      
+      <!-- restored build name + flavor -->
+      <div id="build-name" class="build-name"></div>
+	  <div id="build-subtext" class="build-subtext"></div>
+
+      <div class="cohesion-slider">
+        <label for="cohesionRange">Cohesion</label>
+        <input type="range" id="cohesionRange" min="0" max="3" step="1" value="1">
+        <div class="mode-labels">
+          <span>Strict</span><span>Cohesive</span><span>Chaotic</span><span>Madness</span>
+        </div>
+      </div>
+      <div class="roll-sticky"><button id="roll" class="roll-btn roll-btn"><img src="images/dice.png" alt="" class="btn-ico"> Roll Your Fate</button></div>
+    </header>
+
+    <main>
+      <section class="panel">
+        <div class="sect">
+          <div class="sect-head"><h3>Archetype</h3><div class="underline"></div><p class="sub">Class, Ascendancy, & Weapons</p></div>
+          <div class="grid two">
+            <div><span class="label">Class</span><span id="class"></span></div>
+            <div><span class="label">Ascendancy</span><span id="ascendancy"></span></div>
+            <div class="wide"><span class="label">Weapons</span><span id="weapons"></span></div>
+          </div>
+        </div>
+        <hr class="gold subtle"/>
+        <div class="sect">
+          <div class="sect-head"><h3>Combat Mechanics</h3><div class="underline"></div><p class="sub">Ailments & Tactics</p></div>
+          <div class="grid two">
+            <div class="wide"><span class="label">Ailments</span><span id="ailments"></span></div>
+            <div class="wide"><span class="label">Tactics</span><span id="tactics"></span></div>
+          </div>
+        </div>
+        <hr class="gold subtle"/>
+        <div class="sect">
+          <div class="sect-head"><h3>Survivability</h3><div class="underline"></div><p class="sub">Primary Defense and Defensive Strategy</p></div>
+          <div class="grid two">
+            <div><span class="label">Defense</span><span id="defense"></span></div>
+            <div><span class="label">Defensive Strategy</span><span id="defstrat"></span></div>
+          </div>
+        </div>
+        <hr class="gold subtle"/>
+        <div class="sect">
+          <div class="sect-head"><h3>Balance</h3><div class="underline"></div><p class="sub">Attribute Distribution</p></div>
+          <div class="wide">
+            <div id="balance-bar"></div>
+            <div id="balance-text"></div>
+          </div>
+        </div>
+        <hr class="gold subtle"/>
+        <div class="sect">
+          <div class="sect-head"><h3>Recommended Skills</h3><div class="underline"></div><p class="sub">Two active skills for this roll, with supports</p></div>
+          <div id="skills-grid" class="grid two skills-grid"></div>
+        </div>
+      </section>
+    </main>
+    <footer class="foot">  <small class="version">Randomancer v0.8.0</small>
+</footer>
+  </div>
+
+<script>
+const INTRO_LINES = [
+  "Step forward, Exile… the weave of fate awaits your hand.",
+  "The echoes of destiny whisper — will you answer?",
+  "Beyond the veil, your path lies unwritten. Cast the die.",
+  "Not all who tempt fate return unchanged. Dare you roll?",
+  "In the stillness, the Fates stir. Reach forth and claim your thread."
+];
+document.addEventListener('DOMContentLoaded', ()=>{
+  const intro = document.getElementById('intro');
+  const introLine = document.getElementById('intro-line');
+  const introRoll = document.getElementById('intro-roll');
+  introLine.textContent = INTRO_LINES[Math.floor(Math.random()*INTRO_LINES.length)];
+  introRoll.addEventListener('click', () => {
+    intro.classList.add('fade-out');
+    setTimeout(() => {
+      intro.remove();
+      const app = document.getElementById('app');
+      app.classList.remove('hidden');
+      app.classList.add('fade-in');
+      document.getElementById('roll').click();
+    }, 700);
+  });
+});
+</script>
+<script type="module" src="script_0.8.0.js?v=0.8.0"></script>
+</body>
+</html>
