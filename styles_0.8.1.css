@@ -126,7 +126,26 @@ header{
   background:rgba(24,24,26,.55);
   color:var(--ink);
   cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  gap:.45rem;
 }
+
+.roll-btn .roll-text{
+  white-space:nowrap;
+}
+
+.roll-btn .roll-status{
+  font-size:.8rem;
+  color:var(--muted);
+  opacity:0;
+  transition:opacity .25s ease;
+}
+
+.roll-btn.is-loading .roll-status{
+  opacity:1;
+}
+
 
 main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 

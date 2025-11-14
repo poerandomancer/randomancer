@@ -5,9 +5,9 @@
   <link rel="apple-touch-icon" href="images/dice.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>The Randomancer — 0.8.0</title>
+  <title>The Randomancer — 0.8.1</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Cormorant+Infant:ital,wght@1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles_0.8.0.css?v=0.8.0"/>
+  <link rel="stylesheet" href="styles_0.8.1.css?v=0.8.1"/>
 </head>
 <body>
   <button id="info-fab" class="rm-info-fab" aria-label="About this tool" title="About">?</button>
@@ -64,7 +64,13 @@
           <span>Strict</span><span>Cohesive</span><span>Chaotic</span><span>Madness</span>
         </div>
       </div>
-      <div class="roll-sticky"><button id="roll" class="roll-btn roll-btn"><img src="images/dice.png" alt="" class="btn-ico"> Roll Your Fate</button></div>
+      <div class="roll-sticky">
+      <button id="roll" class="roll-btn roll-btn">
+        <img src="images/dice.png" alt="" class="btn-ico">
+        <span class="roll-text">Roll Your Fate</span>
+        <span class="roll-status" aria-live="polite"></span>
+      </button>
+    </div>
     </header>
 
     <main>
@@ -108,7 +114,7 @@
         </div>
       </section>
     </main>
-    <footer class="foot">  <small class="version">Randomancer v0.8.0</small>
+    <footer class="foot">  <small class="version">Randomancer v0.8.1</small>
 </footer>
   </div>
 
@@ -137,6 +143,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
   });
 });
 </script>
-<script type="module" src="script_0.8.0.js?v=0.8.0"></script>
+<script type="module" src="script_0.8.1.js?v=0.8.1"></script>
 </body>
 </html>
