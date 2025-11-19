@@ -47,6 +47,10 @@ const Dom = (() => {
   };
 
   const currentSnap = () => (window.App?.state?.currentRoll) ? window.App.state.currentRoll : null;
+  const savedOverlay = document.getElementById('saved-overlay');
+  const savedCloseBtn = document.getElementById('saved-close');
+  const savedFab = document.getElementById('saved-fab');
+  let lastSavedFocus = null;
 
   function encodeSnapshot(snap){
     if (!snap || typeof snap !== 'object') return '';
@@ -232,12 +236,17 @@ const Dom = (() => {
     if (!snap) return;
     setElText('#class', snap.className || '');
     setElText('#ascendancy', snap.ascendancy || '');
+    updateAscArt(snap.ascendancy || '');
     const weaponsTxt = snap.offhand ? `${snap.weapon || ''} & ${snap.offhand}` : (snap.weapon || '');
     setElText('#weapons', weaponsTxt);
     setElText('#defense', snap.defense || '');
     setElText('#defstrat', snap.defStrat || '');
     setElText('#ailments', Array.isArray(snap.ailmentList) ? snap.ailmentList.join(' & ') : (snap.ailments || ''));
     setElText('#tactics', Array.isArray(snap.tacticList) ? snap.tacticList.join(' & ') : (snap.tactics || ''));
+    const ailments = Array.isArray(snap.ailmentList)
+      ? snap.ailmentList
+      : (snap.ailments ? snap.ailments.split(/\s*&\s*/).filter(Boolean) : []);
+    updateAilmentOverlay(ailments);
     setElText('#build-name', snap.buildName || '');
     setElText('#build-subtext', snap.flavor || '');
     renderAttributesFromSnapshot(snap.attributes);
@@ -277,17 +286,41 @@ const Dom = (() => {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list.slice(0, MAX_SAVED))); } catch {}
   }
 
+  function openSavedOverlay(){
+    if (!savedOverlay) return;
+    renderSavedList();
+    lastSavedFocus = document.activeElement;
+    savedOverlay.hidden = false;
+    (savedCloseBtn || savedOverlay.querySelector('.rm-info-dialog'))?.focus?.();
+  }
+
+  function closeSavedOverlay(){
+    if (!savedOverlay) return;
+    savedOverlay.hidden = true;
+    if (lastSavedFocus?.focus) lastSavedFocus.focus();
+  }
+
   function renderSavedList(){
     const list = loadSaved();
-    const wrap = document.getElementById('saved-builds');
+    const wrap = document.getElementById('saved-builds-list');
     if (!wrap) return;
     wrap.innerHTML = '';
+    if (!list.length) {
+      const empty = document.createElement('div');
+      empty.className = 'saved-empty';
+      empty.textContent = 'No saved builds yet.';
+      wrap.appendChild(empty);
+      return;
+    }
     list.forEach(entry => {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'saved-item';
       btn.innerHTML = `<span class="name">${entry.name || 'Saved Build'}</span><span class="meta">${entry.meta || ''}</span>`;
-      btn.addEventListener('click', () => applyBuildCode(entry.code));
+      btn.addEventListener('click', async () => {
+        const ok = await applyBuildCode(entry.code);
+        if (ok) closeSavedOverlay();
+      });
       wrap.appendChild(btn);
     });
   }
@@ -301,7 +334,7 @@ const Dom = (() => {
     const entry = {
       code,
       name: snap.buildName || `${snap.className} ${snap.ascendancy}`.trim(),
-      meta: [snap.className, snap.ascendancy].filter(Boolean).join(' • ')
+      meta: [snap.ascendancy, snap.offhand ? `${snap.weapon} & ${snap.offhand}` : snap.weapon].filter(Boolean).join(' • ')
     };
     const existing = loadSaved().filter(e => e.code !== code);
     existing.unshift(entry);
@@ -313,6 +346,7 @@ const Dom = (() => {
   function bindUI(){
     const copyBtn = document.getElementById('copy-build-link');
     const saveBtn = document.getElementById('save-build');
+    const savedListFab = savedFab;
 
     copyBtn?.addEventListener('click', () => {
       const snap = currentSnap();
@@ -326,6 +360,16 @@ const Dom = (() => {
     });
 
     saveBtn?.addEventListener('click', saveCurrentBuild);
+    savedListFab?.addEventListener('click', openSavedOverlay);
+    savedCloseBtn?.addEventListener('click', closeSavedOverlay);
+    savedOverlay?.addEventListener('click', (e) => {
+      const t = e.target;
+      if (t?.dataset?.close) closeSavedOverlay();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && savedOverlay && !savedOverlay.hidden) closeSavedOverlay();
+    });
   }
 
   function autoLoadFromQuery(){

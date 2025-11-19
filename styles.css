@@ -1005,6 +1005,7 @@ img, video { max-width: 100%; height: auto; }
   opacity: 0.8;
   transition: transform .12s ease, box-shadow .12s ease, background .12s ease, opacity .12s ease;
 }
+.saved-fab{ right: calc(max(16px, env(safe-area-inset-right)) + 40px); }
 .rm-info-fab:hover{
   transform: translateY(-1px);
   box-shadow: 0 2px 10px rgba(0,0,0,.45);
@@ -1035,6 +1036,7 @@ img, video { max-width: 100%; height: auto; }
   max-height: 78vh;
   overflow: hidden;
 }
+.saved-overlay .rm-info-dialog{ width: min(560px, calc(100% - 32px)); }
 @media (max-width: 640px){
   .rm-info-dialog{ inset: 8% 50% auto 50%; width: calc(100% - 24px); }
 }
@@ -1059,67 +1061,51 @@ img, video { max-width: 100%; height: auto; }
 .rm-info-content a{ color: #ffd58f; text-decoration: underline; text-decoration-color: rgba(255,213,143,.45); }
 .rm-disclaimer small{ font-size: 12px; opacity: .85; line-height: 1.35; display:block; }
 
-.share-row{
-  max-width: 980px;
-  margin: 0.6rem auto 0.8rem;
-  padding: 10px 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  background: rgba(0,0,0,0.3);
-  border: 1px solid rgba(200,168,107,0.25);
-  border-radius: 10px;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+.panel-actions{
+  position:absolute;
+  top:10px;
+  right:12px;
+  display:flex;
+  gap:8px;
+  z-index:5;
 }
-
-.share-code{ text-align:left; }
-.share-code .label{ font-size: 0.9rem; color: var(--muted); letter-spacing: .3px; }
-.share-value{
-  font-family: 'Cormorant Infant', serif;
-  font-size: 1.05rem;
-  color: var(--gold);
-  word-break: break-all;
-  min-height: 24px;
-}
-
-.share-actions{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
-.share-btn{
+.icon-btn{
   appearance:none;
-  background: linear-gradient(135deg, rgba(200,168,107,0.22), rgba(200,168,107,0.08));
-  border: 1px solid rgba(200,168,107,0.35);
-  color: var(--ink);
-  padding: 7px 12px;
-  border-radius: 10px;
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  border:1px solid rgba(200,168,107,0.4);
+  background: radial-gradient(circle at 30% 30%, rgba(255,240,210,0.16), rgba(0,0,0,0.18)), rgba(0,0,0,0.28);
+  color: var(--gold);
+  font-size: 16px;
   cursor:pointer;
-  font-family:'Cormorant Garamond', serif;
-  letter-spacing:.25px;
-  transition: transform .1s ease, box-shadow .1s ease;
+  display:grid;
+  place-items:center;
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease, background .2s ease;
 }
-.share-btn:hover{ transform: translateY(-1px); box-shadow: 0 4px 10px rgba(0,0,0,0.25); }
+.icon-btn:hover{ transform: translateY(-1px); box-shadow: 0 6px 12px rgba(0,0,0,0.35); border-color: rgba(200,168,107,0.7); }
+.icon-btn:active{ transform: translateY(0); background: radial-gradient(circle at 30% 30%, rgba(255,240,210,0.2), rgba(0,0,0,0.22)), rgba(0,0,0,0.32); }
+.icon-btn:focus{ outline:none; box-shadow: 0 0 0 2px rgba(202,164,95,0.45); }
 
-.saved-panel{
-  max-width: 980px;
-  margin: 0 auto 1rem;
-  text-align:left;
-  padding: 0 4px;
+.saved-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
 }
-.saved-label{ color: var(--muted); font-size: 0.95rem; letter-spacing:.3px; margin-bottom: 6px; }
-.saved-list{ display:flex; flex-wrap:wrap; gap:6px; }
 .saved-item{
   background: rgba(0,0,0,0.32);
   border: 1px solid rgba(200,168,107,0.28);
   color: var(--ink);
-  padding: 8px 12px;
+  padding: 10px 12px;
   border-radius: 10px;
   cursor:pointer;
-  min-width: 160px;
   text-align:left;
-  transition: background .12s ease, border-color .12s ease;
+  transition: background .12s ease, border-color .12s ease, transform .1s ease, box-shadow .1s ease;
 }
-.saved-item:hover{ background: rgba(200,168,107,0.08); border-color: rgba(200,168,107,0.6); }
+.saved-item:hover{ background: rgba(200,168,107,0.08); border-color: rgba(200,168,107,0.6); transform: translateY(-1px); box-shadow: 0 6px 12px rgba(0,0,0,0.25); }
 .saved-item .name{ display:block; color: var(--gold); font-size:1rem; }
-.saved-item .meta{ display:block; color: var(--muted); font-size:0.85rem; }
+.saved-item .meta{ display:block; color: var(--muted); font-size:0.9rem; }
+.saved-empty{ color: var(--muted); font-size: 0.95rem; }
 
 
 /* === Info Lightbox extra polish (v0.7.9_beta2n) === */
