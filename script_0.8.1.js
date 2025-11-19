@@ -626,10 +626,29 @@ function applyHardRestrictions(item,ctx){
 
 // ---------- overlay + ascendancy art ----------
 function updateAscArt(asc){
-  const el=document.getElementById('asc-art'); if(!el) return;
-  const path=`images/ascendancies/${asc.toLowerCase().replace(/\s+/g,'-')}.webp`;
-  el.style.setProperty('--asc-img', `url('${path}')`);
-  el.classList.add('show');
+  const el = document.getElementById('asc-art');
+  if (!el) return;
+  const path = `images/ascendancies/${asc.toLowerCase().replace(/\s+/g,'-')}.webp`;
+
+  // Avoid redundant work if we're already showing this art
+  if (el.dataset.ascPath === path && el.classList.contains('show')) return;
+  el.dataset.ascPath = path;
+
+  // Fade out current art
+  el.classList.remove('show');
+
+  // Preload the new image before fading it in
+  const img = new Image();
+  img.onload = () => {
+    // If another roll changed the target meanwhile, bail
+    if (el.dataset.ascPath !== path) return;
+    el.style.setProperty('--asc-img', `url('${path}')`);
+    // Next frame, fade in the new art
+    requestAnimationFrame(() => {
+      el.classList.add('show');
+    });
+  };
+  img.src = path;
 }
 const AIL_COLORS = {
   ignite:"rgba(255, 80, 0, 0.08)",
@@ -1124,12 +1143,73 @@ function applyGemBorderFromReqWeights(el, weights){
   el.style.boxShadow = '0 0 10px rgba(255,255,255,0.06)';
 }
 
+// ---------- data preload helper ----------
+let dataPromise = null;
+let dataReady = false;
+/**
+ * Ensure the core + skill datasets start loading as early as possible.
+ * Returns a shared promise reused by all roll triggers.
+ */
+function ensureDataPreload(){
+  if (!dataPromise) {
+    dataPromise = loadData().then(result => {
+      dataReady = true;
+      return result;
+    }).catch(err => {
+      console.error("[Randomancer] Data preload failed", err);
+      dataReady = false;
+      dataPromise = null; // allow retry on next click
+      throw err;
+    });
+  }
+  return dataPromise;
+}
+
 // ---------- wireup ----------
 document.addEventListener('DOMContentLoaded', ()=>{
-  const slider=document.getElementById('cohesionRange');
-  if(slider){ const modeMap=['strict','cohesive','chaotic','madness']; slider.addEventListener('input', e=> currentMode = modeMap[e.target.value]); }
-  const rollBtn=document.getElementById('roll');
-  if(rollBtn){ rollBtn.addEventListener('click', async ()=>{ const data = await loadData(); rollBuild(data); }); }
+  const slider = document.getElementById('cohesionRange');
+  if (slider) {
+    const modeMap = ['strict','cohesive','chaotic','madness'];
+    slider.addEventListener('input', e => {
+      const idx = Number(e.target.value) || 0;
+      currentMode = modeMap[idx] || 'cohesive';
+    });
+  }
+
+  // Kick off preloading while the intro screen is up
+  ensureDataPreload().catch(err => {
+    console.error("[Randomancer] Preload on DOMContentLoaded failed", err);
+  });
+
+  const rollBtn = document.getElementById('roll');
+  if (rollBtn) {
+    const statusEl = rollBtn.querySelector('.roll-status');
+    rollBtn.addEventListener('click', async () => {
+      // Tiny loading hint if data is still warming up
+      rollBtn.classList.add('is-loading');
+      if (statusEl && !dataReady) {
+        statusEl.textContent = 'Preparing the fates…';
+      }
+
+      try {
+        const data = await ensureDataPreload();
+        rollBuild(data);
+      } catch (err) {
+        console.error('[Randomancer] roll failed:', err);
+        if (statusEl) {
+          statusEl.textContent = 'Something went wrong. Try again.';
+        }
+      } finally {
+        // Clear the loading state once data has loaded or failed
+        setTimeout(() => {
+          rollBtn.classList.remove('is-loading');
+          if (statusEl && dataReady) {
+            statusEl.textContent = '';
+          }
+        }, 120);
+      }
+    });
+  }
 });
 
 function rollBuild(dataWrap){
