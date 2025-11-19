@@ -344,14 +344,21 @@ const Dom = (() => {
     const code = encodeSnapshot(snap);
     if (!code) return;
 
-    const entry = {
-      code,
-      name: snap.buildName || `${snap.className} ${snap.ascendancy}`.trim(),
-      meta: [snap.ascendancy, snap.offhand ? `${snap.weapon} & ${snap.offhand}` : snap.weapon].filter(Boolean).join(' • ')
-    };
-    const existing = loadSaved().filter(e => e.code !== code);
-    existing.unshift(entry);
-    persistSaved(existing);
+    const list = loadSaved();
+    const existingIndex = list.findIndex(e => e.code === code);
+    if (existingIndex >= 0) {
+      list.splice(existingIndex, 1);
+      persistSaved(list);
+    } else {
+      const entry = {
+        code,
+        name: snap.buildName || `${snap.className} ${snap.ascendancy}`.trim(),
+        meta: [snap.ascendancy, snap.offhand ? `${snap.weapon} & ${snap.offhand}` : snap.weapon].filter(Boolean).join(' • ')
+      };
+      const existing = list.filter(e => e.code !== code);
+      existing.unshift(entry);
+      persistSaved(existing);
+    }
     renderSavedList();
     updateCodeUI(code);
     syncSaveButtonState(code);
