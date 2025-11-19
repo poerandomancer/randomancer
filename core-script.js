@@ -35,7 +35,7 @@ const Dom = (() => {
 })();
 
 // App metadata
-const APP_VERSION = '0.8.2_cleanup';
+const APP_VERSION = '0.8.2_visual_cleanup';
 
 window.RANDOMANCER = window.RANDOMANCER || {};
 window.RANDOMANCER.version = APP_VERSION;
@@ -2048,21 +2048,110 @@ function ensureUniqueSection(){
     return tags.map(t=>`<span class="tag-pill pill${rolledSet.has(t)?' matched':''}" data-tag="${t}">${t}</span>`).join('');
   }
   function highlight(lines, rolledSet){
-    const esc = s => s.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\\\$&');
-    let out = (lines||[]).slice(2).join('\\n');
-    rolledSet.forEach(t=>{ const rx=new RegExp(esc(t),'ig'); out=out.replace(rx, m=>`<span class="hit">${m}</span>`); });
-    return out.split('\\n').map(L=>`<div>${L}</div>`).join('');
-  }
+	  const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+	  // Skip the first 2 lines (name + base) – they’re in the header
+	  let out = (lines || []).slice(2).join('\n');
+	
+	  // Highlight any text that matches the rolled profile tags
+	  rolledSet.forEach(t => {
+		if (!t) return;
+		const rx = new RegExp(esc(String(t)), 'ig');
+		out = out.replace(rx, m => `<span class="hit">${m}</span>`);
+	  });
+	
+	  return out
+		.split('\n')
+		.map(L => L.trim())
+		.filter(L => L.length) // drop empty lines
+		.map(L => `<div class="unique-line">${L}</div>`)
+		.join('');
+	}
+	
+	function buildUniqueReason(it, rolledSet) {
+	  if (!it) return '';
+	
+	  // Use the same tag logic as scoring + pill rendering
+	  const tagSet = getItemTagSet(it);        // returns a Set of normalized tags
+	  const tags = Array.from(tagSet);
+	  if (!tags.length) return '';
+	
+	  const hasRolled =
+		rolledSet &&
+		typeof rolledSet.has === 'function' &&
+		rolledSet.size > 0;
+	
+	  const matched = [];
+	  const unmatched = [];
+	
+	  for (const t of tags) {
+		if (!t) continue;
+	
+		// rolledSet already holds normalized tags (from rolledByCategory/expandTags)
+		if (hasRolled && rolledSet.has(t)) {
+		  matched.push(t);
+		} else {
+		  unmatched.push(t);
+		}
+	  }
+	
+	  // Prefer tags that actually match the rolled profile; otherwise just
+	  // describe the item by its own tags.
+	  const source = (hasRolled && matched.length) ? matched : tags;
+	  const main = source.slice(0, 3); // up to 3 tags
+	
+	  if (!main.length) return '';
+	
+	  const humanList = (arr) => {
+		const pretty = (s) => {
+		  s = String(s || '').trim();
+		  if (!s) return s;
+		  return s[0].toUpperCase() + s.slice(1);
+		};
+		const p = arr.map(pretty);
+		if (p.length === 1) return p[0];
+		if (p.length === 2) return `${p[0]} and ${p[1]}`;
+		return `${p[0]}, ${p[1]} and ${p[2]}`;
+	  };
+	
+	  const list = humanList(main);
+	
+	  if (hasRolled && matched.length) {
+		return `Synergizes with your ${list} focus.`;
+	  }
+	  return `Adds ${list} to your build.`;
+	}
+
+
   function renderUniques(items, rolledSet){
-    let grid = ensureUniqueSection();
-    if(!grid){ setTimeout(()=>renderUniques(items, rolledSet), 120); return; }
-    grid.innerHTML = items.map(it=>`<div class="unique-card">
-      <div class="unique-title">${it.name}</div>
-      <div class="unique-base">${it.base}</div>
-      <div class="unique-tags">${pillsFor(it, rolledSet)}</div>
-      <div class="unique-lines">${highlight(it.lines, rolledSet)}</div>
-    </div>`).join('');
-  }
+	  const grid = ensureUniqueSection();
+	  if (!grid) {
+		setTimeout(() => renderUniques(items, rolledSet), 120);
+		return;
+	  }
+	
+	  grid.innerHTML = items.map(it => {
+		const pills = pillsFor(it, rolledSet);
+		const lines = highlight(it.lines, rolledSet);
+		const reason = buildUniqueReason(it, rolledSet);
+	
+		return `
+		  <div class="unique-card">
+			<div class="unique-header">
+			  <div class="unique-name">${it.name}</div>
+			  <div class="unique-base">${it.base}</div>
+			</div>
+			<div class="tags-row">
+			  ${pills}
+			</div>
+			<div class="unique-lines">
+			  ${reason ? `<div class="unique-highlights">${reason}</div>` : ''}
+			  ${lines}
+			</div>
+		  </div>
+		`;
+	  }).join('');
+	}
+
 
     async function refreshUniques(snap){
 	  if (window.__u79_active !== TOKEN) return; // last-wins
