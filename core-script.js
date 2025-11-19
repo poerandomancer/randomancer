@@ -272,11 +272,6 @@ const Dom = (() => {
     return true;
   }
 
-  function updateCodeUI(code){
-    const el = document.getElementById('build-code-value');
-    if (el) el.textContent = code || '—';
-  }
-
   function loadSaved(){
     try {
       return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
@@ -284,6 +279,24 @@ const Dom = (() => {
   }
   function persistSaved(list){
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list.slice(0, MAX_SAVED))); } catch {}
+  }
+
+  function syncSaveButtonState(code){
+    const btn = document.getElementById('save-build');
+    if (!btn) return;
+    const list = loadSaved();
+    const activeCode = code || (() => { const snap = currentSnap(); return encodeSnapshot(snap); })();
+    const saved = !!(activeCode && list.some(e => e.code === activeCode));
+    btn.textContent = saved ? '★' : '☆';
+    btn.dataset.saved = saved ? '1' : '0';
+    btn.setAttribute('aria-label', saved ? 'Build Saved' : 'Save Build');
+    btn.setAttribute('title', saved ? 'Build Saved' : 'Save Build');
+  }
+
+  function updateCodeUI(code){
+    const el = document.getElementById('build-code-value');
+    if (el) el.textContent = code || '—';
+    syncSaveButtonState(code);
   }
 
   function openSavedOverlay(){
@@ -341,6 +354,7 @@ const Dom = (() => {
     persistSaved(existing);
     renderSavedList();
     updateCodeUI(code);
+    syncSaveButtonState(code);
   }
 
   function bindUI(){
@@ -392,6 +406,7 @@ const Dom = (() => {
     bindUI();
     renderSavedList();
     subscribeToRolls();
+    syncSaveButtonState();
     autoLoadFromQuery();
   });
 
