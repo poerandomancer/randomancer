@@ -34,6 +34,377 @@ const Dom = (() => {
   return { q, setText, setHTML, txt };
 })();
 
+/* === Build Codes + Saved Builds (v0.9 preview) === */
+(function(){
+  const STORAGE_KEY = 'randomancer_saved_builds_v1';
+  const MAX_SAVED = 10;
+
+  const safeBtoa = (str) => {
+    try { return btoa(unescape(encodeURIComponent(str))); } catch { return ''; }
+  };
+  const safeAtob = (str) => {
+    try { return decodeURIComponent(escape(atob(str))); } catch { return ''; }
+  };
+
+  const currentSnap = () => (window.App?.state?.currentRoll) ? window.App.state.currentRoll : null;
+  const savedOverlay = document.getElementById('saved-overlay');
+  const savedCloseBtn = document.getElementById('saved-close');
+  const savedFab = document.getElementById('saved-fab');
+  let lastSavedFocus = null;
+
+  function encodeSnapshot(snap){
+    if (!snap || typeof snap !== 'object') return '';
+    const compact = {
+      v: snap.snapshotVersion || 1,
+      c: snap.className || '',
+      a: snap.ascendancy || '',
+      w: snap.weapon || '',
+      o: snap.offhand || '',
+      al: Array.isArray(snap.ailmentList) ? snap.ailmentList : [],
+      tl: Array.isArray(snap.tacticList) ? snap.tacticList : [],
+      d: snap.defense || '',
+      ds: snap.defStrat || '',
+      b: snap.buildName || '',
+      f: snap.flavor || '',
+      attr: snap.attributes || { strength:0, dexterity:0, intelligence:0 },
+      rs: Array.isArray(snap.recommendedSkills) ? snap.recommendedSkills : [],
+      pb: snap.recommendedPersistentBuff || null,
+      u: Array.isArray(snap.recommendedUniques) ? snap.recommendedUniques : []
+    };
+    return safeBtoa(JSON.stringify(compact));
+  }
+
+  function decodeSnapshot(code){
+    if (!code) return null;
+    const json = safeAtob(code);
+    if (!json) return null;
+    try {
+      const raw = JSON.parse(json);
+      return {
+        snapshotVersion: raw.v || 1,
+        className: raw.c || '',
+        ascendancy: raw.a || '',
+        weapon: raw.w || '',
+        offhand: raw.o || '',
+        ailments: (raw.al || []).join(' & '),
+        tactics: (raw.tl || []).join(' & '),
+        ailmentList: raw.al || [],
+        tacticList: raw.tl || [],
+        defense: raw.d || '',
+        defStrat: raw.ds || '',
+        buildName: raw.b || '',
+        flavor: raw.f || '',
+        attributes: raw.attr || { strength:0, dexterity:0, intelligence:0 },
+        recommendedSkills: raw.rs || [],
+        recommendedPersistentBuff: raw.pb || null,
+        recommendedUniques: raw.u || []
+      };
+    } catch (e) {
+      console.warn('[build code] decode failed', e);
+      return null;
+    }
+  }
+
+  function setElText(sel, txt){ const el = document.querySelector(sel); if (el) el.textContent = txt || ''; }
+
+  function showAppShell(){
+    const intro = document.getElementById('intro');
+    if (intro) intro.remove();
+    const app = document.getElementById('app');
+    if (app) app.classList.remove('hidden');
+  }
+
+  function renderAttributesFromSnapshot(attr){
+    if (!attr) return;
+    const S = Number(attr.strength) || 0;
+    const D = Number(attr.dexterity) || 0;
+    const I = Number(attr.intelligence) || 0;
+    const bar = document.getElementById('balance-bar');
+    const grad=`linear-gradient(90deg, rgba(176,48,48,1) 0%, rgba(176,48,48,1) ${S*100}%, rgba(45,122,45,1) ${S*100}%, rgba(45,122,45,1) ${(S+D)*100}%, rgba(47,79,157,1) ${(S+D)*100}%, rgba(47,79,157,1) 100%)`;
+    if (bar) {
+      bar.style.setProperty('--balance-gradient', grad);
+      bar.classList.add('glow');
+    }
+    setElText('#balance-text', `Strength ${Math.round(S*100)}%  |  Dexterity ${Math.round(D*100)}%  | Intelligence ${Math.round(I*100)}%`);
+  }
+
+  function lookupGem(dict, entry){
+    const key = entry?.id || entry?.name || '';
+    if (!key) return null;
+    return dict[key] || dict[key.toLowerCase()] || null;
+  }
+
+  function renderSkillsFromSnapshot(snap){
+    const grid = document.getElementById('skills-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    const gems = (window.DATA && window.DATA.gems) || [];
+    const gemDict = buildGemDictionary(gems);
+
+    (snap.recommendedSkills || []).forEach(entry => {
+      const g = lookupGem(gemDict, entry) || lookupGem(gemDict, { id: entry.name });
+      if (!g) return;
+      const card = document.createElement('div');
+      card.className = 'skill-card';
+
+      const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
+        ? `<div class="skill-subtitle">${g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')}</div>`
+        : '';
+
+      const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
+      const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
+      const rest = allTags.filter(t => !br.includes(t));
+      const displayTags = [...br, ...rest].slice(0, 10);
+      const pills = displayTags.map(t => `<span class="tag-pill">${t}</span>`).join('');
+
+      const supports = Array.isArray(entry.recommended_supports) && entry.recommended_supports.length
+        ? entry.recommended_supports
+        : g.recommended_supports;
+
+      card.innerHTML = `
+        <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
+        ${requiresSubtitle}
+        <div class="skill-divider"></div>
+        ${grantLine(g)}
+        <div class="skill-tags">${pills}</div>
+        <div class="supports-label">Recommended Supports</div>
+        <div class="supports">${renderSupportCards(supports, gemDict)}</div>
+      `;
+      applyGemBorderFromReqWeights(card, g.requirement_weights);
+      grid.appendChild(card);
+    });
+
+    if (snap.recommendedPersistentBuff) {
+      const buffGem = lookupGem(gemDict, snap.recommendedPersistentBuff);
+      if (buffGem) {
+        renderSnapshotPersistentBuff(buffGem, gemDict);
+      }
+    } else {
+      document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
+    }
+  }
+
+  function renderSnapshotPersistentBuff(g, gemDict){
+    document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
+    const skillsGrid = document.getElementById('skills-grid');
+    const skillsSect = skillsGrid ? skillsGrid.closest('.sect') : null;
+    const main = document.querySelector('main') || document.body;
+    const parent = (skillsSect && skillsSect.parentNode) || main;
+
+    const wrap = document.createElement('div');
+    wrap.id = 'persistent-buff-section';
+    wrap.className = 'sect';
+    wrap.innerHTML = `
+      <div class="sect-head">
+        <h3>Recommended Persistent Buff</h3>
+        <div class="underline"></div>
+        <p class="sub">A long-lasting buff skill that supports this build</p>
+      </div>
+      <div id="persistent-buff-grid" class="grid persistent-buff-grid"></div>
+    `;
+
+    if (skillsSect) skillsSect.insertAdjacentElement('afterend', wrap); else parent.appendChild(wrap);
+    const grid = wrap.querySelector('#persistent-buff-grid');
+    if (!grid) return;
+
+    const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
+      ? `<div class="skill-subtitle">${g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')}</div>`
+      : '';
+    const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
+    const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
+    const rest = allTags.filter(t => !br.includes(t));
+    const displayTags = [...br, ...rest].slice(0, 10);
+    const pills = displayTags.map(t => `<span class="tag-pill">${t}</span>`).join('');
+
+    const card = document.createElement('div');
+    card.className = 'skill-card persistent-buff-card';
+    card.innerHTML = `
+      <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
+      ${requiresSubtitle}
+      <div class="skill-divider"></div>
+      ${grantLine(g)}
+      <div class="skill-tags">${pills}</div>
+      <div class="supports-label">Recommended Supports</div>
+      <div class="supports">${renderSupportCards(g.recommended_supports, gemDict)}</div>
+    `;
+    applyGemBorderFromReqWeights(card, g.requirement_weights);
+    grid.appendChild(card);
+  }
+
+  function renderSnapshotToDom(snap){
+    if (!snap) return;
+    setElText('#class', snap.className || '');
+    setElText('#ascendancy', snap.ascendancy || '');
+    updateAscArt(snap.ascendancy || '');
+    const weaponsTxt = snap.offhand ? `${snap.weapon || ''} & ${snap.offhand}` : (snap.weapon || '');
+    setElText('#weapons', weaponsTxt);
+    setElText('#defense', snap.defense || '');
+    setElText('#defstrat', snap.defStrat || '');
+    setElText('#ailments', Array.isArray(snap.ailmentList) ? snap.ailmentList.join(' & ') : (snap.ailments || ''));
+    setElText('#tactics', Array.isArray(snap.tacticList) ? snap.tacticList.join(' & ') : (snap.tactics || ''));
+    const ailments = Array.isArray(snap.ailmentList)
+      ? snap.ailmentList
+      : (snap.ailments ? snap.ailments.split(/\s*&\s*/).filter(Boolean) : []);
+    updateAilmentOverlay(ailments);
+    setElText('#build-name', snap.buildName || '');
+    setElText('#build-subtext', snap.flavor || '');
+    renderAttributesFromSnapshot(snap.attributes);
+    renderSkillsFromSnapshot(snap);
+
+    if (Array.isArray(snap.recommendedUniques) && snap.recommendedUniques.length && window.RandomancerRenderUniquesFromNames) {
+      window.RandomancerRenderUniquesFromNames(snap.recommendedUniques);
+    }
+  }
+
+  async function applyBuildCode(code){
+    const snap = decodeSnapshot(code);
+    if (!snap) return false;
+    await ensureDataPreload();
+    showAppShell();
+
+    if (window.App?.mergeCurrentRoll) {
+      window.App.mergeCurrentRoll(snap);
+    }
+
+    renderSnapshotToDom(snap);
+    updateCodeUI(code);
+    return true;
+  }
+
+  function updateCodeUI(code){
+    const el = document.getElementById('build-code-value');
+    if (el) el.textContent = code || '—';
+  }
+
+  function loadSaved(){
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    } catch { return []; }
+  }
+  function persistSaved(list){
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list.slice(0, MAX_SAVED))); } catch {}
+  }
+
+  function openSavedOverlay(){
+    if (!savedOverlay) return;
+    renderSavedList();
+    lastSavedFocus = document.activeElement;
+    savedOverlay.hidden = false;
+    (savedCloseBtn || savedOverlay.querySelector('.rm-info-dialog'))?.focus?.();
+  }
+
+  function closeSavedOverlay(){
+    if (!savedOverlay) return;
+    savedOverlay.hidden = true;
+    if (lastSavedFocus?.focus) lastSavedFocus.focus();
+  }
+
+  function renderSavedList(){
+    const list = loadSaved();
+    const wrap = document.getElementById('saved-builds-list');
+    if (!wrap) return;
+    wrap.innerHTML = '';
+    if (!list.length) {
+      const empty = document.createElement('div');
+      empty.className = 'saved-empty';
+      empty.textContent = 'No saved builds yet.';
+      wrap.appendChild(empty);
+      return;
+    }
+    list.forEach(entry => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'saved-item';
+      btn.innerHTML = `<span class="name">${entry.name || 'Saved Build'}</span><span class="meta">${entry.meta || ''}</span>`;
+      btn.addEventListener('click', async () => {
+        const ok = await applyBuildCode(entry.code);
+        if (ok) closeSavedOverlay();
+      });
+      wrap.appendChild(btn);
+    });
+  }
+
+  function saveCurrentBuild(){
+    const snap = currentSnap();
+    if (!snap) return;
+    const code = encodeSnapshot(snap);
+    if (!code) return;
+
+    const entry = {
+      code,
+      name: snap.buildName || `${snap.className} ${snap.ascendancy}`.trim(),
+      meta: [snap.ascendancy, snap.offhand ? `${snap.weapon} & ${snap.offhand}` : snap.weapon].filter(Boolean).join(' • ')
+    };
+    const existing = loadSaved().filter(e => e.code !== code);
+    existing.unshift(entry);
+    persistSaved(existing);
+    renderSavedList();
+    updateCodeUI(code);
+  }
+
+  function bindUI(){
+    const copyBtn = document.getElementById('copy-build-link');
+    const saveBtn = document.getElementById('save-build');
+    const savedListFab = savedFab;
+
+    copyBtn?.addEventListener('click', () => {
+      const snap = currentSnap();
+      const code = encodeSnapshot(snap);
+      if (!code) return;
+      const url = new URL(location.href);
+      url.searchParams.set('build', code);
+      const text = url.toString();
+      if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text);
+      updateCodeUI(code);
+    });
+
+    saveBtn?.addEventListener('click', saveCurrentBuild);
+    savedListFab?.addEventListener('click', openSavedOverlay);
+    savedCloseBtn?.addEventListener('click', closeSavedOverlay);
+    savedOverlay?.addEventListener('click', (e) => {
+      const t = e.target;
+      if (t?.dataset?.close) closeSavedOverlay();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && savedOverlay && !savedOverlay.hidden) closeSavedOverlay();
+    });
+  }
+
+  function autoLoadFromQuery(){
+    const q = getQueryParams();
+    const code = q.get('build') || q.get('buildCode');
+    if (code) applyBuildCode(code);
+  }
+
+  function subscribeToRolls(){
+    if (window.App && typeof window.App.onRoll === 'function') {
+      window.App.onRoll(() => {
+        const snap = currentSnap();
+        const code = encodeSnapshot(snap);
+        updateCodeUI(code);
+      });
+    }
+  }
+
+  onDomReady(() => {
+    bindUI();
+    renderSavedList();
+    subscribeToRolls();
+    autoLoadFromQuery();
+  });
+
+  window.RandomancerEncodeSnapshot = encodeSnapshot;
+  window.RandomancerApplyBuildCode = applyBuildCode;
+  window.RandomancerUpdateBuildCodeUI = () => {
+    const snap = currentSnap();
+    const code = encodeSnapshot(snap);
+    updateCodeUI(code);
+    return code;
+  };
+})();
+
 // App metadata
 const APP_VERSION = '0.8.2_visual_cleanup';
 
@@ -188,14 +559,23 @@ const App = window.App = (() => {
 
     // canonical current roll snapshot
     currentRoll: {
+      className: '',
+      ascendancy: '',
       defense:   '',
       defStrat:  '',
       weapon:    '',
       offhand:   '',
       tactics:   '',
       ailments:  '',
+      ailmentList: [],
+      tacticList: [],
       buildName: '',
-      flavor:    ''
+      flavor:    '',
+      attributes: { strength: 0, dexterity: 0, intelligence: 0 },
+      recommendedSkills: [],
+      recommendedPersistentBuff: null,
+      recommendedUniques: [],
+      snapshotVersion: 1
     },
 
     // dev toggle for “single-entry” behavior
@@ -286,19 +666,37 @@ const App = window.App = (() => {
     return true;
   }
 
+  function mergeCurrentRoll(partial){
+    try {
+      state.currentRoll = { ...state.currentRoll, ...partial };
+      if (typeof window !== 'undefined') {
+        window.__LAST_ROLL_META = { ...state.currentRoll };
+      }
+      return state.currentRoll;
+    } catch (e) {
+      return state.currentRoll;
+    }
+  }
+
   function captureCurrentRollFromDOM(){
     try{
       const offhand = firstText(['#offhand','#off_hand','#off','#offHand']);
 
+      const meta = (typeof window !== 'undefined' && window.__LAST_ROLL_META) ? window.__LAST_ROLL_META : {};
+
       state.currentRoll = {
+        ...state.currentRoll,
+        ...meta,
         defense:   firstText('#defense'),
         defStrat:  firstText('#defstrat'),
         weapon:    firstText('#weapons'),
         offhand,
         tactics:   firstText('#tactics'),
         ailments:  firstText('#ailments'),
-        buildName: firstText('#build-name'),
-        flavor:    firstText('#flavor')
+        ailmentList: (meta.ailmentList && meta.ailmentList.length) ? meta.ailmentList : firstText('#ailments').split(/\s*&\s*/).filter(Boolean),
+        tacticList: (meta.tacticList && meta.tacticList.length) ? meta.tacticList : firstText('#tactics').split(/\s*&\s*/).filter(Boolean),
+        buildName: firstText('#build-name') || meta.buildName || '',
+        flavor:    firstText(['#build-subtext','#flavor']) || meta.flavor || ''
       };
 
       return state.currentRoll;
@@ -307,7 +705,7 @@ const App = window.App = (() => {
     }
   }
 
-  return { state, bootstrap, setCohesion, legacyInit, roll, captureCurrentRollFromDOM, modules: { Config, RulesEngine } };
+  return { state, bootstrap, setCohesion, legacyInit, roll, captureCurrentRollFromDOM, mergeCurrentRoll, modules: { Config, RulesEngine } };
 })();
 
 // ---------- Tag utilities (shared normalizer + alias map) ----------
@@ -966,7 +1364,19 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
 
 
     // Render a dedicated persistent buff skill section (single card, full-width)
-    renderPersistentBuffSkill(persistentPool, rolledProfile, window.TAG_IDF, knobs, gems);
+    const persistent = renderPersistentBuffSkill(persistentPool, rolledProfile, window.TAG_IDF, knobs, gems);
+
+    return {
+      skills: picks.map(g => ({
+        id: g.id || g.base_item?.id || g.name || '',
+        name: g.name || '',
+        recommended_supports: Array.isArray(g.recommended_supports) ? g.recommended_supports.slice(0, 6) : []
+      })),
+      persistentBuff: persistent ? {
+        id: persistent.id || persistent.base_item?.id || persistent.name || '',
+        name: persistent.name || ''
+      } : null
+    };
   }catch(e){
     console.error("[skills] render error", e);
   }
@@ -1048,19 +1458,21 @@ function renderPersistentBuffSkill(persistentPool, rolledProfile, tagIDF, knobs,
 	  return `<span class="${cls}">${t}</span>`;
 	}).join('');
 	
-	card.innerHTML = `
-	  <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
-	  ${requiresSubtitle}
-	  <div class="skill-divider"></div>
-	  ${grantLine(g)}
-	  <div class="skill-tags">${pills}</div>
-	  <div class="supports-label">Recommended Supports</div>
-	  <div class="supports">
-		${renderSupportCards(g.recommended_supports, gemDict)}
-	  </div>
-	`;
-	applyGemBorderFromReqWeights(card, g.requirement_weights);
-	grid.appendChild(card);
+        card.innerHTML = `
+          <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
+          ${requiresSubtitle}
+          <div class="skill-divider"></div>
+          ${grantLine(g)}
+          <div class="skill-tags">${pills}</div>
+          <div class="supports-label">Recommended Supports</div>
+          <div class="supports">
+                ${renderSupportCards(g.recommended_supports, gemDict)}
+          </div>
+        `;
+        applyGemBorderFromReqWeights(card, g.requirement_weights);
+        grid.appendChild(card);
+
+        return g;
   } catch (e) {
     console.error('[persistent buff] render error', e);
   }
@@ -1270,8 +1682,33 @@ function rollBuild(dataWrap){
 
 
   // Build name + flavor (restored)
-  document.getElementById('build-name').textContent = generateBuildName(clsName, asc);
-  document.getElementById('build-subtext').textContent = generateFlavorLine(clsName, asc);
+  const buildName = generateBuildName(clsName, asc);
+  const buildFlavor = generateFlavorLine(clsName, asc);
+  document.getElementById('build-name').textContent = buildName;
+  document.getElementById('build-subtext').textContent = buildFlavor;
+
+  const baseSnapshot = {
+    snapshotVersion: 1,
+    className: clsName,
+    ascendancy: asc || '',
+    defense: defense?.name || '',
+    defStrat: defStrat?.name || '',
+    weapon: weapon?.name || '',
+    offhand: offhand?.name || '',
+    tactics: tacticSet.filter(Boolean).map(t=>t.name).join(' & '),
+    ailments: ailmentSet.filter(Boolean).map(a=>a.name).join(' & '),
+    ailmentList: ailmentSet.filter(Boolean).map(a=>a.name),
+    tacticList: tacticSet.filter(Boolean).map(t=>t.name),
+    buildName,
+    flavor: buildFlavor,
+    attributes: { strength: S, dexterity: D, intelligence: I }
+  };
+
+  if (window.App && typeof window.App.mergeCurrentRoll === 'function') {
+    window.App.mergeCurrentRoll(baseSnapshot);
+  } else if (typeof window !== 'undefined') {
+    window.__LAST_ROLL_META = { ...baseSnapshot };
+  }
 
 
   // Stash the roll context for synergy scorer
@@ -1286,7 +1723,14 @@ function rollBuild(dataWrap){
 	};
 
   // Skills (weapon-limited + synergy scoring)
-  rollRecommendedSkills(dataWrap, base, {weapon, offhand}, window.CURRENT_ROLL);
+  const skillSnapshot = rollRecommendedSkills(dataWrap, base, {weapon, offhand}, window.CURRENT_ROLL) || {};
+
+  if (window.App && typeof window.App.mergeCurrentRoll === 'function') {
+    window.App.mergeCurrentRoll({
+      recommendedSkills: skillSnapshot.skills || [],
+      recommendedPersistentBuff: skillSnapshot.persistentBuff || null
+    });
+  }
   
   // Uniques: trigger the synergy engine directly using the current roll snapshot
   try {
@@ -1524,13 +1968,13 @@ function extractBracketTags(description){
 		  set('#defstrat', s.defStrat);
 		  set('#weapons',  s.weapon);
 		  set('#offhand',  s.offhand);
-		  set('#tactics',  s.tactics);
-		  set('#ailments', s.ailments);
-		  set('#build-name', s.buildName);
-		  set('#flavor', s.flavor);
-		}catch(e){ /*no-op*/ }
-	  };
-	});
+                  set('#tactics',  s.tactics);
+                  set('#ailments', s.ailments);
+                  set('#build-name', s.buildName);
+                  set('#build-subtext', s.flavor);
+                }catch(e){ /*no-op*/ }
+          };
+        });
 
 
   // Pre‑Gate core: evaluate snapshot and decide if valid
@@ -2154,36 +2598,61 @@ function ensureUniqueSection(){
 
 
     async function refreshUniques(snap){
-	  if (window.__u79_active !== TOKEN) return; // last-wins
-	
-	  try{
-		const items = await loadUniquesM();
-		const rolled = rolledByCategory(snap);
-		const rolledSet = new Set([
-		  ...rolled.tactics,
-		  ...rolled.ailments,
-		  ...rolled.def,
-		]);
-		const allow = allowedSlots(snap);
-		const picks = pick(items, rolled, allow, 5, 2);
-	
-		// Debug logging (optional, but now safe & informative)
-		console.log('[u79b2m] snap', snap);
-		console.log('[u79b2m] rolled', rolled);
-		console.log('[u79b2m] picks', picks.length);
+          if (window.__u79_active !== TOKEN) return; // last-wins
+
+          try{
+                const items = await loadUniquesM();
+                const rolled = rolledByCategory(snap);
+                const rolledSet = new Set([
+                  ...rolled.tactics,
+                  ...rolled.ailments,
+                  ...rolled.def,
+                ]);
+                const allow = allowedSlots(snap);
+                const picks = pick(items, rolled, allow, 5, 2);
+
+                if (window.App && typeof window.App.mergeCurrentRoll === 'function') {
+                  window.App.mergeCurrentRoll({ recommendedUniques: picks.map(p => p.name) });
+                }
+                if (typeof window.RandomancerUpdateBuildCodeUI === 'function') {
+                  window.RandomancerUpdateBuildCodeUI();
+                }
+
+                // Debug logging (optional, but now safe & informative)
+                console.log('[u79b2m] snap', snap);
+                console.log('[u79b2m] rolled', rolled);
+                console.log('[u79b2m] picks', picks.length);
 	
 		renderUniques(picks, rolledSet);
 	  }catch(e){
 		console.error('[u79b2m] refresh error', e);
 	  }
-	}
-	
-	// Expose a global hook so the core roll engine can trigger uniques directly
+        }
+
+        // Expose a global hook so the core roll engine can trigger uniques directly
     window.RandomancerRefreshUniques = refreshUniques;
 
-  
+    async function renderUniquesFromNames(names){
+          if (!Array.isArray(names) || !names.length) {
+                ensureUniqueSection()?.replaceChildren();
+                return;
+          }
+
+          try {
+                const items = await loadUniquesM();
+                const byName = new Map(items.map(it => [it.name, it]));
+                const ordered = names.map(n => byName.get(n)).filter(Boolean);
+                renderUniques(ordered, new Set());
+          } catch (e) {
+                console.warn('[u79b2m] renderUniquesFromNames failed', e);
+          }
+    }
+
+    window.RandomancerRenderUniquesFromNames = renderUniquesFromNames;
+
+
       // Hook into App.roll when available (primary path for refresh)
-	(function(){
+        (function(){
 	  function install(attempt){
 		attempt = attempt || 0;
 		if (attempt > 40) return; // ~2s max (40 * 50ms)
