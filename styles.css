@@ -336,6 +336,7 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 
 /* === v0.5.1: Recommended Skills section === */
 .skills-grid { margin-top: .25rem; }
+
 .skill-card {
   border-radius: 10px;
   padding: .8rem 1rem;
@@ -344,8 +345,29 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
   box-shadow: 0 0 6px rgba(0,0,0,0.4);
   transition: box-shadow .2s ease, border-color .2s ease;
 }
-.skill-title { margin: 0 0 .2rem; color: var(--gold); font-weight: 600; }
-.skill-desc { margin: 0 0 .35rem; font-style: italic; color: var(--muted); }
+
+/* Skill name: slightly more prominent */
+.skill-title {
+  margin: 0 0 .15rem;
+  color: var(--gold);
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+/* Subtle "Requires: ..." line under the title */
+.skill-subtitle {
+  margin: 0 0 .4rem;
+  color: var(--muted);
+  font-size: .9rem;
+  font-style: italic;
+}
+
+.skill-desc {
+  margin: 0 0 .35rem;
+  font-style: italic;
+  color: var(--muted);
+}
+
 .skill-tags, .support-tags {
   display:block;
   font-size:.9rem;
@@ -353,6 +375,19 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
   opacity:.9;
   margin:.2rem 0 .2rem;
 }
+
+.skill-divider {
+  border: 0;
+  border-top: 1px dashed rgba(200,168,107,0.25);
+  padding-top: .5rem;
+  padding-bottom: .25rem;
+  /* 
+border-top: 1px dotted var(--gold);
+  opacity: 0.45;
+  margin: 0.25rem 0 0.45rem;
+ */
+}
+
 .req-line { font-size:.9rem; color:var(--silver); opacity:.85; margin:.1rem 0 .3rem; }
 .supports-wrap { margin-top: .5rem; border-top: 1px dashed rgba(200,168,107,0.25); padding-top: .5rem; }
 .support-item {
@@ -613,18 +648,6 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
   color:#e9d8a6;
 }
 
-/* Req. Weapon line */
-.req-block{
-  border-top:1px dashed rgba(213,182,106,.35);
-  margin-top:.75rem;
-  padding-top:.5rem;
-  display:grid;
-  grid-template-columns:140px 1fr;
-  gap:.5rem;
-}
-.req-label{ color:#d5b66a; font-style:italic; }
-.req-value{ color:rgba(235,235,235,.95); }
-
 /* tag pill fallback */
 .tag-pill{
   display:inline-block; padding:.2rem .6rem; border-radius:999px;
@@ -678,34 +701,12 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 
 
 /* v0.7 additions */
-.synergy-chip {
-  display: inline-block;
-  margin-left: 8px;
-  padding: 2px 8px;
-  font-size: 12px;
-  border: 1px solid rgba(255,215,128,0.6);
-  border-radius: 999px;
-  background: rgba(255,215,128,0.08);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
 .tag-pill.matched {
   border-color: rgba(126, 217, 87, 0.7);
   background: rgba(126, 217, 87, 0.12);
   box-shadow: 0 0 8px rgba(126, 217, 87, 0.25) inset;
   font-weight: 600;
 }
-
-/* v0.7 grants label */
-.grants-label{
-  color:#d5b66a;
-  font-weight:700;
-  margin:0 0 .25rem;
-  letter-spacing:.02em;
-  opacity:.95;
-}
-
 
 /* v0.7 grant wrap */
 .grant-wrap{
@@ -829,94 +830,103 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 }
 .uniques-grid{ margin-top:.35rem; }
 
+/* Unique card frame */
 .unique-card {
-  border-radius: 12px;
-  padding: .9rem 1rem;
-  background: rgba(18,18,20,0.78);
-  border: 1px solid var(--unique-bronze-edge);
+  background: #12100c;
+  border: 1px solid rgba(255, 200, 120, 0.45);
+  border-radius: 14px;
   box-shadow:
-    0 0 0 1px rgba(0,0,0,0.35) inset,
-    0 10px 24px rgba(0,0,0,0.35),
-    0 0 10px var(--unique-bronze-soft) inset;
-  position: relative;
-}
-.unique-card::before{
-  content:"";
-  position:absolute; inset:0; pointer-events:none;
-  border-radius:12px;
-  background:
-    linear-gradient(180deg, rgba(197,138,70,0.14), transparent 40%, transparent 70%, rgba(197,138,70,0.08)),
-    linear-gradient(90deg, rgba(197,138,70,0.12), rgba(197,138,70,0.02), rgba(197,138,70,0.12));
-  mix-blend-mode:overlay; opacity:.85;
+    0 0 18px rgba(255, 180, 80, 0.18),
+    inset 0 0 0 1px rgba(255, 200, 140, 0.05);
+  overflow: hidden;
 }
 
-.unique-title { margin: 0 0 .2rem; color: var(--unique-bronze); font-weight: 700; letter-spacing:.03em; }
-.unique-sub  { margin: 0 0 .4rem; font-style: italic; color: var(--muted); }
-
-.unique-tags { display:flex; flex-wrap:wrap; gap:.3rem; margin:.25rem 0 .45rem; }
-.unique-lines { margin:.25rem 0 0; font-size:.98rem; color: rgba(235,235,235,.9); line-height:1.2; }
-.unique-lines .hit { color: var(--unique-bronze); font-weight: 700; text-shadow: 0 0 6px rgba(197,138,70,0.35); }
-
-.unique-tags .tag-pill{
-  background: rgba(197,138,70,0.18);
-  border: 1px solid rgba(197,138,70,0.45);
-  color: #e9d7b4 !important;
-  text-transform: lowercase;
-}
-.unique-tags .tag-pill.matched{
-  border-color: rgba(126,217,87,0.8);
-  background: rgba(126,217,87,0.12);
-  box-shadow: 0 0 8px rgba(126,217,87,0.25) inset;
-  color:#dfe; font-weight: 700;
+/* Header: name + base */
+.unique-header {
+  background: none;
+  border-bottom: 1px solid rgba(255, 200, 140, 0.12);
+  padding: 10px 14px 8px;
 }
 
+.unique-name {
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #ffcf7a;
+  font-size: 1.05rem;
+  line-height: 1.15;
+}
 
-/* === v0.7.6_beta8d — Unique card polish === */
-.unique-card{background:#12100c;border:1px solid rgba(255,200,120,.45);border-radius:14px;box-shadow:0 0 18px rgba(255,180,80,.18),inset 0 0 0 1px rgba(255,200,140,.05);overflow:hidden}
-.unique-header{background:none;padding:10px 14px 8px;border-bottom:1px solid rgba(255,200,140,.12)}
-.unique-name{font-weight:700;letter-spacing:.3px;color:#ffcf7a;font-size:1.05rem;line-height:1.15}
-.unique-base{margin-top:2px;font-variant:small-caps;letter-spacing:.6px;color:#d7b58a;opacity:.9;font-size:.85rem}
-.tags-row{display:flex;flex-wrap:wrap;gap:6px;margin:6px 14px 2px}
-.unique-card .pill{margin:2px 6px 2px 0}
-.unique-card .pill.match{box-shadow:0 0 0 1px rgba(255,210,140,.45),0 0 12px rgba(255,180,90,.25);filter:saturate(1.1)}
-.unique-lines{padding:10px 14px 12px;color:#e4d9c9;font-size:.95rem}
-.unique-line{margin:2px 0;opacity:.95}
+.unique-base {
+  margin-top: 2px;
+  font-variant: small-caps;
+  letter-spacing: 0.6px;
+  color: #d7b58a;
+  opacity: 0.9;
+  font-size: 0.85rem;
+}
 
+/* Tag pills row */
+.tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 6px 14px 2px;
+}
 
+/* Let uniques reuse the gem-pill look but with bronze tint */
+.unique-card .pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 200, 140, 0.35);
+  background: radial-gradient(
+    160% at 10% 30%,
+    rgba(140, 90, 35, 0.30) 0%,
+    rgba(35, 26, 16, 0.45) 60%,
+    rgba(8, 5, 2, 0.9) 100%
+  );
+  font-size: 0.78rem;
+  letter-spacing: 0.2px;
+  line-height: 1.2;
+  color: #f5e3cf;
+}
 
-/* === v0.7.6_beta8e — unique cards reuse gem pill styles === */
-.unique-card .pill{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border:1px solid rgba(245,185,120,.55);border-radius:999px;background:radial-gradient(120% 160% at 10% 30%,rgba(140,90,35,.30) 0%,rgba(35,26,16,.45) 60%,rgba(20,14,9,.65) 100%);color:#f5e3cf;font-size:.78rem;letter-spacing:.2px;line-height:1.2}
-.unique-card .pill.match{box-shadow:0 0 0 1px rgba(255,210,140,.45),0 0 12px rgba(255,180,90,.25);color:#fff2df}
+.unique-card .pill.match {
+  box-shadow:
+    0 0 0 1px rgba(255, 210, 140, 0.45),
+    0 0 12px rgba(255, 180, 90, 0.25);
+  color: #fff2df;
+}
 
-/* === v0.7.6_beta8f — uniques gem-pill alias + glow === */
-.unique-card .pill{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border:1px solid rgba(245,185,120,.55);border-radius:999px;background:radial-gradient(120% 160% at 10% 30%,rgba(140,90,35,.30) 0%,rgba(35,26,16,.45) 60%,rgba(20,14,9,.65) 100%);color:#f5e3cf;font-size:.78rem;letter-spacing:.2px;line-height:1.2}
-.unique-card .pill.match{box-shadow:0 0 0 1px rgba(255,210,140,.45),0 0 12px rgba(255,180,90,.25);color:#fff2df}
-.unique-card{background:#12100c;border:1px solid rgba(255,200,120,.45);border-radius:14px;box-shadow:0 0 18px rgba(255,180,80,.18), inset 0 0 0 1px rgba(255,200,140,.05)}
-.unique-header{background:none;border-bottom:1px solid rgba(255,200,140,.12);padding:10px 14px 8px}
-.unique-name{font-weight:700;letter-spacing:.3px;color:#ffcf7a;font-size:1.05rem;line-height:1.15}
-.unique-base{margin-top:2px;font-variant:small-caps;letter-spacing:.6px;color:#d7b58a;opacity:.9;font-size:.85rem}
-.tags-row{display:flex;flex-wrap:wrap;gap:6px;margin:6px 14px 2px}
-.unique-lines{padding:10px 14px 12px;color:#e4d9c9;font-size:.95rem}
-.unique-line{margin:2px 0;opacity:.95}
+/* Lines */
+.unique-lines {
+  padding: 10px 14px 12px;
+  color: #e4d9c9;
+  font-size: 0.95rem;
+}
 
-/* === v0.7.6_beta8h — uniques gem-pill alias + glow === */
-.unique-card .pill{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border:1px solid rgba(245,185,120,.55);border-radius:999px;background:radial-gradient(120% 160% at 10% 30%,rgba(140,90,35,.30) 0%,rgba(35,26,16,.45) 60%,rgba(20,14,9,.65) 100%);color:#f5e3cf;font-size:.78rem;letter-spacing:.2px;line-height:1.2}
-.unique-card .pill.match{box-shadow:0 0 0 1px rgba(255,210,140,.45),0 0 12px rgba(255,180,90,.25);color:#fff2df}
-.unique-card{background:#12100c;border:1px solid rgba(255,200,120,.45);border-radius:14px;box-shadow:0 0 18px rgba(255,180,80,.18), inset 0 0 0 1px rgba(255,200,140,.05)}
-.unique-header{background:none;border-bottom:1px solid rgba(255,200,140,.12);padding:10px 14px 8px}
-.unique-name{font-weight:700;letter-spacing:.3px;color:#ffcf7a;font-size:1.05rem;line-height:1.15}
-.unique-base{margin-top:2px;font-variant:small-caps;letter-spacing:.6px;color:#d7b58a;opacity:.9;font-size:.85rem}
-.tags-row{display:flex;flex-wrap:wrap;gap:6px;margin:6px 14px 2px}
-.unique-lines{padding:10px 14px 12px;color:#e4d9c9;font-size:.95rem}
-.unique-line{margin:2px 0;opacity:.95}
+.unique-line {
+  margin: 2px 0;
+  opacity: 0.95;
+}
 
+/* Highlighted terms inside lines (from highlight()) */
+.unique-lines .hit {
+  color: var(--unique-bronze, #ffcf7a);
+  font-weight: 700;
+  text-shadow: 0 0 6px rgba(197, 138, 70, 0.35);
+}
 
+.unique-highlights {
+  font-size: 0.85rem;
+  color: rgba(255, 235, 210, 0.95);
+  margin-bottom: 0.35rem;
+  font-style: italic;
+  opacity: 0.95;
+}
 
-/* === v0.7.6_beta8i — uniques polish === */
-.unique-line.meta{opacity:.7;color:#cdb89f;font-size:.92rem}
-.unique-card .pill[data-cat="Tactic"].match{box-shadow:0 0 0 1px rgba(255,210,140,.55),0 0 12px rgba(255,180,90,.35)}
-.unique-card .pill[data-cat="Ailment"].match{box-shadow:0 0 0 1px rgba(170,220,255,.45),0 0 12px rgba(140,200,255,.30)}
-.unique-card .pill[data-cat="DefensiveStrategy"].match{box-shadow:0 0 0 1px rgba(200,255,170,.45),0 0 12px rgba(170,240,150,.28)}
 
 
 /* --- Mobile polish pack (v0.7.9_beta2m) --- */
