@@ -34,6 +34,21 @@ const Dom = (() => {
   return { q, setText, setHTML, txt };
 })();
 
+// App metadata
+const APP_VERSION = '0.8.2_cleanup';
+
+window.RANDOMANCER = window.RANDOMANCER || {};
+window.RANDOMANCER.version = APP_VERSION;
+
+onDomReady(() => {
+  const el = document.querySelector('.version');
+  if (el) {
+    el.textContent = `Randomancer v${APP_VERSION}`;
+  }
+});
+
+
+
 // ===== Shared DOM ready / query helpers (v0.7.5 scaffolding uses these) =====
 function onDomReady(fn) {
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
@@ -1414,7 +1429,7 @@ const gemDesc = g.description || g.support_text || '';
 // ---------- data initialization ----------
 async function loadData() {
   try {
-    const core = await loadJSON('data_0.8.2_cleanup.json');
+    const core = await loadJSON('core-data.json');
     const gemsRaw = await tryLoad(['data/skill_gems.json', 'gems.json']);
     const skillsRaw = await tryLoad(['data/skills.json']);
     const enr = enrichGems(gemsRaw, skillsRaw);
@@ -1928,7 +1943,7 @@ function extractBracketTags(description){
 
 
 async function loadUniquesM(){
-    const url = 'uniques_enriched_0.8.2_cleanup.json?v=' + Date.now();
+    const url = 'uniques_enriched.json?v=' + Date.now();
     const r = await fetch(url, {cache:'no-store'});
     if (!r.ok) throw new Error('HTTP '+r.status);
     const data = await r.json();
