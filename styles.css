@@ -1005,6 +1005,7 @@ img, video { max-width: 100%; height: auto; }
   opacity: 0.8;
   transition: transform .12s ease, box-shadow .12s ease, background .12s ease, opacity .12s ease;
 }
+.saved-fab{ right: calc(max(16px, env(safe-area-inset-right)) + 40px); }
 .rm-info-fab:hover{
   transform: translateY(-1px);
   box-shadow: 0 2px 10px rgba(0,0,0,.45);
@@ -1035,6 +1036,7 @@ img, video { max-width: 100%; height: auto; }
   max-height: 78vh;
   overflow: hidden;
 }
+.saved-overlay .rm-info-dialog{ width: min(560px, calc(100% - 32px)); }
 @media (max-width: 640px){
   .rm-info-dialog{ inset: 8% 50% auto 50%; width: calc(100% - 24px); }
 }
@@ -1058,6 +1060,58 @@ img, video { max-width: 100%; height: auto; }
 .rm-info-content p{ margin: 8px 0; }
 .rm-info-content a{ color: #ffd58f; text-decoration: underline; text-decoration-color: rgba(255,213,143,.45); }
 .rm-disclaimer small{ font-size: 12px; opacity: .85; line-height: 1.35; display:block; }
+
+.panel-actions{
+  position:absolute;
+  top:10px;
+  right:12px;
+  display:flex;
+  gap:8px;
+  z-index:5;
+}
+.icon-btn{
+  appearance:none;
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  border:none;
+  background: transparent;
+  color: var(--gold);
+  font-size: 16px;
+  cursor:pointer;
+  display:grid;
+  place-items:center;
+  transition: transform .12s ease, box-shadow .12s ease, color .2s ease, background .2s ease;
+}
+.icon-btn:hover{ transform: translateY(-1px); box-shadow: 0 6px 12px rgba(0,0,0,0.35); background: rgba(255,255,255,0.04); }
+.icon-btn:active{ transform: translateY(0); background: rgba(255,255,255,0.08); }
+.icon-btn:focus{ outline:none; box-shadow: 0 0 0 2px rgba(202,164,95,0.45); }
+.icon-btn[data-saved="1"]{ color: #ffd58f; text-shadow: 0 0 8px rgba(255,213,143,0.35); }
+
+.saved-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.saved-subtitle{
+  margin: 4px 14px 2px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+.saved-item{
+  background: rgba(0,0,0,0.32);
+  border: 1px solid rgba(200,168,107,0.28);
+  color: var(--ink);
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor:pointer;
+  text-align:left;
+  transition: background .12s ease, border-color .12s ease, transform .1s ease, box-shadow .1s ease;
+}
+.saved-item:hover{ background: rgba(200,168,107,0.08); border-color: rgba(200,168,107,0.6); transform: translateY(-1px); box-shadow: 0 6px 12px rgba(0,0,0,0.25); }
+.saved-item .name{ display:block; color: var(--gold); font-size:1rem; }
+.saved-item .meta{ display:block; color: var(--muted); font-size:0.9rem; }
+.saved-empty{ color: var(--muted); font-size: 0.95rem; }
 
 
 /* === Info Lightbox extra polish (v0.7.9_beta2n) === */
