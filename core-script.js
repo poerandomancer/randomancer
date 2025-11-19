@@ -294,8 +294,6 @@ const Dom = (() => {
   }
 
   function updateCodeUI(code){
-    const el = document.getElementById('build-code-value');
-    if (el) el.textContent = code || '—';
     syncSaveButtonState(code);
   }
 
