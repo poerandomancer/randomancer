@@ -415,17 +415,10 @@ window.TAG_ALIASES = TagUtils.alias;
     return { score, raw, attrSim, idfAvg, weaponHint, combo };
   }
   function quantile(arr, q){ if(!arr || !arr.length) return 0; const xs = arr.slice().sort((a,b)=>a-b); const idx=Math.max(0, Math.min(xs.length-1, Math.floor((xs.length-1)*q))); return xs[idx]; }
-  function normalizeSynergy(raw, scored){
-    if(!scored || !scored.length) return 0; const raws = scored.map(x=>x.raw).filter(x=>isFinite(x));
-    const maxRaw = Math.max(...raws, 0); const p95 = quantile(raws, 0.95);
-    const denom = Math.max(p95, maxRaw*0.9, 1e-6); const num = Math.log1p(Math.max(0, raw)); const den = Math.log1p(denom);
-    return Math.round(100 * Math.min(1, num / (den || 1)));
-  }
 
   // Capture legacy scorer if present
   const LEGACY = {
-    scoreGemSynergy: window.scoreGemSynergy,
-    normalizeSynergy: window.normalizeSynergy
+    scoreGemSynergy: window.scoreGemSynergy
   };
   window.__LEGACY_SCORER = LEGACY;
 
@@ -439,8 +432,7 @@ window.TAG_ALIASES = TagUtils.alias;
         if (actives.length) window.TAG_IDF = buildTagIDF(actives);
       }
       window.scoreGemSynergy = (g, rolledProfile, idf, knobs) => scoreGemSynergy(g, rolledProfile, idf, knobs);
-      window.normalizeSynergy = (raw, scored) => normalizeSynergy(raw, scored);
-      window.__NEW_SCORER = { scoreGemSynergy: window.scoreGemSynergy, normalizeSynergy: window.normalizeSynergy };
+      window.__NEW_SCORER = { scoreGemSynergy: window.scoreGemSynergy};
     } catch(e){ console.warn('[Scorer.installNewScorer] failed', e); }
   }
 
@@ -631,26 +623,6 @@ function lookupGem(dict, raw){
   return null;
 }
 
-
-// --- Synergy chip normalization helpers ---
-function quantile(arr, q){
-  if(!arr.length) return 0;
-  const xs = arr.slice().sort((a,b)=>a-b);
-  const idx = Math.max(0, Math.min(xs.length-1, Math.floor((xs.length-1)*q)));
-  return xs[idx];
-}
-function normalizeSynergy(raw, scored){
-  if(!scored || !scored.length) return 0;
-  const raws = scored.map(x=>x.raw).filter(x=>isFinite(x));
-  const maxRaw = Math.max(...raws, 0);
-  const p95 = quantile(raws, 0.95);
-  // pick a softer denominator to avoid constant 100%s
-  const denom = Math.max(p95, maxRaw*0.9, 1e-6);
-  // sublinear transform for nicer spread
-  const num = Math.log1p(Math.max(0, raw));
-  const den = Math.log1p(denom);
-  return Math.round(100 * Math.min(1, num / (den || 1)));
-}
 // ---------- helpers ----------
 function dominantAttr(attrs){ const e=Object.entries(attrs||{}).sort((a,b)=>b[1]-a[1]); const k=(e[0]?.[0]||'int'); return {strength:'str',dexterity:'dex',intelligence:'int'}[k]||k.slice(0,3); }
 function pickUnique2(list){

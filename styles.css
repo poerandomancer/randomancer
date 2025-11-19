@@ -648,18 +648,6 @@ border-top: 1px dotted var(--gold);
   color:#e9d8a6;
 }
 
-/* Req. Weapon line */
-.req-block{
-  border-top:1px dashed rgba(213,182,106,.35);
-  margin-top:.75rem;
-  padding-top:.5rem;
-  display:grid;
-  grid-template-columns:140px 1fr;
-  gap:.5rem;
-}
-.req-label{ color:#d5b66a; font-style:italic; }
-.req-value{ color:rgba(235,235,235,.95); }
-
 /* tag pill fallback */
 .tag-pill{
   display:inline-block; padding:.2rem .6rem; border-radius:999px;
@@ -713,34 +701,12 @@ border-top: 1px dotted var(--gold);
 
 
 /* v0.7 additions */
-.synergy-chip {
-  display: inline-block;
-  margin-left: 8px;
-  padding: 2px 8px;
-  font-size: 12px;
-  border: 1px solid rgba(255,215,128,0.6);
-  border-radius: 999px;
-  background: rgba(255,215,128,0.08);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
 .tag-pill.matched {
   border-color: rgba(126, 217, 87, 0.7);
   background: rgba(126, 217, 87, 0.12);
   box-shadow: 0 0 8px rgba(126, 217, 87, 0.25) inset;
   font-weight: 600;
 }
-
-/* v0.7 grants label */
-.grants-label{
-  color:#d5b66a;
-  font-weight:700;
-  margin:0 0 .25rem;
-  letter-spacing:.02em;
-  opacity:.95;
-}
-
 
 /* v0.7 grant wrap */
 .grant-wrap{
