@@ -70,6 +70,22 @@
         <span class="roll-status" aria-live="polite"></span>
       </button>
     </div>
+
+    <div class="share-row">
+      <div class="share-code">
+        <div class="label">Build Code</div>
+        <div id="build-code-value" class="share-value" aria-live="polite">—</div>
+      </div>
+      <div class="share-actions">
+        <button id="copy-build-link" class="share-btn" type="button">Copy Build Link</button>
+        <button id="save-build" class="share-btn" type="button">Save Build</button>
+      </div>
+    </div>
+
+    <div class="saved-panel" aria-live="polite">
+      <div class="label saved-label">Saved Builds</div>
+      <div id="saved-builds" class="saved-list"></div>
+    </div>
     </header>
 
     <main>
