@@ -1,5 +1,5 @@
 {
-  "Version": "v0.8.0",
+  "Version": "v0.8.2_cleanup",
   "Classes": {
     "Warrior": {
       "ascendancies": [
