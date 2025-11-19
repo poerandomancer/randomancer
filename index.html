@@ -10,7 +10,20 @@
   <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
+  <button id="saved-fab" class="rm-info-fab saved-fab" aria-label="View Saved Builds" title="View Saved Builds">★</button>
   <button id="info-fab" class="rm-info-fab" aria-label="About this tool" title="About">?</button>
+  <!-- Saved Builds Lightbox -->
+  <div id="saved-overlay" class="rm-info-overlay saved-overlay" hidden>
+    <div class="rm-info-backdrop" data-close="1"></div>
+    <div class="rm-info-dialog saved-dialog" role="dialog" aria-modal="true" aria-labelledby="saved-title">
+      <div class="rm-info-head">
+        <h3 id="saved-title">Saved Builds</h3>
+        <button id="saved-close" class="rm-info-close" aria-label="Close">×</button>
+      </div>
+      <p class="saved-subtitle">Preserves your last 10 Saved Builds</p>
+      <div id="saved-builds-list" class="rm-info-content saved-list"></div>
+    </div>
+  </div>
   <!-- Info Lightbox -->
   <div id="rm-info-overlay" class="rm-info-overlay" hidden>
     <div class="rm-info-backdrop" data-close="1"></div>
@@ -70,10 +83,15 @@
         <span class="roll-status" aria-live="polite"></span>
       </button>
     </div>
+
     </header>
 
     <main>
       <section class="panel">
+        <div class="panel-actions">
+          <button id="save-build" class="icon-btn" type="button" aria-label="Save Build" title="Save Build">☆</button>
+          <button id="copy-build-link" class="icon-btn" type="button" aria-label="Copy Build Link" title="Copy Build Link">⧉</button>
+        </div>
         <div class="sect">
           <div class="sect-head"><h3>Archetype</h3><div class="underline"></div><p class="sub">Class, Ascendancy, & Weapons</p></div>
           <div class="grid two">
