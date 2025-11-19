@@ -946,73 +946,52 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
     if(!grid){ return; }
     grid.innerHTML = '';
 
-    // Small helper to render grant line
-    const grantLine = (g) => {
-      const list = Array.isArray(g.granted_skills_full) ? g.granted_skills_full : [];
-      if(!list.length) return '';
-      const first = list[0];
-      const desc = first?.description || g.grant_description || '';
-      const dn = first?.display_name || g.grant_display || '';
-      if(!dn && !desc) return '';
-      return `
-        <div class="grant-wrap">
-          <div class="grants-label">Grants</div>
-          <div class="grant">
-            <div class="grant-title">${dn || ''}</div>
-            <div class="grant-desc">${desc || ''}</div>
-          </div>
-        </div>
-      `;
-    };
-
     const gemDict = buildGemDictionary(gems);
 
     // Render main recommended skills
-    picks.forEach(g => {
-      const card = document.createElement('div');
-      card.className = 'skill-card';
+	picks.forEach(g => {
+	  const card = document.createElement('div');
+	  card.className = 'skill-card';
+	
+	  // Subtle inline "requires" subtitle directly under the title
+	  const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
+		? `<div class="skill-subtitle">${g.required_weapon_types
+			.map(x => x[0].toUpperCase() + x.slice(1))
+			.join(', ')}</div>`
+		: '';
+	
+	  const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
+	  const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
+	  const rest = allTags.filter(t => !br.includes(t));
+	  const displayTags = [...br, ...rest].slice(0, 10);
+	
+	  // mark matched tags
+	  const matched = new Set();
+	  for (const t of displayTags) {
+		const k = normTagPlus(t);
+		if (rolledProfile.profile.has(k)) matched.add(k);
+	  }
+	  const pills = displayTags.map(t => {
+		const k = normTagPlus(t);
+		const cls = matched.has(k) ? 'tag-pill matched' : 'tag-pill';
+		return `<span class="${cls}">${t}</span>`;
+	  }).join('');
+	
+	  card.innerHTML = `
+		  <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
+		  ${requiresSubtitle}
+		  <div class="skill-divider"></div>
+		  ${grantLine(g)}
+		  <div class="skill-tags">${pills}</div>
+		  <div class="supports-label">Recommended Supports</div>
+		  <div class="supports">
+			${renderSupportCards(g.recommended_supports, gemDict)}
+		  </div>
+		`;
+	  applyGemBorderFromReqWeights(card, g.requirement_weights);
+	  grid.appendChild(card);
+	});
 
-      const reqBlock = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
-        ? `<div class="req-block"><span class="req-label">Requires</span> <span class="req-text">${g.required_weapon_types.map(x=>x[0].toUpperCase()+x.slice(1)).join(', ')}</span></div>`
-        : '';
-
-      const allTags = Array.isArray(g.tags)? g.tags.slice(): [];
-      const br = Array.isArray(g.bracket_tags)? g.bracket_tags: [];
-      const rest = allTags.filter(t=>!br.includes(t));
-      const displayTags = [...br, ...rest].slice(0,10);
-
-      // mark matched tags
-      const matched = new Set();
-      for(const t of displayTags){
-        const k = normTagPlus(t);
-        if(rolledProfile.profile.has(k)) matched.add(k);
-      }
-      const pills = displayTags.map(t=>{
-        const k = normTagPlus(t);
-        const cls = matched.has(k) ? 'tag-pill matched' : 'tag-pill';
-        return `<span class="${cls}">${t}</span>`;
-      }).join('');
-
-      // compute synergy percent
-      const sc = scored.find(x=>x.item===g);
-      const synergyPct = sc? normalizeSynergy(sc.raw, scored) : 0;
-
-      card.innerHTML = `
-        <div class="skill-title">
-          ${g.name||'(Unnamed Gem)'}
-          <span class="synergy-chip">Synergy ${synergyPct}%</span>
-        </div>
-        ${reqBlock}
-        ${grantLine(g)}
-        <div class="skill-tags">${pills}</div>
-        <div class="supports-label">Recommended Supports</div>
-        <div class="supports">
-          ${renderSupportCards(g.recommended_supports, gemDict)}
-        </div>
-      `;
-      applyGemBorderFromReqWeights(card, g.requirement_weights);
-      grid.appendChild(card);
-    });
 
     // Render a dedicated persistent buff skill section (single card, full-width)
     renderPersistentBuffSkill(persistentPool, rolledProfile, window.TAG_IDF, knobs, gems);
@@ -1066,50 +1045,50 @@ function renderPersistentBuffSkill(persistentPool, rolledProfile, tagIDF, knobs,
     }
 
     const grid = wrap.querySelector('#persistent-buff-grid');
-    if (!grid) return;
-    grid.innerHTML = '';
-
-    const g = top.item;
-    const gemDict = buildGemDictionary(gems || []);
-    const card = document.createElement('div');
-    card.className = 'skill-card persistent-buff-card';
-
-    const reqBlock = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
-      ? `<div class="req-block"><span class="req-label">Requires</span> <span class="req-text">${g.required_weapon_types.map(x=>x[0].toUpperCase()+x.slice(1)).join(', ')}</span></div>`
-      : '';
-
-    const allTags = Array.isArray(g.tags)? g.tags.slice(): [];
-    const br = Array.isArray(g.bracket_tags)? g.bracket_tags: [];
-    const rest = allTags.filter(t=>!br.includes(t));
-    const displayTags = [...br, ...rest].slice(0,10);
-
-    const matched = new Set();
-    for(const t of displayTags){
-      const k = normTagPlus(t);
-      if(rolledProfile.profile.has(k)) matched.add(k);
-    }
-    const pills = displayTags.map(t=>{
-      const k = normTagPlus(t);
-      const cls = matched.has(k) ? 'tag-pill matched' : 'tag-pill';
-      return `<span class="${cls}">${t}</span>`;
-    }).join('');
-
-    const synergyPct = normalizeSynergy(top.raw, scoredPB);
-
-    card.innerHTML = `
-      <div class="skill-title">
-        ${g.name||'(Unnamed Gem)'}
-        <span class="synergy-chip">Synergy ${synergyPct}%</span>
-      </div>
-      ${reqBlock}
-      <div class="skill-tags">${pills}</div>
-      <div class="supports-label">Recommended Supports</div>
-      <div class="supports">
-        ${renderSupportCards(g.recommended_supports, gemDict)}
-      </div>
-    `;
-    applyGemBorderFromReqWeights(card, g.requirement_weights);
-    grid.appendChild(card);
+	if (!grid) return;
+	grid.innerHTML = '';
+	
+	const g = top.item;
+	const gemDict = buildGemDictionary(gems || []);
+	const card = document.createElement('div');
+	card.className = 'skill-card persistent-buff-card';
+	
+	// Subtle inline "requires" subtitle directly under the title
+	const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
+	  ? `<div class="skill-subtitle">${g.required_weapon_types
+		  .map(x => x[0].toUpperCase() + x.slice(1))
+		  .join(', ')}</div>`
+	  : '';
+	
+	const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
+	const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
+	const rest = allTags.filter(t => !br.includes(t));
+	const displayTags = [...br, ...rest].slice(0, 10);
+	
+	const matched = new Set();
+	for (const t of displayTags) {
+	  const k = normTagPlus(t);
+	  if (rolledProfile.profile.has(k)) matched.add(k);
+	}
+	const pills = displayTags.map(t => {
+	  const k = normTagPlus(t);
+	  const cls = matched.has(k) ? 'tag-pill matched' : 'tag-pill';
+	  return `<span class="${cls}">${t}</span>`;
+	}).join('');
+	
+	card.innerHTML = `
+	  <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
+	  ${requiresSubtitle}
+	  <div class="skill-divider"></div>
+	  ${grantLine(g)}
+	  <div class="skill-tags">${pills}</div>
+	  <div class="supports-label">Recommended Supports</div>
+	  <div class="supports">
+		${renderSupportCards(g.recommended_supports, gemDict)}
+	  </div>
+	`;
+	applyGemBorderFromReqWeights(card, g.requirement_weights);
+	grid.appendChild(card);
   } catch (e) {
     console.error('[persistent buff] render error', e);
   }
@@ -1136,6 +1115,25 @@ function applyGemBorderFromReqWeights(el, weights){
   el.style.borderImage = `linear-gradient(90deg, ${colors.join(', ')}) 1`;
   el.style.boxShadow = '0 0 10px rgba(255,255,255,0.06)';
 }
+
+// Small helper to render grant line (shared by main skills + persistent buff)
+const grantLine = (g) => {
+  const list = Array.isArray(g.granted_skills_full) ? g.granted_skills_full : [];
+  if (!list.length) return '';
+  const first = list[0];
+  const desc = first?.description || g.grant_description || '';
+  const dn   = first?.display_name || g.grant_display || '';
+  if (!dn && !desc) return '';
+  return `
+    <div class="grant-wrap">
+      <div class="grant">
+        <div class="grant-title">${dn || ''}</div>
+        <div class="grant-desc">${desc || ''}</div>
+      </div>
+    </div>
+  `;
+};
+
 
 // ---------- data preload helper ----------
 let dataPromise = null;
@@ -2059,7 +2057,15 @@ function ensureUniqueSection(){
     const wrap = document.createElement('div');
     wrap.id = 'uniques-section';
     wrap.className = 'sect';
-    wrap.innerHTML = '<div class="sect-head"><h3>Recommended Uniques</h3><div class="underline"></div><p class="sub">Quality-first: tactics → ailments → defense → weapon hints</p></div><div id="uniques-grid" class="grid two uniques-grid"></div>';
+    wrap.innerHTML = `
+	  <div class="sect-head">
+		<h3>Recommended Uniques</h3>
+		<div class="underline"></div>
+		<p class="sub">Unique items tuned to the ailments, tactics, and defenses of this roll.</p>
+	  </div>
+	  <div id="uniques-grid" class="grid two uniques-grid"></div>
+	`;
+
     divider.insertAdjacentElement('afterend', wrap);
 
     return document.getElementById('uniques-grid');

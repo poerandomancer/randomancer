@@ -336,6 +336,7 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 
 /* === v0.5.1: Recommended Skills section === */
 .skills-grid { margin-top: .25rem; }
+
 .skill-card {
   border-radius: 10px;
   padding: .8rem 1rem;
@@ -344,8 +345,29 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
   box-shadow: 0 0 6px rgba(0,0,0,0.4);
   transition: box-shadow .2s ease, border-color .2s ease;
 }
-.skill-title { margin: 0 0 .2rem; color: var(--gold); font-weight: 600; }
-.skill-desc { margin: 0 0 .35rem; font-style: italic; color: var(--muted); }
+
+/* Skill name: slightly more prominent */
+.skill-title {
+  margin: 0 0 .15rem;
+  color: var(--gold);
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+/* Subtle "Requires: ..." line under the title */
+.skill-subtitle {
+  margin: 0 0 .4rem;
+  color: var(--muted);
+  font-size: .9rem;
+  font-style: italic;
+}
+
+.skill-desc {
+  margin: 0 0 .35rem;
+  font-style: italic;
+  color: var(--muted);
+}
+
 .skill-tags, .support-tags {
   display:block;
   font-size:.9rem;
@@ -353,6 +375,19 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
   opacity:.9;
   margin:.2rem 0 .2rem;
 }
+
+.skill-divider {
+  border: 0;
+  border-top: 1px dashed rgba(200,168,107,0.25);
+  padding-top: .5rem;
+  padding-bottom: .25rem;
+  /* 
+border-top: 1px dotted var(--gold);
+  opacity: 0.45;
+  margin: 0.25rem 0 0.45rem;
+ */
+}
+
 .req-line { font-size:.9rem; color:var(--silver); opacity:.85; margin:.1rem 0 .3rem; }
 .supports-wrap { margin-top: .5rem; border-top: 1px dashed rgba(200,168,107,0.25); padding-top: .5rem; }
 .support-item {
