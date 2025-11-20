@@ -171,15 +171,16 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
   margin:.25rem 0 .4rem;
 }
 .section-header{
-  display:flex;
+  display:grid;
+  grid-template-columns:auto auto;
+  column-gap:.35rem;
+  row-gap:.1rem;
   align-items:center;
-  gap:.35rem;
   justify-content:flex-start;
-  flex-wrap:wrap;
 }
 .section-header .section-title{ margin:0 0 .1rem; font-weight:600; color:var(--silver); letter-spacing:.02em; }
-.section-header .underline,
-.section-header .sub{ flex-basis:100%; }
+.section-header .underline{ grid-column:1 / -1; }
+.section-header .sub{ grid-column:1 / -1; }
 .lock-toggle{
   background:transparent;
   border:1px solid transparent;
