@@ -171,22 +171,26 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
   margin:.25rem 0 .4rem;
 }
 .section-header{
-  display:grid;
-  grid-template-columns:auto auto;
-  column-gap:.35rem;
-  row-gap:.1rem;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+.section-title-row{
+  display:flex;
   align-items:center;
-  justify-content:flex-start;
+  gap:.4rem;
 }
 .section-header .section-title{ margin:0 0 .1rem; font-weight:600; color:var(--silver); letter-spacing:.02em; }
-.section-header .underline{ grid-column:1 / -1; }
-.section-header .sub{ grid-column:1 / -1; }
 .lock-toggle{
   background:transparent;
   border:1px solid transparent;
   color:var(--gold);
   cursor:pointer;
-  padding:.1rem .4rem;
+  width:32px;
+  height:28px;
+  padding:0;
+  display:grid;
+  place-items:center;
   border-radius:6px;
   opacity:0;
   pointer-events:none;
