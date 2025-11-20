@@ -39,8 +39,6 @@ const DEFAULT_LOCKS = Object.freeze({
   archetype: false,
   mechanics: false,
   survivability: false,
-  skills: false,
-  uniques: false,
 });
 
 function getLockState(){
@@ -1843,24 +1841,12 @@ function rollBuild(dataWrap){
         };
 
   // Skills (weapon-limited + synergy scoring)
-  if (!locks.skills) {
-    const skillSnapshot = rollRecommendedSkills(dataWrap, base, {weapon, offhand}, window.CURRENT_ROLL) || {};
-
-    if (window.App && typeof window.App.mergeCurrentRoll === 'function') {
-      window.App.mergeCurrentRoll({
-        recommendedSkills: skillSnapshot.skills || [],
-        recommendedPersistentBuff: skillSnapshot.persistentBuff || null
-      });
-    }
-  } else if (current.recommendedSkills && current.recommendedSkills.length) {
-    try {
-      renderSkillsFromSnapshot({
-        recommendedSkills: current.recommendedSkills,
-        recommendedPersistentBuff: current.recommendedPersistentBuff
-      });
-    } catch (e) {
-      console.warn('[Randomancer] render locked skills failed', e);
-    }
+  const skillSnapshot = rollRecommendedSkills(dataWrap, base, {weapon, offhand}, window.CURRENT_ROLL) || {};
+  if (window.App && typeof window.App.mergeCurrentRoll === 'function') {
+    window.App.mergeCurrentRoll({
+      recommendedSkills: skillSnapshot.skills || [],
+      recommendedPersistentBuff: skillSnapshot.persistentBuff || null
+    });
   }
 
   // Uniques: trigger the synergy engine directly using the current roll snapshot
@@ -2614,12 +2600,8 @@ function ensureUniqueSection(){
     wrap.id = 'uniques-section';
     wrap.className = 'sect';
     wrap.innerHTML = `
-          <div class="sect-head section-header" data-section="uniques" data-locked="false">
+          <div class="sect-head">
                 <h3 class="section-title">Recommended Uniques</h3>
-                <button class="lock-toggle" type="button" aria-pressed="false" aria-label="Lock Recommended Uniques">
-                  <span class="lock-icon lock-off" aria-hidden="true">🔓</span>
-                  <span class="lock-icon lock-on" aria-hidden="true">🔒</span>
-                </button>
                 <div class="underline"></div>
                 <p class="sub">Unique items tuned to the ailments, tactics, and defenses of this roll.</p>
           </div>
