@@ -1851,8 +1851,15 @@ function rollBuild(dataWrap){
 
   // Uniques: trigger the synergy engine directly using the current roll snapshot
   try {
-    if (typeof window.RandomancerRefreshUniques === 'function') {
-      window.RandomancerRefreshUniques(window.CURRENT_ROLL);
+    if (!locks.uniques) {
+      if (typeof window.RandomancerRefreshUniques === 'function') {
+        window.RandomancerRefreshUniques(window.CURRENT_ROLL);
+      }
+    } else {
+      ensureUniqueSection();
+      if (Array.isArray(current.recommendedUniques) && current.recommendedUniques.length && typeof window.RandomancerRenderUniquesFromNames === 'function') {
+        window.RandomancerRenderUniquesFromNames(current.recommendedUniques);
+      }
     }
   } catch (e) {
     console.warn('[Randomancer] uniques refresh failed', e);
@@ -2602,6 +2609,10 @@ function ensureUniqueSection(){
         `;
 
     divider.insertAdjacentElement('afterend', wrap);
+
+    const lockBtn = wrap.querySelector('.lock-toggle');
+    if (lockBtn) wireLockButton(lockBtn);
+    syncLockUIFromState();
 
     return document.getElementById('uniques-grid');
   }
