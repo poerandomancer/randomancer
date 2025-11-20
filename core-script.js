@@ -535,7 +535,7 @@ function initSectionLocks(){
 })();
 
 // App metadata
-const APP_VERSION = '0.8.2_visual_cleanup';
+const APP_VERSION = '0.8.2_locking';
 
 window.RANDOMANCER = window.RANDOMANCER || {};
 window.RANDOMANCER.version = APP_VERSION;
@@ -1143,9 +1143,9 @@ function renderCohesionStatus(buildState){
   }
 
   if (modeName === 'strict') {
-    el.textContent = `⚠ Strict cohesion constrained by your current choices — best achieved: ${score}%.`;
+    el.textContent = `⚠ Strict cohesion constrained by your current locks — best achieved: ${score}%.`;
   } else if (modeName === 'cohesive') {
-    el.textContent = `⚠ Cohesive mode is limited by your current build choices — current synergy: ${score}%.`;
+    el.textContent = `⚠ Cohesive mode is limited by your current build locks — current synergy: ${score}%.`;
   } else {
     el.textContent = '';
   }
