@@ -170,6 +170,47 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
   background:linear-gradient(90deg, var(--gold), transparent);
   margin:.25rem 0 .4rem;
 }
+.section-header{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+.section-title-row{
+  display:flex;
+  align-items:center;
+  gap:.4rem;
+}
+.section-header .section-title{ margin:0 0 .1rem; font-weight:600; color:var(--silver); letter-spacing:.02em; }
+.lock-toggle{
+  background:transparent;
+  border:1px solid transparent;
+  color:var(--gold);
+  cursor:pointer;
+  width:32px;
+  height:28px;
+  padding:0;
+  display:grid;
+  place-items:center;
+  border-radius:6px;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 150ms ease-out, border-color 120ms ease-out;
+}
+.lock-toggle:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+.section-header:hover .lock-toggle,
+.section-header:focus-within .lock-toggle{
+  opacity:1;
+  pointer-events:auto;
+}
+.section-header[data-locked="true"] .lock-toggle{
+  opacity:1;
+  pointer-events:auto;
+  border-color:var(--gold);
+}
+.lock-icon.lock-on{ display:none; }
+.section-header[data-locked="true"] .lock-icon.lock-on{ display:inline-block; }
+.section-header[data-locked="true"] .lock-icon.lock-off{ display:none; }
+.section-header[data-locked="true"] .section-title{ color:var(--gold); }
 .sect h3{ margin:0 0 .1rem; font-weight:600; color:var(--silver); letter-spacing:.02em; }
 .sub{ margin:0; color:var(--muted); font-size:.95rem; }
 .gold.subtle{
