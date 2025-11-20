@@ -25,14 +25,72 @@ const RNG = (() => ({
   int: (min, max) => Math.floor(Math.random() * (max - min + 1)) + min,
 }))();
 
+const COHESION_MODE_NAMES = ['strict', 'cohesive', 'chaotic', 'madness'];
+
 // ===== DOM helpers =====
-const Dom = (() => {
-  const q = (sel) => document.querySelector(sel);
-  const setText = (sel, txt) => { const el = q(sel); if (el) el.textContent = txt; };
-  const setHTML = (sel, html) => { const el = q(sel); if (el) el.innerHTML = html; };
-  const txt = (sel) => (q(sel)?.textContent || '').trim();
-  return { q, setText, setHTML, txt };
-})();
+  const Dom = (() => {
+    const q = (sel) => document.querySelector(sel);
+    const setText = (sel, txt) => { const el = q(sel); if (el) el.textContent = txt; };
+    const setHTML = (sel, html) => { const el = q(sel); if (el) el.innerHTML = html; };
+    const txt = (sel) => (q(sel)?.textContent || '').trim();
+    return { q, setText, setHTML, txt };
+  })();
+
+// ----- Section Locks (centralized state + UI sync) -----
+const DEFAULT_LOCKS = Object.freeze({
+  archetype: false,
+  mechanics: false,
+  survivability: false,
+});
+
+function getLockState(){
+  const appState = window.App?.state;
+  const existing = (appState && appState.locks) || window.__LOCK_STATE__ || {};
+  const merged = { ...DEFAULT_LOCKS, ...existing };
+  if (appState) {
+    appState.locks = merged;
+  } else {
+    window.__LOCK_STATE__ = merged;
+  }
+  return merged;
+}
+
+function syncLockUIFromState(){
+  const locks = getLockState();
+  document.querySelectorAll('.section-header').forEach(header => {
+    const section = header?.dataset?.section;
+    if (!section) return;
+    const locked = !!locks[section];
+    header.dataset.locked = locked ? 'true' : 'false';
+    const btn = header.querySelector('.lock-toggle');
+    if (btn) {
+      btn.setAttribute('aria-pressed', locked ? 'true' : 'false');
+    }
+  });
+}
+
+function wireLockButton(btn){
+  if (!btn || btn.__lockInit) return;
+  btn.__lockInit = true;
+  btn.addEventListener('click', (e) => {
+    const header = e.currentTarget.closest('.section-header');
+    if (!header) return;
+    const section = header.dataset.section;
+    if (!section) return;
+
+    const locks = getLockState();
+    const nowLocked = header.dataset.locked !== 'true';
+    locks[section] = nowLocked;
+
+    header.dataset.locked = nowLocked ? 'true' : 'false';
+    e.currentTarget.setAttribute('aria-pressed', nowLocked ? 'true' : 'false');
+  });
+}
+
+function initSectionLocks(){
+  document.querySelectorAll('.section-header .lock-toggle').forEach(wireLockButton);
+  syncLockUIFromState();
+}
 
 /* === Build Codes + Saved Builds (v0.9 preview) === */
 (function(){
@@ -54,6 +112,7 @@ const Dom = (() => {
 
   function encodeSnapshot(snap){
     if (!snap || typeof snap !== 'object') return '';
+    // TODO: include section lock state in saved snapshots once we support persisting locks
     const compact = {
       v: snap.snapshotVersion || 1,
       c: snap.className || '',
@@ -69,7 +128,10 @@ const Dom = (() => {
       attr: snap.attributes || { strength:0, dexterity:0, intelligence:0 },
       rs: Array.isArray(snap.recommendedSkills) ? snap.recommendedSkills : [],
       pb: snap.recommendedPersistentBuff || null,
-      u: Array.isArray(snap.recommendedUniques) ? snap.recommendedUniques : []
+      u: Array.isArray(snap.recommendedUniques) ? snap.recommendedUniques : [],
+      ss: typeof snap.synergyScore === 'number' ? snap.synergyScore : 0,
+      cs: snap.cohesionStatus || 'ok',
+      cm: snap.cohesionModeName || resolveCohesionMode(snap.cohesionMode ?? 1)
     };
     return safeBtoa(JSON.stringify(compact));
   }
@@ -97,7 +159,10 @@ const Dom = (() => {
         attributes: raw.attr || { strength:0, dexterity:0, intelligence:0 },
         recommendedSkills: raw.rs || [],
         recommendedPersistentBuff: raw.pb || null,
-        recommendedUniques: raw.u || []
+        recommendedUniques: raw.u || [],
+        synergyScore: typeof raw.ss === 'number' ? raw.ss : 0,
+        cohesionStatus: raw.cs || 'ok',
+        cohesionModeName: raw.cm || resolveCohesionMode(raw.cohesionMode)
       };
     } catch (e) {
       console.warn('[build code] decode failed', e);
@@ -257,17 +322,61 @@ const Dom = (() => {
     }
   }
 
+  function lookupByName(collection, name){
+    if (!collection || !name) return null;
+    return (collection || []).find(item => item?.name === name) || null;
+  }
+
+  function computeSynergyFromSnapshot(snap){
+    try {
+      const data = window.DATA || {};
+      const cls = data.Classes?.[snap.className] || {};
+      const baseAttrs = cls.attributes || {};
+      const weapons = data.Weapons || {};
+      const weaponPool = [].concat(weapons['Two-Handed'] || [], weapons['One-Handed'] || []);
+      const offhands = weapons['Off-Hand'] || [];
+      const defenses = data.Defense || [];
+      const defStrats = data.DefensiveStrategies || [];
+      const ailments = data.Ailments || [];
+      const tactics = data.Tactics || [];
+
+      const weapon = lookupByName(weaponPool, snap.weapon);
+      const offhand = lookupByName(offhands, snap.offhand);
+      const defense = lookupByName(defenses, snap.defense);
+      const defStrat = lookupByName(defStrats, snap.defStrat);
+      const ailmentSet = (snap.ailmentList || []).map(n => lookupByName(ailments, n)).filter(Boolean);
+      const tacticSet = (snap.tacticList || []).map(n => lookupByName(tactics, n)).filter(Boolean);
+
+      return computeSynergyScore(baseAttrs, { weapon, offhand, defense, defStrat, ailments: ailmentSet, tactics: tacticSet });
+    } catch (e) {
+      console.warn('[snapshot] failed to compute synergy score', e);
+      return 0;
+    }
+  }
+
   async function applyBuildCode(code){
     const snap = decodeSnapshot(code);
     if (!snap) return false;
     await ensureDataPreload();
     showAppShell();
 
+    const synergyScore = typeof snap.synergyScore === 'number'
+      ? snap.synergyScore
+      : computeSynergyFromSnapshot(snap);
+    const modeName = snap.cohesionModeName || resolveCohesionMode(snap.cohesionMode ?? window.App?.state?.cohesionMode ?? currentMode);
+    const cohesionStatus = snap.cohesionStatus || 'ok';
+    const rollPayload = { ...snap, synergyScore, cohesionStatus, cohesionModeName: modeName };
+
     if (window.App?.mergeCurrentRoll) {
-      window.App.mergeCurrentRoll(snap);
+      window.App.mergeCurrentRoll(rollPayload);
     }
 
-    renderSnapshotToDom(snap);
+    renderSnapshotToDom(rollPayload);
+    if (window.App?.state) {
+      refreshCohesionUI({ ...window.App.state, synergyScore, cohesionStatus, cohesionModeName: modeName });
+    } else {
+      refreshCohesionUI({ synergyScore, cohesionStatus, cohesionModeName: modeName });
+    }
     updateCodeUI(code);
     return true;
   }
@@ -426,7 +535,7 @@ const Dom = (() => {
 })();
 
 // App metadata
-const APP_VERSION = '0.8.2_visual_cleanup';
+const APP_VERSION = '0.8.2_locking';
 
 window.RANDOMANCER = window.RANDOMANCER || {};
 window.RANDOMANCER.version = APP_VERSION;
@@ -576,6 +685,9 @@ const App = window.App = (() => {
 
     // 0=strict,1=cohesive,2=chaotic,3=madness
     cohesionMode: 1,
+    cohesionModeName: 'cohesive',
+    synergyScore: 0,
+    cohesionStatus: 'ok',
 
     // canonical current roll snapshot
     currentRoll: {
@@ -595,8 +707,12 @@ const App = window.App = (() => {
       recommendedSkills: [],
       recommendedPersistentBuff: null,
       recommendedUniques: [],
+      synergyScore: 0,
+      cohesionStatus: 'ok',
       snapshotVersion: 1
     },
+
+    locks: { ...DEFAULT_LOCKS },
 
     // dev toggle for “single-entry” behavior
     singleEntryMode: true
@@ -626,10 +742,16 @@ const App = window.App = (() => {
 	  }
 
   function setCohesion(mode){
-	  const n = parseInt(mode, 10);
-	  // Default to 1 (cohesive) only if we get something weird/NaN
-	  state.cohesionMode = Number.isNaN(n) ? 1 : n;
-	}
+          const n = parseInt(mode, 10);
+          // Default to 1 (cohesive) only if we get something weird/NaN
+          state.cohesionMode = Number.isNaN(n) ? 1 : n;
+          state.cohesionModeName = COHESION_MODE_NAMES[state.cohesionMode] || 'cohesive';
+          try {
+            currentMode = state.cohesionModeName;
+          } catch {
+            // ignore if currentMode is not yet initialized
+          }
+        }
 
   function legacyInit(){
     try{
@@ -689,6 +811,19 @@ const App = window.App = (() => {
   function mergeCurrentRoll(partial){
     try {
       state.currentRoll = { ...state.currentRoll, ...partial };
+      if (typeof partial?.synergyScore === 'number') {
+        state.synergyScore = partial.synergyScore;
+      } else if (typeof state.currentRoll.synergyScore === 'number') {
+        state.synergyScore = state.currentRoll.synergyScore;
+      }
+      if (partial?.cohesionStatus) {
+        state.cohesionStatus = partial.cohesionStatus;
+      } else if (state.currentRoll.cohesionStatus) {
+        state.cohesionStatus = state.currentRoll.cohesionStatus;
+      }
+      if (partial?.cohesionModeName) {
+        state.cohesionModeName = partial.cohesionModeName;
+      }
       if (typeof window !== 'undefined') {
         window.__LAST_ROLL_META = { ...state.currentRoll };
       }
@@ -907,7 +1042,20 @@ async function tryLoad(paths) {
 
 // ---------- cohesion + selection ----------
 const COHESION_MODES = { strict:0.75, cohesive:0.5, chaotic:0.25, madness:0.0 };
+const COHESION_EXPECTATIONS = {
+  strict:   { min: 70 },
+  cohesive: { min: 50 },
+  chaotic:  { min: 0 },
+  madness:  { min: 0 },
+};
 let currentMode='cohesive';
+
+function resolveCohesionMode(mode){
+  if (typeof mode === 'string') return mode;
+  const idx = Number(mode);
+  if (!Number.isNaN(idx) && COHESION_MODE_NAMES[idx]) return COHESION_MODE_NAMES[idx];
+  return currentMode || 'cohesive';
+}
 
 function attributeCohesion(a,b){ const k=['strength','dexterity','intelligence']; const dot=k.reduce((s,x)=>s+(a[x]||0)*(b[x]||0),0); const ma=Math.sqrt(k.reduce((s,x)=>s+(a[x]||0)**2,0)); const mb=Math.sqrt(k.reduce((s,x)=>s+(b[x]||0)**2,0)); return dot/(ma*mb||1); }
 function pickByCohesion(list, base, th){
@@ -917,6 +1065,106 @@ function pickByCohesion(list, base, th){
   const filtered=scored.filter(s=>s.score>=th);
   const pool=filtered.length?filtered:scored;
   return pool[Math.floor(Math.random()*pool.length)].x;
+}
+
+function normalizeAttributesForSynergy(attrs){
+  const S = Number(attrs?.strength) || 0;
+  const D = Number(attrs?.dexterity) || 0;
+  const I = Number(attrs?.intelligence) || 0;
+  const total = S + D + I;
+  if (!total) return { strength: 0, dexterity: 0, intelligence: 0 };
+  return { strength: S / total, dexterity: D / total, intelligence: I / total };
+}
+
+function computeSynergyScore(baseAttrs, picks){
+  const base = normalizeAttributesForSynergy(baseAttrs || {});
+  const pools = [];
+  const pushAttr = (src) => {
+    if (!src) return;
+    const attrs = src.attributes || src;
+    pools.push(normalizeAttributesForSynergy(attrs));
+  };
+
+  pushAttr(picks?.weapon);
+  pushAttr(picks?.offhand);
+  pushAttr(picks?.defense);
+  pushAttr(picks?.defStrat);
+  (picks?.ailments || []).forEach(pushAttr);
+  (picks?.tactics || []).forEach(pushAttr);
+
+  const scores = pools
+    .map(p => attributeCohesion(base, p))
+    .filter(n => Number.isFinite(n));
+  const avg = scores.length ? scores.reduce((s, n) => s + n, 0) / scores.length : 0;
+  const clamped = Math.max(0, Math.min(1, avg));
+  return Math.round(clamped * 100);
+}
+
+function evaluateCohesionStatus(buildState){
+  if (!buildState) return 'ok';
+
+  const modeName = resolveCohesionMode(
+    buildState.cohesionModeName ?? buildState.cohesionMode ?? currentMode
+  );
+  const score = typeof buildState.synergyScore === 'number'
+    ? buildState.synergyScore
+    : typeof buildState.currentRoll?.synergyScore === 'number'
+      ? buildState.currentRoll.synergyScore
+      : 0;
+  const expectation = COHESION_EXPECTATIONS[modeName] || { min: 0 };
+  const shouldWarn = (modeName === 'strict' || modeName === 'cohesive')
+    && typeof expectation.min === 'number'
+    && score < expectation.min;
+
+  const status = shouldWarn ? 'constrained' : 'ok';
+  buildState.cohesionStatus = status;
+  buildState.synergyScore = score;
+  buildState.cohesionModeName = modeName;
+  if (buildState.currentRoll) {
+    buildState.currentRoll.cohesionStatus = status;
+    buildState.currentRoll.synergyScore = score;
+    buildState.currentRoll.cohesionModeName = modeName;
+  }
+  return status;
+}
+
+function renderCohesionStatus(buildState){
+  const el = document.querySelector('.cohesion-status');
+  if (!el) return;
+
+  const status = buildState?.cohesionStatus || 'ok';
+  const modeName = resolveCohesionMode(buildState?.cohesionModeName ?? buildState?.cohesionMode ?? currentMode);
+  const score = Math.round(buildState?.synergyScore || 0);
+  el.dataset.status = status;
+
+  if (status !== 'constrained' || (modeName !== 'strict' && modeName !== 'cohesive')) {
+    el.textContent = '';
+    return;
+  }
+
+  if (modeName === 'strict') {
+    el.textContent = `⚠ Strict cohesion constrained by your current locks — best achieved: ${score}%.`;
+  } else if (modeName === 'cohesive') {
+    el.textContent = `⚠ Cohesive mode is limited by your current build locks — current synergy: ${score}%.`;
+  } else {
+    el.textContent = '';
+  }
+}
+
+function updateCohesionBarDecoration(buildState){
+  const wrapper = document.querySelector('.cohesion-bar-wrapper');
+  if (!wrapper) return;
+  const status = buildState?.cohesionStatus || 'ok';
+  const modeName = resolveCohesionMode(buildState?.cohesionModeName ?? buildState?.cohesionMode ?? currentMode);
+  const constrained = (modeName === 'strict' || modeName === 'cohesive') && status === 'constrained';
+  wrapper.dataset.cohesionConstrained = constrained ? 'true' : 'false';
+}
+
+function refreshCohesionUI(buildState){
+  if (!buildState) return;
+  evaluateCohesionStatus(buildState);
+  renderCohesionStatus(buildState);
+  updateCohesionBarDecoration(buildState);
 }
 
 const validOffhands={"One-handed Mace":["One-handed Mace","Shield","Buckler","Focus","Sceptre"],"Spear":["Shield","Buckler","Focus","Sceptre"],"Wand":["Shield","Buckler","Focus","Sceptre"],"Sceptre":["Shield","Buckler","Focus","Wand"]};
@@ -1564,18 +1812,24 @@ function ensureDataPreload(){
 // ---------- wireup ----------
 document.addEventListener('DOMContentLoaded', ()=>{
   const slider = document.getElementById('cohesionRange');
-	if (slider) {
-	  const modeMap = ['strict','cohesive','chaotic','madness'];
-	  slider.addEventListener('input', e => {
-		const idx = Number(e.target.value) || 0;
-		currentMode = modeMap[idx] || 'cohesive';
-	
-		// Keep App.state.cohesionMode in step with the UI slider
-		if (window.App && typeof window.App.setCohesion === 'function') {
-		  window.App.setCohesion(idx);
-		}
-	  });
-	}
+        if (slider) {
+          const modeMap = ['strict','cohesive','chaotic','madness'];
+          slider.addEventListener('input', e => {
+                const idx = Number(e.target.value) || 0;
+                currentMode = modeMap[idx] || 'cohesive';
+
+                // Keep App.state.cohesionMode in step with the UI slider
+                if (window.App && typeof window.App.setCohesion === 'function') {
+                  window.App.setCohesion(idx);
+                }
+
+                if (window.App && window.App.state) {
+                  refreshCohesionUI(window.App.state);
+                }
+          });
+        }
+
+  initSectionLocks();
 
     // Kick off preloading while the intro screen is up and hydrate App.state from it
 	  if (window.App && typeof window.App.bootstrap === 'function') {
@@ -1639,30 +1893,60 @@ function rollBuild(dataWrap){
 
   const th = COHESION_MODES[currentMode];
   const classes = Object.entries(data.Classes);
-  const [clsName, clsData] = classes[Math.floor(Math.random() * classes.length)];
-  const base = clsData.attributes;
+  const locks = getLockState();
+  const current = window.App?.state?.currentRoll || {};
 
-  document.getElementById('class')?.replaceChildren(document.createTextNode(clsName));
-  const asc=clsData.ascendancies[Math.floor(Math.random()*clsData.ascendancies.length)];
-  document.getElementById('ascendancy')?.replaceChildren(document.createTextNode(asc));
+  const findByName = (arr, name) => (arr || []).find(item => item?.name === name) || null;
+
+  // --- Archetype ---
+  const canReuseClass = locks.archetype && current.className && data.Classes[current.className];
+  const archetype = canReuseClass
+    ? [current.className, data.Classes[current.className]]
+    : classes[Math.floor(Math.random() * classes.length)];
+  const [clsName, clsData] = archetype;
+  const base = clsData?.attributes || {};
+
+  const asc = canReuseClass
+    ? (current.ascendancy || clsData?.ascendancies?.[0] || '')
+    : clsData.ascendancies[Math.floor(Math.random() * clsData.ascendancies.length)];
+
+  document.getElementById('class')?.replaceChildren(document.createTextNode(clsName || ''));
+  document.getElementById('ascendancy')?.replaceChildren(document.createTextNode(asc || ''));
   updateAscArt(asc);
 
-  const weaponPool=data.Weapons['Two-Handed'].concat(data.Weapons['One-Handed']);
-  const weapon=pickByCohesion(weaponPool,base,th);
-
-  let offhand=null;
-  if(weapon && Object.keys(validOffhands).includes(weapon.name)){
-    const offPool=data.Weapons['Off-Hand'].filter(o=>validOffhands[weapon.name].includes(o.name));
-    offhand=pickByCohesion(offPool,base,th);
+  const weaponPool = data.Weapons['Two-Handed'].concat(data.Weapons['One-Handed']);
+  const pickWeapon = () => pickByCohesion(weaponPool, base, th);
+  let weapon = locks.archetype ? findByName(weaponPool, current.weapon) : null;
+  if (!locks.archetype || !weapon) {
+    weapon = pickWeapon();
   }
-  document.getElementById('weapons')?.replaceChildren(document.createTextNode(offhand?`${weapon.name} & ${offhand.name}`:weapon.name));
 
-  const defense=pickByCohesion(data.Defense,base,th);
-  document.getElementById('defense')?.replaceChildren(document.createTextNode(defense.name));
+  let offhand = null;
+  if (locks.archetype && current.offhand) {
+    offhand = findByName(data.Weapons['Off-Hand'], current.offhand);
+  }
+  if (!locks.archetype || (!offhand && weapon && Object.keys(validOffhands).includes(weapon.name))) {
+    if (weapon && Object.keys(validOffhands).includes(weapon.name)) {
+      const offPool = data.Weapons['Off-Hand'].filter(o => validOffhands[weapon.name].includes(o.name));
+      offhand = offhand || pickByCohesion(offPool, base, th);
+    }
+  }
+  const weaponText = offhand ? `${weapon?.name || ''} & ${offhand.name}` : (weapon?.name || '');
+  document.getElementById('weapons')?.replaceChildren(document.createTextNode(weaponText));
 
-  const dsPool=data.DefensiveStrategies.filter(ds=>applyHardRestrictions(ds,{defense:defense.name,weapon:weapon.name,offhand:offhand?.name||''}));
-  const defStrat=pickByCohesion(dsPool,base,th);
-  document.getElementById('defstrat')?.replaceChildren(document.createTextNode(defStrat?.name||''));
+  // --- Survivability ---
+  const defense = (locks.survivability && current.defense)
+    ? findByName(data.Defense, current.defense)
+    : null;
+  const pickedDefense = defense || pickByCohesion(data.Defense, base, th);
+  document.getElementById('defense')?.replaceChildren(document.createTextNode(pickedDefense?.name || ''));
+
+  const dsPool = data.DefensiveStrategies.filter(ds => applyHardRestrictions(ds, { defense: pickedDefense?.name || '', weapon: weapon?.name || '', offhand: offhand?.name || '' }));
+  const defStrat = (locks.survivability && current.defStrat)
+    ? (findByName(dsPool, current.defStrat) || findByName(data.DefensiveStrategies, current.defStrat))
+    : null;
+  const pickedDefStrat = defStrat || pickByCohesion(dsPool, base, th);
+  document.getElementById('defstrat')?.replaceChildren(document.createTextNode(pickedDefStrat?.name || ''));
 
   function filterTacticsByStrictRules(allTactics, weapon, offhand){
   const w = String(weapon?.name||'').toLowerCase();
@@ -1677,9 +1961,16 @@ function rollBuild(dataWrap){
 
 // Ailments/Tactics roll (with duplicate prevention)
   let ailmentSet=[], tacticSet=[]; const r=Math.random();
-  if(r<0.6){ ailmentSet=[data.Ailments[Math.floor(Math.random()*data.Ailments.length)]]; tacticSet=[filterTacticsByStrictRules(data.Tactics, weapon, offhand)[Math.floor(Math.random()*filterTacticsByStrictRules(data.Tactics, weapon, offhand).length)]]; }
-  else if(r<0.8){ const a1=data.Ailments[Math.floor(Math.random()*data.Ailments.length)], a2=data.Ailments.filter(x=>x.name!==a1.name)[Math.floor(Math.random()*(data.Ailments.length-1))]; ailmentSet=[a1,a2]; }
-  else { const _pool=filterTacticsByStrictRules(data.Tactics, weapon, offhand); const t1=_pool[Math.floor(Math.random()*_pool.length)]; const t2=_pool.filter(x=>x.name!==t1.name)[Math.floor(Math.random()*Math.max(1,_pool.length-1))]; tacticSet=[t1,t2]; }
+  const mechanicsLocked = locks.mechanics && ((current.ailmentList && current.ailmentList.length) || (current.tacticList && current.tacticList.length));
+  if (mechanicsLocked){
+    ailmentSet = (current.ailmentList || []).map(n => findByName(data.Ailments, n)).filter(Boolean);
+    tacticSet = (current.tacticList || []).map(n => findByName(data.Tactics, n)).filter(Boolean);
+  }
+  if(!mechanicsLocked || (!ailmentSet.length && !tacticSet.length)){
+    if(r<0.6){ ailmentSet=[data.Ailments[Math.floor(Math.random()*data.Ailments.length)]]; tacticSet=[filterTacticsByStrictRules(data.Tactics, weapon, offhand)[Math.floor(Math.random()*filterTacticsByStrictRules(data.Tactics, weapon, offhand).length)]]; }
+    else if(r<0.8){ const a1=data.Ailments[Math.floor(Math.random()*data.Ailments.length)], a2=data.Ailments.filter(x=>x.name!==a1.name)[Math.floor(Math.random()*(data.Ailments.length-1))]; ailmentSet=[a1,a2]; }
+    else { const _pool=filterTacticsByStrictRules(data.Tactics, weapon, offhand); const t1=_pool[Math.floor(Math.random()*_pool.length)]; const t2=_pool.filter(x=>x.name!==t1.name)[Math.floor(Math.random()*Math.max(1,_pool.length-1))]; tacticSet=[t1,t2]; }
+  }
 
   document.getElementById('ailments')?.replaceChildren(document.createTextNode((ailmentSet.filter(Boolean).map(a=>a.name).join(' & ')||'')));
   document.getElementById('tactics')?.replaceChildren(document.createTextNode((tacticSet.filter(Boolean).map(t=>t.name).join(' & ')||'')));
@@ -1688,7 +1979,7 @@ function rollBuild(dataWrap){
   // Balance aggregation
   const add=(a,b)=>({strength:(a.strength||0)+(b.strength||0), dexterity:(a.dexterity||0)+(b.dexterity||0), intelligence:(a.intelligence||0)+(b.intelligence||0)});
   const norm=(a)=>{ const t=(a.strength||0)+(a.dexterity||0)+(a.intelligence||0)||1e-6; return {strength:(a.strength||0)/t, dexterity:(a.dexterity||0)/t, intelligence:(a.intelligence||0)/t}; };
-  const sumParts = [ norm(base), norm(weapon?.attributes||{}), norm(offhand?.attributes||{}), norm(defense?.attributes||{}), norm(defStrat?.attributes||{}) ].reduce((acc,a)=>add(acc,a), {strength:0,dexterity:0,intelligence:0});
+  const sumParts = [ norm(base), norm(weapon?.attributes||{}), norm(offhand?.attributes||{}), norm(pickedDefense?.attributes||{}), norm(pickedDefStrat?.attributes||{}) ].reduce((acc,a)=>add(acc,a), {strength:0,dexterity:0,intelligence:0});
   const ailAvg = (ailmentSet.filter(Boolean).map(a=>a.attributes||{}).map(norm).reduce((acc,a)=>add(acc,a), {strength:0,dexterity:0,intelligence:0}));
   const tacAvg = (tacticSet.filter(Boolean).map(a=>a.attributes||{}).map(norm).reduce((acc,a)=>add(acc,a), {strength:0,dexterity:0,intelligence:0}));
   const total = {strength: sumParts.strength+ailAvg.strength+tacAvg.strength, dexterity: sumParts.dexterity+ailAvg.dexterity+tacAvg.dexterity, intelligence: sumParts.intelligence+ailAvg.intelligence+tacAvg.intelligence};
@@ -1707,12 +1998,22 @@ function rollBuild(dataWrap){
   document.getElementById('build-name').textContent = buildName;
   document.getElementById('build-subtext').textContent = buildFlavor;
 
+  const synergyScore = computeSynergyScore(base, {
+    weapon,
+    offhand,
+    defense: pickedDefense,
+    defStrat: pickedDefStrat,
+    ailments: ailmentSet.filter(Boolean),
+    tactics: tacticSet.filter(Boolean)
+  });
+  const cohesionModeName = resolveCohesionMode(window.App?.state?.cohesionMode ?? currentMode);
+
   const baseSnapshot = {
     snapshotVersion: 1,
     className: clsName,
     ascendancy: asc || '',
-    defense: defense?.name || '',
-    defStrat: defStrat?.name || '',
+    defense: pickedDefense?.name || '',
+    defStrat: pickedDefStrat?.name || '',
     weapon: weapon?.name || '',
     offhand: offhand?.name || '',
     tactics: tacticSet.filter(Boolean).map(t=>t.name).join(' & '),
@@ -1721,7 +2022,10 @@ function rollBuild(dataWrap){
     tacticList: tacticSet.filter(Boolean).map(t=>t.name),
     buildName,
     flavor: buildFlavor,
-    attributes: { strength: S, dexterity: D, intelligence: I }
+    attributes: { strength: S, dexterity: D, intelligence: I },
+    synergyScore,
+    cohesionStatus: 'ok',
+    cohesionModeName
   };
 
   if (window.App && typeof window.App.mergeCurrentRoll === 'function') {
@@ -1733,33 +2037,49 @@ function rollBuild(dataWrap){
 
   // Stash the roll context for synergy scorer
   window.CURRENT_ROLL = {
-	  ailmentSet: ailmentSet.filter(Boolean),
-	  tacticSet: tacticSet.filter(Boolean),
-	  defense: defense,
-	  defStrat: defStrat,
-	  weapon: weapon?.name || '',
-	  offhand: offhand?.name || '',
-	  rollAttr: { strength: S, dexterity: D, intelligence: I }
-	};
+          ailmentSet: ailmentSet.filter(Boolean),
+          tacticSet: tacticSet.filter(Boolean),
+          defense: pickedDefense,
+          defStrat: pickedDefStrat,
+          weapon: weapon?.name || '',
+          offhand: offhand?.name || '',
+          rollAttr: { strength: S, dexterity: D, intelligence: I },
+          synergyScore,
+          cohesionModeName
+        };
 
   // Skills (weapon-limited + synergy scoring)
   const skillSnapshot = rollRecommendedSkills(dataWrap, base, {weapon, offhand}, window.CURRENT_ROLL) || {};
-
   if (window.App && typeof window.App.mergeCurrentRoll === 'function') {
     window.App.mergeCurrentRoll({
       recommendedSkills: skillSnapshot.skills || [],
       recommendedPersistentBuff: skillSnapshot.persistentBuff || null
     });
   }
-  
+
   // Uniques: trigger the synergy engine directly using the current roll snapshot
   try {
-    if (typeof window.RandomancerRefreshUniques === 'function') {
-      window.RandomancerRefreshUniques(window.CURRENT_ROLL);
+    if (!locks.uniques) {
+      if (typeof window.RandomancerRefreshUniques === 'function') {
+        window.RandomancerRefreshUniques(window.CURRENT_ROLL);
+      }
+    } else {
+      ensureUniqueSection();
+      if (Array.isArray(current.recommendedUniques) && current.recommendedUniques.length && typeof window.RandomancerRenderUniquesFromNames === 'function') {
+        window.RandomancerRenderUniquesFromNames(current.recommendedUniques);
+      }
     }
   } catch (e) {
     console.warn('[Randomancer] uniques refresh failed', e);
   }
+
+  if (window.App && window.App.state) {
+    refreshCohesionUI(window.App.state);
+  } else {
+    refreshCohesionUI({ cohesionModeName, synergyScore, cohesionStatus: 'ok' });
+  }
+
+  syncLockUIFromState();
 
 }
 
@@ -2494,15 +2814,19 @@ function ensureUniqueSection(){
     wrap.id = 'uniques-section';
     wrap.className = 'sect';
     wrap.innerHTML = `
-	  <div class="sect-head">
-		<h3>Recommended Uniques</h3>
-		<div class="underline"></div>
-		<p class="sub">Unique items tuned to the ailments, tactics, and defenses of this roll.</p>
-	  </div>
-	  <div id="uniques-grid" class="grid two uniques-grid"></div>
-	`;
+          <div class="sect-head">
+                <h3 class="section-title">Recommended Uniques</h3>
+                <div class="underline"></div>
+                <p class="sub">Unique items tuned to the ailments, tactics, and defenses of this roll.</p>
+          </div>
+          <div id="uniques-grid" class="grid two uniques-grid"></div>
+        `;
 
     divider.insertAdjacentElement('afterend', wrap);
+
+    const lockBtn = wrap.querySelector('.lock-toggle');
+    if (lockBtn) wireLockButton(lockBtn);
+    syncLockUIFromState();
 
     return document.getElementById('uniques-grid');
   }
