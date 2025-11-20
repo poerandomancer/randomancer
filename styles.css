@@ -183,7 +183,7 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 .section-header .section-title{ margin:0 0 .1rem; font-weight:600; color:var(--silver); letter-spacing:.02em; }
 .lock-toggle{
   background:transparent;
-  border:1px solid rgba(220, 188, 120, 0.28);
+  border:0px solid rgba(220, 188, 120, 0.28);
   color:#d9c07a;
   cursor:pointer;
   width:32px;
