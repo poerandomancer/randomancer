@@ -693,20 +693,27 @@ const App = window.App = (() => {
     currentRoll: {
       className: '',
       ascendancy: '',
+      ascendancyId: null,
       defense:   '',
       defStrat:  '',
+      defStratObj: null,
       weapon:    '',
       offhand:   '',
       tactics:   '',
       ailments:  '',
       ailmentList: [],
       tacticList: [],
+      tacticSet: [],
+      ailmentSet: [],
       buildName: '',
       flavor:    '',
       attributes: { strength: 0, dexterity: 0, intelligence: 0 },
+      rollAttr: { strength: 0, dexterity: 0, intelligence: 0 },
+      defenseObj: null,
       recommendedSkills: [],
       recommendedPersistentBuff: null,
       recommendedUniques: [],
+      tagProfile: null,
       synergyScore: 0,
       cohesionStatus: 'ok',
       snapshotVersion: 1
@@ -1039,6 +1046,52 @@ async function tryLoad(paths) {
   return {};
 }
 
+// ---------- passives helpers ----------
+function buildPassiveIndex(passivesData) {
+  const index = {
+    byAscendancyName: new Map(),
+    keystones: [],
+    notables: [],
+    ascendancyNodes: []
+  };
+
+  try {
+    const nodes = Array.isArray(passivesData?.nodes) ? passivesData.nodes : [];
+    for (const node of nodes) {
+      if (!node || !node.type) continue;
+      if (node.type === 'ascendancy' && node.ascendancy) {
+        index.ascendancyNodes.push(node);
+        const key = String(node.ascendancy);
+        if (!index.byAscendancyName.has(key)) index.byAscendancyName.set(key, []);
+        index.byAscendancyName.get(key).push(node);
+      }
+      if (node.type === 'keystone') index.keystones.push(node);
+      if (node.type === 'notable') index.notables.push(node);
+    }
+  } catch (err) {
+    console.error('[passives] failed to build index', err);
+  }
+
+  return index;
+}
+
+function lookupAscendancyIdByName(name) {
+  if (!name) return null;
+  try {
+    const asc = (typeof window !== 'undefined' && window.DATA && window.DATA.passivesEnriched)
+      ? window.DATA.passivesEnriched.ascendancies
+      : null;
+    if (!asc || typeof asc !== 'object') return null;
+    const lower = String(name).toLowerCase();
+    const match = Object.values(asc).find(entry => String(entry?.name || '').toLowerCase() === lower);
+    const idNum = Number(match?.id);
+    return Number.isFinite(idNum) ? idNum : null;
+  } catch (err) {
+    console.warn('[passives] ascendancy id lookup failed', err);
+    return null;
+  }
+}
+
 
 // ---------- cohesion + selection ----------
 const COHESION_MODES = { strict:0.75, cohesive:0.5, chaotic:0.25, madness:0.0 };
@@ -1126,6 +1179,94 @@ function evaluateCohesionStatus(buildState){
     buildState.currentRoll.cohesionModeName = modeName;
   }
   return status;
+}
+
+/**
+ * @typedef {'strict'|'cohesive'|'chaotic'|'madness'} CohesionMode
+ * @typedef {Object} BuildContext
+ * @property {number|null} ascendancyId
+ * @property {string|null} ascendancyName
+ * @property {string[]} tags
+ * @property {string[]} defenseTags
+ * @property {{strength:number, dexterity:number, intelligence:number}} attributes
+ * @property {CohesionMode} cohesionMode
+ */
+
+function buildBuildContext(explicitSnapshot){
+  try {
+    // 1) Explicit snapshot
+    if (explicitSnapshot && typeof explicitSnapshot === 'object') {
+      return buildBuildContextFromSnapshot(explicitSnapshot);
+    }
+
+    // 2) App-level state snapshot
+    if (window.App && window.App.state && window.App.state.currentRoll) {
+      const built = buildBuildContextFromSnapshot(window.App.state.currentRoll);
+      if (built) return built;
+    }
+
+    // 3) Fallback to global CURRENT_ROLL
+    if (window.CURRENT_ROLL && typeof window.CURRENT_ROLL === 'object') {
+      return buildBuildContextFromSnapshot(window.CURRENT_ROLL);
+    }
+  } catch (err) {
+    console.warn('[buildBuildContext] failed', err);
+  }
+
+  return null;
+}
+
+function buildBuildContextFromSnapshot(snap){
+  if (!snap || typeof snap !== 'object') return null;
+
+  const ascendancyName = snap.ascendancyName || snap.ascendancy || null;
+  const ascendancyId = Number.isFinite(snap.ascendancyId)
+    ? Number(snap.ascendancyId)
+    : lookupAscendancyIdByName(ascendancyName);
+
+  const rollAttr = snap.rollAttr || snap.attributes || {};
+  const attributes = normalizeAttributesForSynergy(rollAttr);
+
+  const tagSet = new Set();
+  const defenseSet = new Set();
+  const addTag = (t, sink = tagSet) => { const k = normTagPlus(t); if (k) sink.add(k); };
+  const addTags = (arr, sink) => (arr || []).forEach(t => addTag(t, sink));
+
+  // Prefer existing tag profile if present
+  if (snap.tagProfile && snap.tagProfile.profile instanceof Map) {
+    snap.tagProfile.profile.forEach((_, k) => addTag(k));
+  }
+  if (snap.tagProfile && snap.tagProfile.cats) {
+    addTags(Array.from(snap.tagProfile.cats.tactics || []));
+    addTags(Array.from(snap.tagProfile.cats.ailments || []));
+  }
+
+  addTags((snap.tacticSet || []).flatMap(t => t?.tags || []));
+  addTags((snap.ailmentSet || []).flatMap(a => a?.tags || []));
+  const defPseudo = defensePseudoTags(snap.defense?.name);
+  addTags(defPseudo);
+  addTags(defPseudo, defenseSet);
+  addTags(snap.defStratObj?.tags || snap.defStrat?.tags || []);
+  addTags(Array.from(deriveWeaponHints({ name: snap.weapon }, { name: snap.offhand }) || []));
+
+  const defenseKeywords = ['life','energyshield','armour','evasion','block','ward','guard','resist','regen','leech'];
+  tagSet.forEach(t => {
+    const lower = String(t).toLowerCase();
+    if (defenseKeywords.some(k => lower.includes(k))) defenseSet.add(t);
+  });
+
+  const cohesionMode = resolveCohesionMode(
+    snap.cohesionModeName ?? snap.cohesionMode ?? currentMode
+  );
+
+  return {
+    ascendancyId: Number.isFinite(ascendancyId) ? ascendancyId : null,
+    ascendancyName: ascendancyName || null,
+    tags: Array.from(tagSet).sort(),
+    defenseTags: Array.from(defenseSet).sort(),
+    attributes,
+    cohesionMode
+  };
 }
 
 function renderCohesionStatus(buildState){
@@ -1566,6 +1707,10 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
       weaponPseudoTags: Array.from(deriveWeaponHints(picked.weapon, picked.offhand))
     });
 
+    if (rollCtx && typeof rollCtx === 'object') {
+      rollCtx.tagProfile = rolledProfile;
+    }
+
     // Scoring knobs from cohesion mode
     const knobs = synergyTunings();
     knobs.rollAttr = ctx.rollAttr || baseAttrs || {strength:0.33,dexterity:0.33,intelligence:0.33};
@@ -1635,6 +1780,7 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
     const persistent = renderPersistentBuffSkill(persistentPool, rolledProfile, window.TAG_IDF, knobs, gems);
 
     return {
+      tagProfile: rolledProfile,
       skills: picks.map(g => ({
         id: g.id || g.base_item?.id || g.name || '',
         name: g.name || '',
@@ -1910,6 +2056,8 @@ function rollBuild(dataWrap){
     ? (current.ascendancy || clsData?.ascendancies?.[0] || '')
     : clsData.ascendancies[Math.floor(Math.random() * clsData.ascendancies.length)];
 
+  const ascendancyId = lookupAscendancyIdByName(asc);
+
   document.getElementById('class')?.replaceChildren(document.createTextNode(clsName || ''));
   document.getElementById('ascendancy')?.replaceChildren(document.createTextNode(asc || ''));
   updateAscArt(asc);
@@ -2012,17 +2160,24 @@ function rollBuild(dataWrap){
     snapshotVersion: 1,
     className: clsName,
     ascendancy: asc || '',
+    ascendancyName: asc || '',
+    ascendancyId: ascendancyId ?? null,
     defense: pickedDefense?.name || '',
     defStrat: pickedDefStrat?.name || '',
+    defStratObj: pickedDefStrat || null,
     weapon: weapon?.name || '',
     offhand: offhand?.name || '',
     tactics: tacticSet.filter(Boolean).map(t=>t.name).join(' & '),
     ailments: ailmentSet.filter(Boolean).map(a=>a.name).join(' & '),
     ailmentList: ailmentSet.filter(Boolean).map(a=>a.name),
     tacticList: tacticSet.filter(Boolean).map(t=>t.name),
+    tacticSet: tacticSet.filter(Boolean),
+    ailmentSet: ailmentSet.filter(Boolean),
     buildName,
     flavor: buildFlavor,
     attributes: { strength: S, dexterity: D, intelligence: I },
+    rollAttr: { strength: S, dexterity: D, intelligence: I },
+    defenseObj: pickedDefense || null,
     synergyScore,
     cohesionStatus: 'ok',
     cohesionModeName
@@ -2037,6 +2192,9 @@ function rollBuild(dataWrap){
 
   // Stash the roll context for synergy scorer
   window.CURRENT_ROLL = {
+          ascendancy: asc || '',
+          ascendancyName: asc || '',
+          ascendancyId: ascendancyId ?? null,
           ailmentSet: ailmentSet.filter(Boolean),
           tacticSet: tacticSet.filter(Boolean),
           defense: pickedDefense,
@@ -2044,6 +2202,7 @@ function rollBuild(dataWrap){
           weapon: weapon?.name || '',
           offhand: offhand?.name || '',
           rollAttr: { strength: S, dexterity: D, intelligence: I },
+          tagProfile: null,
           synergyScore,
           cohesionModeName
         };
@@ -2053,7 +2212,8 @@ function rollBuild(dataWrap){
   if (window.App && typeof window.App.mergeCurrentRoll === 'function') {
     window.App.mergeCurrentRoll({
       recommendedSkills: skillSnapshot.skills || [],
-      recommendedPersistentBuff: skillSnapshot.persistentBuff || null
+      recommendedPersistentBuff: skillSnapshot.persistentBuff || null,
+      tagProfile: skillSnapshot.tagProfile || window.CURRENT_ROLL.tagProfile || null
     });
   }
 
@@ -2186,6 +2346,11 @@ async function loadData() {
     const core = await loadJSON('core-data.json');
     const gemsRaw = await tryLoad(['data/skill_gems.json', 'gems.json']);
     const skillsRaw = await tryLoad(['data/skills.json']);
+    const passivesEnriched = await tryLoad(['data/passives_enriched.json']);
+    if (!passivesEnriched || !passivesEnriched.nodes) {
+      console.warn('[loadData] Passive data missing or incomplete');
+    }
+    const passiveIndex = buildPassiveIndex(passivesEnriched);
     const enr = enrichGems(gemsRaw, skillsRaw);
     console.log(`[Skill Enrichment] ${enr.length} enriched skill entries.`);
 
@@ -2193,11 +2358,13 @@ async function loadData() {
       ...core,
       gems: enr,
       skills: skillsRaw,
-      skill_gems: gemsRaw
+      skill_gems: gemsRaw,
+      passivesEnriched,
+      passiveIndex
     };
     console.log("[Global DATA initialized]", window.DATA);
 
-    return { core, gems: enr };
+    return { core, gems: enr, passivesEnriched, passiveIndex };
   } catch (err) {
     console.error("[loadData] Failed to load core data:", err);
     return { core: {}, gems: [] };
