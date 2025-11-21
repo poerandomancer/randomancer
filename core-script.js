@@ -1,5 +1,11 @@
 
 /*! Randomancer v0.8.2_cleanup */
+import {
+  pickRecommendedAscendancyNodes,
+  pickRecommendedKeystones,
+  pickRecommendedNotables,
+} from './passivesEngine.js';
+
 "use strict";
 
 // === v0.7.3 selector helpers & metrics ===
@@ -2215,6 +2221,24 @@ function rollBuild(dataWrap){
       recommendedPersistentBuff: skillSnapshot.persistentBuff || null,
       tagProfile: skillSnapshot.tagProfile || window.CURRENT_ROLL.tagProfile || null
     });
+  }
+
+  // Passive recommendations (pure, cohesion-aware)
+  const passiveCtx = buildBuildContext();
+  const passivesData = (dataWrap && dataWrap.passivesEnriched) || (window.DATA && window.DATA.passivesEnriched) || null;
+  const passiveIndex = (dataWrap && dataWrap.passiveIndex) || (window.DATA && window.DATA.passiveIndex) || null;
+  if (passiveCtx && passivesData && Array.isArray(passivesData.nodes)) {
+    const ascendancyNodes = pickRecommendedAscendancyNodes(passivesData, passiveIndex, passiveCtx, 4);
+    const keystones = pickRecommendedKeystones(passivesData, passiveIndex, passiveCtx, 2);
+    const notables = pickRecommendedNotables(passivesData, passiveIndex, passiveCtx, 6);
+    const passiveBundle = { ascendancyNodes, keystones, notables };
+
+    if (window.App && typeof window.App.mergeCurrentRoll === 'function') {
+      window.App.mergeCurrentRoll({ passives: passiveBundle });
+    }
+    if (window.CURRENT_ROLL && typeof window.CURRENT_ROLL === 'object') {
+      window.CURRENT_ROLL.passives = passiveBundle;
+    }
   }
 
   // Uniques: trigger the synergy engine directly using the current roll snapshot
