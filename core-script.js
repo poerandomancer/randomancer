@@ -322,6 +322,7 @@ function initSectionLocks(){
     setElText('#build-subtext', snap.flavor || '');
     renderAttributesFromSnapshot(snap.attributes);
     renderSkillsFromSnapshot(snap);
+    renderPassiveRecommendations((window.App && window.App.state && window.App.state.currentRoll) || snap, window.DATA);
 
     if (Array.isArray(snap.recommendedUniques) && snap.recommendedUniques.length && window.RandomancerRenderUniquesFromNames) {
       window.RandomancerRenderUniquesFromNames(snap.recommendedUniques);
@@ -1096,6 +1097,109 @@ function lookupAscendancyIdByName(name) {
     console.warn('[passives] ascendancy id lookup failed', err);
     return null;
   }
+}
+
+// ---------- passive UI renderer ----------
+function escapeHtml(str) {
+  return String(str ?? '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[c] || c));
+}
+
+function resolvePassiveIcon(iconPath) {
+  if (!iconPath) return 'images/dice.png';
+  const file = iconPath.split('/').pop() || '';
+  const base = file.replace(/\.dds$/i, '') || 'default';
+  return `images/passives/${base}.png`;
+}
+
+function renderPassiveRow(rowEl, nodes, type) {
+  if (!rowEl) return;
+  const group = rowEl.closest('.passives-group');
+  rowEl.innerHTML = '';
+
+  if (!nodes || !nodes.length) {
+    group?.classList.add('is-empty', 'hidden');
+    return;
+  }
+
+  group?.classList.remove('is-empty', 'hidden');
+
+  nodes.forEach((node, index) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = `passive-node passive-node--${type}`;
+
+    const iconSrc = resolvePassiveIcon(node?.icon);
+    const name = node?.name || 'Unknown Passive';
+    const lines = Array.isArray(node?.lines) ? node.lines.filter(Boolean) : [];
+    const linesHtml = lines.length
+      ? `<div class="passive-node__lines">${lines.map(l => escapeHtml(l)).join('<br>')}</div>`
+      : '';
+
+    wrapper.innerHTML = `
+      <div class="passive-node__orb">
+        <div class="passive-node__orb-inner">
+          <img class="passive-node__icon" src="${iconSrc}" alt="${escapeHtml(name)}">
+        </div>
+      </div>
+      <div class="passive-node__text">
+        <div class="passive-node__name">${escapeHtml(name)}</div>
+        ${linesHtml}
+      </div>
+    `;
+
+    const img = wrapper.querySelector('.passive-node__icon');
+    if (img) {
+      img.addEventListener('error', () => {
+        img.src = 'images/dice.png';
+      }, { once: true });
+    }
+
+    rowEl.appendChild(wrapper);
+
+    if (index < nodes.length - 1) {
+      const link = document.createElement('div');
+      link.className = 'passive-link';
+      rowEl.appendChild(link);
+    }
+  });
+}
+
+function renderPassiveRecommendations(currentRoll, dataWrap) {
+  const panel = document.getElementById('passives-panel');
+  const ascRow = document.querySelector('.passives-row--ascendancy');
+  const keyRow = document.querySelector('.passives-row--keystones');
+  const noteRow = document.querySelector('.passives-row--notables');
+
+  const hideAll = () => {
+    [ascRow, keyRow, noteRow].forEach(row => { if (row) row.innerHTML = ''; });
+    document.querySelectorAll('.passives-group').forEach(g => g.classList.add('hidden', 'is-empty'));
+    if (panel) panel.classList.add('hidden');
+  };
+
+  const passivesData = dataWrap?.passivesEnriched || (window.DATA && window.DATA.passivesEnriched);
+  const hasPassiveData = passivesData && Array.isArray(passivesData.nodes);
+  if (!panel || !hasPassiveData || !currentRoll || !currentRoll.passives) {
+    hideAll();
+    return;
+  }
+
+  panel.classList.remove('hidden');
+  const passives = currentRoll.passives || {};
+
+  renderPassiveRow(ascRow, passives.ascendancyNodes || [], 'ascendancy');
+  renderPassiveRow(keyRow, passives.keystones || [], 'keystone');
+  renderPassiveRow(noteRow, passives.notables || [], 'notable');
+
+  const anyVisible = [ascRow, keyRow, noteRow].some(row => {
+    const g = row?.closest('.passives-group');
+    return g && !g.classList.contains('hidden');
+  });
+  if (panel) panel.classList.toggle('hidden', !anyVisible);
 }
 
 
@@ -2240,6 +2344,8 @@ function rollBuild(dataWrap){
       window.CURRENT_ROLL.passives = passiveBundle;
     }
   }
+
+  renderPassiveRecommendations(window.CURRENT_ROLL, dataWrap);
 
   // Uniques: trigger the synergy engine directly using the current roll snapshot
   try {
