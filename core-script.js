@@ -1,5 +1,11 @@
 
 /*! Randomancer v0.8.2_cleanup */
+import {
+  pickRecommendedAscendancyNodes,
+  pickRecommendedKeystones,
+  pickRecommendedNotables,
+} from './passivesEngine.js';
+
 "use strict";
 
 // === v0.7.3 selector helpers & metrics ===
@@ -316,6 +322,7 @@ function initSectionLocks(){
     setElText('#build-subtext', snap.flavor || '');
     renderAttributesFromSnapshot(snap.attributes);
     renderSkillsFromSnapshot(snap);
+    renderPassiveRecommendations((window.App && window.App.state && window.App.state.currentRoll) || snap, window.DATA);
 
     if (Array.isArray(snap.recommendedUniques) && snap.recommendedUniques.length && window.RandomancerRenderUniquesFromNames) {
       window.RandomancerRenderUniquesFromNames(snap.recommendedUniques);
@@ -535,7 +542,7 @@ function initSectionLocks(){
 })();
 
 // App metadata
-const APP_VERSION = '0.8.2_locking';
+const APP_VERSION = '0.8.2_passives';
 
 window.RANDOMANCER = window.RANDOMANCER || {};
 window.RANDOMANCER.version = APP_VERSION;
@@ -693,20 +700,27 @@ const App = window.App = (() => {
     currentRoll: {
       className: '',
       ascendancy: '',
+      ascendancyId: null,
       defense:   '',
       defStrat:  '',
+      defStratObj: null,
       weapon:    '',
       offhand:   '',
       tactics:   '',
       ailments:  '',
       ailmentList: [],
       tacticList: [],
+      tacticSet: [],
+      ailmentSet: [],
       buildName: '',
       flavor:    '',
       attributes: { strength: 0, dexterity: 0, intelligence: 0 },
+      rollAttr: { strength: 0, dexterity: 0, intelligence: 0 },
+      defenseObj: null,
       recommendedSkills: [],
       recommendedPersistentBuff: null,
       recommendedUniques: [],
+      tagProfile: null,
       synergyScore: 0,
       cohesionStatus: 'ok',
       snapshotVersion: 1
@@ -1039,6 +1053,200 @@ async function tryLoad(paths) {
   return {};
 }
 
+// ---------- passives helpers ----------
+function buildPassiveIndex(passivesData) {
+  const index = {
+    byAscendancyName: new Map(),
+    keystones: [],
+    notables: [],
+    ascendancyNodes: []
+  };
+
+  try {
+    const nodes = Array.isArray(passivesData?.nodes) ? passivesData.nodes : [];
+    for (const node of nodes) {
+      if (!node || !node.type) continue;
+      if (node.type === 'ascendancy' && node.ascendancy) {
+        index.ascendancyNodes.push(node);
+        const key = String(node.ascendancy);
+        if (!index.byAscendancyName.has(key)) index.byAscendancyName.set(key, []);
+        index.byAscendancyName.get(key).push(node);
+      }
+      if (node.type === 'keystone') index.keystones.push(node);
+      if (node.type === 'notable') index.notables.push(node);
+    }
+  } catch (err) {
+    console.error('[passives] failed to build index', err);
+  }
+
+  return index;
+}
+
+function lookupAscendancyIdByName(name) {
+  if (!name) return null;
+  try {
+    const asc = (typeof window !== 'undefined' && window.DATA && window.DATA.passivesEnriched)
+      ? window.DATA.passivesEnriched.ascendancies
+      : null;
+    if (!asc || typeof asc !== 'object') return null;
+    const lower = String(name).toLowerCase();
+    const match = Object.values(asc).find(entry => String(entry?.name || '').toLowerCase() === lower);
+    const idNum = Number(match?.id);
+    return Number.isFinite(idNum) ? idNum : null;
+  } catch (err) {
+    console.warn('[passives] ascendancy id lookup failed', err);
+    return null;
+  }
+}
+
+// ---------- passive UI renderer ----------
+function escapeHtml(str) {
+  return String(str ?? '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[c] || c));
+}
+
+function resolvePassiveIcon(iconPath) {
+  if (!iconPath) return 'images/dice.png';
+  const file = iconPath.split('/').pop() || '';
+  const base = file.replace(/\.dds$/i, '') || 'default';
+  return `images/passives/${base}.png`;
+}
+
+function renderPassiveRow(rowEl, nodes, type, buildTagSet) {
+  if (!rowEl) return;
+  const group = rowEl.closest('.passives-group');
+  rowEl.innerHTML = '';
+
+  if (!nodes || !nodes.length) {
+    group?.classList.add('is-empty', 'hidden');
+    return;
+  }
+
+  group?.classList.remove('is-empty', 'hidden');
+
+  const pool = Array.isArray(nodes) ? nodes.slice() : [];
+  const rows = [];
+  const plans = {
+    ascendancy: [2],
+    keystone: [2],
+    notable: [3, 2, 3],
+  };
+  const plan = plans[type] || [3];
+
+  plan.forEach((take) => {
+    if (!pool.length) return;
+    const slice = pool.splice(0, Math.min(take, pool.length));
+    if (slice.length) rows.push(slice);
+  });
+
+  while (pool.length) {
+    const take = Math.min(3, pool.length);
+    if (take === 1 && rows.length) {
+      rows[rows.length - 1].push(pool.shift());
+      continue;
+    }
+    rows.push(pool.splice(0, take));
+  }
+
+  rows.forEach((rowSet) => {
+    const rowLine = document.createElement('div');
+    rowLine.className = 'passives-row-line';
+    rowSet.forEach((node, index) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = `passive-node passive-node--${type}`;
+
+      const iconSrc = resolvePassiveIcon(node?.icon);
+      const name = node?.name || 'Unknown Passive';
+      const lines = Array.isArray(node?.lines) ? node.lines.filter(Boolean) : [];
+      const tags = Array.isArray(node?.tags) ? node.tags.filter(Boolean) : [];
+      const linesHtml = lines.length
+        ? `<div class="passive-node__lines">${lines.map(l => escapeHtml(l)).join('<br>')}</div>`
+        : '';
+      const tagsHtml = tags.length
+        ? `<div class="passive-node__tags">${tags
+            .map((t) => {
+              const norm = normTagPlus(t);
+              const matched = buildTagSet?.has(norm);
+              return `<span class="passive-tag${matched ? ' is-match' : ''}">${escapeHtml(t)}</span>`;
+            })
+            .join('')}</div>`
+        : '';
+
+      wrapper.innerHTML = `
+        <div class="passive-node__orb">
+          <div class="passive-node__orb-inner">
+            <img class="passive-node__icon" src="${iconSrc}" alt="${escapeHtml(name)}">
+          </div>
+        </div>
+        <div class="passive-node__text">
+          <div class="passive-node__name">${escapeHtml(name)}</div>
+          ${linesHtml}
+          ${tagsHtml}
+        </div>
+      `;
+
+      const img = wrapper.querySelector('.passive-node__icon');
+      if (img) {
+        img.addEventListener('error', () => {
+          img.src = 'images/dice.png';
+        }, { once: true });
+      }
+
+      rowLine.appendChild(wrapper);
+
+      if (index < rowSet.length - 1) {
+        const link = document.createElement('div');
+        link.className = 'passive-link';
+        rowLine.appendChild(link);
+      }
+    });
+
+    rowEl.appendChild(rowLine);
+  });
+}
+
+function renderPassiveRecommendations(currentRoll, dataWrap) {
+  const panel = document.getElementById('passives-panel');
+  const ascRow = document.querySelector('.passives-row--ascendancy');
+  const keyRow = document.querySelector('.passives-row--keystones');
+  const noteRow = document.querySelector('.passives-row--notables');
+
+  const hideAll = () => {
+    [ascRow, keyRow, noteRow].forEach(row => { if (row) row.innerHTML = ''; });
+    document.querySelectorAll('.passives-group').forEach(g => g.classList.add('hidden', 'is-empty'));
+    if (panel) panel.classList.add('hidden');
+  };
+
+  const passivesData = dataWrap?.passivesEnriched || (window.DATA && window.DATA.passivesEnriched);
+  const hasPassiveData = passivesData && Array.isArray(passivesData.nodes);
+  if (!panel || !hasPassiveData || !currentRoll || !currentRoll.passives) {
+    hideAll();
+    return;
+  }
+
+  panel.classList.remove('hidden');
+  const passives = currentRoll.passives || {};
+  const ctx = buildBuildContext(currentRoll);
+  const buildTagSet = new Set();
+  (ctx?.tags || []).forEach((t) => buildTagSet.add(normTagPlus(t)));
+  (ctx?.defenseTags || []).forEach((t) => buildTagSet.add(normTagPlus(t)));
+
+  renderPassiveRow(ascRow, passives.ascendancyNodes || [], 'ascendancy', buildTagSet);
+  renderPassiveRow(keyRow, passives.keystones || [], 'keystone', buildTagSet);
+  renderPassiveRow(noteRow, passives.notables || [], 'notable', buildTagSet);
+
+  const anyVisible = [ascRow, keyRow, noteRow].some(row => {
+    const g = row?.closest('.passives-group');
+    return g && !g.classList.contains('hidden');
+  });
+  if (panel) panel.classList.toggle('hidden', !anyVisible);
+}
+
 
 // ---------- cohesion + selection ----------
 const COHESION_MODES = { strict:0.75, cohesive:0.5, chaotic:0.25, madness:0.0 };
@@ -1126,6 +1334,94 @@ function evaluateCohesionStatus(buildState){
     buildState.currentRoll.cohesionModeName = modeName;
   }
   return status;
+}
+
+/**
+ * @typedef {'strict'|'cohesive'|'chaotic'|'madness'} CohesionMode
+ * @typedef {Object} BuildContext
+ * @property {number|null} ascendancyId
+ * @property {string|null} ascendancyName
+ * @property {string[]} tags
+ * @property {string[]} defenseTags
+ * @property {{strength:number, dexterity:number, intelligence:number}} attributes
+ * @property {CohesionMode} cohesionMode
+ */
+
+function buildBuildContext(explicitSnapshot){
+  try {
+    // 1) Explicit snapshot
+    if (explicitSnapshot && typeof explicitSnapshot === 'object') {
+      return buildBuildContextFromSnapshot(explicitSnapshot);
+    }
+
+    // 2) App-level state snapshot
+    if (window.App && window.App.state && window.App.state.currentRoll) {
+      const built = buildBuildContextFromSnapshot(window.App.state.currentRoll);
+      if (built) return built;
+    }
+
+    // 3) Fallback to global CURRENT_ROLL
+    if (window.CURRENT_ROLL && typeof window.CURRENT_ROLL === 'object') {
+      return buildBuildContextFromSnapshot(window.CURRENT_ROLL);
+    }
+  } catch (err) {
+    console.warn('[buildBuildContext] failed', err);
+  }
+
+  return null;
+}
+
+function buildBuildContextFromSnapshot(snap){
+  if (!snap || typeof snap !== 'object') return null;
+
+  const ascendancyName = snap.ascendancyName || snap.ascendancy || null;
+  const ascendancyId = Number.isFinite(snap.ascendancyId)
+    ? Number(snap.ascendancyId)
+    : lookupAscendancyIdByName(ascendancyName);
+
+  const rollAttr = snap.rollAttr || snap.attributes || {};
+  const attributes = normalizeAttributesForSynergy(rollAttr);
+
+  const tagSet = new Set();
+  const defenseSet = new Set();
+  const addTag = (t, sink = tagSet) => { const k = normTagPlus(t); if (k) sink.add(k); };
+  const addTags = (arr, sink) => (arr || []).forEach(t => addTag(t, sink));
+
+  // Prefer existing tag profile if present
+  if (snap.tagProfile && snap.tagProfile.profile instanceof Map) {
+    snap.tagProfile.profile.forEach((_, k) => addTag(k));
+  }
+  if (snap.tagProfile && snap.tagProfile.cats) {
+    addTags(Array.from(snap.tagProfile.cats.tactics || []));
+    addTags(Array.from(snap.tagProfile.cats.ailments || []));
+  }
+
+  addTags((snap.tacticSet || []).flatMap(t => t?.tags || []));
+  addTags((snap.ailmentSet || []).flatMap(a => a?.tags || []));
+  const defPseudo = defensePseudoTags(snap.defense?.name);
+  addTags(defPseudo);
+  addTags(defPseudo, defenseSet);
+  addTags(snap.defStratObj?.tags || snap.defStrat?.tags || []);
+  addTags(Array.from(deriveWeaponHints({ name: snap.weapon }, { name: snap.offhand }) || []));
+
+  const defenseKeywords = ['life','energyshield','armour','evasion','block','ward','guard','resist','regen','leech'];
+  tagSet.forEach(t => {
+    const lower = String(t).toLowerCase();
+    if (defenseKeywords.some(k => lower.includes(k))) defenseSet.add(t);
+  });
+
+  const cohesionMode = resolveCohesionMode(
+    snap.cohesionModeName ?? snap.cohesionMode ?? currentMode
+  );
+
+  return {
+    ascendancyId: Number.isFinite(ascendancyId) ? ascendancyId : null,
+    ascendancyName: ascendancyName || null,
+    tags: Array.from(tagSet).sort(),
+    defenseTags: Array.from(defenseSet).sort(),
+    attributes,
+    cohesionMode
+  };
 }
 
 function renderCohesionStatus(buildState){
@@ -1566,6 +1862,10 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
       weaponPseudoTags: Array.from(deriveWeaponHints(picked.weapon, picked.offhand))
     });
 
+    if (rollCtx && typeof rollCtx === 'object') {
+      rollCtx.tagProfile = rolledProfile;
+    }
+
     // Scoring knobs from cohesion mode
     const knobs = synergyTunings();
     knobs.rollAttr = ctx.rollAttr || baseAttrs || {strength:0.33,dexterity:0.33,intelligence:0.33};
@@ -1635,6 +1935,7 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
     const persistent = renderPersistentBuffSkill(persistentPool, rolledProfile, window.TAG_IDF, knobs, gems);
 
     return {
+      tagProfile: rolledProfile,
       skills: picks.map(g => ({
         id: g.id || g.base_item?.id || g.name || '',
         name: g.name || '',
@@ -1910,6 +2211,8 @@ function rollBuild(dataWrap){
     ? (current.ascendancy || clsData?.ascendancies?.[0] || '')
     : clsData.ascendancies[Math.floor(Math.random() * clsData.ascendancies.length)];
 
+  const ascendancyId = lookupAscendancyIdByName(asc);
+
   document.getElementById('class')?.replaceChildren(document.createTextNode(clsName || ''));
   document.getElementById('ascendancy')?.replaceChildren(document.createTextNode(asc || ''));
   updateAscArt(asc);
@@ -2012,17 +2315,24 @@ function rollBuild(dataWrap){
     snapshotVersion: 1,
     className: clsName,
     ascendancy: asc || '',
+    ascendancyName: asc || '',
+    ascendancyId: ascendancyId ?? null,
     defense: pickedDefense?.name || '',
     defStrat: pickedDefStrat?.name || '',
+    defStratObj: pickedDefStrat || null,
     weapon: weapon?.name || '',
     offhand: offhand?.name || '',
     tactics: tacticSet.filter(Boolean).map(t=>t.name).join(' & '),
     ailments: ailmentSet.filter(Boolean).map(a=>a.name).join(' & '),
     ailmentList: ailmentSet.filter(Boolean).map(a=>a.name),
     tacticList: tacticSet.filter(Boolean).map(t=>t.name),
+    tacticSet: tacticSet.filter(Boolean),
+    ailmentSet: ailmentSet.filter(Boolean),
     buildName,
     flavor: buildFlavor,
     attributes: { strength: S, dexterity: D, intelligence: I },
+    rollAttr: { strength: S, dexterity: D, intelligence: I },
+    defenseObj: pickedDefense || null,
     synergyScore,
     cohesionStatus: 'ok',
     cohesionModeName
@@ -2037,6 +2347,9 @@ function rollBuild(dataWrap){
 
   // Stash the roll context for synergy scorer
   window.CURRENT_ROLL = {
+          ascendancy: asc || '',
+          ascendancyName: asc || '',
+          ascendancyId: ascendancyId ?? null,
           ailmentSet: ailmentSet.filter(Boolean),
           tacticSet: tacticSet.filter(Boolean),
           defense: pickedDefense,
@@ -2044,6 +2357,7 @@ function rollBuild(dataWrap){
           weapon: weapon?.name || '',
           offhand: offhand?.name || '',
           rollAttr: { strength: S, dexterity: D, intelligence: I },
+          tagProfile: null,
           synergyScore,
           cohesionModeName
         };
@@ -2053,9 +2367,30 @@ function rollBuild(dataWrap){
   if (window.App && typeof window.App.mergeCurrentRoll === 'function') {
     window.App.mergeCurrentRoll({
       recommendedSkills: skillSnapshot.skills || [],
-      recommendedPersistentBuff: skillSnapshot.persistentBuff || null
+      recommendedPersistentBuff: skillSnapshot.persistentBuff || null,
+      tagProfile: skillSnapshot.tagProfile || window.CURRENT_ROLL.tagProfile || null
     });
   }
+
+  // Passive recommendations (pure, cohesion-aware)
+  const passiveCtx = buildBuildContext();
+  const passivesData = (dataWrap && dataWrap.passivesEnriched) || (window.DATA && window.DATA.passivesEnriched) || null;
+  const passiveIndex = (dataWrap && dataWrap.passiveIndex) || (window.DATA && window.DATA.passiveIndex) || null;
+  if (passiveCtx && passivesData && Array.isArray(passivesData.nodes)) {
+    const ascendancyNodes = pickRecommendedAscendancyNodes(passivesData, passiveIndex, passiveCtx, 2);
+    const keystones = pickRecommendedKeystones(passivesData, passiveIndex, passiveCtx, 2);
+    const notables = pickRecommendedNotables(passivesData, passiveIndex, passiveCtx, 8);
+    const passiveBundle = { ascendancyNodes, keystones, notables };
+
+    if (window.App && typeof window.App.mergeCurrentRoll === 'function') {
+      window.App.mergeCurrentRoll({ passives: passiveBundle });
+    }
+    if (window.CURRENT_ROLL && typeof window.CURRENT_ROLL === 'object') {
+      window.CURRENT_ROLL.passives = passiveBundle;
+    }
+  }
+
+  renderPassiveRecommendations(window.CURRENT_ROLL, dataWrap);
 
   // Uniques: trigger the synergy engine directly using the current roll snapshot
   try {
@@ -2183,9 +2518,14 @@ const gemDesc = g.description || g.support_text || '';
 // ---------- data initialization ----------
 async function loadData() {
   try {
-    const core = await loadJSON('core-data.json');
+    const core = await loadJSON('data/core-data.json');
     const gemsRaw = await tryLoad(['data/skill_gems.json', 'gems.json']);
     const skillsRaw = await tryLoad(['data/skills.json']);
+    const passivesEnriched = await tryLoad(['data/enriched/passives_enriched.json']);
+    if (!passivesEnriched || !passivesEnriched.nodes) {
+      console.warn('[loadData] Passive data missing or incomplete');
+    }
+    const passiveIndex = buildPassiveIndex(passivesEnriched);
     const enr = enrichGems(gemsRaw, skillsRaw);
     console.log(`[Skill Enrichment] ${enr.length} enriched skill entries.`);
 
@@ -2193,11 +2533,13 @@ async function loadData() {
       ...core,
       gems: enr,
       skills: skillsRaw,
-      skill_gems: gemsRaw
+      skill_gems: gemsRaw,
+      passivesEnriched,
+      passiveIndex
     };
     console.log("[Global DATA initialized]", window.DATA);
 
-    return { core, gems: enr };
+    return { core, gems: enr, passivesEnriched, passiveIndex };
   } catch (err) {
     console.error("[loadData] Failed to load core data:", err);
     return { core: {}, gems: [] };
@@ -2697,7 +3039,7 @@ function extractBracketTags(description){
 
 
 async function loadUniquesM(){
-    const url = 'uniques_enriched.json?v=' + Date.now();
+    const url = 'data/enriched/uniques_enriched.json?v=' + Date.now();
     const r = await fetch(url, {cache:'no-store'});
     if (!r.ok) throw new Error('HTTP '+r.status);
     const data = await r.json();
