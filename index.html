@@ -153,12 +153,36 @@
           </div>
         </div>
         <hr class="gold subtle"/>
-        <div class="sect">
-          <div class="sect-head">
-            <h3 class="section-title">Recommended Skills</h3>
-            <div class="underline"></div><p class="sub">Two active skills for this roll, with supports</p>
+          <div class="sect">
+            <div class="sect-head">
+              <h3 class="section-title">Recommended Skills</h3>
+              <div class="underline"></div><p class="sub">Two active skills for this roll, with supports</p>
+            </div>
+            <div id="skills-grid" class="grid two skills-grid"></div>
           </div>
-          <div id="skills-grid" class="grid two skills-grid"></div>
+      </section>
+
+      <section id="passives-panel" class="panel panel--passives hidden">
+        <div class="panel-header">
+          <h2 class="panel-title">Recommended Passives</h2>
+          <p class="panel-subtitle">Ascendancy points, keystones, and notables that resonate with this build.</p>
+        </div>
+
+        <div class="passives-groups">
+          <div class="passives-group" data-passive-group="ascendancy">
+            <h3 class="passives-group-title">Ascendancy Nodes</h3>
+            <div class="passives-row passives-row--ascendancy"></div>
+          </div>
+
+          <div class="passives-group" data-passive-group="keystones">
+            <h3 class="passives-group-title">Keystones</h3>
+            <div class="passives-row passives-row--keystones"></div>
+          </div>
+
+          <div class="passives-group" data-passive-group="notables">
+            <h3 class="passives-group-title">Notables</h3>
+            <div class="passives-row passives-row--notables"></div>
+          </div>
         </div>
       </section>
     </main>
