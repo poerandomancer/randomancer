@@ -2107,19 +2107,34 @@ function initCardStacks(root = document) {
     let topIndex = 0;
     const indicator = stack.parentElement?.querySelector('.js-card-stack-indicator');
 
+    const measureHeight = () => {
+      let maxHeight = 0;
+
+      cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const h = rect.height || card.offsetHeight || card.scrollHeight || 0;
+        maxHeight = Math.max(maxHeight, h);
+      });
+
+      if (maxHeight) {
+        stack.style.minHeight = `${maxHeight}px`;
+        stack.style.height = `${maxHeight}px`;
+      }
+
+      return maxHeight;
+    };
+
     function render() {
       const total = cards.length;
-      let maxHeight = 0;
 
       cards.forEach((card, i) => {
         const offset = (i - topIndex + total) % total;
         card.dataset.offset = offset;
-        maxHeight = Math.max(maxHeight, card.offsetHeight || 0);
       });
 
-      if (maxHeight) {
-        stack.style.height = `${maxHeight}px`;
-      }
+      const measured = measureHeight();
+
+      if (!measured) requestAnimationFrame(measureHeight);
 
       if (indicator) {
         indicator.textContent = `${topIndex + 1} / ${total}`;

@@ -460,10 +460,10 @@ border-top: 1px dotted var(--gold);
   max-width: 520px;
   width: 100%;
   margin: 0 auto;
-  padding: 0.35rem 0 1.6rem;
+  padding: 0.75rem 0.65rem 2rem;
   cursor: pointer;
   touch-action: manipulation;
-  min-height: 260px;
+  min-height: 340px;
 }
 
 .card-stack:focus-visible {
@@ -493,18 +493,18 @@ border-top: 1px dotted var(--gold);
 
 .card-stack .skill-card[data-offset="1"],
 .card-stack .unique-card[data-offset="1"] {
-  transform: translateY(0.45rem) scale(0.98);
+  transform: translate(0.5rem, 0.75rem) scale(0.985);
   z-index: 2;
   opacity: 0.9;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.38);
 }
 
 .card-stack .skill-card[data-offset="2"],
 .card-stack .unique-card[data-offset="2"] {
-  transform: translateY(0.9rem) scale(0.96);
+  transform: translate(1rem, 1.35rem) scale(0.97);
   z-index: 1;
-  opacity: 0.7;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  opacity: 0.8;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.35);
 }
 
 .card-stack .skill-card[data-offset]:not([data-offset="0"]):not([data-offset="1"]):not([data-offset="2"]),
