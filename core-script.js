@@ -1131,10 +1131,25 @@ function renderPassiveRow(rowEl, nodes, type, buildTagSet) {
 
   const pool = Array.isArray(nodes) ? nodes.slice() : [];
   const rows = [];
+  const plans = {
+    ascendancy: [2],
+    keystone: [2],
+    notable: [3, 2, 3],
+  };
+  const plan = plans[type] || [3];
+
+  plan.forEach((take) => {
+    if (!pool.length) return;
+    const slice = pool.splice(0, Math.min(take, pool.length));
+    if (slice.length) rows.push(slice);
+  });
+
   while (pool.length) {
-    const remaining = pool.length;
-    let take = remaining >= 3 ? 3 : remaining;
-    if (remaining === 4) take = 2;
+    const take = Math.min(3, pool.length);
+    if (take === 1 && rows.length) {
+      rows[rows.length - 1].push(pool.shift());
+      continue;
+    }
     rows.push(pool.splice(0, take));
   }
 

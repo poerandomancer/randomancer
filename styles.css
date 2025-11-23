@@ -1027,7 +1027,7 @@ border-top: 1px dotted var(--gold);
   align-items: center;
   justify-content: center;
   gap: 1.4rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .passive-node {
