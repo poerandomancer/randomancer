@@ -1016,10 +1016,18 @@ border-top: 1px dotted var(--gold);
 
 .passives-row {
   display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 0.3rem 0.35rem 0.55rem;
   align-items: center;
+}
+
+.passives-row-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 1.4rem;
   flex-wrap: wrap;
-  padding: 0.3rem 0.35rem 0.55rem;
 }
 
 .passive-node {
@@ -1040,8 +1048,8 @@ border-top: 1px dotted var(--gold);
   border: 2px solid rgba(255, 255, 255, 0.2);
   box-shadow:
     0 0 8px rgba(0, 0, 0, 0.5),
-    inset 0 0 8px rgba(0, 0, 0, 0.55);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+    inset 0 0 8px rgba(0, 0, 0, 0.55),
+    0 0 12px rgba(255, 220, 140, 0.35);
 }
 
 .passive-node__orb-inner {
@@ -1078,6 +1086,28 @@ border-top: 1px dotted var(--gold);
   line-height: 1.3;
 }
 
+.passive-node__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  justify-content: center;
+}
+
+.passive-tag {
+  padding: 0.1rem 0.35rem;
+  border-radius: 999px;
+  background: rgba(120, 110, 90, 0.28);
+  color: rgba(235, 225, 205, 0.9);
+  font-size: 0.8rem;
+  border: 1px solid rgba(200, 180, 120, 0.25);
+}
+
+.passive-tag.is-match {
+  background: rgba(210, 170, 90, 0.35);
+  border-color: rgba(255, 210, 120, 0.65);
+  box-shadow: 0 0 8px rgba(255, 210, 120, 0.28);
+}
+
 .passive-link {
   flex: 0 0 48px;
   height: 1px;
@@ -1101,13 +1131,6 @@ border-top: 1px dotted var(--gold);
 
 .passive-node--notable .passive-node__orb {
   border-color: rgba(200, 200, 200, 0.35);
-}
-
-.passive-node:hover .passive-node__orb {
-  box-shadow:
-    0 0 12px rgba(255, 220, 140, 0.35),
-    inset 0 0 10px rgba(255, 255, 255, 0.2);
-  transform: translateY(-1px);
 }
 
 @media (max-width: 720px) {

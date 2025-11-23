@@ -216,17 +216,31 @@ const buildScoreMap = (nodes, ctx) => {
  * @param {number} [count]
  * @returns {PassiveNode[]}
  */
-export function pickRecommendedAscendancyNodes(passivesData, passiveIndex, ctx, count = 4) {
+export function pickRecommendedAscendancyNodes(passivesData, passiveIndex, ctx, count = 2) {
   if (!ctx || ctx.ascendancyId == null) return [];
   const byName = passiveIndex?.byAscendancyName?.get?.(ctx.ascendancyName || '') || null;
-  const candidates = Array.isArray(byName)
+  const baseCandidates = Array.isArray(byName)
     ? byName
     : (passivesData?.nodes || []).filter(
         (node) => node?.type === 'ascendancy' && node.ascendancyId === ctx.ascendancyId
       );
-  if (!candidates.length) return [];
+  if (!baseCandidates.length) return [];
+
+  const notableCandidates = baseCandidates.filter((node) =>
+    normalizeTags(node?.tags || []).includes('notable')
+  );
+  const candidates = notableCandidates.length ? notableCandidates : baseCandidates;
   const scores = buildScoreMap(candidates, ctx);
-  return selectByCohesion(candidates, scores, ctx.cohesionMode, count);
+  const picked = selectByCohesion(candidates, scores, ctx.cohesionMode, count);
+
+  if (picked.length >= count || !candidates.length) return picked.slice(0, count);
+
+  const sorted = [...candidates].sort((a, b) => (scores.get(b) ?? 0) - (scores.get(a) ?? 0));
+  while (picked.length < count) {
+    picked.push(sorted[picked.length % sorted.length]);
+  }
+
+  return picked.slice(0, count);
 }
 
 /**
@@ -242,7 +256,16 @@ export function pickRecommendedKeystones(passivesData, passiveIndex, ctx, count 
     : (passivesData?.nodes || []).filter((node) => node?.type === 'keystone');
   if (!candidates.length) return [];
   const scores = buildScoreMap(candidates, ctx);
-  return selectByCohesion(candidates, scores, ctx.cohesionMode, count);
+  const picked = selectByCohesion(candidates, scores, ctx.cohesionMode, count);
+
+  if (picked.length >= count) return picked.slice(0, count);
+
+  const sorted = [...candidates].sort((a, b) => (scores.get(b) ?? 0) - (scores.get(a) ?? 0));
+  while (picked.length < count) {
+    picked.push(sorted[picked.length % sorted.length]);
+  }
+
+  return picked.slice(0, count);
 }
 
 /**
@@ -252,7 +275,7 @@ export function pickRecommendedKeystones(passivesData, passiveIndex, ctx, count 
  * @param {number} [count]
  * @returns {PassiveNode[]}
  */
-export function pickRecommendedNotables(passivesData, passiveIndex, ctx, count = 6) {
+export function pickRecommendedNotables(passivesData, passiveIndex, ctx, count = 8) {
   const candidates = passiveIndex?.notables?.length
     ? passiveIndex.notables
     : (passivesData?.nodes || []).filter((node) => node?.type === 'notable');
@@ -263,7 +286,16 @@ export function pickRecommendedNotables(passivesData, passiveIndex, ctx, count =
     const adjusted = (!node.tags || node.tags.length === 0) && base < 0.05 ? 0 : base;
     scores.set(node, adjusted);
   });
-  return selectByCohesion(candidates, scores, ctx.cohesionMode, count);
+  const picked = selectByCohesion(candidates, scores, ctx.cohesionMode, count);
+
+  if (picked.length >= count) return picked.slice(0, count);
+
+  const sorted = [...candidates].sort((a, b) => (scores.get(b) ?? 0) - (scores.get(a) ?? 0));
+  while (picked.length < count) {
+    picked.push(sorted[picked.length % sorted.length]);
+  }
+
+  return picked.slice(0, count);
 }
 
 export default {

@@ -1117,7 +1117,7 @@ function resolvePassiveIcon(iconPath) {
   return `images/passives/${base}.png`;
 }
 
-function renderPassiveRow(rowEl, nodes, type) {
+function renderPassiveRow(rowEl, nodes, type, buildTagSet) {
   if (!rowEl) return;
   const group = rowEl.closest('.passives-group');
   rowEl.innerHTML = '';
@@ -1129,43 +1129,69 @@ function renderPassiveRow(rowEl, nodes, type) {
 
   group?.classList.remove('is-empty', 'hidden');
 
-  nodes.forEach((node, index) => {
-    const wrapper = document.createElement('div');
-    wrapper.className = `passive-node passive-node--${type}`;
+  const pool = Array.isArray(nodes) ? nodes.slice() : [];
+  const rows = [];
+  while (pool.length) {
+    const remaining = pool.length;
+    let take = remaining >= 3 ? 3 : remaining;
+    if (remaining === 4) take = 2;
+    rows.push(pool.splice(0, take));
+  }
 
-    const iconSrc = resolvePassiveIcon(node?.icon);
-    const name = node?.name || 'Unknown Passive';
-    const lines = Array.isArray(node?.lines) ? node.lines.filter(Boolean) : [];
-    const linesHtml = lines.length
-      ? `<div class="passive-node__lines">${lines.map(l => escapeHtml(l)).join('<br>')}</div>`
-      : '';
+  rows.forEach((rowSet) => {
+    const rowLine = document.createElement('div');
+    rowLine.className = 'passives-row-line';
+    rowSet.forEach((node, index) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = `passive-node passive-node--${type}`;
 
-    wrapper.innerHTML = `
-      <div class="passive-node__orb">
-        <div class="passive-node__orb-inner">
-          <img class="passive-node__icon" src="${iconSrc}" alt="${escapeHtml(name)}">
+      const iconSrc = resolvePassiveIcon(node?.icon);
+      const name = node?.name || 'Unknown Passive';
+      const lines = Array.isArray(node?.lines) ? node.lines.filter(Boolean) : [];
+      const tags = Array.isArray(node?.tags) ? node.tags.filter(Boolean) : [];
+      const linesHtml = lines.length
+        ? `<div class="passive-node__lines">${lines.map(l => escapeHtml(l)).join('<br>')}</div>`
+        : '';
+      const tagsHtml = tags.length
+        ? `<div class="passive-node__tags">${tags
+            .map((t) => {
+              const norm = normTagPlus(t);
+              const matched = buildTagSet?.has(norm);
+              return `<span class="passive-tag${matched ? ' is-match' : ''}">${escapeHtml(t)}</span>`;
+            })
+            .join('')}</div>`
+        : '';
+
+      wrapper.innerHTML = `
+        <div class="passive-node__orb">
+          <div class="passive-node__orb-inner">
+            <img class="passive-node__icon" src="${iconSrc}" alt="${escapeHtml(name)}">
+          </div>
         </div>
-      </div>
-      <div class="passive-node__text">
-        <div class="passive-node__name">${escapeHtml(name)}</div>
-        ${linesHtml}
-      </div>
-    `;
+        <div class="passive-node__text">
+          <div class="passive-node__name">${escapeHtml(name)}</div>
+          ${linesHtml}
+          ${tagsHtml}
+        </div>
+      `;
 
-    const img = wrapper.querySelector('.passive-node__icon');
-    if (img) {
-      img.addEventListener('error', () => {
-        img.src = 'images/dice.png';
-      }, { once: true });
-    }
+      const img = wrapper.querySelector('.passive-node__icon');
+      if (img) {
+        img.addEventListener('error', () => {
+          img.src = 'images/dice.png';
+        }, { once: true });
+      }
 
-    rowEl.appendChild(wrapper);
+      rowLine.appendChild(wrapper);
 
-    if (index < nodes.length - 1) {
-      const link = document.createElement('div');
-      link.className = 'passive-link';
-      rowEl.appendChild(link);
-    }
+      if (index < rowSet.length - 1) {
+        const link = document.createElement('div');
+        link.className = 'passive-link';
+        rowLine.appendChild(link);
+      }
+    });
+
+    rowEl.appendChild(rowLine);
   });
 }
 
@@ -1190,10 +1216,14 @@ function renderPassiveRecommendations(currentRoll, dataWrap) {
 
   panel.classList.remove('hidden');
   const passives = currentRoll.passives || {};
+  const ctx = buildBuildContext(currentRoll);
+  const buildTagSet = new Set();
+  (ctx?.tags || []).forEach((t) => buildTagSet.add(normTagPlus(t)));
+  (ctx?.defenseTags || []).forEach((t) => buildTagSet.add(normTagPlus(t)));
 
-  renderPassiveRow(ascRow, passives.ascendancyNodes || [], 'ascendancy');
-  renderPassiveRow(keyRow, passives.keystones || [], 'keystone');
-  renderPassiveRow(noteRow, passives.notables || [], 'notable');
+  renderPassiveRow(ascRow, passives.ascendancyNodes || [], 'ascendancy', buildTagSet);
+  renderPassiveRow(keyRow, passives.keystones || [], 'keystone', buildTagSet);
+  renderPassiveRow(noteRow, passives.notables || [], 'notable', buildTagSet);
 
   const anyVisible = [ascRow, keyRow, noteRow].some(row => {
     const g = row?.closest('.passives-group');
@@ -2332,9 +2362,9 @@ function rollBuild(dataWrap){
   const passivesData = (dataWrap && dataWrap.passivesEnriched) || (window.DATA && window.DATA.passivesEnriched) || null;
   const passiveIndex = (dataWrap && dataWrap.passiveIndex) || (window.DATA && window.DATA.passiveIndex) || null;
   if (passiveCtx && passivesData && Array.isArray(passivesData.nodes)) {
-    const ascendancyNodes = pickRecommendedAscendancyNodes(passivesData, passiveIndex, passiveCtx, 4);
+    const ascendancyNodes = pickRecommendedAscendancyNodes(passivesData, passiveIndex, passiveCtx, 2);
     const keystones = pickRecommendedKeystones(passivesData, passiveIndex, passiveCtx, 2);
-    const notables = pickRecommendedNotables(passivesData, passiveIndex, passiveCtx, 6);
+    const notables = pickRecommendedNotables(passivesData, passiveIndex, passiveCtx, 8);
     const passiveBundle = { ascendancyNodes, keystones, notables };
 
     if (window.App && typeof window.App.mergeCurrentRoll === 'function') {
