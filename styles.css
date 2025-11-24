@@ -373,15 +373,21 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 
 
 /* === v0.5.1: Recommended Skills section === */
-.skills-grid { margin-top: .25rem; }
+.skills-grid { margin-top: 1rem; }
 
 .skill-card {
   border-radius: 10px;
-  padding: .8rem 1rem;
-  background: rgba(20,20,24,0.75);
+  padding: .9rem 1rem 1rem;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 38%, rgba(0,0,0,0) 70%),
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.018) 0, rgba(255,255,255,0.018) 10px, rgba(0,0,0,0.02) 14px, rgba(0,0,0,0.02) 22px),
+    radial-gradient(120% 120% at 12% 10%, rgba(255,255,255,0.04) 0%, rgba(0,0,0,0) 65%),
+    rgba(20,20,24,0.82);
   border: 1px solid var(--edge);
-  box-shadow: 0 0 6px rgba(0,0,0,0.4);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.45), 0 0 6px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.03);
   transition: box-shadow .2s ease, border-color .2s ease;
+  position: relative;
+  overflow: hidden;
 }
 
 /* Skill name: slightly more prominent */
@@ -398,6 +404,21 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
   color: var(--muted);
   font-size: .9rem;
   font-style: italic;
+}
+
+.skill-role-badge {
+  position: absolute;
+  right: 0.75rem;
+  top: 0.65rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(200,168,107,0.4);
+  background: linear-gradient(135deg, rgba(200,168,107,0.14), rgba(200,168,107,0.05));
+  color: var(--gold);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.35);
 }
 
 .skill-desc {
@@ -452,6 +473,89 @@ border-top: 1px dotted var(--gold);
 
 /* ensure long lists remain tidy */
 .supports-wrap { max-height: 280px; overflow: auto; scrollbar-width: thin; }
+
+
+/* Stacked card decks (skills + uniques) */
+.card-stack {
+  position: relative;
+  max-width: 520px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.35rem 1.05rem 2.6rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  min-height: 460px;
+}
+
+.card-stack:focus-visible {
+  outline: 2px solid rgba(202, 164, 95, 0.45);
+  outline-offset: 6px;
+}
+
+.card-stack .skill-card,
+.card-stack .unique-card {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  width: 100%;
+  transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+  pointer-events: none;
+  will-change: transform;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  max-height: 100%;
+  overflow: auto;
+}
+
+.card-stack .skill-card[data-offset="0"],
+.card-stack .unique-card[data-offset="0"] {
+  transform: translateY(0) scale(1) rotate(0deg);
+  z-index: 3;
+  opacity: 1;
+  pointer-events: auto;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+}
+
+.card-stack .skill-card[data-offset="1"],
+.card-stack .unique-card[data-offset="1"] {
+  transform: translate(1.35rem, -0.55rem) scale(0.986) rotate(3deg);
+  z-index: 2;
+  opacity: 0.9;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.38);
+}
+
+.card-stack .skill-card[data-offset="2"],
+.card-stack .unique-card[data-offset="2"] {
+  transform: translate(2.55rem, -1.15rem) scale(0.972) rotate(5.5deg);
+  z-index: 1;
+  opacity: 0.8;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+}
+
+.card-stack .skill-card[data-offset]:not([data-offset="0"]):not([data-offset="1"]):not([data-offset="2"]),
+.card-stack .unique-card[data-offset]:not([data-offset="0"]):not([data-offset="1"]):not([data-offset="2"]) {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.card-stack-indicator {
+  text-align: center;
+  font-size: 0.8rem;
+  opacity: 0.7;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: -0.4rem;
+  user-select: none;
+}
+
+.skills-grid .card-stack,
+.skills-grid .card-stack-indicator,
+.uniques-grid .card-stack,
+.uniques-grid .card-stack-indicator {
+  grid-column: 1 / -1;
+}
 
 
 /* v0.5.3.1: balance bar richer + fade ends */
@@ -840,7 +944,7 @@ border-top: 1px dotted var(--gold);
 
 /* === v0.7: active gem cards fixed max-height + flex scroller === */
 :root{
-  --skill-card-max: 560px;
+  --skill-card-max: 640px;
 }
 
 .skills-grid{ align-items: stretch; }
@@ -870,17 +974,26 @@ border-top: 1px dotted var(--gold);
   --unique-bronze-edge: rgba(197,138,70,0.35);
   --unique-bronze-soft: rgba(197,138,70,0.12);
 }
-.uniques-grid{ margin-top:.35rem; }
+.uniques-grid{ margin-top: 1rem; }
 
 /* Unique card frame */
 .unique-card {
-  background: #12100c;
-  border: 1px solid rgba(255, 200, 120, 0.45);
+  background:
+    linear-gradient(140deg, rgba(255, 210, 150, 0.04) 0%, rgba(0,0,0,0) 55%),
+    repeating-linear-gradient(45deg, rgba(255,210,150,0.024) 0, rgba(255,210,150,0.024) 10px, rgba(8,6,4,0.05) 14px, rgba(8,6,4,0.05) 22px),
+    radial-gradient(120% 140% at 10% 15%, rgba(255, 200, 120, 0.08) 0%, rgba(10, 8, 6, 0) 60%),
+    #12100c;
+  border: 1px solid var(--unique-bronze-edge);
   border-radius: 14px;
   box-shadow:
+    0 10px 26px rgba(0,0,0,0.45),
     0 0 18px rgba(255, 180, 80, 0.18),
     inset 0 0 0 1px rgba(255, 200, 140, 0.05);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
 }
 
 /* Header: name + base */
@@ -947,6 +1060,9 @@ border-top: 1px dotted var(--gold);
   padding: 10px 14px 12px;
   color: #e4d9c9;
   font-size: 0.95rem;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .unique-line {
