@@ -205,102 +205,96 @@ function initSectionLocks(){
     return dict[key] || dict[key.toLowerCase()] || null;
   }
 
-  function renderSkillsFromSnapshot(snap){
-    const grid = document.getElementById('skills-grid');
-    if (!grid) return;
-    grid.innerHTML = '';
-
-    const gems = (window.DATA && window.DATA.gems) || [];
-    const gemDict = buildGemDictionary(gems);
-
-    (snap.recommendedSkills || []).forEach(entry => {
-      const g = lookupGem(gemDict, entry) || lookupGem(gemDict, { id: entry.name });
-      if (!g) return;
-      const card = document.createElement('div');
-      card.className = 'skill-card';
-
-      const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
-        ? `<div class="skill-subtitle">${g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')}</div>`
-        : '';
-
-      const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
-      const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
-      const rest = allTags.filter(t => !br.includes(t));
-      const displayTags = [...br, ...rest].slice(0, 10);
-      const pills = displayTags.map(t => `<span class="tag-pill">${t}</span>`).join('');
-
-      const supports = Array.isArray(entry.recommended_supports) && entry.recommended_supports.length
-        ? entry.recommended_supports
-        : g.recommended_supports;
-
-      card.innerHTML = `
-        <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
-        ${requiresSubtitle}
-        <div class="skill-divider"></div>
-        ${grantLine(g)}
-        <div class="skill-tags">${pills}</div>
-        <div class="supports-label">Recommended Supports</div>
-        <div class="supports">${renderSupportCards(supports, gemDict)}</div>
-      `;
-      applyGemBorderFromReqWeights(card, g.requirement_weights);
-      grid.appendChild(card);
-    });
-
-    if (snap.recommendedPersistentBuff) {
-      const buffGem = lookupGem(gemDict, snap.recommendedPersistentBuff);
-      if (buffGem) {
-        renderSnapshotPersistentBuff(buffGem, gemDict);
-      }
-    } else {
-      document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
-    }
-  }
-
-  function renderSnapshotPersistentBuff(g, gemDict){
-    document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
-    const skillsGrid = document.getElementById('skills-grid');
-    const skillsSect = skillsGrid ? skillsGrid.closest('.sect') : null;
-    const main = document.querySelector('main') || document.body;
-    const parent = (skillsSect && skillsSect.parentNode) || main;
-
-    const wrap = document.createElement('div');
-    wrap.id = 'persistent-buff-section';
-    wrap.className = 'sect';
-    wrap.innerHTML = `
-      <div class="sect-head">
-        <h3>Recommended Persistent Buff</h3>
-        <div class="underline"></div>
-        <p class="sub">A long-lasting buff skill that supports this build</p>
-      </div>
-      <div id="persistent-buff-grid" class="grid persistent-buff-grid"></div>
-    `;
-
-    if (skillsSect) skillsSect.insertAdjacentElement('afterend', wrap); else parent.appendChild(wrap);
-    const grid = wrap.querySelector('#persistent-buff-grid');
-    if (!grid) return;
+  function createSkillCard(g, gemDict, supportsOverride, roleLabel, matchProfile){
+    const card = document.createElement('div');
+    card.className = 'skill-card';
 
     const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
       ? `<div class="skill-subtitle">${g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')}</div>`
       : '';
+
     const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
     const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
     const rest = allTags.filter(t => !br.includes(t));
     const displayTags = [...br, ...rest].slice(0, 10);
-    const pills = displayTags.map(t => `<span class="tag-pill">${t}</span>`).join('');
+    const pills = displayTags.map(t => {
+      const norm = normTagPlus(t);
+      const cls = matchProfile && matchProfile.has && matchProfile.has(norm) ? 'tag-pill matched' : 'tag-pill';
+      return `<span class="${cls}">${t}</span>`;
+    }).join('');
 
-    const card = document.createElement('div');
-    card.className = 'skill-card persistent-buff-card';
+    const supports = Array.isArray(supportsOverride) && supportsOverride.length
+      ? supportsOverride
+      : g.recommended_supports;
+
+    const role = roleLabel ? `<div class="skill-role-badge">${roleLabel}</div>` : '';
+
     card.innerHTML = `
+      ${role}
       <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
       ${requiresSubtitle}
       <div class="skill-divider"></div>
       ${grantLine(g)}
       <div class="skill-tags">${pills}</div>
       <div class="supports-label">Recommended Supports</div>
-      <div class="supports">${renderSupportCards(g.recommended_supports, gemDict)}</div>
+      <div class="supports">${renderSupportCards(supports, gemDict)}</div>
     `;
     applyGemBorderFromReqWeights(card, g.requirement_weights);
-    grid.appendChild(card);
+    return card;
+  }
+
+  function renderSkillsFromSnapshot(snap){
+    const grid = document.getElementById('skills-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
+
+    const gems = (window.DATA && window.DATA.gems) || [];
+    const gemDict = buildGemDictionary(gems);
+
+    const entries = [];
+
+    (snap.recommendedSkills || []).forEach(entry => {
+      const g = lookupGem(gemDict, entry) || lookupGem(gemDict, { id: entry.name });
+      if (!g) return;
+      const supports = Array.isArray(entry.recommended_supports) && entry.recommended_supports.length
+        ? entry.recommended_supports
+        : g.recommended_supports;
+
+      entries.push({ gem: g, supports, role: 'Active Skill' });
+    });
+
+    if (snap.recommendedPersistentBuff) {
+      const buffGem = lookupGem(gemDict, snap.recommendedPersistentBuff);
+      if (buffGem) {
+        entries.push({ gem: buffGem, supports: buffGem.recommended_supports, role: 'Persistent Buff' });
+      }
+    }
+
+    if (!entries.length) return;
+
+    if (entries.length === 1) {
+      const { gem, supports, role } = entries[0];
+      grid.appendChild(createSkillCard(gem, gemDict, supports, role, null));
+      return;
+    }
+
+    const stack = document.createElement('div');
+    stack.className = 'card-stack js-card-stack';
+
+    entries.forEach(({ gem, supports, role }) => {
+      stack.appendChild(createSkillCard(gem, gemDict, supports, role, null));
+    });
+
+    grid.appendChild(stack);
+
+    const indicator = document.createElement('div');
+    indicator.className = 'card-stack-indicator js-card-stack-indicator';
+    indicator.textContent = `1 / ${entries.length}`;
+    grid.appendChild(indicator);
+
+    initCardStacks(grid);
   }
 
   function renderSnapshotToDom(snap){
@@ -1886,75 +1880,29 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
 
     const gemDict = buildGemDictionary(gems);
 
-    // Render main recommended skills
-    const buildSkillCard = (g) => {
-      const card = document.createElement('div');
-      card.className = 'skill-card';
+    const cards = picks.map(g => createSkillCard(g, gemDict, g.recommended_supports, 'Active Skill', rolledProfile?.profile));
 
-      // Subtle inline "requires" subtitle directly under the title
-      const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
-            ? `<div class="skill-subtitle">${g.required_weapon_types
-                    .map(x => x[0].toUpperCase() + x.slice(1))
-                    .join(', ')}</div>`
-            : '';
+    const persistent = pickPersistentBuffSkill(persistentPool, rolledProfile, window.TAG_IDF, knobs, gems);
+    if (persistent) {
+      cards.push(createSkillCard(persistent, gemDict, persistent.recommended_supports, 'Persistent Buff', rolledProfile?.profile));
+    }
 
-      const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
-      const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
-      const rest = allTags.filter(t => !br.includes(t));
-      const displayTags = [...br, ...rest].slice(0, 10);
-
-      // mark matched tags
-      const matched = new Set();
-      for (const t of displayTags) {
-            const k = normTagPlus(t);
-            if (rolledProfile.profile.has(k)) matched.add(k);
-      }
-      const pills = displayTags.map(t => {
-            const k = normTagPlus(t);
-            const cls = matched.has(k) ? 'tag-pill matched' : 'tag-pill';
-            return `<span class="${cls}">${t}</span>`;
-      }).join('');
-
-      card.innerHTML = `
-              <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
-              ${requiresSubtitle}
-              <div class="skill-divider"></div>
-              ${grantLine(g)}
-              <div class="skill-tags">${pills}</div>
-              <div class="supports-label">Recommended Supports</div>
-              <div class="supports">
-                    ${renderSupportCards(g.recommended_supports, gemDict)}
-              </div>
-            `;
-      applyGemBorderFromReqWeights(card, g.requirement_weights);
-      return card;
-    };
-
-    if (picks.length <= 1) {
-      picks.forEach(g => {
-        grid.appendChild(buildSkillCard(g));
-      });
+    if (cards.length <= 1) {
+      cards.forEach(card => grid.appendChild(card));
     } else {
       const stack = document.createElement('div');
       stack.className = 'card-stack js-card-stack';
-
-      picks.forEach(g => {
-        stack.appendChild(buildSkillCard(g));
-      });
+      cards.forEach(card => stack.appendChild(card));
 
       grid.appendChild(stack);
 
       const indicator = document.createElement('div');
       indicator.className = 'card-stack-indicator js-card-stack-indicator';
-      indicator.textContent = `1 / ${picks.length}`;
+      indicator.textContent = `1 / ${cards.length}`;
       grid.appendChild(indicator);
 
       initCardStacks(grid);
     }
-
-
-    // Render a dedicated persistent buff skill section (single card, full-width)
-    const persistent = renderPersistentBuffSkill(persistentPool, rolledProfile, window.TAG_IDF, knobs, gems);
 
     return {
       tagProfile: rolledProfile,
@@ -1974,98 +1922,34 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
   }
 
 
-function renderPersistentBuffSkill(persistentPool, rolledProfile, tagIDF, knobs, gems){
+function pickPersistentBuffSkill(persistentPool, rolledProfile, tagIDF, knobs, gems){
   try {
-    // Clear any previous persistent buff section
     document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
 
-    if (!Array.isArray(persistentPool) || !persistentPool.length) return;
+    if (!Array.isArray(persistentPool) || !persistentPool.length) return null;
 
     const actives = persistentPool.filter(g => g && g.type === 'active');
-    if (!actives.length) return;
+    if (!actives.length) return null;
 
-    // Score persistent buff candidates with the same synergy engine
     const scoredPB = actives.map(g => {
       const s = scoreGemSynergy(g, rolledProfile, tagIDF, knobs);
       return { item:g, score:s.score, raw:s.raw };
     }).sort((a,b) => b.score - a.score);
 
     const top = scoredPB[0];
-    if (!top || !isFinite(top.raw)) return;
+    if (!top || !isFinite(top.raw)) return null;
 
-    const skillsGrid = document.getElementById('skills-grid');
-    const skillsSect = skillsGrid ? skillsGrid.closest('.sect') : null;
-    const main = document.querySelector('main') || document.body;
-    const parent = (skillsSect && skillsSect.parentNode) || main;
-
-    // Build section container
-    const wrap = document.createElement('div');
-    wrap.id = 'persistent-buff-section';
-    wrap.className = 'sect';
-    wrap.innerHTML = `
-      <div class="sect-head">
-        <h3>Recommended Persistent Buff</h3>
-        <div class="underline"></div>
-        <p class="sub">A long-lasting buff skill that supports this build</p>
-      </div>
-      <div id="persistent-buff-grid" class="grid persistent-buff-grid"></div>
-    `;
-
-    if (skillsSect) {
-      skillsSect.insertAdjacentElement('afterend', wrap);
-    } else {
-      parent.appendChild(wrap);
+    // ensure any referenced supports exist in the gem dictionary
+    if (!top.item.recommended_supports && Array.isArray(gems)) {
+      const gemDict = buildGemDictionary(gems || []);
+      const fallback = lookupGem(gemDict, top.item) || top.item;
+      top.item.recommended_supports = fallback.recommended_supports;
     }
 
-    const grid = wrap.querySelector('#persistent-buff-grid');
-	if (!grid) return;
-	grid.innerHTML = '';
-	
-	const g = top.item;
-	const gemDict = buildGemDictionary(gems || []);
-	const card = document.createElement('div');
-	card.className = 'skill-card persistent-buff-card';
-	
-	// Subtle inline "requires" subtitle directly under the title
-	const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
-	  ? `<div class="skill-subtitle">${g.required_weapon_types
-		  .map(x => x[0].toUpperCase() + x.slice(1))
-		  .join(', ')}</div>`
-	  : '';
-	
-	const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
-	const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
-	const rest = allTags.filter(t => !br.includes(t));
-	const displayTags = [...br, ...rest].slice(0, 10);
-	
-	const matched = new Set();
-	for (const t of displayTags) {
-	  const k = normTagPlus(t);
-	  if (rolledProfile.profile.has(k)) matched.add(k);
-	}
-	const pills = displayTags.map(t => {
-	  const k = normTagPlus(t);
-	  const cls = matched.has(k) ? 'tag-pill matched' : 'tag-pill';
-	  return `<span class="${cls}">${t}</span>`;
-	}).join('');
-	
-        card.innerHTML = `
-          <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
-          ${requiresSubtitle}
-          <div class="skill-divider"></div>
-          ${grantLine(g)}
-          <div class="skill-tags">${pills}</div>
-          <div class="supports-label">Recommended Supports</div>
-          <div class="supports">
-                ${renderSupportCards(g.recommended_supports, gemDict)}
-          </div>
-        `;
-        applyGemBorderFromReqWeights(card, g.requirement_weights);
-        grid.appendChild(card);
-
-        return g;
+    return top.item;
   } catch (e) {
-    console.error('[persistent buff] render error', e);
+    console.error('[persistent buff] selection error', e);
+    return null;
   }
 }
 
@@ -3232,16 +3116,15 @@ function ensureUniqueSection(){
     document.querySelectorAll('.unique-divider').forEach(el=>el.remove());
     document.querySelectorAll('#uniques-section').forEach(el=>el.remove());
 
-    // Anchor after Skills section (or after persistent buff section if present)
+    // Anchor after Skills section
     const skillsGrid = document.querySelector('#skills-grid');
     const skillsSect = skillsGrid ? skillsGrid.closest('.sect') : null;
-    const buffSect = document.getElementById('persistent-buff-section');
     const main = document.querySelector('main') || document.body;
     const parent = (skillsSect && skillsSect.parentNode) || main;
 
     if (!skillsSect) return null; // try later
 
-    const anchor = buffSect || skillsSect;
+    const anchor = skillsSect;
 
     // Insert divider
     const divider = document.createElement('div');
