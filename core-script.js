@@ -212,6 +212,8 @@ function initSectionLocks(){
 
     document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
 
+    document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
+
     const gems = (window.DATA && window.DATA.gems) || [];
     const gemDict = buildGemDictionary(gems);
 
