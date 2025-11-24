@@ -2116,12 +2116,15 @@ function initCardStacks(root = document) {
         maxHeight = Math.max(maxHeight, h);
       });
 
-      if (maxHeight) {
-        stack.style.minHeight = `${maxHeight}px`;
-        stack.style.height = `${maxHeight}px`;
+      const minFromStyle = parseFloat(getComputedStyle(stack).minHeight) || 0;
+      const targetHeight = Math.max(maxHeight, minFromStyle);
+
+      if (targetHeight) {
+        stack.style.minHeight = `${targetHeight}px`;
+        stack.style.height = `${targetHeight}px`;
       }
 
-      return maxHeight;
+      return targetHeight;
     };
 
     function render() {

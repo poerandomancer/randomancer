@@ -460,10 +460,10 @@ border-top: 1px dotted var(--gold);
   max-width: 520px;
   width: 100%;
   margin: 0 auto;
-  padding: 0.75rem 0.65rem 2rem;
+  padding: 1.05rem 0.9rem 2.35rem;
   cursor: pointer;
   touch-action: manipulation;
-  min-height: 340px;
+  min-height: 420px;
 }
 
 .card-stack:focus-visible {
@@ -480,11 +480,16 @@ border-top: 1px dotted var(--gold);
   transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
   pointer-events: none;
   will-change: transform;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  max-height: 100%;
+  overflow: auto;
 }
 
 .card-stack .skill-card[data-offset="0"],
 .card-stack .unique-card[data-offset="0"] {
-  transform: translateY(0) scale(1);
+  transform: translateY(0) scale(1) rotate(0deg);
   z-index: 3;
   opacity: 1;
   pointer-events: auto;
@@ -493,7 +498,7 @@ border-top: 1px dotted var(--gold);
 
 .card-stack .skill-card[data-offset="1"],
 .card-stack .unique-card[data-offset="1"] {
-  transform: translate(0.5rem, 0.75rem) scale(0.985);
+  transform: translate(0.75rem, 1rem) scale(0.985) rotate(-2.5deg);
   z-index: 2;
   opacity: 0.9;
   box-shadow: 0 8px 18px rgba(0,0,0,0.38);
@@ -501,7 +506,7 @@ border-top: 1px dotted var(--gold);
 
 .card-stack .skill-card[data-offset="2"],
 .card-stack .unique-card[data-offset="2"] {
-  transform: translate(1rem, 1.35rem) scale(0.97);
+  transform: translate(1.35rem, 1.6rem) scale(0.97) rotate(3deg);
   z-index: 1;
   opacity: 0.8;
   box-shadow: 0 6px 14px rgba(0,0,0,0.35);
@@ -918,7 +923,7 @@ border-top: 1px dotted var(--gold);
 
 /* === v0.7: active gem cards fixed max-height + flex scroller === */
 :root{
-  --skill-card-max: 560px;
+  --skill-card-max: 640px;
 }
 
 .skills-grid{ align-items: stretch; }
@@ -959,6 +964,10 @@ border-top: 1px dotted var(--gold);
     0 0 18px rgba(255, 180, 80, 0.18),
     inset 0 0 0 1px rgba(255, 200, 140, 0.05);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
 }
 
 /* Header: name + base */
@@ -1025,6 +1034,9 @@ border-top: 1px dotted var(--gold);
   padding: 10px 14px 12px;
   color: #e4d9c9;
   font-size: 0.95rem;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .unique-line {
