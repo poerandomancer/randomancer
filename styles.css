@@ -454,6 +454,89 @@ border-top: 1px dotted var(--gold);
 .supports-wrap { max-height: 280px; overflow: auto; scrollbar-width: thin; }
 
 
+/* Stacked card decks (skills + uniques) */
+.card-stack {
+  position: relative;
+  max-width: 520px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.15rem 1.05rem 2.45rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  min-height: 440px;
+}
+
+.card-stack:focus-visible {
+  outline: 2px solid rgba(202, 164, 95, 0.45);
+  outline-offset: 6px;
+}
+
+.card-stack .skill-card,
+.card-stack .unique-card {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  width: 100%;
+  transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+  pointer-events: none;
+  will-change: transform;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  max-height: 100%;
+  overflow: auto;
+}
+
+.card-stack .skill-card[data-offset="0"],
+.card-stack .unique-card[data-offset="0"] {
+  transform: translateY(0) scale(1) rotate(0deg);
+  z-index: 3;
+  opacity: 1;
+  pointer-events: auto;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+}
+
+.card-stack .skill-card[data-offset="1"],
+.card-stack .unique-card[data-offset="1"] {
+  transform: translate(0.9rem, -0.3rem) scale(0.987) rotate(5deg);
+  z-index: 2;
+  opacity: 0.9;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.38);
+}
+
+.card-stack .skill-card[data-offset="2"],
+.card-stack .unique-card[data-offset="2"] {
+  transform: translate(1.8rem, -0.75rem) scale(0.972) rotate(9deg);
+  z-index: 1;
+  opacity: 0.8;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+}
+
+.card-stack .skill-card[data-offset]:not([data-offset="0"]):not([data-offset="1"]):not([data-offset="2"]),
+.card-stack .unique-card[data-offset]:not([data-offset="0"]):not([data-offset="1"]):not([data-offset="2"]) {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.card-stack-indicator {
+  text-align: center;
+  font-size: 0.8rem;
+  opacity: 0.7;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: -0.4rem;
+  user-select: none;
+}
+
+.skills-grid .card-stack,
+.skills-grid .card-stack-indicator,
+.uniques-grid .card-stack,
+.uniques-grid .card-stack-indicator {
+  grid-column: 1 / -1;
+}
+
+
 /* v0.5.3.1: balance bar richer + fade ends */
 #balance-bar{
   height:6px;
@@ -840,7 +923,7 @@ border-top: 1px dotted var(--gold);
 
 /* === v0.7: active gem cards fixed max-height + flex scroller === */
 :root{
-  --skill-card-max: 560px;
+  --skill-card-max: 640px;
 }
 
 .skills-grid{ align-items: stretch; }
@@ -881,6 +964,10 @@ border-top: 1px dotted var(--gold);
     0 0 18px rgba(255, 180, 80, 0.18),
     inset 0 0 0 1px rgba(255, 200, 140, 0.05);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
 }
 
 /* Header: name + base */
@@ -947,6 +1034,9 @@ border-top: 1px dotted var(--gold);
   padding: 10px 14px 12px;
   color: #e4d9c9;
   font-size: 0.95rem;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .unique-line {
