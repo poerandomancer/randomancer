@@ -218,7 +218,8 @@ function initSectionLocks(){
     const entries = [];
 
     (snap.recommendedSkills || []).forEach(entry => {
-      const g = lookupGem(gemDict, entry) || lookupGem(gemDict, { id: entry.name });
+      const normalized = (entry && typeof entry === 'object') ? entry : { name: entry };
+      const g = lookupGem(gemDict, normalized) || lookupGem(gemDict, { id: normalized.name });
       if (!g) return;
       const supports = Array.isArray(entry.recommended_supports) && entry.recommended_supports.length
         ? entry.recommended_supports
@@ -228,7 +229,12 @@ function initSectionLocks(){
     });
 
     if (snap.recommendedPersistentBuff) {
-      const buffGem = lookupGem(gemDict, snap.recommendedPersistentBuff);
+      const buffGem = lookupGem(
+        gemDict,
+        (typeof snap.recommendedPersistentBuff === 'object')
+          ? snap.recommendedPersistentBuff
+          : { name: snap.recommendedPersistentBuff }
+      );
       if (buffGem) {
         entries.push({ gem: buffGem, supports: buffGem.recommended_supports, role: 'Persistent Buff' });
       }
@@ -323,6 +329,7 @@ function initSectionLocks(){
     const dataWrap = await ensureDataPreload();
     const data = (typeof window !== 'undefined' && window.DATA) || dataWrap?.core || {};
     const gems = (typeof window !== 'undefined' && window.DATA?.gems) || dataWrap?.gems || [];
+    const gemDict = buildGemDictionary(gems);
     showAppShell();
 
     const findByName = (arr, name) => (arr || []).find(item => item?.name === name) || null;
@@ -330,7 +337,16 @@ function initSectionLocks(){
     let resolvedSkills = snap.recommendedSkills || [];
     let resolvedBuff = snap.recommendedPersistentBuff || null;
 
-    if ((!resolvedSkills.length || !resolvedBuff) && data) {
+    const hasResolvableSkills = Array.isArray(resolvedSkills) && resolvedSkills.some(entry => {
+      const candidate = (entry && typeof entry === 'object') ? entry : { name: entry };
+      return !!lookupGem(gemDict, candidate);
+    });
+
+    const hasResolvableBuff = resolvedBuff
+      ? !!lookupGem(gemDict, (resolvedBuff && typeof resolvedBuff === 'object') ? resolvedBuff : { name: resolvedBuff })
+      : false;
+
+    if ((!resolvedSkills.length || !hasResolvableSkills || !resolvedBuff || !hasResolvableBuff) && data) {
       const clsAttrs = data.Classes?.[snap.className]?.attributes || snap.attributes || { strength: 0, dexterity: 0, intelligence: 0 };
       const weaponPool = [].concat(data.Weapons?.['Two-Handed'] || [], data.Weapons?.['One-Handed'] || []);
       const weaponObj = findByName(weaponPool, snap.weapon);
