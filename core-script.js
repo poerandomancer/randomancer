@@ -205,48 +205,12 @@ function initSectionLocks(){
     return dict[key] || dict[key.toLowerCase()] || null;
   }
 
-  function createSkillCard(g, gemDict, supportsOverride, roleLabel, matchProfile){
-    const card = document.createElement('div');
-    card.className = 'skill-card';
+    function renderSkillsFromSnapshot(snap){
+      const grid = document.getElementById('skills-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
 
-    const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
-      ? `<div class="skill-subtitle">${g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')}</div>`
-      : '';
-
-    const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
-    const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
-    const rest = allTags.filter(t => !br.includes(t));
-    const displayTags = [...br, ...rest].slice(0, 10);
-    const pills = displayTags.map(t => {
-      const norm = normTagPlus(t);
-      const cls = matchProfile && matchProfile.has && matchProfile.has(norm) ? 'tag-pill matched' : 'tag-pill';
-      return `<span class="${cls}">${t}</span>`;
-    }).join('');
-
-    const supports = Array.isArray(supportsOverride) && supportsOverride.length
-      ? supportsOverride
-      : g.recommended_supports;
-
-    const role = roleLabel ? `<div class="skill-role-badge">${roleLabel}</div>` : '';
-
-    card.innerHTML = `
-      ${role}
-      <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
-      ${requiresSubtitle}
-      <div class="skill-divider"></div>
-      ${grantLine(g)}
-      <div class="skill-tags">${pills}</div>
-      <div class="supports-label">Recommended Supports</div>
-      <div class="supports">${renderSupportCards(supports, gemDict)}</div>
-    `;
-    applyGemBorderFromReqWeights(card, g.requirement_weights);
-    return card;
-  }
-
-  function renderSkillsFromSnapshot(snap){
-    const grid = document.getElementById('skills-grid');
-    if (!grid) return;
-    grid.innerHTML = '';
+    document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
 
     document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
 
@@ -1797,7 +1761,7 @@ function synergyTunings(){
   return {alpha:0.60, beta:0.15, noise:0.08}; // madness
 }
 // ---------- support gems renderer ----------
-function renderSupportCards(supportEntries, gemDict){
+  function renderSupportCards(supportEntries, gemDict){
   const items=[];
   (supportEntries||[]).forEach(n=>{
     const g = lookupGem(gemDict, n);
@@ -1811,16 +1775,54 @@ function renderSupportCards(supportEntries, gemDict){
       items.push(`<div class="support-item ${cls}"><div class="support-title">${title}</div></div>`);
     }
   });
-  return items.join('');
+    return items.join('');
 
-}
+  }
 
-// ---------- skill cards (with Grants + Req. Weapon) ----------
+  // ---------- skill cards (with Grants + Req. Weapon) ----------
 
-function isPersistentBuffGem(g){
-  if (!g) return false;
-  const tags = Array.isArray(g.tags) ? g.tags.map(normalizeTag) : [];
-  const set = new Set(tags);
+  function createSkillCard(g, gemDict, supportsOverride, roleLabel, matchProfile){
+    const card = document.createElement('div');
+    card.className = 'skill-card';
+
+    const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
+      ? `<div class="skill-subtitle">${g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')}</div>`
+      : '';
+
+    const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
+    const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
+    const rest = allTags.filter(t => !br.includes(t));
+    const displayTags = [...br, ...rest].slice(0, 10);
+    const pills = displayTags.map(t => {
+      const norm = normTagPlus(t);
+      const cls = matchProfile && matchProfile.has && matchProfile.has(norm) ? 'tag-pill matched' : 'tag-pill';
+      return `<span class="${cls}">${t}</span>`;
+    }).join('');
+
+    const supports = Array.isArray(supportsOverride) && supportsOverride.length
+      ? supportsOverride
+      : g.recommended_supports;
+
+    const role = roleLabel ? `<div class="skill-role-badge">${roleLabel}</div>` : '';
+
+    card.innerHTML = `
+      ${role}
+      <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
+      ${requiresSubtitle}
+      <div class="skill-divider"></div>
+      ${grantLine(g)}
+      <div class="skill-tags">${pills}</div>
+      <div class="supports-label">Recommended Supports</div>
+      <div class="supports">${renderSupportCards(supports, gemDict)}</div>
+    `;
+    applyGemBorderFromReqWeights(card, g.requirement_weights);
+    return card;
+  }
+
+  function isPersistentBuffGem(g){
+    if (!g) return false;
+    const tags = Array.isArray(g.tags) ? g.tags.map(normalizeTag) : [];
+    const set = new Set(tags);
   return set.has('buff') && set.has('persistent');
 }
 
