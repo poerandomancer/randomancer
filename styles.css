@@ -460,10 +460,10 @@ border-top: 1px dotted var(--gold);
   max-width: 520px;
   width: 100%;
   margin: 0 auto;
-  padding: 1.05rem 0.9rem 2.35rem;
+  padding: 1.15rem 1.05rem 2.45rem;
   cursor: pointer;
   touch-action: manipulation;
-  min-height: 420px;
+  min-height: 440px;
 }
 
 .card-stack:focus-visible {
@@ -498,7 +498,7 @@ border-top: 1px dotted var(--gold);
 
 .card-stack .skill-card[data-offset="1"],
 .card-stack .unique-card[data-offset="1"] {
-  transform: translate(0.75rem, 1rem) scale(0.985) rotate(-2.5deg);
+  transform: translate(0.9rem, -0.3rem) scale(0.987) rotate(5deg);
   z-index: 2;
   opacity: 0.9;
   box-shadow: 0 8px 18px rgba(0,0,0,0.38);
@@ -506,7 +506,7 @@ border-top: 1px dotted var(--gold);
 
 .card-stack .skill-card[data-offset="2"],
 .card-stack .unique-card[data-offset="2"] {
-  transform: translate(1.35rem, 1.6rem) scale(0.97) rotate(3deg);
+  transform: translate(1.8rem, -0.75rem) scale(0.972) rotate(9deg);
   z-index: 1;
   opacity: 0.8;
   box-shadow: 0 6px 14px rgba(0,0,0,0.35);

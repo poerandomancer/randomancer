@@ -2107,24 +2107,26 @@ function initCardStacks(root = document) {
     let topIndex = 0;
     const indicator = stack.parentElement?.querySelector('.js-card-stack-indicator');
 
+    let measuredHeight = null;
     const measureHeight = () => {
+      if (measuredHeight !== null) return measuredHeight;
+
       let maxHeight = 0;
 
       cards.forEach(card => {
-        const rect = card.getBoundingClientRect();
-        const h = rect.height || card.offsetHeight || card.scrollHeight || 0;
+        const h = card.scrollHeight || card.offsetHeight || 0;
         maxHeight = Math.max(maxHeight, h);
       });
 
       const minFromStyle = parseFloat(getComputedStyle(stack).minHeight) || 0;
-      const targetHeight = Math.max(maxHeight, minFromStyle);
+      measuredHeight = Math.max(maxHeight, minFromStyle);
 
-      if (targetHeight) {
-        stack.style.minHeight = `${targetHeight}px`;
-        stack.style.height = `${targetHeight}px`;
+      if (measuredHeight) {
+        stack.style.minHeight = `${measuredHeight}px`;
+        stack.style.height = `${measuredHeight}px`;
       }
 
-      return targetHeight;
+      return measuredHeight;
     };
 
     function render() {
@@ -2135,14 +2137,16 @@ function initCardStacks(root = document) {
         card.dataset.offset = offset;
       });
 
-      const measured = measureHeight();
-
-      if (!measured) requestAnimationFrame(measureHeight);
-
       if (indicator) {
         indicator.textContent = `${topIndex + 1} / ${total}`;
       }
     }
+
+    measureHeight();
+    requestAnimationFrame(() => {
+      measuredHeight = null;
+      measureHeight();
+    });
 
     function advance() {
       topIndex = (topIndex + 1) % cards.length;
