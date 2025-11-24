@@ -1887,48 +1887,70 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
     const gemDict = buildGemDictionary(gems);
 
     // Render main recommended skills
-	picks.forEach(g => {
-	  const card = document.createElement('div');
-	  card.className = 'skill-card';
-	
-	  // Subtle inline "requires" subtitle directly under the title
-	  const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
-		? `<div class="skill-subtitle">${g.required_weapon_types
-			.map(x => x[0].toUpperCase() + x.slice(1))
-			.join(', ')}</div>`
-		: '';
-	
-	  const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
-	  const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
-	  const rest = allTags.filter(t => !br.includes(t));
-	  const displayTags = [...br, ...rest].slice(0, 10);
-	
-	  // mark matched tags
-	  const matched = new Set();
-	  for (const t of displayTags) {
-		const k = normTagPlus(t);
-		if (rolledProfile.profile.has(k)) matched.add(k);
-	  }
-	  const pills = displayTags.map(t => {
-		const k = normTagPlus(t);
-		const cls = matched.has(k) ? 'tag-pill matched' : 'tag-pill';
-		return `<span class="${cls}">${t}</span>`;
-	  }).join('');
-	
-	  card.innerHTML = `
-		  <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
-		  ${requiresSubtitle}
-		  <div class="skill-divider"></div>
-		  ${grantLine(g)}
-		  <div class="skill-tags">${pills}</div>
-		  <div class="supports-label">Recommended Supports</div>
-		  <div class="supports">
-			${renderSupportCards(g.recommended_supports, gemDict)}
-		  </div>
-		`;
-	  applyGemBorderFromReqWeights(card, g.requirement_weights);
-	  grid.appendChild(card);
-	});
+    const buildSkillCard = (g) => {
+      const card = document.createElement('div');
+      card.className = 'skill-card';
+
+      // Subtle inline "requires" subtitle directly under the title
+      const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
+            ? `<div class="skill-subtitle">${g.required_weapon_types
+                    .map(x => x[0].toUpperCase() + x.slice(1))
+                    .join(', ')}</div>`
+            : '';
+
+      const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
+      const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
+      const rest = allTags.filter(t => !br.includes(t));
+      const displayTags = [...br, ...rest].slice(0, 10);
+
+      // mark matched tags
+      const matched = new Set();
+      for (const t of displayTags) {
+            const k = normTagPlus(t);
+            if (rolledProfile.profile.has(k)) matched.add(k);
+      }
+      const pills = displayTags.map(t => {
+            const k = normTagPlus(t);
+            const cls = matched.has(k) ? 'tag-pill matched' : 'tag-pill';
+            return `<span class="${cls}">${t}</span>`;
+      }).join('');
+
+      card.innerHTML = `
+              <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
+              ${requiresSubtitle}
+              <div class="skill-divider"></div>
+              ${grantLine(g)}
+              <div class="skill-tags">${pills}</div>
+              <div class="supports-label">Recommended Supports</div>
+              <div class="supports">
+                    ${renderSupportCards(g.recommended_supports, gemDict)}
+              </div>
+            `;
+      applyGemBorderFromReqWeights(card, g.requirement_weights);
+      return card;
+    };
+
+    if (picks.length <= 1) {
+      picks.forEach(g => {
+        grid.appendChild(buildSkillCard(g));
+      });
+    } else {
+      const stack = document.createElement('div');
+      stack.className = 'card-stack js-card-stack';
+
+      picks.forEach(g => {
+        stack.appendChild(buildSkillCard(g));
+      });
+
+      grid.appendChild(stack);
+
+      const indicator = document.createElement('div');
+      indicator.className = 'card-stack-indicator js-card-stack-indicator';
+      indicator.textContent = `1 / ${picks.length}`;
+      grid.appendChild(indicator);
+
+      initCardStacks(grid);
+    }
 
 
     // Render a dedicated persistent buff skill section (single card, full-width)
@@ -2067,6 +2089,77 @@ function applyGemBorderFromReqWeights(el, weights){
   el.style.border = '1px solid transparent';
   el.style.borderImage = `linear-gradient(90deg, ${colors.join(', ')}) 1`;
   el.style.boxShadow = '0 0 10px rgba(255,255,255,0.06)';
+}
+
+// Initialize stacked card decks for recommended skills + uniques
+function initCardStacks(root = document) {
+  const stacks = root.querySelectorAll('.js-card-stack');
+
+  stacks.forEach(stack => {
+    const cards = Array.from(stack.querySelectorAll('.skill-card, .unique-card'));
+
+    if (cards.length <= 1) {
+      stack.style.height = '';
+      if (cards[0]) delete cards[0].dataset.offset;
+      return;
+    }
+
+    let topIndex = 0;
+    const indicator = stack.parentElement?.querySelector('.js-card-stack-indicator');
+
+    const measureHeight = () => {
+      let maxHeight = 0;
+
+      cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const h = rect.height || card.offsetHeight || card.scrollHeight || 0;
+        maxHeight = Math.max(maxHeight, h);
+      });
+
+      const minFromStyle = parseFloat(getComputedStyle(stack).minHeight) || 0;
+      const targetHeight = Math.max(maxHeight, minFromStyle);
+
+      if (targetHeight) {
+        stack.style.minHeight = `${targetHeight}px`;
+        stack.style.height = `${targetHeight}px`;
+      }
+
+      return targetHeight;
+    };
+
+    function render() {
+      const total = cards.length;
+
+      cards.forEach((card, i) => {
+        const offset = (i - topIndex + total) % total;
+        card.dataset.offset = offset;
+      });
+
+      const measured = measureHeight();
+
+      if (!measured) requestAnimationFrame(measureHeight);
+
+      if (indicator) {
+        indicator.textContent = `${topIndex + 1} / ${total}`;
+      }
+    }
+
+    function advance() {
+      topIndex = (topIndex + 1) % cards.length;
+      render();
+    }
+
+    render();
+
+    stack.addEventListener('click', advance);
+    stack.setAttribute('tabindex', '0');
+    stack.addEventListener('keydown', evt => {
+      if (evt.key === 'Enter' || evt.key === ' ') {
+        evt.preventDefault();
+        advance();
+      }
+    });
+  });
 }
 
 // Small helper to render grant line (shared by main skills + persistent buff)
@@ -3253,34 +3346,62 @@ function ensureUniqueSection(){
 
 
   function renderUniques(items, rolledSet){
-	  const grid = ensureUniqueSection();
-	  if (!grid) {
-		setTimeout(() => renderUniques(items, rolledSet), 120);
-		return;
-	  }
-	
-	  grid.innerHTML = items.map(it => {
-		const pills = pillsFor(it, rolledSet);
-		const lines = highlight(it.lines, rolledSet);
-		const reason = buildUniqueReason(it, rolledSet);
-	
-		return `
-		  <div class="unique-card">
-			<div class="unique-header">
-			  <div class="unique-name">${it.name}</div>
-			  <div class="unique-base">${it.base}</div>
-			</div>
-			<div class="tags-row">
-			  ${pills}
-			</div>
-			<div class="unique-lines">
-			  ${reason ? `<div class="unique-highlights">${reason}</div>` : ''}
-			  ${lines}
-			</div>
-		  </div>
-		`;
-	  }).join('');
-	}
+          const grid = ensureUniqueSection();
+          if (!grid) {
+                setTimeout(() => renderUniques(items, rolledSet), 120);
+                return;
+          }
+
+          grid.innerHTML = '';
+
+          if (!items || !items.length) return;
+
+          const buildCard = (it) => {
+                const pills = pillsFor(it, rolledSet);
+                const lines = highlight(it.lines, rolledSet);
+                const reason = buildUniqueReason(it, rolledSet);
+
+                const card = document.createElement('div');
+                card.className = 'unique-card';
+                card.innerHTML = `
+                        <div class="unique-header">
+                          <div class="unique-name">${it.name}</div>
+                          <div class="unique-base">${it.base}</div>
+                        </div>
+                        <div class="tags-row">
+                          ${pills}
+                        </div>
+                        <div class="unique-lines">
+                          ${reason ? `<div class="unique-highlights">${reason}</div>` : ''}
+                          ${lines}
+                        </div>
+                `;
+                return card;
+          };
+
+          if (items.length <= 1) {
+                items.forEach(it => {
+                  grid.appendChild(buildCard(it));
+                });
+                return;
+          }
+
+          const stack = document.createElement('div');
+          stack.className = 'card-stack js-card-stack';
+
+          items.forEach(it => {
+                stack.appendChild(buildCard(it));
+          });
+
+          grid.appendChild(stack);
+
+          const indicator = document.createElement('div');
+          indicator.className = 'card-stack-indicator js-card-stack-indicator';
+          indicator.textContent = `1 / ${items.length}`;
+          grid.appendChild(indicator);
+
+          initCardStacks(grid);
+        }
 
 
     async function refreshUniques(snap){
