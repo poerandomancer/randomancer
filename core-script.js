@@ -205,102 +205,58 @@ function initSectionLocks(){
     return dict[key] || dict[key.toLowerCase()] || null;
   }
 
-  function renderSkillsFromSnapshot(snap){
-    const grid = document.getElementById('skills-grid');
-    if (!grid) return;
-    grid.innerHTML = '';
+    function renderSkillsFromSnapshot(snap){
+      const grid = document.getElementById('skills-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+    document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
 
     const gems = (window.DATA && window.DATA.gems) || [];
     const gemDict = buildGemDictionary(gems);
 
+    const entries = [];
+
     (snap.recommendedSkills || []).forEach(entry => {
       const g = lookupGem(gemDict, entry) || lookupGem(gemDict, { id: entry.name });
       if (!g) return;
-      const card = document.createElement('div');
-      card.className = 'skill-card';
-
-      const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
-        ? `<div class="skill-subtitle">${g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')}</div>`
-        : '';
-
-      const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
-      const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
-      const rest = allTags.filter(t => !br.includes(t));
-      const displayTags = [...br, ...rest].slice(0, 10);
-      const pills = displayTags.map(t => `<span class="tag-pill">${t}</span>`).join('');
-
       const supports = Array.isArray(entry.recommended_supports) && entry.recommended_supports.length
         ? entry.recommended_supports
         : g.recommended_supports;
 
-      card.innerHTML = `
-        <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
-        ${requiresSubtitle}
-        <div class="skill-divider"></div>
-        ${grantLine(g)}
-        <div class="skill-tags">${pills}</div>
-        <div class="supports-label">Recommended Supports</div>
-        <div class="supports">${renderSupportCards(supports, gemDict)}</div>
-      `;
-      applyGemBorderFromReqWeights(card, g.requirement_weights);
-      grid.appendChild(card);
+      entries.push({ gem: g, supports, role: 'Active Skill' });
     });
 
     if (snap.recommendedPersistentBuff) {
       const buffGem = lookupGem(gemDict, snap.recommendedPersistentBuff);
       if (buffGem) {
-        renderSnapshotPersistentBuff(buffGem, gemDict);
+        entries.push({ gem: buffGem, supports: buffGem.recommended_supports, role: 'Persistent Buff' });
       }
-    } else {
-      document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
     }
-  }
 
-  function renderSnapshotPersistentBuff(g, gemDict){
-    document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
-    const skillsGrid = document.getElementById('skills-grid');
-    const skillsSect = skillsGrid ? skillsGrid.closest('.sect') : null;
-    const main = document.querySelector('main') || document.body;
-    const parent = (skillsSect && skillsSect.parentNode) || main;
+    if (!entries.length) return;
 
-    const wrap = document.createElement('div');
-    wrap.id = 'persistent-buff-section';
-    wrap.className = 'sect';
-    wrap.innerHTML = `
-      <div class="sect-head">
-        <h3>Recommended Persistent Buff</h3>
-        <div class="underline"></div>
-        <p class="sub">A long-lasting buff skill that supports this build</p>
-      </div>
-      <div id="persistent-buff-grid" class="grid persistent-buff-grid"></div>
-    `;
+    if (entries.length === 1) {
+      const { gem, supports, role } = entries[0];
+      grid.appendChild(createSkillCard(gem, gemDict, supports, role, null));
+      return;
+    }
 
-    if (skillsSect) skillsSect.insertAdjacentElement('afterend', wrap); else parent.appendChild(wrap);
-    const grid = wrap.querySelector('#persistent-buff-grid');
-    if (!grid) return;
+    const stack = document.createElement('div');
+    stack.className = 'card-stack js-card-stack';
 
-    const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
-      ? `<div class="skill-subtitle">${g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')}</div>`
-      : '';
-    const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
-    const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
-    const rest = allTags.filter(t => !br.includes(t));
-    const displayTags = [...br, ...rest].slice(0, 10);
-    const pills = displayTags.map(t => `<span class="tag-pill">${t}</span>`).join('');
+    entries.forEach(({ gem, supports, role }) => {
+      stack.appendChild(createSkillCard(gem, gemDict, supports, role, null));
+    });
 
-    const card = document.createElement('div');
-    card.className = 'skill-card persistent-buff-card';
-    card.innerHTML = `
-      <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
-      ${requiresSubtitle}
-      <div class="skill-divider"></div>
-      ${grantLine(g)}
-      <div class="skill-tags">${pills}</div>
-      <div class="supports-label">Recommended Supports</div>
-      <div class="supports">${renderSupportCards(g.recommended_supports, gemDict)}</div>
-    `;
-    applyGemBorderFromReqWeights(card, g.requirement_weights);
-    grid.appendChild(card);
+    grid.appendChild(stack);
+
+    const indicator = document.createElement('div');
+    indicator.className = 'card-stack-indicator js-card-stack-indicator';
+    indicator.textContent = `1 / ${entries.length}`;
+    grid.appendChild(indicator);
+
+    initCardStacks(grid);
   }
 
   function renderSnapshotToDom(snap){
@@ -364,15 +320,54 @@ function initSectionLocks(){
   async function applyBuildCode(code){
     const snap = decodeSnapshot(code);
     if (!snap) return false;
-    await ensureDataPreload();
+    const dataWrap = await ensureDataPreload();
+    const data = (typeof window !== 'undefined' && window.DATA) || dataWrap?.core || {};
+    const gems = (typeof window !== 'undefined' && window.DATA?.gems) || dataWrap?.gems || [];
     showAppShell();
+
+    const findByName = (arr, name) => (arr || []).find(item => item?.name === name) || null;
+
+    let resolvedSkills = snap.recommendedSkills || [];
+    let resolvedBuff = snap.recommendedPersistentBuff || null;
+
+    if ((!resolvedSkills.length || !resolvedBuff) && data) {
+      const clsAttrs = data.Classes?.[snap.className]?.attributes || snap.attributes || { strength: 0, dexterity: 0, intelligence: 0 };
+      const weaponPool = [].concat(data.Weapons?.['Two-Handed'] || [], data.Weapons?.['One-Handed'] || []);
+      const weaponObj = findByName(weaponPool, snap.weapon);
+      const offhandObj = findByName(data.Weapons?.['Off-Hand'], snap.offhand);
+      const defenseObj = findByName(data.Defense, snap.defense);
+      const defStratObj = findByName(data.DefensiveStrategies, snap.defStrat);
+      const ailmentSet = (snap.ailmentList || []).map(n => findByName(data.Ailments, n)).filter(Boolean);
+      const tacticSet = (snap.tacticList || []).map(n => findByName(data.Tactics, n)).filter(Boolean);
+
+      const rebuilt = rollRecommendedSkills(
+        { core: data, gems },
+        clsAttrs,
+        { weapon: weaponObj, offhand: offhandObj },
+        { tacticSet, ailmentSet, defense: defenseObj, defStrat: defStratObj, weapon: weaponObj?.name || '', offhand: offhandObj?.name || '' }
+      ) || {};
+
+      if (Array.isArray(rebuilt.skills) && rebuilt.skills.length) {
+        resolvedSkills = rebuilt.skills;
+      }
+      if (rebuilt.persistentBuff) {
+        resolvedBuff = rebuilt.persistentBuff;
+      }
+    }
 
     const synergyScore = typeof snap.synergyScore === 'number'
       ? snap.synergyScore
       : computeSynergyFromSnapshot(snap);
     const modeName = snap.cohesionModeName || resolveCohesionMode(snap.cohesionMode ?? window.App?.state?.cohesionMode ?? currentMode);
     const cohesionStatus = snap.cohesionStatus || 'ok';
-    const rollPayload = { ...snap, synergyScore, cohesionStatus, cohesionModeName: modeName };
+    const rollPayload = {
+      ...snap,
+      recommendedSkills: resolvedSkills,
+      recommendedPersistentBuff: resolvedBuff,
+      synergyScore,
+      cohesionStatus,
+      cohesionModeName: modeName
+    };
 
     if (window.App?.mergeCurrentRoll) {
       window.App.mergeCurrentRoll(rollPayload);
@@ -1803,7 +1798,7 @@ function synergyTunings(){
   return {alpha:0.60, beta:0.15, noise:0.08}; // madness
 }
 // ---------- support gems renderer ----------
-function renderSupportCards(supportEntries, gemDict){
+  function renderSupportCards(supportEntries, gemDict){
   const items=[];
   (supportEntries||[]).forEach(n=>{
     const g = lookupGem(gemDict, n);
@@ -1817,16 +1812,54 @@ function renderSupportCards(supportEntries, gemDict){
       items.push(`<div class="support-item ${cls}"><div class="support-title">${title}</div></div>`);
     }
   });
-  return items.join('');
+    return items.join('');
 
-}
+  }
 
-// ---------- skill cards (with Grants + Req. Weapon) ----------
+  // ---------- skill cards (with Grants + Req. Weapon) ----------
 
-function isPersistentBuffGem(g){
-  if (!g) return false;
-  const tags = Array.isArray(g.tags) ? g.tags.map(normalizeTag) : [];
-  const set = new Set(tags);
+  function createSkillCard(g, gemDict, supportsOverride, roleLabel, matchProfile){
+    const card = document.createElement('div');
+    card.className = 'skill-card';
+
+    const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
+      ? `<div class="skill-subtitle">${g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')}</div>`
+      : '';
+
+    const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
+    const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
+    const rest = allTags.filter(t => !br.includes(t));
+    const displayTags = [...br, ...rest].slice(0, 10);
+    const pills = displayTags.map(t => {
+      const norm = normTagPlus(t);
+      const cls = matchProfile && matchProfile.has && matchProfile.has(norm) ? 'tag-pill matched' : 'tag-pill';
+      return `<span class="${cls}">${t}</span>`;
+    }).join('');
+
+    const supports = Array.isArray(supportsOverride) && supportsOverride.length
+      ? supportsOverride
+      : g.recommended_supports;
+
+    const role = roleLabel ? `<div class="skill-role-badge">${roleLabel}</div>` : '';
+
+    card.innerHTML = `
+      ${role}
+      <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
+      ${requiresSubtitle}
+      <div class="skill-divider"></div>
+      ${grantLine(g)}
+      <div class="skill-tags">${pills}</div>
+      <div class="supports-label">Recommended Supports</div>
+      <div class="supports">${renderSupportCards(supports, gemDict)}</div>
+    `;
+    applyGemBorderFromReqWeights(card, g.requirement_weights);
+    return card;
+  }
+
+  function isPersistentBuffGem(g){
+    if (!g) return false;
+    const tags = Array.isArray(g.tags) ? g.tags.map(normalizeTag) : [];
+    const set = new Set(tags);
   return set.has('buff') && set.has('persistent');
 }
 
@@ -1886,53 +1919,29 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
 
     const gemDict = buildGemDictionary(gems);
 
-    // Render main recommended skills
-	picks.forEach(g => {
-	  const card = document.createElement('div');
-	  card.className = 'skill-card';
-	
-	  // Subtle inline "requires" subtitle directly under the title
-	  const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
-		? `<div class="skill-subtitle">${g.required_weapon_types
-			.map(x => x[0].toUpperCase() + x.slice(1))
-			.join(', ')}</div>`
-		: '';
-	
-	  const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
-	  const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
-	  const rest = allTags.filter(t => !br.includes(t));
-	  const displayTags = [...br, ...rest].slice(0, 10);
-	
-	  // mark matched tags
-	  const matched = new Set();
-	  for (const t of displayTags) {
-		const k = normTagPlus(t);
-		if (rolledProfile.profile.has(k)) matched.add(k);
-	  }
-	  const pills = displayTags.map(t => {
-		const k = normTagPlus(t);
-		const cls = matched.has(k) ? 'tag-pill matched' : 'tag-pill';
-		return `<span class="${cls}">${t}</span>`;
-	  }).join('');
-	
-	  card.innerHTML = `
-		  <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
-		  ${requiresSubtitle}
-		  <div class="skill-divider"></div>
-		  ${grantLine(g)}
-		  <div class="skill-tags">${pills}</div>
-		  <div class="supports-label">Recommended Supports</div>
-		  <div class="supports">
-			${renderSupportCards(g.recommended_supports, gemDict)}
-		  </div>
-		`;
-	  applyGemBorderFromReqWeights(card, g.requirement_weights);
-	  grid.appendChild(card);
-	});
+    const cards = picks.map(g => createSkillCard(g, gemDict, g.recommended_supports, 'Active Skill', rolledProfile?.profile));
 
+    const persistent = pickPersistentBuffSkill(persistentPool, rolledProfile, window.TAG_IDF, knobs, gems);
+    if (persistent) {
+      cards.push(createSkillCard(persistent, gemDict, persistent.recommended_supports, 'Persistent Buff', rolledProfile?.profile));
+    }
 
-    // Render a dedicated persistent buff skill section (single card, full-width)
-    const persistent = renderPersistentBuffSkill(persistentPool, rolledProfile, window.TAG_IDF, knobs, gems);
+    if (cards.length <= 1) {
+      cards.forEach(card => grid.appendChild(card));
+    } else {
+      const stack = document.createElement('div');
+      stack.className = 'card-stack js-card-stack';
+      cards.forEach(card => stack.appendChild(card));
+
+      grid.appendChild(stack);
+
+      const indicator = document.createElement('div');
+      indicator.className = 'card-stack-indicator js-card-stack-indicator';
+      indicator.textContent = `1 / ${cards.length}`;
+      grid.appendChild(indicator);
+
+      initCardStacks(grid);
+    }
 
     return {
       tagProfile: rolledProfile,
@@ -1952,98 +1961,34 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
   }
 
 
-function renderPersistentBuffSkill(persistentPool, rolledProfile, tagIDF, knobs, gems){
+function pickPersistentBuffSkill(persistentPool, rolledProfile, tagIDF, knobs, gems){
   try {
-    // Clear any previous persistent buff section
     document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
 
-    if (!Array.isArray(persistentPool) || !persistentPool.length) return;
+    if (!Array.isArray(persistentPool) || !persistentPool.length) return null;
 
     const actives = persistentPool.filter(g => g && g.type === 'active');
-    if (!actives.length) return;
+    if (!actives.length) return null;
 
-    // Score persistent buff candidates with the same synergy engine
     const scoredPB = actives.map(g => {
       const s = scoreGemSynergy(g, rolledProfile, tagIDF, knobs);
       return { item:g, score:s.score, raw:s.raw };
     }).sort((a,b) => b.score - a.score);
 
     const top = scoredPB[0];
-    if (!top || !isFinite(top.raw)) return;
+    if (!top || !isFinite(top.raw)) return null;
 
-    const skillsGrid = document.getElementById('skills-grid');
-    const skillsSect = skillsGrid ? skillsGrid.closest('.sect') : null;
-    const main = document.querySelector('main') || document.body;
-    const parent = (skillsSect && skillsSect.parentNode) || main;
-
-    // Build section container
-    const wrap = document.createElement('div');
-    wrap.id = 'persistent-buff-section';
-    wrap.className = 'sect';
-    wrap.innerHTML = `
-      <div class="sect-head">
-        <h3>Recommended Persistent Buff</h3>
-        <div class="underline"></div>
-        <p class="sub">A long-lasting buff skill that supports this build</p>
-      </div>
-      <div id="persistent-buff-grid" class="grid persistent-buff-grid"></div>
-    `;
-
-    if (skillsSect) {
-      skillsSect.insertAdjacentElement('afterend', wrap);
-    } else {
-      parent.appendChild(wrap);
+    // ensure any referenced supports exist in the gem dictionary
+    if (!top.item.recommended_supports && Array.isArray(gems)) {
+      const gemDict = buildGemDictionary(gems || []);
+      const fallback = lookupGem(gemDict, top.item) || top.item;
+      top.item.recommended_supports = fallback.recommended_supports;
     }
 
-    const grid = wrap.querySelector('#persistent-buff-grid');
-	if (!grid) return;
-	grid.innerHTML = '';
-	
-	const g = top.item;
-	const gemDict = buildGemDictionary(gems || []);
-	const card = document.createElement('div');
-	card.className = 'skill-card persistent-buff-card';
-	
-	// Subtle inline "requires" subtitle directly under the title
-	const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
-	  ? `<div class="skill-subtitle">${g.required_weapon_types
-		  .map(x => x[0].toUpperCase() + x.slice(1))
-		  .join(', ')}</div>`
-	  : '';
-	
-	const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
-	const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
-	const rest = allTags.filter(t => !br.includes(t));
-	const displayTags = [...br, ...rest].slice(0, 10);
-	
-	const matched = new Set();
-	for (const t of displayTags) {
-	  const k = normTagPlus(t);
-	  if (rolledProfile.profile.has(k)) matched.add(k);
-	}
-	const pills = displayTags.map(t => {
-	  const k = normTagPlus(t);
-	  const cls = matched.has(k) ? 'tag-pill matched' : 'tag-pill';
-	  return `<span class="${cls}">${t}</span>`;
-	}).join('');
-	
-        card.innerHTML = `
-          <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
-          ${requiresSubtitle}
-          <div class="skill-divider"></div>
-          ${grantLine(g)}
-          <div class="skill-tags">${pills}</div>
-          <div class="supports-label">Recommended Supports</div>
-          <div class="supports">
-                ${renderSupportCards(g.recommended_supports, gemDict)}
-          </div>
-        `;
-        applyGemBorderFromReqWeights(card, g.requirement_weights);
-        grid.appendChild(card);
-
-        return g;
+    return top.item;
   } catch (e) {
-    console.error('[persistent buff] render error', e);
+    console.error('[persistent buff] selection error', e);
+    return null;
   }
 }
 
@@ -2067,6 +2012,81 @@ function applyGemBorderFromReqWeights(el, weights){
   el.style.border = '1px solid transparent';
   el.style.borderImage = `linear-gradient(90deg, ${colors.join(', ')}) 1`;
   el.style.boxShadow = '0 0 10px rgba(255,255,255,0.06)';
+}
+
+// Initialize stacked card decks for recommended skills + uniques
+function initCardStacks(root = document) {
+  const stacks = root.querySelectorAll('.js-card-stack');
+
+  stacks.forEach(stack => {
+    const cards = Array.from(stack.querySelectorAll('.skill-card, .unique-card'));
+
+    if (cards.length <= 1) {
+      stack.style.height = '';
+      if (cards[0]) delete cards[0].dataset.offset;
+      return;
+    }
+
+    let topIndex = 0;
+    const indicator = stack.parentElement?.querySelector('.js-card-stack-indicator');
+
+    let measuredHeight = null;
+    const measureHeight = () => {
+      if (measuredHeight !== null) return measuredHeight;
+
+      let maxHeight = 0;
+
+      cards.forEach(card => {
+        const h = card.scrollHeight || card.offsetHeight || 0;
+        maxHeight = Math.max(maxHeight, h);
+      });
+
+      const minFromStyle = parseFloat(getComputedStyle(stack).minHeight) || 0;
+      measuredHeight = Math.max(maxHeight, minFromStyle);
+
+      if (measuredHeight) {
+        stack.style.minHeight = `${measuredHeight}px`;
+        stack.style.height = `${measuredHeight}px`;
+      }
+
+      return measuredHeight;
+    };
+
+    function render() {
+      const total = cards.length;
+
+      cards.forEach((card, i) => {
+        const offset = (i - topIndex + total) % total;
+        card.dataset.offset = offset;
+      });
+
+      if (indicator) {
+        indicator.textContent = `${topIndex + 1} / ${total}`;
+      }
+    }
+
+    measureHeight();
+    requestAnimationFrame(() => {
+      measuredHeight = null;
+      measureHeight();
+    });
+
+    function advance() {
+      topIndex = (topIndex + 1) % cards.length;
+      render();
+    }
+
+    render();
+
+    stack.addEventListener('click', advance);
+    stack.setAttribute('tabindex', '0');
+    stack.addEventListener('keydown', evt => {
+      if (evt.key === 'Enter' || evt.key === ' ') {
+        evt.preventDefault();
+        advance();
+      }
+    });
+  });
 }
 
 // Small helper to render grant line (shared by main skills + persistent buff)
@@ -3135,16 +3155,15 @@ function ensureUniqueSection(){
     document.querySelectorAll('.unique-divider').forEach(el=>el.remove());
     document.querySelectorAll('#uniques-section').forEach(el=>el.remove());
 
-    // Anchor after Skills section (or after persistent buff section if present)
+    // Anchor after Skills section
     const skillsGrid = document.querySelector('#skills-grid');
     const skillsSect = skillsGrid ? skillsGrid.closest('.sect') : null;
-    const buffSect = document.getElementById('persistent-buff-section');
     const main = document.querySelector('main') || document.body;
     const parent = (skillsSect && skillsSect.parentNode) || main;
 
     if (!skillsSect) return null; // try later
 
-    const anchor = buffSect || skillsSect;
+    const anchor = skillsSect;
 
     // Insert divider
     const divider = document.createElement('div');
@@ -3253,34 +3272,62 @@ function ensureUniqueSection(){
 
 
   function renderUniques(items, rolledSet){
-	  const grid = ensureUniqueSection();
-	  if (!grid) {
-		setTimeout(() => renderUniques(items, rolledSet), 120);
-		return;
-	  }
-	
-	  grid.innerHTML = items.map(it => {
-		const pills = pillsFor(it, rolledSet);
-		const lines = highlight(it.lines, rolledSet);
-		const reason = buildUniqueReason(it, rolledSet);
-	
-		return `
-		  <div class="unique-card">
-			<div class="unique-header">
-			  <div class="unique-name">${it.name}</div>
-			  <div class="unique-base">${it.base}</div>
-			</div>
-			<div class="tags-row">
-			  ${pills}
-			</div>
-			<div class="unique-lines">
-			  ${reason ? `<div class="unique-highlights">${reason}</div>` : ''}
-			  ${lines}
-			</div>
-		  </div>
-		`;
-	  }).join('');
-	}
+          const grid = ensureUniqueSection();
+          if (!grid) {
+                setTimeout(() => renderUniques(items, rolledSet), 120);
+                return;
+          }
+
+          grid.innerHTML = '';
+
+          if (!items || !items.length) return;
+
+          const buildCard = (it) => {
+                const pills = pillsFor(it, rolledSet);
+                const lines = highlight(it.lines, rolledSet);
+                const reason = buildUniqueReason(it, rolledSet);
+
+                const card = document.createElement('div');
+                card.className = 'unique-card';
+                card.innerHTML = `
+                        <div class="unique-header">
+                          <div class="unique-name">${it.name}</div>
+                          <div class="unique-base">${it.base}</div>
+                        </div>
+                        <div class="tags-row">
+                          ${pills}
+                        </div>
+                        <div class="unique-lines">
+                          ${reason ? `<div class="unique-highlights">${reason}</div>` : ''}
+                          ${lines}
+                        </div>
+                `;
+                return card;
+          };
+
+          if (items.length <= 1) {
+                items.forEach(it => {
+                  grid.appendChild(buildCard(it));
+                });
+                return;
+          }
+
+          const stack = document.createElement('div');
+          stack.className = 'card-stack js-card-stack';
+
+          items.forEach(it => {
+                stack.appendChild(buildCard(it));
+          });
+
+          grid.appendChild(stack);
+
+          const indicator = document.createElement('div');
+          indicator.className = 'card-stack-indicator js-card-stack-indicator';
+          indicator.textContent = `1 / ${items.length}`;
+          grid.appendChild(indicator);
+
+          initCardStacks(grid);
+        }
 
 
     async function refreshUniques(snap){
