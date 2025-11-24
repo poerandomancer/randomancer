@@ -212,8 +212,6 @@ function initSectionLocks(){
 
     document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
 
-    document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
-
     const gems = (window.DATA && window.DATA.gems) || [];
     const gemDict = buildGemDictionary(gems);
 
@@ -322,15 +320,54 @@ function initSectionLocks(){
   async function applyBuildCode(code){
     const snap = decodeSnapshot(code);
     if (!snap) return false;
-    await ensureDataPreload();
+    const dataWrap = await ensureDataPreload();
+    const data = (typeof window !== 'undefined' && window.DATA) || dataWrap?.core || {};
+    const gems = (typeof window !== 'undefined' && window.DATA?.gems) || dataWrap?.gems || [];
     showAppShell();
+
+    const findByName = (arr, name) => (arr || []).find(item => item?.name === name) || null;
+
+    let resolvedSkills = snap.recommendedSkills || [];
+    let resolvedBuff = snap.recommendedPersistentBuff || null;
+
+    if ((!resolvedSkills.length || !resolvedBuff) && data) {
+      const clsAttrs = data.Classes?.[snap.className]?.attributes || snap.attributes || { strength: 0, dexterity: 0, intelligence: 0 };
+      const weaponPool = [].concat(data.Weapons?.['Two-Handed'] || [], data.Weapons?.['One-Handed'] || []);
+      const weaponObj = findByName(weaponPool, snap.weapon);
+      const offhandObj = findByName(data.Weapons?.['Off-Hand'], snap.offhand);
+      const defenseObj = findByName(data.Defense, snap.defense);
+      const defStratObj = findByName(data.DefensiveStrategies, snap.defStrat);
+      const ailmentSet = (snap.ailmentList || []).map(n => findByName(data.Ailments, n)).filter(Boolean);
+      const tacticSet = (snap.tacticList || []).map(n => findByName(data.Tactics, n)).filter(Boolean);
+
+      const rebuilt = rollRecommendedSkills(
+        { core: data, gems },
+        clsAttrs,
+        { weapon: weaponObj, offhand: offhandObj },
+        { tacticSet, ailmentSet, defense: defenseObj, defStrat: defStratObj, weapon: weaponObj?.name || '', offhand: offhandObj?.name || '' }
+      ) || {};
+
+      if (Array.isArray(rebuilt.skills) && rebuilt.skills.length) {
+        resolvedSkills = rebuilt.skills;
+      }
+      if (rebuilt.persistentBuff) {
+        resolvedBuff = rebuilt.persistentBuff;
+      }
+    }
 
     const synergyScore = typeof snap.synergyScore === 'number'
       ? snap.synergyScore
       : computeSynergyFromSnapshot(snap);
     const modeName = snap.cohesionModeName || resolveCohesionMode(snap.cohesionMode ?? window.App?.state?.cohesionMode ?? currentMode);
     const cohesionStatus = snap.cohesionStatus || 'ok';
-    const rollPayload = { ...snap, synergyScore, cohesionStatus, cohesionModeName: modeName };
+    const rollPayload = {
+      ...snap,
+      recommendedSkills: resolvedSkills,
+      recommendedPersistentBuff: resolvedBuff,
+      synergyScore,
+      cohesionStatus,
+      cohesionModeName: modeName
+    };
 
     if (window.App?.mergeCurrentRoll) {
       window.App.mergeCurrentRoll(rollPayload);
