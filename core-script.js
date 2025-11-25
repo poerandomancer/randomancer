@@ -3288,6 +3288,7 @@ function ensureUniqueSection(){
 			  <div class="unique-name">${it.name}</div>
 			  <div class="unique-base">${it.base}</div>
 			</div>
+			<div class="skill-divider"></div>
 			<div class="tags-row">
 			  ${pills}
 			</div>
@@ -3297,6 +3298,7 @@ function ensureUniqueSection(){
 			</div>
 		  </div>
 		`;
+
 	  }).join('');
 	}
 

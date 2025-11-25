@@ -467,6 +467,12 @@ border-top: 1px dotted var(--gold);
  */
 }
 
+/* Make the skill-style divider inside uniques match the interior width */
+.unique-card .skill-divider{
+  margin: .45rem 14px .3rem; /* same 14px side inset as .tags-row */
+}
+
+
 .req-line { font-size:.9rem; color:var(--silver); opacity:.85; margin:.1rem 0 .3rem; }
 .supports-wrap { margin-top: .5rem; border-top: 1px dashed rgba(200,168,107,0.25); padding-top: .5rem; }
 .support-item {
@@ -924,29 +930,29 @@ border-top: 1px dotted var(--gold);
   overflow: hidden;
 }
 
-/* Header: name + base */
-.unique-header {
-  background: none;
-  border-bottom: 1px solid rgba(255, 200, 140, 0.12);
-  padding: 10px 14px 8px;
+/* Header: align with skill card title + subtitle stack */
+.unique-header{
+  background:none;
+  border-bottom:none;            /* we’ll use the dashed divider instead */
+  padding: .75rem 1rem .25rem;   /* roughly matches skill-card padding */
 }
 
-.unique-name {
-  font-weight: 700;
-  letter-spacing: 0.3px;
-  color: #ffcf7a;
-  font-size: 1.05rem;
-  line-height: 1.15;
+.unique-name{
+  margin:0 0 .15rem;
+  color:var(--gold);             /* same as .skill-title */
+  font-weight:600;               /* slightly softer than 700 */
+  font-size:1.05rem;             /* matches .skill-title */
+  line-height:1.15;
 }
 
-.unique-base {
-  margin-top: 2px;
-  font-variant: small-caps;
-  letter-spacing: 0.6px;
-  color: #d7b58a;
-  opacity: 0.9;
-  font-size: 0.85rem;
+.unique-base{
+  margin:0;
+  color:var(--muted);            /* same palette as .skill-subtitle */
+  font-size:.9rem;
+  font-style:italic;             /* mirrors the “Requires:” line feel */
+  opacity:0.9;
 }
+
 
 /* Tag pills row */
 .tags-row {
