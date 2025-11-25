@@ -134,28 +134,86 @@ function initSectionLocks(){
   const savedFab = document.getElementById('saved-fab');
   let lastSavedFocus = null;
 
+  function ensureSnapshotRecommendations(snap){
+    if (!snap || typeof snap !== 'object') return snap;
+
+    const hasRecs = Array.isArray(snap.recommendedSkills) && snap.recommendedSkills.length;
+    if (hasRecs) return snap;
+
+    const meta = (typeof window !== 'undefined') ? (window.__LAST_ROLL_META || null) : null;
+    if (meta?.recommendedSkills?.length) {
+      return {
+        ...snap,
+        recommendedSkills: meta.recommendedSkills,
+        recommendedPersistentBuff: snap.recommendedPersistentBuff || meta.recommendedPersistentBuff || null
+      };
+    }
+
+    const currentRoll = (typeof window !== 'undefined' && window.App?.state?.currentRoll)
+      ? window.App.state.currentRoll
+      : null;
+    if (currentRoll?.recommendedSkills?.length) {
+      return {
+        ...snap,
+        recommendedSkills: currentRoll.recommendedSkills,
+        recommendedPersistentBuff: snap.recommendedPersistentBuff || currentRoll.recommendedPersistentBuff || null
+      };
+    }
+
+    const current = (typeof window !== 'undefined') ? (window.CURRENT_ROLL || null) : null;
+    if (current?.recommendedSkills?.length) {
+      return {
+        ...snap,
+        recommendedSkills: current.recommendedSkills,
+        recommendedPersistentBuff: snap.recommendedPersistentBuff || current.recommendedPersistentBuff || null
+      };
+    }
+
+    try {
+      if (typeof rebuildRecommendationsFromSnapshot === 'function' && window.DATA) {
+        return rebuildRecommendationsFromSnapshot(snap, window.DATA);
+      }
+    } catch (e) {
+      console.warn('[build code] failed to rebuild recommendations for encoding', e);
+    }
+
+    return snap;
+  }
+
   function encodeSnapshot(snap){
     if (!snap || typeof snap !== 'object') return '';
+    const enriched = ensureSnapshotRecommendations(snap);
+    if (enriched !== snap && typeof window !== 'undefined') {
+      if (window.App?.state?.currentRoll === snap) {
+        window.App.state.currentRoll = { ...window.App.state.currentRoll, ...enriched };
+      }
+      if (window.CURRENT_ROLL === snap) {
+        window.CURRENT_ROLL = { ...window.CURRENT_ROLL, ...enriched };
+      }
+      if (window.__LAST_ROLL_META === snap) {
+        window.__LAST_ROLL_META = { ...window.__LAST_ROLL_META, ...enriched };
+      }
+    }
     // TODO: include section lock state in saved snapshots once we support persisting locks
     const compact = {
-      v: snap.snapshotVersion || 1,
-      c: snap.className || '',
-      a: snap.ascendancy || '',
-      w: snap.weapon || '',
-      o: snap.offhand || '',
-      al: Array.isArray(snap.ailmentList) ? snap.ailmentList : [],
-      tl: Array.isArray(snap.tacticList) ? snap.tacticList : [],
-      d: snap.defense || '',
-      ds: snap.defStrat || '',
-      b: snap.buildName || '',
-      f: snap.flavor || '',
-      attr: snap.attributes || { strength:0, dexterity:0, intelligence:0 },
-      rs: Array.isArray(snap.recommendedSkills) ? snap.recommendedSkills : [],
-      pb: snap.recommendedPersistentBuff || null,
-      u: Array.isArray(snap.recommendedUniques) ? snap.recommendedUniques : [],
-      ss: typeof snap.synergyScore === 'number' ? snap.synergyScore : 0,
-      cs: snap.cohesionStatus || 'ok',
-      cm: snap.cohesionModeName || resolveCohesionMode(snap.cohesionMode ?? 1)
+      v: enriched.snapshotVersion || 1,
+      c: enriched.className || '',
+      a: enriched.ascendancy || '',
+      w: enriched.weapon || '',
+      o: enriched.offhand || '',
+      al: Array.isArray(enriched.ailmentList) ? enriched.ailmentList : [],
+      tl: Array.isArray(enriched.tacticList) ? enriched.tacticList : [],
+      d: enriched.defense || '',
+      ds: enriched.defStrat || '',
+      b: enriched.buildName || '',
+      f: enriched.flavor || '',
+      attr: enriched.attributes || { strength:0, dexterity:0, intelligence:0 },
+      rs: Array.isArray(enriched.recommendedSkills) ? enriched.recommendedSkills : [],
+      pb: enriched.recommendedPersistentBuff || null,
+      u: Array.isArray(enriched.recommendedUniques) ? enriched.recommendedUniques : [],
+      ss: typeof enriched.synergyScore === 'number' ? enriched.synergyScore : 0,
+      cs: enriched.cohesionStatus || 'ok',
+      cm: enriched.cohesionModeName || resolveCohesionMode(enriched.cohesionMode ?? 1)
     };
     return safeBtoa(JSON.stringify(compact));
   }
@@ -223,6 +281,13 @@ function initSectionLocks(){
     return dict[key] || dict[key.toLowerCase()] || null;
   }
 
+  function resolveSnapshotGem(entry, gemDict){
+    if (!entry) return null;
+    const key = (entry && typeof entry === 'object') ? (entry.id || entry.name || '') : entry;
+    if (!key) return null;
+    return lookupGem(gemDict, key) || lookupGem(gemDict, entry?.name || '');
+  }
+
   function renderSkillsFromSnapshot(snap){
     const grid = document.getElementById('skills-grid');
     if (!grid) return;
@@ -232,7 +297,7 @@ function initSectionLocks(){
     const gemDict = buildGemDictionary(gems);
 
     (snap.recommendedSkills || []).forEach(entry => {
-      const g = lookupGem(gemDict, entry) || lookupGem(gemDict, { id: entry.name });
+      const g = resolveSnapshotGem(entry, gemDict);
       if (!g) return;
       const card = document.createElement('div');
       card.className = 'skill-card';
@@ -265,7 +330,7 @@ function initSectionLocks(){
     });
 
     if (snap.recommendedPersistentBuff) {
-      const buffGem = lookupGem(gemDict, snap.recommendedPersistentBuff);
+      const buffGem = resolveSnapshotGem(snap.recommendedPersistentBuff, gemDict);
       if (buffGem) {
         renderSnapshotPersistentBuff(buffGem, gemDict);
       }
@@ -379,18 +444,74 @@ function initSectionLocks(){
     }
   }
 
+  function rebuildRecommendationsFromSnapshot(snap, data){
+    try {
+      const core = data?.core || data || window.DATA || {};
+      if (!snap || !core || !core.Classes || !core.Weapons) return snap;
+
+      const cls = core.Classes?.[snap.className];
+      const baseAttrs = cls?.attributes || {};
+      if (!cls || !Object.keys(baseAttrs).length) return snap;
+
+      const weapons = core.Weapons || {};
+      const weaponPool = [].concat(weapons['Two-Handed'] || [], weapons['One-Handed'] || []);
+      const offhands = weapons['Off-Hand'] || [];
+      const defenses = core.Defense || [];
+      const defStrats = core.DefensiveStrategies || [];
+      const tactics = core.Tactics || [];
+      const ailments = core.Ailments || [];
+
+      const weapon = lookupByName(weaponPool, snap.weapon);
+      const offhand = lookupByName(offhands, snap.offhand);
+      const defense = lookupByName(defenses, snap.defense);
+      const defStrat = lookupByName(defStrats, snap.defStrat);
+      const tacticSet = (snap.tacticList || []).map(n => lookupByName(tactics, n)).filter(Boolean);
+      const ailmentSet = (snap.ailmentList || []).map(n => lookupByName(ailments, n)).filter(Boolean);
+
+      const rollCtx = {
+        tacticSet,
+        ailmentSet,
+        defense,
+        defStrat,
+        rollAttr: snap.attributes || baseAttrs,
+        weapon: weapon || { name: snap.weapon },
+        offhand: offhand || { name: snap.offhand }
+      };
+
+      const rec = rollRecommendedSkills({ core, gems: core.gems || [] }, baseAttrs, { weapon, offhand }, rollCtx);
+      if (!rec || (!rec.skills && !rec.persistentBuff)) return snap;
+
+      return {
+        ...snap,
+        recommendedSkills: (rec.skills && rec.skills.length) ? rec.skills : (snap.recommendedSkills || []),
+        recommendedPersistentBuff: rec.persistentBuff || snap.recommendedPersistentBuff || null,
+        tagProfile: rec.tagProfile || snap.tagProfile || null,
+        tacticSet: tacticSet.length ? tacticSet : snap.tacticSet,
+        ailmentSet: ailmentSet.length ? ailmentSet : snap.ailmentSet,
+        defenseObj: defense || snap.defenseObj || null,
+        defStratObj: defStrat || snap.defStratObj || null
+      };
+    } catch (e) {
+      console.warn('[snapshot] failed to rebuild recommendations', e);
+      return snap;
+    }
+  }
+
   async function applyBuildCode(code){
     const snap = decodeSnapshot(code);
     if (!snap) return false;
     await ensureDataPreload();
+    const hydratedSnap = (snap.recommendedSkills && snap.recommendedSkills.length)
+      ? snap
+      : rebuildRecommendationsFromSnapshot(snap, window.DATA);
     showAppShell();
 
-    const synergyScore = typeof snap.synergyScore === 'number'
-      ? snap.synergyScore
-      : computeSynergyFromSnapshot(snap);
-    const modeName = snap.cohesionModeName || resolveCohesionMode(snap.cohesionMode ?? window.App?.state?.cohesionMode ?? currentMode);
-    const cohesionStatus = snap.cohesionStatus || 'ok';
-    const rollPayload = { ...snap, synergyScore, cohesionStatus, cohesionModeName: modeName };
+    const synergyScore = typeof hydratedSnap.synergyScore === 'number'
+      ? hydratedSnap.synergyScore
+      : computeSynergyFromSnapshot(hydratedSnap);
+    const modeName = hydratedSnap.cohesionModeName || resolveCohesionMode(hydratedSnap.cohesionMode ?? window.App?.state?.cohesionMode ?? currentMode);
+    const cohesionStatus = hydratedSnap.cohesionStatus || 'ok';
+    const rollPayload = { ...hydratedSnap, synergyScore, cohesionStatus, cohesionModeName: modeName };
 
     if (window.App?.mergeCurrentRoll) {
       window.App.mergeCurrentRoll(rollPayload);
