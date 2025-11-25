@@ -208,6 +208,47 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 .section-header[data-locked="true"] .lock-icon.lock-on{ display:inline-block; }
 .section-header[data-locked="true"] .lock-icon.lock-off{ display:none; }
 .section-header[data-locked="true"] .section-title{ color:var(--gold); }
+
+/* ===== Locked section overlay (more pronounced lock state) ===== */
+
+/* Give locked sections a positioning context */
+.sect[data-locked="true"]{
+  position:relative;
+}
+
+/* Gold band across the section: strongest in the middle, fades at the sides */
+.sect[data-locked="true"]::before{
+  content:"";
+  position:absolute;
+  /* sit slightly inside the card instead of spilling past the edges */
+  inset:6px 10px;
+  border-radius:10px;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(212,170,80,0.00) 0%,
+      rgba(212,170,80,0.14) 50%,
+      rgba(212,170,80,0.00) 100%
+    );
+  pointer-events:none;
+
+  /* much softer or no glow; pick one of these: */
+
+  /* Option A: very soft halo */
+  box-shadow:0 0 6px rgba(212,170,80,0.18);
+  opacity:0.7;
+
+  /* Option B (ultra subtle, no glow at all) */
+  /* box-shadow:none;
+     opacity:0.6; */
+}
+
+
+/* (Optional) tiny extra emphasis on the title when locked */
+.sect[data-locked="true"] .section-title{
+  text-shadow:0 0 6px rgba(0,0,0,0.7);
+}
+
 .sect h3{ margin:0 0 .1rem; font-weight:600; color:var(--silver); letter-spacing:.02em; }
 .sub{ margin:0; color:var(--muted); font-size:.95rem; }
 .gold.subtle{
@@ -1303,30 +1344,99 @@ img, video { max-width: 100%; height: auto; }
 .icon-btn:focus{ outline:none; box-shadow: 0 0 0 2px rgba(202,164,95,0.45); }
 .icon-btn[data-saved="1"]{ color: #ffd58f; text-shadow: 0 0 8px rgba(255,213,143,0.35); }
 
+/* ===== Saved builds / favorites list ===== */
+
 .saved-list{
   display:flex;
   flex-direction:column;
-  gap:8px;
+  gap:6px;
+  padding:4px 10px 12px;
 }
+
+/* Subtitle under "Saved Builds" label */
 .saved-subtitle{
-  margin: 4px 14px 2px;
+  margin: 4px 14px 4px;
   color: var(--muted);
   font-size: 0.95rem;
+  font-style:italic;
 }
+
+/* Each saved build row */
 .saved-item{
-  background: rgba(0,0,0,0.32);
-  border: 1px solid rgba(200,168,107,0.28);
-  color: var(--ink);
-  padding: 10px 12px;
-  border-radius: 10px;
+  position:relative;
+  display:block;
+  width:100%;
+  background: radial-gradient(circle at top left, rgba(0,0,0,0.8), rgba(0,0,0,0.3));
+  border: 1px solid rgba(202,164,95,0.32);
+  padding: 7px 11px 6px;
+  border-radius: 9px;
   cursor:pointer;
   text-align:left;
-  transition: background .12s ease, border-color .12s ease, transform .1s ease, box-shadow .1s ease;
+  overflow:hidden;
+  transition:
+    background .14s ease,
+    border-color .14s ease,
+    box-shadow .14s ease;
 }
-.saved-item:hover{ background: rgba(200,168,107,0.08); border-color: rgba(200,168,107,0.6); transform: translateY(-1px); box-shadow: 0 6px 12px rgba(0,0,0,0.25); }
-.saved-item .name{ display:block; color: var(--gold); font-size:1rem; }
-.saved-item .meta{ display:block; color: var(--muted); font-size:0.9rem; }
-.saved-empty{ color: var(--muted); font-size: 0.95rem; }
+
+/* subtle gold wash on the left edge */
+.saved-item::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(202,164,95,0.18),
+      rgba(202,164,95,0.02)
+    );
+  opacity:0.7;
+  pointer-events:none;
+  mix-blend-mode:screen;
+}
+
+/* content sits above the wash */
+.saved-item > .name,
+.saved-item > .meta{
+  position:relative;
+  z-index:1;
+}
+
+/* Hover: gentle, not "card jumps at you" */
+.saved-item:hover{
+  background: radial-gradient(circle at top left, rgba(202,164,95,0.16), rgba(0,0,0,0.45));
+  border-color: rgba(202,164,95,0.6);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.45);
+}
+
+/* Title line – modeled after .flavor */
+.saved-item .name{
+  display:block;
+  font-family:'Cormorant Infant',serif; /* same family as .flavor */
+  font-style:italic;
+  font-weight:500;
+  letter-spacing:.04em;
+  font-size:1.1rem;
+  color:var(--gold);
+  margin-bottom:1px;
+}
+
+/* Secondary line – class, weapon, etc. */
+.saved-item .meta{
+  display:block;
+  color:var(--muted);
+  font-size:0.9rem;
+  opacity:0.95;
+}
+
+/* Empty state text */
+.saved-empty{
+  margin: 8px 14px 12px;
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-style:italic;
+}
+
 
 
 /* === Info Lightbox extra polish (v0.7.9_beta2n) === */
