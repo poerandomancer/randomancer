@@ -134,28 +134,64 @@ function initSectionLocks(){
   const savedFab = document.getElementById('saved-fab');
   let lastSavedFocus = null;
 
+  function ensureSnapshotRecommendations(snap){
+    if (!snap || typeof snap !== 'object') return snap;
+
+    const hasRecs = Array.isArray(snap.recommendedSkills) && snap.recommendedSkills.length;
+    if (hasRecs) return snap;
+
+    const meta = (typeof window !== 'undefined') ? (window.__LAST_ROLL_META || null) : null;
+    if (meta?.recommendedSkills?.length) {
+      return {
+        ...snap,
+        recommendedSkills: meta.recommendedSkills,
+        recommendedPersistentBuff: snap.recommendedPersistentBuff || meta.recommendedPersistentBuff || null
+      };
+    }
+
+    const current = (typeof window !== 'undefined') ? (window.CURRENT_ROLL || null) : null;
+    if (current?.recommendedSkills?.length) {
+      return {
+        ...snap,
+        recommendedSkills: current.recommendedSkills,
+        recommendedPersistentBuff: snap.recommendedPersistentBuff || current.recommendedPersistentBuff || null
+      };
+    }
+
+    try {
+      if (typeof rebuildRecommendationsFromSnapshot === 'function' && window.DATA) {
+        return rebuildRecommendationsFromSnapshot(snap, window.DATA);
+      }
+    } catch (e) {
+      console.warn('[build code] failed to rebuild recommendations for encoding', e);
+    }
+
+    return snap;
+  }
+
   function encodeSnapshot(snap){
     if (!snap || typeof snap !== 'object') return '';
+    const enriched = ensureSnapshotRecommendations(snap);
     // TODO: include section lock state in saved snapshots once we support persisting locks
     const compact = {
-      v: snap.snapshotVersion || 1,
-      c: snap.className || '',
-      a: snap.ascendancy || '',
-      w: snap.weapon || '',
-      o: snap.offhand || '',
-      al: Array.isArray(snap.ailmentList) ? snap.ailmentList : [],
-      tl: Array.isArray(snap.tacticList) ? snap.tacticList : [],
-      d: snap.defense || '',
-      ds: snap.defStrat || '',
-      b: snap.buildName || '',
-      f: snap.flavor || '',
-      attr: snap.attributes || { strength:0, dexterity:0, intelligence:0 },
-      rs: Array.isArray(snap.recommendedSkills) ? snap.recommendedSkills : [],
-      pb: snap.recommendedPersistentBuff || null,
-      u: Array.isArray(snap.recommendedUniques) ? snap.recommendedUniques : [],
-      ss: typeof snap.synergyScore === 'number' ? snap.synergyScore : 0,
-      cs: snap.cohesionStatus || 'ok',
-      cm: snap.cohesionModeName || resolveCohesionMode(snap.cohesionMode ?? 1)
+      v: enriched.snapshotVersion || 1,
+      c: enriched.className || '',
+      a: enriched.ascendancy || '',
+      w: enriched.weapon || '',
+      o: enriched.offhand || '',
+      al: Array.isArray(enriched.ailmentList) ? enriched.ailmentList : [],
+      tl: Array.isArray(enriched.tacticList) ? enriched.tacticList : [],
+      d: enriched.defense || '',
+      ds: enriched.defStrat || '',
+      b: enriched.buildName || '',
+      f: enriched.flavor || '',
+      attr: enriched.attributes || { strength:0, dexterity:0, intelligence:0 },
+      rs: Array.isArray(enriched.recommendedSkills) ? enriched.recommendedSkills : [],
+      pb: enriched.recommendedPersistentBuff || null,
+      u: Array.isArray(enriched.recommendedUniques) ? enriched.recommendedUniques : [],
+      ss: typeof enriched.synergyScore === 'number' ? enriched.synergyScore : 0,
+      cs: enriched.cohesionStatus || 'ok',
+      cm: enriched.cohesionModeName || resolveCohesionMode(enriched.cohesionMode ?? 1)
     };
     return safeBtoa(JSON.stringify(compact));
   }
