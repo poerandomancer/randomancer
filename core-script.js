@@ -386,18 +386,74 @@ function initSectionLocks(){
     }
   }
 
+  function rebuildRecommendationsFromSnapshot(snap, data){
+    try {
+      const core = data?.core || data || window.DATA || {};
+      if (!snap || !core || !core.Classes || !core.Weapons) return snap;
+
+      const cls = core.Classes?.[snap.className];
+      const baseAttrs = cls?.attributes || {};
+      if (!cls || !Object.keys(baseAttrs).length) return snap;
+
+      const weapons = core.Weapons || {};
+      const weaponPool = [].concat(weapons['Two-Handed'] || [], weapons['One-Handed'] || []);
+      const offhands = weapons['Off-Hand'] || [];
+      const defenses = core.Defense || [];
+      const defStrats = core.DefensiveStrategies || [];
+      const tactics = core.Tactics || [];
+      const ailments = core.Ailments || [];
+
+      const weapon = lookupByName(weaponPool, snap.weapon);
+      const offhand = lookupByName(offhands, snap.offhand);
+      const defense = lookupByName(defenses, snap.defense);
+      const defStrat = lookupByName(defStrats, snap.defStrat);
+      const tacticSet = (snap.tacticList || []).map(n => lookupByName(tactics, n)).filter(Boolean);
+      const ailmentSet = (snap.ailmentList || []).map(n => lookupByName(ailments, n)).filter(Boolean);
+
+      const rollCtx = {
+        tacticSet,
+        ailmentSet,
+        defense,
+        defStrat,
+        rollAttr: snap.attributes || baseAttrs,
+        weapon: weapon || { name: snap.weapon },
+        offhand: offhand || { name: snap.offhand }
+      };
+
+      const rec = rollRecommendedSkills({ core, gems: core.gems || [] }, baseAttrs, { weapon, offhand }, rollCtx);
+      if (!rec || (!rec.skills && !rec.persistentBuff)) return snap;
+
+      return {
+        ...snap,
+        recommendedSkills: (rec.skills && rec.skills.length) ? rec.skills : (snap.recommendedSkills || []),
+        recommendedPersistentBuff: rec.persistentBuff || snap.recommendedPersistentBuff || null,
+        tagProfile: rec.tagProfile || snap.tagProfile || null,
+        tacticSet: tacticSet.length ? tacticSet : snap.tacticSet,
+        ailmentSet: ailmentSet.length ? ailmentSet : snap.ailmentSet,
+        defenseObj: defense || snap.defenseObj || null,
+        defStratObj: defStrat || snap.defStratObj || null
+      };
+    } catch (e) {
+      console.warn('[snapshot] failed to rebuild recommendations', e);
+      return snap;
+    }
+  }
+
   async function applyBuildCode(code){
     const snap = decodeSnapshot(code);
     if (!snap) return false;
     await ensureDataPreload();
+    const hydratedSnap = (snap.recommendedSkills && snap.recommendedSkills.length)
+      ? snap
+      : rebuildRecommendationsFromSnapshot(snap, window.DATA);
     showAppShell();
 
-    const synergyScore = typeof snap.synergyScore === 'number'
-      ? snap.synergyScore
-      : computeSynergyFromSnapshot(snap);
-    const modeName = snap.cohesionModeName || resolveCohesionMode(snap.cohesionMode ?? window.App?.state?.cohesionMode ?? currentMode);
-    const cohesionStatus = snap.cohesionStatus || 'ok';
-    const rollPayload = { ...snap, synergyScore, cohesionStatus, cohesionModeName: modeName };
+    const synergyScore = typeof hydratedSnap.synergyScore === 'number'
+      ? hydratedSnap.synergyScore
+      : computeSynergyFromSnapshot(hydratedSnap);
+    const modeName = hydratedSnap.cohesionModeName || resolveCohesionMode(hydratedSnap.cohesionMode ?? window.App?.state?.cohesionMode ?? currentMode);
+    const cohesionStatus = hydratedSnap.cohesionStatus || 'ok';
+    const rollPayload = { ...hydratedSnap, synergyScore, cohesionStatus, cohesionModeName: modeName };
 
     if (window.App?.mergeCurrentRoll) {
       window.App.mergeCurrentRoll(rollPayload);
