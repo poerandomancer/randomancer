@@ -205,10 +205,12 @@ function initSectionLocks(){
     return dict[key] || dict[key.toLowerCase()] || null;
   }
 
-  function renderSkillsFromSnapshot(snap){
-    const grid = document.getElementById('skills-grid');
-    if (!grid) return;
-    grid.innerHTML = '';
+    function renderSkillsFromSnapshot(snap){
+      const grid = document.getElementById('skills-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+    document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
 
     document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
 
