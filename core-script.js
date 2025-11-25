@@ -66,14 +66,24 @@ function syncLockUIFromState(){
   document.querySelectorAll('.section-header').forEach(header => {
     const section = header?.dataset?.section;
     if (!section) return;
+
     const locked = !!locks[section];
+
+    // Existing header + button state
     header.dataset.locked = locked ? 'true' : 'false';
     const btn = header.querySelector('.lock-toggle');
     if (btn) {
       btn.setAttribute('aria-pressed', locked ? 'true' : 'false');
     }
+
+    // NEW: mark the whole section wrapper so CSS can show a stronger "locked" state
+    const container = header.closest('.sect');
+    if (container) {
+      container.dataset.locked = locked ? 'true' : 'false';
+    }
   });
 }
+
 
 function wireLockButton(btn){
   if (!btn || btn.__lockInit) return;
@@ -88,10 +98,18 @@ function wireLockButton(btn){
     const nowLocked = header.dataset.locked !== 'true';
     locks[section] = nowLocked;
 
+    // Existing header + button state
     header.dataset.locked = nowLocked ? 'true' : 'false';
     e.currentTarget.setAttribute('aria-pressed', nowLocked ? 'true' : 'false');
+
+    // NEW: toggle the flag on the section wrapper for the overlay
+    const container = header.closest('.sect');
+    if (container) {
+      container.dataset.locked = nowLocked ? 'true' : 'false';
+    }
   });
 }
+
 
 function initSectionLocks(){
   document.querySelectorAll('.section-header .lock-toggle').forEach(wireLockButton);
@@ -3270,6 +3288,7 @@ function ensureUniqueSection(){
 			  <div class="unique-name">${it.name}</div>
 			  <div class="unique-base">${it.base}</div>
 			</div>
+			<div class="skill-divider"></div>
 			<div class="tags-row">
 			  ${pills}
 			</div>
@@ -3279,6 +3298,7 @@ function ensureUniqueSection(){
 			</div>
 		  </div>
 		`;
+
 	  }).join('');
 	}
 
