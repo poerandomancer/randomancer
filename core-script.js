@@ -223,6 +223,13 @@ function initSectionLocks(){
     return dict[key] || dict[key.toLowerCase()] || null;
   }
 
+  function resolveSnapshotGem(entry, gemDict){
+    if (!entry) return null;
+    const key = (entry && typeof entry === 'object') ? (entry.id || entry.name || '') : entry;
+    if (!key) return null;
+    return lookupGem(gemDict, key) || lookupGem(gemDict, entry?.name || '');
+  }
+
   function renderSkillsFromSnapshot(snap){
     const grid = document.getElementById('skills-grid');
     if (!grid) return;
@@ -232,7 +239,7 @@ function initSectionLocks(){
     const gemDict = buildGemDictionary(gems);
 
     (snap.recommendedSkills || []).forEach(entry => {
-      const g = lookupGem(gemDict, entry) || lookupGem(gemDict, { id: entry.name });
+      const g = resolveSnapshotGem(entry, gemDict);
       if (!g) return;
       const card = document.createElement('div');
       card.className = 'skill-card';
@@ -265,7 +272,7 @@ function initSectionLocks(){
     });
 
     if (snap.recommendedPersistentBuff) {
-      const buffGem = lookupGem(gemDict, snap.recommendedPersistentBuff);
+      const buffGem = resolveSnapshotGem(snap.recommendedPersistentBuff, gemDict);
       if (buffGem) {
         renderSnapshotPersistentBuff(buffGem, gemDict);
       }
