@@ -136,6 +136,11 @@ function initSectionLocks(){
 
   function encodeSnapshot(snap){
     if (!snap || typeof snap !== 'object') return '';
+    
+    console.log('[u79b2m] encoding snap', snap);
+    console.log('[u79b2m] snap.recommendedSkills', snap.recommendedSkills);
+    console.log('[u79b2m] isArray', Array.isArray(snap.recommendedSkills));
+    
     // TODO: include section lock state in saved snapshots once we support persisting locks
     const compact = {
       v: snap.snapshotVersion || 1,
@@ -166,6 +171,10 @@ function initSectionLocks(){
     if (!json) return null;
     try {
       const raw = JSON.parse(json);
+      
+      console.log('[u79b2m] decoding raw', raw);
+      console.log('[u79b2m] decoding skills', raw.rs);
+      
       return {
         snapshotVersion: raw.v || 1,
         className: raw.c || '',
@@ -217,62 +226,67 @@ function initSectionLocks(){
     setElText('#balance-text', `Strength ${Math.round(S*100)}%  |  Dexterity ${Math.round(D*100)}%  | Intelligence ${Math.round(I*100)}%`);
   }
 
-  function lookupGem(dict, entry){
-    const key = entry?.id || entry?.name || '';
-    if (!key) return null;
-    return dict[key] || dict[key.toLowerCase()] || null;
-  }
 
   function renderSkillsFromSnapshot(snap){
-    const grid = document.getElementById('skills-grid');
-    if (!grid) return;
-    grid.innerHTML = '';
+	  const grid = document.getElementById('skills-grid');
+	  if (!grid) return;
+	  grid.innerHTML = '';
+	
+	  const gems = (window.DATA && window.DATA.gems) || [];
+	  const gemDict = buildGemDictionary(gems);
+	
+	  (snap.recommendedSkills || []).forEach(entry => {
+		// 🔧 change: pass a *key* (id or name), not the whole object
+		const key = entry.id || entry.name || '';
+		const g = lookupGem(gemDict, key);
+		if (!g) {
+		  console.warn('[skills] No gem match for recommended skill', entry);
+		  return;
+		}
+	
+		const card = document.createElement('div');
+		card.className = 'skill-card';
+	
+		const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
+		  ? `<div class="skill-subtitle">${g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')}</div>`
+		  : '';
+	
+		const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
+		const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
+		const rest = allTags.filter(t => !br.includes(t));
+		const displayTags = [...br, ...rest].slice(0, 10);
+		const pills = displayTags.map(t => `<span class="tag-pill">${t}</span>`).join('');
+	
+		const supports = Array.isArray(entry.recommended_supports) && entry.recommended_supports.length
+		  ? entry.recommended_supports
+		  : g.recommended_supports;
+	
+		card.innerHTML = `
+		  <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
+		  ${requiresSubtitle}
+		  <div class="skill-divider"></div>
+		  ${grantLine(g)}
+		  <div class="skill-tags">${pills}</div>
+		  <div class="supports-label">Recommended Supports</div>
+		  <div class="supports">${renderSupportCards(supports, gemDict)}</div>
+		`;
+		applyGemBorderFromReqWeights(card, g.requirement_weights);
+		grid.appendChild(card);
+	  });
+	
+	  if (snap.recommendedPersistentBuff) {
+		const buffKey = snap.recommendedPersistentBuff.id || snap.recommendedPersistentBuff.name || '';
+		const buffGem = lookupGem(gemDict, buffKey);
+		if (buffGem) {
+		  renderSnapshotPersistentBuff(buffGem, gemDict);
+		} else {
+		  console.warn('[skills] No gem match for persistent buff', snap.recommendedPersistentBuff);
+		}
+	  } else {
+		document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
+	  }
+	}
 
-    const gems = (window.DATA && window.DATA.gems) || [];
-    const gemDict = buildGemDictionary(gems);
-
-    (snap.recommendedSkills || []).forEach(entry => {
-      const g = lookupGem(gemDict, entry) || lookupGem(gemDict, { id: entry.name });
-      if (!g) return;
-      const card = document.createElement('div');
-      card.className = 'skill-card';
-
-      const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
-        ? `<div class="skill-subtitle">${g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')}</div>`
-        : '';
-
-      const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
-      const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
-      const rest = allTags.filter(t => !br.includes(t));
-      const displayTags = [...br, ...rest].slice(0, 10);
-      const pills = displayTags.map(t => `<span class="tag-pill">${t}</span>`).join('');
-
-      const supports = Array.isArray(entry.recommended_supports) && entry.recommended_supports.length
-        ? entry.recommended_supports
-        : g.recommended_supports;
-
-      card.innerHTML = `
-        <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
-        ${requiresSubtitle}
-        <div class="skill-divider"></div>
-        ${grantLine(g)}
-        <div class="skill-tags">${pills}</div>
-        <div class="supports-label">Recommended Supports</div>
-        <div class="supports">${renderSupportCards(supports, gemDict)}</div>
-      `;
-      applyGemBorderFromReqWeights(card, g.requirement_weights);
-      grid.appendChild(card);
-    });
-
-    if (snap.recommendedPersistentBuff) {
-      const buffGem = lookupGem(gemDict, snap.recommendedPersistentBuff);
-      if (buffGem) {
-        renderSnapshotPersistentBuff(buffGem, gemDict);
-      }
-    } else {
-      document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
-    }
-  }
 
   function renderSnapshotPersistentBuff(g, gemDict){
     document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
@@ -560,7 +574,7 @@ function initSectionLocks(){
 })();
 
 // App metadata
-const APP_VERSION = '0.8.2_passives';
+const APP_VERSION = '0.8.2_fave-fix';
 
 window.RANDOMANCER = window.RANDOMANCER || {};
 window.RANDOMANCER.version = APP_VERSION;
