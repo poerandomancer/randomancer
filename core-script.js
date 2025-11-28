@@ -999,8 +999,6 @@ window.TAG_ALIASES = TagUtils.alias;
     const score = alpha*raw + beta*attrSim + weaponHint + combo + jitter;
     return { score, raw, attrSim, idfAvg, weaponHint, combo };
   }
-  function quantile(arr, q){ if(!arr || !arr.length) return 0; const xs = arr.slice().sort((a,b)=>a-b); const idx=Math.max(0, Math.min(xs.length-1, Math.floor((xs.length-1)*q))); return xs[idx]; }
-
   // Capture legacy scorer if present
   const LEGACY = {
     scoreGemSynergy: window.scoreGemSynergy
@@ -1605,15 +1603,6 @@ function lookupGem(dict, raw){
 
 // ---------- helpers ----------
 function dominantAttr(attrs){ const e=Object.entries(attrs||{}).sort((a,b)=>b[1]-a[1]); const k=(e[0]?.[0]||'int'); return {strength:'str',dexterity:'dex',intelligence:'int'}[k]||k.slice(0,3); }
-function pickUnique2(list){
-  if(!list || list.length<2) return list||[];
-  const a = list[Math.floor(Math.random()*list.length)];
-  let b = list[Math.floor(Math.random()*list.length)];
-  let guard = 0;
-  while(b.name===a.name && guard<20){ b = list[Math.floor(Math.random()*list.length)]; guard++; }
-  if(b.name===a.name){ return [a]; }
-  return [a,b];
-}
 function sample(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 const NAME_TITLES={
   Warrior:["Ember-Forged","Ironclad","Warborn","Stonebound"],
