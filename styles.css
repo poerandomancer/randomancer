@@ -59,10 +59,13 @@ html,body{
 @keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
 
 #app{
-  position:relative; min-height:100%;
-  backdrop-filter:blur(2px);
-  background:rgba(0,0,0,.28);
+  position:relative;
+  min-height:100%;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  background: rgba(0,0,0,.28);
 }
+
 
 header{
   text-align:center;
@@ -1241,6 +1244,50 @@ img, video { max-width: 100%; height: auto; }
 }
 
 .container { width: min(100%, 1100px); margin: 0 auto; padding: 0 16px; }
+
+/* --- Mobile background / blur stability fixes --- */
+@media (max-width: 960px) {
+  /* 1) Avoid background-attachment: fixed quirks on mobile */
+  html,
+  body {
+    background-attachment: scroll;
+    background-position: center top;
+  }
+
+  /* 2) Let the ascendancy art track the document instead of the viewport */
+  body {
+    position: relative;
+  }
+
+  .asc-art {
+    position: absolute;   /* instead of fixed on mobile */
+    inset: 0;
+    /* keep layering and image behavior the same */
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    /* 3) Apply the blur directly to the art so it doesn't flicker */
+    filter: blur(3px) saturate(.9) brightness(1.05);
+    opacity: 0;           /* keep the fade-in behavior */
+    pointer-events: none;
+    transition: opacity .5s ease;
+  }
+
+  .asc-art.show {
+    opacity: .92;
+  }
+
+  /* 4) Since we're blurring the art itself on mobile, 
+        we can drop the backdrop blur (which is flaky on iOS)
+        and just use a slightly stronger dark overlay. */
+  #app {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(0,0,0,0.55);
+  }
+}
+
 
 /* Divider styling + spacing */
 :root { --section-gap: 24px; }
