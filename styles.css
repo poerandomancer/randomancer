@@ -1077,6 +1077,12 @@ border-top: 1px dotted var(--gold);
   flex-wrap: nowrap;
 }
 
+/* v0.8.2_cleanup: temporarily disable Keystone recommendations */
+.passives-group[data-passive-group="keystones"] {
+  display: none;
+}
+
+
 .passive-node {
   display: flex;
   flex-direction: column;
