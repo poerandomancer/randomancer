@@ -1041,20 +1041,6 @@ function normalizeTag(s){
   return TagUtils.norm(s);
 }
 
-// ---------- gem + skill enrichment ----------
-function flattenGems(g) {
-  if (!g) return [];
-  if (Array.isArray(g)) return g;
-  if (g.SkillGems) return Object.values(g.SkillGems);
-  const list = [];
-  for (const [key, val] of Object.entries(g)) {
-    if (val && typeof val === "object") {
-      list.push({ id: key, ...val });
-    }
-  }
-  return list;
-}
-
 // ---------- async data loader ----------
 async function loadJSON(path) {
   try {
@@ -2450,146 +2436,40 @@ function rollBuild(dataWrap){
 
 }
 
-
-function normalizeGem(g){
-  const o = Object.assign({}, g);
-  o.id = o.id || o.base_item?.id || o.base_item?.display_name || o.name || o.skill_name || o.support_name || '';
-  o.name = o.name || o.base_item?.display_name || o.skill_name || o.support_name || null;
-  o.type = (o.type || o.gem_type || (o.support_text ? 'support' : 'active') || '').toLowerCase();
-  o.tags = Array.isArray(o.tags) ? o.tags : [];
-  o.crafting_types = Array.isArray(g.crafting_types) ? g.crafting_types.slice() : [];
-  return o;
-}
-
-
-function enrichGems(gemData, skillsData){
-  const flat = flattenGems(gemData);
-  const skills = skillsData || {};
-  const skillIndex = skills; // assume data/skills.json already keyed by id
-
-  const merged = flat.map(g0 => {
-    const g = normalizeGem(g0);
-
-    // Exclude invalid / dev placeholders / missing crafting types
-    if (!g.base_item || !g.base_item.display_name) return null;
-    if (isDevPlaceholderGem(g)) return null;
-    if (!Array.isArray(g.crafting_types) || g.crafting_types.length === 0) return null;
-
-    // Set required weapon types (lowercased)
-    g.required_weapon_types = g.crafting_types.map(x => String(x).toLowerCase());
-    
-    let grantName = null, grantDesc = '';
-const grantsArr = Array.isArray(g.grants_skills) ? g.grants_skills : [];
-const granted_list = [];
-const allGrantBracketTags = [];
-for(const gid of grantsArr){
-  const sk = skills[gid];
-  if(sk && sk.active_skill){
-    const dn = sk.active_skill.display_name || '';
-    const dd = sk.active_skill.description || '';
-    if(!grantName && dn) grantName = dn;
-    if(!grantDesc && dd) grantDesc = dd;
-    granted_list.push({ id: gid, display_name: dn, description: dd });
-    extractBracketTags(dd).forEach(t => { if(!allGrantBracketTags.includes(t)) allGrantBracketTags.push(t); });
-  }
-}
-g.granted_skills_full = granted_list;
-const gemDesc = g.description || g.support_text || '';
-    const composedDesc = (gemDesc ? gemDesc + (grantDesc ? ' ' + grantDesc : '') : grantDesc);
-    g.description = composedDesc || gemDesc || grantDesc || '';
-
-    // Attach a friendly requirement line
-    let req_line = '';
-    if (g.required_weapon_types && g.required_weapon_types.length){
-      const cap = g.required_weapon_types.map(t => t.charAt(0).toUpperCase() + t.slice(1));
-      req_line = `Requires ${cap.join(' or ')}`;
-    }
-
-    // Description: prefer gem.description/support_text, augment with active_skill.description if short
-    const firstSkillId = Array.isArray(g.grants_skills) ? g.grants_skills[0] : null;
-    const s = firstSkillId ? skillIndex[firstSkillId] || null : null;
-    let description = g.description || g.support_text || '';
-    if ((!description || description.length < 50) && s && s.active_skill && s.active_skill.description){
-      description = description ? (description + ' ' + s.active_skill.description) : s.active_skill.description;
-    }
-
-    // Tags: gem tags + skill types + [bracketed] tokens from description
-    const baseTags = Array.isArray(g.tags) ? g.tags.map(normalizeTag) : [];
-    const skillTypes = Array.isArray(s?.active_skill?.types) ? s.active_skill.types.map(normalizeTag) : [];
-    const bracketTags = allGrantBracketTags;
-    const desc = (s?.active_skill?.description || '') + ' ' + (g.description || g.support_text || '');
-    const bracket = desc.match(/\[[^\]]+\]/g) || [];
-    const descTags = [];
-    bracket.forEach(b => {
-      const inner = b.slice(1,-1);
-      const token = inner.split('|')[0];
-      const clean = normalizeTag(token);
-      if (clean && !descTags.includes(clean)) descTags.push(clean);
-    });
-    g.bracket_tags = bracketTags;
-    const mergedTags = Array.from(new Set([...baseTags, ...skillTypes, ...descTags, ...bracketTags].filter(Boolean)));
-
-	if(grantName){
-      g.grant_display = grantName;
-      g.grant_description = grantDesc || '';
-    }
-
-    return {
-      ...g,
-      description,
-      req_text: req_line,
-      tags: mergedTags
-    };
-  }).filter(Boolean);
-
-  console.log("[Skill Enrichment]", merged.length, "enriched skill entries.");
-  return merged;
-}
-
-
 // ---------- data initialization ----------
 async function loadData() {
   try {
     const core = await loadJSON('data/core-data.json');
-    const gemsRaw = await tryLoad(['data/skill_gems.json', 'gems.json']);
-    const skillsRaw = await tryLoad(['data/skills.json']);
-    const passivesEnriched = await tryLoad(['data/enriched/passives_enriched.json']);
+
+    // Pre-enriched passives (unchanged)
+    const passivesEnriched = await tryLoad('data/enriched/passives_enriched.json');
     if (!passivesEnriched || !passivesEnriched.nodes) {
       console.warn('[loadData] Passive data missing or incomplete');
     }
     const passiveIndex = buildPassiveIndex(passivesEnriched);
-    const enr = enrichGems(gemsRaw, skillsRaw);
-    console.log(`[Skill Enrichment] ${enr.length} enriched skill entries.`);
+
+    // Pre-enriched skill gems (no more runtime enrichment)
+    const gemsEnriched = await tryLoad('data/enriched/skills_enriched.json');
+    const gems = Array.isArray(gemsEnriched) ? gemsEnriched : [];
+    if (!Array.isArray(gemsEnriched)) {
+      console.warn('[loadData] Enriched skills data missing or not an array, defaulting to empty list.');
+    }
+    console.log(`[Skill Enrichment] ${gems.length} enriched skill entries (precomputed).`);
 
     window.DATA = {
       ...core,
-      gems: enr,
-      skills: skillsRaw,
-      skill_gems: gemsRaw,
+      gems,
       passivesEnriched,
       passiveIndex
     };
     console.log("[Global DATA initialized]", window.DATA);
 
-    return { core, gems: enr, passivesEnriched, passiveIndex };
+    return { core, gems, passivesEnriched, passiveIndex };
   } catch (err) {
     console.error("[loadData] Failed to load core data:", err);
     return { core: {}, gems: [] };
   }
 }
-
-function extractBracketTags(description){
-    const found = [];
-    const matches = String(description||'').match(/\[([^\]]+)\]/g) || [];
-    matches.forEach(m => {
-      const inner = m.replace(/[\[\]]/g, '');
-      inner.split('|').map(x => x.trim()).filter(Boolean).map(normalizeTag).forEach(t => {
-        if(t && !found.includes(t)) found.push(t);
-      });
-    });
-    return found;
-  }
-
 
 // === v0.7.3 TAG_IDF cache ===
 (function(){
