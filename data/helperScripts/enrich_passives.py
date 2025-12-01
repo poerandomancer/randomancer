@@ -22,7 +22,25 @@ import json
 import sys
 from pathlib import Path
 from collections import Counter
+import re
 
+TEXT_TAG_RULES = [
+    # Armour break / shattered armour
+    (re.compile(r"(?:break|broken|breaks)\s+armou?r|armou?r\s*(?:break|broken)", re.I), "armourbreak"),
+    (re.compile(r"(armou?r.*shatter|shatter.*armou?r)", re.I), "armourbreak"),
+
+    # Tempo / mobility debuffs
+    (re.compile(r"\bhinder(?:ed|ing|s)?\b|\bhindrance\b", re.I), "hinder"),
+    (re.compile(r"\bslow(?:ed|ing|s)?\b|\bslowing\b", re.I), "slow"),
+    (re.compile(r"\bmaim(?:ed|ing|s)?\b", re.I), "maim"),
+
+    # Sustain / resource
+    (re.compile(r"\blife\s+regen(eration)?\b|\bregenerat(e|es|ed|ing|ion)\b", re.I), "liferegeneration"),
+    (re.compile(r"\bleech(ed|ing|es)?\b", re.I), "leech"),
+
+    # Crit support
+    (re.compile(r"\bcrit(ical|s|ically| chance)?\b|\bcritical\s+strike\b", re.I), "crit"),
+]
 
 INPUT_PASSIVES = "../datamined/passiveskills.json"
 INPUT_STATS = "../datamined/stats.json"
@@ -233,7 +251,7 @@ def extract_stat_lines(node: dict, stat_by_rid: dict, max_lines: int):
     return lines, raw_stats
 
 
-def derive_tags(raw_stats):
+def derive_tags(raw_stats, lines=None):
     tags = set()
 
     for s in raw_stats:
@@ -308,6 +326,8 @@ def derive_tags(raw_stats):
             tags.add("Mines")
         if "slam" in stat_id:
             tags.add("Slam")
+
+        # Weapon hints
         if "bow_" in stat_id:
             tags.add("Bow")
         if "staff_" in stat_id:
@@ -329,7 +349,30 @@ def derive_tags(raw_stats):
         if "leech" in stat_id:
             tags.add("Leech")
 
+        # NEW: debuff / tempo / armour-break-y stats from IDs
+        if "armour_break" in stat_id:
+            tags.add("armourbreak")
+        if "slow" in stat_id:
+            tags.add("slow")
+        if "hinder" in stat_id:
+            tags.add("hinder")
+        if "maim" in stat_id:
+            tags.add("maim")
+        if "culling_strike" in stat_id:
+            tags.add("cullingstrike")
+        if "heavy_stun" in stat_id or "heavystun" in stat_id:
+            tags.add("heavystun")
+
+    # Text-based hints from the already-formatted lines
+    if lines:
+        txt = "\n".join(lines)
+        txt_lower = txt.lower()
+        for rx, tag in TEXT_TAG_RULES:
+            if rx.search(txt_lower):
+                tags.add(tag)
+
     return sorted(tags)
+
 
 
 # ---------- main ----------
@@ -363,7 +406,7 @@ def main():
         max_lines = 1 if classification["type"] == "ascendancy" else 2
 
         lines, raw_stats = extract_stat_lines(node, stat_by_rid, max_lines)
-        tags = derive_tags(raw_stats)
+        tags = derive_tags(raw_stats, lines)
 
         enriched_nodes.append(
             {
