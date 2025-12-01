@@ -395,8 +395,7 @@
       ],
       "attributes": {
         "strength": 0.5,
-        "dexterity": 0.25,
-        "intelligence": 0.25
+        "dexterity": 0.5
       }
     },
     {
@@ -507,26 +506,10 @@
       }
     },
     {
-      "name": "Elemental Infusions",
-      "tags": [
-        "infusions",
-        "infusion",
-        "elemental infusion",
-        "elemental infusions"
-      ],
-      "attributes": {
-        "strength": 0.25,
-        "dexterity": 0.25,
-        "intelligence": 0.5
-      }
-    },
-    {
-      "name": "Chaos Damage Over Time",
+      "name": "Chaos Damage",
       "tags": [
         "chaos",
-        "chaos damage",
-        "chaos dot",
-        "chaos damage over time"
+        "chaos damage"
       ],
       "attributes": {
         "strength": 0.25,

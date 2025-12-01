@@ -157,10 +157,7 @@ function initSectionLocks(){
       attr: snap.attributes || { strength:0, dexterity:0, intelligence:0 },
       rs: Array.isArray(snap.recommendedSkills) ? snap.recommendedSkills : [],
       pb: snap.recommendedPersistentBuff || null,
-      u: Array.isArray(snap.recommendedUniques) ? snap.recommendedUniques : [],
-      ss: typeof snap.synergyScore === 'number' ? snap.synergyScore : 0,
-      cs: snap.cohesionStatus || 'ok',
-      cm: snap.cohesionModeName || resolveCohesionMode(snap.cohesionMode ?? 1)
+      u: Array.isArray(snap.recommendedUniques) ? snap.recommendedUniques : []
     };
     return safeBtoa(JSON.stringify(compact));
   }
@@ -192,10 +189,7 @@ function initSectionLocks(){
         attributes: raw.attr || { strength:0, dexterity:0, intelligence:0 },
         recommendedSkills: raw.rs || [],
         recommendedPersistentBuff: raw.pb || null,
-        recommendedUniques: raw.u || [],
-        synergyScore: typeof raw.ss === 'number' ? raw.ss : 0,
-        cohesionStatus: raw.cs || 'ok',
-        cohesionModeName: raw.cm || resolveCohesionMode(raw.cohesionMode)
+        recommendedUniques: raw.u || []
       };
     } catch (e) {
       console.warn('[build code] decode failed', e);
@@ -366,59 +360,24 @@ function initSectionLocks(){
     return (collection || []).find(item => item?.name === name) || null;
   }
 
-  function computeSynergyFromSnapshot(snap){
-    try {
-      const data = window.DATA || {};
-      const cls = data.Classes?.[snap.className] || {};
-      const baseAttrs = cls.attributes || {};
-      const weapons = data.Weapons || {};
-      const weaponPool = [].concat(weapons['Two-Handed'] || [], weapons['One-Handed'] || []);
-      const offhands = weapons['Off-Hand'] || [];
-      const defenses = data.Defense || [];
-      const defStrats = data.DefensiveStrategies || [];
-      const ailments = data.Ailments || [];
-      const tactics = data.Tactics || [];
-
-      const weapon = lookupByName(weaponPool, snap.weapon);
-      const offhand = lookupByName(offhands, snap.offhand);
-      const defense = lookupByName(defenses, snap.defense);
-      const defStrat = lookupByName(defStrats, snap.defStrat);
-      const ailmentSet = (snap.ailmentList || []).map(n => lookupByName(ailments, n)).filter(Boolean);
-      const tacticSet = (snap.tacticList || []).map(n => lookupByName(tactics, n)).filter(Boolean);
-
-      return computeSynergyScore(baseAttrs, { weapon, offhand, defense, defStrat, ailments: ailmentSet, tactics: tacticSet });
-    } catch (e) {
-      console.warn('[snapshot] failed to compute synergy score', e);
-      return 0;
-    }
-  }
-
   async function applyBuildCode(code){
-    const snap = decodeSnapshot(code);
-    if (!snap) return false;
-    await ensureDataPreload();
-    showAppShell();
+  const snap = decodeSnapshot(code);
+  if (!snap) return false;
+  await ensureDataPreload();
+  showAppShell();
 
-    const synergyScore = typeof snap.synergyScore === 'number'
-      ? snap.synergyScore
-      : computeSynergyFromSnapshot(snap);
-    const modeName = snap.cohesionModeName || resolveCohesionMode(snap.cohesionMode ?? window.App?.state?.cohesionMode ?? currentMode);
-    const cohesionStatus = snap.cohesionStatus || 'ok';
-    const rollPayload = { ...snap, synergyScore, cohesionStatus, cohesionModeName: modeName };
+  // No build-level synergy / cohesion status needed anymore
+  const rollPayload = { ...snap };
 
-    if (window.App?.mergeCurrentRoll) {
-      window.App.mergeCurrentRoll(rollPayload);
-    }
-
-    renderSnapshotToDom(rollPayload);
-    if (window.App?.state) {
-      refreshCohesionUI({ ...window.App.state, synergyScore, cohesionStatus, cohesionModeName: modeName });
-    } else {
-      refreshCohesionUI({ synergyScore, cohesionStatus, cohesionModeName: modeName });
-    }
-    updateCodeUI(code);
-    return true;
+  if (window.App?.mergeCurrentRoll) {
+    window.App.mergeCurrentRoll(rollPayload);
   }
+
+  renderSnapshotToDom(rollPayload);
+  updateCodeUI(code);
+  return true;
+}
+
 
   function loadSaved(){
     try {
@@ -574,7 +533,7 @@ function initSectionLocks(){
 })();
 
 // App metadata
-const APP_VERSION = '0.8.2_data_refactor';
+const APP_VERSION = '0.8.2_cohesion_refactor';
 
 window.RANDOMANCER = window.RANDOMANCER || {};
 window.RANDOMANCER.version = APP_VERSION;
@@ -725,8 +684,6 @@ const App = window.App = (() => {
     // 0=strict,1=cohesive,2=chaotic,3=madness
     cohesionMode: 1,
     cohesionModeName: 'cohesive',
-    synergyScore: 0,
-    cohesionStatus: 'ok',
 
     // canonical current roll snapshot
     currentRoll: {
@@ -753,8 +710,6 @@ const App = window.App = (() => {
       recommendedPersistentBuff: null,
       recommendedUniques: [],
       tagProfile: null,
-      synergyScore: 0,
-      cohesionStatus: 'ok',
       snapshotVersion: 1
     },
 
@@ -855,29 +810,22 @@ const App = window.App = (() => {
   }
 
   function mergeCurrentRoll(partial){
-    try {
-      state.currentRoll = { ...state.currentRoll, ...partial };
-      if (typeof partial?.synergyScore === 'number') {
-        state.synergyScore = partial.synergyScore;
-      } else if (typeof state.currentRoll.synergyScore === 'number') {
-        state.synergyScore = state.currentRoll.synergyScore;
-      }
-      if (partial?.cohesionStatus) {
-        state.cohesionStatus = partial.cohesionStatus;
-      } else if (state.currentRoll.cohesionStatus) {
-        state.cohesionStatus = state.currentRoll.cohesionStatus;
-      }
-      if (partial?.cohesionModeName) {
-        state.cohesionModeName = partial.cohesionModeName;
-      }
-      if (typeof window !== 'undefined') {
-        window.__LAST_ROLL_META = { ...state.currentRoll };
-      }
-      return state.currentRoll;
-    } catch (e) {
-      return state.currentRoll;
-    }
-  }
+	  try {
+		state.currentRoll = { ...state.currentRoll, ...partial };
+	
+		if (partial?.cohesionModeName) {
+		  state.cohesionModeName = partial.cohesionModeName;
+		}
+	
+		if (typeof window !== 'undefined') {
+		  window.__LAST_ROLL_META = { ...state.currentRoll };
+		}
+		return state.currentRoll;
+	  } catch (e) {
+		return state.currentRoll;
+	  }
+	}
+
 
   function captureCurrentRollFromDOM(){
     try{
@@ -1178,7 +1126,21 @@ function renderPassiveRow(rowEl, nodes, type, buildTagSet) {
       const wrapper = document.createElement('div');
       wrapper.className = `passive-node passive-node--${type}`;
 
-      const iconSrc = resolvePassiveIcon(node?.icon);
+	let iconSrc;
+	if (type === 'ascendancy') {
+		// Placeholder for all ascendancy notables
+		iconSrc = 'images/ascendancy.png';
+	} else if (type === 'notable') {
+		// Placeholder for all regular notables
+		iconSrc = 'images/plusattribute.png';
+	} else if (type === 'keystone') {
+		// Placeholder for all keystone notables
+		iconSrc = 'images/plusattribute.png';
+	} else {
+		// Keystones (or any other types) still use the generic resolver
+		iconSrc = resolvePassiveIcon(node?.icon);
+	}
+
       const name = node?.name || 'Unknown Passive';
       const lines = Array.isArray(node?.lines) ? node.lines.filter(Boolean) : [];
       const tags = Array.isArray(node?.tags) ? node.tags.filter(Boolean) : [];
@@ -1267,13 +1229,7 @@ function renderPassiveRecommendations(currentRoll, dataWrap) {
 
 
 // ---------- cohesion + selection ----------
-const COHESION_MODES = { strict:0.75, cohesive:0.5, chaotic:0.25, madness:0.0 };
-const COHESION_EXPECTATIONS = {
-  strict:   { min: 70 },
-  cohesive: { min: 50 },
-  chaotic:  { min: 0 },
-  madness:  { min: 0 },
-};
+const COHESION_MODES = { strict:0.85, cohesive:0.65, chaotic:0.35, madness:0.0 };
 let currentMode='cohesive';
 
 function resolveCohesionMode(mode){
@@ -1300,58 +1256,6 @@ function normalizeAttributesForSynergy(attrs){
   const total = S + D + I;
   if (!total) return { strength: 0, dexterity: 0, intelligence: 0 };
   return { strength: S / total, dexterity: D / total, intelligence: I / total };
-}
-
-function computeSynergyScore(baseAttrs, picks){
-  const base = normalizeAttributesForSynergy(baseAttrs || {});
-  const pools = [];
-  const pushAttr = (src) => {
-    if (!src) return;
-    const attrs = src.attributes || src;
-    pools.push(normalizeAttributesForSynergy(attrs));
-  };
-
-  pushAttr(picks?.weapon);
-  pushAttr(picks?.offhand);
-  pushAttr(picks?.defense);
-  pushAttr(picks?.defStrat);
-  (picks?.ailments || []).forEach(pushAttr);
-  (picks?.tactics || []).forEach(pushAttr);
-
-  const scores = pools
-    .map(p => attributeCohesion(base, p))
-    .filter(n => Number.isFinite(n));
-  const avg = scores.length ? scores.reduce((s, n) => s + n, 0) / scores.length : 0;
-  const clamped = Math.max(0, Math.min(1, avg));
-  return Math.round(clamped * 100);
-}
-
-function evaluateCohesionStatus(buildState){
-  if (!buildState) return 'ok';
-
-  const modeName = resolveCohesionMode(
-    buildState.cohesionModeName ?? buildState.cohesionMode ?? currentMode
-  );
-  const score = typeof buildState.synergyScore === 'number'
-    ? buildState.synergyScore
-    : typeof buildState.currentRoll?.synergyScore === 'number'
-      ? buildState.currentRoll.synergyScore
-      : 0;
-  const expectation = COHESION_EXPECTATIONS[modeName] || { min: 0 };
-  const shouldWarn = (modeName === 'strict' || modeName === 'cohesive')
-    && typeof expectation.min === 'number'
-    && score < expectation.min;
-
-  const status = shouldWarn ? 'constrained' : 'ok';
-  buildState.cohesionStatus = status;
-  buildState.synergyScore = score;
-  buildState.cohesionModeName = modeName;
-  if (buildState.currentRoll) {
-    buildState.currentRoll.cohesionStatus = status;
-    buildState.currentRoll.synergyScore = score;
-    buildState.currentRoll.cohesionModeName = modeName;
-  }
-  return status;
 }
 
 /**
@@ -1440,45 +1344,6 @@ function buildBuildContextFromSnapshot(snap){
     attributes,
     cohesionMode
   };
-}
-
-function renderCohesionStatus(buildState){
-  const el = document.querySelector('.cohesion-status');
-  if (!el) return;
-
-  const status = buildState?.cohesionStatus || 'ok';
-  const modeName = resolveCohesionMode(buildState?.cohesionModeName ?? buildState?.cohesionMode ?? currentMode);
-  const score = Math.round(buildState?.synergyScore || 0);
-  el.dataset.status = status;
-
-  if (status !== 'constrained' || (modeName !== 'strict' && modeName !== 'cohesive')) {
-    el.textContent = '';
-    return;
-  }
-
-  if (modeName === 'strict') {
-    el.textContent = `⚠ Strict cohesion constrained by your current locks — best achieved: ${score}%.`;
-  } else if (modeName === 'cohesive') {
-    el.textContent = `⚠ Cohesive mode is limited by your current build locks — current synergy: ${score}%.`;
-  } else {
-    el.textContent = '';
-  }
-}
-
-function updateCohesionBarDecoration(buildState){
-  const wrapper = document.querySelector('.cohesion-bar-wrapper');
-  if (!wrapper) return;
-  const status = buildState?.cohesionStatus || 'ok';
-  const modeName = resolveCohesionMode(buildState?.cohesionModeName ?? buildState?.cohesionMode ?? currentMode);
-  const constrained = (modeName === 'strict' || modeName === 'cohesive') && status === 'constrained';
-  wrapper.dataset.cohesionConstrained = constrained ? 'true' : 'false';
-}
-
-function refreshCohesionUI(buildState){
-  if (!buildState) return;
-  evaluateCohesionStatus(buildState);
-  renderCohesionStatus(buildState);
-  updateCohesionBarDecoration(buildState);
 }
 
 const validOffhands={"One-handed Mace":["One-handed Mace","Shield","Buckler","Focus","Sceptre"],"Spear":["Shield","Buckler","Focus","Sceptre"],"Wand":["Shield","Buckler","Focus","Sceptre"],"Sceptre":["Shield","Buckler","Focus","Wand"]};
@@ -1812,14 +1677,19 @@ function pickTwoDiverse(sorted, lambda=0.7){
   return [first.item, sorted[idx1].item];
 }
 
-// map cohesion mode to alpha/beta/noise
+// Fixed, mode-agnostic scoring knobs for recommendations.
+// These values are a balanced default:
+// - alpha: weight on tag/profile synergy
+// - beta:  weight on attribute alignment
+// - noise: 0 => deterministic recommendations for a given roll.
 function synergyTunings(){
-  const m = (typeof currentMode!=='undefined'? currentMode : 'cohesive');
-  if(m==='strict') return {alpha:1.15, beta:0.45, noise:0.00};
-  if(m==='cohesive') return {alpha:1.00, beta:0.35, noise:0.02};
-  if(m==='chaotic') return {alpha:0.80, beta:0.25, noise:0.05};
-  return {alpha:0.60, beta:0.15, noise:0.08}; // madness
+  return {
+    alpha: 1.0,
+    beta:  0.4,
+    noise: 0.0
+  };
 }
+
 // ---------- support gems renderer ----------
 function renderSupportCards(supportEntries, gemDict){
   const items=[];
@@ -2141,10 +2011,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
                 if (window.App && typeof window.App.setCohesion === 'function') {
                   window.App.setCohesion(idx);
                 }
-
-                if (window.App && window.App.state) {
-                  refreshCohesionUI(window.App.state);
-                }
           });
         }
 
@@ -2280,22 +2146,102 @@ function rollBuild(dataWrap){
   });
 }
 
-// Ailments/Tactics roll (with duplicate prevention)
-  let ailmentSet=[], tacticSet=[]; const r=Math.random();
-  const mechanicsLocked = locks.mechanics && ((current.ailmentList && current.ailmentList.length) || (current.tacticList && current.tacticList.length));
-  if (mechanicsLocked){
-    ailmentSet = (current.ailmentList || []).map(n => findByName(data.Ailments, n)).filter(Boolean);
-    tacticSet = (current.tacticList || []).map(n => findByName(data.Tactics, n)).filter(Boolean);
-  }
-  if(!mechanicsLocked || (!ailmentSet.length && !tacticSet.length)){
-    if(r<0.6){ ailmentSet=[data.Ailments[Math.floor(Math.random()*data.Ailments.length)]]; tacticSet=[filterTacticsByStrictRules(data.Tactics, weapon, offhand)[Math.floor(Math.random()*filterTacticsByStrictRules(data.Tactics, weapon, offhand).length)]]; }
-    else if(r<0.8){ const a1=data.Ailments[Math.floor(Math.random()*data.Ailments.length)], a2=data.Ailments.filter(x=>x.name!==a1.name)[Math.floor(Math.random()*(data.Ailments.length-1))]; ailmentSet=[a1,a2]; }
-    else { const _pool=filterTacticsByStrictRules(data.Tactics, weapon, offhand); const t1=_pool[Math.floor(Math.random()*_pool.length)]; const t2=_pool.filter(x=>x.name!==t1.name)[Math.floor(Math.random()*Math.max(1,_pool.length-1))]; tacticSet=[t1,t2]; }
+// Ailments/Tactics roll (with duplicate prevention + cohesion bias)
+  let ailmentSet = [];
+  let tacticSet  = [];
+  const r = Math.random();
+
+  const mechanicsLocked =
+    locks.mechanics &&
+    ((current.ailmentList && current.ailmentList.length) ||
+     (current.tacticList && current.tacticList.length));
+
+  if (mechanicsLocked) {
+    // Respect existing locked mechanics
+    ailmentSet = (current.ailmentList || [])
+      .map(n => findByName(data.Ailments, n))
+      .filter(Boolean);
+    tacticSet = (current.tacticList || [])
+      .map(n => findByName(data.Tactics, n))
+      .filter(Boolean);
   }
 
-  document.getElementById('ailments')?.replaceChildren(document.createTextNode((ailmentSet.filter(Boolean).map(a=>a.name).join(' & ')||'')));
-  document.getElementById('tactics')?.replaceChildren(document.createTextNode((tacticSet.filter(Boolean).map(t=>t.name).join(' & ')||'')));
+  // If not locked, or locked values failed to resolve, roll fresh
+  if (!mechanicsLocked || (!ailmentSet.length && !tacticSet.length)) {
+    const thLocal = th; // same threshold as weapons/defense: COHESION_MODES[currentMode]
+
+    const pickAilmentFrom = (pool, excludeNames = []) => {
+      const filtered = pool.filter(a => a && !excludeNames.includes(a.name));
+      if (!filtered.length) return null;
+      // Cohesion-biased pick, with fallback to random within the valid pool
+      return (
+        pickByCohesion(filtered, base, thLocal) ||
+        filtered[Math.floor(Math.random() * filtered.length)]
+      );
+    };
+
+    const pickTacticFrom = (pool, excludeNames = []) => {
+      const filtered = pool.filter(t => t && !excludeNames.includes(t.name));
+      if (!filtered.length) return null;
+      return (
+        pickByCohesion(filtered, base, thLocal) ||
+        filtered[Math.floor(Math.random() * filtered.length)]
+      );
+    };
+
+    // Decide which pattern to use:
+    //  - r < 0.6  => 1 ailment + 1 tactic
+    //  - 0.6-0.8  => 2 ailments
+    //  - 0.8-1.0  => 2 tactics
+    if (r < 0.6) {
+      // 1 ailment + 1 tactic
+      const a1 = pickAilmentFrom(data.Ailments);
+      const tacticPool = filterTacticsByStrictRules(data.Tactics, weapon, offhand);
+      const t1 = pickTacticFrom(tacticPool);
+
+      ailmentSet = a1 ? [a1] : [];
+      tacticSet  = t1 ? [t1] : [];
+
+    } else if (r < 0.8) {
+      // 2 ailments (no duplicates)
+      const a1 = pickAilmentFrom(data.Ailments);
+      const a2 = a1
+        ? pickAilmentFrom(data.Ailments, [a1.name])
+        : pickAilmentFrom(data.Ailments);
+
+      ailmentSet = [a1, a2].filter(Boolean);
+      tacticSet  = [];
+
+    } else {
+      // 2 tactics (no duplicates, strict rules apply)
+      const tacticPool = filterTacticsByStrictRules(data.Tactics, weapon, offhand);
+      const t1 = pickTacticFrom(tacticPool);
+      const t2 = t1
+        ? pickTacticFrom(tacticPool, [t1.name])
+        : pickTacticFrom(tacticPool);
+
+      tacticSet  = [t1, t2].filter(Boolean);
+      ailmentSet = [];
+    }
+  }
+
+  document.getElementById('ailments')
+    ?.replaceChildren(
+      document.createTextNode(
+        ailmentSet.filter(Boolean).map(a => a.name).join(' & ') || ''
+      )
+    );
+
+  document.getElementById('tactics')
+    ?.replaceChildren(
+      document.createTextNode(
+        tacticSet.filter(Boolean).map(t => t.name).join(' & ') || ''
+      )
+    );
+
   updateAilmentOverlay(ailmentSet.filter(Boolean));
+
+
 
   // Balance aggregation
   const add=(a,b)=>({strength:(a.strength||0)+(b.strength||0), dexterity:(a.dexterity||0)+(b.dexterity||0), intelligence:(a.intelligence||0)+(b.intelligence||0)});
@@ -2318,15 +2264,6 @@ function rollBuild(dataWrap){
   const buildFlavor = generateFlavorLine(clsName, asc);
   document.getElementById('build-name').textContent = buildName;
   document.getElementById('build-subtext').textContent = buildFlavor;
-
-  const synergyScore = computeSynergyScore(base, {
-    weapon,
-    offhand,
-    defense: pickedDefense,
-    defStrat: pickedDefStrat,
-    ailments: ailmentSet.filter(Boolean),
-    tactics: tacticSet.filter(Boolean)
-  });
   const cohesionModeName = resolveCohesionMode(window.App?.state?.cohesionMode ?? currentMode);
 
   const baseSnapshot = {
@@ -2351,7 +2288,6 @@ function rollBuild(dataWrap){
     attributes: { strength: S, dexterity: D, intelligence: I },
     rollAttr: { strength: S, dexterity: D, intelligence: I },
     defenseObj: pickedDefense || null,
-    synergyScore,
     cohesionStatus: 'ok',
     cohesionModeName
   };
@@ -2376,7 +2312,6 @@ function rollBuild(dataWrap){
           offhand: offhand?.name || '',
           rollAttr: { strength: S, dexterity: D, intelligence: I },
           tagProfile: null,
-          synergyScore,
           cohesionModeName
         };
 
@@ -2424,12 +2359,6 @@ function rollBuild(dataWrap){
     }
   } catch (e) {
     console.warn('[Randomancer] uniques refresh failed', e);
-  }
-
-  if (window.App && window.App.state) {
-    refreshCohesionUI(window.App.state);
-  } else {
-    refreshCohesionUI({ cohesionModeName, synergyScore, cohesionStatus: 'ok' });
   }
 
   syncLockUIFromState();
