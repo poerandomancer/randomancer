@@ -82,12 +82,23 @@
     <main>
     
       <div class="cohesion-slider cohesion-bar-wrapper" data-cohesion-constrained="false">
-        <div class="mode-labels">
-          <span>Strict</span><span>Cohesive</span><span>Chaotic</span><span>Madness</span>
-        </div>
-        <input type="range" id="cohesionRange" min="0" max="3" step="1" value="1">
-        <div class="cohesion-status" data-status="ok" aria-live="polite"></div>
-      </div>
+		  <div class="mode-labels">
+			<span>Strict</span><span>Cohesive</span><span>Chaotic</span><span>Madness</span>
+		  </div>
+		  <!-- Continuous slider: 0–100 mapped to threshold 1.00 → 0.00 -->
+		  <input
+			type="range"
+			id="cohesionRange"
+			min="0"
+			max="100"
+			step="1"
+			value="35"
+			aria-label="Cohesion threshold"
+		  >
+		  <!-- Live hint, dark-gold glow -->
+		  <div class="cohesion-status" data-status="hint" aria-live="polite"></div>
+		</div>
+
       <section class="panel">
         <div class="panel-actions">
           <button id="save-build" class="icon-btn" type="button" aria-label="Save Build" title="Save Build">☆</button>
