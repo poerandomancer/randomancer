@@ -533,7 +533,7 @@ function initSectionLocks(){
 })();
 
 // App metadata
-const APP_VERSION = '0.8.2_cohesion_refactor';
+const APP_VERSION = '0.8.2_passives_display';
 
 window.RANDOMANCER = window.RANDOMANCER || {};
 window.RANDOMANCER.version = APP_VERSION;
@@ -1083,153 +1083,211 @@ function resolvePassiveIcon(iconPath) {
   return `images/passives/${base}.png`;
 }
 
-function renderPassiveRow(rowEl, nodes, type, buildTagSet) {
-  if (!rowEl) return;
-  const group = rowEl.closest('.passives-group');
-  rowEl.innerHTML = '';
+// ---------- Recommended passives: unified constellation layout + tooltips ----------
+let passiveTooltipHandlerInstalled = false;
 
-  if (!nodes || !nodes.length) {
-    group?.classList.add('is-empty', 'hidden');
-    return;
-  }
+function installPassiveTooltipHandler() {
+  if (passiveTooltipHandlerInstalled) return;
+  passiveTooltipHandlerInstalled = true;
 
-  group?.classList.remove('is-empty', 'hidden');
-
-  const pool = Array.isArray(nodes) ? nodes.slice() : [];
-  const rows = [];
-  const plans = {
-    ascendancy: [2],
-    keystone: [2],
-    notable: [3, 2, 3],
-  };
-  const plan = plans[type] || [3];
-
-  plan.forEach((take) => {
-    if (!pool.length) return;
-    const slice = pool.splice(0, Math.min(take, pool.length));
-    if (slice.length) rows.push(slice);
-  });
-
-  while (pool.length) {
-    const take = Math.min(3, pool.length);
-    if (take === 1 && rows.length) {
-      rows[rows.length - 1].push(pool.shift());
-      continue;
+  document.addEventListener('click', (evt) => {
+    const panel = document.getElementById('passives-panel');
+    if (!panel) return;
+    const target = evt.target;
+    if (panel.contains(target)) {
+      // Let per-node handlers deal with toggling when we click inside the panel
+      return;
     }
-    rows.push(pool.splice(0, take));
+    panel.querySelectorAll('.passive-node.is-active').forEach((nodeEl) => {
+      nodeEl.classList.remove('is-active');
+    });
+  });
+}
+
+function createPassiveNodeElement(node, type, buildTagSet) {
+  const wrapper = document.createElement('div');
+  wrapper.className = `passive-node passive-node--${type}`;
+
+  let iconSrc;
+  if (type === 'ascendancy') {
+    // Placeholder for all ascendancy notables
+    iconSrc = 'images/ascendancy.png';
+  } else if (type === 'notable') {
+    // Placeholder for all regular notables
+    iconSrc = 'images/plusattribute.png';
+  } else if (type === 'keystone') {
+    // Placeholder for all keystone nodes (until bespoke art exists)
+    iconSrc = 'images/plusattribute.png';
+  } else {
+    // Fallback to the generic resolver
+    iconSrc = resolvePassiveIcon(node?.icon);
   }
 
-  rows.forEach((rowSet) => {
-    const rowLine = document.createElement('div');
-    rowLine.className = 'passives-row-line';
-    rowSet.forEach((node, index) => {
-      const wrapper = document.createElement('div');
-      wrapper.className = `passive-node passive-node--${type}`;
+  const name = node?.name || 'Unknown Passive';
+  const lines = Array.isArray(node?.lines) ? node.lines.filter(Boolean) : [];
+  const tags = Array.isArray(node?.tags) ? node.tags.filter(Boolean) : [];
 
-	let iconSrc;
-	if (type === 'ascendancy') {
-		// Placeholder for all ascendancy notables
-		iconSrc = 'images/ascendancy.png';
-	} else if (type === 'notable') {
-		// Placeholder for all regular notables
-		iconSrc = 'images/plusattribute.png';
-	} else if (type === 'keystone') {
-		// Placeholder for all keystone notables
-		iconSrc = 'images/plusattribute.png';
-	} else {
-		// Keystones (or any other types) still use the generic resolver
-		iconSrc = resolvePassiveIcon(node?.icon);
-	}
+  const typeLabel =
+    type === 'ascendancy'
+      ? 'Ascendancy'
+      : type === 'keystone'
+        ? 'Keystone'
+        : 'Notable';
 
-      const name = node?.name || 'Unknown Passive';
-      const lines = Array.isArray(node?.lines) ? node.lines.filter(Boolean) : [];
-      const tags = Array.isArray(node?.tags) ? node.tags.filter(Boolean) : [];
-      const linesHtml = lines.length
-        ? `<div class="passive-node__lines">${lines.map(l => escapeHtml(l)).join('<br>')}</div>`
-        : '';
-      const tagsHtml = tags.length
-        ? `<div class="passive-node__tags">${tags
-            .map((t) => {
-              const norm = normTagPlus(t);
-              const matched = buildTagSet?.has(norm);
-              return `<span class="passive-tag${matched ? ' is-match' : ''}">${escapeHtml(t)}</span>`;
-            })
-            .join('')}</div>`
-        : '';
+  const linesHtml = lines.length
+    ? `<div class="passive-node__lines">${lines.map((l) => escapeHtml(l)).join('<br>')}</div>`
+    : '';
 
-      wrapper.innerHTML = `
-        <div class="passive-node__orb">
-          <div class="passive-node__orb-inner">
-            <img class="passive-node__icon" src="${iconSrc}" alt="${escapeHtml(name)}">
+  const tagsHtml = tags.length
+    ? `<div class="passive-node__tags">${tags
+        .map((t) => {
+          const norm = normTagPlus(t);
+          const matched = buildTagSet?.has(norm);
+          return `<span class="passive-tag${matched ? ' is-match' : ''}">${escapeHtml(t)}</span>`;
+        })
+        .join('')}</div>`
+    : '';
+
+  wrapper.innerHTML = `
+    <div class="passive-node__orb">
+      <div class="passive-node__orb-inner">
+        <img class="passive-node__icon" src="${iconSrc}" alt="${escapeHtml(name)}">
+      </div>
+    </div>
+    <div class="passive-node__label">
+      <div class="passive-node__name">${escapeHtml(name)}</div>
+    </div>
+    <div class="passive-node__tooltip" data-passive-type="${type}">
+      <div class="passive-tooltip passive-tooltip--${type}">
+        <div class="passive-tooltip__header">
+          <div class="passive-tooltip__name">${escapeHtml(name)}</div>
+          <div class="passive-tooltip__stamp passive-tooltip__stamp--${type}">
+            <span>${typeLabel}</span>
           </div>
         </div>
-        <div class="passive-node__text">
-          <div class="passive-node__name">${escapeHtml(name)}</div>
-          ${linesHtml}
-          ${tagsHtml}
-        </div>
-      `;
+        ${linesHtml}
+        ${tagsHtml}
+      </div>
+    </div>
+  `;
 
-      const img = wrapper.querySelector('.passive-node__icon');
-      if (img) {
-        img.addEventListener('error', () => {
-          img.src = 'images/dice.png';
-        }, { once: true });
-      }
+  const img = wrapper.querySelector('.passive-node__icon');
+  if (img) {
+    img.addEventListener(
+      'error',
+      () => {
+        img.src = 'images/dice.png';
+      },
+      { once: true }
+    );
+  }
 
-      rowLine.appendChild(wrapper);
-
-      if (index < rowSet.length - 1) {
-        const link = document.createElement('div');
-        link.className = 'passive-link';
-        rowLine.appendChild(link);
-      }
+  // Mobile / click interaction: tap to lock / unlock tooltip
+  wrapper.addEventListener('click', (evt) => {
+    evt.stopPropagation();
+    const panel = document.getElementById('passives-panel');
+    if (!panel) return;
+    const alreadyActive = wrapper.classList.contains('is-active');
+    panel.querySelectorAll('.passive-node.is-active').forEach((nodeEl) => {
+      nodeEl.classList.remove('is-active');
     });
-
-    rowEl.appendChild(rowLine);
+    if (!alreadyActive) {
+      wrapper.classList.add('is-active');
+    }
   });
+
+  return wrapper;
 }
 
 function renderPassiveRecommendations(currentRoll, dataWrap) {
   const panel = document.getElementById('passives-panel');
-  const ascRow = document.querySelector('.passives-row--ascendancy');
-  const keyRow = document.querySelector('.passives-row--keystones');
-  const noteRow = document.querySelector('.passives-row--notables');
+  const grid = document.getElementById('passives-grid');
 
   const hideAll = () => {
-    [ascRow, keyRow, noteRow].forEach(row => { if (row) row.innerHTML = ''; });
-    document.querySelectorAll('.passives-group').forEach(g => g.classList.add('hidden', 'is-empty'));
+    if (grid) grid.innerHTML = '';
     if (panel) panel.classList.add('hidden');
   };
 
-  const passivesData = dataWrap?.passivesEnriched || (window.DATA && window.DATA.passivesEnriched);
+  const passivesData =
+    dataWrap?.passivesEnriched || (window.DATA && window.DATA.passivesEnriched);
   const hasPassiveData = passivesData && Array.isArray(passivesData.nodes);
-  if (!panel || !hasPassiveData || !currentRoll || !currentRoll.passives) {
+  if (!panel || !grid || !hasPassiveData || !currentRoll || !currentRoll.passives) {
     hideAll();
     return;
   }
 
-  panel.classList.remove('hidden');
-  const passives = currentRoll.passives || {};
   const ctx = buildBuildContext(currentRoll);
   const buildTagSet = new Set();
   (ctx?.tags || []).forEach((t) => buildTagSet.add(normTagPlus(t)));
   (ctx?.defenseTags || []).forEach((t) => buildTagSet.add(normTagPlus(t)));
 
-  renderPassiveRow(ascRow, passives.ascendancyNodes || [], 'ascendancy', buildTagSet);
-  renderPassiveRow(keyRow, passives.keystones || [], 'keystone', buildTagSet);
-  renderPassiveRow(noteRow, passives.notables || [], 'notable', buildTagSet);
+  const passives = currentRoll.passives || {};
+  const ascendancyNodes = Array.isArray(passives.ascendancyNodes)
+    ? passives.ascendancyNodes.slice(0, 2)
+    : [];
 
-  const anyVisible = [ascRow, keyRow, noteRow].some(row => {
-    const g = row?.closest('.passives-group');
-    return g && !g.classList.contains('hidden');
-  });
-  if (panel) panel.classList.toggle('hidden', !anyVisible);
+  // ⛔ Keystones still exist in data, but we don't display them for now
+  const keystones = Array.isArray(passives.keystones)
+    ? passives.keystones.slice(0, 2)
+    : [];
+
+  const notables = Array.isArray(passives.notables)
+    ? passives.notables.slice(0, 8)
+    : [];
+
+  // When keystones are hidden, only check asc + notables to decide if the panel is empty
+  if (!ascendancyNodes.length && !notables.length) {
+    hideAll();
+    return;
+  }
+
+  grid.innerHTML = '';
+  panel.classList.remove('hidden');
+
+  // Inner cross: we *reserve* top/bottom slots for keystones, but just don't fill them.
+  const ascSlots = ['4 / 3', '4 / 5']; // left / right
+  const keySlots = ['3 / 4', '5 / 4']; // top / bottom (unused for now, kept for future)
+
+  // Outer star ring (notables) – unchanged
+  const noteSlots = [
+    '1 / 4', // N
+    '2 / 6', // NE
+    '4 / 7', // E
+    '6 / 6', // SE
+    '7 / 4', // S
+    '6 / 2', // SW
+    '4 / 1', // W
+    '2 / 2', // NW
+  ];
+
+  const place = (node, type, slot) => {
+    if (!node) return;
+    const el = createPassiveNodeElement(node, type, buildTagSet);
+    if (slot) el.style.gridArea = slot;
+    grid.appendChild(el);
+  };
+
+  ascendancyNodes.forEach((node, idx) =>
+    place(node, 'ascendancy', ascSlots[idx] || null)
+  );
+
+  // 🔇 Keystones intentionally not rendered:
+  // keystones.forEach((node, idx) =>
+  //   place(node, 'keystone', keySlots[idx] || null)
+  // );
+
+  notables.forEach((node, idx) =>
+    place(node, 'notable', noteSlots[idx] || null)
+  );
+
+  installPassiveTooltipHandler();
 }
 
 
+
+
 // ---------- cohesion + selection ----------
-const COHESION_MODES = { strict:0.85, cohesive:0.65, chaotic:0.35, madness:0.0 };
+const COHESION_MODES = { strict:1, cohesive:0.65, chaotic:0.35, madness:0.0 };
 let currentMode='cohesive';
 
 function resolveCohesionMode(mode){
