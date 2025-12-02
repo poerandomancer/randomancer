@@ -681,9 +681,12 @@ const App = window.App = (() => {
     SKILLS: null,
     CONFIG: null,
 
-    // 0=strict,1=cohesive,2=chaotic,3=madness
+    // Cohesion slider: continuous [0..1], but we still track the nearest preset index + name
+    // 0=strict,1=cohesive,2=chaotic,3=madness (legacy index for saved builds)
     cohesionMode: 1,
     cohesionModeName: 'cohesive',
+    cohesionThreshold: 2/3,
+
 
     // canonical current roll snapshot
     currentRoll: {
@@ -742,17 +745,36 @@ const App = window.App = (() => {
 		state.CONFIG = Config.resolve(data);
 	  }
 
-  function setCohesion(mode){
-          const n = parseInt(mode, 10);
-          // Default to 1 (cohesive) only if we get something weird/NaN
-          state.cohesionMode = Number.isNaN(n) ? 1 : n;
-          state.cohesionModeName = COHESION_MODE_NAMES[state.cohesionMode] || 'cohesive';
-          try {
-            currentMode = state.cohesionModeName;
-          } catch {
-            // ignore if currentMode is not yet initialized
-          }
-        }
+    function setCohesion(raw){
+		let threshold = Number(raw);
+	
+		// If we didn’t get a clean [0,1] number, treat it as a legacy 0–3 index
+		if (!Number.isFinite(threshold) || threshold < 0 || threshold > 1) {
+		  const idx = parseInt(raw, 10);
+		  if (!Number.isNaN(idx) &&
+			  idx >= 0 &&
+			  idx < COHESION_MODE_NAMES.length) {
+			const presetName = COHESION_MODE_NAMES[idx];
+			threshold = COHESION_MODES[presetName];
+		  } else {
+			threshold = 2/3; // fallback: cohesive
+		  }
+		}
+	
+		if (threshold < 0) threshold = 0;
+		if (threshold > 1) threshold = 1;
+	
+		const name = cohesionNameForThreshold(threshold);
+		const idx = COHESION_MODE_NAMES.indexOf(name);
+	
+		state.cohesionThreshold = threshold;
+		state.cohesionModeName = name;
+		state.cohesionMode = idx === -1 ? 1 : idx;
+	
+		cohesionThreshold = threshold;
+		currentMode = name;
+	  }
+
 
   function legacyInit(){
     try{
@@ -1287,25 +1309,139 @@ function renderPassiveRecommendations(currentRoll, dataWrap) {
 
 
 // ---------- cohesion + selection ----------
-const COHESION_MODES = { strict:1, cohesive:0.65, chaotic:0.35, madness:0.0 };
-let currentMode='cohesive';
+// Named presets still exist, but we now treat cohesion as a continuous threshold [0,1]
+const COHESION_MODES = {
+  strict: 1.0,
+  cohesive: 2/3,   // ≈0.67
+  chaotic: 1/3,    // ≈0.33
+  madness: 0.0
+};
 
+// currentMode is the *nearest* named preset; used mainly for display / metadata
+let currentMode = 'cohesive';
+
+// cohesionThreshold is the actual continuous value used by rollBuild()
+let cohesionThreshold = COHESION_MODES[currentMode];
+
+function cohesionNameForThreshold(threshold){
+  const t = Number(threshold);
+  if (!Number.isFinite(t)) return currentMode || 'cohesive';
+
+  let bestName = 'cohesive';
+  let bestDist = Infinity;
+
+  for (const name of COHESION_MODE_NAMES) {
+    const val = COHESION_MODES[name];
+    if (typeof val !== 'number') continue;
+    const dist = Math.abs(t - val);
+    if (dist < bestDist) {
+      bestDist = dist;
+      bestName = name;
+    }
+  }
+  return bestName;
+}
+
+// Slider is 0–100, with 0 = Strict (1.0) → 100 = Madness (0.0)
+function sliderValueToThreshold(v){
+  const raw = Number(v);
+  if (!Number.isFinite(raw)) return cohesionThreshold;
+  const clamped = Math.max(0, Math.min(100, raw));
+  const t = 1 - clamped / 100;
+  // snap to 0.01 steps so the number matches the UI feel
+  return Math.round(t * 100) / 100;
+}
+
+function thresholdToSliderValue(t){
+  const raw = Number(t);
+  if (!Number.isFinite(raw)) return 35; // default near cohesive
+  const clamped = Math.max(0, Math.min(1, raw));
+  return Math.round((1 - clamped) * 100);
+}
+
+// Very plain, explicit hints about what the current threshold does
+function getCohesionHint(t){
+  const v = Number(t);
+  if (!Number.isFinite(v)) return '';
+
+  if (v === 0) {
+    return 'No cohesion: fully random rolls; attributes are ignored.';
+  }
+  if (v >= 0.90) {
+    return 'Pure & near-pure builds only (very high cohesion).';
+  }
+  if (v >= 0.70) {
+    return 'Pure + aligned hybrids; off-stat options are mostly filtered out.';
+  }
+  if (v >= 0.58) {
+    return 'Hybrid & tri-split builds allowed; hard opposites still blocked.';
+  }
+  if (v >= 0.35) {
+    return 'Loose cohesion: hybrids and off-stat picks show up regularly.';
+  }
+  return 'Very loose cohesion: almost anything goes except direct opposites.';
+}
+
+// Resolve legacy numbers / names into a canonical mode name
 function resolveCohesionMode(mode){
-  if (typeof mode === 'string') return mode;
-  const idx = Number(mode);
-  if (!Number.isNaN(idx) && COHESION_MODE_NAMES[idx]) return COHESION_MODE_NAMES[idx];
+  // Already a named mode
+  if (typeof mode === 'string') {
+    if (Object.prototype.hasOwnProperty.call(COHESION_MODES, mode)) return mode;
+
+    const maybeNum = Number(mode);
+    if (!Number.isNaN(maybeNum)) {
+      return cohesionNameForThreshold(maybeNum);
+    }
+    return currentMode || 'cohesive';
+  }
+
+  // Numeric: int in [0,3] = legacy index, otherwise treat as threshold
+  if (typeof mode === 'number') {
+    if (Number.isInteger(mode) &&
+        mode >= 0 &&
+        mode < COHESION_MODE_NAMES.length) {
+      return COHESION_MODE_NAMES[mode];
+    }
+    return cohesionNameForThreshold(mode);
+  }
+
   return currentMode || 'cohesive';
 }
 
+
 function attributeCohesion(a,b){ const k=['strength','dexterity','intelligence']; const dot=k.reduce((s,x)=>s+(a[x]||0)*(b[x]||0),0); const ma=Math.sqrt(k.reduce((s,x)=>s+(a[x]||0)**2,0)); const mb=Math.sqrt(k.reduce((s,x)=>s+(b[x]||0)**2,0)); return dot/(ma*mb||1); }
 function pickByCohesion(list, base, th){
-  if(!list||!list.length) return null;
-  if(th===0) return list[Math.floor(Math.random()*list.length)];
-  const scored=list.map(x=>({x,score:attributeCohesion(base,x.attributes||{})}));
-  const filtered=scored.filter(s=>s.score>=th);
-  const pool=filtered.length?filtered:scored;
-  return pool[Math.floor(Math.random()*pool.length)].x;
+  if (!list || !list.length) return null;
+
+  // Madness: ignore attributes completely
+  if (th === 0) {
+    return list[Math.floor(Math.random() * list.length)];
+  }
+
+  // Clamp to [0,1] just in case
+  let currentTh = (typeof th === 'number') ? Math.max(0, Math.min(1, th)) : 0;
+
+  const scored = list.map(x => ({
+    x,
+    score: attributeCohesion(base, x.attributes || {})
+  }));
+
+  // First attempt using the requested threshold
+  let filtered = scored.filter(s => s.score >= currentTh);
+
+  // If nothing passes, gradually relax the threshold in 0.10 steps
+  // until we find something, or we bottom out at 0.
+  while (!filtered.length && currentTh > 0) {
+    currentTh = Math.max(0, currentTh - 0.10);
+    filtered = scored.filter(s => s.score >= currentTh);
+  }
+
+  // If we somehow still have nothing (e.g. every score was 0), fall back to everyone.
+  const pool = filtered.length ? filtered : scored;
+
+  return pool[Math.floor(Math.random() * pool.length)].x;
 }
+
 
 function normalizeAttributesForSynergy(attrs){
   const S = Number(attrs?.strength) || 0;
@@ -2058,21 +2194,57 @@ function ensureDataPreload(){
 
 // ---------- wireup ----------
 document.addEventListener('DOMContentLoaded', ()=>{
-  const slider = document.getElementById('cohesionRange');
-        if (slider) {
-          const modeMap = ['strict','cohesive','chaotic','madness'];
-          slider.addEventListener('input', e => {
-                const idx = Number(e.target.value) || 0;
-                currentMode = modeMap[idx] || 'cohesive';
+    const slider = document.getElementById('cohesionRange');
+	  const hintEl = document.querySelector('.cohesion-status');
+	
+	  const applyThreshold = (t) => {
+		// keep globals in sync
+		cohesionThreshold = t;
+		currentMode = cohesionNameForThreshold(t);
+	
+		// sync App.state
+		if (window.App && typeof window.App.setCohesion === 'function') {
+		  window.App.setCohesion(t);
+		}
+	
+		// update live hint
+		if (hintEl) {
+		  hintEl.textContent = getCohesionHint(t);
+		  hintEl.setAttribute('data-status', 'hint');
+		}
+	  };
+	
+	  if (slider) {
+		// derive initial threshold from App.state if present, else use cohesive
+		let initialThreshold = 2/3;
+		try {
+		  const st = window.App && window.App.state;
+		  if (st) {
+			if (typeof st.cohesionThreshold === 'number') {
+			  initialThreshold = st.cohesionThreshold;
+			} else if (typeof st.cohesionMode === 'number') {
+			  const legacyName =
+				COHESION_MODE_NAMES[st.cohesionMode] || st.cohesionModeName;
+			  if (legacyName && typeof COHESION_MODES[legacyName] === 'number') {
+				initialThreshold = COHESION_MODES[legacyName];
+			  }
+			}
+		  }
+		} catch (e) {
+		  // ignore and stick with cohesive
+		}
+	
+		slider.value = String(thresholdToSliderValue(initialThreshold));
+		applyThreshold(initialThreshold);
+	
+		slider.addEventListener('input', (e) => {
+		  const t = sliderValueToThreshold(e.target.value);
+		  applyThreshold(t);
+		});
+	  }
+	
+	  initSectionLocks();
 
-                // Keep App.state.cohesionMode in step with the UI slider
-                if (window.App && typeof window.App.setCohesion === 'function') {
-                  window.App.setCohesion(idx);
-                }
-          });
-        }
-
-  initSectionLocks();
 
     // Kick off preloading while the intro screen is up and hydrate App.state from it
 	  if (window.App && typeof window.App.bootstrap === 'function') {
@@ -2134,7 +2306,10 @@ function rollBuild(dataWrap){
     return;
   }
 
-  const th = COHESION_MODES[currentMode];
+    const th = (typeof cohesionThreshold === 'number')
+    ? cohesionThreshold
+    : (COHESION_MODES[currentMode] ?? COHESION_MODES.cohesive);
+
   const classes = Object.entries(data.Classes);
   const locks = getLockState();
   const current = window.App?.state?.currentRoll || {};
