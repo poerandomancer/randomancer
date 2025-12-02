@@ -673,18 +673,25 @@ border-top: 1px dotted var(--gold);
 .cohesion-status{
   min-height:1.2rem;
   margin-top:.35rem;
-  font-size:.9rem;
-  color:#c29a4b; /* darker gold */
+  font-size:.95rem;
+  font-weight:500;
+  letter-spacing:.03em;
+  color:#ffeac2; /* bright warm gold */
   text-shadow:
-    0 0 6px rgba(0,0,0,0.8),
-    0 0 10px rgba(194,154,75,0.55);
+    0 0 4px rgba(0,0,0,0.9),
+    0 0 10px rgba(0,0,0,0.9),
+    0 0 18px rgba(255,220,150,0.9),
+    0 0 32px rgba(255,220,150,0.85);
 }
 
+/* Optional: if you ever want to mute it in some state */
+.cohesion-status[data-status="ok"],
 .cohesion-status[data-status="muted"]{
   color:var(--muted);
   opacity:.75;
   text-shadow:none;
 }
+
 
 .cohesion-bar-wrapper[data-cohesion-constrained="true"] input[type=range]::-webkit-slider-thumb{ box-shadow:0 0 0 2px rgba(255,204,0,0.7), 0 0 12px rgba(255,204,0,0.55); }
 .cohesion-bar-wrapper[data-cohesion-constrained="true"] input[type=range]::-moz-range-thumb{ box-shadow:0 0 0 2px rgba(255,204,0,0.7), 0 0 12px rgba(255,204,0,0.55); }
