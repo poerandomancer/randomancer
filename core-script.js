@@ -1287,7 +1287,7 @@ function renderPassiveRecommendations(currentRoll, dataWrap) {
 
 
 // ---------- cohesion + selection ----------
-const COHESION_MODES = { strict:0.85, cohesive:0.65, chaotic:0.35, madness:0.0 };
+const COHESION_MODES = { strict:1, cohesive:0.65, chaotic:0.35, madness:0.0 };
 let currentMode='cohesive';
 
 function resolveCohesionMode(mode){

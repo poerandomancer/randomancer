@@ -1177,12 +1177,19 @@ border-top: 1px dotted var(--gold);
 }
 
 /* Inner four (ascendancy + keystone): keep full names, allow wrapping */
+/* Inner cluster: up to 2 lines, then ellipsis */
 .passive-node--ascendancy .passive-node__name,
 .passive-node--keystone .passive-node__name {
   font-size: 0.9rem;
   max-width: 120px;
-  white-space: normal;
+
+  /* multi-line ellipsis */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
+
 
 
 /* Tooltip shell */
