@@ -533,7 +533,7 @@ function initSectionLocks(){
 })();
 
 // App metadata
-const APP_VERSION = '0.8.2_cohesion_refactor';
+const APP_VERSION = '0.8.2_passives_display';
 
 window.RANDOMANCER = window.RANDOMANCER || {};
 window.RANDOMANCER.version = APP_VERSION;
@@ -1225,14 +1225,18 @@ function renderPassiveRecommendations(currentRoll, dataWrap) {
   const ascendancyNodes = Array.isArray(passives.ascendancyNodes)
     ? passives.ascendancyNodes.slice(0, 2)
     : [];
+
+  // ⛔ Keystones still exist in data, but we don't display them for now
   const keystones = Array.isArray(passives.keystones)
     ? passives.keystones.slice(0, 2)
     : [];
+
   const notables = Array.isArray(passives.notables)
     ? passives.notables.slice(0, 8)
     : [];
 
-  if (!ascendancyNodes.length && !keystones.length && !notables.length) {
+  // When keystones are hidden, only check asc + notables to decide if the panel is empty
+  if (!ascendancyNodes.length && !notables.length) {
     hideAll();
     return;
   }
@@ -1240,18 +1244,20 @@ function renderPassiveRecommendations(currentRoll, dataWrap) {
   grid.innerHTML = '';
   panel.classList.remove('hidden');
 
-  // Constellation-style layout: cross core (asc + keystone) + surrounding ring of notables.
-  const ascSlots = ['3 / 2', '3 / 4']; // left-right
-  const keySlots = ['2 / 3', '4 / 3']; // top-bottom
+  // Inner cross: we *reserve* top/bottom slots for keystones, but just don't fill them.
+  const ascSlots = ['4 / 3', '4 / 5']; // left / right
+  const keySlots = ['3 / 4', '5 / 4']; // top / bottom (unused for now, kept for future)
+
+  // Outer star ring (notables) – unchanged
   const noteSlots = [
-    '1 / 3', // N
-    '2 / 5', // NE
-    '4 / 5', // SE
-    '5 / 3', // S
-    '4 / 1', // SW
-    '2 / 1', // NW
-    '1 / 2', // NNW
-    '1 / 4', // NNE
+    '1 / 4', // N
+    '2 / 6', // NE
+    '4 / 7', // E
+    '6 / 6', // SE
+    '7 / 4', // S
+    '6 / 2', // SW
+    '4 / 1', // W
+    '2 / 2', // NW
   ];
 
   const place = (node, type, slot) => {
@@ -1264,15 +1270,19 @@ function renderPassiveRecommendations(currentRoll, dataWrap) {
   ascendancyNodes.forEach((node, idx) =>
     place(node, 'ascendancy', ascSlots[idx] || null)
   );
-  keystones.forEach((node, idx) =>
-    place(node, 'keystone', keySlots[idx] || null)
-  );
+
+  // 🔇 Keystones intentionally not rendered:
+  // keystones.forEach((node, idx) =>
+  //   place(node, 'keystone', keySlots[idx] || null)
+  // );
+
   notables.forEach((node, idx) =>
     place(node, 'notable', noteSlots[idx] || null)
   );
 
   installPassiveTooltipHandler();
 }
+
 
 
 

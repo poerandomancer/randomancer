@@ -1042,66 +1042,48 @@ border-top: 1px dotted var(--gold);
 /* Layout shell + decorative connectors */
 .passives-layout {
   position: relative;
-  padding: 1.1rem 0 1.4rem;
+
+  /* Square, centered module – a bit larger now */
+  width: min(480px, 88vw);
+  aspect-ratio: 1 / 1;
+  margin: 1rem auto 1.25rem;
+
+  /* Inner padding so nodes don’t hug the edge */
+  padding: 1.35rem;
+
+  /* Passive tree background + darkening overlay */
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.92)),
+    url("images/passive-bg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-blend-mode: soft-light, normal;
+
+  border-radius: 999px;
 }
 
-.passives-layout::before,
-.passives-layout::after {
+
+
+/* Subtle gold ring around the passive tree */
+.passives-layout::before {
   content: "";
   position: absolute;
-  left: 50%;
-  top: 50%;
+  inset: 0.3rem;
+  border-radius: inherit;
   pointer-events: none;
-  transform: translate(-50%, -50%);
-  opacity: 0.45;
-}
 
-/* Outer "ring" */
-.passives-layout::before {
-  width: min(360px, 78vw);
-  height: min(360px, 78vw);
-  border-radius: 999px;
   border: 1px solid rgba(200, 168, 107, 0.45);
   box-shadow:
     0 0 12px rgba(0, 0, 0, 0.8),
     0 0 18px rgba(200, 168, 107, 0.28);
 }
 
-/* Cross-style dividers */
+/* No more cross pattern */
 .passives-layout::after {
-  width: min(380px, 82vw);
-  height: min(380px, 82vw);
-  background:
-    /* horizontal */
-    linear-gradient(
-      to right,
-      transparent 48%,
-      rgba(200, 168, 107, 0.75) 50%,
-      transparent 52%
-    ),
-    /* vertical */
-    linear-gradient(
-      to bottom,
-      transparent 48%,
-      rgba(200, 168, 107, 0.75) 50%,
-      transparent 52%
-    ),
-    /* diagonal 1 */
-    linear-gradient(
-      45deg,
-      transparent 48%,
-      rgba(200, 168, 107, 0.6) 50%,
-      transparent 52%
-    ),
-    /* diagonal 2 */
-    linear-gradient(
-      -45deg,
-      transparent 48%,
-      rgba(200, 168, 107, 0.6) 50%,
-      transparent 52%
-    );
-  mix-blend-mode: screen;
+  content: none;
 }
+
 
 
 /* Constellation grid */
@@ -1109,14 +1091,19 @@ border-top: 1px dotted var(--gold);
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  grid-template-rows: repeat(5, minmax(80px, auto));
-  max-width: 520px;
-  margin: 0 auto;
-  gap: 0.35rem;
+
+  width: 100%;
+  height: 100%;
+
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-rows: repeat(7, minmax(0, 1fr));
+  gap: 0.18rem; /* was 0.25rem */
+
   justify-items: center;
   align-items: center;
 }
+
+
 
 /* Node shell */
 .passive-node {
@@ -1132,21 +1119,18 @@ border-top: 1px dotted var(--gold);
 
 /* Orb – slightly tightened */
 .passive-node__orb {
-  width: 60px;
-  height: 60px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   padding: 2px;
-  background: radial-gradient(
-    circle at 30% 30%,
-    rgba(255, 230, 180, 0.12),
-    rgba(15, 12, 10, 0.9)
-  );
-  border: 2px solid rgba(255, 255, 255, 0.22);
+  background: radial-gradient(circle at 30% 30%, rgba(255, 230, 180, 0.12), rgba(15, 12, 10, 0.9));
+  border: 2px solid rgba(255, 255, 255, 0.2);
   box-shadow:
     0 0 8px rgba(0, 0, 0, 0.5),
     inset 0 0 8px rgba(0, 0, 0, 0.55),
     0 0 12px rgba(255, 220, 140, 0.35);
 }
+
 
 .passive-node__orb-inner {
   width: 100%;
@@ -1170,15 +1154,36 @@ border-top: 1px dotted var(--gold);
 
 /* Label under the orb */
 .passive-node__label {
-  min-height: 1.1rem;
+  min-height: 1.2rem;
 }
 
+/* Base label styling */
 .passive-node__name {
   font-weight: 600;
   color: #f4e7d2;
-  letter-spacing: 0.2px;
-  font-size: 0.9rem;
+  letter-spacing: 0.16px;
+  font-size: 0.84rem;
+  line-height: 1.1;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.9);
 }
+
+/* Outer ring: compact, 1-line labels with ellipsis */
+.passive-node--notable .passive-node__name {
+  font-size: 0.78rem;
+  max-width: 88px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Inner four (ascendancy + keystone): keep full names, allow wrapping */
+.passive-node--ascendancy .passive-node__name,
+.passive-node--keystone .passive-node__name {
+  font-size: 0.9rem;
+  max-width: 120px;
+  white-space: normal;
+}
+
 
 /* Tooltip shell */
 .passive-node__tooltip {
@@ -1337,11 +1342,19 @@ border-top: 1px dotted var(--gold);
 
 /* Mobile & small screens: simplify layout (still unified section) */
 @media (max-width: 720px) {
-  .passives-layout {
-    padding: 0.4rem 0 0.8rem;
+.passives-layout {
+    width: 100%;
+    margin: 0.5rem 0 0.75rem;
+    padding: 0.75rem 0.5rem 1rem;
+    aspect-ratio: auto;
+    border-radius: 18px;
   }
 
-  .passives-layout::before,
+  .passives-layout::before {
+    inset: 0;
+    border-radius: inherit;
+  }
+  
   .passives-layout::after {
     opacity: 0;
   }
@@ -1358,8 +1371,8 @@ border-top: 1px dotted var(--gold);
   }
 
   .passive-node__orb {
-    width: 52px;
-    height: 52px;
+    width: 46px;
+    height: 46px;
   }
 
   .passive-node__tooltip {
