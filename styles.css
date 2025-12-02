@@ -13,13 +13,17 @@
 
 *{ box-sizing:border-box; }
 
-html,body{
-  margin:0;
-  height:100%;
+html,
+body {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden; /* prevent sideways drag / reveal */
   background: var(--bg) url('images/background.png') center/cover no-repeat fixed;
-  color:var(--ink);
-  font-family:'Cormorant Garamond',serif;
+  color: var(--ink);
+  font-family: 'Cormorant Garamond', serif;
 }
+
 
 .intro-screen{
   position:fixed;
@@ -1218,7 +1222,11 @@ border-top: 1px dotted var(--gold);
   position: absolute;
   left: 50%;
   bottom: 100%;
-  transform: translate(-50%, -6px);
+
+  /* dynamic horizontal shift so we can clamp on mobile */
+  --tooltip-shift-x: 0px;
+
+  transform: translate(calc(-50% + var(--tooltip-shift-x)), -6px);
   min-width: 230px;
   max-width: 270px;
   opacity: 0;
@@ -1227,6 +1235,7 @@ border-top: 1px dotted var(--gold);
   z-index: 5;
   transition: opacity 0.14s ease, transform 0.14s ease;
 }
+
 
 /* Tooltip body */
 .passive-tooltip {
@@ -1360,8 +1369,9 @@ border-top: 1px dotted var(--gold);
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transform: translate(-50%, -12px);
+  transform: translate(calc(-50% + var(--tooltip-shift-x)), -12px);
 }
+
 
 /* Make sure tooltip never gets clipped on really small panels */
 .panel--passives {
