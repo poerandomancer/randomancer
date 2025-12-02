@@ -69,14 +69,6 @@
       <div id="build-name" class="build-name"></div>
 	  <div id="build-subtext" class="build-subtext"></div>
 
-      <div class="cohesion-slider cohesion-bar-wrapper" data-cohesion-constrained="false">
-        <label for="cohesionRange">Cohesion</label>
-        <input type="range" id="cohesionRange" min="0" max="3" step="1" value="1">
-        <div class="mode-labels">
-          <span>Strict</span><span>Cohesive</span><span>Chaotic</span><span>Madness</span>
-        </div>
-        <div class="cohesion-status" data-status="ok" aria-live="polite"></div>
-      </div>
       <div class="roll-sticky">
       <button id="roll" class="roll-btn roll-btn">
         <img src="images/dice.png" alt="" class="btn-ico">
@@ -88,6 +80,14 @@
     </header>
 
     <main>
+    
+      <div class="cohesion-slider cohesion-bar-wrapper" data-cohesion-constrained="false">
+        <div class="mode-labels">
+          <span>Strict</span><span>Cohesive</span><span>Chaotic</span><span>Madness</span>
+        </div>
+        <input type="range" id="cohesionRange" min="0" max="3" step="1" value="1">
+        <div class="cohesion-status" data-status="ok" aria-live="polite"></div>
+      </div>
       <section class="panel">
         <div class="panel-actions">
           <button id="save-build" class="icon-btn" type="button" aria-label="Save Build" title="Save Build">☆</button>
