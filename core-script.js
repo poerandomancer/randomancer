@@ -1126,6 +1126,43 @@ function installPassiveTooltipHandler() {
   });
 }
 
+function shouldAdjustPassiveTooltip() {
+  if (typeof window === 'undefined' || !window.matchMedia) return false;
+  try {
+    // Prefer coarse pointer, fall back to narrow screens
+    if (window.matchMedia('(pointer: coarse)').matches) return true;
+    if (window.matchMedia('(max-width: 768px)').matches) return true;
+  } catch (e) {
+    // ignore matchMedia errors
+  }
+  return false;
+}
+
+function adjustPassiveTooltipPosition(wrapper) {
+  if (!shouldAdjustPassiveTooltip()) return;
+
+  const tooltip = wrapper.querySelector('.passive-node__tooltip');
+  if (!tooltip) return;
+
+  // Reset any previous shift so we measure a "default" position
+  tooltip.style.setProperty('--tooltip-shift-x', '0px');
+
+  const rect = tooltip.getBoundingClientRect();
+  const viewportPadding = 12; // a little breathing room from the edge
+  const viewportLeft = viewportPadding;
+  const viewportRight = window.innerWidth - viewportPadding;
+
+  let shift = 0;
+  if (rect.left < viewportLeft) {
+    shift = viewportLeft - rect.left;           // shift right
+  } else if (rect.right > viewportRight) {
+    shift = viewportRight - rect.right;         // shift left
+  }
+
+  tooltip.style.setProperty('--tooltip-shift-x', `${shift}px`);
+}
+
+
 function createPassiveNodeElement(node, type, buildTagSet) {
   const wrapper = document.createElement('div');
   wrapper.className = `passive-node passive-node--${type}`;
@@ -1206,17 +1243,24 @@ function createPassiveNodeElement(node, type, buildTagSet) {
 
   // Mobile / click interaction: tap to lock / unlock tooltip
   wrapper.addEventListener('click', (evt) => {
-    evt.stopPropagation();
-    const panel = document.getElementById('passives-panel');
-    if (!panel) return;
-    const alreadyActive = wrapper.classList.contains('is-active');
-    panel.querySelectorAll('.passive-node.is-active').forEach((nodeEl) => {
-      nodeEl.classList.remove('is-active');
-    });
-    if (!alreadyActive) {
-      wrapper.classList.add('is-active');
-    }
+  evt.stopPropagation();
+  const panel = document.getElementById('passives-panel');
+  if (!panel) return;
+
+  const alreadyActive = wrapper.classList.contains('is-active');
+
+  // Close any other open tooltip
+  panel.querySelectorAll('.passive-node.is-active').forEach((nodeEl) => {
+    nodeEl.classList.remove('is-active');
   });
+
+  if (!alreadyActive) {
+    wrapper.classList.add('is-active');
+    // On mobile, clamp the tooltip so it stays fully on-screen
+    adjustPassiveTooltipPosition(wrapper);
+  }
+});
+
 
   return wrapper;
 }
