@@ -2196,6 +2196,7 @@ function applyGemBorderFromReqWeights(el, weights){
   const w = weights||{};
   const s = Number(w.strength||0), d = Number(w.dexterity||0), i = Number(w.intelligence||0);
   const max = Math.max(s,d,i);
+  el.style.borderRadius = '12px';
   const colors = [];
   if(s===max && max>0) colors.push('rgba(176,48,48,0.9)');
   if(d===max && max>0) colors.push('rgba(45,122,45,0.9)');
@@ -2235,14 +2236,8 @@ const grantLine = (g) => {
 // ---------- stacked recommendations (skills + uniques) ----------
 const STACK_STATE = { cards: [], index: 0, animating: false, gemDict: null, rolledProfile: null };
 const STACK_MAX_VISIBLE = 8;
-
-function stableTilt(key){
-  const pattern = [-2, 0, 2, -1, 1, 3, -3, 1];
-  const s = String(key || 'stack');
-  let sum = 0;
-  for (let i = 0; i < s.length; i++) sum += s.charCodeAt(i);
-  return pattern[Math.abs(sum) % pattern.length];
-}
+const STACK_OFFSET_X = 9;
+const STACK_OFFSET_Y = 11;
 
 function buildGemTags(g, rolledProfile){
   const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
@@ -2268,7 +2263,10 @@ function buildStackSkillCard(card, rolledProfile){
     ? card.supports
     : g.recommended_supports;
   const cardEl = document.createElement('div');
-  cardEl.className = 'skill-card stack-card';
+  cardEl.className = 'skill-card stack-card active';
+  if (card.label === 'Persistent Buff') {
+    cardEl.classList.add('persistent-buff-card');
+  }
 
   const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
     ? `<div class="skill-subtitle">${g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')}</div>`
@@ -2361,13 +2359,13 @@ function renderRecommendationStack(){
     const card = cards[idx];
     const el = buildStackCard(card, STACK_STATE.rolledProfile);
     if (!el) continue;
-    const offsetX = layer * 7;
-    const offsetY = layer * 9;
-    const layerTilt = ((layer % 3) - 1) * 0.8;
-    const angle = (card.tilt || 0) + layerTilt;
+    const offsetX = layer * STACK_OFFSET_X;
+    const offsetY = layer * STACK_OFFSET_Y;
+    const angle = layer === 0 ? 0 : (-1.6 * layer);
     el.style.transform = `translate(${offsetX}px, ${offsetY}px) rotate(${angle}deg)`;
     el.style.zIndex = 10 + layer;
     if (layer === 0) el.dataset.top = 'true';
+    el.style.opacity = layer === 0 ? 1 : Math.max(0.7, 1 - layer * 0.05);
     stackEl.appendChild(el);
   }
 
@@ -2385,18 +2383,37 @@ function shuffleRecommendationStack(){
   const stackEl = document.getElementById('recommendation-stack');
   const top = stackEl?.querySelector('.stack-card[data-top="true"]');
   if (!top) return;
+  const startTransform = top.style.transform || window.getComputedStyle(top).transform || 'translate(0px,0px)';
+  const startOpacity = window.getComputedStyle(top).opacity || '1';
+
+  const ghost = top.cloneNode(true);
+  ghost.classList.add('is-shuffling');
+  ghost.dataset.top = 'false';
+  ghost.style.pointerEvents = 'none';
+  ghost.style.transform = startTransform;
+  ghost.style.opacity = startOpacity;
+  ghost.style.zIndex = '99';
+
   STACK_STATE.animating = true;
-  top.classList.add('is-shuffling');
+  STACK_STATE.index = (STACK_STATE.index + 1) % STACK_STATE.cards.length;
+  renderRecommendationStack();
+
+  stackEl.appendChild(ghost);
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      ghost.style.transition = 'transform .48s ease, opacity .48s ease';
+      ghost.style.transform = `${startTransform} translate(6px, 24px) rotate(-8deg)`;
+      ghost.style.opacity = '0';
+    });
+  });
+
   const finish = () => {
-    STACK_STATE.index = (STACK_STATE.index + 1) % STACK_STATE.cards.length;
+    ghost.remove();
     STACK_STATE.animating = false;
-    renderRecommendationStack();
   };
-  top.addEventListener('animationend', finish, { once: true });
-  top.addEventListener('animationcancel', finish, { once: true });
-  setTimeout(() => {
-    if (STACK_STATE.animating) finish();
-  }, 700);
+  ghost.addEventListener('transitionend', finish, { once: true });
+  setTimeout(finish, 700);
 }
 
 async function refreshRecommendationStack(opts = {}){
@@ -2412,26 +2429,30 @@ async function refreshRecommendationStack(opts = {}){
     (roll.recommendedSkills || []).forEach(entry => {
       const g = lookupGem(gemDict, entry);
       if (!g) return;
+      const supports = Array.isArray(entry?.recommended_supports) && entry.recommended_supports.length
+        ? entry.recommended_supports
+        : g.recommended_supports;
       cards.push({
         key: entry.id || entry.name || g.id || g.name,
         type: 'skill',
         gem: g,
-        supports: Array.isArray(entry.recommended_supports) ? entry.recommended_supports : g.recommended_supports,
-        label: 'Active Skill',
-        tilt: stableTilt(entry.id || entry.name || g.name)
+        supports,
+        label: 'Active Skill'
       });
     });
 
     if (roll.recommendedPersistentBuff) {
       const buff = lookupGem(gemDict, roll.recommendedPersistentBuff);
       if (buff) {
+        const supports = Array.isArray(roll.recommendedPersistentBuff.recommended_supports) && roll.recommendedPersistentBuff.recommended_supports.length
+          ? roll.recommendedPersistentBuff.recommended_supports
+          : buff.recommended_supports;
         cards.push({
           key: buff.id || buff.name || 'buff',
           type: 'skill',
           gem: buff,
-          supports: buff.recommended_supports,
-          label: 'Persistent Buff',
-          tilt: stableTilt(buff.id || buff.name || 'buff')
+          supports,
+          label: 'Persistent Buff'
         });
       }
     }
@@ -2461,8 +2482,7 @@ async function refreshRecommendationStack(opts = {}){
         cards.push({
           key: `unique-${it.name}`,
           type: 'unique',
-          item: it,
-          tilt: stableTilt(it.name || it.base || Math.random())
+          item: it
         });
       });
     }
