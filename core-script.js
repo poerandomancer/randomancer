@@ -291,7 +291,7 @@ function initSectionLocks(){
 
     const wrap = document.createElement('div');
     wrap.id = 'persistent-buff-section';
-    wrap.className = 'sect';
+    wrap.className = 'sect flat-recommendations';
     wrap.innerHTML = `
       <div class="sect-head">
         <h3>Recommended Persistent Buff</h3>
@@ -716,6 +716,8 @@ const App = window.App = (() => {
       snapshotVersion: 1
     },
 
+    recommendationView: 'stacked',
+
     locks: { ...DEFAULT_LOCKS },
 
     // dev toggle for “single-entry” behavior
@@ -832,21 +834,27 @@ const App = window.App = (() => {
   }
 
   function mergeCurrentRoll(partial){
-	  try {
-		state.currentRoll = { ...state.currentRoll, ...partial };
+          try {
+                state.currentRoll = { ...state.currentRoll, ...partial };
 	
 		if (partial?.cohesionModeName) {
 		  state.cohesionModeName = partial.cohesionModeName;
 		}
 	
-		if (typeof window !== 'undefined') {
-		  window.__LAST_ROLL_META = { ...state.currentRoll };
-		}
-		return state.currentRoll;
-	  } catch (e) {
-		return state.currentRoll;
-	  }
-	}
+                if (typeof window !== 'undefined') {
+                  window.__LAST_ROLL_META = { ...state.currentRoll };
+                }
+
+                if (partial && (partial.recommendedSkills || partial.recommendedPersistentBuff || partial.recommendedUniques)) {
+                  if (typeof refreshRecommendationStack === 'function') {
+                    refreshRecommendationStack();
+                  }
+                }
+                return state.currentRoll;
+          } catch (e) {
+                return state.currentRoll;
+          }
+        }
 
 
   function captureCurrentRollFromDOM(){
@@ -876,7 +884,16 @@ const App = window.App = (() => {
     }
   }
 
-  return { state, bootstrap, setCohesion, legacyInit, roll, captureCurrentRollFromDOM, mergeCurrentRoll, modules: { Config, RulesEngine } };
+  function setRecommendationView(mode){
+    if (mode !== 'stacked' && mode !== 'flat') return state.recommendationView;
+    state.recommendationView = mode;
+    if (typeof document !== 'undefined' && document.body) {
+      document.body.dataset.recView = mode;
+    }
+    return state.recommendationView;
+  }
+
+  return { state, bootstrap, setCohesion, legacyInit, roll, captureCurrentRollFromDOM, mergeCurrentRoll, setRecommendationView, modules: { Config, RulesEngine } };
 })();
 
 // ---------- Tag utilities (shared normalizer + alias map) ----------
@@ -2105,7 +2122,7 @@ function renderPersistentBuffSkill(persistentPool, rolledProfile, tagIDF, knobs,
     // Build section container
     const wrap = document.createElement('div');
     wrap.id = 'persistent-buff-section';
-    wrap.className = 'sect';
+    wrap.className = 'sect flat-recommendations';
     wrap.innerHTML = `
       <div class="sect-head">
         <h3>Recommended Persistent Buff</h3>
@@ -2179,17 +2196,20 @@ function applyGemBorderFromReqWeights(el, weights){
   const w = weights||{};
   const s = Number(w.strength||0), d = Number(w.dexterity||0), i = Number(w.intelligence||0);
   const max = Math.max(s,d,i);
+  el.style.borderRadius = '12px';
   const colors = [];
   if(s===max && max>0) colors.push('rgba(176,48,48,0.9)');
   if(d===max && max>0) colors.push('rgba(45,122,45,0.9)');
   if(i===max && max>0) colors.push('rgba(47,79,157,0.9)');
   if(colors.length<=1){
     const c = colors[0] || 'rgba(200,200,200,0.35)';
+    try { el.style.setProperty('--card-accent', c); } catch (e) {}
     el.style.border = '1px solid ' + c;
     el.style.boxShadow = '0 0 8px rgba(255,255,255,0.06)';
     return;
   }
   // gradient for ties
+  try { el.style.setProperty('--card-accent', colors[0] || 'rgba(200,200,200,0.6)'); } catch (e) {}
   el.style.border = '1px solid transparent';
   el.style.borderImage = `linear-gradient(90deg, ${colors.join(', ')}) 1`;
   el.style.boxShadow = '0 0 10px rgba(255,255,255,0.06)';
@@ -2212,6 +2232,271 @@ const grantLine = (g) => {
     </div>
   `;
 };
+
+// ---------- stacked recommendations (skills + uniques) ----------
+const STACK_STATE = { cards: [], index: 0, animating: false, gemDict: null, rolledProfile: null };
+const STACK_MAX_VISIBLE = 8;
+const STACK_OFFSET_X = 9;
+const STACK_OFFSET_Y = 11;
+
+function buildGemTags(g, rolledProfile){
+  const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
+  const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
+  const rest = allTags.filter(t => !br.includes(t));
+  const displayTags = [...br, ...rest].slice(0, 10);
+  const matched = new Set();
+  const prof = rolledProfile?.profile;
+  for (const t of displayTags) {
+    const k = normTagPlus(t);
+    if (prof && typeof prof.has === 'function' && prof.has(k)) matched.add(k);
+  }
+  return displayTags.map(t => {
+    const k = normTagPlus(t);
+    const cls = matched.has(k) ? 'tag-pill matched' : 'tag-pill';
+    return `<span class="${cls}">${t}</span>`;
+  }).join('');
+}
+
+function buildStackSkillCard(card, rolledProfile){
+  const g = card.gem;
+  const supportList = Array.isArray(card.supports) && card.supports.length
+    ? card.supports
+    : g.recommended_supports;
+  const cardEl = document.createElement('div');
+  cardEl.className = 'skill-card stack-card active';
+  if (card.label === 'Persistent Buff') {
+    cardEl.classList.add('persistent-buff-card');
+  }
+
+  const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
+    ? `<div class="skill-subtitle">${g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')}</div>`
+    : '';
+
+  cardEl.innerHTML = `
+    <div class="card-type-badge">${card.label || 'Active Skill'}</div>
+    <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
+    ${requiresSubtitle}
+    <div class="skill-divider"></div>
+    ${grantLine(g)}
+    <div class="skill-tags">${buildGemTags(g, rolledProfile)}</div>
+    <div class="supports-label">Recommended Supports</div>
+    <div class="supports">${renderSupportCards(supportList, STACK_STATE.gemDict || {})}</div>
+  `;
+
+  applyGemBorderFromReqWeights(cardEl, g.requirement_weights);
+  return cardEl;
+}
+
+function highlightUniqueLinesForStack(lines, rolledSet){
+  const esc = s => String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  let out = (lines || []).slice(2).join('\n');
+  rolledSet?.forEach(t => {
+    if (!t) return;
+    const rx = new RegExp(esc(String(t)), 'ig');
+    out = out.replace(rx, m => `<span class="hit">${m}</span>`);
+  });
+  return out
+    .split('\n')
+    .map(L => L.trim())
+    .filter(Boolean)
+    .map(L => `<div class="unique-line">${L}</div>`)
+    .join('');
+}
+
+function buildStackUniqueCard(card, rolledProfile){
+  const it = card.item;
+  const rolledSet = rolledProfile?.profile || new Set();
+  const tagGetter = window.__STACK_ITEM_TAG_SET || window.getItemTagSet;
+  const tags = Array.from(tagGetter ? tagGetter(it) : []).sort();
+  const pills = tags.map(t => {
+    const cls = rolledSet.has(normTagPlus(t)) ? 'tag-pill pill matched' : 'tag-pill pill';
+    return `<span class="${cls}" data-tag="${t}">${t}</span>`;
+  }).join('');
+  const lines = highlightUniqueLinesForStack(it.lines, rolledSet);
+  const reason = (typeof buildUniqueReason === 'function') ? buildUniqueReason(it, rolledSet) : '';
+  const cardEl = document.createElement('div');
+  cardEl.className = 'unique-card stack-card';
+  cardEl.style.setProperty('--card-accent', 'rgba(255,200,140,0.75)');
+  cardEl.innerHTML = `
+    <div class="card-type-badge">Unique Item</div>
+    <div class="unique-header">
+      <div class="unique-name">${it.name}</div>
+      <div class="unique-base">${it.base}</div>
+    </div>
+    <div class="skill-divider"></div>
+    <div class="tags-row">${pills}</div>
+    <div class="unique-lines">${reason ? `<div class="unique-highlights">${reason}</div>` : ''}${lines}</div>
+  `;
+  return cardEl;
+}
+
+function buildStackCard(card, rolledProfile){
+  if (!card) return null;
+  if (card.type === 'unique') return buildStackUniqueCard(card, rolledProfile);
+  return buildStackSkillCard(card, rolledProfile);
+}
+
+function renderRecommendationStack(){
+  const stackEl = document.getElementById('recommendation-stack');
+  const dotsEl = document.getElementById('stack-dots');
+  const counterEl = document.getElementById('stack-counter');
+  if (!stackEl) return;
+
+  const cards = STACK_STATE.cards || [];
+  const total = cards.length;
+  stackEl.innerHTML = '';
+
+  if (!total) {
+    stackEl.innerHTML = '<div class="card-stack-empty">Roll to reveal recommended skills and uniques.</div>';
+    if (dotsEl) dotsEl.innerHTML = '';
+    if (counterEl) counterEl.textContent = '';
+    return;
+  }
+
+  const visible = Math.min(total, STACK_MAX_VISIBLE);
+  for (let layer = visible - 1; layer >= 0; layer--) {
+    const idx = (STACK_STATE.index + layer) % total;
+    const card = cards[idx];
+    const el = buildStackCard(card, STACK_STATE.rolledProfile);
+    if (!el) continue;
+    const offsetX = layer * STACK_OFFSET_X;
+    const offsetY = layer * STACK_OFFSET_Y;
+    const angle = layer === 0 ? 0 : (-1.6 * layer);
+    el.style.transform = `translate(${offsetX}px, ${offsetY}px) rotate(${angle}deg)`;
+    el.style.zIndex = 10 + layer;
+    if (layer === 0) el.dataset.top = 'true';
+    el.style.opacity = layer === 0 ? 1 : Math.max(0.7, 1 - layer * 0.05);
+    stackEl.appendChild(el);
+  }
+
+  if (dotsEl) {
+    dotsEl.innerHTML = cards.map((_, i) => `<span class="dot${i === STACK_STATE.index ? ' active' : ''}"></span>`).join('');
+  }
+  if (counterEl) {
+    counterEl.textContent = `${STACK_STATE.index + 1} / ${total}`;
+  }
+}
+
+function shuffleRecommendationStack(){
+  if (STACK_STATE.animating) return;
+  if (!Array.isArray(STACK_STATE.cards) || STACK_STATE.cards.length <= 1) return;
+  const stackEl = document.getElementById('recommendation-stack');
+  const top = stackEl?.querySelector('.stack-card[data-top="true"]');
+  if (!top) return;
+  const startTransform = top.style.transform || window.getComputedStyle(top).transform || 'translate(0px,0px)';
+  const startOpacity = window.getComputedStyle(top).opacity || '1';
+
+  const ghost = top.cloneNode(true);
+  ghost.classList.add('is-shuffling');
+  ghost.dataset.top = 'false';
+  ghost.style.pointerEvents = 'none';
+  ghost.style.transform = startTransform;
+  ghost.style.opacity = startOpacity;
+  ghost.style.zIndex = '99';
+
+  STACK_STATE.animating = true;
+  STACK_STATE.index = (STACK_STATE.index + 1) % STACK_STATE.cards.length;
+  renderRecommendationStack();
+
+  stackEl.appendChild(ghost);
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      ghost.style.transition = 'transform .48s ease, opacity .48s ease';
+      ghost.style.transform = `${startTransform} translate(6px, 24px) rotate(-8deg)`;
+      ghost.style.opacity = '0';
+    });
+  });
+
+  const finish = () => {
+    ghost.remove();
+    STACK_STATE.animating = false;
+  };
+  ghost.addEventListener('transitionend', finish, { once: true });
+  setTimeout(finish, 700);
+}
+
+async function refreshRecommendationStack(opts = {}){
+  try {
+    const roll = (window.App && window.App.state && window.App.state.currentRoll) || window.CURRENT_ROLL || {};
+    const rolledProfile = roll.tagProfile || window.CURRENT_ROLL?.tagProfile || null;
+    const gems = (window.DATA && window.DATA.gems) || (window.App && window.App.state && window.App.state.GEMS) || [];
+    const gemDict = buildGemDictionary(Array.isArray(gems) ? gems : []);
+    STACK_STATE.gemDict = gemDict;
+    STACK_STATE.rolledProfile = rolledProfile;
+
+    const cards = [];
+    (roll.recommendedSkills || []).forEach(entry => {
+      const g = lookupGem(gemDict, entry);
+      if (!g) return;
+      const supports = Array.isArray(entry?.recommended_supports) && entry.recommended_supports.length
+        ? entry.recommended_supports
+        : g.recommended_supports;
+      cards.push({
+        key: entry.id || entry.name || g.id || g.name,
+        type: 'skill',
+        gem: g,
+        supports,
+        label: 'Active Skill'
+      });
+    });
+
+    if (roll.recommendedPersistentBuff) {
+      const buff = lookupGem(gemDict, roll.recommendedPersistentBuff);
+      if (buff) {
+        const supports = Array.isArray(roll.recommendedPersistentBuff.recommended_supports) && roll.recommendedPersistentBuff.recommended_supports.length
+          ? roll.recommendedPersistentBuff.recommended_supports
+          : buff.recommended_supports;
+        cards.push({
+          key: buff.id || buff.name || 'buff',
+          type: 'skill',
+          gem: buff,
+          supports,
+          label: 'Persistent Buff'
+        });
+      }
+    }
+
+    let uniques = opts.uniques || STACK_STATE.lastUniques;
+    if (!uniques && Array.isArray(roll.recommendedUniques) && roll.recommendedUniques.length) {
+      try {
+        const loadUniquesFn = (typeof loadUniquesM === 'function'
+          ? loadUniquesM
+          : (typeof window !== 'undefined' && typeof window.loadUniquesM === 'function' ? window.loadUniquesM : null));
+        const all = loadUniquesFn
+          ? await loadUniquesFn()
+          : await fetch('data/enriched/uniques_enriched.json?v=' + Date.now(), { cache: 'no-store' })
+              .then(r => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
+              .then(data => Array.isArray(data) ? data : (data.items || []));
+        const byName = new Map(all.map(it => [it.name, it]));
+        uniques = roll.recommendedUniques.map(n => byName.get(n)).filter(Boolean);
+      } catch (e) {
+        console.warn('[stack] Unable to load uniques', e);
+      }
+    }
+
+    if (Array.isArray(uniques)) {
+      STACK_STATE.lastUniques = uniques;
+      uniques.forEach(it => {
+        if (!it) return;
+        cards.push({
+          key: `unique-${it.name}`,
+          type: 'unique',
+          item: it
+        });
+      });
+    }
+
+    const prevIdx = STACK_STATE.index || 0;
+    STACK_STATE.cards = cards;
+    if (prevIdx >= cards.length) {
+      STACK_STATE.index = 0;
+    }
+    renderRecommendationStack();
+  } catch (e) {
+    console.warn('[stack] refresh failed', e);
+  }
+}
 
 
 // ---------- data preload helper ----------
@@ -2258,7 +2543,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 		}
 	  };
 	
-	  if (slider) {
+          if (slider) {
 		// derive initial threshold from App.state if present, else use cohesive
 		let initialThreshold = 2/3;
 		try {
@@ -2281,13 +2566,52 @@ document.addEventListener('DOMContentLoaded', ()=>{
 		slider.value = String(thresholdToSliderValue(initialThreshold));
 		applyThreshold(initialThreshold);
 	
-		slider.addEventListener('input', (e) => {
-		  const t = sliderValueToThreshold(e.target.value);
-		  applyThreshold(t);
-		});
-	  }
-	
-	  initSectionLocks();
+                slider.addEventListener('input', (e) => {
+                  const t = sliderValueToThreshold(e.target.value);
+                  applyThreshold(t);
+                });
+          }
+
+          initSectionLocks();
+
+          const initialView = (window.App && window.App.state && window.App.state.recommendationView) || 'stacked';
+          if (window.App && typeof window.App.setRecommendationView === 'function') {
+            window.App.setRecommendationView(initialView);
+          } else if (document.body) {
+            document.body.dataset.recView = initialView;
+          }
+
+          const viewToggle = document.getElementById('toggle-rec-view');
+          const syncToggle = (mode) => {
+            if (!viewToggle) return;
+            const stacked = mode !== 'flat';
+            viewToggle.setAttribute('aria-pressed', stacked ? 'true' : 'false');
+            viewToggle.title = stacked ? 'Switch to flat recommendations' : 'Switch to stacked recommendations';
+            viewToggle.textContent = stacked ? '⥮' : '☰';
+          };
+          syncToggle(initialView);
+
+          viewToggle?.addEventListener('click', () => {
+            const next = (document.body?.dataset?.recView === 'stacked') ? 'flat' : 'stacked';
+            if (window.App && typeof window.App.setRecommendationView === 'function') {
+              window.App.setRecommendationView(next);
+            } else if (document.body) {
+              document.body.dataset.recView = next;
+            }
+            syncToggle(next);
+            if (next === 'stacked') {
+              renderRecommendationStack();
+            }
+          });
+
+          const stackEl = document.getElementById('recommendation-stack');
+          stackEl?.addEventListener('click', (e) => {
+            const top = stackEl.querySelector('.stack-card[data-top="true"]');
+            if (!top || !top.contains(e.target)) return;
+            shuffleRecommendationStack();
+          });
+
+          refreshRecommendationStack();
 
 
     // Kick off preloading while the intro screen is up and hydrate App.state from it
@@ -3163,6 +3487,9 @@ async function loadUniquesM(){
     const data = await r.json();
     return Array.isArray(data) ? data : (data.items||[]);
   }
+  if (typeof window !== 'undefined' && !window.loadUniquesM) {
+    window.loadUniquesM = loadUniquesM;
+  }
 
   function getItemTagSet(item){
     const raw = (item.tags && item.tags.raw) || [];
@@ -3200,6 +3527,7 @@ async function loadUniquesM(){
 
     return new Set(acc);
   }
+  window.__STACK_ITEM_TAG_SET = getItemTagSet;
   function scoreItem(it, rolled, slotAllow){
     const all = getItemTagSet(it);
     let s = 0;
@@ -3266,13 +3594,13 @@ function ensureUniqueSection(){
 
     // Insert divider
     const divider = document.createElement('div');
-    divider.className = 'ornate-divider gold unique-divider';
+    divider.className = 'ornate-divider gold unique-divider flat-recommendations';
     anchor.insertAdjacentElement('afterend', divider);
 
     // Insert Uniques section
     const wrap = document.createElement('div');
     wrap.id = 'uniques-section';
-    wrap.className = 'sect';
+    wrap.className = 'sect flat-recommendations';
     wrap.innerHTML = `
           <div class="sect-head">
                 <h3 class="section-title">Recommended Uniques</h3>
@@ -3428,11 +3756,12 @@ function ensureUniqueSection(){
                 console.log('[u79b2m] snap', snap);
                 console.log('[u79b2m] rolled', rolled);
                 console.log('[u79b2m] picks', picks.length);
-	
-		renderUniques(picks, rolledSet);
-	  }catch(e){
-		console.error('[u79b2m] refresh error', e);
-	  }
+
+                renderUniques(picks, rolledSet);
+                refreshRecommendationStack({ uniques: picks });
+          }catch(e){
+                console.error('[u79b2m] refresh error', e);
+          }
         }
 
         // Expose a global hook so the core roll engine can trigger uniques directly
@@ -3449,6 +3778,7 @@ function ensureUniqueSection(){
                 const byName = new Map(items.map(it => [it.name, it]));
                 const ordered = names.map(n => byName.get(n)).filter(Boolean);
                 renderUniques(ordered, new Set());
+                refreshRecommendationStack({ uniques: ordered });
           } catch (e) {
                 console.warn('[u79b2m] renderUniquesFromNames failed', e);
           }
