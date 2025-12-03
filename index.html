@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Cormorant+Infant:ital,wght@1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css"/>
 </head>
-<body>
+<body data-rec-view="stacked">
   <button id="saved-fab" class="rm-info-fab saved-fab" aria-label="View Saved Builds" title="View Saved Builds">★</button>
   <button id="info-fab" class="rm-info-fab" aria-label="About this tool" title="About">?</button>
   <!-- Saved Builds Lightbox -->
@@ -82,9 +82,9 @@
     <main>
     
       <div class="cohesion-slider cohesion-bar-wrapper" data-cohesion-constrained="false">
-		  <div class="mode-labels">
-			<span>Strict</span><span>Cohesive</span><span>Chaotic</span><span>Madness</span>
-		  </div>
+                  <div class="mode-labels">
+                        <span>Strict</span><span>Cohesive</span><span>Chaotic</span><span>Madness</span>
+                  </div>
 		  <!-- Continuous slider: 0–100 mapped to threshold 1.00 → 0.00 -->
 		  <input
 			type="range"
@@ -103,10 +103,11 @@
         <div class="panel-actions">
           <button id="save-build" class="icon-btn" type="button" aria-label="Save Build" title="Save Build">☆</button>
           <button id="copy-build-link" class="icon-btn" type="button" aria-label="Copy Build Link" title="Copy Build Link">⧉</button>
+          <button id="toggle-rec-view" class="icon-btn view-toggle" type="button" aria-pressed="true" aria-label="Toggle stacked recommendations" title="Toggle stacked recommendations">⥮</button>
         </div>
           <div class="sect">
-          <div class="sect-head section-header" data-section="archetype" data-locked="false">
-            <div class="section-title-row">
+            <div class="sect-head section-header" data-section="archetype" data-locked="false">
+              <div class="section-title-row">
               <h3 class="section-title">Archetype</h3>
               <button class="lock-toggle" type="button" aria-pressed="false" aria-label="Lock Archetype">
                 <span class="lock-icon lock-off" aria-hidden="true">🔓</span>
@@ -164,7 +165,24 @@
           </div>
         </div>
         <hr class="gold subtle"/>
-          <div class="sect">
+          <div id="stacked-recommendations" class="sect stacked-recommendations">
+            <div class="sect-head section-header" data-section="recommendations">
+              <div class="section-title-row">
+                <h3 class="section-title">General Recommendations</h3>
+                <button id="toggle-rec-view" class="rec-view-toggle" type="button" aria-pressed="true" aria-label="Toggle stacked recommendations view" title="Switch to flat recommendations">⥮</button>
+              </div>
+              <div class="underline"></div>
+              <p class="sub">Recommended skills, buffs, and uniques — stacked like a hand of cards.</p>
+            </div>
+            <div class="card-stack-shell">
+              <div id="recommendation-stack" class="card-stack" aria-live="polite"></div>
+              <div class="card-stack-indicators">
+                <div id="stack-dots" class="stack-dots" aria-hidden="true"></div>
+                <div id="stack-counter" class="stack-counter"></div>
+              </div>
+            </div>
+          </div>
+          <div class="sect flat-recommendations">
             <div class="sect-head">
               <h3 class="section-title">Recommended Skills</h3>
               <div class="underline"></div><p class="sub">Two active skills for this roll, with supports</p>
