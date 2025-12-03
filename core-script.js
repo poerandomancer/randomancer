@@ -2308,7 +2308,8 @@ function highlightUniqueLinesForStack(lines, rolledSet){
 function buildStackUniqueCard(card, rolledProfile){
   const it = card.item;
   const rolledSet = rolledProfile?.profile || new Set();
-  const tags = Array.from(getItemTagSet(it)).sort();
+  const tagGetter = window.__STACK_ITEM_TAG_SET || window.getItemTagSet;
+  const tags = Array.from(tagGetter ? tagGetter(it) : []).sort();
   const pills = tags.map(t => {
     const cls = rolledSet.has(normTagPlus(t)) ? 'tag-pill pill matched' : 'tag-pill pill';
     return `<span class="${cls}" data-tag="${t}">${t}</span>`;
@@ -2433,7 +2434,14 @@ async function refreshRecommendationStack(opts = {}){
     let uniques = opts.uniques;
     if (!uniques && Array.isArray(roll.recommendedUniques) && roll.recommendedUniques.length) {
       try {
-        const all = await loadUniquesM();
+        const loadUniquesFn = (typeof loadUniquesM === 'function'
+          ? loadUniquesM
+          : (typeof window !== 'undefined' && typeof window.loadUniquesM === 'function' ? window.loadUniquesM : null));
+        const all = loadUniquesFn
+          ? await loadUniquesFn()
+          : await fetch('data/enriched/uniques_enriched.json?v=' + Date.now(), { cache: 'no-store' })
+              .then(r => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
+              .then(data => Array.isArray(data) ? data : (data.items || []));
         const byName = new Map(all.map(it => [it.name, it]));
         uniques = roll.recommendedUniques.map(n => byName.get(n)).filter(Boolean);
       } catch (e) {
@@ -3454,6 +3462,9 @@ async function loadUniquesM(){
     const data = await r.json();
     return Array.isArray(data) ? data : (data.items||[]);
   }
+  if (typeof window !== 'undefined' && !window.loadUniquesM) {
+    window.loadUniquesM = loadUniquesM;
+  }
 
   function getItemTagSet(item){
     const raw = (item.tags && item.tags.raw) || [];
@@ -3491,6 +3502,7 @@ async function loadUniquesM(){
 
     return new Set(acc);
   }
+  window.__STACK_ITEM_TAG_SET = getItemTagSet;
   function scoreItem(it, rolled, slotAllow){
     const all = getItemTagSet(it);
     let s = 0;
