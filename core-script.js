@@ -2387,11 +2387,16 @@ function shuffleRecommendationStack(){
   if (!top) return;
   STACK_STATE.animating = true;
   top.classList.add('is-shuffling');
-  top.addEventListener('animationend', () => {
+  const finish = () => {
     STACK_STATE.index = (STACK_STATE.index + 1) % STACK_STATE.cards.length;
     STACK_STATE.animating = false;
     renderRecommendationStack();
-  }, { once: true });
+  };
+  top.addEventListener('animationend', finish, { once: true });
+  top.addEventListener('animationcancel', finish, { once: true });
+  setTimeout(() => {
+    if (STACK_STATE.animating) finish();
+  }, 700);
 }
 
 async function refreshRecommendationStack(opts = {}){
@@ -2431,7 +2436,7 @@ async function refreshRecommendationStack(opts = {}){
       }
     }
 
-    let uniques = opts.uniques;
+    let uniques = opts.uniques || STACK_STATE.lastUniques;
     if (!uniques && Array.isArray(roll.recommendedUniques) && roll.recommendedUniques.length) {
       try {
         const loadUniquesFn = (typeof loadUniquesM === 'function'
@@ -3569,13 +3574,13 @@ function ensureUniqueSection(){
 
     // Insert divider
     const divider = document.createElement('div');
-    divider.className = 'ornate-divider gold unique-divider';
+    divider.className = 'ornate-divider gold unique-divider flat-recommendations';
     anchor.insertAdjacentElement('afterend', divider);
 
     // Insert Uniques section
     const wrap = document.createElement('div');
     wrap.id = 'uniques-section';
-    wrap.className = 'sect';
+    wrap.className = 'sect flat-recommendations';
     wrap.innerHTML = `
           <div class="sect-head">
                 <h3 class="section-title">Recommended Uniques</h3>
