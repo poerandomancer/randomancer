@@ -164,6 +164,13 @@ function syncStackToggleUI(btn, mode){
   btn.title = stacked ? 'Stacked view' : 'Flat list view';
 }
 
+function syncRecommendationVisibility(mode){
+  const stack = document.getElementById(REC_STACK_CONTAINER_ID);
+  const flatWrap = document.getElementById('recommendation-flat');
+  if (stack) stack.classList.toggle('rec-view-hidden', mode === 'flat');
+  if (flatWrap) flatWrap.classList.toggle('rec-view-hidden', mode !== 'flat');
+}
+
 function applyStackLayout(section, container){
   if (!container) return;
   container.classList.add('rec-card-stack');
@@ -176,6 +183,7 @@ function applyStackLayout(section, container){
 
   container.classList.toggle('is-stacked', mode === 'stacked');
   container.classList.toggle('is-flat', mode === 'flat');
+  syncRecommendationVisibility(mode);
 
   cards.forEach(card => {
     card.classList.toggle('is-top', false);
@@ -195,7 +203,7 @@ function applyStackLayout(section, container){
 
     const top = cards[0];
     if (top) {
-      const height = top.getBoundingClientRect().height;
+      const height = top.getBoundingClientRect().height || top.offsetHeight || top.scrollHeight || 0;
       const stackHeight = height + REC_STACK_OFFSET * Math.max(0, cards.length - 1);
       container.style.setProperty('--stack-height', `${stackHeight}px`);
     }
@@ -2107,44 +2115,46 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
     // Pick two with diversity
     const picks = pickTwoDiverse(scored, 0.7);
 
-    const grid = document.getElementById(REC_STACK_CONTAINER_ID);
-    if(!grid){ return; }
-    grid.innerHTML = '';
+    const stack = document.getElementById(REC_STACK_CONTAINER_ID);
+    const flatGrid = document.getElementById('skills-grid');
+    if (stack) stack.innerHTML = '';
+    if (flatGrid) flatGrid.innerHTML = '';
 
     const gemDict = buildGemDictionary(gems);
 
     // Render main recommended skills
         picks.forEach(g => {
-          const card = document.createElement('div');
-          card.className = 'skill-card rec-card';
-	
-	  // Subtle inline "requires" subtitle directly under the title
-	  const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
-		? `<div class="skill-subtitle">${g.required_weapon_types
-			.map(x => x[0].toUpperCase() + x.slice(1))
-			.join(', ')}</div>`
-		: '';
-	
-	  const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
-	  const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
-	  const rest = allTags.filter(t => !br.includes(t));
-	  const displayTags = [...br, ...rest].slice(0, 10);
-	
-	  // mark matched tags
-	  const matched = new Set();
-	  for (const t of displayTags) {
-		const k = normTagPlus(t);
-		if (rolledProfile.profile.has(k)) matched.add(k);
-	  }
-	  const pills = displayTags.map(t => {
-		const k = normTagPlus(t);
-		const cls = matched.has(k) ? 'tag-pill matched' : 'tag-pill';
-		return `<span class="${cls}">${t}</span>`;
-	  }).join('');
-	
-          card.innerHTML = `
-                  <div class="rec-card-badge">Active Skill</div>
-                  <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
+          const stackCard = document.createElement('div');
+          stackCard.className = 'skill-card rec-card';
+
+          const flatCard = document.createElement('div');
+          flatCard.className = 'skill-card';
+
+          // Subtle inline "requires" subtitle directly under the title
+          const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
+                ? `<div class="skill-subtitle">${g.required_weapon_types
+                        .map(x => x[0].toUpperCase() + x.slice(1))
+                        .join(', ')}</div>`
+                : '';
+
+          const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
+          const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
+          const rest = allTags.filter(t => !br.includes(t));
+          const displayTags = [...br, ...rest].slice(0, 10);
+
+          // mark matched tags
+          const matched = new Set();
+          for (const t of displayTags) {
+                const k = normTagPlus(t);
+                if (rolledProfile.profile.has(k)) matched.add(k);
+          }
+          const pills = displayTags.map(t => {
+                const k = normTagPlus(t);
+                const cls = matched.has(k) ? 'tag-pill matched' : 'tag-pill';
+                return `<span class="${cls}">${t}</span>`;
+          }).join('');
+
+          const shared = `
                   ${requiresSubtitle}
                   <div class="skill-divider"></div>
                   ${grantLine(g)}
@@ -2154,11 +2164,26 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
                         ${renderSupportCards(g.recommended_supports, gemDict)}
                   </div>
                 `;
-          applyGemBorderFromReqWeights(card, g.requirement_weights);
-          grid.appendChild(card);
+
+          stackCard.innerHTML = `
+                  <div class="rec-card-badge">Active Skill</div>
+                  <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
+                  ${shared}
+                `;
+
+          flatCard.innerHTML = `
+                  <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
+                  ${shared}
+                `;
+
+          applyGemBorderFromReqWeights(stackCard, g.requirement_weights);
+          applyGemBorderFromReqWeights(flatCard, g.requirement_weights);
+
+          if (stack) stack.appendChild(stackCard);
+          if (flatGrid) flatGrid.appendChild(flatCard);
         });
 
-    setupStackSection(REC_STACK_SECTION_KEY, grid, document.querySelector('.recommendation-head[data-stack-section="recommendations"]'));
+    setupStackSection(REC_STACK_SECTION_KEY, stack, document.querySelector('.recommendation-head[data-stack-section="recommendations"]'));
 
 
     // Render a dedicated persistent buff skill section (single card, full-width)
@@ -2192,7 +2217,6 @@ function renderPersistentBuffSkill(persistentPool, rolledProfile, tagIDF, knobs,
     if (!actives.length) return;
 
     const stack = document.getElementById(REC_STACK_CONTAINER_ID);
-    if (!stack) return;
 
     // Score persistent buff candidates with the same synergy engine
     const scoredPB = actives.map(g => {
@@ -2205,10 +2229,7 @@ function renderPersistentBuffSkill(persistentPool, rolledProfile, tagIDF, knobs,
 
     const g = top.item;
     const gemDict = buildGemDictionary(gems || []);
-    const card = document.createElement('div');
-    card.className = 'skill-card persistent-buff-card rec-card';
 
-    // Subtle inline "requires" subtitle directly under the title
     const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
       ? `<div class="skill-subtitle">${g.required_weapon_types
               .map(x => x[0].toUpperCase() + x.slice(1))
@@ -2231,9 +2252,7 @@ function renderPersistentBuffSkill(persistentPool, rolledProfile, tagIDF, knobs,
       return `<span class="${cls}">${t}</span>`;
     }).join('');
 
-    card.innerHTML = `
-      <div class="rec-card-badge">Persistent Buff</div>
-      <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
+    const shared = `
       ${requiresSubtitle}
       <div class="skill-divider"></div>
       ${grantLine(g)}
@@ -2243,10 +2262,56 @@ function renderPersistentBuffSkill(persistentPool, rolledProfile, tagIDF, knobs,
             ${renderSupportCards(g.recommended_supports, gemDict)}
       </div>
     `;
-    applyGemBorderFromReqWeights(card, g.requirement_weights);
-    stack.appendChild(card);
 
-    applyStackLayout(REC_STACK_SECTION_KEY, stack);
+    if (stack) {
+      const stackCard = document.createElement('div');
+      stackCard.className = 'skill-card persistent-buff-card rec-card';
+      stackCard.innerHTML = `
+        <div class="rec-card-badge">Persistent Buff</div>
+        <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
+        ${shared}
+      `;
+      applyGemBorderFromReqWeights(stackCard, g.requirement_weights);
+      stack.appendChild(stackCard);
+      applyStackLayout(REC_STACK_SECTION_KEY, stack);
+    }
+
+    // Flat layout: recreate dedicated section below skills
+    const skillsGrid = document.getElementById('skills-grid');
+    const skillsSect = skillsGrid ? skillsGrid.closest('.sect') : null;
+    const flatWrap = document.getElementById('recommendation-flat');
+    const parent = flatWrap || document.querySelector('main') || document.body;
+
+    const wrap = document.createElement('div');
+    wrap.id = 'persistent-buff-section';
+    wrap.className = 'sect';
+    wrap.innerHTML = `
+      <div class="sect-head">
+        <h3>Recommended Persistent Buff</h3>
+        <div class="underline"></div>
+        <p class="sub">A long-lasting buff skill that supports this build</p>
+      </div>
+      <div id="persistent-buff-grid" class="grid persistent-buff-grid"></div>
+    `;
+
+    if (skillsSect) {
+      skillsSect.insertAdjacentElement('afterend', wrap);
+    } else {
+      parent.appendChild(wrap);
+    }
+
+    const grid = wrap.querySelector('#persistent-buff-grid');
+    if (!grid) return g;
+    grid.innerHTML = '';
+
+    const flatCard = document.createElement('div');
+    flatCard.className = 'skill-card persistent-buff-card';
+    flatCard.innerHTML = `
+      <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
+      ${shared}
+    `;
+    applyGemBorderFromReqWeights(flatCard, g.requirement_weights);
+    grid.appendChild(flatCard);
 
     return g;
   } catch (e) {
@@ -3336,10 +3401,44 @@ function ensureUniqueSection(){
     document.querySelectorAll('.unique-divider').forEach(el=>el.remove());
     document.querySelectorAll('#uniques-section').forEach(el=>el.remove());
 
-    const stack = document.getElementById(REC_STACK_CONTAINER_ID);
-    if (!stack) return null;
-    return stack;
-  }
+    // Anchor after Skills section (or after persistent buff section if present)
+    const skillsGrid = document.querySelector('#skills-grid');
+    const skillsSect = skillsGrid ? skillsGrid.closest('.sect') : null;
+    const buffSect = document.getElementById('persistent-buff-section');
+    const flatWrap = document.getElementById('recommendation-flat');
+    const main = flatWrap || document.querySelector('main') || document.body;
+    const parent = (skillsSect && skillsSect.parentNode) || main;
+
+    if (!skillsSect) return null; // try later
+
+    const anchor = buffSect || skillsSect;
+
+    // Insert divider
+    const divider = document.createElement('div');
+    divider.className = 'ornate-divider gold unique-divider';
+    anchor.insertAdjacentElement('afterend', divider);
+
+    // Insert Uniques section
+    const wrap = document.createElement('div');
+    wrap.id = 'uniques-section';
+    wrap.className = 'sect';
+    wrap.innerHTML = `
+          <div class="sect-head">
+                <h3 class="section-title">Recommended Uniques</h3>
+                <div class="underline"></div>
+                <p class="sub">Unique items tuned to the ailments, tactics, and defenses of this roll.</p>
+          </div>
+          <div id="uniques-grid" class="grid two uniques-grid"></div>
+        `;
+
+    divider.insertAdjacentElement('afterend', wrap);
+
+    const lockBtn = wrap.querySelector('.lock-toggle');
+    if (lockBtn) wireLockButton(lockBtn);
+    syncLockUIFromState();
+
+    return document.getElementById('uniques-grid');
+}
 
   function pillsFor(item, rolledSet){
     const tags = Array.from(getItemTagSet(item)).sort();
@@ -3422,7 +3521,8 @@ function ensureUniqueSection(){
 
   function renderUniques(items, rolledSet){
           const grid = ensureUniqueSection();
-          if (!grid) { 
+          const stack = document.getElementById(REC_STACK_CONTAINER_ID);
+          if (!grid && !stack) {
                 setTimeout(() => renderUniques(items, rolledSet), 120);
                 return;
           }
@@ -3432,9 +3532,10 @@ function ensureUniqueSection(){
                 const lines = highlight(it.lines, rolledSet);
                 const reason = buildUniqueReason(it, rolledSet);
 
-                const card = document.createElement('div');
-                card.className = 'unique-card rec-card';
-                card.innerHTML = `
+                if (stack) {
+                  const stackCard = document.createElement('div');
+                  stackCard.className = 'unique-card rec-card';
+                  stackCard.innerHTML = `
                         <div class="rec-card-badge">Unique</div>
                         <div class="unique-header">
                           <div class="unique-name">${it.name}</div>
@@ -3448,12 +3549,32 @@ function ensureUniqueSection(){
                           ${reason ? `<div class="unique-highlights">${reason}</div>` : ''}
                           ${lines}
                         </div>
-                `;
+                  `;
+                  stack.appendChild(stackCard);
+                }
 
-                grid.appendChild(card);
+                if (grid) {
+                  const card = document.createElement('div');
+                  card.className = 'unique-card';
+                  card.innerHTML = `
+                        <div class="unique-header">
+                          <div class="unique-name">${it.name}</div>
+                          <div class="unique-base">${it.base}</div>
+                        </div>
+                        <div class="skill-divider"></div>
+                        <div class="tags-row">
+                          ${pills}
+                        </div>
+                        <div class="unique-lines">
+                          ${reason ? `<div class="unique-highlights">${reason}</div>` : ''}
+                          ${lines}
+                        </div>
+                  `;
+                  grid.appendChild(card);
+                }
           });
 
-          applyStackLayout(REC_STACK_SECTION_KEY, grid);
+          if (stack) applyStackLayout(REC_STACK_SECTION_KEY, stack);
         }
 
 

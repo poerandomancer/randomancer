@@ -424,6 +424,9 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 .skills-grid { margin-top: .25rem; }
 .recommendation-stack { padding-top: 6px; }
 
+.rec-view-hidden { display: none !important; }
+.recommendation-flat-wrap { margin-top: .35rem; }
+
 .section-title-row {
   display: flex;
   align-items: center;
@@ -485,7 +488,7 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 }
 .rec-card-stack.is-stacked {
   display: block !important;
-  min-height: var(--stack-height, auto);
+  min-height: var(--stack-height, 320px);
 }
 
 .rec-card-stack.is-stacked > .rec-card {
