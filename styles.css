@@ -532,7 +532,7 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 .rec-card {
   position: relative;
   display: block;
-  min-height: 435px;
+  min-height: 510px;
 }
 
 .rec-card-badge {
