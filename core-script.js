@@ -116,6 +116,120 @@ function initSectionLocks(){
   syncLockUIFromState();
 }
 
+// ----- Recommendation card stacks (layout + toggles) -----
+const REC_STACK_STORAGE_KEY = 'randomancer:recStackMode';
+const REC_STACK_DEFAULT_MODE = 'stacked';
+const REC_STACK_OFFSET = 6; // px vertical offset between cards
+const REC_STACK_SIDE_OFFSET = 4; // px lateral offset between cards
+
+function loadStackState(){
+  try {
+    if (typeof localStorage === 'undefined') return {};
+    const raw = localStorage.getItem(REC_STACK_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    console.warn('[stack] failed to load stack state', e);
+    return {};
+  }
+}
+
+const REC_STACK_STATE = loadStackState();
+
+function persistStackState(){
+  try {
+    if (typeof localStorage === 'undefined') return;
+    localStorage.setItem(REC_STACK_STORAGE_KEY, JSON.stringify(REC_STACK_STATE));
+  } catch (e) {
+    console.warn('[stack] failed to persist stack state', e);
+  }
+}
+
+function getStackMode(section){
+  return REC_STACK_STATE[section] || REC_STACK_DEFAULT_MODE;
+}
+
+function setStackMode(section, mode){
+  REC_STACK_STATE[section] = mode === 'flat' ? 'flat' : 'stacked';
+  persistStackState();
+}
+
+function syncStackToggleUI(btn, mode){
+  if (!btn) return;
+  const stacked = mode !== 'flat';
+  btn.classList.toggle('is-flat', !stacked);
+  btn.setAttribute('aria-pressed', stacked ? 'true' : 'false');
+  btn.setAttribute('aria-label', stacked ? 'Switch to flat list' : 'Switch to stacked view');
+  btn.title = stacked ? 'Stacked view' : 'Flat list view';
+}
+
+function applyStackLayout(section, container){
+  if (!container) return;
+  container.classList.add('rec-card-stack');
+  container.style.removeProperty('--stack-height');
+  container.style.setProperty('--stack-offset', `${REC_STACK_OFFSET}px`);
+  container.style.setProperty('--stack-side-offset', `${REC_STACK_SIDE_OFFSET}px`);
+
+  const mode = getStackMode(section);
+  const cards = Array.from(container.children).filter(el => el.classList?.contains('rec-card'));
+
+  container.classList.toggle('is-stacked', mode === 'stacked');
+  container.classList.toggle('is-flat', mode === 'flat');
+
+  cards.forEach(card => {
+    card.classList.toggle('is-top', false);
+    card.style.removeProperty('--stack-index');
+    card.style.removeProperty('z-index');
+  });
+
+  if (mode !== 'stacked' || !cards.length) return;
+
+  // Defer measurement so heights are accurate after DOM updates
+  requestAnimationFrame(() => {
+    cards.forEach((card, idx) => {
+      card.style.setProperty('--stack-index', idx);
+      card.classList.toggle('is-top', idx === 0);
+      card.style.zIndex = String(cards.length - idx);
+    });
+
+    const top = cards[0];
+    if (top) {
+      const height = top.getBoundingClientRect().height;
+      const stackHeight = height + REC_STACK_OFFSET * Math.max(0, cards.length - 1);
+      container.style.setProperty('--stack-height', `${stackHeight}px`);
+    }
+  });
+}
+
+function ensureStackToggle(header, section, container){
+  if (!header) return;
+  let btn = header.querySelector('.stack-toggle');
+  if (!btn) {
+    btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'stack-toggle';
+    btn.innerHTML = '<span class="stack-toggle-icon" aria-hidden="true"></span>';
+    header.appendChild(btn);
+  }
+
+  if (!btn.__stackInit) {
+    btn.__stackInit = true;
+    btn.addEventListener('click', () => {
+      const next = getStackMode(section) === 'stacked' ? 'flat' : 'stacked';
+      setStackMode(section, next);
+      syncStackToggleUI(btn, next);
+      applyStackLayout(section, container);
+    });
+  }
+
+  syncStackToggleUI(btn, getStackMode(section));
+}
+
+function setupStackSection(section, container, header){
+  if (!container) return;
+  if (header) ensureStackToggle(header, section, container);
+  applyStackLayout(section, container);
+}
+
 /* === Build Codes + Saved Builds (v0.9 preview) === */
 (function(){
   const STORAGE_KEY = 'randomancer_saved_builds_v1';
@@ -238,8 +352,8 @@ function initSectionLocks(){
 		  return;
 		}
 	
-		const card = document.createElement('div');
-		card.className = 'skill-card';
+                const card = document.createElement('div');
+                card.className = 'skill-card rec-card';
 	
 		const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
 		  ? `<div class="skill-subtitle">${g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')}</div>`
@@ -255,18 +369,20 @@ function initSectionLocks(){
 		  ? entry.recommended_supports
 		  : g.recommended_supports;
 	
-		card.innerHTML = `
-		  <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
-		  ${requiresSubtitle}
+          card.innerHTML = `
+                  <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
+                  ${requiresSubtitle}
 		  <div class="skill-divider"></div>
 		  ${grantLine(g)}
 		  <div class="skill-tags">${pills}</div>
 		  <div class="supports-label">Recommended Supports</div>
 		  <div class="supports">${renderSupportCards(supports, gemDict)}</div>
-		`;
-		applyGemBorderFromReqWeights(card, g.requirement_weights);
-		grid.appendChild(card);
-	  });
+                `;
+                applyGemBorderFromReqWeights(card, g.requirement_weights);
+                grid.appendChild(card);
+          });
+
+          setupStackSection('skills', grid, document.querySelector('.recommendation-head[data-stack-section="skills"]'));
 	
 	  if (snap.recommendedPersistentBuff) {
 		const buffKey = snap.recommendedPersistentBuff.id || snap.recommendedPersistentBuff.name || '';
@@ -293,12 +409,17 @@ function initSectionLocks(){
     wrap.id = 'persistent-buff-section';
     wrap.className = 'sect';
     wrap.innerHTML = `
-      <div class="sect-head">
-        <h3>Recommended Persistent Buff</h3>
+      <div class="sect-head recommendation-head" data-stack-section="persistent-buff">
+        <div class="section-title-row">
+          <h3>Recommended Persistent Buff</h3>
+          <button class="stack-toggle" type="button" aria-pressed="true" aria-label="Toggle stacked view">
+            <span class="stack-toggle-icon" aria-hidden="true"></span>
+          </button>
+        </div>
         <div class="underline"></div>
         <p class="sub">A long-lasting buff skill that supports this build</p>
       </div>
-      <div id="persistent-buff-grid" class="grid persistent-buff-grid"></div>
+      <div id="persistent-buff-grid" class="grid persistent-buff-grid rec-card-stack" data-stack-section="persistent-buff"></div>
     `;
 
     if (skillsSect) skillsSect.insertAdjacentElement('afterend', wrap); else parent.appendChild(wrap);
@@ -315,7 +436,7 @@ function initSectionLocks(){
     const pills = displayTags.map(t => `<span class="tag-pill">${t}</span>`).join('');
 
     const card = document.createElement('div');
-    card.className = 'skill-card persistent-buff-card';
+    card.className = 'skill-card persistent-buff-card rec-card';
     card.innerHTML = `
       <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
       ${requiresSubtitle}
@@ -327,6 +448,7 @@ function initSectionLocks(){
     `;
     applyGemBorderFromReqWeights(card, g.requirement_weights);
     grid.appendChild(card);
+    setupStackSection('persistent-buff', grid, wrap.querySelector('.recommendation-head[data-stack-section="persistent-buff"]'));
   }
 
   function renderSnapshotToDom(snap){
@@ -2014,8 +2136,8 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
 
     // Render main recommended skills
 	picks.forEach(g => {
-	  const card = document.createElement('div');
-	  card.className = 'skill-card';
+          const card = document.createElement('div');
+          card.className = 'skill-card rec-card';
 	
 	  // Subtle inline "requires" subtitle directly under the title
 	  const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
@@ -2051,10 +2173,12 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
 		  <div class="supports">
 			${renderSupportCards(g.recommended_supports, gemDict)}
 		  </div>
-		`;
-	  applyGemBorderFromReqWeights(card, g.requirement_weights);
-	  grid.appendChild(card);
-	});
+                `;
+          applyGemBorderFromReqWeights(card, g.requirement_weights);
+          grid.appendChild(card);
+        });
+
+    setupStackSection('skills', grid, document.querySelector('.recommendation-head[data-stack-section="skills"]'));
 
 
     // Render a dedicated persistent buff skill section (single card, full-width)
@@ -2107,12 +2231,17 @@ function renderPersistentBuffSkill(persistentPool, rolledProfile, tagIDF, knobs,
     wrap.id = 'persistent-buff-section';
     wrap.className = 'sect';
     wrap.innerHTML = `
-      <div class="sect-head">
-        <h3>Recommended Persistent Buff</h3>
+      <div class="sect-head recommendation-head" data-stack-section="persistent-buff">
+        <div class="section-title-row">
+          <h3>Recommended Persistent Buff</h3>
+          <button class="stack-toggle" type="button" aria-pressed="true" aria-label="Toggle stacked view">
+            <span class="stack-toggle-icon" aria-hidden="true"></span>
+          </button>
+        </div>
         <div class="underline"></div>
         <p class="sub">A long-lasting buff skill that supports this build</p>
       </div>
-      <div id="persistent-buff-grid" class="grid persistent-buff-grid"></div>
+      <div id="persistent-buff-grid" class="grid persistent-buff-grid rec-card-stack" data-stack-section="persistent-buff"></div>
     `;
 
     if (skillsSect) {
@@ -2127,8 +2256,8 @@ function renderPersistentBuffSkill(persistentPool, rolledProfile, tagIDF, knobs,
 	
 	const g = top.item;
 	const gemDict = buildGemDictionary(gems || []);
-	const card = document.createElement('div');
-	card.className = 'skill-card persistent-buff-card';
+        const card = document.createElement('div');
+        card.className = 'skill-card persistent-buff-card rec-card';
 	
 	// Subtle inline "requires" subtitle directly under the title
 	const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
@@ -2166,6 +2295,8 @@ function renderPersistentBuffSkill(persistentPool, rolledProfile, tagIDF, knobs,
         `;
         applyGemBorderFromReqWeights(card, g.requirement_weights);
         grid.appendChild(card);
+
+        setupStackSection('persistent-buff', grid, wrap.querySelector('.recommendation-head[data-stack-section="persistent-buff"]'));
 
         return g;
   } catch (e) {
@@ -2239,7 +2370,9 @@ function ensureDataPreload(){
 // ---------- wireup ----------
 document.addEventListener('DOMContentLoaded', ()=>{
     const slider = document.getElementById('cohesionRange');
-	  const hintEl = document.querySelector('.cohesion-status');
+          const hintEl = document.querySelector('.cohesion-status');
+
+          setupStackSection('skills', document.getElementById('skills-grid'), document.querySelector('.recommendation-head[data-stack-section="skills"]'));
 	
 	  const applyThreshold = (t) => {
 		// keep globals in sync
@@ -3274,12 +3407,17 @@ function ensureUniqueSection(){
     wrap.id = 'uniques-section';
     wrap.className = 'sect';
     wrap.innerHTML = `
-          <div class="sect-head">
-                <h3 class="section-title">Recommended Uniques</h3>
+          <div class="sect-head recommendation-head" data-stack-section="uniques">
+                <div class="section-title-row">
+                  <h3 class="section-title">Recommended Uniques</h3>
+                  <button class="stack-toggle" type="button" aria-pressed="true" aria-label="Toggle stacked view">
+                    <span class="stack-toggle-icon" aria-hidden="true"></span>
+                  </button>
+                </div>
                 <div class="underline"></div>
                 <p class="sub">Unique items tuned to the ailments, tactics, and defenses of this roll.</p>
           </div>
-          <div id="uniques-grid" class="grid two uniques-grid"></div>
+          <div id="uniques-grid" class="grid two uniques-grid rec-card-stack" data-stack-section="uniques"></div>
         `;
 
     divider.insertAdjacentElement('afterend', wrap);
@@ -3382,11 +3520,11 @@ function ensureUniqueSection(){
 		const lines = highlight(it.lines, rolledSet);
 		const reason = buildUniqueReason(it, rolledSet);
 	
-		return `
-		  <div class="unique-card">
-			<div class="unique-header">
-			  <div class="unique-name">${it.name}</div>
-			  <div class="unique-base">${it.base}</div>
+                return `
+                  <div class="unique-card rec-card">
+                        <div class="unique-header">
+                          <div class="unique-name">${it.name}</div>
+                          <div class="unique-base">${it.base}</div>
 			</div>
 			<div class="skill-divider"></div>
 			<div class="tags-row">
@@ -3397,10 +3535,12 @@ function ensureUniqueSection(){
 			  ${lines}
 			</div>
 		  </div>
-		`;
+                `;
 
-	  }).join('');
-	}
+          }).join('');
+
+          setupStackSection('uniques', grid, grid.closest('.sect')?.querySelector('.recommendation-head[data-stack-section="uniques"]'));
+        }
 
 
     async function refreshUniques(snap){
