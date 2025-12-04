@@ -498,7 +498,7 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
   transform: translate(
     calc(var(--stack-side-offset, 4px) * var(--stack-index, 0)),
     calc(var(--stack-offset, 6px) * var(--stack-index, 0))
-  );
+  ) rotate(var(--stack-tilt, 0deg));
   pointer-events: none;
   margin: 0;
   transition: transform .18s ease, box-shadow .18s ease;
@@ -532,7 +532,7 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 .rec-card {
   position: relative;
   display: block;
-  min-height: 360px;
+  min-height: 435px;
 }
 
 .rec-card-badge {

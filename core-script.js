@@ -121,9 +121,10 @@ const REC_STACK_STORAGE_KEY = 'randomancer:recStackMode';
 const REC_STACK_DEFAULT_MODE = 'stacked';
 const REC_STACK_OFFSET = 6; // px vertical offset between cards
 const REC_STACK_SIDE_OFFSET = 4; // px lateral offset between cards
-const REC_STACK_MIN_CARD_HEIGHT = 360; // px minimum height so cards remain tall and clickable
+const REC_STACK_MIN_CARD_HEIGHT = 435; // px minimum height so cards remain tall and clickable
 const REC_STACK_SECTION_KEY = 'recommendations';
 const REC_STACK_CONTAINER_ID = 'recommendation-stack';
+const REC_STACK_MAX_VISIBLE_EDGES = 6;
 
 function loadStackState(){
   try {
@@ -189,6 +190,7 @@ function applyStackLayout(section, container){
   cards.forEach(card => {
     card.classList.toggle('is-top', false);
     card.style.removeProperty('--stack-index');
+    card.style.removeProperty('--stack-tilt');
     card.style.removeProperty('z-index');
   });
 
@@ -196,9 +198,16 @@ function applyStackLayout(section, container){
 
   // Defer measurement so heights are accurate after DOM updates
   requestAnimationFrame(() => {
+    const visibleEdges = Math.min(Math.max(0, cards.length - 1), REC_STACK_MAX_VISIBLE_EDGES);
+
     cards.forEach((card, idx) => {
-      card.style.setProperty('--stack-index', idx);
-      card.classList.toggle('is-top', idx === 0);
+      const isTop = idx === 0;
+      const edgeIndex = Math.min(idx, REC_STACK_MAX_VISIBLE_EDGES);
+      const tiltDeg = isTop ? 0 : Number(card.dataset.stackTilt || (card.dataset.stackTilt = `${Math.random() < 0.5 ? 1 : 2}`)) || 1;
+
+      card.style.setProperty('--stack-index', edgeIndex);
+      card.style.setProperty('--stack-tilt', `${tiltDeg}deg`);
+      card.classList.toggle('is-top', isTop);
       card.style.zIndex = String(cards.length - idx);
     });
 
@@ -206,7 +215,7 @@ function applyStackLayout(section, container){
     if (top) {
       const measuredHeight = top.getBoundingClientRect().height || top.offsetHeight || top.scrollHeight || 0;
       const height = Math.max(measuredHeight, REC_STACK_MIN_CARD_HEIGHT);
-      const stackHeight = height + REC_STACK_OFFSET * Math.max(0, cards.length - 1);
+      const stackHeight = height + REC_STACK_OFFSET * visibleEdges;
       container.style.setProperty('--stack-height', `${stackHeight}px`);
     }
   });
