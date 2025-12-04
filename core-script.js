@@ -182,6 +182,7 @@ function applyStackLayout(section, container){
 
   const mode = getStackMode(section);
   const cards = Array.from(container.children).filter(el => el.classList?.contains('rec-card'));
+  container.setAttribute('data-card-count', cards.length);
 
   container.classList.toggle('is-stacked', mode === 'stacked');
   container.classList.toggle('is-flat', mode === 'flat');

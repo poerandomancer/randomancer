@@ -485,6 +485,24 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
   width: var(--rec-card-width);
   max-width: 90vw;
   margin: 0 auto;
+  padding-bottom: 28px;
+}
+
+.rec-card-stack.is-stacked[data-card-count]:not([data-card-count="0"])::after {
+  content: attr(data-card-count) ' cards';
+  position: absolute;
+  right: 12px;
+  bottom: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(20,18,15,0.94), rgba(12,11,10,0.9));
+  border: 1px solid rgba(202,164,95,0.4);
+  color: var(--gold);
+  font-size: 12px;
+  letter-spacing: 0.35px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.55);
+  pointer-events: none;
+  opacity: 0.95;
 }
 .rec-card-stack.is-stacked {
   display: block !important;
