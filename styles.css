@@ -484,8 +484,8 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
   --rec-card-width: 380px;
   width: var(--rec-card-width);
   max-width: 90vw;
-  margin: 0 auto 26px;
-  padding-bottom: 32px;
+  margin: 0 auto 36px;
+  padding-bottom: 60px;
   z-index: 0;
 }
 
@@ -493,7 +493,7 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
   content: attr(data-current-index) ' / ' attr(data-card-count);
   position: absolute;
   left: 50%;
-  bottom: -18px;
+  bottom: -32px;
   transform: translateX(-50%);
   color: rgba(202,164,95,0.78);
   font-size: 12px;
@@ -513,7 +513,7 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
   width: 100%;
   transform: translate(
     calc(var(--stack-side-offset, 4px) * var(--stack-index, 0)),
-    calc(var(--stack-offset, 6px) * var(--stack-index, 0))
+    calc(var(--card-offset, var(--stack-offset, 2px)) * var(--stack-index, 0))
   ) rotate(var(--stack-tilt, 0deg));
   pointer-events: none;
   margin: 0;
@@ -566,12 +566,16 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 }
 
 .skill-card {
-  border-radius: 10px;
+  border-radius: 14px;
   padding: .8rem 1rem;
   background: #15161b;
   border: 1px solid var(--edge);
   box-shadow: 0 0 6px rgba(0,0,0,0.4);
   transition: box-shadow .2s ease, border-color .2s ease;
+}
+
+.skill-card.hybrid {
+  border-radius: 14px;
 }
 
 /* Skill name: slightly more prominent */

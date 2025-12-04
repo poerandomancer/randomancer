@@ -119,12 +119,12 @@ function initSectionLocks(){
 // ----- Recommendation card stacks (layout + toggles) -----
 const REC_STACK_STORAGE_KEY = 'randomancer:recStackMode';
 const REC_STACK_DEFAULT_MODE = 'stacked';
-const REC_STACK_OFFSET = 3; // px vertical offset between cards
+const REC_STACK_OFFSET = 2; // px vertical offset between cards (default/fallback)
 const REC_STACK_SIDE_OFFSET = 4; // px lateral offset between cards
 const REC_STACK_MIN_CARD_HEIGHT = 510; // px minimum height so cards remain tall and clickable
 const REC_STACK_SECTION_KEY = 'recommendations';
 const REC_STACK_CONTAINER_ID = 'recommendation-stack';
-const REC_STACK_MAX_VISIBLE_EDGES = 6;
+const REC_STACK_MAX_VISIBLE_EDGES = 5;
 
 function loadStackState(){
   try {
@@ -205,6 +205,7 @@ function applyStackLayout(section, container){
     card.classList.toggle('is-top', false);
     card.style.removeProperty('--stack-index');
     card.style.removeProperty('--stack-tilt');
+    card.style.removeProperty('--card-offset');
     card.style.removeProperty('z-index');
   });
 
@@ -214,12 +215,18 @@ function applyStackLayout(section, container){
   requestAnimationFrame(() => {
     const visibleEdges = Math.min(Math.max(0, cards.length - 1), REC_STACK_MAX_VISIBLE_EDGES);
 
+    const offsets = [];
+
     cards.forEach((card, idx) => {
       const isTop = idx === 0;
       const edgeIndex = Math.min(idx, REC_STACK_MAX_VISIBLE_EDGES);
-      const tiltDeg = isTop ? 0 : Number(card.dataset.stackTilt || (card.dataset.stackTilt = `${Math.random() < 0.5 ? 1 : 2}`)) || 1;
+      const offsetPx = isTop ? 0 : Number(card.dataset.stackOffset || (card.dataset.stackOffset = `${Math.random() < 0.5 ? 1 : 2}`)) || 1;
+      const tiltDeg = isTop ? 0 : Number(card.dataset.stackTilt || (card.dataset.stackTilt = `${2 + (Math.random() < 0.5 ? 0 : 1)}`)) || 2;
+
+      offsets.push(offsetPx);
 
       card.style.setProperty('--stack-index', edgeIndex);
+      card.style.setProperty('--card-offset', `${offsetPx}px`);
       card.style.setProperty('--stack-tilt', `${tiltDeg}deg`);
       card.classList.toggle('is-top', isTop);
       card.style.zIndex = String(cards.length - idx);
@@ -229,7 +236,8 @@ function applyStackLayout(section, container){
     if (top) {
       const measuredHeight = top.getBoundingClientRect().height || top.offsetHeight || top.scrollHeight || 0;
       const height = Math.max(measuredHeight, REC_STACK_MIN_CARD_HEIGHT);
-      const stackHeight = height + REC_STACK_OFFSET * visibleEdges;
+      const maxOffset = offsets.length ? Math.max(...offsets) : REC_STACK_OFFSET;
+      const stackHeight = height + maxOffset * visibleEdges;
       container.style.setProperty('--stack-height', `${stackHeight}px`);
     }
   });
