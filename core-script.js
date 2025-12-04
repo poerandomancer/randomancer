@@ -116,6 +116,194 @@ function initSectionLocks(){
   syncLockUIFromState();
 }
 
+// ----- Recommendation card stacks (layout + toggles) -----
+const REC_STACK_STORAGE_KEY = 'randomancer:recStackMode';
+const REC_STACK_DEFAULT_MODE = 'stacked';
+const REC_STACK_OFFSET = 2; // px vertical offset between cards (default/fallback)
+const REC_STACK_SIDE_OFFSET = 4; // px lateral offset between cards
+const REC_STACK_MIN_CARD_HEIGHT = 510; // px minimum height so cards remain tall and clickable
+const REC_STACK_SECTION_KEY = 'recommendations';
+const REC_STACK_CONTAINER_ID = 'recommendation-stack';
+const REC_STACK_MAX_VISIBLE_EDGES = 5;
+
+function loadStackState(){
+  try {
+    if (typeof localStorage === 'undefined') return {};
+    const raw = localStorage.getItem(REC_STACK_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    console.warn('[stack] failed to load stack state', e);
+    return {};
+  }
+}
+
+const REC_STACK_STATE = loadStackState();
+
+function persistStackState(){
+  try {
+    if (typeof localStorage === 'undefined') return;
+    localStorage.setItem(REC_STACK_STORAGE_KEY, JSON.stringify(REC_STACK_STATE));
+  } catch (e) {
+    console.warn('[stack] failed to persist stack state', e);
+  }
+}
+
+function getStackMode(section){
+  return REC_STACK_STATE[section] || REC_STACK_DEFAULT_MODE;
+}
+
+function setStackMode(section, mode){
+  REC_STACK_STATE[section] = mode === 'flat' ? 'flat' : 'stacked';
+  persistStackState();
+}
+
+function syncStackToggleUI(btn, mode){
+  if (!btn) return;
+  const stacked = mode !== 'flat';
+  btn.classList.toggle('is-flat', !stacked);
+  btn.setAttribute('aria-pressed', stacked ? 'true' : 'false');
+  btn.setAttribute('aria-label', stacked ? 'Switch to flat list' : 'Switch to stacked view');
+  btn.title = stacked ? 'Stacked view' : 'Flat list view';
+}
+
+function syncRecommendationVisibility(mode){
+  const stack = document.getElementById(REC_STACK_CONTAINER_ID);
+  const flatWrap = document.getElementById('recommendation-flat');
+  if (stack) stack.classList.toggle('rec-view-hidden', mode === 'flat');
+  if (flatWrap) flatWrap.classList.toggle('rec-view-hidden', mode !== 'flat');
+}
+
+function applyStackLayout(section, container){
+  if (!container) return;
+  container.classList.add('rec-card-stack');
+  container.style.removeProperty('--stack-height');
+  container.style.setProperty('--stack-offset', `${REC_STACK_OFFSET}px`);
+  container.style.setProperty('--stack-side-offset', `${REC_STACK_SIDE_OFFSET}px`);
+
+  const mode = getStackMode(section);
+  const cards = Array.from(container.children).filter(el => el.classList?.contains('rec-card'));
+  const totalCards = cards.length;
+
+  let current = Number(container.dataset.currentIndex);
+  if (!Number.isFinite(current) || current < 1) current = totalCards ? 1 : 0;
+  if (current > totalCards) current = totalCards;
+
+  container.setAttribute('data-card-count', totalCards);
+  if (totalCards) {
+    container.setAttribute('data-current-index', current);
+    container.dataset.currentIndex = String(current);
+  } else {
+    container.removeAttribute('data-current-index');
+    container.dataset.currentIndex = '';
+  }
+
+  container.classList.toggle('is-stacked', mode === 'stacked');
+  container.classList.toggle('is-flat', mode === 'flat');
+  syncRecommendationVisibility(mode);
+
+  cards.forEach(card => {
+    card.classList.toggle('is-top', false);
+    card.style.removeProperty('--stack-index');
+    card.style.removeProperty('--stack-tilt');
+    card.style.removeProperty('--card-offset');
+    card.style.removeProperty('z-index');
+  });
+
+  if (mode !== 'stacked' || !cards.length) return;
+
+  // Defer measurement so heights are accurate after DOM updates
+  requestAnimationFrame(() => {
+    const visibleEdges = Math.min(Math.max(0, cards.length - 1), REC_STACK_MAX_VISIBLE_EDGES);
+
+    const offsets = [];
+
+    cards.forEach((card, idx) => {
+      const isTop = idx === 0;
+      const edgeIndex = Math.min(idx, REC_STACK_MAX_VISIBLE_EDGES);
+      const offsetPx = isTop ? 0 : Number(card.dataset.stackOffset || (card.dataset.stackOffset = `${Math.random() < 0.5 ? 1 : 2}`)) || 1;
+      const tiltDeg = isTop ? 0 : Number(card.dataset.stackTilt || (card.dataset.stackTilt = `${2 + (Math.random() < 0.5 ? 0 : 1)}`)) || 2;
+
+      offsets.push(offsetPx);
+
+      card.style.setProperty('--stack-index', edgeIndex);
+      card.style.setProperty('--card-offset', `${offsetPx}px`);
+      card.style.setProperty('--stack-tilt', `${tiltDeg}deg`);
+      card.classList.toggle('is-top', isTop);
+      card.style.zIndex = String(cards.length - idx);
+    });
+
+    const top = cards[0];
+    if (top) {
+      const measuredHeight = top.getBoundingClientRect().height || top.offsetHeight || top.scrollHeight || 0;
+      const height = Math.max(measuredHeight, REC_STACK_MIN_CARD_HEIGHT);
+      const maxOffset = offsets.length ? Math.max(...offsets) : REC_STACK_OFFSET;
+      const stackHeight = height + maxOffset * visibleEdges;
+      container.style.setProperty('--stack-height', `${stackHeight}px`);
+    }
+  });
+}
+
+function cycleStackCards(section, container){
+  if (!container) return;
+  const mode = getStackMode(section);
+  if (mode !== 'stacked') return;
+
+  const cards = Array.from(container.children).filter(el => el.classList?.contains('rec-card'));
+  if (cards.length <= 1) return;
+
+  const top = cards[0];
+  if (!top) return;
+
+  const current = Number(container.dataset.currentIndex) || 1;
+  const next = current >= cards.length ? 1 : current + 1;
+  container.dataset.currentIndex = String(next);
+
+  container.appendChild(top);
+  applyStackLayout(section, container);
+}
+
+function wireStackInteraction(section, container){
+  if (!container || container.__stackClickInit) return;
+  container.__stackClickInit = true;
+
+  container.addEventListener('click', (e) => {
+    const card = e.target.closest('.rec-card');
+    if (!card || !card.classList.contains('is-top')) return;
+    cycleStackCards(section, container);
+  });
+}
+
+function ensureStackToggle(header, section, container){
+  if (!header) return;
+  let btn = header.querySelector('.stack-toggle');
+  if (!btn) {
+    btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'stack-toggle';
+    btn.innerHTML = '<span class="stack-toggle-icon" aria-hidden="true"></span>';
+    header.appendChild(btn);
+  }
+
+  if (!btn.__stackInit) {
+    btn.__stackInit = true;
+    btn.addEventListener('click', () => {
+      const next = getStackMode(section) === 'stacked' ? 'flat' : 'stacked';
+      setStackMode(section, next);
+      syncStackToggleUI(btn, next);
+      applyStackLayout(section, container);
+    });
+  }
+
+  syncStackToggleUI(btn, getStackMode(section));
+}
+
+function setupStackSection(section, container, header){
+  if (!container) return;
+  if (header) ensureStackToggle(header, section, container);
+  wireStackInteraction(section, container);
+  applyStackLayout(section, container);
+}
+
 /* === Build Codes + Saved Builds (v0.9 preview) === */
 (function(){
   const STORAGE_KEY = 'randomancer_saved_builds_v1';
@@ -222,9 +410,10 @@ function initSectionLocks(){
 
 
   function renderSkillsFromSnapshot(snap){
-	  const grid = document.getElementById('skills-grid');
-	  if (!grid) return;
-	  grid.innerHTML = '';
+          const grid = document.getElementById(REC_STACK_CONTAINER_ID);
+          if (!grid) return;
+          grid.innerHTML = '';
+          grid.dataset.currentIndex = '';
 	
 	  const gems = (window.DATA && window.DATA.gems) || [];
 	  const gemDict = buildGemDictionary(gems);
@@ -238,8 +427,8 @@ function initSectionLocks(){
 		  return;
 		}
 	
-		const card = document.createElement('div');
-		card.className = 'skill-card';
+                const card = document.createElement('div');
+                card.className = 'skill-card rec-card';
 	
 		const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
 		  ? `<div class="skill-subtitle">${g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')}</div>`
@@ -255,18 +444,21 @@ function initSectionLocks(){
 		  ? entry.recommended_supports
 		  : g.recommended_supports;
 	
-		card.innerHTML = `
-		  <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
-		  ${requiresSubtitle}
-		  <div class="skill-divider"></div>
-		  ${grantLine(g)}
-		  <div class="skill-tags">${pills}</div>
-		  <div class="supports-label">Recommended Supports</div>
-		  <div class="supports">${renderSupportCards(supports, gemDict)}</div>
-		`;
-		applyGemBorderFromReqWeights(card, g.requirement_weights);
-		grid.appendChild(card);
-	  });
+          card.innerHTML = `
+                  <div class="rec-card-badge">Active Skill</div>
+                  <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
+                  ${requiresSubtitle}
+                  <div class="skill-divider"></div>
+                  ${grantLine(g)}
+                  <div class="skill-tags">${pills}</div>
+                  <div class="supports-label">Recommended Supports</div>
+                  <div class="supports">${renderSupportCards(supports, gemDict)}</div>
+                `;
+                applyGemBorderFromReqWeights(card, g.requirement_weights);
+                grid.appendChild(card);
+          });
+
+          setupStackSection(REC_STACK_SECTION_KEY, grid, document.querySelector('.recommendation-head[data-stack-section="recommendations"]'));
 	
 	  if (snap.recommendedPersistentBuff) {
 		const buffKey = snap.recommendedPersistentBuff.id || snap.recommendedPersistentBuff.name || '';
@@ -276,33 +468,13 @@ function initSectionLocks(){
 		} else {
 		  console.warn('[skills] No gem match for persistent buff', snap.recommendedPersistentBuff);
 		}
-	  } else {
-		document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
-	  }
-	}
+          }
+        }
 
 
-  function renderSnapshotPersistentBuff(g, gemDict){
+function renderSnapshotPersistentBuff(g, gemDict){
     document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
-    const skillsGrid = document.getElementById('skills-grid');
-    const skillsSect = skillsGrid ? skillsGrid.closest('.sect') : null;
-    const main = document.querySelector('main') || document.body;
-    const parent = (skillsSect && skillsSect.parentNode) || main;
-
-    const wrap = document.createElement('div');
-    wrap.id = 'persistent-buff-section';
-    wrap.className = 'sect';
-    wrap.innerHTML = `
-      <div class="sect-head">
-        <h3>Recommended Persistent Buff</h3>
-        <div class="underline"></div>
-        <p class="sub">A long-lasting buff skill that supports this build</p>
-      </div>
-      <div id="persistent-buff-grid" class="grid persistent-buff-grid"></div>
-    `;
-
-    if (skillsSect) skillsSect.insertAdjacentElement('afterend', wrap); else parent.appendChild(wrap);
-    const grid = wrap.querySelector('#persistent-buff-grid');
+    const grid = document.getElementById(REC_STACK_CONTAINER_ID);
     if (!grid) return;
 
     const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
@@ -315,8 +487,9 @@ function initSectionLocks(){
     const pills = displayTags.map(t => `<span class="tag-pill">${t}</span>`).join('');
 
     const card = document.createElement('div');
-    card.className = 'skill-card persistent-buff-card';
+    card.className = 'skill-card persistent-buff-card rec-card';
     card.innerHTML = `
+      <div class="rec-card-badge">Persistent Buff</div>
       <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
       ${requiresSubtitle}
       <div class="skill-divider"></div>
@@ -327,6 +500,7 @@ function initSectionLocks(){
     `;
     applyGemBorderFromReqWeights(card, g.requirement_weights);
     grid.appendChild(card);
+    applyStackLayout(REC_STACK_SECTION_KEY, grid);
   }
 
   function renderSnapshotToDom(snap){
@@ -2006,55 +2180,78 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
     // Pick two with diversity
     const picks = pickTwoDiverse(scored, 0.7);
 
-    const grid = document.getElementById('skills-grid');
-    if(!grid){ return; }
-    grid.innerHTML = '';
+    const stack = document.getElementById(REC_STACK_CONTAINER_ID);
+    const flatGrid = document.getElementById('skills-grid');
+    if (stack) {
+      stack.innerHTML = '';
+      stack.dataset.currentIndex = '';
+    }
+    if (flatGrid) flatGrid.innerHTML = '';
 
     const gemDict = buildGemDictionary(gems);
 
     // Render main recommended skills
-	picks.forEach(g => {
-	  const card = document.createElement('div');
-	  card.className = 'skill-card';
-	
-	  // Subtle inline "requires" subtitle directly under the title
-	  const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
-		? `<div class="skill-subtitle">${g.required_weapon_types
-			.map(x => x[0].toUpperCase() + x.slice(1))
-			.join(', ')}</div>`
-		: '';
-	
-	  const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
-	  const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
-	  const rest = allTags.filter(t => !br.includes(t));
-	  const displayTags = [...br, ...rest].slice(0, 10);
-	
-	  // mark matched tags
-	  const matched = new Set();
-	  for (const t of displayTags) {
-		const k = normTagPlus(t);
-		if (rolledProfile.profile.has(k)) matched.add(k);
-	  }
-	  const pills = displayTags.map(t => {
-		const k = normTagPlus(t);
-		const cls = matched.has(k) ? 'tag-pill matched' : 'tag-pill';
-		return `<span class="${cls}">${t}</span>`;
-	  }).join('');
-	
-	  card.innerHTML = `
-		  <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
-		  ${requiresSubtitle}
-		  <div class="skill-divider"></div>
-		  ${grantLine(g)}
-		  <div class="skill-tags">${pills}</div>
-		  <div class="supports-label">Recommended Supports</div>
-		  <div class="supports">
-			${renderSupportCards(g.recommended_supports, gemDict)}
-		  </div>
-		`;
-	  applyGemBorderFromReqWeights(card, g.requirement_weights);
-	  grid.appendChild(card);
-	});
+        picks.forEach(g => {
+          const stackCard = document.createElement('div');
+          stackCard.className = 'skill-card rec-card';
+
+          const flatCard = document.createElement('div');
+          flatCard.className = 'skill-card';
+
+          // Subtle inline "requires" subtitle directly under the title
+          const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
+                ? `<div class="skill-subtitle">${g.required_weapon_types
+                        .map(x => x[0].toUpperCase() + x.slice(1))
+                        .join(', ')}</div>`
+                : '';
+
+          const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
+          const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
+          const rest = allTags.filter(t => !br.includes(t));
+          const displayTags = [...br, ...rest].slice(0, 10);
+
+          // mark matched tags
+          const matched = new Set();
+          for (const t of displayTags) {
+                const k = normTagPlus(t);
+                if (rolledProfile.profile.has(k)) matched.add(k);
+          }
+          const pills = displayTags.map(t => {
+                const k = normTagPlus(t);
+                const cls = matched.has(k) ? 'tag-pill matched' : 'tag-pill';
+                return `<span class="${cls}">${t}</span>`;
+          }).join('');
+
+          const shared = `
+                  ${requiresSubtitle}
+                  <div class="skill-divider"></div>
+                  ${grantLine(g)}
+                  <div class="skill-tags">${pills}</div>
+                  <div class="supports-label">Recommended Supports</div>
+                  <div class="supports">
+                        ${renderSupportCards(g.recommended_supports, gemDict)}
+                  </div>
+                `;
+
+          stackCard.innerHTML = `
+                  <div class="rec-card-badge">Active Skill</div>
+                  <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
+                  ${shared}
+                `;
+
+          flatCard.innerHTML = `
+                  <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
+                  ${shared}
+                `;
+
+          applyGemBorderFromReqWeights(stackCard, g.requirement_weights);
+          applyGemBorderFromReqWeights(flatCard, g.requirement_weights);
+
+          if (stack) stack.appendChild(stackCard);
+          if (flatGrid) flatGrid.appendChild(flatCard);
+        });
+
+    setupStackSection(REC_STACK_SECTION_KEY, stack, document.querySelector('.recommendation-head[data-stack-section="recommendations"]'));
 
 
     // Render a dedicated persistent buff skill section (single card, full-width)
@@ -2080,13 +2277,14 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
 
 function renderPersistentBuffSkill(persistentPool, rolledProfile, tagIDF, knobs, gems){
   try {
-    // Clear any previous persistent buff section
     document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
 
     if (!Array.isArray(persistentPool) || !persistentPool.length) return;
 
     const actives = persistentPool.filter(g => g && g.type === 'active');
     if (!actives.length) return;
+
+    const stack = document.getElementById(REC_STACK_CONTAINER_ID);
 
     // Score persistent buff candidates with the same synergy engine
     const scoredPB = actives.map(g => {
@@ -2097,12 +2295,61 @@ function renderPersistentBuffSkill(persistentPool, rolledProfile, tagIDF, knobs,
     const top = scoredPB[0];
     if (!top || !isFinite(top.raw)) return;
 
+    const g = top.item;
+    const gemDict = buildGemDictionary(gems || []);
+
+    const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
+      ? `<div class="skill-subtitle">${g.required_weapon_types
+              .map(x => x[0].toUpperCase() + x.slice(1))
+              .join(', ')}</div>`
+      : '';
+
+    const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
+    const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
+    const rest = allTags.filter(t => !br.includes(t));
+    const displayTags = [...br, ...rest].slice(0, 10);
+
+    const matched = new Set();
+    for (const t of displayTags) {
+      const k = normTagPlus(t);
+      if (rolledProfile.profile.has(k)) matched.add(k);
+    }
+    const pills = displayTags.map(t => {
+      const k = normTagPlus(t);
+      const cls = matched.has(k) ? 'tag-pill matched' : 'tag-pill';
+      return `<span class="${cls}">${t}</span>`;
+    }).join('');
+
+    const shared = `
+      ${requiresSubtitle}
+      <div class="skill-divider"></div>
+      ${grantLine(g)}
+      <div class="skill-tags">${pills}</div>
+      <div class="supports-label">Recommended Supports</div>
+      <div class="supports">
+            ${renderSupportCards(g.recommended_supports, gemDict)}
+      </div>
+    `;
+
+    if (stack) {
+      const stackCard = document.createElement('div');
+      stackCard.className = 'skill-card persistent-buff-card rec-card';
+      stackCard.innerHTML = `
+        <div class="rec-card-badge">Persistent Buff</div>
+        <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
+        ${shared}
+      `;
+      applyGemBorderFromReqWeights(stackCard, g.requirement_weights);
+      stack.appendChild(stackCard);
+      applyStackLayout(REC_STACK_SECTION_KEY, stack);
+    }
+
+    // Flat layout: recreate dedicated section below skills
     const skillsGrid = document.getElementById('skills-grid');
     const skillsSect = skillsGrid ? skillsGrid.closest('.sect') : null;
-    const main = document.querySelector('main') || document.body;
-    const parent = (skillsSect && skillsSect.parentNode) || main;
+    const flatWrap = document.getElementById('recommendation-flat');
+    const parent = flatWrap || document.querySelector('main') || document.body;
 
-    // Build section container
     const wrap = document.createElement('div');
     wrap.id = 'persistent-buff-section';
     wrap.className = 'sect';
@@ -2122,52 +2369,19 @@ function renderPersistentBuffSkill(persistentPool, rolledProfile, tagIDF, knobs,
     }
 
     const grid = wrap.querySelector('#persistent-buff-grid');
-	if (!grid) return;
-	grid.innerHTML = '';
-	
-	const g = top.item;
-	const gemDict = buildGemDictionary(gems || []);
-	const card = document.createElement('div');
-	card.className = 'skill-card persistent-buff-card';
-	
-	// Subtle inline "requires" subtitle directly under the title
-	const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
-	  ? `<div class="skill-subtitle">${g.required_weapon_types
-		  .map(x => x[0].toUpperCase() + x.slice(1))
-		  .join(', ')}</div>`
-	  : '';
-	
-	const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
-	const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
-	const rest = allTags.filter(t => !br.includes(t));
-	const displayTags = [...br, ...rest].slice(0, 10);
-	
-	const matched = new Set();
-	for (const t of displayTags) {
-	  const k = normTagPlus(t);
-	  if (rolledProfile.profile.has(k)) matched.add(k);
-	}
-	const pills = displayTags.map(t => {
-	  const k = normTagPlus(t);
-	  const cls = matched.has(k) ? 'tag-pill matched' : 'tag-pill';
-	  return `<span class="${cls}">${t}</span>`;
-	}).join('');
-	
-        card.innerHTML = `
-          <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
-          ${requiresSubtitle}
-          <div class="skill-divider"></div>
-          ${grantLine(g)}
-          <div class="skill-tags">${pills}</div>
-          <div class="supports-label">Recommended Supports</div>
-          <div class="supports">
-                ${renderSupportCards(g.recommended_supports, gemDict)}
-          </div>
-        `;
-        applyGemBorderFromReqWeights(card, g.requirement_weights);
-        grid.appendChild(card);
+    if (!grid) return g;
+    grid.innerHTML = '';
 
-        return g;
+    const flatCard = document.createElement('div');
+    flatCard.className = 'skill-card persistent-buff-card';
+    flatCard.innerHTML = `
+      <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
+      ${shared}
+    `;
+    applyGemBorderFromReqWeights(flatCard, g.requirement_weights);
+    grid.appendChild(flatCard);
+
+    return g;
   } catch (e) {
     console.error('[persistent buff] render error', e);
   }
@@ -2239,7 +2453,9 @@ function ensureDataPreload(){
 // ---------- wireup ----------
 document.addEventListener('DOMContentLoaded', ()=>{
     const slider = document.getElementById('cohesionRange');
-	  const hintEl = document.querySelector('.cohesion-status');
+          const hintEl = document.querySelector('.cohesion-status');
+
+          setupStackSection(REC_STACK_SECTION_KEY, document.getElementById(REC_STACK_CONTAINER_ID), document.querySelector('.recommendation-head[data-stack-section="recommendations"]'));
 	
 	  const applyThreshold = (t) => {
 		// keep globals in sync
@@ -3257,7 +3473,8 @@ function ensureUniqueSection(){
     const skillsGrid = document.querySelector('#skills-grid');
     const skillsSect = skillsGrid ? skillsGrid.closest('.sect') : null;
     const buffSect = document.getElementById('persistent-buff-section');
-    const main = document.querySelector('main') || document.body;
+    const flatWrap = document.getElementById('recommendation-flat');
+    const main = flatWrap || document.querySelector('main') || document.body;
     const parent = (skillsSect && skillsSect.parentNode) || main;
 
     if (!skillsSect) return null; // try later
@@ -3289,7 +3506,7 @@ function ensureUniqueSection(){
     syncLockUIFromState();
 
     return document.getElementById('uniques-grid');
-  }
+}
 
   function pillsFor(item, rolledSet){
     const tags = Array.from(getItemTagSet(item)).sort();
@@ -3371,36 +3588,62 @@ function ensureUniqueSection(){
 
 
   function renderUniques(items, rolledSet){
-	  const grid = ensureUniqueSection();
-	  if (!grid) {
-		setTimeout(() => renderUniques(items, rolledSet), 120);
-		return;
-	  }
-	
-	  grid.innerHTML = items.map(it => {
-		const pills = pillsFor(it, rolledSet);
-		const lines = highlight(it.lines, rolledSet);
-		const reason = buildUniqueReason(it, rolledSet);
-	
-		return `
-		  <div class="unique-card">
-			<div class="unique-header">
-			  <div class="unique-name">${it.name}</div>
-			  <div class="unique-base">${it.base}</div>
-			</div>
-			<div class="skill-divider"></div>
-			<div class="tags-row">
-			  ${pills}
-			</div>
-			<div class="unique-lines">
-			  ${reason ? `<div class="unique-highlights">${reason}</div>` : ''}
-			  ${lines}
-			</div>
-		  </div>
-		`;
+          const grid = ensureUniqueSection();
+          const stack = document.getElementById(REC_STACK_CONTAINER_ID);
+          if (!grid && !stack) {
+                setTimeout(() => renderUniques(items, rolledSet), 120);
+                return;
+          }
 
-	  }).join('');
-	}
+          items.forEach(it => {
+                const pills = pillsFor(it, rolledSet);
+                const lines = highlight(it.lines, rolledSet);
+                const reason = buildUniqueReason(it, rolledSet);
+
+                if (stack) {
+                  const stackCard = document.createElement('div');
+                  stackCard.className = 'unique-card rec-card';
+                  stackCard.innerHTML = `
+                        <div class="rec-card-badge">Unique</div>
+                        <div class="unique-header">
+                          <div class="unique-name">${it.name}</div>
+                          <div class="unique-base">${it.base}</div>
+                        </div>
+                        <div class="skill-divider"></div>
+                        <div class="tags-row">
+                          ${pills}
+                        </div>
+                        <div class="unique-lines">
+                          ${reason ? `<div class="unique-highlights">${reason}</div>` : ''}
+                          ${lines}
+                        </div>
+                  `;
+                  stack.appendChild(stackCard);
+                }
+
+                if (grid) {
+                  const card = document.createElement('div');
+                  card.className = 'unique-card';
+                  card.innerHTML = `
+                        <div class="unique-header">
+                          <div class="unique-name">${it.name}</div>
+                          <div class="unique-base">${it.base}</div>
+                        </div>
+                        <div class="skill-divider"></div>
+                        <div class="tags-row">
+                          ${pills}
+                        </div>
+                        <div class="unique-lines">
+                          ${reason ? `<div class="unique-highlights">${reason}</div>` : ''}
+                          ${lines}
+                        </div>
+                  `;
+                  grid.appendChild(card);
+                }
+          });
+
+          if (stack) applyStackLayout(REC_STACK_SECTION_KEY, stack);
+        }
 
 
     async function refreshUniques(snap){
