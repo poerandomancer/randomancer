@@ -422,6 +422,7 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 
 /* === v0.5.1: Recommended Skills section === */
 .skills-grid { margin-top: .25rem; }
+.recommendation-stack { padding-top: 6px; }
 
 .section-title-row {
   display: flex;
@@ -475,7 +476,13 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 .stack-toggle.is-flat .stack-toggle-icon::before { transform: translateY(-4px); }
 .stack-toggle.is-flat .stack-toggle-icon::after { transform: translateY(4px); border-color: rgba(202,164,95,0.55); }
 
-.rec-card-stack { position: relative; }
+.rec-card-stack {
+  position: relative;
+  --rec-card-width: 380px;
+  width: var(--rec-card-width);
+  max-width: 90vw;
+  margin: 0 auto;
+}
 .rec-card-stack.is-stacked {
   display: block !important;
   min-height: var(--stack-height, auto);
@@ -501,12 +508,40 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 
 .rec-card-stack.is-stacked > .rec-card.is-top { pointer-events: auto; }
 
+.rec-card-stack.is-flat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
 .rec-card-stack.is-flat > .rec-card,
 .rec-card-stack:not(.is-stacked) > .rec-card {
   position: relative;
   transform: none;
   z-index: auto;
   pointer-events: auto;
+  width: 100%;
+  max-width: var(--rec-card-width);
+  margin: 0 auto 12px;
+}
+
+.rec-card {
+  position: relative;
+}
+
+.rec-card-badge {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(202,164,95,0.14);
+  border: 1px solid rgba(202,164,95,0.35);
+  color: var(--gold);
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
 }
 
 .skill-card {
