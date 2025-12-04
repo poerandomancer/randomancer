@@ -484,28 +484,23 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
   --rec-card-width: 380px;
   width: var(--rec-card-width);
   max-width: 90vw;
-  margin: 0 auto;
-  padding-bottom: 38px;
+  margin: 0 auto 26px;
+  padding-bottom: 32px;
   z-index: 0;
 }
 
 .rec-card-stack.is-stacked[data-card-count]:not([data-card-count="0"])::after {
-  content: attr(data-card-count) ' cards';
+  content: attr(data-current-index) ' / ' attr(data-card-count);
   position: absolute;
-  right: 12px;
-  bottom: 10px;
-  padding: 3px 10px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, rgba(20,18,15,0.94), rgba(12,11,10,0.9));
-  border: 1px solid rgba(202,164,95,0.4);
-  color: var(--gold);
+  left: 50%;
+  bottom: -18px;
+  transform: translateX(-50%);
+  color: rgba(202,164,95,0.78);
   font-size: 12px;
   letter-spacing: 0.35px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.55);
   pointer-events: none;
-  opacity: 0.95;
   z-index: 50;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.35);
 }
 .rec-card-stack.is-stacked {
   display: block !important;

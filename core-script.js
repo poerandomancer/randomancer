@@ -182,7 +182,20 @@ function applyStackLayout(section, container){
 
   const mode = getStackMode(section);
   const cards = Array.from(container.children).filter(el => el.classList?.contains('rec-card'));
-  container.setAttribute('data-card-count', cards.length);
+  const totalCards = cards.length;
+
+  let current = Number(container.dataset.currentIndex);
+  if (!Number.isFinite(current) || current < 1) current = totalCards ? 1 : 0;
+  if (current > totalCards) current = totalCards;
+
+  container.setAttribute('data-card-count', totalCards);
+  if (totalCards) {
+    container.setAttribute('data-current-index', current);
+    container.dataset.currentIndex = String(current);
+  } else {
+    container.removeAttribute('data-current-index');
+    container.dataset.currentIndex = '';
+  }
 
   container.classList.toggle('is-stacked', mode === 'stacked');
   container.classList.toggle('is-flat', mode === 'flat');
@@ -232,6 +245,10 @@ function cycleStackCards(section, container){
 
   const top = cards[0];
   if (!top) return;
+
+  const current = Number(container.dataset.currentIndex) || 1;
+  const next = current >= cards.length ? 1 : current + 1;
+  container.dataset.currentIndex = String(next);
 
   container.appendChild(top);
   applyStackLayout(section, container);
@@ -388,6 +405,7 @@ function setupStackSection(section, container, header){
           const grid = document.getElementById(REC_STACK_CONTAINER_ID);
           if (!grid) return;
           grid.innerHTML = '';
+          grid.dataset.currentIndex = '';
 	
 	  const gems = (window.DATA && window.DATA.gems) || [];
 	  const gemDict = buildGemDictionary(gems);
@@ -2156,7 +2174,10 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
 
     const stack = document.getElementById(REC_STACK_CONTAINER_ID);
     const flatGrid = document.getElementById('skills-grid');
-    if (stack) stack.innerHTML = '';
+    if (stack) {
+      stack.innerHTML = '';
+      stack.dataset.currentIndex = '';
+    }
     if (flatGrid) flatGrid.innerHTML = '';
 
     const gemDict = buildGemDictionary(gems);
