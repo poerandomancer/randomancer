@@ -121,6 +121,7 @@ const REC_STACK_STORAGE_KEY = 'randomancer:recStackMode';
 const REC_STACK_DEFAULT_MODE = 'stacked';
 const REC_STACK_OFFSET = 6; // px vertical offset between cards
 const REC_STACK_SIDE_OFFSET = 4; // px lateral offset between cards
+const REC_STACK_MIN_CARD_HEIGHT = 360; // px minimum height so cards remain tall and clickable
 const REC_STACK_SECTION_KEY = 'recommendations';
 const REC_STACK_CONTAINER_ID = 'recommendation-stack';
 
@@ -203,10 +204,37 @@ function applyStackLayout(section, container){
 
     const top = cards[0];
     if (top) {
-      const height = top.getBoundingClientRect().height || top.offsetHeight || top.scrollHeight || 0;
+      const measuredHeight = top.getBoundingClientRect().height || top.offsetHeight || top.scrollHeight || 0;
+      const height = Math.max(measuredHeight, REC_STACK_MIN_CARD_HEIGHT);
       const stackHeight = height + REC_STACK_OFFSET * Math.max(0, cards.length - 1);
       container.style.setProperty('--stack-height', `${stackHeight}px`);
     }
+  });
+}
+
+function cycleStackCards(section, container){
+  if (!container) return;
+  const mode = getStackMode(section);
+  if (mode !== 'stacked') return;
+
+  const cards = Array.from(container.children).filter(el => el.classList?.contains('rec-card'));
+  if (cards.length <= 1) return;
+
+  const top = cards[0];
+  if (!top) return;
+
+  container.appendChild(top);
+  applyStackLayout(section, container);
+}
+
+function wireStackInteraction(section, container){
+  if (!container || container.__stackClickInit) return;
+  container.__stackClickInit = true;
+
+  container.addEventListener('click', (e) => {
+    const card = e.target.closest('.rec-card');
+    if (!card || !card.classList.contains('is-top')) return;
+    cycleStackCards(section, container);
   });
 }
 
@@ -237,6 +265,7 @@ function ensureStackToggle(header, section, container){
 function setupStackSection(section, container, header){
   if (!container) return;
   if (header) ensureStackToggle(header, section, container);
+  wireStackInteraction(section, container);
   applyStackLayout(section, container);
 }
 
