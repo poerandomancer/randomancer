@@ -374,10 +374,11 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
   --rec-card-width: 380px;
   width: var(--rec-card-width);
   max-width: 90vw;
-  margin: 0 auto 36px;
+  margin: 24px auto 36px; /* added 12px top margin */
   padding-bottom: 60px;
   z-index: 0;
 }
+
 
 .rec-card-stack.is-stacked[data-card-count]:not([data-card-count="0"])::after {
   content: attr(data-current-index) ' / ' attr(data-card-count);
@@ -394,21 +395,37 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 }
 .rec-card-stack.is-stacked {
   display: block !important;
-  min-height: var(--stack-height, 320px);
+  min-height: var(--stack-height, 560px);
 }
 
 .rec-card-stack.is-stacked > .rec-card {
   position: absolute;
   inset: 0;
   width: 100%;
+
+  /* default: no lift */
+  --stack-lift: 0px;
+
   transform: translate(
     calc(var(--stack-side-offset, 4px) * var(--stack-index, 0)),
-    calc(var(--card-offset, var(--stack-offset, 2px)) * var(--stack-index, 0))
+    calc(
+      var(--card-offset, var(--stack-offset, 2px)) * var(--stack-index, 0)
+      + var(--stack-lift, 0px)
+    )
   ) rotate(var(--stack-tilt, 0deg));
+
   pointer-events: none;
   margin: 0;
-  transition: transform .18s ease, box-shadow .18s ease;
+  transition: transform .25s ease, box-shadow .25s ease;
 }
+
+/* Tiny shuffle lift when you press the top card */
+.rec-card-stack.is-stacked > .rec-card.is-top:active {
+  --stack-lift: -10px;          /* negative = lift upward */
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.85);
+}
+
+
 
 .rec-card-stack.is-stacked > .rec-card:not(.is-top) {
   filter: brightness(0.96);
@@ -438,24 +455,43 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 .rec-card {
   position: relative;
   display: block;
-  min-height: 510px;
+  min-height: var(--skill-card-max, 560px);
 }
 
 .rec-card-badge {
   position: absolute;
   top: 10px;
   right: 12px;
-  padding: 4px 8px;
+
+  /* shape & layout */
+  padding: 3px 10px;
   border-radius: 999px;
-  background: rgba(202,164,95,0.14);
-  border: 1px solid rgba(202,164,95,0.35);
-  color: var(--gold);
-  font-size: 12px;
-  letter-spacing: 0.4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+
+  /* wax / coin-like face */
+  background:
+    radial-gradient(circle at 20% 0%, rgba(255, 255, 255, 0.18), transparent 55%),
+    radial-gradient(circle at 80% 130%, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 1)),
+    linear-gradient(145deg, #4a361c, #2c1f10);
+  border: 1px solid rgba(255, 214, 160, 0.85);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.85),
+    0 0 10px rgba(212, 170, 80, 0.35),
+    inset 0 0 4px rgba(0, 0, 0, 0.9);
+
+  /* text treatment */
+  color: #fde7c3;
+  font-size: 11px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
+
 .skill-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -467,6 +503,7 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
   transition: box-shadow .2s ease, border-color .2s ease;
   height: auto !important;
   max-height: var(--skill-card-max, 560px);
+  overflow: hidden;
 }
 
 .skill-card.hybrid {
@@ -658,6 +695,7 @@ border-top: 1px dotted var(--gold);
 
 /* Unique card frame */
 .unique-card {
+  position: relative;
   background: #12100c;
   border: 1px solid rgba(255, 200, 120, 0.45);
   border-radius: 14px;
@@ -665,7 +703,13 @@ border-top: 1px dotted var(--gold);
     0 0 18px rgba(255, 180, 80, 0.18),
     inset 0 0 0 1px rgba(255, 200, 140, 0.05);
   overflow: hidden;
+
+  /* Match skill card behavior */
+  display: flex;
+  flex-direction: column;
+  max-height: var(--skill-card-max, 560px);
 }
+
 
 /* Header: align with skill card title + subtitle stack */
 .unique-header{
@@ -731,7 +775,12 @@ border-top: 1px dotted var(--gold);
   padding: 10px 14px 12px;
   color: #e4d9c9;
   font-size: 0.95rem;
+
+  /* Fill the available card space and scroll if needed */
+  flex: 1 1 auto;
+  overflow-y: auto;
 }
+
 
 .unique-line {
   margin: 2px 0;
@@ -1442,4 +1491,43 @@ img, video { max-width: 100%; height: auto; }
   max-width: 780px;
   margin: 0 auto 0.5rem;
 }
+
+/* === Recommended Stack – parchment playing-card surface (overlay only) === */
+
+.recommendation-stack .skill-card,
+.recommendation-stack .unique-card {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;   /* keep corners clean for borders */
+}
+
+/* Subtle worn-card texture + vignette + sheen layered over the dark card */
+.recommendation-stack .skill-card::after,
+.recommendation-stack .unique-card::after {
+  content: "";
+  position: absolute;
+  inset: 1px;                 /* don’t cover the border */
+  border-radius: inherit;
+  pointer-events: none;
+
+  background:
+    /* bottom vignette – darker toward the lower edge */
+    radial-gradient(
+      140% 180% at 50% 120%,
+      rgba(0, 0, 0, 0.7),
+      transparent 60%
+    ),
+    /* top-left highlight / sheen */
+    radial-gradient(
+      140% 140% at 0% 0%,
+      rgba(255, 255, 255, 0.18),
+      transparent 55%
+    ),
+    /* worn parchment texture */
+    url("images/worn-card-texture.webp") center/100% 100% repeat;
+
+  mix-blend-mode: soft-light; /* blend with existing dark background */
+  opacity: 0.7;              /* tweak 0.4–0.7 depending on taste */
+}
+
 
