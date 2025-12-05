@@ -9,6 +9,7 @@
   --panel: rgba(10,10,12,.86);
   --edge: rgba(200,168,107,.35);
   --radius: 16px;
+  --skill-card-max: 560px;
 }
 
 *{ box-sizing:border-box; }
@@ -310,7 +311,7 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 
 
 /* === v0.5.1: Recommended Skills section === */
-.skills-grid { margin-top: .25rem; }
+.skills-grid { margin-top: .25rem; align-items: stretch; }
 .recommendation-stack { padding-top: 6px; }
 
 .rec-view-hidden { display: none !important; }
@@ -455,12 +456,17 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 }
 
 .skill-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
   border-radius: 14px;
   padding: .8rem 1rem;
   background: #15161b;
   border: 1px solid var(--edge);
   box-shadow: 0 0 6px rgba(0,0,0,0.4);
   transition: box-shadow .2s ease, border-color .2s ease;
+  height: auto !important;
+  max-height: var(--skill-card-max, 560px);
 }
 
 .skill-card.hybrid {
@@ -483,13 +489,7 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
   font-style: italic;
 }
 
-.skill-desc {
-  margin: 0 0 .35rem;
-  font-style: italic;
-  color: var(--muted);
-}
-
-.skill-tags, .support-tags, .spirit-tags, .active-tags {
+.skill-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 0.3rem;
@@ -532,7 +532,6 @@ border-top: 1px dotted var(--gold);
 }
 
 
-.req-line { font-size:.9rem; color:var(--silver); opacity:.85; margin:.1rem 0 .3rem; }
 .support-item {
   border-radius: 8px;
   padding: .5rem .6rem;
@@ -555,41 +554,23 @@ border-top: 1px dotted var(--gold);
 .support-item.int { border-color: rgba(47,79,157,0.5); }
 .support-item.hybrid { border:1px solid transparent; border-image: linear-gradient(90deg,#b03030,#2d7a2d,#2f4f9d) 1; }
 
-/* ensure long lists remain tidy */
-.supports-wrap {
-  max-height: 280px;
-  overflow: auto;
-  scrollbar-width: thin;
-  margin-top: .5rem;
+.supports {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  width: 100%;
   border-top: 1px dashed rgba(200,168,107,0.25);
-  padding-top: .5rem;
+  padding: .5rem 0 .25rem;
+  margin-top: .35rem;
 }
 
+.supports .support-item {
+  display: block;
+  max-width: unset;
+  margin: .4rem 0;
+}
 
-/* ===== v0.6_init.10: Granted Skills Display ===== */
-.granted-skills {
-  margin-top: 0.4rem;
-  padding: 0.3rem 0.5rem;
-  border-left: 2px solid #c8a04e;
-  font-size: 0.9em;
-  opacity: 0.9;
-}
-.granted-title {
-  font-weight: bold;
-  color: #d8b46e;
-  margin-bottom: 0.2rem;
-}
-.granted-skill {
-  margin-bottom: 0.2rem;
-}
-.granted-name {
-  font-weight: 600;
-  color: #e6d28c;
-}
-.granted-desc {
-  color: #bcb09a;
-  margin-left: 0.25rem;
-}
+.supports-label{ color:#d5b66a; font-style:italic; margin-top:.5rem; }
 
 /* === v0.6.4: Cohesion Slider + Skill Cards === */
 .cohesion-slider{ margin:1.5rem auto 0.1rem; width:min(720px,90%); text-align:center; color:var(--gold); }
@@ -647,61 +628,8 @@ border-top: 1px dotted var(--gold);
   margin:0 0 1rem;
 }
 
-/* “Grants” callout (baseline look) */
-.grants-callout{
-  border-left:3px solid rgba(213,182,106,.65);
-  padding:.5rem .75rem;
-  background:rgba(0,0,0,.18);
-  margin:.25rem 0 .6rem;
-}
-.grants-title{
-  color:#d5b66a;
-  font-weight:700;
-  margin-bottom:.25rem;
-  letter-spacing:.02em;
-}
-.grants-body .granted-name{
-  font-weight:700;
-  color:#e9d8a6;
-}
-
-/* Scroll panel for supports to limit card height */
-.supports {
-  display: block;
-  clear: both;
-  max-height: 220px;
-  overflow: auto;
-  padding-right: .25rem; /* avoid scrollbar overlap */
-  border-top: 1px dashed var(--edge);
-  margin-top: .35rem;
-}
-.support-item { margin:.35rem 0; }
-
-
-/* --- Multi-grant display (restored) --- */
-.grants { margin:.4rem 0; }
-.grants .label { font-size:.9rem; color: var(--silver); opacity:.85; display:block; margin-bottom:.25rem; }
-.grant-list { display:block; }
-.grant-item { border-left: 2px solid var(--edge); padding:.3rem .6rem; margin:.3rem 0; background: rgba(12,12,14,0.35); }
 .grant-title { font-weight:600; color:var(--silver); margin:0 0 .1rem; }
 .grant-desc { font-size:.9rem; color: var(--muted); margin:0; }
-
-
-/* --- Active skill card flex + supports fill --- */
-.skill-card.active { display:flex; flex-direction:column; max-height: 720px; }
-.skill-card .skill-title,
-.skill-card .req-block,
-.skill-card .grants,
-.skill-card .skill-desc,
-.skill-card .skill-tags { flex: 0 0 auto; width:100%; }
-.supports { flex: 1 1 auto; min-height: 0; overflow:auto; width:100%; }
-
-/* override: let flex-fill manage height */
-.supports { max-height: none; }
-
-/* Label above supports */
-/* supports label matches required weapon label */
-.supports-label{ color:#d5b66a; font-style:italic; }
 
 
 /* v0.7 additions */
@@ -719,112 +647,6 @@ border-top: 1px dotted var(--gold);
   background: rgba(12,12,14,0.35);
   border-left:2px solid var(--edge);
 }
-
-/* --- v0.7: Recommended Supports scroll panel --- */
-.supports{
-  --panel-height: 240px;
-  max-height: var(--panel-height);
-  overflow-y: auto;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 8px;
-  padding: 8px;
-  margin-top: 6px;
-  border: 1px solid rgba(140,120,90,0.35);
-  border-radius: 10px;
-  background: rgba(18,18,20,0.55);
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.35);
-  scrollbar-gutter: stable;
-}
-
-.supports::-webkit-scrollbar { width: 10px; }
-.supports::-webkit-scrollbar-thumb {
-  background: rgba(120,110,90,0.55);
-  border-radius: 8px;
-  border: 2px solid rgba(18,18,20,0.7);
-}
-.supports::-webkit-scrollbar-track { background: rgba(18,18,20,0.35); }
-
-/* Ensure cards stack cleanly inside the panel */
-.supports .support-item{
-  display: block;
-  max-width: unset;
-  margin: 0;
-}
-
-/* === v0.7 restore 0.6_release support pane behavior === */
-.skill-card{
-  display: flex;
-  flex-direction: column;
-  /* allow inner scroller to size correctly */
-  min-height: 0;
-}
-.skill-card .supports-label{
-  margin-top: .5rem;
-}
-.skill-card .supports{
-  /* fill remaining space within card and scroll */
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
-
-  /* revert to 0.6_release look (no panel border/background) */
-  display: block;
-  background: transparent;
-  border: 0;
-  box-shadow: none;
-
-  /* 0.6 style: dashed divider and top padding */
-  border-top: 1px dashed rgba(200,168,107,0.25);
-  padding-top: .5rem;
-  padding-bottom: .25rem;
-}
-
-/* support cards spacing, consistent with 0.6 */
-.supports .support-item{
-  display: block;
-  max-width: unset;
-  margin: .4rem 0;
-}
-
-/* remove prior custom scrollbar visuals for parity with 0.6 */
-.supports::-webkit-scrollbar,
-.supports::-webkit-scrollbar-thumb,
-.supports::-webkit-scrollbar-track{ background: transparent; border: 0; }
-
-/* === v0.7 supports pane: fill remaining space reliably === */
-.skills-grid{
-  align-items: stretch;     /* ensure grid items fill the row height */
-}
-.skill-card{
-  height: 100%;             /* allow inner flex to consume row height */
-}
-
-/* === v0.7: active gem cards fixed max-height + flex scroller === */
-:root{
-  --skill-card-max: 560px;
-}
-
-.skills-grid{ align-items: stretch; }
-
-.skill-card{
-  /* allow the supports area to calculate remaining space */
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  /* key: keep cards neat and let supports scroll within */
-  height: auto !important;
-  max-height: var(--skill-card-max);
-}
-
-.skill-card .supports-label{ margin-top: .5rem; }
-
-.skill-card .supports{
-  flex: 1 1 auto;   /* fills remaining vertical space */
-  min-height: 0;    /* critical for nested flex scrolling */
-  overflow-y: auto; /* create an internal scroller */
-}
-
 
 /* ===== v0.7.6: Uniques bronze cards ===== */
 :root{
@@ -1319,10 +1141,10 @@ h2 { font-size: clamp(18px, 3.5vw, 28px); }
 
 @media (max-width: 960px) {
   .skill-card, .unique-card { padding: 12px; }
-  .unique-lines div, .skill-lines div { line-height: 1.3; }
+  .unique-lines div { line-height: 1.3; }
 }
 
-.skill-tags, .unique-tags { display:flex; flex-wrap:wrap; gap: 6px; }
+.skill-tags { display:flex; flex-wrap:wrap; gap: 6px; }
 .tag-pill { padding: 2px 8px; border-radius: 999px; font-size: 12px; }
 @media (max-width: 480px) {
   .tag-pill { font-size: 11px; padding: 2px 6px; }
@@ -1343,9 +1165,6 @@ h2 { font-size: clamp(18px, 3.5vw, 28px); }
 
 img, video { max-width: 100%; height: auto; }
 
-@media (max-width: 640px) {
-  .background-vignette { opacity: .5; }
-}
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
 }
