@@ -1607,7 +1607,7 @@ img, video { max-width: 100%; height: auto; }
     width: var(--rec-card-width);
 
     /* Reduce sideways fanning so nothing hangs off-screen */
-/*     --stack-side-offset: 1.5px !important; */
+    --stack-side-offset: 1.5px !important;
   }
 }
 
@@ -1621,6 +1621,6 @@ img, video { max-width: 100%; height: auto; }
   /* Keep non-top cards visually quieter & cheaper to repaint */
   .rec-card-stack.is-stacked > .rec-card:not(.is-top) {
     filter: none;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.55);
+/*     box-shadow: 0 1px 4px rgba(0,0,0,0.55); */
   }
 }
