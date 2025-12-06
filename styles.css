@@ -384,6 +384,10 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
   margin: 24px auto 36px; /* added 12px top margin */
   padding-bottom: 60px;
   z-index: 0;
+  
+  /* new: calmer default stacking offsets */
+  --stack-side-offset: 3px;
+  --stack-offset: 1.6px;
 }
 
 
@@ -413,25 +417,28 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
   /* default: no lift */
   --stack-lift: 0px;
 
+  /* clamp the visual depth of the stack to 4 steps (0–3) */
+  --stack-index-clamped: clamp(0, var(--stack-index, 0), 3);
+
   transform: translate(
-    calc(var(--stack-side-offset, 4px) * var(--stack-index, 0)),
+    calc(var(--stack-side-offset, 3px) * var(--stack-index-clamped)),
     calc(
-      var(--card-offset, var(--stack-offset, 2px)) * var(--stack-index, 0)
+      var(--card-offset, var(--stack-offset, 1.6px)) * var(--stack-index-clamped)
       + var(--stack-lift, 0px)
     )
   ) rotate(var(--stack-tilt, 0deg));
 
   pointer-events: none;
   margin: 0;
-  transition: transform .25s ease , box-shadow .25s ease;
+  transition: transform .22s ease;
 }
+
 
 /* Tiny shuffle lift when you press the top card */
 .rec-card-stack.is-stacked > .rec-card.is-top:active {
-  --stack-lift: -10px;          /* negative = lift upward */
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.85);
+  --stack-lift: -6px;           /* gentler lift */
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.78);
 }
-
 
 
 .rec-card-stack.is-stacked > .rec-card:not(.is-top) {
@@ -1614,7 +1621,7 @@ img, video { max-width: 100%; height: auto; }
 @media (max-width: 600px) {
   /* Make stack shuffle cheaper to animate on mobile */
   .rec-card-stack.is-stacked > .rec-card {
-    transition: transform 0.26s ease;
+    transition: transform 0.22s ease-out;
     will-change: transform;
   }
 
