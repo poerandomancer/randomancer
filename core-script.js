@@ -118,7 +118,8 @@ function initSectionLocks(){
 
 // ----- Recommendation card stacks (layout + toggles) -----
 const REC_STACK_STORAGE_KEY = 'randomancer:recStackMode';
-const REC_STACK_DEFAULT_MODE = 'stacked';
+// const REC_STACK_DEFAULT_MODE = 'stacked';
+const REC_STACK_DEFAULT_MODE = 'flat';
 const REC_STACK_OFFSET = 2; // px vertical offset between cards (default/fallback)
 const REC_STACK_SIDE_OFFSET = 4; // px lateral offset between cards
 const REC_STACK_MIN_CARD_HEIGHT = 510; // px minimum height so cards remain tall and clickable
