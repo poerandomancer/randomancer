@@ -735,7 +735,7 @@ function renderSnapshotPersistentBuff(g, gemDict){
 })();
 
 // App metadata
-const APP_VERSION = '0.8.2_passives_display';
+const APP_VERSION = '0.8.2_stacked_display';
 
 window.RANDOMANCER = window.RANDOMANCER || {};
 window.RANDOMANCER.version = APP_VERSION;
