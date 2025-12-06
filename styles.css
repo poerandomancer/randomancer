@@ -423,7 +423,7 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 
   pointer-events: none;
   margin: 0;
-  transition: transform .25s ease/* , box-shadow .25s ease */;
+  transition: transform .25s ease , box-shadow .25s ease;
 }
 
 /* Tiny shuffle lift when you press the top card */
