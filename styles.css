@@ -340,6 +340,13 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
   transition: background .18s ease, box-shadow .18s ease, transform .18s ease, border-color .18s ease;
 }
 
+/* Keep the stack toggle pinned to the right edge of its header row,
+   even when the "Recommended Stack" title is hidden in flat mode. */
+.recommendation-head .stack-toggle {
+  margin-left: auto;
+}
+
+
 .stack-toggle:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.5); transform: translateY(-1px); }
 .stack-toggle:focus { outline: none; box-shadow: 0 0 0 2px rgba(202,164,95,0.45); }
 .stack-toggle.is-flat { border-color: rgba(180,180,180,0.45); background: radial-gradient(circle at 30% 30%, rgba(140,140,140,0.16), rgba(8,7,6,0.9)); }
@@ -416,7 +423,7 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 
   pointer-events: none;
   margin: 0;
-  transition: transform .25s ease, box-shadow .25s ease;
+  transition: transform .25s ease/* , box-shadow .25s ease */;
 }
 
 /* Tiny shuffle lift when you press the top card */
@@ -579,11 +586,36 @@ border-top: 1px dotted var(--gold);
 .support-title { margin: 0 0 .15rem; font-weight: 600; color: var(--silver); }
 .support-desc { margin: 0; font-size:.9rem; color:var(--muted); }
 
-/* Attribute glows (active skills) */
-.skill-card.str { border-color: rgba(176,48,48,0.7); box-shadow: 0 0 8px rgba(176,48,48,0.25); }
-.skill-card.dex { border-color: rgba(45,122,45,0.7); box-shadow: 0 0 8px rgba(45,122,45,0.25); }
-.skill-card.int { border-color: rgba(47,79,157,0.7); box-shadow: 0 0 8px rgba(47,79,157,0.25); }
-.skill-card.hybrid { border: 1px solid transparent; border-image: linear-gradient(90deg,#b03030,#2d7a2d,#2f4f9d) 1; box-shadow: 0 0 10px rgba(255,255,255,0.05), 0 0 12px rgba(200,168,107,0.05) inset; }
+/* Attribute glows (active skills) – default / flat views
+   Stacked cards get their own toned-down printed frames further below. */
+.skill-card.attr-str {
+  border-color: rgba(176,48,48,0.7);
+  box-shadow: 0 0 8px rgba(176,48,48,0.25);
+}
+
+.skill-card.attr-dex {
+  border-color: rgba(45,122,45,0.7);
+  box-shadow: 0 0 8px rgba(45,122,45,0.25);
+}
+
+.skill-card.attr-int {
+  border-color: rgba(47,79,157,0.7);
+  box-shadow: 0 0 8px rgba(47,79,157,0.25);
+}
+
+.skill-card.attr-hybrid {
+  border: 1px solid transparent;
+  border-image: linear-gradient(90deg,#b03030,#2d7a2d,#2f4f9d) 1;
+  box-shadow:
+    0 0 10px rgba(255,255,255,0.05),
+    0 0 12px rgba(200,168,107,0.05) inset;
+}
+
+.skill-card.attr-unique {
+  border-color: rgba(180, 132, 86, 0.75);      /* bronze */
+  box-shadow: 0 0 8px rgba(180, 132, 86, 0.30);
+}
+
 
 /* Dimmer outlines for supports */
 .support-item.str { border-color: rgba(176,48,48,0.5); }
@@ -693,23 +725,19 @@ border-top: 1px dotted var(--gold);
 }
 .uniques-grid{ margin-top:.35rem; }
 
-/* Unique card frame */
+/* Unique card frame – neutral base, let stacked style provide the bronze */
 .unique-card {
   position: relative;
-  background: #12100c;
-  border: 1px solid rgba(255, 200, 120, 0.45);
+  background: #15161b;               /* match skill-card base */
+  border: 1px solid var(--edge);     /* same subtle edge as skills */
   border-radius: 14px;
-  box-shadow:
-    0 0 18px rgba(255, 180, 80, 0.18),
-    inset 0 0 0 1px rgba(255, 200, 140, 0.05);
+  box-shadow: 0 0 6px rgba(0,0,0,0.4); /* simple neutral shadow */
   overflow: hidden;
 
-  /* Match skill card behavior */
   display: flex;
   flex-direction: column;
   max-height: var(--skill-card-max, 560px);
 }
-
 
 /* Header: align with skill card title + subtitle stack */
 .unique-header{
@@ -1506,28 +1534,63 @@ img, video { max-width: 100%; height: auto; }
 .recommendation-stack .unique-card::after {
   content: "";
   position: absolute;
-  inset: 1px;                 /* don’t cover the border */
+  inset: 0;                 /* was 1px – gives a tiny raw edge + room for inner frame */
   border-radius: inherit;
   pointer-events: none;
+  z-index: 0;                 /* parchment sits under the printed border */
 
   background:
-    /* bottom vignette – darker toward the lower edge */
     radial-gradient(
       140% 180% at 50% 120%,
       rgba(0, 0, 0, 0.7),
       transparent 60%
     ),
-    /* top-left highlight / sheen */
     radial-gradient(
       140% 140% at 0% 0%,
       rgba(255, 255, 255, 0.18),
       transparent 55%
     ),
-    /* worn parchment texture */
-    url("images/worn-card-texture.webp") center/100% 100% repeat;
+    url("images/worn-card-texture.jpeg") center/100% 100% repeat;
 
-  mix-blend-mode: soft-light; /* blend with existing dark background */
-  opacity: 0.7;              /* tweak 0.4–0.7 depending on taste */
+  mix-blend-mode: soft-light;
+  opacity: 0.7;
 }
 
 
+/* === v0.7.x: Stacked Recommendations – thick printed borders (no inset) === */
+
+/* Base stacked card frame for both skills and uniques */
+.rec-card-stack.is-stacked .skill-card.attr-str,
+.rec-card-stack.is-stacked .skill-card.attr-dex,
+.rec-card-stack.is-stacked .skill-card.attr-int,
+.rec-card-stack.is-stacked .skill-card.attr-hybrid,
+.rec-card-stack.is-stacked .skill-card.attr-unique{
+  border: 0;
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.85),          /* outer lift */
+    inset 0 0 0 6px currentColor,            /* slightly thinner printed ring */
+    inset 0 0 10px rgba(0, 0, 0, 0.55);      /* softer burn-in */
+}
+
+
+/* Attribute tints for stacked SKILL / BUFF cards */
+.rec-card-stack.is-stacked .skill-card.attr-str {
+  color: rgba(176, 104, 70, 0.65);          /* warm rusted copper */
+}
+
+.rec-card-stack.is-stacked .skill-card.attr-dex {
+  color: rgba(122, 160, 100, 0.65);         /* mossy green */
+}
+
+.rec-card-stack.is-stacked .skill-card.attr-int {
+  color: rgba(106, 134, 184, 0.70);         /* arcane blue */
+}
+
+.rec-card-stack.is-stacked .skill-card.attr-hybrid {
+  color: rgba(196, 172, 122, 0.72);         /* antique gold */
+  /* color: rgba(139, 111, 184, 0.72); */        /* muted hybrid purple */
+}
+
+.rec-card-stack.is-stacked .skill-card.attr-unique {
+  color: rgba(180, 132, 86, 0.80);          /* rich bronze */
+}

@@ -167,11 +167,38 @@ function syncStackToggleUI(btn, mode){
 }
 
 function syncRecommendationVisibility(mode){
-  const stack = document.getElementById(REC_STACK_CONTAINER_ID);
+  const stack    = document.getElementById(REC_STACK_CONTAINER_ID);
   const flatWrap = document.getElementById('recommendation-flat');
-  if (stack) stack.classList.toggle('rec-view-hidden', mode === 'flat');
-  if (flatWrap) flatWrap.classList.toggle('rec-view-hidden', mode !== 'flat');
+
+  // Header that contains "Recommended Stack" title + subtitle + toggle button
+  const stackHead = document.querySelector('.recommendation-head[data-stack-section="recommendations"]');
+
+  const hideStack = (mode === 'flat');
+
+  // Hide the stack cards themselves in flat mode
+  if (stack) {
+    stack.classList.toggle('rec-view-hidden', hideStack);
+  }
+
+  // Show flat recommendations only in flat mode
+  if (flatWrap) {
+    flatWrap.classList.toggle('rec-view-hidden', !hideStack);
+  }
+
+  // In flat mode, hide just the stack header text + underline + subtitle,
+  // but keep the toggle button visible so you can switch back.
+  if (stackHead) {
+    const title     = stackHead.querySelector('.section-title');
+    const underline = stackHead.querySelector('.underline');
+    const sub       = stackHead.querySelector('.sub');
+
+    [title, underline, sub].forEach(el => {
+      if (el) el.classList.toggle('rec-view-hidden', hideStack);
+    });
+  }
 }
+
+
 
 function applyStackLayout(section, container){
   if (!container) return;
@@ -2388,26 +2415,43 @@ function renderPersistentBuffSkill(persistentPool, rolledProfile, tagIDF, knobs,
 }
 
 // ---- Active gem border color from requirement_weights ----
+// Now purely class-based so CSS can style flat vs stacked differently.
 function applyGemBorderFromReqWeights(el, weights){
-  if(!el) return;
-  const w = weights||{};
-  const s = Number(w.strength||0), d = Number(w.dexterity||0), i = Number(w.intelligence||0);
-  const max = Math.max(s,d,i);
-  const colors = [];
-  if(s===max && max>0) colors.push('rgba(176,48,48,0.9)');
-  if(d===max && max>0) colors.push('rgba(45,122,45,0.9)');
-  if(i===max && max>0) colors.push('rgba(47,79,157,0.9)');
-  if(colors.length<=1){
-    const c = colors[0] || 'rgba(200,200,200,0.35)';
-    el.style.border = '1px solid ' + c;
-    el.style.boxShadow = '0 0 8px rgba(255,255,255,0.06)';
+  if (!el) return;
+
+  // Clear any legacy inline styling
+  el.style.border = '';
+  el.style.borderImage = '';
+  el.style.boxShadow = '';
+
+  // Remove any previous attribute classes
+  el.classList.remove('attr-str', 'attr-dex', 'attr-int', 'attr-hybrid');
+
+  const w = weights || {};
+  const s = Number(w.strength || 0);
+  const d = Number(w.dexterity || 0);
+  const i = Number(w.intelligence || 0);
+  const max = Math.max(s, d, i);
+
+  if (!max || max <= 0) {
+    // Neutral card – keep the base frame
     return;
   }
-  // gradient for ties
-  el.style.border = '1px solid transparent';
-  el.style.borderImage = `linear-gradient(90deg, ${colors.join(', ')}) 1`;
-  el.style.boxShadow = '0 0 10px rgba(255,255,255,0.06)';
+
+  const winners = [];
+  if (s === max) winners.push('str');
+  if (d === max) winners.push('dex');
+  if (i === max) winners.push('int');
+
+  if (winners.length === 1) {
+    // Single dominant attribute
+    el.classList.add('attr-' + winners[0]); // attr-str / attr-dex / attr-int
+  } else {
+    // Mixed weights – treat as hybrid
+    el.classList.add('attr-hybrid');
+  }
 }
+
 
 // Small helper to render grant line (shared by main skills + persistent buff)
 const grantLine = (g) => {
@@ -3602,7 +3646,7 @@ function ensureUniqueSection(){
 
                 if (stack) {
                   const stackCard = document.createElement('div');
-                  stackCard.className = 'unique-card rec-card';
+                  stackCard.className = 'unique-card skill-card attr-unique rec-card';
                   stackCard.innerHTML = `
                         <div class="rec-card-badge">Unique</div>
                         <div class="unique-header">
