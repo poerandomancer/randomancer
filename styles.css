@@ -1603,11 +1603,11 @@ img, video { max-width: 100%; height: auto; }
 @media (max-width: 600px) {
   .rec-card-stack {
     /* Slightly narrower cards & a tiny safety margin */
-    --rec-card-width: min(340px, 92vw);
+    --rec-card-width: min(316px, 92vw);
     width: var(--rec-card-width);
 
     /* Reduce sideways fanning so nothing hangs off-screen */
-    --stack-side-offset: 1.5px !important;
+/*     --stack-side-offset: 1.5px !important; */
   }
 }
 
