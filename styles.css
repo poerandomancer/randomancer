@@ -1572,29 +1572,29 @@ img, video { max-width: 100%; height: auto; }
   border: 0;
   box-shadow:
     0 6px 20px rgba(0, 0, 0, 0.85),          /* outer lift */
-    inset 0 0 0 12px currentColor,            /* slightly thinner printed ring */
-    inset 0 0 10px rgba(0, 0, 0, 0.75);      /* softer burn-in */
+    inset 0 0 0 6px currentColor,            /* slightly thinner printed ring */
+    inset 0 0 10px rgba(0, 0, 0, 0.55);      /* softer burn-in */
 }
 
 
 /* Attribute tints for stacked SKILL / BUFF cards */
 .rec-card-stack.is-stacked .skill-card.attr-str {
-  color: rgba(176, 104, 70, 0.3);          /* warm rusted copper */
+  color: rgba(176, 104, 70, 0.65);          /* warm rusted copper */
 }
 
 .rec-card-stack.is-stacked .skill-card.attr-dex {
-  color: rgba(122, 160, 100, 0.3);         /* mossy green */
+  color: rgba(122, 160, 100, 0.65);         /* mossy green */
 }
 
 .rec-card-stack.is-stacked .skill-card.attr-int {
-  color: rgba(106, 134, 184, 0.3);         /* arcane blue */
+  color: rgba(106, 134, 184, 0.70);         /* arcane blue */
 }
 
 .rec-card-stack.is-stacked .skill-card.attr-hybrid {
-  color: rgba(196, 172, 122, 0.3);         /* antique gold */
+  color: rgba(196, 172, 122, 0.72);         /* antique gold */
   /* color: rgba(139, 111, 184, 0.72); */        /* muted hybrid purple */
 }
 
 .rec-card-stack.is-stacked .skill-card.attr-unique {
-  color: rgba(180, 132, 86, 0.3);          /* rich bronze */
+  color: rgba(180, 132, 86, 0.80);          /* rich bronze */
 }
