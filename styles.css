@@ -1598,3 +1598,29 @@ img, video { max-width: 100%; height: auto; }
 .rec-card-stack.is-stacked .skill-card.attr-unique {
   color: rgba(180, 132, 86, 0.80);          /* rich bronze */
 }
+
+/* --- Mobile tweaks for stacked recommendation cards --- */
+@media (max-width: 600px) {
+  .rec-card-stack {
+    /* Slightly narrower cards & a tiny safety margin */
+    --rec-card-width: min(340px, 92vw);
+    width: var(--rec-card-width);
+
+    /* Reduce sideways fanning so nothing hangs off-screen */
+    --stack-side-offset: 1.5px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  /* Make stack shuffle cheaper to animate on mobile */
+  .rec-card-stack.is-stacked > .rec-card {
+    transition: transform 0.26s ease;
+    will-change: transform;
+  }
+
+  /* Keep non-top cards visually quieter & cheaper to repaint */
+  .rec-card-stack.is-stacked > .rec-card:not(.is-top) {
+    filter: none;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.55);
+  }
+}
