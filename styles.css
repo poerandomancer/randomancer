@@ -1526,18 +1526,21 @@ img, video { max-width: 100%; height: auto; }
 .recommendation-stack .unique-card {
   position: relative;
   border-radius: 18px;
-  overflow: hidden;   /* keep corners clean for borders */
+  overflow: hidden;
+  isolation: isolate;               /* keep stacking local to the card */
 }
 
-/* Subtle worn-card texture + vignette + sheen layered over the dark card */
+/* Texture overlay ABOVE all card contents */
 .recommendation-stack .skill-card::after,
 .recommendation-stack .unique-card::after {
   content: "";
   position: absolute;
-  inset: 0;                 /* was 1px – gives a tiny raw edge + room for inner frame */
+  inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  z-index: 0;                 /* parchment sits under the printed border */
+
+  /* key change: higher than any child content */
+  z-index: 5;
 
   background:
     radial-gradient(
@@ -1553,8 +1556,9 @@ img, video { max-width: 100%; height: auto; }
     url("images/worn-card-texture.jpeg") center/100% 100% repeat;
 
   mix-blend-mode: soft-light;
-  opacity: 0.7;
+  opacity: 0.9; /* maybe tone this down a bit when it's on top */
 }
+
 
 
 /* === v0.7.x: Stacked Recommendations – thick printed borders (no inset) === */
