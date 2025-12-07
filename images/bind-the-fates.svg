@@ -1,0 +1,12 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bind the Fates icon">
+  <defs>
+    <linearGradient id="halo" x1="8" y1="8" x2="56" y2="56" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f4e0b2" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#c8a86b" stop-opacity="0.65"/>
+    </linearGradient>
+  </defs>
+  <circle cx="32" cy="32" r="28" fill="rgba(0,0,0,0.35)" stroke="url(#halo)" stroke-width="2"/>
+  <path d="M18 20c4.2 0 7.6 3.4 7.6 7.6 0 2.6-1.3 4.9-3.4 6.3l11.6 11.6c1.6 1.6 4.2 1.6 5.8 0l4.8-4.8c1.6-1.6 1.6-4.2 0-5.8L33.4 23.3c1.4-2.1 3.8-3.5 6.4-3.5 4.2 0 7.6 3.4 7.6 7.6" stroke="#f2dca4" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M23.2 17.2 32 12l8.8 5.2-1.8 10.1-7 4.1-7-4.1z" stroke="#f8e6bc" stroke-width="1.8" fill="rgba(200,168,107,0.18)"/>
+  <path d="m22.5 45.5 4.9-5 4.6 4.6-4.9 5c-1.3 1.3-3.4 1.3-4.6 0-1.3-1.3-1.3-3.3 0-4.6Z" fill="rgba(180,72,72,0.75)" stroke="#e3b272" stroke-width="1.4"/>
+</svg>
