@@ -704,7 +704,8 @@ border-top: 1px dotted var(--gold);
   display:flex;
   align-items:center;
   gap:0.55rem;
-  margin:0.4rem 0 1.1rem;
+  margin:0.4rem auto 1.1rem;
+  width:min(720px,90%);
 }
 .bind-fates{
   display:inline-flex;
