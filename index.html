@@ -28,11 +28,34 @@
     <div class="bind-fates-backdrop" data-close="1"></div>
     <div class="bind-fates-dialog" role="dialog" aria-modal="true" aria-labelledby="bind-fates-title">
       <div class="bind-fates-head">
-        <h3 id="bind-fates-title">Bind the Fates — <span id="bind-fates-active-category-label"></span></h3>
+        <h3 id="bind-fates-title">Bind the Fates</h3>
         <button id="bind-fates-close" class="bind-fates-close" type="button" aria-label="Close">×</button>
       </div>
-      <p id="bind-fates-category-hint" class="bind-fates-hint"></p>
-      <div id="bind-fates-list" class="bind-fates-list"></div>
+      <div class="bind-fates-sections">
+        <section class="bind-fates-section" data-category="ascendancy">
+          <div class="bind-fates-section-head">
+            <h4>Ascendancy</h4>
+            <p class="bind-fates-hint">Swear Oaths to favored ascendancies, or name Abominations that fate will never grant.</p>
+          </div>
+          <div id="bind-fates-list-ascendancy" class="bind-fates-list"></div>
+        </section>
+        <hr class="bind-fates-divider">
+        <section class="bind-fates-section" data-category="weapon">
+          <div class="bind-fates-section-head">
+            <h4>Weapon</h4>
+            <p class="bind-fates-hint">Bind yourself to chosen arms, or curse weapons you will never wield.</p>
+          </div>
+          <div id="bind-fates-list-weapon" class="bind-fates-list"></div>
+        </section>
+        <hr class="bind-fates-divider">
+        <section class="bind-fates-section" data-category="combat">
+          <div class="bind-fates-section-head">
+            <h4>Combat Mechanics</h4>
+            <p class="bind-fates-hint">Favor certain ailments or tactics, or name those that are forbidden.</p>
+          </div>
+          <div id="bind-fates-list-combat" class="bind-fates-list"></div>
+        </section>
+      </div>
     </div>
   </div>
   <!-- Info Lightbox -->
@@ -110,31 +133,20 @@
                   <div class="cohesion-status" data-status="hint" aria-live="polite"></div>
                 </div>
 
-      <div id="bind-fates-bar" class="bind-fates collapsed" aria-expanded="false">
-        <button class="bind-fates-toggle" type="button">
-          <img src="images/bind-the-fates.svg" alt="" class="bind-fates-icon" aria-hidden="true">
-          <span class="bind-fates-label">Bind the Fates</span>
-          <span id="bind-fates-summary" class="bind-fates-summary">
-            No Oaths bound · no Abominations
-          </span>
-        </button>
-
-        <div class="bind-fates-controls" aria-hidden="true">
-          <button class="bind-fates-control" type="button" data-bind-category="ascendancy">
-            <span class="label">Ascendancy</span>
-            <span class="pill" data-role="summary"></span>
+      <div class="bind-fates-row">
+        <div id="bind-fates-bar" class="bind-fates" aria-expanded="false">
+          <button class="bind-fates-toggle" type="button" aria-label="Open Bind the Fates">
+            <img src="images/bind-the-fates.png" alt="" class="bind-fates-icon" aria-hidden="true">
+            <div class="bind-fates-text">
+              <span class="bind-fates-label">Bind the Fates</span>
+              <span id="bind-fates-summary" class="bind-fates-summary">
+                No Fates Bound
+              </span>
+            </div>
           </button>
-          <button class="bind-fates-control" type="button" data-bind-category="weapon">
-            <span class="label">Weapon</span>
-            <span class="pill" data-role="summary"></span>
-          </button>
-          <button class="bind-fates-control" type="button" data-bind-category="combat">
-            <span class="label">Combat Mechanics</span>
-            <span class="pill" data-role="summary"></span>
-          </button>
-
-          <span id="bind-fates-error" class="bind-fates-error" aria-live="polite"></span>
+          <button id="bind-fates-clear" class="bind-fates-clear" type="button" aria-label="Clear bound fates" title="Clear bound fates">×</button>
         </div>
+        <span id="bind-fates-error" class="bind-fates-error" aria-live="polite"></span>
       </div>
 
       <section class="panel">
