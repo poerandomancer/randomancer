@@ -2264,51 +2264,23 @@ function ensureDataPreload(){
   return dataPromise;
 }
 
-const BIND_CATEGORY_LABELS = {
-  ascendancy: 'Ascendancy',
-  weapon: 'Weapon',
-  combat: 'Combat Mechanics'
-};
-
-function summarizeBindCategory(cfg){
-  const oaths = Array.isArray(cfg?.oaths) ? cfg.oaths : [];
-  const aboms = Array.isArray(cfg?.abominations) ? cfg.abominations : [];
-  if (!oaths.length && !aboms.length) return 'None';
-  const parts = [];
-  if (oaths.length) {
-    const names = oaths.slice(0, 2).join(', ');
-    parts.push(`${names}${oaths.length > 2 ? '…' : ''} (Oath${oaths.length > 1 ? 's' : ''})`);
-  }
-  if (aboms.length) {
-    const names = aboms.slice(0, 2).join(', ');
-    parts.push(`${names}${aboms.length > 2 ? '…' : ''} (Abomination${aboms.length > 1 ? 's' : ''})`);
-  }
-  return parts.join(' · ');
+function countBindFatesSelections(bind){
+  const counts = { oaths: 0, abominations: 0 };
+  Object.values(bind || {}).forEach((cfg) => {
+    counts.oaths += Array.isArray(cfg?.oaths) ? cfg.oaths.length : 0;
+    counts.abominations += Array.isArray(cfg?.abominations) ? cfg.abominations.length : 0;
+  });
+  return counts;
 }
 
 function updateBindFatesSummary(){
   const bf = window.App?.getBindFates ? window.App.getBindFates() : getBindFatesFromApp();
   const summaryEl = document.getElementById('bind-fates-summary');
-  const buttons = document.querySelectorAll('.bind-fates-control');
-  const parts = [];
-
-  buttons?.forEach((btn) => {
-    const cat = btn?.dataset?.bindCategory;
-    if (!cat) return;
-    const cfg = bf?.[cat] || { oaths: [], abominations: [] };
-    const pill = btn.querySelector('.pill[data-role="summary"]');
-    const label = BIND_CATEGORY_LABELS[cat] || cat;
-    const text = summarizeBindCategory(cfg);
-    if (pill) pill.textContent = text;
-    if (text && text !== 'None') {
-      parts.push(`${label}: ${text}`);
-    }
-  });
-
+  const counts = countBindFatesSelections(bf);
   if (summaryEl) {
-    summaryEl.textContent = parts.length
-      ? parts.join(' · ')
-      : 'No Oaths bound · no Abominations';
+    summaryEl.textContent = (counts.oaths + counts.abominations) > 0
+      ? `${counts.oaths} Oath${counts.oaths === 1 ? '' : 's'} | ${counts.abominations} Abomination${counts.abominations === 1 ? '' : 's'}`
+      : 'No Fates Bound';
   }
 }
 
@@ -2371,33 +2343,17 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
   const bindBar     = document.getElementById('bind-fates-bar');
   const toggleBtn   = bindBar?.querySelector('.bind-fates-toggle');
-  const controls    = bindBar?.querySelector('.bind-fates-controls');
-  const categoryButtons = bindBar?.querySelectorAll('.bind-fates-control');
+  const clearBtn    = document.getElementById('bind-fates-clear');
 
   const modal         = document.getElementById('bind-fates-modal');
   const modalBackdrop = modal?.querySelector('.bind-fates-backdrop');
   const modalClose    = document.getElementById('bind-fates-close');
-  const modalLabel    = document.getElementById('bind-fates-active-category-label');
-  const modalHint     = document.getElementById('bind-fates-category-hint');
-  const modalList     = document.getElementById('bind-fates-list');
-  let activeCategory = null;
-  let originButton = null;
-
-  const CATEGORY_HINTS = {
-    ascendancy: 'Swear Oaths to favored ascendancies, or name Abominations that fate will never grant.',
-    weapon: 'Bind yourself to chosen arms, or curse weapons you will never wield.',
-    combat: 'Favor certain ailments or tactics, or name those that are forbidden.'
+  const modalSections = {
+    ascendancy: document.getElementById('bind-fates-list-ascendancy'),
+    weapon: document.getElementById('bind-fates-list-weapon'),
+    combat: document.getElementById('bind-fates-list-combat'),
   };
-
-  if (controls && bindBar) {
-    controls.setAttribute('aria-hidden', bindBar.classList.contains('collapsed') ? 'true' : 'false');
-  }
-
-  toggleBtn?.addEventListener('click', () => {
-    const collapsed = bindBar.classList.toggle('collapsed');
-    bindBar.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
-    if (controls) controls.setAttribute('aria-hidden', collapsed ? 'true' : 'false');
-  });
+  let originButton = null;
 
   const resolveData = async () => {
     const fromState = (window.App && window.App.state && window.App.state.DATA) || window.DATA;
@@ -2423,9 +2379,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
   };
 
-  const renderOptions = (category, options, cfg) => {
-    if (!modalList) return;
-    modalList.innerHTML = '';
+  const renderOptions = (options, cfg, listEl) => {
+    if (!listEl) return;
+    listEl.innerHTML = '';
     options.forEach((opt) => {
       const name = typeof opt === 'string' ? opt : opt?.name;
       if (!name) return;
@@ -2438,59 +2394,81 @@ document.addEventListener('DOMContentLoaded', ()=>{
       else if (cfg?.abominations?.includes(name)) btn.classList.add('is-abomination');
       btn.textContent = name;
       btn.addEventListener('click', () => cycleOptionState(btn));
-      modalList.appendChild(btn);
+      listEl.appendChild(btn);
     });
   };
 
-  const openBindFatesModal = async (category, originBtn) => {
-    const data = await resolveData();
-    if (!modal || !modalList || !data) return;
-    activeCategory = category;
-    originButton = originBtn || null;
-
-    const current = window.App?.getBindFates ? window.App.getBindFates() : getBindFatesFromApp();
-    const cfg = current?.[category] || { oaths: [], abominations: [] };
-    const label = BIND_CATEGORY_LABELS[category] || category;
-    if (modalLabel) modalLabel.textContent = label;
-    if (modalHint) modalHint.textContent = CATEGORY_HINTS[category] || '';
-
-    let options = [];
+  const buildOptions = (category, data) => {
     if (category === 'ascendancy') {
       const ascSet = new Set();
       Object.values(data.Classes || {}).forEach((cls) => {
         (cls?.ascendancies || []).forEach((name) => ascSet.add(name));
       });
-      options = Array.from(ascSet).sort();
-    } else if (category === 'weapon') {
+      return Array.from(ascSet).sort();
+    }
+    if (category === 'weapon') {
       const two = Array.isArray(data.Weapons?.['Two-Handed']) ? data.Weapons['Two-Handed'] : [];
       const one = Array.isArray(data.Weapons?.['One-Handed']) ? data.Weapons['One-Handed'] : [];
-      options = [...two, ...one].map((w) => w.name);
-    } else if (category === 'combat') {
+      return [...two, ...one].map((w) => w.name);
+    }
+    if (category === 'combat') {
       const ail = (data.Ailments || []).map((a) => ({ name: a.name, kind: 'ailment' }));
       const tac = (data.Tactics || []).map((t) => ({ name: t.name, kind: 'tactic' }));
-      options = [...ail, ...tac];
+      return [...ail, ...tac];
     }
+    return [];
+  };
 
-    renderOptions(category, options, cfg);
+  const openBindFatesModal = async (originBtn) => {
+    const data = await resolveData();
+    if (!modal || !data) return;
+    originButton = originBtn || null;
+
+    const current = window.App?.getBindFates ? window.App.getBindFates() : getBindFatesFromApp();
+    Object.entries(modalSections).forEach(([category, listEl]) => {
+      const cfg = current?.[category] || { oaths: [], abominations: [] };
+      const options = buildOptions(category, data);
+      renderOptions(options, cfg, listEl);
+    });
 
     modal.hidden = false;
-    (modalClose || modalList.querySelector('.bind-option') || modal)?.focus?.();
+    (modal.querySelector('.bind-option') || modalClose || modal)?.focus?.();
   };
 
   const persistBindFatesSelection = () => {
-    if (!modalList || !activeCategory) return;
-    const oaths = [];
-    const abominations = [];
-    modalList.querySelectorAll('.bind-option').forEach((opt) => {
-      const name = opt?.dataset?.name;
-      if (!name) return;
-      if (opt.classList.contains('is-oath')) oaths.push(name);
-      else if (opt.classList.contains('is-abomination')) abominations.push(name);
-    });
+    Object.entries(modalSections).forEach(([category, listEl]) => {
+      if (!listEl) return;
+      const oaths = [];
+      const abominations = [];
+      listEl.querySelectorAll('.bind-option').forEach((opt) => {
+        const name = opt?.dataset?.name;
+        if (!name) return;
+        if (opt.classList.contains('is-oath')) oaths.push(name);
+        else if (opt.classList.contains('is-abomination')) abominations.push(name);
+      });
 
-    if (window.App?.setBindFatesCategory) {
-      window.App.setBindFatesCategory(activeCategory, { oaths, abominations });
-    }
+      if (window.App?.setBindFatesCategory) {
+        window.App.setBindFatesCategory(category, { oaths, abominations });
+      } else if (window.App?.state?.bindFates?.[category]) {
+        window.App.state.bindFates[category] = { oaths, abominations };
+      }
+    });
+  };
+
+  const clearBindFatesSelections = () => {
+    Object.keys(modalSections).forEach((category) => {
+      if (window.App?.setBindFatesCategory) {
+        window.App.setBindFatesCategory(category, { oaths: [], abominations: [] });
+      } else if (window.App?.state?.bindFates?.[category]) {
+        window.App.state.bindFates[category] = { oaths: [], abominations: [] };
+      }
+      const listEl = modalSections[category];
+      listEl?.querySelectorAll('.bind-option').forEach((opt) => {
+        opt.classList.remove('is-oath', 'is-abomination');
+      });
+    });
+    updateBindFatesSummary();
+    showBindFatesError('');
   };
 
   const closeBindFatesModal = () => {
@@ -2500,7 +2478,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
     updateBindFatesSummary();
     showBindFatesError('');
     if (originButton?.focus) originButton.focus();
-    activeCategory = null;
     originButton = null;
   };
 
@@ -2513,12 +2490,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
   });
 
-  categoryButtons?.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const category = btn?.dataset?.bindCategory;
-      if (!category) return;
-      openBindFatesModal(category, btn);
-    });
+  toggleBtn?.addEventListener('click', () => openBindFatesModal(toggleBtn));
+  clearBtn?.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    evt.stopPropagation();
+    clearBindFatesSelections();
   });
 
   updateBindFatesSummary();
