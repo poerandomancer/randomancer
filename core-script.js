@@ -2290,6 +2290,31 @@ function showBindFatesError(msg){
   el.textContent = msg || '';
 }
 
+function renderOathAwareText(el, values, oathSet, separator = ' & '){
+  if (!el) return;
+  const list = Array.isArray(values)
+    ? values.filter(Boolean)
+    : (values ? [values] : []);
+
+  if (!list.length) {
+    el.replaceChildren(document.createTextNode(''));
+    return;
+  }
+
+  const nodes = [];
+  list.forEach((val, idx) => {
+    const span = document.createElement('span');
+    span.textContent = val;
+    if (oathSet && typeof oathSet.has === 'function' && oathSet.has(val)) {
+      span.classList.add('oath-hit');
+    }
+    nodes.push(span);
+    if (idx < list.length - 1) nodes.push(document.createTextNode(separator));
+  });
+
+  el.replaceChildren(...nodes);
+}
+
 // ---------- wireup ----------
 document.addEventListener('DOMContentLoaded', ()=>{
     const slider = document.getElementById('cohesionRange');
@@ -2574,6 +2599,10 @@ function rollBuild(dataWrap){
 
   const findByName = (arr, name) => (arr || []).find(item => item?.name === name) || null;
 
+  const combatCfg = bind.combat || { oaths: [], abominations: [] };
+  const cOaths = new Set(combatCfg.oaths || []);
+  const cAboms = new Set(combatCfg.abominations || []);
+
   // --- Archetype ---
   const ascCfg = bind.ascendancy || { oaths: [], abominations: [] };
   const ascOaths = new Set(ascCfg.oaths || []);
@@ -2611,10 +2640,27 @@ function rollBuild(dataWrap){
   const wOaths = new Set(weaponCfg.oaths || []);
   const wAboms = new Set(weaponCfg.abominations || []);
 
+  const minionsOath = cOaths.has('Minions');
+  const sceptreAbomination = wAboms.has('Sceptre');
+
+  if (minionsOath && sceptreAbomination) {
+    showBindFatesError('Minions combat mechanic is not a valid Oath while Sceptre is an Abomination.');
+    return;
+  }
+
   let filteredWeaponPool = weaponPool.filter((w) => !wAboms.has(w.name));
   if (wOaths.size > 0) {
     const fromOath = filteredWeaponPool.filter((w) => wOaths.has(w.name));
     if (fromOath.length > 0) filteredWeaponPool = fromOath;
+  }
+
+  if (minionsOath) {
+    const sceptreOption = filteredWeaponPool.find((w) => w?.name === 'Sceptre');
+    if (!sceptreOption) {
+      showBindFatesError('Minions combat mechanic requires a Sceptre, but no Sceptre is available with your current Oaths & Abominations.');
+      return;
+    }
+    filteredWeaponPool = [sceptreOption];
   }
 
   if (!filteredWeaponPool.length) {
@@ -2630,7 +2676,6 @@ function rollBuild(dataWrap){
     const offPool = (data.Weapons['Off-Hand'] || []).filter((o) => validOffhands[weapon.name].includes(o.name));
     offhand = pickByCohesion(offPool, base, th);
   }
-  const weaponText = offhand ? `${weapon?.name || ''} & ${offhand?.name || ''}` : (weapon?.name || '');
 
   // --- Survivability ---
   const pickedDefense = pickByCohesion(data.Defense, base, th);
@@ -2653,10 +2698,6 @@ function rollBuild(dataWrap){
   let ailmentSet = [];
   let tacticSet  = [];
   const r = Math.random();
-
-  const combatCfg = bind.combat || { oaths: [], abominations: [] };
-  const cOaths = new Set(combatCfg.oaths || []);
-  const cAboms = new Set(combatCfg.abominations || []);
 
   const allAil = data.Ailments || [];
   const allTac = filterTacticsByStrictRules(data.Tactics || [], weapon, offhand);
@@ -2747,25 +2788,27 @@ function rollBuild(dataWrap){
   tacticSet  = cleanPicks.filter(m => m.kind === 'tactic').map(m => m.ref);
 
   document.getElementById('class')?.replaceChildren(document.createTextNode(clsName || ''));
-  document.getElementById('ascendancy')?.replaceChildren(document.createTextNode(asc || ''));
+  renderOathAwareText(document.getElementById('ascendancy'), asc || '', ascOaths);
   updateAscArt(asc);
-  document.getElementById('weapons')?.replaceChildren(document.createTextNode(weaponText));
+  renderOathAwareText(
+    document.getElementById('weapons'),
+    [weapon?.name, offhand?.name].filter(Boolean),
+    wOaths
+  );
   document.getElementById('defense')?.replaceChildren(document.createTextNode(pickedDefense?.name || ''));
   document.getElementById('defstrat')?.replaceChildren(document.createTextNode(pickedDefStrat?.name || ''));
 
-  document.getElementById('ailments')
-    ?.replaceChildren(
-      document.createTextNode(
-        ailmentSet.filter(Boolean).map(a => a.name).join(' & ') || ''
-      )
-    );
+  renderOathAwareText(
+    document.getElementById('ailments'),
+    ailmentSet.filter(Boolean).map(a => a.name),
+    cOaths
+  );
 
-  document.getElementById('tactics')
-    ?.replaceChildren(
-      document.createTextNode(
-        tacticSet.filter(Boolean).map(t => t.name).join(' & ') || ''
-      )
-    );
+  renderOathAwareText(
+    document.getElementById('tactics'),
+    tacticSet.filter(Boolean).map(t => t.name),
+    cOaths
+  );
 
   updateAilmentOverlay(ailmentSet.filter(Boolean));
 
