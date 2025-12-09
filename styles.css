@@ -714,7 +714,7 @@ border-top: 1px dotted var(--gold);
   box-shadow:0 4px 16px rgba(0,0,0,0.26);
   padding:6px 8px;
   border:0;
-  border-radius:0;
+  border-radius:10px;
   width:fit-content;
 }
 .bind-fates:hover{ background:linear-gradient(90deg, rgba(200,168,107,0.24), rgba(0,0,0,0.35)); }
@@ -730,7 +730,7 @@ border-top: 1px dotted var(--gold);
 }
 .bind-fates-toggle:focus-visible{ outline:1px solid var(--gold); outline-offset:2px; border-radius:2px; }
 .bind-fates-icon{ width:22px; height:22px; filter:drop-shadow(0 0 4px rgba(0,0,0,0.4)); }
-.bind-fates-text{ display:flex; flex-direction:column; align-items:flex-start; gap:2px; }
+.bind-fates-text{ display:flex; flex-direction:row; align-items:baseline; gap:0.45rem; }
 .bind-fates-label{
   font-family:'Cormorant Infant',serif;
   font-weight:600;
@@ -741,6 +741,7 @@ border-top: 1px dotted var(--gold);
   color:var(--muted);
   font-size:0.92rem;
   letter-spacing:.02em;
+  white-space:nowrap;
 }
 .bind-fates-clear{
   appearance:none;
@@ -779,6 +780,9 @@ border-top: 1px dotted var(--gold);
   border-radius:12px;
   color:var(--ink);
   padding:0 0 12px;
+  max-height:80vh;
+  display:flex;
+  flex-direction:column;
 }
 .bind-fates-head{
   display:flex;
@@ -799,7 +803,12 @@ border-top: 1px dotted var(--gold);
   cursor:pointer;
 }
 .bind-fates-close:hover{ background:rgba(255,255,255,0.08); }
-.bind-fates-sections{ padding:10px 14px 6px; }
+.bind-fates-sections{
+  padding:10px 14px 6px;
+  overflow:auto;
+  flex:1;
+  min-height:0;
+}
 .bind-fates-section{ margin-bottom:8px; }
 .bind-fates-section-head{ display:flex; flex-direction:column; gap:2px; margin-bottom:6px; }
 .bind-fates-section-head h4{ margin:0; color:var(--silver); letter-spacing:.02em; }
