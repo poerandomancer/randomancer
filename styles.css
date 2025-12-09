@@ -715,7 +715,7 @@ border-top: 1px dotted var(--gold);
   box-shadow:0 4px 16px rgba(0,0,0,0.26);
   padding:6px 8px;
   border:0;
-  border-radius:10px;
+  border-radius:999px;
   width:fit-content;
 }
 .bind-fates:hover{ background:linear-gradient(90deg, rgba(200,168,107,0.24), rgba(0,0,0,0.35)); }
@@ -739,7 +739,8 @@ border-top: 1px dotted var(--gold);
   font-size:1.05rem;
 }
 .bind-fates-summary{
-  color:var(--muted);
+  font-family:'Cormorant Infant',serif;
+  color:var(--gold);
   font-size:0.92rem;
   letter-spacing:.02em;
   white-space:nowrap;
