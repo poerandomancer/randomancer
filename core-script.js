@@ -2875,6 +2875,9 @@ function rollBuild(dataWrap){
 
   // Uniques: trigger the synergy engine directly using the current roll snapshot
   try {
+    const locks = getLockState();
+    const current = window.App?.state?.currentRoll || window.CURRENT_ROLL || {};
+
     if (!locks.uniques) {
       if (typeof window.RandomancerRefreshUniques === 'function') {
         window.RandomancerRefreshUniques(window.CURRENT_ROLL);
