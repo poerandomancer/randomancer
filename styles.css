@@ -909,6 +909,46 @@ border-top: 1px dotted var(--gold);
   box-shadow:0 0 8px rgba(200,80,80,0.35);
 }
 
+.bind-fates-subtitle{
+  padding:8px 14px 6px;
+  border-bottom:1px solid rgba(200,168,107,0.22);
+  font-size:0.9rem;
+  color:var(--muted);
+  background:radial-gradient(circle at 0 0, rgba(255,244,214,0.08), transparent 55%);
+}
+
+.bind-fates-subtitle p{
+  margin:0 0 4px;
+}
+
+.bind-fates-subtitle p:last-child{
+  margin-bottom:0;
+}
+
+.bind-fates-subtitle .bf-pill{
+  display:inline-flex;
+  align-items:center;
+  padding:0 0.4em;
+  border-radius:999px;
+  border:1px solid rgba(200,168,107,0.32);
+  font-size:0.8em;
+  letter-spacing:0.09em;
+  text-transform:uppercase;
+}
+
+.bind-fates-subtitle .bf-pill-oath{
+  border-color:rgba(255,222,160,0.9);
+  background:rgba(200,168,107,0.14);
+  color:var(--gold);
+}
+
+.bind-fates-subtitle .bf-pill-abom{
+  border-color:rgba(200,80,80,0.85);
+  background:rgba(120,30,30,0.35);
+  color:#ffb3b3;
+}
+
+
 .oath-hit{
   color:#f7e7b5;
   text-shadow:0 0 6px rgba(255,214,120,0.6), 0 0 12px rgba(255,214,120,0.35);

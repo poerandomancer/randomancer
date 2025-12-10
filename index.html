@@ -25,20 +25,43 @@
     </div>
   </div>
   <div id="bind-fates-modal" class="bind-fates-modal" hidden>
-    <div class="bind-fates-backdrop" data-close="1"></div>
-    <div class="bind-fates-dialog" role="dialog" aria-modal="true" aria-labelledby="bind-fates-title">
-      <div class="bind-fates-head">
-        <h3 id="bind-fates-title">Bind the Fates</h3>
-        <button id="bind-fates-close" class="bind-fates-close" type="button" aria-label="Close">×</button>
-      </div>
-      <div class="bind-fates-sections">
-        <section class="bind-fates-section" data-category="ascendancy">
-          <div class="bind-fates-section-head">
-            <h4>Ascendancy</h4>
-            <p class="bind-fates-hint">Swear Oaths to favored ascendancies, or name Abominations that fate will never grant.</p>
-          </div>
-          <div id="bind-fates-list-ascendancy" class="bind-fates-list"></div>
-        </section>
+	  <div class="bind-fates-backdrop" data-close="1"></div>
+	  <div class="bind-fates-dialog"
+		   role="dialog"
+		   aria-modal="true"
+		   aria-labelledby="bind-fates-title"
+		   aria-describedby="bind-fates-subtitle">
+		<div class="bind-fates-head">
+		  <h3 id="bind-fates-title">Bind the Fates</h3>
+		  <button id="bind-fates-close" class="bind-fates-close" type="button" aria-label="Close">×</button>
+		</div>
+	
+		<!-- New subtitle / instructions -->
+		<div id="bind-fates-subtitle" class="bind-fates-subtitle">
+		  <p>
+			Tap or click any option to cycle its fate:
+			first tap swears an <span class="bf-pill bf-pill-oath">Oath</span>,
+			second tap marks an <span class="bf-pill bf-pill-abom">Abomination</span>,
+			third tap clears it.
+		  </p>
+		  <p>
+			Oaths bind the randomizer to those choices;
+			Abominations are completely barred from your rolls.
+		  </p>
+		</div>
+	
+		<div class="bind-fates-sections">
+		  <section class="bind-fates-section" data-category="ascendancy">
+			<div class="bind-fates-section-head">
+			  <h4>Ascendancy</h4>
+			  <p class="bind-fates-hint">
+				Swear Oaths to favored ascendancies, or name Abominations that fate will never grant.
+			  </p>
+			</div>
+			<div id="bind-fates-list-ascendancy" class="bind-fates-list"></div>
+		  </section>
+		  <!-- rest of sections stay the same -->
+
         <hr class="bind-fates-divider">
         <section class="bind-fates-section" data-category="weapon">
           <div class="bind-fates-section-head">
