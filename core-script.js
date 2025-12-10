@@ -716,6 +716,12 @@ const App = window.App = (() => {
       snapshotVersion: 1
     },
 
+    bindFates: {
+      ascendancy: { oaths: [], abominations: [] },
+      weapon:     { oaths: [], abominations: [] },
+      combat:     { oaths: [], abominations: [] }
+    },
+
     locks: { ...DEFAULT_LOCKS },
 
     // dev toggle for “single-entry” behavior
@@ -769,11 +775,24 @@ const App = window.App = (() => {
 	
 		state.cohesionThreshold = threshold;
 		state.cohesionModeName = name;
-		state.cohesionMode = idx === -1 ? 1 : idx;
-	
-		cohesionThreshold = threshold;
-		currentMode = name;
-	  }
+                state.cohesionMode = idx === -1 ? 1 : idx;
+
+                cohesionThreshold = threshold;
+                currentMode = name;
+          }
+
+  function getBindFates(){
+    return state.bindFates;
+  }
+
+  function setBindFatesCategory(category, next){
+    if (!state.bindFates[category]) return;
+    const safe = (arr) => Array.from(new Set((arr || []).filter(Boolean)));
+    state.bindFates[category] = {
+      oaths: safe(next?.oaths),
+      abominations: safe(next?.abominations)
+    };
+  }
 
 
   function legacyInit(){
@@ -876,8 +895,17 @@ const App = window.App = (() => {
     }
   }
 
-  return { state, bootstrap, setCohesion, legacyInit, roll, captureCurrentRollFromDOM, mergeCurrentRoll, modules: { Config, RulesEngine } };
+  return { state, bootstrap, setCohesion, legacyInit, roll, captureCurrentRollFromDOM, mergeCurrentRoll, getBindFates, setBindFatesCategory, modules: { Config, RulesEngine } };
 })();
+
+function getBindFatesFromApp(){
+  const App = window.App;
+  return (App && App.state && App.state.bindFates) || {
+    ascendancy: { oaths: [], abominations: [] },
+    weapon:     { oaths: [], abominations: [] },
+    combat:     { oaths: [], abominations: [] }
+  };
+}
 
 // ---------- Tag utilities (shared normalizer + alias map) ----------
 const TagUtils = (() => {
@@ -2236,6 +2264,57 @@ function ensureDataPreload(){
   return dataPromise;
 }
 
+function countBindFatesSelections(bind){
+  const counts = { oaths: 0, abominations: 0 };
+  Object.values(bind || {}).forEach((cfg) => {
+    counts.oaths += Array.isArray(cfg?.oaths) ? cfg.oaths.length : 0;
+    counts.abominations += Array.isArray(cfg?.abominations) ? cfg.abominations.length : 0;
+  });
+  return counts;
+}
+
+function updateBindFatesSummary(){
+  const bf = window.App?.getBindFates ? window.App.getBindFates() : getBindFatesFromApp();
+  const summaryEl = document.getElementById('bind-fates-summary');
+  const counts = countBindFatesSelections(bf);
+  if (summaryEl) {
+    summaryEl.textContent = (counts.oaths + counts.abominations) > 0
+      ? `${counts.oaths} Oath${counts.oaths === 1 ? '' : 's'} | ${counts.abominations} Abomination${counts.abominations === 1 ? '' : 's'}`
+      : 'No Fates Bound';
+  }
+}
+
+function showBindFatesError(msg){
+  const el = document.getElementById('bind-fates-error');
+  if (!el) return;
+  el.textContent = msg || '';
+}
+
+function renderOathAwareText(el, values, oathSet, separator = ' & '){
+  if (!el) return;
+  const list = Array.isArray(values)
+    ? values.filter(Boolean)
+    : (values ? [values] : []);
+
+  if (!list.length) {
+    el.replaceChildren(document.createTextNode(''));
+    return;
+  }
+
+  const nodes = [];
+  list.forEach((val, idx) => {
+    const span = document.createElement('span');
+    span.textContent = val;
+    if (oathSet && typeof oathSet.has === 'function' && oathSet.has(val)) {
+      span.classList.add('oath-hit');
+    }
+    nodes.push(span);
+    if (idx < list.length - 1) nodes.push(document.createTextNode(separator));
+  });
+
+  el.replaceChildren(...nodes);
+}
+
 // ---------- wireup ----------
 document.addEventListener('DOMContentLoaded', ()=>{
     const slider = document.getElementById('cohesionRange');
@@ -2281,13 +2360,171 @@ document.addEventListener('DOMContentLoaded', ()=>{
 		slider.value = String(thresholdToSliderValue(initialThreshold));
 		applyThreshold(initialThreshold);
 	
-		slider.addEventListener('input', (e) => {
-		  const t = sliderValueToThreshold(e.target.value);
-		  applyThreshold(t);
-		});
-	  }
-	
-	  initSectionLocks();
+                slider.addEventListener('input', (e) => {
+                  const t = sliderValueToThreshold(e.target.value);
+                  applyThreshold(t);
+                });
+          }
+
+  const bindBar     = document.getElementById('bind-fates-bar');
+  const toggleBtn   = bindBar?.querySelector('.bind-fates-toggle');
+  const clearBtn    = document.getElementById('bind-fates-clear');
+
+  const modal         = document.getElementById('bind-fates-modal');
+  const modalBackdrop = modal?.querySelector('.bind-fates-backdrop');
+  const modalClose    = document.getElementById('bind-fates-close');
+  const modalSections = {
+    ascendancy: document.getElementById('bind-fates-list-ascendancy'),
+    weapon: document.getElementById('bind-fates-list-weapon'),
+    combat: document.getElementById('bind-fates-list-combat'),
+  };
+  let originButton = null;
+
+  const resolveData = async () => {
+    const fromState = (window.App && window.App.state && window.App.state.DATA) || window.DATA;
+    if (fromState) return fromState;
+    try {
+      const preload = await ensureDataPreload();
+      return preload?.core || preload;
+    } catch (e) {
+      console.error('[BindFates] Unable to resolve data', e);
+      return null;
+    }
+  };
+
+  const cycleOptionState = (btn) => {
+    if (!btn) return;
+    if (btn.classList.contains('is-oath')) {
+      btn.classList.remove('is-oath');
+      btn.classList.add('is-abomination');
+    } else if (btn.classList.contains('is-abomination')) {
+      btn.classList.remove('is-abomination');
+    } else {
+      btn.classList.add('is-oath');
+    }
+  };
+
+  const renderOptions = (options, cfg, listEl) => {
+    if (!listEl) return;
+    listEl.innerHTML = '';
+    options.forEach((opt) => {
+      const name = typeof opt === 'string' ? opt : opt?.name;
+      if (!name) return;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'bind-option';
+      btn.dataset.name = name;
+      if (opt?.kind) btn.dataset.kind = opt.kind;
+      if (cfg?.oaths?.includes(name)) btn.classList.add('is-oath');
+      else if (cfg?.abominations?.includes(name)) btn.classList.add('is-abomination');
+      btn.textContent = name;
+      btn.addEventListener('click', () => cycleOptionState(btn));
+      listEl.appendChild(btn);
+    });
+  };
+
+  const buildOptions = (category, data) => {
+    if (category === 'ascendancy') {
+      const ascSet = new Set();
+      Object.values(data.Classes || {}).forEach((cls) => {
+        (cls?.ascendancies || []).forEach((name) => ascSet.add(name));
+      });
+      return Array.from(ascSet).sort();
+    }
+    if (category === 'weapon') {
+      const two = Array.isArray(data.Weapons?.['Two-Handed']) ? data.Weapons['Two-Handed'] : [];
+      const one = Array.isArray(data.Weapons?.['One-Handed']) ? data.Weapons['One-Handed'] : [];
+      return [...two, ...one].map((w) => w.name);
+    }
+    if (category === 'combat') {
+      const ail = (data.Ailments || []).map((a) => ({ name: a.name, kind: 'ailment' }));
+      const tac = (data.Tactics || []).map((t) => ({ name: t.name, kind: 'tactic' }));
+      return [...ail, ...tac];
+    }
+    return [];
+  };
+
+  const openBindFatesModal = async (originBtn) => {
+    const data = await resolveData();
+    if (!modal || !data) return;
+    originButton = originBtn || null;
+
+    const current = window.App?.getBindFates ? window.App.getBindFates() : getBindFatesFromApp();
+    Object.entries(modalSections).forEach(([category, listEl]) => {
+      const cfg = current?.[category] || { oaths: [], abominations: [] };
+      const options = buildOptions(category, data);
+      renderOptions(options, cfg, listEl);
+    });
+
+    modal.hidden = false;
+    (modal.querySelector('.bind-option') || modalClose || modal)?.focus?.();
+  };
+
+  const persistBindFatesSelection = () => {
+    Object.entries(modalSections).forEach(([category, listEl]) => {
+      if (!listEl) return;
+      const oaths = [];
+      const abominations = [];
+      listEl.querySelectorAll('.bind-option').forEach((opt) => {
+        const name = opt?.dataset?.name;
+        if (!name) return;
+        if (opt.classList.contains('is-oath')) oaths.push(name);
+        else if (opt.classList.contains('is-abomination')) abominations.push(name);
+      });
+
+      if (window.App?.setBindFatesCategory) {
+        window.App.setBindFatesCategory(category, { oaths, abominations });
+      } else if (window.App?.state?.bindFates?.[category]) {
+        window.App.state.bindFates[category] = { oaths, abominations };
+      }
+    });
+  };
+
+  const clearBindFatesSelections = () => {
+    Object.keys(modalSections).forEach((category) => {
+      if (window.App?.setBindFatesCategory) {
+        window.App.setBindFatesCategory(category, { oaths: [], abominations: [] });
+      } else if (window.App?.state?.bindFates?.[category]) {
+        window.App.state.bindFates[category] = { oaths: [], abominations: [] };
+      }
+      const listEl = modalSections[category];
+      listEl?.querySelectorAll('.bind-option').forEach((opt) => {
+        opt.classList.remove('is-oath', 'is-abomination');
+      });
+    });
+    updateBindFatesSummary();
+    showBindFatesError('');
+  };
+
+  const closeBindFatesModal = () => {
+    if (!modal) return;
+    persistBindFatesSelection();
+    modal.hidden = true;
+    updateBindFatesSummary();
+    showBindFatesError('');
+    if (originButton?.focus) originButton.focus();
+    originButton = null;
+  };
+
+  modalClose?.addEventListener('click', closeBindFatesModal);
+  modalBackdrop?.addEventListener('click', closeBindFatesModal);
+  modal?.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Escape') {
+      evt.preventDefault();
+      closeBindFatesModal();
+    }
+  });
+
+  toggleBtn?.addEventListener('click', () => openBindFatesModal(toggleBtn));
+  clearBtn?.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    evt.stopPropagation();
+    clearBindFatesSelections();
+  });
+
+  updateBindFatesSummary();
+
+          initSectionLocks();
 
 
     // Kick off preloading while the intro screen is up and hydrate App.state from it
@@ -2350,67 +2587,101 @@ function rollBuild(dataWrap){
     return;
   }
 
+  showBindFatesError('');
+
     const th = (typeof cohesionThreshold === 'number')
     ? cohesionThreshold
     : (COHESION_MODES[currentMode] ?? COHESION_MODES.cohesive);
 
-  const classes = Object.entries(data.Classes);
-  const locks = getLockState();
-  const current = window.App?.state?.currentRoll || {};
+  const bind = getBindFatesFromApp();
+
+  const classes = Object.entries(data.Classes || {});
 
   const findByName = (arr, name) => (arr || []).find(item => item?.name === name) || null;
 
+  const combatCfg = bind.combat || { oaths: [], abominations: [] };
+  const cOaths = new Set(combatCfg.oaths || []);
+  const cAboms = new Set(combatCfg.abominations || []);
+
   // --- Archetype ---
-  const canReuseClass = locks.archetype && current.className && data.Classes[current.className];
-  const archetype = canReuseClass
-    ? [current.className, data.Classes[current.className]]
-    : classes[Math.floor(Math.random() * classes.length)];
-  const [clsName, clsData] = archetype;
+  const ascCfg = bind.ascendancy || { oaths: [], abominations: [] };
+  const ascOaths = new Set(ascCfg.oaths || []);
+  const ascAboms = new Set(ascCfg.abominations || []);
+
+  const ascCandidates = [];
+  for (const [clsName, clsData] of classes) {
+    const ascList = Array.isArray(clsData?.ascendancies) ? clsData.ascendancies : [];
+    let filtered = ascList.filter((name) => !ascAboms.has(name));
+    if (ascOaths.size > 0) {
+      filtered = filtered.filter((name) => ascOaths.has(name));
+    }
+
+    if (filtered.length > 0) {
+      ascCandidates.push({ clsName, clsData, ascList: filtered });
+    }
+  }
+
+  if (!ascCandidates.length) {
+    showBindFatesError('No valid ascendancies with your current Oaths & Abominations.');
+    return;
+  }
+
+  const pickedAsc = ascCandidates[Math.floor(Math.random() * ascCandidates.length)];
+  const clsName = pickedAsc.clsName;
+  const clsData = pickedAsc.clsData;
   const base = clsData?.attributes || {};
 
-  const asc = canReuseClass
-    ? (current.ascendancy || clsData?.ascendancies?.[0] || '')
-    : clsData.ascendancies[Math.floor(Math.random() * clsData.ascendancies.length)];
+  const asc = pickedAsc.ascList[Math.floor(Math.random() * pickedAsc.ascList.length)];
 
   const ascendancyId = lookupAscendancyIdByName(asc);
 
-  document.getElementById('class')?.replaceChildren(document.createTextNode(clsName || ''));
-  document.getElementById('ascendancy')?.replaceChildren(document.createTextNode(asc || ''));
-  updateAscArt(asc);
+  const weaponPool = (data.Weapons['Two-Handed'] || []).concat(data.Weapons['One-Handed'] || []);
+  const weaponCfg = bind.weapon || { oaths: [], abominations: [] };
+  const wOaths = new Set(weaponCfg.oaths || []);
+  const wAboms = new Set(weaponCfg.abominations || []);
 
-  const weaponPool = data.Weapons['Two-Handed'].concat(data.Weapons['One-Handed']);
-  const pickWeapon = () => pickByCohesion(weaponPool, base, th);
-  let weapon = locks.archetype ? findByName(weaponPool, current.weapon) : null;
-  if (!locks.archetype || !weapon) {
-    weapon = pickWeapon();
+  const minionsOath = cOaths.has('Minions');
+  const sceptreAbomination = wAboms.has('Sceptre');
+
+  if (minionsOath && sceptreAbomination) {
+    showBindFatesError('Minions combat mechanic is not a valid Oath while Sceptre is an Abomination.');
+    return;
   }
+
+  let filteredWeaponPool = weaponPool.filter((w) => !wAboms.has(w.name));
+  if (wOaths.size > 0) {
+    const fromOath = filteredWeaponPool.filter((w) => wOaths.has(w.name));
+    if (fromOath.length > 0) filteredWeaponPool = fromOath;
+  }
+
+  if (minionsOath) {
+    const sceptreOption = filteredWeaponPool.find((w) => w?.name === 'Sceptre');
+    if (!sceptreOption) {
+      showBindFatesError('Minions combat mechanic requires a Sceptre, but no Sceptre is available with your current Oaths & Abominations.');
+      return;
+    }
+    filteredWeaponPool = [sceptreOption];
+  }
+
+  if (!filteredWeaponPool.length) {
+    showBindFatesError('No valid weapons with your current Oaths & Abominations.');
+    return;
+  }
+
+  const pickWeapon = () => pickByCohesion(filteredWeaponPool, base, th);
+  const weapon = pickWeapon();
 
   let offhand = null;
-  if (locks.archetype && current.offhand) {
-    offhand = findByName(data.Weapons['Off-Hand'], current.offhand);
+  if (weapon && Object.keys(validOffhands).includes(weapon.name)) {
+    const offPool = (data.Weapons['Off-Hand'] || []).filter((o) => validOffhands[weapon.name].includes(o.name));
+    offhand = pickByCohesion(offPool, base, th);
   }
-  if (!locks.archetype || (!offhand && weapon && Object.keys(validOffhands).includes(weapon.name))) {
-    if (weapon && Object.keys(validOffhands).includes(weapon.name)) {
-      const offPool = data.Weapons['Off-Hand'].filter(o => validOffhands[weapon.name].includes(o.name));
-      offhand = offhand || pickByCohesion(offPool, base, th);
-    }
-  }
-  const weaponText = offhand ? `${weapon?.name || ''} & ${offhand.name}` : (weapon?.name || '');
-  document.getElementById('weapons')?.replaceChildren(document.createTextNode(weaponText));
 
   // --- Survivability ---
-  const defense = (locks.survivability && current.defense)
-    ? findByName(data.Defense, current.defense)
-    : null;
-  const pickedDefense = defense || pickByCohesion(data.Defense, base, th);
-  document.getElementById('defense')?.replaceChildren(document.createTextNode(pickedDefense?.name || ''));
+  const pickedDefense = pickByCohesion(data.Defense, base, th);
 
   const dsPool = data.DefensiveStrategies.filter(ds => applyHardRestrictions(ds, { defense: pickedDefense?.name || '', weapon: weapon?.name || '', offhand: offhand?.name || '' }));
-  const defStrat = (locks.survivability && current.defStrat)
-    ? (findByName(dsPool, current.defStrat) || findByName(data.DefensiveStrategies, current.defStrat))
-    : null;
-  const pickedDefStrat = defStrat || pickByCohesion(dsPool, base, th);
-  document.getElementById('defstrat')?.replaceChildren(document.createTextNode(pickedDefStrat?.name || ''));
+  const pickedDefStrat = pickByCohesion(dsPool, base, th);
 
   function filterTacticsByStrictRules(allTactics, weapon, offhand){
   const w = String(weapon?.name||'').toLowerCase();
@@ -2428,29 +2699,43 @@ function rollBuild(dataWrap){
   let tacticSet  = [];
   const r = Math.random();
 
-  const mechanicsLocked =
-    locks.mechanics &&
-    ((current.ailmentList && current.ailmentList.length) ||
-     (current.tacticList && current.tacticList.length));
+  const allAil = data.Ailments || [];
+  const allTac = filterTacticsByStrictRules(data.Tactics || [], weapon, offhand);
 
-  if (mechanicsLocked) {
-    // Respect existing locked mechanics
-    ailmentSet = (current.ailmentList || [])
-      .map(n => findByName(data.Ailments, n))
-      .filter(Boolean);
-    tacticSet = (current.tacticList || [])
-      .map(n => findByName(data.Tactics, n))
-      .filter(Boolean);
-  }
+  const validAil = allAil.filter((a) => !cAboms.has(a.name));
+  const validTac = allTac.filter((t) => !cAboms.has(t.name));
 
-  // If not locked, or locked values failed to resolve, roll fresh
-  if (!mechanicsLocked || (!ailmentSet.length && !tacticSet.length)) {
-    const thLocal = th; // same threshold as weapons/defense: COHESION_MODES[currentMode]
+  const mechanics = [
+    ...validAil.map((a) => ({ kind: 'ailment', ref: a })),
+    ...validTac.map((t) => ({ kind: 'tactic', ref: t }))
+  ];
 
+  const pickMechanic = (pool, excludeNames = []) => {
+    const filtered = pool.filter((m) => m && !excludeNames.includes(m.ref?.name));
+    if (!filtered.length) return null;
+    const picked = pickByCohesion(filtered.map((m) => m.ref), base, th) || filtered[Math.floor(Math.random() * filtered.length)].ref;
+    return filtered.find((m) => m.ref === picked || m.ref?.name === picked?.name) || filtered[0];
+  };
+
+  const oathMech = mechanics.filter((m) => cOaths.has(m.ref?.name));
+  const neutralMech = mechanics.filter((m) => !cOaths.has(m.ref?.name));
+
+  const picks = [];
+
+  if (oathMech.length >= 2) {
+    const first = pickMechanic(oathMech);
+    const second = pickMechanic(oathMech, [first?.ref?.name]);
+    picks.push(first, second);
+  } else if (oathMech.length === 1) {
+    const first = oathMech[0];
+    const second = pickMechanic(neutralMech, [first?.ref?.name]);
+    if (first) picks.push(first);
+    if (second) picks.push(second);
+  } else {
+    const thLocal = th;
     const pickAilmentFrom = (pool, excludeNames = []) => {
       const filtered = pool.filter(a => a && !excludeNames.includes(a.name));
       if (!filtered.length) return null;
-      // Cohesion-biased pick, with fallback to random within the valid pool
       return (
         pickByCohesion(filtered, base, thLocal) ||
         filtered[Math.floor(Math.random() * filtered.length)]
@@ -2466,55 +2751,64 @@ function rollBuild(dataWrap){
       );
     };
 
-    // Decide which pattern to use:
-    //  - r < 0.6  => 1 ailment + 1 tactic
-    //  - 0.6-0.8  => 2 ailments
-    //  - 0.8-1.0  => 2 tactics
     if (r < 0.6) {
-      // 1 ailment + 1 tactic
-      const a1 = pickAilmentFrom(data.Ailments);
-      const tacticPool = filterTacticsByStrictRules(data.Tactics, weapon, offhand);
-      const t1 = pickTacticFrom(tacticPool);
-
-      ailmentSet = a1 ? [a1] : [];
-      tacticSet  = t1 ? [t1] : [];
-
+      const a1 = pickAilmentFrom(validAil);
+      const tPool = validTac;
+      const t1 = pickTacticFrom(tPool);
+      if (a1) picks.push({ kind: 'ailment', ref: a1 });
+      if (t1) picks.push({ kind: 'tactic', ref: t1 });
     } else if (r < 0.8) {
-      // 2 ailments (no duplicates)
-      const a1 = pickAilmentFrom(data.Ailments);
+      const a1 = pickAilmentFrom(validAil);
       const a2 = a1
-        ? pickAilmentFrom(data.Ailments, [a1.name])
-        : pickAilmentFrom(data.Ailments);
+        ? pickAilmentFrom(validAil, [a1.name])
+        : pickAilmentFrom(validAil);
 
-      ailmentSet = [a1, a2].filter(Boolean);
-      tacticSet  = [];
-
+      if (a1) picks.push({ kind: 'ailment', ref: a1 });
+      if (a2) picks.push({ kind: 'ailment', ref: a2 });
     } else {
-      // 2 tactics (no duplicates, strict rules apply)
-      const tacticPool = filterTacticsByStrictRules(data.Tactics, weapon, offhand);
-      const t1 = pickTacticFrom(tacticPool);
+      const tPool = validTac;
+      const t1 = pickTacticFrom(tPool);
       const t2 = t1
-        ? pickTacticFrom(tacticPool, [t1.name])
-        : pickTacticFrom(tacticPool);
+        ? pickTacticFrom(tPool, [t1.name])
+        : pickTacticFrom(tPool);
 
-      tacticSet  = [t1, t2].filter(Boolean);
-      ailmentSet = [];
+      if (t1) picks.push({ kind: 'tactic', ref: t1 });
+      if (t2) picks.push({ kind: 'tactic', ref: t2 });
     }
   }
 
-  document.getElementById('ailments')
-    ?.replaceChildren(
-      document.createTextNode(
-        ailmentSet.filter(Boolean).map(a => a.name).join(' & ') || ''
-      )
-    );
+  const cleanPicks = picks.filter(Boolean).slice(0, 2);
 
-  document.getElementById('tactics')
-    ?.replaceChildren(
-      document.createTextNode(
-        tacticSet.filter(Boolean).map(t => t.name).join(' & ') || ''
-      )
-    );
+  if (cleanPicks.length < 2) {
+    showBindFatesError('No valid combat mechanics with your current Oaths & Abominations.');
+    return;
+  }
+
+  ailmentSet = cleanPicks.filter(m => m.kind === 'ailment').map(m => m.ref);
+  tacticSet  = cleanPicks.filter(m => m.kind === 'tactic').map(m => m.ref);
+
+  document.getElementById('class')?.replaceChildren(document.createTextNode(clsName || ''));
+  renderOathAwareText(document.getElementById('ascendancy'), asc || '', ascOaths);
+  updateAscArt(asc);
+  renderOathAwareText(
+    document.getElementById('weapons'),
+    [weapon?.name, offhand?.name].filter(Boolean),
+    wOaths
+  );
+  document.getElementById('defense')?.replaceChildren(document.createTextNode(pickedDefense?.name || ''));
+  document.getElementById('defstrat')?.replaceChildren(document.createTextNode(pickedDefStrat?.name || ''));
+
+  renderOathAwareText(
+    document.getElementById('ailments'),
+    ailmentSet.filter(Boolean).map(a => a.name),
+    cOaths
+  );
+
+  renderOathAwareText(
+    document.getElementById('tactics'),
+    tacticSet.filter(Boolean).map(t => t.name),
+    cOaths
+  );
 
   updateAilmentOverlay(ailmentSet.filter(Boolean));
 
@@ -2624,6 +2918,9 @@ function rollBuild(dataWrap){
 
   // Uniques: trigger the synergy engine directly using the current roll snapshot
   try {
+    const locks = getLockState();
+    const current = window.App?.state?.currentRoll || window.CURRENT_ROLL || {};
+
     if (!locks.uniques) {
       if (typeof window.RandomancerRefreshUniques === 'function') {
         window.RandomancerRefreshUniques(window.CURRENT_ROLL);

@@ -72,6 +72,7 @@ body {
 
 
 header{
+  position: relative;
   text-align:center;
   padding:3rem 1rem 1.25rem;
   text-shadow:0 1px 2px rgba(0,0,0,.6);
@@ -84,6 +85,41 @@ header{
   font-size:1.9rem;
   color:var(--gold);
 }
+
+.patch-indicator{
+  position:absolute;
+  top:1.1rem;
+  left: max(1.25rem, env(safe-area-inset-left));
+  padding:0.2rem 0.8rem;
+  font-size:0.75rem;
+  letter-spacing:0.09em;
+  text-transform:uppercase;
+  color:var(--muted);
+  border-radius:999px;
+  border:1px solid rgba(200,168,107,.45);
+  background:
+    radial-gradient(circle at 30% 0%, rgba(255,240,210,0.16), transparent 65%),
+    linear-gradient(to right, rgba(8,8,9,0.96), rgba(24,20,14,0.94));
+  box-shadow:0 0 6px rgba(0,0,0,.7);
+  white-space:nowrap;
+  pointer-events:none; /* keeps it from interfering with header clicks */
+}
+
+.patch-indicator strong{
+  color:var(--gold);
+  font-weight:600;
+}
+
+@media (max-width: 600px){
+  .patch-indicator{
+    font-size:0.7rem;
+    top:0.9rem;
+    left:50%;
+    transform:translateX(-50%);
+    text-align:center;
+  }
+}
+
 
 .subtitle{
   font-style:italic;
@@ -188,6 +224,9 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
   gap:.4rem;
 }
 .section-header .section-title{ margin:0 0 .1rem; font-weight:600; color:var(--silver); letter-spacing:.02em; }
+.section-header .lock-toggle {
+  display: none !important;
+}
 .lock-toggle{
   background:transparent;
   border:0px solid rgba(220, 188, 120, 0.28);
@@ -694,6 +733,226 @@ border-top: 1px dotted var(--gold);
   color:var(--muted);
   opacity:.75;
   text-shadow:none;
+}
+
+/* Bind the Fates */
+.bind-fates-row{
+  display:flex;
+  align-items:center;
+  gap:0.55rem;
+  margin:0.4rem auto 1.1rem;
+  width:min(720px,90%);
+}
+.bind-fates{
+  display:inline-flex;
+  align-items:center;
+  gap:0.35rem;
+  background:linear-gradient(90deg, rgba(200,168,107,0.18), rgba(0,0,0,0.35));
+  box-shadow:0 4px 16px rgba(0,0,0,0.26);
+  padding:6px 8px;
+  border:0;
+  border-radius:999px;
+  width:fit-content;
+}
+/* Keep Bind the Fates bar on one line, even on mobile */
+.bind-fates-row{
+  flex-wrap:nowrap;           /* bar + error stay side-by-side */
+}
+
+.bind-fates{
+  white-space:nowrap;         /* bar contents prefer a single line */
+}
+
+.bind-fates-text{
+  display:flex;
+  flex-direction:row;
+  align-items:baseline;
+  gap:0.45rem;
+  flex-wrap:nowrap;
+  min-width:0;                /* allows summary to shrink/ellipsis */
+}
+
+.bind-fates-label{
+  white-space:nowrap;
+}
+
+.bind-fates-summary{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;     /* so long summaries don’t force a wrap */
+  max-width:12rem;            /* tweak as desired */
+}
+
+.bind-fates:hover{ background:linear-gradient(90deg, rgba(200,168,107,0.24), rgba(0,0,0,0.35)); }
+.bind-fates-toggle{
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+  padding:4px 6px;
+  border:0;
+  background:transparent;
+  color:var(--ink);
+  cursor:pointer;
+}
+.bind-fates-toggle:focus-visible{ outline:1px solid var(--gold); outline-offset:2px; border-radius:2px; }
+.bind-fates-icon{ width:22px; height:22px; filter:drop-shadow(0 0 4px rgba(0,0,0,0.4)); }
+.bind-fates-text{ display:flex; flex-direction:row; align-items:baseline; gap:0.45rem; }
+.bind-fates-label{
+  font-family:'Cormorant Infant',serif;
+  font-weight:600;
+  letter-spacing:.04em;
+  font-size:1.05rem;
+}
+.bind-fates-summary{
+  font-family:'Cormorant Infant',serif;
+  color:var(--gold);
+  font-size:0.92rem;
+  letter-spacing:.02em;
+  white-space:nowrap;
+}
+.bind-fates-clear{
+  appearance:none;
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  cursor:pointer;
+  font-size:1rem;
+  line-height:1;
+  padding:2px 4px;
+}
+.bind-fates-clear:hover,
+.bind-fates-clear:focus-visible{ color:var(--gold); outline:none; }
+.bind-fates-error{
+  min-width:180px;
+  color:rgb(226,132,93);
+  font-size:0.95rem;
+  font-weight:600;
+  letter-spacing:.02em;
+}
+
+.bind-fates-modal[hidden]{ display:none; }
+.bind-fates-modal{ position:fixed; inset:0; z-index:130; }
+.bind-fates-backdrop{
+  position:absolute; inset:0;
+  background:rgba(0,0,0,0.65);
+  backdrop-filter: blur(2px);
+}
+.bind-fates-dialog{
+  position:absolute; inset: 12% auto auto 50%;
+  transform: translateX(-50%);
+  width: min(540px, calc(100% - 28px));
+  background:rgba(18,16,14,0.96);
+  border:1px solid rgba(200,168,107,0.42);
+  box-shadow:0 14px 36px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(0,0,0,0.5);
+  border-radius:12px;
+  color:var(--ink);
+  padding:0 0 12px;
+  max-height:80vh;
+  display:flex;
+  flex-direction:column;
+}
+.bind-fates-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 14px;
+  border-bottom:1px solid rgba(200,168,107,0.28);
+  background:linear-gradient(180deg, rgba(200,168,107,0.12), rgba(0,0,0,0));
+}
+.bind-fates-head h3{ margin:0; font-size:18px; color:var(--gold); }
+.bind-fates-close{
+  appearance:none;
+  width:28px; height:28px;
+  border-radius:8px;
+  border:0;
+  background:transparent;
+  color:var(--ink);
+  cursor:pointer;
+}
+.bind-fates-close:hover{ background:rgba(255,255,255,0.08); }
+.bind-fates-sections{
+  padding:10px 14px 6px;
+  overflow:auto;
+  flex:1;
+  min-height:0;
+}
+.bind-fates-section{ margin-bottom:8px; }
+.bind-fates-section-head{ display:flex; flex-direction:column; gap:2px; margin-bottom:6px; }
+.bind-fates-section-head h4{ margin:0; color:var(--silver); letter-spacing:.02em; }
+.bind-fates-hint{ margin:0; color:var(--muted); font-size:0.95rem; }
+.bind-fates-divider{ border:0; border-top:1px solid rgba(200,168,107,0.22); margin:10px 0; }
+.bind-fates-list{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+  gap:8px;
+}
+.bind-option{
+  padding:10px 12px;
+  border-radius:10px;
+  background:rgba(18,18,20,0.75);
+  border:1px solid rgba(200,168,107,0.28);
+  color:var(--ink);
+  cursor:pointer;
+  text-align:left;
+  transition: border-color .12s ease, box-shadow .12s ease, background .12s ease;
+}
+.bind-option:hover,
+.bind-option:focus-visible{ outline:none; border-color:var(--gold); box-shadow:0 0 10px rgba(200,168,107,0.35); }
+.bind-option.is-oath{
+  border-color: rgba(255, 222, 160, 0.9);
+  background: linear-gradient(135deg, rgba(200,168,107,0.26), rgba(0,0,0,0.7));
+  box-shadow:0 0 8px rgba(200,168,107,0.4);
+}
+.bind-option.is-abomination{
+  border-color: rgba(200,80,80,0.85);
+  background: linear-gradient(135deg, rgba(120,30,30,0.35), rgba(0,0,0,0.75));
+  box-shadow:0 0 8px rgba(200,80,80,0.35);
+}
+
+.bind-fates-subtitle{
+  padding:8px 14px 6px;
+  border-bottom:1px solid rgba(200,168,107,0.22);
+  font-size:0.9rem;
+  color:var(--muted);
+  background:radial-gradient(circle at 0 0, rgba(255,244,214,0.08), transparent 55%);
+}
+
+.bind-fates-subtitle p{
+  margin:0 0 4px;
+}
+
+.bind-fates-subtitle p:last-child{
+  margin-bottom:0;
+}
+
+.bind-fates-subtitle .bf-pill{
+  display:inline-flex;
+  align-items:center;
+  padding:0 0.4em;
+  border-radius:999px;
+  border:1px solid rgba(200,168,107,0.32);
+  font-size:0.8em;
+  letter-spacing:0.09em;
+  text-transform:uppercase;
+}
+
+.bind-fates-subtitle .bf-pill-oath{
+  border-color:rgba(255,222,160,0.9);
+  background:rgba(200,168,107,0.14);
+  color:var(--gold);
+}
+
+.bind-fates-subtitle .bf-pill-abom{
+  border-color:rgba(200,80,80,0.85);
+  background:rgba(120,30,30,0.35);
+  color:#ffb3b3;
+}
+
+
+.oath-hit{
+  color:#f7e7b5;
+  text-shadow:0 0 6px rgba(255,214,120,0.6), 0 0 12px rgba(255,214,120,0.35);
+  font-weight:700;
 }
 
 
