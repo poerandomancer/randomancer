@@ -754,6 +754,35 @@ border-top: 1px dotted var(--gold);
   border-radius:999px;
   width:fit-content;
 }
+/* Keep Bind the Fates bar on one line, even on mobile */
+.bind-fates-row{
+  flex-wrap:nowrap;           /* bar + error stay side-by-side */
+}
+
+.bind-fates{
+  white-space:nowrap;         /* bar contents prefer a single line */
+}
+
+.bind-fates-text{
+  display:flex;
+  flex-direction:row;
+  align-items:baseline;
+  gap:0.45rem;
+  flex-wrap:nowrap;
+  min-width:0;                /* allows summary to shrink/ellipsis */
+}
+
+.bind-fates-label{
+  white-space:nowrap;
+}
+
+.bind-fates-summary{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;     /* so long summaries don’t force a wrap */
+  max-width:12rem;            /* tweak as desired */
+}
+
 .bind-fates:hover{ background:linear-gradient(90deg, rgba(200,168,107,0.24), rgba(0,0,0,0.35)); }
 .bind-fates-toggle{
   display:flex;
