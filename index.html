@@ -1,6 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <title>The Randomancer – Path of Exile 2 Build Randomizer & PoE2 Build Generator</title>
+
+  <meta name="description" content="The Randomancer is a Path of Exile 2 build randomizer that generates themed, high-cohesion PoE2 builds with skills, passives, oaths, and uniques in one click." />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="/images/dice.png">
+  <link rel="canonical" href="https://therandomancer.com/">
+  
+  <!-- Open Graph -->
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://therandomancer.com/">
+	<meta property="og:title" content="The Randomancer – Path of Exile 2 Build Randomizer">
+	<meta property="og:description" content="Generate fully-themed PoE2 builds with skills, passives, oaths, uniques, and cohesion scoring in one click.">
+	<meta property="og:image" content="https://therandomancer.com/images/randomancer-banner-og.png">
+	
+	<!-- Twitter -->
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:title" content="The Randomancer – PoE 2 Build Generator">
+	<meta name="twitter:description" content="Random Path of Exile 2 builds with cohesion scoring and themed loadouts.">
+	<meta name="twitter:image" content="https://therandomancer.com/images/randomancer-banner-og.png">
+	
+	<script type="application/ld+json">
+	{
+	  "@context": "https://schema.org",
+	  "@type": "WebApplication",
+	  "name": "The Randomancer",
+	  "url": "https://therandomancer.com/",
+	  "applicationCategory": "GameApplication",
+	  "operatingSystem": "Any",
+	  "description": "The Randomancer is a Path of Exile 2 build randomizer that generates cohesive, themed PoE2 character builds with skills, passives, oaths, and uniques.",
+	  "creator": {
+		"@type": "Person",
+		"name": "Tony T."
+	  },
+	  "inLanguage": "en",
+	  "keywords": [
+		"Path of Exile 2",
+		"PoE2",
+		"PoE 2 build randomizer",
+		"PoE2 build generator",
+		"PoE2 random build tool"
+	  ]
+	}
+	</script>
+
   <link rel="icon" type="image/png" href="images/dice.png">
   <link rel="apple-touch-icon" href="images/dice.png">
   <meta charset="UTF-8" />
@@ -22,6 +67,63 @@
       </div>
       <p class="saved-subtitle">Preserves your last 10 Saved Builds</p>
       <div id="saved-builds-list" class="rm-info-content saved-list"></div>
+    </div>
+  </div>
+  <div id="bind-fates-modal" class="bind-fates-modal" hidden>
+	  <div class="bind-fates-backdrop" data-close="1"></div>
+	  <div class="bind-fates-dialog"
+		   role="dialog"
+		   aria-modal="true"
+		   aria-labelledby="bind-fates-title"
+		   aria-describedby="bind-fates-subtitle">
+		<div class="bind-fates-head">
+		  <h3 id="bind-fates-title">Bind the Fates</h3>
+		  <button id="bind-fates-close" class="bind-fates-close" type="button" aria-label="Close">×</button>
+		</div>
+	
+		<!-- New subtitle / instructions -->
+		<div id="bind-fates-subtitle" class="bind-fates-subtitle">
+		  <p>
+			Tap or click any option to cycle its fate:
+			first tap swears an <span class="bf-pill bf-pill-oath">Oath</span>,
+			second tap marks an <span class="bf-pill bf-pill-abom">Abomination</span>,
+			third tap clears it.
+		  </p>
+		  <p>
+			Oaths bind the randomizer to those choices;
+			Abominations are completely barred from your rolls.
+		  </p>
+		</div>
+	
+		<div class="bind-fates-sections">
+		  <section class="bind-fates-section" data-category="ascendancy">
+			<div class="bind-fates-section-head">
+			  <h4>Ascendancy</h4>
+			  <p class="bind-fates-hint">
+				Swear Oaths to favored ascendancies, or name Abominations that fate will never grant.
+			  </p>
+			</div>
+			<div id="bind-fates-list-ascendancy" class="bind-fates-list"></div>
+		  </section>
+		  <!-- rest of sections stay the same -->
+
+        <hr class="bind-fates-divider">
+        <section class="bind-fates-section" data-category="weapon">
+          <div class="bind-fates-section-head">
+            <h4>Weapon</h4>
+            <p class="bind-fates-hint">Bind yourself to chosen arms, or curse weapons you will never wield.</p>
+          </div>
+          <div id="bind-fates-list-weapon" class="bind-fates-list"></div>
+        </section>
+        <hr class="bind-fates-divider">
+        <section class="bind-fates-section" data-category="combat">
+          <div class="bind-fates-section-head">
+            <h4>Combat Mechanics</h4>
+            <p class="bind-fates-hint">Favor certain ailments or tactics, or name those that are forbidden.</p>
+          </div>
+          <div id="bind-fates-list-combat" class="bind-fates-list"></div>
+        </section>
+      </div>
     </div>
   </div>
   <!-- Info Lightbox -->
@@ -55,37 +157,41 @@
   <div id="intro" class="intro-screen">
     <div class="intro-content">
       <p id="intro-line"></p>
-      <button id="intro-roll" class="roll-btn roll-btn"><img src="images/dice.png" alt="" class="btn-ico"> Roll Your Fate</button>
+      <button id="intro-roll" class="roll-btn roll-btn"><img src="images/dice.png" alt="The Randomancer – Path of Exile 2 build randomizer thrice dice icon" class="btn-ico"> Roll Your Fate</button>
     </div>
   </div>
 
   <div id="asc-art" class="asc-art" aria-hidden="true"></div>
   <div id="app" class="hidden">
     <header>
+      <div class="patch-indicator" aria-label="Supported Path of Exile 2 patch">
+        Supports POE2 · <strong>v0.3.1</strong>
+      </div>
+
       <h1 class="title">The Randomancer</h1>
       <h2 class="subtitle">Conjure the Impossible. Defy the Meta.</h2>
       
       <!-- restored build name + flavor -->
       <div id="build-name" class="build-name"></div>
-	  <div id="build-subtext" class="build-subtext"></div>
+      <div id="build-subtext" class="build-subtext"></div>
 
       <div class="roll-sticky">
-      <button id="roll" class="roll-btn roll-btn">
-        <img src="images/dice.png" alt="" class="btn-ico">
-        <span class="roll-text">Roll Your Fate</span>
-        <span class="roll-status" aria-live="polite"></span>
-      </button>
-    </div>
+        <button id="roll" class="roll-btn roll-btn">
+          <img src="images/dice.png" alt="The Randomancer – Path of Exile 2 build randomizer thrice dice icon" class="btn-ico">
+          <span class="roll-text">Roll Your Fate</span>
+          <span class="roll-status" aria-live="polite"></span>
+        </button>
+      </div>
+	</header>
 
-    </header>
 
     <main>
     
       <div class="cohesion-slider cohesion-bar-wrapper" data-cohesion-constrained="false">
-		  <div class="mode-labels">
-			<span>Strict</span><span>Cohesive</span><span>Chaotic</span><span>Madness</span>
-		  </div>
-		  <!-- Continuous slider: 0–100 mapped to threshold 1.00 → 0.00 -->
+                  <div class="mode-labels">
+                        <span>Strict</span><span>Cohesive</span><span>Chaotic</span><span>Madness</span>
+                  </div>
+                  <!-- Continuous slider: 0–100 mapped to threshold 1.00 → 0.00 -->
 		  <input
 			type="range"
 			id="cohesionRange"
@@ -95,9 +201,25 @@
 			value="35"
 			aria-label="Cohesion threshold"
 		  >
-		  <!-- Live hint, dark-gold glow -->
-		  <div class="cohesion-status" data-status="hint" aria-live="polite"></div>
-		</div>
+                  <!-- Live hint, dark-gold glow -->
+                  <div class="cohesion-status" data-status="hint" aria-live="polite"></div>
+                </div>
+
+      <div class="bind-fates-row">
+        <div id="bind-fates-bar" class="bind-fates" aria-expanded="false">
+          <button class="bind-fates-toggle" type="button" aria-label="Open Bind the Fates">
+            <img src="images/bind-the-fates.png" alt="The Randomancer – Path of Exile 2 build randomizer bind the fates icon" class="bind-fates-icon" aria-hidden="true">
+            <div class="bind-fates-text">
+              <span class="bind-fates-label">Bind the Fates</span>
+              <span id="bind-fates-summary" class="bind-fates-summary">
+                No Fates Bound
+              </span>
+            </div>
+          </button>
+          <button id="bind-fates-clear" class="bind-fates-clear" type="button" aria-label="Clear bound fates" title="Clear bound fates">×</button>
+        </div>
+        <span id="bind-fates-error" class="bind-fates-error" aria-live="polite"></span>
+      </div>
 
       <section class="panel">
         <div class="panel-actions">
@@ -187,7 +309,16 @@
     </main>
     <footer class="foot">
 	  <small class="version"></small>
+	  <p>
+		The Randomancer is a fan-made Path of Exile 2 build randomizer and PoE 2 build
+		generator. Not affiliated with or endorsed by Grinding Gear Games.
+	  </p>
+	  <p>
+		View the project on
+		<a href="https://github.com/poerandomancer/randomancer" rel="noopener">GitHub</a>.
+	  </p>
 	</footer>
+
 
   </div>
 
