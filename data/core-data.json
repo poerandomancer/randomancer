@@ -160,8 +160,7 @@
           "ranged"
         ],
         "attributes": {
-          "strength": 0.5,
-          "intelligence": 0.5
+          "intelligence": 1.0
         }
       },
       {
