@@ -533,7 +533,7 @@ function initSectionLocks(){
 })();
 
 // App metadata
-const APP_VERSION = '0.8.2_passives_display';
+const APP_VERSION = '0.8.3_bind_the_fates';
 
 window.RANDOMANCER = window.RANDOMANCER || {};
 window.RANDOMANCER.version = APP_VERSION;
