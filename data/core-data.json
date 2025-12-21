@@ -54,7 +54,8 @@
     "Sorceress": {
       "ascendancies": [
         "Chronomancer",
-        "Stormweaver"
+        "Stormweaver",
+        "Disciple of Varashta"
       ],
       "attributes": {
         "intelligence": 1.0
@@ -69,7 +70,17 @@
         "dexterity": 0.5,
         "intelligence": 0.5
       }
-    }
+    },
+    "Druid": {
+      "ascendancies": [
+        "Shaman",
+        "Oracle"
+      ],
+      "attributes": {
+        "strength": 0.5,
+        "intelligence": 0.5
+      }
+    },
   },
   "Weapons": {
     "Two-Handed": [
@@ -125,6 +136,18 @@
         ],
         "attributes": {
           "intelligence": 1.0
+        }
+      },
+      {
+        "name": "Talisman",
+        "tags": [
+          "melee",
+          "talisman",
+          "shapeshift"
+        ],
+        "attributes": {
+          "strength": 0.5,
+          "intelligence": 0.5
         }
       }
     ],
