@@ -137,10 +137,6 @@ function initSectionLocks(){
   function encodeSnapshot(snap){
     if (!snap || typeof snap !== 'object') return '';
     
-    console.log('[u79b2m] encoding snap', snap);
-    console.log('[u79b2m] snap.recommendedSkills', snap.recommendedSkills);
-    console.log('[u79b2m] isArray', Array.isArray(snap.recommendedSkills));
-    
     // TODO: include section lock state in saved snapshots once we support persisting locks
     const compact = {
       v: snap.snapshotVersion || 1,
@@ -168,10 +164,6 @@ function initSectionLocks(){
     if (!json) return null;
     try {
       const raw = JSON.parse(json);
-      
-      console.log('[u79b2m] decoding raw', raw);
-      console.log('[u79b2m] decoding skills', raw.rs);
-      
       return {
         snapshotVersion: raw.v || 1,
         className: raw.c || '',
@@ -353,11 +345,6 @@ function initSectionLocks(){
     if (Array.isArray(snap.recommendedUniques) && snap.recommendedUniques.length && window.RandomancerRenderUniquesFromNames) {
       window.RandomancerRenderUniquesFromNames(snap.recommendedUniques);
     }
-  }
-
-  function lookupByName(collection, name){
-    if (!collection || !name) return null;
-    return (collection || []).find(item => item?.name === name) || null;
   }
 
   async function applyBuildCode(code){
@@ -1005,13 +992,12 @@ window.TAG_ALIASES = TagUtils.alias;
     for(const [t,w] of rolledCtx.profile){ if(set.has(t)) raw += w * (idf.get(t) ?? 0.0); }
     const attrSim = cosineSim(g.requirement_weights||{}, opts.rollAttr||{});
     const weaponHint = tags.some(t=>opts.weaponHints?.has(t)) ? 0.10 : 0;
-    const combo = 0;
-    let { alpha, beta, noise } = opts; alpha=Math.min(2,Math.max(0,alpha)); beta=Math.min(2,Math.max(0,beta));
-    const jitter = (Math.random()-0.5) * (noise||0);
-    const score = alpha*raw + beta*attrSim + weaponHint + combo + jitter;
-    return { score, raw, attrSim, idfAvg, weaponHint, combo };
-  }
-  function quantile(arr, q){ if(!arr || !arr.length) return 0; const xs = arr.slice().sort((a,b)=>a-b); const idx=Math.max(0, Math.min(xs.length-1, Math.floor((xs.length-1)*q))); return xs[idx]; }
+  const combo = 0;
+  let { alpha, beta, noise } = opts; alpha=Math.min(2,Math.max(0,alpha)); beta=Math.min(2,Math.max(0,beta));
+  const jitter = (Math.random()-0.5) * (noise||0);
+  const score = alpha*raw + beta*attrSim + weaponHint + combo + jitter;
+  return { score, raw, attrSim, idfAvg, weaponHint, combo };
+}
 
   // Capture legacy scorer if present
   const LEGACY = {
@@ -1736,15 +1722,6 @@ function lookupGem(dict, raw){
 
 // ---------- helpers ----------
 function dominantAttr(attrs){ const e=Object.entries(attrs||{}).sort((a,b)=>b[1]-a[1]); const k=(e[0]?.[0]||'int'); return {strength:'str',dexterity:'dex',intelligence:'int'}[k]||k.slice(0,3); }
-function pickUnique2(list){
-  if(!list || list.length<2) return list||[];
-  const a = list[Math.floor(Math.random()*list.length)];
-  let b = list[Math.floor(Math.random()*list.length)];
-  let guard = 0;
-  while(b.name===a.name && guard<20){ b = list[Math.floor(Math.random()*list.length)]; guard++; }
-  if(b.name===a.name){ return [a]; }
-  return [a,b];
-}
 function sample(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 const NAME_TITLES={
   Warrior:["Ember-Forged","Ironclad","Warborn","Stonebound"],
@@ -2611,8 +2588,6 @@ function rollBuild(dataWrap){
   const bind = getBindFatesFromApp();
 
   const classes = Object.entries(data.Classes || {});
-
-  const findByName = (arr, name) => (arr || []).find(item => item?.name === name) || null;
 
   const combatCfg = bind.combat || { oaths: [], abominations: [] };
   const cOaths = new Set(combatCfg.oaths || []);
@@ -3736,11 +3711,6 @@ function ensureUniqueSection(){
                   window.RandomancerUpdateBuildCodeUI();
                 }
 
-                // Debug logging (optional, but now safe & informative)
-                console.log('[u79b2m] snap', snap);
-                console.log('[u79b2m] rolled', rolled);
-                console.log('[u79b2m] picks', picks.length);
-	
 		renderUniques(picks, rolledSet);
 	  }catch(e){
 		console.error('[u79b2m] refresh error', e);
@@ -3824,4 +3794,3 @@ function ensureUniqueSection(){
 
   window.RandomancerInfo = { set(html){ if(content) content.innerHTML = html; }, open: openInfo, close: closeInfo };
 })();
-
