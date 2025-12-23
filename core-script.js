@@ -533,7 +533,7 @@ function initSectionLocks(){
 })();
 
 // App metadata
-const APP_VERSION = '0.8.3_bind_the_fates';
+const APP_VERSION = '0.8.4_druid_data_update';
 
 window.RANDOMANCER = window.RANDOMANCER || {};
 window.RANDOMANCER.version = APP_VERSION;
@@ -1792,18 +1792,33 @@ function isGemWeaponCompatible(g, rolledTypesLower){
     ? g.required_weapon_types
     : (Array.isArray(g.crafting_types) ? g.crafting_types : []);
   if(!req.length) return true;
+
   const reqLower = req.map(x => String(x).toLowerCase());
+
   const hasOccult = reqLower.includes("occult");
   const hasElemental = reqLower.includes("elemental");
   const hasMaceGeneric = reqLower.includes("mace");
-  
+  const hasPrimal = reqLower.includes("primal");
+
+  // NEW: use gem tags to split Primal into spell vs non-spell
+  if (hasPrimal) {
+    const tagLower = Array.isArray(g.tags) ? g.tags.map(t => String(t).toLowerCase()) : [];
+    const isSpellGem = tagLower.includes("spell");
+
+    const hasTalisman = rolledTypesLower.includes("talisman");
+    const hasCasterWeapon = rolledTypesLower.some(r => ["wand", "staff", "sceptre"].includes(r));
+
+    // Primal spells => wand/staff/sceptre only; non-spell primal => talisman only
+    return isSpellGem ? hasCasterWeapon : hasTalisman;
+  }
+
   if ((hasOccult || hasElemental) && rolledTypesLower.some(r => r === "sceptre")) return true;
   if (hasElemental && rolledTypesLower.some(r => ["wand", "staff"].includes(r))) return true;
-  
-  
-    if (hasMaceGeneric && rolledTypesLower.some(r => r.includes('mace'))) return true;
+  if (hasMaceGeneric && rolledTypesLower.some(r => r.includes('mace'))) return true;
+
   return reqLower.some(r => rolledTypesLower.includes(r));
 }
+
 
 // ---------- v0.7 Synergy Scorer helpers ----------
 

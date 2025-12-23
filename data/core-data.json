@@ -80,7 +80,7 @@
         "strength": 0.5,
         "intelligence": 0.5
       }
-    },
+    }
   },
   "Weapons": {
     "Two-Handed": [
@@ -143,7 +143,9 @@
         "tags": [
           "melee",
           "talisman",
-          "shapeshift"
+          "shapeshift",
+          "ranged",
+          "primal"
         ],
         "attributes": {
           "strength": 0.5,
@@ -620,11 +622,12 @@
       "enableOneHandedOffhandCombos": true,
       "twoHandedWeapons": [
         "Bow",
+        "Crossbow",
         "Staff",
+        "Quarterstaff",
         "Spear",
-        "Two-Handed Axe",
-        "Two-Handed Sword",
-        "Two-Handed Mace"
+        "Two-Handed Mace",
+        "Talisman"
       ],
       "allowedOffhandsForOneHanded": [
         "Shield",
