@@ -54,7 +54,8 @@
     "Sorceress": {
       "ascendancies": [
         "Chronomancer",
-        "Stormweaver"
+        "Stormweaver",
+        "Disciple of Varashta"
       ],
       "attributes": {
         "intelligence": 1.0
@@ -67,6 +68,16 @@
       ],
       "attributes": {
         "dexterity": 0.5,
+        "intelligence": 0.5
+      }
+    },
+    "Druid": {
+      "ascendancies": [
+        "Shaman",
+        "Oracle"
+      ],
+      "attributes": {
+        "strength": 0.5,
         "intelligence": 0.5
       }
     }
@@ -125,6 +136,20 @@
         ],
         "attributes": {
           "intelligence": 1.0
+        }
+      },
+      {
+        "name": "Talisman",
+        "tags": [
+          "melee",
+          "talisman",
+          "shapeshift",
+          "ranged",
+          "primal"
+        ],
+        "attributes": {
+          "strength": 0.5,
+          "intelligence": 0.5
         }
       }
     ],
@@ -597,11 +622,12 @@
       "enableOneHandedOffhandCombos": true,
       "twoHandedWeapons": [
         "Bow",
+        "Crossbow",
         "Staff",
+        "Quarterstaff",
         "Spear",
-        "Two-Handed Axe",
-        "Two-Handed Sword",
-        "Two-Handed Mace"
+        "Two-Handed Mace",
+        "Talisman"
       ],
       "allowedOffhandsForOneHanded": [
         "Shield",
