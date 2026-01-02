@@ -317,7 +317,20 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 .grid.two{ grid-template-columns:repeat(2,minmax(0,1fr)); }
 .grid .wide{ grid-column:1 / -1; }
 .label{ display:inline-block; min-width:9rem; color:var(--gold); letter-spacing:.02em; margin-right:.25rem; }
-#weapons,#ailments,#tactics,#defense,#defstrat{ font-weight:600; }
+#weapons,#weapons-set2,#ailments,#tactics,#defense,#defstrat{ font-weight:600; }
+.weapon-sets{ display:flex; flex-direction:column; gap:.2rem; }
+.weapon-set2-btn{
+  align-self:flex-start;
+  padding:.15rem .65rem;
+  border-radius:999px;
+  border:1px solid var(--edge);
+  background:rgba(20,20,24,0.6);
+  color:var(--muted);
+  font-size:.85rem;
+  cursor:pointer;
+}
+.weapon-set2-btn:hover{ color:var(--silver); border-color:rgba(212,170,80,0.6); }
+.weapon-set2-btn[hidden]{ display:none; }
 .foot{ text-align:center; padding:1.25rem 1rem 3rem; color:var(--muted); }
 .hidden{ display:none; }
 
@@ -364,6 +377,27 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 }
 
 /* === v0.5.1: Recommended Skills section === */
+.skills-tabs{
+  display:flex;
+  gap:.4rem;
+  margin-top:.25rem;
+}
+.skills-tab{
+  padding:.2rem .7rem;
+  border-radius:999px;
+  border:1px solid var(--edge);
+  background:rgba(20,20,24,0.6);
+  color:var(--muted);
+  font-size:.85rem;
+  cursor:pointer;
+}
+.skills-tab.is-active{
+  color:var(--gold);
+  border-color:rgba(212,170,80,0.6);
+  box-shadow:0 0 6px rgba(212,170,80,0.2);
+}
+.skills-tab[disabled]{ opacity:.35; cursor:default; }
+.skills-tabs[hidden]{ display:none; }
 .skills-grid { margin-top: .25rem; }
 
 .skill-card {

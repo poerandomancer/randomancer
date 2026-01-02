@@ -240,7 +240,14 @@
           <div class="grid two">
             <div><span class="label">Class</span><span id="class"></span></div>
             <div><span class="label">Ascendancy</span><span id="ascendancy"></span></div>
-            <div class="wide"><span class="label">Weapons</span><span id="weapons"></span></div>
+            <div class="wide">
+              <span class="label">Weapons</span>
+              <div class="weapon-sets">
+                <span id="weapons"></span>
+                <button id="weapon-set2-btn" class="weapon-set2-btn" type="button" hidden>+ Select secondary weapon set</button>
+                <span id="weapons-set2" hidden></span>
+              </div>
+            </div>
           </div>
         </div>
         <hr class="gold subtle"/>
@@ -291,7 +298,12 @@
               <h3 class="section-title">Recommended Skills</h3>
               <div class="underline"></div><p class="sub">Two active skills for this roll, with supports</p>
             </div>
-            <div id="skills-grid" class="grid two skills-grid"></div>
+            <div id="skills-tabs" class="skills-tabs" hidden>
+              <button class="skills-tab is-active" data-skill-tab="1" type="button">Weapon Set 1</button>
+              <button class="skills-tab" data-skill-tab="2" type="button" hidden disabled>Weapon Set 2</button>
+            </div>
+            <div id="skills-grid" class="grid two skills-grid" data-skill-set="1"></div>
+            <div id="skills-grid-2" class="grid two skills-grid hidden" data-skill-set="2"></div>
           </div>
       </section>
 
