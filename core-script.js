@@ -613,8 +613,14 @@ function setActiveSkillsTab(tabId){
   const grid1 = document.getElementById('skills-grid');
   const grid2 = document.getElementById('skills-grid-2');
   tabs.forEach(tab => tab.classList.toggle('is-active', tab.dataset.skillTab === tabKey));
-  if (grid1) grid1.classList.toggle('hidden', tabKey === '2');
-  if (grid2) grid2.classList.toggle('hidden', tabKey !== '2');
+  if (grid1) {
+    grid1.classList.toggle('hidden', tabKey === '2');
+    grid1.hidden = (tabKey === '2');
+  }
+  if (grid2) {
+    grid2.classList.toggle('hidden', tabKey !== '2');
+    grid2.hidden = (tabKey !== '2');
+  }
 }
 
 function getQueryParams() {
