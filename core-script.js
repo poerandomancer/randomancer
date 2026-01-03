@@ -612,11 +612,9 @@ function setActiveSkillsTab(tabId){
   const tabs = document.querySelectorAll('.skills-tab');
   const grid1 = document.getElementById('skills-grid');
   const grid2 = document.getElementById('skills-grid-2');
-  const buffSection = document.getElementById('persistent-buff-section');
   tabs.forEach(tab => tab.classList.toggle('is-active', tab.dataset.skillTab === tabKey));
   if (grid1) grid1.classList.toggle('hidden', tabKey === '2');
   if (grid2) grid2.classList.toggle('hidden', tabKey !== '2');
-  if (buffSection) buffSection.hidden = (tabKey === '2');
 }
 
 function getQueryParams() {
