@@ -144,6 +144,8 @@ function initSectionLocks(){
       a: snap.ascendancy || '',
       w: snap.weapon || '',
       o: snap.offhand || '',
+      w2: snap.weapon2 || '',
+      o2: snap.offhand2 || '',
       al: Array.isArray(snap.ailmentList) ? snap.ailmentList : [],
       tl: Array.isArray(snap.tacticList) ? snap.tacticList : [],
       d: snap.defense || '',
@@ -152,6 +154,7 @@ function initSectionLocks(){
       f: snap.flavor || '',
       attr: snap.attributes || { strength:0, dexterity:0, intelligence:0 },
       rs: Array.isArray(snap.recommendedSkills) ? snap.recommendedSkills : [],
+      rs2: Array.isArray(snap.recommendedSkills2) ? snap.recommendedSkills2 : [],
       pb: snap.recommendedPersistentBuff || null,
       u: Array.isArray(snap.recommendedUniques) ? snap.recommendedUniques : []
     };
@@ -170,6 +173,8 @@ function initSectionLocks(){
         ascendancy: raw.a || '',
         weapon: raw.w || '',
         offhand: raw.o || '',
+        weapon2: raw.w2 || '',
+        offhand2: raw.o2 || '',
         ailments: (raw.al || []).join(' & '),
         tactics: (raw.tl || []).join(' & '),
         ailmentList: raw.al || [],
@@ -180,6 +185,7 @@ function initSectionLocks(){
         flavor: raw.f || '',
         attributes: raw.attr || { strength:0, dexterity:0, intelligence:0 },
         recommendedSkills: raw.rs || [],
+        recommendedSkills2: raw.rs2 || [],
         recommendedPersistentBuff: raw.pb || null,
         recommendedUniques: raw.u || []
       };
@@ -213,65 +219,73 @@ function initSectionLocks(){
   }
 
 
+  function renderSkillCardsFromSnapshot(entries, grid, gemDict){
+    if (!grid) return;
+    grid.innerHTML = '';
+    (entries || []).forEach(entry => {
+      const key = entry.id || entry.name || '';
+      const g = lookupGem(gemDict, key);
+      if (!g) {
+        console.warn('[skills] No gem match for recommended skill', entry);
+        return;
+      }
+
+      const card = document.createElement('div');
+      card.className = 'skill-card';
+
+      const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
+        ? `<div class="skill-subtitle">${g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')}</div>`
+        : '';
+
+      const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
+      const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
+      const rest = allTags.filter(t => !br.includes(t));
+      const displayTags = [...br, ...rest].slice(0, 10);
+      const pills = displayTags.map(t => `<span class="tag-pill">${t}</span>`).join('');
+
+      const supports = Array.isArray(entry.recommended_supports) && entry.recommended_supports.length
+        ? entry.recommended_supports
+        : g.recommended_supports;
+
+      card.innerHTML = `
+        <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
+        ${requiresSubtitle}
+        <div class="skill-divider"></div>
+        ${grantLine(g)}
+        <div class="skill-tags">${pills}</div>
+        <div class="supports-label">Recommended Supports</div>
+        <div class="supports">${renderSupportCards(supports, gemDict)}</div>
+      `;
+      applyGemBorderFromReqWeights(card, g.requirement_weights);
+      grid.appendChild(card);
+    });
+  }
+
   function renderSkillsFromSnapshot(snap){
-	  const grid = document.getElementById('skills-grid');
-	  if (!grid) return;
-	  grid.innerHTML = '';
-	
-	  const gems = (window.DATA && window.DATA.gems) || [];
-	  const gemDict = buildGemDictionary(gems);
-	
-	  (snap.recommendedSkills || []).forEach(entry => {
-		// 🔧 change: pass a *key* (id or name), not the whole object
-		const key = entry.id || entry.name || '';
-		const g = lookupGem(gemDict, key);
-		if (!g) {
-		  console.warn('[skills] No gem match for recommended skill', entry);
-		  return;
-		}
-	
-		const card = document.createElement('div');
-		card.className = 'skill-card';
-	
-		const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
-		  ? `<div class="skill-subtitle">${g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')}</div>`
-		  : '';
-	
-		const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
-		const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
-		const rest = allTags.filter(t => !br.includes(t));
-		const displayTags = [...br, ...rest].slice(0, 10);
-		const pills = displayTags.map(t => `<span class="tag-pill">${t}</span>`).join('');
-	
-		const supports = Array.isArray(entry.recommended_supports) && entry.recommended_supports.length
-		  ? entry.recommended_supports
-		  : g.recommended_supports;
-	
-		card.innerHTML = `
-		  <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
-		  ${requiresSubtitle}
-		  <div class="skill-divider"></div>
-		  ${grantLine(g)}
-		  <div class="skill-tags">${pills}</div>
-		  <div class="supports-label">Recommended Supports</div>
-		  <div class="supports">${renderSupportCards(supports, gemDict)}</div>
-		`;
-		applyGemBorderFromReqWeights(card, g.requirement_weights);
-		grid.appendChild(card);
-	  });
-	
-	  if (snap.recommendedPersistentBuff) {
-		const buffKey = snap.recommendedPersistentBuff.id || snap.recommendedPersistentBuff.name || '';
-		const buffGem = lookupGem(gemDict, buffKey);
-		if (buffGem) {
-		  renderSnapshotPersistentBuff(buffGem, gemDict);
-		} else {
-		  console.warn('[skills] No gem match for persistent buff', snap.recommendedPersistentBuff);
-		}
-	  } else {
-		document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
-	  }
-	}
+    const grid = document.getElementById('skills-grid');
+    const grid2 = document.getElementById('skills-grid-2');
+    if (!grid) return;
+
+    const gems = (window.DATA && window.DATA.gems) || [];
+    const gemDict = buildGemDictionary(gems);
+
+    renderSkillCardsFromSnapshot(snap.recommendedSkills || [], grid, gemDict);
+    if (grid2) {
+      renderSkillCardsFromSnapshot(snap.recommendedSkills2 || [], grid2, gemDict);
+    }
+
+    if (snap.recommendedPersistentBuff) {
+      const buffKey = snap.recommendedPersistentBuff.id || snap.recommendedPersistentBuff.name || '';
+      const buffGem = lookupGem(gemDict, buffKey);
+      if (buffGem) {
+        renderSnapshotPersistentBuff(buffGem, gemDict);
+      } else {
+        console.warn('[skills] No gem match for persistent buff', snap.recommendedPersistentBuff);
+      }
+    } else {
+      document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
+    }
+  }
 
 
   function renderSnapshotPersistentBuff(g, gemDict){
@@ -326,8 +340,19 @@ function initSectionLocks(){
     setElText('#class', snap.className || '');
     setElText('#ascendancy', snap.ascendancy || '');
     updateAscArt(snap.ascendancy || '');
-    const weaponsTxt = snap.offhand ? `${snap.weapon || ''} & ${snap.offhand}` : (snap.weapon || '');
+    const weaponsTxt = formatWeaponLine(snap.weapon, snap.offhand);
     setElText('#weapons', weaponsTxt);
+    const weapons2Txt = formatWeaponLine(snap.weapon2, snap.offhand2);
+    const weapons2El = document.getElementById('weapons-set2');
+    if (weapons2El) {
+      weapons2El.textContent = weapons2Txt;
+      weapons2El.hidden = !weapons2Txt;
+    }
+    const hasSet2 = hasSecondaryWeaponSet(snap);
+    const set2Btn = document.getElementById('weapon-set2-btn');
+    if (set2Btn) {
+      set2Btn.hidden = hasSet2 || !weaponsTxt;
+    }
     setElText('#defense', snap.defense || '');
     setElText('#defstrat', snap.defStrat || '');
     setElText('#ailments', Array.isArray(snap.ailmentList) ? snap.ailmentList.join(' & ') : (snap.ailments || ''));
@@ -340,6 +365,8 @@ function initSectionLocks(){
     setElText('#build-subtext', snap.flavor || '');
     renderAttributesFromSnapshot(snap.attributes);
     renderSkillsFromSnapshot(snap);
+    setSkillsTabsAvailability(hasSet2);
+    setActiveSkillsTab('1');
     renderPassiveRecommendations((window.App && window.App.state && window.App.state.currentRoll) || snap, window.DATA);
 
     if (Array.isArray(snap.recommendedUniques) && snap.recommendedUniques.length && window.RandomancerRenderUniquesFromNames) {
@@ -544,6 +571,60 @@ function onDomReady(fn) {
   }
 }
 
+function formatWeaponLine(weapon, offhand){
+  if (weapon && offhand) return `${weapon} & ${offhand}`;
+  return weapon || offhand || '';
+}
+
+function hasSecondaryWeaponSet(snap){
+  return !!(snap && (snap.weapon2 || snap.offhand2));
+}
+
+function renderSecondaryWeaponLine(values, oathSet){
+  const el = document.getElementById('weapons-set2');
+  if (!el) return;
+  if (!values || !values.length) {
+    el.replaceChildren(document.createTextNode(''));
+    return;
+  }
+  if (oathSet) {
+    renderOathAwareText(el, values, oathSet);
+  } else {
+    el.textContent = values.filter(Boolean).join(' & ');
+  }
+}
+
+function setSkillsTabsAvailability(hasSet2){
+  const tabs = document.getElementById('skills-tabs');
+  const tab2 = tabs?.querySelector('[data-skill-tab="2"]');
+  if (tabs) tabs.hidden = !hasSet2;
+  if (tab2) {
+    tab2.hidden = !hasSet2;
+    tab2.disabled = !hasSet2;
+  }
+  if (!hasSet2) {
+    setActiveSkillsTab('1');
+  }
+}
+
+function setActiveSkillsTab(tabId){
+  const tabKey = String(tabId || '1');
+  const tabs = document.querySelectorAll('.skills-tab');
+  const grid1 = document.getElementById('skills-grid');
+  const grid2 = document.getElementById('skills-grid-2');
+  tabs.forEach(tab => tab.classList.toggle('is-active', tab.dataset.skillTab === tabKey));
+  if (grid1) {
+    grid1.classList.toggle('hidden', tabKey === '2');
+    grid1.hidden = (tabKey === '2');
+    grid1.style.display = (tabKey === '2') ? 'none' : 'grid';
+  }
+  if (grid2) {
+    grid2.classList.toggle('hidden', tabKey !== '2');
+    grid2.hidden = (tabKey !== '2');
+    grid2.style.display = (tabKey !== '2') ? 'none' : 'grid';
+  }
+}
+
 function getQueryParams() {
   try {
     return new URLSearchParams(location.search);
@@ -685,6 +766,8 @@ const App = window.App = (() => {
       defStratObj: null,
       weapon:    '',
       offhand:   '',
+      weapon2:   '',
+      offhand2:  '',
       tactics:   '',
       ailments:  '',
       ailmentList: [],
@@ -697,6 +780,7 @@ const App = window.App = (() => {
       rollAttr: { strength: 0, dexterity: 0, intelligence: 0 },
       defenseObj: null,
       recommendedSkills: [],
+      recommendedSkills2: [],
       recommendedPersistentBuff: null,
       recommendedUniques: [],
       tagProfile: null,
@@ -1976,8 +2060,12 @@ function isPersistentBuffGem(g){
   return set.has('buff') && set.has('persistent');
 }
 
-function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
+function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx, opts = {}){
   try{
+    const options = opts || {};
+    const targetGridId = options.gridId || 'skills-grid';
+    const includePersistentBuff = options.includePersistentBuff !== false;
+    const assignTagProfile = options.assignTagProfile !== false;
     const rolledTypesLower = weaponsToTypes(picked.weapon, picked.offhand);
     const gems = (window.DATA && window.DATA.gems) ? window.DATA.gems : (dataWrap.gems || []);
     const actives = gems.filter(g =>
@@ -1988,10 +2076,21 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
 
     // Separate persistent buff skills from general pool
     const persistentPool = actives.filter(g => isPersistentBuffGem(g) && isGemWeaponCompatible(g, rolledTypesLower));
-    const eligible = actives.filter(g =>
+    const eligibleBase = actives.filter(g =>
       isGemWeaponCompatible(g, rolledTypesLower) &&
       !isPersistentBuffGem(g)
     );
+    const avoidRaw = options.avoidSkills || [];
+    const avoidSet = new Set(
+      (avoidRaw instanceof Set ? Array.from(avoidRaw) : avoidRaw)
+        .filter(Boolean)
+        .map(x => String(x).toLowerCase())
+    );
+    const eligibleAvoid = eligibleBase.filter(g => {
+      const key = String(g.id || g.base_item?.id || g.name || '').toLowerCase();
+      return !avoidSet.has(key);
+    });
+    const eligible = eligibleAvoid.length >= 2 ? eligibleAvoid : eligibleBase;
 
     // Build/ensure global IDF
     if(!window.TAG_IDF){
@@ -2008,7 +2107,7 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
       weaponPseudoTags: Array.from(deriveWeaponHints(picked.weapon, picked.offhand))
     });
 
-    if (rollCtx && typeof rollCtx === 'object') {
+    if (assignTagProfile && rollCtx && typeof rollCtx === 'object') {
       rollCtx.tagProfile = rolledProfile;
     }
 
@@ -2026,7 +2125,7 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
     // Pick two with diversity
     const picks = pickTwoDiverse(scored, 0.7);
 
-    const grid = document.getElementById('skills-grid');
+    const grid = document.getElementById(targetGridId);
     if(!grid){ return; }
     grid.innerHTML = '';
 
@@ -2078,7 +2177,9 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
 
 
     // Render a dedicated persistent buff skill section (single card, full-width)
-    const persistent = renderPersistentBuffSkill(persistentPool, rolledProfile, window.TAG_IDF, knobs, gems);
+    const persistent = includePersistentBuff
+      ? renderPersistentBuffSkill(persistentPool, rolledProfile, window.TAG_IDF, knobs, gems)
+      : null;
 
     return {
       tagProfile: rolledProfile,
@@ -2087,7 +2188,7 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
         name: g.name || '',
         recommended_supports: Array.isArray(g.recommended_supports) ? g.recommended_supports.slice(0, 6) : []
       })),
-      persistentBuff: persistent ? {
+      persistentBuff: (includePersistentBuff && persistent) ? {
         id: persistent.id || persistent.base_item?.id || persistent.name || '',
         name: persistent.name || ''
       } : null
@@ -2560,7 +2661,157 @@ document.addEventListener('DOMContentLoaded', ()=>{
       }
     });
   }
+
+  const weaponSet2Btn = document.getElementById('weapon-set2-btn');
+  if (weaponSet2Btn) {
+    weaponSet2Btn.addEventListener('click', () => {
+      handleSecondaryWeaponSetSelection().catch(err => {
+        console.error('[secondary weapons] roll failed:', err);
+      });
+    });
+  }
+
+  const skillsTabs = document.getElementById('skills-tabs');
+  if (skillsTabs) {
+    skillsTabs.addEventListener('click', (event) => {
+      const btn = event.target.closest('.skills-tab');
+      if (!btn || btn.disabled) return;
+      setActiveSkillsTab(btn.dataset.skillTab || '1');
+    });
+  }
 });
+
+function resetSecondaryWeaponSetUI(showButton){
+  const weapons2El = document.getElementById('weapons-set2');
+  if (weapons2El) {
+    weapons2El.textContent = '';
+    weapons2El.hidden = true;
+  }
+  const grid2 = document.getElementById('skills-grid-2');
+  if (grid2) grid2.innerHTML = '';
+  const btn = document.getElementById('weapon-set2-btn');
+  if (btn) btn.hidden = !showButton;
+  setSkillsTabsAvailability(false);
+  setActiveSkillsTab('1');
+}
+
+function resolveCoreData(dataWrap){
+  if (dataWrap && dataWrap.core) return dataWrap.core;
+  if (dataWrap && dataWrap.Weapons) return dataWrap;
+  return window.DATA || {};
+}
+
+function rollSecondaryWeaponSet(dataWrap){
+  const data = resolveCoreData(dataWrap);
+  const current = window.App?.state?.currentRoll || window.CURRENT_ROLL || {};
+  if (!data || !current.className || current.weapon2) return null;
+
+  const base = data.Classes?.[current.className]?.attributes || {};
+  const th = (typeof cohesionThreshold === 'number')
+    ? cohesionThreshold
+    : (COHESION_MODES[currentMode] ?? COHESION_MODES.cohesive);
+
+  const bind = getBindFatesFromApp();
+  const weaponCfg = bind.weapon || { oaths: [], abominations: [] };
+  const combatCfg = bind.combat || { oaths: [], abominations: [] };
+  const wOaths = new Set(weaponCfg.oaths || []);
+  const wAboms = new Set(weaponCfg.abominations || []);
+  const cOaths = new Set(combatCfg.oaths || []);
+
+  const minionsOath = cOaths.has('Minions');
+  const sceptreAbomination = wAboms.has('Sceptre');
+
+  if (minionsOath && sceptreAbomination) {
+    console.warn('[secondary weapons] Minions oath requires Sceptre, but Sceptre is an abomination.');
+    return null;
+  }
+
+  const weaponPool = (data.Weapons['Two-Handed'] || []).concat(data.Weapons['One-Handed'] || []);
+  let filteredWeaponPool = weaponPool.filter((w) => !wAboms.has(w.name) && w.name !== current.weapon);
+  if (wOaths.size > 0) {
+    const fromOath = filteredWeaponPool.filter((w) => wOaths.has(w.name));
+    if (fromOath.length > 0) filteredWeaponPool = fromOath;
+  }
+
+  if (minionsOath) {
+    const sceptreOption = filteredWeaponPool.find((w) => w?.name === 'Sceptre');
+    if (!sceptreOption) {
+      console.warn('[secondary weapons] Minions oath requires a Sceptre, but none are available.');
+      return null;
+    }
+    filteredWeaponPool = [sceptreOption];
+  }
+
+  if (!filteredWeaponPool.length) {
+    console.warn('[secondary weapons] No valid weapons available for secondary set.');
+    return null;
+  }
+
+  const weapon = pickByCohesion(filteredWeaponPool, base, th);
+  let offhand = null;
+  if (weapon && Object.keys(validOffhands).includes(weapon.name)) {
+    const offPool = (data.Weapons['Off-Hand'] || []).filter((o) => validOffhands[weapon.name].includes(o.name));
+    offhand = pickByCohesion(offPool, base, th);
+  }
+
+  return { weapon, offhand, wOaths };
+}
+
+async function handleSecondaryWeaponSetSelection(){
+  const data = await ensureDataPreload();
+  const coreData = resolveCoreData(data);
+  const current = window.App?.state?.currentRoll || window.CURRENT_ROLL || {};
+  if (!current.weapon || current.weapon2) return;
+
+  const result = rollSecondaryWeaponSet(coreData);
+  if (!result) return;
+
+  const { weapon, offhand, wOaths } = result;
+  const weaponName = weapon?.name || '';
+  const offhandName = offhand?.name || '';
+
+  renderSecondaryWeaponLine([weaponName, offhandName].filter(Boolean), wOaths);
+  const weapons2El = document.getElementById('weapons-set2');
+  if (weapons2El) weapons2El.hidden = false;
+
+  const avoidSkills = new Set(
+    (current.recommendedSkills || [])
+      .map(s => s?.id || s?.name || '')
+      .filter(Boolean)
+      .map(s => String(s).toLowerCase())
+  );
+
+  const skillSnapshot = rollRecommendedSkills(
+    coreData,
+    coreData.Classes?.[current.className]?.attributes || {},
+    { weapon, offhand },
+    window.CURRENT_ROLL,
+    {
+      gridId: 'skills-grid-2',
+      includePersistentBuff: false,
+      avoidSkills,
+      assignTagProfile: false
+    }
+  ) || {};
+
+  if (window.App && typeof window.App.mergeCurrentRoll === 'function') {
+    window.App.mergeCurrentRoll({
+      weapon2: weaponName,
+      offhand2: offhandName,
+      recommendedSkills2: skillSnapshot.skills || []
+    });
+  }
+
+  if (window.CURRENT_ROLL && typeof window.CURRENT_ROLL === 'object') {
+    window.CURRENT_ROLL.weapon2 = weaponName;
+    window.CURRENT_ROLL.offhand2 = offhandName;
+  }
+
+  const set2Btn = document.getElementById('weapon-set2-btn');
+  if (set2Btn) set2Btn.hidden = true;
+  setSkillsTabsAvailability(true);
+  setActiveSkillsTab('1');
+}
 
 function rollBuild(dataWrap){
   // Accept either the { core, gems } wrapper or fall back to global DATA
@@ -2785,6 +3036,7 @@ function rollBuild(dataWrap){
     [weapon?.name, offhand?.name].filter(Boolean),
     wOaths
   );
+  resetSecondaryWeaponSetUI(true);
   document.getElementById('defense')?.replaceChildren(document.createTextNode(pickedDefense?.name || ''));
   document.getElementById('defstrat')?.replaceChildren(document.createTextNode(pickedDefStrat?.name || ''));
 
@@ -2838,6 +3090,8 @@ function rollBuild(dataWrap){
     defStratObj: pickedDefStrat || null,
     weapon: weapon?.name || '',
     offhand: offhand?.name || '',
+    weapon2: '',
+    offhand2: '',
     tactics: tacticSet.filter(Boolean).map(t=>t.name).join(' & '),
     ailments: ailmentSet.filter(Boolean).map(a=>a.name).join(' & '),
     ailmentList: ailmentSet.filter(Boolean).map(a=>a.name),
@@ -2850,7 +3104,8 @@ function rollBuild(dataWrap){
     rollAttr: { strength: S, dexterity: D, intelligence: I },
     defenseObj: pickedDefense || null,
     cohesionStatus: 'ok',
-    cohesionModeName
+    cohesionModeName,
+    recommendedSkills2: []
   };
 
   if (window.App && typeof window.App.mergeCurrentRoll === 'function') {
@@ -2871,6 +3126,8 @@ function rollBuild(dataWrap){
           defStrat: pickedDefStrat,
           weapon: weapon?.name || '',
           offhand: offhand?.name || '',
+          weapon2: '',
+          offhand2: '',
           rollAttr: { strength: S, dexterity: D, intelligence: I },
           tagProfile: null,
           cohesionModeName
@@ -3053,13 +3310,24 @@ async function loadData() {
 		  const set = (sel, txt)=>{ const el = document.querySelector(sel); if(el && (typeof txt==='string')) el.textContent = txt; };
 		  set('#defense',  s.defense);
 		  set('#defstrat', s.defStrat);
-		  set('#weapons',  s.weapon);
+		  set('#weapons',  formatWeaponLine(s.weapon, s.offhand));
 		  set('#offhand',  s.offhand);
                   set('#tactics',  s.tactics);
                   set('#ailments', s.ailments);
                   set('#build-name', s.buildName);
                   set('#build-subtext', s.flavor);
-                }catch(e){ /*no-op*/ }
+		  const weapons2El = document.querySelector('#weapons-set2');
+		  if (weapons2El) {
+		    const weapons2Txt = formatWeaponLine(s.weapon2, s.offhand2);
+		    weapons2El.textContent = weapons2Txt;
+		    weapons2El.hidden = !weapons2Txt;
+		  }
+		  const set2Btn = document.querySelector('#weapon-set2-btn');
+		  if (set2Btn) {
+		    set2Btn.hidden = !!(s.weapon2 || s.offhand2) || !s.weapon;
+		  }
+		  setSkillsTabsAvailability(!!(s.weapon2 || s.offhand2));
+		}catch(e){ /*no-op*/ }
           };
         });
 
