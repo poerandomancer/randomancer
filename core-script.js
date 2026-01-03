@@ -616,10 +616,12 @@ function setActiveSkillsTab(tabId){
   if (grid1) {
     grid1.classList.toggle('hidden', tabKey === '2');
     grid1.hidden = (tabKey === '2');
+    grid1.style.display = (tabKey === '2') ? 'none' : 'grid';
   }
   if (grid2) {
     grid2.classList.toggle('hidden', tabKey !== '2');
     grid2.hidden = (tabKey !== '2');
+    grid2.style.display = (tabKey !== '2') ? 'none' : 'grid';
   }
 }
 
