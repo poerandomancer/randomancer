@@ -2689,8 +2689,14 @@ function resetSecondaryWeaponSetUI(showButton){
   setActiveSkillsTab('1');
 }
 
+function resolveCoreData(dataWrap){
+  if (dataWrap && dataWrap.core) return dataWrap.core;
+  if (dataWrap && dataWrap.Weapons) return dataWrap;
+  return window.DATA || {};
+}
+
 function rollSecondaryWeaponSet(dataWrap){
-  const data = dataWrap || window.DATA;
+  const data = resolveCoreData(dataWrap);
   const current = window.App?.state?.currentRoll || window.CURRENT_ROLL || {};
   if (!data || !current.className || current.weapon2) return null;
 
@@ -2747,10 +2753,11 @@ function rollSecondaryWeaponSet(dataWrap){
 
 async function handleSecondaryWeaponSetSelection(){
   const data = await ensureDataPreload();
+  const coreData = resolveCoreData(data);
   const current = window.App?.state?.currentRoll || window.CURRENT_ROLL || {};
   if (!current.weapon || current.weapon2) return;
 
-  const result = rollSecondaryWeaponSet(data);
+  const result = rollSecondaryWeaponSet(coreData);
   if (!result) return;
 
   const { weapon, offhand, wOaths } = result;
@@ -2769,8 +2776,8 @@ async function handleSecondaryWeaponSetSelection(){
   );
 
   const skillSnapshot = rollRecommendedSkills(
-    data,
-    data.Classes?.[current.className]?.attributes || {},
+    coreData,
+    coreData.Classes?.[current.className]?.attributes || {},
     { weapon, offhand },
     window.CURRENT_ROLL,
     {

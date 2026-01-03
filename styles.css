@@ -318,7 +318,7 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 .grid .wide{ grid-column:1 / -1; }
 .label{ display:inline-block; min-width:9rem; color:var(--gold); letter-spacing:.02em; margin-right:.25rem; }
 #weapons,#weapons-set2,#ailments,#tactics,#defense,#defstrat{ font-weight:600; }
-.weapon-sets{ display:flex; flex-direction:column; gap:.2rem; }
+.weapon-sets{ display:inline-flex; flex-direction:column; gap:.2rem; }
 .weapon-set2-btn{
   align-self:flex-start;
   padding:.15rem .65rem;
