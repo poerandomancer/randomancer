@@ -318,7 +318,10 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 .grid .wide{ grid-column:1 / -1; }
 .label{ display:inline-block; min-width:9rem; color:var(--gold); letter-spacing:.02em; margin-right:.25rem; }
 #weapons,#weapons-set2,#ailments,#tactics,#defense,#defstrat{ font-weight:600; }
-.weapon-sets{ display:inline-flex; flex-direction:column; gap:.2rem; }
+/* Weapon set display: simple stacked lines (no set indicators in the build panel) */
+.weapon-sets{ display:inline-flex; flex-direction:column; gap:.25rem; }
+.weapon-sets #weapons,
+.weapon-sets #weapons-set2{ display:block; }
 .weapon-set2-btn{
   align-self:flex-start;
   padding:.15rem .65rem;
@@ -326,7 +329,10 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
   border:1px solid var(--edge);
   background:rgba(20,20,24,0.6);
   color:var(--muted);
-  font-size:.85rem;
+  font-family: inherit;
+  font-weight: 600;
+  letter-spacing: .02em;
+  font-size:.9rem;
   cursor:pointer;
 }
 .weapon-set2-btn:hover{ color:var(--silver); border-color:rgba(212,170,80,0.6); }
@@ -379,26 +385,60 @@ main{ max-width:860px; margin:0 auto; padding:1.25rem; }
 /* === v0.5.1: Recommended Skills section === */
 .skills-tabs{
   display:flex;
-  gap:.4rem;
-  margin-top:.25rem;
+  gap:.35rem;
+  margin-top:.35rem;
+  margin-bottom:.15rem;
+  align-items:flex-end;
+  position:relative;
+  padding-bottom:0;
+}
+.skills-tabs::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:1px;
+  background: linear-gradient(90deg, transparent, rgba(200,168,107,.55), transparent);
+  opacity:.75;
+  pointer-events:none;
 }
 .skills-tab{
-  padding:.2rem .7rem;
-  border-radius:999px;
-  border:1px solid var(--edge);
-  background:rgba(20,20,24,0.6);
-  color:var(--muted);
-  font-size:.85rem;
+  padding:.3rem .75rem;
+  height:28px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:.6rem .6rem 0 0;
+  border:1px solid rgba(200,168,107,.35);
+  border-bottom:0;
+  background: rgba(16,16,20,0.55);
+  color: rgba(210,210,220,0.75);
+  font-family:'Cormorant Infant','Cormorant Garamond',serif;
+  font-style:italic;
+  font-weight:600;
+  font-size:.78rem;
+  letter-spacing:.06em;
   cursor:pointer;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.75);
+  margin-bottom:-1px;
+}
+/* Optional: keep the rail but make it subtle/dark */
+.skills-tabs::after{
+  background: linear-gradient(90deg, transparent, rgba(0,0,0,.55), transparent);
+  opacity: .35;
 }
 .skills-tab.is-active{
-  color:var(--gold);
-  border-color:rgba(212,170,80,0.6);
-  box-shadow:0 0 6px rgba(212,170,80,0.2);
+  color: var(--gold);
+  border-color: rgba(212,170,80,0.70);
+  background: rgba(20,20,24,0.78);
+  box-shadow:
+    0 0 10px rgba(212,170,80,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.08);
 }
 .skills-tab[disabled]{ opacity:.35; cursor:default; }
 .skills-tabs[hidden]{ display:none; }
-.skills-grid { margin-top: .25rem; }
+.skills-grid { margin-top: .45rem; }
 
 .skill-card {
   display: flex;
@@ -497,7 +537,7 @@ border-top: 1px dotted var(--gold);
 /* === v0.6.4: Cohesion Slider + Skill Cards === */
 .cohesion-slider{ margin:1.5rem auto 0.1rem; width:min(720px,90%); text-align:center; color:var(--gold); }
 .cohesion-slider input[type=range]{ width:100%; appearance:none; height:6px; border-radius:6px; background:linear-gradient(90deg, rgba(212,170,80,0.4), rgba(212,170,80,0.9)); outline:none; cursor:pointer; box-shadow:0 0 6px rgba(212,170,80,0.3); }
-.cohesion-slider .mode-labels{ display:flex; justify-content:space-between; font-size:.85rem; opacity:.8; margin-top:.2rem; color:var(--muted); }
+.cohesion-slider .mode-labels{ display:flex; justify-content:space-between; font-size:.9rem; opacity:.8; margin-top:.2rem; color:var(--muted); }
 .cohesion-status{
   min-height:1.2rem;
   margin-top:.35rem;

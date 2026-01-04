@@ -351,6 +351,8 @@ function initSectionLocks(){
     const hasSet2 = hasSecondaryWeaponSet(snap);
     const set2Btn = document.getElementById('weapon-set2-btn');
     if (set2Btn) {
+      // Ensure label stays consistent even if HTML changes between versions
+      set2Btn.textContent = 'Add Weapon Set II';
       set2Btn.hidden = hasSet2 || !weaponsTxt;
     }
     setElText('#defense', snap.defense || '');
@@ -2682,6 +2684,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 });
 
 function resetSecondaryWeaponSetUI(showButton){
+
   const weapons2El = document.getElementById('weapons-set2');
   if (weapons2El) {
     weapons2El.textContent = '';
@@ -2690,7 +2693,10 @@ function resetSecondaryWeaponSetUI(showButton){
   const grid2 = document.getElementById('skills-grid-2');
   if (grid2) grid2.innerHTML = '';
   const btn = document.getElementById('weapon-set2-btn');
-  if (btn) btn.hidden = !showButton;
+  if (btn) {
+    btn.textContent = 'Add Weapon Set II';
+    btn.hidden = !showButton;
+  }
   setSkillsTabsAvailability(false);
   setActiveSkillsTab('1');
 }
@@ -2773,7 +2779,6 @@ async function handleSecondaryWeaponSetSelection(){
   renderSecondaryWeaponLine([weaponName, offhandName].filter(Boolean), wOaths);
   const weapons2El = document.getElementById('weapons-set2');
   if (weapons2El) weapons2El.hidden = false;
-
   const avoidSkills = new Set(
     (current.recommendedSkills || [])
       .map(s => s?.id || s?.name || '')
