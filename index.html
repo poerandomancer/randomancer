@@ -56,7 +56,25 @@
 </head>
 <body>
   <button id="saved-fab" class="rm-info-fab saved-fab" aria-label="View Saved Builds" title="View Saved Builds">★</button>
+  <button id="feedback-fab" class="rm-info-fab feedback-fab" aria-label="Provide Feedback" title="Provide Feedback" data-feedback-url="https://docs.google.com/forms/d/e/1FAIpQLSdYYeGkQhoIEDjRF4wpyItAqxcGgAK24JfAyA6XeAfTQz-AbA/viewform?usp=dialog">✉</button>
   <button id="info-fab" class="rm-info-fab" aria-label="About this tool" title="About">?</button>
+
+  <!-- Mobile menu (replaces the individual header icons on small screens) -->
+  <button id="header-menu-fab" class="rm-info-fab header-menu-fab" aria-label="Menu" title="Menu" aria-haspopup="menu" aria-expanded="false">☰</button>
+  <div id="header-menu" class="header-menu" role="menu" hidden>
+    <button type="button" class="header-menu-item" data-action="saved" role="menuitem">
+      <span class="header-menu-ico" aria-hidden="true">★</span>
+      <span class="header-menu-label">Saved Builds</span>
+    </button>
+    <button type="button" class="header-menu-item" data-action="info" role="menuitem">
+      <span class="header-menu-ico" aria-hidden="true">?</span>
+      <span class="header-menu-label">About</span>
+    </button>
+    <button type="button" class="header-menu-item" data-action="feedback" role="menuitem">
+      <span class="header-menu-ico" aria-hidden="true">✉</span>
+      <span class="header-menu-label">Provide Feedback</span>
+    </button>
+  </div>
   <!-- Saved Builds Lightbox -->
   <div id="saved-overlay" class="rm-info-overlay saved-overlay" hidden>
     <div class="rm-info-backdrop" data-close="1"></div>
