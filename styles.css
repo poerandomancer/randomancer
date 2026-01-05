@@ -18,6 +18,17 @@
 
 *{ box-sizing:border-box; }
 
+
+html { font-size: 16px; }
+
+/* Desktop readability bump */
+@media (min-width: 961px) {
+  html { font-size: 17px; }
+}
+@media (min-width: 1400px) {
+  html { font-size: 18px; }
+}
+
 html,
 body {
   margin: 0;
@@ -914,6 +925,8 @@ border-top: 1px dotted var(--gold);
   padding: 10px 14px 12px;
   color: #e4d9c9;
   font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
 .unique-line {
@@ -1313,9 +1326,11 @@ border-top: 1px dotted var(--gold);
 
 
 /* --- Mobile polish pack (v0.7.9_beta2m) --- */
-html { font-size: clamp(14px, 1.8vw, 16px); }
-h1 { font-size: clamp(24px, 5.5vw, 40px); }
-h2 { font-size: clamp(18px, 3.5vw, 28px); }
+@media (max-width: 960px) {
+  html { font-size: clamp(14px, 1.8vw, 16px); }
+  h1 { font-size: clamp(24px, 5.5vw, 40px); }
+  h2 { font-size: clamp(18px, 3.5vw, 28px); }
+}
 
 .grid.two { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
 @media (max-width: 960px) {
@@ -1327,7 +1342,9 @@ h2 { font-size: clamp(18px, 3.5vw, 28px); }
   .unique-lines div, .skill-lines div { line-height: 1.3; }
 }
 
-.tag-pill { padding: 2px 8px; border-radius: 999px; font-size: 12px; }
+@media (max-width: 960px) {
+  .tag-pill { padding: 2px 8px; border-radius: 999px; font-size: 12px; }
+}
 @media (max-width: 480px) {
   .tag-pill { font-size: 11px; padding: 2px 6px; }
 }
