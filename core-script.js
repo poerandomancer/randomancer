@@ -3813,21 +3813,12 @@ function ensureUniqueSection(){
     document.querySelectorAll('.unique-divider').forEach(el=>el.remove());
     document.querySelectorAll('#uniques-section').forEach(el=>el.remove());
 
-    // Anchor after Skills section (or after persistent buff section if present)
-    const skillsGrid = document.querySelector('#skills-grid');
-    const skillsSect = skillsGrid ? skillsGrid.closest('.sect') : null;
-    const buffSect = document.getElementById('persistent-buff-section');
-    const main = document.querySelector('main') || document.body;
-    const parent = (skillsSect && skillsSect.parentNode) || main;
+    // Mount into the dedicated Uniques panel (keeps section borders consistent)
+    const mount = document.getElementById('uniques-mount');
+    if (!mount) return null;
 
-    if (!skillsSect) return null; // try later
-
-    const anchor = buffSect || skillsSect;
-
-    // Insert divider
-    const divider = document.createElement('div');
-    divider.className = 'ornate-divider gold unique-divider';
-    anchor.insertAdjacentElement('afterend', divider);
+    // Clear any previous content
+    mount.innerHTML = '';
 
     // Insert Uniques section
     const wrap = document.createElement('div');
@@ -3842,13 +3833,13 @@ function ensureUniqueSection(){
           <div id="uniques-grid" class="grid two uniques-grid"></div>
         `;
 
-    divider.insertAdjacentElement('afterend', wrap);
+    mount.appendChild(wrap);
 
     const lockBtn = wrap.querySelector('.lock-toggle');
     if (lockBtn) wireLockButton(lockBtn);
     syncLockUIFromState();
 
-    return document.getElementById('uniques-grid');
+    return wrap.querySelector('#uniques-grid');
   }
 
   function pillsFor(item, rolledSet){

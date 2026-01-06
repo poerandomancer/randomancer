@@ -228,6 +228,17 @@ main{ max-width:860px; margin:0 auto; padding:1rem 1.25rem 1.25rem; }
 }
 .panel > *{ position:relative; z-index:1; }
 
+/* --- Panel separation consistency --- */
+main .panel + .panel{
+  margin-top: 16px;
+}
+
+/* Hide the uniques panel until JS mounts the section (avoids an empty bordered box pre-roll) */
+#uniques-panel:has(#uniques-mount:empty){
+  display:none;
+}
+
+
 .sect{ padding:.25rem 0; }
 .sect-head{ margin-bottom:.5rem; position:relative; }
 .sect-head .underline{
