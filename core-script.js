@@ -755,7 +755,7 @@ const App = window.App = (() => {
     // 0=strict,1=cohesive,2=chaotic,3=madness (legacy index for saved builds)
     cohesionMode: 1,
     cohesionModeName: 'cohesive',
-    cohesionThreshold: 2/3,
+    cohesionThreshold: 3/4,
 
 
     // canonical current roll snapshot
@@ -1498,7 +1498,7 @@ function sliderValueToThreshold(v){
 
 function thresholdToSliderValue(t){
   const raw = Number(t);
-  if (!Number.isFinite(raw)) return 35; // default near cohesive
+  if (!Number.isFinite(raw)) return 25; // default near cohesive
   const clamped = Math.max(0, Math.min(1, raw));
   return Math.round((1 - clamped) * 100);
 }
@@ -1850,6 +1850,22 @@ function weaponsToTypes(weapon, offhand){
   return arr.map(x=>String(x).toLowerCase());
 }
 
+// ---- Gem/offhand compatibility helpers ----
+// Some active skills in skills_enriched.json carry the tag "requiresshield".
+// These should ONLY be eligible when the build has rolled a Shield/Buckler in the off-hand slot.
+function offhandIsShieldOrBuckler(offhand){
+  const n = String(offhand?.name || '').toLowerCase();
+  return n.includes('shield') || n.includes('buckler');
+}
+function gemRequiresShield(g){
+  const tags = Array.isArray(g?.tags) ? g.tags : [];
+  return tags.some(t => String(t).toLowerCase() === 'requiresshield');
+}
+function isGemShieldCompatible(g, offhand){
+  if (!gemRequiresShield(g)) return true;
+  return offhandIsShieldOrBuckler(offhand);
+}
+
 function isGemWeaponCompatible(g, rolledTypesLower){
   const req = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
     ? g.required_weapon_types
@@ -2077,9 +2093,10 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx, opts = {}){
     );
 
     // Separate persistent buff skills from general pool
-    const persistentPool = actives.filter(g => isPersistentBuffGem(g) && isGemWeaponCompatible(g, rolledTypesLower));
+    const persistentPool = actives.filter(g => isPersistentBuffGem(g) && isGemWeaponCompatible(g, rolledTypesLower) && isGemShieldCompatible(g, picked.offhand));
     const eligibleBase = actives.filter(g =>
       isGemWeaponCompatible(g, rolledTypesLower) &&
+      isGemShieldCompatible(g, picked.offhand) &&
       !isPersistentBuffGem(g)
     );
     const avoidRaw = options.avoidSkills || [];
@@ -2434,7 +2451,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 	
 	  if (slider) {
 		// derive initial threshold from App.state if present, else use cohesive
-		let initialThreshold = 2/3;
+		let initialThreshold = 3/4;
 		try {
 		  const st = window.App && window.App.state;
 		  if (st) {
@@ -3813,21 +3830,12 @@ function ensureUniqueSection(){
     document.querySelectorAll('.unique-divider').forEach(el=>el.remove());
     document.querySelectorAll('#uniques-section').forEach(el=>el.remove());
 
-    // Anchor after Skills section (or after persistent buff section if present)
-    const skillsGrid = document.querySelector('#skills-grid');
-    const skillsSect = skillsGrid ? skillsGrid.closest('.sect') : null;
-    const buffSect = document.getElementById('persistent-buff-section');
-    const main = document.querySelector('main') || document.body;
-    const parent = (skillsSect && skillsSect.parentNode) || main;
+    // Mount into the dedicated Uniques panel (keeps section borders consistent)
+    const mount = document.getElementById('uniques-mount');
+    if (!mount) return null;
 
-    if (!skillsSect) return null; // try later
-
-    const anchor = buffSect || skillsSect;
-
-    // Insert divider
-    const divider = document.createElement('div');
-    divider.className = 'ornate-divider gold unique-divider';
-    anchor.insertAdjacentElement('afterend', divider);
+    // Clear any previous content
+    mount.innerHTML = '';
 
     // Insert Uniques section
     const wrap = document.createElement('div');
@@ -3842,13 +3850,13 @@ function ensureUniqueSection(){
           <div id="uniques-grid" class="grid two uniques-grid"></div>
         `;
 
-    divider.insertAdjacentElement('afterend', wrap);
+    mount.appendChild(wrap);
 
     const lockBtn = wrap.querySelector('.lock-toggle');
     if (lockBtn) wireLockButton(lockBtn);
     syncLockUIFromState();
 
-    return document.getElementById('uniques-grid');
+    return wrap.querySelector('#uniques-grid');
   }
 
   function pillsFor(item, rolledSet){

@@ -216,7 +216,7 @@
 			min="0"
 			max="100"
 			step="1"
-			value="35"
+			value="25"
 			aria-label="Cohesion threshold"
 		  >
                   <!-- Live hint, dark-gold glow -->
@@ -239,7 +239,7 @@
         <span id="bind-fates-error" class="bind-fates-error" aria-live="polite"></span>
       </div>
 
-      <section class="panel">
+      <section id="build-panel" class="panel">
         <div class="panel-actions">
           <button id="save-build" class="icon-btn" type="button" aria-label="Save Build" title="Save Build">☆</button>
           <button id="copy-build-link" class="icon-btn" type="button" aria-label="Copy Build Link" title="Copy Build Link">⧉</button>
@@ -310,8 +310,10 @@
             <div id="balance-text"></div>
           </div>
         </div>
-        <hr class="gold subtle"/>
-          <div class="sect">
+      </section>
+
+      <section id="skills-panel" class="panel panel--skills">
+<div class="sect">
             <div class="sect-head">
               <h3 class="section-title">Recommended Skills</h3>
               <div class="underline"></div><p class="sub">Two active skills for this roll, with supports</p>
@@ -323,6 +325,10 @@
             <div id="skills-grid" class="grid two skills-grid" data-skill-set="1"></div>
             <div id="skills-grid-2" class="grid two skills-grid hidden" data-skill-set="2"></div>
           </div>
+      </section>
+
+      <section id="uniques-panel" class="panel panel--uniques">
+        <div id="uniques-mount"></div>
       </section>
 
       <section id="passives-panel" class="panel panel--passives hidden">
