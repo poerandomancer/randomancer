@@ -126,6 +126,10 @@ header{
   font-weight:600;
 }
 
+/* Soften bold weight across the UI (avoids chunky/synthetic 700 weight in some browsers) */
+strong, b { font-weight: 600; }
+
+
 @media (max-width: 600px){
   .patch-indicator{
     font-size:0.7rem;
@@ -809,7 +813,7 @@ border-top: 1px dotted var(--gold);
 .oath-hit{
   color:#f7e7b5;
   text-shadow:0 0 6px rgba(255,214,120,0.6), 0 0 12px rgba(255,214,120,0.35);
-  font-weight:700;
+  font-weight: 600;
 }
 
 
@@ -958,7 +962,7 @@ border-top: 1px dotted var(--gold);
 /* Highlighted terms inside lines (from highlight()) */
 .unique-lines .hit {
   color: var(--unique-bronze, #ffcf7a);
-  font-weight: 700;
+  font-weight: 600;
   text-shadow: 0 0 6px rgba(197, 138, 70, 0.35);
 }
 
