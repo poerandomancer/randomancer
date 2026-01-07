@@ -1850,6 +1850,22 @@ function weaponsToTypes(weapon, offhand){
   return arr.map(x=>String(x).toLowerCase());
 }
 
+// ---- Gem/offhand compatibility helpers ----
+// Some active skills in skills_enriched.json carry the tag "requiresshield".
+// These should ONLY be eligible when the build has rolled a Shield/Buckler in the off-hand slot.
+function offhandIsShieldOrBuckler(offhand){
+  const n = String(offhand?.name || '').toLowerCase();
+  return n.includes('shield') || n.includes('buckler');
+}
+function gemRequiresShield(g){
+  const tags = Array.isArray(g?.tags) ? g.tags : [];
+  return tags.some(t => String(t).toLowerCase() === 'requiresshield');
+}
+function isGemShieldCompatible(g, offhand){
+  if (!gemRequiresShield(g)) return true;
+  return offhandIsShieldOrBuckler(offhand);
+}
+
 function isGemWeaponCompatible(g, rolledTypesLower){
   const req = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
     ? g.required_weapon_types
@@ -2077,9 +2093,10 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx, opts = {}){
     );
 
     // Separate persistent buff skills from general pool
-    const persistentPool = actives.filter(g => isPersistentBuffGem(g) && isGemWeaponCompatible(g, rolledTypesLower));
+    const persistentPool = actives.filter(g => isPersistentBuffGem(g) && isGemWeaponCompatible(g, rolledTypesLower) && isGemShieldCompatible(g, picked.offhand));
     const eligibleBase = actives.filter(g =>
       isGemWeaponCompatible(g, rolledTypesLower) &&
+      isGemShieldCompatible(g, picked.offhand) &&
       !isPersistentBuffGem(g)
     );
     const avoidRaw = options.avoidSkills || [];
