@@ -755,7 +755,7 @@ const App = window.App = (() => {
     // 0=strict,1=cohesive,2=chaotic,3=madness (legacy index for saved builds)
     cohesionMode: 1,
     cohesionModeName: 'cohesive',
-    cohesionThreshold: 2/3,
+    cohesionThreshold: 3/4,
 
 
     // canonical current roll snapshot
@@ -1498,7 +1498,7 @@ function sliderValueToThreshold(v){
 
 function thresholdToSliderValue(t){
   const raw = Number(t);
-  if (!Number.isFinite(raw)) return 35; // default near cohesive
+  if (!Number.isFinite(raw)) return 25; // default near cohesive
   const clamped = Math.max(0, Math.min(1, raw));
   return Math.round((1 - clamped) * 100);
 }
@@ -2451,7 +2451,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 	
 	  if (slider) {
 		// derive initial threshold from App.state if present, else use cohesive
-		let initialThreshold = 2/3;
+		let initialThreshold = 3/4;
 		try {
 		  const st = window.App && window.App.state;
 		  if (st) {
