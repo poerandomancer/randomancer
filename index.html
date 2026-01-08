@@ -252,9 +252,24 @@
 
       <section id="build-panel" class="panel">
         <div class="panel-actions">
+          <button id="view-toggle" class="view-toggle-btn" type="button" aria-pressed="false" aria-label="Toggle Summary View" title="Switch to Summary View">Summary</button>
           <button id="save-build" class="icon-btn" type="button" aria-label="Save Build" title="Save Build">☆</button>
-          <button id="copy-build-link" class="icon-btn" type="button" aria-label="Copy Build Link" title="Copy Build Link">⧉</button>
+
+          <div class="copy-menu" id="copy-menu-wrap">
+            <button id="copy-build-link" class="icon-btn" type="button" aria-label="Copy" title="Copy" aria-haspopup="menu" aria-expanded="false">⧉</button>
+            <div id="copy-menu" class="copy-menu-pop" role="menu" hidden>
+              <button id="copy-menu-link" class="copy-menu-item" type="button" role="menuitem">Copy Build Link</button>
+              <button id="copy-menu-summary" class="copy-menu-item" type="button" role="menuitem">Copy Summary</button>
+            </div>
+          </div>
         </div>
+        <div id="summary-panel" class="summary-panel" hidden aria-label="Build Summary">
+          <div id="summary-line-1" class="summary-row summary-row--primary oath-hit"></div>
+          <div id="summary-line-2" class="summary-row"></div>
+          <div id="summary-line-3" class="summary-row"></div>
+          <div id="summary-line-4" class="summary-row"></div>
+        </div>
+
           <div class="sect">
           <div class="sect-head section-header" data-section="archetype" data-locked="false">
             <div class="section-title-row">

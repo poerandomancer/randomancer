@@ -387,7 +387,120 @@ function initSectionLocks(){
     grid.appendChild(card);
   }
 
-  function renderSnapshotToDom(snap){
+  // ===== Summary View (presentation toggle) =====
+const VIEW_STORAGE_KEY = 'rm_view_mode';
+
+function getViewMode(){
+  try {
+    const v = localStorage.getItem(VIEW_STORAGE_KEY);
+    return (v === 'summary' || v === 'detailed') ? v : 'detailed';
+  } catch {
+    return 'detailed';
+  }
+}
+
+function updateViewToggleButton(mode){
+  const btn = document.getElementById('view-toggle');
+  if (!btn) return;
+  const isSummary = mode === 'summary';
+  btn.setAttribute('aria-pressed', isSummary ? 'true' : 'false');
+  // Button label shows the *other* view as the action.
+  btn.textContent = isSummary ? 'Detailed' : 'Summary';
+  btn.title = isSummary ? 'Switch to Detailed View' : 'Switch to Summary View';
+  btn.setAttribute('aria-label', btn.title);
+}
+
+function setViewMode(mode){
+  const m = (mode === 'summary') ? 'summary' : 'detailed';
+  const appEl = document.getElementById('app');
+  if (appEl) appEl.dataset.view = m;
+
+  try { localStorage.setItem(VIEW_STORAGE_KEY, m); } catch {}
+  updateViewToggleButton(m);
+
+  // Ensure summary text is up-to-date when switching views
+  const snap = (typeof currentSnap === 'function') ? currentSnap() : null;
+  if (snap) renderSummaryFromSnapshot(snap);
+}
+
+function toggleViewMode(){
+  const next = (getViewMode() === 'summary') ? 'detailed' : 'summary';
+  setViewMode(next);
+}
+
+function buildSummaryLinesFromSnapshot(snap){
+  if (!snap) return ['', '', '', ''];
+
+  const dot = ' · ';
+
+  const weaponsTxt = formatWeaponLine(snap.weapon, snap.offhand);
+
+  const ailments = Array.isArray(snap.ailmentList)
+    ? snap.ailmentList
+    : (snap.ailments ? String(snap.ailments).split(/\s*&\s*/).filter(Boolean) : []);
+  const tactics = Array.isArray(snap.tacticList)
+    ? snap.tacticList
+    : (snap.tactics ? String(snap.tactics).split(/\s*&\s*/).filter(Boolean) : []);
+
+  const ailTxt = ailments.length ? ailments.join(' & ') : '';
+  const tacTxt = tactics.length ? tactics.join(' & ') : '';
+  const mechanicsTxt = [ailTxt, tacTxt].filter(Boolean).join(' / ');
+
+  const line1 = [snap.ascendancy, weaponsTxt, mechanicsTxt, snap.defStrat].filter(Boolean).join(dot);
+
+  // Resolve gem entries -> display names
+  const gems = (window.DATA && window.DATA.gems) || [];
+  const gemDict = buildGemDictionary(gems);
+  const resolveGemName = (entry) => {
+    if (!entry) return '';
+    const key = entry.id || entry.name || '';
+    if (!key) return '';
+    const g = lookupGem(gemDict, key);
+    return (g && g.name) ? g.name : (entry.name || key);
+  };
+
+  const skills = (snap.recommendedSkills || []).map(resolveGemName).filter(Boolean);
+  const buff = snap.recommendedPersistentBuff ? resolveGemName(snap.recommendedPersistentBuff) : '';
+  const line2 = [...skills, buff].filter(Boolean).join(dot);
+
+  const uniques = Array.isArray(snap.recommendedUniques) ? snap.recommendedUniques : [];
+  const line3 = uniques.filter(Boolean).join(dot);
+
+  const pass = snap.passives || {};
+  const passNames = [
+    ...(pass.ascendancyNodes || []).map(n => n && n.name).filter(Boolean),
+    ...(pass.keystones || []).map(n => n && n.name).filter(Boolean),
+    ...(pass.notables || []).map(n => n && n.name).filter(Boolean),
+  ];
+
+  // De-dupe while preserving order
+  const seen = new Set();
+  const uniqPass = passNames.filter(n => (seen.has(n) ? false : (seen.add(n), true)));
+  const line4 = uniqPass.join(dot);
+
+  return [line1, line2, line3, line4];
+}
+
+function getSummaryTextFromSnapshot(snap){
+  return buildSummaryLinesFromSnapshot(snap).filter(Boolean).join('\n');
+}
+
+function renderSummaryFromSnapshot(snap){
+  const panel = document.getElementById('summary-panel');
+  if (!panel) return;
+
+  const lines = buildSummaryLinesFromSnapshot(snap);
+  const ids = ['summary-line-1','summary-line-2','summary-line-3','summary-line-4'];
+  ids.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = lines[i] || '';
+  });
+
+  panel.hidden = (getViewMode() !== 'summary');
+}
+
+function renderSnapshotToDom(snap){
     if (!snap) return;
     setElText('#class', snap.className || '');
     setElText('#ascendancy', snap.ascendancy || '');
@@ -419,15 +532,35 @@ function initSectionLocks(){
     updateAilmentOverlay(ailments);
     setElText('#build-name', snap.buildName || '');
     setElText('#build-subtext', snap.flavor || '');
-    renderAttributesFromSnapshot(snap.attributes);
-    renderSkillsFromSnapshot(snap);
+    // Keep the Summary view in sync on every roll (and do this early so it still updates even if later renderers fail).
+    renderSummaryFromSnapshot(snap);
+
+    try {
+      renderAttributesFromSnapshot(snap.attributes);
+    } catch (e) {
+      console.warn('[render] attribute breakdown failed', e);
+    }
+
+    try {
+      renderSkillsFromSnapshot(snap);
+    } catch (e) {
+      console.warn('[render] skills panel failed', e);
+    }
     setSkillsTabsAvailability(hasSet2);
     setActiveSkillsTab('1');
-    renderPassiveRecommendations((window.App && window.App.state && window.App.state.currentRoll) || snap, window.DATA);
+    try {
+      renderPassiveRecommendations((window.App && window.App.state && window.App.state.currentRoll) || snap, window.DATA);
+    } catch (e) {
+      console.warn('[render] passives panel failed', e);
+    }
 
-    if (Array.isArray(snap.recommendedUniques) && snap.recommendedUniques.length && window.RandomancerRenderUniquesFromNames) {
-  		window.RandomancerRenderUniquesFromNames(snap.recommendedUniques, snap);
-}
+    try {
+      if (Array.isArray(snap.recommendedUniques) && snap.recommendedUniques.length && window.RandomancerRenderUniquesFromNames) {
+        window.RandomancerRenderUniquesFromNames(snap.recommendedUniques, snap);
+      }
+    } catch (e) {
+      console.warn('[render] uniques panel failed', e);
+    }
 
   }
 
@@ -566,19 +699,91 @@ function initSectionLocks(){
     const copyBtn = document.getElementById('copy-build-link');
     const saveBtn = document.getElementById('save-build');
     const savedListFab = savedFab;
+const viewBtn = document.getElementById('view-toggle');
 
-    copyBtn?.addEventListener('click', () => {
-      const snap = currentSnap();
-      const code = encodeSnapshot(snap);
-      if (!code) return;
-      const url = new URL(location.href);
-      url.searchParams.set('build', code);
-      const text = url.toString();
-      if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text);
-      updateCodeUI(code);
+    // Initialize persisted view mode (default: detailed)
+    setViewMode(getViewMode());
+
+    viewBtn?.addEventListener('click', () => {
+      toggleViewMode();
     });
 
-    saveBtn?.addEventListener('click', saveCurrentBuild);
+
+    // Copy dropdown (Option C): choose Link vs Summary
+    const copyWrap = document.getElementById('copy-menu-wrap');
+    const copyMenu = document.getElementById('copy-menu');
+    const copyItemLink = document.getElementById('copy-menu-link');
+    const copyItemSummary = document.getElementById('copy-menu-summary');
+
+    const closeCopyMenu = () => {
+      if (!copyMenu || !copyBtn) return;
+      copyMenu.hidden = true;
+      copyBtn.setAttribute('aria-expanded', 'false');
+    };
+
+    const openCopyMenu = () => {
+      if (!copyMenu || !copyBtn) return;
+      copyMenu.hidden = false;
+      copyBtn.setAttribute('aria-expanded', 'true');
+    };
+
+    const toggleCopyMenu = () => {
+      if (!copyMenu || !copyBtn) return;
+      if (copyMenu.hidden) openCopyMenu();
+      else closeCopyMenu();
+    };
+
+    const safeCopy = (text) => {
+      if (!text) return;
+      try {
+        if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text);
+      } catch {}
+    };
+
+    const buildShareUrlFromSnap = (snap) => {
+      const code = encodeSnapshot(snap);
+      if (!code) return '';
+      const url = new URL(location.href);
+      url.searchParams.set('build', code);
+      return url.toString();
+    };
+
+    copyBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleCopyMenu();
+    });
+
+    copyItemLink?.addEventListener('click', () => {
+      const snap = currentSnap();
+      const url = buildShareUrlFromSnap(snap);
+      safeCopy(url);
+      const code = encodeSnapshot(snap);
+      updateCodeUI(code);
+      closeCopyMenu();
+    });
+
+    copyItemSummary?.addEventListener('click', () => {
+      const snap = currentSnap();
+      const summary = getSummaryTextFromSnapshot(snap);
+      safeCopy(summary);
+      const code = encodeSnapshot(snap);
+      updateCodeUI(code);
+      closeCopyMenu();
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!copyMenu || copyMenu.hidden) return;
+      const t = e.target;
+      if (copyWrap && t instanceof Node && copyWrap.contains(t)) return;
+      closeCopyMenu();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeCopyMenu();
+    });
+
+saveBtn?.addEventListener('click', saveCurrentBuild);
     savedListFab?.addEventListener('click', openSavedOverlay);
     savedCloseBtn?.addEventListener('click', closeSavedOverlay);
     savedOverlay?.addEventListener('click', (e) => {
