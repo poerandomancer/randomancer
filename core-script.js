@@ -340,6 +340,8 @@ function initSectionLocks(){
     setElText('#class', snap.className || '');
     setElText('#ascendancy', snap.ascendancy || '');
     updateAscArt(snap.ascendancy || '');
+    const appEl = document.getElementById('app');
+    if (appEl) appEl.dataset.hasRoll = 'true';
     const weaponsTxt = formatWeaponLine(snap.weapon, snap.offhand);
     setElText('#weapons', weaponsTxt);
     const weapons2Txt = formatWeaponLine(snap.weapon2, snap.offhand2);
@@ -3203,6 +3205,10 @@ function rollBuild(dataWrap){
   } catch (e) {
     console.warn('[Randomancer] uniques refresh failed', e);
   }
+
+  // Reveal build output panels now that we have a roll
+  const appEl = document.getElementById('app');
+  if (appEl) appEl.dataset.hasRoll = 'true';
 
   syncLockUIFromState();
 

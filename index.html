@@ -175,12 +175,12 @@
   <div id="intro" class="intro-screen">
     <div class="intro-content">
       <p id="intro-line"></p>
-      <button id="intro-roll" class="roll-btn roll-btn"><img src="images/dice.png" alt="The Randomancer – Path of Exile 2 build randomizer thrice dice icon" class="btn-ico"> Roll Your Fate</button>
+      <button id="intro-roll" class="roll-btn roll-btn"><img src="images/dice.png" alt="The Randomancer – Path of Exile 2 build randomizer thrice dice icon" class="btn-ico"> Approach the Randomancer</button>
     </div>
   </div>
 
   <div id="asc-art" class="asc-art" aria-hidden="true"></div>
-  <div id="app" class="hidden">
+  <div id="app" class="hidden" data-has-roll="false">
     <header>
       <div class="patch-indicator" aria-label="Supported Path of Exile 2 patch">
         Supports POE2 · <strong>v0.4.0</strong>
@@ -188,10 +188,9 @@
 
       <h1 class="title">The Randomancer</h1>
       <h2 class="subtitle">Conjure the Impossible. Defy the Meta.</h2>
-      
-      <!-- restored build name + flavor -->
-      <div id="build-name" class="build-name"></div>
-      <div id="build-subtext" class="build-subtext"></div>
+      <div class="app-lede" role="note" aria-label="How to use the Randomancer">
+        Tune <strong>Cohesion</strong> for tighter themes or wilder chaos. Use <strong>Bind the Fates</strong> to swear oaths or banish abominations. When you’re ready, click <strong>Roll Your Fate</strong> to begin.
+      </div>
 
       <div class="roll-sticky">
         <button id="roll" class="roll-btn roll-btn">
@@ -238,6 +237,18 @@
         </div>
         <span id="bind-fates-error" class="bind-fates-error" aria-live="polite"></span>
       </div>
+
+
+      <div id="build-roll-banner" class="build-roll-banner" aria-live="polite">
+        <div id="build-name" class="build-name"></div>
+        <div id="build-subtext" class="build-subtext"></div>
+      </div>
+
+      <section id="empty-state" class="panel empty-state" aria-label="Welcome">
+        <h3 class="empty-title">The Fates Await...</h3>
+        <p class="empty-text">
+        </p>
+      </section>
 
       <section id="build-panel" class="panel">
         <div class="panel-actions">
@@ -378,7 +389,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
       const app = document.getElementById('app');
       app.classList.remove('hidden');
       app.classList.add('fade-in');
-      document.getElementById('roll').click();
     }, 700);
   });
 });
