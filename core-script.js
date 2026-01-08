@@ -425,12 +425,10 @@ function initSectionLocks(){
     setActiveSkillsTab('1');
     renderPassiveRecommendations((window.App && window.App.state && window.App.state.currentRoll) || snap, window.DATA);
 
-    if (Array.isArray(snap.recommendedUniques) && snap.recommendedUniques.length && typeof window.RandomancerRenderUniquesFromNames === 'function') {
-      const uniqNames = snap.recommendedUniques
-        .map(u => (typeof u === 'string' ? u : (u && typeof u === 'object' ? u.name : null)))
-        .filter(Boolean);
-      if (uniqNames.length) window.RandomancerRenderUniquesFromNames(uniqNames);
-    }
+    if (Array.isArray(snap.recommendedUniques) && snap.recommendedUniques.length && window.RandomancerRenderUniquesFromNames) {
+  		window.RandomancerRenderUniquesFromNames(snap.recommendedUniques, snap);
+}
+
   }
 
   async function applyBuildCode(code){
@@ -4090,11 +4088,11 @@ function ensureUniqueSection(){
 		return;
 	  }
 	
-	  // Recreate rolled tag profile so highlights + matched pills work on rehydrate
-	  let rolledSet = null;
+	  // ✅ Build rolledSet from the snapshot we were passed
+	  let rolledSet;
 	  try {
 		if (snapOrRolledSet && typeof snapOrRolledSet.has === 'function') {
-		  rolledSet = snapOrRolledSet;
+		  rolledSet = snapOrRolledSet; // already a Set-like
 		} else {
 		  const snap =
 			(snapOrRolledSet && typeof snapOrRolledSet === 'object')
@@ -4110,17 +4108,20 @@ function ensureUniqueSection(){
 	  } catch {
 		rolledSet = new Set();
 	  }
-	  if (!rolledSet) rolledSet = new Set();
 	
-	  try {
-		const items = await loadUniquesM();
-		const byName = new Map(items.map(it => [it.name, it]));
-		const ordered = names.map(n => byName.get(n)).filter(Boolean);
-		renderUniques(ordered, rolledSet);
-	  } catch (e) {
-		console.warn('[u79b2m] renderUniquesFromNames failed', e);
-	  }
+	  // (optional safety) normalize name list if you might get objects:
+	  const nameList = names
+		.map(u => (typeof u === 'string' ? u : (u && typeof u === 'object' ? u.name : null)))
+		.filter(Boolean);
+	
+	  const items = await loadUniquesM();
+	  const byName = new Map(items.map(it => [it.name, it]));
+	  const ordered = nameList.map(n => byName.get(n)).filter(Boolean);
+	
+	  // ✅ THIS is what drives highlight() matching
+	  renderUniques(ordered, rolledSet);
 	}
+
 
 
 

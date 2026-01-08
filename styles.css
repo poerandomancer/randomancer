@@ -257,13 +257,13 @@ strong, b { font-weight: 600; }
   box-shadow: 0 6px 18px rgba(0,0,0,.22);
   
   min-height: max(640px, 72vh);   /* taller on desktop */
-  padding-bottom: 6rem;          /* keeps text near top, gives fade runway */
+  padding-bottom: 4rem;          /* keeps text near top, gives fade runway */
 }
 
 @media (max-width: 720px){
   #empty-state.panel{
     min-height: max(520px, 64vh);
-    padding-bottom: 5rem;
+    padding-bottom: 3rem;
   }
 }
 
