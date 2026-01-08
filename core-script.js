@@ -107,6 +107,11 @@ function wireLockButton(btn){
     if (container) {
       container.dataset.locked = nowLocked ? 'true' : 'false';
     }
+
+    // Keep the Build Code in sync (now includes locks + passives)
+    if (typeof window.RandomancerUpdateBuildCodeUI === 'function') {
+      window.RandomancerUpdateBuildCodeUI();
+    }
   });
 }
 
@@ -156,8 +161,36 @@ function initSectionLocks(){
       rs: Array.isArray(snap.recommendedSkills) ? snap.recommendedSkills : [],
       rs2: Array.isArray(snap.recommendedSkills2) ? snap.recommendedSkills2 : [],
       pb: snap.recommendedPersistentBuff || null,
-      u: Array.isArray(snap.recommendedUniques) ? snap.recommendedUniques : []
+      u: Array.isArray(snap.recommendedUniques)
+        ? snap.recommendedUniques.map(u => (typeof u === 'string' ? u : (u && typeof u === 'object' ? u.name : null))).filter(Boolean)
+        : [],
+
+      // passives (packed) + section locks so rehydrated builds preserve these panels
+      p: (() => {
+        const pass = snap.passives;
+        if (!pass || typeof pass !== 'object') return null;
+
+        const packNode = (n) => {
+          if (!n || typeof n !== 'object') return null;
+          return {
+            name: n.name || '',
+            lines: Array.isArray(n.lines) ? n.lines.slice(0, 16) : [],
+            tags: Array.isArray(n.tags) ? n.tags.slice(0, 24) : [],
+            icon: n.icon || ''
+          };
+        };
+
+        const packList = (arr, max) =>
+          Array.isArray(arr) ? arr.slice(0, max).map(packNode).filter(Boolean) : [];
+
+        return {
+          a: packList(pass.ascendancyNodes, 2),
+          k: packList(pass.keystones, 2),
+          n: packList(pass.notables, 8)
+        };
+      })(),
     };
+
     return safeBtoa(JSON.stringify(compact));
   }
 
@@ -187,7 +220,26 @@ function initSectionLocks(){
         recommendedSkills: raw.rs || [],
         recommendedSkills2: raw.rs2 || [],
         recommendedPersistentBuff: raw.pb || null,
-        recommendedUniques: raw.u || []
+        recommendedUniques: raw.u || [],
+
+        passives: (() => {
+          const p = raw.p;
+          if (!p || typeof p !== 'object') return null;
+
+          // v2 packed shape: { a, k, n }
+          if ('a' in p || 'k' in p || 'n' in p) {
+            return {
+              ascendancyNodes: Array.isArray(p.a) ? p.a : [],
+              keystones: Array.isArray(p.k) ? p.k : [],
+              notables: Array.isArray(p.n) ? p.n : []
+            };
+          }
+
+          // legacy / dev shape (already expanded)
+          if (p.ascendancyNodes || p.keystones || p.notables) return p;
+
+          return null;
+        })()
       };
     } catch (e) {
       console.warn('[build code] decode failed', e);
@@ -371,18 +423,42 @@ function initSectionLocks(){
     setActiveSkillsTab('1');
     renderPassiveRecommendations((window.App && window.App.state && window.App.state.currentRoll) || snap, window.DATA);
 
-    if (Array.isArray(snap.recommendedUniques) && snap.recommendedUniques.length && window.RandomancerRenderUniquesFromNames) {
-      window.RandomancerRenderUniquesFromNames(snap.recommendedUniques);
+    if (Array.isArray(snap.recommendedUniques) && snap.recommendedUniques.length && typeof window.RandomancerRenderUniquesFromNames === 'function') {
+      const uniqNames = snap.recommendedUniques
+        .map(u => (typeof u === 'string' ? u : (u && typeof u === 'object' ? u.name : null)))
+        .filter(Boolean);
+      if (uniqNames.length) window.RandomancerRenderUniquesFromNames(uniqNames);
     }
   }
 
   async function applyBuildCode(code){
   const snap = decodeSnapshot(code);
   if (!snap) return false;
-  await ensureDataPreload();
+
+  const dataWrap = await ensureDataPreload();
   showAppShell();
 
-  // No build-level synergy / cohesion status needed anymore
+  // Back-compat: older build codes didn't store passives; rebuild them from the snapshot context.
+  if (!snap.passives) {
+    try {
+      const passivesData =
+        dataWrap?.passivesEnriched || (window.DATA && window.DATA.passivesEnriched);
+      const passiveIndex =
+        dataWrap?.passiveIndex || (window.DATA && window.DATA.passiveIndex);
+
+      if (passivesData && Array.isArray(passivesData.nodes)) {
+        const passiveCtx = buildBuildContext(snap);
+        const ascendancyNodes = pickRecommendedAscendancyNodes(passivesData, passiveIndex, passiveCtx, 2);
+        const keystones = pickRecommendedKeystones(passivesData, passiveIndex, passiveCtx, 2);
+        const notables = pickRecommendedNotables(passivesData, passiveIndex, passiveCtx, 8);
+        snap.passives = { ascendancyNodes, keystones, notables };
+      }
+    } catch (e) {
+      console.warn('[build code] passive recompute failed', e);
+    }
+  }
+
+  // Merge into global roll state so the rest of the app sees the right info
   const rollPayload = { ...snap };
 
   if (window.App?.mergeCurrentRoll) {
@@ -393,6 +469,7 @@ function initSectionLocks(){
   updateCodeUI(code);
   return true;
 }
+
 
 
   function loadSaved(){
