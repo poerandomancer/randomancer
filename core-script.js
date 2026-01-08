@@ -1886,34 +1886,288 @@ function lookupGem(dict, raw){
 // ---------- helpers ----------
 function dominantAttr(attrs){ const e=Object.entries(attrs||{}).sort((a,b)=>b[1]-a[1]); const k=(e[0]?.[0]||'int'); return {strength:'str',dexterity:'dex',intelligence:'int'}[k]||k.slice(0,3); }
 function sample(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-const NAME_TITLES={
-  Warrior:["Ember-Forged","Ironclad","Warborn","Stonebound"],
-  Ranger:["Shadowstalker","Silent Arrow","Thorned","Windswift"],
-  Witch:["Veil-Touched","Hexbound","Soulweaver","Ashen"],
-  Sorceress:["Storm-Wreathed","Starbound","Auric","Umbral"],
-  Monk:["Storm-Wreathed","Inner Flame","Tranquil","Sage of Steel"],
-  Huntress:["Moonstalker","Wildbloom","Nightsong","Fangstep"],
-  Mercenary:["Oathbreaker","Gallowglass","Bloodhired","Black Banner"]
+// ===== Build Name Generation (v0.8.2+) =====
+// New approach:
+// - NAME_DESCRIPTORS (x): per-ascendancy adjectives/epithets
+// - NAME_TITLES (y): per-ascendancy noun-y titles
+// - NAME_TENDENCIES (z): ailment/tactic themed nouns for "of z", "z-bound", etc.
+// - NAME_TENDENCY_FORMS: -ing / adjective-friendly forms for "The z-ing y"
+const NAME_DESCRIPTORS = {
+  // Warrior
+  "Titan": ["Titanic","Stonebound","Mountain-Born","Earthshaking","Atlas-Broad","Ironclad"],
+  "Warbringer": ["Warworn","Blooded","Banner-Sworn","Battle-Hymned","Drum-Hearted","Iron-Sworn"],
+  "Smith of Kitava": ["Forgebound","Cinderhand","Soot-Crowned","Brandmarked","Chain-Forged","Ashen"],
+
+  // Mercenary
+  "Tactician": ["Measured","Battlewise","Steel-Sighted","Cold-Calculating","Drill-Hardened","Formation-Born"],
+  "Witchhunter": ["Hexbane","Lantern-Lit","Oath-Sworn","Relentless","Ash-Creed","Sanctified"],
+  "Gemling Legionnaire": ["Gem-Forged","Faceted","Prism-Blooded","Runed","Crystalline","Lattice-Bound"],
+
+  // Ranger
+  "Deadeye": ["Unerring","Hawk-Eyed","Silent","Longshot","Pinpoint","Shadow-Drawn"],
+  "Pathfinder": ["Trailwise","Horizon-Bound","Mire-Walking","Thorn-Run","Wayfinding","Wild-Tracked"],
+
+  // Huntress
+  "Amazon": ["Bronze-Crowned","Lionhearted","Spear-Blessed","Sunforged","Steel-Sister","Storm-Stride"],
+  "Ritualist": ["Circle-Drawn","Bone-Scribed","Masked","Ritebound","Blood-Binding","Totem-Kissed"],
+
+  // Witch
+  "Blood Mage": ["Sanguine","Veinbound","Crimson","Hemocrafted","Bloodletter","Thrice-Bled"],
+  "Lich": ["Deathless","Sepulchral","Graveborn","Soul-Tethered","Ossuary","Pale"],
+  "Infernalist": ["Cinder-Crowned","Furnace-Hearted","Hellbound","Ash-Tongued","Blazing","Coal-Black"],
+  "Abyssal Lich": ["Abyss-Touched","Depthborn","Starless","Void-Drinking","Umbral","Blackened"],
+
+  // Sorceress
+  "Chronomancer": ["Clockwork","Hourglass-Bound","Fatespun","Moment-Sundered","Echoing","Timeworn"],
+  "Stormweaver": ["Storm-Wreathed","Tempest-Lashed","Skybound","Lightning-Kissed","Thunder-Born","Rain-Soaked"],
+  "Disciple of Varashta": ["Rune-Taught","Oathbound","Star-Studied","Vigilant","Ward-Scribed","Varashtan"],
+
+  // Monk
+  "Invoker": ["Tranquil","Spirit-Forged","Palm-Scribed","Mantra-Bound","Quiet Thunder","Inner-Flamed"],
+  "Acolyte of Chayula": ["Shadow-Devout","Void-Kissed","Nightbound","Spiral-Eyed","Breach-Touched","Umbral"],
+
+  // Druid
+  "Shaman": ["Spirit-Talked","Ancestor-Blessed","Totem-Bound","Wild-Voiced","Storm-Calling","Groveborn"],
+  "Oracle": ["Omen-Touched","Fate-Seen","Star-Read","Vision-Blessed","Augural","Foretold"]
 };
-const NAME_SUFFIX={
-  "Titan":["Vanguard","Colossus","Juggernaut"],
-  "Warbringer":["Harbinger","Bloodcaller","War Herald"],
-  "Smith of Kitava":["Forgehand","Anvil-Keeper","Brandwright"],
-  "Blood Mage":["Hemomancer","Crimson Saint","Veincaller"],
-  "Spellblade":["Aetherduelist","Edge of Thought","Mindcarver"],
-  "Stormweaver":["Tempest","Skybrand","Thunder-Palm"]
+
+const NAME_TITLES = {
+  // Warrior
+  "Titan": ["Colossus","Vanguard","Juggernaut","Worldshaker","Bastion"],
+  "Warbringer": ["War Herald","Harbinger","Bloodcaller","Standard-Bearer","Warchanter"],
+  "Smith of Kitava": ["Forgehand","Anvil-Keeper","Brandwright","Cindersmith","Chainforger"],
+
+  // Mercenary
+  "Tactician": ["Field Marshal","Commandant","War Planner","Siege Captain","Stratagem"],
+  "Witchhunter": ["Inquisitor","Purifier","Hexbreaker","Cinder Judge","Witchhunter"],
+  "Gemling Legionnaire": ["Legionnaire","Facet Veteran","Prism Soldier","Jewel Ward","Gemling"],
+
+  // Ranger
+  "Deadeye": ["Sharpshooter","Marksman","Sniper","Arrow-Sage","Deadeye"],
+  "Pathfinder": ["Wayfinder","Trailseer","Trackmaster","Wildguide","Pathfinder"],
+
+  // Huntress
+  "Amazon": ["War-Maiden","Spearqueen","Sunlancer","Shield-Sister","Amazon"],
+  "Ritualist": ["Ritecaller","Circleweaver","Bloodbinder","Hex-Dancer","Ritualist"],
+
+  // Witch
+  "Blood Mage": ["Hemomancer","Crimson Saint","Veincaller","Red Magus","Blood Savant"],
+  "Lich": ["Deathlord","Bone Regent","Tomb-King","Grave Sovereign","Lich"],
+  "Infernalist": ["Emberlord","Flame Apostle","Pit-Speaker","Hellwright","Infernalist"],
+  "Abyssal Lich": ["Void Regent","Deep Lich","Nether Sovereign","Dreadwight","Abyssal Lich"],
+
+  // Sorceress
+  "Chronomancer": ["Timebinder","Hourkeeper","Epoch Sage","Clockwright","Chronomancer"],
+  "Stormweaver": ["Tempest","Galeweaver","Skybrand","Thunder-Palm","Stormweaver"],
+  "Disciple of Varashta": ["Adept","Disciple","Wardbearer","Oathkeeper","Varashta's Hand"],
+
+  // Monk
+  "Invoker": ["Ascetic","Kata-Sage","Temple Adept","Chi Warden","Invoker"],
+  "Acolyte of Chayula": ["Void Disciple","Breach Monk","Dark Acolyte","Chayula's Hand","Acolyte"],
+
+  // Druid
+  "Shaman": ["Spiritcaller","Totem-Sage","Ancestor Seer","Wildspeaker","Shaman"],
+  "Oracle": ["Seer","Augur","Omenweaver","Prophecy-Scribe","Oracle"]
 };
-function generateBuildName(cls, asc){ const t = sample(NAME_TITLES[cls]||["Nameless"]); const s = sample(NAME_SUFFIX[asc]||["Wanderer"]); return `The ${t} ${s}`; }
-const FLAVOR={
-  Warrior:["Born of war, bound by honor.","Strength tempered by flame."],
-  Ranger:["Swift as shadow, silent as dusk.","The hunt never ends."],
-  Witch:["Wisdom is a double-edged curse.","Power whispers, and she listens."],
-  Sorceress:["Lightning is a prayer with teeth.","Stars remember those who dare."],
-  Monk:["Every strike, a meditation.","Balance through battle."],
-  Huntress:["The wild answers in kind.","Footfalls like falling leaves."],
-  Mercenary:["Gold buys blades, not mercy.","No banner, only resolve."]
+
+// Thematic nouns (z) drawn from ailments/tactics rolled this build.
+const NAME_TENDENCIES = {
+  // Ailments
+  "Freeze": ["Rime","Winter","Frost","Hoarfrost","Ice","Glacier"],
+  "Ignite": ["Ember","Cinder","Wildfire","Pyre","Flame","Ash"],
+  "Shock": ["Tempest","Storm","Lightning","Thunder","Arc","Static"],
+  "Poison": ["Venom","Toxin","Blight","Rot","Nightshade","Viper"],
+  "Bleed": ["Hemorrhage","Blood","Rend","Gash","Scar","Sanguine"],
+
+  // Tactics
+  "Heavy Stun": ["Concussion","Stagger","Skullcrack","Quake","Sunder","Stun"],
+  "Armour Break": ["Fracture","Rendsteel","Shatter","Sundered Plate","Ruin","Crack"],
+  "Critical Hit": ["Precision","Execution","Fatal Point","Keen Edge","Perfect Strike","Deadly Aim"],
+  "Totems": ["Idols","Effigies","Wards","Pillars","Runes","Totemcraft"],
+  "Warcry": ["Battlecry","Roar","Oathcall","War Chant","Howl","Shout"],
+  "Marks": ["Brand","Sigil","Lock-On","Hunter's Mark","Aim","Marksmanship"],
+  "Curses": ["Hex","Malison","Doom","Bane","Witchsign","Cursecraft"],
+  "Minions": ["Thralls","Servitors","Legion","Swarm","Retinue","Gravebound"],
+  "Companions": ["Pack","Familiar","Beastbond","Hunt Pack","Allies","Bond"],
+  "Thorns": ["Barbs","Spines","Briar","Needles","Thornwall","Razors"],
+  "Culling Strike": ["Cull","Last Rites","Final Cut","Reaping","Mercy","Execution"],
+  "Slow/Maim/Hinder": ["Maim","Snare","Hamstring","Drag","Quagmire","Hinder"],
+  "Chaos Damage": ["Entropy","Ruin","Blight","Abyss","Chaos","Void"]
 };
-function generateFlavorLine(cls, asc){ const arr = FLAVOR[cls] || ["Conjure the impossible. Defy the meta."]; return sample(arr); }
+
+const NAME_TENDENCY_FORMS = {
+  // Ailments
+  "Freeze": ["Freezing","Frostbitten","Rimebound"],
+  "Ignite": ["Burning","Smoldering","Flame-Kissed"],
+  "Shock": ["Crackling","Storming","Thunderstruck"],
+  "Poison": ["Venomous","Toxic","Blighted"],
+  "Bleed": ["Bleeding","Rending","Bloodied"],
+
+  // Tactics
+  "Heavy Stun": ["Staggering","Concussive","Skullcracking"],
+  "Armour Break": ["Shattering","Rending","Fracturing"],
+  "Critical Hit": ["Precise","Lethal","Keen-Edged"],
+  "Totems": ["Totemic","Ward-Set","Idolbound"],
+  "Warcry": ["Roaring","Howling","Battle-Chanting"],
+  "Marks": ["Marked","Locking-On","Branding"],
+  "Curses": ["Hexing","Cursing","Doomcalling"],
+  "Minions": ["Swarming","Gravecalling","Thrall-Summoning"],
+  "Companions": ["Packbound","Beastbonded","Familiar-Led"],
+  "Thorns": ["Barbed","Spined","Briar-Clad"],
+  "Culling Strike": ["Reaping","Executing","Merciless"],
+  "Slow/Maim/Hinder": ["Snaring","Maiming","Hamstringing"],
+  "Chaos Damage": ["Entropic","Blighting","Abyss-Touched"]
+};
+
+// Optional class seasoning for occasional extra variation
+const NAME_CLASS_SPICE = {
+  "Warrior": ["Iron","War","Steel","Siege","Valor"],
+  "Mercenary": ["Coin","Contract","Black Banner","Gallows","Oath"],
+  "Ranger": ["Hunt","Grove","Arrow","Shadow","Trail"],
+  "Huntress": ["Moon","Wild","Fang","Thorn","Stag"],
+  "Witch": ["Hex","Grave","Blood","Bone","Night"],
+  "Sorceress": ["Star","Aether","Storm","Sigil","Glass"],
+  "Monk": ["Temple","Palm","Mantra","Kata","Stillness"],
+  "Druid": ["Root","Grove","Spirit","Briar","Verdant"]
+};
+
+const NAME_GENERIC_DESCRIPTORS = ["Fate-Touched","Oathbound","Doomlit","Wayward","Wandering"];
+const NAME_GENERIC_TITLES = ["Wanderer","Outcast","Harbinger","Adept","Revenant"];
+
+function _asHyphen(s){
+  return String(s||'').trim().replace(/[^\w]+/g,'-').replace(/-+/g,'-').replace(/(^-|-$)/g,'');
+}
+
+function _wordCount(s){
+  return String(s || '').trim().split(/\s+/).filter(Boolean).length;
+}
+function _pickFromPool(pool, maxWords){
+  if (!Array.isArray(pool) || !pool.length) return "";
+  const short = (typeof maxWords === 'number')
+    ? pool.filter(v => _wordCount(v) <= maxWords)
+    : pool;
+  return sample((short && short.length) ? short : pool);
+}
+function _nameSetToList(set){
+  if (!Array.isArray(set)) return [];
+  return set.map(x => (typeof x === 'string' ? x : (x && typeof x === 'object' ? x.name : null))).filter(Boolean);
+}
+function _pickTendencyKey(ailments, tactics){
+  const ail = _nameSetToList(ailments);
+  const tac = _nameSetToList(tactics);
+  if (!ail.length && !tac.length) return null;
+  if (ail.length && tac.length) return (Math.random() < 0.6) ? sample(ail) : sample(tac);
+  return ail.length ? sample(ail) : sample(tac);
+}
+
+const BUILD_NAME_TEMPLATES = [
+  // Keep names punchy + readable (weighted by repetition)
+  ({x,y}) => `The ${x} ${y}`,
+  ({x,y}) => `The ${x} ${y}`,
+  ({x,y}) => `The ${x} ${y}`,
+
+  ({x,y,z}) => `The ${x} ${y} of ${z}`,
+  ({y,z}) => `The ${y} of ${z}`,
+  ({zForm,y}) => `The ${zForm} ${y}`
+];
+
+// New generator (pass ailments/tactics for z)
+function generateBuildName(cls, asc, ailments, tactics){
+  const descPool = NAME_DESCRIPTORS[asc] || NAME_GENERIC_DESCRIPTORS;
+  const titlePool = NAME_TITLES[asc] || NAME_GENERIC_TITLES;
+  const cPool = NAME_CLASS_SPICE[cls] || ["Fate"];
+
+  const x = sample(descPool);
+  const y = sample(titlePool);
+
+  const tendencyKey = _pickTendencyKey(ailments, tactics);
+  const zPool = (tendencyKey && NAME_TENDENCIES[tendencyKey]) ? NAME_TENDENCIES[tendencyKey] : ["Fate"];
+  const zFormPool = (tendencyKey && NAME_TENDENCY_FORMS[tendencyKey]) ? NAME_TENDENCY_FORMS[tendencyKey] : ["Fated"];
+
+  const z = _pickFromPool(zPool, 2);
+  const zForm = _pickFromPool(zFormPool, 2);
+  const zH = _asHyphen(z);
+  const c = sample(cPool);
+
+  const history = (typeof window !== 'undefined')
+    ? (window.__BUILD_NAME_HISTORY__ || (window.__BUILD_NAME_HISTORY__ = []))
+    : [];
+
+  let out = `The ${x} ${y}`;
+
+  for (let i=0; i<16; i++){
+    const tpl = sample(BUILD_NAME_TEMPLATES);
+    const candidate = tpl({ x, y, z, zH, zForm, c });
+
+    // Keep it from getting too tongue-twistery
+    if (!candidate) continue;
+    if (_wordCount(candidate) > 7) continue;
+
+    // avoid immediate repeats (within last ~24 names)
+    if (!history.includes(candidate)) {
+      out = candidate;
+      break;
+    }
+  }
+
+  if (history) {
+    history.unshift(out);
+    if (history.length > 24) history.length = 24;
+  }
+  return out;
+}
+
+// Flavor lines (still mostly class-driven, but with full class coverage)
+const FLAVOR = {
+  Warrior:["Born of war, bound by honor.","Strength tempered by flame.","Steel answers steel."],
+  Ranger:["Swift as shadow, silent as dusk.","The hunt never ends.","An arrow is a promise."],
+  Witch:["Wisdom is a double-edged curse.","Power whispers, and she listens.","A pact is still a blade."],
+  Sorceress:["Lightning is a prayer with teeth.","Stars remember those who dare.","Time bends for the bold."],
+  Monk:["Every strike, a meditation.","Balance through battle.","Stillness is a weapon."],
+  Huntress:["The wild answers in kind.","Footfalls like falling leaves.","Fangs bared to fate."],
+  Mercenary:["Gold buys blades, not mercy.","No banner, only resolve.","Contracts are written in scars."],
+  Druid:["Roots remember. Storms obey.","The grove speaks; the world listens.","Fate is read in bark and bone."]
+};
+
+const FLAVOR_ASC = {
+  "Titan":["A mountain with a heartbeat.","Unmoved. Unbroken."],
+  "Warbringer":["The drums of war follow close.","A banner is a blade."],
+  "Smith of Kitava":["Forge-fire in the veins.","Hammered into legend."],
+  "Tactician":["Victory is a calculation.","The battlefield is a board."],
+  "Witchhunter":["No hex goes unanswered.","Purity by fire."],
+  "Gemling Legionnaire":["Facets catch every fate.","A legion in crystal."],
+  "Deadeye":["One shot. One verdict.","Distance is mercy."],
+  "Pathfinder":["Every trail has teeth.","The wild is a map of scars."],
+  "Amazon":["Steel-sister of the sun.","Spearpoint prophecy."],
+  "Ritualist":["Circles close. Blood binds.","Rites carved in night."],
+  "Blood Mage":["Crimson is currency.","Life traded for power."],
+  "Lich":["Death is a door left open.","A crown of bone and silence."],
+  "Infernalist":["Flame speaks first.","Ash writes the epilogue."],
+  "Abyssal Lich":["Starless depths answer back.","The void keeps its promises."],
+  "Chronomancer":["Seconds are weapons.","Time, broken to purpose."],
+  "Stormweaver":["Thunder in the lungs.","The sky is a spellbook."],
+  "Disciple of Varashta":["Wards within wards.","Oaths etched in starlight."],
+  "Invoker":["Breath, stance, strike.","A mantra with teeth."],
+  "Acolyte of Chayula":["The Breach watches.","Shadow is devotion."],
+  "Shaman":["Ancestors at your shoulder.","Spirits carry the strike."],
+  "Oracle":["Omens do not lie.","The future already blinked."]
+};
+
+function generateFlavorLine(cls, asc, ailments, tactics){
+  const pool = [];
+  if (FLAVOR[cls]) pool.push(...FLAVOR[cls]);
+  if (FLAVOR_ASC[asc]) pool.push(...FLAVOR_ASC[asc]);
+
+  // Small chance to echo the rolled mechanics
+  const tKey = _pickTendencyKey(ailments, tactics);
+  if (tKey && Math.random() < 0.25) {
+    pool.push(`Marked by ${tKey}.`);
+  }
+
+  if (!pool.length) pool.push("Conjure the impossible. Defy the meta.");
+  return sample(pool);
+}
+
 function isDevPlaceholderGem(g){
   const s = (g?.name || g?.base_item?.display_name || g?.id || '').toString();
   return /(\bDNT\b|\bUNUSED\b|Coming\s*Soon)/i.test(s);
@@ -3172,8 +3426,8 @@ function rollBuild(dataWrap){
 
 
   // Build name + flavor (restored)
-  const buildName = generateBuildName(clsName, asc);
-  const buildFlavor = generateFlavorLine(clsName, asc);
+  const buildName = generateBuildName(clsName, asc, ailmentSet.filter(Boolean), tacticSet.filter(Boolean));
+  const buildFlavor = generateFlavorLine(clsName, asc, ailmentSet.filter(Boolean), tacticSet.filter(Boolean));
   document.getElementById('build-name').textContent = buildName;
   document.getElementById('build-subtext').textContent = buildFlavor;
   const cohesionModeName = resolveCohesionMode(window.App?.state?.cohesionMode ?? currentMode);
