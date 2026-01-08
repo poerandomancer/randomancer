@@ -4078,21 +4078,45 @@ function ensureUniqueSection(){
         // Expose a global hook so the core roll engine can trigger uniques directly
     window.RandomancerRefreshUniques = refreshUniques;
 
-    async function renderUniquesFromNames(names){
-          if (!Array.isArray(names) || !names.length) {
-                ensureUniqueSection()?.replaceChildren();
-                return;
-          }
+    async function renderUniquesFromNames(names, snapOrRolledSet){
+	  if (!Array.isArray(names) || !names.length) {
+		ensureUniqueSection()?.replaceChildren();
+		return;
+	  }
+	
+	  // Recreate rolled tag profile so highlights + matched pills work on rehydrate
+	  let rolledSet = null;
+	  try {
+		if (snapOrRolledSet && typeof snapOrRolledSet.has === 'function') {
+		  rolledSet = snapOrRolledSet;
+		} else {
+		  const snap =
+			(snapOrRolledSet && typeof snapOrRolledSet === 'object')
+			  ? snapOrRolledSet
+			  : (window.App?.state?.currentRoll || window.CURRENT_ROLL || {});
+		  const rolled = rolledByCategory(snap || {});
+		  rolledSet = new Set([
+			...(rolled?.tactics || []),
+			...(rolled?.ailments || []),
+			...(rolled?.def || []),
+		  ]);
+		}
+	  } catch {
+		rolledSet = new Set();
+	  }
+	  if (!rolledSet) rolledSet = new Set();
+	
+	  try {
+		const items = await loadUniquesM();
+		const byName = new Map(items.map(it => [it.name, it]));
+		const ordered = names.map(n => byName.get(n)).filter(Boolean);
+		renderUniques(ordered, rolledSet);
+	  } catch (e) {
+		console.warn('[u79b2m] renderUniquesFromNames failed', e);
+	  }
+	}
 
-          try {
-                const items = await loadUniquesM();
-                const byName = new Map(items.map(it => [it.name, it]));
-                const ordered = names.map(n => byName.get(n)).filter(Boolean);
-                renderUniques(ordered, new Set());
-          } catch (e) {
-                console.warn('[u79b2m] renderUniquesFromNames failed', e);
-          }
-    }
+
 
     window.RandomancerRenderUniquesFromNames = renderUniquesFromNames;
 
