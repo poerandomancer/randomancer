@@ -182,6 +182,114 @@ strong, b { font-weight: 600; }
   font-size:1.1rem;
 }
 
+/* --- Header lede / onboarding blurb (replaces initial build name) --- */
+.app-lede{
+  margin:-0.65rem auto 0.9rem;
+  max-width:74ch;
+  color:var(--muted);
+  font-size:1.02rem;
+  line-height:1.35;
+  text-align:center;
+}
+.app-lede strong{ color:var(--gold); font-weight:600; }
+
+/* --- Rolled build banner (attached to each roll) --- */
+.build-roll-banner{
+  /* Give the title room to breathe, but keep it tight to the panel below */
+  margin:2.25rem auto 0.05rem;
+  padding:0;
+  text-align:center;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  /* Optical centering tweak: italic caps can look slightly left in some serif faces */
+  --optical-center: 0.06em;
+}
+.build-roll-banner .build-name,
+.build-roll-banner .build-subtext{
+  transform: translateX(var(--optical-center));
+}
+
+.build-roll-banner::after{
+  display:none;
+}
+.build-roll-banner .build-name{ margin:0; }
+.build-subtext{
+  margin:0.22rem auto 0.06rem;
+  color:var(--muted);
+  font-family:'Cormorant Infant',serif;
+  font-style:italic;
+  max-width:70ch;
+  font-size:1.05rem;
+}
+
+/* --- Empty state (no build rolled yet) --- */
+.empty-state{
+  text-align:center;
+}
+.empty-title{
+  margin:0 0 0.4rem;
+  font-size:1.25rem;
+  color:var(--gold);
+  letter-spacing:.02em;
+}
+.empty-text{
+  margin:0 auto;
+  max-width:72ch;
+  color:var(--muted);
+  line-height:1.45;
+}
+
+
+/* --- Empty state panel: fade border + background toward bottom --- */
+#empty-state.panel{
+  /* Let the panel “dissolve” into the background at the bottom */
+  border-color: transparent; /* redraw a fading border via ::after */
+  background: linear-gradient(
+    180deg,
+    rgba(10,10,12,.86) 0%,
+    rgba(10,10,12,.82) 8%,
+    rgba(10,10,12,0) 100%
+  );
+
+  /* Slightly softer shadow so the bottom doesn’t read as a hard card edge */
+  box-shadow: 0 6px 18px rgba(0,0,0,.22);
+  
+  min-height: max(640px, 72vh);   /* taller on desktop */
+  padding-bottom: 4rem;          /* keeps text near top, gives fade runway */
+}
+
+@media (max-width: 720px){
+  #empty-state.panel{
+    min-height: max(520px, 64vh);
+    padding-bottom: 3rem;
+  }
+}
+
+/* Match the overlay sheen to the fade */
+#empty-state.panel::before{
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,0.05) 0%,
+    rgba(0,0,0,0.55) 12%,
+    rgba(0,0,0,0) 100%
+  );
+}
+
+/* Fading border: strong at the top, vanishes at the bottom */
+#empty-state.panel::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  border:1px solid var(--edge);
+  pointer-events:none;
+
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 14%, transparent 100%);
+          mask-image: linear-gradient(to bottom, #000 0%, #000 14%, transparent 100%);
+}
+
 .roll-btn{
   margin-top:.5rem; padding:.7rem 1.1rem;
   border-radius:var(--radius);
@@ -820,19 +928,21 @@ border-top: 1px dotted var(--gold);
 .cohesion-bar-wrapper[data-cohesion-constrained="true"] input[type=range]::-webkit-slider-thumb{ box-shadow:0 0 0 2px rgba(255,204,0,0.7), 0 0 12px rgba(255,204,0,0.55); }
 .cohesion-bar-wrapper[data-cohesion-constrained="true"] input[type=range]::-moz-range-thumb{ box-shadow:0 0 0 2px rgba(255,204,0,0.7), 0 0 12px rgba(255,204,0,0.55); }
 
-/* build name + subtext (restored) */
+/* build name + subtext (rolled build banner) */
 #build-name{
   font-family:"Cinzel Decorative",serif;
   color:#d5b66a;
   font-size:1.6rem;
   letter-spacing:.06em;
   text-transform:uppercase;
-  margin:2rem 0 .2rem;
+  margin:0;
+  text-align:center;
 }
 #build-subtext{
   font-style:italic;
   color:rgba(235,235,235,.85);
-  margin:0 0 1rem;
+  margin:0.25rem 0 0.25rem;
+  text-align:center;
 }
 
 /* Supports layout */
@@ -1771,5 +1881,18 @@ img, video { max-width: 100%; height: auto; }
 
 @media (min-width: 1280px) {
   html { font-size: 18px; }
+}
+
+
+/* --- Pre-roll state: hide build output panels until first roll --- */
+#app[data-has-roll="false"] #build-roll-banner,
+#app[data-has-roll="false"] #build-panel,
+#app[data-has-roll="false"] #skills-panel,
+#app[data-has-roll="false"] #uniques-panel,
+#app[data-has-roll="false"] #passives-panel{
+  display:none;
+}
+#app[data-has-roll="true"] #empty-state{
+  display:none;
 }
 
