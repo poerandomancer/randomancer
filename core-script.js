@@ -107,6 +107,11 @@ function wireLockButton(btn){
     if (container) {
       container.dataset.locked = nowLocked ? 'true' : 'false';
     }
+
+    // Keep the Build Code in sync (now includes locks + passives)
+    if (typeof window.RandomancerUpdateBuildCodeUI === 'function') {
+      window.RandomancerUpdateBuildCodeUI();
+    }
   });
 }
 
@@ -137,10 +142,6 @@ function initSectionLocks(){
   function encodeSnapshot(snap){
     if (!snap || typeof snap !== 'object') return '';
     
-    console.log('[u79b2m] encoding snap', snap);
-    console.log('[u79b2m] snap.recommendedSkills', snap.recommendedSkills);
-    console.log('[u79b2m] isArray', Array.isArray(snap.recommendedSkills));
-    
     // TODO: include section lock state in saved snapshots once we support persisting locks
     const compact = {
       v: snap.snapshotVersion || 1,
@@ -148,6 +149,8 @@ function initSectionLocks(){
       a: snap.ascendancy || '',
       w: snap.weapon || '',
       o: snap.offhand || '',
+      w2: snap.weapon2 || '',
+      o2: snap.offhand2 || '',
       al: Array.isArray(snap.ailmentList) ? snap.ailmentList : [],
       tl: Array.isArray(snap.tacticList) ? snap.tacticList : [],
       d: snap.defense || '',
@@ -156,9 +159,38 @@ function initSectionLocks(){
       f: snap.flavor || '',
       attr: snap.attributes || { strength:0, dexterity:0, intelligence:0 },
       rs: Array.isArray(snap.recommendedSkills) ? snap.recommendedSkills : [],
+      rs2: Array.isArray(snap.recommendedSkills2) ? snap.recommendedSkills2 : [],
       pb: snap.recommendedPersistentBuff || null,
-      u: Array.isArray(snap.recommendedUniques) ? snap.recommendedUniques : []
+      u: Array.isArray(snap.recommendedUniques)
+        ? snap.recommendedUniques.map(u => (typeof u === 'string' ? u : (u && typeof u === 'object' ? u.name : null))).filter(Boolean)
+        : [],
+
+      // passives (packed) + section locks so rehydrated builds preserve these panels
+      p: (() => {
+        const pass = snap.passives;
+        if (!pass || typeof pass !== 'object') return null;
+
+        const packNode = (n) => {
+          if (!n || typeof n !== 'object') return null;
+          return {
+            name: n.name || '',
+            lines: Array.isArray(n.lines) ? n.lines.slice(0, 16) : [],
+            tags: Array.isArray(n.tags) ? n.tags.slice(0, 24) : [],
+            icon: n.icon || ''
+          };
+        };
+
+        const packList = (arr, max) =>
+          Array.isArray(arr) ? arr.slice(0, max).map(packNode).filter(Boolean) : [];
+
+        return {
+          a: packList(pass.ascendancyNodes, 2),
+          k: packList(pass.keystones, 2),
+          n: packList(pass.notables, 8)
+        };
+      })(),
     };
+
     return safeBtoa(JSON.stringify(compact));
   }
 
@@ -168,16 +200,14 @@ function initSectionLocks(){
     if (!json) return null;
     try {
       const raw = JSON.parse(json);
-      
-      console.log('[u79b2m] decoding raw', raw);
-      console.log('[u79b2m] decoding skills', raw.rs);
-      
       return {
         snapshotVersion: raw.v || 1,
         className: raw.c || '',
         ascendancy: raw.a || '',
         weapon: raw.w || '',
         offhand: raw.o || '',
+        weapon2: raw.w2 || '',
+        offhand2: raw.o2 || '',
         ailments: (raw.al || []).join(' & '),
         tactics: (raw.tl || []).join(' & '),
         ailmentList: raw.al || [],
@@ -188,8 +218,28 @@ function initSectionLocks(){
         flavor: raw.f || '',
         attributes: raw.attr || { strength:0, dexterity:0, intelligence:0 },
         recommendedSkills: raw.rs || [],
+        recommendedSkills2: raw.rs2 || [],
         recommendedPersistentBuff: raw.pb || null,
-        recommendedUniques: raw.u || []
+        recommendedUniques: raw.u || [],
+
+        passives: (() => {
+          const p = raw.p;
+          if (!p || typeof p !== 'object') return null;
+
+          // v2 packed shape: { a, k, n }
+          if ('a' in p || 'k' in p || 'n' in p) {
+            return {
+              ascendancyNodes: Array.isArray(p.a) ? p.a : [],
+              keystones: Array.isArray(p.k) ? p.k : [],
+              notables: Array.isArray(p.n) ? p.n : []
+            };
+          }
+
+          // legacy / dev shape (already expanded)
+          if (p.ascendancyNodes || p.keystones || p.notables) return p;
+
+          return null;
+        })()
       };
     } catch (e) {
       console.warn('[build code] decode failed', e);
@@ -221,65 +271,73 @@ function initSectionLocks(){
   }
 
 
+  function renderSkillCardsFromSnapshot(entries, grid, gemDict){
+    if (!grid) return;
+    grid.innerHTML = '';
+    (entries || []).forEach(entry => {
+      const key = entry.id || entry.name || '';
+      const g = lookupGem(gemDict, key);
+      if (!g) {
+        console.warn('[skills] No gem match for recommended skill', entry);
+        return;
+      }
+
+      const card = document.createElement('div');
+      card.className = 'skill-card';
+
+      const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
+        ? `<div class="skill-subtitle">${g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')}</div>`
+        : '';
+
+      const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
+      const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
+      const rest = allTags.filter(t => !br.includes(t));
+      const displayTags = [...br, ...rest].slice(0, 10);
+      const pills = displayTags.map(t => `<span class="tag-pill">${t}</span>`).join('');
+
+      const supports = Array.isArray(entry.recommended_supports) && entry.recommended_supports.length
+        ? entry.recommended_supports
+        : g.recommended_supports;
+
+      card.innerHTML = `
+        <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
+        ${requiresSubtitle}
+        <div class="skill-divider"></div>
+        ${grantLine(g)}
+        <div class="skill-tags">${pills}</div>
+        <div class="supports-label">Recommended Supports</div>
+        <div class="supports">${renderSupportCards(supports, gemDict)}</div>
+      `;
+      applyGemBorderFromReqWeights(card, g.requirement_weights);
+      grid.appendChild(card);
+    });
+  }
+
   function renderSkillsFromSnapshot(snap){
-	  const grid = document.getElementById('skills-grid');
-	  if (!grid) return;
-	  grid.innerHTML = '';
-	
-	  const gems = (window.DATA && window.DATA.gems) || [];
-	  const gemDict = buildGemDictionary(gems);
-	
-	  (snap.recommendedSkills || []).forEach(entry => {
-		// 🔧 change: pass a *key* (id or name), not the whole object
-		const key = entry.id || entry.name || '';
-		const g = lookupGem(gemDict, key);
-		if (!g) {
-		  console.warn('[skills] No gem match for recommended skill', entry);
-		  return;
-		}
-	
-		const card = document.createElement('div');
-		card.className = 'skill-card';
-	
-		const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
-		  ? `<div class="skill-subtitle">${g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')}</div>`
-		  : '';
-	
-		const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
-		const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
-		const rest = allTags.filter(t => !br.includes(t));
-		const displayTags = [...br, ...rest].slice(0, 10);
-		const pills = displayTags.map(t => `<span class="tag-pill">${t}</span>`).join('');
-	
-		const supports = Array.isArray(entry.recommended_supports) && entry.recommended_supports.length
-		  ? entry.recommended_supports
-		  : g.recommended_supports;
-	
-		card.innerHTML = `
-		  <div class="skill-title">${g.name || '(Unnamed Gem)'}</div>
-		  ${requiresSubtitle}
-		  <div class="skill-divider"></div>
-		  ${grantLine(g)}
-		  <div class="skill-tags">${pills}</div>
-		  <div class="supports-label">Recommended Supports</div>
-		  <div class="supports">${renderSupportCards(supports, gemDict)}</div>
-		`;
-		applyGemBorderFromReqWeights(card, g.requirement_weights);
-		grid.appendChild(card);
-	  });
-	
-	  if (snap.recommendedPersistentBuff) {
-		const buffKey = snap.recommendedPersistentBuff.id || snap.recommendedPersistentBuff.name || '';
-		const buffGem = lookupGem(gemDict, buffKey);
-		if (buffGem) {
-		  renderSnapshotPersistentBuff(buffGem, gemDict);
-		} else {
-		  console.warn('[skills] No gem match for persistent buff', snap.recommendedPersistentBuff);
-		}
-	  } else {
-		document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
-	  }
-	}
+    const grid = document.getElementById('skills-grid');
+    const grid2 = document.getElementById('skills-grid-2');
+    if (!grid) return;
+
+    const gems = (window.DATA && window.DATA.gems) || [];
+    const gemDict = buildGemDictionary(gems);
+
+    renderSkillCardsFromSnapshot(snap.recommendedSkills || [], grid, gemDict);
+    if (grid2) {
+      renderSkillCardsFromSnapshot(snap.recommendedSkills2 || [], grid2, gemDict);
+    }
+
+    if (snap.recommendedPersistentBuff) {
+      const buffKey = snap.recommendedPersistentBuff.id || snap.recommendedPersistentBuff.name || '';
+      const buffGem = lookupGem(gemDict, buffKey);
+      if (buffGem) {
+        renderSnapshotPersistentBuff(buffGem, gemDict);
+      } else {
+        console.warn('[skills] No gem match for persistent buff', snap.recommendedPersistentBuff);
+      }
+    } else {
+      document.querySelectorAll('#persistent-buff-section').forEach(el => el.remove());
+    }
+  }
 
 
   function renderSnapshotPersistentBuff(g, gemDict){
@@ -329,13 +387,231 @@ function initSectionLocks(){
     grid.appendChild(card);
   }
 
-  function renderSnapshotToDom(snap){
+  // ===== Summary View (presentation toggle) =====
+const VIEW_STORAGE_KEY = 'rm_view_mode';
+
+function getViewMode(){
+  try {
+    const v = localStorage.getItem(VIEW_STORAGE_KEY);
+    return (v === 'summary' || v === 'detailed') ? v : 'detailed';
+  } catch {
+    return 'detailed';
+  }
+}
+
+function updateViewToggleButton(mode){
+  const btn = document.getElementById('view-toggle');
+  if (!btn) return;
+  const isSummary = mode === 'summary';
+  btn.setAttribute('aria-pressed', isSummary ? 'true' : 'false');
+  // Button label shows the *other* view as the action.
+  btn.textContent = isSummary ? 'Detailed' : 'Summary';
+  btn.title = isSummary ? 'Switch to Detailed View' : 'Switch to Summary View';
+  btn.setAttribute('aria-label', btn.title);
+}
+
+function setViewMode(mode){
+  const m = (mode === 'summary') ? 'summary' : 'detailed';
+  const appEl = document.getElementById('app');
+  if (appEl) appEl.dataset.view = m;
+
+  try { localStorage.setItem(VIEW_STORAGE_KEY, m); } catch {}
+  updateViewToggleButton(m);
+
+  // Ensure summary text is up-to-date when switching views
+  const snap = (typeof currentSnap === 'function') ? currentSnap() : null;
+  if (snap) renderSummaryFromSnapshot(snap);
+}
+
+function toggleViewMode(){
+  const next = (getViewMode() === 'summary') ? 'detailed' : 'summary';
+  setViewMode(next);
+}
+
+// Summary auto-refresh helpers: keep summary text synced even when roll flows differ
+function isSummaryModeActive(){
+  const appEl = document.getElementById('app');
+  const ds = appEl && appEl.dataset ? appEl.dataset.view : '';
+  if (ds) return ds === 'summary';
+  return getViewMode() === 'summary';
+}
+
+function refreshSummaryFromLatest(){
+  if (!isSummaryModeActive()) return;
+
+  let snap = null;
+  try { snap = (typeof currentSnap === 'function') ? currentSnap() : null; } catch {}
+  if (!snap) {
+    try { snap = (window.App && window.App.state && window.App.state.currentRoll) ? window.App.state.currentRoll : null; } catch {}
+  }
+  if (!snap) {
+    try { snap = window.CURRENT_ROLL || null; } catch {}
+  }
+
+  // As a last resort, capture from DOM (useful when some roll flows update DOM first)
+  if (!snap && window.App && typeof window.App.captureCurrentRollFromDOM === 'function') {
+    try {
+      window.App.captureCurrentRollFromDOM();
+      snap = (window.App.state && window.App.state.currentRoll) ? window.App.state.currentRoll : null;
+    } catch {}
+  }
+
+  if (snap) {
+    try { renderSummaryFromSnapshot(snap); } catch {}
+  }
+}
+
+function scheduleSummaryRefresh(){
+  refreshSummaryFromLatest();
+  try { requestAnimationFrame(() => refreshSummaryFromLatest()); } catch {}
+  try { setTimeout(() => refreshSummaryFromLatest(), 0); } catch {}
+}
+
+// Expose refresh hook globally so all roll entrypoints can trigger it safely
+try { window.scheduleSummaryRefresh = scheduleSummaryRefresh; } catch {}
+
+function installSummaryAutoRefresh(){
+  const nameEl = document.getElementById('build-name');
+  if (!nameEl || nameEl.__summaryAutoRefresh) return;
+  nameEl.__summaryAutoRefresh = true;
+
+  const obs = new MutationObserver(() => {
+    if (!isSummaryModeActive()) return;
+    if (window.scheduleSummaryRefresh) window.scheduleSummaryRefresh();
+  });
+  obs.observe(nameEl, { childList: true, characterData: true, subtree: true });
+}
+
+function buildSummaryLinesFromSnapshot(snap){
+
+  if (!snap) return ['', '', '', '', ''];
+
+  const dot = ' · ';
+
+  const weaponsTxt = formatWeaponLine(snap.weapon, snap.offhand);
+
+  const ailments = Array.isArray(snap.ailmentList)
+    ? snap.ailmentList
+    : (snap.ailments ? String(snap.ailments).split(/\s*&\s*/).filter(Boolean) : []);
+  const tactics = Array.isArray(snap.tacticList)
+    ? snap.tacticList
+    : (snap.tactics ? String(snap.tactics).split(/\s*&\s*/).filter(Boolean) : []);
+
+  const ailTxt = ailments.length ? ailments.join(' & ') : '';
+  const tacTxt = tactics.length ? tactics.join(' & ') : '';
+  const mechanicsTxt = [ailTxt, tacTxt].filter(Boolean).join(' & ');
+
+  const line1 = [snap.ascendancy, weaponsTxt, mechanicsTxt, snap.defStrat].filter(Boolean).join(dot);
+
+  // Resolve gem entries -> display names
+  const gems = (window.DATA && window.DATA.gems) || [];
+  const gemDict = buildGemDictionary(gems);
+  const resolveGemName = (entry) => {
+    if (!entry) return '';
+    const key = entry.id || entry.name || '';
+    if (!key) return '';
+    const g = lookupGem(gemDict, key);
+    return (g && g.name) ? g.name : (entry.name || key);
+  };
+
+  // Secondary weapon set (if rolled/selected)
+  const weapons2Txt = formatWeaponLine(snap.weapon2, snap.offhand2);
+  const skills2All = (snap.recommendedSkills2 || []).map(resolveGemName).filter(Boolean);
+  const skills2 = skills2All.slice(0, 2);
+  const lineWS2 = [weapons2Txt, ...skills2].filter(Boolean).join(dot);
+
+
+  const skills = (snap.recommendedSkills || []).map(resolveGemName).filter(Boolean);
+  const buff = snap.recommendedPersistentBuff ? resolveGemName(snap.recommendedPersistentBuff) : '';
+  const line2 = [...skills, buff].filter(Boolean).join(dot);
+
+  const uniques = Array.isArray(snap.recommendedUniques) ? snap.recommendedUniques : [];
+  const line3 = uniques.filter(Boolean).join(dot);
+
+  const pass = snap.passives || {};
+  const passNames = [
+    ...(pass.ascendancyNodes || []).map(n => n && n.name).filter(Boolean),
+    ...(pass.keystones || []).map(n => n && n.name).filter(Boolean),
+    ...(pass.notables || []).map(n => n && n.name).filter(Boolean),
+  ];
+
+  // De-dupe while preserving order
+  const seen = new Set();
+  const uniqPass = passNames.filter(n => (seen.has(n) ? false : (seen.add(n), true)));
+  const line4 = uniqPass.join(dot);
+
+  return [line1, lineWS2, line2, line3, line4];
+}
+
+function getSummaryTextFromSnapshot(snap){
+  const lines = buildSummaryLinesFromSnapshot(snap);
+  const out = [];
+  if (lines[0]) out.push(`ARCHETYPE: ${lines[0]}`);
+  if (lines[1]) out.push(`WEAPON SET II: ${lines[1]}`);
+  if (lines[2]) out.push(`CORE SKILLS: ${lines[2]}`);
+  if (lines[3]) out.push(`UNIQUES: ${lines[3]}`);
+  if (lines[4]) out.push(`PASSIVES: ${lines[4]}`);
+  return out.join('\n');
+}
+
+const SUMMARY_LABELS = ['ARCHETYPE','WEAPON SET II','CORE SKILLS','UNIQUES','PASSIVES'];
+
+function setSummaryRow(el, label, content, opts){
+  if (!el) return;
+  // clear
+  while (el.firstChild) el.removeChild(el.firstChild);
+  if (!content) { el.hidden = true; return; }
+  el.hidden = false;
+
+  const labelSpan = document.createElement('span');
+  labelSpan.className = 'summary-label';
+  labelSpan.textContent = `${label} — `;
+
+  const contentSpan = document.createElement('span');
+  contentSpan.className = (opts && opts.highlight) ? 'summary-content oath-hit' : 'summary-content';
+  contentSpan.textContent = content;
+
+  el.appendChild(labelSpan);
+  el.appendChild(contentSpan);
+}
+
+function renderSummaryFromSnapshot(snap){
+  const panel = document.getElementById('summary-panel');
+  if (!panel) return;
+
+  const lines = buildSummaryLinesFromSnapshot(snap);
+  const ids = ['summary-line-1','summary-line-2','summary-line-3','summary-line-4','summary-line-5'];
+  ids.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    setSummaryRow(el, SUMMARY_LABELS[i], lines[i] || '', { highlight: i === 0 });
+  });
+
+  panel.hidden = !isSummaryModeActive();
+}
+
+function renderSnapshotToDom(snap){
     if (!snap) return;
     setElText('#class', snap.className || '');
     setElText('#ascendancy', snap.ascendancy || '');
     updateAscArt(snap.ascendancy || '');
-    const weaponsTxt = snap.offhand ? `${snap.weapon || ''} & ${snap.offhand}` : (snap.weapon || '');
+    const appEl = document.getElementById('app');
+    if (appEl) appEl.dataset.hasRoll = 'true';
+    const weaponsTxt = formatWeaponLine(snap.weapon, snap.offhand);
     setElText('#weapons', weaponsTxt);
+    const weapons2Txt = formatWeaponLine(snap.weapon2, snap.offhand2);
+    const weapons2El = document.getElementById('weapons-set2');
+    if (weapons2El) {
+      weapons2El.textContent = weapons2Txt;
+      weapons2El.hidden = !weapons2Txt;
+    }
+    const hasSet2 = hasSecondaryWeaponSet(snap);
+    const set2Btn = document.getElementById('weapon-set2-btn');
+    if (set2Btn) {
+      // Ensure label stays consistent even if HTML changes between versions
+      set2Btn.textContent = 'Add Weapon Set II';
+      set2Btn.hidden = hasSet2 || !weaponsTxt;
+    }
     setElText('#defense', snap.defense || '');
     setElText('#defstrat', snap.defStrat || '');
     setElText('#ailments', Array.isArray(snap.ailmentList) ? snap.ailmentList.join(' & ') : (snap.ailments || ''));
@@ -346,27 +622,66 @@ function initSectionLocks(){
     updateAilmentOverlay(ailments);
     setElText('#build-name', snap.buildName || '');
     setElText('#build-subtext', snap.flavor || '');
-    renderAttributesFromSnapshot(snap.attributes);
-    renderSkillsFromSnapshot(snap);
-    renderPassiveRecommendations((window.App && window.App.state && window.App.state.currentRoll) || snap, window.DATA);
+    // Keep the Summary view in sync on every roll (and do this early so it still updates even if later renderers fail).
+    renderSummaryFromSnapshot(snap);
 
-    if (Array.isArray(snap.recommendedUniques) && snap.recommendedUniques.length && window.RandomancerRenderUniquesFromNames) {
-      window.RandomancerRenderUniquesFromNames(snap.recommendedUniques);
+    try {
+      renderAttributesFromSnapshot(snap.attributes);
+    } catch (e) {
+      console.warn('[render] attribute breakdown failed', e);
     }
-  }
 
-  function lookupByName(collection, name){
-    if (!collection || !name) return null;
-    return (collection || []).find(item => item?.name === name) || null;
+    try {
+      renderSkillsFromSnapshot(snap);
+    } catch (e) {
+      console.warn('[render] skills panel failed', e);
+    }
+    setSkillsTabsAvailability(hasSet2);
+    setActiveSkillsTab('1');
+    try {
+      renderPassiveRecommendations((window.App && window.App.state && window.App.state.currentRoll) || snap, window.DATA);
+    } catch (e) {
+      console.warn('[render] passives panel failed', e);
+    }
+
+    try {
+      if (Array.isArray(snap.recommendedUniques) && snap.recommendedUniques.length && window.RandomancerRenderUniquesFromNames) {
+        window.RandomancerRenderUniquesFromNames(snap.recommendedUniques, snap);
+      }
+    } catch (e) {
+      console.warn('[render] uniques panel failed', e);
+    }
+
   }
 
   async function applyBuildCode(code){
   const snap = decodeSnapshot(code);
   if (!snap) return false;
-  await ensureDataPreload();
+
+  const dataWrap = await ensureDataPreload();
   showAppShell();
 
-  // No build-level synergy / cohesion status needed anymore
+  // Back-compat: older build codes didn't store passives; rebuild them from the snapshot context.
+  if (!snap.passives) {
+    try {
+      const passivesData =
+        dataWrap?.passivesEnriched || (window.DATA && window.DATA.passivesEnriched);
+      const passiveIndex =
+        dataWrap?.passiveIndex || (window.DATA && window.DATA.passiveIndex);
+
+      if (passivesData && Array.isArray(passivesData.nodes)) {
+        const passiveCtx = buildBuildContext(snap);
+        const ascendancyNodes = pickRecommendedAscendancyNodes(passivesData, passiveIndex, passiveCtx, 2);
+        const keystones = pickRecommendedKeystones(passivesData, passiveIndex, passiveCtx, 2);
+        const notables = pickRecommendedNotables(passivesData, passiveIndex, passiveCtx, 8);
+        snap.passives = { ascendancyNodes, keystones, notables };
+      }
+    } catch (e) {
+      console.warn('[build code] passive recompute failed', e);
+    }
+  }
+
+  // Merge into global roll state so the rest of the app sees the right info
   const rollPayload = { ...snap };
 
   if (window.App?.mergeCurrentRoll) {
@@ -377,6 +692,7 @@ function initSectionLocks(){
   updateCodeUI(code);
   return true;
 }
+
 
 
   function loadSaved(){
@@ -458,7 +774,7 @@ function initSectionLocks(){
       const entry = {
         code,
         name: snap.buildName || `${snap.className} ${snap.ascendancy}`.trim(),
-        meta: [snap.ascendancy, snap.offhand ? `${snap.weapon} & ${snap.offhand}` : snap.weapon].filter(Boolean).join(' • ')
+        meta: [snap.ascendancy, formatWeaponLine(snap.weapon, snap.offhand)].filter(Boolean).join(' • ')
       };
       const existing = list.filter(e => e.code !== code);
       existing.unshift(entry);
@@ -473,19 +789,94 @@ function initSectionLocks(){
     const copyBtn = document.getElementById('copy-build-link');
     const saveBtn = document.getElementById('save-build');
     const savedListFab = savedFab;
+const viewBtn = document.getElementById('view-toggle');
 
-    copyBtn?.addEventListener('click', () => {
-      const snap = currentSnap();
-      const code = encodeSnapshot(snap);
-      if (!code) return;
-      const url = new URL(location.href);
-      url.searchParams.set('build', code);
-      const text = url.toString();
-      if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text);
-      updateCodeUI(code);
+    // Initialize persisted view mode (default: detailed)
+    setViewMode(getViewMode());
+
+    // Keep summary view synced during rolls (some flows update state/DOM at different times)
+    installSummaryAutoRefresh();
+
+    viewBtn?.addEventListener('click', () => {
+      toggleViewMode();
     });
 
-    saveBtn?.addEventListener('click', saveCurrentBuild);
+
+    // Copy dropdown (Option C): choose Link vs Summary
+    const copyWrap = document.getElementById('copy-menu-wrap');
+    const copyMenu = document.getElementById('copy-menu');
+    const copyItemLink = document.getElementById('copy-menu-link');
+    const copyItemSummary = document.getElementById('copy-menu-summary');
+
+    const closeCopyMenu = () => {
+      if (!copyMenu || !copyBtn) return;
+      copyMenu.hidden = true;
+      copyBtn.setAttribute('aria-expanded', 'false');
+    };
+
+    const openCopyMenu = () => {
+      if (!copyMenu || !copyBtn) return;
+      copyMenu.hidden = false;
+      copyBtn.setAttribute('aria-expanded', 'true');
+    };
+
+    const toggleCopyMenu = () => {
+      if (!copyMenu || !copyBtn) return;
+      if (copyMenu.hidden) openCopyMenu();
+      else closeCopyMenu();
+    };
+
+    const safeCopy = (text) => {
+      if (!text) return;
+      try {
+        if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text);
+      } catch {}
+    };
+
+    const buildShareUrlFromSnap = (snap) => {
+      const code = encodeSnapshot(snap);
+      if (!code) return '';
+      const url = new URL(location.href);
+      url.searchParams.set('build', code);
+      return url.toString();
+    };
+
+    copyBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleCopyMenu();
+    });
+
+    copyItemLink?.addEventListener('click', () => {
+      const snap = currentSnap();
+      const url = buildShareUrlFromSnap(snap);
+      safeCopy(url);
+      const code = encodeSnapshot(snap);
+      updateCodeUI(code);
+      closeCopyMenu();
+    });
+
+    copyItemSummary?.addEventListener('click', () => {
+      const snap = currentSnap();
+      const summary = getSummaryTextFromSnapshot(snap);
+      safeCopy(summary);
+      const code = encodeSnapshot(snap);
+      updateCodeUI(code);
+      closeCopyMenu();
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!copyMenu || copyMenu.hidden) return;
+      const t = e.target;
+      if (copyWrap && t instanceof Node && copyWrap.contains(t)) return;
+      closeCopyMenu();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeCopyMenu();
+    });
+
+saveBtn?.addEventListener('click', saveCurrentBuild);
     savedListFab?.addEventListener('click', openSavedOverlay);
     savedCloseBtn?.addEventListener('click', closeSavedOverlay);
     savedOverlay?.addEventListener('click', (e) => {
@@ -505,12 +896,34 @@ function initSectionLocks(){
   }
 
   function subscribeToRolls(){
-    if (window.App && typeof window.App.onRoll === 'function') {
-      window.App.onRoll(() => {
-        const snap = currentSnap();
-        const code = encodeSnapshot(snap);
-        updateCodeUI(code);
-      });
+    // App.onRoll is attached by a later bootstrap layer; retry briefly if it's not ready yet.
+    if (!subscribeToRolls._attempts) subscribeToRolls._attempts = 0;
+    if (!subscribeToRolls._unsub) subscribeToRolls._unsub = null;
+
+    const App = window.App;
+    if (!App || typeof App.onRoll !== 'function') {
+      if (subscribeToRolls._attempts++ < 25) {
+        setTimeout(subscribeToRolls, 120);
+      }
+      return;
+    }
+
+    // Only subscribe once.
+    if (subscribeToRolls._unsub) return;
+
+    subscribeToRolls._unsub = App.onRoll((snap) => {
+      const s = snap || currentSnap();
+      try { renderSummaryFromSnapshot(s); } catch {}
+      const code = encodeSnapshot(s);
+      updateCodeUI(code);
+    });
+
+    // Hydrate summary immediately if we already have a roll loaded (e.g., via build code).
+    const s0 = currentSnap();
+    if (s0) {
+      try { renderSummaryFromSnapshot(s0); } catch {}
+      const code0 = encodeSnapshot(s0);
+      updateCodeUI(code0);
     }
   }
 
@@ -533,7 +946,7 @@ function initSectionLocks(){
 })();
 
 // App metadata
-const APP_VERSION = '0.8.2_passives_display';
+const APP_VERSION = '0.8.4_feedback_form';
 
 window.RANDOMANCER = window.RANDOMANCER || {};
 window.RANDOMANCER.version = APP_VERSION;
@@ -554,6 +967,70 @@ function onDomReady(fn) {
     setTimeout(fn, 0);
   } else {
     document.addEventListener('DOMContentLoaded', fn);
+  }
+}
+
+function formatWeaponLine(weapon, offhand){
+  const w = (weapon || '').trim();
+  const o = (offhand || '').trim();
+
+  // Bow builds always imply a Quiver (even if offhand is not explicitly set in data)
+  if (w && /^bow$/i.test(w)) {
+    const q = 'Quiver';
+    if (!o || /quiver/i.test(o) === false) return `${w} & ${q}`;
+    return `${w} & ${o}`;
+  }
+
+  if (w && o) return `${w} & ${o}`;
+  return w || o || '';
+}
+
+function hasSecondaryWeaponSet(snap){
+  return !!(snap && (snap.weapon2 || snap.offhand2));
+}
+
+function renderSecondaryWeaponLine(values, oathSet){
+  const el = document.getElementById('weapons-set2');
+  if (!el) return;
+  if (!values || !values.length) {
+    el.replaceChildren(document.createTextNode(''));
+    return;
+  }
+  if (oathSet) {
+    renderOathAwareText(el, values, oathSet);
+  } else {
+    el.textContent = values.filter(Boolean).join(' & ');
+  }
+}
+
+function setSkillsTabsAvailability(hasSet2){
+  const tabs = document.getElementById('skills-tabs');
+  const tab2 = tabs?.querySelector('[data-skill-tab="2"]');
+  if (tabs) tabs.hidden = !hasSet2;
+  if (tab2) {
+    tab2.hidden = !hasSet2;
+    tab2.disabled = !hasSet2;
+  }
+  if (!hasSet2) {
+    setActiveSkillsTab('1');
+  }
+}
+
+function setActiveSkillsTab(tabId){
+  const tabKey = String(tabId || '1');
+  const tabs = document.querySelectorAll('.skills-tab');
+  const grid1 = document.getElementById('skills-grid');
+  const grid2 = document.getElementById('skills-grid-2');
+  tabs.forEach(tab => tab.classList.toggle('is-active', tab.dataset.skillTab === tabKey));
+  if (grid1) {
+    grid1.classList.toggle('hidden', tabKey === '2');
+    grid1.hidden = (tabKey === '2');
+    grid1.style.display = (tabKey === '2') ? 'none' : 'grid';
+  }
+  if (grid2) {
+    grid2.classList.toggle('hidden', tabKey !== '2');
+    grid2.hidden = (tabKey !== '2');
+    grid2.style.display = (tabKey !== '2') ? 'none' : 'grid';
   }
 }
 
@@ -685,7 +1162,7 @@ const App = window.App = (() => {
     // 0=strict,1=cohesive,2=chaotic,3=madness (legacy index for saved builds)
     cohesionMode: 1,
     cohesionModeName: 'cohesive',
-    cohesionThreshold: 2/3,
+    cohesionThreshold: 3/4,
 
 
     // canonical current roll snapshot
@@ -698,6 +1175,8 @@ const App = window.App = (() => {
       defStratObj: null,
       weapon:    '',
       offhand:   '',
+      weapon2:   '',
+      offhand2:  '',
       tactics:   '',
       ailments:  '',
       ailmentList: [],
@@ -710,6 +1189,7 @@ const App = window.App = (() => {
       rollAttr: { strength: 0, dexterity: 0, intelligence: 0 },
       defenseObj: null,
       recommendedSkills: [],
+      recommendedSkills2: [],
       recommendedPersistentBuff: null,
       recommendedUniques: [],
       tagProfile: null,
@@ -1005,13 +1485,12 @@ window.TAG_ALIASES = TagUtils.alias;
     for(const [t,w] of rolledCtx.profile){ if(set.has(t)) raw += w * (idf.get(t) ?? 0.0); }
     const attrSim = cosineSim(g.requirement_weights||{}, opts.rollAttr||{});
     const weaponHint = tags.some(t=>opts.weaponHints?.has(t)) ? 0.10 : 0;
-    const combo = 0;
-    let { alpha, beta, noise } = opts; alpha=Math.min(2,Math.max(0,alpha)); beta=Math.min(2,Math.max(0,beta));
-    const jitter = (Math.random()-0.5) * (noise||0);
-    const score = alpha*raw + beta*attrSim + weaponHint + combo + jitter;
-    return { score, raw, attrSim, idfAvg, weaponHint, combo };
-  }
-  function quantile(arr, q){ if(!arr || !arr.length) return 0; const xs = arr.slice().sort((a,b)=>a-b); const idx=Math.max(0, Math.min(xs.length-1, Math.floor((xs.length-1)*q))); return xs[idx]; }
+  const combo = 0;
+  let { alpha, beta, noise } = opts; alpha=Math.min(2,Math.max(0,alpha)); beta=Math.min(2,Math.max(0,beta));
+  const jitter = (Math.random()-0.5) * (noise||0);
+  const score = alpha*raw + beta*attrSim + weaponHint + combo + jitter;
+  return { score, raw, attrSim, idfAvg, weaponHint, combo };
+}
 
   // Capture legacy scorer if present
   const LEGACY = {
@@ -1426,7 +1905,7 @@ function sliderValueToThreshold(v){
 
 function thresholdToSliderValue(t){
   const raw = Number(t);
-  if (!Number.isFinite(raw)) return 35; // default near cohesive
+  if (!Number.isFinite(raw)) return 25; // default near cohesive
   const clamped = Math.max(0, Math.min(1, raw));
   return Math.round((1 - clamped) * 100);
 }
@@ -1736,44 +2215,289 @@ function lookupGem(dict, raw){
 
 // ---------- helpers ----------
 function dominantAttr(attrs){ const e=Object.entries(attrs||{}).sort((a,b)=>b[1]-a[1]); const k=(e[0]?.[0]||'int'); return {strength:'str',dexterity:'dex',intelligence:'int'}[k]||k.slice(0,3); }
-function pickUnique2(list){
-  if(!list || list.length<2) return list||[];
-  const a = list[Math.floor(Math.random()*list.length)];
-  let b = list[Math.floor(Math.random()*list.length)];
-  let guard = 0;
-  while(b.name===a.name && guard<20){ b = list[Math.floor(Math.random()*list.length)]; guard++; }
-  if(b.name===a.name){ return [a]; }
-  return [a,b];
-}
 function sample(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-const NAME_TITLES={
-  Warrior:["Ember-Forged","Ironclad","Warborn","Stonebound"],
-  Ranger:["Shadowstalker","Silent Arrow","Thorned","Windswift"],
-  Witch:["Veil-Touched","Hexbound","Soulweaver","Ashen"],
-  Sorceress:["Storm-Wreathed","Starbound","Auric","Umbral"],
-  Monk:["Storm-Wreathed","Inner Flame","Tranquil","Sage of Steel"],
-  Huntress:["Moonstalker","Wildbloom","Nightsong","Fangstep"],
-  Mercenary:["Oathbreaker","Gallowglass","Bloodhired","Black Banner"]
+// ===== Build Name Generation (v0.8.2+) =====
+// New approach:
+// - NAME_DESCRIPTORS (x): per-ascendancy adjectives/epithets
+// - NAME_TITLES (y): per-ascendancy noun-y titles
+// - NAME_TENDENCIES (z): ailment/tactic themed nouns for "of z", "z-bound", etc.
+// - NAME_TENDENCY_FORMS: -ing / adjective-friendly forms for "The z-ing y"
+const NAME_DESCRIPTORS = {
+  // Warrior
+  "Titan": ["Titanic","Stonebound","Mountain-Born","Earthshaking","Atlas-Broad","Ironclad"],
+  "Warbringer": ["Warworn","Blooded","Banner-Sworn","Battle-Hymned","Drum-Hearted","Iron-Sworn"],
+  "Smith of Kitava": ["Forgebound","Cinderhand","Soot-Crowned","Brandmarked","Chain-Forged","Ashen"],
+
+  // Mercenary
+  "Tactician": ["Measured","Battlewise","Steel-Sighted","Cold-Calculating","Drill-Hardened","Formation-Born"],
+  "Witchhunter": ["Hexbane","Lantern-Lit","Oath-Sworn","Relentless","Ash-Creed","Sanctified"],
+  "Gemling Legionnaire": ["Gem-Forged","Faceted","Prism-Blooded","Runed","Crystalline","Lattice-Bound"],
+
+  // Ranger
+  "Deadeye": ["Unerring","Hawk-Eyed","Silent","Longshot","Pinpoint","Shadow-Drawn"],
+  "Pathfinder": ["Trailwise","Horizon-Bound","Mire-Walking","Thorn-Run","Wayfinding","Wild-Tracked"],
+
+  // Huntress
+  "Amazon": ["Bronze-Crowned","Lionhearted","Spear-Blessed","Sunforged","Steel-Sister","Storm-Stride"],
+  "Ritualist": ["Circle-Drawn","Bone-Scribed","Masked","Ritebound","Blood-Binding","Totem-Kissed"],
+
+  // Witch
+  "Blood Mage": ["Sanguine","Veinbound","Crimson","Hemocrafted","Bloodletter","Thrice-Bled"],
+  "Lich": ["Deathless","Sepulchral","Graveborn","Soul-Tethered","Ossuary","Pale"],
+  "Infernalist": ["Cinder-Crowned","Furnace-Hearted","Hellbound","Ash-Tongued","Blazing","Coal-Black"],
+  "Abyssal Lich": ["Abyss-Touched","Depthborn","Starless","Void-Drinking","Umbral","Blackened"],
+
+  // Sorceress
+  "Chronomancer": ["Clockwork","Hourglass-Bound","Fatespun","Moment-Sundered","Echoing","Timeworn"],
+  "Stormweaver": ["Storm-Wreathed","Tempest-Lashed","Skybound","Lightning-Kissed","Thunder-Born","Rain-Soaked"],
+  "Disciple of Varashta": ["Rune-Taught","Oathbound","Star-Studied","Vigilant","Ward-Scribed","Varashtan"],
+
+  // Monk
+  "Invoker": ["Tranquil","Spirit-Forged","Palm-Scribed","Mantra-Bound","Quiet Thunder","Inner-Flamed"],
+  "Acolyte of Chayula": ["Shadow-Devout","Void-Kissed","Nightbound","Spiral-Eyed","Breach-Touched","Umbral"],
+
+  // Druid
+  "Shaman": ["Spirit-Talked","Ancestor-Blessed","Totem-Bound","Wild-Voiced","Storm-Calling","Groveborn"],
+  "Oracle": ["Omen-Touched","Fate-Seen","Star-Read","Vision-Blessed","Augural","Foretold"]
 };
-const NAME_SUFFIX={
-  "Titan":["Vanguard","Colossus","Juggernaut"],
-  "Warbringer":["Harbinger","Bloodcaller","War Herald"],
-  "Smith of Kitava":["Forgehand","Anvil-Keeper","Brandwright"],
-  "Blood Mage":["Hemomancer","Crimson Saint","Veincaller"],
-  "Spellblade":["Aetherduelist","Edge of Thought","Mindcarver"],
-  "Stormweaver":["Tempest","Skybrand","Thunder-Palm"]
+
+const NAME_TITLES = {
+  // Warrior
+  "Titan": ["Colossus","Vanguard","Juggernaut","Worldshaker","Bastion"],
+  "Warbringer": ["War Herald","Harbinger","Bloodcaller","Standard-Bearer","Warchanter"],
+  "Smith of Kitava": ["Forgehand","Anvil-Keeper","Brandwright","Cindersmith","Chainforger"],
+
+  // Mercenary
+  "Tactician": ["Field Marshal","Commandant","War Planner","Siege Captain","Stratagem"],
+  "Witchhunter": ["Inquisitor","Purifier","Hexbreaker","Cinder Judge","Witchhunter"],
+  "Gemling Legionnaire": ["Legionnaire","Facet Veteran","Prism Soldier","Jewel Ward","Gemling"],
+
+  // Ranger
+  "Deadeye": ["Sharpshooter","Marksman","Sniper","Arrow-Sage","Deadeye"],
+  "Pathfinder": ["Wayfinder","Trailseer","Trackmaster","Wildguide","Pathfinder"],
+
+  // Huntress
+  "Amazon": ["War-Maiden","Spearqueen","Sunlancer","Shield-Sister","Amazon"],
+  "Ritualist": ["Ritecaller","Circleweaver","Bloodbinder","Hex-Dancer","Ritualist"],
+
+  // Witch
+  "Blood Mage": ["Hemomancer","Crimson Saint","Veincaller","Red Magus","Blood Savant"],
+  "Lich": ["Deathlord","Bone Regent","Tomb-King","Grave Sovereign","Lich"],
+  "Infernalist": ["Emberlord","Flame Apostle","Pit-Speaker","Hellwright","Infernalist"],
+  "Abyssal Lich": ["Void Regent","Deep Lich","Nether Sovereign","Dreadwight","Abyssal Lich"],
+
+  // Sorceress
+  "Chronomancer": ["Timebinder","Hourkeeper","Epoch Sage","Clockwright","Chronomancer"],
+  "Stormweaver": ["Tempest","Galeweaver","Skybrand","Thunder-Palm","Stormweaver"],
+  "Disciple of Varashta": ["Adept","Disciple","Wardbearer","Oathkeeper","Varashta's Hand"],
+
+  // Monk
+  "Invoker": ["Ascetic","Kata-Sage","Temple Adept","Chi Warden","Invoker"],
+  "Acolyte of Chayula": ["Void Disciple","Breach Monk","Dark Acolyte","Chayula's Hand","Acolyte"],
+
+  // Druid
+  "Shaman": ["Spiritcaller","Totem-Sage","Ancestor Seer","Wildspeaker","Shaman"],
+  "Oracle": ["Seer","Augur","Omenweaver","Prophecy-Scribe","Oracle"]
 };
-function generateBuildName(cls, asc){ const t = sample(NAME_TITLES[cls]||["Nameless"]); const s = sample(NAME_SUFFIX[asc]||["Wanderer"]); return `The ${t} ${s}`; }
-const FLAVOR={
-  Warrior:["Born of war, bound by honor.","Strength tempered by flame."],
-  Ranger:["Swift as shadow, silent as dusk.","The hunt never ends."],
-  Witch:["Wisdom is a double-edged curse.","Power whispers, and she listens."],
-  Sorceress:["Lightning is a prayer with teeth.","Stars remember those who dare."],
-  Monk:["Every strike, a meditation.","Balance through battle."],
-  Huntress:["The wild answers in kind.","Footfalls like falling leaves."],
-  Mercenary:["Gold buys blades, not mercy.","No banner, only resolve."]
+
+// Thematic nouns (z) drawn from ailments/tactics rolled this build.
+const NAME_TENDENCIES = {
+  // Ailments
+  "Freeze": ["Rime","Winter","Frost","Hoarfrost","Ice","Glacier"],
+  "Ignite": ["Ember","Cinder","Wildfire","Pyre","Flame","Ash"],
+  "Shock": ["Tempest","Storm","Lightning","Thunder","Arc","Static"],
+  "Poison": ["Venom","Toxin","Blight","Rot","Nightshade","Viper"],
+  "Bleed": ["Hemorrhage","Blood","Rend","Gash","Scar","Sanguine"],
+
+  // Tactics
+  "Heavy Stun": ["Concussion","Stagger","Skullcrack","Quake","Sunder","Stun"],
+  "Armour Break": ["Fracture","Rendsteel","Shatter","Sundered Plate","Ruin","Crack"],
+  "Critical Hit": ["Precision","Execution","Fatal Point","Keen Edge","Perfect Strike","Deadly Aim"],
+  "Totems": ["Idols","Effigies","Wards","Pillars","Runes","Totemcraft"],
+  "Warcry": ["Battlecry","Roar","Oathcall","War Chant","Howl","Shout"],
+  "Marks": ["Brand","Sigil","Lock-On","Hunter's Mark","Aim","Marksmanship"],
+  "Curses": ["Hex","Malison","Doom","Bane","Witchsign","Cursecraft"],
+  "Minions": ["Thralls","Servitors","Legion","Swarm","Retinue","Gravebound"],
+  "Companions": ["Pack","Familiar","Beastbond","Hunt Pack","Allies","Bond"],
+  "Thorns": ["Barbs","Spines","Briar","Needles","Thornwall","Razors"],
+  "Culling Strike": ["Cull","Last Rites","Final Cut","Reaping","Mercy","Execution"],
+  "Slow/Maim/Hinder": ["Maim","Snare","Hamstring","Drag","Quagmire","Hinder"],
+  "Chaos Damage": ["Entropy","Ruin","Blight","Abyss","Chaos","Void"]
 };
-function generateFlavorLine(cls, asc){ const arr = FLAVOR[cls] || ["Conjure the impossible. Defy the meta."]; return sample(arr); }
+
+const NAME_TENDENCY_FORMS = {
+  // Ailments
+  "Freeze": ["Freezing","Frostbitten","Rimebound"],
+  "Ignite": ["Burning","Smoldering","Flame-Kissed"],
+  "Shock": ["Crackling","Storming","Thunderstruck"],
+  "Poison": ["Venomous","Toxic","Blighted"],
+  "Bleed": ["Bleeding","Rending","Bloodied"],
+
+  // Tactics
+  "Heavy Stun": ["Staggering","Concussive","Skullcracking"],
+  "Armour Break": ["Shattering","Rending","Fracturing"],
+  "Critical Hit": ["Precise","Lethal","Keen-Edged"],
+  "Totems": ["Totemic","Ward-Set","Idolbound"],
+  "Warcry": ["Roaring","Howling","Battle-Chanting"],
+  "Marks": ["Marked","Locking-On","Branding"],
+  "Curses": ["Hexing","Cursing","Doomcalling"],
+  "Minions": ["Swarming","Gravecalling","Thrall-Summoning"],
+  "Companions": ["Packbound","Beastbonded","Familiar-Led"],
+  "Thorns": ["Barbed","Spined","Briar-Clad"],
+  "Culling Strike": ["Reaping","Executing","Merciless"],
+  "Slow/Maim/Hinder": ["Snaring","Maiming","Hamstringing"],
+  "Chaos Damage": ["Entropic","Blighting","Abyss-Touched"]
+};
+
+// Optional class seasoning for occasional extra variation
+const NAME_CLASS_SPICE = {
+  "Warrior": ["Iron","War","Steel","Siege","Valor"],
+  "Mercenary": ["Coin","Contract","Black Banner","Gallows","Oath"],
+  "Ranger": ["Hunt","Grove","Arrow","Shadow","Trail"],
+  "Huntress": ["Moon","Wild","Fang","Thorn","Stag"],
+  "Witch": ["Hex","Grave","Blood","Bone","Night"],
+  "Sorceress": ["Star","Aether","Storm","Sigil","Glass"],
+  "Monk": ["Temple","Palm","Mantra","Kata","Stillness"],
+  "Druid": ["Root","Grove","Spirit","Briar","Verdant"]
+};
+
+const NAME_GENERIC_DESCRIPTORS = ["Fate-Touched","Oathbound","Doomlit","Wayward","Wandering"];
+const NAME_GENERIC_TITLES = ["Wanderer","Outcast","Harbinger","Adept","Revenant"];
+
+function _asHyphen(s){
+  return String(s||'').trim().replace(/[^\w]+/g,'-').replace(/-+/g,'-').replace(/(^-|-$)/g,'');
+}
+
+function _wordCount(s){
+  return String(s || '').trim().split(/\s+/).filter(Boolean).length;
+}
+function _pickFromPool(pool, maxWords){
+  if (!Array.isArray(pool) || !pool.length) return "";
+  const short = (typeof maxWords === 'number')
+    ? pool.filter(v => _wordCount(v) <= maxWords)
+    : pool;
+  return sample((short && short.length) ? short : pool);
+}
+function _nameSetToList(set){
+  if (!Array.isArray(set)) return [];
+  return set.map(x => (typeof x === 'string' ? x : (x && typeof x === 'object' ? x.name : null))).filter(Boolean);
+}
+function _pickTendencyKey(ailments, tactics){
+  const ail = _nameSetToList(ailments);
+  const tac = _nameSetToList(tactics);
+  if (!ail.length && !tac.length) return null;
+  if (ail.length && tac.length) return (Math.random() < 0.6) ? sample(ail) : sample(tac);
+  return ail.length ? sample(ail) : sample(tac);
+}
+
+const BUILD_NAME_TEMPLATES = [
+  // Keep names punchy + readable (weighted by repetition)
+  ({x,y}) => `The ${x} ${y}`,
+  ({x,y}) => `The ${x} ${y}`,
+  ({x,y}) => `The ${x} ${y}`,
+
+  ({x,y,z}) => `The ${x} ${y} of ${z}`,
+  ({y,z}) => `The ${y} of ${z}`,
+  ({zForm,y}) => `The ${zForm} ${y}`
+];
+
+// New generator (pass ailments/tactics for z)
+function generateBuildName(cls, asc, ailments, tactics){
+  const descPool = NAME_DESCRIPTORS[asc] || NAME_GENERIC_DESCRIPTORS;
+  const titlePool = NAME_TITLES[asc] || NAME_GENERIC_TITLES;
+  const cPool = NAME_CLASS_SPICE[cls] || ["Fate"];
+
+  const x = sample(descPool);
+  const y = sample(titlePool);
+
+  const tendencyKey = _pickTendencyKey(ailments, tactics);
+  const zPool = (tendencyKey && NAME_TENDENCIES[tendencyKey]) ? NAME_TENDENCIES[tendencyKey] : ["Fate"];
+  const zFormPool = (tendencyKey && NAME_TENDENCY_FORMS[tendencyKey]) ? NAME_TENDENCY_FORMS[tendencyKey] : ["Fated"];
+
+  const z = _pickFromPool(zPool, 2);
+  const zForm = _pickFromPool(zFormPool, 2);
+  const zH = _asHyphen(z);
+  const c = sample(cPool);
+
+  const history = (typeof window !== 'undefined')
+    ? (window.__BUILD_NAME_HISTORY__ || (window.__BUILD_NAME_HISTORY__ = []))
+    : [];
+
+  let out = `The ${x} ${y}`;
+
+  for (let i=0; i<16; i++){
+    const tpl = sample(BUILD_NAME_TEMPLATES);
+    const candidate = tpl({ x, y, z, zH, zForm, c });
+
+    // Keep it from getting too tongue-twistery
+    if (!candidate) continue;
+    if (_wordCount(candidate) > 7) continue;
+
+    // avoid immediate repeats (within last ~24 names)
+    if (!history.includes(candidate)) {
+      out = candidate;
+      break;
+    }
+  }
+
+  if (history) {
+    history.unshift(out);
+    if (history.length > 24) history.length = 24;
+  }
+  return out;
+}
+
+// Flavor lines (still mostly class-driven, but with full class coverage)
+const FLAVOR = {
+  Warrior:["Born of war, bound by honor.","Strength tempered by flame.","Steel answers steel."],
+  Ranger:["Swift as shadow, silent as dusk.","The hunt never ends.","An arrow is a promise."],
+  Witch:["Wisdom is a double-edged curse.","Power whispers, and she listens.","A pact is still a blade."],
+  Sorceress:["Lightning is a prayer with teeth.","Stars remember those who dare.","Time bends for the bold."],
+  Monk:["Every strike, a meditation.","Balance through battle.","Stillness is a weapon."],
+  Huntress:["The wild answers in kind.","Footfalls like falling leaves.","Fangs bared to fate."],
+  Mercenary:["Gold buys blades, not mercy.","No banner, only resolve.","Contracts are written in scars."],
+  Druid:["Roots remember. Storms obey.","The grove speaks; the world listens.","Fate is read in bark and bone."]
+};
+
+const FLAVOR_ASC = {
+  "Titan":["A mountain with a heartbeat.","Unmoved. Unbroken."],
+  "Warbringer":["The drums of war follow close.","A banner is a blade."],
+  "Smith of Kitava":["Forge-fire in the veins.","Hammered into legend."],
+  "Tactician":["Victory is a calculation.","The battlefield is a board."],
+  "Witchhunter":["No hex goes unanswered.","Purity by fire."],
+  "Gemling Legionnaire":["Facets catch every fate.","A legion in crystal."],
+  "Deadeye":["One shot. One verdict.","Distance is mercy."],
+  "Pathfinder":["Every trail has teeth.","The wild is a map of scars."],
+  "Amazon":["Steel-sister of the sun.","Spearpoint prophecy."],
+  "Ritualist":["Circles close. Blood binds.","Rites carved in night."],
+  "Blood Mage":["Crimson is currency.","Life traded for power."],
+  "Lich":["Death is a door left open.","A crown of bone and silence."],
+  "Infernalist":["Flame speaks first.","Ash writes the epilogue."],
+  "Abyssal Lich":["Starless depths answer back.","The void keeps its promises."],
+  "Chronomancer":["Seconds are weapons.","Time, broken to purpose."],
+  "Stormweaver":["Thunder in the lungs.","The sky is a spellbook."],
+  "Disciple of Varashta":["Wards within wards.","Oaths etched in starlight."],
+  "Invoker":["Breath, stance, strike.","A mantra with teeth."],
+  "Acolyte of Chayula":["The Breach watches.","Shadow is devotion."],
+  "Shaman":["Ancestors at your shoulder.","Spirits carry the strike."],
+  "Oracle":["Omens do not lie.","The future already blinked."]
+};
+
+function generateFlavorLine(cls, asc, ailments, tactics){
+  const pool = [];
+  if (FLAVOR[cls]) pool.push(...FLAVOR[cls]);
+  if (FLAVOR_ASC[asc]) pool.push(...FLAVOR_ASC[asc]);
+
+  // Small chance to echo the rolled mechanics
+  const tKey = _pickTendencyKey(ailments, tactics);
+  if (tKey && Math.random() < 0.25) {
+    pool.push(`Marked by ${tKey}.`);
+  }
+
+  if (!pool.length) pool.push("Conjure the impossible. Defy the meta.");
+  return sample(pool);
+}
+
 function isDevPlaceholderGem(g){
   const s = (g?.name || g?.base_item?.display_name || g?.id || '').toString();
   return /(\bDNT\b|\bUNUSED\b|Coming\s*Soon)/i.test(s);
@@ -1787,23 +2511,54 @@ function weaponsToTypes(weapon, offhand){
   return arr.map(x=>String(x).toLowerCase());
 }
 
+// ---- Gem/offhand compatibility helpers ----
+// Some active skills in skills_enriched.json carry the tag "requiresshield".
+// These should ONLY be eligible when the build has rolled a Shield/Buckler in the off-hand slot.
+function offhandIsShieldOrBuckler(offhand){
+  const n = String(offhand?.name || '').toLowerCase();
+  return n.includes('shield') || n.includes('buckler');
+}
+function gemRequiresShield(g){
+  const tags = Array.isArray(g?.tags) ? g.tags : [];
+  return tags.some(t => String(t).toLowerCase() === 'requiresshield');
+}
+function isGemShieldCompatible(g, offhand){
+  if (!gemRequiresShield(g)) return true;
+  return offhandIsShieldOrBuckler(offhand);
+}
+
 function isGemWeaponCompatible(g, rolledTypesLower){
   const req = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
     ? g.required_weapon_types
     : (Array.isArray(g.crafting_types) ? g.crafting_types : []);
   if(!req.length) return true;
+
   const reqLower = req.map(x => String(x).toLowerCase());
+
   const hasOccult = reqLower.includes("occult");
   const hasElemental = reqLower.includes("elemental");
   const hasMaceGeneric = reqLower.includes("mace");
-  
+  const hasPrimal = reqLower.includes("primal");
+
+  // NEW: use gem tags to split Primal into spell vs non-spell
+  if (hasPrimal) {
+    const tagLower = Array.isArray(g.tags) ? g.tags.map(t => String(t).toLowerCase()) : [];
+    const isSpellGem = tagLower.includes("spell");
+
+    const hasTalisman = rolledTypesLower.includes("talisman");
+    const hasCasterWeapon = rolledTypesLower.some(r => ["wand", "staff", "sceptre"].includes(r));
+
+    // Primal spells => wand/staff/sceptre only; non-spell primal => talisman only
+    return isSpellGem ? hasCasterWeapon : hasTalisman;
+  }
+
   if ((hasOccult || hasElemental) && rolledTypesLower.some(r => r === "sceptre")) return true;
   if (hasElemental && rolledTypesLower.some(r => ["wand", "staff"].includes(r))) return true;
-  
-  
-    if (hasMaceGeneric && rolledTypesLower.some(r => r.includes('mace'))) return true;
+  if (hasMaceGeneric && rolledTypesLower.some(r => r.includes('mace'))) return true;
+
   return reqLower.some(r => rolledTypesLower.includes(r));
 }
+
 
 // ---------- v0.7 Synergy Scorer helpers ----------
 
@@ -1984,8 +2739,12 @@ function isPersistentBuffGem(g){
   return set.has('buff') && set.has('persistent');
 }
 
-function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
+function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx, opts = {}){
   try{
+    const options = opts || {};
+    const targetGridId = options.gridId || 'skills-grid';
+    const includePersistentBuff = options.includePersistentBuff !== false;
+    const assignTagProfile = options.assignTagProfile !== false;
     const rolledTypesLower = weaponsToTypes(picked.weapon, picked.offhand);
     const gems = (window.DATA && window.DATA.gems) ? window.DATA.gems : (dataWrap.gems || []);
     const actives = gems.filter(g =>
@@ -1995,11 +2754,23 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
     );
 
     // Separate persistent buff skills from general pool
-    const persistentPool = actives.filter(g => isPersistentBuffGem(g) && isGemWeaponCompatible(g, rolledTypesLower));
-    const eligible = actives.filter(g =>
+    const persistentPool = actives.filter(g => isPersistentBuffGem(g) && isGemWeaponCompatible(g, rolledTypesLower) && isGemShieldCompatible(g, picked.offhand));
+    const eligibleBase = actives.filter(g =>
       isGemWeaponCompatible(g, rolledTypesLower) &&
+      isGemShieldCompatible(g, picked.offhand) &&
       !isPersistentBuffGem(g)
     );
+    const avoidRaw = options.avoidSkills || [];
+    const avoidSet = new Set(
+      (avoidRaw instanceof Set ? Array.from(avoidRaw) : avoidRaw)
+        .filter(Boolean)
+        .map(x => String(x).toLowerCase())
+    );
+    const eligibleAvoid = eligibleBase.filter(g => {
+      const key = String(g.id || g.base_item?.id || g.name || '').toLowerCase();
+      return !avoidSet.has(key);
+    });
+    const eligible = eligibleAvoid.length >= 2 ? eligibleAvoid : eligibleBase;
 
     // Build/ensure global IDF
     if(!window.TAG_IDF){
@@ -2016,7 +2787,7 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
       weaponPseudoTags: Array.from(deriveWeaponHints(picked.weapon, picked.offhand))
     });
 
-    if (rollCtx && typeof rollCtx === 'object') {
+    if (assignTagProfile && rollCtx && typeof rollCtx === 'object') {
       rollCtx.tagProfile = rolledProfile;
     }
 
@@ -2034,7 +2805,7 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
     // Pick two with diversity
     const picks = pickTwoDiverse(scored, 0.7);
 
-    const grid = document.getElementById('skills-grid');
+    const grid = document.getElementById(targetGridId);
     if(!grid){ return; }
     grid.innerHTML = '';
 
@@ -2086,7 +2857,9 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
 
 
     // Render a dedicated persistent buff skill section (single card, full-width)
-    const persistent = renderPersistentBuffSkill(persistentPool, rolledProfile, window.TAG_IDF, knobs, gems);
+    const persistent = includePersistentBuff
+      ? renderPersistentBuffSkill(persistentPool, rolledProfile, window.TAG_IDF, knobs, gems)
+      : null;
 
     return {
       tagProfile: rolledProfile,
@@ -2095,7 +2868,7 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx){
         name: g.name || '',
         recommended_supports: Array.isArray(g.recommended_supports) ? g.recommended_supports.slice(0, 6) : []
       })),
-      persistentBuff: persistent ? {
+      persistentBuff: (includePersistentBuff && persistent) ? {
         id: persistent.id || persistent.base_item?.id || persistent.name || '',
         name: persistent.name || ''
       } : null
@@ -2339,7 +3112,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 	
 	  if (slider) {
 		// derive initial threshold from App.state if present, else use cohesive
-		let initialThreshold = 2/3;
+		let initialThreshold = 3/4;
 		try {
 		  const st = window.App && window.App.state;
 		  if (st) {
@@ -2552,6 +3325,30 @@ document.addEventListener('DOMContentLoaded', ()=>{
       try {
         const data = await ensureDataPreload();
         rollBuild(data);
+
+      // Summary view: keep text updated immediately after each roll
+      if (window.scheduleSummaryRefresh) window.scheduleSummaryRefresh();
+
+        // Keep Summary view live on each reroll.
+        // (This roll pipeline is the primary entrypoint; other roll funnels may not fire listeners.)
+        try {
+          const snap = (window.App && window.App.state && window.App.state.currentRoll)
+            ? { ...window.App.state.currentRoll }
+            : null;
+          // Run once immediately and once on the next tick to catch any late merges.
+          if (snap) renderSummaryFromSnapshot(snap);
+          setTimeout(() => {
+            try {
+              const s2 = (window.App && window.App.state && window.App.state.currentRoll)
+                ? { ...window.App.state.currentRoll }
+                : null;
+              if (s2) renderSummaryFromSnapshot(s2);
+              if (typeof window.RandomancerUpdateBuildCodeUI === 'function') {
+                window.RandomancerUpdateBuildCodeUI();
+              }
+            } catch {}
+          }, 0);
+        } catch {}
       } catch (err) {
         console.error('[Randomancer] roll failed:', err);
         if (statusEl) {
@@ -2568,7 +3365,161 @@ document.addEventListener('DOMContentLoaded', ()=>{
       }
     });
   }
+
+  const weaponSet2Btn = document.getElementById('weapon-set2-btn');
+  if (weaponSet2Btn) {
+    weaponSet2Btn.addEventListener('click', () => {
+      handleSecondaryWeaponSetSelection().catch(err => {
+        console.error('[secondary weapons] roll failed:', err);
+      });
+    });
+  }
+
+  const skillsTabs = document.getElementById('skills-tabs');
+  if (skillsTabs) {
+    skillsTabs.addEventListener('click', (event) => {
+      const btn = event.target.closest('.skills-tab');
+      if (!btn || btn.disabled) return;
+      setActiveSkillsTab(btn.dataset.skillTab || '1');
+    });
+  }
 });
+
+function resetSecondaryWeaponSetUI(showButton){
+
+  const weapons2El = document.getElementById('weapons-set2');
+  if (weapons2El) {
+    weapons2El.textContent = '';
+    weapons2El.hidden = true;
+  }
+  const grid2 = document.getElementById('skills-grid-2');
+  if (grid2) grid2.innerHTML = '';
+  const btn = document.getElementById('weapon-set2-btn');
+  if (btn) {
+    btn.textContent = 'Add Weapon Set II';
+    btn.hidden = !showButton;
+  }
+  setSkillsTabsAvailability(false);
+  setActiveSkillsTab('1');
+}
+
+function resolveCoreData(dataWrap){
+  if (dataWrap && dataWrap.core) return dataWrap.core;
+  if (dataWrap && dataWrap.Weapons) return dataWrap;
+  return window.DATA || {};
+}
+
+function rollSecondaryWeaponSet(dataWrap){
+  const data = resolveCoreData(dataWrap);
+  const current = window.App?.state?.currentRoll || window.CURRENT_ROLL || {};
+  if (!data || !current.className || current.weapon2) return null;
+
+  const base = data.Classes?.[current.className]?.attributes || {};
+  const th = (typeof cohesionThreshold === 'number')
+    ? cohesionThreshold
+    : (COHESION_MODES[currentMode] ?? COHESION_MODES.cohesive);
+
+  const bind = getBindFatesFromApp();
+  const weaponCfg = bind.weapon || { oaths: [], abominations: [] };
+  const combatCfg = bind.combat || { oaths: [], abominations: [] };
+  const wOaths = new Set(weaponCfg.oaths || []);
+  const wAboms = new Set(weaponCfg.abominations || []);
+  const cOaths = new Set(combatCfg.oaths || []);
+
+  const minionsOath = cOaths.has('Minions');
+  const sceptreAbomination = wAboms.has('Sceptre');
+
+  if (minionsOath && sceptreAbomination) {
+    console.warn('[secondary weapons] Minions oath requires Sceptre, but Sceptre is an abomination.');
+    return null;
+  }
+
+  const weaponPool = (data.Weapons['Two-Handed'] || []).concat(data.Weapons['One-Handed'] || []);
+  let filteredWeaponPool = weaponPool.filter((w) => !wAboms.has(w.name) && w.name !== current.weapon);
+  if (wOaths.size > 0) {
+    const fromOath = filteredWeaponPool.filter((w) => wOaths.has(w.name));
+    if (fromOath.length > 0) filteredWeaponPool = fromOath;
+  }
+
+  if (minionsOath) {
+    const sceptreOption = filteredWeaponPool.find((w) => w?.name === 'Sceptre');
+    if (!sceptreOption) {
+      console.warn('[secondary weapons] Minions oath requires a Sceptre, but none are available.');
+      return null;
+    }
+    filteredWeaponPool = [sceptreOption];
+  }
+
+  if (!filteredWeaponPool.length) {
+    console.warn('[secondary weapons] No valid weapons available for secondary set.');
+    return null;
+  }
+
+  const weapon = pickByCohesion(filteredWeaponPool, base, th);
+  let offhand = null;
+  if (weapon && Object.keys(validOffhands).includes(weapon.name)) {
+    const offPool = (data.Weapons['Off-Hand'] || []).filter((o) => validOffhands[weapon.name].includes(o.name));
+    offhand = pickByCohesion(offPool, base, th);
+  }
+
+  return { weapon, offhand, wOaths };
+}
+
+async function handleSecondaryWeaponSetSelection(){
+  const data = await ensureDataPreload();
+  const coreData = resolveCoreData(data);
+  const current = window.App?.state?.currentRoll || window.CURRENT_ROLL || {};
+  if (!current.weapon || current.weapon2) return;
+
+  const result = rollSecondaryWeaponSet(coreData);
+  if (!result) return;
+
+  const { weapon, offhand, wOaths } = result;
+  const weaponName = weapon?.name || '';
+  let offhandName = offhand?.name || '';
+  if (weaponName && /^bow$/i.test(weaponName) && !offhandName) offhandName = 'Quiver';
+
+  renderSecondaryWeaponLine([weaponName, offhandName].filter(Boolean), wOaths);
+  const weapons2El = document.getElementById('weapons-set2');
+  if (weapons2El) weapons2El.hidden = false;
+  const avoidSkills = new Set(
+    (current.recommendedSkills || [])
+      .map(s => s?.id || s?.name || '')
+      .filter(Boolean)
+      .map(s => String(s).toLowerCase())
+  );
+
+  const skillSnapshot = rollRecommendedSkills(
+    coreData,
+    coreData.Classes?.[current.className]?.attributes || {},
+    { weapon, offhand },
+    window.CURRENT_ROLL,
+    {
+      gridId: 'skills-grid-2',
+      includePersistentBuff: false,
+      avoidSkills,
+      assignTagProfile: false
+    }
+  ) || {};
+
+  if (window.App && typeof window.App.mergeCurrentRoll === 'function') {
+    window.App.mergeCurrentRoll({
+      weapon2: weaponName,
+      offhand2: offhandName,
+      recommendedSkills2: skillSnapshot.skills || []
+    });
+  }
+
+  if (window.CURRENT_ROLL && typeof window.CURRENT_ROLL === 'object') {
+    window.CURRENT_ROLL.weapon2 = weaponName;
+    window.CURRENT_ROLL.offhand2 = offhandName;
+  }
+
+  const set2Btn = document.getElementById('weapon-set2-btn');
+  if (set2Btn) set2Btn.hidden = true;
+  setSkillsTabsAvailability(true);
+  setActiveSkillsTab('1');
+}
 
 function rollBuild(dataWrap){
   // Accept either the { core, gems } wrapper or fall back to global DATA
@@ -2596,8 +3547,6 @@ function rollBuild(dataWrap){
   const bind = getBindFatesFromApp();
 
   const classes = Object.entries(data.Classes || {});
-
-  const findByName = (arr, name) => (arr || []).find(item => item?.name === name) || null;
 
   const combatCfg = bind.combat || { oaths: [], abominations: [] };
   const cOaths = new Set(combatCfg.oaths || []);
@@ -2790,11 +3739,19 @@ function rollBuild(dataWrap){
   document.getElementById('class')?.replaceChildren(document.createTextNode(clsName || ''));
   renderOathAwareText(document.getElementById('ascendancy'), asc || '', ascOaths);
   updateAscArt(asc);
+  const weaponParts = (() => {
+    const wName = weapon?.name || '';
+    const oName = offhand?.name || '';
+    if (wName && /^bow$/i.test(wName)) return [wName, oName || 'Quiver'];
+    return [wName, oName].filter(Boolean);
+  })();
+
   renderOathAwareText(
     document.getElementById('weapons'),
-    [weapon?.name, offhand?.name].filter(Boolean),
+    weaponParts,
     wOaths
   );
+  resetSecondaryWeaponSetUI(true);
   document.getElementById('defense')?.replaceChildren(document.createTextNode(pickedDefense?.name || ''));
   document.getElementById('defstrat')?.replaceChildren(document.createTextNode(pickedDefStrat?.name || ''));
 
@@ -2831,8 +3788,8 @@ function rollBuild(dataWrap){
 
 
   // Build name + flavor (restored)
-  const buildName = generateBuildName(clsName, asc);
-  const buildFlavor = generateFlavorLine(clsName, asc);
+  const buildName = generateBuildName(clsName, asc, ailmentSet.filter(Boolean), tacticSet.filter(Boolean));
+  const buildFlavor = generateFlavorLine(clsName, asc, ailmentSet.filter(Boolean), tacticSet.filter(Boolean));
   document.getElementById('build-name').textContent = buildName;
   document.getElementById('build-subtext').textContent = buildFlavor;
   const cohesionModeName = resolveCohesionMode(window.App?.state?.cohesionMode ?? currentMode);
@@ -2848,6 +3805,8 @@ function rollBuild(dataWrap){
     defStratObj: pickedDefStrat || null,
     weapon: weapon?.name || '',
     offhand: offhand?.name || '',
+    weapon2: '',
+    offhand2: '',
     tactics: tacticSet.filter(Boolean).map(t=>t.name).join(' & '),
     ailments: ailmentSet.filter(Boolean).map(a=>a.name).join(' & '),
     ailmentList: ailmentSet.filter(Boolean).map(a=>a.name),
@@ -2860,7 +3819,8 @@ function rollBuild(dataWrap){
     rollAttr: { strength: S, dexterity: D, intelligence: I },
     defenseObj: pickedDefense || null,
     cohesionStatus: 'ok',
-    cohesionModeName
+    cohesionModeName,
+    recommendedSkills2: []
   };
 
   if (window.App && typeof window.App.mergeCurrentRoll === 'function') {
@@ -2881,6 +3841,8 @@ function rollBuild(dataWrap){
           defStrat: pickedDefStrat,
           weapon: weapon?.name || '',
           offhand: offhand?.name || '',
+          weapon2: '',
+          offhand2: '',
           rollAttr: { strength: S, dexterity: D, intelligence: I },
           tagProfile: null,
           cohesionModeName
@@ -2935,7 +3897,28 @@ function rollBuild(dataWrap){
     console.warn('[Randomancer] uniques refresh failed', e);
   }
 
+  // Reveal build output panels now that we have a roll
+  const appEl = document.getElementById('app');
+  if (appEl) appEl.dataset.hasRoll = 'true';
+
   syncLockUIFromState();
+
+  // Ensure Summary view stays in sync with the latest roll snapshot (covers App.roll capture-phase funnel).
+  try {
+    const s = (window.App && window.App.state && window.App.state.currentRoll)
+      ? window.App.state.currentRoll
+      : (window.CURRENT_ROLL || null);
+    if (s) renderSummaryFromSnapshot(s);
+    // Run once more on next tick to capture late merges (uniques/passives/skills updates)
+    setTimeout(() => {
+      try {
+        const s2 = (window.App && window.App.state && window.App.state.currentRoll)
+          ? window.App.state.currentRoll
+          : (window.CURRENT_ROLL || null);
+        if (s2) renderSummaryFromSnapshot(s2);
+      } catch {}
+    }, 0);
+  } catch {}
 
 }
 
@@ -3063,13 +4046,25 @@ async function loadData() {
 		  const set = (sel, txt)=>{ const el = document.querySelector(sel); if(el && (typeof txt==='string')) el.textContent = txt; };
 		  set('#defense',  s.defense);
 		  set('#defstrat', s.defStrat);
-		  set('#weapons',  s.weapon);
+		  set('#weapons',  formatWeaponLine(s.weapon, s.offhand));
 		  set('#offhand',  s.offhand);
                   set('#tactics',  s.tactics);
                   set('#ailments', s.ailments);
                   set('#build-name', s.buildName);
                   set('#build-subtext', s.flavor);
-                }catch(e){ /*no-op*/ }
+		  const weapons2El = document.querySelector('#weapons-set2');
+		  if (weapons2El) {
+		    const weapons2Txt = formatWeaponLine(s.weapon2, s.offhand2);
+		    weapons2El.textContent = weapons2Txt;
+		    weapons2El.hidden = !weapons2Txt;
+		  }
+		  const set2Btn = document.querySelector('#weapon-set2-btn');
+		  if (set2Btn) {
+		    set2Btn.hidden = !!(s.weapon2 || s.offhand2) || !s.weapon;
+		  }
+		  setSkillsTabsAvailability(!!(s.weapon2 || s.offhand2));
+			  try { renderSummaryFromSnapshot(s); } catch (e) {}
+		}catch(e){ /*no-op*/ }
           };
         });
 
@@ -3139,6 +4134,7 @@ async function loadData() {
 
       // capture → sync
       try { App.captureCurrentRollFromDOM(); App.syncDOMFromState(); } catch {}
+      try { if (window.scheduleSummaryRefresh) window.scheduleSummaryRefresh(); } catch {}
       
       // notify listeners that a roll has completed
       try { notifyRoll(); } catch (e) {}
@@ -3550,21 +4546,12 @@ function ensureUniqueSection(){
     document.querySelectorAll('.unique-divider').forEach(el=>el.remove());
     document.querySelectorAll('#uniques-section').forEach(el=>el.remove());
 
-    // Anchor after Skills section (or after persistent buff section if present)
-    const skillsGrid = document.querySelector('#skills-grid');
-    const skillsSect = skillsGrid ? skillsGrid.closest('.sect') : null;
-    const buffSect = document.getElementById('persistent-buff-section');
-    const main = document.querySelector('main') || document.body;
-    const parent = (skillsSect && skillsSect.parentNode) || main;
+    // Mount into the dedicated Uniques panel (keeps section borders consistent)
+    const mount = document.getElementById('uniques-mount');
+    if (!mount) return null;
 
-    if (!skillsSect) return null; // try later
-
-    const anchor = buffSect || skillsSect;
-
-    // Insert divider
-    const divider = document.createElement('div');
-    divider.className = 'ornate-divider gold unique-divider';
-    anchor.insertAdjacentElement('afterend', divider);
+    // Clear any previous content
+    mount.innerHTML = '';
 
     // Insert Uniques section
     const wrap = document.createElement('div');
@@ -3579,13 +4566,13 @@ function ensureUniqueSection(){
           <div id="uniques-grid" class="grid two uniques-grid"></div>
         `;
 
-    divider.insertAdjacentElement('afterend', wrap);
+    mount.appendChild(wrap);
 
     const lockBtn = wrap.querySelector('.lock-toggle');
     if (lockBtn) wireLockButton(lockBtn);
     syncLockUIFromState();
 
-    return document.getElementById('uniques-grid');
+    return wrap.querySelector('#uniques-grid');
   }
 
   function pillsFor(item, rolledSet){
@@ -3721,11 +4708,6 @@ function ensureUniqueSection(){
                   window.RandomancerUpdateBuildCodeUI();
                 }
 
-                // Debug logging (optional, but now safe & informative)
-                console.log('[u79b2m] snap', snap);
-                console.log('[u79b2m] rolled', rolled);
-                console.log('[u79b2m] picks', picks.length);
-	
 		renderUniques(picks, rolledSet);
 	  }catch(e){
 		console.error('[u79b2m] refresh error', e);
@@ -3735,21 +4717,48 @@ function ensureUniqueSection(){
         // Expose a global hook so the core roll engine can trigger uniques directly
     window.RandomancerRefreshUniques = refreshUniques;
 
-    async function renderUniquesFromNames(names){
-          if (!Array.isArray(names) || !names.length) {
-                ensureUniqueSection()?.replaceChildren();
-                return;
-          }
+    async function renderUniquesFromNames(names, snapOrRolledSet){
+	  if (!Array.isArray(names) || !names.length) {
+		ensureUniqueSection()?.replaceChildren();
+		return;
+	  }
+	
+	  // ✅ Build rolledSet from the snapshot we were passed
+	  let rolledSet;
+	  try {
+		if (snapOrRolledSet && typeof snapOrRolledSet.has === 'function') {
+		  rolledSet = snapOrRolledSet; // already a Set-like
+		} else {
+		  const snap =
+			(snapOrRolledSet && typeof snapOrRolledSet === 'object')
+			  ? snapOrRolledSet
+			  : (window.App?.state?.currentRoll || window.CURRENT_ROLL || {});
+		  const rolled = rolledByCategory(snap || {});
+		  rolledSet = new Set([
+			...(rolled?.tactics || []),
+			...(rolled?.ailments || []),
+			...(rolled?.def || []),
+		  ]);
+		}
+	  } catch {
+		rolledSet = new Set();
+	  }
+	
+	  // (optional safety) normalize name list if you might get objects:
+	  const nameList = names
+		.map(u => (typeof u === 'string' ? u : (u && typeof u === 'object' ? u.name : null)))
+		.filter(Boolean);
+	
+	  const items = await loadUniquesM();
+	  const byName = new Map(items.map(it => [it.name, it]));
+	  const ordered = nameList.map(n => byName.get(n)).filter(Boolean);
+	
+	  // ✅ THIS is what drives highlight() matching
+	  renderUniques(ordered, rolledSet);
+	}
 
-          try {
-                const items = await loadUniquesM();
-                const byName = new Map(items.map(it => [it.name, it]));
-                const ordered = names.map(n => byName.get(n)).filter(Boolean);
-                renderUniques(ordered, new Set());
-          } catch (e) {
-                console.warn('[u79b2m] renderUniquesFromNames failed', e);
-          }
-    }
+
+
 
     window.RandomancerRenderUniquesFromNames = renderUniquesFromNames;
 
@@ -3810,3 +4819,92 @@ function ensureUniqueSection(){
   window.RandomancerInfo = { set(html){ if(content) content.innerHTML = html; }, open: openInfo, close: closeInfo };
 })();
 
+
+/* === Feedback link + Mobile header menu (v0.8.2a) === */
+(function(){
+  function getFeedbackUrl(){
+    return (document.getElementById('feedback-fab')?.dataset?.feedbackUrl || '').trim();
+  }
+
+  function openFeedback(){
+    const url = getFeedbackUrl();
+    if (!url || url.includes('REPLACE_ME')) {
+      console.warn('[feedback] Please set data-feedback-url on #feedback-fab (index.html).');
+      return;
+    }
+    window.open(url, '_blank', 'noopener');
+  }
+
+  function init(){
+    const feedbackFab = document.getElementById('feedback-fab');
+    feedbackFab?.addEventListener('click', openFeedback);
+
+    const menuFab = document.getElementById('header-menu-fab');
+    const menu = document.getElementById('header-menu');
+    if (!menuFab || !menu) return;
+
+    const isOpen = () => !menu.hidden;
+
+    function openMenu(){
+      menu.hidden = false;
+      menuFab.setAttribute('aria-expanded', 'true');
+      const first = menu.querySelector('.header-menu-item');
+      first?.focus?.();
+    }
+
+    function closeMenu(){
+      menu.hidden = true;
+      menuFab.setAttribute('aria-expanded', 'false');
+    }
+
+    function toggleMenu(){
+      if (isOpen()) closeMenu();
+      else openMenu();
+    }
+
+    menuFab.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleMenu();
+    });
+
+    menu.addEventListener('click', (e) => {
+      const item = e.target?.closest?.('.header-menu-item');
+      if (!item) return;
+
+      const action = item.dataset.action;
+      closeMenu();
+
+      if (action === 'saved') document.getElementById('saved-fab')?.click();
+      else if (action === 'info') document.getElementById('info-fab')?.click();
+      else if (action === 'feedback') openFeedback();
+    });
+
+    // Close when clicking anywhere outside the menu / button
+    document.addEventListener('click', (e) => {
+      if (!isOpen()) return;
+      const t = e.target;
+      if (t === menuFab || menu.contains(t)) return;
+      closeMenu();
+    });
+
+    // ESC closes the menu
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isOpen()) {
+        closeMenu();
+        menuFab.focus?.();
+      }
+    });
+
+    // If the viewport changes while open, just close it
+    window.addEventListener('resize', () => {
+      if (isOpen()) closeMenu();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();

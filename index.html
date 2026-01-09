@@ -56,7 +56,25 @@
 </head>
 <body>
   <button id="saved-fab" class="rm-info-fab saved-fab" aria-label="View Saved Builds" title="View Saved Builds">★</button>
+  <button id="feedback-fab" class="rm-info-fab feedback-fab" aria-label="Provide Feedback" title="Provide Feedback" data-feedback-url="https://docs.google.com/forms/d/e/1FAIpQLSdYYeGkQhoIEDjRF4wpyItAqxcGgAK24JfAyA6XeAfTQz-AbA/viewform?usp=dialog">✉</button>
   <button id="info-fab" class="rm-info-fab" aria-label="About this tool" title="About">?</button>
+
+  <!-- Mobile menu (replaces the individual header icons on small screens) -->
+  <button id="header-menu-fab" class="rm-info-fab header-menu-fab" aria-label="Menu" title="Menu" aria-haspopup="menu" aria-expanded="false">☰</button>
+  <div id="header-menu" class="header-menu" role="menu" hidden>
+    <button type="button" class="header-menu-item" data-action="saved" role="menuitem">
+      <span class="header-menu-ico" aria-hidden="true">★</span>
+      <span class="header-menu-label">Saved Builds</span>
+    </button>
+    <button type="button" class="header-menu-item" data-action="info" role="menuitem">
+      <span class="header-menu-ico" aria-hidden="true">?</span>
+      <span class="header-menu-label">About</span>
+    </button>
+    <button type="button" class="header-menu-item" data-action="feedback" role="menuitem">
+      <span class="header-menu-ico" aria-hidden="true">✉</span>
+      <span class="header-menu-label">Provide Feedback</span>
+    </button>
+  </div>
   <!-- Saved Builds Lightbox -->
   <div id="saved-overlay" class="rm-info-overlay saved-overlay" hidden>
     <div class="rm-info-backdrop" data-close="1"></div>
@@ -137,16 +155,14 @@
       <div id="rm-info-content" class="rm-info-content">
 <h4>About this Tool</h4>
 <p>This build-randomizing tool is intended to inspire creativity and experimentation within the world of Path of Exile 2. Hopefully it will provide some relief to the general 'meta fatigue' and unlock more possibilities and fun within the game.  Feel free to use this to set a challenge for yourself, or as more of a springboard for some new build ideas.</p>
-<p>The tool itself is hopefully self-explanatory. Clicking the 'Roll Your Fate' button will conjure up a randomized build, selecting a class, ascendancy, weapon(s), common ailments and tactics, primary defensive layer, and a secondary defensive layer. The randomness or cohesion of these selections can be customized with the slider at the top of the page for a more streamlined build vs. a more creative build. Along with these selections is a display indicating which attributes a build leans toward, a pair of recommended skill gems, and a set of possibly helpful unique items that may go well with the build.</p>
-<p>Now this tool is far from perfect.  The data this sits on top of may not be perfectly accurate, and it is possible you may see skill or unique items that don't align 100% with what's in the live game. However, it's probably 90% there. This is more of a fun prototype that I've been playing around with.</p>
-<p>If you have any thoughts, feedback, suggestions for features, bugs, etc. feel free to reach out to <a href="mailto:poerandomancer@gmail.com">poerandomancer@gmail.com</a>. I would love to hear your thoughts.</p>
+<p>This tool is far from perfect, and is really more of a fun prototype that I've been playing around with. If you have any thoughts, feedback, suggestions for features, bugs, etc. feel free to reach out to <a href="mailto:poerandomancer@gmail.com">poerandomancer@gmail.com</a>. I would love to hear your thoughts.</p>
 
 <h4>About Me</h4>
-<p>I found myself daydreaming about my Path of Exile 2 'LeechBreak Crossbow Titan' build one Tuesday afternoon, during a very slow and very boring sprint planning meeting at work. Like many of you I am a recent Path of Exile 2 convert (the 1st one didn’t quite hook me) and now often find myself obsessing over complex and enigmatic mathematical interactions between obscure mechanics and poorly-explained optimization opportunities, all draped in fantastical grimdark pageantry.  My dorky imagination has truly been hijacked by this incredible game.</p>
-<p>Several months ago, I slowly began to realize the true open-ended potential of buildcrafting and theorycrafting, and why so many people have been enjoying the first Path of Exile for so many years.  And seeking inspiration for unusual and creative approaches to playing the game, I stumbled upon the asmology Build Roulette tool (found here: <a href="https://www.asmology.com/path-of-exile-ii/build-roulette/" target="_blank" rel="noopener">https://www.asmology.com/path-of-exile-ii/build-roulette/</a>). A nifty little online widget to randomize one ascendancy and one skill, to inject some challenge and creativity into the experience for those burned out on the same “Super-Meta” “S-Tier” build guides.</p>
+<p>I found myself daydreaming about my Path of Exile 2 'LeechBreak Crossbow Titan' build one Tuesday afternoon, during a very slow and very boring sprint planning meeting at work. Like many of you I am a recent Path of Exile 2 convert, and now I often find myself obsessing over enigmatic mathematical interactions between obscure mechanics, all draped in fantastical grimdark pageantry.  My imagination has truly been hijacked by this incredible game.</p>
+<p>I slowly began to realize the true open-ended potential of buildcrafting, and why so many people have been enjoying the first Path of Exile for so many years.  Seeking inspiration for unusual and creative approaches to playing the game, I stumbled upon the asmology Build Roulette tool (found here: <a href="https://www.asmology.com/path-of-exile-ii/build-roulette/" target="_blank" rel="noopener">https://www.asmology.com/path-of-exile-ii/build-roulette/</a>). A nifty little online widget to randomize one ascendancy and one skill, to inject some challenge and creativity into the experience.</p>
 <p>Back to my boring Tuesday afternoon meeting, it occurred to me that there is some more opportunity here for creative inspiration. The breadth of interactions to explore within POE2 feel nearly endless, and I was looking for something new to try.</p>
 <p>So I made this.</p>
-<p>At the same time, I had a general curiosity regarding the software capabilities of ChatGPT. Yes, this was built with the aid of AI. Sorry. I am a software developer by trade, and I had a clear vision and general technical notion of how I would accomplish this, so it seemed like a decent sandbox to see what all the fuss was about. Turns out, if you have a very specific end goal in mind and a fairly simple project, AI is kinda like having a junior developer in your back pocket. A junior developer who is great at brainstorming, but also has debilitating short-term memory loss and a frustratingly unshakable misplaced optimistic confidence. Great for a quick dry-run on concepts, horrific at iteration and refinement. I ended up needing to intervene at several points with some manual refactors, but ultimately... this is what I ended up with. A pretty fun little project, and an interesting development cycle.</p>
+<p>At the same time, I had a general curiosity regarding the software capabilities of ChatGPT. Yes, this was built with the aid of AI. Sorry. I am a software developer by trade, and I had a clear vision and general technical notion of how I would accomplish this, so it seemed like a decent sandbox to see what all the fuss was about. Turns out, if you have a very specific end goal in mind and a fairly simple project, AI is kinda like having a junior developer in your back pocket. A junior developer who is great at brainstorming, but also has debilitating short-term memory loss and a frustratingly unshakable misplaced confidence. Great for a quick dry-run on concepts, horrific at iteration and refinement. I ended up needing to intervene at several points with some manual refactors, but ultimately... this is what I ended up with. A pretty fun little project, and an interesting development cycle.</p>
 
 <hr class="rm-info-hr">
 
@@ -157,23 +173,22 @@
   <div id="intro" class="intro-screen">
     <div class="intro-content">
       <p id="intro-line"></p>
-      <button id="intro-roll" class="roll-btn roll-btn"><img src="images/dice.png" alt="The Randomancer – Path of Exile 2 build randomizer thrice dice icon" class="btn-ico"> Roll Your Fate</button>
+      <button id="intro-roll" class="roll-btn roll-btn"><img src="images/dice.png" alt="The Randomancer – Path of Exile 2 build randomizer thrice dice icon" class="btn-ico"> Approach the Randomancer</button>
     </div>
   </div>
 
   <div id="asc-art" class="asc-art" aria-hidden="true"></div>
-  <div id="app" class="hidden">
+  <div id="app" class="hidden" data-has-roll="false">
     <header>
       <div class="patch-indicator" aria-label="Supported Path of Exile 2 patch">
-        Supports POE2 · <strong>v0.3.1</strong>
+        Supports POE2 · <strong>v0.4.0</strong>
       </div>
 
       <h1 class="title">The Randomancer</h1>
       <h2 class="subtitle">Conjure the Impossible. Defy the Meta.</h2>
-      
-      <!-- restored build name + flavor -->
-      <div id="build-name" class="build-name"></div>
-      <div id="build-subtext" class="build-subtext"></div>
+      <div class="app-lede" role="note" aria-label="How to use the Randomancer">
+        Tune <strong>Cohesion</strong> for tighter themes or wilder chaos. Use <strong>Bind the Fates</strong> to bind or bar certain options. When you’re ready, click <strong>Roll Your Fate</strong> to begin.
+      </div>
 
       <div class="roll-sticky">
         <button id="roll" class="roll-btn roll-btn">
@@ -198,7 +213,7 @@
 			min="0"
 			max="100"
 			step="1"
-			value="35"
+			value="25"
 			aria-label="Cohesion threshold"
 		  >
                   <!-- Live hint, dark-gold glow -->
@@ -221,11 +236,39 @@
         <span id="bind-fates-error" class="bind-fates-error" aria-live="polite"></span>
       </div>
 
-      <section class="panel">
+
+      <div id="build-roll-banner" class="build-roll-banner" aria-live="polite">
+        <div id="build-name" class="build-name"></div>
+        <div id="build-subtext" class="build-subtext"></div>
+      </div>
+
+      <section id="empty-state" class="panel empty-state" aria-label="Welcome">
+        <h3 class="empty-title">The Fates Await...</h3>
+        <p class="empty-text">
+        </p>
+      </section>
+
+      <section id="build-panel" class="panel">
         <div class="panel-actions">
+          <button id="view-toggle" class="view-toggle-btn" type="button" aria-pressed="false" aria-label="Toggle Summary View" title="Switch to Summary View">Summary</button>
           <button id="save-build" class="icon-btn" type="button" aria-label="Save Build" title="Save Build">☆</button>
-          <button id="copy-build-link" class="icon-btn" type="button" aria-label="Copy Build Link" title="Copy Build Link">⧉</button>
+
+          <div class="copy-menu" id="copy-menu-wrap">
+            <button id="copy-build-link" class="icon-btn" type="button" aria-label="Copy" title="Copy" aria-haspopup="menu" aria-expanded="false">⧉</button>
+            <div id="copy-menu" class="copy-menu-pop" role="menu" hidden>
+              <button id="copy-menu-link" class="copy-menu-item" type="button" role="menuitem">Copy Build Link</button>
+              <button id="copy-menu-summary" class="copy-menu-item" type="button" role="menuitem">Copy Summary</button>
+            </div>
+          </div>
         </div>
+        <div id="summary-panel" class="summary-panel" hidden aria-label="Build Summary">
+          <div id="summary-line-1" class="summary-row summary-row--primary"></div>
+          <div id="summary-line-2" class="summary-row"></div>
+          <div id="summary-line-3" class="summary-row"></div>
+          <div id="summary-line-4" class="summary-row"></div>
+          <div id="summary-line-5" class="summary-row"></div>
+        </div>
+
           <div class="sect">
           <div class="sect-head section-header" data-section="archetype" data-locked="false">
             <div class="section-title-row">
@@ -240,7 +283,14 @@
           <div class="grid two">
             <div><span class="label">Class</span><span id="class"></span></div>
             <div><span class="label">Ascendancy</span><span id="ascendancy"></span></div>
-            <div class="wide"><span class="label">Weapons</span><span id="weapons"></span></div>
+            <div class="wide">
+              <span class="label">Weapons</span>
+              <div class="weapon-sets">
+                <span id="weapons"></span>
+                <button id="weapon-set2-btn" class="weapon-set2-btn" type="button" hidden>+ Select secondary weapon set</button>
+                <span id="weapons-set2" hidden></span>
+              </div>
+            </div>
           </div>
         </div>
         <hr class="gold subtle"/>
@@ -285,14 +335,25 @@
             <div id="balance-text"></div>
           </div>
         </div>
-        <hr class="gold subtle"/>
-          <div class="sect">
+      </section>
+
+      <section id="skills-panel" class="panel panel--skills">
+<div class="sect">
             <div class="sect-head">
               <h3 class="section-title">Recommended Skills</h3>
               <div class="underline"></div><p class="sub">Two active skills for this roll, with supports</p>
             </div>
-            <div id="skills-grid" class="grid two skills-grid"></div>
+            <div id="skills-tabs" class="skills-tabs" hidden>
+              <button class="skills-tab is-active" data-skill-tab="1" type="button">Weapon Set I</button>
+              <button class="skills-tab" data-skill-tab="2" type="button" hidden disabled>Weapon Set II</button>
+            </div>
+            <div id="skills-grid" class="grid two skills-grid" data-skill-set="1"></div>
+            <div id="skills-grid-2" class="grid two skills-grid hidden" data-skill-set="2"></div>
           </div>
+      </section>
+
+      <section id="uniques-panel" class="panel panel--uniques">
+        <div id="uniques-mount"></div>
       </section>
 
       <section id="passives-panel" class="panel panel--passives hidden">
@@ -342,7 +403,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
       const app = document.getElementById('app');
       app.classList.remove('hidden');
       app.classList.add('fade-in');
-      document.getElementById('roll').click();
     }, 700);
   });
 });
