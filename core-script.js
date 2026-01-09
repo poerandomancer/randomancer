@@ -467,6 +467,9 @@ function scheduleSummaryRefresh(){
   try { setTimeout(() => refreshSummaryFromLatest(), 0); } catch {}
 }
 
+// Expose refresh hook globally so all roll entrypoints can trigger it safely
+try { window.scheduleSummaryRefresh = scheduleSummaryRefresh; } catch {}
+
 function installSummaryAutoRefresh(){
   const nameEl = document.getElementById('build-name');
   if (!nameEl || nameEl.__summaryAutoRefresh) return;
@@ -474,14 +477,14 @@ function installSummaryAutoRefresh(){
 
   const obs = new MutationObserver(() => {
     if (!isSummaryModeActive()) return;
-    scheduleSummaryRefresh();
+    if (window.scheduleSummaryRefresh) window.scheduleSummaryRefresh();
   });
   obs.observe(nameEl, { childList: true, characterData: true, subtree: true });
 }
 
 function buildSummaryLinesFromSnapshot(snap){
 
-  if (!snap) return ['', '', '', ''];
+  if (!snap) return ['', '', '', '', ''];
 
   const dot = ' · ';
 
@@ -496,7 +499,7 @@ function buildSummaryLinesFromSnapshot(snap){
 
   const ailTxt = ailments.length ? ailments.join(' & ') : '';
   const tacTxt = tactics.length ? tactics.join(' & ') : '';
-  const mechanicsTxt = [ailTxt, tacTxt].filter(Boolean).join(' / ');
+  const mechanicsTxt = [ailTxt, tacTxt].filter(Boolean).join(' & ');
 
   const line1 = [snap.ascendancy, weaponsTxt, mechanicsTxt, snap.defStrat].filter(Boolean).join(dot);
 
@@ -510,6 +513,13 @@ function buildSummaryLinesFromSnapshot(snap){
     const g = lookupGem(gemDict, key);
     return (g && g.name) ? g.name : (entry.name || key);
   };
+
+  // Secondary weapon set (if rolled/selected)
+  const weapons2Txt = formatWeaponLine(snap.weapon2, snap.offhand2);
+  const skills2All = (snap.recommendedSkills2 || []).map(resolveGemName).filter(Boolean);
+  const skills2 = skills2All.slice(0, 2);
+  const lineWS2 = [weapons2Txt, ...skills2].filter(Boolean).join(dot);
+
 
   const skills = (snap.recommendedSkills || []).map(resolveGemName).filter(Boolean);
   const buff = snap.recommendedPersistentBuff ? resolveGemName(snap.recommendedPersistentBuff) : '';
@@ -530,26 +540,28 @@ function buildSummaryLinesFromSnapshot(snap){
   const uniqPass = passNames.filter(n => (seen.has(n) ? false : (seen.add(n), true)));
   const line4 = uniqPass.join(dot);
 
-  return [line1, line2, line3, line4];
+  return [line1, lineWS2, line2, line3, line4];
 }
 
 function getSummaryTextFromSnapshot(snap){
   const lines = buildSummaryLinesFromSnapshot(snap);
   const out = [];
   if (lines[0]) out.push(`ARCHETYPE: ${lines[0]}`);
-  if (lines[1]) out.push(`SKILLS: ${lines[1]}`);
-  if (lines[2]) out.push(`UNIQUES: ${lines[2]}`);
-  if (lines[3]) out.push(`PASSIVES: ${lines[3]}`);
+  if (lines[1]) out.push(`WEAPON SET II: ${lines[1]}`);
+  if (lines[2]) out.push(`SKILLS: ${lines[2]}`);
+  if (lines[3]) out.push(`UNIQUES: ${lines[3]}`);
+  if (lines[4]) out.push(`PASSIVES: ${lines[4]}`);
   return out.join('\n');
 }
 
-const SUMMARY_LABELS = ['ARCHETYPE','SKILLS','UNIQUES','PASSIVES'];
+const SUMMARY_LABELS = ['ARCHETYPE','WEAPON SET II','SKILLS','UNIQUES','PASSIVES'];
 
 function setSummaryRow(el, label, content, opts){
   if (!el) return;
   // clear
   while (el.firstChild) el.removeChild(el.firstChild);
-  if (!content) return;
+  if (!content) { el.hidden = true; return; }
+  el.hidden = false;
 
   const labelSpan = document.createElement('span');
   labelSpan.className = 'summary-label';
@@ -568,7 +580,7 @@ function renderSummaryFromSnapshot(snap){
   if (!panel) return;
 
   const lines = buildSummaryLinesFromSnapshot(snap);
-  const ids = ['summary-line-1','summary-line-2','summary-line-3','summary-line-4'];
+  const ids = ['summary-line-1','summary-line-2','summary-line-3','summary-line-4','summary-line-5'];
   ids.forEach((id, i) => {
     const el = document.getElementById(id);
     if (!el) return;
@@ -762,7 +774,7 @@ function renderSnapshotToDom(snap){
       const entry = {
         code,
         name: snap.buildName || `${snap.className} ${snap.ascendancy}`.trim(),
-        meta: [snap.ascendancy, snap.offhand ? `${snap.weapon} & ${snap.offhand}` : snap.weapon].filter(Boolean).join(' • ')
+        meta: [snap.ascendancy, formatWeaponLine(snap.weapon, snap.offhand)].filter(Boolean).join(' • ')
       };
       const existing = list.filter(e => e.code !== code);
       existing.unshift(entry);
@@ -959,8 +971,18 @@ function onDomReady(fn) {
 }
 
 function formatWeaponLine(weapon, offhand){
-  if (weapon && offhand) return `${weapon} & ${offhand}`;
-  return weapon || offhand || '';
+  const w = (weapon || '').trim();
+  const o = (offhand || '').trim();
+
+  // Bow builds always imply a Quiver (even if offhand is not explicitly set in data)
+  if (w && /^bow$/i.test(w)) {
+    const q = 'Quiver';
+    if (!o || /quiver/i.test(o) === false) return `${w} & ${q}`;
+    return `${w} & ${o}`;
+  }
+
+  if (w && o) return `${w} & ${o}`;
+  return w || o || '';
 }
 
 function hasSecondaryWeaponSet(snap){
@@ -3305,7 +3327,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         rollBuild(data);
 
       // Summary view: keep text updated immediately after each roll
-      scheduleSummaryRefresh();
+      if (window.scheduleSummaryRefresh) window.scheduleSummaryRefresh();
 
         // Keep Summary view live on each reroll.
         // (This roll pipeline is the primary entrypoint; other roll funnels may not fire listeners.)
@@ -3454,7 +3476,8 @@ async function handleSecondaryWeaponSetSelection(){
 
   const { weapon, offhand, wOaths } = result;
   const weaponName = weapon?.name || '';
-  const offhandName = offhand?.name || '';
+  let offhandName = offhand?.name || '';
+  if (weaponName && /^bow$/i.test(weaponName) && !offhandName) offhandName = 'Quiver';
 
   renderSecondaryWeaponLine([weaponName, offhandName].filter(Boolean), wOaths);
   const weapons2El = document.getElementById('weapons-set2');
@@ -3716,9 +3739,16 @@ function rollBuild(dataWrap){
   document.getElementById('class')?.replaceChildren(document.createTextNode(clsName || ''));
   renderOathAwareText(document.getElementById('ascendancy'), asc || '', ascOaths);
   updateAscArt(asc);
+  const weaponParts = (() => {
+    const wName = weapon?.name || '';
+    const oName = offhand?.name || '';
+    if (wName && /^bow$/i.test(wName)) return [wName, oName || 'Quiver'];
+    return [wName, oName].filter(Boolean);
+  })();
+
   renderOathAwareText(
     document.getElementById('weapons'),
-    [weapon?.name, offhand?.name].filter(Boolean),
+    weaponParts,
     wOaths
   );
   resetSecondaryWeaponSetUI(true);
@@ -4104,7 +4134,7 @@ async function loadData() {
 
       // capture → sync
       try { App.captureCurrentRollFromDOM(); App.syncDOMFromState(); } catch {}
-      try { scheduleSummaryRefresh(); } catch {}
+      try { if (window.scheduleSummaryRefresh) window.scheduleSummaryRefresh(); } catch {}
       
       // notify listeners that a roll has completed
       try { notifyRoll(); } catch (e) {}
