@@ -548,13 +548,13 @@ function getSummaryTextFromSnapshot(snap){
   const out = [];
   if (lines[0]) out.push(`ARCHETYPE: ${lines[0]}`);
   if (lines[1]) out.push(`WEAPON SET II: ${lines[1]}`);
-  if (lines[2]) out.push(`SKILLS: ${lines[2]}`);
+  if (lines[2]) out.push(`CORE SKILLS: ${lines[2]}`);
   if (lines[3]) out.push(`UNIQUES: ${lines[3]}`);
   if (lines[4]) out.push(`PASSIVES: ${lines[4]}`);
   return out.join('\n');
 }
 
-const SUMMARY_LABELS = ['ARCHETYPE','WEAPON SET II','SKILLS','UNIQUES','PASSIVES'];
+const SUMMARY_LABELS = ['ARCHETYPE','WEAPON SET II','CORE SKILLS','UNIQUES','PASSIVES'];
 
 function setSummaryRow(el, label, content, opts){
   if (!el) return;
