@@ -1992,12 +1992,34 @@ img, video { max-width: 100%; height: auto; }
   letter-spacing: .01em;
   line-height: 1.35;
   text-align:center;
-  margin: .55rem 0;
+  margin: .78rem 0;
   word-break: break-word;
 }
 .summary-row--primary{
   font-size: 1.28rem;
   letter-spacing: .03em;
+}
+
+.summary-label{
+  display:inline-block;
+  white-space: nowrap;
+  font-size: 0.78rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  opacity: .68;
+  font-weight: 700;
+}
+
+.summary-content{
+  font-weight: 600;
+}
+
+.summary-row--primary .summary-content{
+  font-weight: 700;
+}
+
+@media (max-width: 720px){
+  .summary-label{ font-size: 0.72rem; }
 }
 
 .summary-row:empty{ display:none; }

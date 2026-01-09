@@ -428,7 +428,59 @@ function toggleViewMode(){
   setViewMode(next);
 }
 
+// Summary auto-refresh helpers: keep summary text synced even when roll flows differ
+function isSummaryModeActive(){
+  const appEl = document.getElementById('app');
+  const ds = appEl && appEl.dataset ? appEl.dataset.view : '';
+  if (ds) return ds === 'summary';
+  return getViewMode() === 'summary';
+}
+
+function refreshSummaryFromLatest(){
+  if (!isSummaryModeActive()) return;
+
+  let snap = null;
+  try { snap = (typeof currentSnap === 'function') ? currentSnap() : null; } catch {}
+  if (!snap) {
+    try { snap = (window.App && window.App.state && window.App.state.currentRoll) ? window.App.state.currentRoll : null; } catch {}
+  }
+  if (!snap) {
+    try { snap = window.CURRENT_ROLL || null; } catch {}
+  }
+
+  // As a last resort, capture from DOM (useful when some roll flows update DOM first)
+  if (!snap && window.App && typeof window.App.captureCurrentRollFromDOM === 'function') {
+    try {
+      window.App.captureCurrentRollFromDOM();
+      snap = (window.App.state && window.App.state.currentRoll) ? window.App.state.currentRoll : null;
+    } catch {}
+  }
+
+  if (snap) {
+    try { renderSummaryFromSnapshot(snap); } catch {}
+  }
+}
+
+function scheduleSummaryRefresh(){
+  refreshSummaryFromLatest();
+  try { requestAnimationFrame(() => refreshSummaryFromLatest()); } catch {}
+  try { setTimeout(() => refreshSummaryFromLatest(), 0); } catch {}
+}
+
+function installSummaryAutoRefresh(){
+  const nameEl = document.getElementById('build-name');
+  if (!nameEl || nameEl.__summaryAutoRefresh) return;
+  nameEl.__summaryAutoRefresh = true;
+
+  const obs = new MutationObserver(() => {
+    if (!isSummaryModeActive()) return;
+    scheduleSummaryRefresh();
+  });
+  obs.observe(nameEl, { childList: true, characterData: true, subtree: true });
+}
+
 function buildSummaryLinesFromSnapshot(snap){
+
   if (!snap) return ['', '', '', ''];
 
   const dot = ' · ';
@@ -482,7 +534,33 @@ function buildSummaryLinesFromSnapshot(snap){
 }
 
 function getSummaryTextFromSnapshot(snap){
-  return buildSummaryLinesFromSnapshot(snap).filter(Boolean).join('\n');
+  const lines = buildSummaryLinesFromSnapshot(snap);
+  const out = [];
+  if (lines[0]) out.push(`ARCHETYPE: ${lines[0]}`);
+  if (lines[1]) out.push(`SKILLS: ${lines[1]}`);
+  if (lines[2]) out.push(`UNIQUES: ${lines[2]}`);
+  if (lines[3]) out.push(`PASSIVES: ${lines[3]}`);
+  return out.join('\n');
+}
+
+const SUMMARY_LABELS = ['ARCHETYPE','SKILLS','UNIQUES','PASSIVES'];
+
+function setSummaryRow(el, label, content, opts){
+  if (!el) return;
+  // clear
+  while (el.firstChild) el.removeChild(el.firstChild);
+  if (!content) return;
+
+  const labelSpan = document.createElement('span');
+  labelSpan.className = 'summary-label';
+  labelSpan.textContent = `${label} — `;
+
+  const contentSpan = document.createElement('span');
+  contentSpan.className = (opts && opts.highlight) ? 'summary-content oath-hit' : 'summary-content';
+  contentSpan.textContent = content;
+
+  el.appendChild(labelSpan);
+  el.appendChild(contentSpan);
 }
 
 function renderSummaryFromSnapshot(snap){
@@ -494,10 +572,10 @@ function renderSummaryFromSnapshot(snap){
   ids.forEach((id, i) => {
     const el = document.getElementById(id);
     if (!el) return;
-    el.textContent = lines[i] || '';
+    setSummaryRow(el, SUMMARY_LABELS[i], lines[i] || '', { highlight: i === 0 });
   });
 
-  panel.hidden = (getViewMode() !== 'summary');
+  panel.hidden = !isSummaryModeActive();
 }
 
 function renderSnapshotToDom(snap){
@@ -704,6 +782,9 @@ const viewBtn = document.getElementById('view-toggle');
     // Initialize persisted view mode (default: detailed)
     setViewMode(getViewMode());
 
+    // Keep summary view synced during rolls (some flows update state/DOM at different times)
+    installSummaryAutoRefresh();
+
     viewBtn?.addEventListener('click', () => {
       toggleViewMode();
     });
@@ -803,12 +884,34 @@ saveBtn?.addEventListener('click', saveCurrentBuild);
   }
 
   function subscribeToRolls(){
-    if (window.App && typeof window.App.onRoll === 'function') {
-      window.App.onRoll(() => {
-        const snap = currentSnap();
-        const code = encodeSnapshot(snap);
-        updateCodeUI(code);
-      });
+    // App.onRoll is attached by a later bootstrap layer; retry briefly if it's not ready yet.
+    if (!subscribeToRolls._attempts) subscribeToRolls._attempts = 0;
+    if (!subscribeToRolls._unsub) subscribeToRolls._unsub = null;
+
+    const App = window.App;
+    if (!App || typeof App.onRoll !== 'function') {
+      if (subscribeToRolls._attempts++ < 25) {
+        setTimeout(subscribeToRolls, 120);
+      }
+      return;
+    }
+
+    // Only subscribe once.
+    if (subscribeToRolls._unsub) return;
+
+    subscribeToRolls._unsub = App.onRoll((snap) => {
+      const s = snap || currentSnap();
+      try { renderSummaryFromSnapshot(s); } catch {}
+      const code = encodeSnapshot(s);
+      updateCodeUI(code);
+    });
+
+    // Hydrate summary immediately if we already have a roll loaded (e.g., via build code).
+    const s0 = currentSnap();
+    if (s0) {
+      try { renderSummaryFromSnapshot(s0); } catch {}
+      const code0 = encodeSnapshot(s0);
+      updateCodeUI(code0);
     }
   }
 
@@ -3200,6 +3303,30 @@ document.addEventListener('DOMContentLoaded', ()=>{
       try {
         const data = await ensureDataPreload();
         rollBuild(data);
+
+      // Summary view: keep text updated immediately after each roll
+      scheduleSummaryRefresh();
+
+        // Keep Summary view live on each reroll.
+        // (This roll pipeline is the primary entrypoint; other roll funnels may not fire listeners.)
+        try {
+          const snap = (window.App && window.App.state && window.App.state.currentRoll)
+            ? { ...window.App.state.currentRoll }
+            : null;
+          // Run once immediately and once on the next tick to catch any late merges.
+          if (snap) renderSummaryFromSnapshot(snap);
+          setTimeout(() => {
+            try {
+              const s2 = (window.App && window.App.state && window.App.state.currentRoll)
+                ? { ...window.App.state.currentRoll }
+                : null;
+              if (s2) renderSummaryFromSnapshot(s2);
+              if (typeof window.RandomancerUpdateBuildCodeUI === 'function') {
+                window.RandomancerUpdateBuildCodeUI();
+              }
+            } catch {}
+          }, 0);
+        } catch {}
       } catch (err) {
         console.error('[Randomancer] roll failed:', err);
         if (statusEl) {
@@ -3746,6 +3873,23 @@ function rollBuild(dataWrap){
 
   syncLockUIFromState();
 
+  // Ensure Summary view stays in sync with the latest roll snapshot (covers App.roll capture-phase funnel).
+  try {
+    const s = (window.App && window.App.state && window.App.state.currentRoll)
+      ? window.App.state.currentRoll
+      : (window.CURRENT_ROLL || null);
+    if (s) renderSummaryFromSnapshot(s);
+    // Run once more on next tick to capture late merges (uniques/passives/skills updates)
+    setTimeout(() => {
+      try {
+        const s2 = (window.App && window.App.state && window.App.state.currentRoll)
+          ? window.App.state.currentRoll
+          : (window.CURRENT_ROLL || null);
+        if (s2) renderSummaryFromSnapshot(s2);
+      } catch {}
+    }, 0);
+  } catch {}
+
 }
 
 // ---------- data initialization ----------
@@ -3889,6 +4033,7 @@ async function loadData() {
 		    set2Btn.hidden = !!(s.weapon2 || s.offhand2) || !s.weapon;
 		  }
 		  setSkillsTabsAvailability(!!(s.weapon2 || s.offhand2));
+			  try { renderSummaryFromSnapshot(s); } catch (e) {}
 		}catch(e){ /*no-op*/ }
           };
         });
@@ -3959,6 +4104,7 @@ async function loadData() {
 
       // capture → sync
       try { App.captureCurrentRollFromDOM(); App.syncDOMFromState(); } catch {}
+      try { scheduleSummaryRefresh(); } catch {}
       
       // notify listeners that a roll has completed
       try { notifyRoll(); } catch (e) {}
