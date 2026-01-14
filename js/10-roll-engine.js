@@ -1,4 +1,4 @@
-import { renderSecondaryWeaponLine, setActiveSkillsTab, setSkillsTabsAvailability } from './01-meta-and-domready.js';
+import { renderOathAwareText, renderSecondaryWeaponLine, setActiveSkillsTab, setSkillsTabsAvailability } from './01-meta-and-domready.js';
 import { renderSummaryFromSnapshot } from './02-summary-view.js';
 import { getLockState, syncLockUIFromState } from './00-locks-and-snapshots.js';
 import { getBindFatesFromApp } from './04-app-state.js';
