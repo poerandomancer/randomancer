@@ -122,7 +122,6 @@ function lookupGem(dict, raw){
 
 // ---------- helpers ----------
 function dominantAttr(attrs){ const e=Object.entries(attrs||{}).sort((a,b)=>b[1]-a[1]); const k=(e[0]?.[0]||'int'); return {strength:'str',dexterity:'dex',intelligence:'int'}[k]||k.slice(0,3); }
-function sample(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 // ===== Build Name Generation (v0.8.2+) =====
 
 // ===== Build Name Generation (v0.8.2+) =====
