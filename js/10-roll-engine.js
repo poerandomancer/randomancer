@@ -6,6 +6,7 @@ import { sample } from './05-tags-and-scorer.js';
 import { COHESION_MODES, applyHardRestrictions, buildBuildContext, cohesionThreshold, currentMode, lookupAscendancyIdByName, pickByCohesion, resolveCohesionMode, validOffhands } from './06-cohesion.js';
 import { renderPassiveRecommendations, rollRecommendedSkills } from './07-skills-render.js';
 import { dataReady, ensureDataPreload } from './08-data-load.js';
+import { pickRecommendedAscendancyNodes, pickRecommendedKeystones, pickRecommendedNotables } from '../passivesEngine.js';
 
 // ---------- overlay + ascendancy art ----------
 function updateAscArt(asc){
