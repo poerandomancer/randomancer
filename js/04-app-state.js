@@ -1,5 +1,5 @@
 import { COHESION_MODE_NAMES, Dom, firstText } from './01-meta-and-domready.js';
-import { DEFAULT_LOCKS } from './00-locks-and-snapshots.js';
+import { DEFAULT_LOCKS } from './00-locks-defaults.js';
 import { Config, RulesEngine, Schema } from './03-config-and-schema.js';
 import { COHESION_MODES, cohesionNameForThreshold, setCohesionState } from './06-cohesion.js';
 import { ensureDataPreload } from './08-data-load.js';

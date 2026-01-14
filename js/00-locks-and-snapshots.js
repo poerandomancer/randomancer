@@ -24,14 +24,9 @@ import {
   pickRecommendedKeystones,
   pickRecommendedNotables,
 } from '../passivesEngine.js';
+import { DEFAULT_LOCKS } from './00-locks-defaults.js';
 
 // ----- Section Locks (centralized state + UI sync) -----
-const DEFAULT_LOCKS = Object.freeze({
-  archetype: false,
-  mechanics: false,
-  survivability: false,
-});
-
 function getLockState(){
   const appState = window.App?.state;
   const existing = (appState && appState.locks) || window.__LOCK_STATE__ || {};
