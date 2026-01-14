@@ -8,6 +8,26 @@ import {
 
 "use strict";
 
+/**
+ * Module Map + Public API (single-file layout)
+ * 1) Locks + build code snapshots + saved builds (section locks, encode/decode, saved overlay).
+ * 2) Summary view (view toggle, summary render + auto-refresh).
+ * 3) Config + schema + rules (Schema/Config/RulesEngine scaffolding).
+ * 4) App state & bootstrap (window.App, roll orchestration, state capture).
+ * 5) Tags/scorer + IDF helpers (TagUtils, scorer install).
+ * 6) Passives + skills render (passives constellation + skill cards).
+ * 7) Data load + bind fates UI (JSON loaders + modal wiring).
+ * 8) Roll engine + sync (rollBuild, state→DOM sync, pre-gate).
+ * 9) Uniques synergy + info/feedback UI.
+ *
+ * Public window exports (must remain available):
+ * window.App, window.rollBuild, window.scheduleSummaryRefresh, window.RandomancerEncodeSnapshot,
+ * window.RandomancerApplyBuildCode, window.RandomancerUpdateBuildCodeUI,
+ * window.RandomancerRefreshUniques, window.RandomancerRenderUniquesFromNames,
+ * window.RandomancerInfo, window.getOrBuildIDF,
+ * window.__LOCK_STATE__ handling + getLockState/setLockState/DEFAULT_LOCKS.
+ */
+
 // === v0.7.3 selector helpers & metrics ===
 const Selectors = {
   weapon: '#weapons',
@@ -1041,6 +1061,47 @@ function getQueryParams() {
     return new URLSearchParams('');
   }
 }
+
+// Optional runtime smoke check (warnings only).
+const DEBUG_SMOKE_CHECK = false;
+function runSmokeCheck(){
+  const requiredExports = [
+    'App',
+    'rollBuild',
+    'scheduleSummaryRefresh',
+    'RandomancerEncodeSnapshot',
+    'RandomancerApplyBuildCode',
+    'RandomancerUpdateBuildCodeUI',
+    'RandomancerRefreshUniques',
+    'RandomancerRenderUniquesFromNames',
+    'RandomancerInfo',
+    'getOrBuildIDF'
+  ];
+  const missingExports = requiredExports.filter((key) => typeof window[key] === 'undefined');
+  if (missingExports.length) {
+    console.warn('[smoke-check] Missing window exports:', missingExports);
+  }
+
+  const requiredNodes = {
+    rollButton: '#roll',
+    cohesionSlider: '#cohesionRange',
+    summaryToggle: '#view-toggle',
+    bindFatesModal: '#bind-fates-modal',
+    savedOverlay: '#saved-overlay',
+    infoOverlay: '#rm-info-overlay'
+  };
+  Object.entries(requiredNodes).forEach(([label, selector]) => {
+    if (!document.querySelector(selector)) {
+      console.warn(`[smoke-check] Missing DOM node: ${label} (${selector})`);
+    }
+  });
+}
+
+onDomReady(() => {
+  const params = getQueryParams();
+  const shouldRun = DEBUG_SMOKE_CHECK || params.get('debug') === '1';
+  if (shouldRun) runSmokeCheck();
+});
 
 // ===== Schema guard =====
 const Schema = (() => {
