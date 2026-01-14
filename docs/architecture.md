@@ -3,15 +3,21 @@
 ## Module Map (current layout)
 
 **JavaScript (single entry: `core-script.js`)**
-1. **Locks + Build Codes + Saved Builds** — lock state, build code encode/decode, saved builds overlay.
-2. **Summary View** — summary toggle, summary render, auto-refresh hooks.
-3. **Config + Schema + Rules Engine** — data schema guard, config resolution, rules enforcement scaffold.
-4. **App State** — `window.App` state container, bootstrap, cohesion setters, state capture.
-5. **Tags + Scoring Helpers** — tag normalization, scorer install, IDF setup helpers.
-6. **Passives + Skills Render** — passives constellation render, skills cards, persistent buff render.
-7. **Data Load + Bind Fates UI** — JSON loaders, preloading, bind-fates modal wiring.
-8. **Roll Engine + Sync** — roll pipeline, UI sync, pre-gate state wrapper.
-9. **Uniques + Info/Feedback** — uniques synergy engine, info lightbox, feedback/menu UI.
+1. **`js/01-meta-and-domready.js`** — selectors, DOM helpers, onDomReady, shared helpers, smoke check.
+2. **`js/00-locks-and-snapshots.js`** — lock state, build code encode/decode, saved builds overlay.
+3. **`js/02-summary-view.js`** — summary toggle, summary render, auto-refresh hooks.
+4. **`js/03-config-and-schema.js`** — data schema guard, config resolution, rules enforcement scaffold.
+5. **`js/04-app-state.js`** — `window.App` state container, bootstrap, cohesion setters, state capture.
+6. **`js/05-tags-and-scorer.js`** — tag normalization, scorer install, IDF setup helpers, dictionaries.
+7. **`js/06-cohesion.js`** — cohesion modes, thresholds, build context helpers.
+8. **`js/07-skills-render.js`** — passives constellation render, skills cards, persistent buff render.
+9. **`js/08-data-load.js`** — JSON loaders + preload pipeline.
+10. **`js/09-bind-fates-ui.js`** — bind-fates modal + cohesion slider wiring.
+11. **`js/10-roll-engine.js`** — rollBuild + weapon set II + roll button wiring.
+12. **`js/11-pre-gate-and-sync.js`** — pre-gate + state→DOM sync + IDF cache.
+13. **`js/12-uniques-engine.js`** — uniques synergy engine.
+14. **`js/13-info-lightbox.js`** — info lightbox controller.
+15. **`js/14-feedback-menu.js`** — feedback link + mobile header menu.
 
 **CSS (split into ordered layers, aggregated by `styles.css`)**
 - `css/00-base.css`
