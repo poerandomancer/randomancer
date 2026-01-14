@@ -1,4 +1,4 @@
-import { TagUtils } from './05-tags-and-scorer.js';
+import { TagUtils, defensePseudoTags } from './05-tags-and-scorer.js';
 
 /* === Randomancer: Uniques Synergy — canonical engine (v0.8.2) === */
 (function(){
