@@ -33,6 +33,8 @@ function updateAscArt(asc){
   };
   img.src = path;
 }
+
+try { window.rollBuild = rollBuild; } catch {}
 const AIL_COLORS = {
   ignite:"rgba(255, 80, 0, 0.08)",
   freeze:"rgba(90, 160, 255, 0.08)",
@@ -665,91 +667,6 @@ function rollBuild(dataWrap){
   });
 }
 
-try { window.rollBuild = rollBuild; } catch {}
-
-// ---------- roll button + weapon set wiring ----------
-document.addEventListener('DOMContentLoaded', () => {
-  const rollBtn = document.getElementById('roll');
-  if (rollBtn) {
-    const statusEl = rollBtn.querySelector('.roll-status');
-    rollBtn.addEventListener('click', async () => {
-      // Tiny loading hint if data is still warming up
-      rollBtn.classList.add('is-loading');
-      if (statusEl && !dataReady) {
-        statusEl.textContent = 'Preparing the fates…';
-      }
-
-      try {
-        const data = await ensureDataPreload();
-        rollBuild(data);
-
-        // Summary view: keep text updated immediately after each roll
-        if (window.scheduleSummaryRefresh) window.scheduleSummaryRefresh();
-
-        // Keep Summary view live on each reroll.
-        // (This roll pipeline is the primary entrypoint; other roll funnels may not fire listeners.)
-        try {
-          const snap = (window.App && window.App.state && window.App.state.currentRoll)
-            ? { ...window.App.state.currentRoll }
-            : null;
-          // Run once immediately and once on the next tick to catch any late merges.
-          if (snap) renderSummaryFromSnapshot(snap);
-          setTimeout(() => {
-            try {
-              const s2 = (window.App && window.App.state && window.App.state.currentRoll)
-                ? { ...window.App.state.currentRoll }
-                : null;
-              if (s2) renderSummaryFromSnapshot(s2);
-              if (typeof window.RandomancerUpdateBuildCodeUI === 'function') {
-                window.RandomancerUpdateBuildCodeUI();
-              }
-            } catch {}
-          }, 0);
-        } catch {}
-      } catch (err) {
-        console.error('[Randomancer] roll failed:', err);
-        if (statusEl) {
-          statusEl.textContent = 'Something went wrong. Try again.';
-        }
-      } finally {
-        // Clear the loading state once data has loaded or failed
-        setTimeout(() => {
-          rollBtn.classList.remove('is-loading');
-          if (statusEl && dataReady) {
-            statusEl.textContent = '';
-          }
-        }, 120);
-      }
-    });
-  }
-
-  const weaponSet2Btn = document.getElementById('weapon-set2-btn');
-  if (weaponSet2Btn) {
-    weaponSet2Btn.addEventListener('click', () => {
-      handleSecondaryWeaponSetSelection().catch(err => {
-        console.error('[secondary weapons] roll failed:', err);
-      });
-    });
-  }
-
-  const skillsTabs = document.getElementById('skills-tabs');
-  if (skillsTabs) {
-    skillsTabs.addEventListener('click', (event) => {
-      const btn = event.target.closest('.skills-tab');
-      if (!btn || btn.disabled) return;
-      setActiveSkillsTab(btn.dataset.skillTab || '1');
-    });
-  }
-});
-
-export {
-  handleSecondaryWeaponSetSelection,
-  resetSecondaryWeaponSetUI,
-  rollBuild,
-  updateAilmentOverlay,
-  updateAscArt
-};
-
 // Ailments/Tactics roll (with duplicate prevention + cohesion bias)
   let ailmentSet = [];
   let tacticSet  = [];
@@ -1028,3 +945,86 @@ export {
   } catch {}
 
 }
+
+// ---------- roll button + weapon set wiring ----------
+document.addEventListener('DOMContentLoaded', () => {
+  const rollBtn = document.getElementById('roll');
+  if (rollBtn) {
+    const statusEl = rollBtn.querySelector('.roll-status');
+    rollBtn.addEventListener('click', async () => {
+      // Tiny loading hint if data is still warming up
+      rollBtn.classList.add('is-loading');
+      if (statusEl && !dataReady) {
+        statusEl.textContent = 'Preparing the fates…';
+      }
+
+      try {
+        const data = await ensureDataPreload();
+        rollBuild(data);
+
+        // Summary view: keep text updated immediately after each roll
+        if (window.scheduleSummaryRefresh) window.scheduleSummaryRefresh();
+
+        // Keep Summary view live on each reroll.
+        // (This roll pipeline is the primary entrypoint; other roll funnels may not fire listeners.)
+        try {
+          const snap = (window.App && window.App.state && window.App.state.currentRoll)
+            ? { ...window.App.state.currentRoll }
+            : null;
+          // Run once immediately and once on the next tick to catch any late merges.
+          if (snap) renderSummaryFromSnapshot(snap);
+          setTimeout(() => {
+            try {
+              const s2 = (window.App && window.App.state && window.App.state.currentRoll)
+                ? { ...window.App.state.currentRoll }
+                : null;
+              if (s2) renderSummaryFromSnapshot(s2);
+              if (typeof window.RandomancerUpdateBuildCodeUI === 'function') {
+                window.RandomancerUpdateBuildCodeUI();
+              }
+            } catch {}
+          }, 0);
+        } catch {}
+      } catch (err) {
+        console.error('[Randomancer] roll failed:', err);
+        if (statusEl) {
+          statusEl.textContent = 'Something went wrong. Try again.';
+        }
+      } finally {
+        // Clear the loading state once data has loaded or failed
+        setTimeout(() => {
+          rollBtn.classList.remove('is-loading');
+          if (statusEl && dataReady) {
+            statusEl.textContent = '';
+          }
+        }, 120);
+      }
+    });
+  }
+
+  const weaponSet2Btn = document.getElementById('weapon-set2-btn');
+  if (weaponSet2Btn) {
+    weaponSet2Btn.addEventListener('click', () => {
+      handleSecondaryWeaponSetSelection().catch(err => {
+        console.error('[secondary weapons] roll failed:', err);
+      });
+    });
+  }
+
+  const skillsTabs = document.getElementById('skills-tabs');
+  if (skillsTabs) {
+    skillsTabs.addEventListener('click', (event) => {
+      const btn = event.target.closest('.skills-tab');
+      if (!btn || btn.disabled) return;
+      setActiveSkillsTab(btn.dataset.skillTab || '1');
+    });
+  }
+});
+
+export {
+  handleSecondaryWeaponSetSelection,
+  resetSecondaryWeaponSetUI,
+  rollBuild,
+  updateAilmentOverlay,
+  updateAscArt
+};
