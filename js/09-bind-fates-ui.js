@@ -30,6 +30,10 @@ function showBindFatesError(msg){
   el.textContent = msg || '';
 }
 
+if (typeof window !== 'undefined') {
+  window.showBindFatesError = showBindFatesError;
+}
+
 // ---------- wireup ----------
 document.addEventListener('DOMContentLoaded', ()=>{
     const slider = document.getElementById('cohesionRange');
@@ -254,5 +258,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 	  }
 
 });
+
+export { showBindFatesError };
 
 // ---------- data initialization ----------

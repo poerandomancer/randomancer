@@ -1,4 +1,4 @@
-import { formatWeaponLine, getQueryParams, setSkillsTabsAvailability } from './01-meta-and-domready.js';
+import { formatWeaponLine, getQueryParams, onDomReady, setSkillsTabsAvailability } from './01-meta-and-domready.js';
 import { renderSummaryFromSnapshot } from './02-summary-view.js';
 import { buildTagIDF } from './05-tags-and-scorer.js';
 

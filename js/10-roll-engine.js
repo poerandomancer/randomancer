@@ -35,6 +35,11 @@ function updateAscArt(asc){
 }
 
 try { window.rollBuild = rollBuild; } catch {}
+const showBindFatesError = (msg) => {
+  if (typeof window !== 'undefined' && typeof window.showBindFatesError === 'function') {
+    window.showBindFatesError(msg);
+  }
+};
 const AIL_COLORS = {
   ignite:"rgba(255, 80, 0, 0.08)",
   freeze:"rgba(90, 160, 255, 0.08)",

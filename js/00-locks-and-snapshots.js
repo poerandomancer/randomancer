@@ -1,6 +1,7 @@
 import {
   formatWeaponLine,
   hasSecondaryWeaponSet,
+  getQueryParams,
   onDomReady,
   setActiveSkillsTab,
   setSkillsTabsAvailability
