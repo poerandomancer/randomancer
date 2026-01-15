@@ -1,0 +1,245 @@
+import { COHESION_MODE_NAMES, Dom, firstText } from './01-meta-and-domready.js';
+import { DEFAULT_LOCKS } from './00-locks-defaults.js';
+import { Config, RulesEngine, Schema } from './03-config-and-schema.js';
+import { COHESION_MODES, cohesionNameForThreshold, setCohesionState } from './06-cohesion.js';
+import { ensureDataPreload } from './08-data-load.js';
+
+// ===== App API =====
+const App = window.App = (() => {
+  const state = {
+    DATA:   null,
+    GEMS:   null,
+    SKILLS: null,
+    CONFIG: null,
+
+    // Cohesion slider: continuous [0..1], but we still track the nearest preset index + name
+    // 0=strict,1=cohesive,2=chaotic,3=madness (legacy index for saved builds)
+    cohesionMode: 1,
+    cohesionModeName: 'cohesive',
+    cohesionThreshold: 3/4,
+
+
+    // canonical current roll snapshot
+    currentRoll: {
+      className: '',
+      ascendancy: '',
+      ascendancyId: null,
+      defense:   '',
+      defStrat:  '',
+      defStratObj: null,
+      weapon:    '',
+      offhand:   '',
+      weapon2:   '',
+      offhand2:  '',
+      tactics:   '',
+      ailments:  '',
+      ailmentList: [],
+      tacticList: [],
+      tacticSet: [],
+      ailmentSet: [],
+      buildName: '',
+      flavor:    '',
+      attributes: { strength: 0, dexterity: 0, intelligence: 0 },
+      rollAttr: { strength: 0, dexterity: 0, intelligence: 0 },
+      defenseObj: null,
+      recommendedSkills: [],
+      recommendedSkills2: [],
+      recommendedPersistentBuff: null,
+      recommendedUniques: [],
+      tagProfile: null,
+      snapshotVersion: 1
+    },
+
+    bindFates: {
+      ascendancy: { oaths: [], abominations: [] },
+      weapon:     { oaths: [], abominations: [] },
+      combat:     { oaths: [], abominations: [] }
+    },
+
+    locks: { ...DEFAULT_LOCKS },
+
+    // dev toggle for “single-entry” behavior
+    singleEntryMode: true
+  };
+
+    async function bootstrap(){
+		// Reuse the same preload pipeline the UI uses
+		const { core, gems } = await ensureDataPreload();
+	
+		// loadData() stores the merged/enriched dataset on window.DATA
+		const data =
+		  (typeof window !== 'undefined' && window.DATA) ||
+		  core ||
+		  {};
+	
+		// Sanity check against the canonical schema
+		const chk = Schema.validateData(data);
+		if (!chk.ok) {
+		  console.warn("[schema] missing keys:", chk.missing);
+		}
+	
+		// Hydrate App state from the same data the rest of the app uses
+		state.DATA   = data;
+		state.GEMS   = gems;                 // enriched gems returned by loadData()
+		state.SKILLS = data.skills || null;  // raw skills saved by loadData()
+		state.CONFIG = Config.resolve(data);
+	  }
+
+    function setCohesion(raw){
+		let threshold = Number(raw);
+	
+		// If we didn’t get a clean [0,1] number, treat it as a legacy 0–3 index
+		if (!Number.isFinite(threshold) || threshold < 0 || threshold > 1) {
+		  const idx = parseInt(raw, 10);
+		  if (!Number.isNaN(idx) &&
+			  idx >= 0 &&
+			  idx < COHESION_MODE_NAMES.length) {
+			const presetName = COHESION_MODE_NAMES[idx];
+			threshold = COHESION_MODES[presetName];
+		  } else {
+			threshold = 2/3; // fallback: cohesive
+		  }
+		}
+	
+		if (threshold < 0) threshold = 0;
+		if (threshold > 1) threshold = 1;
+	
+		const name = cohesionNameForThreshold(threshold);
+		const idx = COHESION_MODE_NAMES.indexOf(name);
+	
+		state.cohesionThreshold = threshold;
+		state.cohesionModeName = name;
+                state.cohesionMode = idx === -1 ? 1 : idx;
+
+                setCohesionState(threshold);
+          }
+
+  function getBindFates(){
+    return state.bindFates;
+  }
+
+  function setBindFatesCategory(category, next){
+    if (!state.bindFates[category]) return;
+    const safe = (arr) => Array.from(new Set((arr || []).filter(Boolean)));
+    state.bindFates[category] = {
+      oaths: safe(next?.oaths),
+      abominations: safe(next?.abominations)
+    };
+  }
+
+
+  function legacyInit(){
+    try{
+      if (typeof window !== 'undefined') {
+        window.DATA = state.DATA; window.SKILL_GEMS = state.GEMS; window.SKILLS = state.SKILLS;
+      }
+    }catch(e){ console.warn("legacyInit exposure failed:", e); }
+  }
+
+  // Post-roll validator: thin wrapper over RulesEngine.enforce
+  function validateAndFix(config){
+    // Prefer an explicit config, then App.state.CONFIG, then a fresh resolve
+    const cfg =
+      config ||
+      state.CONFIG ||
+      (state.DATA ? Config.resolve(state.DATA) : null);
+
+    if (!cfg || !cfg.rules) return;
+
+    try {
+      // Single canonical validation path
+      RulesEngine.enforce(cfg, 25);
+    } catch (e) {
+      console.warn('[validateAndFix] error during enforcement', e);
+    }
+  }
+  
+  // Expose validator for v0.7.5 scaffolding and other callers
+  if (typeof window !== 'undefined') {
+    window.validateAndFix = validateAndFix;
+  }
+
+  function roll(mode){
+    // Trigger the legacy generator
+    if (typeof window.rollBuild === "function") {
+      window.rollBuild(state.cohesionMode || (mode || 1));
+    } else {
+      const rollBtn = Dom.q('#roll');
+      if (rollBtn) rollBtn.click();
+    }
+
+    // Use cached CONFIG when available
+    let cfg = state.CONFIG;
+    if (!cfg && state.DATA) {
+      cfg = Config.resolve(state.DATA);
+      state.CONFIG = cfg;
+    }
+
+    if (cfg) {
+      validateAndFix(cfg);
+    }
+
+    // Indicate that we initiated a roll
+    return true;
+  }
+
+  function mergeCurrentRoll(partial){
+	  try {
+		state.currentRoll = { ...state.currentRoll, ...partial };
+	
+		if (partial?.cohesionModeName) {
+		  state.cohesionModeName = partial.cohesionModeName;
+		}
+	
+		if (typeof window !== 'undefined') {
+		  window.__LAST_ROLL_META = { ...state.currentRoll };
+		}
+		return state.currentRoll;
+	  } catch (e) {
+		return state.currentRoll;
+	  }
+	}
+
+
+  function captureCurrentRollFromDOM(){
+    try{
+      const offhand = firstText(['#offhand','#off_hand','#off','#offHand']);
+
+      const meta = (typeof window !== 'undefined' && window.__LAST_ROLL_META) ? window.__LAST_ROLL_META : {};
+
+      state.currentRoll = {
+        ...state.currentRoll,
+        ...meta,
+        defense:   firstText('#defense'),
+        defStrat:  firstText('#defstrat'),
+        weapon:    firstText('#weapons'),
+        offhand,
+        tactics:   firstText('#tactics'),
+        ailments:  firstText('#ailments'),
+        ailmentList: (meta.ailmentList && meta.ailmentList.length) ? meta.ailmentList : firstText('#ailments').split(/\s*&\s*/).filter(Boolean),
+        tacticList: (meta.tacticList && meta.tacticList.length) ? meta.tacticList : firstText('#tactics').split(/\s*&\s*/).filter(Boolean),
+        buildName: firstText('#build-name') || meta.buildName || '',
+        flavor:    firstText(['#build-subtext','#flavor']) || meta.flavor || ''
+      };
+
+      return state.currentRoll;
+    } catch (e) {
+      return {};
+    }
+  }
+
+  return { state, bootstrap, setCohesion, legacyInit, roll, captureCurrentRollFromDOM, mergeCurrentRoll, getBindFates, setBindFatesCategory, modules: { Config, RulesEngine } };
+})();
+
+function getBindFatesFromApp(){
+  const App = window.App;
+  return (App && App.state && App.state.bindFates) || {
+    ascendancy: { oaths: [], abominations: [] },
+    weapon:     { oaths: [], abominations: [] },
+    combat:     { oaths: [], abominations: [] }
+  };
+}
+
+export { getBindFatesFromApp };
+
+// ---------- Tag utilities (shared normalizer + alias map) ----------

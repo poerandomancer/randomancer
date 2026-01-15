@@ -1,0 +1,98 @@
+/* --- Mobile polish pack (v0.7.9_beta2m) --- */
+@media (max-width: 960px) {
+  html { font-size: clamp(14px, 1.8vw, 16px); }
+  h1 { font-size: clamp(24px, 5.5vw, 40px); }
+  h2 { font-size: clamp(18px, 3.5vw, 28px); }
+}
+
+.grid.two { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
+@media (max-width: 960px) {
+  .grid.two { grid-template-columns: 1fr; gap: 12px; }
+}
+
+@media (max-width: 960px) {
+  .skill-card, .unique-card { padding: 12px; }
+  .unique-lines div, .skill-lines div { line-height: 1.3; }
+}
+
+@media (max-width: 960px) {
+  .tag-pill { padding: 2px 8px; border-radius: 999px; font-size: 12px; }
+}
+@media (max-width: 480px) {
+  .tag-pill { font-size: 11px; padding: 2px 6px; }
+}
+
+@media (max-width: 960px) {
+  .sect { margin: 16px 0; }
+  .sect .sect-head .underline { margin-top: 6px; }
+}
+
+.roll-btn { min-height: 44px; display: inline-flex; align-items: center; gap: .5rem; }
+.roll-btn .btn-ico{ width:18px; height:18px; display:inline-block; object-fit:contain; filter: drop-shadow(0 0 2px rgba(0,0,0,.6)); }
+.roll-sticky { position: sticky; bottom: 16px; z-index: 50; display:flex; justify-content:center; pointer-events:none; }
+.roll-sticky .roll-btn { pointer-events:auto; border-radius: 999px; padding: 10px 16px; }
+@supports (padding: max(0px)) {
+  .roll-sticky { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+}
+
+img, video { max-width: 100%; height: auto; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+.container { width: min(100%, 1100px); margin: 0 auto; padding: 0 16px; }
+
+/* --- Mobile background / blur stability fixes --- */
+@media (max-width: 960px) {
+  /* 1) Avoid background-attachment: fixed quirks on mobile */
+  html,
+  body {
+    background-attachment: scroll;
+    background-position: center top;
+  }
+
+  /* 2) Let the ascendancy art track the document instead of the viewport */
+  body {
+    position: relative;
+  }
+
+  .asc-art {
+    position: absolute;   /* instead of fixed on mobile */
+    inset: 0;
+    /* keep layering and image behavior the same */
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    /* 3) Apply the blur directly to the art so it doesn't flicker */
+    filter: blur(3px) saturate(.9) brightness(1.05);
+    opacity: 0;           /* keep the fade-in behavior */
+    pointer-events: none;
+    transition: opacity .5s ease;
+  }
+
+  .asc-art.show {
+    opacity: .92;
+  }
+
+  /* 4) Since we're blurring the art itself on mobile, 
+        we can drop the backdrop blur (which is flaky on iOS)
+        and just use a slightly stronger dark overlay. */
+  #app {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(0,0,0,0.55);
+  }
+}
+
+
+/* Divider styling + spacing */
+.ornate-divider.gold.unique-divider{
+  height: 1px;
+  background: linear-gradient(90deg, rgba(0,0,0,0), rgba(202,164,95,.38), rgba(0,0,0,0));
+  opacity: .9;
+  margin: var(--section-gap) 0;
+}
+#uniques-section.sect { margin-top: 0; }
+
