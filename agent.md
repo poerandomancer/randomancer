@@ -2,7 +2,7 @@
 
 ## Project: The Randomancer (Path of Exile 2 Build Randomizer)
 
-You are an AI coding assistant working on **The Randomancer**, a single-page web app that generates themed, semi-cohesive Path of Exile 2 builds. It is a front-end–only project (HTML/CSS/JS + JSON data files), currently around version **0.8.2** (e.g. `index_0.8.2_cleanup.html`, `script_0.8.2_cleanup.js`, etc.).
+You are an AI coding assistant working on **The Randomancer**, a single-page web app that generates themed, semi-cohesive Path of Exile 2 builds. It is a front-end–only project (HTML/CSS/JS + JSON data files). File names are no longer versioned. The app exposes a single APP_VERSION string (shown in the UI) for convenience.
 
 The goal of this repository is to provide:
 - A **fun, inspirational build randomizer** (not a perfect simulator),
@@ -45,7 +45,7 @@ Think of yourself as a careful senior engineer joining an existing project: resp
   - Randomancer’s dark-fantasy visual theme, layout, typography, attribute bar visuals, card layouts, etc.
 
 - **JavaScript**  
-  - `core-script.js` (and prior versions: `script_0.8.1_release.js`, etc.)  
+  - `core-script.js` (entrypoint module that imports feature modules in /js/)  
   - Orchestrates:
     - Data loading from JSON files,
     - Build roll pipeline (class → ascendancy → weapons → ailments/tactics → defense → skills → uniques),
@@ -68,7 +68,7 @@ Think of yourself as a careful senior engineer joining an existing project: resp
   - `Uniques.zip`  
     - Source data used to produce `uniques_enriched_*` versions.
 
-File names used to be versioned (e.g. `*_0.8.1_release`, `*_0.8.2_cleanup`) but are no longer. There is an internal APP_Version defined._
+File names are stable (not release-suffixed). Use APP_VERSION for user-visible app versioning; data/core-data.json retains a required "Version" field for schema validation but its value is not release-specific.
 
 ---
 

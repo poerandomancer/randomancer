@@ -33,7 +33,7 @@ const Dom = (() => {
 })();
 
 // App metadata
-const APP_VERSION = '0.8.4_feedback_form';
+const APP_VERSION = '0.8.4.1';
 
 window.RANDOMANCER = window.RANDOMANCER || {};
 window.RANDOMANCER.version = APP_VERSION;

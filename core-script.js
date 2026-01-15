@@ -1,4 +1,4 @@
-/*! Randomancer v0.8.2_cleanup */
+/*! Randomancer */
 "use strict";
 
 /**

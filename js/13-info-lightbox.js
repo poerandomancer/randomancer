@@ -21,5 +21,3 @@
   window.RandomancerInfo = { set(html){ if(content) content.innerHTML = html; }, open: openInfo, close: closeInfo };
 })();
 
-
-/* === Feedback link + Mobile header menu (v0.8.2a) === */

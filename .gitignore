@@ -1,3 +1,5 @@
+# macOS junk
+.DS_Store
 *.DS_Store
-__MACOSX
-*__MACOSX
+**/.DS_Store
+__MACOSX/

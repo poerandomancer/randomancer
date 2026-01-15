@@ -25,11 +25,11 @@
 - `css/20-controls.css`
 - `css/30-sections.css`
 - `css/40-skills.css`
-- `css/60-uniques.css`
 - `css/50-passives.css`
-- `css/90-mobile.css`
+- `css/60-uniques.css`
 - `css/70-modals.css`
 - `css/80-summary.css`
+- `css/90-mobile.css`
 
 ## Initialization Flow
 1. `core-script.js` loads and registers helpers, state, and UI wiring.
@@ -56,6 +56,7 @@ The following globals are part of the contract and must remain intact:
 - `data/core-data.json`
 - `data/enriched/passives_enriched.json`
 - `data/enriched/skills_enriched.json`
+- `data/enriched/uniques_enriched.json`
 
 ## localStorage Keys
 - `rm_view_mode`
