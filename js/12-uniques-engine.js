@@ -1,4 +1,3 @@
-import { syncLockUIFromState } from './00-locks-and-snapshots.js';
 import { TagUtils, defensePseudoTags } from './05-tags-and-scorer.js';
 
 /* === Randomancer: Uniques Synergy — canonical engine (v0.8.2) === */
@@ -8,6 +7,11 @@ import { TagUtils, defensePseudoTags } from './05-tags-and-scorer.js';
 
   // Use shared tag normalizer
   const norm = (s) => TagUtils.norm(s);
+  const syncLocks = () => {
+    if (typeof window !== 'undefined' && typeof window.syncLockUIFromState === 'function') {
+      window.syncLockUIFromState();
+    }
+  };
 
   const splitNames = (s) => String(s||'')
     .replace(/\u00B7/g,'•')
@@ -335,7 +339,7 @@ function ensureUniqueSection(){
 
     const lockBtn = wrap.querySelector('.lock-toggle');
     if (lockBtn) wireLockButton(lockBtn);
-    syncLockUIFromState();
+    syncLocks();
 
     return wrap.querySelector('#uniques-grid');
   }

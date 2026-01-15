@@ -63,6 +63,10 @@ function syncLockUIFromState(){
   });
 }
 
+if (typeof window !== 'undefined') {
+  window.syncLockUIFromState = syncLockUIFromState;
+}
+
 
 function wireLockButton(btn){
   if (!btn || btn.__lockInit) return;
