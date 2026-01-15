@@ -35,7 +35,7 @@ body {
   height: 100%;
   width: 100%;
   overflow-x: hidden; /* prevent sideways drag / reveal */
-  background: var(--bg) url('images/background.png') center/cover no-repeat fixed;
+  background: var(--bg) url('/images/background.png') center/cover no-repeat fixed;
   color: var(--ink);
   font-family: 'Cormorant Garamond', serif;
 }
@@ -85,5 +85,4 @@ body {
   -webkit-backdrop-filter: blur(2px);
   background: rgba(0,0,0,.28);
 }
-
 
