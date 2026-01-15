@@ -12,7 +12,7 @@ import { pickRecommendedAscendancyNodes, pickRecommendedKeystones, pickRecommend
 function updateAscArt(asc){
   const el = document.getElementById('asc-art');
   if (!el) return;
-  const path = `images/ascendancies/${asc.toLowerCase().replace(/\s+/g,'-')}.webp`;
+  const path = `/images/ascendancies/${asc.toLowerCase().replace(/\s+/g,'-')}.webp`;
 
   // Avoid redundant work if we're already showing this art
   if (el.dataset.ascPath === path && el.classList.contains('show')) return;
