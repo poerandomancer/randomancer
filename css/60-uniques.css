@@ -1,0 +1,104 @@
+/* ===== v0.7.6: Uniques bronze cards ===== */
+.uniques-grid{ margin-top:.35rem; }
+
+/* Unique card frame */
+.unique-card {
+  background: #12100c;
+  border: 1px solid rgba(255, 200, 120, 0.45);
+  border-radius: 14px;
+  box-shadow:
+    0 0 18px rgba(255, 180, 80, 0.18),
+    inset 0 0 0 1px rgba(255, 200, 140, 0.05);
+  overflow: hidden;
+}
+
+/* Header: align with skill card title + subtitle stack */
+.unique-header{
+  background:none;
+  border-bottom:none;            /* we’ll use the dashed divider instead */
+  padding: .75rem 1rem .25rem;   /* roughly matches skill-card padding */
+}
+
+.unique-name{
+  margin:0 0 .15rem;
+  color:var(--gold);             /* same as .skill-title */
+  font-weight:600;               /* slightly softer than 700 */
+  font-size:1.05rem;             /* matches .skill-title */
+  line-height:1.15;
+}
+
+.unique-base{
+  margin:0;
+  color:var(--muted);            /* same palette as .skill-subtitle */
+  font-size:.9rem;
+  font-style:italic;             /* mirrors the “Requires:” line feel */
+  opacity:0.9;
+}
+
+
+/* Tag pills row */
+.tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 6px 14px 2px;
+}
+
+/* Let uniques reuse the gem-pill look but with bronze tint */
+.unique-card .pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 200, 140, 0.35);
+  background: radial-gradient(
+    160% at 10% 30%,
+    rgba(140, 90, 35, 0.30) 0%,
+    rgba(35, 26, 16, 0.45) 60%,
+    rgba(8, 5, 2, 0.9) 100%
+  );
+  font-size: 0.78rem;
+  letter-spacing: 0.2px;
+  line-height: 1.2;
+  color: #f5e3cf;
+}
+
+.unique-card .pill.match {
+  box-shadow:
+    0 0 0 1px rgba(255, 210, 140, 0.45),
+    0 0 12px rgba(255, 180, 90, 0.25);
+  color: #fff2df;
+}
+
+/* Lines */
+.unique-lines {
+  padding: 10px 14px 12px;
+  color: #e4d9c9;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.unique-line {
+  margin: 2px 0;
+  opacity: 0.95;
+}
+
+/* Highlighted terms inside lines (from highlight()) */
+.unique-lines .hit {
+  color: var(--unique-bronze, #ffcf7a);
+  font-weight: 600;
+  text-shadow: 0 0 6px rgba(197, 138, 70, 0.35);
+}
+
+.unique-highlights {
+  font-size: 0.85rem;
+  color: rgba(255, 235, 210, 0.95);
+  margin-bottom: 0.35rem;
+  font-style: italic;
+  opacity: 0.95;
+}
+
+
+
