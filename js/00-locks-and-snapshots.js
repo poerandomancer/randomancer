@@ -4,7 +4,8 @@ import {
   getQueryParams,
   onDomReady,
   setActiveSkillsTab,
-  setSkillsTabsAvailability
+  setSkillsTabsAvailability,
+  SUPPORT,
 } from './01-meta-and-domready.js';
 import {
   getSummaryTextFromSnapshot,
@@ -564,12 +565,101 @@ function renderSnapshotToDom(snap){
     updateCodeUI(code);
     syncSaveButtonState(code);
   }
+  
+  function normalizePoeNinjaWeaponMode(weapon, offhand) {
+	  const display = formatWeaponLine(weapon, offhand); 
+	  // e.g. "Bow & Quiver", "Wand & Sceptre", "One-handed Mace & One-handed Mace"
+	  if (!display) return "";
+	
+	  const parts = display
+		.split(/&|\//g)
+		.map(s => s.trim())
+		.filter(Boolean);
+	
+	  if (parts.length <= 1) return display.trim();
+	
+	  // --------------------------------------------------
+	  // NEW RULE: Dual same-weapon case
+	  // --------------------------------------------------
+		if (
+		  parts.length === 2 &&
+		  parts[0].toLowerCase() === parts[1].toLowerCase()
+		) {
+		  // poe.ninja expects title-cased tokens: "One Handed"
+		  const normalized = parts[0]
+			.replace(/-/g, " ")
+			.replace(/\b\w/g, c => c.toUpperCase());
+		
+		  return `Dual ${normalized}`;
+		}
+
+
+	
+	  // --------------------------------------------------
+	  // Existing special-case: Wand / Sceptre
+	  // --------------------------------------------------
+	  const lower = parts.map(p => p.toLowerCase());
+	  const hasWand = lower.includes("wand");
+	  const hasSceptre = lower.includes("sceptre") || lower.includes("scepter");
+	
+	  if (hasWand && hasSceptre) return "Wand / Sceptre";
+	
+	  // --------------------------------------------------
+	  // Default behavior
+	  // --------------------------------------------------
+	  return parts.join(" / ");
+	}
+
+	
+	function buildPoeNinjaUrlFromSnapshot(snap) {
+	  if (!snap) return "";
+	
+	  const base = `https://poe.ninja/poe2/builds/${SUPPORT.league.poeNinjaSlug}`;
+	  const params = new URLSearchParams();
+	
+	  const asc = (snap.ascendancyName || snap.ascendancy || "").trim();
+	  if (asc) params.set("class", asc);
+	
+	  const weaponmode = normalizePoeNinjaWeaponMode(snap.weapon, snap.offhand);
+	  if (weaponmode) params.set("weaponmode", weaponmode);
+	
+	  const skills = Array.isArray(snap.recommendedSkills) ? snap.recommendedSkills : [];
+	  const skillNames = skills
+		.map(s => (s && typeof s === "object" ? s.name : String(s || "")))
+		.filter(Boolean)
+		.slice(0, 2);
+	
+	  if (skillNames.length) params.set("skills", skillNames.join(","));
+	
+	  return `${base}?${params.toString()}`;
+	}
+
 
   function bindUI(){
     const copyBtn = document.getElementById('copy-build-link');
     const saveBtn = document.getElementById('save-build');
     const savedListFab = savedFab;
-const viewBtn = document.getElementById('view-toggle');
+	const viewBtn = document.getElementById('view-toggle');
+	
+	const poeBtn = document.getElementById('poe-ninja-btn');
+	if (poeBtn) {
+	  poeBtn.title = `Scout similar builds on poe.ninja (${SUPPORT.league.name})`;
+	  poeBtn.setAttribute('aria-label', 'Open matching builds on poe.ninja');
+	
+	  poeBtn.addEventListener('click', (e) => {
+		e.preventDefault();
+		e.stopPropagation();
+	
+		const snap = currentSnap();
+		if (!snap) return;
+	
+		const url = buildPoeNinjaUrlFromSnapshot(snap);
+		if (!url) return;
+	
+		window.open(url, "_blank", "noopener,noreferrer");
+	  });
+	}
+
 
     // Initialize persisted view mode (default: detailed)
     setViewMode(getViewMode());

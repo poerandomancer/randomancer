@@ -35,8 +35,17 @@ const Dom = (() => {
 // App metadata
 const APP_VERSION = '0.8.4.1';
 
+const SUPPORT = Object.freeze({
+  poe2Patch: "0.4.0",
+  league: {
+    name: "Fate of the Vaal",
+    poeNinjaSlug: "vaal",
+  },
+});
+
 window.RANDOMANCER = window.RANDOMANCER || {};
 window.RANDOMANCER.version = APP_VERSION;
+window.RANDOMANCER.support = SUPPORT;
 
 // ===== Shared DOM ready / query helpers (v0.7.5 scaffolding uses these) =====
 function onDomReady(fn) {
@@ -200,6 +209,7 @@ export {
   COHESION_MODE_NAMES,
   Dom,
   APP_VERSION,
+  SUPPORT,
   onDomReady,
   formatWeaponLine,
   hasSecondaryWeaponSet,
