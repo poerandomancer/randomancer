@@ -566,9 +566,15 @@ function renderSnapshotToDom(snap){
     syncSaveButtonState(code);
   }
   
+  function normalizeHandedWeaponLabel(label) {
+	  return label
+		.replace(/-/g, " ")                 // One-handed → One handed
+		.replace(/\b\w/g, c => c.toUpperCase()); // → One Handed
+	}
+
+  
   function normalizePoeNinjaWeaponMode(weapon, offhand) {
 	  const display = formatWeaponLine(weapon, offhand); 
-	  // e.g. "Bow & Quiver", "Wand & Sceptre", "One-handed Mace & One-handed Mace"
 	  if (!display) return "";
 	
 	  const parts = display
@@ -576,27 +582,25 @@ function renderSnapshotToDom(snap){
 		.map(s => s.trim())
 		.filter(Boolean);
 	
-	  if (parts.length <= 1) return display.trim();
+	  // --------------------------------------------------
+	  // SINGLE WEAPON CASE
+	  // --------------------------------------------------
+	  if (parts.length === 1) {
+		return normalizeHandedWeaponLabel(parts[0]);
+	  }
 	
 	  // --------------------------------------------------
-	  // NEW RULE: Dual same-weapon case
+	  // Dual same-weapon case
 	  // --------------------------------------------------
-		if (
-		  parts.length === 2 &&
-		  parts[0].toLowerCase() === parts[1].toLowerCase()
-		) {
-		  // poe.ninja expects title-cased tokens: "One Handed"
-		  const normalized = parts[0]
-			.replace(/-/g, " ")
-			.replace(/\b\w/g, c => c.toUpperCase());
-		
-		  return `Dual ${normalized}`;
-		}
-
-
+	  if (
+		parts.length === 2 &&
+		parts[0].toLowerCase() === parts[1].toLowerCase()
+	  ) {
+		return `Dual ${normalizeHandedWeaponLabel(parts[0])}`;
+	  }
 	
 	  // --------------------------------------------------
-	  // Existing special-case: Wand / Sceptre
+	  // Wand / Sceptre special-case
 	  // --------------------------------------------------
 	  const lower = parts.map(p => p.toLowerCase());
 	  const hasWand = lower.includes("wand");
@@ -605,11 +609,12 @@ function renderSnapshotToDom(snap){
 	  if (hasWand && hasSceptre) return "Wand / Sceptre";
 	
 	  // --------------------------------------------------
-	  // Default behavior
+	  // DEFAULT MIXED-WEAPON CASE
+	  // 🔑 FIX: normalize EACH part before joining
 	  // --------------------------------------------------
-	  return parts.join(" / ");
+	  const normalizedParts = parts.map(normalizeHandedWeaponLabel);
+	  return normalizedParts.join(" / ");
 	}
-
 	
 	function buildPoeNinjaUrlFromSnapshot(snap) {
 	  if (!snap) return "";
