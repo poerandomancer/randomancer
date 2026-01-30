@@ -240,6 +240,10 @@
       <div id="build-roll-banner" class="build-roll-banner" aria-live="polite">
         <div id="build-name" class="build-name"></div>
         <div id="build-subtext" class="build-subtext"></div>
+        <div class="build-panel-tabs view-mode-tabs">
+				<div class="skills-tab is-active" data-view="detailed">Detailed</div>
+				<div class="skills-tab" data-view="summary">Summary</div>
+			</div>
       </div>
 
       <section id="empty-state" class="panel empty-state" aria-label="Welcome">
@@ -250,7 +254,6 @@
 
       <section id="build-panel" class="panel">
         <div class="panel-actions">
-          <button id="view-toggle" class="view-toggle-btn" type="button" aria-pressed="false" aria-label="Toggle Summary View" title="Switch to Summary View">Summary</button>
           <button id="poe-ninja-btn" class="icon-btn" type="button" aria-label="Open matching builds on poe.ninja" title="Scout similar builds on poe.ninja (Fate of the Vaal)">🥷</button>
           <button id="save-build" class="icon-btn" type="button" aria-label="Save Build" title="Save Build">☆</button>
 
@@ -279,7 +282,7 @@
                 <span class="lock-icon lock-on" aria-hidden="true">🔒</span>
               </button>
             </div>
-            <div class="underline"></div><p class="sub">Class, Ascendancy, & Weapons</p>
+            <div class="underline"></div>
           </div>
           <div class="grid two">
             <div><span class="label">Class</span><span id="class"></span></div>
@@ -304,7 +307,7 @@
                 <span class="lock-icon lock-on" aria-hidden="true">🔒</span>
               </button>
             </div>
-            <div class="underline"></div><p class="sub">Ailments & Tactics</p>
+            <div class="underline"></div>
           </div>
           <div class="grid two">
             <div class="wide"><span class="label">Ailments</span><span id="ailments"></span></div>
@@ -321,7 +324,7 @@
                 <span class="lock-icon lock-on" aria-hidden="true">🔒</span>
               </button>
             </div>
-            <div class="underline"></div><p class="sub">Primary Defense and Defensive Strategy</p>
+            <div class="underline"></div>
           </div>
           <div class="grid two">
             <div><span class="label">Defense</span><span id="defense"></span></div>
@@ -330,7 +333,7 @@
         </div>
         <hr class="gold subtle"/>
         <div class="sect">
-          <div class="sect-head"><h3>Balance</h3><div class="underline"></div><p class="sub">Attribute Distribution</p></div>
+          <div class="sect-head"><h3>Balance</h3><div class="underline"></div></div>
           <div class="wide">
             <div id="balance-bar"></div>
             <div id="balance-text"></div>

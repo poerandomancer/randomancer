@@ -107,7 +107,7 @@ strong, b { font-weight: 600; }
 /* --- Rolled build banner (attached to each roll) --- */
 .build-roll-banner{
   /* Give the title room to breathe, but keep it tight to the panel below */
-  margin:2.25rem auto 0.05rem;
+  margin:2.25rem auto 0.14rem;
   padding:0;
   text-align:center;
   position:relative;

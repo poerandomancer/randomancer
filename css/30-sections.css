@@ -196,4 +196,18 @@ main .panel + .panel{
   margin-top: .25rem;
 }
 
+#build-panel {
+  margin-top: 14px;
+}
+
+.view-mode-tabs {
+  position: absolute;
+  bottom: -14px; /* pulls tabs DOWN onto the next panel */
+  right: 14px;
+  display: flex;
+  gap: 6px;
+  z-index: 5;
+}
+
+
 /* === v0.5.1: Recommended Skills section === */
