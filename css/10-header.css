@@ -120,13 +120,14 @@ strong, b { font-weight: 600; }
 
 .build-title-block{
   /* Give the title room to breathe, but keep it tight to the panel below */
-  margin:2.25rem auto 0.14rem;
+  margin:0.25rem auto 0.14rem;
   padding:0;
   text-align:center;
   position:relative;
   display:flex;
   flex-direction:column;
   align-items:center;
+  width: clamp(280px, 70vw, 720px);
   /* Optical centering tweak: italic caps can look slightly left in some serif faces */
   --optical-center: 0.06em;
 }
