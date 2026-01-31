@@ -74,6 +74,36 @@ body {
 }
 .asc-art.show{ opacity:.92; }
 
+/* Toast (clipboard + lightweight feedback) */
+.rm-toast{
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%) translateY(6px);
+  padding: 10px 14px;
+
+  background: rgba(10,10,12,0.88);
+  border: 1px solid rgba(212,170,80,0.35);
+  border-radius: 12px;
+
+  color: var(--silver);
+  box-shadow:
+    0 10px 28px rgba(0,0,0,0.55),
+    0 0 18px rgba(212,170,80,0.16);
+
+  opacity: 0;
+  pointer-events: none;
+  z-index: 9999;
+
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.rm-toast.is-show{
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+
 #app.hidden{ display:none; }
 .fade-in{ animation:fadeIn .7s ease forwards; }
 @keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }

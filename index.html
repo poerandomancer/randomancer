@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-QP11XW9Z5X"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	
+	  gtag('config', 'G-QP11XW9Z5X');
+	</script>
+
   <title>The Randomancer – Path of Exile 2 Build Randomizer & PoE2 Build Generator</title>
 
   <meta name="description" content="The Randomancer is a Path of Exile 2 build randomizer that generates themed, high-cohesion PoE2 builds with skills, passives, oaths, and uniques in one click." />
@@ -265,16 +276,34 @@
 
       <section id="build-panel" class="panel">
         <div class="panel-actions">
-          <button id="poe-ninja-btn" class="icon-btn" type="button" aria-label="Open matching builds on poe.ninja" title="Scout similar builds on poe.ninja (Fate of the Vaal)">🥷</button>
-          <button id="save-build" class="icon-btn" type="button" aria-label="Save Build" title="Save Build">☆</button>
+			  <div class="copy-menu" id="build-actions-wrap">
+			  <button id="build-actions-btn" class="icon-btn" type="button" aria-label="Build actions" title="Build actions" aria-haspopup="menu" aria-expanded="false">
+				  <span class="kebab-glyph" aria-hidden="true">⋯</span>
+				</button>
 
-          <div class="copy-menu" id="copy-menu-wrap">
-            <button id="copy-build-link" class="icon-btn" type="button" aria-label="Copy" title="Copy" aria-haspopup="menu" aria-expanded="false">⧉</button>
-            <div id="copy-menu" class="copy-menu-pop" role="menu" hidden>
-              <button id="copy-menu-link" class="copy-menu-item" type="button" role="menuitem">Copy Build Link</button>
-              <button id="copy-menu-summary" class="copy-menu-item" type="button" role="menuitem">Copy Summary</button>
-            </div>
-          </div>
+			
+			  <div id="build-actions-menu" class="copy-menu-pop" role="menu" hidden>
+				<button id="build-actions-save" class="copy-menu-item" type="button" role="menuitem">
+				  <span class="copy-menu-ico" aria-hidden="true">☆</span>
+				  <span class="copy-menu-label">Save Build</span>
+				</button>
+			
+				<button id="build-actions-copy-summary" class="copy-menu-item" type="button" role="menuitem">
+				  <span class="copy-menu-ico" aria-hidden="true">⧉</span>
+				  <span class="copy-menu-label">Copy Summary</span>
+				</button>
+			
+				<button id="build-actions-copy-link" class="copy-menu-item" type="button" role="menuitem">
+				  <span class="copy-menu-ico" aria-hidden="true">⧉</span>
+				  <span class="copy-menu-label">Copy Build Link</span>
+				</button>
+			
+				<button id="build-actions-poe-ninja" class="copy-menu-item" type="button" role="menuitem">
+				  <span class="copy-menu-ico" aria-hidden="true">🥷</span>
+				  <span class="copy-menu-label">Similar Builds on poe.ninja</span>
+				</button>
+			  </div>
+			</div>
         </div>
         <div class="build-title-block">
 			<div id="build-name" class="build-name"></div>
@@ -426,6 +455,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   });
 });
 </script>
+<div id="rm-toast" class="rm-toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
 <script type="module" src="core-script.js"></script>
 </body>
 </html>

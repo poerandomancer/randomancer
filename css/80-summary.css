@@ -69,12 +69,90 @@
   color: var(--silver);
   font: inherit;
   cursor:pointer;
+
+  display:flex;
+  align-items:center;
+  gap: 10px;
 }
+
+.copy-menu-ico{
+  width: 1.25rem;
+  text-align:center;
+  opacity: 0.92;
+  flex: 0 0 auto;
+}
+
+.copy-menu-label{
+  flex: 1 1 auto;
+}
+
+.copy-menu-item.is-saved .copy-menu-ico{
+  color: var(--gold);
+  text-shadow: 0 0 8px rgba(212,170,80,0.55);
+}
+
+.copy-menu-item.is-saved .copy-menu-label{
+  color: var(--gold);
+  text-shadow:
+    0 0 8px rgba(212,170,80,0.35),
+    0 0 14px rgba(212,170,80,0.18);
+}
+
 .copy-menu-item:hover{
   background: rgba(212,170,80,0.10);
   color: var(--gold);
 }
 .copy-menu-item:active{ transform: translateY(1px); }
+
+/* Build actions kebab: make it more visible without being loud */
+/* Build actions kebab: smaller + subtler */
+#build-actions-btn{
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+
+  font-size: 16px;
+  line-height: 1;
+
+  border: 1px solid rgba(212,170,80,0.26);
+  background: rgba(10,10,12,0.28);
+
+  box-shadow:
+    inset 0 0 0 1px rgba(0,0,0,0.26),
+    0 0 7px rgba(212,170,80,0.12);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+#build-actions-btn:hover{
+  border-color: rgba(212,170,80,0.38);
+  background: rgba(10,10,12,0.42);
+  box-shadow:
+    inset 0 0 0 1px rgba(0,0,0,0.28),
+    0 0 10px rgba(212,170,80,0.18);
+}
+
+#build-actions-btn:active{
+  transform: translateY(1px);
+}
+
+#build-actions-btn:focus-visible{
+  outline: none;
+  box-shadow:
+    0 0 0 2px rgba(212,170,80,0.14),
+    inset 0 0 0 1px rgba(0,0,0,0.28),
+    0 0 10px rgba(212,170,80,0.18);
+}
+
+#build-actions-btn .kebab-glyph{
+  position: relative;
+  top: -2px; /* try -1px, then -2px if needed */
+}
+
 
 /* Summary panel styling */
 .summary-panel{

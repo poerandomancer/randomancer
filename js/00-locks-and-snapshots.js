@@ -486,16 +486,25 @@ function renderSnapshotToDom(snap){
   }
 
   function syncSaveButtonState(code){
-    const btn = document.getElementById('save-build');
-    if (!btn) return;
-    const list = loadSaved();
-    const activeCode = code || (() => { const snap = currentSnap(); return encodeSnapshot(snap); })();
-    const saved = !!(activeCode && list.some(e => e.code === activeCode));
-    btn.textContent = saved ? '★' : '☆';
-    btn.dataset.saved = saved ? '1' : '0';
-    btn.setAttribute('aria-label', saved ? 'Build Saved' : 'Save Build');
-    btn.setAttribute('title', saved ? 'Build Saved' : 'Save Build');
-  }
+	  const btn = document.getElementById('build-actions-save');
+	  if (!btn) return;
+	
+	  const ico = btn.querySelector('.copy-menu-ico');
+	  const label = btn.querySelector('.copy-menu-label');
+	
+	  const list = loadSaved();
+	  const activeCode = code || (() => { const snap = currentSnap(); return encodeSnapshot(snap); })();
+	  const saved = !!(activeCode && list.some(e => e.code === activeCode));
+	
+	  if (ico) ico.textContent = saved ? '★' : '☆';
+	  if (label) label.textContent = saved ? 'Build Saved' : 'Save Build';
+	
+	  btn.classList.toggle('is-saved', saved);
+	  btn.dataset.saved = saved ? '1' : '0';
+	  btn.setAttribute('aria-label', saved ? 'Build Saved' : 'Save Build');
+	  btn.setAttribute('title', saved ? 'Build Saved' : 'Save Build');
+	}
+
 
   function updateCodeUI(code){
     syncSaveButtonState(code);
@@ -641,17 +650,93 @@ function renderSnapshotToDom(snap){
 
 
   function bindUI(){
-    const copyBtn = document.getElementById('copy-build-link');
-    const saveBtn = document.getElementById('save-build');
-    const savedListFab = savedFab;
-	const viewBtn = document.getElementById('view-toggle');
+  // === Build Actions dropdown (kebab) ===
+	const actionsWrap = document.getElementById('build-actions-wrap');
+	const actionsBtn = document.getElementById('build-actions-btn');
+	const actionsMenu = document.getElementById('build-actions-menu');
 	
-	const poeBtn = document.getElementById('poe-ninja-btn');
-	if (poeBtn) {
-	  poeBtn.title = `Scout similar builds on poe.ninja (${SUPPORT.league.name})`;
-	  poeBtn.setAttribute('aria-label', 'Open matching builds on poe.ninja');
+	const actionSave = document.getElementById('build-actions-save');
+	const actionCopySummary = document.getElementById('build-actions-copy-summary');
+	const actionCopyLink = document.getElementById('build-actions-copy-link');
+	const actionPoe = document.getElementById('build-actions-poe-ninja');
 	
-	  poeBtn.addEventListener('click', (e) => {
+	const closeActionsMenu = () => {
+	  if (!actionsMenu || !actionsBtn) return;
+	  actionsMenu.hidden = true;
+	  actionsBtn.setAttribute('aria-expanded', 'false');
+	};
+	
+	const openActionsMenu = () => {
+	  if (!actionsMenu || !actionsBtn) return;
+	  actionsMenu.hidden = false;
+	  actionsBtn.setAttribute('aria-expanded', 'true');
+	};
+	
+	const toggleActionsMenu = () => {
+	  if (!actionsMenu || !actionsBtn) return;
+	  if (actionsMenu.hidden) openActionsMenu();
+	  else closeActionsMenu();
+	};
+	
+	const safeCopy = (text) => {
+	  if (!text) return;
+	  try {
+		if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text);
+	  } catch {}
+	};
+	
+	const buildShareUrlFromSnap = (snap) => {
+	  const code = encodeSnapshot(snap);
+	  if (!code) return '';
+	  const url = new URL(location.href);
+	  url.searchParams.set('build', code);
+	  return url.toString();
+	};
+	
+	actionsBtn?.addEventListener('click', (e) => {
+	  e.preventDefault();
+	  e.stopPropagation();
+	  toggleActionsMenu();
+	});
+	
+	// Save Build (toggles saved/unsaved) — no immediate UI mutation beyond save logic
+	actionSave?.addEventListener('click', () => {
+	  saveCurrentBuild();
+// 	  closeActionsMenu();
+	});
+	
+	// Copy Summary
+	actionCopySummary?.addEventListener('click', async () => {
+	  const snap = currentSnap();
+	  const summary = getSummaryTextFromSnapshot(snap);
+	
+	  const ok = await copyTextToClipboard(summary);
+	  showToast(ok ? 'Build Summary copied to clipboard!' : 'Could not copy Build Summary.');
+	
+	  const code = encodeSnapshot(snap);
+	  updateCodeUI(code);
+	  // intentionally do NOT close the menu
+	});
+	
+	// Copy Build Link
+	actionCopyLink?.addEventListener('click', async () => {
+	  const snap = currentSnap();
+	  const url = buildShareUrlFromSnap(snap);
+	
+	  const ok = await copyTextToClipboard(url);
+	  showToast(ok ? 'Build Link copied to clipboard!' : 'Could not copy Build Link.');
+	
+	  const code = encodeSnapshot(snap);
+	  updateCodeUI(code);
+	  // intentionally do NOT close the menu
+	});
+	
+	// poe.ninja
+	if (actionPoe) {
+	  actionPoe.title = `Similar builds on poe.ninja (${SUPPORT.league.name})`;
+	  actionPoe.setAttribute('aria-label', 'Open matching builds on poe.ninja');
+	
+	  actionPoe.addEventListener('click', (e) => {
 		e.preventDefault();
 		e.stopPropagation();
 	
@@ -662,9 +747,23 @@ function renderSnapshotToDom(snap){
 		if (!url) return;
 	
 		window.open(url, "_blank", "noopener,noreferrer");
+		closeActionsMenu();
 	  });
 	}
+	
+	document.addEventListener('click', (e) => {
+	  if (!actionsMenu || actionsMenu.hidden) return;
+	  const t = e.target;
+	  if (actionsWrap && t instanceof Node && actionsWrap.contains(t)) return;
+	  closeActionsMenu();
+	});
+	
+	document.addEventListener('keydown', (e) => {
+	  if (e.key === 'Escape') closeActionsMenu();
+	});
 
+    const savedListFab = savedFab;
+	const viewBtn = document.getElementById('view-toggle');
 
     // Initialize persisted view mode (default: detailed)
     setViewMode(getViewMode());
@@ -676,82 +775,6 @@ function renderSnapshotToDom(snap){
       toggleViewMode();
     });
 
-
-    // Copy dropdown (Option C): choose Link vs Summary
-    const copyWrap = document.getElementById('copy-menu-wrap');
-    const copyMenu = document.getElementById('copy-menu');
-    const copyItemLink = document.getElementById('copy-menu-link');
-    const copyItemSummary = document.getElementById('copy-menu-summary');
-
-    const closeCopyMenu = () => {
-      if (!copyMenu || !copyBtn) return;
-      copyMenu.hidden = true;
-      copyBtn.setAttribute('aria-expanded', 'false');
-    };
-
-    const openCopyMenu = () => {
-      if (!copyMenu || !copyBtn) return;
-      copyMenu.hidden = false;
-      copyBtn.setAttribute('aria-expanded', 'true');
-    };
-
-    const toggleCopyMenu = () => {
-      if (!copyMenu || !copyBtn) return;
-      if (copyMenu.hidden) openCopyMenu();
-      else closeCopyMenu();
-    };
-
-    const safeCopy = (text) => {
-      if (!text) return;
-      try {
-        if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text);
-      } catch {}
-    };
-
-    const buildShareUrlFromSnap = (snap) => {
-      const code = encodeSnapshot(snap);
-      if (!code) return '';
-      const url = new URL(location.href);
-      url.searchParams.set('build', code);
-      return url.toString();
-    };
-
-    copyBtn?.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      toggleCopyMenu();
-    });
-
-    copyItemLink?.addEventListener('click', () => {
-      const snap = currentSnap();
-      const url = buildShareUrlFromSnap(snap);
-      safeCopy(url);
-      const code = encodeSnapshot(snap);
-      updateCodeUI(code);
-      closeCopyMenu();
-    });
-
-    copyItemSummary?.addEventListener('click', () => {
-      const snap = currentSnap();
-      const summary = getSummaryTextFromSnapshot(snap);
-      safeCopy(summary);
-      const code = encodeSnapshot(snap);
-      updateCodeUI(code);
-      closeCopyMenu();
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!copyMenu || copyMenu.hidden) return;
-      const t = e.target;
-      if (copyWrap && t instanceof Node && copyWrap.contains(t)) return;
-      closeCopyMenu();
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeCopyMenu();
-    });
-
-saveBtn?.addEventListener('click', saveCurrentBuild);
     savedListFab?.addEventListener('click', openSavedOverlay);
     savedCloseBtn?.addEventListener('click', closeSavedOverlay);
     savedOverlay?.addEventListener('click', (e) => {
@@ -763,6 +786,53 @@ saveBtn?.addEventListener('click', saveCurrentBuild);
       if (e.key === 'Escape' && savedOverlay && !savedOverlay.hidden) closeSavedOverlay();
     });
   }
+  
+  let __toastTimer = null;
+
+	function showToast(msg, ms = 1600){
+	  const el = document.getElementById('rm-toast');
+	  if (!el) return;
+	
+	  el.textContent = msg;
+	  el.hidden = false;
+	  el.classList.add('is-show');
+	
+	  clearTimeout(__toastTimer);
+	  __toastTimer = setTimeout(() => {
+		el.classList.remove('is-show');
+		setTimeout(() => { el.hidden = true; }, 220);
+	  }, ms);
+	}
+	
+	async function copyTextToClipboard(text){
+	  if (!text) return false;
+	
+	  // Modern API
+	  try {
+		if (navigator.clipboard?.writeText) {
+		  await navigator.clipboard.writeText(text);
+		  return true;
+		}
+	  } catch {}
+	
+	  // Fallback
+	  try {
+		const ta = document.createElement('textarea');
+		ta.value = text;
+		ta.setAttribute('readonly', '');
+		ta.style.position = 'fixed';
+		ta.style.left = '-9999px';
+		ta.style.top = '0';
+		document.body.appendChild(ta);
+		ta.select();
+		const ok = document.execCommand('copy');
+		ta.remove();
+		return !!ok;
+	  } catch {}
+	
+	  return false;
+	}
+
 
   function autoLoadFromQuery(){
     const q = getQueryParams();
