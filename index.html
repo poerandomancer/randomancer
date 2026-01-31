@@ -204,7 +204,7 @@
     
       <div class="cohesion-slider cohesion-bar-wrapper" data-cohesion-constrained="false">
                   <div class="mode-labels">
-                        <span>Strict</span><span>Cohesive</span><span>Chaotic</span><span>Madness</span>
+                        <span>Cohesive</span><span>Chaotic</span>
                   </div>
                   <!-- Continuous slider: 0–100 mapped to threshold 1.00 → 0.00 -->
 		  <input
@@ -235,11 +235,22 @@
         </div>
         <span id="bind-fates-error" class="bind-fates-error" aria-live="polite"></span>
       </div>
+      
+      <div class="control-item weapon-set2-control">
+		  <label class="toggle-label">
+			<input
+			  type="checkbox"
+			  id="weapon-set2-toggle"
+			  aria-label="Include Weapon Set II">
+			<span class="toggle-ui"></span>
+			<span class="toggle-text">Enable Weapon Set II</span>
+
+		  </label>
+		</div>
+
 
 
       <div id="build-roll-banner" class="build-roll-banner" aria-live="polite">
-        <div id="build-name" class="build-name"></div>
-        <div id="build-subtext" class="build-subtext"></div>
         <div class="build-panel-tabs view-mode-tabs">
 				<div class="skills-tab is-active" data-view="detailed">Detailed</div>
 				<div class="skills-tab" data-view="summary">Summary</div>
@@ -265,6 +276,11 @@
             </div>
           </div>
         </div>
+        <div class="build-title-block">
+			<div id="build-name" class="build-name"></div>
+			<div id="build-subtext" class="build-subtext"></div>
+		</div>
+        
         <div id="summary-panel" class="summary-panel" hidden aria-label="Build Summary">
           <div id="summary-line-1" class="summary-row summary-row--primary"></div>
           <div id="summary-line-2" class="summary-row"></div>
@@ -291,7 +307,6 @@
               <span class="label">Weapons</span>
               <div class="weapon-sets">
                 <span id="weapons"></span>
-                <button id="weapon-set2-btn" class="weapon-set2-btn" type="button" hidden>+ Select secondary weapon set</button>
                 <span id="weapons-set2" hidden></span>
               </div>
             </div>
@@ -342,7 +357,7 @@
       </section>
 
       <section id="skills-panel" class="panel panel--skills">
-<div class="sect">
+		<div class="sect">
             <div class="sect-head">
               <h3 class="section-title">Recommended Skills</h3>
               <div class="underline"></div><p class="sub">Two active skills for this roll, with supports</p>

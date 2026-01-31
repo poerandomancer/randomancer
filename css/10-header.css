@@ -117,15 +117,29 @@ strong, b { font-weight: 600; }
   /* Optical centering tweak: italic caps can look slightly left in some serif faces */
   --optical-center: 0.06em;
 }
-.build-roll-banner .build-name,
-.build-roll-banner .build-subtext{
+
+.build-title-block{
+  /* Give the title room to breathe, but keep it tight to the panel below */
+  margin:2.25rem auto 0.14rem;
+  padding:0;
+  text-align:center;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  /* Optical centering tweak: italic caps can look slightly left in some serif faces */
+  --optical-center: 0.06em;
+}
+
+.build-title-block .build-name,
+.build-title-block .build-subtext{
   transform: translateX(var(--optical-center));
 }
 
-.build-roll-banner::after{
+.build-title-block::after{
   display:none;
 }
-.build-roll-banner .build-name{ margin:0; }
+.build-title-block .build-name{ margin:0; }
 .build-subtext{
   margin:0.22rem auto 0.06rem;
   color:var(--muted);

@@ -387,12 +387,12 @@ function renderSnapshotToDom(snap){
       weapons2El.hidden = !weapons2Txt;
     }
     const hasSet2 = hasSecondaryWeaponSet(snap);
-    const set2Btn = document.getElementById('weapon-set2-btn');
-    if (set2Btn) {
-      // Ensure label stays consistent even if HTML changes between versions
-      set2Btn.textContent = 'Add Weapon Set II';
-      set2Btn.hidden = hasSet2 || !weaponsTxt;
-    }
+    // ✅ Sync Weapon Set II toggle state from the loaded/active snapshot
+	const ws2Toggle = document.getElementById('weapon-set2-toggle');
+	if (ws2Toggle) {
+	  ws2Toggle.checked = hasSet2;
+	}
+
     setElText('#defense', snap.defense || '');
     setElText('#defstrat', snap.defStrat || '');
     setElText('#ailments', Array.isArray(snap.ailmentList) ? snap.ailmentList.join(' & ') : (snap.ailments || ''));

@@ -967,6 +967,15 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         const data = await ensureDataPreload();
         rollBuild(data);
+        
+        const ws2Toggle = document.getElementById('weapon-set2-toggle');
+		if (ws2Toggle?.checked) {
+		  try {
+			await handleSecondaryWeaponSetSelection();
+		  } catch (err) {
+			console.error('[secondary weapons] roll failed:', err);
+		  }
+		}
 
         // Summary view: keep text updated immediately after each roll
         if (window.scheduleSummaryRefresh) window.scheduleSummaryRefresh();
@@ -1026,6 +1035,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const toggle = document.getElementById('weapon-set2-toggle');
+  if (!toggle) return;
+
+  // Reflect existing roll state (if applicable)
+  const current = window.App?.state?.currentRoll;
+  if (current?.weapon2) {
+    toggle.checked = true;
+  }
+
+  // ❌ No behavior on change
+  toggle.addEventListener('change', () => {
+    // Intentionally empty.
+    // Toggle state is read during roll.
+  });
+});
+
 
 export {
   handleSecondaryWeaponSetSelection,

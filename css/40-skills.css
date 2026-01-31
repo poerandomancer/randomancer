@@ -150,7 +150,7 @@ border-top: 1px dotted var(--gold);
   z-index: 3;
 }
 /* === v0.6.4: Cohesion Slider + Skill Cards === */
-.cohesion-slider{ margin:0.45rem auto 0.1rem; width:min(720px,90%); text-align:center; color:var(--gold); }
+.cohesion-slider{ margin:0.45rem auto 0.1rem; width:min(640px,90%); text-align:center; color:var(--gold); }
 .cohesion-slider input[type=range]{ width:100%; appearance:none; height:6px; border-radius:6px; background:linear-gradient(90deg, rgba(212,170,80,0.4), rgba(212,170,80,0.9)); outline:none; cursor:pointer; box-shadow:0 0 6px rgba(212,170,80,0.3); }
 .cohesion-slider .mode-labels{ display:flex; justify-content:space-between; font-size:.9rem; opacity:.8; margin-top:.2rem; color:var(--muted); }
 .cohesion-status{
@@ -175,9 +175,13 @@ border-top: 1px dotted var(--gold);
   text-shadow:none;
 }
 
+.cohesion-status{
+	display: none;
+}
+
 /* Bind the Fates */
 .bind-fates-row{
-  width:min(720px,90%);
+  width:min(640px,90%);
   margin:0.45rem auto 0.65rem;
   display:flex;
   flex-direction:column;
@@ -273,6 +277,116 @@ border-top: 1px dotted var(--gold);
   align-self:flex-end;
   min-width:0;
 }
+
+/* Align Weapon Set II toggle with the control bars */
+.control-item.weapon-set2-control{
+  width: min(640px, 90%);
+  margin: 0.15rem auto 0.85rem;  /* tweak vertical placement */
+  padding: 0 10px;               /* aligns with Bind the Fates inner padding */
+  display: flex;
+  justify-content: flex-start;
+}
+
+
+.weapon-set2-control .toggle-label .toggle-ui {
+  position: relative;
+  width: 44px;
+  height: 22px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  transition: background 0.25s ease, box-shadow 0.25s ease;
+}
+
+.weapon-set2-control .toggle-label .toggle-ui::after{
+  content: "";
+  position: absolute;
+
+  top: 50%;
+  left: 2px;
+  transform: translateY(-50%);
+
+  width: 18px;
+  height: 18px;
+
+  background: rgba(12,12,14,0.95);
+  border-radius: 50%;
+  transition: transform 0.25s ease;
+}
+
+
+.weapon-set2-control
+.toggle-label
+input:checked
++ .toggle-ui {
+  background: linear-gradient(90deg, #7a5c1a, #d4af37);
+  box-shadow:
+    0 0 6px rgba(212, 175, 55, 0.6),
+    inset 0 0 2px rgba(255,255,255,0.35);
+}
+
+.weapon-set2-control
+.toggle-label
+input:checked
++ .toggle-ui::after{
+  transform: translateY(-50%) translateX(22px);
+}
+
+.weapon-set2-control .toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.weapon-set2-control .toggle-ui {
+  flex-shrink: 0;
+}
+
+.weapon-set2-control .toggle-ui {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.weapon-set2-control .toggle-label {
+  font-weight: 600;
+}
+
+.weapon-set2-control .toggle-label input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* OFF state: dull gold + etched inner highlight */
+.weapon-set2-control .toggle-label .toggle-ui{
+  background: linear-gradient(90deg, rgba(200,168,107,0.22), rgba(120,100,55,0.22));
+  border: 1px solid rgba(200,168,107,0.25);
+
+  /* etched inner highlight (top + bottom) */
+  box-shadow:
+    inset 0 1px 0 rgba(235,210,150,0.16),
+    inset 0 -1px 0 rgba(0,0,0,0.35),
+    inset 0 0 0 1px rgba(0,0,0,0.22);
+}
+
+
+.weapon-set2-control .toggle-label .toggle-ui::after{
+  background: rgba(12,12,14,0.95);
+  box-shadow: 0 0 0 1px rgba(200,168,107,0.18);
+}
+
+.weapon-set2-control .toggle-text{
+  color: rgba(235,235,235,0.88);
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.weapon-set2-control .toggle-label input:checked + .toggle-ui + .toggle-text{
+  color: var(--gold);
+  text-shadow:
+    0 0 6px rgba(212,170,80,0.55),
+    0 0 14px rgba(212,170,80,0.25);
+}
+
+
 
 /* Slightly tighter on very small screens */
 @media (max-width: 480px){
