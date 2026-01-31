@@ -150,6 +150,26 @@ strong, b { font-weight: 600; }
   font-size:1.05rem;
 }
 
+/* Subtle divider under build title/subtext (only after a roll exists) */
+.build-title-block::after{
+  content:"";
+  display:block;
+
+  width: min(520px, 70%);
+  height: 1px;
+
+  margin: clamp(0.7rem, 2vh, 1.05rem) auto 0;
+
+  background: linear-gradient(to right,
+	  rgba(212,170,80,0.0),
+	  rgba(212,170,80,0.22),
+	  rgba(255,235,190,0.10),
+	  rgba(212,170,80,0.22),
+	  rgba(212,170,80,0.0)
+);
+}
+
+
 /* --- Empty state (no build rolled yet) --- */
 .empty-state{
   text-align:center;
@@ -168,26 +188,6 @@ strong, b { font-weight: 600; }
 }
 
 /* Empty state title (now used as randomized flavor line) */
-/* 
-#empty-state .empty-title{
-  margin: 0.6rem auto 0.25rem;
-  padding: 0;
-
-  max-width: clamp(320px, 82vw, 720px);
-  text-align: center;
-
-  font-family:'Cormorant Infant',serif;
-  font-size: clamp(1.55rem, 4.2vw, 2.5rem);
-  line-height: 1.12;
-  letter-spacing: 0.02em;
-
-  font-style: italic;
-  color: var(--gold);
-  
-  text-shadow: 0 0 6px rgba(0,0,0,0.65);
-}
- */
-
 #empty-state .empty-title{
   font-family:'Cormorant Infant',serif;
   font-style:italic;
