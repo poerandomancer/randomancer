@@ -181,15 +181,9 @@
 </div>
     </div>
   </div>
-  <div id="intro" class="intro-screen">
-    <div class="intro-content">
-      <p id="intro-line"></p>
-      <button id="intro-roll" class="roll-btn roll-btn"><img src="images/dice.png" alt="The Randomancer – Path of Exile 2 build randomizer thrice dice icon" class="btn-ico"> Approach the Randomancer</button>
-    </div>
-  </div>
 
   <div id="asc-art" class="asc-art" aria-hidden="true"></div>
-  <div id="app" class="hidden" data-has-roll="false">
+  <div id="app" data-has-roll="false">
     <header>
       <div class="patch-indicator" aria-label="Supported Path of Exile 2 patch">
         Supports POE2 · <strong>v0.4.0</strong>
@@ -437,24 +431,56 @@ const INTRO_LINES = [
   "The echoes of destiny whisper — will you answer?",
   "Beyond the veil, your path lies unwritten. Cast the die.",
   "Not all who tempt fate return unchanged. Dare you roll?",
-  "In the stillness, the Fates stir. Reach forth and claim your thread."
+  "In the stillness, the Fates stir. Reach forth and claim your thread.",
+  "Wraeclast remembers every sin you dare to repeat.",
+  "Exile, the shore was mercy. This is not.",
+  "The gods have stopped listening. Fate has not.",
+  "Maps fade, monuments crumble, legends reroll.",
+  "Some destinies are forged in blood; others in chance.",
+  "Kaom had a plan. You have a roll.",
+  "Karui drums, Eternal banners, one long scream.",
+  "Innocence burned, Sin smiled, and the world kept turning.",
+  "Where prophecy falters, improvisation begins.",
+  "The Ancients whisper; the Randomancer answers.",
+  "Every shard of corruption hides an opportunity.",
+  "Not all experiments survive their creators.",
+  "You brought flasks and hope. Leave with stories.",
+  "The land is cruel. Your build can be crueler.",
+  "When the dead won’t stay down, neither should your ideas.",
+  "Meta got you down? Wraeclast has other plans.",
+  "Good builds farm maps. Great builds generate stories.",
+  "Balance passes are temporary. terrible ideas are eternal.",
+  "If the forums hate it, you’re probably onto something.",
+  "One exile, infinite patch notes.",
+  "The best loot is the friends confused along the way.",
+  "Theorycraft later. Regret now.",
+  "May your flasks be full and your expectations low.",
+  "When in doubt, blame desync. When inspired, blame this roll.",
+  "Warning: contents may include joy, regret, or both.",
+  "Every exile is a bad idea refined.",
+  "Wraeclast shapes steel and souls the same way.",
+  "Some paths are chosen. This one was rolled.",
+  "The gods watch. The map device does not care.",
+  "Between hope and horror lies one more build.",
+  "Build boldly. Regret beautifully.",
+  "Dice, data, and divine disappointment.",
+  "Fate is just another loot table.",
+  "Reckless by design, ruthless by accident.",
+  "Because ‘viable’ is such a boring word.",
+  "The meta is a suggestion, not a sentence.",
+  "Leave the comfort zone in Oriath.",
+  "All gas, no guide.",
+  "For when respeccing once just isn’t enough."
 ];
-document.addEventListener('DOMContentLoaded', ()=>{
-  const intro = document.getElementById('intro');
-  const introLine = document.getElementById('intro-line');
-  const introRoll = document.getElementById('intro-roll');
-  introLine.textContent = INTRO_LINES[Math.floor(Math.random()*INTRO_LINES.length)];
-  introRoll.addEventListener('click', () => {
-    intro.classList.add('fade-out');
-    setTimeout(() => {
-      intro.remove();
-      const app = document.getElementById('app');
-      app.classList.remove('hidden');
-      app.classList.add('fade-in');
-    }, 700);
-  });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const emptyText = document.querySelector('#empty-state .empty-title');
+  if (emptyText) {
+    emptyText.textContent = INTRO_LINES[Math.floor(Math.random() * INTRO_LINES.length)];
+  }
 });
 </script>
+
 <div id="rm-toast" class="rm-toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
 <script type="module" src="core-script.js"></script>
 </body>
