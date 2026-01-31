@@ -107,7 +107,7 @@ strong, b { font-weight: 600; }
 /* --- Rolled build banner (attached to each roll) --- */
 .build-roll-banner{
   /* Give the title room to breathe, but keep it tight to the panel below */
-  margin:2.25rem auto 0.05rem;
+  margin:2.25rem auto 0.14rem;
   padding:0;
   text-align:center;
   position:relative;
@@ -117,15 +117,30 @@ strong, b { font-weight: 600; }
   /* Optical centering tweak: italic caps can look slightly left in some serif faces */
   --optical-center: 0.06em;
 }
-.build-roll-banner .build-name,
-.build-roll-banner .build-subtext{
+
+.build-title-block{
+  /* Give the title room to breathe, but keep it tight to the panel below */
+  margin:0.25rem auto 0.14rem;
+  padding:0;
+  text-align:center;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  width: clamp(280px, 70vw, 720px);
+  /* Optical centering tweak: italic caps can look slightly left in some serif faces */
+  --optical-center: 0.06em;
+}
+
+.build-title-block .build-name,
+.build-title-block .build-subtext{
   transform: translateX(var(--optical-center));
 }
 
-.build-roll-banner::after{
+.build-title-block::after{
   display:none;
 }
-.build-roll-banner .build-name{ margin:0; }
+.build-title-block .build-name{ margin:0; }
 .build-subtext{
   margin:0.22rem auto 0.06rem;
   color:var(--muted);
@@ -134,6 +149,26 @@ strong, b { font-weight: 600; }
   max-width:70ch;
   font-size:1.05rem;
 }
+
+/* Subtle divider under build title/subtext (only after a roll exists) */
+.build-title-block::after{
+  content:"";
+  display:block;
+
+  width: min(520px, 70%);
+  height: 1px;
+
+  margin: clamp(0.7rem, 2vh, 1.05rem) auto 0;
+
+  background: linear-gradient(to right,
+	  rgba(212,170,80,0.0),
+	  rgba(212,170,80,0.22),
+	  rgba(255,235,190,0.10),
+	  rgba(212,170,80,0.22),
+	  rgba(212,170,80,0.0)
+);
+}
+
 
 /* --- Empty state (no build rolled yet) --- */
 .empty-state{
@@ -152,52 +187,74 @@ strong, b { font-weight: 600; }
   line-height:1.45;
 }
 
-
-/* --- Empty state panel: fade border + background toward bottom --- */
-#empty-state.panel{
-  /* Let the panel “dissolve” into the background at the bottom */
-  border-color: transparent; /* redraw a fading border via ::after */
-  background: linear-gradient(
-    180deg,
-    rgba(10,10,12,.86) 0%,
-    rgba(10,10,12,.82) 8%,
-    rgba(10,10,12,0) 100%
-  );
-
-  /* Slightly softer shadow so the bottom doesn’t read as a hard card edge */
-  box-shadow: 0 6px 18px rgba(0,0,0,.22);
-  
-  min-height: max(640px, 72vh);   /* taller on desktop */
-  padding-bottom: 4rem;          /* keeps text near top, gives fade runway */
+/* Empty state title (now used as randomized flavor line) */
+#empty-state .empty-title{
+  font-family:'Cormorant Infant',serif;
+  font-style:italic;
+  font-size:1.7rem;
+  color:var(--gold);
+  text-shadow:0 0 8px rgba(0,0,0,0.8);
+  margin-bottom:2rem;
 }
 
-@media (max-width: 720px){
-  #empty-state.panel{
-    min-height: max(520px, 64vh);
-    padding-bottom: 3rem;
-  }
+/* --- Pre-roll atmosphere: vignette + bottom fade to black --- */
+#app{
+  position: relative;
 }
 
-/* Match the overlay sheen to the fade */
-#empty-state.panel::before{
-  background: linear-gradient(
-    180deg,
-    rgba(0,0,0,0.05) 0%,
-    rgba(0,0,0,0.55) 12%,
-    rgba(0,0,0,0) 100%
-  );
-}
-
-/* Fading border: strong at the top, vanishes at the bottom */
-#empty-state.panel::after{
+/* Put overlay above the page background but behind the UI */
+#app[data-has-roll="false"]::before{
   content:"";
-  position:absolute;
-  inset:0;
-  border-radius:inherit;
-  border:1px solid var(--edge);
-  pointer-events:none;
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
 
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 14%, transparent 100%);
-          mask-image: linear-gradient(to bottom, #000 0%, #000 14%, transparent 100%);
+  background:
+    /* soft vignette */
+    radial-gradient(ellipse at 50% 18%,
+      rgba(0,0,0,0.00) 0%,
+      rgba(0,0,0,0.22) 58%,
+      rgba(0,0,0,0.55) 100%
+    ),
+    /* bottom falloff to black */
+    linear-gradient(to bottom,
+      rgba(0,0,0,0.00) 0%,
+      rgba(0,0,0,0.00) 46%,
+      rgba(0,0,0,0.55) 78%,
+      rgba(0,0,0,0.92) 100%
+    );
+}
+
+/* Ensure app content sits above the overlay */
+#app[data-has-roll="false"] > *{
+  position: relative;
+  z-index: 1;
+}
+
+
+/* --- Empty state panel: no card, let background do the work --- */
+#empty-state.panel{
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+
+  /* keep spacing so the title doesn't feel stuck */
+  padding-top: clamp(5.2rem, 7vh, 8.5rem);
+  min-height: max(520px, 62vh);
+  position: relative;
+}
+
+#empty-state.panel::before{
+  content:"";
+  display:block;
+  width: min(520px, 70%);
+  height: 1px;
+  margin: 0 auto clamp(1.0rem, 2.5vh, 1.6rem);
+  background: linear-gradient(to right,
+    rgba(212,170,80,0.0),
+    rgba(212,170,80,0.22),
+    rgba(212,170,80,0.0)
+  );
 }
 

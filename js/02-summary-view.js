@@ -13,24 +13,12 @@ function getViewMode(){
   }
 }
 
-function updateViewToggleButton(mode){
-  const btn = document.getElementById('view-toggle');
-  if (!btn) return;
-  const isSummary = mode === 'summary';
-  btn.setAttribute('aria-pressed', isSummary ? 'true' : 'false');
-  // Button label shows the *other* view as the action.
-  btn.textContent = isSummary ? 'Detailed' : 'Summary';
-  btn.title = isSummary ? 'Switch to Detailed View' : 'Switch to Summary View';
-  btn.setAttribute('aria-label', btn.title);
-}
-
 function setViewMode(mode){
   const m = (mode === 'summary') ? 'summary' : 'detailed';
   const appEl = document.getElementById('app');
   if (appEl) appEl.dataset.view = m;
 
   try { localStorage.setItem(VIEW_STORAGE_KEY, m); } catch {}
-  updateViewToggleButton(m);
 
   // Ensure summary text is up-to-date when switching views
   const snap = (window.App && window.App.state && window.App.state.currentRoll)
@@ -205,6 +193,32 @@ function renderSummaryFromSnapshot(snap){
 
   panel.hidden = !isSummaryModeActive();
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.view-mode-tabs .skills-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document
+        .querySelectorAll('.view-mode-tabs .skills-tab')
+        .forEach(t => t.classList.remove('is-active'));
+
+      tab.classList.add('is-active');
+      setViewMode(tab.dataset.view);
+    });
+  });
+});
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const mode = getViewMode();
+  document
+    .querySelectorAll('.view-mode-tabs .skills-tab')
+    .forEach(t => {
+      t.classList.toggle('is-active', t.dataset.view === mode);
+    });
+
+  setViewMode(mode); // ensures DOM + summary panel are correct
+});
+
 
 export {
   getViewMode,

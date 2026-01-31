@@ -136,7 +136,7 @@ function setSkillsTabsAvailability(hasSet2){
 
 function setActiveSkillsTab(tabId){
   const tabKey = String(tabId || '1');
-  const tabs = document.querySelectorAll('.skills-tab');
+  const tabs = document.querySelectorAll('.skills-tabs .skills-tab');
   const grid1 = document.getElementById('skills-grid');
   const grid2 = document.getElementById('skills-grid-2');
   tabs.forEach(tab => tab.classList.toggle('is-active', tab.dataset.skillTab === tabKey));
