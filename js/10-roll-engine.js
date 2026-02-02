@@ -549,6 +549,71 @@ async function handleSecondaryWeaponSetSelection(){
   if (set2Btn) set2Btn.hidden = true;
   setSkillsTabsAvailability(true);
   setActiveSkillsTab('1');
+  
+  // Recompute balance bar now that weapon set II exists (include WS2; mechanics weight = 0.5)
+	try {
+	  const current2 = window.App?.state?.currentRoll || window.CURRENT_ROLL || {};
+	
+	  const add=(a,b)=>({strength:(a.strength||0)+(b.strength||0), dexterity:(a.dexterity||0)+(b.dexterity||0), intelligence:(a.intelligence||0)+(b.intelligence||0)});
+	  const scale=(a,k)=>({strength:(a.strength||0)*k, dexterity:(a.dexterity||0)*k, intelligence:(a.intelligence||0)*k});
+	  const norm=(a)=>{ const t=(a.strength||0)+(a.dexterity||0)+(a.intelligence||0)||1e-6; return {strength:(a.strength||0)/t, dexterity:(a.dexterity||0)/t, intelligence:(a.intelligence||0)/t}; };
+	
+	  const weaponPool = (coreData.Weapons['Two-Handed'] || []).concat(coreData.Weapons['One-Handed'] || []);
+	  const offPool = (coreData.Weapons['Off-Hand'] || []);
+	
+	  const w1 = weaponPool.find(w => w?.name === current2.weapon) || null;
+	  const o1 = (current2.offhand && current2.offhand !== 'Quiver')
+		? (offPool.find(o => o?.name === current2.offhand) || null)
+		: null;
+	
+	  const classBase = coreData.Classes?.[current2.className]?.attributes || {};
+	  const defenseObj = current2.defenseObj || null;
+	  const defStratObj = current2.defStratObj || null;
+	
+	  const ailmentSet = current2.ailmentSet || window.CURRENT_ROLL?.ailmentSet || [];
+	  const tacticSet  = current2.tacticSet  || window.CURRENT_ROLL?.tacticSet  || [];
+	
+	  const sumParts = [
+		norm(classBase),
+		norm(w1?.attributes||{}),
+		norm(o1?.attributes||{}),
+		norm(weapon?.attributes||{}),   // WS2 weapon (object in this scope)
+		norm(offhand?.attributes||{}),  // WS2 offhand (object in this scope, may be null)
+		norm(defenseObj?.attributes||{}),
+		norm(defStratObj?.attributes||{})
+	  ].reduce((acc,a)=>add(acc,a), {strength:0,dexterity:0,intelligence:0});
+	
+	  const ailSum = ailmentSet.filter(Boolean).map(a=>a.attributes||{}).map(norm).reduce((acc,a)=>add(acc,a), {strength:0,dexterity:0,intelligence:0});
+	  const tacSum = tacticSet.filter(Boolean).map(t=>t.attributes||{}).map(norm).reduce((acc,a)=>add(acc,a), {strength:0,dexterity:0,intelligence:0});
+	
+	  const MECH_W = 0.5;
+	  const mech = scale(add(ailSum, tacSum), MECH_W);
+	
+	  const total = add(sumParts, mech);
+	
+	  const T = (total.strength+total.dexterity+total.intelligence)||1e-6;
+	  const attrs = { strength: total.strength/T, dexterity: total.dexterity/T, intelligence: total.intelligence/T };
+	
+	  // Update UI
+	  const S=attrs.strength, D=attrs.dexterity, I=attrs.intelligence;
+	  const bar=document.getElementById('balance-bar');
+	  const grad=`linear-gradient(90deg, rgba(176,48,48,1) 0%, rgba(176,48,48,1) ${S*100}%, rgba(45,122,45,1) ${S*100}%, rgba(45,122,45,1) ${(S+D)*100}%, rgba(47,79,157,1) ${(S+D)*100}%, rgba(47,79,157,1) 100%)`;
+	  bar.style.setProperty('--balance-gradient', grad);
+	  bar.classList.add('glow');
+	  document.getElementById('balance-text').textContent =
+		`Strength ${Math.round(S*100)}% | Dexterity ${Math.round(D*100)}% | Intelligence ${Math.round(I*100)}%`;
+	
+	  // Keep snapshot in sync
+	  if (window.App && typeof window.App.mergeCurrentRoll === 'function') {
+		window.App.mergeCurrentRoll({ attributes: attrs, rollAttr: attrs });
+	  }
+	  if (window.CURRENT_ROLL && typeof window.CURRENT_ROLL === 'object') {
+		window.CURRENT_ROLL.rollAttr = attrs;
+	  }
+	} catch (e) {
+	  console.warn('[secondary weapons] balance recompute failed', e);
+	}
+
 }
 
 function rollBuild(dataWrap){
@@ -582,79 +647,148 @@ function rollBuild(dataWrap){
   const cOaths = new Set(combatCfg.oaths || []);
   const cAboms = new Set(combatCfg.abominations || []);
 
-  // --- Archetype ---
-  const ascCfg = bind.ascendancy || { oaths: [], abominations: [] };
-  const ascOaths = new Set(ascCfg.oaths || []);
-  const ascAboms = new Set(ascCfg.abominations || []);
+	// --- Archetype ---
+	// (hierarchical active-anchor: ascendancy > weapon > mechanics)
+	// - If ascendancy oaths exist, we keep the current behavior (random within allowed).
+	// - Otherwise, we pick ONE active weapon (if any) or 1–2 active mechanics (if any),
+	//   use that as an attribute anchor to choose the class/asc-candidate via pickByCohesion,
+	//   then revert to class attributes as the driver for the rest of the roll.
+	
+	const ascCfg = bind.ascendancy || { oaths: [], abominations: [] };
+	const ascOaths = new Set(ascCfg.oaths || []);
+	const ascAboms = new Set(ascCfg.abominations || []);
+	
+	const weaponPool = (data.Weapons['Two-Handed'] || []).concat(data.Weapons['One-Handed'] || []);
+	const weaponCfg = bind.weapon || { oaths: [], abominations: [] };
+	const wOaths = new Set(weaponCfg.oaths || []);
+	const wAboms = new Set(weaponCfg.abominations || []);
+	
+	// Keep existing hard conflict check (Minions requires Sceptre; Sceptre cannot be an abomination).
+	const minionsOath = cOaths.has('Minions');
+	const sceptreAbomination = wAboms.has('Sceptre');
+	if (minionsOath && sceptreAbomination) {
+	  showBindFatesError('Minions combat mechanic is not a valid Oath while Sceptre is an Abomination.');
+	  return;
+	}
+	
+	// ---- Active anchor picks (used to select class/asc candidate, and as roll driver if present) ----
+	let anchorAttrs = null;                 // {strength,dexterity,intelligence} ratio-ish
+	let activeWeaponOathName = null;        // string name of the active weapon oath (weapon tier)
+	let activeMechanicOathNames = null;     // [name, name?] for mechanics-tier-only
+	
+	// Tier 2: weapon anchor (only when NO ascendancy oaths)
+	if (ascOaths.size === 0 && wOaths.size > 0) {
+	  const oathWeapons = weaponPool.filter(w => w && wOaths.has(w.name) && !wAboms.has(w.name));
+	  if (oathWeapons.length) {
+		const picked = oathWeapons[Math.floor(Math.random() * oathWeapons.length)];
+		activeWeaponOathName = picked?.name || null;
+		anchorAttrs = picked?.attributes || null;
+	  }
+	}
+	// Tier 3: mechanics anchor (only when NO ascendancy oaths AND NO weapon oaths)
+	else if (ascOaths.size === 0 && wOaths.size === 0 && cOaths.size > 0) {
+	  const ail = (data.Ailments || []).filter(a => a && !cAboms.has(a.name));
+	  const tac = (data.Tactics || []).filter(t => t && !cAboms.has(t.name));
+	  const oathMechRefs = [...ail, ...tac].filter(m => cOaths.has(m.name));
+	
+	  if (oathMechRefs.length) {
+		const first = oathMechRefs[Math.floor(Math.random() * oathMechRefs.length)];
+		let second = null;
+		if (oathMechRefs.length > 1) {
+		  const rest = oathMechRefs.filter(m => m.name !== first.name);
+		  second = rest[Math.floor(Math.random() * rest.length)];
+		}
+	
+		activeMechanicOathNames = [first?.name, second?.name].filter(Boolean);
+	
+		// Vector sum -> normalized ratio
+		const sum = activeMechanicOathNames.reduce((acc, nm) => {
+		  const m = oathMechRefs.find(x => x?.name === nm);
+		  const a = m?.attributes || {};
+		  acc.strength += (a.strength || 0);
+		  acc.dexterity += (a.dexterity || 0);
+		  acc.intelligence += (a.intelligence || 0);
+		  return acc;
+		}, { strength: 0, dexterity: 0, intelligence: 0 });
+	
+		const T = (sum.strength + sum.dexterity + sum.intelligence) || 1e-6;
+		anchorAttrs = { strength: sum.strength / T, dexterity: sum.dexterity / T, intelligence: sum.intelligence / T };
+	  }
+	}
+	
+	// ---- Build asc candidates (respecting asc oath/abom constraints) ----
+	const ascCandidates = [];
+	for (const [clsName, clsData] of classes) {
+	  const ascList = Array.isArray(clsData?.ascendancies) ? clsData.ascendancies : [];
+	  let filtered = ascList.filter((name) => !ascAboms.has(name));
+	  if (ascOaths.size > 0) {
+		filtered = filtered.filter((name) => ascOaths.has(name));
+	  }
+	  if (filtered.length > 0) {
+		ascCandidates.push({ clsName, clsData, ascList: filtered });
+	  }
+	}
+	
+	if (!ascCandidates.length) {
+	  showBindFatesError('No valid ascendancies with your current Oaths & Abominations.');
+	  return;
+	}
+	
+	// If we have an oath anchor (weapon/mechanics), use it to pick the class/asc candidate.
+	// Otherwise (asc oaths present, or no oaths), keep current random behavior.
+	const ascPickPool = ascCandidates.map(c => ({ ...c, attributes: c.clsData?.attributes || {} }));
+	const pickedAsc = anchorAttrs
+	  ? pickByCohesion(ascPickPool, anchorAttrs, th)
+	  : ascPickPool[Math.floor(Math.random() * ascPickPool.length)];
+	
+	const clsName = pickedAsc.clsName;
+	const clsData = pickedAsc.clsData;
 
-  const ascCandidates = [];
-  for (const [clsName, clsData] of classes) {
-    const ascList = Array.isArray(clsData?.ascendancies) ? clsData.ascendancies : [];
-    let filtered = ascList.filter((name) => !ascAboms.has(name));
-    if (ascOaths.size > 0) {
-      filtered = filtered.filter((name) => ascOaths.has(name));
-    }
+	// If an oath anchor exists (weapon/mechanics), drive the rest of the roll from it.
+	// Otherwise fall back to the class attributes (original behavior).
+	const base = anchorAttrs || clsData?.attributes || {};
 
-    if (filtered.length > 0) {
-      ascCandidates.push({ clsName, clsData, ascList: filtered });
-    }
-  }
+	const asc = pickedAsc.ascList[Math.floor(Math.random() * pickedAsc.ascList.length)];
+	const ascendancyId = lookupAscendancyIdByName(asc);
+	
+	// --- Weapons ---
+	// (use oath anchor as the driver from here onward, when present)
 
-  if (!ascCandidates.length) {
-    showBindFatesError('No valid ascendancies with your current Oaths & Abominations.');
-    return;
-  }
+	let filteredWeaponPool = weaponPool.filter((w) => !wAboms.has(w.name));
+	
+	if (wOaths.size > 0) {
+	  const fromOath = filteredWeaponPool.filter((w) => wOaths.has(w.name));
+	  if (fromOath.length > 0) filteredWeaponPool = fromOath;
+	}
+	
+	if (minionsOath) {
+	  const sceptreOption = filteredWeaponPool.find((w) => w?.name === 'Sceptre');
+	  if (!sceptreOption) {
+		showBindFatesError('Minions combat mechanic requires a Sceptre, but no Sceptre is available with your current Oaths & Abominations.');
+		return;
+	  }
+	  filteredWeaponPool = [sceptreOption];
+	}
+	
+	if (!filteredWeaponPool.length) {
+	  showBindFatesError('No valid weapons with your current Oaths & Abominations.');
+	  return;
+	}
+	
+	// If Tier-2 weapon anchor was selected, FORCE that weapon later (no “drift”).
+	if (activeWeaponOathName) {
+	  const forced = filteredWeaponPool.find(w => w?.name === activeWeaponOathName);
+	  if (forced) filteredWeaponPool = [forced];
+	}
+	
+	const weapon = pickByCohesion(filteredWeaponPool, base, th);
+	
+	let offhand = null;
+	if (weapon && Object.keys(validOffhands).includes(weapon.name)) {
+	  const offPool = (data.Weapons['Off-Hand'] || []).filter((o) => validOffhands[weapon.name].includes(o.name));
+	  offhand = pickByCohesion(offPool, base, th);
+	}
 
-  const pickedAsc = ascCandidates[Math.floor(Math.random() * ascCandidates.length)];
-  const clsName = pickedAsc.clsName;
-  const clsData = pickedAsc.clsData;
-  const base = clsData?.attributes || {};
-
-  const asc = pickedAsc.ascList[Math.floor(Math.random() * pickedAsc.ascList.length)];
-
-  const ascendancyId = lookupAscendancyIdByName(asc);
-
-  const weaponPool = (data.Weapons['Two-Handed'] || []).concat(data.Weapons['One-Handed'] || []);
-  const weaponCfg = bind.weapon || { oaths: [], abominations: [] };
-  const wOaths = new Set(weaponCfg.oaths || []);
-  const wAboms = new Set(weaponCfg.abominations || []);
-
-  const minionsOath = cOaths.has('Minions');
-  const sceptreAbomination = wAboms.has('Sceptre');
-
-  if (minionsOath && sceptreAbomination) {
-    showBindFatesError('Minions combat mechanic is not a valid Oath while Sceptre is an Abomination.');
-    return;
-  }
-
-  let filteredWeaponPool = weaponPool.filter((w) => !wAboms.has(w.name));
-  if (wOaths.size > 0) {
-    const fromOath = filteredWeaponPool.filter((w) => wOaths.has(w.name));
-    if (fromOath.length > 0) filteredWeaponPool = fromOath;
-  }
-
-  if (minionsOath) {
-    const sceptreOption = filteredWeaponPool.find((w) => w?.name === 'Sceptre');
-    if (!sceptreOption) {
-      showBindFatesError('Minions combat mechanic requires a Sceptre, but no Sceptre is available with your current Oaths & Abominations.');
-      return;
-    }
-    filteredWeaponPool = [sceptreOption];
-  }
-
-  if (!filteredWeaponPool.length) {
-    showBindFatesError('No valid weapons with your current Oaths & Abominations.');
-    return;
-  }
-
-  const pickWeapon = () => pickByCohesion(filteredWeaponPool, base, th);
-  const weapon = pickWeapon();
-
-  let offhand = null;
-  if (weapon && Object.keys(validOffhands).includes(weapon.name)) {
-    const offPool = (data.Weapons['Off-Hand'] || []).filter((o) => validOffhands[weapon.name].includes(o.name));
-    offhand = pickByCohesion(offPool, base, th);
-  }
 
   // --- Survivability ---
   const pickedDefense = pickByCohesion(data.Defense, base, th);
@@ -696,65 +830,78 @@ function rollBuild(dataWrap){
     return filtered.find((m) => m.ref === picked || m.ref?.name === picked?.name) || filtered[0];
   };
 
-  const oathMech = mechanics.filter((m) => cOaths.has(m.ref?.name));
-  const neutralMech = mechanics.filter((m) => !cOaths.has(m.ref?.name));
-
-  const picks = [];
-
-  if (oathMech.length >= 2) {
-    const first = pickMechanic(oathMech);
-    const second = pickMechanic(oathMech, [first?.ref?.name]);
-    picks.push(first, second);
-  } else if (oathMech.length === 1) {
-    const first = oathMech[0];
-    const second = pickMechanic(neutralMech, [first?.ref?.name]);
-    if (first) picks.push(first);
-    if (second) picks.push(second);
-  } else {
-    const thLocal = th;
-    const pickAilmentFrom = (pool, excludeNames = []) => {
-      const filtered = pool.filter(a => a && !excludeNames.includes(a.name));
-      if (!filtered.length) return null;
-      return (
-        pickByCohesion(filtered, base, thLocal) ||
-        filtered[Math.floor(Math.random() * filtered.length)]
-      );
-    };
-
-    const pickTacticFrom = (pool, excludeNames = []) => {
-      const filtered = pool.filter(t => t && !excludeNames.includes(t.name));
-      if (!filtered.length) return null;
-      return (
-        pickByCohesion(filtered, base, thLocal) ||
-        filtered[Math.floor(Math.random() * filtered.length)]
-      );
-    };
-
-    if (r < 0.6) {
-      const a1 = pickAilmentFrom(validAil);
-      const tPool = validTac;
-      const t1 = pickTacticFrom(tPool);
-      if (a1) picks.push({ kind: 'ailment', ref: a1 });
-      if (t1) picks.push({ kind: 'tactic', ref: t1 });
-    } else if (r < 0.8) {
-      const a1 = pickAilmentFrom(validAil);
-      const a2 = a1
-        ? pickAilmentFrom(validAil, [a1.name])
-        : pickAilmentFrom(validAil);
-
-      if (a1) picks.push({ kind: 'ailment', ref: a1 });
-      if (a2) picks.push({ kind: 'ailment', ref: a2 });
-    } else {
-      const tPool = validTac;
-      const t1 = pickTacticFrom(tPool);
-      const t2 = t1
-        ? pickTacticFrom(tPool, [t1.name])
-        : pickTacticFrom(tPool);
-
-      if (t1) picks.push({ kind: 'tactic', ref: t1 });
-      if (t2) picks.push({ kind: 'tactic', ref: t2 });
-    }
-  }
+	const oathMech = mechanics.filter((m) => cOaths.has(m.ref?.name));
+	const neutralMech = mechanics.filter((m) => !cOaths.has(m.ref?.name));
+	
+	const picks = [];
+	
+	// If Tier-3 mechanics anchor picked 1–2 active mechanics earlier, FORCE those here.
+	const forcedNames =
+	  Array.isArray(activeMechanicOathNames) && activeMechanicOathNames.length
+		? activeMechanicOathNames.slice(0, 2)
+		: null;
+	
+	if (forcedNames) {
+	  for (const nm of forcedNames) {
+		const m = mechanics.find(x => x?.ref?.name === nm);
+		if (m) picks.push(m);
+	  }
+	
+	  // If only one forced mechanic, fill second like the normal oath logic.
+	  if (picks.length === 1) {
+		const second = pickMechanic(neutralMech, [picks[0]?.ref?.name]);
+		if (second) picks.push(second);
+	  }
+	
+	  // Safety fallback (should be rare)
+	  while (picks.length < 2) {
+		const next = pickMechanic(mechanics, picks.map(p => p?.ref?.name).filter(Boolean));
+		if (!next) break;
+		picks.push(next);
+	  }
+	} else if (oathMech.length >= 2) {
+	  const first = pickMechanic(oathMech);
+	  const second = pickMechanic(oathMech, [first?.ref?.name]);
+	  picks.push(first, second);
+	} else if (oathMech.length === 1) {
+	  const first = oathMech[0];
+	  const second = pickMechanic(neutralMech, [first?.ref?.name]);
+	  if (first) picks.push(first);
+	  if (second) picks.push(second);
+	} else {
+	  const thLocal = th;
+	
+	  const pickAilmentFrom = (pool, excludeNames = []) => {
+		const filtered = pool.filter(a => a && !excludeNames.includes(a.name));
+		if (!filtered.length) return null;
+		return (pickByCohesion(filtered, base, thLocal) || filtered[Math.floor(Math.random() * filtered.length)]);
+	  };
+	
+	  const pickTacticFrom = (pool, excludeNames = []) => {
+		const filtered = pool.filter(t => t && !excludeNames.includes(t.name));
+		if (!filtered.length) return null;
+		return (pickByCohesion(filtered, base, thLocal) || filtered[Math.floor(Math.random() * filtered.length)]);
+	  };
+	
+	  if (r < 0.6) {
+		const a1 = pickAilmentFrom(validAil);
+		const tPool = validTac;
+		const t1 = pickTacticFrom(tPool);
+		if (a1) picks.push({ kind: 'ailment', ref: a1 });
+		if (t1) picks.push({ kind: 'tactic', ref: t1 });
+	  } else if (r < 0.8) {
+		const a1 = pickAilmentFrom(validAil);
+		const a2 = a1 ? pickAilmentFrom(validAil, [a1.name]) : pickAilmentFrom(validAil);
+		if (a1) picks.push({ kind: 'ailment', ref: a1 });
+		if (a2) picks.push({ kind: 'ailment', ref: a2 });
+	  } else {
+		const tPool = validTac;
+		const t1 = pickTacticFrom(tPool);
+		const t2 = t1 ? pickTacticFrom(tPool, [t1.name]) : pickTacticFrom(tPool);
+		if (t1) picks.push({ kind: 'tactic', ref: t1 });
+		if (t2) picks.push({ kind: 'tactic', ref: t2 });
+	  }
+	}
 
   const cleanPicks = picks.filter(Boolean).slice(0, 2);
 
@@ -802,20 +949,40 @@ function rollBuild(dataWrap){
 
 
   // Balance aggregation
-  const add=(a,b)=>({strength:(a.strength||0)+(b.strength||0), dexterity:(a.dexterity||0)+(b.dexterity||0), intelligence:(a.intelligence||0)+(b.intelligence||0)});
-  const norm=(a)=>{ const t=(a.strength||0)+(a.dexterity||0)+(a.intelligence||0)||1e-6; return {strength:(a.strength||0)/t, dexterity:(a.dexterity||0)/t, intelligence:(a.intelligence||0)/t}; };
-  const sumParts = [ norm(base), norm(weapon?.attributes||{}), norm(offhand?.attributes||{}), norm(pickedDefense?.attributes||{}), norm(pickedDefStrat?.attributes||{}) ].reduce((acc,a)=>add(acc,a), {strength:0,dexterity:0,intelligence:0});
-  const ailAvg = (ailmentSet.filter(Boolean).map(a=>a.attributes||{}).map(norm).reduce((acc,a)=>add(acc,a), {strength:0,dexterity:0,intelligence:0}));
-  const tacAvg = (tacticSet.filter(Boolean).map(a=>a.attributes||{}).map(norm).reduce((acc,a)=>add(acc,a), {strength:0,dexterity:0,intelligence:0}));
-  const total = {strength: sumParts.strength+ailAvg.strength+tacAvg.strength, dexterity: sumParts.dexterity+ailAvg.dexterity+tacAvg.dexterity, intelligence: sumParts.intelligence+ailAvg.intelligence+tacAvg.intelligence};
-  const T = (total.strength+total.dexterity+total.intelligence)||1e-6;
-  const S=total.strength/T, D=total.dexterity/T, I=total.intelligence/T;
-  const bar=document.getElementById('balance-bar');
-  const grad=`linear-gradient(90deg, rgba(176,48,48,1) 0%, rgba(176,48,48,1) ${S*100}%, rgba(45,122,45,1) ${S*100}%, rgba(45,122,45,1) ${(S+D)*100}%, rgba(47,79,157,1) ${(S+D)*100}%, rgba(47,79,157,1) 100%)`;
-  bar.style.setProperty('--balance-gradient', grad);
-  bar.classList.add('glow');
-  document.getElementById('balance-text').textContent = `Strength ${Math.round(S*100)}%  |  Dexterity ${Math.round(D*100)}%  |  Intelligence ${Math.round(I*100)}%`;
-
+	const add=(a,b)=>({strength:(a.strength||0)+(b.strength||0), dexterity:(a.dexterity||0)+(b.dexterity||0), intelligence:(a.intelligence||0)+(b.intelligence||0)});
+	const scale=(a,k)=>({strength:(a.strength||0)*k, dexterity:(a.dexterity||0)*k, intelligence:(a.intelligence||0)*k});
+	const norm=(a)=>{ const t=(a.strength||0)+(a.dexterity||0)+(a.intelligence||0)||1e-6; return {strength:(a.strength||0)/t, dexterity:(a.dexterity||0)/t, intelligence:(a.intelligence||0)/t}; };
+	
+	// Use the *actual rolled class* for the balance bar (not the oath-anchor driver).
+	const classBase = clsData?.attributes || {};
+	
+	const sumParts = [
+	  norm(classBase),
+	  norm(weapon?.attributes||{}),
+	  norm(offhand?.attributes||{}),
+	  norm(pickedDefense?.attributes||{}),
+	  norm(pickedDefStrat?.attributes||{})
+	].reduce((acc,a)=>add(acc,a), {strength:0,dexterity:0,intelligence:0});
+	
+	const ailSum = ailmentSet.filter(Boolean).map(a=>a.attributes||{}).map(norm).reduce((acc,a)=>add(acc,a), {strength:0,dexterity:0,intelligence:0});
+	const tacSum = tacticSet.filter(Boolean).map(t=>t.attributes||{}).map(norm).reduce((acc,a)=>add(acc,a), {strength:0,dexterity:0,intelligence:0});
+	
+	// Mechanics get a lighter nudge in the bar
+	const MECH_W = 0.5;
+	const mech = scale(add(ailSum, tacSum), MECH_W);
+	
+	const total = add(sumParts, mech);
+	
+	const T = (total.strength+total.dexterity+total.intelligence)||1e-6;
+	const S=total.strength/T, D=total.dexterity/T, I=total.intelligence/T;
+	
+	const bar=document.getElementById('balance-bar');
+	const grad=`linear-gradient(90deg, rgba(176,48,48,1) 0%, rgba(176,48,48,1) ${S*100}%, rgba(45,122,45,1) ${S*100}%, rgba(45,122,45,1) ${(S+D)*100}%, rgba(47,79,157,1) ${(S+D)*100}%, rgba(47,79,157,1) 100%)`;
+	bar.style.setProperty('--balance-gradient', grad);
+	bar.classList.add('glow');
+	
+	document.getElementById('balance-text').textContent =
+	  `Strength ${Math.round(S*100)}% | Dexterity ${Math.round(D*100)}% | Intelligence ${Math.round(I*100)}%`;
 
   // Build name + flavor (restored)
   const buildName = generateBuildName(clsName, asc, ailmentSet.filter(Boolean), tacticSet.filter(Boolean));
