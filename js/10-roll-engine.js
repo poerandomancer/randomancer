@@ -549,6 +549,71 @@ async function handleSecondaryWeaponSetSelection(){
   if (set2Btn) set2Btn.hidden = true;
   setSkillsTabsAvailability(true);
   setActiveSkillsTab('1');
+  
+  // Recompute balance bar now that weapon set II exists (include WS2; mechanics weight = 0.5)
+	try {
+	  const current2 = window.App?.state?.currentRoll || window.CURRENT_ROLL || {};
+	
+	  const add=(a,b)=>({strength:(a.strength||0)+(b.strength||0), dexterity:(a.dexterity||0)+(b.dexterity||0), intelligence:(a.intelligence||0)+(b.intelligence||0)});
+	  const scale=(a,k)=>({strength:(a.strength||0)*k, dexterity:(a.dexterity||0)*k, intelligence:(a.intelligence||0)*k});
+	  const norm=(a)=>{ const t=(a.strength||0)+(a.dexterity||0)+(a.intelligence||0)||1e-6; return {strength:(a.strength||0)/t, dexterity:(a.dexterity||0)/t, intelligence:(a.intelligence||0)/t}; };
+	
+	  const weaponPool = (coreData.Weapons['Two-Handed'] || []).concat(coreData.Weapons['One-Handed'] || []);
+	  const offPool = (coreData.Weapons['Off-Hand'] || []);
+	
+	  const w1 = weaponPool.find(w => w?.name === current2.weapon) || null;
+	  const o1 = (current2.offhand && current2.offhand !== 'Quiver')
+		? (offPool.find(o => o?.name === current2.offhand) || null)
+		: null;
+	
+	  const classBase = coreData.Classes?.[current2.className]?.attributes || {};
+	  const defenseObj = current2.defenseObj || null;
+	  const defStratObj = current2.defStratObj || null;
+	
+	  const ailmentSet = current2.ailmentSet || window.CURRENT_ROLL?.ailmentSet || [];
+	  const tacticSet  = current2.tacticSet  || window.CURRENT_ROLL?.tacticSet  || [];
+	
+	  const sumParts = [
+		norm(classBase),
+		norm(w1?.attributes||{}),
+		norm(o1?.attributes||{}),
+		norm(weapon?.attributes||{}),   // WS2 weapon (object in this scope)
+		norm(offhand?.attributes||{}),  // WS2 offhand (object in this scope, may be null)
+		norm(defenseObj?.attributes||{}),
+		norm(defStratObj?.attributes||{})
+	  ].reduce((acc,a)=>add(acc,a), {strength:0,dexterity:0,intelligence:0});
+	
+	  const ailSum = ailmentSet.filter(Boolean).map(a=>a.attributes||{}).map(norm).reduce((acc,a)=>add(acc,a), {strength:0,dexterity:0,intelligence:0});
+	  const tacSum = tacticSet.filter(Boolean).map(t=>t.attributes||{}).map(norm).reduce((acc,a)=>add(acc,a), {strength:0,dexterity:0,intelligence:0});
+	
+	  const MECH_W = 0.5;
+	  const mech = scale(add(ailSum, tacSum), MECH_W);
+	
+	  const total = add(sumParts, mech);
+	
+	  const T = (total.strength+total.dexterity+total.intelligence)||1e-6;
+	  const attrs = { strength: total.strength/T, dexterity: total.dexterity/T, intelligence: total.intelligence/T };
+	
+	  // Update UI
+	  const S=attrs.strength, D=attrs.dexterity, I=attrs.intelligence;
+	  const bar=document.getElementById('balance-bar');
+	  const grad=`linear-gradient(90deg, rgba(176,48,48,1) 0%, rgba(176,48,48,1) ${S*100}%, rgba(45,122,45,1) ${S*100}%, rgba(45,122,45,1) ${(S+D)*100}%, rgba(47,79,157,1) ${(S+D)*100}%, rgba(47,79,157,1) 100%)`;
+	  bar.style.setProperty('--balance-gradient', grad);
+	  bar.classList.add('glow');
+	  document.getElementById('balance-text').textContent =
+		`Strength ${Math.round(S*100)}% | Dexterity ${Math.round(D*100)}% | Intelligence ${Math.round(I*100)}%`;
+	
+	  // Keep snapshot in sync
+	  if (window.App && typeof window.App.mergeCurrentRoll === 'function') {
+		window.App.mergeCurrentRoll({ attributes: attrs, rollAttr: attrs });
+	  }
+	  if (window.CURRENT_ROLL && typeof window.CURRENT_ROLL === 'object') {
+		window.CURRENT_ROLL.rollAttr = attrs;
+	  }
+	} catch (e) {
+	  console.warn('[secondary weapons] balance recompute failed', e);
+	}
+
 }
 
 function rollBuild(dataWrap){
@@ -884,20 +949,40 @@ function rollBuild(dataWrap){
 
 
   // Balance aggregation
-  const add=(a,b)=>({strength:(a.strength||0)+(b.strength||0), dexterity:(a.dexterity||0)+(b.dexterity||0), intelligence:(a.intelligence||0)+(b.intelligence||0)});
-  const norm=(a)=>{ const t=(a.strength||0)+(a.dexterity||0)+(a.intelligence||0)||1e-6; return {strength:(a.strength||0)/t, dexterity:(a.dexterity||0)/t, intelligence:(a.intelligence||0)/t}; };
-  const sumParts = [ norm(base), norm(weapon?.attributes||{}), norm(offhand?.attributes||{}), norm(pickedDefense?.attributes||{}), norm(pickedDefStrat?.attributes||{}) ].reduce((acc,a)=>add(acc,a), {strength:0,dexterity:0,intelligence:0});
-  const ailAvg = (ailmentSet.filter(Boolean).map(a=>a.attributes||{}).map(norm).reduce((acc,a)=>add(acc,a), {strength:0,dexterity:0,intelligence:0}));
-  const tacAvg = (tacticSet.filter(Boolean).map(a=>a.attributes||{}).map(norm).reduce((acc,a)=>add(acc,a), {strength:0,dexterity:0,intelligence:0}));
-  const total = {strength: sumParts.strength+ailAvg.strength+tacAvg.strength, dexterity: sumParts.dexterity+ailAvg.dexterity+tacAvg.dexterity, intelligence: sumParts.intelligence+ailAvg.intelligence+tacAvg.intelligence};
-  const T = (total.strength+total.dexterity+total.intelligence)||1e-6;
-  const S=total.strength/T, D=total.dexterity/T, I=total.intelligence/T;
-  const bar=document.getElementById('balance-bar');
-  const grad=`linear-gradient(90deg, rgba(176,48,48,1) 0%, rgba(176,48,48,1) ${S*100}%, rgba(45,122,45,1) ${S*100}%, rgba(45,122,45,1) ${(S+D)*100}%, rgba(47,79,157,1) ${(S+D)*100}%, rgba(47,79,157,1) 100%)`;
-  bar.style.setProperty('--balance-gradient', grad);
-  bar.classList.add('glow');
-  document.getElementById('balance-text').textContent = `Strength ${Math.round(S*100)}%  |  Dexterity ${Math.round(D*100)}%  |  Intelligence ${Math.round(I*100)}%`;
-
+	const add=(a,b)=>({strength:(a.strength||0)+(b.strength||0), dexterity:(a.dexterity||0)+(b.dexterity||0), intelligence:(a.intelligence||0)+(b.intelligence||0)});
+	const scale=(a,k)=>({strength:(a.strength||0)*k, dexterity:(a.dexterity||0)*k, intelligence:(a.intelligence||0)*k});
+	const norm=(a)=>{ const t=(a.strength||0)+(a.dexterity||0)+(a.intelligence||0)||1e-6; return {strength:(a.strength||0)/t, dexterity:(a.dexterity||0)/t, intelligence:(a.intelligence||0)/t}; };
+	
+	// Use the *actual rolled class* for the balance bar (not the oath-anchor driver).
+	const classBase = clsData?.attributes || {};
+	
+	const sumParts = [
+	  norm(classBase),
+	  norm(weapon?.attributes||{}),
+	  norm(offhand?.attributes||{}),
+	  norm(pickedDefense?.attributes||{}),
+	  norm(pickedDefStrat?.attributes||{})
+	].reduce((acc,a)=>add(acc,a), {strength:0,dexterity:0,intelligence:0});
+	
+	const ailSum = ailmentSet.filter(Boolean).map(a=>a.attributes||{}).map(norm).reduce((acc,a)=>add(acc,a), {strength:0,dexterity:0,intelligence:0});
+	const tacSum = tacticSet.filter(Boolean).map(t=>t.attributes||{}).map(norm).reduce((acc,a)=>add(acc,a), {strength:0,dexterity:0,intelligence:0});
+	
+	// Mechanics get a lighter nudge in the bar
+	const MECH_W = 0.5;
+	const mech = scale(add(ailSum, tacSum), MECH_W);
+	
+	const total = add(sumParts, mech);
+	
+	const T = (total.strength+total.dexterity+total.intelligence)||1e-6;
+	const S=total.strength/T, D=total.dexterity/T, I=total.intelligence/T;
+	
+	const bar=document.getElementById('balance-bar');
+	const grad=`linear-gradient(90deg, rgba(176,48,48,1) 0%, rgba(176,48,48,1) ${S*100}%, rgba(45,122,45,1) ${S*100}%, rgba(45,122,45,1) ${(S+D)*100}%, rgba(47,79,157,1) ${(S+D)*100}%, rgba(47,79,157,1) 100%)`;
+	bar.style.setProperty('--balance-gradient', grad);
+	bar.classList.add('glow');
+	
+	document.getElementById('balance-text').textContent =
+	  `Strength ${Math.round(S*100)}% | Dexterity ${Math.round(D*100)}% | Intelligence ${Math.round(I*100)}%`;
 
   // Build name + flavor (restored)
   const buildName = generateBuildName(clsName, asc, ailmentSet.filter(Boolean), tacticSet.filter(Boolean));
