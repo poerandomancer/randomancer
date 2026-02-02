@@ -606,7 +606,7 @@ function rollBuild(dataWrap){
 	  return;
 	}
 	
-	// ---- Active anchor picks (only used to select class/asc candidate) ----
+	// ---- Active anchor picks (used to select class/asc candidate, and as roll driver if present) ----
 	let anchorAttrs = null;                 // {strength,dexterity,intelligence} ratio-ish
 	let activeWeaponOathName = null;        // string name of the active weapon oath (weapon tier)
 	let activeMechanicOathNames = null;     // [name, name?] for mechanics-tier-only
@@ -678,12 +678,17 @@ function rollBuild(dataWrap){
 	
 	const clsName = pickedAsc.clsName;
 	const clsData = pickedAsc.clsData;
-	const base = clsData?.attributes || {};
+
+	// If an oath anchor exists (weapon/mechanics), drive the rest of the roll from it.
+	// Otherwise fall back to the class attributes (original behavior).
+	const base = anchorAttrs || clsData?.attributes || {};
+
 	const asc = pickedAsc.ascList[Math.floor(Math.random() * pickedAsc.ascList.length)];
 	const ascendancyId = lookupAscendancyIdByName(asc);
 	
 	// --- Weapons ---
-	// (use class attributes as the driver from here onward, like today)
+	// (use oath anchor as the driver from here onward, when present)
+
 	let filteredWeaponPool = weaponPool.filter((w) => !wAboms.has(w.name));
 	
 	if (wOaths.size > 0) {
