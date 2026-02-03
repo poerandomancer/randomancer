@@ -33,7 +33,7 @@ const Dom = (() => {
 })();
 
 // App metadata
-const APP_VERSION = '0.8.4.1';
+const APP_VERSION = '0.8.4.2';
 
 const SUPPORT = Object.freeze({
   poe2Patch: "0.4.0",
