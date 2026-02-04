@@ -46,7 +46,7 @@ The goal is to encourage **creative, off-meta build ideas** while still giving a
 
 ## Project Structure
 
-Typical versioned release (example: `v0.8.2_cleanup`):
+Typical project layout (file names are no longer versioned; the UI shows APP_VERSION):
 
 ```text
 .
@@ -155,7 +155,7 @@ How It Works (Simplified Flow)
 
 Data Load
 
-On page load, script_*.js fetches core JSON files (e.g. data_0.8.2_cleanup.json, skill_gems.json, uniques_enriched_0.8.2_cleanup.json).
+On page load, core-script.js loads data/core-data.json, skill_gems.json, and data/enriched/uniques_enriched.json (plus other enriched data as configured).
 
 The code builds internal lookup maps or helpers where needed (e.g., mapping skills by tag, type, or weapon compatibility).
 

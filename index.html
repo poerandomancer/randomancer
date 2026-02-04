@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-QP11XW9Z5X"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	
+	  gtag('config', 'G-QP11XW9Z5X');
+	</script>
+
   <title>The Randomancer – Path of Exile 2 Build Randomizer & PoE2 Build Generator</title>
 
   <meta name="description" content="The Randomancer is a Path of Exile 2 build randomizer that generates themed, high-cohesion PoE2 builds with skills, passives, oaths, and uniques in one click." />
@@ -50,7 +61,7 @@
   <link rel="apple-touch-icon" href="images/dice.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>The Randomancer — 0.8.2_cleanup</title>
+  <title>The Randomancer</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Cormorant+Infant:ital,wght@1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css"/>
 </head>
@@ -170,15 +181,9 @@
 </div>
     </div>
   </div>
-  <div id="intro" class="intro-screen">
-    <div class="intro-content">
-      <p id="intro-line"></p>
-      <button id="intro-roll" class="roll-btn roll-btn"><img src="images/dice.png" alt="The Randomancer – Path of Exile 2 build randomizer thrice dice icon" class="btn-ico"> Approach the Randomancer</button>
-    </div>
-  </div>
 
   <div id="asc-art" class="asc-art" aria-hidden="true"></div>
-  <div id="app" class="hidden" data-has-roll="false">
+  <div id="app" data-has-roll="false">
     <header>
       <div class="patch-indicator" aria-label="Supported Path of Exile 2 patch">
         Supports POE2 · <strong>v0.4.0</strong>
@@ -204,7 +209,7 @@
     
       <div class="cohesion-slider cohesion-bar-wrapper" data-cohesion-constrained="false">
                   <div class="mode-labels">
-                        <span>Strict</span><span>Cohesive</span><span>Chaotic</span><span>Madness</span>
+                        <span>Cohesive</span><span>Chaotic</span>
                   </div>
                   <!-- Continuous slider: 0–100 mapped to threshold 1.00 → 0.00 -->
 		  <input
@@ -235,11 +240,26 @@
         </div>
         <span id="bind-fates-error" class="bind-fates-error" aria-live="polite"></span>
       </div>
+      
+      <div class="control-item weapon-set2-control">
+		  <label class="toggle-label">
+			<input
+			  type="checkbox"
+			  id="weapon-set2-toggle"
+			  aria-label="Include Weapon Set II">
+			<span class="toggle-ui"></span>
+			<span class="toggle-text">Enable Weapon Set II</span>
+
+		  </label>
+		</div>
+
 
 
       <div id="build-roll-banner" class="build-roll-banner" aria-live="polite">
-        <div id="build-name" class="build-name"></div>
-        <div id="build-subtext" class="build-subtext"></div>
+        <div class="build-panel-tabs view-mode-tabs">
+				<div class="skills-tab is-active" data-view="detailed">Detailed</div>
+				<div class="skills-tab" data-view="summary">Summary</div>
+			</div>
       </div>
 
       <section id="empty-state" class="panel empty-state" aria-label="Welcome">
@@ -250,17 +270,40 @@
 
       <section id="build-panel" class="panel">
         <div class="panel-actions">
-          <button id="view-toggle" class="view-toggle-btn" type="button" aria-pressed="false" aria-label="Toggle Summary View" title="Switch to Summary View">Summary</button>
-          <button id="save-build" class="icon-btn" type="button" aria-label="Save Build" title="Save Build">☆</button>
+			  <div class="copy-menu" id="build-actions-wrap">
+			  <button id="build-actions-btn" class="icon-btn" type="button" aria-label="Build actions" title="Build actions" aria-haspopup="menu" aria-expanded="false">
+				  <span class="kebab-glyph" aria-hidden="true">⋯</span>
+				</button>
 
-          <div class="copy-menu" id="copy-menu-wrap">
-            <button id="copy-build-link" class="icon-btn" type="button" aria-label="Copy" title="Copy" aria-haspopup="menu" aria-expanded="false">⧉</button>
-            <div id="copy-menu" class="copy-menu-pop" role="menu" hidden>
-              <button id="copy-menu-link" class="copy-menu-item" type="button" role="menuitem">Copy Build Link</button>
-              <button id="copy-menu-summary" class="copy-menu-item" type="button" role="menuitem">Copy Summary</button>
-            </div>
-          </div>
+			
+			  <div id="build-actions-menu" class="copy-menu-pop" role="menu" hidden>
+				<button id="build-actions-save" class="copy-menu-item" type="button" role="menuitem">
+				  <span class="copy-menu-ico" aria-hidden="true">☆</span>
+				  <span class="copy-menu-label">Save Build</span>
+				</button>
+			
+				<button id="build-actions-copy-summary" class="copy-menu-item" type="button" role="menuitem">
+				  <span class="copy-menu-ico" aria-hidden="true">⧉</span>
+				  <span class="copy-menu-label">Copy Summary</span>
+				</button>
+			
+				<button id="build-actions-copy-link" class="copy-menu-item" type="button" role="menuitem">
+				  <span class="copy-menu-ico" aria-hidden="true">⧉</span>
+				  <span class="copy-menu-label">Copy Build Link</span>
+				</button>
+			
+				<button id="build-actions-poe-ninja" class="copy-menu-item" type="button" role="menuitem">
+				  <span class="copy-menu-ico" aria-hidden="true">🥷</span>
+				  <span class="copy-menu-label">Similar Builds on poe.ninja</span>
+				</button>
+			  </div>
+			</div>
         </div>
+        <div class="build-title-block">
+			<div id="build-name" class="build-name"></div>
+			<div id="build-subtext" class="build-subtext"></div>
+		</div>
+        
         <div id="summary-panel" class="summary-panel" hidden aria-label="Build Summary">
           <div id="summary-line-1" class="summary-row summary-row--primary"></div>
           <div id="summary-line-2" class="summary-row"></div>
@@ -278,7 +321,7 @@
                 <span class="lock-icon lock-on" aria-hidden="true">🔒</span>
               </button>
             </div>
-            <div class="underline"></div><p class="sub">Class, Ascendancy, & Weapons</p>
+            <div class="underline"></div>
           </div>
           <div class="grid two">
             <div><span class="label">Class</span><span id="class"></span></div>
@@ -287,7 +330,6 @@
               <span class="label">Weapons</span>
               <div class="weapon-sets">
                 <span id="weapons"></span>
-                <button id="weapon-set2-btn" class="weapon-set2-btn" type="button" hidden>+ Select secondary weapon set</button>
                 <span id="weapons-set2" hidden></span>
               </div>
             </div>
@@ -303,7 +345,7 @@
                 <span class="lock-icon lock-on" aria-hidden="true">🔒</span>
               </button>
             </div>
-            <div class="underline"></div><p class="sub">Ailments & Tactics</p>
+            <div class="underline"></div>
           </div>
           <div class="grid two">
             <div class="wide"><span class="label">Ailments</span><span id="ailments"></span></div>
@@ -320,7 +362,7 @@
                 <span class="lock-icon lock-on" aria-hidden="true">🔒</span>
               </button>
             </div>
-            <div class="underline"></div><p class="sub">Primary Defense and Defensive Strategy</p>
+            <div class="underline"></div>
           </div>
           <div class="grid two">
             <div><span class="label">Defense</span><span id="defense"></span></div>
@@ -329,7 +371,7 @@
         </div>
         <hr class="gold subtle"/>
         <div class="sect">
-          <div class="sect-head"><h3>Balance</h3><div class="underline"></div><p class="sub">Attribute Distribution</p></div>
+          <div class="sect-head"><h3>Balance</h3><div class="underline"></div></div>
           <div class="wide">
             <div id="balance-bar"></div>
             <div id="balance-text"></div>
@@ -338,7 +380,7 @@
       </section>
 
       <section id="skills-panel" class="panel panel--skills">
-<div class="sect">
+		<div class="sect">
             <div class="sect-head">
               <h3 class="section-title">Recommended Skills</h3>
               <div class="underline"></div><p class="sub">Two active skills for this roll, with supports</p>
@@ -389,24 +431,54 @@ const INTRO_LINES = [
   "The echoes of destiny whisper — will you answer?",
   "Beyond the veil, your path lies unwritten. Cast the die.",
   "Not all who tempt fate return unchanged. Dare you roll?",
-  "In the stillness, the Fates stir. Reach forth and claim your thread."
+  "In the stillness, the Fates stir. Reach forth and claim your thread.",
+  "Wraeclast remembers every sin you dare to repeat.",
+  "The shore was mercy, Exile. This is not.",
+  "The gods have stopped listening. Fate has not.",
+  "Maps fade, monuments crumble, legends reroll.",
+  "Some destinies are forged in blood; others in chance.",
+  "Innocence burned, Sin smiled, and the world kept turning.",
+  "Where prophecy falters, improvisation begins.",
+  "The Ancients whisper; the Randomancer answers.",
+  "Every shard of corruption hides an opportunity.",
+  "Not all experiments survive their creators.",
+  "Enter with flasks and hope. Depart with stories.",
+  "This land is cruel. Your build can be crueler.",
+  "When the dead won’t stay down, neither should your ideas.",
+  "Meta got you down? Wraeclast has other plans.",
+  "Good builds farm maps. Great builds make stories.",
+  "Balance passes are temporary. Terrible ideas are eternal.",
+  "If the forums hate it, you’re probably onto something.",
+  "One exile, infinite patch notes.",
+  "The best loot is the friends confused along the way.",
+  "Theorycraft later. Regret now.",
+  "May your flasks be full and your expectations low.",
+  "When in doubt, blame desync. When inspired, blame the Randomancer.",
+  "Every exile is a bad idea refined.",
+  "Wraeclast shapes steel and souls the same way.",
+  "Some paths are chosen. This one was gambled.",
+  "The gods watch. The map device does not care.",
+  "Between hope and horror lies one more build.",
+  "Build boldly. Regret beautifully.",
+  "Dice, data, and divine disappointment.",
+  "Fate is just another loot table.",
+  "Reckless by design, ruthless by accident.",
+  "Because ‘viable’ is such a boring word.",
+  "The meta is a suggestion, not a sentence.",
+  "Leave the comfort zone in Oriath.",
+  "All gas, no guide.",
+  "For when respeccing once just isn’t enough."
 ];
-document.addEventListener('DOMContentLoaded', ()=>{
-  const intro = document.getElementById('intro');
-  const introLine = document.getElementById('intro-line');
-  const introRoll = document.getElementById('intro-roll');
-  introLine.textContent = INTRO_LINES[Math.floor(Math.random()*INTRO_LINES.length)];
-  introRoll.addEventListener('click', () => {
-    intro.classList.add('fade-out');
-    setTimeout(() => {
-      intro.remove();
-      const app = document.getElementById('app');
-      app.classList.remove('hidden');
-      app.classList.add('fade-in');
-    }, 700);
-  });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const emptyText = document.querySelector('#empty-state .empty-title');
+  if (emptyText) {
+    emptyText.textContent = INTRO_LINES[Math.floor(Math.random() * INTRO_LINES.length)];
+  }
 });
 </script>
+
+<div id="rm-toast" class="rm-toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
 <script type="module" src="core-script.js"></script>
 </body>
 </html>

@@ -1,0 +1,213 @@
+main{ max-width:860px; margin:0 auto; padding:1rem 1.25rem 1.25rem; }
+
+.panel{
+  position:relative;
+  background:var(--panel);
+  border:1px solid var(--edge);
+  border-radius:var(--radius);
+  padding:1rem 1.25rem 1.25rem;
+  box-shadow:0 6px 20px rgba(0,0,0,.25);
+  overflow:hidden;
+  z-index:1;
+}
+.panel::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:var(--overlay-gradient,linear-gradient(135deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.85) 100%));
+  pointer-events:none;
+  z-index:0;
+}
+.panel > *{ position:relative; z-index:1; }
+
+/* --- Panel separation consistency --- */
+main .panel + .panel{
+  margin-top: 16px;
+}
+
+/* Hide the uniques panel until JS mounts the section (avoids an empty bordered box pre-roll) */
+#uniques-panel:has(#uniques-mount:empty){
+  display:none;
+}
+
+
+.sect{ padding:.25rem 0; }
+.sect-head{ margin-bottom:.5rem; position:relative; }
+.sect-head .underline{
+  height:1px; width:120px;
+  background:linear-gradient(90deg, var(--gold), transparent);
+  margin:.25rem 0 .4rem;
+}
+.section-header{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+.section-title-row{
+  display:flex;
+  align-items:center;
+  gap:.4rem;
+}
+.section-header .section-title{ margin:0 0 .1rem; font-weight:600; color:var(--silver); letter-spacing:.02em; }
+.section-header .lock-toggle {
+  display: none !important;
+}
+.lock-toggle{
+  background:transparent;
+  border:0px solid rgba(220, 188, 120, 0.28);
+  color:#d9c07a;
+  cursor:pointer;
+  width:32px;
+  height:28px;
+  padding:0;
+  display:grid;
+  place-items:center;
+  border-radius:6px;
+  opacity:0.85;
+  pointer-events:auto;
+  filter:drop-shadow(0 0 6px rgba(200,168,107,0.45));
+  transition:opacity 150ms ease-out, border-color 120ms ease-out, filter 150ms ease-out;
+}
+.lock-toggle:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+.section-header[data-locked="true"] .lock-toggle{
+  opacity:1;
+  pointer-events:auto;
+  border-color:var(--gold);
+  filter:drop-shadow(0 0 8px rgba(200,168,107,0.6));
+}
+.lock-icon.lock-on{ display:none; }
+.section-header[data-locked="true"] .lock-icon.lock-on{ display:inline-block; }
+.section-header[data-locked="true"] .lock-icon.lock-off{ display:none; }
+.section-header[data-locked="true"] .section-title{ color:var(--gold); }
+
+/* ===== Locked section overlay (more pronounced lock state) ===== */
+
+/* Give locked sections a positioning context */
+.sect[data-locked="true"]{
+  position:relative;
+}
+
+/* Gold band across the section: strongest in the middle, fades at the sides */
+.sect[data-locked="true"]::before{
+  content:"";
+  position:absolute;
+  /* sit slightly inside the card instead of spilling past the edges */
+  inset:6px 10px;
+  border-radius:10px;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(212,170,80,0.00) 0%,
+      rgba(212,170,80,0.14) 50%,
+      rgba(212,170,80,0.00) 100%
+    );
+  pointer-events:none;
+
+  /* much softer or no glow; pick one of these: */
+
+  /* Option A: very soft halo */
+  box-shadow:0 0 6px rgba(212,170,80,0.18);
+  opacity:0.7;
+
+  /* Option B (ultra subtle, no glow at all) */
+  /* box-shadow:none;
+     opacity:0.6; */
+}
+
+
+/* (Optional) tiny extra emphasis on the title when locked */
+.sect[data-locked="true"] .section-title{
+  text-shadow:0 0 6px rgba(0,0,0,0.7);
+}
+
+.sect h3{ margin:0 0 .1rem; font-weight:600; color:var(--silver); letter-spacing:.02em; }
+.sub{ margin:0; color:var(--muted); font-size:.95rem; }
+.gold.subtle{
+  height:1px; border:0;
+  background:linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin:.9rem 0; opacity:.6;
+}
+.grid{ display:grid; gap:.65rem .75rem; }
+.grid.two{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+.grid .wide{ grid-column:1 / -1; }
+.label{ display:inline-block; min-width:9rem; color:var(--gold); letter-spacing:.02em; margin-right:.25rem; }
+#weapons,#weapons-set2,#ailments,#tactics,#defense,#defstrat{ font-weight:600; }
+/* Weapon set display: simple stacked lines (no set indicators in the build panel) */
+.weapon-sets{ display:inline-flex; flex-direction:column; gap:.25rem; }
+.weapon-sets #weapons,
+.weapon-sets #weapons-set2{ display:block; }
+.weapon-set2-btn{
+  align-self:flex-start;
+  padding:.15rem .65rem;
+  border-radius:999px;
+  border:1px solid var(--edge);
+  background:rgba(20,20,24,0.6);
+  color:var(--muted);
+  font-family: inherit;
+  font-weight: 600;
+  letter-spacing: .02em;
+  font-size:.9rem;
+  cursor:pointer;
+}
+.weapon-set2-btn:hover{ color:var(--silver); border-color:rgba(212,170,80,0.6); }
+.weapon-set2-btn[hidden]{ display:none; }
+.foot{ text-align:center; padding:1.25rem 1rem 3rem; color:var(--muted); }
+.hidden{ display:none; }
+
+#balance-bar{
+  position: relative;
+  height: 6px;
+  border-radius: 4px;
+  margin: .8rem 0 .25rem;
+  background: var(--balance-gradient);
+  box-shadow:
+    0 0 12px rgba(212,170,80,0.65),
+    0 0 24px rgba(180,130,50,0.45),
+    0 0 36px rgba(140,90,20,0.25);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%);
+}
+#balance-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--balance-gradient);
+  opacity: 0.8;
+  filter: blur(10px);
+  pointer-events: none;
+}
+#balance-bar.glow::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:var(--balance-gradient);
+  filter:blur(8px) brightness(1.25);
+  mix-blend-mode:screen;
+  opacity:.9;
+  border-radius:inherit;
+  pointer-events:none;
+}
+
+#balance-text {
+  text-align: center;
+  font-size: .95rem;
+  color: var(--muted);
+  margin-top: .25rem;
+}
+
+#build-panel {
+  margin-top: 14px;
+}
+
+.view-mode-tabs {
+  position: absolute;
+  bottom: -14px; /* pulls tabs DOWN onto the next panel */
+  right: 14px;
+  display: flex;
+  gap: 6px;
+  z-index: 5;
+}
+
+
+/* === v0.5.1: Recommended Skills section === */
