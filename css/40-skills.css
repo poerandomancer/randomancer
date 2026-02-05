@@ -153,31 +153,6 @@ border-top: 1px dotted var(--gold);
 .cohesion-slider{ margin:0.45rem auto 0.1rem; width:min(640px,90%); text-align:center; color:var(--gold); }
 .cohesion-slider input[type=range]{ width:100%; appearance:none; height:6px; border-radius:6px; background:linear-gradient(90deg, rgba(212,170,80,0.4), rgba(212,170,80,0.9)); outline:none; cursor:pointer; box-shadow:0 0 6px rgba(212,170,80,0.3); }
 .cohesion-slider .mode-labels{ display:flex; justify-content:space-between; font-size:.9rem; opacity:.8; margin-top:.2rem; color:var(--muted); }
-.cohesion-status{
-  min-height:1.2rem;
-  margin-top:.35rem;
-  font-size:.95rem;
-  font-weight:500;
-  letter-spacing:.03em;
-  color:#ffeac2; /* bright warm gold */
-  text-shadow:
-    0 0 4px rgba(0,0,0,0.9),
-    0 0 10px rgba(0,0,0,0.9),
-    0 0 18px rgba(255,220,150,0.9),
-    0 0 32px rgba(255,220,150,0.85);
-}
-
-/* Optional: if you ever want to mute it in some state */
-.cohesion-status[data-status="ok"],
-.cohesion-status[data-status="muted"]{
-  color:var(--muted);
-  opacity:.75;
-  text-shadow:none;
-}
-
-.cohesion-status{
-	display: none;
-}
 
 /* Bind the Fates */
 .bind-fates-row{

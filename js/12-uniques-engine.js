@@ -7,11 +7,6 @@ import { TagUtils, defensePseudoTags } from './05-tags-and-scorer.js';
 
   // Use shared tag normalizer
   const norm = (s) => TagUtils.norm(s);
-  const syncLocks = () => {
-    if (typeof window !== 'undefined' && typeof window.syncLockUIFromState === 'function') {
-      window.syncLockUIFromState();
-    }
-  };
 
   const splitNames = (s) => String(s||'')
     .replace(/\u00B7/g,'•')
@@ -336,10 +331,6 @@ function ensureUniqueSection(){
         `;
 
     mount.appendChild(wrap);
-
-    const lockBtn = wrap.querySelector('.lock-toggle');
-    if (lockBtn) wireLockButton(lockBtn);
-    syncLocks();
 
     return wrap.querySelector('#uniques-grid');
   }
