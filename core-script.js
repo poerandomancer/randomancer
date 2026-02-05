@@ -4,16 +4,16 @@
 /**
  * Module Map + Public API
  * 1) 01-meta-and-domready: selectors, DOM helpers, onDomReady, shared helpers, smoke check.
- * 2) 00-locks-and-snapshots: locks, build code encode/decode, saved builds.
+ * 2) 00-locks-and-snapshots: snapshots/build codes/saved builds.
  * 3) 02-summary-view: summary mode toggle + render + auto-refresh.
  * 4) 03-config-and-schema: Schema/Config/RulesEngine scaffolding.
  * 5) 04-app-state: window.App, bootstrap, cohesion state helpers.
  * 6) 05-tags-and-scorer: tag normalization + scorer glue + dictionary builders.
- * 7) 06-cohesion: cohesion modes + build context helpers.
+ * 7) 06-cohesion: continuous threshold + relax safety net.
  * 8) 07-skills-render: passives + skills render helpers.
  * 9) 08-data-load: JSON loaders + preload pipeline.
  * 10) 09-bind-fates-ui: bind fates modal + cohesion slider wiring.
- * 11) 10-roll-engine: rollBuild + weapon set II + roll button wiring.
+ * 11) 10-roll-engine: rollBuild + WS2 toggle plumbing.
  * 12) 11-pre-gate-and-sync: pre-gate + state→DOM sync + IDF cache.
  * 13) 12-uniques-engine: uniques synergy engine.
  * 14) 13-info-lightbox: info overlay controller.
