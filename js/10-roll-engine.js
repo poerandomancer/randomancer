@@ -391,21 +391,17 @@ function generateFlavorLine(cls, asc, ailments, tactics){
   return sample(pool);
 }
 
-
-function resetSecondaryWeaponSetUI(showButton){
-
+function resetSecondaryWeaponSetUI(){
   const weapons2El = document.getElementById('weapons-set2');
   if (weapons2El) {
     weapons2El.textContent = '';
     weapons2El.hidden = true;
   }
+
   const grid2 = document.getElementById('skills-grid-2');
   if (grid2) grid2.innerHTML = '';
-  const btn = document.getElementById('weapon-set2-btn');
-  if (btn) {
-    btn.textContent = 'Add Weapon Set II';
-    btn.hidden = !showButton;
-  }
+
+  // WS2 is toggle-driven; no button UI.
   setSkillsTabsAvailability(false);
   setActiveSkillsTab('1');
 }
@@ -470,8 +466,8 @@ function rollSecondaryWeaponSet(dataWrap){
   return { weapon, offhand, wOaths };
 }
 
-async function handleSecondaryWeaponSetSelection(){
-  const data = await ensureDataPreload();
+async function handleSecondaryWeaponSetSelection(dataWrap){
+  const data = dataWrap || await ensureDataPreload();
   const coreData = resolveCoreData(data);
   const current = window.App?.state?.currentRoll || window.CURRENT_ROLL || {};
   if (!current.weapon || current.weapon2) return;
@@ -520,8 +516,6 @@ async function handleSecondaryWeaponSetSelection(){
     window.CURRENT_ROLL.offhand2 = offhandName;
   }
 
-  const set2Btn = document.getElementById('weapon-set2-btn');
-  if (set2Btn) set2Btn.hidden = true;
   setSkillsTabsAvailability(true);
   setActiveSkillsTab('1');
   
@@ -1018,7 +1012,7 @@ function rollBuild(dataWrap){
     weaponParts,
     wOaths
   );
-  resetSecondaryWeaponSetUI(true);
+  resetSecondaryWeaponSetUI();
   document.getElementById('defense')?.replaceChildren(document.createTextNode(pickedDefense?.name || ''));
   document.getElementById('defstrat')?.replaceChildren(document.createTextNode(pickedDefStrat?.name || ''));
 
@@ -1209,7 +1203,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const ws2Toggle = document.getElementById('weapon-set2-toggle');
 		if (ws2Toggle?.checked) {
 		  try {
-			await handleSecondaryWeaponSetSelection();
+			await handleSecondaryWeaponSetSelection(data);
 		  } catch (err) {
 			console.error('[secondary weapons] roll failed:', err);
 		  }
@@ -1252,15 +1246,6 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }, 120);
       }
-    });
-  }
-
-  const weaponSet2Btn = document.getElementById('weapon-set2-btn');
-  if (weaponSet2Btn) {
-    weaponSet2Btn.addEventListener('click', () => {
-      handleSecondaryWeaponSetSelection().catch(err => {
-        console.error('[secondary weapons] roll failed:', err);
-      });
     });
   }
   
@@ -1315,27 +1300,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-  const toggle = document.getElementById('weapon-set2-toggle');
-  if (!toggle) return;
-
-  // Reflect existing roll state (if applicable)
-  const current = window.App?.state?.currentRoll;
-  if (current?.weapon2) {
-    toggle.checked = true;
-  }
-
-  // ❌ No behavior on change
-  toggle.addEventListener('change', () => {
-    // Intentionally empty.
-    // Toggle state is read during roll.
-  });
-});
-
 
 export {
-  handleSecondaryWeaponSetSelection,
-  resetSecondaryWeaponSetUI,
   rollBuild,
   updateAscArt
 };

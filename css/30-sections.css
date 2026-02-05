@@ -55,21 +55,6 @@ main .panel + .panel{
 .weapon-sets{ display:inline-flex; flex-direction:column; gap:.25rem; }
 .weapon-sets #weapons,
 .weapon-sets #weapons-set2{ display:block; }
-.weapon-set2-btn{
-  align-self:flex-start;
-  padding:.15rem .65rem;
-  border-radius:999px;
-  border:1px solid var(--edge);
-  background:rgba(20,20,24,0.6);
-  color:var(--muted);
-  font-family: inherit;
-  font-weight: 600;
-  letter-spacing: .02em;
-  font-size:.9rem;
-  cursor:pointer;
-}
-.weapon-set2-btn:hover{ color:var(--silver); border-color:rgba(212,170,80,0.6); }
-.weapon-set2-btn[hidden]{ display:none; }
 .foot{ text-align:center; padding:1.25rem 1rem 3rem; color:var(--muted); }
 .hidden{ display:none; }
 

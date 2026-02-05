@@ -93,14 +93,7 @@ import {
           k: packList(pass.keystones, 2),
           n: packList(pass.notables, 8)
         };
-      })(),
-      
-      mc: (() => {
-		  const al = Array.isArray(snap.ailmentList) ? snap.ailmentList.length : 0;
-		  const tl = Array.isArray(snap.tacticList) ? snap.tacticList.length : 0;
-		  const n = al + tl;
-		  return (n === 1 || n === 2 || n === 3) ? n : 2;
-		})(),
+      })()
 
     };
 
@@ -152,19 +145,7 @@ import {
           if (p.ascendancyNodes || p.keystones || p.notables) return p;
 
           return null;
-        })(),
-        
-        mechanicsCount: (() => {
-		  const mc = Number(raw.mc);
-		  if (mc === 1 || mc === 2 || mc === 3) return mc;
-		
-		  const al = Array.isArray(raw.al) ? raw.al.length : 0;
-		  const tl = Array.isArray(raw.tl) ? raw.tl.length : 0;
-		  const n = al + tl;
-		  return (n === 1 || n === 2 || n === 3) ? n : 2;
-		})(),
-		
-
+        })()
       };
     } catch (e) {
       console.warn('[build code] decode failed', e);
@@ -321,26 +302,6 @@ function renderSnapshotToDom(snap){
       weapons2El.hidden = !weapons2Txt;
     }
     const hasSet2 = hasSecondaryWeaponSet(snap);
-    // ✅ Sync Weapon Set II toggle state from the loaded/active snapshot
-	const ws2Toggle = document.getElementById('weapon-set2-toggle');
-	if (ws2Toggle) {
-	  ws2Toggle.checked = hasSet2;
-	}
-	
-	// ✅ Sync Combat Mechanics count from snapshot
-	const mc =
-	  (snap && (snap.mechanicsCount === 1 || snap.mechanicsCount === 2 || snap.mechanicsCount === 3))
-		? snap.mechanicsCount
-		: ((Array.isArray(snap.ailmentList) ? snap.ailmentList.length : 0) +
-		   (Array.isArray(snap.tacticList) ? snap.tacticList.length : 0));
-	
-	if (typeof window.setCombatMechanicsCount === 'function') {
-	  window.setCombatMechanicsCount(mc);
-	} else {
-	  // fallback: keep localStorage in sync even if setter isn't available yet
-	  try { localStorage.setItem('randomancer_mechanics_count', String(mc || 2)); } catch {}
-	}
-
 
     setElText('#defense', snap.defense || '');
     setElText('#defstrat', snap.defStrat || '');

@@ -103,10 +103,6 @@ import { buildTagIDF } from './05-tags-and-scorer.js';
 		    weapons2El.textContent = weapons2Txt;
 		    weapons2El.hidden = !weapons2Txt;
 		  }
-		  const set2Btn = document.querySelector('#weapon-set2-btn');
-		  if (set2Btn) {
-		    set2Btn.hidden = !!(s.weapon2 || s.offhand2) || !s.weapon;
-		  }
 		  setSkillsTabsAvailability(!!(s.weapon2 || s.offhand2));
 			  try { renderSummaryFromSnapshot(s); } catch (e) {}
 		}catch(e){ /*no-op*/ }
