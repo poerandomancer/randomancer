@@ -1334,6 +1334,13 @@ document.addEventListener('DOMContentLoaded', () => {
     paint();
 
     window.getCombatMechanicsCount = () => count;
+    
+    window.setCombatMechanicsCount = function (n) {
+	  count = clampCount(Number(n));
+	  try { localStorage.setItem(STORAGE_KEY, String(count)); } catch {}
+	  paint();
+	};
+
 
     // Cycle: 2 -> 3 -> 1 -> 2 ...
     mechBtn.addEventListener('click', () => {
