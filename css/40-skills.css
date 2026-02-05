@@ -278,15 +278,22 @@ border-top: 1px dotted var(--gold);
   min-width:0;
 }
 
-/* Align Weapon Set II toggle with the control bars */
+/* Align Weapon Set II + Mechanics on one row */
 .control-item.weapon-set2-control{
   width: min(640px, 90%);
-  margin: 0.15rem auto 0.85rem;  /* tweak vertical placement */
-  padding: 0 10px;               /* aligns with Bind the Fates inner padding */
+  margin: 0.15rem auto 0.85rem;
+  padding: 0 10px;
+
   display: flex;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: space-between; /* <-- key change */
+  gap: 18px;
+  flex-wrap: wrap; /* mobile safety */
 }
 
+.weapon-set2-control #mechanics-count-btn{
+  margin-left: auto; /* pushes Mechanics to the far right */
+}
 
 .weapon-set2-control .toggle-label .toggle-ui {
   position: relative;
@@ -386,6 +393,140 @@ input:checked
     0 0 14px rgba(212,170,80,0.25);
 }
 
+/* Remove the older pill styling from the mechanics button in THIS row */
+.weapon-set2-control #mechanics-count-btn{
+  background: none;
+  border: none;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* Make dots capsule mimic toggle-ui off-state styling */
+.weapon-set2-control #mechanics-count-btn .rm-dotstep__dots{
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 0 10px;
+  border-radius: 999px;
+
+  background: linear-gradient(90deg, rgba(200,168,107,0.22), rgba(120,100,55,0.22));
+  border: 1px solid rgba(200,168,107,0.25);
+
+  box-shadow:
+    inset 0 1px 0 rgba(235,210,150,0.16),
+    inset 0 -1px 0 rgba(0,0,0,0.35),
+    inset 0 0 0 1px rgba(0,0,0,0.22);
+}
+
+/* --- Mechanics dots: force visible + kill any inherited toggle-knob pseudo --- */
+.weapon-set2-control #mechanics-count-btn{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+/* If any old styles are injecting a knob via ::after, nuke it */
+.weapon-set2-control #mechanics-count-btn .rm-dotstep__dots::after,
+.weapon-set2-control #mechanics-count-btn .rm-dotstep__dot::after{
+  content: none !important;
+}
+
+/* Force dots to have real size (empty spans otherwise "disappear") */
+.weapon-set2-control #mechanics-count-btn .rm-dotstep__dot{
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+
+  background: rgba(235,235,235,0.30);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.35);
+
+  /* safety overrides in case something weird is positioning them */
+  position: static !important;
+  transform: none !important;
+}
+
+/* Gold "on" dots */
+.weapon-set2-control #mechanics-count-btn .rm-dotstep__dot.is-on{
+  background: rgba(212, 174, 90, 0.95);
+  box-shadow:
+    0 0 10px rgba(212,170,80,0.35),
+    inset 0 0 0 1px rgba(0,0,0,0.28);
+}
+
+.weapon-set2-control #mechanics-count-btn .rm-dotstep__dot{
+  background: rgba(255,255,255,0.38);
+}
+
+/* --- Force Mechanics button typography to match Weapon toggle text --- */
+.weapon-set2-control #mechanics-count-btn{
+  font: inherit;                 /* KEY: stop system button font */
+  color: inherit;
+  letter-spacing: inherit;
+
+  -webkit-appearance: none;
+  appearance: none;
+  background: none;
+  border: none;
+}
+
+/* Make the label span inherit too (belt + suspenders) */
+.weapon-set2-control #mechanics-count-btn .rm-dotstep__label{
+  font: inherit;
+  line-height: 1;
+}
+
+.weapon-set2-control #mechanics-count-btn{
+  font-weight: 600;              /* matches .toggle-label */
+}
+
+/* --- Mechanics hover + focus polish --- */
+
+/* Hover: warm up the capsule slightly, like the weapon toggle */
+.weapon-set2-control #mechanics-count-btn:hover .rm-dotstep__dots{
+  border-color: rgba(212,170,80,0.45);
+  box-shadow:
+    0 0 6px rgba(212,170,80,0.20),
+    inset 0 1px 0 rgba(235,210,150,0.16),
+    inset 0 -1px 0 rgba(0,0,0,0.35),
+    inset 0 0 0 1px rgba(0,0,0,0.22);
+}
+
+/* Optional: give the label a subtle gold hint on hover */
+.weapon-set2-control #mechanics-count-btn:hover .rm-dotstep__label{
+  color: rgba(255,245,220,0.92);
+}
+
+/* Focus-visible: clean keyboard focus ring (only when tabbing) */
+.weapon-set2-control #mechanics-count-btn:focus{
+  outline: none;
+}
+
+.weapon-set2-control #mechanics-count-btn:focus-visible .rm-dotstep__dots{
+  outline: 2px solid rgba(212,170,80,0.75);
+  outline-offset: 3px;
+  box-shadow:
+    0 0 10px rgba(212,170,80,0.25),
+    inset 0 1px 0 rgba(235,210,150,0.16),
+    inset 0 -1px 0 rgba(0,0,0,0.35),
+    inset 0 0 0 1px rgba(0,0,0,0.22);
+}
+
+/* Press: tiny downward nudge + slight dim, like a physical toggle */
+.weapon-set2-control #mechanics-count-btn:active{
+  transform: translateY(1px);
+}
+
+.weapon-set2-control #mechanics-count-btn:active .rm-dotstep__dots{
+  filter: brightness(0.95);
+}
+
+.weapon-set2-control #mechanics-count-btn{
+  transition: transform 80ms ease;
+}
 
 
 /* Slightly tighter on very small screens */

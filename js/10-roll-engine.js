@@ -810,108 +810,225 @@ function rollBuild(dataWrap){
 // Ailments/Tactics roll (with duplicate prevention + cohesion bias)
   let ailmentSet = [];
   let tacticSet  = [];
+
+  const mechanicsTarget = (() => {
+    const g = (typeof window.getCombatMechanicsCount === 'function') ? window.getCombatMechanicsCount() : null;
+    let s = null;
+    try { s = Number(localStorage.getItem('randomancer_mechanics_count')); } catch {}
+    const n = (g ?? s ?? 2);
+    return (n === 1 || n === 2 || n === 3) ? n : 2;
+  })();
+
   const r = Math.random();
 
   const allAil = data.Ailments || [];
   const allTac = filterTacticsByStrictRules(data.Tactics || [], weapon, offhand);
 
-  const validAil = allAil.filter((a) => !cAboms.has(a.name));
-  const validTac = allTac.filter((t) => !cAboms.has(t.name));
+  const validAil = allAil.filter((a) => a && !cAboms.has(a.name));
+  const validTac = allTac.filter((t) => t && !cAboms.has(t.name));
 
   const mechanics = [
     ...validAil.map((a) => ({ kind: 'ailment', ref: a })),
     ...validTac.map((t) => ({ kind: 'tactic', ref: t }))
   ];
 
-  const pickMechanic = (pool, excludeNames = []) => {
-    const filtered = pool.filter((m) => m && !excludeNames.includes(m.ref?.name));
-    if (!filtered.length) return null;
-    const picked = pickByCohesion(filtered.map((m) => m.ref), base, th) || filtered[Math.floor(Math.random() * filtered.length)].ref;
-    return filtered.find((m) => m.ref === picked || m.ref?.name === picked?.name) || filtered[0];
-  };
-
-	const oathMech = mechanics.filter((m) => cOaths.has(m.ref?.name));
-	const neutralMech = mechanics.filter((m) => !cOaths.has(m.ref?.name));
-	
-	const picks = [];
-	
-	// If Tier-3 mechanics anchor picked 1–2 active mechanics earlier, FORCE those here.
-	const forcedNames =
-	  Array.isArray(activeMechanicOathNames) && activeMechanicOathNames.length
-		? activeMechanicOathNames.slice(0, 2)
-		: null;
-	
-	if (forcedNames) {
-	  for (const nm of forcedNames) {
-		const m = mechanics.find(x => x?.ref?.name === nm);
-		if (m) picks.push(m);
-	  }
-	
-	  // If only one forced mechanic, fill second like the normal oath logic.
-	  if (picks.length === 1) {
-		const second = pickMechanic(neutralMech, [picks[0]?.ref?.name]);
-		if (second) picks.push(second);
-	  }
-	
-	  // Safety fallback (should be rare)
-	  while (picks.length < 2) {
-		const next = pickMechanic(mechanics, picks.map(p => p?.ref?.name).filter(Boolean));
-		if (!next) break;
-		picks.push(next);
-	  }
-	} else if (oathMech.length >= 2) {
-	  const first = pickMechanic(oathMech);
-	  const second = pickMechanic(oathMech, [first?.ref?.name]);
-	  picks.push(first, second);
-	} else if (oathMech.length === 1) {
-	  const first = oathMech[0];
-	  const second = pickMechanic(neutralMech, [first?.ref?.name]);
-	  if (first) picks.push(first);
-	  if (second) picks.push(second);
-	} else {
-	  const thLocal = th;
-	
-	  const pickAilmentFrom = (pool, excludeNames = []) => {
-		const filtered = pool.filter(a => a && !excludeNames.includes(a.name));
-		if (!filtered.length) return null;
-		return (pickByCohesion(filtered, base, thLocal) || filtered[Math.floor(Math.random() * filtered.length)]);
-	  };
-	
-	  const pickTacticFrom = (pool, excludeNames = []) => {
-		const filtered = pool.filter(t => t && !excludeNames.includes(t.name));
-		if (!filtered.length) return null;
-		return (pickByCohesion(filtered, base, thLocal) || filtered[Math.floor(Math.random() * filtered.length)]);
-	  };
-	
-	  if (r < 0.6) {
-		const a1 = pickAilmentFrom(validAil);
-		const tPool = validTac;
-		const t1 = pickTacticFrom(tPool);
-		if (a1) picks.push({ kind: 'ailment', ref: a1 });
-		if (t1) picks.push({ kind: 'tactic', ref: t1 });
-	  } else if (r < 0.8) {
-		const a1 = pickAilmentFrom(validAil);
-		const a2 = a1 ? pickAilmentFrom(validAil, [a1.name]) : pickAilmentFrom(validAil);
-		if (a1) picks.push({ kind: 'ailment', ref: a1 });
-		if (a2) picks.push({ kind: 'ailment', ref: a2 });
-	  } else {
-		const tPool = validTac;
-		const t1 = pickTacticFrom(tPool);
-		const t2 = t1 ? pickTacticFrom(tPool, [t1.name]) : pickTacticFrom(tPool);
-		if (t1) picks.push({ kind: 'tactic', ref: t1 });
-		if (t2) picks.push({ kind: 'tactic', ref: t2 });
-	  }
-	}
-
-  const cleanPicks = picks.filter(Boolean).slice(0, 2);
-
-  if (cleanPicks.length < 2) {
-    showBindFatesError('No valid combat mechanics with your current Oaths & Abominations.');
+  if (mechanics.length < mechanicsTarget) {
+    showBindFatesError(`Not enough valid combat mechanics to roll ${mechanicsTarget} with your current Oaths & Abominations.`);
     return;
   }
 
-  ailmentSet = cleanPicks.filter(m => m.kind === 'ailment').map(m => m.ref);
-  tacticSet  = cleanPicks.filter(m => m.kind === 'tactic').map(m => m.ref);
+  const pickMechanic = (pool, excludeNames = []) => {
+    const filtered = pool.filter((m) => m && !excludeNames.includes(m.ref?.name));
+    if (!filtered.length) return null;
+    const pickedRef =
+      pickByCohesion(filtered.map((m) => m.ref), base, th) ||
+      filtered[Math.floor(Math.random() * filtered.length)].ref;
+    return filtered.find((m) => m.ref === pickedRef || m.ref?.name === pickedRef?.name) || filtered[0];
+  };
+
+  const oathMech = mechanics.filter((m) => cOaths.has(m.ref?.name));
+  const neutralMech = mechanics.filter((m) => !cOaths.has(m.ref?.name));
+
+  const picks = [];
+
+  // If Tier-3 mechanics anchor picked 1–2 active mechanics earlier, FORCE those here (up to target).
+  const forcedNames =
+    Array.isArray(activeMechanicOathNames) && activeMechanicOathNames.length
+      ? activeMechanicOathNames.slice(0, Math.min(mechanicsTarget, 2))
+      : null;
+
+  if (forcedNames) {
+    for (const nm of forcedNames) {
+      const m = mechanics.find((x) => x?.ref?.name === nm);
+      if (m) picks.push(m);
+    }
+
+    // Fill remaining slots, prefer non-oath mechanics if available.
+    while (picks.length < mechanicsTarget) {
+      const exclude = picks.map((p) => p?.ref?.name).filter(Boolean);
+      const next =
+        (neutralMech.length ? pickMechanic(neutralMech, exclude) : null) ||
+        pickMechanic(mechanics, exclude);
+      if (!next) break;
+      picks.push(next);
+    }
+  } else if (oathMech.length >= mechanicsTarget) {
+    // Enough oath mechanics to satisfy the full target count.
+    while (picks.length < mechanicsTarget) {
+      const exclude = picks.map((p) => p?.ref?.name).filter(Boolean);
+      const next = pickMechanic(oathMech, exclude);
+      if (!next) break;
+      picks.push(next);
+    }
+  } else if (oathMech.length > 0) {
+    // Some oath mechanics exist; include them first, then fill from neutral.
+    while (picks.length < Math.min(oathMech.length, mechanicsTarget)) {
+      const exclude = picks.map((p) => p?.ref?.name).filter(Boolean);
+      const next = pickMechanic(oathMech, exclude);
+      if (!next) break;
+      picks.push(next);
+    }
+
+    while (picks.length < mechanicsTarget) {
+      const exclude = picks.map((p) => p?.ref?.name).filter(Boolean);
+      const next =
+        (neutralMech.length ? pickMechanic(neutralMech, exclude) : null) ||
+        pickMechanic(mechanics, exclude);
+      if (!next) break;
+      picks.push(next);
+    }
+  } else {
+    const thLocal = th;
+
+    const pickAilmentFrom = (pool, excludeNames = []) => {
+      const filtered = pool.filter((a) => a && !excludeNames.includes(a.name));
+      if (!filtered.length) return null;
+      return pickByCohesion(filtered, base, thLocal) || filtered[Math.floor(Math.random() * filtered.length)];
+    };
+
+    const pickTacticFrom = (pool, excludeNames = []) => {
+      const filtered = pool.filter((t) => t && !excludeNames.includes(t.name));
+      if (!filtered.length) return null;
+      return pickByCohesion(filtered, base, thLocal) || filtered[Math.floor(Math.random() * filtered.length)];
+    };
+
+    if (mechanicsTarget === 1) {
+	  const hasAil = validAil.length > 0;
+	  const hasTac = validTac.length > 0;
+	
+	  // 50/50 split when both pools exist
+	  const wantAilment = (hasAil && hasTac)
+		? (Math.random() < 0.5)
+		: hasAil;
+	
+	  if (wantAilment) {
+		const a1 = pickAilmentFrom(validAil);
+		if (a1) picks.push({ kind: 'ailment', ref: a1 });
+		else {
+		  const t1 = pickTacticFrom(validTac);
+		  if (t1) picks.push({ kind: 'tactic', ref: t1 });
+		}
+	  } else {
+		const t1 = pickTacticFrom(validTac);
+		if (t1) picks.push({ kind: 'tactic', ref: t1 });
+		else {
+		  const a1 = pickAilmentFrom(validAil);
+		  if (a1) picks.push({ kind: 'ailment', ref: a1 });
+		}
+	  }
+	}
+ else if (mechanicsTarget === 2) {
+      // Preserve existing 2-mechanic weighting:
+      // ~60% mixed, ~20% double-ailment, ~20% double-tactic
+      if (r < 0.6) {
+        const a1 = pickAilmentFrom(validAil);
+        const t1 = pickTacticFrom(validTac);
+        if (a1) picks.push({ kind: 'ailment', ref: a1 });
+        if (t1) picks.push({ kind: 'tactic', ref: t1 });
+      } else if (r < 0.8) {
+        const a1 = pickAilmentFrom(validAil);
+        const a2 = a1 ? pickAilmentFrom(validAil, [a1.name]) : pickAilmentFrom(validAil);
+        if (a1) picks.push({ kind: 'ailment', ref: a1 });
+        if (a2) picks.push({ kind: 'ailment', ref: a2 });
+      } else {
+        const t1 = pickTacticFrom(validTac);
+        const t2 = t1 ? pickTacticFrom(validTac, [t1.name]) : pickTacticFrom(validTac);
+        if (t1) picks.push({ kind: 'tactic', ref: t1 });
+        if (t2) picks.push({ kind: 'tactic', ref: t2 });
+      }
+    } else {
+      // mechanicsTarget === 3
+      // Keep the same overall feel:
+      // ~60% skew toward mixed sets (2+1), ~20% triple-ailment, ~20% triple-tactic
+      if (r < 0.6) {
+        const preferAilHeavy = Math.random() < 0.5;
+        if (preferAilHeavy) {
+          const a1 = pickAilmentFrom(validAil);
+          const a2 = a1 ? pickAilmentFrom(validAil, [a1.name]) : pickAilmentFrom(validAil);
+          const t1 = pickTacticFrom(validTac);
+          if (a1) picks.push({ kind: 'ailment', ref: a1 });
+          if (a2) picks.push({ kind: 'ailment', ref: a2 });
+          if (t1) picks.push({ kind: 'tactic', ref: t1 });
+        } else {
+          const t1 = pickTacticFrom(validTac);
+          const t2 = t1 ? pickTacticFrom(validTac, [t1.name]) : pickTacticFrom(validTac);
+          const a1 = pickAilmentFrom(validAil);
+          if (t1) picks.push({ kind: 'tactic', ref: t1 });
+          if (t2) picks.push({ kind: 'tactic', ref: t2 });
+          if (a1) picks.push({ kind: 'ailment', ref: a1 });
+        }
+      } else if (r < 0.8) {
+        const a1 = pickAilmentFrom(validAil);
+        const a2 = a1 ? pickAilmentFrom(validAil, [a1.name]) : pickAilmentFrom(validAil);
+        const used = [a1?.name, a2?.name].filter(Boolean);
+        const a3 = used.length ? pickAilmentFrom(validAil, used) : pickAilmentFrom(validAil);
+        if (a1) picks.push({ kind: 'ailment', ref: a1 });
+        if (a2) picks.push({ kind: 'ailment', ref: a2 });
+        if (a3) picks.push({ kind: 'ailment', ref: a3 });
+      } else {
+        const t1 = pickTacticFrom(validTac);
+        const t2 = t1 ? pickTacticFrom(validTac, [t1.name]) : pickTacticFrom(validTac);
+        const used = [t1?.name, t2?.name].filter(Boolean);
+        const t3 = used.length ? pickTacticFrom(validTac, used) : pickTacticFrom(validTac);
+        if (t1) picks.push({ kind: 'tactic', ref: t1 });
+        if (t2) picks.push({ kind: 'tactic', ref: t2 });
+        if (t3) picks.push({ kind: 'tactic', ref: t3 });
+      }
+    }
+  }
+
+  // Ensure we end up with mechanicsTarget unique picks, if possible.
+  const uniquePicks = [];
+  const seen = new Set();
+  for (const p of picks.filter(Boolean)) {
+    const nm = p?.ref?.name;
+    if (!nm || seen.has(nm)) continue;
+    seen.add(nm);
+    uniquePicks.push(p);
+  }
+
+  // Safety fill (should be rare): top up to target from the full pool.
+  while (uniquePicks.length < mechanicsTarget) {
+    const exclude = uniquePicks.map((p) => p?.ref?.name).filter(Boolean);
+    const next = pickMechanic(mechanics, exclude);
+    if (!next) break;
+    const nm = next?.ref?.name;
+    if (nm && !seen.has(nm)) {
+      seen.add(nm);
+      uniquePicks.push(next);
+    }
+  }
+
+  const cleanPicks = uniquePicks.slice(0, mechanicsTarget);
+
+  if (cleanPicks.length < mechanicsTarget) {
+    showBindFatesError(`Not enough valid combat mechanics to roll ${mechanicsTarget} with your current Oaths & Abominations.`);
+    return;
+  }
+
+  ailmentSet = cleanPicks.filter((m) => m.kind === 'ailment').map((m) => m.ref);
+  tacticSet  = cleanPicks.filter((m) => m.kind === 'tactic').map((m) => m.ref);
+
 
   document.getElementById('class')?.replaceChildren(document.createTextNode(clsName || ''));
   renderOathAwareText(document.getElementById('ascendancy'), asc || '', ascOaths);
@@ -1192,6 +1309,40 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+  
+    // --- Combat mechanics count (1/2/3) dot control ---
+  const mechBtn = document.getElementById('mechanics-count-btn');
+  if (mechBtn) {
+    const STORAGE_KEY = 'randomancer_mechanics_count';
+    const dots = Array.from(mechBtn.querySelectorAll('.rm-dotstep__dot'));
+
+    const clampCount = (n) => (n === 1 || n === 2 || n === 3) ? n : 2;
+
+    const loadCount = () => {
+      try { return clampCount(Number(localStorage.getItem(STORAGE_KEY))); }
+      catch { return 2; }
+    };
+
+    let count = loadCount();
+
+    const paint = () => {
+      dots.forEach((dot, i) => dot.classList.toggle('is-on', i < count));
+      mechBtn.setAttribute('aria-label', `Combat mechanics: ${count}`);
+		mechBtn.title = `Combat Mechanics: roll ${count} ailments/tactics`;
+    };
+
+    paint();
+
+    window.getCombatMechanicsCount = () => count;
+
+    // Cycle: 2 -> 3 -> 1 -> 2 ...
+    mechBtn.addEventListener('click', () => {
+      count = (count % 3) + 1;
+      try { localStorage.setItem(STORAGE_KEY, String(count)); } catch {}
+      paint();
+    });
+  }
+
 
   const skillsTabs = document.getElementById('skills-tabs');
   if (skillsTabs) {
