@@ -266,6 +266,29 @@ border-top: 1px dotted var(--gold);
   flex-wrap: wrap; /* mobile safety */
 }
 
+/* Mobile: keep Weapon Set II + Combat Mechanics on one row */
+@media (max-width: 560px){
+  .control-item.weapon-set2-control{
+    width: calc(100% - 24px); /* reclaim the missing 10% */
+    padding: 0;               /* reclaim the extra 20px */
+    gap: 12px;                /* tighter spacing */
+    flex-wrap: nowrap;        /* prevent the split */
+  }
+
+  .weapon-set2-control .toggle-label{ gap: 8px; }
+
+  .weapon-set2-control .toggle-text,
+  .weapon-set2-control #mechanics-count-btn .rm-dotstep__label{
+    font-size: 0.92rem;       /* slight shrink to fit */
+  }
+
+  .weapon-set2-control #mechanics-count-btn .rm-dotstep__dots{
+    padding: 0 8px;           /* slightly slimmer capsule */
+    gap: 5px;
+  }
+}
+
+
 .weapon-set2-control #mechanics-count-btn{
   margin-left: auto; /* pushes Mechanics to the far right */
 }
