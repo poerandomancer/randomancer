@@ -20,90 +20,12 @@ import { buildBuildContext } from './06-cohesion.js';
 import { applyGemBorderFromReqWeights, grantLine, renderSupportCards } from './07-skills-render.js';
 import { ensureDataPreload } from './08-data-load.js';
 import { renderPassiveRecommendations } from './07-skills-render.js';
-import { updateAilmentOverlay, updateAscArt } from './10-roll-engine.js';
+import { updateAscArt } from './10-roll-engine.js';
 import {
   pickRecommendedAscendancyNodes,
   pickRecommendedKeystones,
   pickRecommendedNotables,
 } from '../passivesEngine.js';
-import { DEFAULT_LOCKS } from './00-locks-defaults.js';
-
-// ----- Section Locks (centralized state + UI sync) -----
-function getLockState(){
-  const appState = window.App?.state;
-  const existing = (appState && appState.locks) || window.__LOCK_STATE__ || {};
-  const merged = { ...DEFAULT_LOCKS, ...existing };
-  if (appState) {
-    appState.locks = merged;
-  } else {
-    window.__LOCK_STATE__ = merged;
-  }
-  return merged;
-}
-
-function syncLockUIFromState(){
-  const locks = getLockState();
-  document.querySelectorAll('.section-header').forEach(header => {
-    const section = header?.dataset?.section;
-    if (!section) return;
-
-    const locked = !!locks[section];
-
-    // Existing header + button state
-    header.dataset.locked = locked ? 'true' : 'false';
-    const btn = header.querySelector('.lock-toggle');
-    if (btn) {
-      btn.setAttribute('aria-pressed', locked ? 'true' : 'false');
-    }
-
-    // NEW: mark the whole section wrapper so CSS can show a stronger "locked" state
-    const container = header.closest('.sect');
-    if (container) {
-      container.dataset.locked = locked ? 'true' : 'false';
-    }
-  });
-}
-
-if (typeof window !== 'undefined') {
-  window.syncLockUIFromState = syncLockUIFromState;
-}
-
-
-function wireLockButton(btn){
-  if (!btn || btn.__lockInit) return;
-  btn.__lockInit = true;
-  btn.addEventListener('click', (e) => {
-    const header = e.currentTarget.closest('.section-header');
-    if (!header) return;
-    const section = header.dataset.section;
-    if (!section) return;
-
-    const locks = getLockState();
-    const nowLocked = header.dataset.locked !== 'true';
-    locks[section] = nowLocked;
-
-    // Existing header + button state
-    header.dataset.locked = nowLocked ? 'true' : 'false';
-    e.currentTarget.setAttribute('aria-pressed', nowLocked ? 'true' : 'false');
-
-    // NEW: toggle the flag on the section wrapper for the overlay
-    const container = header.closest('.sect');
-    if (container) {
-      container.dataset.locked = nowLocked ? 'true' : 'false';
-    }
-
-    // Keep the Build Code in sync (now includes locks + passives)
-    if (typeof window.RandomancerUpdateBuildCodeUI === 'function') {
-      window.RandomancerUpdateBuildCodeUI();
-    }
-  });
-}
-
-
-function initSectionLocks(){
-  document.querySelectorAll('.section-header .lock-toggle').forEach(wireLockButton);
-  syncLockUIFromState();
-}
 
 /* === Build Codes + Saved Builds (v0.9 preview) === */
 (function(){
@@ -126,7 +48,6 @@ function initSectionLocks(){
   function encodeSnapshot(snap){
     if (!snap || typeof snap !== 'object') return '';
     
-    // TODO: include section lock state in saved snapshots once we support persisting locks
     const compact = {
       v: snap.snapshotVersion || 1,
       c: snap.className || '',
@@ -149,7 +70,7 @@ function initSectionLocks(){
         ? snap.recommendedUniques.map(u => (typeof u === 'string' ? u : (u && typeof u === 'object' ? u.name : null))).filter(Boolean)
         : [],
 
-      // passives (packed) + section locks so rehydrated builds preserve these panels
+      // passives (packed) so rehydrated builds preserve these panels
       p: (() => {
         const pass = snap.passives;
         if (!pass || typeof pass !== 'object') return null;
@@ -252,13 +173,6 @@ function initSectionLocks(){
   }
 
   function setElText(sel, txt){ const el = document.querySelector(sel); if (el) el.textContent = txt || ''; }
-
-  function showAppShell(){
-    const intro = document.getElementById('intro');
-    if (intro) intro.remove();
-    const app = document.getElementById('app');
-    if (app) app.classList.remove('hidden');
-  }
 
   function renderAttributesFromSnapshot(attr){
     if (!attr) return;
@@ -432,10 +346,6 @@ function renderSnapshotToDom(snap){
     setElText('#defstrat', snap.defStrat || '');
     setElText('#ailments', Array.isArray(snap.ailmentList) ? snap.ailmentList.join(' & ') : (snap.ailments || ''));
     setElText('#tactics', Array.isArray(snap.tacticList) ? snap.tacticList.join(' & ') : (snap.tactics || ''));
-    const ailments = Array.isArray(snap.ailmentList)
-      ? snap.ailmentList
-      : (snap.ailments ? snap.ailments.split(/\s*&\s*/).filter(Boolean) : []);
-    updateAilmentOverlay(ailments);
     setElText('#build-name', snap.buildName || '');
     setElText('#build-subtext', snap.flavor || '');
     // Keep the Summary view in sync on every roll (and do this early so it still updates even if later renderers fail).
@@ -475,7 +385,6 @@ function renderSnapshotToDom(snap){
   if (!snap) return false;
 
   const dataWrap = await ensureDataPreload();
-  showAppShell();
 
   // Back-compat: older build codes didn't store passives; rebuild them from the snapshot context.
   if (!snap.passives) {
@@ -924,5 +833,3 @@ function renderSnapshotToDom(snap){
     return code;
   };
 })();
-
-export { DEFAULT_LOCKS, getLockState, initSectionLocks, syncLockUIFromState };

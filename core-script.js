@@ -24,7 +24,6 @@
  * window.RandomancerApplyBuildCode, window.RandomancerUpdateBuildCodeUI,
  * window.RandomancerRefreshUniques, window.RandomancerRenderUniquesFromNames,
  * window.RandomancerInfo, window.getOrBuildIDF,
- * window.__LOCK_STATE__ handling + getLockState/setLockState/DEFAULT_LOCKS.
  */
 
 import './js/01-meta-and-domready.js';

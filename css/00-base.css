@@ -40,29 +40,6 @@ body {
   font-family: 'Cormorant Garamond', serif;
 }
 
-
-.intro-screen{
-  position:fixed;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background: radial-gradient(ellipse at center, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.85) 100%);
-  z-index:50;
-  text-align:center;
-  transition:opacity .7s ease, visibility .7s ease;
-}
-.intro-screen.fade-out{ opacity:0; visibility:hidden; }
-.intro-content{ max-width:720px; padding:2rem; }
-.intro-content p{
-  font-family:'Cormorant Infant',serif;
-  font-style:italic;
-  font-size:1.7rem;
-  color:var(--gold);
-  text-shadow:0 0 8px rgba(0,0,0,0.8);
-  margin-bottom:2rem;
-}
-
 .asc-art{
   position:fixed; inset:0; opacity:0; pointer-events:none;
   transition:opacity .5s ease;

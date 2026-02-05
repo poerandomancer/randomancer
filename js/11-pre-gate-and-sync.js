@@ -138,7 +138,7 @@ import { buildTagIDF } from './05-tags-and-scorer.js';
     // Patch App.roll to include optional pre‑gate
     const prevRoll = App.roll || function(mode){
       if (typeof window.rollBuild === 'function'){
-        try{ window.rollBuild(App.state?.cohesionMode ?? (mode||1)); }catch(e){}
+        try{ window.rollBuild(App.state?.DATA || window.DATA); }catch(e){}
       } else {
         const btn = document.querySelector('#roll'); if (btn) btn.click();
       }
@@ -153,7 +153,7 @@ import { buildTagIDF } from './05-tags-and-scorer.js';
           attempts++;
           // trigger a roll via legacy path
           if (typeof window.rollBuild === 'function'){
-            try{ window.rollBuild(App.state?.cohesionMode ?? (mode||1)); }catch(e){}
+            try{ window.rollBuild(App.state?.DATA || window.DATA); }catch(e){}
           } else {
             const btn = document.querySelector('#roll'); if (btn) btn.click();
           }

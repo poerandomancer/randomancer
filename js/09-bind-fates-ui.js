@@ -1,7 +1,6 @@
-import { COHESION_MODE_NAMES, renderOathAwareText } from './01-meta-and-domready.js';
-import { initSectionLocks } from './00-locks-and-snapshots.js';
+import { renderOathAwareText } from './01-meta-and-domready.js';
 import { getBindFatesFromApp } from './04-app-state.js';
-import { COHESION_MODES, setCohesionState, sliderValueToThreshold, thresholdToSliderValue, getCohesionHint } from './06-cohesion.js';
+import { sliderValueToThreshold, thresholdToSliderValue } from './06-cohesion.js';
 import { ensureDataPreload } from './08-data-load.js';
 
 function countBindFatesSelections(bind){
@@ -37,43 +36,23 @@ if (typeof window !== 'undefined') {
 // ---------- wireup ----------
 document.addEventListener('DOMContentLoaded', ()=>{
     const slider = document.getElementById('cohesionRange');
-	  const hintEl = document.querySelector('.cohesion-status');
 	
 	  const applyThreshold = (t) => {
-		// keep globals in sync
-		setCohesionState(t);
-	
 		// sync App.state
 		if (window.App && typeof window.App.setCohesion === 'function') {
 		  window.App.setCohesion(t);
 		}
-	
-		// update live hint
-		if (hintEl) {
-		  hintEl.textContent = getCohesionHint(t);
-		  hintEl.setAttribute('data-status', 'hint');
-		}
 	  };
 	
 	  if (slider) {
-		// derive initial threshold from App.state if present, else use cohesive
 		let initialThreshold = 3/4;
 		try {
 		  const st = window.App && window.App.state;
-		  if (st) {
-			if (typeof st.cohesionThreshold === 'number') {
-			  initialThreshold = st.cohesionThreshold;
-			} else if (typeof st.cohesionMode === 'number') {
-			  const legacyName =
-				COHESION_MODE_NAMES[st.cohesionMode] || st.cohesionModeName;
-			  if (legacyName && typeof COHESION_MODES[legacyName] === 'number') {
-				initialThreshold = COHESION_MODES[legacyName];
-			  }
-			}
+		  if (st && typeof st.cohesionThreshold === 'number') {
+			initialThreshold = st.cohesionThreshold;
 		  }
-		} catch (e) {
-		  // ignore and stick with cohesive
-		}
+		} catch (e) {}
+
 	
 		slider.value = String(thresholdToSliderValue(initialThreshold));
 		applyThreshold(initialThreshold);
@@ -242,10 +221,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
   updateBindFatesSummary();
 
-          initSectionLocks();
-
-
-    // Kick off preloading while the intro screen is up and hydrate App.state from it
+   // Kick off preloading early and hydrate App.state from it
 	  if (window.App && typeof window.App.bootstrap === 'function') {
 		window.App.bootstrap().catch(err => {
 		  console.error("[Randomancer] App bootstrap failed", err);

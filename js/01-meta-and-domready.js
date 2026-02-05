@@ -21,8 +21,6 @@ const RNG = (() => ({
   int: (min, max) => Math.floor(Math.random() * (max - min + 1)) + min,
 }))();
 
-const COHESION_MODE_NAMES = ['strict', 'cohesive', 'chaotic', 'madness'];
-
 // ===== DOM helpers =====
 const Dom = (() => {
   const q = (sel) => document.querySelector(sel);
@@ -206,7 +204,6 @@ export {
   firstText,
   lc,
   RNG,
-  COHESION_MODE_NAMES,
   Dom,
   APP_VERSION,
   SUPPORT,

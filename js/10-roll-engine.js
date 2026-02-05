@@ -1,14 +1,13 @@
 import { renderOathAwareText, renderSecondaryWeaponLine, setActiveSkillsTab, setSkillsTabsAvailability } from './01-meta-and-domready.js';
 import { renderSummaryFromSnapshot } from './02-summary-view.js';
-import { getLockState, syncLockUIFromState } from './00-locks-and-snapshots.js';
 import { getBindFatesFromApp } from './04-app-state.js';
 import { sample } from './05-tags-and-scorer.js';
-import { COHESION_MODES, applyHardRestrictions, buildBuildContext, cohesionThreshold, currentMode, lookupAscendancyIdByName, pickByCohesion, resolveCohesionMode, validOffhands } from './06-cohesion.js';
+import { applyHardRestrictions, buildBuildContext, cohesionThreshold, lookupAscendancyIdByName, pickByCohesion, validOffhands } from './06-cohesion.js';
 import { renderPassiveRecommendations, rollRecommendedSkills } from './07-skills-render.js';
 import { dataReady, ensureDataPreload } from './08-data-load.js';
 import { pickRecommendedAscendancyNodes, pickRecommendedKeystones, pickRecommendedNotables } from '../passivesEngine.js';
 
-// ---------- overlay + ascendancy art ----------
+// ---------- ascendancy art ----------
 function updateAscArt(asc){
   const el = document.getElementById('asc-art');
   if (!el) return;
@@ -41,28 +40,6 @@ const showBindFatesError = (msg) => {
     window.showBindFatesError(msg);
   }
 };
-const AIL_COLORS = {
-  ignite:"rgba(255, 80, 0, 0.08)",
-  freeze:"rgba(90, 160, 255, 0.08)",
-  shock:"rgba(220, 220, 80, 0.07)",
-  poison:"rgba(90, 255, 120, 0.08)",
-  bleed:"rgba(255, 60, 60, 0.08)"
-};
-function updateAilmentOverlay(ailments){
-  const panel=document.querySelector('.panel'); if(!panel) return;
-  const names = (Array.isArray(ailments) ? ailments.map(a => String(a.name||a).toLowerCase()) : []);
-  if(names.length===0){
-    panel.style.setProperty('--overlay-gradient','linear-gradient(135deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 100%)'); return;
-  }
-  const c1 = AIL_COLORS[names[0]] || 'rgba(255,255,255,0.0)';
-  if(names.length>1){
-    const c2 = AIL_COLORS[names[1]] || 'rgba(255,255,255,0.0)';
-    panel.style.setProperty('--overlay-gradient', `linear-gradient(135deg, ${c1} 0%, ${c2} 70%, rgba(0,0,0,0.85) 100%)`);
-  }else{
-    panel.style.setProperty('--overlay-gradient', `linear-gradient(135deg, ${c1} 0%, rgba(0,0,0,0.85) 100%)`);
-  }
-}
-
 
 // ---------- dictionary builders (TRUE Map) ----------
 function buildGemDictionary(gems){
@@ -445,9 +422,7 @@ function rollSecondaryWeaponSet(dataWrap){
   if (!data || !current.className || current.weapon2) return null;
 
   const base = data.Classes?.[current.className]?.attributes || {};
-  const th = (typeof cohesionThreshold === 'number')
-    ? cohesionThreshold
-    : (COHESION_MODES[currentMode] ?? COHESION_MODES.cohesive);
+  const th = (typeof cohesionThreshold === 'number') ? cohesionThreshold : 3/4;
 
   const bind = getBindFatesFromApp();
   const weaponCfg = bind.weapon || { oaths: [], abominations: [] };
@@ -635,9 +610,7 @@ function rollBuild(dataWrap){
 
   showBindFatesError('');
 
-    const th = (typeof cohesionThreshold === 'number')
-    ? cohesionThreshold
-    : (COHESION_MODES[currentMode] ?? COHESION_MODES.cohesive);
+    const th = (typeof cohesionThreshold === 'number') ? cohesionThreshold : 3/4;
 
   const bind = getBindFatesFromApp();
 
@@ -1061,10 +1034,6 @@ function rollBuild(dataWrap){
     cOaths
   );
 
-  updateAilmentOverlay(ailmentSet.filter(Boolean));
-
-
-
   // Balance aggregation
 	const add=(a,b)=>({strength:(a.strength||0)+(b.strength||0), dexterity:(a.dexterity||0)+(b.dexterity||0), intelligence:(a.intelligence||0)+(b.intelligence||0)});
 	const scale=(a,k)=>({strength:(a.strength||0)*k, dexterity:(a.dexterity||0)*k, intelligence:(a.intelligence||0)*k});
@@ -1106,7 +1075,6 @@ function rollBuild(dataWrap){
   const buildFlavor = generateFlavorLine(clsName, asc, ailmentSet.filter(Boolean), tacticSet.filter(Boolean));
   document.getElementById('build-name').textContent = buildName;
   document.getElementById('build-subtext').textContent = buildFlavor;
-  const cohesionModeName = resolveCohesionMode(window.App?.state?.cohesionMode ?? currentMode);
 
   const baseSnapshot = {
     snapshotVersion: 1,
@@ -1132,8 +1100,6 @@ function rollBuild(dataWrap){
     attributes: { strength: S, dexterity: D, intelligence: I },
     rollAttr: { strength: S, dexterity: D, intelligence: I },
     defenseObj: pickedDefense || null,
-    cohesionStatus: 'ok',
-    cohesionModeName,
     recommendedSkills2: []
   };
 
@@ -1158,8 +1124,7 @@ function rollBuild(dataWrap){
           weapon2: '',
           offhand2: '',
           rollAttr: { strength: S, dexterity: D, intelligence: I },
-          tagProfile: null,
-          cohesionModeName
+          tagProfile: null
         };
 
   // Skills (weapon-limited + synergy scoring)
@@ -1194,28 +1159,17 @@ function rollBuild(dataWrap){
 
   // Uniques: trigger the synergy engine directly using the current roll snapshot
   try {
-    const locks = getLockState();
-    const current = window.App?.state?.currentRoll || window.CURRENT_ROLL || {};
+	  if (typeof window.RandomancerRefreshUniques === 'function') {
+		window.RandomancerRefreshUniques(window.CURRENT_ROLL);
+	  }
+	} catch (e) {
+	  console.warn('[Randomancer] uniques refresh failed', e);
+	}
 
-    if (!locks.uniques) {
-      if (typeof window.RandomancerRefreshUniques === 'function') {
-        window.RandomancerRefreshUniques(window.CURRENT_ROLL);
-      }
-    } else {
-      ensureUniqueSection();
-      if (Array.isArray(current.recommendedUniques) && current.recommendedUniques.length && typeof window.RandomancerRenderUniquesFromNames === 'function') {
-        window.RandomancerRenderUniquesFromNames(current.recommendedUniques);
-      }
-    }
-  } catch (e) {
-    console.warn('[Randomancer] uniques refresh failed', e);
-  }
 
   // Reveal build output panels now that we have a roll
   const appEl = document.getElementById('app');
   if (appEl) appEl.dataset.hasRoll = 'true';
-
-  syncLockUIFromState();
 
   // Ensure Summary view stays in sync with the latest roll snapshot (covers App.roll capture-phase funnel).
   try {
@@ -1383,6 +1337,5 @@ export {
   handleSecondaryWeaponSetSelection,
   resetSecondaryWeaponSetUI,
   rollBuild,
-  updateAilmentOverlay,
   updateAscArt
 };
