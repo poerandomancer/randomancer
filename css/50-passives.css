@@ -9,6 +9,22 @@
 
 .panel--passives .panel-title {
   margin: 0;
+
+  /* Match other section headers (h3 look) */
+  font-weight: 600;
+  color: var(--silver);
+  letter-spacing: .02em;
+  font-size: 1.17rem; /* aligns closely with default h3 sizing */
+}
+
+/* Add the missing gold underline divider (matches .sect-head .underline) */
+.panel--passives .panel-title::after{
+  content:'';
+  display:block;
+  height:1px;
+  width:120px;
+  background:linear-gradient(90deg, var(--gold), transparent);
+  margin:.25rem 0 .4rem;
 }
 
 .panel--passives .panel-subtitle {
