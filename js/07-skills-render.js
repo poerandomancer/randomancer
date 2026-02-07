@@ -562,6 +562,63 @@ function excludeFromRecommendedCoreSkills(g){
   return false;
 }
 
+// ---------- selection variance helpers ----------
+function weightedPickIndex(weights){
+  let sum = 0;
+  for (const w of weights) sum += w;
+  if (!(sum > 0)) return Math.floor(Math.random() * Math.max(1, weights.length));
+  let r = Math.random() * sum;
+  for (let i = 0; i < weights.length; i++){
+    r -= weights[i];
+    if (r <= 0) return i;
+  }
+  return Math.max(0, weights.length - 1);
+}
+
+// Pick #1 from top-K (weighted), then pick #2 via the same MMR-ish overlap penalty as pickTwoDiverse.
+function pickTwoDiverseTopK(sorted, lambda = 0.7, coh = 0.75){
+  if (sorted.length <= 1) return sorted.slice(0, 2).map(s => s.item);
+
+  const c = (typeof coh === 'number' && Number.isFinite(coh)) ? coh : 0.75;
+
+  // Higher cohesion => smaller K (more deterministic). Lower cohesion => larger K (more variance).
+  const K =
+    (c >= 0.85) ? 5 :
+    (c >= 0.70) ? 6 :
+    (c >= 0.55) ? 8 :
+    (c >= 0.40) ? 10 : 12;
+
+  const top = sorted.slice(0, Math.min(K, sorted.length));
+  const minScore = top[top.length - 1].score;
+
+  // Higher cohesion => more peaked weights (more likely to pick the top entries).
+  const pow = 1.0 + c; // ~1.0–2.0
+
+  const weights = top.map(s => Math.pow(Math.max(0, s.score - minScore) + 1e-6, pow));
+  const idx = weightedPickIndex(weights);
+  const first = top[idx];
+
+  const S1 = new Set((first.item.tags || []).map(normTagPlus));
+  let best = -Infinity, bestItem = null;
+
+  for (let i = 0; i < sorted.length; i++){
+    const cand = sorted[i];
+    if (cand === first) continue;
+
+    const g = cand.item;
+    const S2 = new Set((g.tags || []).map(normTagPlus));
+    let inter = 0;
+    for (const t of S2){ if (S1.has(t)) inter++; }
+    const union = new Set([...S1, ...S2]).size || 1;
+    const overlap = inter / union;
+
+    const mmr = lambda * cand.score - (1 - lambda) * overlap;
+    if (mmr > best){ best = mmr; bestItem = g; }
+  }
+
+  return [first.item, bestItem || sorted[0].item];
+}
+
 // ----- subtitle helpers (crafting type / school) -----
 function humanizeLabel(x){
   return String(x || '')
@@ -672,15 +729,63 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx, opts = {}){
     const knobs = synergyTunings();
     knobs.rollAttr = ctx.rollAttr || baseAttrs || {strength:0.33,dexterity:0.33,intelligence:0.33};
     knobs.weaponHints = deriveWeaponHints(picked.weapon, picked.offhand);
+    
+        // ---------- mechanic coverage bonus (scales with cohesion + mechanic count) ----------
+    const coh = (typeof cohesionThreshold === 'number' && Number.isFinite(cohesionThreshold))
+      ? cohesionThreshold
+      : 0.75;
 
-    // Score all eligibles for main recommended skills
+    // Each rolled tactic/ailment counts as a "mechanic". We reward gems that cover more of them.
+    const tacticMechs = (ctx.tacticSet || []).map(t => new Set((t?.tags || []).map(normTagPlus)));
+    const ailmentMechs = (ctx.ailmentSet || []).map(a => new Set((a?.tags || []).map(normTagPlus)));
+    const totalMechs = tacticMechs.length + ailmentMechs.length;
+
+    const coverageBonusForGem = (g) => {
+      if (!totalMechs) return 0;
+
+      const gSet = new Set((g.tags || []).map(normTagPlus));
+
+      let tHits = 0;
+      for (const mech of tacticMechs){
+        for (const tag of mech){
+          if (gSet.has(tag)){ tHits++; break; }
+        }
+      }
+
+      let aHits = 0;
+      for (const mech of ailmentMechs){
+        for (const tag of mech){
+          if (gSet.has(tag)){ aHits++; break; }
+        }
+      }
+
+      const coverage = tHits + aHits;
+      if (!coverage) return 0;
+
+      // Per-mechanic bonus scales with cohesion (more strict => more "match the roll")
+      const per = 0.08 + 0.12 * coh;   // ~0.08–0.20
+      let bonus = coverage * per;
+
+      // Extra reward for hitting BOTH a tactic + an ailment (build feels more "real")
+      if (tHits > 0 && aHits > 0) bonus += 0.10 * coh;
+
+      // Cap to avoid a single gem overpowering everything (still lets attributes matter)
+      const cap = 0.20 + 0.70 * coh;   // ~0.20–0.90
+      if (bonus > cap) bonus = cap;
+
+      return bonus;
+    };
+
+
+    // Score all eligibles for main recommended skills (+ mechanic coverage bonus)
     const scored = eligible.map(g => {
       const s = scoreGemSynergy(g, rolledProfile, window.TAG_IDF, knobs);
-      return { item:g, score:s.score, raw:s.raw };
+      const covBonus = coverageBonusForGem(g);
+      return { item:g, score:s.score + covBonus, raw:s.raw };
     }).sort((a,b)=>b.score - a.score);
 
-    // Pick two with diversity
-    const picks = pickTwoDiverse(scored, 0.7);
+    // Pick #1 from top-K (weighted by score), then #2 with diversity
+    const picks = pickTwoDiverseTopK(scored, 0.7, coh);
 
     const grid = document.getElementById(targetGridId);
     if(!grid){ return; }
