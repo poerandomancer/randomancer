@@ -184,8 +184,16 @@ import {
       const card = document.createElement('div');
       card.className = 'skill-card';
 
-      const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
-        ? `<div class="skill-subtitle">${g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')}</div>`
+      const requiresText = (g?.weapon_requirements?.display)
+        ? String(g.weapon_requirements.display)
+        : (typeof g.req_text === 'string' && g.req_text)
+          ? g.req_text
+          : (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
+            ? g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')
+            : '';
+
+      const requiresSubtitle = requiresText
+        ? `<div class="skill-subtitle">${requiresText}</div>`
         : '';
 
       const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
@@ -262,9 +270,17 @@ import {
     const grid = wrap.querySelector('#persistent-buff-grid');
     if (!grid) return;
 
-    const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
-      ? `<div class="skill-subtitle">${g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')}</div>`
-      : '';
+    const requiresText = (g?.weapon_requirements?.display)
+        ? String(g.weapon_requirements.display)
+        : (typeof g.req_text === 'string' && g.req_text)
+          ? g.req_text
+          : (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
+            ? g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')
+            : '';
+
+      const requiresSubtitle = requiresText
+        ? `<div class="skill-subtitle">${requiresText}</div>`
+        : '';
     const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
     const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
     const rest = allTags.filter(t => !br.includes(t));

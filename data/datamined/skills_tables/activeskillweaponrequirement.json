@@ -1,0 +1,536 @@
+[
+  {
+    "_rid": 0,
+    "Id": "Unarmed",
+    "WieldableClasses": [
+      0
+    ],
+    "String": null
+  },
+  {
+    "_rid": 1,
+    "Id": "Any Mace",
+    "WieldableClasses": [
+      5,
+      10
+    ],
+    "String": null
+  },
+  {
+    "_rid": 2,
+    "Id": "One Hand Mace",
+    "WieldableClasses": [
+      5
+    ],
+    "String": null
+  },
+  {
+    "_rid": 3,
+    "Id": "Two Hand Mace",
+    "WieldableClasses": [
+      10
+    ],
+    "String": null
+  },
+  {
+    "_rid": 4,
+    "Id": "Any Sword",
+    "WieldableClasses": [
+      3,
+      8
+    ],
+    "String": null
+  },
+  {
+    "_rid": 5,
+    "Id": "One Hand Sword",
+    "WieldableClasses": [
+      3
+    ],
+    "String": null
+  },
+  {
+    "_rid": 6,
+    "Id": "Two Hand Sword",
+    "WieldableClasses": [
+      8
+    ],
+    "String": null
+  },
+  {
+    "_rid": 7,
+    "Id": "Any Axe",
+    "WieldableClasses": [
+      4,
+      9
+    ],
+    "String": null
+  },
+  {
+    "_rid": 8,
+    "Id": "One Hand Axe",
+    "WieldableClasses": [
+      4
+    ],
+    "String": null
+  },
+  {
+    "_rid": 9,
+    "Id": "Two Hand Axe",
+    "WieldableClasses": [
+      9
+    ],
+    "String": null
+  },
+  {
+    "_rid": 10,
+    "Id": "Any MaceSwordAxe",
+    "WieldableClasses": [
+      5,
+      10,
+      3,
+      8,
+      4,
+      9
+    ],
+    "String": null
+  },
+  {
+    "_rid": 11,
+    "Id": "One Hand MaceSwordAxe",
+    "WieldableClasses": [
+      5,
+      3,
+      4
+    ],
+    "String": null
+  },
+  {
+    "_rid": 12,
+    "Id": "Any MaceSwordAxeStaff",
+    "WieldableClasses": [
+      5,
+      10,
+      3,
+      8,
+      4,
+      9,
+      7,
+      16
+    ],
+    "String": null
+  },
+  {
+    "_rid": 13,
+    "Id": "Any SwordAxe",
+    "WieldableClasses": [
+      3,
+      8,
+      4,
+      9
+    ],
+    "String": null
+  },
+  {
+    "_rid": 14,
+    "Id": "Dagger",
+    "WieldableClasses": [
+      1
+    ],
+    "String": null
+  },
+  {
+    "_rid": 15,
+    "Id": "Claw",
+    "WieldableClasses": [
+      14
+    ],
+    "String": null
+  },
+  {
+    "_rid": 16,
+    "Id": "DaggerClaw",
+    "WieldableClasses": [
+      1,
+      14
+    ],
+    "String": null
+  },
+  {
+    "_rid": 17,
+    "Id": "One Hand Sharp",
+    "WieldableClasses": [
+      1,
+      14,
+      3
+    ],
+    "String": null
+  },
+  {
+    "_rid": 18,
+    "Id": "Any Blunt Weapon",
+    "WieldableClasses": [
+      5,
+      13,
+      10,
+      7,
+      16
+    ],
+    "String": null
+  },
+  {
+    "_rid": 19,
+    "Id": "Quarterstaff",
+    "WieldableClasses": [
+      16
+    ],
+    "String": null
+  },
+  {
+    "_rid": 20,
+    "Id": "PalmQuaterstaff",
+    "WieldableClasses": [
+      16,
+      0
+    ],
+    "String": null
+  },
+  {
+    "_rid": 21,
+    "Id": "Any Staff",
+    "WieldableClasses": [
+      7,
+      16
+    ],
+    "String": null
+  },
+  {
+    "_rid": 22,
+    "Id": "Wand",
+    "WieldableClasses": [
+      2
+    ],
+    "String": null
+  },
+  {
+    "_rid": 23,
+    "Id": "Bow",
+    "WieldableClasses": [
+      6
+    ],
+    "String": null
+  },
+  {
+    "_rid": 24,
+    "Id": "WandBow",
+    "WieldableClasses": [
+      2,
+      6
+    ],
+    "String": null
+  },
+  {
+    "_rid": 25,
+    "Id": "Spear",
+    "WieldableClasses": [
+      17
+    ],
+    "String": null
+  },
+  {
+    "_rid": 26,
+    "Id": "SpearBow",
+    "WieldableClasses": [
+      17,
+      6
+    ],
+    "String": null
+  },
+  {
+    "_rid": 27,
+    "Id": "SpearBowCrossbow",
+    "WieldableClasses": [
+      17,
+      6,
+      18
+    ],
+    "String": null
+  },
+  {
+    "_rid": 28,
+    "Id": "Flail",
+    "WieldableClasses": [
+      20
+    ],
+    "String": null
+  },
+  {
+    "_rid": 29,
+    "Id": "FlailShield",
+    "WieldableClasses": [
+      20,
+      12
+    ],
+    "String": null
+  },
+  {
+    "_rid": 30,
+    "Id": "Crossbow",
+    "WieldableClasses": [
+      18
+    ],
+    "String": null
+  },
+  {
+    "_rid": 31,
+    "Id": "Shield",
+    "WieldableClasses": [
+      12
+    ],
+    "String": 8583
+  },
+  {
+    "_rid": 32,
+    "Id": "Buckler",
+    "WieldableClasses": [
+      21
+    ],
+    "String": null
+  },
+  {
+    "_rid": 33,
+    "Id": "Any Shield",
+    "WieldableClasses": [
+      12,
+      21
+    ],
+    "String": null
+  },
+  {
+    "_rid": 34,
+    "Id": "Any Melee Weapon",
+    "WieldableClasses": [
+      3,
+      8,
+      4,
+      9,
+      5,
+      10,
+      16,
+      14,
+      1,
+      17,
+      20,
+      26
+    ],
+    "String": 8503
+  },
+  {
+    "_rid": 35,
+    "Id": "Any Dual Wieldable Weapon",
+    "WieldableClasses": [
+      3,
+      8,
+      4,
+      9,
+      5,
+      10,
+      14,
+      1
+    ],
+    "String": null
+  },
+  {
+    "_rid": 36,
+    "Id": "Any Melee Weapon and Unarmed",
+    "WieldableClasses": [
+      3,
+      8,
+      4,
+      9,
+      5,
+      10,
+      0,
+      16,
+      14,
+      1,
+      17,
+      20,
+      26
+    ],
+    "String": 8730
+  },
+  {
+    "_rid": 37,
+    "Id": "Any Melee One Hand and Unarmed",
+    "WieldableClasses": [
+      3,
+      4,
+      5,
+      14,
+      1,
+      17,
+      20,
+      0
+    ],
+    "String": null
+  },
+  {
+    "_rid": 38,
+    "Id": "Any Martial Weapon",
+    "WieldableClasses": [
+      3,
+      8,
+      4,
+      9,
+      5,
+      10,
+      16,
+      14,
+      1,
+      17,
+      6,
+      20,
+      18,
+      26
+    ],
+    "String": 7378
+  },
+  {
+    "_rid": 39,
+    "Id": "Any Martial Weapon and Unarmed",
+    "WieldableClasses": [
+      3,
+      8,
+      4,
+      9,
+      5,
+      10,
+      16,
+      14,
+      1,
+      17,
+      6,
+      20,
+      18,
+      0,
+      26
+    ],
+    "String": 8163
+  },
+  {
+    "_rid": 40,
+    "Id": "Nothing",
+    "WieldableClasses": [
+      23
+    ],
+    "String": null
+  },
+  {
+    "_rid": 41,
+    "Id": "Any Thrown Axe",
+    "WieldableClasses": [
+      24,
+      25
+    ],
+    "String": null
+  },
+  {
+    "_rid": 42,
+    "Id": "Old Energy Blade",
+    "WieldableClasses": [
+      14,
+      1,
+      15,
+      4,
+      5,
+      3,
+      13,
+      7,
+      9,
+      10,
+      8,
+      2,
+      16
+    ],
+    "String": null
+  },
+  {
+    "_rid": 43,
+    "Id": "Old Puncture",
+    "WieldableClasses": [
+      6,
+      14,
+      1,
+      3,
+      8
+    ],
+    "String": null
+  },
+  {
+    "_rid": 44,
+    "Id": "Old Sunder",
+    "WieldableClasses": [
+      5,
+      13,
+      7,
+      10,
+      4,
+      9,
+      0,
+      16
+    ],
+    "String": null
+  },
+  {
+    "_rid": 45,
+    "Id": "Old Endurance Charge Slam",
+    "WieldableClasses": [
+      5,
+      13,
+      7,
+      10,
+      4,
+      9,
+      3,
+      8,
+      0,
+      16
+    ],
+    "String": null
+  },
+  {
+    "_rid": 46,
+    "Id": "Talisman",
+    "WieldableClasses": [
+      26
+    ],
+    "String": null
+  },
+  {
+    "_rid": 47,
+    "Id": "Unborn Lich",
+    "WieldableClasses": [
+      7
+    ],
+    "String": 9143
+  },
+  {
+    "_rid": 48,
+    "Id": "Non-Talisman Melee Weapon",
+    "WieldableClasses": [
+      3,
+      8,
+      4,
+      9,
+      5,
+      10,
+      16,
+      14,
+      1,
+      17,
+      20
+    ],
+    "String": 9156
+  }
+]

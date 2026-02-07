@@ -12,7 +12,7 @@ import {
   scoreGemSynergy,
   synergyTunings
 } from './05-tags-and-scorer.js';
-import { buildBuildContext } from './06-cohesion.js';
+import { buildBuildContext, cohesionThreshold } from './06-cohesion.js';
 
 // ---------- passives helpers ----------
 function buildPassiveIndex(passivesData) {
@@ -315,11 +315,56 @@ function isDevPlaceholderGem(g){
 }
 
 
-function weaponsToTypes(weapon, offhand){
-  const arr = [];
-  if(weapon && weapon.name) arr.push(weapon.name);
-  if(offhand && offhand.name) arr.push(offhand.name);
-  return arr.map(x=>String(x).toLowerCase());
+function weaponContext(weapon, offhand){
+  const wName = String(weapon?.name || '');
+  const oName = String(offhand?.name || '');
+
+  const wTagsArr = Array.isArray(weapon?.tags) ? weapon.tags : [];
+  const oTagsArr = Array.isArray(offhand?.tags) ? offhand.tags : [];
+
+  const wTags = new Set(wTagsArr.map(t => String(t).toLowerCase()));
+  const oTags = new Set(oTagsArr.map(t => String(t).toLowerCase()));
+
+  // Fallback: if tags are missing, include display names so compatibility checks still work
+  if (!wTags.size && wName) wTags.add(wName.toLowerCase());
+  if (!oTags.size && oName) oTags.add(oName.toLowerCase());
+  
+    // Add canonical hint tags from names (keeps gating robust even if tags are missing)
+    const addHintsFromName = (name, set) => {
+    const n = String(name || '').toLowerCase();
+    if (!n) return;
+
+    // specificity first to avoid collisions
+    if (n.includes('crossbow')) set.add('crossbow');
+    else if (n.includes('bow')) set.add('bow');
+
+    if (n.includes('quarterstaff')) set.add('quarterstaff');
+    else if (n.includes('staff')) set.add('staff');
+
+    if (n.includes('sceptre') || n.includes('scepter')) set.add('sceptre');
+    if (n.includes('wand')) set.add('wand');
+    if (n.includes('spear')) set.add('spear');
+    if (n.includes('flail')) set.add('flail');
+    if (n.includes('talisman')) set.add('talisman');
+
+    if (n.includes('buckler')) set.add('buckler');
+    if (n.includes('shield')) set.add('shield');
+    if (n.includes('quiver')) set.add('quiver');
+    if (n.includes('focus')) set.add('focus');
+
+    if (n.includes('unarmed')) set.add('unarmed');
+
+    if (n.includes('mace') || n.includes('hammer')) set.add('mace');
+    if (n.includes('axe')) set.add('axe');
+    if (n.includes('sword')) set.add('sword');
+    if (n.includes('dagger')) set.add('dagger');
+    if (n.includes('claw')) set.add('claw');
+  };
+
+  addHintsFromName(wName, wTags);
+  addHintsFromName(oName, oTags);
+
+  return { weaponName: wName, offhandName: oName, weaponTags: wTags, offhandTags: oTags };
 }
 
 // ---- Gem/offhand compatibility helpers ----
@@ -338,36 +383,105 @@ function isGemShieldCompatible(g, offhand){
   return offhandIsShieldOrBuckler(offhand);
 }
 
-function isGemWeaponCompatible(g, rolledTypesLower){
+function isGemWeaponCompatible(g, ctx){
+  // v2 schema: gate by weapon_requirements (hard restriction)
+  const wr = g?.weapon_requirements;
+
+  const wName = String(ctx?.weaponName || '').toLowerCase();
+  const oName = String(ctx?.offhandName || '').toLowerCase();
+  const wTags = (ctx?.weaponTags instanceof Set) ? ctx.weaponTags : new Set();
+  const oTags = (ctx?.offhandTags instanceof Set) ? ctx.offhandTags : new Set();
+  
+  // --- Special weapon rules (your requested distinctions) ---
+  const tagList = Array.isArray(g?.tags) ? g.tags.map(t => String(t).toLowerCase()) : [];
+  const tagSet = new Set(tagList);
+  const skillTypes = (g?.taxonomy?.skill_types || []).map(t => String(t).toLowerCase());
+  const typeSet = new Set(skillTypes);
+
+  const hasTalisman = wTags.has('talisman') || wName.includes('talisman');
+  const isShapeshift = tagSet.has('shapeshift') || tagSet.has('shapeshifting');
+
+  // If you're holding a Talisman, ONLY shapeshift skills are allowed
+  if (hasTalisman && !isShapeshift) return false;
+
+  // Minion skills: ONLY sceptres (mainhand OR offhand)
+  const isMinion = typeSet.has('minion');
+  const hasSceptre = wTags.has('sceptre') || oTags.has('sceptre') || wName.includes('sceptre') || oName.includes('sceptre');
+  if (isMinion && !hasSceptre) return false;
+
+  // Spell skills: allowed if you have a “spell weapon” (wand/staff/sceptre) — enforce strongly only at higher cohesion
+  const isSpell = typeSet.has('spell') || tagSet.has('spell');
+  const hasSpellWeapon = wTags.has('spell') || oTags.has('spell') || wTags.has('wand') || oTags.has('wand') || wTags.has('staff') || oTags.has('staff') || hasSceptre;
+
+  if (isSpell && !hasSpellWeapon) return false;
+
+  if (wr && wr.is_unrestricted) return true;
+
+  if (wr) {
+    const mhNames = Array.isArray(wr.mainhand_names_any_of) ? wr.mainhand_names_any_of : [];
+    const mhTags = Array.isArray(wr.mainhand_tags_any_of) ? wr.mainhand_tags_any_of : [];
+    const ohNames = Array.isArray(wr.offhand_names_any_of) ? wr.offhand_names_any_of : [];
+    const ohTags = Array.isArray(wr.offhand_tags_any_of) ? wr.offhand_tags_any_of : [];
+    const disOhTags = Array.isArray(wr.disallow_offhand_tags_any_of) ? wr.disallow_offhand_tags_any_of : [];
+    
+	const anyTags = Array.isArray(wr.allowed_weapon_tags_any_of) ? wr.allowed_weapon_tags_any_of : [];
+
+    if (mhNames.length) {
+      const ok = mhNames.some(n => String(n).toLowerCase() === wName);
+      if (!ok) return false;
+    }
+    if (mhTags.length) {
+      const ok = mhTags.some(t => wTags.has(String(t).toLowerCase()));
+      if (!ok) return false;
+    }
+    if (ohNames.length) {
+      const ok = ohNames.some(n => String(n).toLowerCase() === oName);
+      if (!ok) return false;
+    }
+    if (ohTags.length) {
+      const ok = ohTags.some(t => oTags.has(String(t).toLowerCase()));
+      if (!ok) return false;
+    }
+    if (disOhTags.length) {
+      const bad = disOhTags.some(t => oTags.has(String(t).toLowerCase()));
+      if (bad) return false;
+    }
+    
+	// If this requirement only provides a union list (no per-hand constraints), enforce it here.
+    if (!mhNames.length && !mhTags.length && !ohNames.length && !ohTags.length && anyTags.length) {
+      const all = new Set([...wTags, ...oTags, wName, oName].filter(Boolean));
+      const ok = anyTags.some(t => all.has(String(t).toLowerCase()));
+      if (!ok) return false;
+    }
+
+
+    return true;
+  }
+
+  // Legacy fallback (pre-v2): use required_weapon_types / crafting_types
   const req = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
     ? g.required_weapon_types
     : (Array.isArray(g.crafting_types) ? g.crafting_types : []);
-  if(!req.length) return true;
+
+  if (!req.length) return true;
 
   const reqLower = req.map(x => String(x).toLowerCase());
 
-  const hasOccult = reqLower.includes("occult");
-  const hasElemental = reqLower.includes("elemental");
-  const hasMaceGeneric = reqLower.includes("mace");
-  const hasPrimal = reqLower.includes("primal");
+  // Old logic expected display names; check tags + names to stay permissive.
+  const wTokens = new Set([...wTags, wName].filter(Boolean));
+  const oTokens = new Set([...oTags, oName].filter(Boolean));
+  const all = new Set([...wTokens, ...oTokens]);
 
-  // NEW: use gem tags to split Primal into spell vs non-spell
-  if (hasPrimal) {
-    const tagLower = Array.isArray(g.tags) ? g.tags.map(t => String(t).toLowerCase()) : [];
-    const isSpellGem = tagLower.includes("spell");
+  // Mace generic
+  if (reqLower.includes('mace') && [...all].some(r => r.includes('mace'))) return true;
 
-    const hasTalisman = rolledTypesLower.includes("talisman");
-    const hasCasterWeapon = rolledTypesLower.some(r => ["wand", "staff", "sceptre"].includes(r));
+  // Occult/Elemental special-cases (sceptre, wand, staff) in legacy data
+  const hasOccult = reqLower.includes('occult');
+  const hasElemental = reqLower.includes('elemental');
+  if ((hasOccult || hasElemental) && all.has('sceptre')) return true;
+  if (hasElemental && (all.has('wand') || all.has('staff'))) return true;
 
-    // Primal spells => wand/staff/sceptre only; non-spell primal => talisman only
-    return isSpellGem ? hasCasterWeapon : hasTalisman;
-  }
-
-  if ((hasOccult || hasElemental) && rolledTypesLower.some(r => r === "sceptre")) return true;
-  if (hasElemental && rolledTypesLower.some(r => ["wand", "staff"].includes(r))) return true;
-  if (hasMaceGeneric && rolledTypesLower.some(r => r.includes('mace'))) return true;
-
-  return reqLower.some(r => rolledTypesLower.includes(r));
+  return reqLower.some(r => all.has(r));
 }
 
 
@@ -399,26 +513,129 @@ function isPersistentBuffGem(g){
   return set.has('buff') && set.has('persistent');
 }
 
+// ---------- recommended-skill eligibility filters ----------
+
+function isMinionSkill(g){
+  const st = Array.isArray(g?.taxonomy?.skill_types) ? g.taxonomy.skill_types.map(normalizeTag) : [];
+  return new Set(st).has('minion');
+}
+
+function hasExplicitCraftingType(g){
+  // Allow minion skills even if crafting types are missing (many minion gems are like this)
+  if (isMinionSkill(g)) return true;
+
+  // v2 schema
+  const c = g?.crafting;
+  const v2 =
+    (Array.isArray(c?.types_raw) && c.types_raw.length) ||
+    (Array.isArray(c?.schools) && c.schools.length) ||
+    (Array.isArray(c?.weapon_affinities) && c.weapon_affinities.length);
+
+  // legacy schema
+  const legacy = Array.isArray(g?.crafting_types) && g.crafting_types.length;
+
+  return !!(v2 || legacy);
+}
+
+
+function isTriggeredOnlyGem(g){
+  const st = Array.isArray(g?.taxonomy?.skill_types) ? g.taxonomy.skill_types.map(normalizeTag) : [];
+  const set = new Set(st);
+  // NOTE: we do NOT exclude "triggerable" or "triggers" (castable skills can have those)
+  return set.has('triggered') || set.has('inbuilttrigger');
+}
+
+function isSpiritOrPersistentGem(g){
+  // Persistent/spirit is allowed for minion skills (sceptre-only gate handles the rest)
+  if (isMinionSkill(g)) return false;
+
+  const tags = Array.isArray(g?.tags) ? g.tags.map(normalizeTag) : [];
+  const set = new Set(tags);
+  return set.has('persistent') || set.has('spirit');
+}
+
+
+function excludeFromRecommendedCoreSkills(g){
+  if (!hasExplicitCraftingType(g)) return true;
+  if (isTriggeredOnlyGem(g)) return true;
+  if (isSpiritOrPersistentGem(g)) return true;
+  return false;
+}
+
+// ----- subtitle helpers (crafting type / school) -----
+function humanizeLabel(x){
+  return String(x || '')
+    .trim()
+    .replace(/[_-]+/g, ' ')
+    .replace(/\b\w/g, c => c.toUpperCase());
+}
+
+function gemCraftingLabel(g){
+  // v2 schema: crafting.weapon_affinities / crafting.schools / crafting.types_raw
+  const c = g && g.crafting;
+  if (c) {
+    const wa = Array.isArray(c.weapon_affinities) ? c.weapon_affinities.filter(Boolean) : [];
+    const sc = Array.isArray(c.schools) ? c.schools.filter(Boolean) : [];
+    const raw = Array.isArray(c.types_raw) ? c.types_raw.filter(Boolean) : [];
+    const pick = wa.length ? wa : (sc.length ? sc : raw);
+    if (pick.length) return pick.map(humanizeLabel).join(' / ');
+  }
+
+  // legacy schema: crafting_types
+  if (Array.isArray(g?.crafting_types) && g.crafting_types.length) {
+    return g.crafting_types.filter(Boolean).map(humanizeLabel).join(' / ');
+  }
+
+  // fallback to taxonomy
+  const st = (g?.taxonomy?.skill_types || []).map(x => String(x).toLowerCase());
+  if (st.includes('spell')) return 'Spell';
+  if (st.includes('attack')) return 'Attack';
+  return '';
+}
+
+function gemSubtitleHTML(g){
+  const label = gemCraftingLabel(g);
+  return label ? `<div class="skill-subtitle">${label}</div>` : '';
+}
+
+
 function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx, opts = {}){
   try{
     const options = opts || {};
     const targetGridId = options.gridId || 'skills-grid';
     const includePersistentBuff = options.includePersistentBuff !== false;
     const assignTagProfile = options.assignTagProfile !== false;
-    const rolledTypesLower = weaponsToTypes(picked.weapon, picked.offhand);
+    const weaponCtx = weaponContext(picked.weapon, picked.offhand);
     const gems = (window.DATA && window.DATA.gems) ? window.DATA.gems : (dataWrap.gems || []);
-    const actives = gems.filter(g =>
-      g.type === 'active' &&
-      Array.isArray(g.crafting_types) && g.crafting_types.length > 0 &&
-      !isDevPlaceholderGem(g)
-    );
+    // Do NOT require crafting_types here; some valid actives have no crafting types in newer datasets.
+	const hasCraftingTypes = (g) => {
+	  const v2 = Array.isArray(g?.crafting?.types_raw) && g.crafting.types_raw.length > 0;
+	  const v1 = Array.isArray(g?.crafting_types) && g.crafting_types.length > 0;
+	  return v2 || v1;
+	};
+
+	const hasSpirit = (g) => {
+	  const st = Array.isArray(g?.taxonomy?.skill_types) ? g.taxonomy.skill_types : [];
+	  const tg = Array.isArray(g?.tags) ? g.tags : [];
+	  return [...st, ...tg].some(t => String(t).toLowerCase().includes('spirit'));
+	};
+	
+	const actives = gems.filter(g =>
+	  g.type === 'active' &&
+	  hasCraftingTypes(g) &&
+	  !isDevPlaceholderGem(g) &&
+	  !hasSpirit(g)
+	);
+
+
 
     // Separate persistent buff skills from general pool
-    const persistentPool = actives.filter(g => isPersistentBuffGem(g) && isGemWeaponCompatible(g, rolledTypesLower) && isGemShieldCompatible(g, picked.offhand));
+    const persistentPool = actives.filter(g => isPersistentBuffGem(g) && isGemWeaponCompatible(g, weaponCtx) && isGemShieldCompatible(g, picked.offhand));
     const eligibleBase = actives.filter(g =>
-      isGemWeaponCompatible(g, rolledTypesLower) &&
+      isGemWeaponCompatible(g, weaponCtx) &&
       isGemShieldCompatible(g, picked.offhand) &&
-      !isPersistentBuffGem(g)
+      !isPersistentBuffGem(g) &&
+      !excludeFromRecommendedCoreSkills(g)
     );
     const avoidRaw = options.avoidSkills || [];
     const avoidSet = new Set(
@@ -477,11 +694,7 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx, opts = {}){
 	  card.className = 'skill-card';
 	
 	  // Subtle inline "requires" subtitle directly under the title
-	  const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
-		? `<div class="skill-subtitle">${g.required_weapon_types
-			.map(x => x[0].toUpperCase() + x.slice(1))
-			.join(', ')}</div>`
-		: '';
+	  const requiresSubtitle = gemSubtitleHTML(g);
 	
 	  const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
 	  const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
@@ -592,11 +805,7 @@ function renderPersistentBuffSkill(persistentPool, rolledProfile, tagIDF, knobs,
 	card.className = 'skill-card persistent-buff-card';
 	
 	// Subtle inline "requires" subtitle directly under the title
-	const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
-	  ? `<div class="skill-subtitle">${g.required_weapon_types
-		  .map(x => x[0].toUpperCase() + x.slice(1))
-		  .join(', ')}</div>`
-	  : '';
+	const requiresSubtitle = gemSubtitleHTML(g);
 	
 	const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
 	const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
@@ -658,6 +867,19 @@ function applyGemBorderFromReqWeights(el, weights){
 
 // Small helper to render grant line (shared by main skills + persistent buff)
 const grantLine = (g) => {
+  // v2 schema: description is on the gem itself
+  const descV2 = String(g?.description || '').trim();
+  if (descV2){
+    return `
+      <div class="grant-wrap">
+        <div class="grant">
+          <div class="grant-desc">${descV2}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  // legacy fallback
   const list = Array.isArray(g.granted_skills_full) ? g.granted_skills_full : [];
   if (!list.length) return '';
   const first = list[0];
@@ -673,6 +895,8 @@ const grantLine = (g) => {
     </div>
   `;
 };
+
+
 
 export {
   applyGemBorderFromReqWeights,
