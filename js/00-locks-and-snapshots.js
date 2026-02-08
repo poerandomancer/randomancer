@@ -65,6 +65,8 @@ import {
       attr: snap.attributes || { strength:0, dexterity:0, intelligence:0 },
       rs: Array.isArray(snap.recommendedSkills) ? snap.recommendedSkills : [],
       rs2: Array.isArray(snap.recommendedSkills2) ? snap.recommendedSkills2 : [],
+      ss: Array.isArray(snap.synergySupports) ? snap.synergySupports : [],
+      ss2: Array.isArray(snap.synergySupports2) ? snap.synergySupports2 : [],
       pb: snap.recommendedPersistentBuff || null,
       u: Array.isArray(snap.recommendedUniques)
         ? snap.recommendedUniques.map(u => (typeof u === 'string' ? u : (u && typeof u === 'object' ? u.name : null))).filter(Boolean)
@@ -125,6 +127,8 @@ import {
         attributes: raw.attr || { strength:0, dexterity:0, intelligence:0 },
         recommendedSkills: raw.rs || [],
         recommendedSkills2: raw.rs2 || [],
+        synergySupports: raw.ss || [],
+        synergySupports2: raw.ss2 || [],
         recommendedPersistentBuff: raw.pb || null,
         recommendedUniques: raw.u || [],
 
@@ -220,7 +224,25 @@ import {
     });
   }
 
-  function renderSkillsFromSnapshot(snap){
+  
+
+  function renderSynergySupportsFromSnapshot(supportEntries, grid, gemDict){
+    if (!grid) return;
+    const ids = Array.isArray(supportEntries) ? supportEntries.filter(Boolean) : [];
+    if (!ids.length) return;
+
+    const card = document.createElement('div');
+    card.className = 'skill-card wide';
+    card.id = (grid.id === 'skills-grid-2') ? 'synergy-supports-section-2' : 'synergy-supports-section';
+    card.innerHTML = `
+      <div class="skill-title">Synergy Supports</div>
+      <div class="skill-subtitle">Supports that reinforce multiple rolled mechanics.</div>
+      <div class="supports">${renderSupportCards(ids, gemDict)}</div>
+    `;
+    grid.appendChild(card);
+  }
+
+function renderSkillsFromSnapshot(snap){
     const grid = document.getElementById('skills-grid');
     const grid2 = document.getElementById('skills-grid-2');
     if (!grid) return;
@@ -229,8 +251,10 @@ import {
     const gemDict = buildGemDictionary(gems);
 
     renderSkillCardsFromSnapshot(snap.recommendedSkills || [], grid, gemDict);
+    renderSynergySupportsFromSnapshot(snap.synergySupports || [], grid, gemDict);
     if (grid2) {
       renderSkillCardsFromSnapshot(snap.recommendedSkills2 || [], grid2, gemDict);
+      renderSynergySupportsFromSnapshot(snap.synergySupports2 || [], grid2, gemDict);
     }
 
     if (snap.recommendedPersistentBuff) {

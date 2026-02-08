@@ -504,6 +504,169 @@ function renderSupportCards(supportEntries, gemDict){
 
 }
 
+
+
+// ---------- cross-mechanic support suggestions (strong) ----------
+
+function _mechTagSetsFromCtx(ctx){
+  const tactics = Array.isArray(ctx?.tacticSet) ? ctx.tacticSet : [];
+  const ailments = Array.isArray(ctx?.ailmentSet) ? ctx.ailmentSet : [];
+
+  const out = [];
+  tactics.forEach((t, i) => {
+    const tags = new Set((t?.tags || []).map(normTagPlus).filter(Boolean));
+    if (tags.size) out.push({ kind: 'tactic', idx: i, tags });
+  });
+  ailments.forEach((a, i) => {
+    const tags = new Set((a?.tags || []).map(normTagPlus).filter(Boolean));
+    if (tags.size) out.push({ kind: 'ailment', idx: i, tags });
+  });
+
+  return {
+    sets: out,
+    tacticCount: tactics.length,
+    ailmentCount: ailments.length,
+    mechCount: tactics.length + ailments.length
+  };
+}
+
+function _supportTagSet(g){
+  const raw = []
+    .concat(Array.isArray(g?.effect_tags) ? g.effect_tags : [])
+    .concat(Array.isArray(g?.tags) ? g.tags : [])
+    // Optional: include bracket_tags explicitly (usually redundant if you've merged them into tags)
+    .concat(Array.isArray(g?.bracket_tags) ? g.bracket_tags : [])
+    // taxonomy fields are not sourced from brackets and tend to be higher-signal
+    .concat(Array.isArray(g?.taxonomy?.gem_tags) ? g.taxonomy.gem_tags : [])
+    .concat(Array.isArray(g?.taxonomy?.skill_types) ? g.taxonomy.skill_types : [])
+    .concat(Array.isArray(g?.taxonomy?.damage_types) ? g.taxonomy.damage_types : [])
+    .concat(Array.isArray(g?.taxonomy?.delivery) ? g.taxonomy.delivery : [])
+    .concat(Array.isArray(g?.taxonomy?.role) ? g.taxonomy.role : []);
+
+  return new Set(raw.map(normTagPlus).filter(Boolean));
+}
+
+
+function selectSynergySupports(picks, ctx, gemDict, maxCount=4){
+  try{
+    const mech = _mechTagSetsFromCtx(ctx);
+    if (!mech || mech.mechCount < 2) return [];
+
+    // Candidate pool = ALL supports, EXCEPT supports already in the two skills' recommended_supports lists
+	const excluded = new Set();
+	(picks || []).forEach(g => {
+	  (g?.recommended_supports || []).forEach(sid => {
+		const sg = lookupGem(gemDict, sid);
+		// Prefer canonical id exclusion if possible
+		if (sg?.id != null) excluded.add(String(sg.id));
+		else if (sid != null) excluded.add(String(sid));
+	  });
+	});
+	
+	// Collect unique supports by id from the gem dictionary (Map has many alias keys)
+	const cand = new Map(); // id -> gem
+	if (gemDict && typeof gemDict.values === 'function') {
+	  for (const g of gemDict.values()) {
+		if (!g || g.type !== 'support') continue;
+		const id = (g.id != null) ? String(g.id) : null;
+		if (!id) continue;
+		if (excluded.has(id)) continue;     // <-- the inversion
+		if (cand.has(id)) continue;         // de-dupe
+		cand.set(id, g);
+	  }
+	}
+	
+	const scored = [];
+	for (const [sid, sg] of cand) {
+	  // NOTE: sg is already the support gem object; no lookup needed.
+	  if (!sg || sg.type !== 'support') continue;
+	
+	  const stags = _supportTagSet(sg);
+	  if (!stags.size) continue;
+	
+	  let hits = 0, tacticHits = 0, ailmentHits = 0;
+	  const matchedTags = new Set();
+	  const covered = new Set();
+	
+	  mech.sets.forEach((mset, mi) => {
+		let hit = false;
+		for (const t of mset.tags) {
+		  if (stags.has(t)) {
+			matchedTags.add(t);
+			hit = true;
+		  }
+		}
+		if (hit) {
+		  hits++;
+		  covered.add(mi);
+		  if (mset.kind === 'tactic') tacticHits++;
+		  else ailmentHits++;
+		}
+	  });
+	
+	  if (hits < 2) continue;
+	
+	  let idfScore = 0;
+	  matchedTags.forEach(t => {
+		const v = (window.TAG_IDF && typeof window.TAG_IDF.get === 'function') ? window.TAG_IDF.get(t) : 0;
+		idfScore += (typeof v === 'number' && isFinite(v)) ? v : 0.15;
+	  });
+	
+	  let score = hits * 2.0 + idfScore;
+	  if (tacticHits > 0 && ailmentHits > 0) score += 1.0; // cross-category bonus
+	  score += Math.min(0.3, (Array.isArray(sg?.effect_tags) ? sg.effect_tags.length : 0) * 0.03);
+	
+	  scored.push({ sid, score, hits, covered, matched: matchedTags });
+	}
+
+
+    scored.sort((a,b) => b.score - a.score);
+
+    // Greedy diversity pass: prefer candidates that cover new mechanics
+    const picked = [];
+    const coveredAll = new Set();
+    const usedTags = new Set();
+
+    for (const c of scored) {
+      if (picked.length >= maxCount) break;
+
+      let addsNewMechanic = false;
+      c.covered.forEach(i => { if (!coveredAll.has(i)) addsNewMechanic = true; });
+
+      // If it doesn't add new mechanic coverage, require it to add at least one new matched tag.
+      let addsNewTag = false;
+      c.matched.forEach(t => { if (!usedTags.has(t)) addsNewTag = true; });
+
+      if (picked.length && !addsNewMechanic && !addsNewTag) continue;
+
+      picked.push(c.sid);
+      c.covered.forEach(i => coveredAll.add(i));
+      c.matched.forEach(t => usedTags.add(t));
+    }
+
+    return picked.slice(0, maxCount);
+  }catch(e){
+    console.warn('[skills] synergy support selection failed', e);
+    return [];
+  }
+}
+
+function renderSynergySupportsCard(grid, supportIds, gemDict){
+  if (!grid) return;
+  const ids = Array.isArray(supportIds) ? supportIds.filter(Boolean) : [];
+  if (!ids.length) return;
+
+  const card = document.createElement('div');
+  card.className = 'skill-card wide';
+  card.id = 'synergy-supports-section';
+  card.innerHTML = `
+    <div class="skill-title">Synergy Supports</div>
+    <div class="skill-subtitle">Optional supports that reinforce multiple rolled mechanics — these may apply to other skills you choose.</div>
+    <div class="supports">${renderSupportCards(ids, gemDict)}</div>
+  `;
+  grid.appendChild(card);
+}
+
 // ---------- skill cards (with Grants + Req. Weapon) ----------
 
 function isPersistentBuffGem(g){
@@ -793,6 +956,8 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx, opts = {}){
 
     const gemDict = buildGemDictionary(gems);
 
+    const synergySupports = selectSynergySupports(picks, ctx, gemDict, 4);
+
     // Render main recommended skills
 	picks.forEach(g => {
 	  const card = document.createElement('div');
@@ -833,6 +998,10 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx, opts = {}){
 	  grid.appendChild(card);
 	});
 
+    // Cross-mechanic support suggestions (0-4)
+    renderSynergySupportsCard(grid, synergySupports, gemDict);
+
+
 
     // Render a dedicated persistent buff skill section (single card, full-width)
     const persistent = includePersistentBuff
@@ -846,6 +1015,7 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx, opts = {}){
         name: g.name || '',
         recommended_supports: Array.isArray(g.recommended_supports) ? g.recommended_supports.slice(0, 6) : []
       })),
+      synergySupports: Array.isArray(synergySupports) ? synergySupports.slice(0, 4) : [],
       persistentBuff: (includePersistentBuff && persistent) ? {
         id: persistent.id || persistent.base_item?.id || persistent.name || '',
         name: persistent.name || ''

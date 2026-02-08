@@ -507,7 +507,8 @@ async function handleSecondaryWeaponSetSelection(dataWrap){
     window.App.mergeCurrentRoll({
       weapon2: weaponName,
       offhand2: offhandName,
-      recommendedSkills2: skillSnapshot.skills || []
+      recommendedSkills2: skillSnapshot.skills || [],
+      synergySupports2: skillSnapshot.synergySupports || []
     });
   }
 
@@ -1127,6 +1128,7 @@ function rollBuild(dataWrap){
     window.App.mergeCurrentRoll({
       recommendedSkills: skillSnapshot.skills || [],
       recommendedPersistentBuff: skillSnapshot.persistentBuff || null,
+      synergySupports: skillSnapshot.synergySupports || [],
       tagProfile: skillSnapshot.tagProfile || window.CURRENT_ROLL.tagProfile || null
     });
   }

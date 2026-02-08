@@ -70,6 +70,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -216,6 +217,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "slam"
+    ],
     "weapon_requirements": {
       "requirement_id": "Any Mace",
       "display": "Requires Any Mace",
@@ -360,6 +364,9 @@
         "movement"
       ]
     },
+    "effect_tags": [
+      "slam"
+    ],
     "weapon_requirements": {
       "requirement_id": "Talisman",
       "display": "Requires Talisman",
@@ -516,6 +523,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Shield",
       "display": "Requires Shield",
@@ -669,6 +677,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "corpse",
+      "corpses"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -799,6 +811,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "corpse",
+      "corpses"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -913,6 +929,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -993,6 +1010,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -1065,6 +1083,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -1137,6 +1156,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -1209,6 +1229,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -1283,6 +1307,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -1357,6 +1385,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -1425,6 +1457,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -1495,6 +1531,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -1567,6 +1607,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -1641,6 +1685,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -1716,6 +1764,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -1796,6 +1845,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -1870,6 +1920,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -1944,6 +1995,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -2012,6 +2064,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -2083,6 +2136,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -2180,6 +2234,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -2295,6 +2353,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -2362,6 +2421,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -2429,6 +2489,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -2504,6 +2565,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -2581,6 +2643,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -2662,6 +2725,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -2743,6 +2807,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -2824,6 +2889,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -2899,6 +2965,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -2983,6 +3050,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -3078,6 +3146,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Quarterstaff",
       "display": "Requires Quarterstaff",
@@ -3225,6 +3294,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -3349,6 +3422,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -3423,6 +3500,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -3497,6 +3575,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -3583,6 +3662,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -3714,6 +3797,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -3857,6 +3944,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "electrocute",
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -3967,6 +4058,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -4043,6 +4135,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -4115,6 +4208,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -4187,6 +4281,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -4281,6 +4376,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -4412,6 +4508,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -4537,6 +4634,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -4683,6 +4781,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -4826,6 +4925,7 @@
         "movement"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -4979,6 +5079,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -5116,6 +5217,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Mace",
       "display": "Requires Any Mace",
@@ -5258,6 +5360,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "requirement_id": "Bow",
       "display": "Requires Bow",
@@ -5389,6 +5495,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -5458,6 +5565,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -5561,6 +5672,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -5708,6 +5820,12 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock",
+      "aftershock",
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "requirement_id": "Quarterstaff",
       "display": "Requires Quarterstaff",
@@ -5850,6 +5968,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -5985,6 +6104,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "requirement_id": "Bow",
       "display": "Requires Bow",
@@ -6123,6 +6246,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -6251,6 +6375,12 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "totem",
+      "totems",
+      "shock",
+      "aftershock"
+    ],
     "weapon_requirements": {
       "requirement_id": "Any Martial Weapon",
       "display": "Requires Any Martial Weapon",
@@ -6417,6 +6547,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -6490,6 +6621,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -6584,6 +6716,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "electrocute",
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -6720,6 +6856,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -6863,6 +7004,10 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -6974,6 +7119,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -7052,6 +7198,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -7126,6 +7273,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -7204,6 +7352,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -7283,6 +7432,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -7357,6 +7507,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -7431,6 +7582,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -7504,6 +7656,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -7598,6 +7754,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -7729,6 +7886,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -7860,6 +8018,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -7988,9 +8147,9 @@
         "usablewhilemoving"
       ],
       "damage_types": [
+        "cold",
         "lightning",
-        "fire",
-        "cold"
+        "fire"
       ],
       "delivery": [
         "spell",
@@ -8001,6 +8160,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -8140,6 +8300,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -8269,6 +8432,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -8350,6 +8514,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -8424,6 +8592,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -8496,6 +8668,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -8567,6 +8743,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -8653,6 +8833,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -8772,6 +8953,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -8891,6 +9073,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -9010,6 +9193,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -9137,6 +9321,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -9267,6 +9452,10 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "requirement_id": "SpearBow",
       "display": "Requires SpearBow",
@@ -9430,6 +9619,12 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "shock",
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -9579,6 +9774,10 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "offering",
+      "offerings"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -9718,6 +9917,9 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "requirement_id": "Any Martial Weapon",
       "display": "Requires Any Martial Weapon",
@@ -9903,6 +10105,10 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "requirement_id": "Any Martial Weapon",
       "display": "Requires Any Martial Weapon",
@@ -10091,6 +10297,9 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "requirement_id": "Any Martial Weapon",
       "display": "Requires Any Martial Weapon",
@@ -10273,6 +10482,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -10398,6 +10608,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "warcry"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -10526,6 +10739,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -10614,6 +10828,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -10698,6 +10913,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -10780,6 +10999,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -10857,6 +11080,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -10947,6 +11173,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Spear",
       "display": "Requires Spear",
@@ -11092,6 +11319,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "ignite"
+    ],
     "weapon_requirements": {
       "requirement_id": "Talisman",
       "display": "Requires Talisman",
@@ -11258,6 +11490,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -11421,6 +11657,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -11564,6 +11801,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Mace",
       "display": "Requires Any Mace",
@@ -11711,6 +11949,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -11839,6 +12078,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -11953,6 +12193,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -12064,6 +12308,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -12161,6 +12406,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock",
+      "shockwave",
+      "aftershock"
+    ],
     "weapon_requirements": {
       "requirement_id": "Any Mace",
       "display": "Requires Any Mace",
@@ -12312,6 +12562,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -12426,6 +12680,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -12522,6 +12777,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -12638,6 +12897,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -12765,6 +13028,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -12898,6 +13165,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -13050,6 +13321,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -13177,6 +13452,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -13307,6 +13586,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -13436,6 +13719,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -13562,6 +13849,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -13680,6 +13971,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -13781,6 +14076,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -13863,6 +14161,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -13938,6 +14240,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -14013,6 +14319,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -14088,6 +14398,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -14170,6 +14484,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "poison"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -14245,6 +14562,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "poison"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -14320,6 +14640,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "poison",
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -14399,6 +14724,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -14474,6 +14800,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -14553,6 +14882,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -14630,6 +14962,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -14702,6 +15035,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -14774,6 +15108,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -14847,6 +15182,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -14915,6 +15251,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -15012,6 +15349,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -15129,6 +15467,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -15227,6 +15566,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -15351,6 +15694,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -15426,6 +15770,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -15496,6 +15841,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -15569,6 +15915,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -15641,6 +15988,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -15715,6 +16063,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -15797,6 +16146,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -15879,6 +16229,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -15974,6 +16325,9 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "poison"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -16078,6 +16432,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -16150,6 +16508,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -16218,6 +16580,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -16290,6 +16656,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -16359,6 +16729,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -16436,6 +16810,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions",
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -16519,6 +16898,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions",
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -16602,6 +16986,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions",
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -16703,6 +17092,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "totem",
+      "totems"
+    ],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -16829,6 +17222,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -16904,6 +17298,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -16979,6 +17374,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -17074,6 +17470,12 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "warcry",
+      "shock",
+      "slam",
+      "aftershock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -17231,6 +17633,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "slam"
+    ],
     "weapon_requirements": {
       "requirement_id": "Any Mace",
       "display": "Requires Any Mace",
@@ -17370,6 +17775,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -17506,6 +17912,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -17646,6 +18056,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -17744,6 +18155,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -17873,6 +18285,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -17997,6 +18413,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -18107,6 +18524,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -18174,6 +18592,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -18251,6 +18670,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -18334,6 +18754,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -18414,6 +18835,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -18495,6 +18917,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -18566,6 +18989,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -18637,6 +19061,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -18722,6 +19147,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Mace",
       "display": "Requires Any Mace",
@@ -18865,6 +19291,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -19017,6 +19447,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -19137,6 +19568,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -19232,6 +19666,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -19363,6 +19800,9 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -19499,6 +19939,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Mace",
       "display": "Requires Any Mace",
@@ -19644,6 +20085,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "requirement_id": "Spear",
       "display": "Requires Spear",
@@ -19792,6 +20237,7 @@
         "movement"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Spear",
       "display": "Requires Spear",
@@ -19962,6 +20408,7 @@
         "movement"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Spear",
       "display": "Requires Spear",
@@ -20108,6 +20555,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Spear",
       "display": "Requires Spear",
@@ -20255,6 +20703,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Spear",
       "display": "Requires Spear",
@@ -20385,6 +20834,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -20503,6 +20956,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "shock"
+    ],
     "weapon_requirements": {
       "requirement_id": "Spear",
       "display": "Requires Spear",
@@ -20657,6 +21115,12 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "requirement_id": "Spear",
       "display": "Requires Spear",
@@ -20796,6 +21260,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "requirement_id": "Any Axe",
       "display": "Requires Any Axe",
@@ -20902,6 +21370,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Axe",
       "display": "Requires Any Axe",
@@ -21016,6 +21485,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Quarterstaff",
       "display": "Requires Quarterstaff",
@@ -21147,6 +21617,13 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "totem",
+      "totems",
+      "slam",
+      "shock",
+      "aftershock"
+    ],
     "weapon_requirements": {
       "requirement_id": "Any Mace",
       "display": "Requires Any Mace",
@@ -21291,6 +21768,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "requirement_id": "Bow",
       "display": "Requires Bow",
@@ -21438,6 +21919,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "slam",
+      "shock",
+      "aftershock"
+    ],
     "weapon_requirements": {
       "requirement_id": "Two Hand Mace",
       "display": "Requires Two Hand Mace",
@@ -21571,6 +22057,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Claw",
       "display": "Requires Claw",
@@ -21685,6 +22172,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Quarterstaff",
       "display": "Requires Quarterstaff",
@@ -21817,6 +22305,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Sword",
       "display": "Requires Any Sword",
@@ -21927,6 +22416,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Claw",
       "display": "Requires Claw",
@@ -22037,6 +22527,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Flail",
       "display": "Requires Flail",
@@ -22145,6 +22636,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Axe",
       "display": "Requires Any Axe",
@@ -22251,6 +22743,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Axe",
       "display": "Requires Any Axe",
@@ -22357,6 +22850,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Axe",
       "display": "Requires Any Axe",
@@ -22465,6 +22959,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Axe",
       "display": "Requires Any Axe",
@@ -22572,6 +23067,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Axe",
       "display": "Requires Any Axe",
@@ -22691,6 +23187,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -22804,6 +23304,10 @@
         "movement"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "requirement_id": "Quarterstaff",
       "display": "Requires Quarterstaff",
@@ -22937,6 +23441,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Sword",
       "display": "Requires Any Sword",
@@ -23045,6 +23550,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Sword",
       "display": "Requires Any Sword",
@@ -23166,6 +23672,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Quarterstaff",
       "display": "Requires Quarterstaff",
@@ -23294,6 +23801,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -23380,6 +23888,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock",
+      "aftershock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -23457,6 +23969,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -23530,6 +24043,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -23601,6 +24115,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -23674,6 +24189,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -23740,6 +24256,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -23811,6 +24328,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "slam"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -23890,6 +24410,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "slam"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -23969,6 +24492,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "slam"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -24038,6 +24564,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -24105,6 +24632,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -24171,6 +24699,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -24233,6 +24762,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -24305,6 +24835,12 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock",
+      "slam",
+      "shockwave",
+      "aftershock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -24388,6 +24924,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -24482,6 +25019,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "requirement_id": "Quarterstaff",
       "display": "Requires Quarterstaff",
@@ -24632,6 +25173,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -24768,6 +25310,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -24880,6 +25423,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -24990,6 +25534,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -25089,6 +25637,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Sword",
       "display": "Requires Any Sword",
@@ -25196,6 +25745,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Dagger",
       "display": "Requires Dagger",
@@ -25313,6 +25863,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -25411,6 +25965,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Sword",
       "display": "Requires Any Sword",
@@ -25516,6 +26071,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Claw",
       "display": "Requires Claw",
@@ -25620,6 +26176,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Dagger",
       "display": "Requires Dagger",
@@ -25725,6 +26282,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Dagger",
       "display": "Requires Dagger",
@@ -25836,6 +26394,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -25959,6 +26518,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "totem",
+      "totems"
+    ],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -26111,6 +26674,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -26231,6 +26795,10 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -26354,6 +26922,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Quarterstaff",
       "display": "Requires Quarterstaff",
@@ -26508,6 +27077,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Quarterstaff",
       "display": "Requires Quarterstaff",
@@ -26654,6 +27224,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "slam"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -26792,6 +27367,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -26913,6 +27492,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -27034,6 +27617,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -27114,6 +27701,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -27199,6 +27787,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "requirement_id": "Any Axe",
       "display": "Requires Any Axe",
@@ -27315,6 +27907,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "requirement_id": "Bow",
       "display": "Requires Bow",
@@ -27459,6 +28055,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Talisman",
       "display": "Requires Talisman",
@@ -27594,6 +28191,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Talisman",
       "display": "Requires Talisman",
@@ -27707,6 +28305,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Talisman",
       "display": "Requires Talisman",
@@ -27830,6 +28429,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -27914,6 +28514,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Dagger",
       "display": "Requires Dagger",
@@ -28015,6 +28616,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Thrown Axe",
       "display": "Requires Any Thrown Axe",
@@ -28128,6 +28730,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Two Hand Sword",
       "display": "Requires Two Hand Sword",
@@ -28231,6 +28834,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Sword",
       "display": "Requires Any Sword",
@@ -28338,6 +28942,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Talisman",
       "display": "Requires Talisman",
@@ -28445,6 +29050,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "requirement_id": "Any Axe",
       "display": "Requires Any Axe",
@@ -28574,6 +29183,11 @@
         "debuff"
       ]
     },
+    "effect_tags": [
+      "slam",
+      "shock",
+      "shockwave"
+    ],
     "weapon_requirements": {
       "requirement_id": "Talisman",
       "display": "Requires Talisman",
@@ -28731,6 +29345,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -28869,6 +29486,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock",
+      "aftershock"
+    ],
     "weapon_requirements": {
       "requirement_id": "Talisman",
       "display": "Requires Talisman",
@@ -28993,6 +29614,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -29076,6 +29698,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -29161,6 +29786,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -29270,6 +29896,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -29349,6 +29978,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -29429,6 +30061,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -29529,6 +30165,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock",
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -29646,6 +30287,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -29712,6 +30354,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -29787,6 +30432,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -29862,6 +30510,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -29939,6 +30590,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -30016,6 +30670,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -30093,6 +30750,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -30170,6 +30830,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -30247,6 +30910,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -30329,6 +30995,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -30425,6 +31095,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock",
+      "aftershock",
+      "slam"
+    ],
     "weapon_requirements": {
       "requirement_id": "Talisman",
       "display": "Requires Talisman",
@@ -30566,6 +31241,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "warcry"
+    ],
     "weapon_requirements": {
       "requirement_id": "Talisman",
       "display": "Requires Talisman",
@@ -30714,6 +31392,9 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -30805,6 +31486,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -30895,6 +31577,10 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -31000,6 +31686,9 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -31106,15 +31795,21 @@
         "triggers"
       ],
       "damage_types": [
+        "cold",
         "lightning",
-        "fire",
-        "cold"
+        "fire"
       ],
       "delivery": [],
       "role": [
         "buff"
       ]
     },
+    "effect_tags": [
+      "ignite",
+      "shock",
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -31235,6 +31930,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -31348,6 +32044,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -31455,6 +32152,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -31569,6 +32267,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -31669,6 +32368,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -31758,6 +32458,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -31832,6 +32533,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -31913,6 +32615,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -32000,6 +32703,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -32087,6 +32791,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -32176,6 +32881,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -32265,6 +32971,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -32352,6 +33059,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -32439,6 +33147,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -32526,6 +33235,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -32613,6 +33323,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -32700,6 +33411,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -32787,6 +33499,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -32874,6 +33587,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -32961,6 +33675,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -33048,6 +33763,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -33135,6 +33851,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -33222,6 +33939,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -33309,6 +34027,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -33386,6 +34105,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -33459,6 +34179,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -33532,6 +34253,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -33605,6 +34327,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -33678,6 +34401,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -33751,6 +34475,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -33824,6 +34549,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -33897,6 +34623,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -33970,6 +34697,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -34043,6 +34771,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -34127,6 +34856,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -34216,6 +34946,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -34305,6 +35036,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -34394,6 +35126,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -34483,6 +35216,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -34572,6 +35306,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -34661,6 +35396,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -34750,6 +35486,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -34839,6 +35576,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -34916,6 +35654,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -34987,6 +35726,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -35058,6 +35798,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -35129,6 +35870,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -35200,6 +35942,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -35271,6 +36014,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -35342,6 +36086,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -35413,6 +36158,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -35484,6 +36230,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -35582,6 +36329,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -35710,6 +36458,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -35817,6 +36566,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -35913,6 +36663,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -36017,6 +36768,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "warcry"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -36089,6 +36843,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "warcry"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -36174,6 +36931,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -36287,6 +37045,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -36395,6 +37154,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -36495,6 +37255,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -36590,6 +37351,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -36687,6 +37449,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -36806,6 +37572,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "totem",
+      "totems"
+    ],
     "weapon_requirements": {
       "requirement_id": "Any Mace",
       "display": "Requires Any Mace",
@@ -36953,6 +37723,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "totem",
+      "totems"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -37079,6 +37853,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "totem",
+      "totems"
+    ],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -37203,6 +37981,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -37345,6 +38127,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -37500,6 +38286,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "ignite"
+    ],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -37668,6 +38459,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "poison"
+    ],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -37825,6 +38621,12 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "electrocute",
+      "shock"
+    ],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -37978,6 +38780,10 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "offering",
+      "offerings"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -38099,6 +38905,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "requirement_id": "Quarterstaff",
       "display": "Requires Quarterstaff",
@@ -38252,6 +39061,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Quarterstaff",
       "display": "Requires Quarterstaff",
@@ -38422,6 +39232,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Quarterstaff",
       "display": "Requires Quarterstaff",
@@ -38576,6 +39387,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "requirement_id": "Quarterstaff",
       "display": "Requires Quarterstaff",
@@ -38740,6 +39554,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock",
+      "shockwave"
+    ],
     "weapon_requirements": {
       "requirement_id": "Quarterstaff",
       "display": "Requires Quarterstaff",
@@ -38899,6 +39717,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -39025,6 +39847,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -39145,6 +39971,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "requirement_id": "Quarterstaff",
       "display": "Requires Quarterstaff",
@@ -39293,6 +40123,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -39442,6 +40276,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -39550,6 +40385,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -39622,6 +40458,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -39698,6 +40535,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -39773,6 +40611,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -39849,6 +40688,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "poison"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -39959,6 +40801,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -40104,6 +40950,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "requirement_id": "Bow",
       "display": "Requires Bow",
@@ -40252,6 +41102,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "poison"
+    ],
     "weapon_requirements": {
       "requirement_id": "Bow",
       "display": "Requires Bow",
@@ -40393,6 +41248,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -40529,6 +41388,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "poison"
+    ],
     "weapon_requirements": {
       "requirement_id": "Bow",
       "display": "Requires Bow",
@@ -40679,6 +41543,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "shock"
+    ],
     "weapon_requirements": {
       "requirement_id": "Bow",
       "display": "Requires Bow",
@@ -40818,6 +41687,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "ignite"
+    ],
     "weapon_requirements": {
       "requirement_id": "Bow",
       "display": "Requires Bow",
@@ -40968,6 +41842,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "requirement_id": "Bow",
       "display": "Requires Bow",
@@ -41124,6 +42002,12 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "requirement_id": "Bow",
       "display": "Requires Bow",
@@ -41288,6 +42172,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "poison"
+    ],
     "weapon_requirements": {
       "requirement_id": "Bow",
       "display": "Requires Bow",
@@ -41439,6 +42328,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -41578,6 +42468,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -41723,6 +42618,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "requirement_id": "Bow",
       "display": "Requires Bow",
@@ -41879,9 +42778,9 @@
         "usablewhilemoving"
       ],
       "damage_types": [
+        "cold",
         "lightning",
-        "fire",
-        "cold"
+        "fire"
       ],
       "delivery": [
         "spell",
@@ -41891,6 +42790,12 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill",
+      "shock",
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -42051,6 +42956,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Mace",
       "display": "Requires Any Mace",
@@ -42188,6 +43094,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Shield",
       "display": "Requires Shield",
@@ -42347,6 +43254,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Shield",
       "display": "Requires Shield",
@@ -42486,6 +43394,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -42599,6 +43508,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -42717,6 +43627,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Shield",
       "display": "Requires Any Shield",
@@ -42869,6 +43780,12 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -43009,6 +43926,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "poison"
+    ],
     "weapon_requirements": {
       "requirement_id": "Bow",
       "display": "Requires Bow",
@@ -43157,6 +44079,10 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -43280,6 +44206,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "poison"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -43382,6 +44311,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "corpse",
+      "corpses",
+      "poison"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -43496,6 +44430,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -43565,6 +44500,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -43631,6 +44567,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -43693,14 +44630,19 @@
       ],
       "skill_types": [],
       "damage_types": [
-        "fire",
-        "cold"
+        "cold",
+        "fire"
       ],
       "delivery": [],
       "role": [
         "damage"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill",
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -43788,6 +44730,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite",
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -43867,6 +44813,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -43936,6 +44883,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -44004,6 +44952,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -44079,6 +45028,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "electrocute",
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -44153,6 +45106,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "electrocute",
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -44250,6 +45207,10 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -44355,6 +45316,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -44426,6 +45388,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -44505,6 +45468,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -44586,6 +45553,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -44670,9 +45641,9 @@
       ],
       "skill_types": [],
       "damage_types": [
+        "cold",
         "lightning",
-        "fire",
-        "cold"
+        "fire"
       ],
       "delivery": [
         "spell",
@@ -44682,6 +45653,12 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite",
+      "shock",
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -44766,6 +45743,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -44840,6 +45818,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -44941,6 +45922,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "requirement_id": "Spear",
       "display": "Requires Spear",
@@ -45083,6 +46068,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -45202,6 +46188,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "ignite"
+    ],
     "weapon_requirements": {
       "requirement_id": "Spear",
       "display": "Requires Spear",
@@ -45349,6 +46340,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Spear",
       "display": "Requires Spear",
@@ -45459,9 +46451,9 @@
         "spear"
       ],
       "damage_types": [
+        "cold",
         "lightning",
-        "fire",
-        "cold"
+        "fire"
       ],
       "delivery": [
         "attack",
@@ -45471,6 +46463,12 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill",
+      "shock",
+      "ignite"
+    ],
     "weapon_requirements": {
       "requirement_id": "Spear",
       "display": "Requires Spear",
@@ -45621,6 +46619,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "requirement_id": "Spear",
       "display": "Requires Spear",
@@ -45758,6 +46759,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Martial Weapon",
       "display": "Requires Any Martial Weapon",
@@ -45914,6 +46916,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -45979,6 +46982,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -46057,6 +47061,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -46137,6 +47142,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -46209,6 +47215,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -46280,6 +47287,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -46351,6 +47359,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -46422,6 +47431,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -46489,6 +47499,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -46569,6 +47580,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -46655,6 +47667,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -46732,6 +47745,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -46832,6 +47846,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -46961,6 +47976,10 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "offering",
+      "offerings"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -47087,6 +48106,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "totem",
+      "totems"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -47198,6 +48221,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -47271,6 +48295,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -47340,6 +48365,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -47404,6 +48430,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -47486,6 +48513,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -47596,6 +48627,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -47664,6 +48696,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -47745,6 +48778,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -47812,6 +48846,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "corpse",
+      "corpses"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -47887,6 +48925,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -47959,6 +48998,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -48031,6 +49071,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -48102,6 +49143,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -48174,6 +49219,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -48248,6 +49297,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -48322,6 +49372,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -48398,6 +49452,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -48471,6 +49526,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -48563,6 +49619,10 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -48674,6 +49734,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -48769,6 +49830,10 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -48885,6 +49950,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "poison"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -48959,6 +50027,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -49028,6 +50097,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -49093,6 +50163,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -49157,6 +50228,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -49244,6 +50316,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -49362,6 +50435,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Mace",
       "display": "Requires Any Mace",
@@ -49465,6 +50539,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -49577,6 +50652,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -49697,6 +50776,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -49812,6 +50892,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -49951,6 +51032,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "ignite"
+    ],
     "weapon_requirements": {
       "requirement_id": "Any Mace",
       "display": "Requires Any Mace",
@@ -50083,6 +51169,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -50195,6 +51282,12 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions",
+      "ignite",
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -50316,6 +51409,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Mace",
       "display": "Requires Any Mace",
@@ -50458,6 +51552,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "ignite"
+    ],
     "weapon_requirements": {
       "requirement_id": "Any Mace",
       "display": "Requires Any Mace",
@@ -50591,6 +51690,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -50724,6 +51824,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock",
+      "aftershock"
+    ],
     "weapon_requirements": {
       "requirement_id": "Any Mace",
       "display": "Requires Any Mace",
@@ -50866,6 +51970,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "slam"
+    ],
     "weapon_requirements": {
       "requirement_id": "Shield",
       "display": "Requires Shield",
@@ -51019,6 +52126,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "warcry"
+    ],
     "weapon_requirements": {
       "requirement_id": "Shield",
       "display": "Requires Shield",
@@ -51177,6 +52287,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -51310,6 +52424,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -51433,6 +52551,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -51585,6 +52704,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -51735,6 +52855,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -51868,6 +52989,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -52009,6 +53131,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -52152,6 +53275,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -52295,6 +53419,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -52435,6 +53560,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -52577,6 +53703,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -52722,6 +53849,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -52861,6 +53989,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -53000,6 +54129,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -53143,6 +54273,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -53293,6 +54424,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -53431,6 +54563,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -53558,6 +54691,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "warcry"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -53629,6 +54765,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -53696,6 +54833,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -53763,6 +54901,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -53834,6 +54973,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -53901,6 +55041,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -53978,6 +55119,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -54090,6 +55232,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Quarterstaff",
       "display": "Requires Quarterstaff",
@@ -54213,6 +55356,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Flail",
       "display": "Requires Flail",
@@ -54319,6 +55463,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "One Hand Sword",
       "display": "Requires One Hand Sword",
@@ -54426,6 +55571,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Sword",
       "display": "Requires Any Sword",
@@ -54534,6 +55680,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Two Hand Sword",
       "display": "Requires Two Hand Sword",
@@ -54640,6 +55787,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "One Hand Axe",
       "display": "Requires One Hand Axe",
@@ -54747,6 +55895,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Axe",
       "display": "Requires Any Axe",
@@ -54855,6 +56004,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Two Hand Axe",
       "display": "Requires Two Hand Axe",
@@ -54961,6 +56111,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "One Hand Mace",
       "display": "Requires One Hand Mace",
@@ -55084,6 +56235,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Mace",
       "display": "Requires Any Mace",
@@ -55208,6 +56360,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Two Hand Mace",
       "display": "Requires Two Hand Mace",
@@ -55330,6 +56483,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Claw",
       "display": "Requires Claw",
@@ -55437,6 +56591,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Claw",
       "display": "Requires Claw",
@@ -55545,6 +56700,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Dagger",
       "display": "Requires Dagger",
@@ -55653,6 +56809,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Dagger",
       "display": "Requires Dagger",
@@ -55761,6 +56918,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Spear",
       "display": "Requires Spear",
@@ -55886,6 +57044,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Spear",
       "display": "Requires Spear",
@@ -56017,6 +57176,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "requirement_id": "Spear",
       "display": "Requires Spear",
@@ -56150,6 +57313,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "requirement_id": "Bow",
       "display": "Requires Bow",
@@ -56277,6 +57444,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -56402,6 +57573,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Melee Weapon and Unarmed",
       "display": "Requires Any Melee Weapon and Unarmed",
@@ -56539,6 +57711,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any MaceSwordAxe",
       "display": "Requires Any MaceSwordAxe",
@@ -56665,6 +57838,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -56763,6 +57940,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -56878,6 +58056,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "ignite"
+    ],
     "weapon_requirements": {
       "requirement_id": "Unarmed",
       "display": "Requires Unarmed",
@@ -57015,6 +58198,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "shock"
+    ],
     "weapon_requirements": {
       "requirement_id": "Unarmed",
       "display": "Requires Unarmed",
@@ -57150,6 +58338,12 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "requirement_id": "Unarmed",
       "display": "Requires Unarmed",
@@ -57283,6 +58477,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "poison"
+    ],
     "weapon_requirements": {
       "requirement_id": "Unarmed",
       "display": "Requires Unarmed",
@@ -57422,6 +58621,12 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "requirement_id": "Unarmed",
       "display": "Requires Unarmed",
@@ -57548,6 +58753,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -57666,9 +58872,9 @@
         "triggered"
       ],
       "damage_types": [
+        "cold",
         "lightning",
-        "fire",
-        "cold"
+        "fire"
       ],
       "delivery": [
         "spell",
@@ -57678,6 +58884,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -57807,15 +59014,16 @@
         "lightning"
       ],
       "damage_types": [
+        "cold",
         "lightning",
-        "fire",
-        "cold"
+        "fire"
       ],
       "delivery": [],
       "role": [
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -57932,6 +59140,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions",
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -58053,6 +59266,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -58167,6 +59384,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -58250,6 +59471,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -58343,6 +59568,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -58466,6 +59695,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -58557,6 +59790,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -58647,6 +59884,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -58742,6 +59983,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -58859,6 +60104,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -58951,6 +60200,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -59047,6 +60300,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -59169,6 +60423,10 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -59289,6 +60547,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -59415,6 +60677,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -59522,6 +60785,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -59616,6 +60883,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -59714,6 +60982,7 @@
         "defense"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -59807,6 +61076,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -59903,9 +61173,9 @@
         "spell"
       ],
       "damage_types": [
+        "cold",
         "lightning",
-        "fire",
-        "cold"
+        "fire"
       ],
       "delivery": [
         "spell"
@@ -59914,6 +61184,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -60023,6 +61294,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -60126,6 +61398,12 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "totem",
+      "totems",
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -60231,6 +61509,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -60339,6 +61618,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -60451,6 +61731,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Martial Weapon and Unarmed",
       "display": "Requires Any Martial Weapon and Unarmed",
@@ -60594,6 +61875,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -60698,6 +61983,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Martial Weapon and Unarmed",
       "display": "Requires Any Martial Weapon and Unarmed",
@@ -60847,6 +62133,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Martial Weapon and Unarmed",
       "display": "Requires Any Martial Weapon and Unarmed",
@@ -60996,6 +62283,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Martial Weapon and Unarmed",
       "display": "Requires Any Martial Weapon and Unarmed",
@@ -61142,6 +62430,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "SpearBowCrossbow",
       "display": "Requires SpearBowCrossbow",
@@ -61262,6 +62551,9 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "requirement_id": "Any Martial Weapon and Unarmed",
       "display": "Requires Any Martial Weapon and Unarmed",
@@ -61408,6 +62700,9 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "requirement_id": "Any Martial Weapon and Unarmed",
       "display": "Requires Any Martial Weapon and Unarmed",
@@ -61554,6 +62849,10 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "requirement_id": "Any Martial Weapon and Unarmed",
       "display": "Requires Any Martial Weapon and Unarmed",
@@ -61696,6 +62995,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Martial Weapon and Unarmed",
       "display": "Requires Any Martial Weapon and Unarmed",
@@ -61848,6 +63148,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -61969,6 +63270,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -62073,6 +63375,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -62187,6 +63490,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -62306,6 +63610,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "requirement_id": "Any Melee Weapon",
       "display": "Requires Any Melee Weapon",
@@ -62469,6 +63777,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Non-Talisman Melee Weapon",
       "display": "Requires Non-Talisman Melee Weapon",
@@ -62631,6 +63940,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -62742,6 +64055,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -62855,6 +64169,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Martial Weapon and Unarmed",
       "display": "Requires Any Martial Weapon and Unarmed",
@@ -63015,6 +64330,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -63109,6 +64425,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -63186,6 +64503,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -63265,6 +64583,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -63349,6 +64668,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -63430,6 +64750,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -63511,6 +64834,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -63590,6 +64916,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -63670,6 +64997,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "poison"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -63745,6 +65075,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "poison"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -63820,6 +65153,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -63895,6 +65232,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -63972,6 +65313,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "warcry"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -64050,6 +65394,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "warcry"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -64125,6 +65472,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "warcry"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -64199,6 +65549,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -64269,6 +65620,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -64341,6 +65693,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -64411,6 +65764,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -64481,6 +65835,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -64551,6 +65906,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -64621,6 +65977,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -64691,6 +66048,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -64791,6 +66152,12 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "shock",
+      "electrocute"
+    ],
     "weapon_requirements": {
       "requirement_id": "Bow",
       "display": "Requires Bow",
@@ -64961,6 +66328,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Quarterstaff",
       "display": "Requires Quarterstaff",
@@ -65110,6 +66478,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "requirement_id": "Quarterstaff",
       "display": "Requires Quarterstaff",
@@ -65241,6 +66612,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Quarterstaff",
       "display": "Requires Quarterstaff",
@@ -65365,6 +66737,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -65436,6 +66809,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -65507,6 +66881,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -65581,6 +66956,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -65662,6 +67038,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -65745,6 +67122,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -65836,6 +67217,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -65918,6 +67300,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -65998,6 +67384,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -66084,6 +67471,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -66160,6 +67548,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -66234,6 +67623,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -66306,6 +67696,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -66379,6 +67770,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -66452,6 +67844,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -66523,6 +67916,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -66594,6 +67988,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -66665,6 +68060,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -66736,6 +68132,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -66811,6 +68208,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -66886,6 +68284,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -66957,6 +68356,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -67052,6 +68452,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "corpse",
+      "corpses",
+      "poison"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -67171,6 +68576,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -67244,6 +68650,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -67327,6 +68737,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -67409,6 +68820,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -67491,6 +68903,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -67568,6 +68981,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -67650,6 +69064,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -67738,6 +69153,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -67826,6 +69242,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -67898,6 +69315,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -67969,6 +69387,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -68040,6 +69459,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -68111,6 +69531,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "warcry"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -68184,6 +69607,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -68261,6 +69685,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -68342,10 +69767,10 @@
       ],
       "skill_types": [],
       "damage_types": [
+        "cold",
         "physical",
         "lightning",
         "fire",
-        "cold",
         "chaos"
       ],
       "delivery": [
@@ -68357,6 +69782,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -68436,6 +69862,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -68511,6 +69938,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -68588,6 +70016,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -68664,6 +70093,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -68740,6 +70170,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -68813,6 +70244,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -68882,6 +70314,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -68964,9 +70397,9 @@
         "triggered"
       ],
       "damage_types": [
+        "cold",
         "lightning",
-        "fire",
-        "cold"
+        "fire"
       ],
       "delivery": [
         "spell",
@@ -68977,6 +70410,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -69113,6 +70550,12 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "requirement_id": "Bow",
       "display": "Requires Bow",
@@ -69252,6 +70695,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -69384,6 +70828,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -69520,6 +70965,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -69668,6 +71114,10 @@
         "debuff"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -69816,6 +71266,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -69962,6 +71413,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Quarterstaff",
       "display": "Requires Quarterstaff",
@@ -70096,6 +71548,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -70220,15 +71673,21 @@
         "triggers"
       ],
       "damage_types": [
+        "cold",
         "lightning",
-        "fire",
-        "cold"
+        "fire"
       ],
       "delivery": [],
       "role": [
         "buff"
       ]
     },
+    "effect_tags": [
+      "shock",
+      "ignite",
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -70357,6 +71816,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -70474,15 +71934,16 @@
         "persistent"
       ],
       "damage_types": [
+        "cold",
         "lightning",
-        "fire",
-        "cold"
+        "fire"
       ],
       "delivery": [],
       "role": [
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -70598,6 +72059,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -70715,6 +72177,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -70793,6 +72256,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -70867,6 +72331,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -70947,6 +72412,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock",
+      "slam",
+      "aftershock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -71026,6 +72496,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock",
+      "slam",
+      "aftershock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -71101,6 +72576,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock",
+      "aftershock",
+      "slam"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -71180,6 +72660,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock",
+      "aftershock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -71281,6 +72765,12 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "grenade",
+      "grenades"
+    ],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -71441,6 +72931,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "requirement_id": "Bow",
       "display": "Requires Bow",
@@ -71589,6 +73083,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -71685,6 +73180,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -71788,6 +73284,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -71865,6 +73362,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -71957,16 +73457,17 @@
         "physical"
       ],
       "damage_types": [
+        "cold",
         "physical",
         "lightning",
-        "fire",
-        "cold"
+        "fire"
       ],
       "delivery": [],
       "role": [
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -72108,6 +73609,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -72182,6 +73684,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -72256,6 +73759,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -72329,6 +73833,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -72399,6 +73904,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -72474,6 +73980,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -72547,6 +74054,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -72620,6 +74128,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -72690,6 +74199,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -72764,6 +74274,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -72833,6 +74344,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -72900,6 +74412,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -72970,6 +74483,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -73042,6 +74556,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -73130,6 +74648,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -73246,6 +74765,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -73366,6 +74886,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -73490,6 +75011,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -73609,6 +75131,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -73732,6 +75255,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "requirement_id": "Bow",
       "display": "Requires Bow",
@@ -73877,6 +75404,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "requirement_id": "Bow",
       "display": "Requires Bow",
@@ -74014,6 +75545,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -74113,6 +75645,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -74210,6 +75743,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -74319,6 +75853,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Martial Weapon",
       "display": "Requires Any Martial Weapon",
@@ -74493,6 +76028,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Martial Weapon",
       "display": "Requires Any Martial Weapon",
@@ -74675,6 +76211,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -74803,6 +76340,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -74924,6 +76462,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "SpearBowCrossbow",
       "display": "Requires SpearBowCrossbow",
@@ -75053,6 +76592,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -75172,6 +76712,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -75287,6 +76828,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -75421,6 +76963,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Quarterstaff",
       "display": "Requires Quarterstaff",
@@ -75553,6 +77096,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -75624,6 +77168,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -75693,6 +77238,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -75757,6 +77303,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -75821,6 +77368,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -75885,6 +77433,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -75951,6 +77500,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -76013,6 +77563,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -76079,6 +77630,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -76153,6 +77708,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -76223,6 +77782,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -76298,6 +77861,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "totem",
+      "totems"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -76370,6 +77937,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "totem",
+      "totems"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -76442,6 +78013,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "totem",
+      "totems"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -76513,6 +78088,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "grenade",
+      "grenades"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -76580,6 +78159,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "grenade",
+      "grenades"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -76648,6 +78231,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "grenade",
+      "grenades"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -76720,6 +78307,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -76791,6 +78379,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "totem",
+      "totems"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -76869,6 +78461,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "totem",
+      "totems"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -76947,6 +78543,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -77023,6 +78620,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -77101,6 +78702,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -77176,6 +78781,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -77249,6 +78858,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -77316,6 +78926,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -77386,6 +78997,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -77457,6 +79069,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -77536,6 +79149,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -77621,6 +79235,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -77694,6 +79309,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -77769,6 +79385,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -77849,6 +79466,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -77935,6 +79553,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -78011,6 +79630,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -78088,6 +79708,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -78153,6 +79774,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -78222,6 +79844,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -78290,6 +79913,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -78363,6 +79987,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -78435,6 +80060,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "offering",
+      "offerings"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -78505,6 +80134,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "offering",
+      "offerings"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -78578,6 +80211,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "offering",
+      "offerings"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -78649,6 +80286,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -78718,6 +80356,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -78787,6 +80426,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -78857,6 +80497,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -78927,6 +80568,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -78997,6 +80639,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -79064,6 +80707,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -79138,6 +80785,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -79212,6 +80860,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -79289,6 +80938,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -79368,6 +81021,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -79447,6 +81104,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -79522,6 +81183,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -79588,6 +81253,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -79655,6 +81321,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "grenade",
+      "grenades"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -79725,6 +81395,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "grenade",
+      "grenades"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -79791,6 +81465,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "grenade",
+      "grenades"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -79864,6 +81542,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -79942,6 +81621,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -80021,6 +81701,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock",
+      "slam",
+      "aftershock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -80098,6 +81783,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -80174,6 +81863,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -80254,6 +81944,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -80334,6 +82025,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -80414,6 +82106,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -80494,6 +82190,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -80574,6 +82274,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -80652,6 +82356,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -80732,6 +82437,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -80814,6 +82520,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -80894,6 +82601,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "corpse",
+      "corpses"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -80972,6 +82683,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "corpse",
+      "corpses"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -81050,6 +82765,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -81120,6 +82836,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -81190,6 +82907,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -81260,6 +82978,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -81333,6 +83052,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -81410,6 +83132,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -81492,6 +83218,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -81573,6 +83302,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -81651,6 +83381,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -81736,6 +83467,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -81814,6 +83546,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -81881,6 +83614,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -81948,6 +83682,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -82028,6 +83766,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -82109,6 +83851,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -82188,6 +83934,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -82274,6 +84021,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -82351,6 +84099,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -82428,6 +84180,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -82503,6 +84256,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -82576,6 +84333,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -82649,6 +84410,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -82726,6 +84488,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -82803,6 +84566,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -82867,6 +84631,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -82931,6 +84696,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -83001,6 +84767,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -83075,6 +84842,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -83145,6 +84913,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -83215,6 +84984,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -83286,6 +85056,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock",
+      "aftershock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -83364,6 +85138,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -83429,6 +85204,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "poison",
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -83502,6 +85282,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -83587,6 +85368,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -83680,6 +85464,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -83755,6 +85540,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -83828,6 +85614,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -83904,6 +85691,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -83975,6 +85763,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -84050,6 +85839,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -84128,6 +85921,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -84206,6 +86003,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -84286,6 +86087,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -84368,6 +86173,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -84450,6 +86259,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -84532,6 +86345,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -84604,6 +86418,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -84679,6 +86494,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -84762,6 +86578,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -84847,6 +86664,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -84921,6 +86739,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -84999,6 +86818,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -85079,6 +86899,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -85159,6 +86980,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -85234,6 +87059,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -85318,6 +87147,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -85407,6 +87240,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -85489,6 +87326,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -85562,6 +87400,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -85634,6 +87473,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -85708,6 +87548,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -85795,6 +87636,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -85878,6 +87720,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -85970,6 +87813,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -86054,6 +87898,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -86137,6 +87982,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -86233,6 +88079,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -86313,6 +88163,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -86392,6 +88245,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -86478,6 +88332,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -86564,6 +88419,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -86643,6 +88499,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -86710,6 +88570,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -86778,6 +88639,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -86850,6 +88712,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -86923,6 +88786,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -86996,6 +88860,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -87071,6 +88936,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -87146,6 +89012,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -87221,6 +89088,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -87296,6 +89164,10 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -87371,6 +89243,10 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -87446,6 +89322,10 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -87519,6 +89399,9 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -87592,6 +89475,9 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -87662,6 +89548,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -87736,6 +89623,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -87818,6 +89706,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -87900,6 +89789,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -87975,6 +89865,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "totem",
+      "totems"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -88047,6 +89941,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "totem",
+      "totems"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -88124,6 +90022,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "totem",
+      "totems"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -88204,6 +90106,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "totem",
+      "totems"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -88280,6 +90186,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -88347,6 +90254,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -88419,6 +90327,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -88512,6 +90424,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -88603,6 +90519,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -88688,6 +90608,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -88764,6 +90685,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -88838,6 +90760,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -88928,6 +90851,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -89013,6 +90939,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -89091,6 +91021,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -89173,6 +91104,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -89251,6 +91183,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -89330,6 +91263,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -89412,6 +91349,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -89489,6 +91427,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -89561,6 +91500,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -89636,6 +91579,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -89716,6 +91663,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -89786,6 +91734,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -89856,6 +91805,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -89921,6 +91871,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -89988,6 +91939,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -90061,6 +92013,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -90135,6 +92091,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -90213,6 +92170,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -90289,6 +92247,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -90362,6 +92321,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -90428,6 +92388,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -90497,6 +92461,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -90568,6 +92533,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -90638,6 +92604,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -90716,6 +92683,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -90799,6 +92767,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -90880,6 +92849,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -90954,6 +92924,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -91036,6 +93007,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "poison",
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -91113,6 +93089,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -91182,6 +93159,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -91247,6 +93225,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -91330,6 +93309,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "slam"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -91423,6 +93405,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -91509,6 +93492,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -91615,6 +93601,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -91745,8 +93735,8 @@
         "usablewhilemoving"
       ],
       "damage_types": [
-        "lightning",
-        "cold"
+        "cold",
+        "lightning"
       ],
       "delivery": [
         "spell",
@@ -91756,6 +93746,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -91881,6 +93876,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "totem",
+      "totems"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -91953,6 +93952,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "totem",
+      "totems"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -92029,6 +94032,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "totem",
+      "totems"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -92106,6 +94113,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -92194,6 +94202,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -92324,6 +94335,9 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "requirement_id": "Any Martial Weapon",
       "display": "Requires Any Martial Weapon",
@@ -92500,6 +94514,10 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "requirement_id": "Any Martial Weapon",
       "display": "Requires Any Martial Weapon",
@@ -92676,6 +94694,9 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "requirement_id": "Any Martial Weapon",
       "display": "Requires Any Martial Weapon",
@@ -92849,6 +94870,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -92980,6 +95002,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "requirement_id": "Spear",
       "display": "Requires Spear",
@@ -93138,6 +95164,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "requirement_id": "Spear",
       "display": "Requires Spear",
@@ -93286,6 +95315,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Spear",
       "display": "Requires Spear",
@@ -93433,6 +95463,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Spear",
       "display": "Requires Spear",
@@ -93582,6 +95613,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Spear",
       "display": "Requires Spear",
@@ -93730,6 +95762,10 @@
         "movement"
       ]
     },
+    "effect_tags": [
+      "bleeding",
+      "bleed"
+    ],
     "weapon_requirements": {
       "requirement_id": "Spear",
       "display": "Requires Spear",
@@ -93874,6 +95910,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -94011,6 +96048,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -94135,6 +96173,14 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "freeze",
+      "chill",
+      "ignite",
+      "shock"
+    ],
     "weapon_requirements": {
       "requirement_id": "Spear",
       "display": "Requires Spear",
@@ -94301,6 +96347,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "requirement_id": "Spear",
       "display": "Requires Spear",
@@ -94448,6 +96498,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "requirement_id": "Buckler",
       "display": "Requires Buckler",
@@ -94579,6 +96633,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -94673,9 +96728,9 @@
         "spear"
       ],
       "damage_types": [
+        "cold",
         "lightning",
-        "fire",
-        "cold"
+        "fire"
       ],
       "delivery": [
         "attack",
@@ -94686,6 +96741,12 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite",
+      "shock",
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "requirement_id": "Spear",
       "display": "Requires Spear",
@@ -94843,6 +96904,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -94960,6 +97025,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -95077,15 +97143,16 @@
         "persistent"
       ],
       "damage_types": [
+        "cold",
         "lightning",
-        "fire",
-        "cold"
+        "fire"
       ],
       "delivery": [],
       "role": [
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -95220,6 +97287,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -95332,9 +97400,9 @@
         "triggered"
       ],
       "damage_types": [
+        "cold",
         "lightning",
-        "fire",
-        "cold"
+        "fire"
       ],
       "delivery": [
         "attack",
@@ -95344,6 +97412,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -95474,6 +97543,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -95598,6 +97668,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -95726,6 +97797,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -95829,6 +97901,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -95912,8 +97985,8 @@
         "triggered"
       ],
       "damage_types": [
-        "fire",
-        "cold"
+        "cold",
+        "fire"
       ],
       "delivery": [
         "attack",
@@ -95923,6 +97996,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -96060,6 +98137,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock",
+      "shockwave"
+    ],
     "weapon_requirements": {
       "requirement_id": "Talisman",
       "display": "Requires Talisman",
@@ -96210,6 +98291,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "poison"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -96343,6 +98427,11 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "ignite"
+    ],
     "weapon_requirements": {
       "requirement_id": "Talisman",
       "display": "Requires Talisman",
@@ -96500,6 +98589,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -96635,6 +98725,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "requirement_id": "Talisman",
       "display": "Requires Talisman",
@@ -96809,6 +98902,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -96941,6 +99035,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -97047,6 +99145,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "requirement_id": "Talisman",
       "display": "Requires Talisman",
@@ -97210,6 +99312,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Talisman",
       "display": "Requires Talisman",
@@ -97356,6 +99459,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock",
+      "shockwave"
+    ],
     "weapon_requirements": {
       "requirement_id": "Talisman",
       "display": "Requires Talisman",
@@ -97521,6 +99628,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -97649,9 +99760,9 @@
         "spell"
       ],
       "damage_types": [
+        "cold",
         "lightning",
-        "fire",
-        "cold"
+        "fire"
       ],
       "delivery": [
         "spell"
@@ -97660,6 +99771,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -97781,6 +99893,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -97924,6 +100037,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Talisman",
       "display": "Requires Talisman",
@@ -98062,6 +100176,10 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -98165,6 +100283,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -98282,6 +100401,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Talisman",
       "display": "Requires Talisman",
@@ -98406,6 +100526,10 @@
         "movement"
       ]
     },
+    "effect_tags": [
+      "corpse",
+      "corpses"
+    ],
     "weapon_requirements": {
       "requirement_id": "Talisman",
       "display": "Requires Talisman",
@@ -98570,6 +100694,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -98692,6 +100817,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -98802,6 +100931,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Talisman",
       "display": "Requires Talisman",
@@ -98969,6 +101099,11 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "warcry",
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "requirement_id": "Talisman",
       "display": "Requires Talisman",
@@ -99133,6 +101268,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -99228,6 +101364,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -99310,6 +101447,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -99382,6 +101520,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -99463,6 +101602,12 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -99545,6 +101690,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -99641,6 +101787,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -99727,6 +101876,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -99801,6 +101951,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -99887,6 +102040,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -99959,6 +102116,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -100035,6 +102193,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -100110,6 +102269,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -100198,6 +102358,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -100276,6 +102437,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -100349,6 +102511,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -100422,6 +102585,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -100500,6 +102664,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -100582,6 +102747,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -100652,6 +102818,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -100718,6 +102885,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -100793,6 +102961,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -100870,6 +103039,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -100952,6 +103124,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -101032,6 +103207,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -101114,6 +103293,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -101187,6 +103367,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -101262,6 +103443,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -101334,6 +103516,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -101395,6 +103578,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -101456,6 +103640,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -101518,6 +103703,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -101587,6 +103773,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -101666,6 +103853,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -101748,6 +103936,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -101817,6 +104006,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -101892,6 +104082,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "poison"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -101968,6 +104161,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -102046,6 +104240,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -102136,6 +104331,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -102207,6 +104406,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "offering",
+      "offerings"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -102281,6 +104484,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -102349,6 +104556,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -102419,6 +104627,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -102491,6 +104702,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "poison"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -102571,6 +104785,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -102641,6 +104856,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -102715,6 +104931,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -102786,6 +105003,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -102856,6 +105074,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -102926,6 +105145,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -103033,6 +105253,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Mace",
       "display": "Requires Any Mace",
@@ -103178,6 +105399,9 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -103304,6 +105528,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "totem",
+      "totems"
+    ],
     "weapon_requirements": {
       "requirement_id": "Crossbow",
       "display": "Requires Crossbow",
@@ -103454,6 +105682,12 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "warcry",
+      "ignite",
+      "shock",
+      "shockwave"
+    ],
     "weapon_requirements": {
       "requirement_id": "Any Melee Weapon and Unarmed",
       "display": "Requires Any Melee Weapon and Unarmed",
@@ -103634,6 +105868,10 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -103726,6 +105964,10 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -103816,6 +106058,10 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -103924,6 +106170,10 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "corpse",
+      "corpses"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -104029,6 +106279,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -104155,6 +106409,9 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "poison"
+    ],
     "weapon_requirements": {
       "requirement_id": "SpearBowCrossbow",
       "display": "Requires SpearBowCrossbow",
@@ -104296,6 +106553,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -104391,6 +106652,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -104526,6 +106788,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "SpearBow",
       "display": "Requires SpearBow",
@@ -104706,6 +106969,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Unarmed",
       "display": "Requires Unarmed",
@@ -104839,6 +107103,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -104933,6 +107198,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Non-Talisman Melee Weapon",
       "display": "Requires Non-Talisman Melee Weapon",
@@ -105087,6 +107353,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -105229,6 +107498,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -105351,6 +107621,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Any Melee Weapon",
       "display": "Requires Any Melee Weapon",
@@ -105488,15 +107759,18 @@
         "totemcastsalone"
       ],
       "damage_types": [
+        "cold",
         "lightning",
-        "fire",
-        "cold"
+        "fire"
       ],
       "delivery": [],
       "role": [
         "buff"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -105631,6 +107905,12 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles",
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -105761,6 +108041,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -105872,6 +108153,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "requirement_id": "Unborn Lich",
       "display": "Requires Unborn Lich",
@@ -106004,6 +108289,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -106116,6 +108402,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock",
+      "shockwave"
+    ],
     "weapon_requirements": {
       "requirement_id": "Talisman",
       "display": "Requires Talisman",
@@ -106225,6 +108515,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -106336,6 +108630,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -106458,6 +108753,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -106566,6 +108862,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -106696,6 +108993,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "requirement_id": "Talisman",
       "display": "Requires Talisman",
@@ -106833,9 +109131,9 @@
         "usablewhilemoving"
       ],
       "damage_types": [
+        "cold",
         "lightning",
-        "fire",
-        "cold"
+        "fire"
       ],
       "delivery": [
         "spell",
@@ -106845,6 +109143,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -106968,6 +109267,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -107050,6 +109350,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -107140,6 +109441,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -107231,6 +109533,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -107317,6 +109622,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -107393,6 +109699,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -107476,6 +109783,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -107558,6 +109866,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -107650,6 +109959,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -107743,6 +110055,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "ignite"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -107841,6 +110156,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -107939,6 +110257,10 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -108059,6 +110381,7 @@
         "buff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -108193,6 +110516,10 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "minion",
+      "minions"
+    ],
     "weapon_requirements": {
       "requirement_id": "Talisman",
       "display": "Requires Talisman",
@@ -108332,6 +110659,9 @@
         "buff"
       ]
     },
+    "effect_tags": [
+      "poison"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -108426,6 +110756,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -108510,6 +110841,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -108591,6 +110923,9 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "warcry"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -108661,6 +110996,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "corpse",
+      "corpses"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -108733,6 +111072,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -108818,6 +111158,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -108903,6 +111244,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -108969,14 +111311,18 @@
       ],
       "skill_types": [],
       "damage_types": [
-        "physical",
-        "cold"
+        "cold",
+        "physical"
       ],
       "delivery": [],
       "role": [
         "damage"
       ]
     },
+    "effect_tags": [
+      "freeze",
+      "chill"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -109065,6 +111411,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -109147,6 +111494,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -109227,6 +111575,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -109310,6 +111659,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -109396,6 +111746,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -109480,6 +111831,7 @@
         "debuff"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -109557,9 +111909,9 @@
       ],
       "skill_types": [],
       "damage_types": [
+        "cold",
         "lightning",
-        "fire",
-        "cold"
+        "fire"
       ],
       "delivery": [
         "spell",
@@ -109569,6 +111921,7 @@
         "damage"
       ]
     },
+    "effect_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -109653,6 +112006,10 @@
         "damage"
       ]
     },
+    "effect_tags": [
+      "projectile",
+      "projectiles"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },
@@ -109732,6 +112089,9 @@
         "debuff"
       ]
     },
+    "effect_tags": [
+      "shock"
+    ],
     "weapon_requirements": {
       "is_unrestricted": true
     },

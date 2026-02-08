@@ -69,6 +69,107 @@ def norm_tag(s: Any) -> str:
     return _ALIAS_MAP.get(t, t)
 
 
+
+# ---------- effect tag derivation (from GrantedEffect stat sets) ----------
+
+# NOTE: stat Ids are usually snake_case, so avoid strict word-boundary () regex.
+# We also ignore negative/disable stats (e.g. 'cannot_inflict_elemental_ailments') to avoid misleading tags.
+
+_EFFECT_PATTERNS = [
+    # ailments / status
+    (re.compile(r'ignite|chance_to_ignite|burn|burning', re.I), ['ignite']),
+    (re.compile(r'poison|chance_to_poison', re.I), ['poison']),
+    (re.compile(r'bleed|bleeding|chance_to_bleed', re.I), ['bleeding', 'bleed']),
+    (re.compile(r'shock|chance_to_shock', re.I), ['shock']),
+    (re.compile(r'electrocute', re.I), ['electrocute', 'shock']),
+    (re.compile(r'freeze|chance_to_freeze|chill', re.I), ['freeze', 'chill']),
+
+    # tactics / mechanics
+    (re.compile(r'totem', re.I), ['totem', 'totems']),
+    (re.compile(r'ballista', re.I), ['ballista', 'totem']),
+    (re.compile(r'minion', re.I), ['minion', 'minions']),
+    (re.compile(r'corpse', re.I), ['corpse', 'corpses']),
+    (re.compile(r'offering', re.I), ['offering', 'offerings']),
+    (re.compile(r'grenade', re.I), ['grenade', 'grenades']),
+    (re.compile(r'projectile', re.I), ['projectile', 'projectiles']),
+    (re.compile(r'warcry', re.I), ['warcry']),
+    (re.compile(r'slam', re.I), ['slam']),
+    (re.compile(r'shockwave', re.I), ['shockwave']),
+    (re.compile(r'aftershock', re.I), ['aftershock']),
+]
+
+_NEGATIVE_MARKERS = ('cannot', 'prevent', 'disable', 'suppresses', 'suppressed')
+
+
+def effect_tags_from_stat_id(stat_id: str) -> List[str]:
+    if not stat_id:
+        return []
+
+    s = str(stat_id)
+    low = s.lower()
+
+    # Skip negative/disable stats to avoid implying the opposite effect.
+    if any(m in low for m in _NEGATIVE_MARKERS):
+        return []
+
+    out: List[str] = []
+    for rx, tags in _EFFECT_PATTERNS:
+        if rx.search(low):
+            for t in tags:
+                nt = norm_tag(t)
+                if nt and nt not in out:
+                    out.append(nt)
+    return out
+
+
+def derive_effect_tags_from_granted_effects(
+    granted_effect_rids: List[int],
+    granted_by_rid: Dict[int, Dict[str, Any]],
+    statsets_by_rid: Dict[int, Dict[str, Any]],
+    stat_id_by_rid: Dict[int, str]
+) -> List[str]:
+    if not granted_effect_rids or not statsets_by_rid or not stat_id_by_rid:
+        return []
+
+    tags: List[str] = []
+    seen = set()
+
+    def add_tag(t: str):
+        nt = norm_tag(t)
+        if nt and nt not in seen:
+            tags.append(nt)
+            seen.add(nt)
+
+    for gr in granted_effect_rids:
+        row = granted_by_rid.get(gr)
+        if not row:
+            continue
+        sets: List[int] = []
+        ss = row.get('StatSet')
+        if isinstance(ss, int):
+            sets.append(ss)
+        addl = row.get('AdditionalStatSets')
+        if isinstance(addl, list):
+            sets.extend([x for x in addl if isinstance(x, int)])
+
+        for ssid in sets:
+            ssrow = statsets_by_rid.get(ssid)
+            if not ssrow:
+                continue
+            stat_rids: List[int] = []
+            for k in ('ImplicitStats', 'ConstantStats'):
+                v = ssrow.get(k)
+                if isinstance(v, list):
+                    stat_rids.extend([x for x in v if isinstance(x, int)])
+
+            for srid in stat_rids:
+                sid = stat_id_by_rid.get(srid, '')
+                for t in effect_tags_from_stat_id(sid):
+                    add_tag(t)
+
+    return tags
+
+
 def extract_bracket_tags(text: Any) -> List[str]:
     found: List[str] = []
     for inner in re.findall(r"\[([^\]]+)\]", str(text or "")):
@@ -333,6 +434,28 @@ def enrich_from_tables(table_dir: Path, out_path: Path) -> Tuple[List[Dict[str, 
     grantedeffects = load_json(table_dir / "grantedeffects.json")
     skillcraftingdata = load_json(table_dir / "skillcraftingdata.json")
 
+    # Optional: derive effect_tags (primarily for support gems) from stat sets.
+    statsets_by_rid: Dict[int, Dict[str, Any]] = {}
+    stat_id_by_rid: Dict[int, str] = {}
+    try:
+        statsets_path = table_dir / "grantedeffectstatsets.json"
+        stats_path = table_dir.parent / "stats.json"
+        if statsets_path.exists() and stats_path.exists():
+            statsets_by_rid = idx_by_rid(load_json(statsets_path))
+            stats_rows = load_json(stats_path)
+            for r in stats_rows:
+                rid = r.get("_rid")
+                sid = r.get("Id")
+                if isinstance(rid, int) and sid:
+                    stat_id_by_rid[rid] = str(sid)
+            print(f"[enrich_skills] effect_tags enabled: {len(statsets_by_rid)} statsets, {len(stat_id_by_rid)} stats")
+        else:
+            print("[enrich_skills] effect_tags disabled: missing grantedeffectstatsets.json and/or stats.json")
+    except Exception as e:
+        print(f"[enrich_skills] WARN: effect_tags init failed: {e}", file=sys.stderr)
+        statsets_by_rid = {}
+        stat_id_by_rid = {}
+
     # indices
     base_by_rid = idx_by_rid(baseitemtypes)
     ge_by_rid = idx_by_rid(gemeffects)
@@ -525,6 +648,7 @@ def enrich_from_tables(table_dir: Path, out_path: Path) -> Tuple[List[Dict[str, 
                 merged_tags.append(t)
 
         taxonomy = derive_taxonomy(gem_tag_ids, skill_types)
+        effect_tags = derive_effect_tags_from_granted_effects(granted_effect_rids, granted_by_rid, statsets_by_rid, stat_id_by_rid)
 
         # build output gem
         base_id = str(base.get("Id") or "")
@@ -555,6 +679,7 @@ def enrich_from_tables(table_dir: Path, out_path: Path) -> Tuple[List[Dict[str, 
                 "weapon_affinities": affin,
             },
             "taxonomy": taxonomy,
+            "effect_tags": effect_tags,
             "weapon_requirements": weapon_req_obj,
             "recommended_supports": rec_supp,
             "tags": merged_tags,
