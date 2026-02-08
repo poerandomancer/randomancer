@@ -14,6 +14,8 @@ import {
 } from './05-tags-and-scorer.js';
 import { buildBuildContext, cohesionThreshold } from './06-cohesion.js';
 
+const SHOW_EMPTY_SYNERGY_SUPPORTS = true; // set false later if you want to hide again
+
 // ---------- passives helpers ----------
 function buildPassiveIndex(passivesData) {
   const index = {
@@ -651,21 +653,35 @@ function selectSynergySupports(picks, ctx, gemDict, maxCount=4){
   }
 }
 
-function renderSynergySupportsCard(grid, supportIds, gemDict){
+function renderSynergySupportsCard(grid, supportIds, gemDict, mechCount = 0){
   if (!grid) return;
+
   const ids = Array.isArray(supportIds) ? supportIds.filter(Boolean) : [];
-  if (!ids.length) return;
+  const shouldShowEmpty = SHOW_EMPTY_SYNERGY_SUPPORTS && (mechCount >= 2);
+
+  // If we have nothing and we're not in "show empty" mode, do nothing.
+  if (!ids.length && !shouldShowEmpty) return;
 
   const card = document.createElement('div');
-  card.className = 'skill-card wide';
-  card.id = 'synergy-supports-section';
+  card.className = 'skill-card';
+  card.style.gridColumn = '1 / -1'; // full width
+
+  const body = ids.length
+    ? `<div class="supports">${renderSupportCards(ids, gemDict)}</div>`
+    : `<div class="skill-note" style="opacity:.85; font-style:italic;">
+         No cross-mechanic support gems found for this roll.
+       </div>`;
+
   card.innerHTML = `
     <div class="skill-title">Synergy Supports</div>
     <div class="skill-subtitle">Optional supports that reinforce multiple rolled mechanics — these may apply to other skills you choose.</div>
-    <div class="supports">${renderSupportCards(ids, gemDict)}</div>
+    <div class="skill-divider"></div>
+    ${body}
   `;
+
   grid.appendChild(card);
 }
+
 
 // ---------- skill cards (with Grants + Req. Weapon) ----------
 
@@ -999,7 +1015,12 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx, opts = {}){
 	});
 
     // Cross-mechanic support suggestions (0-4)
-    renderSynergySupportsCard(grid, synergySupports, gemDict);
+    const mechCount =
+	  (ctx?.tacticSet?.length || 0) +
+	  (ctx?.ailmentSet?.length || 0);
+	
+	renderSynergySupportsCard(grid, synergySupports, gemDict, mechCount);
+
 
 
 
