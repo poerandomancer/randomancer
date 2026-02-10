@@ -16,6 +16,177 @@ import { buildBuildContext, cohesionThreshold } from './06-cohesion.js';
 
 const SHOW_EMPTY_SYNERGY_SUPPORTS = true; // set false later if you want to hide again
 
+// ---------- anti-repeat (recent history) ----------
+const RECENT_PICK_WINDOW = 60; // last N picks per category (keeps penalty "local" to the session)
+
+function _ensurePickHistory(){
+  if (!window.__PICK_HISTORY) {
+    window.__PICK_HISTORY = { skills: [], buffs: [], supports: [] };
+  }
+  return window.__PICK_HISTORY;
+}
+function _pickKey(x){
+  return String(x || '').trim().toLowerCase();
+}
+function _recentCount(kind, key){
+  if (!key) return 0;
+  const hist = (_ensurePickHistory()[kind] || []);
+  let c = 0;
+  for (const k of hist) if (k === key) c++;
+  return c;
+}
+
+function applyRepeatPenalty(score, kind, key, coh, meta){
+  const k = _pickKey(key);
+  const n = _recentCount(kind, k);
+  if (!n) return score;
+
+  const c = (typeof coh === 'number' && Number.isFinite(coh)) ? coh : 0.75;
+  const base =
+    (kind === 'skills') ? (0.10 + 0.22 * c) :
+    (kind === 'buffs')  ? (0.12 + 0.25 * c) :
+                          (0.08 + 0.18 * c);
+
+  let pen = Math.min(0.45, base * Math.log1p(n));
+
+  // If a skill helps cover rolled mechanics (esp. multi-mechanic rolls), soften the penalty.
+  if (kind === 'skills' && meta && (meta.totalMechs|0) >= 2 && (meta.mechHits|0) > 0) {
+    const shield = 0.10 + 0.45 * c;  // 0.10..0.55
+    pen *= (1 - shield);            // reduce penalty more at high cohesion
+  }
+
+  return score - pen;
+}
+
+
+function pushPickHistory(kind, keys){
+  const hist = _ensurePickHistory();
+  const arr = hist[kind] || (hist[kind] = []);
+  const list = Array.isArray(keys) ? keys : [keys];
+  for (const x of list) {
+    const k = _pickKey(x);
+    if (!k) continue;
+    arr.push(k);
+  }
+  while (arr.length > RECENT_PICK_WINDOW) arr.shift();
+}
+
+// ---------- mechanic-aware 2-skill selection ----------
+function pickTwoDiverseTopKWithMechanics(sorted, lambda = 0.7, coh = 0.75, mechSets = []){
+  if (sorted.length <= 1) return sorted.slice(0, 2).map(s => s.item);
+
+  const c = (typeof coh === 'number' && Number.isFinite(coh)) ? coh : 0.75;
+  const hasMechs = Array.isArray(mechSets) && mechSets.length >= 2;
+
+  // Higher cohesion => smaller K. Lower cohesion => larger K.
+  const baseK =
+    (c >= 0.85) ? 5 :
+    (c >= 0.70) ? 6 :
+    (c >= 0.55) ? 8 :
+    (c >= 0.40) ? 10 : 12;
+
+  // If mechanics are in play, widen the "first pick" pool a bit so we can find at least one mechanic-covering option.
+  const K = Math.min(sorted.length, hasMechs ? (baseK + 4) : baseK);
+  const top = sorted.slice(0, K);
+
+  const maskFor = (item) => {
+    if (!hasMechs) return 0;
+    const S = new Set((item.tags || []).map(normTagPlus));
+    let mask = 0;
+    for (let i = 0; i < mechSets.length; i++){
+      const ms = mechSets[i];
+      let hit = false;
+      for (const t of ms){ if (S.has(t)) { hit = true; break; } }
+      if (hit) mask |= (1 << i);
+    }
+    return mask;
+  };
+
+  // --- Pick #1: prefer something that covers at least one rolled mechanic (if available in top-K) ---
+  let firstPool = top;
+  if (hasMechs) {
+    const mechCovering = top.filter(s => maskFor(s.item) !== 0);
+    if (mechCovering.length) firstPool = mechCovering;
+  }
+
+  const minScore = firstPool[firstPool.length - 1].score;
+
+  // Higher cohesion => more peaked weights.
+  const pow = 1.0 + c;
+  const weights = firstPool.map(s => Math.pow(Math.max(0, s.score - minScore) + 1e-6, pow));
+  const idx = weightedPickIndex(weights);
+  const first = firstPool[idx];
+
+  const S1 = new Set((first.item.tags || []).map(normTagPlus));
+  const cov1 = hasMechs ? mechSets.map(ms => {
+    for (const t of ms) { if (S1.has(t)) return true; }
+    return false;
+  }) : [];
+
+  // IMPORTANT: For exactly-2 mechanics, always try to cover the uncovered mechanic with #2 (even at low cohesion).
+  const requireUncovered =
+    hasMechs &&
+    cov1.some(v => !v) &&
+    (mechSets.length === 2 || c >= 0.65);
+
+  let best = -Infinity, bestItem = null;
+
+  for (let i = 0; i < sorted.length; i++){
+    const cand = sorted[i];
+    if (cand === first) continue;
+
+    const g = cand.item;
+    const S2 = new Set((g.tags || []).map(normTagPlus));
+
+    // Diversity overlap penalty
+    let inter = 0;
+    for (const t of S2){ if (S1.has(t)) inter++; }
+    const union = new Set([...S1, ...S2]).size || 1;
+    const overlap = inter / union;
+
+    // Mechanic coverage nudging (favor covering uncovered mechanics)
+    let uncoveredHits = 0;
+    if (hasMechs && cov1.length) {
+      const cov2 = mechSets.map(ms => {
+        for (const t of ms) { if (S2.has(t)) return true; }
+        return false;
+      });
+      for (let mi = 0; mi < cov1.length; mi++){
+        if (!cov1[mi] && cov2[mi]) uncoveredHits++;
+      }
+      if (requireUncovered && uncoveredHits === 0) continue;
+    }
+
+    // Stronger uncovered bonus when we specifically have 2 mechanics (we want both represented)
+    const perUncovered = (mechSets.length === 2)
+      ? (0.25 + 0.35 * c)
+      : (0.12 + 0.25 * c);
+
+    const uncoveredBonus = uncoveredHits * perUncovered;
+    const mmr = lambda * (cand.score + uncoveredBonus) - (1 - lambda) * overlap;
+
+    if (mmr > best){ best = mmr; bestItem = g; }
+  }
+
+  if (!bestItem) return pickTwoDiverseTopK(sorted, lambda, coh);
+  return [first.item, bestItem];
+}
+
+
+// ---------- synergy support "meaningful mechanic match" ----------
+const WEAK_MECH_TAGS = new Set([
+  'attack','attacks','spell','spells','melee','ranged',
+  'projectile','projectiles','area','aoe',
+  'damage','hit','hits','duration','physical','elemental'
+]);
+function isMeaningfulMechanicTag(t){
+  const k = normTagPlus(t);
+  if (!k) return false;
+  if (WEAK_MECH_TAGS.has(k)) return false;
+  return true;
+}
+
+
 // ---------- passives helpers ----------
 function buildPassiveIndex(passivesData) {
   const index = {
@@ -553,6 +724,8 @@ function selectSynergySupports(picks, ctx, gemDict, maxCount=4){
   try{
     const mech = _mechTagSetsFromCtx(ctx);
     if (!mech || mech.mechCount < 2) return [];
+    
+    const coh = (typeof cohesionThreshold === 'number' && Number.isFinite(cohesionThreshold)) ? cohesionThreshold : 0.75;
 
     // Candidate pool = ALL supports, EXCEPT supports already in the two skills' recommended_supports lists
 	const excluded = new Set();
@@ -593,11 +766,13 @@ function selectSynergySupports(picks, ctx, gemDict, maxCount=4){
 	  mech.sets.forEach((mset, mi) => {
 		let hit = false;
 		for (const t of mset.tags) {
+		  if (!isMeaningfulMechanicTag(t)) continue;
 		  if (stags.has(t)) {
 			matchedTags.add(t);
 			hit = true;
 		  }
 		}
+
 		if (hit) {
 		  hits++;
 		  covered.add(mi);
@@ -617,6 +792,8 @@ function selectSynergySupports(picks, ctx, gemDict, maxCount=4){
 	  let score = hits * 2.0 + idfScore;
 	  if (tacticHits > 0 && ailmentHits > 0) score += 1.0; // cross-category bonus
 	  score += Math.min(0.3, (Array.isArray(sg?.effect_tags) ? sg.effect_tags.length : 0) * 0.03);
+	  
+	  score = applyRepeatPenalty(score, 'supports', sid, coh);
 	
 	  scored.push({ sid, score, hits, covered, matched: matchedTags });
 	}
@@ -958,13 +1135,27 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx, opts = {}){
 
     // Score all eligibles for main recommended skills (+ mechanic coverage bonus)
     const scored = eligible.map(g => {
-      const s = scoreGemSynergy(g, rolledProfile, window.TAG_IDF, knobs);
-      const covBonus = coverageBonusForGem(g);
-      return { item:g, score:s.score + covBonus, raw:s.raw };
-    }).sort((a,b)=>b.score - a.score);
+	  const s = scoreGemSynergy(g, rolledProfile, window.TAG_IDF, knobs);
+	  const cov = coverageBonusForGem(g); // see note below if you keep it returning a number
+		const covBonus = (typeof cov === 'number') ? cov : (cov.bonus || 0);
+		const mechHits = (typeof cov === 'number') ? 0 : (cov.mechHits || 0);
+		
+		const key = g.id || g.base_item?.id || g.name || '';
+		let score = s.score + covBonus;
+		
+		score = applyRepeatPenalty(score, 'skills', key, coh, {
+		  totalMechs,
+		  mechHits
+		});
+		
+		return { item:g, score, raw:s.raw };
 
-    // Pick #1 from top-K (weighted by score), then #2 with diversity
-    const picks = pickTwoDiverseTopK(scored, 0.7, coh);
+	}).sort((a,b)=>b.score - a.score);
+	
+	// Pick #1 from top-K (weighted), then #2 with diversity + mechanic coverage
+	const mechSets = [...tacticMechs, ...ailmentMechs];
+	const picks = pickTwoDiverseTopKWithMechanics(scored, 0.7, coh, mechSets);
+
 
     const grid = document.getElementById(targetGridId);
     if(!grid){ return; }
@@ -1028,6 +1219,15 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx, opts = {}){
     const persistent = includePersistentBuff
       ? renderPersistentBuffSkill(persistentPool, rolledProfile, window.TAG_IDF, knobs, gems)
       : null;
+      
+    // Update recent-pick history (anti-repeat)
+	pushPickHistory('skills', picks.map(g => (g.id || g.base_item?.id || g.name || '')));
+	if (includePersistentBuff && persistent) {
+	  pushPickHistory('buffs', (persistent.id || persistent.base_item?.id || persistent.name || ''));
+	}
+	if (Array.isArray(synergySupports) && synergySupports.length) {
+	  pushPickHistory('supports', synergySupports);
+	}
 
     return {
       tagProfile: rolledProfile,
@@ -1057,14 +1257,30 @@ function renderPersistentBuffSkill(persistentPool, rolledProfile, tagIDF, knobs,
 
     const actives = persistentPool.filter(g => g && g.type === 'active');
     if (!actives.length) return;
+    
+    const coh = (typeof cohesionThreshold === 'number' && Number.isFinite(cohesionThreshold)) ? cohesionThreshold : 0.75;
 
     // Score persistent buff candidates with the same synergy engine
     const scoredPB = actives.map(g => {
-      const s = scoreGemSynergy(g, rolledProfile, tagIDF, knobs);
-      return { item:g, score:s.score, raw:s.raw };
-    }).sort((a,b) => b.score - a.score);
+	  const s = scoreGemSynergy(g, rolledProfile, tagIDF, knobs);
+	  const key = g.id || g.base_item?.id || g.name || '';
+	  let score = s.score;
+	  score = applyRepeatPenalty(score, 'buffs', key, coh);
+	  return { item:g, score, raw:s.raw };
+	}).sort((a,b) => b.score - a.score);
+	
+	const K =
+	  (coh >= 0.85) ? 4 :
+	  (coh >= 0.70) ? 5 :
+	  (coh >= 0.55) ? 6 :
+	  (coh >= 0.40) ? 8 : 10;
+	
+	const topPB = scoredPB.slice(0, Math.min(K, scoredPB.length));
+	const minScore = topPB[topPB.length - 1].score;
+	const pow = 1.0 + coh;
+	const weightsPB = topPB.map(s => Math.pow(Math.max(0, s.score - minScore) + 1e-6, pow));
+	const top = topPB[weightedPickIndex(weightsPB)];
 
-    const top = scoredPB[0];
     if (!top || !isFinite(top.raw)) return;
 
     const skillsGrid = document.getElementById('skills-grid');
