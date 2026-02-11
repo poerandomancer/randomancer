@@ -334,6 +334,24 @@ function weaponSlotAllowed(it, slotAllow){
     const k = String(slot || '').toLowerCase();
     return (SLOT_HARD_CAPS[k] ?? fallback);
   };
+  
+    // Normalized resistance tags (TagUtils.norm strips underscores/spaces)
+	  const TAG_ALL_ELE_RES = norm('all_elemental_resistance');
+	  const TAG_FIRE_RES = norm('fire_resistance');
+	  const TAG_COLD_RES = norm('cold_resistance');
+	  const TAG_LIGHTNING_RES = norm('lightning_resistance');
+	  const TAG_CHAOS_RES = norm('chaos_resistance');
+	
+	  // Common utility-style tags (used as light tie-breakers in Pass 3)
+	  const UTILITY_BONUS_TAGS = new Set([
+		norm('movement speed'),
+		norm('action speed'),
+		norm('attack speed'),
+		norm('cast speed'),
+		norm('cooldown recovery'),
+		norm('cooldown recovery rate'),
+	  ]);
+
 
 
   function weaponAllowFromState(state, useSecond=false){
@@ -412,8 +430,6 @@ function weaponSlotAllowed(it, slotAllow){
 	  if (a.has('ignite')) { a.add('fire'); a.add(norm('fire damage')); }
 	  if (a.has('freeze') || a.has('chill')) { a.add('cold'); a.add(norm('cold damage')); }
 	  if (a.has('shock') || a.has('electrocute')) { a.add('lightning'); a.add(norm('lightning damage')); }
-// 	  if (a.has('poison')) { a.add('chaos'); a.add(norm('chaos damage')); }
-// 	  if (a.has('bleed') || a.has('bleeding')) { a.add('physical'); a.add(norm('physical damage')); }
 	
 	  return Array.from(a);
 	}
@@ -445,11 +461,15 @@ function weaponSlotAllowed(it, slotAllow){
     for (const t of rolled.def)      if (all.has(t)) s += 1.5;
 
     // Small bump for resistance coverage (tie-breaker, not a primary driver)
-    if (all.has('all_elemental_resistance')) s += 0.6;
-    else {
-      const r = (all.has('fire_resistance')?1:0) + (all.has('cold_resistance')?1:0) + (all.has('lightning_resistance')?1:0) + (all.has('chaos_resistance')?1:0);
-      if (r) s += Math.min(0.6, r * 0.2);
-    }
+    if (all.has(TAG_ALL_ELE_RES)) s += 0.6;
+	else {
+	  const r =
+		(all.has(TAG_FIRE_RES)?1:0) +
+		(all.has(TAG_COLD_RES)?1:0) +
+		(all.has(TAG_LIGHTNING_RES)?1:0) +
+		(all.has(TAG_CHAOS_RES)?1:0);
+	  if (r) s += Math.min(0.6, r * 0.2);
+	}
 
     // Attribute leaning (very light; stronger at higher cohesion)
     const th = (typeof window.cohesionThreshold === 'number') ? window.cohesionThreshold : 0.75;
@@ -526,6 +546,127 @@ function weaponSlotAllowed(it, slotAllow){
     const pick2 = weightedPickFromBand(scored2, 0.75, abs2);
     return [pick1, ...(pick2 ? [pick2] : [])];
   }
+  
+    // -------------------------
+  // Pass 3: Utility (rings / amulets / belts / flasks / charms / jewels)
+  // - Tactics carry the most weight
+  // - Offense (ailments + mapped elements) next
+  // - Defensive strategy secondary
+  // - Resistances + utility tags are light tie-breakers (do not qualify on their own)
+  // -------------------------
+
+  function scoreUtilityPass(it, rolled, state){
+    const all = getItemTagSet(it);
+    let match = 0;
+    let s = 0;
+
+    // Tactics (primary driver)
+    for (const t of rolled.tactics){
+      if (all.has(t)){ s += 4.0; match += 4.0; }
+    }
+
+    // Offense: ailments + mapped elements (ignite->fire, freeze->cold, shock->lightning)
+    for (const t of expandedWeaponAilmentTags(rolled)){
+      if (all.has(t)){ s += 2.0; match += 2.0; }
+    }
+
+    // Defensive strategy (secondary)
+    for (const t of rolled.def){
+      if (all.has(t)){ s += 1.5; match += 1.5; }
+    }
+
+    // Resistances as light tie-breaker (never part of match qualification)
+    if (all.has(TAG_ALL_ELE_RES)) s += 0.45;
+    else {
+      const r =
+        (all.has(TAG_FIRE_RES)?1:0) +
+        (all.has(TAG_COLD_RES)?1:0) +
+        (all.has(TAG_LIGHTNING_RES)?1:0) +
+        (all.has(TAG_CHAOS_RES)?1:0);
+      if (r) s += Math.min(0.45, r * 0.12);
+    }
+
+    // Utility-style tags (light bump, capped)
+    let ub = 0;
+    for (const t of UTILITY_BONUS_TAGS){
+      if (all.has(t)) ub += 0.18;
+    }
+    if (ub) s += Math.min(0.45, ub);
+
+    // Attribute leaning (very light; a nudge, not a driver)
+    const th = (typeof window.cohesionThreshold === 'number') ? window.cohesionThreshold : 0.75;
+    const attr = it?.meta?.attributes;
+    const rollAttr = state?.rollAttr;
+    if (attr && rollAttr){
+      const us = (attr.str || 0) + (attr.all || 0);
+      const ud = (attr.dex || 0) + (attr.all || 0);
+      const ui = (attr.int || 0) + (attr.all || 0);
+
+      const bs = rollAttr.strength || 0;
+      const bd = rollAttr.dexterity || 0;
+      const bi = rollAttr.intelligence || 0;
+
+      const dot = us*bs + ud*bd + ui*bi;
+      const nu = Math.sqrt(us*us + ud*ud + ui*ui) || 0;
+      const nb = Math.sqrt(bs*bs + bd*bd + bi*bi) || 0;
+      const sim = (nu > 0 && nb > 0) ? (dot / (nu * nb)) : 0;
+
+      const w = (th >= 0.70) ? 0.35 : 0.18;
+      s += sim * w;
+    }
+
+    return { s, match };
+  }
+
+  function pickUtilityPass(items, rolled, state, seedPicks=[], limitMax=3){
+    const seed = Array.isArray(seedPicks) ? seedPicks : [];
+    const usedNames = new Set(seed.map(p => p && p.name).filter(Boolean));
+
+    const per = new Map();
+    for (const p of seed){
+      if (!p || !p.slot) continue;
+      per.set(p.slot, (per.get(p.slot) || 0) + 1);
+    }
+
+    const pool = items.filter(it => !WEAPON_SLOTS.has(it.slot) && !ARMOUR_SLOTS.has(it.slot));
+
+    // Score once
+    const scoredAll = pool
+      .filter(it => !usedNames.has(it.name))
+      .map(it => {
+        const r = scoreUtilityPass(it, rolled, state);
+        return { it, s: r.s, match: r.match };
+      })
+      .sort((a,b)=>b.s-a.s);
+
+    const out = [];
+    const ABS_MATCH_MIN = 1.5; // allow def-strat-only utility matches
+    const REL_BAND = 0.60;
+
+    // Iterative pick: each time, re-filter by remaining slot caps and match threshold.
+    for (let step=0; step<limitMax; step++){
+      const eligible = scoredAll
+        .filter(r => r.match >= ABS_MATCH_MIN && !usedNames.has(r.it.name))
+        .filter(r => {
+          const c = per.get(r.it.slot) || 0;
+          const cap = slotHardCap(r.it.slot, 1);
+          return c < cap;
+        });
+
+      if (!eligible.length) break;
+
+      eligible.sort((a,b)=>b.s-a.s);
+      const pick = weightedPickFromBand(eligible, REL_BAND, ABS_MATCH_MIN);
+      if (!pick) break;
+
+      usedNames.add(pick.name);
+      per.set(pick.slot, (per.get(pick.slot) || 0) + 1);
+      out.push(pick);
+    }
+
+    return out;
+  }
+
 
   function pickPasses(items, rolled, snap){
     const state = getRollSnapshot(snap) || {};
@@ -544,13 +685,16 @@ function weaponSlotAllowed(it, slotAllow){
     const armourPicks = pickArmourPass(items, rolled, state, out);
     out.push(...armourPicks);
 
-    // Fill (utility only) up to 5, aiming for ~2-5 overall without forcing weak matches.
+	// Pass 3: Utility (rings / amulets / belts / flasks / charms / jewels)
+    // Fill up to 5 overall, but don't force weak matches.
     const MAX = 5;
-    const allowAll = allowedSlots(snap);
+    const remaining = Math.max(0, MAX - out.length);
+    if (remaining > 0){
+      const utilLimit = Math.min(3, remaining);
+      const utilPicks = pickUtilityPass(items, rolled, state, out, utilLimit);
+      out.push(...utilPicks);
+    }
 
-    const utilityPool = items.filter(it => !WEAPON_SLOTS.has(it.slot) && !ARMOUR_SLOTS.has(it.slot));
-    const fill = pickGeneral(utilityPool, rolled, allowAll, Math.max(0, MAX - out.length), 2, out);
-    out.push(...fill);
 
     // Final safety: avoid duplicate slots (except rings/jewels) to prevent double-body etc.
     const seenSlot = new Map();
