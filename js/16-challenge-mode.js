@@ -30,17 +30,16 @@ function setChallengeVisibility(active) {
 }
 
 function setChallengePanels(active) {
-  const challengeOut = document.getElementById('challenge-contract-output');
+  const challengePanel = document.getElementById('challenge-panel');
   const buildBanner = document.getElementById('build-roll-banner');
-  const summaryPanel = document.getElementById('summary-panel');
+  const buildPanel = document.getElementById('build-panel');
   const skillsPanel = document.getElementById('skills-panel');
   const uniquesPanel = document.getElementById('uniques-panel');
   const passivesPanel = document.getElementById('passives-panel');
 
-  challengeOut?.classList.toggle('is-hidden', !active);
+  challengePanel?.classList.toggle('is-hidden', !active);
   buildBanner?.classList.toggle('is-hidden', active);
-
-  if (summaryPanel) summaryPanel.hidden = active;
+  buildPanel?.classList.toggle('is-hidden', active);
   skillsPanel?.classList.toggle('is-hidden', active);
   uniquesPanel?.classList.toggle('is-hidden', active);
   passivesPanel?.classList.toggle('is-hidden', active);
@@ -49,16 +48,10 @@ function setChallengePanels(active) {
 function renderChallengeContract(contract) {
   const appEl = document.getElementById('app');
   const emptyState = document.getElementById('empty-state');
-  const buildPanel = document.getElementById('build-panel');
-  const buildName = document.getElementById('build-name');
-  const buildSub = document.getElementById('build-subtext');
 
   const title = document.getElementById('challenge-contract-title');
   const subtitle = document.getElementById('challenge-contract-subtitle');
   const list = document.getElementById('challenge-contract-lines');
-
-  if (buildName) buildName.textContent = contract.title;
-  if (buildSub) buildSub.textContent = `Challenge Mode · ${contract.severity}`;
 
   if (title) title.textContent = contract.title;
   if (subtitle) subtitle.textContent = contract.subtitle;
@@ -73,7 +66,6 @@ function renderChallengeContract(contract) {
 
   if (appEl) appEl.dataset.hasRoll = 'true';
   if (emptyState) emptyState.classList.add('is-hidden');
-  if (buildPanel) buildPanel.classList.remove('is-hidden');
 
   setChallengePanels(true);
 }
@@ -93,7 +85,17 @@ async function handleChallengeRoll({ rollBtn, statusEl }) {
 function syncMode(mode) {
   const isChallenge = mode === MODES.CHALLENGE;
   setChallengeVisibility(isChallenge);
-  if (!isChallenge) setChallengePanels(false);
+  setChallengePanels(isChallenge);
+
+  const emptyState = document.getElementById('empty-state');
+  if (emptyState) {
+    if (isChallenge) {
+      emptyState.classList.add('is-hidden');
+    } else {
+      const hasRoll = document.getElementById('app')?.dataset?.hasRoll === 'true';
+      emptyState.classList.toggle('is-hidden', hasRoll);
+    }
+  }
 
   document.querySelectorAll('input[name="randomancer-mode"]').forEach(radio => {
     radio.checked = radio.value === mode;
@@ -130,4 +132,3 @@ window.RandomancerHandleRollOverride = async ({ rollBtn, statusEl }) => {
   }
   return true;
 };
-
