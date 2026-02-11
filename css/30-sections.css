@@ -113,5 +113,32 @@ main .panel + .panel{
   z-index: 5;
 }
 
+.challenge-contract-output{
+  margin: .5rem 0 0;
+  padding: .8rem .9rem;
+  border:1px solid var(--edge);
+  border-radius:10px;
+  background:rgba(0,0,0,.25);
+}
+
+.challenge-contract-title{
+  margin:0;
+  color:var(--silver);
+  font-size:1.18rem;
+}
+
+.challenge-contract-subtitle{
+  margin:.2rem 0 .5rem;
+  color:var(--gold);
+  font-size:.92rem;
+}
+
+.challenge-contract-lines{
+  margin:.2rem 0 0;
+  padding-left:1rem;
+  display:grid;
+  gap:.35rem;
+}
+
 
 /* === v0.5.1: Recommended Skills section === */

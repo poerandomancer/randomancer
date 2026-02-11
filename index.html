@@ -205,6 +205,21 @@
 
 
     <main>
+      <div class="mode-switch-row" role="group" aria-label="Randomancer mode">
+        <span class="mode-switch-label">Mode</span>
+        <div class="mode-switch-options">
+          <label class="mode-switch-option">
+            <input type="radio" name="randomancer-mode" value="standard" checked>
+            <span>Standard</span>
+          </label>
+          <label class="mode-switch-option">
+            <input type="radio" name="randomancer-mode" value="challenge">
+            <span>Challenge Mode</span>
+          </label>
+        </div>
+      </div>
+
+      <div id="standard-controls">
     
       <div class="cohesion-slider cohesion-bar-wrapper" data-cohesion-constrained="false">
                   <div class="mode-labels">
@@ -259,6 +274,27 @@
 			</button>
 		</div>
 
+      </div>
+
+      <div id="challenge-controls" class="challenge-controls is-hidden" aria-label="Challenge Mode controls">
+        <div class="challenge-control-item">
+          <label for="challenge-task-count">Tasks</label>
+          <select id="challenge-task-count">
+            <option value="1">1</option>
+            <option value="2" selected>2</option>
+            <option value="3">3</option>
+          </select>
+        </div>
+        <div class="challenge-control-item">
+          <label for="challenge-severity">Severity</label>
+          <select id="challenge-severity">
+            <option value="mild">mild</option>
+            <option value="cruel" selected>cruel</option>
+            <option value="diabolical">diabolical</option>
+          </select>
+        </div>
+      </div>
+
 
 
 
@@ -310,6 +346,12 @@
 			<div id="build-name" class="build-name"></div>
 			<div id="build-subtext" class="build-subtext"></div>
 		</div>
+
+        <div id="challenge-contract-output" class="challenge-contract-output is-hidden" aria-live="polite">
+          <h3 id="challenge-contract-title" class="challenge-contract-title"></h3>
+          <p id="challenge-contract-subtitle" class="challenge-contract-subtitle"></p>
+          <ul id="challenge-contract-lines" class="challenge-contract-lines"></ul>
+        </div>
         
         <div id="summary-panel" class="summary-panel" hidden aria-label="Build Summary">
           <div id="summary-line-1" class="summary-row summary-row--primary"></div>

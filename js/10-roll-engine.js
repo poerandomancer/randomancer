@@ -1199,6 +1199,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       try {
+        if (typeof window.RandomancerHandleRollOverride === 'function') {
+          const handled = await window.RandomancerHandleRollOverride({ rollBtn, statusEl });
+          if (handled) return;
+        }
+
         const data = await ensureDataPreload();
         rollBuild(data);
         
