@@ -1206,6 +1206,15 @@ document.addEventListener('DOMContentLoaded', () => {
 		if (ws2Toggle?.checked) {
 		  try {
 			await handleSecondaryWeaponSetSelection(data);
+
+            // Re-refresh uniques now that weapon2/offhand2 may be present
+            try {
+              if (typeof window.RandomancerRefreshUniques === 'function') {
+                window.RandomancerRefreshUniques(window.CURRENT_ROLL);
+              }
+            } catch (e) {
+              console.warn('[Randomancer] uniques re-refresh after ws2 failed', e);
+            }
 		  } catch (err) {
 			console.error('[secondary weapons] roll failed:', err);
 		  }
