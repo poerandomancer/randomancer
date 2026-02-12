@@ -112,8 +112,11 @@
 
 .challenge-empty-flavor{
   text-align:center;
-  color:var(--muted);
-  font-size:clamp(1.05rem, 1.8vw, 1.35rem);
+  color:var(--gold);
+  font-family:'Cormorant Infant',serif;
+  font-style:italic;
+  font-size:1.7rem;
+  text-shadow:0 0 8px rgba(0,0,0,0.8);
   line-height:1.3;
   margin:0 auto;
   padding-top:clamp(5.2rem, 7vh, 8.5rem);
