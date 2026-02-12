@@ -53,8 +53,7 @@
   transition:opacity .2s ease, filter .2s ease;
 }
 
-.mode-toggle:hover,
-.mode-toggle:focus-within{
+.mode-toggle:hover{
   opacity:1;
   filter:saturate(1.06);
 }
