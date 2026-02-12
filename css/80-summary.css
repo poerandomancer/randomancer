@@ -106,7 +106,7 @@
 
 /* Build actions kebab: make it more visible without being loud */
 /* Build actions kebab: smaller + subtler */
-#build-actions-btn{
+:is(#build-actions-btn, #challenge-actions-btn){
   width: 28px;
   height: 28px;
   border-radius: 999px;
@@ -128,7 +128,7 @@
   transition: box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
 }
 
-#build-actions-btn:hover{
+:is(#build-actions-btn, #challenge-actions-btn):hover{
   border-color: rgba(212,170,80,0.38);
   background: rgba(10,10,12,0.42);
   box-shadow:
@@ -136,11 +136,11 @@
     0 0 10px rgba(212,170,80,0.18);
 }
 
-#build-actions-btn:active{
+:is(#build-actions-btn, #challenge-actions-btn):active{
   transform: translateY(1px);
 }
 
-#build-actions-btn:focus-visible{
+:is(#build-actions-btn, #challenge-actions-btn):focus-visible{
   outline: none;
   box-shadow:
     0 0 0 2px rgba(212,170,80,0.14),
@@ -148,7 +148,7 @@
     0 0 10px rgba(212,170,80,0.18);
 }
 
-#build-actions-btn .kebab-glyph{
+:is(#build-actions-btn, #challenge-actions-btn) .kebab-glyph{
   position: relative;
   top: -2px; /* try -1px, then -2px if needed */
 }
@@ -208,4 +208,9 @@
   .summary-panel{ margin-top: 46px; padding: 0; }
   .summary-row{ font-size: 1.0rem; }
   .summary-row--primary{ font-size: 1.18rem; }
+}
+
+.challenge-contract-lines.summary-panel{
+  margin-top:.55rem;
+  margin-bottom:0;
 }

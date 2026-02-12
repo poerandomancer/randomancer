@@ -118,23 +118,16 @@ main .panel + .panel{
   padding: 0;
 }
 
-.challenge-contract-title{
-  margin:0;
-  color:var(--silver);
-  font-size:1.18rem;
-}
-
-.challenge-contract-subtitle{
-  margin:.2rem 0 .5rem;
-  color:var(--gold);
-  font-size:.92rem;
+.challenge-contract-output .build-title-block{
+  margin-top:.15rem;
 }
 
 .challenge-contract-lines{
-  margin:.2rem 0 0;
-  padding-left:1rem;
-  display:grid;
-  gap:.35rem;
+  margin-top:.55rem;
+}
+
+.challenge-contract-lines .summary-row{
+  text-align:left;
 }
 
 

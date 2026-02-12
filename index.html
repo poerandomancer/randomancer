@@ -205,19 +205,15 @@
 
 
     <main>
-      <div class="mode-switch-row" role="group" aria-label="Randomancer mode">
-        <span class="mode-switch-label">Mode</span>
-        <div class="mode-switch-options">
-          <label class="mode-switch-option">
-            <input type="radio" name="randomancer-mode" value="standard" checked>
-            <span>Standard</span>
-          </label>
-          <label class="mode-switch-option">
-            <input type="radio" name="randomancer-mode" value="challenge">
-            <span>Challenge Mode</span>
+      <div class="controls-rail">
+        <div class="mode-switch-row" role="group" aria-label="Randomancer mode">
+          <label id="randomancer-mode-control" class="mode-toggle" for="randomancer-mode-toggle">
+            <span class="mode-toggle-text" data-mode="standard">Build</span>
+            <input type="checkbox" id="randomancer-mode-toggle" aria-label="Toggle Challenge mode">
+            <span class="toggle-ui" aria-hidden="true"></span>
+            <span class="mode-toggle-text" data-mode="challenge">Challenge</span>
           </label>
         </div>
-      </div>
 
       <div id="standard-controls">
     
@@ -276,23 +272,22 @@
 
       </div>
 
-      <div id="challenge-controls" class="challenge-controls is-hidden" aria-label="Challenge Mode controls">
-        <div class="challenge-control-item">
-          <label for="challenge-task-count">Tasks</label>
-          <select id="challenge-task-count">
-            <option value="1">1</option>
-            <option value="2" selected>2</option>
-            <option value="3">3</option>
-          </select>
-        </div>
-        <div class="challenge-control-item">
-          <label for="challenge-severity">Severity</label>
-          <select id="challenge-severity">
-            <option value="mild">mild</option>
-            <option value="cruel" selected>cruel</option>
-            <option value="diabolical">diabolical</option>
-          </select>
-        </div>
+      <div id="challenge-controls" class="control-item weapon-set2-control challenge-controls is-hidden" aria-label="Challenge Mode controls">
+        <button id="challenge-task-count-btn" class="rm-dotstep mechanics-like-btn" type="button" aria-label="Tasks: 2">
+          <span class="rm-dotstep__label toggle-text">Tasks</span>
+          <span class="rm-dotstep__dots" aria-hidden="true">
+            <span class="rm-dotstep__dot" data-dot="1"></span>
+            <span class="rm-dotstep__dot" data-dot="2"></span>
+            <span class="rm-dotstep__dot" data-dot="3"></span>
+          </span>
+        </button>
+        <button id="challenge-severity-btn" class="rm-dotstep mechanics-like-btn" type="button" aria-label="Severity: Cruel">
+          <span class="rm-dotstep__label toggle-text">Severity</span>
+          <span class="rm-dotstep__dots" aria-hidden="true">
+            <span id="challenge-severity-value" class="rm-dotstep__value">Cruel</span>
+          </span>
+        </button>
+      </div>
       </div>
 
       <hr id="challenge-empty-divider" class="gold subtle challenge-empty-divider is-hidden" aria-hidden="true"/>
@@ -340,9 +335,11 @@
           </div>
         </div>
         <div id="challenge-contract-output" class="challenge-contract-output" aria-live="polite">
-          <h3 id="challenge-contract-title" class="challenge-contract-title"></h3>
-          <p id="challenge-contract-subtitle" class="challenge-contract-subtitle"></p>
-          <ul id="challenge-contract-lines" class="challenge-contract-lines"></ul>
+          <div class="build-title-block">
+            <h3 id="challenge-contract-title" class="build-name"></h3>
+            <p id="challenge-contract-subtitle" class="build-subtext"></p>
+          </div>
+          <div id="challenge-contract-lines" class="summary-panel challenge-contract-lines"></div>
         </div>
       </section>
 
