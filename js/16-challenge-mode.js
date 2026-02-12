@@ -8,6 +8,9 @@ const MODES = {
 };
 let challengeHasRoll = false;
 
+const STANDARD_LEDE_HTML = 'Tune <strong>Cohesion</strong> for tighter themes or wilder chaos. Use <strong>Bind the Fates</strong> to favor or ban certain options. Toggle <strong>Weapon Set II</strong> for an additional weapon set, and choose <strong>Combat Mechanics</strong>: 1-3 for ailment/tactic depth.<br><strong>---</strong><br>Click <strong>Roll Your Fate</strong> to begin.';
+const CHALLENGE_LEDE_TEXT = 'Challenge Mode rolls a Contract, not a build. Choose 1–3 Tasks, set Severity (Mild–Diabolical), then Roll Your Fate to receive a stacked set of constraints to overcome.';
+
 function getMode() {
   try {
     const stored = localStorage.getItem(MODE_KEY);
@@ -29,6 +32,16 @@ function setChallengeVisibility(active) {
 
   standardControls?.classList.toggle('is-hidden', active);
   challengeControls?.classList.toggle('is-hidden', !active);
+}
+
+function setHeaderLede(mode) {
+  const lede = document.getElementById('app-lede');
+  if (!lede) return;
+  if (mode === MODES.CHALLENGE) {
+    lede.textContent = CHALLENGE_LEDE_TEXT;
+  } else {
+    lede.innerHTML = STANDARD_LEDE_HTML;
+  }
 }
 
 function setChallengePanels(active) {
@@ -107,6 +120,7 @@ async function handleChallengeRoll({ rollBtn, statusEl }) {
 
 function syncMode(mode) {
   const isChallenge = mode === MODES.CHALLENGE;
+  setHeaderLede(mode);
   setChallengeVisibility(isChallenge);
   setChallengePanels(isChallenge);
 
