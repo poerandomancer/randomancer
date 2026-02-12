@@ -33,6 +33,7 @@
 }
 
 .mode-switch-under-roll .mode-switch-row{
+  justify-content:center;
   margin:.45rem 0 .65rem;
 }
 
