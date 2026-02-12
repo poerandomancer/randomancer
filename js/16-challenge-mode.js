@@ -175,11 +175,18 @@ function syncMode(mode) {
   const isChallenge = mode === MODES.CHALLENGE;
   const modeToggle = document.getElementById('randomancer-mode-toggle');
   const modeToggleControl = document.getElementById('randomancer-mode-control');
+  const app = document.getElementById('app');
 
   document.body?.classList.toggle('challenge-mode', isChallenge);
   setHeaderLede(mode);
   setChallengeVisibility(isChallenge);
   setChallengePanels(isChallenge);
+
+  if (app) {
+    app.classList.remove('mode-content-fade');
+    void app.offsetWidth;
+    app.classList.add('mode-content-fade');
+  }
 
   if (modeToggle) modeToggle.checked = isChallenge;
   modeToggleControl?.classList.toggle('is-challenge', isChallenge);

@@ -100,6 +100,8 @@ body.challenge-mode .asc-art.show{
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
   background: rgba(0,0,0,.28);
+  isolation:isolate;
+  transition: background-color .45s ease, filter .45s ease;
 }
 
 #app::after{
@@ -107,11 +109,11 @@ body.challenge-mode .asc-art.show{
   position:fixed;
   inset:0;
   pointer-events:none;
-  z-index:0;
+  z-index:40;
   opacity:0;
   background:
-    radial-gradient(130% 80% at 50% 20%, rgba(128,34,32,0.12), rgba(0,0,0,0) 60%),
-    linear-gradient(180deg, rgba(74,18,16,0.16) 0%, rgba(46,8,8,0.26) 100%);
+    radial-gradient(130% 82% at 50% 18%, rgba(92,44,34,0.08), rgba(0,0,0,0) 62%),
+    linear-gradient(180deg, rgba(58,26,20,0.11) 0%, rgba(36,14,12,0.2) 100%);
   mix-blend-mode:multiply;
   transition:opacity .45s ease;
 }
@@ -123,4 +125,13 @@ body.challenge-mode #app::after{
 #app > *{
   position:relative;
   z-index:1;
+}
+
+#app.mode-content-fade{
+  animation:modeContentFade .42s ease;
+}
+
+@keyframes modeContentFade{
+  0%{ opacity:.93; filter:saturate(.96); }
+  100%{ opacity:1; filter:saturate(1); }
 }
