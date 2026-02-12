@@ -32,6 +32,11 @@
   margin:0 auto;
 }
 
+.mode-switch-under-roll .mode-switch-row{
+  justify-content:center;
+  margin:.45rem 0 .65rem;
+}
+
 .mode-switch-row{
   display:flex;
   justify-content:flex-end;
@@ -44,6 +49,13 @@
   gap:10px;
   font-weight:600;
   cursor:pointer;
+  opacity:.76;
+  transition:opacity .2s ease, filter .2s ease;
+}
+
+.mode-toggle:hover{
+  opacity:1;
+  filter:saturate(1.06);
 }
 
 .mode-toggle input[type="checkbox"]{
