@@ -73,7 +73,8 @@
     "effects": {
       "locks": {
         "class": "{CLASS}",
-        "weaponSet": "{WEAPON_SET}"
+        "weaponSet": "{WEAPON_SET}",
+        "weaponMode": "armed"
       }
     }
   },
@@ -119,7 +120,8 @@
       "locks": {
         "class": "{CLASS}",
         "weaponSet": "{WEAPON_SET}",
-        "primaryDefense": "{DEFENSE}"
+        "primaryDefense": "{DEFENSE}",
+        "weaponMode": "armed"
       }
     }
   },
@@ -208,7 +210,8 @@
     "effects": {
       "bans": {
         "charms": true
-      }
+      },
+      "locks": {}
     }
   },
   {
@@ -231,7 +234,8 @@
     "effects": {
       "bans": {
         "flasks": true
-      }
+      },
+      "locks": {}
     }
   },
   {
@@ -254,7 +258,8 @@
     "effects": {
       "bans": {
         "jewelry": true
-      }
+      },
+      "locks": {}
     }
   },
   {
@@ -277,7 +282,8 @@
     "effects": {
       "bans": {
         "uniques": true
-      }
+      },
+      "locks": {}
     }
   },
   {
@@ -300,7 +306,8 @@
     "effects": {
       "bans": {
         "rares": true
-      }
+      },
+      "locks": {}
     }
   },
   {
@@ -327,7 +334,8 @@
         "pickupMagic": true,
         "pickupRare": true,
         "pickupUnique": true
-      }
+      },
+      "locks": {}
     }
   },
   {
@@ -349,7 +357,8 @@
     "shortLabel": "Empty Hand",
     "effects": {
       "locks": {
-        "weaponSet": "Unarmed"
+        "weaponSet": "Unarmed",
+        "weaponMode": "unarmed"
       }
     }
   },
@@ -372,7 +381,8 @@
     "shortLabel": "Baseline Heresy",
     "effects": {
       "locks": {
-        "mainDamageMode": "defaultWeapon"
+        "mainDamageMode": "defaultWeapon",
+        "skillPolicy": "default_weapon_only"
       }
     }
   },
@@ -434,6 +444,730 @@
       "locks": {
         "ascendancy": "{ASCENDANCY}",
         "keystone": "{KEYSTONE}"
+      }
+    }
+  },
+  {
+    "id": "D1_dual_weaponsets",
+    "role": "anchor",
+    "directive": "mandate",
+    "strength": "hard",
+    "domainTags": [
+      "weapon_identity",
+      "build_architecture"
+    ],
+    "minSeverity": "mild",
+    "weights": {
+      "mild": 7,
+      "cruel": 6,
+      "diabolical": 4
+    },
+    "template": "You must design around two weapon sets: {WEAPON_SET_1} and {WEAPON_SET_2}.",
+    "shortLabel": "Twin Arsenal",
+    "slots": {
+      "WEAPON_SET_1": {
+        "picker": "weaponSet"
+      },
+      "WEAPON_SET_2": {
+        "picker": "weaponSet",
+        "filters": {
+          "notEqualTo": "WEAPON_SET_1"
+        }
+      }
+    },
+    "effects": {
+      "locks": {
+        "weaponMode": "armed",
+        "weaponSetPrimary": "{WEAPON_SET_1}",
+        "weaponSetSecondary": "{WEAPON_SET_2}",
+        "weaponSwap": "required"
+      }
+    }
+  },
+  {
+    "id": "D2_weaponset_plus_deep_mechanic",
+    "role": "anchor",
+    "directive": "mandate",
+    "strength": "hard",
+    "domainTags": [
+      "weapon_identity",
+      "skill_architecture",
+      "build_architecture"
+    ],
+    "minSeverity": "cruel",
+    "weights": {
+      "mild": 0,
+      "cruel": 7,
+      "diabolical": 6
+    },
+    "template": "Wield {WEAPON_SET} and commit to {DEEP_MECHANIC}.",
+    "shortLabel": "Mechanic Pact",
+    "slots": {
+      "WEAPON_SET": {
+        "picker": "weaponSet"
+      },
+      "DEEP_MECHANIC": {
+        "picker": "deepMechanic"
+      }
+    },
+    "effects": {
+      "locks": {
+        "weaponMode": "armed",
+        "weaponSet": "{WEAPON_SET}",
+        "deepMechanic": "{DEEP_MECHANIC}"
+      }
+    }
+  },
+  {
+    "id": "H1_must_use_offhand",
+    "role": "anchor",
+    "directive": "mandate",
+    "strength": "hard",
+    "domainTags": [
+      "weapon_identity",
+      "itemization_constraint"
+    ],
+    "minSeverity": "mild",
+    "weights": {
+      "mild": 6,
+      "cruel": 5,
+      "diabolical": 3
+    },
+    "template": "Your off-hand must be {OFFHAND}.",
+    "shortLabel": "Offhand Oath",
+    "slots": {
+      "OFFHAND": {
+        "picker": "offHand"
+      }
+    },
+    "effects": {
+      "locks": {
+        "weaponMode": "armed",
+        "offhand": "{OFFHAND}",
+        "weaponStyle": "requires_offhand"
+      }
+    }
+  },
+  {
+    "id": "H2_onehand_no_offhand",
+    "role": "twist",
+    "directive": "constraint",
+    "strength": "hard",
+    "domainTags": [
+      "weapon_identity",
+      "itemization_constraint"
+    ],
+    "minSeverity": "cruel",
+    "weights": {
+      "mild": 0,
+      "cruel": 6,
+      "diabolical": 6
+    },
+    "template": "Wield {ONE_HANDED_MAIN} with an empty off-hand (no off-hand items).",
+    "shortLabel": "One Hand Only",
+    "slots": {
+      "ONE_HANDED_MAIN": {
+        "picker": "oneHandedMain"
+      }
+    },
+    "effects": {
+      "locks": {
+        "weaponMode": "armed",
+        "mainHand": "{ONE_HANDED_MAIN}",
+        "offhand": "none",
+        "weaponStyle": "no_offhand"
+      }
+    }
+  },
+  {
+    "id": "F4_normal_armor_slot",
+    "role": "twist",
+    "directive": "constraint",
+    "strength": "hard",
+    "domainTags": [
+      "itemization_constraint",
+      "rarity_rules"
+    ],
+    "minSeverity": "cruel",
+    "weights": {
+      "mild": 0,
+      "cruel": 6,
+      "diabolical": 6
+    },
+    "template": "You must keep a Normal-rarity {ARMOR_SLOT} equipped.",
+    "shortLabel": "Humble Plate",
+    "slots": {
+      "ARMOR_SLOT": {
+        "picker": "armorSlot"
+      }
+    },
+    "effects": {
+      "limits": {
+        "normalArmorSlot": "{ARMOR_SLOT}"
+      }
+    }
+  },
+  {
+    "id": "K1_melee_only",
+    "role": "anchor",
+    "directive": "constraint",
+    "strength": "hard",
+    "domainTags": [
+      "skill_architecture",
+      "combat_style"
+    ],
+    "minSeverity": "cruel",
+    "weights": {
+      "mild": 0,
+      "cruel": 6,
+      "diabolical": 6
+    },
+    "template": "You may only deal damage with Melee skills (no ranged damage sources).",
+    "shortLabel": "Close Quarters",
+    "effects": {
+      "locks": {
+        "damageRange": "melee"
+      }
+    }
+  },
+  {
+    "id": "K2_ranged_only",
+    "role": "anchor",
+    "directive": "constraint",
+    "strength": "hard",
+    "domainTags": [
+      "skill_architecture",
+      "combat_style"
+    ],
+    "minSeverity": "cruel",
+    "weights": {
+      "mild": 0,
+      "cruel": 6,
+      "diabolical": 6
+    },
+    "template": "You may only deal damage with Ranged skills (no melee damage sources).",
+    "shortLabel": "Long Reach",
+    "effects": {
+      "locks": {
+        "damageRange": "ranged"
+      }
+    }
+  },
+  {
+    "id": "O1_two_damage_skills_max",
+    "role": "twist",
+    "directive": "constraint",
+    "strength": "soft",
+    "domainTags": [
+      "skill_architecture",
+      "build_shape"
+    ],
+    "minSeverity": "mild",
+    "weights": {
+      "mild": 7,
+      "cruel": 6,
+      "diabolical": 4
+    },
+    "template": "You may only use two damage-dealing active skills.",
+    "shortLabel": "Two Blades",
+    "effects": {
+      "limits": {
+        "damageSkillsMax": 2
+      },
+      "locks": {
+        "skillPolicy": "max_2"
+      }
+    }
+  },
+  {
+    "id": "O2_one_damage_skill_only",
+    "role": "anchor",
+    "directive": "constraint",
+    "strength": "hard",
+    "domainTags": [
+      "skill_architecture",
+      "build_shape"
+    ],
+    "minSeverity": "cruel",
+    "weights": {
+      "mild": 0,
+      "cruel": 7,
+      "diabolical": 7
+    },
+    "template": "You may only use one damage-dealing active skill.",
+    "shortLabel": "One Art",
+    "effects": {
+      "limits": {
+        "damageSkillsMax": 1
+      },
+      "locks": {
+        "skillPolicy": "max_1"
+      }
+    }
+  },
+  {
+    "id": "P1_supports_one_per_skill",
+    "role": "twist",
+    "directive": "constraint",
+    "strength": "soft",
+    "domainTags": [
+      "skill_architecture",
+      "itemization_constraint"
+    ],
+    "minSeverity": "mild",
+    "weights": {
+      "mild": 7,
+      "cruel": 6,
+      "diabolical": 4
+    },
+    "template": "Limit yourself to 1 support gem per skill.",
+    "shortLabel": "Sparse Links",
+    "effects": {
+      "limits": {
+        "supportsPerSkill": 1
+      },
+      "locks": {
+        "supportPolicy": "per_skill_1"
+      }
+    }
+  },
+  {
+    "id": "P2_supports_three_total",
+    "role": "twist",
+    "directive": "constraint",
+    "strength": "hard",
+    "domainTags": [
+      "skill_architecture",
+      "itemization_constraint"
+    ],
+    "minSeverity": "cruel",
+    "weights": {
+      "mild": 0,
+      "cruel": 6,
+      "diabolical": 6
+    },
+    "template": "You may use only 3 support gems total across your entire build.",
+    "shortLabel": "Three Chains",
+    "effects": {
+      "limits": {
+        "supportsTotal": 3
+      },
+      "locks": {
+        "supportPolicy": "total_3"
+      }
+    }
+  },
+  {
+    "id": "P3_no_support_gems",
+    "role": "anchor",
+    "directive": "constraint",
+    "strength": "hard",
+    "domainTags": [
+      "skill_architecture",
+      "itemization_constraint"
+    ],
+    "minSeverity": "diabolical",
+    "weights": {
+      "mild": 0,
+      "cruel": 0,
+      "diabolical": 7
+    },
+    "template": "You may not use any support gems.",
+    "shortLabel": "Unlinked",
+    "effects": {
+      "bans": {
+        "supportGems": true
+      },
+      "locks": {
+        "supportPolicy": "none"
+      }
+    }
+  },
+  {
+    "id": "L1_damage_only_minions_companions",
+    "role": "anchor",
+    "directive": "constraint",
+    "strength": "hard",
+    "domainTags": [
+      "skill_architecture",
+      "combat_style"
+    ],
+    "minSeverity": "cruel",
+    "weights": {
+      "mild": 0,
+      "cruel": 7,
+      "diabolical": 6
+    },
+    "template": "Your character may not deal direct damage. Only Minions and/or Companions may deal damage.",
+    "shortLabel": "Hands Off",
+    "effects": {
+      "locks": {
+        "damageSource": "minions_or_companions"
+      }
+    }
+  },
+  {
+    "id": "L2_damage_only_totems",
+    "role": "anchor",
+    "directive": "constraint",
+    "strength": "hard",
+    "domainTags": [
+      "skill_architecture",
+      "combat_style"
+    ],
+    "minSeverity": "diabolical",
+    "weights": {
+      "mild": 0,
+      "cruel": 0,
+      "diabolical": 7
+    },
+    "template": "Your character may not deal direct damage. Only Totems may deal damage.",
+    "shortLabel": "Totem Master",
+    "effects": {
+      "locks": {
+        "damageSource": "totems"
+      }
+    }
+  },
+  {
+    "id": "R1_even_attributes",
+    "role": "twist",
+    "directive": "constraint",
+    "strength": "soft",
+    "domainTags": [
+      "attributes",
+      "build_architecture"
+    ],
+    "minSeverity": "mild",
+    "weights": {
+      "mild": 6,
+      "cruel": 5,
+      "diabolical": 4
+    },
+    "template": "Keep your attribute points evenly distributed as you level.",
+    "shortLabel": "Balanced Mind",
+    "effects": {
+      "limits": {
+        "evenAttributes": true
+      }
+    }
+  },
+  {
+    "id": "M1_apply_two_ailments",
+    "role": "twist",
+    "directive": "mandate",
+    "strength": "soft",
+    "domainTags": [
+      "ailments",
+      "skill_architecture"
+    ],
+    "minSeverity": "cruel",
+    "weights": {
+      "mild": 0,
+      "cruel": 7,
+      "diabolical": 6
+    },
+    "template": "Your build must reliably apply both {AILMENT_1} and {AILMENT_2}.",
+    "shortLabel": "Double Affliction",
+    "slots": {
+      "AILMENT_1": {
+        "picker": "ailment"
+      },
+      "AILMENT_2": {
+        "picker": "ailment",
+        "filters": {
+          "notEqualTo": "AILMENT_1"
+        }
+      }
+    },
+    "effects": {
+      "locks": {
+        "ailmentsRequired": "2",
+        "ailmentPolicy": "two"
+      }
+    }
+  },
+  {
+    "id": "M2_apply_three_ailments",
+    "role": "anchor",
+    "directive": "mandate",
+    "strength": "hard",
+    "domainTags": [
+      "ailments",
+      "skill_architecture"
+    ],
+    "minSeverity": "diabolical",
+    "weights": {
+      "mild": 0,
+      "cruel": 0,
+      "diabolical": 7
+    },
+    "template": "Your build must reliably apply {AILMENT_1}, {AILMENT_2}, and {AILMENT_3}.",
+    "shortLabel": "Triple Affliction",
+    "slots": {
+      "AILMENT_1": {
+        "picker": "ailment"
+      },
+      "AILMENT_2": {
+        "picker": "ailment",
+        "filters": {
+          "notEqualTo": "AILMENT_1"
+        }
+      },
+      "AILMENT_3": {
+        "picker": "ailment",
+        "filters": {
+          "notEqualTo": "AILMENT_2"
+        }
+      }
+    },
+    "effects": {
+      "locks": {
+        "ailmentsRequired": "3",
+        "ailmentPolicy": "three"
+      }
+    }
+  },
+  {
+    "id": "S1_beast_mode_shapeshift",
+    "role": "anchor",
+    "directive": "mandate",
+    "strength": "soft",
+    "domainTags": [
+      "skill_architecture",
+      "build_shape"
+    ],
+    "minSeverity": "mild",
+    "weights": {
+      "mild": 6,
+      "cruel": 5,
+      "diabolical": 4
+    },
+    "template": "Beast Mode: remain Shapeshifted whenever possible and use two Shapeshift forms.",
+    "shortLabel": "Beast Mode",
+    "effects": {
+      "locks": {
+        "shapeshift": "required"
+      }
+    }
+  },
+  {
+    "id": "Q1_no_persistent_buffs",
+    "role": "twist",
+    "directive": "constraint",
+    "strength": "hard",
+    "domainTags": [
+      "skill_architecture",
+      "resource_model"
+    ],
+    "minSeverity": "mild",
+    "weights": {
+      "mild": 6,
+      "cruel": 5,
+      "diabolical": 4
+    },
+    "template": "You may not use persistent buff skills.",
+    "shortLabel": "No Blessings",
+    "effects": {
+      "bans": {
+        "persistentBuffs": true
+      }
+    }
+  },
+  {
+    "id": "Q2_no_spirit_reservation",
+    "role": "twist",
+    "directive": "constraint",
+    "strength": "hard",
+    "domainTags": [
+      "skill_architecture",
+      "resource_model"
+    ],
+    "minSeverity": "cruel",
+    "weights": {
+      "mild": 0,
+      "cruel": 6,
+      "diabolical": 6
+    },
+    "template": "You may not reserve Spirit (no reservation skills).",
+    "shortLabel": "No Reservation",
+    "effects": {
+      "bans": {
+        "spiritReservation": true
+      }
+    }
+  },
+  {
+    "id": "J1_attribute_nodes_only",
+    "role": "anchor",
+    "directive": "constraint",
+    "strength": "hard",
+    "domainTags": [
+      "passive_tree_constraint",
+      "attributes"
+    ],
+    "minSeverity": "cruel",
+    "weights": {
+      "mild": 0,
+      "cruel": 7,
+      "diabolical": 6
+    },
+    "template": "On the passive tree, you may only allocate {ATTRIBUTE} attribute nodes.",
+    "shortLabel": "Single Stat",
+    "slots": {
+      "ATTRIBUTE": {
+        "picker": "attribute"
+      }
+    },
+    "effects": {
+      "limits": {
+        "passivesAttributeOnly": "{ATTRIBUTE}"
+      }
+    }
+  },
+  {
+    "id": "J2_attribute_nodes_and_gear_only",
+    "role": "anchor",
+    "directive": "constraint",
+    "strength": "hard",
+    "domainTags": [
+      "passive_tree_constraint",
+      "attributes",
+      "itemization_constraint"
+    ],
+    "minSeverity": "diabolical",
+    "weights": {
+      "mild": 0,
+      "cruel": 0,
+      "diabolical": 7
+    },
+    "template": "On the passive tree and on gear, you may only take {ATTRIBUTE} attribute bonuses.",
+    "shortLabel": "Pure Stat",
+    "slots": {
+      "ATTRIBUTE": {
+        "picker": "attribute"
+      }
+    },
+    "effects": {
+      "limits": {
+        "passivesAttributeOnly": "{ATTRIBUTE}",
+        "gearAttributeOnly": "{ATTRIBUTE}"
+      }
+    }
+  },
+  {
+    "id": "J3_passives_offense_or_defense_only",
+    "role": "anchor",
+    "directive": "constraint",
+    "strength": "hard",
+    "domainTags": [
+      "passive_tree_constraint",
+      "build_architecture"
+    ],
+    "minSeverity": "diabolical",
+    "weights": {
+      "mild": 0,
+      "cruel": 0,
+      "diabolical": 6
+    },
+    "template": "On the passive tree, allocate only {TREE_FOCUS} nodes whenever possible.",
+    "shortLabel": "Single Mind",
+    "slots": {
+      "TREE_FOCUS": {
+        "picker": "treeFocus"
+      }
+    },
+    "effects": {
+      "limits": {
+        "passiveFocus": "{TREE_FOCUS}"
+      }
+    }
+  },
+  {
+    "id": "S2_no_resistance_investment",
+    "role": "anchor",
+    "directive": "constraint",
+    "strength": "hard",
+    "domainTags": [
+      "itemization_constraint",
+      "defense_philosophy"
+    ],
+    "minSeverity": "diabolical",
+    "weights": {
+      "mild": 0,
+      "cruel": 0,
+      "diabolical": 6
+    },
+    "template": "Do not invest in {RESIST_TYPE} Resistance (no resistance mods, no resistance passives).",
+    "shortLabel": "Vulnerable",
+    "slots": {
+      "RESIST_TYPE": {
+        "picker": "resistType"
+      }
+    },
+    "effects": {
+      "bans": {
+        "resistance": "{RESIST_TYPE}"
+      }
+    }
+  },
+  {
+    "id": "N1_theme_oath",
+    "role": "anchor",
+    "directive": "mandate",
+    "strength": "soft",
+    "domainTags": [
+      "identity_archetype",
+      "skill_architecture"
+    ],
+    "minSeverity": "mild",
+    "weights": {
+      "mild": 7,
+      "cruel": 6,
+      "diabolical": 4
+    },
+    "template": "Your build must be themed around {THEME}.",
+    "shortLabel": "Theme Oath",
+    "slots": {
+      "THEME": {
+        "picker": "theme"
+      }
+    },
+    "effects": {
+      "locks": {
+        "theme": "{THEME}"
+      }
+    }
+  },
+  {
+    "id": "N2_theme_plus_trigger",
+    "role": "anchor",
+    "directive": "mandate",
+    "strength": "hard",
+    "domainTags": [
+      "identity_archetype",
+      "skill_architecture"
+    ],
+    "minSeverity": "cruel",
+    "weights": {
+      "mild": 0,
+      "cruel": 7,
+      "diabolical": 6
+    },
+    "template": "Theme your build around {THEME}, and include the trigger support {TRIGGER_SUPPORT}.",
+    "shortLabel": "Trigger Writ",
+    "slots": {
+      "THEME": {
+        "picker": "theme"
+      },
+      "TRIGGER_SUPPORT": {
+        "picker": "triggerSupport"
+      }
+    },
+    "effects": {
+      "locks": {
+        "theme": "{THEME}",
+        "triggerSupport": "{TRIGGER_SUPPORT}"
       }
     }
   }

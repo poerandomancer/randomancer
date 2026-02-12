@@ -220,29 +220,98 @@ async function buildPickerContext() {
 
   const weaponSet = unique(weaponSets);
 
-  // ----- Active skills
+  // ----- Separate pools for 1H and Off-Hand (used by a few contracts)
+  const oneHandedMain = unique(oneHanded.map(w => w?.name).filter(Boolean));
+  const offHand = unique(offHands.map(w => w?.name).filter(Boolean));
+
+  // ----- Armor slots (used for Normal-rarity slot contract)
+  const armorSlot = ['Helmet', 'Body Armour', 'Gloves', 'Boots'];
+
+  // ----- Ailments
+  const ailmentLean = {};
+  const ailment = unique(
+    toArray(core.Ailments).map(a => {
+      const name = a?.name;
+      if (name) ailmentLean[name] = leanKeyFromAttributes(a?.attributes);
+      return name;
+    }).filter(Boolean)
+  );
+
+  // ----- Themes (damage types + tactics)
+  const damageTypes = ['Physical Damage', 'Fire Damage', 'Cold Damage', 'Lightning Damage', 'Chaos Damage'];
+  const tacticNames = unique(toArray(core.Tactics).map(t => t?.name).filter(Boolean));
+  const theme = unique([...damageTypes, ...tacticNames, 'Triggers', 'Shapeshift']);
+
+  // ----- Attributes / focus toggles
+  const attribute = ['Strength', 'Dexterity', 'Intelligence'];
+  const treeFocus = ['Offensive', 'Defensive'];
+  const resistType = ['Elemental', 'Chaos'];
+
+  // ----- Skills
   const gems = toArray(core.gems);
+  const activeGems = gems.filter(g => g?.type === 'active');
+  const supportGems = gems.filter(g => g?.type === 'support');
+
   const activeSkill = unique(
-    gems
-      .filter(g => !g?.support)
+    activeGems
       .map(g => g?.base_item?.display_name || g?.name || g?.skill_name)
       .filter(Boolean)
   );
 
-  // ----- Skill Archetypes (curated list for now)
-  const skillArchetype = [
-    'Projectile skill',
-    'Strike skill',
-    'Area skill',
-    'Channelling skill',
-    'Damage-over-time skill',
-    'Totem skill',
-    'Trap/Mine skill',
-    'Minion skill',
-    'Warcry / Battle Shout',
-    'Curse / Hex',
-    'Aura / Reservation',
-    'Movement skill'
+  const triggerSupport = unique(
+    supportGems
+      .filter(g => (g?.tags || []).includes('trigger') || String(g?.name || '').toLowerCase().includes('invocation'))
+      .map(g => g?.base_item?.display_name || g?.name || g?.support_name)
+      .filter(Boolean)
+  );
+
+  const persistentBuffSkill = unique(
+    activeGems
+      .filter(g => (g?.tags || []).includes('buff') && (g?.tags || []).includes('persistent'))
+      .map(g => g?.base_item?.display_name || g?.name)
+      .filter(Boolean)
+  );
+
+  // ----- Skill Archetypes (derived from gem tags, but presented as friendly labels)
+  const archetypeDefs = [
+    { label: 'Projectile Skill', tag: 'projectile' },
+    { label: 'Strike Skill', tag: 'strike' },
+    { label: 'Area Skill', tag: 'area' },
+    { label: 'Channeling Skill', tag: 'channelling' },
+    { label: 'Damage-over-time Skill', tag: 'dot' },
+    { label: 'Totem Skill', tag: 'totem' },
+    { label: 'Trap/Mine Skill', tag: 'trappable' },
+    { label: 'Minion Skill', tag: 'minion' },
+    { label: 'Warcry', tag: 'warcry' },
+    { label: 'Curse', tag: 'curse' },
+    { label: 'Aura/Reservation', tag: 'hasreservation' },
+    { label: 'Movement Skill', tag: 'movement' }
+  ];
+
+  const tagCounts = {};
+  archetypeDefs.forEach(def => tagCounts[def.tag] = 0);
+  activeGems.forEach(g => {
+    const tags = g?.tags || [];
+    archetypeDefs.forEach(def => {
+      if (tags.includes(def.tag)) tagCounts[def.tag] += 1;
+    });
+  });
+
+  const skillArchetype = archetypeDefs.filter(def => (tagCounts[def.tag] || 0) > 0).map(def => def.label);
+
+  // ----- Deep mechanics (curated; for vibe + clarity)
+  const deepMechanic = [
+    'Trigger / Proc Engine',
+    'Combo / Finishers',
+    'Channeling',
+    'Totems',
+    'Minions',
+    'Traps & Mines',
+    'Warcry',
+    'Curses',
+    'Marks',
+    'Reservation / Auras',
+    'Shapeshift Forms'
   ];
 
   // ----- Keystones
@@ -259,7 +328,18 @@ async function buildPickerContext() {
     ascendancy: unique(ascendancies),
     defense: unique(defenses),
     weaponSet,
-    skillArchetype,
+    oneHandedMain,
+    offHand,
+    armorSlot,
+    ailment,
+    theme,
+    attribute,
+    treeFocus,
+    resistType,
+    triggerSupport,
+    persistentBuffSkill,
+    deepMechanic,
+    skillArchetype: unique(skillArchetype),
     activeSkill: unique(activeSkill),
     keystone: unique(keystones),
 
@@ -268,7 +348,8 @@ async function buildPickerContext() {
       class: classLean,
       ascendancy: ascendancyLean,
       defense: defenseLean,
-      weaponSet: weaponSetLean
+      weaponSet: weaponSetLean,
+      ailment: ailmentLean
     }
   };
 }
