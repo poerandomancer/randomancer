@@ -12,7 +12,7 @@ let challengeTaskCount = 2;
 let challengeSeverity = 'cruel';
 
 const STANDARD_LEDE_HTML = 'Tune <strong>Cohesion</strong> for tighter themes or wilder chaos. Use <strong>Bind the Fates</strong> to favor or ban certain options. Toggle <strong>Weapon Set II</strong> for an additional weapon set, and choose <strong>Combat Mechanics</strong>: 1-3 for ailment/tactic depth.<br><strong>---</strong><br>Click <strong>Roll Your Fate</strong> to begin.';
-const CHALLENGE_LEDE_TEXT = '<strong>Challenge Mode</strong> rolls a <strong>Contract</strong>, not a build. Choose 1–3 <strong>Tasks</strong>, set <strong>Severity</strong> (Mild–Diabolical), then <strong>Roll Your Fate</strong> to receive a stacked set of constraints to overcome.<br><strong>---</strong><br>Click <strong>Roll Your Fate</strong> to begin.';
+const CHALLENGE_LEDE_TEXT = '<strong>Challenge Mode</strong> rolls a <strong>Contract</strong>, not a build. Choose 1–3 <strong>Tasks</strong>, set <strong>Severity</strong>, then <strong>Roll Your Fate</strong> to receive a stacked set of constraints to overcome.<br><strong>---</strong><br>Click <strong>Roll Your Fate</strong> to begin.';
 
 function getMode() {
   try {
