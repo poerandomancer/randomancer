@@ -1,10 +1,12 @@
 import { ensureDataPreload } from './08-data-load.js';
 
 const SEVERITY_ORDER = { mild: 1, cruel: 2, diabolical: 3 };
+
+// V2: no more "taboo" role — 2 tasks is anchor+twist; 3 tasks is anchor+twist+twist
 const STACK_PLAN = {
   1: ['anchor'],
-  2: ['anchor', 'taboo'],
-  3: ['anchor', 'twist', 'taboo']
+  2: ['anchor', 'twist'],
+  3: ['anchor', 'twist', 'twist']
 };
 
 let challengeLibraryPromise = null;
@@ -54,72 +56,226 @@ async function loadChallengeLibrary() {
   return challengeLibraryPromise;
 }
 
+// -------------------------
+// Lean / Opposite / Alternate matching
+// -------------------------
+
+const ATTR_ORDER = ['str', 'dex', 'int'];
+
+function attrKeyFromCore(attrName) {
+  if (attrName === 'strength') return 'str';
+  if (attrName === 'dexterity') return 'dex';
+  if (attrName === 'intelligence') return 'int';
+  return null;
+}
+
+function leanKeyFromAttributes(attrs) {
+  const keys = [];
+  const obj = attrs && typeof attrs === 'object' ? attrs : {};
+  for (const [k, v] of Object.entries(obj)) {
+    if (!v) continue;
+    const mapped = attrKeyFromCore(k);
+    if (mapped) keys.push(mapped);
+  }
+  if (!keys.length) return null;
+  const ordered = ATTR_ORDER.filter(k => keys.includes(k));
+  return ordered.join('_');
+}
+
+function leanSetFromKey(key) {
+  if (!key) return new Set();
+  return new Set(String(key).split('_').filter(Boolean));
+}
+
+function leanKeyFromSet(set) {
+  const ordered = ATTR_ORDER.filter(k => set.has(k));
+  return ordered.length ? ordered.join('_') : null;
+}
+
+function oppositeLeanKey(key) {
+  const set = leanSetFromKey(key);
+  const all = new Set(ATTR_ORDER);
+  for (const v of set) all.delete(v);
+  return leanKeyFromSet(all);
+}
+
+function overlapCount(aKey, bKey) {
+  const a = leanSetFromKey(aKey);
+  const b = leanSetFromKey(bKey);
+  let count = 0;
+  for (const v of a) if (b.has(v)) count += 1;
+  return count;
+}
+
+function pickByMatch({ options, optionLeanMap, targetLeanKey, mode }) {
+  const target = targetLeanKey;
+  if (!target) return [];
+
+  if (mode === 'opposite') {
+    const opposite = oppositeLeanKey(target);
+    if (!opposite) return [];
+    return options.filter(v => optionLeanMap?.[v] === opposite);
+  }
+
+  if (mode === 'alternate') {
+    // Prefer zero overlap; otherwise choose minimal overlap. Never return identical lean-key.
+    const scored = options
+      .map(v => ({ v, lean: optionLeanMap?.[v] || null }))
+      .filter(row => row.lean && row.lean !== target)
+      .map(row => ({ ...row, overlap: overlapCount(row.lean, target) }));
+
+    if (!scored.length) return [];
+
+    const zero = scored.filter(r => r.overlap === 0).map(r => r.v);
+    if (zero.length) return zero;
+
+    const min = Math.min(...scored.map(r => r.overlap));
+    return scored.filter(r => r.overlap === min).map(r => r.v);
+  }
+
+  return [];
+}
+
+// -------------------------
+// Picker Context (V2)
+// -------------------------
+
 async function buildPickerContext() {
   await ensureDataPreload();
   const core = window.DATA || {};
 
+  // ----- Classes + Ascendancies
   const classes = Object.keys(core.Classes || {});
-  const ascendancies = classes.flatMap(className => toArray(core.Classes?.[className]?.ascendancies).map(a => a?.name).filter(Boolean));
-  const defenses = toArray(core.Defense).map(d => d?.name).filter(Boolean);
-  const ailments = toArray(core.Ailments).map(a => a?.name).filter(Boolean);
-  const tactics = toArray(core.Tactics).map(t => t?.name).filter(Boolean);
+  const classLean = {};
+  classes.forEach(name => {
+    classLean[name] = leanKeyFromAttributes(core.Classes?.[name]?.attributes);
+  });
 
-  const weaponSet = unique([
-    'Bow + Quiver',
-    'Crossbow + Quiver',
-    'Wand + Focus',
-    'Staff',
-    'Two-Handed Mace',
-    'Two-Handed Sword',
-    'Spear + Shield',
-    'One-Handed + Shield',
-    ...Object.keys(core.Weapons?.['Two-Handed'] || {}).map(k => `${k} (2H)`),
-    ...Object.keys(core.Weapons?.['One-Handed'] || {}).map(k => `${k} + Off-Hand`)
-  ]);
+  const ascendancyLean = {};
+  const ascendancies = classes.flatMap(className => {
+    return toArray(core.Classes?.[className]?.ascendancies)
+      .map(a => String(a))
+      .filter(Boolean)
+      .map(a => {
+        ascendancyLean[a] = classLean[className] || null;
+        return a;
+      });
+  });
 
-  const weaponType = unique([
-    'Unarmed',
-    ...Object.keys(core.Weapons?.['Two-Handed'] || {}),
-    ...Object.keys(core.Weapons?.['One-Handed'] || {}),
-    ...Object.keys(core.Weapons?.['Off-Hand'] || {})
-  ]);
+  // ----- Primary Defenses
+  const defenseLean = {};
+  const defenses = toArray(core.Defense)
+    .map(d => {
+      const name = d?.name;
+      if (name) defenseLean[name] = leanKeyFromAttributes(d?.attributes);
+      return name;
+    })
+    .filter(Boolean);
 
-  const gems = toArray(core.gems);
-  const activeSkill = unique(gems
-    .filter(g => !g?.support)
-    .map(g => g?.base_item?.display_name || g?.name || g?.skill_name)
-    .filter(Boolean));
+  // ----- Weapon Sets (derive from core weapons)
+  const weaponSetLean = {};
+  const weaponSets = [];
 
-  let uniques = [];
-  try {
-    const uniqueData = await fetch('data/enriched/uniques_enriched.json').then(res => (res.ok ? res.json() : []));
-    uniques = unique(toArray(uniqueData).map(item => item?.name).filter(Boolean));
-  } catch {
-    uniques = [];
+  // Two-handed weapons as standalone weapon sets
+  const twoHanded = toArray(core.Weapons?.['Two-Handed']);
+  twoHanded.forEach(w => {
+    if (!w?.name) return;
+    weaponSets.push(w.name);
+    weaponSetLean[w.name] = leanKeyFromAttributes(w.attributes);
+  });
+
+  // One-handed + Off-hand combinations
+  const oneHanded = toArray(core.Weapons?.['One-Handed']);
+  const offHands = toArray(core.Weapons?.['Off-Hand']);
+
+  function sumAttrs(a, b) {
+    const out = { strength: 0, dexterity: 0, intelligence: 0 };
+    const add = src => {
+      if (!src || typeof src !== 'object') return;
+      out.strength += Number(src.strength || 0);
+      out.dexterity += Number(src.dexterity || 0);
+      out.intelligence += Number(src.intelligence || 0);
+    };
+    add(a);
+    add(b);
+    return out;
   }
 
+  oneHanded.forEach(main => {
+    if (!main?.name) return;
+    offHands.forEach(off => {
+      const allowed = toArray(off?.['one-handed']);
+      if (!allowed.includes(main.name)) return;
+      if (!off?.name) return;
+
+      const label = `${main.name} & ${off.name}`;
+      weaponSets.push(label);
+      weaponSetLean[label] = leanKeyFromAttributes(sumAttrs(main.attributes, off.attributes));
+    });
+  });
+
+  // Always include Unarmed for explicit contracts
+  weaponSets.push('Unarmed');
+  weaponSetLean.Unarmed = null;
+
+  const weaponSet = unique(weaponSets);
+
+  // ----- Active skills
+  const gems = toArray(core.gems);
+  const activeSkill = unique(
+    gems
+      .filter(g => !g?.support)
+      .map(g => g?.base_item?.display_name || g?.name || g?.skill_name)
+      .filter(Boolean)
+  );
+
+  // ----- Skill Archetypes (curated list for now)
+  const skillArchetype = [
+    'Projectile skill',
+    'Strike skill',
+    'Area skill',
+    'Channelling skill',
+    'Damage-over-time skill',
+    'Totem skill',
+    'Trap/Mine skill',
+    'Minion skill',
+    'Warcry / Battle Shout',
+    'Curse / Hex',
+    'Aura / Reservation',
+    'Movement skill'
+  ];
+
+  // ----- Keystones
   const passives = toArray(core.passivesEnriched?.nodes || []);
-  const keystones = unique(passives
-    .filter(node => node?.isKeystone || node?.type === 'keystone')
-    .map(node => node?.name)
-    .filter(Boolean));
+  const keystones = unique(
+    passives
+      .filter(node => node?.isKeystone || node?.type === 'keystone')
+      .map(node => node?.name)
+      .filter(Boolean)
+  );
 
   return {
-    ascOrClass: unique([...ascendancies, ...classes]),
-    defense: unique([...defenses, 'Armour', 'Evasion', 'Energy Shield', 'Block']),
+    class: unique(classes),
+    ascendancy: unique(ascendancies),
+    defense: unique(defenses),
     weaponSet,
-    weaponType: unique([...weaponType, 'Spear', 'Quarterstaff', 'Crossbow', 'Bow', 'Claws']),
-    activeSkill: unique([...activeSkill, 'Lightning Arrow', 'Bone Storm', 'Earthquake', 'Ice Shot', 'Tempest Flurry']),
-    unique: unique([...uniques, 'Goldrim', 'Lifesprig', 'Tabula Rasa', 'Facebreaker']),
-    keystone: unique([...keystones, 'Chaos Inoculation', 'Resolute Technique', 'Mind Over Matter', 'Blood Magic']),
-    archetype: ['Totem specialist', 'Self-cast nuker', 'Hit-and-run skirmisher', 'Frontline bruiser', 'Ailment stacker'],
-    deepMechanic: ['Snapshotting defensive windows', 'Mana-stacking conversion', 'Corpse scaling', 'Trigger cadence optimization', 'Low-life aura stacking'],
-    ailment: unique([...ailments, 'Freeze', 'Ignite', 'Shock', 'Poison', 'Bleed']),
-    damageType: ['Physical', 'Fire', 'Cold', 'Lightning', 'Chaos'],
-    attribute: ['Strength', 'Dexterity', 'Intelligence', 'Strength/Dexterity', 'Dexterity/Intelligence'],
-    tactics
+    skillArchetype,
+    activeSkill: unique(activeSkill),
+    keystone: unique(keystones),
+
+    // Per-picker lean lookups (used for match logic)
+    __lean: {
+      class: classLean,
+      ascendancy: ascendancyLean,
+      defense: defenseLean,
+      weaponSet: weaponSetLean
+    }
   };
 }
+
+// -------------------------
+// Template + severity helpers
+// -------------------------
 
 function fillTemplate(template, slots) {
   return String(template || '').replace(/\{([A-Z0-9_]+)\}/g, (_m, key) => slots?.[key] ?? `{${key}}`);
@@ -129,11 +285,22 @@ function minSeverityAllowed(userSeverity, taskSeverity) {
   return (SEVERITY_ORDER[userSeverity] || 0) >= (SEVERITY_ORDER[taskSeverity] || 0);
 }
 
+// -------------------------
+// Conflicts (V2: directive + domainTags)
+// -------------------------
+
 function matchesWith(task, matcher) {
   if (!task || !matcher) return false;
-  if (matcher.category && task.category !== matcher.category) return false;
-  if (!matcher.tag || matcher.tag === '*') return true;
-  return toArray(task.tags).includes(matcher.tag);
+
+  // Back-compat (old schema)
+  if (matcher.category && task.category && task.category !== matcher.category) return false;
+  if (matcher.tag && task.tags && matcher.tag !== '*' && !toArray(task.tags).includes(matcher.tag)) return false;
+
+  // V2 schema
+  if (matcher.directive && task.directive !== matcher.directive) return false;
+  if (matcher.domainTag && matcher.domainTag !== '*' && !toArray(task.domainTags).includes(matcher.domainTag)) return false;
+
+  return true;
 }
 
 function conflictRejects(level, severity) {
@@ -157,16 +324,22 @@ function hasConflict(candidate, selected, severity) {
   return false;
 }
 
+// -------------------------
+// Effects + state
+// -------------------------
+
 function applyEffects(state, task, slotValues) {
   const effects = task.effects || {};
+  const resolveValue = (raw) => (typeof raw === 'string' ? fillTemplate(raw, slotValues) : raw);
+
   for (const [k, rawValue] of Object.entries(effects.locks || {})) {
-    state.locks[k] = fillTemplate(rawValue, slotValues);
+    state.locks[k] = resolveValue(rawValue);
   }
   for (const [k, rawValue] of Object.entries(effects.bans || {})) {
-    state.bans[k] = fillTemplate(rawValue, slotValues);
+    state.bans[k] = resolveValue(rawValue);
   }
   for (const [k, rawValue] of Object.entries(effects.limits || {})) {
-    state.limits[k] = fillTemplate(rawValue, slotValues);
+    state.limits[k] = resolveValue(rawValue);
   }
 }
 
@@ -187,7 +360,7 @@ function cloneState(state) {
 function failsLockCollision(task, slotValues, state) {
   const incomingLocks = task.effects?.locks || {};
   for (const [key, rawValue] of Object.entries(incomingLocks)) {
-    const resolved = fillTemplate(rawValue, slotValues);
+    const resolved = (typeof rawValue === 'string') ? fillTemplate(rawValue, slotValues) : rawValue;
     const current = state.locks?.[key];
     if (current != null && current !== resolved) return true;
   }
@@ -195,33 +368,142 @@ function failsLockCollision(task, slotValues, state) {
 }
 
 function failsBanLockSanity(task, slotValues, state) {
+  // Minimal sanity checks (mostly for obvious contradictions).
   const text = fillTemplate(task.template || '', slotValues);
-  if (state.bans?.uniques && (slotValues.UNIQUE_ITEM || /unique/i.test(text))) return true;
-  if (state.bans?.weaponSwap && (task.effects?.locks?.requiresWeaponSwap || /weapon\s*-?swap/i.test(text))) return true;
-  if (state.locks?.mainSkill && slotValues.ACTIVE_SKILL && state.locks.mainSkill !== slotValues.ACTIVE_SKILL) return true;
+
+  // If a contract already bans uniques, don't allow tasks that explicitly require or reference them.
+  if (state.bans?.uniques && /\bunique\b/i.test(text)) {
+    // Allow the banning task itself.
+    if (!/may not equip unique/i.test(text)) return true;
+  }
+
+  // Default-attack-only should not coexist with tasks that mandate an active main skill.
+  if (state.locks?.mainDamageMode === 'defaultWeapon' && (slotValues.ACTIVE_SKILL || slotValues.SKILL_ARCHETYPE)) return true;
+
   return false;
 }
 
-function pickSlotValue(slotConfig, slots, context) {
+// -------------------------
+// Slot resolution (V2: match logic)
+// -------------------------
+
+function buildSlotOrder(defs) {
+  const keys = Object.keys(defs || {});
+  const deps = {};
+  keys.forEach(k => {
+    const d = [];
+    const cfg = defs[k] || {};
+    const notEq = cfg?.filters?.notEqualTo;
+    if (notEq) d.push(notEq);
+    const against = cfg?.match?.againstSlot;
+    if (against) d.push(against);
+    const fallbackAgainst = cfg?.fallback?.againstSlot;
+    if (fallbackAgainst) d.push(fallbackAgainst);
+    deps[k] = unique(d);
+  });
+
+  const ordered = [];
+  const remaining = new Set(keys);
+
+  // Simple topological ordering
+  while (remaining.size) {
+    let progressed = false;
+    for (const k of [...remaining]) {
+      const need = deps[k] || [];
+      const ok = need.every(dep => ordered.includes(dep) || !keys.includes(dep));
+      if (ok) {
+        ordered.push(k);
+        remaining.delete(k);
+        progressed = true;
+      }
+    }
+    if (!progressed) {
+      // Cycle or unresolved dependency; fall back to original order for remaining.
+      for (const k of keys) {
+        if (remaining.has(k)) {
+          ordered.push(k);
+          remaining.delete(k);
+        }
+      }
+    }
+  }
+
+  return ordered;
+}
+
+function resolveMatchOptions({ pickerName, options, optionLeanMap, defs, slots, matchCfg, context }) {
+  const againstSlot = matchCfg?.againstSlot;
+  if (!againstSlot) return options;
+
+  const againstValue = slots[againstSlot];
+  if (!againstValue) return options;
+
+  const againstPickerName = defs?.[againstSlot]?.picker;
+  if (!againstPickerName) return options;
+
+  const targetLean = context.__lean?.[againstPickerName]?.[againstValue] || null;
+  if (!targetLean) return [];
+
+  const matched = pickByMatch({ options, optionLeanMap, targetLeanKey: targetLean, mode: matchCfg.mode });
+  return matched;
+}
+
+function pickSlotValue(slotKey, slotConfig, slots, defs, context) {
   const pickerName = slotConfig?.picker;
   let options = toArray(context[pickerName]);
+
+  // Basic filters
   const notEqualTo = slotConfig?.filters?.notEqualTo;
   if (notEqualTo && slots[notEqualTo]) {
     options = options.filter(option => option !== slots[notEqualTo]);
   }
+
+  // Match logic (opposite / alternate)
+  const optionLeanMap = context.__lean?.[pickerName] || null;
+  if (slotConfig?.match) {
+    const matched = resolveMatchOptions({
+      pickerName,
+      options,
+      optionLeanMap,
+      defs,
+      slots,
+      matchCfg: slotConfig.match,
+      context
+    });
+
+    if (matched.length) {
+      options = matched;
+    } else if (slotConfig?.fallback) {
+      const fallbackMatched = resolveMatchOptions({
+        pickerName,
+        options,
+        optionLeanMap,
+        defs,
+        slots,
+        matchCfg: slotConfig.fallback,
+        context
+      });
+      options = fallbackMatched.length ? fallbackMatched : [];
+    } else {
+      options = [];
+    }
+  }
+
   return randomPick(options);
 }
 
-function resolveSlots(task, context, maxRetries = 25) {
+function resolveSlots(task, context, maxRetries = 40) {
   const defs = task?.slots || {};
   const keys = Object.keys(defs);
   const slots = {};
   if (!keys.length) return slots;
 
+  const order = buildSlotOrder(defs);
+
   for (let attempt = 0; attempt < maxRetries; attempt += 1) {
     let ok = true;
-    for (const key of keys) {
-      const value = pickSlotValue(defs[key], slots, context);
+    for (const key of order) {
+      const value = pickSlotValue(key, defs[key], slots, defs, context);
       if (!value) {
         ok = false;
         break;
@@ -231,10 +513,15 @@ function resolveSlots(task, context, maxRetries = 25) {
     if (ok) return slots;
     Object.keys(slots).forEach(k => delete slots[k]);
   }
+
   return null;
 }
 
-function buildContractTitle({ picks, slots, severity }) {
+// -------------------------
+// Title helper
+// -------------------------
+
+function buildContractTitle({ picks, severity }) {
   const poolBySeverity = {
     mild: ['Wayward', 'Unquiet', 'Odd', 'Restless'],
     cruel: ['Cursed', 'Bloodbound', 'Blight-Touched', 'Grim'],
@@ -245,20 +532,23 @@ function buildContractTitle({ picks, slots, severity }) {
 
   const getFirstSlot = key => picks.find(p => p.slots?.[key])?.slots?.[key];
 
-  if (getFirstSlot('UNIQUE_ITEM')) return `The ${getFirstSlot('UNIQUE_ITEM')} Covenant`;
   if (getFirstSlot('KEYSTONE')) return `The ${getFirstSlot('KEYSTONE')} Decree`;
   if (getFirstSlot('ACTIVE_SKILL')) return `The ${getFirstSlot('ACTIVE_SKILL')} Edict`;
-  if (ids.includes('mandate_unarmed_class')) return 'The Empty Hand Oath';
-  if (ids.includes('prohibit_uniques')) return 'The Poverty Oath';
-  if (ids.includes('mandate_dual_weapon_sets')) return 'The Twin Arsenal Contract';
+  if (ids.includes('G1_unarmed')) return 'The Empty Hand Oath';
+  if (ids.includes('F3_ironman_normals_only_pickup')) return 'The Ironman Covenant';
 
   return `The ${randomPick(poolBySeverity[severity] || poolBySeverity.cruel)} ${randomPick(nouns)}`;
 }
 
-async function generateChallengeContract({ taskCount = 2, severity = 'cruel', maxAttempts = 120 } = {}) {
+// -------------------------
+// Generator
+// -------------------------
+
+async function generateChallengeContract({ taskCount = 2, severity = 'cruel', maxAttempts = 140 } = {}) {
   const normalizedCount = [1, 2, 3].includes(Number(taskCount)) ? Number(taskCount) : 2;
   const normalizedSeverity = SEVERITY_ORDER[severity] ? severity : 'cruel';
   const rolePlan = STACK_PLAN[normalizedCount];
+
   const library = await loadChallengeLibrary();
   const pickerContext = await buildPickerContext();
 
@@ -284,10 +574,12 @@ async function generateChallengeContract({ taskCount = 2, severity = 'cruel', ma
       if (!slots) continue;
       if (hasConflict(chosen, selected, normalizedSeverity)) continue;
       if (failsLockCollision(chosen, slots, state)) continue;
-      if (failsBanLockSanity(chosen, slots, state)) continue;
 
       const nextState = cloneState(state);
       applyEffects(nextState, chosen, slots);
+
+      if (failsBanLockSanity(chosen, slots, nextState)) continue;
+
       const next = [...selected, { task: chosen, slots, line: fillTemplate(chosen.template, slots) }];
       const resolved = backtrack(index + 1, next, nextState, attempts);
       if (resolved) return resolved;
@@ -312,6 +604,8 @@ async function generateChallengeContract({ taskCount = 2, severity = 'cruel', ma
     tasks: picks.map(item => ({
       id: item.task.id,
       role: item.task.role,
+      directive: item.task.directive,
+      strength: item.task.strength,
       shortLabel: item.task.shortLabel,
       line: item.line,
       slots: item.slots
