@@ -1,0 +1,395 @@
+[
+  {
+    "id": "mandate_class_defense_contradiction",
+    "role": "anchor",
+    "category": "mandate",
+    "tags": ["class", "ascendancy", "defense", "attributes"],
+    "minSeverity": "cruel",
+    "weights": { "mild": 0, "cruel": 6, "diabolical": 7 },
+    "template": "Play {ASC_OR_CLASS}, but your primary defense must be {DEFENSE}.",
+    "shortLabel": "Contradiction Shell",
+    "slots": {
+      "ASC_OR_CLASS": { "picker": "ascOrClass" },
+      "DEFENSE": { "picker": "defense" }
+    },
+    "effects": { "locks": { "defense": "{DEFENSE}" } },
+    "conflicts": [
+      { "with": { "category": "mandate", "tag": "defense" }, "level": "hard", "reason": "Two defense mandates collide." },
+      { "with": { "category": "limit", "tag": "defense" }, "level": "soft", "reason": "May overconstrain defense rules." }
+    ]
+  },
+  {
+    "id": "mandate_dual_weapon_sets",
+    "role": "anchor",
+    "category": "mandate",
+    "tags": ["weaponSet"],
+    "minSeverity": "cruel",
+    "weights": { "mild": 1, "cruel": 6, "diabolical": 7 },
+    "template": "You must actively use two weapon sets: {WEAPON_SET_A} and {WEAPON_SET_B}.",
+    "shortLabel": "Dual Arsenal",
+    "slots": {
+      "WEAPON_SET_A": { "picker": "weaponSet" },
+      "WEAPON_SET_B": { "picker": "weaponSet", "filters": { "notEqualTo": "WEAPON_SET_A" } }
+    },
+    "effects": { "locks": { "requiresWeaponSwap": true } },
+    "conflicts": [
+      { "with": { "category": "mandate", "tag": "weaponSet" }, "level": "hard", "reason": "Too many weapon set mandates." },
+      { "with": { "category": "prohibit", "tag": "weaponSet" }, "level": "hard", "reason": "Conflicts with weapon restrictions." }
+    ]
+  },
+  {
+    "id": "mandate_unarmed_class",
+    "role": "anchor",
+    "category": "mandate",
+    "tags": ["class", "ascendancy", "weaponType"],
+    "minSeverity": "cruel",
+    "weights": { "mild": 0, "cruel": 4, "diabolical": 6 },
+    "template": "Unarmed contract: solve it as {ASC_OR_CLASS}.",
+    "shortLabel": "Empty Hand",
+    "slots": { "ASC_OR_CLASS": { "picker": "ascOrClass" } },
+    "effects": { "locks": { "weaponType": "Unarmed" } },
+    "conflicts": [
+      { "with": { "category": "mandate", "tag": "weaponSet" }, "level": "hard", "reason": "Unarmed vs weapon set mandates." },
+      { "with": { "category": "limit", "tag": "weaponType" }, "level": "hard", "reason": "Unarmed vs weapon type limits." },
+      { "with": { "category": "limit", "tag": "weaponSet" }, "level": "hard", "reason": "Unarmed vs weapon swap limits." }
+    ]
+  },
+  {
+    "id": "mandate_main_skill",
+    "role": "anchor",
+    "category": "mandate",
+    "tags": ["skills"],
+    "minSeverity": "mild",
+    "weights": { "mild": 7, "cruel": 7, "diabolical": 7 },
+    "template": "Your main skill must be: {ACTIVE_SKILL}.",
+    "shortLabel": "Main Skill Edict",
+    "slots": { "ACTIVE_SKILL": { "picker": "activeSkill" } },
+    "effects": { "locks": { "mainSkill": "{ACTIVE_SKILL}" } },
+    "conflicts": [
+      { "with": { "category": "limit", "tag": "skills" }, "level": "soft", "reason": "Skill limits may restrict viability." }
+    ]
+  },
+  {
+    "id": "mandate_build_around_unique",
+    "role": "anchor",
+    "category": "mandate",
+    "tags": ["gear", "gearRarity"],
+    "minSeverity": "cruel",
+    "weights": { "mild": 0, "cruel": 5, "diabolical": 7 },
+    "template": "You must build around the unique: {UNIQUE_ITEM}.",
+    "shortLabel": "Relic Covenant",
+    "slots": { "UNIQUE_ITEM": { "picker": "unique" } },
+    "conflicts": [
+      { "with": { "category": "prohibit", "tag": "gearRarity" }, "level": "hard", "reason": "Uniques are prohibited." }
+    ]
+  },
+  {
+    "id": "mandate_take_keystone",
+    "role": "anchor",
+    "category": "mandate",
+    "tags": ["passives"],
+    "minSeverity": "mild",
+    "weights": { "mild": 5, "cruel": 6, "diabolical": 6 },
+    "template": "You must path into the keystone: {KEYSTONE}.",
+    "shortLabel": "Keystone Decree",
+    "slots": { "KEYSTONE": { "picker": "keystone" } }
+  },
+  {
+    "id": "mandate_melee_only",
+    "role": "anchor",
+    "category": "mandate",
+    "tags": ["weaponType", "skills"],
+    "minSeverity": "mild",
+    "weights": { "mild": 4, "cruel": 5, "diabolical": 5 },
+    "template": "Melee-only. No ranged damage skills.",
+    "shortLabel": "Melee Oath",
+    "effects": { "locks": { "rangeRule": "meleeOnly" } },
+    "conflicts": [
+      { "with": { "category": "mandate", "tag": "skills" }, "level": "soft", "reason": "Ensure mandated skill fits melee." }
+    ]
+  },
+  {
+    "id": "mandate_ranged_only",
+    "role": "anchor",
+    "category": "mandate",
+    "tags": ["weaponType", "skills"],
+    "minSeverity": "mild",
+    "weights": { "mild": 4, "cruel": 5, "diabolical": 5 },
+    "template": "Ranged-only. No melee damage skills.",
+    "shortLabel": "Ranged Oath",
+    "effects": { "locks": { "rangeRule": "rangedOnly" } },
+    "conflicts": [
+      { "with": { "category": "mandate", "tag": "skills" }, "level": "soft", "reason": "Ensure mandated skill fits ranged." }
+    ]
+  },
+  {
+    "id": "mandate_archetype",
+    "role": "anchor",
+    "category": "mandate",
+    "tags": ["archetype"],
+    "minSeverity": "mild",
+    "weights": { "mild": 4, "cruel": 5, "diabolical": 6 },
+    "template": "Solve the contract as a {ARCHETYPE}.",
+    "shortLabel": "Playstyle Law",
+    "slots": { "ARCHETYPE": { "picker": "archetype" } },
+    "conflicts": [
+      { "with": { "category": "mandate", "tag": "archetype" }, "level": "hard", "reason": "Only one archetype mandate." }
+    ]
+  },
+  {
+    "id": "mandate_deep_mechanic",
+    "role": "anchor",
+    "category": "mandate",
+    "tags": ["deepMechanics"],
+    "minSeverity": "cruel",
+    "weights": { "mild": 0, "cruel": 4, "diabolical": 6 },
+    "template": "Your build must meaningfully leverage: {DEEP_MECHANIC}.",
+    "shortLabel": "Deep Mechanic Clause",
+    "slots": { "DEEP_MECHANIC": { "picker": "deepMechanic" } }
+  },
+  {
+    "id": "mandate_default_weapon_skill",
+    "role": "anchor",
+    "category": "mandate",
+    "tags": ["weaponType", "skills"],
+    "minSeverity": "cruel",
+    "weights": { "mild": 0, "cruel": 4, "diabolical": 6 },
+    "template": "Your primary damage must come from the default {WEAPON_TYPE} weapon skill.",
+    "shortLabel": "Baseline Heresy",
+    "slots": { "WEAPON_TYPE": { "picker": "weaponType" } },
+    "effects": { "locks": { "mainSkillType": "defaultWeaponSkill", "weaponType": "{WEAPON_TYPE}" } },
+    "conflicts": [
+      { "with": { "category": "mandate", "tag": "skills" }, "level": "hard", "reason": "Conflicts with a specific main-skill mandate." }
+    ]
+  },
+  {
+    "id": "mandate_focus_ailment",
+    "role": "anchor",
+    "category": "mandate",
+    "tags": ["ailments"],
+    "minSeverity": "mild",
+    "weights": { "mild": 4, "cruel": 5, "diabolical": 5 },
+    "template": "Your build must reliably apply {AILMENT}.",
+    "shortLabel": "Ailment Writ",
+    "slots": { "AILMENT": { "picker": "ailment" } }
+  },
+
+  {
+    "id": "limit_only_one_unique",
+    "role": "twist",
+    "category": "limit",
+    "tags": ["gearRarity", "gear"],
+    "minSeverity": "mild",
+    "weights": { "mild": 4, "cruel": 4, "diabolical": 3 },
+    "template": "Limit: you may equip at most 1 unique item.",
+    "shortLabel": "Single Relic",
+    "effects": { "limits": { "uniqueCountMax": 1 } },
+    "conflicts": [
+      { "with": { "category": "prohibit", "tag": "gearRarity" }, "level": "hard", "reason": "Uniques are fully prohibited." }
+    ]
+  },
+  {
+    "id": "limit_no_weapon_swap",
+    "role": "twist",
+    "category": "limit",
+    "tags": ["weaponSet"],
+    "minSeverity": "mild",
+    "weights": { "mild": 5, "cruel": 4, "diabolical": 3 },
+    "template": "Limit: you may not weapon-swap. One weapon set only.",
+    "shortLabel": "Single Arsenal",
+    "effects": { "bans": { "weaponSwap": true } },
+    "conflicts": [
+      { "with": { "category": "mandate", "tag": "weaponSet" }, "level": "hard", "reason": "Conflicts with dual weapon set mandate." }
+    ]
+  },
+  {
+    "id": "limit_damage_type_only",
+    "role": "twist",
+    "category": "limit",
+    "tags": ["damageType", "skills"],
+    "minSeverity": "cruel",
+    "weights": { "mild": 0, "cruel": 4, "diabolical": 5 },
+    "template": "Limit: deal {DAMAGE_TYPE}-only damage (as your primary output).",
+    "shortLabel": "Mono Damage",
+    "slots": { "DAMAGE_TYPE": { "picker": "damageType" } },
+    "effects": { "locks": { "damageType": "{DAMAGE_TYPE}" } }
+  },
+  {
+    "id": "limit_defense_single_axis",
+    "role": "twist",
+    "category": "limit",
+    "tags": ["defense"],
+    "minSeverity": "cruel",
+    "weights": { "mild": 0, "cruel": 4, "diabolical": 5 },
+    "template": "Limit: you may only scale one defense axis — {DEFENSE}.",
+    "shortLabel": "One Wall",
+    "slots": { "DEFENSE": { "picker": "defense" } },
+    "effects": { "locks": { "defense": "{DEFENSE}" } }
+  },
+  {
+    "id": "limit_one_damage_skill",
+    "role": "twist",
+    "category": "limit",
+    "tags": ["skills"],
+    "minSeverity": "mild",
+    "weights": { "mild": 5, "cruel": 4, "diabolical": 4 },
+    "template": "Limit: only one damage-dealing active skill on your bar.",
+    "shortLabel": "One-Button Doctrine",
+    "effects": { "limits": { "damageSkillCountMax": 1 } }
+  },
+  {
+    "id": "limit_two_damage_skills",
+    "role": "twist",
+    "category": "limit",
+    "tags": ["skills"],
+    "minSeverity": "mild",
+    "weights": { "mild": 4, "cruel": 4, "diabolical": 3 },
+    "template": "Limit: at most two damage-dealing active skills.",
+    "shortLabel": "Two Blades",
+    "effects": { "limits": { "damageSkillCountMax": 2 } }
+  },
+  {
+    "id": "limit_attribute_skew",
+    "role": "twist",
+    "category": "limit",
+    "tags": ["attributes"],
+    "minSeverity": "cruel",
+    "weights": { "mild": 0, "cruel": 3, "diabolical": 4 },
+    "template": "Limit: your build must lean heavily into {ATTRIBUTE} (no balanced tri-stat).",
+    "shortLabel": "Single Attribute",
+    "slots": { "ATTRIBUTE": { "picker": "attribute" } },
+    "effects": { "locks": { "attributeLean": "{ATTRIBUTE}" } }
+  },
+  {
+    "id": "limit_no_trigger_play",
+    "role": "twist",
+    "category": "limit",
+    "tags": ["archetype", "deepMechanics"],
+    "minSeverity": "cruel",
+    "weights": { "mild": 0, "cruel": 3, "diabolical": 4 },
+    "template": "Limit: no trigger-style automation. You must self-cast/attack for damage.",
+    "shortLabel": "Manual Labor",
+    "effects": { "bans": { "triggers": true } }
+  },
+  {
+    "id": "limit_ailment_pair",
+    "role": "twist",
+    "category": "limit",
+    "tags": ["ailments"],
+    "minSeverity": "diabolical",
+    "weights": { "mild": 0, "cruel": 0, "diabolical": 4 },
+    "template": "Limit: you must apply BOTH {AILMENT_A} and {AILMENT_B}.",
+    "shortLabel": "Twin Afflictions",
+    "slots": {
+      "AILMENT_A": { "picker": "ailment" },
+      "AILMENT_B": { "picker": "ailment", "filters": { "notEqualTo": "AILMENT_A" } }
+    }
+  },
+  {
+    "id": "limit_no_minion_army",
+    "role": "twist",
+    "category": "limit",
+    "tags": ["tactics"],
+    "minSeverity": "mild",
+    "weights": { "mild": 4, "cruel": 3, "diabolical": 3 },
+    "template": "Limit: no more than one persistent minion type.",
+    "shortLabel": "No Army",
+    "effects": { "limits": { "minionTypesMax": 1 } }
+  },
+
+  {
+    "id": "prohibit_uniques",
+    "role": "taboo",
+    "category": "prohibit",
+    "tags": ["gearRarity"],
+    "minSeverity": "mild",
+    "weights": { "mild": 5, "cruel": 6, "diabolical": 6 },
+    "template": "Taboo: no unique items allowed.",
+    "shortLabel": "Poverty Oath",
+    "effects": { "bans": { "uniques": true } },
+    "conflicts": [
+      { "with": { "category": "mandate", "tag": "gearRarity" }, "level": "hard", "reason": "Cannot mandate a unique if uniques are banned." },
+      { "with": { "category": "limit", "tag": "gearRarity" }, "level": "hard", "reason": "Unique limits irrelevant if uniques are banned." }
+    ]
+  },
+  {
+    "id": "prohibit_crit_scaling",
+    "role": "taboo",
+    "category": "prohibit",
+    "tags": ["skills"],
+    "minSeverity": "mild",
+    "weights": { "mild": 4, "cruel": 5, "diabolical": 5 },
+    "template": "Taboo: no critical strike scaling.",
+    "shortLabel": "No Crit",
+    "effects": { "bans": { "critScaling": true } }
+  },
+  {
+    "id": "prohibit_dot_scaling",
+    "role": "taboo",
+    "category": "prohibit",
+    "tags": ["skills"],
+    "minSeverity": "mild",
+    "weights": { "mild": 4, "cruel": 5, "diabolical": 5 },
+    "template": "Taboo: no damage-over-time scaling.",
+    "shortLabel": "No DoT",
+    "effects": { "bans": { "dotScaling": true } }
+  },
+  {
+    "id": "prohibit_projectiles",
+    "role": "taboo",
+    "category": "prohibit",
+    "tags": ["skills"],
+    "minSeverity": "cruel",
+    "weights": { "mild": 0, "cruel": 4, "diabolical": 5 },
+    "template": "Taboo: no projectile skills.",
+    "shortLabel": "No Projectiles",
+    "effects": { "bans": { "projectiles": true } }
+  },
+  {
+    "id": "prohibit_minions",
+    "role": "taboo",
+    "category": "prohibit",
+    "tags": ["tactics"],
+    "minSeverity": "mild",
+    "weights": { "mild": 4, "cruel": 4, "diabolical": 4 },
+    "template": "Taboo: no minions.",
+    "shortLabel": "No Minions",
+    "effects": { "bans": { "minions": true } }
+  },
+  {
+    "id": "prohibit_totems",
+    "role": "taboo",
+    "category": "prohibit",
+    "tags": ["tactics"],
+    "minSeverity": "mild",
+    "weights": { "mild": 4, "cruel": 4, "diabolical": 4 },
+    "template": "Taboo: no totems.",
+    "shortLabel": "No Totems",
+    "effects": { "bans": { "totems": true } }
+  },
+  {
+    "id": "prohibit_movement_skill",
+    "role": "taboo",
+    "category": "prohibit",
+    "tags": ["skills"],
+    "minSeverity": "cruel",
+    "weights": { "mild": 0, "cruel": 3, "diabolical": 4 },
+    "template": "Taboo: no movement skills.",
+    "shortLabel": "No Movement",
+    "effects": { "bans": { "movementSkills": true } }
+  },
+  {
+    "id": "prohibit_weapon_swap",
+    "role": "taboo",
+    "category": "prohibit",
+    "tags": ["weaponSet"],
+    "minSeverity": "mild",
+    "weights": { "mild": 3, "cruel": 3, "diabolical": 3 },
+    "template": "Taboo: you may not weapon-swap.",
+    "shortLabel": "No Swap",
+    "effects": { "bans": { "weaponSwap": true } },
+    "conflicts": [
+      { "with": { "category": "mandate", "tag": "weaponSet" }, "level": "hard", "reason": "Conflicts with dual weapon set mandate." }
+    ]
+  }
+]

@@ -40,6 +40,10 @@ body {
   font-family: 'Cormorant Garamond', serif;
 }
 
+body.challenge-mode{
+  background: var(--bg) url('/images/challenge-background.png') center/cover no-repeat fixed;
+}
+
 .asc-art{
   position:fixed; inset:0; opacity:0; pointer-events:none;
   transition:opacity .5s ease;
@@ -50,6 +54,11 @@ body {
   filter:saturate(.9) brightness(1.05);
 }
 .asc-art.show{ opacity:.92; }
+
+body.challenge-mode .asc-art,
+body.challenge-mode .asc-art.show{
+  opacity: 0 !important;
+}
 
 /* Toast (clipboard + lightweight feedback) */
 .rm-toast{
@@ -92,4 +101,3 @@ body {
   -webkit-backdrop-filter: blur(2px);
   background: rgba(0,0,0,.28);
 }
-

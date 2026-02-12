@@ -188,7 +188,7 @@
 
       <h1 class="title">The Randomancer</h1>
       <h2 class="subtitle">Conjure the Impossible. Defy the Meta.</h2>
-      <div class="app-lede" role="note" aria-label="How to use the Randomancer">
+      <div id="app-lede" class="app-lede" role="note" aria-label="How to use the Randomancer">
         Tune <strong>Cohesion</strong> for tighter themes or wilder chaos. Use <strong>Bind the Fates</strong> to favor or ban certain options. Toggle <strong>Weapon Set II</strong> for an additional weapon set, and choose <strong>Combat Mechanics</strong>: 1-3 for ailment/tactic depth.<br>
         <strong>---</strong><br>
         Click <strong>Roll Your Fate</strong> to begin.
@@ -205,6 +205,21 @@
 
 
     <main>
+      <div class="mode-switch-row" role="group" aria-label="Randomancer mode">
+        <span class="mode-switch-label">Mode</span>
+        <div class="mode-switch-options">
+          <label class="mode-switch-option">
+            <input type="radio" name="randomancer-mode" value="standard" checked>
+            <span>Standard</span>
+          </label>
+          <label class="mode-switch-option">
+            <input type="radio" name="randomancer-mode" value="challenge">
+            <span>Challenge Mode</span>
+          </label>
+        </div>
+      </div>
+
+      <div id="standard-controls">
     
       <div class="cohesion-slider cohesion-bar-wrapper" data-cohesion-constrained="false">
                   <div class="mode-labels">
@@ -259,6 +274,30 @@
 			</button>
 		</div>
 
+      </div>
+
+      <div id="challenge-controls" class="challenge-controls is-hidden" aria-label="Challenge Mode controls">
+        <div class="challenge-control-item">
+          <label for="challenge-task-count">Tasks</label>
+          <select id="challenge-task-count">
+            <option value="1">1</option>
+            <option value="2" selected>2</option>
+            <option value="3">3</option>
+          </select>
+        </div>
+        <div class="challenge-control-item">
+          <label for="challenge-severity">Severity</label>
+          <select id="challenge-severity">
+            <option value="mild">mild</option>
+            <option value="cruel" selected>cruel</option>
+            <option value="diabolical">diabolical</option>
+          </select>
+        </div>
+      </div>
+
+      <hr id="challenge-empty-divider" class="gold subtle challenge-empty-divider is-hidden" aria-hidden="true"/>
+      <div id="challenge-empty-flavor" class="challenge-empty-flavor is-hidden" aria-live="polite"></div>
+
 
 
 
@@ -273,6 +312,38 @@
         <h3 class="empty-title">The Fates Await...</h3>
         <p class="empty-text">
         </p>
+      </section>
+
+      <section id="challenge-panel" class="panel is-hidden" aria-label="Challenge Contract">
+        <div class="panel-actions">
+          <div class="copy-menu" id="challenge-actions-wrap">
+            <button id="challenge-actions-btn" class="icon-btn" type="button" aria-label="Challenge actions" title="Challenge actions" aria-haspopup="menu" aria-expanded="false">
+              <span class="kebab-glyph" aria-hidden="true">⋯</span>
+            </button>
+
+            <div id="challenge-actions-menu" class="copy-menu-pop" role="menu" hidden>
+              <button id="challenge-actions-save" class="copy-menu-item" type="button" role="menuitem">
+                <span class="copy-menu-ico" aria-hidden="true">☆</span>
+                <span class="copy-menu-label">Save Challenge</span>
+              </button>
+
+              <button id="challenge-actions-copy-summary" class="copy-menu-item" type="button" role="menuitem">
+                <span class="copy-menu-ico" aria-hidden="true">⧉</span>
+                <span class="copy-menu-label">Copy Challenge Summary</span>
+              </button>
+
+              <button id="challenge-actions-copy-link" class="copy-menu-item" type="button" role="menuitem">
+                <span class="copy-menu-ico" aria-hidden="true">⧉</span>
+                <span class="copy-menu-label">Copy Challenge URL</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div id="challenge-contract-output" class="challenge-contract-output" aria-live="polite">
+          <h3 id="challenge-contract-title" class="challenge-contract-title"></h3>
+          <p id="challenge-contract-subtitle" class="challenge-contract-subtitle"></p>
+          <ul id="challenge-contract-lines" class="challenge-contract-lines"></ul>
+        </div>
       </section>
 
       <section id="build-panel" class="panel">
@@ -310,7 +381,6 @@
 			<div id="build-name" class="build-name"></div>
 			<div id="build-subtext" class="build-subtext"></div>
 		</div>
-        
         <div id="summary-panel" class="summary-panel" hidden aria-label="Build Summary">
           <div id="summary-line-1" class="summary-row summary-row--primary"></div>
           <div id="summary-line-2" class="summary-row"></div>
@@ -464,6 +534,8 @@ const INTRO_LINES = [
   "All gas, no guide.",
   "For when respeccing once just isn’t enough."
 ];
+
+window.RandomancerIntroLines = INTRO_LINES;
 
 document.addEventListener('DOMContentLoaded', () => {
   const emptyText = document.querySelector('#empty-state .empty-title');

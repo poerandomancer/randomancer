@@ -30,6 +30,7 @@ import {
 /* === Build Codes + Saved Builds (v0.9 preview) === */
 (function(){
   const STORAGE_KEY = 'randomancer_saved_builds_v1';
+  const CHALLENGE_STORAGE_KEY = 'randomancer_saved_challenges_v1';
   const MAX_SAVED = 10;
 
   const safeBtoa = (str) => {
@@ -40,10 +41,17 @@ import {
   };
 
   const currentSnap = () => (window.App?.state?.currentRoll) ? window.App.state.currentRoll : null;
+  const currentChallenge = () => (window.CURRENT_CHALLENGE_CONTRACT && typeof window.CURRENT_CHALLENGE_CONTRACT === 'object') ? window.CURRENT_CHALLENGE_CONTRACT : null;
   const savedOverlay = document.getElementById('saved-overlay');
   const savedCloseBtn = document.getElementById('saved-close');
   const savedFab = document.getElementById('saved-fab');
   let lastSavedFocus = null;
+
+  const isChallengeMode = () => {
+    const checked = document.querySelector('input[name="randomancer-mode"]:checked')?.value;
+    if (checked) return checked === 'challenge';
+    try { return localStorage.getItem('randomancer_mode') === 'challenge'; } catch { return false; }
+  };
 
   function encodeSnapshot(snap){
     if (!snap || typeof snap !== 'object') return '';
@@ -155,6 +163,71 @@ import {
       console.warn('[build code] decode failed', e);
       return null;
     }
+  }
+
+  function encodeChallengeContract(contract){
+    if (!contract || typeof contract !== 'object') return '';
+    const compact = {
+      v: 1,
+      title: contract.title || '',
+      subtitle: contract.subtitle || '',
+      severity: contract.severity || 'cruel',
+      taskCount: Number(contract.taskCount) || 2,
+      tasks: Array.isArray(contract.tasks)
+        ? contract.tasks.map(t => ({
+            id: t?.id || '',
+            role: t?.role || '',
+            shortLabel: t?.shortLabel || '',
+            line: t?.line || '',
+            slots: t?.slots && typeof t.slots === 'object' ? t.slots : {}
+          }))
+        : []
+    };
+    return safeBtoa(JSON.stringify(compact));
+  }
+
+  function decodeChallengeContract(code){
+    if (!code) return null;
+    const json = safeAtob(code);
+    if (!json) return null;
+    try {
+      const raw = JSON.parse(json);
+      if (!raw || typeof raw !== 'object') return null;
+      return {
+        mode: 'challenge',
+        title: raw.title || '',
+        subtitle: raw.subtitle || '',
+        severity: raw.severity || 'cruel',
+        taskCount: Number(raw.taskCount) || 2,
+        tasks: Array.isArray(raw.tasks) ? raw.tasks : []
+      };
+    } catch {
+      return null;
+    }
+  }
+
+  async function applyChallengeCode(code){
+    const contract = decodeChallengeContract(code);
+    if (!contract) return false;
+    if (typeof window.RandomancerSetMode === 'function') {
+      window.RandomancerSetMode('challenge');
+    }
+    const render = () => {
+      if (typeof window.RandomancerRenderChallengeContract === 'function') {
+        window.RandomancerRenderChallengeContract(contract);
+        return true;
+      }
+      return false;
+    };
+    if (render()) return true;
+    await new Promise(r => setTimeout(r, 40));
+    return render();
+  }
+
+  function challengeSummaryText(contract){
+    if (!contract) return '';
+    const lines = (contract.tasks || []).map(t => `• ${t.line || ''}`.trim()).filter(Boolean);
+    return [contract.title || 'Challenge Contract', contract.subtitle || '', ...lines].filter(Boolean).join('\n');
   }
 
   function setElText(sel, txt){ const el = document.querySelector(sel); if (el) el.textContent = txt || ''; }
@@ -426,8 +499,16 @@ function renderSnapshotToDom(snap){
       return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
     } catch { return []; }
   }
+  function loadSavedChallenges(){
+    try {
+      return JSON.parse(localStorage.getItem(CHALLENGE_STORAGE_KEY) || '[]');
+    } catch { return []; }
+  }
   function persistSaved(list){
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list.slice(0, MAX_SAVED))); } catch {}
+  }
+  function persistSavedChallenges(list){
+    try { localStorage.setItem(CHALLENGE_STORAGE_KEY, JSON.stringify(list.slice(0, MAX_SAVED))); } catch {}
   }
 
   function syncSaveButtonState(code){
@@ -457,6 +538,7 @@ function renderSnapshotToDom(snap){
 
   function openSavedOverlay(){
     if (!savedOverlay) return;
+    updateSavedLabels();
     renderSavedList();
     lastSavedFocus = document.activeElement;
     savedOverlay.hidden = false;
@@ -470,14 +552,15 @@ function renderSnapshotToDom(snap){
   }
 
   function renderSavedList(){
-    const list = loadSaved();
+    const challengeMode = isChallengeMode();
+    const list = challengeMode ? loadSavedChallenges() : loadSaved();
     const wrap = document.getElementById('saved-builds-list');
     if (!wrap) return;
     wrap.innerHTML = '';
     if (!list.length) {
       const empty = document.createElement('div');
       empty.className = 'saved-empty';
-      empty.textContent = 'No saved builds yet.';
+      empty.textContent = challengeMode ? 'No saved challenges yet.' : 'No saved builds yet.';
       wrap.appendChild(empty);
       return;
     }
@@ -485,13 +568,32 @@ function renderSnapshotToDom(snap){
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'saved-item';
-      btn.innerHTML = `<span class="name">${entry.name || 'Saved Build'}</span><span class="meta">${entry.meta || ''}</span>`;
+      btn.innerHTML = `<span class="name">${entry.name || (challengeMode ? 'Saved Challenge' : 'Saved Build')}</span><span class="meta">${entry.meta || ''}</span>`;
       btn.addEventListener('click', async () => {
-        const ok = await applyBuildCode(entry.code);
+        const ok = challengeMode
+          ? await applyChallengeCode(entry.code)
+          : await applyBuildCode(entry.code);
         if (ok) closeSavedOverlay();
       });
       wrap.appendChild(btn);
     });
+  }
+
+  function updateSavedLabels(){
+    const challengeMode = isChallengeMode();
+    const savedTitle = document.getElementById('saved-title');
+    const savedSubtitle = document.querySelector('.saved-subtitle');
+    const savedFabEl = document.getElementById('saved-fab');
+    const menuSavedLabel = document.querySelector('.header-menu-item[data-action="saved"] .header-menu-label');
+
+    const noun = challengeMode ? 'Challenges' : 'Builds';
+    if (savedTitle) savedTitle.textContent = `Saved ${noun}`;
+    if (savedSubtitle) savedSubtitle.textContent = `Preserves your last 10 Saved ${noun}`;
+    if (savedFabEl) {
+      savedFabEl.setAttribute('aria-label', `View Saved ${noun}`);
+      savedFabEl.setAttribute('title', `View Saved ${noun}`);
+    }
+    if (menuSavedLabel) menuSavedLabel.textContent = `Saved ${noun}`;
   }
 
   function saveCurrentBuild(){
@@ -518,6 +620,46 @@ function renderSnapshotToDom(snap){
     renderSavedList();
     updateCodeUI(code);
     syncSaveButtonState(code);
+  }
+
+  function saveCurrentChallenge(){
+    const contract = currentChallenge();
+    if (!contract) return;
+    const code = encodeChallengeContract(contract);
+    if (!code) return;
+
+    const list = loadSavedChallenges();
+    const existingIndex = list.findIndex(e => e.code === code);
+    if (existingIndex >= 0) {
+      list.splice(existingIndex, 1);
+      persistSavedChallenges(list);
+    } else {
+      const entry = {
+        code,
+        name: contract.title || 'Challenge Contract',
+        meta: [contract.severity, contract.subtitle].filter(Boolean).join(' • ')
+      };
+      const existing = list.filter(e => e.code !== code);
+      existing.unshift(entry);
+      persistSavedChallenges(existing);
+    }
+    renderSavedList();
+    syncChallengeSaveButtonState(code);
+  }
+
+  function syncChallengeSaveButtonState(code){
+    const btn = document.getElementById('challenge-actions-save');
+    if (!btn) return;
+
+    const ico = btn.querySelector('.copy-menu-ico');
+    const label = btn.querySelector('.copy-menu-label');
+    const list = loadSavedChallenges();
+    const activeCode = code || (() => { const c = currentChallenge(); return encodeChallengeContract(c); })();
+    const saved = !!(activeCode && list.some(e => e.code === activeCode));
+
+    if (ico) ico.textContent = saved ? '★' : '☆';
+    if (label) label.textContent = saved ? 'Challenge Saved' : 'Save Challenge';
+    btn.classList.toggle('is-saved', saved);
   }
   
   function normalizeHandedWeaponLabel(label) {
@@ -604,6 +746,12 @@ function renderSnapshotToDom(snap){
 	const actionCopySummary = document.getElementById('build-actions-copy-summary');
 	const actionCopyLink = document.getElementById('build-actions-copy-link');
 	const actionPoe = document.getElementById('build-actions-poe-ninja');
+	const challengeActionsWrap = document.getElementById('challenge-actions-wrap');
+	const challengeActionsBtn = document.getElementById('challenge-actions-btn');
+	const challengeActionsMenu = document.getElementById('challenge-actions-menu');
+	const challengeActionSave = document.getElementById('challenge-actions-save');
+	const challengeActionCopySummary = document.getElementById('challenge-actions-copy-summary');
+	const challengeActionCopyLink = document.getElementById('challenge-actions-copy-link');
 	
 	const closeActionsMenu = () => {
 	  if (!actionsMenu || !actionsBtn) return;
@@ -622,6 +770,22 @@ function renderSnapshotToDom(snap){
 	  if (actionsMenu.hidden) openActionsMenu();
 	  else closeActionsMenu();
 	};
+
+	const closeChallengeActionsMenu = () => {
+	  if (!challengeActionsMenu || !challengeActionsBtn) return;
+	  challengeActionsMenu.hidden = true;
+	  challengeActionsBtn.setAttribute('aria-expanded', 'false');
+	};
+
+	const toggleChallengeActionsMenu = () => {
+	  if (!challengeActionsMenu || !challengeActionsBtn) return;
+	  if (challengeActionsMenu.hidden) {
+	    challengeActionsMenu.hidden = false;
+	    challengeActionsBtn.setAttribute('aria-expanded', 'true');
+	  } else {
+	    closeChallengeActionsMenu();
+	  }
+	};
 	
 	const safeCopy = (text) => {
 	  if (!text) return;
@@ -637,11 +801,25 @@ function renderSnapshotToDom(snap){
 	  url.searchParams.set('build', code);
 	  return url.toString();
 	};
+
+	const challengeShareUrl = (contract) => {
+	  const code = encodeChallengeContract(contract);
+	  if (!code) return '';
+	  const url = new URL(location.href);
+	  url.searchParams.set('challenge', code);
+	  return url.toString();
+	};
 	
 	actionsBtn?.addEventListener('click', (e) => {
 	  e.preventDefault();
 	  e.stopPropagation();
 	  toggleActionsMenu();
+	});
+
+	challengeActionsBtn?.addEventListener('click', (e) => {
+	  e.preventDefault();
+	  e.stopPropagation();
+	  toggleChallengeActionsMenu();
 	});
 	
 	// Save Build (toggles saved/unsaved) — no immediate UI mutation beyond save logic
@@ -695,6 +873,25 @@ function renderSnapshotToDom(snap){
 		closeActionsMenu();
 	  });
 	}
+
+	challengeActionSave?.addEventListener('click', () => {
+	  saveCurrentChallenge();
+	});
+
+	challengeActionCopySummary?.addEventListener('click', async () => {
+	  const contract = currentChallenge();
+	  const ok = await copyTextToClipboard(challengeSummaryText(contract));
+	  showToast(ok ? 'Challenge Summary copied to clipboard!' : 'Could not copy Challenge Summary.');
+	  syncChallengeSaveButtonState();
+	});
+
+	challengeActionCopyLink?.addEventListener('click', async () => {
+	  const contract = currentChallenge();
+	  const url = challengeShareUrl(contract);
+	  const ok = await copyTextToClipboard(url);
+	  showToast(ok ? 'Challenge URL copied to clipboard!' : 'Could not copy Challenge URL.');
+	  syncChallengeSaveButtonState();
+	});
 	
 	document.addEventListener('click', (e) => {
 	  if (!actionsMenu || actionsMenu.hidden) return;
@@ -702,9 +899,19 @@ function renderSnapshotToDom(snap){
 	  if (actionsWrap && t instanceof Node && actionsWrap.contains(t)) return;
 	  closeActionsMenu();
 	});
+
+	document.addEventListener('click', (e) => {
+	  if (!challengeActionsMenu || challengeActionsMenu.hidden) return;
+	  const t = e.target;
+	  if (challengeActionsWrap && t instanceof Node && challengeActionsWrap.contains(t)) return;
+	  closeChallengeActionsMenu();
+	});
 	
 	document.addEventListener('keydown', (e) => {
-	  if (e.key === 'Escape') closeActionsMenu();
+	  if (e.key === 'Escape') {
+	    closeActionsMenu();
+	    closeChallengeActionsMenu();
+	  }
 	});
 
     const savedListFab = savedFab;
@@ -730,6 +937,17 @@ function renderSnapshotToDom(snap){
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && savedOverlay && !savedOverlay.hidden) closeSavedOverlay();
     });
+
+    document.addEventListener('randomancer:mode-change', () => {
+      updateSavedLabels();
+      if (savedOverlay && !savedOverlay.hidden) renderSavedList();
+    });
+
+    document.addEventListener('randomancer:challenge-rendered', () => {
+      syncChallengeSaveButtonState();
+    });
+
+    updateSavedLabels();
   }
   
   let __toastTimer = null;
@@ -781,6 +999,11 @@ function renderSnapshotToDom(snap){
 
   function autoLoadFromQuery(){
     const q = getQueryParams();
+    const challengeCode = q.get('challenge') || q.get('challengeCode');
+    if (challengeCode) {
+      applyChallengeCode(challengeCode);
+      return;
+    }
     const code = q.get('build') || q.get('buildCode');
     if (code) applyBuildCode(code);
   }
@@ -822,6 +1045,7 @@ function renderSnapshotToDom(snap){
     renderSavedList();
     subscribeToRolls();
     syncSaveButtonState();
+    syncChallengeSaveButtonState();
     autoLoadFromQuery();
   });
 
