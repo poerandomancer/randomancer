@@ -315,6 +315,30 @@
       </section>
 
       <section id="challenge-panel" class="panel is-hidden" aria-label="Challenge Contract">
+        <div class="panel-actions">
+          <div class="copy-menu" id="challenge-actions-wrap">
+            <button id="challenge-actions-btn" class="icon-btn" type="button" aria-label="Challenge actions" title="Challenge actions" aria-haspopup="menu" aria-expanded="false">
+              <span class="kebab-glyph" aria-hidden="true">⋯</span>
+            </button>
+
+            <div id="challenge-actions-menu" class="copy-menu-pop" role="menu" hidden>
+              <button id="challenge-actions-save" class="copy-menu-item" type="button" role="menuitem">
+                <span class="copy-menu-ico" aria-hidden="true">☆</span>
+                <span class="copy-menu-label">Save Challenge</span>
+              </button>
+
+              <button id="challenge-actions-copy-summary" class="copy-menu-item" type="button" role="menuitem">
+                <span class="copy-menu-ico" aria-hidden="true">⧉</span>
+                <span class="copy-menu-label">Copy Challenge Summary</span>
+              </button>
+
+              <button id="challenge-actions-copy-link" class="copy-menu-item" type="button" role="menuitem">
+                <span class="copy-menu-ico" aria-hidden="true">⧉</span>
+                <span class="copy-menu-label">Copy Challenge URL</span>
+              </button>
+            </div>
+          </div>
+        </div>
         <div id="challenge-contract-output" class="challenge-contract-output" aria-live="polite">
           <h3 id="challenge-contract-title" class="challenge-contract-title"></h3>
           <p id="challenge-contract-subtitle" class="challenge-contract-subtitle"></p>

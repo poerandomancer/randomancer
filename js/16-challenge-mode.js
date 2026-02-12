@@ -19,6 +19,7 @@ function getMode() {
 function setMode(mode) {
   const next = mode === MODES.CHALLENGE ? MODES.CHALLENGE : MODES.STANDARD;
   try { localStorage.setItem(MODE_KEY, next); } catch {}
+  try { document.dispatchEvent(new CustomEvent('randomancer:mode-change', { detail: { mode: next } })); } catch {}
   return next;
 }
 
@@ -69,6 +70,7 @@ function setChallengeFlavorLine() {
 }
 
 function renderChallengeContract(contract) {
+  if (!contract || typeof contract !== 'object') return;
   const title = document.getElementById('challenge-contract-title');
   const subtitle = document.getElementById('challenge-contract-subtitle');
   const list = document.getElementById('challenge-contract-lines');
@@ -85,6 +87,8 @@ function renderChallengeContract(contract) {
   }
 
   challengeHasRoll = true;
+  window.CURRENT_CHALLENGE_CONTRACT = contract;
+  try { document.dispatchEvent(new CustomEvent('randomancer:challenge-rendered')); } catch {}
 
   setChallengePanels(true);
 }
@@ -117,6 +121,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   setChallengeFlavorLine();
   syncMode(initialMode);
+  try { document.dispatchEvent(new CustomEvent('randomancer:mode-change', { detail: { mode: initialMode } })); } catch {}
 
   radios.forEach(radio => {
     radio.addEventListener('change', event => {
@@ -141,4 +146,14 @@ window.RandomancerHandleRollOverride = async ({ rollBtn, statusEl }) => {
     if (statusEl) statusEl.textContent = 'Challenge generation failed. Try again.';
   }
   return true;
+};
+
+window.RandomancerRenderChallengeContract = (contract) => {
+  renderChallengeContract(contract);
+};
+
+window.RandomancerSetMode = (mode) => {
+  const next = setMode(mode);
+  syncMode(next);
+  return next;
 };
