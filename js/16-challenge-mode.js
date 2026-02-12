@@ -14,6 +14,29 @@ let challengeSeverity = 'cruel';
 const STANDARD_LEDE_HTML = 'Tune <strong>Cohesion</strong> for tighter themes or wilder chaos. Use <strong>Bind the Fates</strong> to favor or ban certain options. Toggle <strong>Weapon Set II</strong> for an additional weapon set, and choose <strong>Combat Mechanics</strong>: 1-3 for ailment/tactic depth.<br><strong>---</strong><br>Click <strong>Roll Your Fate</strong> to begin.';
 const CHALLENGE_LEDE_TEXT = '<strong>Challenge Mode</strong> rolls a <strong>Contract</strong>, not a build. Choose 1–3 <strong>Tasks</strong>, set <strong>Severity</strong> (Mild–Diabolical), then <strong>Roll Your Fate</strong> to receive a stacked set of constraints to overcome.<br><strong>---</strong><br>Click <strong>Roll Your Fate</strong> to begin.';
 
+function stabilizeLedeHeight() {
+  const lede = document.getElementById('app-lede');
+  if (!lede) return;
+
+  const previous = lede.innerHTML;
+  const previousMinHeight = lede.style.minHeight;
+  lede.style.minHeight = '';
+
+  lede.innerHTML = STANDARD_LEDE_HTML;
+  const standardHeight = lede.offsetHeight;
+
+  lede.innerHTML = CHALLENGE_LEDE_TEXT;
+  const challengeHeight = lede.offsetHeight;
+
+  lede.innerHTML = previous;
+  const targetHeight = Math.max(standardHeight, challengeHeight);
+  lede.style.minHeight = `${targetHeight}px`;
+
+  if (previousMinHeight && Number.parseFloat(previousMinHeight) > targetHeight) {
+    lede.style.minHeight = previousMinHeight;
+  }
+}
+
 function getMode() {
   try {
     const stored = localStorage.getItem(MODE_KEY);
@@ -196,10 +219,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   const modeToggle = document.getElementById('randomancer-mode-toggle');
   const initialMode = getMode();
 
+  stabilizeLedeHeight();
   setChallengeFlavorLine();
   bindChallengeControls();
   syncMode(initialMode);
   try { document.dispatchEvent(new CustomEvent('randomancer:mode-change', { detail: { mode: initialMode } })); } catch {}
+
+  window.addEventListener('resize', stabilizeLedeHeight);
 
   modeToggle?.addEventListener('change', event => {
     const nextMode = setMode(event.target?.checked ? MODES.CHALLENGE : MODES.STANDARD);
