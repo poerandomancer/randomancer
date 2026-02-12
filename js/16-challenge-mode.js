@@ -46,7 +46,6 @@ function setChallengePanels(active) {
 }
 
 function renderChallengeContract(contract) {
-  const appEl = document.getElementById('app');
   const emptyState = document.getElementById('empty-state');
 
   const title = document.getElementById('challenge-contract-title');
@@ -64,7 +63,6 @@ function renderChallengeContract(contract) {
     });
   }
 
-  if (appEl) appEl.dataset.hasRoll = 'true';
   if (emptyState) emptyState.classList.add('is-hidden');
 
   setChallengePanels(true);
