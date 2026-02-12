@@ -295,6 +295,8 @@
         </div>
       </div>
 
+      <hr id="challenge-empty-divider" class="gold subtle challenge-empty-divider is-hidden" aria-hidden="true"/>
+
 
 
 
@@ -507,6 +509,8 @@ const INTRO_LINES = [
   "All gas, no guide.",
   "For when respeccing once just isn’t enough."
 ];
+
+window.RandomancerIntroLines = INTRO_LINES;
 
 document.addEventListener('DOMContentLoaded', () => {
   const emptyText = document.querySelector('#empty-state .empty-title');
