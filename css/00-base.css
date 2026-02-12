@@ -101,3 +101,26 @@ body.challenge-mode .asc-art.show{
   -webkit-backdrop-filter: blur(2px);
   background: rgba(0,0,0,.28);
 }
+
+#app::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  opacity:0;
+  background:
+    radial-gradient(130% 80% at 50% 20%, rgba(128,34,32,0.12), rgba(0,0,0,0) 60%),
+    linear-gradient(180deg, rgba(74,18,16,0.16) 0%, rgba(46,8,8,0.26) 100%);
+  mix-blend-mode:multiply;
+  transition:opacity .45s ease;
+}
+
+body.challenge-mode #app::after{
+  opacity:1;
+}
+
+#app > *{
+  position:relative;
+  z-index:1;
+}
