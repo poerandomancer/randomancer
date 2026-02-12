@@ -86,3 +86,12 @@
 .challenge-empty-divider{
   margin:.2rem 0 1rem;
 }
+
+.challenge-empty-flavor{
+  text-align:center;
+  color:var(--muted);
+  font-size:clamp(1.05rem, 1.8vw, 1.35rem);
+  line-height:1.3;
+  margin:1.25rem auto 0.75rem;
+  max-width:min(900px, 92vw);
+}

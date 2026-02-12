@@ -33,6 +33,7 @@ function setChallengeVisibility(active) {
 function setChallengePanels(active) {
   const challengePanel = document.getElementById('challenge-panel');
   const challengeDivider = document.getElementById('challenge-empty-divider');
+  const challengeFlavor = document.getElementById('challenge-empty-flavor');
   const buildBanner = document.getElementById('build-roll-banner');
   const buildPanel = document.getElementById('build-panel');
   const skillsPanel = document.getElementById('skills-panel');
@@ -47,6 +48,7 @@ function setChallengePanels(active) {
 
   challengePanel?.classList.toggle('is-hidden', !showChallengePanel);
   challengeDivider?.classList.toggle('is-hidden', !showChallengeEmpty);
+  challengeFlavor?.classList.toggle('is-hidden', !showChallengeEmpty);
   buildBanner?.classList.toggle('is-hidden', active);
   buildPanel?.classList.toggle('is-hidden', active);
   skillsPanel?.classList.toggle('is-hidden', active);
@@ -54,8 +56,16 @@ function setChallengePanels(active) {
   passivesPanel?.classList.toggle('is-hidden', active);
 
   if (emptyState) {
-    emptyState.classList.toggle('is-hidden', !(showChallengeEmpty || showStandardEmpty));
+    emptyState.classList.toggle('is-hidden', !showStandardEmpty);
   }
+}
+
+function setChallengeFlavorLine() {
+  const challengeFlavor = document.getElementById('challenge-empty-flavor');
+  if (!challengeFlavor) return;
+  const pool = Array.isArray(window.RandomancerIntroLines) ? window.RandomancerIntroLines : [];
+  if (!pool.length) return;
+  challengeFlavor.textContent = pool[Math.floor(Math.random() * pool.length)];
 }
 
 function renderChallengeContract(contract) {
@@ -105,6 +115,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const radios = Array.from(document.querySelectorAll('input[name="randomancer-mode"]'));
   const initialMode = getMode();
 
+  setChallengeFlavorLine();
   syncMode(initialMode);
 
   radios.forEach(radio => {
