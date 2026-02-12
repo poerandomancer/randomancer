@@ -120,6 +120,7 @@ async function handleChallengeRoll({ rollBtn, statusEl }) {
 
 function syncMode(mode) {
   const isChallenge = mode === MODES.CHALLENGE;
+  document.body?.classList.toggle('challenge-mode', isChallenge);
   setHeaderLede(mode);
   setChallengeVisibility(isChallenge);
   setChallengePanels(isChallenge);
