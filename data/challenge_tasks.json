@@ -15,7 +15,7 @@
       "cruel": 6,
       "diabolical": 5
     },
-    "template": "Choose {CLASS}. Your primary defense must be {DEFENSE} (true opposite).",
+    "template": "Choose {CLASS}. Your primary defense must be {DEFENSE}.",
     "shortLabel": "Contradiction Shell",
     "slots": {
       "CLASS": {
@@ -56,7 +56,7 @@
       "cruel": 6,
       "diabolical": 5
     },
-    "template": "Choose {CLASS}. You must wield {WEAPON_SET} (against-type).",
+    "template": "Choose {CLASS}. You must wield {WEAPON_SET}.",
     "shortLabel": "Against-Type Arms",
     "slots": {
       "CLASS": {
@@ -94,7 +94,7 @@
       "cruel": 7,
       "diabolical": 5
     },
-    "template": "Choose {CLASS}. You must wield {WEAPON_SET} and rely primarily on {DEFENSE} (both against-type).",
+    "template": "Choose {CLASS}. You must wield {WEAPON_SET} and rely primarily on {DEFENSE}.",
     "shortLabel": "Double Contradiction",
     "slots": {
       "CLASS": {
