@@ -14,6 +14,32 @@ let challengeSeverity = 'cruel';
 const STANDARD_LEDE_HTML = 'Tune <strong>Cohesion</strong> for tighter themes or wilder chaos. Use <strong>Bind the Fates</strong> to favor or ban certain options. Toggle <strong>Weapon Set II</strong> for an additional weapon set, and choose <strong>Combat Mechanics</strong>: 1-3 for ailment/tactic depth.<br><strong>---</strong><br>Click <strong>Roll Your Fate</strong> to begin.';
 const CHALLENGE_LEDE_TEXT = '<strong>Challenge Mode</strong> rolls a <strong>Contract</strong>, not a build. Choose 1–3 <strong>Tasks</strong>, set <strong>Severity</strong>, then <strong>Roll Your Fate</strong> to receive a stacked set of constraints to overcome.<br><strong>---</strong><br>Click <strong>Roll Your Fate</strong> to begin.';
 
+let CHALLENGE_TEMPLATE_BY_ID = Object.create(null);
+
+function buildTemplateSegments(template, slots) {
+  const str = String(template || '');
+  const re = /\{([A-Z0-9_]+)\}/g;
+  const out = [];
+  let last = 0;
+  let m;
+
+  while ((m = re.exec(str))) {
+    const start = m.index;
+    const key = m[1];
+    if (start > last) out.push({ t: str.slice(last, start), hi: false });
+
+    const has = slots && slots[key] != null;
+    const val = has ? String(slots[key]) : `{${key}}`;
+    out.push({ t: val, hi: has });
+
+    last = start + m[0].length;
+  }
+  if (last < str.length) out.push({ t: str.slice(last), hi: false });
+
+  return out;
+}
+
+
 function stabilizeLedeHeight() {
   const lede = document.getElementById('app-lede');
   if (!lede) return;
@@ -130,11 +156,32 @@ function renderChallengeContract(contract) {
       dash.textContent = ' — ';
 
       const content = document.createElement('span');
-      content.className = 'summary-content';
-      content.textContent = task.line;
+			content.className = 'summary-content';
+			
+			// Build segments from the authoritative template (so saved codes highlight correctly)
+			const template = task?.id ? CHALLENGE_TEMPLATE_BY_ID[task.id] : null;
+			const segments = template ? buildTemplateSegments(template, task?.slots || {}) : null;
+			
+			if (Array.isArray(segments) && segments.length) {
+				segments.forEach(seg => {
+					if (!seg || seg.t == null) return;
+					if (seg.hi) {
+						const v = document.createElement('span');
+						v.className = 'task-val';
+						v.textContent = seg.t;
+						content.appendChild(v);
+					} else {
+						content.appendChild(document.createTextNode(seg.t));
+					}
+				});
+			} else {
+				// Fallback (should be rare): render the prefilled line
+				content.textContent = task.line;
+			}
+			
+			row.append(label, dash, content);
+			list.appendChild(row);
 
-      row.append(label, dash, content);
-      list.appendChild(row);
     });
   }
 
@@ -232,9 +279,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     syncMode(nextMode);
   });
 
-  try {
-    await loadChallengeLibrary();
-  } catch {}
+	try {
+		const lib = await loadChallengeLibrary();
+		CHALLENGE_TEMPLATE_BY_ID = Object.create(null);
+		(Array.isArray(lib) ? lib : []).forEach(t => {
+			if (t?.id && t?.template) CHALLENGE_TEMPLATE_BY_ID[t.id] = t.template;
+		});
+	} catch {}
+
 });
 
 window.RandomancerHandleRollOverride = async ({ statusEl }) => {

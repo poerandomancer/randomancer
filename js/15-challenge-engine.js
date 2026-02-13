@@ -390,7 +390,16 @@ function conflictRejects(level, severity) {
 }
 
 function hasConflict(candidate, selected, severity) {
+  const candTags = new Set(toArray(candidate?.conflictTags));
   for (const existing of selected) {
+    // Conflict tags: simple overlap-based hard conflicts (e.g. support_policy, skill_policy)
+    if (candTags.size) {
+      for (const tag of toArray(existing.task?.conflictTags)) {
+        if (candTags.has(tag)) return true;
+      }
+    }
+
+    // Structured conflicts (optional, for future fine-grained rules)
     for (const conflict of toArray(candidate.conflicts)) {
       if (matchesWith(existing.task, conflict.with) && conflictRejects(conflict.level, severity)) {
         return true;

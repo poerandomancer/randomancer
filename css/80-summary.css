@@ -190,6 +190,21 @@
   font-weight: 700;
 }
 
+/* Highlight substituted values inside Challenge task lines */
+#challenge-contract-lines .task-val{
+  /* Match Summary headline glow language */
+  color: var(--title-gold, var(--gold));
+  font-weight: 800;
+  letter-spacing: .01em;
+
+  /* Brighter, tighter glow like the summary first line */
+  text-shadow:
+    0 0 10px rgba(210, 170, 95, 0.24),
+    0 0 18px rgba(210, 170, 95, 0.14);
+}
+
+
+
 .summary-content{
   font-weight: 600;
 }

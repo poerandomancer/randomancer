@@ -119,8 +119,37 @@ body.challenge-mode .asc-art.show{
 }
 
 body.challenge-mode #app::after{
-  opacity:1;
+  opacity: 1;
+
+  /* Strong vignette + your existing rusted overlay layers */
+  background:
+		/* Stronger vignette (darker edges) */
+		radial-gradient(120% 95% at 50% 36%,
+			rgba(0,0,0,0) 30%,
+			rgba(0,0,0,0.86) 100%
+		),
+	
+		/* Rusted-gold / brass glaze (subtle) */
+		radial-gradient(120% 80% at 50% 22%,
+			rgba(122, 88, 26, 0.10),
+			rgba(0,0,0,0) 60%
+		),
+	
+		/* Darker rusted glow (reduced color intensity) */
+		radial-gradient(132% 84% at 50% 18%,
+			rgba(62, 26, 14, 0.18),
+			rgba(0,0,0,0) 64%
+		),
+	
+		/* Deeper dark wash (overall darkening) */
+		linear-gradient(180deg,
+			rgba(44, 16, 14, 0.32) 0%,
+			rgba(12, 8, 10, 0.62) 100%
+		);
+
+
 }
+
 
 #app > *{
   position:relative;
