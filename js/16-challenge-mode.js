@@ -153,7 +153,8 @@ function renderChallengeContract(contract) {
       label.textContent = String(task.shortLabel || task.role || 'Clause').toUpperCase();
 
       const dash = document.createElement('span');
-      dash.textContent = ' — ';
+      dash.className = 'summary-dash';
+      dash.textContent = ' • ';
 
       const content = document.createElement('span');
 			content.className = 'summary-content';

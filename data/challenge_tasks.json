@@ -384,7 +384,10 @@
         "mainDamageMode": "defaultWeapon",
         "skillPolicy": "default_weapon_only"
       }
-    }
+    },
+    "conflictTags": [
+      "skill_policy"
+    ]
   },
   {
     "id": "I1_must_take_keystone",
@@ -628,7 +631,10 @@
       "locks": {
         "damageRange": "melee"
       }
-    }
+    },
+    "conflictTags": [
+      "damage_range"
+    ]
   },
   {
     "id": "K2_ranged_only",
@@ -651,7 +657,10 @@
       "locks": {
         "damageRange": "ranged"
       }
-    }
+    },
+    "conflictTags": [
+      "damage_range"
+    ]
   },
   {
     "id": "O1_two_damage_skills_max",
@@ -677,7 +686,10 @@
       "locks": {
         "skillPolicy": "max_2"
       }
-    }
+    },
+    "conflictTags": [
+      "skill_policy"
+    ]
   },
   {
     "id": "O2_one_damage_skill_only",
@@ -703,7 +715,10 @@
       "locks": {
         "skillPolicy": "max_1"
       }
-    }
+    },
+    "conflictTags": [
+      "skill_policy"
+    ]
   },
   {
     "id": "P1_supports_one_per_skill",
@@ -729,7 +744,10 @@
       "locks": {
         "supportPolicy": "per_skill_1"
       }
-    }
+    },
+    "conflictTags": [
+      "support_policy"
+    ]
   },
   {
     "id": "P2_supports_three_total",
@@ -755,7 +773,10 @@
       "locks": {
         "supportPolicy": "total_3"
       }
-    }
+    },
+    "conflictTags": [
+      "support_policy"
+    ]
   },
   {
     "id": "P3_no_support_gems",
@@ -781,7 +802,10 @@
       "locks": {
         "supportPolicy": "none"
       }
-    }
+    },
+    "conflictTags": [
+      "support_policy"
+    ]
   },
   {
     "id": "L1_damage_only_minions_companions",
@@ -804,7 +828,10 @@
       "locks": {
         "damageSource": "minions_or_companions"
       }
-    }
+    },
+    "conflictTags": [
+      "damage_source"
+    ]
   },
   {
     "id": "L2_damage_only_totems",
@@ -827,7 +854,10 @@
       "locks": {
         "damageSource": "totems"
       }
-    }
+    },
+    "conflictTags": [
+      "damage_source"
+    ]
   },
   {
     "id": "R1_even_attributes",

@@ -109,7 +109,7 @@ body.challenge-mode .asc-art.show{
   position:fixed;
   inset:0;
   pointer-events:none;
-  z-index:40;
+  z-index:0;
   opacity:0;
   background:
     radial-gradient(132% 84% at 50% 18%, rgba(104,48,36,0.13), rgba(0,0,0,0) 60%),
@@ -124,10 +124,11 @@ body.challenge-mode #app::after{
   /* Strong vignette + your existing rusted overlay layers */
   background:
 		/* Stronger vignette (darker edges) */
-		radial-gradient(120% 95% at 50% 36%,
-			rgba(0,0,0,0) 30%,
-			rgba(0,0,0,0.86) 100%
+		radial-gradient(120% 95% at 50% 42%,
+			rgba(0,0,0,0) 22%,
+			rgba(0,0,0,0.94) 100%
 		),
+
 	
 		/* Rusted-gold / brass glaze (subtle) */
 		radial-gradient(120% 80% at 50% 22%,
