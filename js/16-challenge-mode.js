@@ -189,7 +189,7 @@ function getTooltipPayload(slotKey, value) {
   }
 
 
-  if (slotKey === 'SKILL_FAMILY') {
+  if (slotKey.startsWith('SKILL_FAMILY')) {
     const core = window.DATA || {};
     const lib = core.skillFamilyLib;
     const index = core.skillFamilyIndex;
@@ -554,7 +554,7 @@ function renderChallengeContract(contract) {
 					if (seg.hi) {
 						const v = document.createElement('span');
 						const slotKey = seg.k;
-						const wantsTip = slotKey === 'ACTIVE_SKILL' || slotKey === 'KEYSTONE' || slotKey === 'SKILL_FAMILY';
+						const wantsTip = slotKey === 'ACTIVE_SKILL' || slotKey === 'KEYSTONE' || slotKey.startsWith('SKILL_FAMILY');
 						v.className = wantsTip ? 'task-val has-tip' : 'task-val';
 						if (wantsTip) {
 							v.dataset.slotKey = slotKey;

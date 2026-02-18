@@ -302,6 +302,101 @@
     }
   },
   {
+    "id": "A11_class_plus_two_skill_families",
+    "role": "anchor",
+    "directive": "mandate",
+    "strength": "hard",
+    "domainTags": [
+      "identity_archetype",
+      "skill_family",
+      "skill_architecture",
+      "build_shape"
+    ],
+    "minSeverity": "mild",
+    "weights": {
+      "mild": 5,
+      "cruel": 5,
+      "diabolical": 4
+    },
+    "template": "Choose {CLASS} and use at least 1 {SKILL_FAMILY} and at least 1 {SKILL_FAMILY_2}.",
+    "shortLabel": "Twin Oath",
+    "slots": {
+      "CLASS": {
+        "picker": "class"
+      },
+      "SKILL_FAMILY": {
+        "picker": "skillFamily"
+      },
+      "SKILL_FAMILY_2": {
+        "picker": "skillFamily",
+        "filters": {
+          "notEqualTo": "SKILL_FAMILY"
+        }
+      }
+    },
+    "conflictTags": [
+      "skill_family_constraint"
+    ],
+    "effects": {
+      "locks": {
+        "class": "{CLASS}",
+        "skillFamily": "{SKILL_FAMILY}",
+        "skillFamily2": "{SKILL_FAMILY_2}",
+        "mainDamageMode": "skillFamilyDual"
+      }
+    }
+  },
+  {
+    "id": "A12_class_two_skill_families_and_defense",
+    "role": "anchor",
+    "directive": "mandate",
+    "strength": "hard",
+    "domainTags": [
+      "identity_archetype",
+      "skill_family",
+      "skill_architecture",
+      "defense_philosophy",
+      "build_shape"
+    ],
+    "minSeverity": "mild",
+    "weights": {
+      "mild": 4,
+      "cruel": 4,
+      "diabolical": 3
+    },
+    "template": "Choose {CLASS} and use at least 1 {SKILL_FAMILY} and at least 1 {SKILL_FAMILY_2}, and maintain {DEFENSE}.",
+    "shortLabel": "Twin Bulwark",
+    "slots": {
+      "CLASS": {
+        "picker": "class"
+      },
+      "SKILL_FAMILY": {
+        "picker": "skillFamily"
+      },
+      "SKILL_FAMILY_2": {
+        "picker": "skillFamily",
+        "filters": {
+          "notEqualTo": "SKILL_FAMILY"
+        }
+      },
+      "DEFENSE": {
+        "picker": "defense"
+      }
+    },
+    "conflictTags": [
+      "skill_family_constraint"
+    ],
+    "effects": {
+      "locks": {
+        "class": "{CLASS}",
+        "skillFamily": "{SKILL_FAMILY}",
+        "skillFamily2": "{SKILL_FAMILY_2}",
+        "primaryDefense": "{DEFENSE}",
+        "mainDamageMode": "skillFamilyDual"
+      }
+    }
+  },
+  {
     "id": "A1_class_opposite_defense",
     "role": "anchor",
     "directive": "mandate",
