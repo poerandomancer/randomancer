@@ -264,6 +264,44 @@
     }
   },
   {
+    "id": "A10_class_plus_skill_family",
+    "role": "anchor",
+    "directive": "mandate",
+    "strength": "hard",
+    "domainTags": [
+      "identity_archetype",
+      "skill_family",
+      "skill_architecture",
+      "build_shape"
+    ],
+    "minSeverity": "mild",
+    "weights": {
+      "mild": 6,
+      "cruel": 6,
+      "diabolical": 5
+    },
+    "template": "Choose {CLASS} and center your build on {SKILL_FAMILY}.",
+    "shortLabel": "Family Oath",
+    "slots": {
+      "CLASS": {
+        "picker": "class"
+      },
+      "SKILL_FAMILY": {
+        "picker": "skillFamily"
+      }
+    },
+    "conflictTags": [
+      "skill_family_constraint"
+    ],
+    "effects": {
+      "locks": {
+        "class": "{CLASS}",
+        "skillFamily": "{SKILL_FAMILY}",
+        "mainDamageMode": "skillFamily"
+      }
+    }
+  },
+  {
     "id": "A1_class_opposite_defense",
     "role": "anchor",
     "directive": "mandate",
@@ -1597,6 +1635,37 @@
       "locks": {
         "theme": "{THEME}",
         "triggerSupport": "{TRIGGER_SUPPORT}"
+      }
+    }
+  },
+  {
+    "id": "SF1_skill_family_damage_only",
+    "role": "twist",
+    "directive": "mandate",
+    "strength": "soft",
+    "domainTags": [
+      "skill_family",
+      "skill_architecture"
+    ],
+    "minSeverity": "mild",
+    "weights": {
+      "mild": 5,
+      "cruel": 6,
+      "diabolical": 6
+    },
+    "template": "Your primary damage skills must belong to {SKILL_FAMILY}.",
+    "shortLabel": "Bloodline Focus",
+    "slots": {
+      "SKILL_FAMILY": {
+        "picker": "skillFamily"
+      }
+    },
+    "conflictTags": [
+      "skill_family_constraint"
+    ],
+    "effects": {
+      "locks": {
+        "skillFamily": "{SKILL_FAMILY}"
       }
     }
   }

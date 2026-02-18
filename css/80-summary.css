@@ -334,6 +334,13 @@
   margin-bottom: 6px;
 }
 
+
+.rc-tooltip__lines{
+  max-height: 280px;
+  overflow: auto;
+  padding-right: 6px;
+}
+
 .rc-tooltip__lines div{
   margin: 2px 0;
 }

@@ -391,6 +391,9 @@ async function buildPickerContext() {
     }
     return unique([...singles, ...pairs]);
   })();
+  // ----- Skill Families (tag-based libraries; used for Challenge Mode pickers/tooltips)
+  const skillFamily = unique(toArray(core.skillFamilyOptions || []));
+
 
 
   // ----- Skill Archetypes (derived from gem tags, but presented as friendly labels)
@@ -472,6 +475,7 @@ async function buildPickerContext() {
     deepMechanic,
     skillArchetype: unique(skillArchetype),
     activeSkill: unique(activeSkill),
+    skillFamily: unique(skillFamily),
     keystone: unique(keystones),
 
     // Per-picker lean lookups (used for match logic)
@@ -799,6 +803,7 @@ function buildContractTitle({ picks, severity }) {
 
   if (getFirstSlot('KEYSTONE')) return `The ${getFirstSlot('KEYSTONE')} Decree`;
   if (getFirstSlot('ACTIVE_SKILL')) return `The ${getFirstSlot('ACTIVE_SKILL')} Edict`;
+  if (getFirstSlot('SKILL_FAMILY')) return `The ${getFirstSlot('SKILL_FAMILY')} Covenant`;
   if (ids.includes('G1_unarmed')) return 'The Empty Hand Oath';
   if (ids.includes('F3_ironman_normals_only_pickup')) return 'The Ironman Covenant';
 

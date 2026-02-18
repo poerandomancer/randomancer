@@ -18,8 +18,9 @@
  * 13) 12-uniques-engine: uniques synergy engine.
  * 14) 13-info-lightbox: info overlay controller.
  * 15) 14-feedback-menu: feedback + mobile header menu.
- * 16) 15-challenge-engine: challenge contract generation + compatibility rules.
- * 17) 16-challenge-mode: mode toggle, challenge roll routing, contract rendering.
+ * 16) 17-skill-family-utils: skill family library resolver + tag-query helpers.
+ * 17) 15-challenge-engine: challenge contract generation + compatibility rules.
+ * 18) 16-challenge-mode: mode toggle, challenge roll routing, contract rendering.
  *
  * Public window exports (must remain available):
  * window.App, window.rollBuild, window.scheduleSummaryRefresh, window.RandomancerEncodeSnapshot,
@@ -43,5 +44,6 @@ import './js/11-pre-gate-and-sync.js';
 import './js/12-uniques-engine.js';
 import './js/13-info-lightbox.js';
 import './js/14-feedback-menu.js';
+import './js/17-skill-family-utils.js';
 import './js/15-challenge-engine.js';
 import './js/16-challenge-mode.js';

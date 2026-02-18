@@ -1,0 +1,569 @@
+{
+  "schema_version": "0.1",
+  "description": "Skill Family Library for Challenge Mode. Families are resolved by tag queries over the union of taxonomy.gem_tags, taxonomy.skill_types, and effect_tags on each skill (skills_enriched.json).",
+  "resolution_rules": {
+    "skill_pool_filter": "Active skills only; exclude support gems; exclude DNT/Unused by id or name. Buff/persistent/spirit skills are allowed.",
+    "tag_union": [
+      "taxonomy.gem_tags",
+      "taxonomy.skill_types",
+      "effect_tags"
+    ],
+    "dedupe_per_skill": true,
+    "normalization": "Lowercase; remove non-alphanumeric; apply alias_to_canonical mapping."
+  },
+  "tag_normalization": {
+    "strip_chars_regex": "[^a-z0-9]+",
+    "alias_to_canonical": {
+      "bleeding": "bleed",
+      "bleeds": "bleed",
+      "bleedable": "bleed",
+      "poisons": "poison",
+      "poisonable": "poison",
+      "ignites": "ignite",
+      "igniteable": "ignite",
+      "shocks": "shock",
+      "shockable": "shock",
+      "frozen": "freeze",
+      "freezing": "freeze",
+      "freezes": "freeze",
+      "freezable": "freeze",
+      "projectiles": "projectile",
+      "minions": "minion",
+      "corpses": "corpse"
+    },
+    "canonical_to_aliases": {
+      "bleed": [
+        "bleeding",
+        "bleeds",
+        "bleedable"
+      ],
+      "poison": [
+        "poisons",
+        "poisonable"
+      ],
+      "ignite": [
+        "ignites",
+        "igniteable"
+      ],
+      "shock": [
+        "shocks",
+        "shockable"
+      ],
+      "freeze": [
+        "frozen",
+        "freezing",
+        "freezes",
+        "freezable"
+      ],
+      "projectile": [
+        "projectiles"
+      ],
+      "minion": [
+        "minions"
+      ],
+      "corpse": [
+        "corpses"
+      ]
+    }
+  },
+  "families": [
+    {
+      "id": "fire_spells",
+      "name": "Fire Spells",
+      "query": {
+        "all": [
+          "fire",
+          "spell"
+        ]
+      },
+      "dev": {
+        "current_match_count": 25,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "cold_spells",
+      "name": "Cold Spells",
+      "query": {
+        "all": [
+          "cold",
+          "spell"
+        ]
+      },
+      "dev": {
+        "current_match_count": 22,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "lightning_spells",
+      "name": "Lightning Spells",
+      "query": {
+        "all": [
+          "lightning",
+          "spell"
+        ]
+      },
+      "dev": {
+        "current_match_count": 24,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "chaos_spells",
+      "name": "Chaos Spells",
+      "query": {
+        "all": [
+          "chaos",
+          "spell"
+        ]
+      },
+      "dev": {
+        "current_match_count": 13,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "physical_spells",
+      "name": "Physical Spells",
+      "query": {
+        "all": [
+          "physical",
+          "spell"
+        ]
+      },
+      "dev": {
+        "current_match_count": 16,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "plant_spells",
+      "name": "Plant Spells",
+      "query": {
+        "all": [
+          "plant",
+          "spell"
+        ]
+      },
+      "dev": {
+        "current_match_count": 3,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "orb_spells",
+      "name": "Orb Spells",
+      "query": {
+        "all": [
+          "orb",
+          "spell"
+        ]
+      },
+      "dev": {
+        "current_match_count": 5,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "storm_spells",
+      "name": "Storm Spells",
+      "query": {
+        "all": [
+          "storm",
+          "spell"
+        ]
+      },
+      "dev": {
+        "current_match_count": 7,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "elemental_combo_spells",
+      "name": "Elemental Combo Spells",
+      "query": {
+        "all": [
+          "spell"
+        ],
+        "any_groups": [
+          [
+            "fire",
+            "cold"
+          ],
+          [
+            "cold",
+            "lightning"
+          ],
+          [
+            "lightning",
+            "fire"
+          ]
+        ]
+      },
+      "dev": {
+        "current_match_count": 8,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "fire_attacks",
+      "name": "Fire Attacks",
+      "query": {
+        "all": [
+          "fire",
+          "attack"
+        ]
+      },
+      "dev": {
+        "current_match_count": 31,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "cold_attacks",
+      "name": "Cold Attacks",
+      "query": {
+        "all": [
+          "cold",
+          "attack"
+        ]
+      },
+      "dev": {
+        "current_match_count": 28,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "lightning_attacks",
+      "name": "Lightning Attacks",
+      "query": {
+        "all": [
+          "lightning",
+          "attack"
+        ]
+      },
+      "dev": {
+        "current_match_count": 29,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "chaos_attacks",
+      "name": "Chaos Attacks",
+      "query": {
+        "all": [
+          "chaos",
+          "attack"
+        ]
+      },
+      "dev": {
+        "current_match_count": 9,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "plant_attacks",
+      "name": "Plant Attacks",
+      "query": {
+        "all": [
+          "plant",
+          "attack"
+        ]
+      },
+      "dev": {
+        "current_match_count": 3,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "slam_skills",
+      "name": "Slam Skills",
+      "query": {
+        "all": [
+          "slam"
+        ]
+      },
+      "dev": {
+        "current_match_count": 25,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "fissure_skills",
+      "name": "Fissure Skills",
+      "query": {
+        "all": [
+          "createsfissure"
+        ]
+      },
+      "dev": {
+        "current_match_count": 9,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "wind_skills",
+      "name": "Wind Skills",
+      "query": {
+        "all": [
+          "wind"
+        ]
+      },
+      "dev": {
+        "current_match_count": 9,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "palm_skills",
+      "name": "Palm Skills",
+      "query": {
+        "all": [
+          "palm"
+        ]
+      },
+      "dev": {
+        "current_match_count": 3,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "strike_skills",
+      "name": "Strike Skills",
+      "query": {
+        "all": [
+          "strike"
+        ]
+      },
+      "dev": {
+        "current_match_count": 45,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "sacrifice_skills",
+      "name": "Sacrifice Skills",
+      "query": {
+        "any": [
+          "corpse",
+          "offering"
+        ]
+      },
+      "dev": {
+        "current_match_count": 9,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "hex_skills",
+      "name": "Hex Skills",
+      "query": {
+        "any": [
+          "curse",
+          "mark"
+        ]
+      },
+      "dev": {
+        "current_match_count": 14,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "necrotic_skills",
+      "name": "Necrotic Skills",
+      "query": {
+        "any": [
+          "necrotic",
+          "wither"
+        ]
+      },
+      "dev": {
+        "current_match_count": 6,
+        "missing_tags_in_dataset": [
+          "wither"
+        ]
+      }
+    },
+    {
+      "id": "grenade_skills",
+      "name": "Grenade Skills",
+      "query": {
+        "all": [
+          "grenade"
+        ]
+      },
+      "dev": {
+        "current_match_count": 7,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "bleed_skills",
+      "name": "Bleed Skills",
+      "query": {
+        "any": [
+          "bleed",
+          "bleeding"
+        ]
+      },
+      "dev": {
+        "current_match_count": 5,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "poison_skills",
+      "name": "Poison Skills",
+      "query": {
+        "all": [
+          "poison"
+        ]
+      },
+      "dev": {
+        "current_match_count": 11,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "ground_effect_skills",
+      "name": "Ground Effect Skills",
+      "query": {
+        "all": [
+          "createsgroundeffect"
+        ]
+      },
+      "dev": {
+        "current_match_count": 24,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "shapeshift_skills",
+      "name": "Shapeshift Skills",
+      "query": {
+        "all": [
+          "shapeshift"
+        ]
+      },
+      "dev": {
+        "current_match_count": 20,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "bear_form_skills",
+      "name": "Bear Form Skills",
+      "query": {
+        "all": [
+          "shapeshift",
+          "bear"
+        ]
+      },
+      "dev": {
+        "current_match_count": 7,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "wolf_form_skills",
+      "name": "Wolf Form Skills",
+      "query": {
+        "all": [
+          "shapeshift",
+          "wolf"
+        ]
+      },
+      "dev": {
+        "current_match_count": 6,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "wyvern_form_skills",
+      "name": "Wyvern Form Skills",
+      "query": {
+        "all": [
+          "shapeshift",
+          "wyvern"
+        ]
+      },
+      "dev": {
+        "current_match_count": 6,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "acrobatic_skills",
+      "name": "Acrobatic Skills",
+      "query": {
+        "any": [
+          "travel",
+          "movement",
+          "jumping"
+        ]
+      },
+      "dev": {
+        "current_match_count": 20,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "ignite_skills",
+      "name": "Ignite Skills",
+      "query": {
+        "all": [
+          "ignite"
+        ]
+      },
+      "dev": {
+        "current_match_count": 24,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "freezing_skills",
+      "name": "Freezing Skills",
+      "query": {
+        "all": [
+          "freeze"
+        ]
+      },
+      "dev": {
+        "current_match_count": 30,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "shock_skills",
+      "name": "Shock Skills",
+      "query": {
+        "all": [
+          "shock"
+        ]
+      },
+      "dev": {
+        "current_match_count": 46,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "charge_skills",
+      "name": "Charge Skills",
+      "query": {
+        "any": [
+          "consumescharges",
+          "generatescharges",
+          "requirescharges",
+          "skillconsumesfrenzychargesonuse",
+          "skillconsumesendurancechargesonuse",
+          "skillconsumespowerchargesonuse"
+        ]
+      },
+      "dev": {
+        "current_match_count": 39,
+        "missing_tags_in_dataset": []
+      }
+    }
+  ]
+}

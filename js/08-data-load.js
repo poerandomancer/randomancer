@@ -1,4 +1,5 @@
 import { buildPassiveIndex } from './07-skills-render.js';
+import { buildSkillFamilyIndex, resolveSkillFamily } from './17-skill-family-utils.js';
 
 // ---------- async data loader ----------
 async function loadJSON(path) {
@@ -72,6 +73,40 @@ async function loadData() {
     }
     console.log(`[Skill Enrichment] ${gems.length} enriched skill entries (precomputed).`);
 
+    // Skill Families (Challenge Mode)
+    const skillFamilyLibRaw = await tryLoad('data/skill_families.json');
+    const skillFamilyLib = (skillFamilyLibRaw && typeof skillFamilyLibRaw === 'object' && !Array.isArray(skillFamilyLibRaw))
+      ? skillFamilyLibRaw
+      : null;
+    
+    const skillFamilyIndex = skillFamilyLib ? buildSkillFamilyIndex(gems, skillFamilyLib) : null;
+    
+    // Pre-resolve family matches for instant pickers/tooltips
+    const skillFamilyByName = Object.create(null);
+    const skillFamilyById = Object.create(null);
+    const skillFamilyResolved = new Map(); // name -> Set(skillId)
+    const skillFamilyCounts = Object.create(null);
+    const skillFamilyOptions = [];
+    
+    if (skillFamilyLib && Array.isArray(skillFamilyLib.families) && skillFamilyIndex) {
+      for (const fam of skillFamilyLib.families) {
+    if (!fam || !fam.name) continue;
+    skillFamilyByName[fam.name] = fam;
+    if (fam.id) skillFamilyById[fam.id] = fam;
+    
+    const matchIds = resolveSkillFamily(fam, skillFamilyIndex, skillFamilyLib);
+    const count = matchIds ? matchIds.size : 0;
+    skillFamilyCounts[fam.name] = count;
+    skillFamilyResolved.set(fam.name, matchIds || new Set());
+    if (count > 0) skillFamilyOptions.push(fam.name);
+      }
+      // Stable sort for UI
+      skillFamilyOptions.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+      console.log(`[Skill Families] Loaded ${skillFamilyOptions.length}/${skillFamilyLib.families.length} families with matches.`);
+    } else {
+      console.warn('[Skill Families] Library missing or index build failed; Skill Family pickers/tooltips will be disabled.');
+    }
+    
     // Optional keystone tooltip overrides (human-readable effect lines)
     const keystoneTooltipsRaw = await tryLoad('data/enriched/keystone_tooltips.json');
     const keystoneTooltips = (keystoneTooltipsRaw && typeof keystoneTooltipsRaw === 'object' && !Array.isArray(keystoneTooltipsRaw))
@@ -83,7 +118,14 @@ async function loadData() {
       gems,
       passivesEnriched,
       passiveIndex,
-      keystoneTooltips
+      keystoneTooltips,
+      skillFamilyLib,
+      skillFamilyIndex,
+      skillFamilyByName,
+      skillFamilyById,
+      skillFamilyResolved,
+      skillFamilyCounts,
+      skillFamilyOptions
     };
     console.log("[Global DATA initialized]", window.DATA);
 

@@ -1,5 +1,6 @@
 import { ensureDataPreload } from './08-data-load.js';
 import { generateChallengeContract, loadChallengeLibrary } from './15-challenge-engine.js';
+import { getFamilySkillNames, resolveSkillFamily } from './17-skill-family-utils.js';
 
 const MODE_KEY = 'randomancer_mode';
 const MODES = {
@@ -125,6 +126,36 @@ function getTooltipPayload(slotKey, value) {
     return { title: value, lines };
   }
 
+
+  if (slotKey === 'SKILL_FAMILY') {
+    const core = window.DATA || {};
+    const lib = core.skillFamilyLib;
+    const index = core.skillFamilyIndex;
+    if (!lib || !index) return null;
+
+    // Prefer exact match (names are authored). Fallback to case-insensitive lookup.
+    let fam = core.skillFamilyByName?.[value] || null;
+    if (!fam) {
+      const keys = Object.keys(core.skillFamilyByName || {});
+      const hit = keys.find(k => String(k).toLowerCase() === String(value).toLowerCase());
+      fam = hit ? core.skillFamilyByName[hit] : null;
+    }
+    if (!fam) return null;
+
+    let matchIds = null;
+    if (core.skillFamilyResolved && typeof core.skillFamilyResolved.get === 'function') {
+      matchIds = core.skillFamilyResolved.get(fam.name);
+    }
+    if (!matchIds) {
+      matchIds = resolveSkillFamily(fam, index, lib);
+    }
+    if (!matchIds || matchIds.size === 0) return null;
+
+    const { names, total, remaining } = getFamilySkillNames(fam, index, matchIds, { max: 28 });
+    const lines = names.slice();
+    if (remaining > 0) lines.push(`… +${remaining} more`);
+    return { title: `${fam.name} (${total})`, lines };
+  }
   return null;
 }
 
@@ -420,7 +451,7 @@ function renderChallengeContract(contract) {
 					if (seg.hi) {
 						const v = document.createElement('span');
 						const slotKey = seg.k;
-						const wantsTip = slotKey === 'ACTIVE_SKILL' || slotKey === 'KEYSTONE';
+						const wantsTip = slotKey === 'ACTIVE_SKILL' || slotKey === 'KEYSTONE' || slotKey === 'SKILL_FAMILY';
 						v.className = wantsTip ? 'task-val has-tip' : 'task-val';
 						if (wantsTip) {
 							v.dataset.slotKey = slotKey;
