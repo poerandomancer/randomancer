@@ -326,6 +326,8 @@
 
 .rc-tooltip.is-open{
   opacity: 1;
+  /* Allow cursor to enter + scroll long lists when open */
+  pointer-events: auto;
 }
 
 .rc-tooltip__title{

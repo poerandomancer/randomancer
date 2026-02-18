@@ -51,6 +51,28 @@ let __RC_GEM_BY_NAME = null;
 let __RC_PASSIVE_BY_NAME = null;
 let __RC_TIP_BOUND = false;
 
+// Hover persistence: keep tooltip open while either the trigger or the tooltip panel is hovered.
+let __RC_TIP_HIDE_TIMER = null;
+let __RC_TIP_HOVER_TRIGGER = false;
+let __RC_TIP_HOVER_PANEL = false;
+
+function clearTipHideTimer() {
+  if (!__RC_TIP_HIDE_TIMER) return;
+  clearTimeout(__RC_TIP_HIDE_TIMER);
+  __RC_TIP_HIDE_TIMER = null;
+}
+
+function scheduleTipHide(delayMs = 220) {
+  clearTipHideTimer();
+  __RC_TIP_HIDE_TIMER = setTimeout(() => {
+    __RC_TIP_HIDE_TIMER = null;
+    if (__RC_TIP_PINNED) return;
+    if (__RC_TIP_HOVER_TRIGGER) return;
+    if (__RC_TIP_HOVER_PANEL) return;
+    hideTooltip();
+  }, delayMs);
+}
+
 function escapeHtml(str) {
   return String(str == null ? '' : str)
     .replace(/&/g, '&amp;')
@@ -166,6 +188,22 @@ function ensureTooltipEl() {
   el.className = 'rc-tooltip';
   el.setAttribute('role', 'tooltip');
   document.body.appendChild(el);
+
+  // Option B: tooltip stays open while hovered (desktop mouse), enabling scroll.
+  el.addEventListener('pointerenter', (evt) => {
+    if (__RC_TIP_PINNED) return;
+    if (evt.pointerType && evt.pointerType !== 'mouse') return;
+    __RC_TIP_HOVER_PANEL = true;
+    clearTipHideTimer();
+  });
+
+  el.addEventListener('pointerleave', (evt) => {
+    if (__RC_TIP_PINNED) return;
+    if (evt.pointerType && evt.pointerType !== 'mouse') return;
+    __RC_TIP_HOVER_PANEL = false;
+    scheduleTipHide(220);
+  });
+
   __RC_TIP_EL = el;
   return el;
 }
@@ -180,7 +218,7 @@ function renderTooltip(payload) {
     <div class="rc-tooltip__lines">
       ${lines.map(l => `<div>${escapeHtml(l)}</div>`).join('')}
     </div>
-    <div class="rc-tooltip__hint">Tap to pin • Tap elsewhere to close</div>
+    <div class="rc-tooltip__hint">Move into panel to scroll • Tap to pin</div>
   `;
 }
 
@@ -220,6 +258,8 @@ function showTooltipFor(target, pinned = false) {
   const payload = getTooltipPayload(slotKey, value);
   if (!payload) return;
 
+  clearTipHideTimer();
+
   __RC_TIP_TARGET = target;
   __RC_TIP_PINNED = Boolean(pinned);
 
@@ -234,6 +274,9 @@ function hideTooltip() {
   el.classList.remove('is-open');
   __RC_TIP_TARGET = null;
   __RC_TIP_PINNED = false;
+  __RC_TIP_HOVER_TRIGGER = false;
+  __RC_TIP_HOVER_PANEL = false;
+  clearTipHideTimer();
 }
 
 function initChallengeInlineTooltips() {
@@ -256,6 +299,8 @@ function initChallengeInlineTooltips() {
     if (evt.pointerType && evt.pointerType !== 'mouse') return;
     const el = isTipTarget(evt.target);
     if (!el) return;
+    __RC_TIP_HOVER_TRIGGER = true;
+    clearTipHideTimer();
     showTooltipFor(el, false);
   });
 
@@ -266,7 +311,10 @@ function initChallengeInlineTooltips() {
     if (!from) return;
     const toEl = evt.relatedTarget && isTipTarget(evt.relatedTarget);
     if (toEl === from) return;
-    hideTooltip();
+
+    // Leaving the trigger: allow time to move into the tooltip panel.
+    __RC_TIP_HOVER_TRIGGER = false;
+    scheduleTipHide(220);
   });
 
   // Keyboard focus
