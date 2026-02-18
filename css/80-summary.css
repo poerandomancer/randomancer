@@ -230,6 +230,56 @@
   margin-bottom:0;
 }
 
+/* Challenge Contract: micro-header layout (label on its own line) */
+#challenge-contract-lines .summary-row{
+  margin: 0; /* spacing handled between rows only */
+}
+
+/* spacing only BETWEEN tasks */
+#challenge-contract-lines .summary-row + .summary-row{
+  margin-top: 1.05rem;
+}
+
+
+#challenge-contract-lines .summary-label{
+  display: block;
+  margin: 0 0 .22rem 0;
+
+  /* micro-header look */
+  color: var(--gold);
+  opacity: .92;
+  font-weight: 800;
+  font-size: 0.78rem;
+  letter-spacing: .10em;
+
+  /* small caps style */
+  text-transform: none;
+  font-variant-caps: all-small-caps;
+
+  text-shadow:
+    0 0 8px rgba(212,170,80,0.22),
+    0 0 16px rgba(212,170,80,0.10);
+}
+
+#challenge-contract-lines .summary-dash{
+  display: none; /* remove separator glyph entirely */
+}
+
+#challenge-contract-lines .summary-content{
+  display: block;
+}
+
+#challenge-contract-lines .summary-row{ text-align:left; }
+
+@media (max-width: 680px){
+  #challenge-contract-lines .summary-label{
+    opacity: .78;
+    font-size: 0.74rem;
+    letter-spacing: .09em;
+    text-shadow: 0 0 8px rgba(212,170,80,0.14);
+  }
+}
+
 
 /* -------------------------
    Inline tooltips (Challenge Contract values)

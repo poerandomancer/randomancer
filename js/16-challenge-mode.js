@@ -401,7 +401,7 @@ function renderChallengeContract(contract) {
 
       const label = document.createElement('span');
       label.className = 'summary-label';
-      label.textContent = String(task.shortLabel || task.role || 'Clause').toUpperCase();
+      label.textContent = String(task.shortLabel || task.role || 'Clause');
 
       const dash = document.createElement('span');
       dash.className = 'summary-dash';
