@@ -21,6 +21,10 @@ export function isEligibleSkillForFamilies(skill) {
   if (!skill || skill.type !== "active") return false;
   const blob = `${skill.id || ""} ${skill.name || ""}`.toLowerCase();
   if (blob.includes("dnt") || blob.includes("unused")) return false;
+  
+  const sid = String(skill.id || "").toLowerCase();
+	if (sid.includes("default") || sid.includes("unique")) return false;
+
   return true;
 }
 
