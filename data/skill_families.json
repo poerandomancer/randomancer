@@ -29,7 +29,8 @@
       "freezable": "freeze",
       "projectiles": "projectile",
       "minions": "minion",
-      "corpses": "corpse"
+      "corpses": "corpse",
+      "companions": "companion"
     },
     "canonical_to_aliases": {
       "bleed": [
@@ -63,6 +64,9 @@
       ],
       "corpse": [
         "corpses"
+      ],
+      "companion": [
+        "companions"
       ]
     }
   },
@@ -273,6 +277,32 @@
       },
       "dev": {
         "current_match_count": 3,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "minion_skills",
+      "name": "Minion Skills",
+      "query": {
+        "all": [
+          "minion"
+        ]
+      },
+      "dev": {
+        "current_match_count": 51,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "companion_skills",
+      "name": "Companion Skills",
+      "query": {
+        "all": [
+          "companion"
+        ]
+      },
+      "dev": {
+        "current_match_count": 11,
         "missing_tags_in_dataset": []
       }
     },
