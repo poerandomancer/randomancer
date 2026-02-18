@@ -312,8 +312,19 @@ function createPassiveNodeElement(node, type, buildTagSet) {
   }
 
   const name = node?.name || 'Unknown Passive';
-  const lines = Array.isArray(node?.lines) ? node.lines.filter(Boolean) : [];
+  let lines = Array.isArray(node?.lines) ? node.lines.filter(Boolean) : [];
   const tags = Array.isArray(node?.tags) ? node.tags.filter(Boolean) : [];
+
+  // Keystone effect text is often represented by a placeholder "Keystone ..." stat.
+  // If we have a richer human-readable override table, prefer it for tooltips.
+  if (type === 'keystone') {
+    const lib = window.DATA?.keystoneTooltips;
+    const entry = lib && (lib[name] || lib[name?.replace(/[’]/g, "'")]);
+    const isGeneric = !lines.length || lines.every((l) => /^keystone\b/i.test(String(l).trim()));
+    if (entry && Array.isArray(entry.lines) && entry.lines.length && isGeneric) {
+      lines = entry.lines.slice();
+    }
+  }
 
   const typeLabel =
     type === 'ascendancy'

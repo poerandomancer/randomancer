@@ -30,13 +30,264 @@ function buildTemplateSegments(template, slots) {
 
     const has = slots && slots[key] != null;
     const val = has ? String(slots[key]) : `{${key}}`;
-    out.push({ t: val, hi: has });
+    out.push({ t: val, hi: has, k: key });
 
     last = start + m[0].length;
   }
   if (last < str.length) out.push({ t: str.slice(last), hi: false });
 
   return out;
+}
+
+
+// -------------------------
+// Inline tooltips for Contract values (Active Skills / Keystones)
+// -------------------------
+let __RC_TIP_EL = null;
+let __RC_TIP_PINNED = false;
+let __RC_TIP_TARGET = null;
+let __RC_GEM_BY_NAME = null;
+let __RC_PASSIVE_BY_NAME = null;
+let __RC_TIP_BOUND = false;
+
+function escapeHtml(str) {
+  return String(str == null ? '' : str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function stripBracketMarkup(str) {
+  const s = String(str == null ? '' : str);
+  return s
+    .replace(/\[([^\]|]+)\|([^\]]+)\]/g, '$2')
+    .replace(/\[([^\]]+)\]/g, '$1')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function gemIndexByName() {
+  if (__RC_GEM_BY_NAME) return __RC_GEM_BY_NAME;
+  const map = Object.create(null);
+  const gems = window.DATA?.gems || [];
+  gems.forEach(g => {
+    const name = g?.base_item?.display_name || g?.name;
+    if (!name) return;
+    if (!map[name]) map[name] = g;
+  });
+  __RC_GEM_BY_NAME = map;
+  return map;
+}
+
+function passiveIndexByName() {
+  if (__RC_PASSIVE_BY_NAME) return __RC_PASSIVE_BY_NAME;
+  const map = Object.create(null);
+  const nodes = window.DATA?.passivesEnriched?.nodes || [];
+  nodes.forEach(n => {
+    if (!n?.name) return;
+    if (!map[n.name]) map[n.name] = n;
+  });
+  __RC_PASSIVE_BY_NAME = map;
+  return map;
+}
+
+function getTooltipPayload(slotKey, value) {
+  if (!slotKey || !value) return null;
+
+  if (slotKey === 'ACTIVE_SKILL') {
+    const gem = gemIndexByName()[value];
+    if (!gem) return null;
+
+    const desc = stripBracketMarkup(gem.description || gem.support_text || '');
+    if (!desc) return null;
+
+    return { title: value, lines: [desc] };
+  }
+
+  if (slotKey === 'KEYSTONE') {
+    const lib = window.DATA?.keystoneTooltips || {};
+    const entry = lib[value] || lib[value?.replace(/[’]/g, "'")];
+    let lines = Array.isArray(entry?.lines) ? entry.lines.slice() : null;
+
+    if (!lines || !lines.length) {
+      const node = passiveIndexByName()[value];
+      lines = Array.isArray(node?.lines) ? node.lines.slice() : [];
+    }
+
+    lines = (lines || [])
+      .map(l => String(l))
+      .map(l => stripBracketMarkup(l))
+      .filter(Boolean);
+
+    if (!lines.length) return null;
+    return { title: value, lines };
+  }
+
+  return null;
+}
+
+function ensureTooltipEl() {
+  if (__RC_TIP_EL) return __RC_TIP_EL;
+  const el = document.createElement('div');
+  el.id = 'rc-inline-tooltip';
+  el.className = 'rc-tooltip';
+  el.setAttribute('role', 'tooltip');
+  document.body.appendChild(el);
+  __RC_TIP_EL = el;
+  return el;
+}
+
+function renderTooltip(payload) {
+  const el = ensureTooltipEl();
+  const title = payload?.title || '';
+  const lines = Array.isArray(payload?.lines) ? payload.lines : [];
+
+  el.innerHTML = `
+    <div class="rc-tooltip__title">${escapeHtml(title)}</div>
+    <div class="rc-tooltip__lines">
+      ${lines.map(l => `<div>${escapeHtml(l)}</div>`).join('')}
+    </div>
+    <div class="rc-tooltip__hint">Tap to pin • Tap elsewhere to close</div>
+  `;
+}
+
+function positionTooltip(target) {
+  const el = ensureTooltipEl();
+  if (!target || !document.body.contains(target)) return;
+
+  // Stage offscreen to measure
+  el.style.left = '-9999px';
+  el.style.top = '-9999px';
+  el.style.transform = 'translate(-50%, -110%)';
+  el.classList.add('is-open');
+
+  const rect = target.getBoundingClientRect();
+  const tipRect = el.getBoundingClientRect();
+
+  const margin = 10;
+  const pad = 10;
+
+  let x = rect.left + rect.width / 2;
+  const half = tipRect.width / 2;
+  x = Math.max(pad + half, Math.min(window.innerWidth - pad - half, x));
+
+  // Prefer above; flip below if needed
+  let aboveTop = rect.top - tipRect.height - margin;
+  const canFitAbove = aboveTop > pad;
+  const y = canFitAbove ? (rect.top - margin) : (rect.bottom + margin);
+
+  el.style.left = `${Math.round(x)}px`;
+  el.style.top = `${Math.round(y)}px`;
+  el.style.transform = canFitAbove ? 'translate(-50%, -100%)' : 'translate(-50%, 0)';
+}
+
+function showTooltipFor(target, pinned = false) {
+  const slotKey = target?.dataset?.slotKey;
+  const value = (target?.textContent || '').trim();
+  const payload = getTooltipPayload(slotKey, value);
+  if (!payload) return;
+
+  __RC_TIP_TARGET = target;
+  __RC_TIP_PINNED = Boolean(pinned);
+
+  renderTooltip(payload);
+
+  // Next frame for stable layout
+  requestAnimationFrame(() => positionTooltip(target));
+}
+
+function hideTooltip() {
+  const el = ensureTooltipEl();
+  el.classList.remove('is-open');
+  __RC_TIP_TARGET = null;
+  __RC_TIP_PINNED = false;
+}
+
+function initChallengeInlineTooltips() {
+  if (__RC_TIP_BOUND) return;
+  __RC_TIP_BOUND = true;
+
+  const host = document.getElementById('challenge-contract-lines');
+  if (!host) return;
+
+  const isTipTarget = (evtTarget) => {
+    const el = evtTarget?.closest?.('.task-val.has-tip');
+    if (!el) return null;
+    if (!host.contains(el)) return null;
+    return el;
+  };
+
+  // Hover (mouse)
+  host.addEventListener('pointerover', (evt) => {
+    if (__RC_TIP_PINNED) return;
+    if (evt.pointerType && evt.pointerType !== 'mouse') return;
+    const el = isTipTarget(evt.target);
+    if (!el) return;
+    showTooltipFor(el, false);
+  });
+
+  host.addEventListener('pointerout', (evt) => {
+    if (__RC_TIP_PINNED) return;
+    if (evt.pointerType && evt.pointerType !== 'mouse') return;
+    const from = isTipTarget(evt.target);
+    if (!from) return;
+    const toEl = evt.relatedTarget && isTipTarget(evt.relatedTarget);
+    if (toEl === from) return;
+    hideTooltip();
+  });
+
+  // Keyboard focus
+  host.addEventListener('focusin', (evt) => {
+    if (__RC_TIP_PINNED) return;
+    const el = isTipTarget(evt.target);
+    if (!el) return;
+    showTooltipFor(el, false);
+  });
+
+  host.addEventListener('focusout', (evt) => {
+    if (__RC_TIP_PINNED) return;
+    const el = isTipTarget(evt.target);
+    if (!el) return;
+    hideTooltip();
+  });
+
+  // Tap / touch pinning
+  host.addEventListener('pointerdown', (evt) => {
+    const el = isTipTarget(evt.target);
+    if (!el) return;
+
+    // For touch/pen, toggle pin. For mouse, leave hover behavior.
+    if (evt.pointerType === 'mouse') return;
+    evt.preventDefault();
+    evt.stopPropagation();
+
+    if (__RC_TIP_PINNED && __RC_TIP_TARGET === el) {
+      hideTooltip();
+      return;
+    }
+    showTooltipFor(el, true);
+  });
+
+  // Click outside closes pinned tooltip
+  document.addEventListener('pointerdown', (evt) => {
+    if (!__RC_TIP_PINNED) return;
+    const el = ensureTooltipEl();
+    if (el.contains(evt.target)) return;
+    if (__RC_TIP_TARGET && __RC_TIP_TARGET.contains(evt.target)) return;
+    hideTooltip();
+  });
+
+  // Keep tooltip positioned during layout changes
+  window.addEventListener('resize', () => {
+    if (!__RC_TIP_TARGET) return;
+    requestAnimationFrame(() => positionTooltip(__RC_TIP_TARGET));
+  });
+  window.addEventListener('scroll', () => {
+    if (!__RC_TIP_TARGET) return;
+    requestAnimationFrame(() => positionTooltip(__RC_TIP_TARGET));
+  }, true);
 }
 
 
@@ -168,7 +419,13 @@ function renderChallengeContract(contract) {
 					if (!seg || seg.t == null) return;
 					if (seg.hi) {
 						const v = document.createElement('span');
-						v.className = 'task-val';
+						const slotKey = seg.k;
+						const wantsTip = slotKey === 'ACTIVE_SKILL' || slotKey === 'KEYSTONE';
+						v.className = wantsTip ? 'task-val has-tip' : 'task-val';
+						if (wantsTip) {
+							v.dataset.slotKey = slotKey;
+							v.tabIndex = 0;
+						}
 						v.textContent = seg.t;
 						content.appendChild(v);
 					} else {
@@ -270,6 +527,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   stabilizeLedeHeight();
   setChallengeFlavorLine();
   bindChallengeControls();
+  initChallengeInlineTooltips();
   syncMode(initialMode);
   try { document.dispatchEvent(new CustomEvent('randomancer:mode-change', { detail: { mode: initialMode } })); } catch {}
 

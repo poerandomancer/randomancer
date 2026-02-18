@@ -72,11 +72,18 @@ async function loadData() {
     }
     console.log(`[Skill Enrichment] ${gems.length} enriched skill entries (precomputed).`);
 
+    // Optional keystone tooltip overrides (human-readable effect lines)
+    const keystoneTooltipsRaw = await tryLoad('data/enriched/keystone_tooltips.json');
+    const keystoneTooltips = (keystoneTooltipsRaw && typeof keystoneTooltipsRaw === 'object' && !Array.isArray(keystoneTooltipsRaw))
+      ? keystoneTooltipsRaw
+      : {};
+
     window.DATA = {
       ...core,
       gems,
       passivesEnriched,
-      passiveIndex
+      passiveIndex,
+      keystoneTooltips
     };
     console.log("[Global DATA initialized]", window.DATA);
 

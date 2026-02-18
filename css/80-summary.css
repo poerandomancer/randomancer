@@ -229,3 +229,67 @@
   margin-top:.55rem;
   margin-bottom:0;
 }
+
+
+/* -------------------------
+   Inline tooltips (Challenge Contract values)
+------------------------- */
+
+.task-val.has-tip{
+  cursor: help;
+  border-bottom: 1px dotted rgba(212,170,80,0.35);
+  padding-bottom: 1px;
+}
+
+.task-val.has-tip:hover{
+  border-bottom-color: rgba(212,170,80,0.6);
+}
+
+.task-val.has-tip:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(212,170,80,0.14);
+  border-radius: 4px;
+}
+
+.rc-tooltip{
+  position: fixed;
+  z-index: 9999;
+  max-width: min(360px, calc(100vw - 24px));
+  padding: 10px 12px;
+  border-radius: 12px;
+
+  border: 1px solid rgba(212,170,80,0.26);
+  background: rgba(8,8,10,0.92);
+
+  box-shadow:
+    0 18px 42px rgba(0,0,0,0.55),
+    0 0 14px rgba(212,170,80,0.12);
+
+  color: rgba(240,234,220,0.95);
+  font-size: 13px;
+  line-height: 1.35;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease;
+}
+
+.rc-tooltip.is-open{
+  opacity: 1;
+}
+
+.rc-tooltip__title{
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  margin-bottom: 6px;
+}
+
+.rc-tooltip__lines div{
+  margin: 2px 0;
+}
+
+.rc-tooltip__hint{
+  margin-top: 8px;
+  font-size: 11px;
+  opacity: 0.7;
+}

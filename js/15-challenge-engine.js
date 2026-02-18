@@ -440,6 +440,12 @@ async function buildPickerContext() {
   const keystones = unique(
     passives
       .filter(node => node?.isKeystone || node?.type === 'keystone')
+      // Exclude Atlas keystones (map/endgame), as Challenge contracts should focus on character identity
+      .filter(node => {
+        const id = String(node?.id || '');
+        const icon = String(node?.icon || '');
+        return !(id.startsWith('Atlas') || icon.includes('AtlasTrees/'));
+      })
       .map(node => node?.name)
       .filter(Boolean)
   );
