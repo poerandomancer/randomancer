@@ -56,6 +56,9 @@ let __RC_TIP_HIDE_TIMER = null;
 let __RC_TIP_HOVER_TRIGGER = false;
 let __RC_TIP_HOVER_PANEL = false;
 
+// Scroll affordances for long tooltip lists
+const __RC_TIP_SCROLL_MAX_PX = 280;
+
 function clearTipHideTimer() {
   if (!__RC_TIP_HIDE_TIMER) return;
   clearTimeout(__RC_TIP_HIDE_TIMER);
@@ -71,6 +74,43 @@ function scheduleTipHide(delayMs = 220) {
     if (__RC_TIP_HOVER_PANEL) return;
     hideTooltip();
   }, delayMs);
+}
+
+function syncTooltipScrollState() {
+  const tip = ensureTooltipEl();
+  const linesEl = tip.querySelector('.rc-tooltip__lines');
+  if (!linesEl) {
+    tip.classList.remove('is-scroll', 'is-at-bottom');
+    return false;
+  }
+
+  // Reset scroll each time we show a tooltip.
+  linesEl.scrollTop = 0;
+
+  // Default CSS has no max-height; compare natural height against our cap.
+  const needsScroll = linesEl.scrollHeight > (__RC_TIP_SCROLL_MAX_PX + 2);
+  tip.classList.toggle('is-scroll', needsScroll);
+
+  if (!needsScroll) {
+    tip.classList.remove('is-at-bottom');
+    return false;
+  }
+
+  // After enabling scroll, compute bottom-state for the fade.
+  requestAnimationFrame(() => updateTooltipAtBottom());
+  return true;
+}
+
+function updateTooltipAtBottom() {
+  const tip = ensureTooltipEl();
+  if (!tip.classList.contains('is-scroll')) {
+    tip.classList.remove('is-at-bottom');
+    return;
+  }
+  const linesEl = tip.querySelector('.rc-tooltip__lines');
+  if (!linesEl) return;
+  const atBottom = (linesEl.scrollTop + linesEl.clientHeight) >= (linesEl.scrollHeight - 2);
+  tip.classList.toggle('is-at-bottom', atBottom);
 }
 
 function escapeHtml(str) {
@@ -217,9 +257,24 @@ function renderTooltip(payload) {
     <div class="rc-tooltip__title">${escapeHtml(title)}</div>
     <div class="rc-tooltip__lines">
       ${lines.map(l => `<div>${escapeHtml(l)}</div>`).join('')}
+      <div class="rc-tooltip__fade" aria-hidden="true"></div>
     </div>
-    <div class="rc-tooltip__hint">Move into panel to scroll • Tap to pin</div>
+    <div class="rc-tooltip__hint"></div>
   `;
+
+  // Only show scroll styling (and the “scroll” hint) if the list actually overflows.
+  const needsScroll = syncTooltipScrollState();
+
+  // Wire scroll listener to update fade visibility.
+  const linesEl = el.querySelector('.rc-tooltip__lines');
+  if (linesEl) {
+    linesEl.addEventListener('scroll', () => updateTooltipAtBottom(), { passive: true });
+  }
+
+  const hintEl = el.querySelector('.rc-tooltip__hint');
+  if (hintEl) {
+    hintEl.textContent = needsScroll ? 'Move into panel to scroll • Tap to pin' : 'Tap to pin';
+  }
 }
 
 function positionTooltip(target) {
@@ -271,7 +326,7 @@ function showTooltipFor(target, pinned = false) {
 
 function hideTooltip() {
   const el = ensureTooltipEl();
-  el.classList.remove('is-open');
+  el.classList.remove('is-open', 'is-scroll', 'is-at-bottom');
   __RC_TIP_TARGET = null;
   __RC_TIP_PINNED = false;
   __RC_TIP_HOVER_TRIGGER = false;

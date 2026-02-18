@@ -338,9 +338,43 @@
 
 
 .rc-tooltip__lines{
+  /* Default: no forced scrolling for short lists */
+  max-height: none;
+  overflow: visible;
+  padding-right: 0;
+  position: relative;
+}
+
+/* Only constrain + show scroll affordances when the list actually overflows */
+.rc-tooltip.is-scroll .rc-tooltip__lines{
   max-height: 280px;
   overflow: auto;
   padding-right: 6px;
+}
+
+/* Bottom fade hint (only when scrollable + not at bottom) */
+.rc-tooltip__fade{
+  display: none;
+}
+
+.rc-tooltip.is-scroll .rc-tooltip__fade{
+  display: block;
+  position: sticky;
+  bottom: 0;
+  height: 22px;
+  margin-top: -22px;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.12s ease;
+  background: linear-gradient(
+    to bottom,
+    rgba(8,8,10,0),
+    rgba(8,8,10,0.92)
+  );
+}
+
+.rc-tooltip.is-scroll.is-at-bottom .rc-tooltip__fade{
+  opacity: 0;
 }
 
 .rc-tooltip__lines div{
