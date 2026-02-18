@@ -126,7 +126,7 @@ body.challenge-mode #app::after{
 		/* Stronger vignette (darker edges) */
 		radial-gradient(120% 95% at 50% 42%,
 			rgba(0,0,0,0) 22%,
-			rgba(0,0,0,0.94) 100%
+			rgba(0,0,0,0.97) 100%
 		),
 
 	

@@ -117,7 +117,15 @@ function pickByMatch({ options, optionLeanMap, targetLeanKey, mode }) {
     return options.filter(v => optionLeanMap?.[v] === opposite);
   }
 
-  if (mode === 'alternate') {
+  if (mode === 'aligned') {
+    // For hybrids (e.g., dex_int), pick one component and match that.
+    const parts = String(target).split('_').filter(Boolean);
+    if (!parts.length) return [];
+    const chosen = parts.length === 1 ? parts[0] : parts[Math.floor(Math.random() * parts.length)];
+    return options.filter(v => optionLeanMap?.[v] === chosen);
+  }
+
+    if (mode === 'alternate') {
     // Prefer zero overlap; otherwise choose minimal overlap. Never return identical lean-key.
     const scored = options
       .map(v => ({ v, lean: optionLeanMap?.[v] || null }))
@@ -170,7 +178,8 @@ async function buildPickerContext() {
       if (name) defenseLean[name] = leanKeyFromAttributes(d?.attributes);
       return name;
     })
-    .filter(Boolean);
+    .filter(Boolean)
+    .filter(name => ['Armour', 'Evasion', 'Energy Shield'].includes(name));
 
   // ----- Weapon Sets (derive from core weapons)
   const weaponSetLean = {};
@@ -224,6 +233,50 @@ async function buildPickerContext() {
   const oneHandedMain = unique(oneHanded.map(w => w?.name).filter(Boolean));
   const offHand = unique(offHands.map(w => w?.name).filter(Boolean));
 
+  // ----- Lean maps for 1H + Off-hand (used by weaponLoadout picker)
+  const oneHandedLean = {};
+  oneHanded.forEach(w => {
+    if (w?.name) oneHandedLean[w.name] = leanKeyFromAttributes(w.attributes);
+  });
+
+  const offHandLean = {};
+  offHands.forEach(w => {
+    if (w?.name) offHandLean[w.name] = leanKeyFromAttributes(w.attributes);
+  });
+
+  // ----- Weapon Loadouts (full / partial constraints)
+  const weaponLoadoutLean = {};
+  const weaponLoadout = [];
+
+  const articleFor = (word) => (/^[aeiou]/i.test(String(word || '').trim()) ? 'an' : 'a');
+
+  // Full weapon sets
+  weaponSet.forEach(ws => {
+    weaponLoadout.push(ws);
+    weaponLoadoutLean[ws] = weaponSetLean[ws] || null;
+  });
+
+  // Main-hand only (e.g. "a Wand")
+  oneHandedMain.forEach(mh => {
+    const phr = /^(a|an)\s/i.test(mh) ? mh : `${articleFor(mh)} ${mh}`;
+    weaponLoadout.push(phr);
+    weaponLoadoutLean[phr] = oneHandedLean[mh] || null;
+  });
+
+  // Off-hand only (e.g. "a Shield")
+  offHand.forEach(oh => {
+    const phr = /^(a|an)\s/i.test(oh) ? oh : `${articleFor(oh)} ${oh}`;
+    weaponLoadout.push(phr);
+    weaponLoadoutLean[phr] = offHandLean[oh] || null;
+  });
+
+  // Diabolical-only extras (filtered out below diabolical severity in pickSlotValue)
+  weaponLoadout.push('Empty Off-hand');
+  weaponLoadoutLean['Empty Off-hand'] = 'str_dex_int';
+
+  // Ensure Unarmed can participate in match logic (also filtered below diabolical)
+  weaponLoadoutLean.Unarmed = 'str_dex_int';
+
   // ----- Armor slots (used for Normal-rarity slot contract)
   const armorSlot = ['Helmet', 'Body Armour', 'Gloves', 'Boots'];
 
@@ -246,14 +299,60 @@ async function buildPickerContext() {
   const attribute = ['Strength', 'Dexterity', 'Intelligence'];
   const treeFocus = ['Offensive', 'Defensive'];
   const resistType = ['Elemental', 'Chaos'];
+  const chargeType = ['Frenzy', 'Endurance', 'Power'];
+  const elementResist = ['Fire', 'Cold', 'Lightning', 'Chaos'];
 
   // ----- Skills
   const gems = toArray(core.gems);
   const activeGems = gems.filter(g => g?.type === 'active');
   const supportGems = gems.filter(g => g?.type === 'support');
 
+  const normalizeTag = (t) => String(t || '').trim().toLowerCase().replace(/\s+/g, '_');
+
+  const isDevPlaceholderGem = (g) => {
+    const s = String(g?.name || g?.base_item?.display_name || g?.id || '');
+    return /(\bDNT\b|\bUNUSED\b|placeholder|coming\s*soon)/i.test(s);
+  };
+
+  const hasExplicitCraftingType = (g) => {
+    const c = g?.crafting;
+    return (
+      (Array.isArray(c?.types_raw) && c.types_raw.length) ||
+      (Array.isArray(c?.schools) && c.schools.length) ||
+      (Array.isArray(c?.weapon_affinities) && c.weapon_affinities.length) ||
+      (Array.isArray(g?.crafting_types) && g.crafting_types.length)
+    );
+  };
+
+  const isTriggeredOnlyGem = (g) => {
+    const st = Array.isArray(g?.taxonomy?.skill_types) ? g.taxonomy.skill_types.map(normalizeTag) : [];
+    const set = new Set(st);
+    return set.has('triggered') || set.has('inbuilttrigger') || set.has('invocation');
+  };
+
+  const isPersistentBuffGem = (g) => {
+    const tags = Array.isArray(g?.tags) ? g.tags.map(normalizeTag) : [];
+    const set = new Set(tags);
+    return set.has('buff') && set.has('persistent');
+  };
+
+  const isSpiritGem = (g) => {
+    const tags = Array.isArray(g?.tags) ? g.tags.map(normalizeTag) : [];
+    if (tags.includes('spirit')) return true;
+    const st = Array.isArray(g?.taxonomy?.skill_types) ? g.taxonomy.skill_types.map(normalizeTag) : [];
+    if (st.includes('spirit')) return true;
+    const desc = String(g?.description || '');
+    return /\bspirit\b/i.test(desc);
+  };
+
+  // ACTIVE_SKILL picker pool: approximate Standard "Recommended Skills" eligibility
   const activeSkill = unique(
     activeGems
+      .filter(g => !isDevPlaceholderGem(g))
+      .filter(g => hasExplicitCraftingType(g))
+      .filter(g => !isSpiritGem(g))
+      .filter(g => !isTriggeredOnlyGem(g))
+      .filter(g => !isPersistentBuffGem(g))
       .map(g => g?.base_item?.display_name || g?.name || g?.skill_name)
       .filter(Boolean)
   );
@@ -271,6 +370,28 @@ async function buildPickerContext() {
       .map(g => g?.base_item?.display_name || g?.name)
       .filter(Boolean)
   );
+
+  const rawForms = unique(
+    activeGems
+      .map(g => String(g?.description || ''))
+      .map(desc => {
+        const m = desc.match(/\[Shapeshift\]\s+into\s+an?\s+\[([^\]]+)\]/i);
+        return m ? m[1].trim() : null;
+      })
+      .filter(Boolean)
+  );
+
+  const shapeshiftForms = (() => {
+    const singles = rawForms.map(f => `${f} form`);
+    const pairs = [];
+    for (let i = 0; i < rawForms.length; i += 1) {
+      for (let j = i + 1; j < rawForms.length; j += 1) {
+        pairs.push(`${rawForms[i]} and ${rawForms[j]} forms`);
+      }
+    }
+    return unique([...singles, ...pairs]);
+  })();
+
 
   // ----- Skill Archetypes (derived from gem tags, but presented as friendly labels)
   const archetypeDefs = [
@@ -330,12 +451,16 @@ async function buildPickerContext() {
     weaponSet,
     oneHandedMain,
     offHand,
+    weaponLoadout: unique(weaponLoadout),
+    shapeshiftForms: unique(shapeshiftForms),
     armorSlot,
     ailment,
     theme,
     attribute,
     treeFocus,
     resistType,
+    chargeType,
+    elementResist,
     triggerSupport,
     persistentBuffSkill,
     deepMechanic,
@@ -349,6 +474,7 @@ async function buildPickerContext() {
       ascendancy: ascendancyLean,
       defense: defenseLean,
       weaponSet: weaponSetLean,
+      weaponLoadout: weaponLoadoutLean,
       ailment: ailmentLean
     }
   };
@@ -361,6 +487,15 @@ async function buildPickerContext() {
 function fillTemplate(template, slots) {
   return String(template || '').replace(/\{([A-Z0-9_]+)\}/g, (_m, key) => slots?.[key] ?? `{${key}}`);
 }
+
+function formatZeroDefense(defenseName) {
+  const name = String(defenseName || '').trim();
+  if (/^armou?r$/i.test(name)) return '0% Armour Rating';
+  if (/^evasion$/i.test(name)) return '0% Evasion Rating';
+  if (/^energy\s*shield$/i.test(name)) return '0 Energy Shield';
+  return `0 ${name}`;
+}
+
 
 function minSeverityAllowed(userSeverity, taskSeverity) {
   return (SEVERITY_ORDER[userSeverity] || 0) >= (SEVERITY_ORDER[taskSeverity] || 0);
@@ -541,6 +676,33 @@ function resolveMatchOptions({ pickerName, options, optionLeanMap, defs, slots, 
 function pickSlotValue(slotKey, slotConfig, slots, defs, context) {
   const pickerName = slotConfig?.picker;
   let options = toArray(context[pickerName]);
+  const severity = context.__severity || 'cruel';
+
+  // Picker-specific, severity-aware behavior
+  if (pickerName === 'weaponLoadout') {
+    // Occasionally require two weapon sets (Cruel/Diabolical only)
+    const dualChance = severity === 'diabolical' ? 0.18 : (severity === 'cruel' ? 0.08 : 0);
+    if (dualChance && Math.random() < dualChance && slots?.CLASS && Array.isArray(context.weaponSet)) {
+      const ws = toArray(context.weaponSet).filter(v => v && v !== 'Unarmed');
+      const classLean = context.__lean?.class?.[slots.CLASS] || null;
+      const wsLean = context.__lean?.weaponSet || {};
+
+      const pickAlt = (pool) => {
+        const matched = pickByMatch({ options: pool, optionLeanMap: wsLean, targetLeanKey: classLean, mode: 'alternate' });
+        return randomPick(matched.length ? matched : pool);
+      };
+
+      const set1 = pickAlt(ws);
+      const pool2 = ws.filter(v => v !== set1);
+      const set2 = pool2.length ? pickAlt(pool2) : null;
+      if (set1 && set2) return `Weapon Set I: ${set1}; Weapon Set II: ${set2}`;
+    }
+
+    // Diabolical-only extras
+    if (severity !== 'diabolical') {
+      options = options.filter(v => v !== 'Unarmed' && v !== 'Empty Off-hand');
+    }
+  }
 
   // Basic filters
   const notEqualTo = slotConfig?.filters?.notEqualTo;
@@ -548,7 +710,7 @@ function pickSlotValue(slotKey, slotConfig, slots, defs, context) {
     options = options.filter(option => option !== slots[notEqualTo]);
   }
 
-  // Match logic (opposite / alternate)
+  // Match logic (opposite / alternate / aligned)
   const optionLeanMap = context.__lean?.[pickerName] || null;
   if (slotConfig?.match) {
     const matched = resolveMatchOptions({
@@ -579,7 +741,14 @@ function pickSlotValue(slotKey, slotConfig, slots, defs, context) {
     }
   }
 
-  return randomPick(options);
+  const picked = randomPick(options);
+  if (!picked) return null;
+
+  if (slotConfig?.format === 'zeroDefense') {
+    return formatZeroDefense(picked);
+  }
+
+  return picked;
 }
 
 function resolveSlots(task, context, maxRetries = 40) {
@@ -641,6 +810,7 @@ async function generateChallengeContract({ taskCount = 2, severity = 'cruel', ma
 
   const library = await loadChallengeLibrary();
   const pickerContext = await buildPickerContext();
+  pickerContext.__severity = normalizedSeverity;
 
   const tasksByRole = rolePlan.map(role =>
     library.filter(task => task.role === role && minSeverityAllowed(normalizedSeverity, task.minSeverity))
