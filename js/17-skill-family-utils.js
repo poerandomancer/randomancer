@@ -19,11 +19,12 @@ export function normalizeTag(rawTag, familyLib) {
 
 export function isEligibleSkillForFamilies(skill) {
   if (!skill || skill.type !== "active") return false;
+
   const blob = `${skill.id || ""} ${skill.name || ""}`.toLowerCase();
-  if (blob.includes("dnt") || blob.includes("unused")) return false;
-  
+  if (blob.includes("dnt") || blob.includes("unused") || blob.includes("playtest")) return false;
+
   const sid = String(skill.id || "").toLowerCase();
-	if (sid.includes("default") || sid.includes("unique")) return false;
+  if (sid.includes("default") || sid.includes("unique") || sid.includes("playtest")) return false;
 
   return true;
 }

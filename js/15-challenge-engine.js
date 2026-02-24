@@ -1,4 +1,5 @@
 import { ensureDataPreload } from './08-data-load.js';
+import { resolveSkillFamily } from './17-skill-family-utils.js';
 
 const SEVERITY_ORDER = { mild: 1, cruel: 2, diabolical: 3 };
 
@@ -311,8 +312,8 @@ async function buildPickerContext() {
 
   const isDevPlaceholderGem = (g) => {
     const s = String(g?.name || g?.base_item?.display_name || g?.id || '');
-    return /(\bDNT\b|\bUNUSED\b|placeholder|coming\s*soon)/i.test(s);
-  };
+    return /(\bDNT\b|\bUNUSED\b|\bPLAYTEST\b|play\s*test|placeholder|coming\s*soon)/i.test(s);
+  }
 
   const hasExplicitCraftingType = (g) => {
     const c = g?.crafting;
@@ -477,6 +478,14 @@ async function buildPickerContext() {
     activeSkill: unique(activeSkill),
     skillFamily: unique(skillFamily),
     keystone: unique(keystones),
+    
+		// Skill family resolver context (for dynamic wording)
+    __skillFamily: {
+      byName: core.skillFamilyByName || {},
+      lib: core.skillFamilyLib || null,
+      index: core.skillFamilyIndex || null,
+      resolved: core.skillFamilyResolved || null
+    },
 
     // Per-picker lean lookups (used for match logic)
     __lean: {
@@ -506,6 +515,51 @@ function formatZeroDefense(defenseName) {
   return `0 ${name}`;
 }
 
+function getSkillFamilyCountByName(familyName, context) {
+  const meta = context?.__skillFamily || {};
+  const byName = meta.byName || {};
+  const lib = meta.lib;
+  const index = meta.index;
+  const resolved = meta.resolved;
+
+  if (!familyName) return 0;
+
+  let fam = byName[familyName] || null;
+  if (!fam) {
+    const keys = Object.keys(byName);
+    const hit = keys.find(k => String(k).toLowerCase() === String(familyName).toLowerCase());
+    fam = hit ? byName[hit] : null;
+  }
+  if (!fam) return 0;
+
+  let matchIds = null;
+  if (resolved && typeof resolved.get === 'function') {
+    matchIds = resolved.get(fam.name);
+  }
+  if (!matchIds && lib && index) {
+    try { matchIds = resolveSkillFamily(fam, index, lib); } catch {}
+  }
+  return matchIds?.size || 0;
+}
+
+function skillFamilyRulePhrase(count) {
+  if (count >= 12) return 'use only';
+  if (count >= 5) return 'primarily use';
+  return 'use at least one skill from';
+}
+
+function applySkillFamilyRules(slots, context) {
+  if (!slots) return;
+
+  if (slots.SKILL_FAMILY && slots.SKILL_FAMILY_RULE == null) {
+    const n = getSkillFamilyCountByName(slots.SKILL_FAMILY, context);
+    slots.SKILL_FAMILY_RULE = skillFamilyRulePhrase(n);
+  }
+  if (slots.SKILL_FAMILY_2 && slots.SKILL_FAMILY_2_RULE == null) {
+    const n2 = getSkillFamilyCountByName(slots.SKILL_FAMILY_2, context);
+    slots.SKILL_FAMILY_2_RULE = skillFamilyRulePhrase(n2);
+  }
+}
 
 function minSeverityAllowed(userSeverity, taskSeverity) {
   return (SEVERITY_ORDER[userSeverity] || 0) >= (SEVERITY_ORDER[taskSeverity] || 0);
@@ -779,7 +833,10 @@ function resolveSlots(task, context, maxRetries = 40) {
       }
       slots[key] = value;
     }
-    if (ok) return slots;
+		if (ok) {
+      applySkillFamilyRules(slots, context);
+      return slots;
+    }
     Object.keys(slots).forEach(k => delete slots[k]);
   }
 

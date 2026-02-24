@@ -371,48 +371,41 @@
         "missing_tags_in_dataset": []
       }
     },
-    {
-      "id": "sacrifice_skills",
-      "name": "Sacrifice Skills",
-      "query": {
-        "any": [
-          "corpse",
-          "offering"
-        ]
-      },
-      "dev": {
-        "current_match_count": 9,
-        "missing_tags_in_dataset": []
-      }
-    },
-    {
-      "id": "hex_skills",
-      "name": "Hex Skills",
-      "query": {
-        "any": [
-          "curse",
-          "mark"
-        ]
-      },
-      "dev": {
-        "current_match_count": 14,
-        "missing_tags_in_dataset": []
-      }
-    },
+		{
+			"id": "corpse_skills",
+			"name": "Corpse Skills",
+			"query": { "any": ["corpse"] },
+			"dev": { "current_match_count": 0, "missing_tags_in_dataset": [] }
+		},
+		{
+			"id": "offering_skills",
+			"name": "Offering Skills",
+			"query": { "any": ["offering"] },
+			"dev": { "current_match_count": 0, "missing_tags_in_dataset": [] }
+		},
+		{
+			"id": "curse_skills",
+			"name": "Curse Skills",
+			"query": { "any": ["curse"] },
+			"dev": { "current_match_count": 0, "missing_tags_in_dataset": [] }
+		},
+		{
+			"id": "mark_skills",
+			"name": "Mark Skills",
+			"query": { "any": ["mark"] },
+			"dev": { "current_match_count": 0, "missing_tags_in_dataset": [] }
+		},
     {
       "id": "necrotic_skills",
       "name": "Necrotic Skills",
       "query": {
         "any": [
-          "necrotic",
-          "wither"
+          "necrotic"
         ]
       },
       "dev": {
         "current_match_count": 6,
-        "missing_tags_in_dataset": [
-          "wither"
-        ]
+        "missing_tags_in_dataset": []
       }
     },
     {
@@ -574,24 +567,6 @@
       },
       "dev": {
         "current_match_count": 46,
-        "missing_tags_in_dataset": []
-      }
-    },
-    {
-      "id": "charge_skills",
-      "name": "Charge Skills",
-      "query": {
-        "any": [
-          "consumescharges",
-          "generatescharges",
-          "requirescharges",
-          "skillconsumesfrenzychargesonuse",
-          "skillconsumesendurancechargesonuse",
-          "skillconsumespowerchargesonuse"
-        ]
-      },
-      "dev": {
-        "current_match_count": 39,
         "missing_tags_in_dataset": []
       }
     }

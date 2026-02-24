@@ -17,6 +17,41 @@ const CHALLENGE_LEDE_TEXT = '<strong>Challenge Mode</strong> rolls a <strong>Con
 
 let CHALLENGE_TEMPLATE_BY_ID = Object.create(null);
 
+function getSkillFamilyCountByName(familyName) {
+  const core = window.DATA || {};
+  const byName = core.skillFamilyByName || {};
+  const lib = core.skillFamilyLib;
+  const index = core.skillFamilyIndex;
+  if (!familyName || !lib || !index) return 0;
+
+  let fam = byName[familyName] || null;
+  if (!fam) {
+    const keys = Object.keys(byName);
+    const hit = keys.find(k => String(k).toLowerCase() === String(familyName).toLowerCase());
+    fam = hit ? byName[hit] : null;
+  }
+  if (!fam) return 0;
+
+  let matchIds = null;
+  if (core.skillFamilyResolved && typeof core.skillFamilyResolved.get === 'function') {
+    matchIds = core.skillFamilyResolved.get(fam.name);
+  }
+  if (!matchIds) matchIds = resolveSkillFamily(fam, index, lib);
+  return matchIds?.size || 0;
+}
+
+function skillFamilyRulePhrase(count) {
+  if (count >= 12) return 'use only';
+  if (count >= 5) return 'primarily use';
+  return 'use at least one skill from';
+}
+
+function inferSkillFamilyRulePhrase(familyName) {
+  const n = getSkillFamilyCountByName(familyName);
+  if (!n) return null;
+  return skillFamilyRulePhrase(n);
+}
+
 function buildTemplateSegments(template, slots) {
   const str = String(template || '');
   const re = /\{([A-Z0-9_]+)\}/g;
@@ -29,8 +64,19 @@ function buildTemplateSegments(template, slots) {
     const key = m[1];
     if (start > last) out.push({ t: str.slice(last, start), hi: false });
 
-    const has = slots && slots[key] != null;
-    const val = has ? String(slots[key]) : `{${key}}`;
+    let has = slots && slots[key] != null;
+    let val = has ? String(slots[key]) : `{${key}}`;
+
+    // Back-compat: older saved contracts won't have *_RULE filled
+    if (!has && (key === 'SKILL_FAMILY_RULE' || key === 'SKILL_FAMILY_2_RULE')) {
+      const baseKey = (key === 'SKILL_FAMILY_RULE') ? 'SKILL_FAMILY' : 'SKILL_FAMILY_2';
+      const inferred = inferSkillFamilyRulePhrase(slots?.[baseKey]);
+      if (inferred) {
+        has = true;
+        val = inferred;
+      }
+    }
+
     out.push({ t: val, hi: has, k: key });
 
     last = start + m[0].length;
@@ -189,7 +235,7 @@ function getTooltipPayload(slotKey, value) {
   }
 
 
-  if (slotKey.startsWith('SKILL_FAMILY')) {
+  if (slotKey === 'SKILL_FAMILY' || slotKey === 'SKILL_FAMILY_2') {
     const core = window.DATA || {};
     const lib = core.skillFamilyLib;
     const index = core.skillFamilyIndex;
@@ -554,7 +600,11 @@ function renderChallengeContract(contract) {
 					if (seg.hi) {
 						const v = document.createElement('span');
 						const slotKey = seg.k;
-						const wantsTip = slotKey === 'ACTIVE_SKILL' || slotKey === 'KEYSTONE' || slotKey.startsWith('SKILL_FAMILY');
+						const wantsTip =
+							slotKey === 'ACTIVE_SKILL' ||
+							slotKey === 'KEYSTONE' ||
+							slotKey === 'SKILL_FAMILY' ||
+							slotKey === 'SKILL_FAMILY_2';
 						v.className = wantsTip ? 'task-val has-tip' : 'task-val';
 						if (wantsTip) {
 							v.dataset.slotKey = slotKey;
@@ -657,6 +707,12 @@ function syncMode(mode) {
 document.addEventListener('DOMContentLoaded', async () => {
   const modeToggle = document.getElementById('randomancer-mode-toggle');
   const initialMode = getMode();
+
+  // Mode toggle labels
+  const stdLabel = document.querySelector('.mode-toggle-text[data-mode="standard"]');
+  const chLabel  = document.querySelector('.mode-toggle-text[data-mode="challenge"]');
+  if (stdLabel) stdLabel.textContent = 'Build Mode';
+  if (chLabel)  chLabel.textContent  = 'Challenge Mode';
 
   stabilizeLedeHeight();
   setChallengeFlavorLine();

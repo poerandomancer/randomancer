@@ -103,6 +103,10 @@
   transition:color .2s ease,text-shadow .2s ease;
 }
 
+.mode-toggle-text{
+  white-space: nowrap;
+}
+
 .mode-toggle:not(.is-challenge) .mode-toggle-text[data-mode="standard"],
 .mode-toggle.is-challenge .mode-toggle-text[data-mode="challenge"]{
   color:var(--gold);
