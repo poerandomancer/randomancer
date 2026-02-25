@@ -132,3 +132,14 @@ main .panel + .panel{
 
 
 /* === v0.5.1: Recommended Skills section === */
+
+
+body[data-mode="challenge"] hr.gold.subtle,
+body.challenge-mode hr.gold.subtle{
+  background:linear-gradient(90deg, transparent, rgba(118,124,134,0.45), transparent);
+}
+
+body[data-mode="challenge"] .label,
+body.challenge-mode .label{
+  color:#8e96a2;
+}

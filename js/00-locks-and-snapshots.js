@@ -997,6 +997,40 @@ function renderSnapshotToDom(snap){
 	}
 
 
+
+
+  function cloneJsonSafe(value){
+    if (!value || typeof value !== 'object') return null;
+    try {
+      if (typeof structuredClone === 'function') return structuredClone(value);
+    } catch {}
+    try { return JSON.parse(JSON.stringify(value)); } catch { return null; }
+  }
+
+  function clearBuildResultsToEmpty(){
+    const appEl = document.getElementById('app');
+    if (appEl) appEl.dataset.hasRoll = 'false';
+    const ids = [
+      'class','ascendancy','weapons','weapons-set2','defense','defstrat','ailments','tactics','build-name','build-subtext',
+      'summary-line-1','summary-line-2','summary-line-3','summary-line-4','summary-line-5','balance-bar','balance-text'
+    ];
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (id === 'balance-bar') {
+        el.style.removeProperty('width');
+      } else {
+        el.textContent = '';
+      }
+    });
+    const ws2 = document.getElementById('weapons-set2');
+    if (ws2) ws2.hidden = true;
+    const summary = document.getElementById('summary-panel');
+    if (summary) summary.hidden = true;
+    if (window.App?.state) window.App.state.currentRoll = null;
+    window.CURRENT_ROLL = null;
+  }
+
   function autoLoadFromQuery(){
     const q = getQueryParams();
     const challengeCode = q.get('challenge') || q.get('challengeCode');
@@ -1051,6 +1085,14 @@ function renderSnapshotToDom(snap){
 
   window.RandomancerEncodeSnapshot = encodeSnapshot;
   window.RandomancerApplyBuildCode = applyBuildCode;
+  window.RandomancerGetCurrentBuildSnapshot = () => cloneJsonSafe(currentSnap());
+  window.RandomancerRenderBuildSnapshot = (snap) => {
+    if (!snap || typeof snap !== 'object') return false;
+    if (window.App?.mergeCurrentRoll) window.App.mergeCurrentRoll({ ...snap });
+    renderSnapshotToDom(snap);
+    return true;
+  };
+  window.RandomancerClearBuildResults = clearBuildResultsToEmpty;
   window.RandomancerUpdateBuildCodeUI = () => {
     const snap = currentSnap();
     const code = encodeSnapshot(snap);

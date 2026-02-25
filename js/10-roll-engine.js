@@ -1205,7 +1205,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const data = await ensureDataPreload();
+        if (typeof window.RandomancerPrepareBuildRoll === 'function') {
+          window.RandomancerPrepareBuildRoll();
+        }
         rollBuild(data);
+        if (typeof window.RandomancerAfterBuildRoll === "function") {
+          window.RandomancerAfterBuildRoll();
+        }
         
         const ws2Toggle = document.getElementById('weapon-set2-toggle');
 		if (ws2Toggle?.checked) {

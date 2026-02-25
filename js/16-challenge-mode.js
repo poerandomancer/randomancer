@@ -3,6 +3,8 @@ import { generateChallengeContract, loadChallengeLibrary } from './15-challenge-
 import { getFamilySkillNames, resolveSkillFamily } from './17-skill-family-utils.js';
 
 const MODE_KEY = 'randomancer_mode';
+const STASHED_BUILD_KEY = 'stashedBuildState';
+const STASHED_CHALLENGE_KEY = 'stashedChallengeState';
 const MODES = {
   STANDARD: 'standard',
   CHALLENGE: 'challenge'
@@ -11,6 +13,8 @@ const SEVERITY_ORDER = ['mild', 'cruel', 'diabolical'];
 let challengeHasRoll = false;
 let challengeTaskCount = 2;
 let challengeSeverity = 'cruel';
+let stashedBuildState = null;
+let stashedChallengeState = null;
 
 const STANDARD_LEDE_HTML = 'Tune <strong>Cohesion</strong> for tighter themes or wilder chaos. Use <strong>Bind the Fates</strong> to favor or ban certain options. Toggle <strong>Weapon Set II</strong> for an additional weapon set, and choose <strong>Combat Mechanics</strong>: 1-3 for ailment/tactic depth.<br><strong>---</strong><br>Click <strong>Roll Your Fate</strong> to begin.';
 const CHALLENGE_LEDE_TEXT = '<strong>Challenge Mode</strong> rolls a <strong>Contract</strong>, not a build. Choose 1–3 <strong>Tasks</strong>, set <strong>Severity</strong>, then <strong>Roll Your Fate</strong> to receive a stacked set of constraints to overcome.<br><strong>---</strong><br>Click <strong>Roll Your Fate</strong> to begin.';
@@ -638,6 +642,94 @@ function stabilizeLedeHeight() {
   }
 }
 
+function prefersReducedMotion() {
+  return window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function runModeTransition(label, swapFn) {
+  const overlay = document.getElementById('modeTransition');
+  const labelEl = document.getElementById('modeTransitionLabel');
+  if (!overlay || prefersReducedMotion()) {
+    swapFn?.();
+    return;
+  }
+
+  if (labelEl) labelEl.textContent = label || '';
+  overlay.classList.add('is-on');
+  await sleep(260);
+  swapFn?.();
+  await sleep(260);
+  overlay.classList.remove('is-on');
+}
+
+function cloneJsonSafe(value) {
+  if (!value || typeof value !== 'object') return null;
+  try {
+    if (typeof structuredClone === 'function') return structuredClone(value);
+  } catch {}
+  try { return JSON.parse(JSON.stringify(value)); } catch { return null; }
+}
+
+function persistStash() {
+  try {
+    if (stashedBuildState) localStorage.setItem(STASHED_BUILD_KEY, JSON.stringify(stashedBuildState));
+    else localStorage.removeItem(STASHED_BUILD_KEY);
+    if (stashedChallengeState) localStorage.setItem(STASHED_CHALLENGE_KEY, JSON.stringify(stashedChallengeState));
+    else localStorage.removeItem(STASHED_CHALLENGE_KEY);
+  } catch {}
+}
+
+function hydrateStash() {
+  try {
+    stashedBuildState = JSON.parse(localStorage.getItem(STASHED_BUILD_KEY) || 'null');
+    stashedChallengeState = JSON.parse(localStorage.getItem(STASHED_CHALLENGE_KEY) || 'null');
+  } catch {
+    stashedBuildState = null;
+    stashedChallengeState = null;
+  }
+}
+
+function clearChallengeResultsToEmpty() {
+  challengeHasRoll = false;
+  window.CURRENT_CHALLENGE_CONTRACT = null;
+  const title = document.getElementById('challenge-contract-title');
+  const subtitle = document.getElementById('challenge-contract-subtitle');
+  const list = document.getElementById('challenge-contract-lines');
+  if (title) title.textContent = '';
+  if (subtitle) subtitle.textContent = '';
+  if (list) list.innerHTML = '';
+}
+
+function updateResumePrompts(mode) {
+  const app = document.getElementById('app');
+  const hasBuildRoll = app?.dataset?.hasRoll === 'true';
+  const buildWrap = document.getElementById('resumeBuildWrap');
+  const challengeWrap = document.getElementById('resumeChallengeWrap');
+
+  buildWrap?.classList.toggle('is-hidden', !(mode === MODES.STANDARD && !hasBuildRoll && stashedBuildState));
+  challengeWrap?.classList.toggle('is-hidden', !(mode === MODES.CHALLENGE && !challengeHasRoll && stashedChallengeState));
+}
+
+function stashCurrentBuildState() {
+  const snap = typeof window.RandomancerGetCurrentBuildSnapshot === 'function'
+    ? window.RandomancerGetCurrentBuildSnapshot()
+    : cloneJsonSafe(window.App?.state?.currentRoll || window.CURRENT_ROLL);
+  if (!snap) return;
+  stashedBuildState = snap;
+  persistStash();
+}
+
+function stashCurrentChallengeState() {
+  const contract = cloneJsonSafe(window.CURRENT_CHALLENGE_CONTRACT);
+  if (!contract) return;
+  stashedChallengeState = contract;
+  persistStash();
+}
+
 function getMode() {
   try {
     const stored = localStorage.getItem(MODE_KEY);
@@ -699,6 +791,8 @@ function setChallengePanels(active) {
   if (emptyState) {
     emptyState.classList.toggle('is-hidden', !showStandardEmpty);
   }
+
+  updateResumePrompts(active ? MODES.CHALLENGE : MODES.STANDARD);
 }
 
 function setChallengeFlavorLine() {
@@ -834,15 +928,17 @@ function syncMode(mode) {
   const app = document.getElementById('app');
 
   document.body?.classList.toggle('challenge-mode', isChallenge);
+  if (document.body) document.body.dataset.mode = isChallenge ? 'challenge' : 'build';
   setHeaderLede(mode);
   setChallengeVisibility(isChallenge);
   setChallengePanels(isChallenge);
 
-  if (app) {
-    app.classList.remove('mode-content-fade');
-    void app.offsetWidth;
-    app.classList.add('mode-content-fade');
+  if (app && !isChallenge && app.dataset.hasRoll !== 'true') {
+    app.dataset.hasRoll = 'false';
   }
+
+  const rollText = document.querySelector('#roll .roll-text');
+  if (rollText) rollText.textContent = isChallenge ? 'Draft Contract' : 'Roll Build';
 
   if (modeToggle) modeToggle.checked = isChallenge;
   modeToggleControl?.classList.toggle('is-challenge', isChallenge);
@@ -858,6 +954,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (stdLabel) stdLabel.textContent = 'Build Mode';
   if (chLabel)  chLabel.textContent  = 'Challenge Mode';
 
+  hydrateStash();
   stabilizeLedeHeight();
   setChallengeFlavorLine();
   bindChallengeControls();
@@ -867,9 +964,38 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   window.addEventListener('resize', stabilizeLedeHeight);
 
-  modeToggle?.addEventListener('change', event => {
-    const nextMode = setMode(event.target?.checked ? MODES.CHALLENGE : MODES.STANDARD);
-    syncMode(nextMode);
+
+  const resumeBuildBtn = document.getElementById('resumeBuildBtn');
+  const resumeChallengeBtn = document.getElementById('resumeChallengeBtn');
+
+  resumeBuildBtn?.addEventListener('click', () => {
+    if (!stashedBuildState) return;
+    if (typeof window.RandomancerRenderBuildSnapshot === 'function') {
+      window.RandomancerRenderBuildSnapshot(cloneJsonSafe(stashedBuildState));
+      stashedBuildState = null;
+      persistStash();
+      updateResumePrompts(MODES.STANDARD);
+    }
+  });
+
+  resumeChallengeBtn?.addEventListener('click', () => {
+    if (!stashedChallengeState) return;
+    renderChallengeContract(cloneJsonSafe(stashedChallengeState));
+    stashedChallengeState = null;
+    persistStash();
+    updateResumePrompts(MODES.CHALLENGE);
+  });
+
+  modeToggle?.addEventListener('change', async event => {
+    const targetMode = event.target?.checked ? MODES.CHALLENGE : MODES.STANDARD;
+    const label = targetMode === MODES.CHALLENGE
+      ? 'Entering Challenge Mode…'
+      : 'Returning to Build Mode…';
+
+    await runModeTransition(label, () => {
+      const nextMode = setMode(targetMode);
+      syncMode(nextMode);
+    });
   });
 
 	try {
@@ -882,10 +1008,35 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 });
 
+
+window.RandomancerPrepareBuildRoll = () => {
+  stashCurrentChallengeState();
+  clearChallengeResultsToEmpty();
+  updateResumePrompts(MODES.STANDARD);
+};
+
+window.RandomancerPrepareChallengeRoll = () => {
+  stashCurrentBuildState();
+  if (typeof window.RandomancerClearBuildResults === 'function') {
+    window.RandomancerClearBuildResults();
+  }
+  updateResumePrompts(MODES.CHALLENGE);
+};
+
+window.RandomancerGetMode = getMode;
+window.RandomancerClearChallengeResults = clearChallengeResultsToEmpty;
+window.RandomancerAfterBuildRoll = () => {
+  updateResumePrompts(MODES.STANDARD);
+};
+
+
 window.RandomancerHandleRollOverride = async ({ statusEl }) => {
   if (getMode() !== MODES.CHALLENGE) return false;
 
   try {
+    if (typeof window.RandomancerPrepareChallengeRoll === 'function') {
+      window.RandomancerPrepareChallengeRoll();
+    }
     if (statusEl) statusEl.textContent = 'Forging your contract…';
     await handleChallengeRoll({ statusEl });
   } catch (err) {

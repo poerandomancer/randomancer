@@ -340,6 +340,9 @@
           <div class="build-title-block">
             <h3 id="challenge-contract-title" class="build-name"></h3>
             <p id="challenge-contract-subtitle" class="build-subtext"></p>
+            <div id="resumeChallengeWrap" class="resume-wrap is-hidden">
+              <button id="resumeChallengeBtn" class="resume-link" type="button">Resume last Contract</button>
+            </div>
           </div>
           <div id="challenge-contract-lines" class="summary-panel challenge-contract-lines"></div>
         </div>
@@ -379,6 +382,9 @@
         <div class="build-title-block">
 			<div id="build-name" class="build-name"></div>
 			<div id="build-subtext" class="build-subtext"></div>
+            <div id="resumeBuildWrap" class="resume-wrap is-hidden">
+              <button id="resumeBuildBtn" class="resume-link" type="button">Resume last Build</button>
+            </div>
 		</div>
         <div id="summary-panel" class="summary-panel" hidden aria-label="Build Summary">
           <div id="summary-line-1" class="summary-row summary-row--primary"></div>
@@ -543,6 +549,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 </script>
+
+
+<div id="modeTransition" class="mode-transition" aria-hidden="true">
+  <div id="modeTransitionLabel" class="mode-transition__label"></div>
+</div>
 
 <div id="rm-toast" class="rm-toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
 <script type="module" src="core-script.js"></script>

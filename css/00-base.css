@@ -14,6 +14,17 @@
   --unique-bronze-edge: rgba(197,138,70,0.35);
   --unique-bronze-soft: rgba(197,138,70,0.12);
   --section-gap: 24px;
+  --challenge-iron: #7f8792;
+  --challenge-crimson: #9f2f37;
+  --challenge-crimson-soft: rgba(159,47,55,0.35);
+}
+
+body[data-mode="build"]{
+  --mode-accent: var(--gold);
+}
+
+body[data-mode="challenge"]{
+  --mode-accent: var(--challenge-crimson);
 }
 
 *{ box-sizing:border-box; }
@@ -40,7 +51,8 @@ body {
   font-family: 'Cormorant Garamond', serif;
 }
 
-body.challenge-mode{
+body.challenge-mode,
+body[data-mode="challenge"]{
   background: var(--bg) url('/images/challenge-background.png') center/cover no-repeat fixed;
 }
 
@@ -56,7 +68,9 @@ body.challenge-mode{
 .asc-art.show{ opacity:.92; }
 
 body.challenge-mode .asc-art,
-body.challenge-mode .asc-art.show{
+body.challenge-mode .asc-art.show,
+body[data-mode="challenge"] .asc-art,
+body[data-mode="challenge"] .asc-art.show{
   opacity: 0 !important;
 }
 
@@ -118,35 +132,23 @@ body.challenge-mode .asc-art.show{
   transition:opacity .5s ease;
 }
 
-body.challenge-mode #app::after{
+body.challenge-mode #app::after,
+body[data-mode="challenge"] #app::after{
   opacity: 1;
 
-  /* Strong vignette + your existing rusted overlay layers */
   background:
-		/* Stronger vignette (darker edges) */
-		radial-gradient(120% 95% at 50% 42%,
-			rgba(0,0,0,0) 22%,
-			rgba(0,0,0,0.97) 100%
-		),
-
-	
-		/* Rusted-gold / brass glaze (subtle) */
-		radial-gradient(120% 80% at 50% 22%,
-			rgba(122, 88, 26, 0.10),
-			rgba(0,0,0,0) 60%
-		),
-	
-		/* Darker rusted glow (reduced color intensity) */
-		radial-gradient(132% 84% at 50% 18%,
-			rgba(62, 26, 14, 0.18),
-			rgba(0,0,0,0) 64%
-		),
-	
-		/* Deeper dark wash (overall darkening) */
-		linear-gradient(180deg,
-			rgba(44, 16, 14, 0.32) 0%,
-			rgba(12, 8, 10, 0.62) 100%
-		);
+    radial-gradient(118% 92% at 50% 44%,
+      rgba(0,0,0,0) 20%,
+      rgba(0,0,0,0.985) 100%
+    ),
+    radial-gradient(130% 88% at 54% 18%,
+      rgba(118, 34, 41, 0.22),
+      rgba(0,0,0,0) 62%
+    ),
+    linear-gradient(180deg,
+      rgba(34, 18, 22, 0.48) 0%,
+      rgba(10, 8, 10, 0.78) 100%
+    );
 
 
 }
@@ -157,11 +159,41 @@ body.challenge-mode #app::after{
   z-index:1;
 }
 
-#app.mode-content-fade{
-  animation:modeContentFade .5s ease;
+
+
+.mode-transition{
+  position: fixed;
+  inset: 0;
+  z-index: 12000;
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,0.96);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 260ms ease;
 }
 
-@keyframes modeContentFade{
-  0%{ opacity:.88; filter:saturate(.9) brightness(.96); }
-  100%{ opacity:1; filter:saturate(1); }
+.mode-transition.is-on{
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mode-transition__label{
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  font-size: clamp(.82rem, 1.6vw, 1rem);
+  color: rgba(236, 231, 224, 0.92);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .mode-transition{ transition: none; }
+  .asc-art,
+  #app,
+  #app::after,
+  .mode-toggle,
+  .mode-toggle .toggle-ui,
+  .mode-toggle .toggle-ui::after{
+    transition: none !important;
+    animation: none !important;
+  }
 }
