@@ -11,10 +11,10 @@
 }
 
 .roll-sticky{
-  display: inline-flex;
-  align-items: center;
+  position: relative;
+  display: flex;
   justify-content: center;
-  gap: .5rem;
+  align-items: center;
 }
 
 .roll-btn .roll-text{
@@ -179,8 +179,12 @@ body.challenge-mode .challenge-empty-flavor{
 }
 
 .resume-roll-btn{
-  width: 42px;
-  height: 42px;
+  position: absolute;
+  left: calc(50% + clamp(112px, 17vw, 168px));
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
   border-radius: 999px;
   border: 1px solid color-mix(in srgb, var(--mode-accent, var(--gold)) 48%, rgba(255,255,255,0.22));
   background: rgba(14,14,18,0.72);
@@ -194,13 +198,18 @@ body.challenge-mode .challenge-empty-flavor{
   transition: transform .16s ease, border-color .2s ease, opacity .2s ease;
 }
 
-.resume-roll-btn__glyph{
-  font-size: 1.2rem;
-  line-height: 1;
+.resume-roll-btn__icon{
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .resume-roll-btn:hover{
-  transform: translateY(-1px);
+  transform: translateY(calc(-50% - 1px));
 }
 
 .resume-roll-btn:focus-visible{
