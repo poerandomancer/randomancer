@@ -760,7 +760,12 @@ function setChallengeVisibility(active) {
   const standardControls = document.getElementById('standard-controls');
   const challengeControls = document.getElementById('challenge-controls');
 
-  standardControls?.classList.toggle('is-hidden', active);
+  if (standardControls) {
+    Array.from(standardControls.children || []).forEach((child) => {
+      const keepVisible = child.classList?.contains('bind-fates-row');
+      child.classList.toggle('is-hidden', active && !keepVisible);
+    });
+  }
   challengeControls?.classList.toggle('is-hidden', !active);
 }
 
@@ -878,6 +883,9 @@ function renderChallengeContract(contract) {
 
   challengeHasRoll = true;
   window.CURRENT_CHALLENGE_CONTRACT = contract;
+  if (window.App?.setChallengeFates && contract?.challengeFates) {
+    window.App.setChallengeFates(contract.challengeFates);
+  }
   try { document.dispatchEvent(new CustomEvent('randomancer:challenge-rendered')); } catch {}
 
   setChallengePanels(true);
@@ -925,7 +933,11 @@ function bindChallengeControls() {
 
 async function handleChallengeRoll({ statusEl }) {
   await ensureDataPreload();
-  const contract = await generateChallengeContract({ taskCount: challengeTaskCount, severity: challengeSeverity });
+  const contract = await generateChallengeContract({
+    taskCount: challengeTaskCount,
+    severity: challengeSeverity,
+    challengeFates: window.App?.getChallengeFates?.()
+  });
 
   renderChallengeContract(contract);
   if (statusEl) statusEl.textContent = '';

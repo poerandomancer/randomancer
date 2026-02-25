@@ -39,6 +39,52 @@ function weightedPick(items, severity) {
   return weighted[weighted.length - 1];
 }
 
+
+function hasCategory(task, cat) {
+  const cats = Array.isArray(task?.categories) ? task.categories : [];
+  return cats.includes(cat);
+}
+
+// Applies challenge fates with dead-end fallback strategy:
+// 1) respect bans and ignore favors, 2) if still empty, ignore both.
+function applyFatesToCandidates({ role, baseCandidates, fates, exactCount }) {
+  const candidates = Array.isArray(baseCandidates) ? baseCandidates : [];
+  if (!candidates.length) return [];
+
+  if (role === 'anchor') {
+    const cfg = fates?.anchors || { favor: [], ban: [] };
+    const favor = new Set(toArray(cfg.favor));
+    const ban = new Set(toArray(cfg.ban));
+
+    const allowed = candidates.filter(task => !ban.has(task.id));
+    if (!favor.size) return allowed.length ? allowed : candidates;
+
+    const favoredAllowed = allowed.filter(task => favor.has(task.id));
+    if (exactCount === 1 && favoredAllowed.length) return favoredAllowed;
+    if (exactCount > 1 && favoredAllowed.length) return allowed;
+    if (allowed.length) return allowed;
+    return candidates;
+  }
+
+  if (role === 'twist') {
+    const cfg = fates?.twistCategories || { favor: [], ban: [] };
+    const favor = new Set(toArray(cfg.favor));
+    const ban = new Set(toArray(cfg.ban));
+
+    const categorized = candidates.filter(task => Array.isArray(task?.categories) && task.categories.length);
+    const allowed = categorized.filter(task => !Array.from(ban).some(cat => hasCategory(task, cat)));
+    if (!favor.size) return allowed.length ? allowed : candidates;
+
+    const favoredAllowed = allowed.filter(task => Array.from(favor).some(cat => hasCategory(task, cat)));
+    if (exactCount === 1 && favoredAllowed.length) return favoredAllowed;
+    if (exactCount > 1 && favoredAllowed.length) return allowed;
+    if (allowed.length) return allowed;
+    return candidates;
+  }
+
+  return candidates;
+}
+
 async function loadChallengeLibrary() {
   if (!challengeLibraryPromise) {
     challengeLibraryPromise = fetch('data/challenge_tasks.json')
@@ -871,7 +917,7 @@ function buildContractTitle({ picks, severity }) {
 // Generator
 // -------------------------
 
-async function generateChallengeContract({ taskCount = 2, severity = 'cruel', maxAttempts = 140 } = {}) {
+async function generateChallengeContract({ taskCount = 2, severity = 'cruel', maxAttempts = 140, challengeFates = null } = {}) {
   const normalizedCount = [1, 2, 3].includes(Number(taskCount)) ? Number(taskCount) : 2;
   const normalizedSeverity = SEVERITY_ORDER[severity] ? severity : 'cruel';
   const rolePlan = STACK_PLAN[normalizedCount];
@@ -880,15 +926,39 @@ async function generateChallengeContract({ taskCount = 2, severity = 'cruel', ma
   const pickerContext = await buildPickerContext();
   pickerContext.__severity = normalizedSeverity;
 
-  const tasksByRole = rolePlan.map(role =>
-    library.filter(task => task.role === role && minSeverityAllowed(normalizedSeverity, task.minSeverity))
-  );
+  const tasksByRole = rolePlan.map((role, index) => {
+    const exactCount = rolePlan.filter(r => r === role).length;
+    const base = library.filter(task => task.role === role && minSeverityAllowed(normalizedSeverity, task.minSeverity));
+    return applyFatesToCandidates({ role, baseCandidates: base, fates: challengeFates, exactCount, index, rolePlan });
+  });
 
   function backtrack(index, selected, state, attempts) {
     if (index >= rolePlan.length) return selected;
     if (attempts.count >= maxAttempts) return null;
 
-    const candidates = tasksByRole[index].filter(task => !selected.some(entry => entry.task.id === task.id));
+    let candidates = tasksByRole[index].filter(task => !selected.some(entry => entry.task.id === task.id));
+
+    if (rolePlan[index] === 'anchor') {
+      const cfg = challengeFates?.anchors || { favor: [], ban: [] };
+      const favor = new Set(toArray(cfg.favor));
+      const totalAnchors = rolePlan.filter(role => role === 'anchor').length;
+      const pickedFavored = selected.some(entry => entry.task?.role === 'anchor' && favor.has(entry.task?.id));
+      if (favor.size && totalAnchors > 1 && !pickedFavored) {
+        const favoredOnly = candidates.filter(task => favor.has(task.id));
+        if (favoredOnly.length) candidates = favoredOnly;
+      }
+    }
+
+    if (rolePlan[index] === 'twist') {
+      const cfg = challengeFates?.twistCategories || { favor: [], ban: [] };
+      const favor = new Set(toArray(cfg.favor));
+      const totalTwists = rolePlan.filter(role => role === 'twist').length;
+      const pickedFavored = selected.some(entry => entry.task?.role === 'twist' && toArray(entry.task?.categories).some(cat => favor.has(cat)));
+      if (favor.size && totalTwists > 1 && !pickedFavored) {
+        const favoredOnly = candidates.filter(task => toArray(task?.categories).some(cat => favor.has(cat)));
+        if (favoredOnly.length) candidates = favoredOnly;
+      }
+    }
     if (!candidates.length) return null;
 
     const queue = [...candidates];
@@ -938,7 +1008,11 @@ async function generateChallengeContract({ taskCount = 2, severity = 'cruel', ma
       line: item.line,
       slots: item.slots
     })),
-    state: deriveStateFromPicks(picks)
+    state: deriveStateFromPicks(picks),
+    challengeFates: challengeFates || {
+      anchors: { favor: [], ban: [] },
+      twistCategories: { favor: [], ban: [] }
+    }
   };
 }
 

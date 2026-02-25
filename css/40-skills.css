@@ -589,6 +589,7 @@ input:checked
 .bind-fates-section-head{ display:flex; flex-direction:column; gap:2px; margin-bottom:6px; }
 .bind-fates-section-head h4{ margin:0; color:var(--silver); letter-spacing:.02em; }
 .bind-fates-hint{ margin:0; color:var(--muted); font-size:0.95rem; }
+.bind-fates-warning{ color:#d48f8f; }
 .bind-fates-divider{ border:0; border-top:1px solid rgba(200,168,107,0.22); margin:10px 0; }
 .bind-fates-list{
   display:grid;
