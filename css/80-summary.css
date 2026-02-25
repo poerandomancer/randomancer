@@ -468,3 +468,14 @@
     height: min(420px, calc(100vh - 120px));
   }
 }
+
+
+body[data-mode="challenge"] :is(#build-actions-btn, #challenge-actions-btn):focus-visible,
+body.challenge-mode :is(#build-actions-btn, #challenge-actions-btn):focus-visible,
+body[data-mode="challenge"] .task-val.has-tip:focus-visible,
+body.challenge-mode .task-val.has-tip:focus-visible{
+  border-color: rgba(159,47,55,0.88);
+  box-shadow: 0 0 0 1px rgba(159,47,55,0.45), 0 0 12px rgba(159,47,55,0.34);
+}
+
+

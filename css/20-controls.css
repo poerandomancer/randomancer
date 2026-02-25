@@ -10,6 +10,13 @@
   gap:.45rem;
 }
 
+.roll-sticky{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .roll-btn .roll-text{
   white-space:nowrap;
 }
@@ -109,8 +116,34 @@
 
 .mode-toggle:not(.is-challenge) .mode-toggle-text[data-mode="standard"],
 .mode-toggle.is-challenge .mode-toggle-text[data-mode="challenge"]{
-  color:var(--gold);
-  text-shadow:0 0 6px rgba(212,170,80,0.45);
+  color:var(--mode-accent, var(--gold));
+  text-shadow:0 0 6px color-mix(in srgb, var(--mode-accent, var(--gold)) 45%, transparent);
+}
+
+
+
+body[data-mode="challenge"] .mode-toggle .toggle-ui,
+body.challenge-mode .mode-toggle .toggle-ui{
+  background:linear-gradient(90deg, rgba(96,102,112,0.36), rgba(48,52,58,0.36));
+  border-color: rgba(133, 138, 145, 0.35);
+}
+
+body[data-mode="challenge"] .mode-toggle input:checked + .toggle-ui,
+body.challenge-mode .mode-toggle input:checked + .toggle-ui{
+  background:linear-gradient(90deg, #4f5662, #982d35);
+  box-shadow:0 0 8px rgba(159,47,55,0.55), inset 0 0 2px rgba(255,255,255,0.25);
+}
+
+body[data-mode="challenge"] :is(.rm-dotstep, .mechanics-like-btn, .roll-btn):focus-visible,
+body.challenge-mode :is(.rm-dotstep, .mechanics-like-btn, .roll-btn):focus-visible{
+  outline:1px solid rgba(159,47,55,0.85);
+  outline-offset:2px;
+}
+
+body[data-mode="challenge"] .challenge-empty-flavor,
+body.challenge-mode .challenge-empty-flavor{
+  color:#b34a52;
+  text-shadow:0 0 8px rgba(0,0,0,0.88);
 }
 
 .challenge-controls{ margin:0.15rem auto 0.85rem; }
@@ -143,4 +176,111 @@
 @media (max-width: 520px){
   .controls-rail{ width:calc(100% - 20px); }
   .mode-switch-row{ margin-bottom:.45rem; }
+  .resume-roll-btn{
+    left: calc(50% + 84px);
+  }
+}
+
+.resume-roll-btn{
+  position: absolute;
+  left: calc(50% + clamp(90px, 12.2vw, 124px));
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--mode-accent, var(--gold)) 48%, rgba(255,255,255,0.22));
+  background: rgba(14,14,18,0.72);
+  color: color-mix(in srgb, var(--mode-accent, var(--gold)) 88%, #f2e9d7 12%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 14px rgba(0,0,0,0.35);
+  cursor: pointer;
+  transition: transform .16s ease, border-color .2s ease, opacity .2s ease;
+}
+
+.resume-roll-btn__icon{
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.resume-roll-btn:hover{
+  transform: translateY(calc(-50% - 1px));
+}
+
+.resume-roll-btn:focus-visible{
+  outline: 1px solid color-mix(in srgb, var(--mode-accent, var(--gold)) 80%, white 20%);
+  outline-offset: 2px;
+}
+
+/* ================================
+   Roll + Resume alignment (desktop/base)
+   Keep Roll centered, tuck Resume close
+================================== */
+
+:root{
+  --resume-btn-size: 30px; /* smaller than current 32px */
+  --resume-btn-gap: 10px;  /* tighter spacing */
+}
+
+/* IMPORTANT: no gap here (mobile file currently adds one) */
+.roll-sticky{
+  gap: 0 !important;
+}
+
+/* Balance spacer so Roll stays dead-center when Resume is visible */
+.roll-sticky::before{
+  content: "";
+  width: 0;
+  flex: 0 0 auto;
+}
+
+.roll-sticky:has(#resumeRollBtn:not(.is-hidden))::before{
+  width: calc(var(--resume-btn-size) + var(--resume-btn-gap));
+}
+
+/* Make resume participate in layout (NOT absolutely positioned) */
+#resumeRollBtn.resume-roll-btn{
+  position: static !important;
+  left: auto !important;
+  top: auto !important;
+  transform: none !important;
+
+  width: var(--resume-btn-size) !important;
+  height: var(--resume-btn-size) !important;
+
+  margin-left: var(--resume-btn-gap) !important;
+  padding: 0 !important;
+}
+
+/* Fix hover transform (old rule assumed translateY(-50%)) */
+#resumeRollBtn.resume-roll-btn:hover{
+  transform: translateY(-1px) !important;
+}
+
+/* Icon scale */
+#resumeRollBtn .resume-roll-btn__icon{
+  width: 13px !important;
+  height: 13px !important;
+}
+
+/* Keep Roll + Resume perfectly vertically aligned inside the sticky cluster */
+.roll-sticky{
+  margin-top: .5rem; /* preserve the original spacing that used to live on .roll-btn */
+}
+
+.roll-sticky .roll-btn{
+  margin-top: 0 !important; /* remove the offset that was pulling Roll down */
+}
+
+#resumeRollBtn.resume-roll-btn{
+  margin-top: 0 !important; /* ensure resume isn’t offset either */
+  align-self: center;       /* extra belt-and-suspenders */
 }
