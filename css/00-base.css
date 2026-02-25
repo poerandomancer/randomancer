@@ -25,6 +25,8 @@ body[data-mode="build"]{
 
 body[data-mode="challenge"]{
   --mode-accent: var(--challenge-crimson);
+  --gold: var(--challenge-crimson);
+  --edge: var(--challenge-crimson-soft);
 }
 
 *{ box-sizing:border-box; }
