@@ -97,3 +97,18 @@ img, video { max-width: 100%; height: auto; }
   margin: var(--section-gap) 0;
 }
 #uniques-section.sect { margin-top: 0; }
+
+/* ================================
+   Roll + Resume alignment (mobile overrides)
+================================== */
+
+@media (max-width: 960px){
+  .roll-sticky{ gap: 0 !important; }
+}
+
+@media (max-width: 520px){
+  :root{
+    --resume-btn-size: 28px;
+    --resume-btn-gap: 8px;
+  }
+}

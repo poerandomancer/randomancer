@@ -219,3 +219,68 @@ body.challenge-mode .challenge-empty-flavor{
   outline: 1px solid color-mix(in srgb, var(--mode-accent, var(--gold)) 80%, white 20%);
   outline-offset: 2px;
 }
+
+/* ================================
+   Roll + Resume alignment (desktop/base)
+   Keep Roll centered, tuck Resume close
+================================== */
+
+:root{
+  --resume-btn-size: 30px; /* smaller than current 32px */
+  --resume-btn-gap: 10px;  /* tighter spacing */
+}
+
+/* IMPORTANT: no gap here (mobile file currently adds one) */
+.roll-sticky{
+  gap: 0 !important;
+}
+
+/* Balance spacer so Roll stays dead-center when Resume is visible */
+.roll-sticky::before{
+  content: "";
+  width: 0;
+  flex: 0 0 auto;
+}
+
+.roll-sticky:has(#resumeRollBtn:not(.is-hidden))::before{
+  width: calc(var(--resume-btn-size) + var(--resume-btn-gap));
+}
+
+/* Make resume participate in layout (NOT absolutely positioned) */
+#resumeRollBtn.resume-roll-btn{
+  position: static !important;
+  left: auto !important;
+  top: auto !important;
+  transform: none !important;
+
+  width: var(--resume-btn-size) !important;
+  height: var(--resume-btn-size) !important;
+
+  margin-left: var(--resume-btn-gap) !important;
+  padding: 0 !important;
+}
+
+/* Fix hover transform (old rule assumed translateY(-50%)) */
+#resumeRollBtn.resume-roll-btn:hover{
+  transform: translateY(-1px) !important;
+}
+
+/* Icon scale */
+#resumeRollBtn .resume-roll-btn__icon{
+  width: 13px !important;
+  height: 13px !important;
+}
+
+/* Keep Roll + Resume perfectly vertically aligned inside the sticky cluster */
+.roll-sticky{
+  margin-top: .5rem; /* preserve the original spacing that used to live on .roll-btn */
+}
+
+.roll-sticky .roll-btn{
+  margin-top: 0 !important; /* remove the offset that was pulling Roll down */
+}
+
+#resumeRollBtn.resume-roll-btn{
+  margin-top: 0 !important; /* ensure resume isn’t offset either */
+  align-self: center;       /* extra belt-and-suspenders */
+}
