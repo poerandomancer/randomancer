@@ -96,6 +96,8 @@ let __RC_TIP_TARGET = null;
 let __RC_GEM_BY_NAME = null;
 let __RC_PASSIVE_BY_NAME = null;
 let __RC_TIP_BOUND = false;
+let __RC_TIP_FAMILY_SELECTED = null;
+let __RC_TIP_FAMILY_PINNED = false;
 
 // Hover persistence: keep tooltip open while either the trigger or the tooltip panel is hovered.
 let __RC_TIP_HIDE_TIMER = null;
@@ -260,11 +262,42 @@ function getTooltipPayload(slotKey, value) {
     if (!matchIds || matchIds.size === 0) return null;
 
     const { names, total, remaining } = getFamilySkillNames(fam, index, matchIds, { max: 28 });
-    const lines = names.slice();
-    if (remaining > 0) lines.push(`… +${remaining} more`);
-    return { title: `${fam.name} (${total})`, lines };
+    return {
+      kind: 'family',
+      title: `${fam.name} (${total})`,
+      skills: names,
+      remaining,
+      defaultSkill: names[0] || null
+    };
   }
   return null;
+}
+
+function getSkillDescription(skillName) {
+  const gem = gemIndexByName()[skillName];
+  const desc = stripBracketMarkup(gem?.description || gem?.support_text || '');
+  return desc || 'No description available.';
+}
+
+function setFamilySelected(skillName, { pinned = false } = {}) {
+  const tip = ensureTooltipEl();
+  if (!tip.classList.contains('rc-tooltip--family')) return;
+
+  __RC_TIP_FAMILY_SELECTED = skillName || null;
+  if (pinned) __RC_TIP_FAMILY_PINNED = true;
+
+  const selectedName = __RC_TIP_FAMILY_SELECTED;
+  const buttons = tip.querySelectorAll('.rc-tip-skill');
+  buttons.forEach(btn => {
+    const on = btn.dataset.skill === selectedName;
+    btn.classList.toggle('is-selected', on);
+    btn.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+
+  const titleEl = tip.querySelector('.rc-tooltip__detail-title');
+  const bodyEl = tip.querySelector('.rc-tooltip__detail-body');
+  if (titleEl) titleEl.textContent = selectedName || '';
+  if (bodyEl) bodyEl.textContent = selectedName ? getSkillDescription(selectedName) : '';
 }
 
 function ensureTooltipEl() {
@@ -296,6 +329,43 @@ function ensureTooltipEl() {
 
 function renderTooltip(payload) {
   const el = ensureTooltipEl();
+  const isFamily = payload?.kind === 'family' && Array.isArray(payload?.skills);
+
+  el.classList.toggle('rc-tooltip--family', isFamily);
+
+  if (isFamily) {
+    const skills = payload.skills;
+    const defaultSkill = payload.defaultSkill || skills[0] || null;
+    __RC_TIP_FAMILY_PINNED = false;
+
+    el.innerHTML = `
+      <div class="rc-tooltip__title">${escapeHtml(payload?.title || '')}</div>
+      <div class="rc-tooltip__grid">
+        <div class="rc-tooltip__skilllist" role="listbox" aria-label="Skills in family">
+          ${skills.map((skill, idx) => `
+            <button
+              type="button"
+              class="rc-tip-skill${skill === defaultSkill || (idx === 0 && !defaultSkill) ? ' is-selected' : ''}"
+              data-skill="${escapeHtml(skill)}"
+              role="option"
+              aria-selected="${skill === defaultSkill || (idx === 0 && !defaultSkill) ? 'true' : 'false'}"
+            >${escapeHtml(skill)}</button>
+          `).join('')}
+          ${payload.remaining > 0 ? `<div class="rc-tip-more">… +${payload.remaining} more</div>` : ''}
+        </div>
+
+        <div class="rc-tooltip__detail" aria-live="polite">
+          <div class="rc-tooltip__detail-title"></div>
+          <div class="rc-tooltip__detail-body"></div>
+        </div>
+      </div>
+      <div class="rc-tooltip__hint">Hover a skill to preview • Click to pin selection • Tap to pin tooltip</div>
+    `;
+
+    setFamilySelected(defaultSkill);
+    return;
+  }
+
   const title = payload?.title || '';
   const lines = Array.isArray(payload?.lines) ? payload.lines : [];
 
@@ -372,11 +442,13 @@ function showTooltipFor(target, pinned = false) {
 
 function hideTooltip() {
   const el = ensureTooltipEl();
-  el.classList.remove('is-open', 'is-scroll', 'is-at-bottom');
+  el.classList.remove('is-open', 'is-scroll', 'is-at-bottom', 'rc-tooltip--family');
   __RC_TIP_TARGET = null;
   __RC_TIP_PINNED = false;
   __RC_TIP_HOVER_TRIGGER = false;
   __RC_TIP_HOVER_PANEL = false;
+  __RC_TIP_FAMILY_SELECTED = null;
+  __RC_TIP_FAMILY_PINNED = false;
   clearTipHideTimer();
 }
 
@@ -457,6 +529,34 @@ function initChallengeInlineTooltips() {
     if (el.contains(evt.target)) return;
     if (__RC_TIP_TARGET && __RC_TIP_TARGET.contains(evt.target)) return;
     hideTooltip();
+  });
+
+  // Family tooltip interaction (single popover, list->detail)
+  document.addEventListener('pointerover', (evt) => {
+    const tip = __RC_TIP_EL;
+    if (!tip || !tip.classList.contains('rc-tooltip--family')) return;
+    if (evt.pointerType && evt.pointerType !== 'mouse') return;
+    const btn = evt.target?.closest?.('.rc-tip-skill');
+    if (!btn || !tip.contains(btn)) return;
+    if (__RC_TIP_FAMILY_PINNED) return;
+    setFamilySelected(btn.dataset.skill || null);
+  });
+
+  document.addEventListener('focusin', (evt) => {
+    const tip = __RC_TIP_EL;
+    if (!tip || !tip.classList.contains('rc-tooltip--family')) return;
+    const btn = evt.target?.closest?.('.rc-tip-skill');
+    if (!btn || !tip.contains(btn)) return;
+    if (__RC_TIP_FAMILY_PINNED) return;
+    setFamilySelected(btn.dataset.skill || null);
+  });
+
+  document.addEventListener('click', (evt) => {
+    const tip = __RC_TIP_EL;
+    if (!tip || !tip.classList.contains('rc-tooltip--family')) return;
+    const btn = evt.target?.closest?.('.rc-tip-skill');
+    if (!btn || !tip.contains(btn)) return;
+    setFamilySelected(btn.dataset.skill || null, { pinned: true });
   });
 
   // Keep tooltip positioned during layout changes

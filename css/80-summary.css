@@ -386,3 +386,75 @@
   font-size: 11px;
   opacity: 0.7;
 }
+
+
+.rc-tooltip--family{
+  max-width: min(720px, calc(100vw - 24px));
+}
+
+.rc-tooltip__grid{
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 12px;
+  max-height: 320px;
+}
+
+.rc-tooltip__skilllist,
+.rc-tooltip__detail-body{
+  max-height: 300px;
+  overflow: auto;
+}
+
+.rc-tooltip__skilllist{
+  padding-right: 4px;
+}
+
+.rc-tip-skill{
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 6px 8px;
+  color: inherit;
+  cursor: pointer;
+}
+
+.rc-tip-skill:hover,
+.rc-tip-skill:focus-visible{
+  border-color: rgba(212,170,80,0.18);
+  outline: none;
+}
+
+.rc-tip-skill.is-selected{
+  background: rgba(212,170,80,0.10);
+  border-color: rgba(212,170,80,0.25);
+}
+
+.rc-tip-more{
+  opacity: 0.7;
+  font-size: 12px;
+  padding: 6px 8px;
+}
+
+.rc-tooltip__detail-title{
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.rc-tooltip__detail-body{
+  white-space: pre-wrap;
+}
+
+@media (max-width: 560px){
+  .rc-tooltip__grid{
+    grid-template-columns: 1fr;
+    max-height: 420px;
+  }
+
+  .rc-tooltip__skilllist,
+  .rc-tooltip__detail-body{
+    max-height: 180px;
+  }
+}
