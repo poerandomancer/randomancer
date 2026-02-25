@@ -397,7 +397,7 @@
   display: grid;
   grid-template-columns: 184px minmax(0, 1fr);
   gap: 12px;
-  height: 320px;
+  height: min(320px, calc(100vh - 160px));
 }
 
 .rc-tooltip__skilllist{
@@ -424,6 +424,7 @@
   padding: 6px 8px;
   color: inherit;
   cursor: pointer;
+  font: inherit;
 }
 
 .rc-tip-skill:hover,
@@ -464,6 +465,6 @@
   .rc-tooltip__grid{
     grid-template-columns: 1fr;
     grid-template-rows: 148px minmax(0, 1fr);
-    height: 420px;
+    height: min(420px, calc(100vh - 120px));
   }
 }

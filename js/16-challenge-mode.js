@@ -337,6 +337,8 @@ function renderTooltip(payload) {
     const skills = payload.skills;
     const defaultSkill = payload.defaultSkill || skills[0] || null;
     __RC_TIP_FAMILY_PINNED = false;
+    
+    el.classList.remove('is-scroll', 'is-at-bottom');
 
     el.innerHTML = `
       <div class="rc-tooltip__title">${escapeHtml(payload?.title || '')}</div>
@@ -359,7 +361,7 @@ function renderTooltip(payload) {
           <div class="rc-tooltip__detail-body"></div>
         </div>
       </div>
-      <div class="rc-tooltip__hint">Hover a skill to preview • Click to pin selection • Tap to pin tooltip</div>
+      <div class="rc-tooltip__hint">Hover a skill to preview • Click to pin/unpin selection • Tap to pin tooltip</div>
     `;
 
     setFamilySelected(defaultSkill);
@@ -563,13 +565,43 @@ function initChallengeInlineTooltips() {
     setFamilySelected(btn.dataset.skill || null);
   });
 
-  document.addEventListener('click', (evt) => {
-    const tip = __RC_TIP_EL;
-    if (!tip || !tip.classList.contains('rc-tooltip--family')) return;
-    const btn = evt.target?.closest?.('.rc-tip-skill');
-    if (!btn || !tip.contains(btn)) return;
-    setFamilySelected(btn.dataset.skill || null, { pinned: true });
-  });
+	document.addEventListener('click', (evt) => {
+		const tip = __RC_TIP_EL;
+		if (!tip || !tip.classList.contains('rc-tooltip--family')) return;
+	
+		const btn = evt.target?.closest?.('.rc-tip-skill');
+		if (!btn || !tip.contains(btn)) return;
+	
+		const skill = btn.dataset.skill || null;
+		if (!skill) return;
+	
+		const isKeyboardClick = evt.detail === 0; // Enter/Space-triggered click
+	
+		// Keyboard: treat as "select only" (no pinning side effects)
+		if (isKeyboardClick) {
+			setFamilySelected(skill); // does not change pinned state
+		} else {
+			// Mouse/tap: click pins; clicking the selected skill again toggles pin on/off
+			const clickedSame = (skill === __RC_TIP_FAMILY_SELECTED);
+	
+			if (clickedSame) {
+				__RC_TIP_FAMILY_PINNED = !__RC_TIP_FAMILY_PINNED; // toggle
+				// If toggling ON, pass pinned:true to ensure internal state is consistent.
+				setFamilySelected(skill, { pinned: __RC_TIP_FAMILY_PINNED });
+			} else {
+				__RC_TIP_FAMILY_PINNED = true;          // force pin on new selection
+				setFamilySelected(skill, { pinned: true });
+			}
+		}
+	
+		// Update hint copy to reflect pinned state
+		const hintEl = tip.querySelector('.rc-tooltip__hint');
+		if (hintEl) {
+			hintEl.textContent = __RC_TIP_FAMILY_PINNED
+				? 'Pinned selection • Click selected skill again to unpin • Tap to pin tooltip'
+				: 'Hover a skill to preview • Click to pin/unpin selection • Tap to pin tooltip';
+		}
+	});
 
   // Keep tooltip positioned during layout changes
   window.addEventListener('resize', () => {
