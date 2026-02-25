@@ -176,15 +176,18 @@ body.challenge-mode .challenge-empty-flavor{
 @media (max-width: 520px){
   .controls-rail{ width:calc(100% - 20px); }
   .mode-switch-row{ margin-bottom:.45rem; }
+  .resume-roll-btn{
+    left: calc(50% + 84px);
+  }
 }
 
 .resume-roll-btn{
   position: absolute;
-  left: calc(50% + clamp(112px, 17vw, 168px));
+  left: calc(50% + clamp(90px, 12.2vw, 124px));
   top: 50%;
   transform: translateY(-50%);
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 999px;
   border: 1px solid color-mix(in srgb, var(--mode-accent, var(--gold)) 48%, rgba(255,255,255,0.22));
   background: rgba(14,14,18,0.72);
@@ -199,8 +202,8 @@ body.challenge-mode .challenge-empty-flavor{
 }
 
 .resume-roll-btn__icon{
-  width: 17px;
-  height: 17px;
+  width: 14px;
+  height: 14px;
   fill: none;
   stroke: currentColor;
   stroke-width: 2.1;
