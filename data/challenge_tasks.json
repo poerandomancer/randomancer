@@ -350,8 +350,8 @@
 			"cruel": 4,
 			"diabolical": 3
 		},
-		"template": "Choose {CLASS} and {SKILL_FAMILY_RULE} {SKILL_FAMILY}, and maintain {DEFENSE}.",
-		"shortLabel": "Twin Bulwark",
+		"template": "Choose {CLASS} and {SKILL_FAMILY_RULE} {SKILL_FAMILY}. Maintain {DEFENSE}.",
+		"shortLabel": "Lineage Bulwark",
 		"slots": {
 			"CLASS": {
 				"picker": "class"
@@ -451,6 +451,7 @@
       "bans": {
         "uniques": true
       },
+      "conflictTags": ["rarity_policy"],
       "locks": {}
     }
   },
@@ -479,6 +480,7 @@
         "pickupRare": true,
         "pickupUnique": true
       },
+      "conflictTags": ["rarity_policy"],
       "locks": {}
     }
   },
@@ -531,6 +533,7 @@
 				"picker": "armorSlot"
 			}
 		},
+		"conflictTags": ["rarity_policy"],
 		"effects": {
 			"limits": {
 				"normalArmorSlot": "{ARMOR_SLOT}"
@@ -674,7 +677,8 @@
       "limits": {
         "evenAttributes": true
       }
-    }
+    },
+    "conflictTags": ["attribute_constraint"]
   },
   {
     "id": "S5_zero_element_resist",
@@ -697,7 +701,8 @@
       "ELEMENT": {
         "picker": "elementResist"
       }
-    }
+    },
+    "conflictTags": ["resistance_policy"]
   },
   {
     "id": "P4_no_heralds",
@@ -813,6 +818,7 @@
         "picker": "attribute"
       }
     },
+    "conflictTags": ["attribute_constraint"],
     "effects": {
       "limits": {
         "passivesAttributeOnly": "{ATTRIBUTE}"
@@ -849,5 +855,292 @@
         "skillFamily": "{SKILL_FAMILY}"
       }
     }
-  }
+  },
+  
+	{
+		"id": "J2_twin_virtues",
+		"role": "twist",
+		"directive": "mandate",
+		"strength": "soft",
+		"domainTags": ["attributes", "build_architecture"],
+		"minSeverity": "cruel",
+		"weights": { "mild": 0, "cruel": 6, "diabolical": 6 },
+		"template": "Keep {ATTRIBUTE} and {ATTRIBUTE_2} within 10 points of each other.",
+		"shortLabel": "Twin Virtues",
+		"slots": {
+			"ATTRIBUTE": { "picker": "attribute" },
+			"ATTRIBUTE_2": { "picker": "attribute", "filters": { "notEqualTo": "ATTRIBUTE" } }
+		},
+		"conflictTags": ["attribute_constraint"]
+	},
+	
+	{
+		"id": "F5_relic_cap",
+		"role": "twist",
+		"directive": "constraint",
+		"strength": "soft",
+		"domainTags": ["itemization_constraint", "rarity_rules"],
+		"minSeverity": "mild",
+		"weights": { "mild": 6, "cruel": 6, "diabolical": 4 },
+		"template": "Equip at most 1 Unique item.",
+		"shortLabel": "Relic Cap",
+		"conflictTags": ["rarity_policy"],
+		"effects": { "limits": { "uniquesMax": 1 } }
+	},
+	
+	{
+		"id": "F6_blue_collar",
+		"role": "twist",
+		"directive": "constraint",
+		"strength": "hard",
+		"domainTags": ["itemization_constraint", "rarity_rules"],
+		"minSeverity": "cruel",
+		"weights": { "mild": 0, "cruel": 6, "diabolical": 6 },
+		"template": "Equip Magic-rarity {ARMOR_SLOT} and Magic-rarity {ARMOR_SLOT_2}.",
+		"shortLabel": "Blue Collar",
+		"slots": {
+			"ARMOR_SLOT": { "picker": "armorSlot" },
+			"ARMOR_SLOT_2": { "picker": "armorSlot", "filters": { "notEqualTo": "ARMOR_SLOT" } }
+		},
+		"conflictTags": ["rarity_policy"],
+		"effects": { "limits": { "magicArmorSlots": ["{ARMOR_SLOT}", "{ARMOR_SLOT_2}"] } }
+	},
+	
+	{
+		"id": "F7_two_magic_pieces",
+		"role": "twist",
+		"directive": "mandate",
+		"strength": "soft",
+		"domainTags": ["itemization_constraint", "rarity_rules"],
+		"minSeverity": "mild",
+		"weights": { "mild": 6, "cruel": 6, "diabolical": 4 },
+		"template": "Equip at least 2 Magic-rarity gear pieces.",
+		"shortLabel": "Blue Collar II",
+		"conflictTags": ["rarity_policy"],
+		"effects": { "limits": { "magicGearMin": 2 } }
+	},
+	
+	{
+		"id": "F8_unforged_steel",
+		"role": "twist",
+		"directive": "constraint",
+		"strength": "hard",
+		"domainTags": ["weapon_identity", "itemization_constraint", "rarity_rules"],
+		"minSeverity": "cruel",
+		"weights": { "mild": 0, "cruel": 6, "diabolical": 6 },
+		"template": "Your Weapon(s) must not be Rare.",
+		"shortLabel": "Unforged Steel",
+		"conflictTags": ["rarity_policy"],
+		"effects": { "limits": { "weaponsNoRare": true } }
+	},
+	
+	{
+		"id": "F9_rarity_mosaic",
+		"role": "twist",
+		"directive": "mandate",
+		"strength": "soft",
+		"domainTags": ["itemization_constraint", "rarity_rules"],
+		"minSeverity": "mild",
+		"weights": { "mild": 6, "cruel": 5, "diabolical": 4 },
+		"template": "Keep at least 1 Normal item and at least 1 Magic item equipped.",
+		"shortLabel": "Rarity Mosaic",
+		"conflictTags": ["rarity_policy"],
+		"effects": { "limits": { "normalMin": 1, "magicMin": 1 } }
+	},
+	
+	{
+		"id": "F10_rainbow_mosaic",
+		"role": "twist",
+		"directive": "mandate",
+		"strength": "hard",
+		"domainTags": ["itemization_constraint", "rarity_rules"],
+		"minSeverity": "cruel",
+		"weights": { "mild": 0, "cruel": 6, "diabolical": 6 },
+		"template": "Equip at least 1 Normal, 1 Magic, 1 Rare, and 1 Unique item.",
+		"shortLabel": "Rainbow Mosaic",
+		"conflictTags": ["rarity_policy"],
+		"effects": { "limits": { "normalMin": 1, "magicMin": 1, "rareMin": 1, "uniqueMin": 1 } }
+	},
+	
+	{
+		"id": "S6_wounded_ward",
+		"role": "twist",
+		"directive": "constraint",
+		"strength": "soft",
+		"domainTags": ["defense", "resistance"],
+		"minSeverity": "mild",
+		"weights": { "mild": 6, "cruel": 6, "diabolical": 4 },
+		"template": "Keep your {ELEMENT} Resistance at or below 50%.",
+		"shortLabel": "Wounded Ward",
+		"slots": { "ELEMENT": { "picker": "elementResist" } },
+		"conflictTags": ["resistance_policy"],
+		"effects": { "limits": { "resistCap": { "element": "{ELEMENT}", "max": 50 } } }
+	},
+	
+	{
+		"id": "S7_open_wound",
+		"role": "twist",
+		"directive": "constraint",
+		"strength": "hard",
+		"domainTags": ["defense", "resistance"],
+		"minSeverity": "diabolical",
+		"weights": { "mild": 0, "cruel": 0, "diabolical": 6 },
+		"template": "Keep your {ELEMENT} Resistance at or below 25%.",
+		"shortLabel": "Open Wound",
+		"slots": { "ELEMENT": { "picker": "elementResist" } },
+		"conflictTags": ["resistance_policy"],
+		"effects": { "limits": { "resistCap": { "element": "{ELEMENT}", "max": 25 } } }
+	},
+	
+	{
+		"id": "S8_twofold_exposure",
+		"role": "twist",
+		"directive": "constraint",
+		"strength": "hard",
+		"domainTags": ["defense", "resistance"],
+		"minSeverity": "cruel",
+		"weights": { "mild": 0, "cruel": 6, "diabolical": 6 },
+		"template": "Keep your {ELEMENT} and {ELEMENT_2} Resistances at or below 50%.",
+		"shortLabel": "Twofold Exposure",
+		"slots": {
+			"ELEMENT": { "picker": "elementResist" },
+			"ELEMENT_2": { "picker": "elementResist", "filters": { "notEqualTo": "ELEMENT" } }
+		},
+		"conflictTags": ["resistance_policy"],
+		"effects": {
+			"limits": {
+				"resistCaps": [
+					{ "element": "{ELEMENT}", "max": 50 },
+					{ "element": "{ELEMENT_2}", "max": 50 }
+				]
+			}
+		}
+	},
+	
+	{
+		"id": "S9_capped_by_oath",
+		"role": "twist",
+		"directive": "mandate",
+		"strength": "hard",
+		"domainTags": ["defense", "resistance"],
+		"minSeverity": "cruel",
+		"weights": { "mild": 0, "cruel": 6, "diabolical": 6 },
+		"template": "Raise your maximum {ELEMENT} Resistance to 80%.",
+		"shortLabel": "Capped by Oath",
+		"slots": { "ELEMENT": { "picker": "elementResist" } },
+		"conflictTags": ["resistance_policy"],
+		"effects": { "limits": { "maxResTarget": { "element": "{ELEMENT}", "min": 80 } } }
+	},
+	
+	{
+		"id": "S10_overcapped_76",
+		"role": "twist",
+		"directive": "mandate",
+		"strength": "soft",
+		"domainTags": ["defense", "resistance"],
+		"minSeverity": "mild",
+		"weights": { "mild": 6, "cruel": 6, "diabolical": 4 },
+		"template": "Raise your maximum Elemental Resistances to at least 76%.",
+		"shortLabel": "Overcapped",
+		"conflictTags": ["resistance_policy"],
+		"effects": { "limits": { "maxAllElementalResMin": 76 } }
+	},
+	
+	{
+		"id": "F11_missing_something",
+		"role": "twist",
+		"directive": "constraint",
+		"strength": "hard",
+		"domainTags": ["itemization_constraint", "build_shape"],
+		"minSeverity": "diabolical",
+		"weights": { "mild": 0, "cruel": 0, "diabolical": 5 },
+		"template": "Leave one gear slot empty for the entire run.",
+		"shortLabel": "Missing Something?",
+		"effects": { "limits": { "oneEmptySlot": true } }
+	},
+	
+	{
+		"id": "I3_early_crown",
+		"role": "twist",
+		"directive": "mandate",
+		"strength": "soft",
+		"domainTags": ["passive_tree_constraint", "build_architecture"],
+		"minSeverity": "mild",
+		"weights": { "mild": 6, "cruel": 6, "diabolical": 5 },
+		"template": "Allocate your first Keystone by level 20.",
+		"shortLabel": "The Early Crown",
+		"conflictTags": ["tree_policy"],
+		"effects": { "limits": { "firstKeystoneByLevel": 20 } }
+	},
+	
+	{
+		"id": "E6_normal_charms_only",
+		"role": "twist",
+		"directive": "constraint",
+		"strength": "soft",
+		"domainTags": ["itemization_constraint", "rarity_rules", "utility_removal"],
+		"minSeverity": "mild",
+		"weights": { "mild": 6, "cruel": 6, "diabolical": 4 },
+		"template": "All equipped Charms must be Normal-rarity.",
+		"shortLabel": "Humble Charms",
+		"conflictTags": ["rarity_policy"],
+		"effects": { "limits": { "charmsNormalOnly": true } }
+	},
+	
+	{
+		"id": "E7_normal_flasks_only",
+		"role": "twist",
+		"directive": "constraint",
+		"strength": "soft",
+		"domainTags": ["itemization_constraint", "rarity_rules", "utility_removal"],
+		"minSeverity": "mild",
+		"weights": { "mild": 6, "cruel": 6, "diabolical": 4 },
+		"template": "All equipped Flasks must be Normal-rarity.",
+		"shortLabel": "Plain Draughts",
+		"conflictTags": ["rarity_policy"],
+		"effects": { "limits": { "flasksNormalOnly": true } }
+	},
+	
+	{
+		"id": "I4_three_keystones",
+		"role": "twist",
+		"directive": "mandate",
+		"strength": "hard",
+		"domainTags": ["passive_tree_constraint", "build_architecture"],
+		"minSeverity": "diabolical",
+		"weights": { "mild": 0, "cruel": 0, "diabolical": 6 },
+		"template": "Allocate at least 3 Keystones on the passive tree.",
+		"shortLabel": "Three Crowns",
+		"conflictTags": ["tree_policy"],
+		"effects": { "limits": { "keystonesMin": 3 } }
+	},
+	
+	{
+		"id": "I5_no_jewels",
+		"role": "twist",
+		"directive": "constraint",
+		"strength": "soft",
+		"domainTags": ["passive_tree_constraint", "itemization_constraint"],
+		"minSeverity": "mild",
+		"weights": { "mild": 6, "cruel": 6, "diabolical": 4 },
+		"template": "Do not equip any Jewels in the passive tree.",
+		"shortLabel": "No Jewels",
+		"conflictTags": ["tree_policy"],
+		"effects": { "bans": { "jewels": true } }
+	},
+	
+	{
+		"id": "F12_magic_armor_slot",
+		"role": "twist",
+		"directive": "constraint",
+		"strength": "hard",
+		"domainTags": ["itemization_constraint", "rarity_rules"],
+		"minSeverity": "cruel",
+		"weights": { "mild": 0, "cruel": 6, "diabolical": 6 },
+		"template": "Equip a Magic-rarity {ARMOR_SLOT}.",
+		"shortLabel": "Blue Plate",
+		"slots": { "ARMOR_SLOT": { "picker": "armorSlot" } },
+		"conflictTags": ["rarity_policy"],
+		"effects": { "limits": { "magicArmorSlot": "{ARMOR_SLOT}" } }
+	}
 ]
