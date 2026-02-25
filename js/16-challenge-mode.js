@@ -5,6 +5,7 @@ import { getFamilySkillNames, resolveSkillFamily } from './17-skill-family-utils
 const MODE_KEY = 'randomancer_mode';
 const STASHED_BUILD_KEY = 'stashedBuildState';
 const STASHED_CHALLENGE_KEY = 'stashedChallengeState';
+const MODE_TRANSITION_MS = 380;
 const MODES = {
   STANDARD: 'standard',
   CHALLENGE: 'challenge'
@@ -660,9 +661,9 @@ async function runModeTransition(label, swapFn) {
 
   if (labelEl) labelEl.textContent = label || '';
   overlay.classList.add('is-on');
-  await sleep(260);
+  await sleep(MODE_TRANSITION_MS);
   swapFn?.();
-  await sleep(260);
+  await sleep(MODE_TRANSITION_MS);
   overlay.classList.remove('is-on');
 }
 

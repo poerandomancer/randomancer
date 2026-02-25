@@ -170,7 +170,7 @@ body[data-mode="challenge"] #app::after{
   background: rgba(0,0,0,0.96);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 260ms ease;
+  transition: opacity 380ms ease;
 }
 
 .mode-transition.is-on{
