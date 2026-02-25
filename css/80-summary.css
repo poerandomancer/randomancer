@@ -389,24 +389,29 @@
 
 
 .rc-tooltip--family{
-  max-width: min(720px, calc(100vw - 24px));
+  width: min(640px, calc(100vw - 24px));
+  max-width: min(640px, calc(100vw - 24px));
 }
 
 .rc-tooltip__grid{
   display: grid;
-  grid-template-columns: 200px 1fr;
+  grid-template-columns: 184px minmax(0, 1fr);
   gap: 12px;
-  max-height: 320px;
-}
-
-.rc-tooltip__skilllist,
-.rc-tooltip__detail-body{
-  max-height: 300px;
-  overflow: auto;
+  height: 320px;
 }
 
 .rc-tooltip__skilllist{
+  min-height: 0;
+  height: 100%;
+  overflow: auto;
   padding-right: 4px;
+}
+
+.rc-tooltip__detail{
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .rc-tip-skill{
@@ -444,17 +449,21 @@
 }
 
 .rc-tooltip__detail-body{
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow: auto;
   white-space: pre-wrap;
 }
 
 @media (max-width: 560px){
-  .rc-tooltip__grid{
-    grid-template-columns: 1fr;
-    max-height: 420px;
+  .rc-tooltip--family{
+    width: min(360px, calc(100vw - 24px));
+    max-width: min(360px, calc(100vw - 24px));
   }
 
-  .rc-tooltip__skilllist,
-  .rc-tooltip__detail-body{
-    max-height: 180px;
+  .rc-tooltip__grid{
+    grid-template-columns: 1fr;
+    grid-template-rows: 148px minmax(0, 1fr);
+    height: 420px;
   }
 }
