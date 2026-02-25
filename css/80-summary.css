@@ -386,3 +386,84 @@
   font-size: 11px;
   opacity: 0.7;
 }
+
+
+.rc-tooltip--family{
+  width: min(640px, calc(100vw - 24px));
+  max-width: min(640px, calc(100vw - 24px));
+}
+
+.rc-tooltip__grid{
+  display: grid;
+  grid-template-columns: 184px minmax(0, 1fr);
+  gap: 12px;
+  height: 320px;
+}
+
+.rc-tooltip__skilllist{
+  min-height: 0;
+  height: 100%;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.rc-tooltip__detail{
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.rc-tip-skill{
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 6px 8px;
+  color: inherit;
+  cursor: pointer;
+}
+
+.rc-tip-skill:hover,
+.rc-tip-skill:focus-visible{
+  border-color: rgba(212,170,80,0.18);
+  outline: none;
+}
+
+.rc-tip-skill.is-selected{
+  background: rgba(212,170,80,0.10);
+  border-color: rgba(212,170,80,0.25);
+}
+
+.rc-tip-more{
+  opacity: 0.7;
+  font-size: 12px;
+  padding: 6px 8px;
+}
+
+.rc-tooltip__detail-title{
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.rc-tooltip__detail-body{
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 560px){
+  .rc-tooltip--family{
+    width: min(360px, calc(100vw - 24px));
+    max-width: min(360px, calc(100vw - 24px));
+  }
+
+  .rc-tooltip__grid{
+    grid-template-columns: 1fr;
+    grid-template-rows: 148px minmax(0, 1fr);
+    height: 420px;
+  }
+}
