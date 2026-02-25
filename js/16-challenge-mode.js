@@ -709,14 +709,12 @@ function updateResumePrompts(mode) {
   const hasBuildRoll = app?.dataset?.hasRoll === 'true';
   const buildWrap = document.getElementById('resumeBuildWrap');
   const challengeWrap = document.getElementById('resumeChallengeWrap');
-  const challengeResumeMount = document.getElementById('challenge-empty-resume');
 
   const showBuildResume = mode === MODES.STANDARD && !hasBuildRoll && !!stashedBuildState;
   const showChallengeResume = mode === MODES.CHALLENGE && !challengeHasRoll && !!stashedChallengeState;
 
   buildWrap?.classList.toggle('is-hidden', !showBuildResume);
   challengeWrap?.classList.toggle('is-hidden', !showChallengeResume);
-  challengeResumeMount?.classList.toggle('is-hidden', !showChallengeResume);
 }
 
 function stashCurrentBuildState() {

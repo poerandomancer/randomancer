@@ -166,9 +166,10 @@ body.challenge-mode .challenge-empty-flavor{
   max-width:min(900px, 92vw);
 }
 
-.challenge-empty-resume{
-  text-align:center;
-  margin:-2.2rem auto 1.1rem;
+.resume-top-row{
+  min-height: 1.4rem;
+  margin: .3rem auto .45rem;
+  text-align: center;
 }
 
 @media (max-width: 520px){
@@ -178,7 +179,7 @@ body.challenge-mode .challenge-empty-flavor{
 
 
 .resume-wrap{
-  margin-top: .35rem;
+  margin-top: .05rem;
 }
 
 .resume-link{
