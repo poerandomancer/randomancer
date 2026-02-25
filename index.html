@@ -294,6 +294,11 @@
 
       <hr id="challenge-empty-divider" class="gold subtle challenge-empty-divider is-hidden" aria-hidden="true"/>
       <div id="challenge-empty-flavor" class="challenge-empty-flavor is-hidden" aria-live="polite"></div>
+      <div id="challenge-empty-resume" class="challenge-empty-resume is-hidden">
+        <div id="resumeChallengeWrap" class="resume-wrap is-hidden">
+          <button id="resumeChallengeBtn" class="resume-link" type="button">Resume last Contract</button>
+        </div>
+      </div>
 
 
 
@@ -307,6 +312,9 @@
 
       <section id="empty-state" class="panel empty-state" aria-label="Welcome">
         <h3 class="empty-title">The Fates Await...</h3>
+        <div id="resumeBuildWrap" class="resume-wrap is-hidden">
+          <button id="resumeBuildBtn" class="resume-link" type="button">Resume last Build</button>
+        </div>
         <p class="empty-text">
         </p>
       </section>
@@ -340,9 +348,6 @@
           <div class="build-title-block">
             <h3 id="challenge-contract-title" class="build-name"></h3>
             <p id="challenge-contract-subtitle" class="build-subtext"></p>
-            <div id="resumeChallengeWrap" class="resume-wrap is-hidden">
-              <button id="resumeChallengeBtn" class="resume-link" type="button">Resume last Contract</button>
-            </div>
           </div>
           <div id="challenge-contract-lines" class="summary-panel challenge-contract-lines"></div>
         </div>
@@ -382,9 +387,6 @@
         <div class="build-title-block">
 			<div id="build-name" class="build-name"></div>
 			<div id="build-subtext" class="build-subtext"></div>
-            <div id="resumeBuildWrap" class="resume-wrap is-hidden">
-              <button id="resumeBuildBtn" class="resume-link" type="button">Resume last Build</button>
-            </div>
 		</div>
         <div id="summary-panel" class="summary-panel" hidden aria-label="Build Summary">
           <div id="summary-line-1" class="summary-row summary-row--primary"></div>

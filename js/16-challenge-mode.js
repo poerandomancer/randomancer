@@ -709,9 +709,14 @@ function updateResumePrompts(mode) {
   const hasBuildRoll = app?.dataset?.hasRoll === 'true';
   const buildWrap = document.getElementById('resumeBuildWrap');
   const challengeWrap = document.getElementById('resumeChallengeWrap');
+  const challengeResumeMount = document.getElementById('challenge-empty-resume');
 
-  buildWrap?.classList.toggle('is-hidden', !(mode === MODES.STANDARD && !hasBuildRoll && stashedBuildState));
-  challengeWrap?.classList.toggle('is-hidden', !(mode === MODES.CHALLENGE && !challengeHasRoll && stashedChallengeState));
+  const showBuildResume = mode === MODES.STANDARD && !hasBuildRoll && !!stashedBuildState;
+  const showChallengeResume = mode === MODES.CHALLENGE && !challengeHasRoll && !!stashedChallengeState;
+
+  buildWrap?.classList.toggle('is-hidden', !showBuildResume);
+  challengeWrap?.classList.toggle('is-hidden', !showChallengeResume);
+  challengeResumeMount?.classList.toggle('is-hidden', !showChallengeResume);
 }
 
 function stashCurrentBuildState() {
@@ -935,6 +940,12 @@ function syncMode(mode) {
 
   if (app && !isChallenge && app.dataset.hasRoll !== 'true') {
     app.dataset.hasRoll = 'false';
+    const ascArt = document.getElementById('asc-art');
+    if (ascArt) {
+      ascArt.classList.remove('show');
+      ascArt.style.removeProperty('--asc-img');
+      delete ascArt.dataset.ascPath;
+    }
   }
 
   const rollText = document.querySelector('#roll .roll-text');

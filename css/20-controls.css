@@ -166,6 +166,11 @@ body.challenge-mode .challenge-empty-flavor{
   max-width:min(900px, 92vw);
 }
 
+.challenge-empty-resume{
+  text-align:center;
+  margin:-2.2rem auto 1.1rem;
+}
+
 @media (max-width: 520px){
   .controls-rail{ width:calc(100% - 20px); }
   .mode-switch-row{ margin-bottom:.45rem; }

@@ -1010,6 +1010,12 @@ function renderSnapshotToDom(snap){
   function clearBuildResultsToEmpty(){
     const appEl = document.getElementById('app');
     if (appEl) appEl.dataset.hasRoll = 'false';
+    const ascArt = document.getElementById('asc-art');
+    if (ascArt) {
+      ascArt.classList.remove('show');
+      ascArt.style.removeProperty('--asc-img');
+      delete ascArt.dataset.ascPath;
+    }
     const ids = [
       'class','ascendancy','weapons','weapons-set2','defense','defstrat','ailments','tactics','build-name','build-subtext',
       'summary-line-1','summary-line-2','summary-line-3','summary-line-4','summary-line-5','balance-bar','balance-text'
