@@ -408,19 +408,31 @@ function positionTooltip(target) {
 
   const margin = 10;
   const pad = 10;
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
 
   let x = rect.left + rect.width / 2;
   const half = tipRect.width / 2;
-  x = Math.max(pad + half, Math.min(window.innerWidth - pad - half, x));
+  x = Math.max(pad + half, Math.min(vw - pad - half, x));
 
-  // Prefer above; flip below if needed
-  let aboveTop = rect.top - tipRect.height - margin;
-  const canFitAbove = aboveTop > pad;
-  const y = canFitAbove ? (rect.top - margin) : (rect.bottom + margin);
+  const aboveTop = rect.top - tipRect.height - margin;
+  const belowTop = rect.bottom + margin;
+  const canFitAbove = aboveTop >= pad;
+  const canFitBelow = (belowTop + tipRect.height) <= (vh - pad);
+
+  let yTop = canFitAbove ? aboveTop : belowTop;
+  if (!canFitAbove && !canFitBelow) {
+    const spaceAbove = rect.top - pad;
+    const spaceBelow = vh - rect.bottom - pad;
+    yTop = (spaceBelow >= spaceAbove) ? belowTop : aboveTop;
+  }
+
+  const maxTop = Math.max(pad, vh - pad - tipRect.height);
+  yTop = Math.max(pad, Math.min(maxTop, yTop));
 
   el.style.left = `${Math.round(x)}px`;
-  el.style.top = `${Math.round(y)}px`;
-  el.style.transform = canFitAbove ? 'translate(-50%, -100%)' : 'translate(-50%, 0)';
+  el.style.top = `${Math.round(yTop)}px`;
+  el.style.transform = 'translate(-50%, 0)';
 }
 
 function showTooltipFor(target, pinned = false) {
