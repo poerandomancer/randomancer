@@ -707,14 +707,21 @@ function clearChallengeResultsToEmpty() {
 function updateResumePrompts(mode) {
   const app = document.getElementById('app');
   const hasBuildRoll = app?.dataset?.hasRoll === 'true';
-  const buildWrap = document.getElementById('resumeBuildWrap');
-  const challengeWrap = document.getElementById('resumeChallengeWrap');
+  const resumeBtn = document.getElementById('resumeRollBtn');
 
   const showBuildResume = mode === MODES.STANDARD && !hasBuildRoll && !!stashedBuildState;
   const showChallengeResume = mode === MODES.CHALLENGE && !challengeHasRoll && !!stashedChallengeState;
+  const isChallengeResume = showChallengeResume && !showBuildResume;
 
-  buildWrap?.classList.toggle('is-hidden', !showBuildResume);
-  challengeWrap?.classList.toggle('is-hidden', !showChallengeResume);
+  if (!resumeBtn) return;
+  const show = showBuildResume || showChallengeResume;
+  resumeBtn.classList.toggle('is-hidden', !show);
+  if (!show) return;
+
+  const label = isChallengeResume ? 'Resume last Contract' : 'Resume last Build';
+  resumeBtn.setAttribute('title', label);
+  resumeBtn.setAttribute('aria-label', label);
+  resumeBtn.dataset.resumeMode = isChallengeResume ? MODES.CHALLENGE : MODES.STANDARD;
 }
 
 function stashCurrentBuildState() {
@@ -974,25 +981,27 @@ document.addEventListener('DOMContentLoaded', async () => {
   window.addEventListener('resize', stabilizeLedeHeight);
 
 
-  const resumeBuildBtn = document.getElementById('resumeBuildBtn');
-  const resumeChallengeBtn = document.getElementById('resumeChallengeBtn');
-
-  resumeBuildBtn?.addEventListener('click', () => {
-    if (!stashedBuildState) return;
-    if (typeof window.RandomancerRenderBuildSnapshot === 'function') {
-      window.RandomancerRenderBuildSnapshot(cloneJsonSafe(stashedBuildState));
-      stashedBuildState = null;
-      persistStash();
-      updateResumePrompts(MODES.STANDARD);
+  const resumeRollBtn = document.getElementById('resumeRollBtn');
+  resumeRollBtn?.addEventListener('click', () => {
+    const target = resumeRollBtn.dataset.resumeMode;
+    if (target === MODES.STANDARD) {
+      if (!stashedBuildState) return;
+      if (typeof window.RandomancerRenderBuildSnapshot === 'function') {
+        window.RandomancerRenderBuildSnapshot(cloneJsonSafe(stashedBuildState));
+        stashedBuildState = null;
+        persistStash();
+        updateResumePrompts(MODES.STANDARD);
+      }
+      return;
     }
-  });
 
-  resumeChallengeBtn?.addEventListener('click', () => {
-    if (!stashedChallengeState) return;
-    renderChallengeContract(cloneJsonSafe(stashedChallengeState));
-    stashedChallengeState = null;
-    persistStash();
-    updateResumePrompts(MODES.CHALLENGE);
+    if (target === MODES.CHALLENGE) {
+      if (!stashedChallengeState) return;
+      renderChallengeContract(cloneJsonSafe(stashedChallengeState));
+      stashedChallengeState = null;
+      persistStash();
+      updateResumePrompts(MODES.CHALLENGE);
+    }
   });
 
   modeToggle?.addEventListener('change', async event => {
