@@ -16,20 +16,36 @@ function updateAscArt(asc){
   // Avoid redundant work if we're already showing this art
   if (el.dataset.ascPath === path && el.classList.contains('show')) return;
   el.dataset.ascPath = path;
-
-  // Fade out current art
-  el.classList.remove('show');
+  const hasCurrent = !!el.style.getPropertyValue('--asc-img');
+  const token = String(Date.now());
+  el.dataset.ascToken = token;
 
   // Preload the new image before fading it in
   const img = new Image();
   img.onload = () => {
     // If another roll changed the target meanwhile, bail
-    if (el.dataset.ascPath !== path) return;
-    el.style.setProperty('--asc-img', `url('${path}')`);
-    // Next frame, fade in the new art
-    requestAnimationFrame(() => {
+    if (el.dataset.ascPath !== path || el.dataset.ascToken !== token) return;
+
+    // First reveal: just fade in the base art.
+    if (!hasCurrent) {
+      el.style.setProperty('--asc-img', `url('${path}')`);
+      requestAnimationFrame(() => el.classList.add('show'));
+      return;
+    }
+
+    // Crossfade from old -> new art over ~2.4s using the overlay layer.
+    el.style.setProperty('--asc-next-img', `url('${path}')`);
+    el.classList.remove('is-crossfading');
+    void el.offsetWidth;
+    el.classList.add('is-crossfading');
+
+    window.setTimeout(() => {
+      if (el.dataset.ascPath !== path || el.dataset.ascToken !== token) return;
+      el.style.setProperty('--asc-img', `url('${path}')`);
+      el.classList.remove('is-crossfading');
+      el.style.removeProperty('--asc-next-img');
       el.classList.add('show');
-    });
+    }, 2400);
   };
   img.src = path;
 }
@@ -40,6 +56,118 @@ const showBindFatesError = (msg) => {
     window.showBindFatesError(msg);
   }
 };
+
+const REVEAL_MS = 2400;
+const REVEAL_HOLD_MS = 90;
+const revealController = {
+  isRevealing: false,
+  revealTimer: null,
+  defogKickoffTimer: null,
+  artDefogTimer: null
+};
+
+function prefersReducedMotion() {
+  return window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+}
+
+function setHeaderCollapsed(collapsed, instant = false) {
+  const header = document.getElementById('app-header');
+  const toggle = document.getElementById('header-details-toggle');
+  if (!header) return;
+
+  const alreadyCollapsed = header.classList.contains('rc-header--collapsed');
+  if (alreadyCollapsed === collapsed) return;
+
+  const oldHeight = header.getBoundingClientRect().height;
+  if (instant) header.classList.add('rc-header--no-anim');
+  header.classList.toggle('rc-header--collapsed', collapsed);
+  if (toggle) toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+
+  requestAnimationFrame(() => {
+    const newHeight = header.getBoundingClientRect().height;
+    const delta = oldHeight - newHeight;
+    if (delta) window.scrollBy(0, -delta);
+    if (instant) header.classList.remove('rc-header--no-anim');
+  });
+}
+
+function collapseHeaderForRoll() {
+  setHeaderCollapsed(true, prefersReducedMotion());
+}
+
+function finishReveal() {
+  const resultsStage = document.getElementById('results-stage');
+  const ascArt = document.getElementById('asc-art');
+  const app = document.getElementById('app');
+
+  if (revealController.revealTimer) {
+    clearTimeout(revealController.revealTimer);
+    revealController.revealTimer = null;
+  }
+  if (revealController.defogKickoffTimer) {
+    clearTimeout(revealController.defogKickoffTimer);
+    revealController.defogKickoffTimer = null;
+  }
+  if (revealController.artDefogTimer) {
+    clearTimeout(revealController.artDefogTimer);
+    revealController.artDefogTimer = null;
+  }
+
+  resultsStage?.classList.remove('is-revealing', 'is-defogging');
+  ascArt?.classList.remove('is-revealing-art', 'is-defogging-art');
+  app?.classList.remove('is-revealing-art', 'is-defogging-art');
+  revealController.isRevealing = false;
+}
+
+function skipReveal() {
+  if (!revealController.isRevealing) return;
+  finishReveal();
+}
+
+function startReveal() {
+  const resultsStage = document.getElementById('results-stage');
+  const ascArt = document.getElementById('asc-art');
+  const app = document.getElementById('app');
+  if (!resultsStage) return;
+
+  collapseHeaderForRoll();
+
+  if (prefersReducedMotion()) {
+    finishReveal();
+    return;
+  }
+
+  if (revealController.revealTimer) {
+    clearTimeout(revealController.revealTimer);
+    revealController.revealTimer = null;
+  }
+
+  revealController.isRevealing = true;
+  resultsStage.classList.add('is-revealing');
+  resultsStage.classList.remove('is-defogging');
+  app?.classList.add('is-revealing-art');
+  app?.classList.remove('is-defogging-art');
+
+  void resultsStage.offsetWidth;
+  revealController.defogKickoffTimer = setTimeout(() => {
+    resultsStage.classList.add('is-defogging');
+    app?.classList.add('is-defogging-art');
+    revealController.defogKickoffTimer = null;
+  }, REVEAL_HOLD_MS);
+
+  if (ascArt?.classList.contains('show')) {
+    ascArt.classList.add('is-revealing-art');
+    ascArt.classList.remove('is-defogging-art');
+    revealController.artDefogTimer = setTimeout(() => {
+      ascArt.classList.add('is-defogging-art');
+      revealController.artDefogTimer = null;
+    }, REVEAL_HOLD_MS + 120);
+  }
+
+  revealController.revealTimer = setTimeout(() => {
+    finishReveal();
+  }, REVEAL_MS + REVEAL_HOLD_MS);
+}
 
 // ---------- dictionary builders (TRUE Map) ----------
 function buildGemDictionary(gems){
@@ -1189,9 +1317,29 @@ function rollBuild(dataWrap){
 // ---------- roll button + weapon set wiring ----------
 document.addEventListener('DOMContentLoaded', () => {
   const rollBtn = document.getElementById('roll');
+  const headerToggleBtn = document.getElementById('header-details-toggle');
+
+  headerToggleBtn?.addEventListener('click', () => {
+    const header = document.getElementById('app-header');
+    const collapsed = header?.classList.contains('rc-header--collapsed');
+    setHeaderCollapsed(!collapsed, prefersReducedMotion());
+  });
+
+  document.addEventListener('keydown', (evt) => {
+    if (!revealController.isRevealing) return;
+    if (evt.code !== 'Space') return;
+    evt.preventDefault();
+    skipReveal();
+  });
+
   if (rollBtn) {
     const statusEl = rollBtn.querySelector('.roll-status');
     rollBtn.addEventListener('click', async () => {
+      if (revealController.isRevealing) {
+        skipReveal();
+        return;
+      }
+
       // Tiny loading hint if data is still warming up
       rollBtn.classList.add('is-loading');
       if (statusEl && !dataReady) {
@@ -1201,7 +1349,12 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         if (typeof window.RandomancerHandleRollOverride === 'function') {
           const handled = await window.RandomancerHandleRollOverride({ rollBtn, statusEl });
-          if (handled) return;
+          if (handled) {
+            if (window.CURRENT_CHALLENGE_CONTRACT) {
+              startReveal();
+            }
+            return;
+          }
         }
 
         const data = await ensureDataPreload();
@@ -1212,6 +1365,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (typeof window.RandomancerAfterBuildRoll === "function") {
           window.RandomancerAfterBuildRoll();
         }
+        startReveal();
         
         const ws2Toggle = document.getElementById('weapon-set2-toggle');
 		if (ws2Toggle?.checked) {
