@@ -302,51 +302,6 @@
     }
   },
   {
-    "id": "A11_class_plus_two_skill_families",
-    "role": "anchor",
-    "directive": "mandate",
-    "strength": "hard",
-    "domainTags": [
-      "identity_archetype",
-      "skill_family",
-      "skill_architecture",
-      "build_shape"
-    ],
-    "minSeverity": "mild",
-    "weights": {
-      "mild": 0,
-      "cruel": 0,
-      "diabolical": 0
-    },
-    "template": "Choose {CLASS} and {SKILL_FAMILY_RULE} {SKILL_FAMILY}, and {SKILL_FAMILY_2_RULE} {SKILL_FAMILY_2}.",
-    "shortLabel": "Twin Covenant",
-    "slots": {
-      "CLASS": {
-        "picker": "class"
-      },
-      "SKILL_FAMILY": {
-        "picker": "skillFamily"
-      },
-      "SKILL_FAMILY_2": {
-        "picker": "skillFamily",
-        "filters": {
-          "notEqualTo": "SKILL_FAMILY"
-        }
-      }
-    },
-    "conflictTags": [
-      "skill_family_constraint"
-    ],
-    "effects": {
-      "locks": {
-        "class": "{CLASS}",
-        "skillFamily": "{SKILL_FAMILY}",
-        "skillFamily2": "{SKILL_FAMILY_2}",
-        "mainDamageMode": "skillFamilyDual"
-      }
-    }
-  },
-  {
     "id": "A12_class_skill_family_and_defense",
     "role": "anchor",
     "directive": "mandate",
