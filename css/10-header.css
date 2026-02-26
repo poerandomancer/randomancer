@@ -5,6 +5,70 @@ header{
   text-shadow:0 1px 2px rgba(0,0,0,.6);
 }
 
+.rc-header-topbar{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:.45rem;
+}
+
+.rc-header-extra{
+  overflow:hidden;
+  max-height:320px;
+  opacity:1;
+  transition:max-height 220ms ease-out, opacity 220ms ease-out, margin 220ms ease-out;
+}
+
+.rc-header.rc-header--collapsed .rc-header-extra{
+  max-height:0;
+  opacity:0;
+  margin:0;
+  pointer-events:none;
+}
+
+.rc-header.rc-header--no-anim .rc-header-extra,
+.rc-header.rc-header--no-anim .header-details-toggle__chevron{
+  transition:none !important;
+}
+
+.header-details-toggle{
+  border:1px solid rgba(200,168,107,.32);
+  background:rgba(12,12,14,.66);
+  color:var(--muted);
+  width:1.35rem;
+  height:1.35rem;
+  border-radius:999px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  padding:0;
+  margin-top:.2rem;
+  transition:transform 180ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+.header-details-toggle:hover{
+  color:var(--gold);
+  border-color:rgba(200,168,107,.58);
+}
+
+.header-details-toggle:focus-visible{
+  outline:1px solid rgba(200,168,107,.75);
+  outline-offset:2px;
+}
+
+.header-details-toggle__chevron{
+  font-size:.64rem;
+  line-height:1;
+  display:inline-block;
+  transform-origin:50% 50%;
+  transition:transform 220ms ease;
+}
+
+.rc-header.rc-header--collapsed .header-details-toggle__chevron{
+  transform:rotate(-90deg);
+}
+
 .title{
   letter-spacing:.04em;
   font-weight:600;
@@ -103,6 +167,48 @@ strong, b { font-weight: 600; }
   text-align:center;
 }
 .app-lede strong{ color:var(--gold); font-weight:600; }
+
+.results-stage{
+  position:relative;
+}
+
+.rc-reveal-fog{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:30;
+  opacity:0;
+  background:
+    radial-gradient(140% 110% at 50% 28%, rgba(114,100,74,0.22), rgba(12,11,13,0.52) 65%),
+    linear-gradient(180deg, rgba(8,8,10,0.26), rgba(8,8,10,0.58));
+  transition: opacity 1900ms ease-out;
+}
+
+.results-stage.is-revealing .rc-reveal-fog{
+  opacity:1;
+}
+
+.results-stage.is-defogging .rc-reveal-fog{
+  opacity:0;
+}
+
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .rc-reveal-fog{
+    background:rgba(8,8,10,0.36);
+    -webkit-backdrop-filter: blur(18px) saturate(1.02);
+    backdrop-filter: blur(18px) saturate(1.02);
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .rc-header-extra,
+  .header-details-toggle,
+  .header-details-toggle__chevron,
+  .rc-reveal-fog{
+    transition:none !important;
+    animation:none !important;
+  }
+}
 
 /* --- Rolled build banner (attached to each roll) --- */
 .build-roll-banner{
