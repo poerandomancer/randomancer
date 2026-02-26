@@ -1,7 +1,6 @@
-import { COHESION_MODE_NAMES, Dom, firstText } from './01-meta-and-domready.js';
-import { DEFAULT_LOCKS } from './00-locks-defaults.js';
+import { Dom, firstText } from './01-meta-and-domready.js';
 import { Config, RulesEngine, Schema } from './03-config-and-schema.js';
-import { COHESION_MODES, cohesionNameForThreshold, setCohesionState } from './06-cohesion.js';
+import { setCohesionThreshold } from './06-cohesion.js';
 import { ensureDataPreload } from './08-data-load.js';
 
 // ===== App API =====
@@ -14,8 +13,6 @@ const App = window.App = (() => {
 
     // Cohesion slider: continuous [0..1], but we still track the nearest preset index + name
     // 0=strict,1=cohesive,2=chaotic,3=madness (legacy index for saved builds)
-    cohesionMode: 1,
-    cohesionModeName: 'cohesive',
     cohesionThreshold: 3/4,
 
 
@@ -56,7 +53,11 @@ const App = window.App = (() => {
       combat:     { oaths: [], abominations: [] }
     },
 
-    locks: { ...DEFAULT_LOCKS },
+    // Challenge-mode equivalent of Bind the Fates.
+    challengeFates: {
+      anchors: { favor: [], ban: [] },
+      twistCategories: { favor: [], ban: [] }
+    },
 
     // dev toggle for “single-entry” behavior
     singleEntryMode: true
@@ -85,34 +86,17 @@ const App = window.App = (() => {
 		state.CONFIG = Config.resolve(data);
 	  }
 
-    function setCohesion(raw){
-		let threshold = Number(raw);
+	function setCohesion(raw){
+	  let threshold = Number(raw);
+	  if (!Number.isFinite(threshold)) return;
 	
-		// If we didn’t get a clean [0,1] number, treat it as a legacy 0–3 index
-		if (!Number.isFinite(threshold) || threshold < 0 || threshold > 1) {
-		  const idx = parseInt(raw, 10);
-		  if (!Number.isNaN(idx) &&
-			  idx >= 0 &&
-			  idx < COHESION_MODE_NAMES.length) {
-			const presetName = COHESION_MODE_NAMES[idx];
-			threshold = COHESION_MODES[presetName];
-		  } else {
-			threshold = 2/3; // fallback: cohesive
-		  }
-		}
+	  if (threshold < 0) threshold = 0;
+	  if (threshold > 1) threshold = 1;
 	
-		if (threshold < 0) threshold = 0;
-		if (threshold > 1) threshold = 1;
-	
-		const name = cohesionNameForThreshold(threshold);
-		const idx = COHESION_MODE_NAMES.indexOf(name);
-	
-		state.cohesionThreshold = threshold;
-		state.cohesionModeName = name;
-                state.cohesionMode = idx === -1 ? 1 : idx;
+	  state.cohesionThreshold = threshold;
+	  setCohesionThreshold(threshold);
+	}
 
-                setCohesionState(threshold);
-          }
 
   function getBindFates(){
     return state.bindFates;
@@ -125,6 +109,25 @@ const App = window.App = (() => {
       oaths: safe(next?.oaths),
       abominations: safe(next?.abominations)
     };
+  }
+
+  function getChallengeFates(){
+    return state.challengeFates;
+  }
+
+  function setChallengeFatesCategory(category, next){
+    if (!state.challengeFates[category]) return;
+    const safe = (arr) => Array.from(new Set((arr || []).filter(Boolean)));
+    state.challengeFates[category] = {
+      favor: safe(next?.favor),
+      ban: safe(next?.ban)
+    };
+  }
+
+  function setChallengeFates(next){
+    const src = next && typeof next === 'object' ? next : {};
+    setChallengeFatesCategory('anchors', src.anchors);
+    setChallengeFatesCategory('twistCategories', src.twistCategories);
   }
 
 
@@ -162,7 +165,7 @@ const App = window.App = (() => {
   function roll(mode){
     // Trigger the legacy generator
     if (typeof window.rollBuild === "function") {
-      window.rollBuild(state.cohesionMode || (mode || 1));
+      window.rollBuild(state.DATA || window.DATA);
     } else {
       const rollBtn = Dom.q('#roll');
       if (rollBtn) rollBtn.click();
@@ -186,10 +189,6 @@ const App = window.App = (() => {
   function mergeCurrentRoll(partial){
 	  try {
 		state.currentRoll = { ...state.currentRoll, ...partial };
-	
-		if (partial?.cohesionModeName) {
-		  state.cohesionModeName = partial.cohesionModeName;
-		}
 	
 		if (typeof window !== 'undefined') {
 		  window.__LAST_ROLL_META = { ...state.currentRoll };
@@ -228,7 +227,21 @@ const App = window.App = (() => {
     }
   }
 
-  return { state, bootstrap, setCohesion, legacyInit, roll, captureCurrentRollFromDOM, mergeCurrentRoll, getBindFates, setBindFatesCategory, modules: { Config, RulesEngine } };
+  return {
+    state,
+    bootstrap,
+    setCohesion,
+    legacyInit,
+    roll,
+    captureCurrentRollFromDOM,
+    mergeCurrentRoll,
+    getBindFates,
+    setBindFatesCategory,
+    getChallengeFates,
+    setChallengeFatesCategory,
+    setChallengeFates,
+    modules: { Config, RulesEngine }
+  };
 })();
 
 function getBindFatesFromApp(){

@@ -21,8 +21,6 @@ const RNG = (() => ({
   int: (min, max) => Math.floor(Math.random() * (max - min + 1)) + min,
 }))();
 
-const COHESION_MODE_NAMES = ['strict', 'cohesive', 'chaotic', 'madness'];
-
 // ===== DOM helpers =====
 const Dom = (() => {
   const q = (sel) => document.querySelector(sel);
@@ -33,7 +31,7 @@ const Dom = (() => {
 })();
 
 // App metadata
-const APP_VERSION = '0.8.4.2';
+const APP_VERSION = '0.8.4.4';
 
 const SUPPORT = Object.freeze({
   poe2Patch: "0.4.0",
@@ -206,7 +204,6 @@ export {
   firstText,
   lc,
   RNG,
-  COHESION_MODE_NAMES,
   Dom,
   APP_VERSION,
   SUPPORT,

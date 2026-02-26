@@ -7,11 +7,6 @@ import { TagUtils, defensePseudoTags } from './05-tags-and-scorer.js';
 
   // Use shared tag normalizer
   const norm = (s) => TagUtils.norm(s);
-  const syncLocks = () => {
-    if (typeof window !== 'undefined' && typeof window.syncLockUIFromState === 'function') {
-      window.syncLockUIFromState();
-    }
-  };
 
   const splitNames = (s) => String(s||'')
     .replace(/\u00B7/g,'•')
@@ -292,23 +287,432 @@ function weaponSlotAllowed(it, slotAllow){
     return true;
   }
 
-  function pick(items, rolled, allow, limitMax=5, perSlotCap=2){
+  function pickGeneral(items, rolled, allow, limitMax=5, perSlotCap=2, seedPicks=[]){
     const MIN = 2.8;
     const slotAllow = allow || new Set();
+
+    const seed = Array.isArray(seedPicks) ? seedPicks : [];
+    const usedNames = new Set(seed.map(p => p && p.name).filter(Boolean));
+    const per = new Map();
+    for (const p of seed){
+      if (!p || !p.slot) continue;
+      per.set(p.slot, (per.get(p.slot) || 0) + 1);
+    }
+
     const scored = items
       .map(it => ({ it, s: scoreItem(it, rolled, slotAllow) }))
-      .filter(row => weaponSlotAllowed(row.it, slotAllow) && row.s >= MIN)
+      .filter(row => weaponSlotAllowed(row.it, slotAllow) && row.s >= MIN && !usedNames.has(row.it.name))
       .sort((a, b) => b.s - a.s);
-    const out = [], per = new Map();
+
+    const out = [];
     for (const row of scored){
       const c = per.get(row.it.slot) || 0;
-      if (c >= perSlotCap) continue;
+      const cap = Math.min(perSlotCap, slotHardCap(row.it.slot, 1));
+      if (c >= cap) continue;
       per.set(row.it.slot, c + 1);
       out.push(row.it);
       if (out.length >= limitMax) break;
     }
     return out;
+}
+
+
+  // -------------------------
+  // Pass-based unique selection (Weapon pass + Armour pass)
+  // - Tactics carry the most weight in every pass
+  // - No anti-tags influence (ignored entirely for matching)
+  // - No recency penalty (deferred)
+  // -------------------------
+
+  const WEAPON_SLOTS = new Set(['bow','crossbow','staff','spear','sword','mace','axe','claw','wand','sceptre','shield','buckler','focus','soulcore','traptool','quiver']);
+  const ARMOUR_SLOTS = new Set(['helmet','body','gloves','boots']);
+
+  // Hard caps per slot (prevents duplicate armour slots like double body).
+  // Rings/jewels may appear more than once; everything else is 1.
+  const SLOT_HARD_CAPS = Object.freeze({ ring: 2, jewel: 2 });
+  const slotHardCap = (slot, fallback=1) => {
+    const k = String(slot || '').toLowerCase();
+    return (SLOT_HARD_CAPS[k] ?? fallback);
+  };
+  
+    // Normalized resistance tags (TagUtils.norm strips underscores/spaces)
+	  const TAG_ALL_ELE_RES = norm('all_elemental_resistance');
+	  const TAG_FIRE_RES = norm('fire_resistance');
+	  const TAG_COLD_RES = norm('cold_resistance');
+	  const TAG_LIGHTNING_RES = norm('lightning_resistance');
+	  const TAG_CHAOS_RES = norm('chaos_resistance');
+	
+	  // Common utility-style tags (used as light tie-breakers in Pass 3)
+	  const UTILITY_BONUS_TAGS = new Set([
+		norm('movement speed'),
+		norm('action speed'),
+		norm('attack speed'),
+		norm('cast speed'),
+		norm('cooldown recovery'),
+		norm('cooldown recovery rate'),
+	  ]);
+
+
+
+  function weaponAllowFromState(state, useSecond=false){
+    const w = useSecond ? (state?.weapon2 ?? state?.weaponTwo ?? state?.weaponSet2) : (state?.weapon ?? state?.weapon1 ?? state?.weaponOne);
+    const o = useSecond ? (state?.offhand2 ?? state?.offhandTwo ?? state?.offhandSet2) : (state?.offhand ?? state?.offhand1 ?? state?.offhandOne);
+    const wName = (w && typeof w === 'object') ? (w.name || w.display || w.label || '') : (w || '');
+    const oName = (o && typeof o === 'object') ? (o.name || o.display || o.label || '') : (o || '');
+    const weaponText = String(((wName||'') + ' ' + (oName||'')).trim()).toLowerCase();
+    if (!weaponText) return null;
+
+    const allow = new Set();
+    const hasWord = (s) => {
+      if (!s) return false;
+      const re = new RegExp('\\b' + s + '\\b', 'i');
+      return re.test(weaponText);
+    };
+    const add = (s) => allow.add(s);
+
+    const wantsQuarterstaff = hasWord('quarterstaff');
+    const wantsStaff = hasWord('staff') && !wantsQuarterstaff;
+
+    const hasBow = hasWord('bow');
+    const hasCrossbow = hasWord('crossbow');
+
+    // primary weapon types
+    if (hasBow)         { add('bow'); add('quiver'); }
+    if (hasCrossbow)    add('crossbow');
+    if (wantsStaff || wantsQuarterstaff) add('staff');
+    if (hasWord('spear'))  add('spear');
+    if (hasWord('sword'))  add('sword');
+    if (hasWord('mace'))   add('mace');
+    if (hasWord('axe'))    add('axe');
+    if (hasWord('claw'))   add('claw');
+    if (hasWord('wand'))   add('wand');
+    if (hasWord('sceptre')) add('sceptre');
+
+    // off-hands
+    if (hasWord('shield'))   add('shield');
+    if (hasWord('buckler'))  add('buckler');
+    if (hasWord('focus'))    add('focus');
+    if (hasWord('soulcore')) add('soulcore');
+    if (hasWord('trap tool') || hasWord('traptool')) add('traptool');
+
+    allow.__wtxt = weaponText;
+    allow.__wantsQuarterstaff = wantsQuarterstaff;
+    allow.__wantsStaff = wantsStaff;
+
+    return allow;
   }
+
+  function weightedPickFromBand(rows, relMin=0.75, absMin=0){
+    if (!rows || !rows.length) return null;
+    const best = rows[0].s || 0;
+    const min = Math.max(absMin, best * relMin);
+    const band = rows.filter(r => (r.s || 0) >= min);
+    if (!band.length) return null;
+
+    // Weighted roulette (score^2)
+    let total = 0;
+    for (const r of band) total += Math.max(0, r.s) ** 2;
+    if (total <= 0) return band[0].it;
+
+    let roll = Math.random() * total;
+    for (const r of band){
+      roll -= Math.max(0, r.s) ** 2;
+      if (roll <= 0) return r.it;
+    }
+    return band[band.length - 1].it;
+  }
+  
+  function expandedWeaponAilmentTags(rolled){
+	  const a = new Set(rolled?.ailments || []);
+	
+	  // Map ailments -> element tags (and "damage" tags) so ailment builds can match weapons
+	  // that scale the underlying element even if they don't mention the ailment itself.
+	  if (a.has('ignite')) { a.add('fire'); a.add(norm('fire damage')); }
+	  if (a.has('freeze') || a.has('chill')) { a.add('cold'); a.add(norm('cold damage')); }
+	  if (a.has('shock') || a.has('electrocute')) { a.add('lightning'); a.add(norm('lightning damage')); }
+	
+	  return Array.from(a);
+	}
+
+
+  function scoreWeaponPass(it, rolled){
+	  const all = getItemTagSet(it);
+	  let s = 0;
+	
+	  // Tactics are still the strongest signal.
+	  for (const t of rolled.tactics) if (all.has(t)) s += 4.0;
+	
+	  // Ailments + mapped elements (ignite -> fire, etc.)
+	  for (const t of expandedWeaponAilmentTags(rolled)) if (all.has(t)) s += 2.0;
+	
+	  return s;
+	}
+
+
+  function scoreArmourPass(it, rolled, state){
+    const all = getItemTagSet(it);
+    let s = 0;
+
+    // Offense-first, tactics lead
+    for (const t of rolled.tactics)  if (all.has(t)) s += 4.0;
+    for (const t of rolled.ailments) if (all.has(t)) s += 2.0;
+
+    // Defensive strategy / primary defense (secondary)
+    for (const t of rolled.def)      if (all.has(t)) s += 1.5;
+
+    // Small bump for resistance coverage (tie-breaker, not a primary driver)
+    if (all.has(TAG_ALL_ELE_RES)) s += 0.6;
+	else {
+	  const r =
+		(all.has(TAG_FIRE_RES)?1:0) +
+		(all.has(TAG_COLD_RES)?1:0) +
+		(all.has(TAG_LIGHTNING_RES)?1:0) +
+		(all.has(TAG_CHAOS_RES)?1:0);
+	  if (r) s += Math.min(0.6, r * 0.2);
+	}
+
+    // Attribute leaning (very light; stronger at higher cohesion)
+    const th = (typeof window.cohesionThreshold === 'number') ? window.cohesionThreshold : 0.75;
+    const attr = it?.meta?.attributes;
+    const rollAttr = state?.rollAttr;
+    if (attr && rollAttr){
+      const us = (attr.str || 0) + (attr.all || 0);
+      const ud = (attr.dex || 0) + (attr.all || 0);
+      const ui = (attr.int || 0) + (attr.all || 0);
+
+      const bs = rollAttr.strength || 0;
+      const bd = rollAttr.dexterity || 0;
+      const bi = rollAttr.intelligence || 0;
+
+      const dot = us*bs + ud*bd + ui*bi;
+      const nu = Math.sqrt(us*us + ud*ud + ui*ui) || 0;
+      const nb = Math.sqrt(bs*bs + bd*bd + bi*bi) || 0;
+      const sim = (nu > 0 && nb > 0) ? (dot / (nu * nb)) : 0;
+
+      const w = (th >= 0.70) ? 0.8 : 0.35;
+      s += sim * w;
+    }
+
+    return s;
+  }
+
+  function pickWeaponPass(items, rolled, allow){
+    if (!allow || !allow.size) return null;
+
+    const scored = items
+      .filter(it => WEAPON_SLOTS.has(it.slot) && allow.has(it.slot) && weaponSlotAllowed(it, allow))
+      .map(it => ({ it, s: scoreWeaponPass(it, rolled) }))
+      .sort((a,b)=>b.s-a.s);
+
+    if (!scored.length) return null;
+
+    // Require at least a meaningful match (typically >= 1 tactic hit)
+    // With weights, 1 tactic match = 4.0.
+    const MIN_BEST = 2.0; // allow a single ailment OR mapped element match (2.0)
+	const best = scored[0].s || 0;
+	if (best < MIN_BEST) return null;
+	
+	return weightedPickFromBand(scored, 0.75, MIN_BEST);
+
+  }
+
+  function pickArmourPass(items, rolled, state, seedPicks=[]){
+    const used = new Set((seedPicks||[]).map(p => p && p.name).filter(Boolean));
+    const scored = items
+      .filter(it => ARMOUR_SLOTS.has(it.slot) && !used.has(it.name))
+      .map(it => ({ it, s: scoreArmourPass(it, rolled, state) }))
+      .sort((a,b)=>b.s-a.s);
+
+    if (!scored.length) return [];
+
+    const best = scored[0].s || 0;
+    if (best < 3.0) return []; // avoid forcing weak armour picks
+
+    const pick1 = weightedPickFromBand(scored, 0.70, 3.0);
+    if (!pick1) return [];
+
+    used.add(pick1.name);
+
+    // Second armour pick: different slot, slightly lower bar
+    const scored2 = scored
+      .filter(r => r.it && r.it.slot !== pick1.slot && !used.has(r.it.name));
+
+    if (!scored2.length) return [pick1];
+
+    const best2 = scored2[0].s || 0;
+    const abs2 = Math.max(2.6, best * 0.55);
+    if (best2 < abs2) return [pick1];
+
+    const pick2 = weightedPickFromBand(scored2, 0.75, abs2);
+    return [pick1, ...(pick2 ? [pick2] : [])];
+  }
+  
+    // -------------------------
+  // Pass 3: Utility (rings / amulets / belts / flasks / charms / jewels)
+  // - Tactics carry the most weight
+  // - Offense (ailments + mapped elements) next
+  // - Defensive strategy secondary
+  // - Resistances + utility tags are light tie-breakers (do not qualify on their own)
+  // -------------------------
+
+  function scoreUtilityPass(it, rolled, state){
+    const all = getItemTagSet(it);
+    let match = 0;
+    let s = 0;
+
+    // Tactics (primary driver)
+    for (const t of rolled.tactics){
+      if (all.has(t)){ s += 4.0; match += 4.0; }
+    }
+
+    // Offense: ailments + mapped elements (ignite->fire, freeze->cold, shock->lightning)
+    for (const t of expandedWeaponAilmentTags(rolled)){
+      if (all.has(t)){ s += 2.0; match += 2.0; }
+    }
+
+    // Defensive strategy (secondary)
+    for (const t of rolled.def){
+      if (all.has(t)){ s += 1.5; match += 1.5; }
+    }
+
+    // Resistances as light tie-breaker (never part of match qualification)
+    if (all.has(TAG_ALL_ELE_RES)) s += 0.45;
+    else {
+      const r =
+        (all.has(TAG_FIRE_RES)?1:0) +
+        (all.has(TAG_COLD_RES)?1:0) +
+        (all.has(TAG_LIGHTNING_RES)?1:0) +
+        (all.has(TAG_CHAOS_RES)?1:0);
+      if (r) s += Math.min(0.45, r * 0.12);
+    }
+
+    // Utility-style tags (light bump, capped)
+    let ub = 0;
+    for (const t of UTILITY_BONUS_TAGS){
+      if (all.has(t)) ub += 0.18;
+    }
+    if (ub) s += Math.min(0.45, ub);
+
+    // Attribute leaning (very light; a nudge, not a driver)
+    const th = (typeof window.cohesionThreshold === 'number') ? window.cohesionThreshold : 0.75;
+    const attr = it?.meta?.attributes;
+    const rollAttr = state?.rollAttr;
+    if (attr && rollAttr){
+      const us = (attr.str || 0) + (attr.all || 0);
+      const ud = (attr.dex || 0) + (attr.all || 0);
+      const ui = (attr.int || 0) + (attr.all || 0);
+
+      const bs = rollAttr.strength || 0;
+      const bd = rollAttr.dexterity || 0;
+      const bi = rollAttr.intelligence || 0;
+
+      const dot = us*bs + ud*bd + ui*bi;
+      const nu = Math.sqrt(us*us + ud*ud + ui*ui) || 0;
+      const nb = Math.sqrt(bs*bs + bd*bd + bi*bi) || 0;
+      const sim = (nu > 0 && nb > 0) ? (dot / (nu * nb)) : 0;
+
+      const w = (th >= 0.70) ? 0.35 : 0.18;
+      s += sim * w;
+    }
+
+    return { s, match };
+  }
+
+  function pickUtilityPass(items, rolled, state, seedPicks=[], limitMax=3){
+    const seed = Array.isArray(seedPicks) ? seedPicks : [];
+    const usedNames = new Set(seed.map(p => p && p.name).filter(Boolean));
+
+    const per = new Map();
+    for (const p of seed){
+      if (!p || !p.slot) continue;
+      per.set(p.slot, (per.get(p.slot) || 0) + 1);
+    }
+
+    const pool = items.filter(it => !WEAPON_SLOTS.has(it.slot) && !ARMOUR_SLOTS.has(it.slot));
+
+    // Score once
+    const scoredAll = pool
+      .filter(it => !usedNames.has(it.name))
+      .map(it => {
+        const r = scoreUtilityPass(it, rolled, state);
+        return { it, s: r.s, match: r.match };
+      })
+      .sort((a,b)=>b.s-a.s);
+
+    const out = [];
+    const ABS_MATCH_MIN = 1.5; // allow def-strat-only utility matches
+    const REL_BAND = 0.60;
+
+    // Iterative pick: each time, re-filter by remaining slot caps and match threshold.
+    for (let step=0; step<limitMax; step++){
+      const eligible = scoredAll
+        .filter(r => r.match >= ABS_MATCH_MIN && !usedNames.has(r.it.name))
+        .filter(r => {
+          const c = per.get(r.it.slot) || 0;
+          const cap = slotHardCap(r.it.slot, 1);
+          return c < cap;
+        });
+
+      if (!eligible.length) break;
+
+      eligible.sort((a,b)=>b.s-a.s);
+      const pick = weightedPickFromBand(eligible, REL_BAND, ABS_MATCH_MIN);
+      if (!pick) break;
+
+      usedNames.add(pick.name);
+      per.set(pick.slot, (per.get(pick.slot) || 0) + 1);
+      out.push(pick);
+    }
+
+    return out;
+  }
+
+
+  function pickPasses(items, rolled, snap){
+    const state = getRollSnapshot(snap) || {};
+    const out = [];
+
+    // Pass 1: Weapons (try weapon set 1, then set 2 fallback)
+    const allowW1 = weaponAllowFromState(state, false);
+    let weaponPick = pickWeaponPass(items, rolled, allowW1);
+    if (!weaponPick){
+      const allowW2 = weaponAllowFromState(state, true);
+      weaponPick = pickWeaponPass(items, rolled, allowW2);
+    }
+    if (weaponPick) out.push(weaponPick);
+
+    // Pass 2: Armour (offense-first with defensive secondary)
+    const armourPicks = pickArmourPass(items, rolled, state, out);
+    out.push(...armourPicks);
+
+	// Pass 3: Utility (rings / amulets / belts / flasks / charms / jewels)
+    // Fill up to 5 overall, but don't force weak matches.
+    const MAX = 5;
+    const remaining = Math.max(0, MAX - out.length);
+    if (remaining > 0){
+      const utilLimit = Math.min(3, remaining);
+      const utilPicks = pickUtilityPass(items, rolled, state, out, utilLimit);
+      out.push(...utilPicks);
+    }
+
+
+    // Final safety: avoid duplicate slots (except rings/jewels) to prevent double-body etc.
+    const seenSlot = new Map();
+    const pruned = [];
+    for (const it of out){
+      if (!it || !it.slot) continue;
+      const slot = String(it.slot).toLowerCase();
+      const cap = slotHardCap(slot, 1);
+      const used = seenSlot.get(slot) || 0;
+      if (used >= cap) continue;
+      seenSlot.set(slot, used + 1);
+      pruned.push(it);
+      if (pruned.length >= MAX) break;
+    }
+
+    return pruned;
+  }
+
 
 function ensureUniqueSection(){
     // Remove previous instances to avoid drift
@@ -336,10 +740,6 @@ function ensureUniqueSection(){
         `;
 
     mount.appendChild(wrap);
-
-    const lockBtn = wrap.querySelector('.lock-toggle');
-    if (lockBtn) wireLockButton(lockBtn);
-    syncLocks();
 
     return wrap.querySelector('#uniques-grid');
   }
@@ -468,7 +868,7 @@ function ensureUniqueSection(){
                   ...rolled.def,
                 ]);
                 const allow = allowedSlots(snap);
-                const picks = pick(items, rolled, allow, 5, 2);
+                const picks = pickPasses(items, rolled, snap);
 
                 if (window.App && typeof window.App.mergeCurrentRoll === 'function') {
                   window.App.mergeCurrentRoll({ recommendedUniques: picks.map(p => p.name) });

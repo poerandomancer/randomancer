@@ -10,6 +10,13 @@
   gap:.45rem;
 }
 
+.roll-sticky{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .roll-btn .roll-text{
   white-space:nowrap;
 }
@@ -25,4 +32,255 @@
   opacity:1;
 }
 
+.is-hidden{ display:none !important; }
 
+.controls-rail{
+  width:min(640px, 90%);
+  margin:0 auto;
+}
+
+.mode-switch-under-roll .mode-switch-row{
+  justify-content:center;
+  margin:.45rem 0 .65rem;
+}
+
+.mode-switch-row{
+  display:flex;
+  justify-content:flex-end;
+  margin:0 0 .35rem;
+}
+
+.mode-toggle{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  font-weight:600;
+  cursor:pointer;
+  opacity:.76;
+  transition:opacity .2s ease, filter .2s ease;
+}
+
+.mode-toggle:hover{
+  opacity:1;
+  filter:saturate(1.06);
+}
+
+.mode-toggle input[type="checkbox"]{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+.mode-toggle .toggle-ui{
+  position:relative;
+  width:44px;
+  height:22px;
+  border-radius:999px;
+  background:linear-gradient(90deg, rgba(200,168,107,0.22), rgba(120,100,55,0.22));
+  border:1px solid rgba(200,168,107,0.25);
+  box-shadow:inset 0 1px 0 rgba(235,210,150,0.16), inset 0 -1px 0 rgba(0,0,0,0.35), inset 0 0 0 1px rgba(0,0,0,0.22);
+  transition: background 0.25s ease, box-shadow 0.25s ease;
+}
+
+.mode-toggle .toggle-ui::after{
+  content:"";
+  position:absolute;
+  top:50%;
+  left:2px;
+  transform:translateY(-50%);
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:rgba(12,12,14,0.95);
+  box-shadow:0 0 0 1px rgba(200,168,107,0.18);
+  transition:transform .25s ease;
+}
+
+.mode-toggle input:checked + .toggle-ui{
+  background:linear-gradient(90deg, #7a5c1a, #d4af37);
+  box-shadow:0 0 6px rgba(212,175,55,0.6), inset 0 0 2px rgba(255,255,255,0.35);
+}
+
+.mode-toggle input:checked + .toggle-ui::after{
+  transform:translateY(-50%) translateX(22px);
+}
+
+.mode-toggle-text{
+  color:rgba(235,235,235,0.58);
+  transition:color .2s ease,text-shadow .2s ease;
+}
+
+.mode-toggle-text{
+  white-space: nowrap;
+}
+
+.mode-toggle:not(.is-challenge) .mode-toggle-text[data-mode="standard"],
+.mode-toggle.is-challenge .mode-toggle-text[data-mode="challenge"]{
+  color:var(--mode-accent, var(--gold));
+  text-shadow:0 0 6px color-mix(in srgb, var(--mode-accent, var(--gold)) 45%, transparent);
+}
+
+
+
+body[data-mode="challenge"] .mode-toggle .toggle-ui,
+body.challenge-mode .mode-toggle .toggle-ui{
+  background:linear-gradient(90deg, rgba(96,102,112,0.36), rgba(48,52,58,0.36));
+  border-color: rgba(133, 138, 145, 0.35);
+}
+
+body[data-mode="challenge"] .mode-toggle input:checked + .toggle-ui,
+body.challenge-mode .mode-toggle input:checked + .toggle-ui{
+  background:linear-gradient(90deg, #4f5662, #982d35);
+  box-shadow:0 0 8px rgba(159,47,55,0.55), inset 0 0 2px rgba(255,255,255,0.25);
+}
+
+body[data-mode="challenge"] :is(.rm-dotstep, .mechanics-like-btn, .roll-btn):focus-visible,
+body.challenge-mode :is(.rm-dotstep, .mechanics-like-btn, .roll-btn):focus-visible{
+  outline:1px solid rgba(159,47,55,0.85);
+  outline-offset:2px;
+}
+
+body[data-mode="challenge"] .challenge-empty-flavor,
+body.challenge-mode .challenge-empty-flavor{
+  color:#b34a52;
+  text-shadow:0 0 8px rgba(0,0,0,0.88);
+}
+
+.challenge-controls{ margin:0.15rem auto 0.85rem; }
+
+#challenge-severity-btn{ margin-left:auto; }
+
+#challenge-severity-value{
+  font-size:.88rem;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  line-height:1;
+}
+
+.challenge-empty-divider{ margin:.9rem 0 0; }
+
+.challenge-empty-flavor{
+  text-align:center;
+  color:var(--gold);
+  font-family:'Cormorant Infant',serif;
+  font-style:italic;
+  font-size:1.7rem;
+  text-shadow:0 0 8px rgba(0,0,0,0.8);
+  line-height:1.3;
+  margin:0 auto;
+  padding-top:clamp(5.2rem, 7vh, 8.5rem);
+  min-height:max(520px, 62vh);
+  max-width:min(900px, 92vw);
+}
+
+@media (max-width: 520px){
+  .controls-rail{ width:calc(100% - 20px); }
+  .mode-switch-row{ margin-bottom:.45rem; }
+  .resume-roll-btn{
+    left: calc(50% + 84px);
+  }
+}
+
+.resume-roll-btn{
+  position: absolute;
+  left: calc(50% + clamp(90px, 12.2vw, 124px));
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--mode-accent, var(--gold)) 48%, rgba(255,255,255,0.22));
+  background: rgba(14,14,18,0.72);
+  color: color-mix(in srgb, var(--mode-accent, var(--gold)) 88%, #f2e9d7 12%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 14px rgba(0,0,0,0.35);
+  cursor: pointer;
+  transition: transform .16s ease, border-color .2s ease, opacity .2s ease;
+}
+
+.resume-roll-btn__icon{
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.resume-roll-btn:hover{
+  transform: translateY(calc(-50% - 1px));
+}
+
+.resume-roll-btn:focus-visible{
+  outline: 1px solid color-mix(in srgb, var(--mode-accent, var(--gold)) 80%, white 20%);
+  outline-offset: 2px;
+}
+
+/* ================================
+   Roll + Resume alignment (desktop/base)
+   Keep Roll centered, tuck Resume close
+================================== */
+
+:root{
+  --resume-btn-size: 30px; /* smaller than current 32px */
+  --resume-btn-gap: 10px;  /* tighter spacing */
+}
+
+/* IMPORTANT: no gap here (mobile file currently adds one) */
+.roll-sticky{
+  gap: 0 !important;
+}
+
+/* Balance spacer so Roll stays dead-center when Resume is visible */
+.roll-sticky::before{
+  content: "";
+  width: 0;
+  flex: 0 0 auto;
+}
+
+.roll-sticky:has(#resumeRollBtn:not(.is-hidden))::before{
+  width: calc(var(--resume-btn-size) + var(--resume-btn-gap));
+}
+
+/* Make resume participate in layout (NOT absolutely positioned) */
+#resumeRollBtn.resume-roll-btn{
+  position: static !important;
+  left: auto !important;
+  top: auto !important;
+  transform: none !important;
+
+  width: var(--resume-btn-size) !important;
+  height: var(--resume-btn-size) !important;
+
+  margin-left: var(--resume-btn-gap) !important;
+  padding: 0 !important;
+}
+
+/* Fix hover transform (old rule assumed translateY(-50%)) */
+#resumeRollBtn.resume-roll-btn:hover{
+  transform: translateY(-1px) !important;
+}
+
+/* Icon scale */
+#resumeRollBtn .resume-roll-btn__icon{
+  width: 13px !important;
+  height: 13px !important;
+}
+
+/* Keep Roll + Resume perfectly vertically aligned inside the sticky cluster */
+.roll-sticky{
+  margin-top: .5rem; /* preserve the original spacing that used to live on .roll-btn */
+}
+
+.roll-sticky .roll-btn{
+  margin-top: 0 !important; /* remove the offset that was pulling Roll down */
+}
+
+#resumeRollBtn.resume-roll-btn{
+  margin-top: 0 !important; /* ensure resume isn’t offset either */
+  align-self: center;       /* extra belt-and-suspenders */
+}

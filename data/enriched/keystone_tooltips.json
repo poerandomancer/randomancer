@@ -1,0 +1,212 @@
+{
+  "Resolute Technique": {
+    "lines": [
+      "Accuracy Rating is Doubled",
+      "Never deal Critical Hits"
+    ]
+  },
+  "Giant's Blood": {
+    "lines": [
+      "You can wield Two-Handed Axes, Maces and Swords in one hand",
+      "Triple Attribute requirements of Martial Weapons",
+      "Inherent Life granted by Strength is halved"
+    ]
+  },
+  "Unwavering Stance": {
+    "lines": [
+      "Cannot be Light Stunned",
+      "Cannot Dodge Roll or Sprint"
+    ]
+  },
+  "Avatar of Fire": {
+    "lines": [
+      "75% of Damage Converted to Fire Damage",
+      "Deal no Non-Fire Damage"
+    ]
+  },
+  "Blood Magic": {
+    "lines": [
+      "You have no Mana",
+      "Skill Mana Costs Converted to Life Costs"
+    ]
+  },
+  "Zealot's Oath": {
+    "lines": [
+      "Excess Life Recovery from Regeneration is applied to Energy Shield",
+      "Energy Shield does not Recharge"
+    ]
+  },
+  "Ancestral Bond": {
+    "lines": [
+      "Unlimited number of Summoned Totems",
+      "Totems reserve 75 Spirit each"
+    ]
+  },
+  "Pain Attunement": {
+    "lines": [
+      "30% less Critical Damage Bonus when on Full Life",
+      "30% more Critical Damage Bonus when on Low Life"
+    ]
+  },
+  "Chaos Inoculation": {
+    "lines": [
+      "Maximum Life is 1",
+      "Immune to Chaos Damage and Bleeding"
+    ]
+  },
+  "Eldritch Battery": {
+    "lines": [
+      "Converts all Energy Shield to Mana",
+      "Doubles Mana Costs"
+    ]
+  },
+  "Mind Over Matter": {
+    "lines": [
+      "All Damage is taken from Mana before Life",
+      "50% less Mana Recovery Rate"
+    ]
+  },
+  "Whispers of Doom": {
+    "lines": [
+      "You can apply an additional Curse",
+      "Double Activation Delay of Curses"
+    ]
+  },
+  "Necromantic Talisman": {
+    "lines": [
+      "All bonuses from Equipped Amulet apply to your Minions instead of you"
+    ]
+  },
+  "Conduit": {
+    "lines": [
+      "If you would gain a Charge, Allies in your Presence gain that Charge instead"
+    ]
+  },
+  "Resonance": {
+    "lines": [
+      "Gain Power Charges instead of Frenzy Charges",
+      "Gain Frenzy Charges instead of Endurance Charges",
+      "Gain Endurance Charges instead of Power Charges"
+    ]
+  },
+  "Eternal Youth": {
+    "lines": [
+      "Life Recharges instead of Energy Shield",
+      "50% less Life Recovery from Flasks"
+    ]
+  },
+  "Primal Hunger": {
+    "lines": [
+      "100% more Maximum Rage",
+      "Regenerate 1 Rage per second per 4 Rage spent Recently",
+      "No Rage effect"
+    ]
+  },
+  "Dance with Death": {
+    "lines": [
+      "25% more Skill Speed while Off Hand is empty and you have a One-Handed Martial Weapon equipped in your Main Hand"
+    ]
+  },
+  "Heartstopper": {
+    "lines": [
+      "Take 50% less Damage over Time if you've started taking Damage over Time in the past second",
+      "Take 50% more Damage over Time if you haven't started taking Damage over Time in the past second"
+    ]
+  },
+  "Oasis": {
+    "lines": [
+      "Cannot use Charms",
+      "30% more Recovery from Flasks"
+    ]
+  },
+  "Vaal Pact": {
+    "lines": [
+      "Life Leech is Instant",
+      "Cannot use Life Flasks"
+    ]
+  },
+  "Iron Reflexes": {
+    "lines": [
+      "Converts all Evasion Rating to Armour"
+    ]
+  },
+  "Glancing Blows": {
+    "lines": [
+      "Chance to Evade is Unlucky",
+      "Chance to Deflect is Lucky"
+    ]
+  },
+  "Elemental Equilibrium": {
+    "lines": [
+      "Create Lightning Infusion Remnants instead of Fire",
+      "Create Cold Infusion Remnants instead of Lightning",
+      "Create Fire Infusion Remnants instead of Cold"
+    ]
+  },
+  "Bulwark": {
+    "lines": [
+      "Dodge Roll cannot Avoid Damage",
+      "Take 30% less Damage from Hits while Dodge Rolling"
+    ]
+  },
+  "Crimson Assault": {
+    "lines": [
+      "Bleeding you inflict is Aggravated",
+      "Base Bleeding Duration is 1 second",
+      "50% more Magnitude of Bleeding you inflict"
+    ]
+  },
+  "Trusted Kinship": {
+    "lines": [
+      "You can have two Companions of different types",
+      "You have 30% less Defences",
+      "Companions have +1 to each Defence for every 2 of that Defence you have"
+    ]
+  },
+  "Hollow Palm Technique": {
+    "lines": [
+      "Can Attack as though using a Quarterstaff while both of your hand slots are empty",
+      "Unarmed Attacks that would use your Quarterstaff's damage gain:",
+      "• Physical damage based on their Skill Level",
+      "• 1% more Attack Speed per 75 Item Evasion Rating on Equipped Armour Items",
+      "• +0.1% to Critical Hit Chance per 10 Item Energy Shield on Equipped Armour Items"
+    ]
+  },
+  "Blackflame Covenant": {
+    "lines": [
+      "Fire Spells Convert 100% of Fire Damage to Chaos Damage",
+      "Chaos Damage from Fire Spells Contributes to Flammability and Ignite Magnitudes",
+      "Ignite inflicted with Fire Spells deals Chaos Damage instead of Fire Damage"
+    ]
+  },
+  "Ritual Cadence": {
+    "lines": [
+      "Invocation Skills instead Trigger Spells every 2 seconds",
+      "Invocation Skills cannot gain Energy while Triggering Spells",
+      "Invoked Spells consume 50% less Energy"
+    ]
+  },
+  "Scarred Faith": {
+    "lines": [
+      "5% of Physical Damage prevented Recouped as Energy Shield per enemy Power",
+      "Energy Shield does not Recharge",
+      "You cannot Recover Energy Shield from Regeneration",
+      "You cannot Recover Energy Shield to above Armour"
+    ]
+  },
+  "Lord of the Wilds": {
+    "lines": [
+      "You can equip a non-Unique Sceptre while wielding a Talisman",
+      "50% less Spirit",
+      "Non-Minion Skills have 50% less Reservation Efficiency"
+    ]
+  },
+  "Wildsurge Incantation": {
+    "lines": [
+      "Storm and Plant Spells:",
+      "• deal 50% more damage",
+      "• cost 50% less",
+      "• have 75% less duration"
+    ]
+  }
+}

@@ -1,43 +1,37 @@
-import { COHESION_MODE_NAMES } from './01-meta-and-domready.js';
 import { defensePseudoTags, deriveWeaponHints, normTagPlus } from './05-tags-and-scorer.js';
 
 // ---------- cohesion + selection ----------
-// Named presets still exist, but we now treat cohesion as a continuous threshold [0,1]
-const COHESION_MODES = {
-  strict: 1.0,
-  cohesive: 2/3,   // ≈0.67
-  chaotic: 1/3,    // ≈0.33
-  madness: 0.0
-};
+// Cohesion is a continuous threshold [0,1]. No named modes, no UI hints.
+// We do keep an internal tier mapping ONLY for subsystems that still want a coarse tier (e.g. passives).
+const COHESION_TIER_ANCHORS = [
+  { name: 'strict',   v: 1.0 },
+  { name: 'cohesive', v: 2/3 },
+  { name: 'chaotic',  v: 1/3 },
+  { name: 'madness',  v: 0.0 }
+];
 
-// currentMode is the *nearest* named preset; used mainly for display / metadata
-let currentMode = 'cohesive';
+// App default (matches your current UI default)
+let cohesionThreshold = 3/4;
 
-// cohesionThreshold is the actual continuous value used by rollBuild()
-let cohesionThreshold = COHESION_MODES[currentMode];
-
-function setCohesionState(threshold){
-  cohesionThreshold = threshold;
-  currentMode = cohesionNameForThreshold(threshold);
+function setCohesionThreshold(threshold){
+  let t = Number(threshold);
+  if (!Number.isFinite(t)) return;
+  if (t < 0) t = 0;
+  if (t > 1) t = 1;
+  cohesionThreshold = t;
 }
 
-function cohesionNameForThreshold(threshold){
+function cohesionTierFromThreshold(threshold){
   const t = Number(threshold);
-  if (!Number.isFinite(t)) return currentMode || 'cohesive';
+  if (!Number.isFinite(t)) return 'cohesive';
 
-  let bestName = 'cohesive';
+  let best = 'cohesive';
   let bestDist = Infinity;
-
-  for (const name of COHESION_MODE_NAMES) {
-    const val = COHESION_MODES[name];
-    if (typeof val !== 'number') continue;
-    const dist = Math.abs(t - val);
-    if (dist < bestDist) {
-      bestDist = dist;
-      bestName = name;
-    }
+  for (const a of COHESION_TIER_ANCHORS) {
+    const d = Math.abs(t - a.v);
+    if (d < bestDist) { bestDist = d; best = a.name; }
   }
-  return bestName;
+  return best;
 }
 
 // Slider is 0–100, with 0 = Strict (1.0) → 100 = Madness (0.0)
@@ -56,56 +50,6 @@ function thresholdToSliderValue(t){
   const clamped = Math.max(0, Math.min(1, raw));
   return Math.round((1 - clamped) * 100);
 }
-
-// Very plain, explicit hints about what the current threshold does
-function getCohesionHint(t){
-  const v = Number(t);
-  if (!Number.isFinite(v)) return '';
-
-  if (v === 0) {
-    return 'No cohesion: fully random rolls; attributes are ignored.';
-  }
-  if (v >= 0.90) {
-    return 'Pure & near-pure builds only (very high cohesion).';
-  }
-  if (v >= 0.70) {
-    return 'Pure + aligned hybrids; off-stat options are mostly filtered out.';
-  }
-  if (v >= 0.58) {
-    return 'Hybrid & tri-split builds allowed; hard opposites still blocked.';
-  }
-  if (v >= 0.35) {
-    return 'Loose cohesion: hybrids and off-stat picks show up regularly.';
-  }
-  return 'Very loose cohesion: almost anything goes except direct opposites.';
-}
-
-// Resolve legacy numbers / names into a canonical mode name
-function resolveCohesionMode(mode){
-  // Already a named mode
-  if (typeof mode === 'string') {
-    if (Object.prototype.hasOwnProperty.call(COHESION_MODES, mode)) return mode;
-
-    const maybeNum = Number(mode);
-    if (!Number.isNaN(maybeNum)) {
-      return cohesionNameForThreshold(maybeNum);
-    }
-    return currentMode || 'cohesive';
-  }
-
-  // Numeric: int in [0,3] = legacy index, otherwise treat as threshold
-  if (typeof mode === 'number') {
-    if (Number.isInteger(mode) &&
-        mode >= 0 &&
-        mode < COHESION_MODE_NAMES.length) {
-      return COHESION_MODE_NAMES[mode];
-    }
-    return cohesionNameForThreshold(mode);
-  }
-
-  return currentMode || 'cohesive';
-}
-
 
 function attributeCohesion(a,b){ const k=['strength','dexterity','intelligence']; const dot=k.reduce((s,x)=>s+(a[x]||0)*(b[x]||0),0); const ma=Math.sqrt(k.reduce((s,x)=>s+(a[x]||0)**2,0)); const mb=Math.sqrt(k.reduce((s,x)=>s+(b[x]||0)**2,0)); return dot/(ma*mb||1); }
 function pickByCohesion(list, base, th){
@@ -241,9 +185,13 @@ function buildBuildContextFromSnapshot(snap){
     if (defenseKeywords.some(k => lower.includes(k))) defenseSet.add(t);
   });
 
-  const cohesionMode = resolveCohesionMode(
-    snap.cohesionModeName ?? snap.cohesionMode ?? currentMode
-  );
+	const t =
+	  (Number.isFinite(snap.cohesionThreshold) ? Number(snap.cohesionThreshold) :
+	   (Number.isFinite(window.App?.state?.cohesionThreshold) ? Number(window.App.state.cohesionThreshold) :
+		cohesionThreshold));
+	
+	const cohesionMode = cohesionTierFromThreshold(t);
+
 
   return {
     ascendancyId: Number.isFinite(ascendancyId) ? ascendancyId : null,
@@ -265,15 +213,10 @@ function applyHardRestrictions(item,ctx){
 }
 
 export {
-  COHESION_MODES,
-  currentMode,
   cohesionThreshold,
-  setCohesionState,
-  cohesionNameForThreshold,
+  setCohesionThreshold,
   sliderValueToThreshold,
   thresholdToSliderValue,
-  getCohesionHint,
-  resolveCohesionMode,
   pickByCohesion,
   normalizeAttributesForSynergy,
   lookupAscendancyIdByName,
@@ -282,5 +225,6 @@ export {
   validOffhands,
   applyHardRestrictions
 };
+
 
 // ---------- overlay + ascendancy art ----------

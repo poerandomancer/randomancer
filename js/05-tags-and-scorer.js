@@ -68,26 +68,41 @@ window.TAG_ALIASES = TagUtils.alias;
     const idf = new Map(); for(const [t,c] of df) idf.set(t, Math.log(N/(1+c))); return idf;
   }
   function buildRolledTagProfileCtx(ctx){
-    const prof = new Map();
-    const cats = { tactics:new Set(), ailments:new Set() };
-    const add = (k,w)=>{ if(!k) return; prof.set(k, (prof.get(k)||0)+w); };
-    const addAll = (arr,w)=> (arr||[]).forEach(t=>{ const k=normTagPlus(t); add(k,w); });
-    const ROLLED_WEIGHTS = { tactics:1.10, ailments:1.00, defStrat:0.70, defense:0.60, weapon:0.50 };
-    cats.tactics = new Set((ctx.tacticSet||[]).flatMap(t=>t?.tags||[]).map(normTagPlus));
-    cats.ailments= new Set((ctx.ailmentSet||[]).flatMap(a=>a?.tags||[]).map(normTagPlus));
-    addAll(cats.tactics, ROLLED_WEIGHTS.tactics);
-    addAll(cats.ailments, ROLLED_WEIGHTS.ailments);
-    addAll(defensePseudoTags(ctx.defense?.name), ROLLED_WEIGHTS.defense);
-    addAll([ctx.defStrat?.name], ROLLED_WEIGHTS.defStrat);
-    addAll([ctx.weapon, ctx.offhand], ROLLED_WEIGHTS.weapon);
-    return { profile: prof, cats };
-  }
-  function deriveWeaponHints(weapon, offhand){
-    const set = new Set(); const name = (s)=> String(s||'').toLowerCase();
-    const addIf = (src, tag)=>{ const n=name(src); if(n.includes(tag)) set.add(tag); };
-    [weapon,offhand].forEach((w)=>{ ['bow','wand','buckler','shield','sceptre','sword','axe','mace','staff','spear','focus','quiver'].forEach(t=>addIf(w,t)); });
-    return set;
-  }
+	  const prof = new Map();
+	  const cats = { tactics:new Set(), ailments:new Set() };
+	  const add = (k,w)=>{ if(!k) return; prof.set(k, (prof.get(k)||0)+w); };
+	  const addAll = (arr,w)=> (arr||[]).forEach(t=>{ const k=normTagPlus(t); add(k,w); });
+	
+	  const ROLLED_WEIGHTS = { tactics:1.10, ailments:1.00, defStrat:0.70, defense:0.60, weapon:0.50 };
+	
+	  // --- accept new shape (tacticsTags / ailmentsTags / weaponPseudoTags) OR old (tacticSet / ailmentSet) ---
+	  const tacticsArr =
+		ctx?.tacticsTags ??
+		(ctx?.tacticSet ? (ctx.tacticSet||[]).flatMap(t=>t?.tags||[]) : []);
+	
+	  const ailmentsArr =
+		ctx?.ailmentsTags ??
+		(ctx?.ailmentSet ? (ctx.ailmentSet||[]).flatMap(a=>a?.tags||[]) : []);
+	
+	  cats.tactics = new Set((tacticsArr||[]).map(normTagPlus));
+	  cats.ailments= new Set((ailmentsArr||[]).map(normTagPlus));
+	
+	  addAll(cats.tactics, ROLLED_WEIGHTS.tactics);
+	  addAll(cats.ailments, ROLLED_WEIGHTS.ailments);
+	
+	  const defenseArr = ctx?.defensePseudoTags ?? defensePseudoTags(ctx?.defense?.name);
+	  addAll(defenseArr, ROLLED_WEIGHTS.defense);
+	
+	  const defStratArr = ctx?.defStratTags ?? (ctx?.defStrat?.tags ?? [ctx?.defStrat?.name]);
+	  addAll(defStratArr, ROLLED_WEIGHTS.defStrat);
+	
+	  const weaponArr = ctx?.weaponPseudoTags ?? [ctx?.weapon, ctx?.offhand].filter(Boolean);
+	  addAll(weaponArr, ROLLED_WEIGHTS.weapon);
+	
+	  return { profile: prof, cats };
+	}
+
+  
   function scoreGemSynergy(g, rolledCtx, idf, opts){
     const tags = (g.tags||[]).map(normTagPlus); const set = new Set(tags);
     let raw=0, cnt=0, idfSum=0;
@@ -211,12 +226,39 @@ function deriveWeaponHints(weapon, offhand){
   const n = (x)=>String(x?.name||'').toLowerCase();
   const w = n(weapon), o = n(offhand);
   const set = new Set();
-  const addIf = (name, key) => { if(name.includes(key)) set.add(key); };
-  [w,o].forEach(name=>{
-    addIf(name,'sceptre'); addIf(name,'wand'); addIf(name,'staff'); addIf(name,'bow'); addIf(name,'spear');
-    addIf(name,'axe'); addIf(name,'sword'); addIf(name,'mace'); addIf(name,'dagger'); addIf(name,'hammer');
-    addIf(name,'shield'); addIf(name,'buckler'); addIf(name,'focus'); addIf(name,'quiver');
-  });
+  const add = (t)=>{ if(t) set.add(t); };
+
+  const scan = (name)=> {
+    if (!name) return;
+
+    // specificity first to avoid substring collisions
+    if (name.includes('crossbow')) add('crossbow');
+    else if (name.includes('bow')) add('bow');
+
+    if (name.includes('quarterstaff')) add('quarterstaff');
+    else if (name.includes('staff')) add('staff');
+
+    if (name.includes('sceptre') || name.includes('scepter')) add('sceptre');
+    if (name.includes('wand')) add('wand');
+    if (name.includes('spear')) add('spear');
+    if (name.includes('flail')) add('flail');
+    if (name.includes('talisman')) add('talisman');
+
+    if (name.includes('dagger')) add('dagger');
+    if (name.includes('claw')) add('claw');
+    if (name.includes('sword')) add('sword');
+    if (name.includes('axe')) add('axe');
+    if (name.includes('mace') || name.includes('hammer')) add('mace');
+
+    if (name.includes('buckler')) add('buckler');
+    if (name.includes('shield')) add('shield');
+    if (name.includes('quiver')) add('quiver');
+    if (name.includes('focus')) add('focus');
+
+    if (name.includes('unarmed')) add('unarmed');
+  };
+
+  scan(w); scan(o);
   return set;
 }
 
@@ -253,22 +295,39 @@ function defensePseudoTags(defenseName){
 
 function buildRolledTagProfileCtx(ctx){
   const prof = new Map();
-  const cats = { tactics: new Set(), ailments: new Set() };
-  const add = (arr, w=1, sink=null) => {
-    (arr||[]).forEach(x=>{
-      const k = normTagPlus(x);
-      if(!k) return;
-      prof.set(k, (prof.get(k)||0) + w);
-      if(sink) sink.add(k);
-    });
-  };
-  add(ctx.tacticsTags, ROLLED_WEIGHTS.tactics, cats.tactics);
-  add(ctx.ailmentsTags, ROLLED_WEIGHTS.ailments, cats.ailments);
-  add(ctx.defStratTags, ROLLED_WEIGHTS.defStrat);
-  add(ctx.defensePseudoTags, ROLLED_WEIGHTS.defense);
-  add(ctx.weaponPseudoTags, ROLLED_WEIGHTS.weapon);
+  const cats = { tactics:new Set(), ailments:new Set() };
+  const add = (k,w)=>{ if(!k) return; prof.set(k, (prof.get(k)||0)+w); };
+  const addAll = (arr,w)=> (arr||[]).forEach(t=>{ const k=normTagPlus(t); add(k,w); });
+
+  const ROLLED_WEIGHTS = { tactics:1.10, ailments:1.00, defStrat:0.70, defense:0.60, weapon:0.50 };
+
+  // --- accept new shape (tacticsTags / ailmentsTags / weaponPseudoTags) OR old (tacticSet / ailmentSet) ---
+  const tacticsArr =
+    ctx?.tacticsTags ??
+    (ctx?.tacticSet ? (ctx.tacticSet||[]).flatMap(t=>t?.tags||[]) : []);
+
+  const ailmentsArr =
+    ctx?.ailmentsTags ??
+    (ctx?.ailmentSet ? (ctx.ailmentSet||[]).flatMap(a=>a?.tags||[]) : []);
+
+  cats.tactics = new Set((tacticsArr||[]).map(normTagPlus));
+  cats.ailments= new Set((ailmentsArr||[]).map(normTagPlus));
+
+  addAll(cats.tactics, ROLLED_WEIGHTS.tactics);
+  addAll(cats.ailments, ROLLED_WEIGHTS.ailments);
+
+  const defenseArr = ctx?.defensePseudoTags ?? defensePseudoTags(ctx?.defense?.name);
+  addAll(defenseArr, ROLLED_WEIGHTS.defense);
+
+  const defStratArr = ctx?.defStratTags ?? (ctx?.defStrat?.tags ?? [ctx?.defStrat?.name]);
+  addAll(defStratArr, ROLLED_WEIGHTS.defStrat);
+
+  const weaponArr = ctx?.weaponPseudoTags ?? [ctx?.weapon, ctx?.offhand].filter(Boolean);
+  addAll(weaponArr, ROLLED_WEIGHTS.weapon);
+
   return { profile: prof, cats };
 }
+
 
 function cosineSim(a,b){
   const k = ['strength','dexterity','intelligence'];

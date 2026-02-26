@@ -169,6 +169,17 @@ strong, b { font-weight: 600; }
 );
 }
 
+body[data-mode="challenge"] .build-title-block::after,
+body.challenge-mode .build-title-block::after{
+  background: linear-gradient(to right,
+    rgba(159,47,55,0.0),
+    rgba(159,47,55,0.26),
+    rgba(221,124,131,0.14),
+    rgba(159,47,55,0.26),
+    rgba(159,47,55,0.0)
+  );
+}
+
 
 /* --- Empty state (no build rolled yet) --- */
 .empty-state{
@@ -258,3 +269,11 @@ strong, b { font-weight: 600; }
   );
 }
 
+body[data-mode="challenge"] #empty-state.panel::before,
+body.challenge-mode #empty-state.panel::before{
+  background: linear-gradient(to right,
+    rgba(159,47,55,0.0),
+    rgba(159,47,55,0.25),
+    rgba(159,47,55,0.0)
+  );
+}

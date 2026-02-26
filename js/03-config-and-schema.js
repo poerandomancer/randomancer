@@ -101,7 +101,7 @@ const RulesEngine = (() => {
       const v = evaluate(cfg, snapshot());
       if (v.length===0) return true;
       i++;
-      if (typeof window.rollBuild === 'function') window.rollBuild(window.App?.state?.cohesionMode ?? 1);
+      if (typeof window.rollBuild === 'function') window.rollBuild(window.App?.state?.DATA || window.DATA);
       else { const btn = document.querySelector('#roll'); if (btn) btn.click(); }
     }
     console.warn('[RulesEngine.enforce] attempts exhausted');

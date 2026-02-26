@@ -1,0 +1,110 @@
+[
+  {
+    "_rid": 0,
+    "Id": "Marauder",
+    "Character": 0,
+    "ListBackground": "Art/2DArt/UIImages/InGame/Gemcutting/GemcuttingListMarauder",
+    "Icon": "Art/2DArt/UIImages/InGame/GemcuttingNew/GemcuttingIconAxe",
+    "ConsoleIcon": "Art/2DArt/UIImages/InGame/ConsoleNew/GemCrafting/CMarauder",
+    "Name": "Axe"
+  },
+  {
+    "_rid": 1,
+    "Id": "Witch",
+    "Character": 1,
+    "ListBackground": "Art/2DArt/UIImages/InGame/Gemcutting/GemcuttingListWitch",
+    "Icon": "Art/2DArt/UIImages/InGame/GemcuttingNew/GemcuttingIconOccult",
+    "ConsoleIcon": "Art/2DArt/UIImages/InGame/ConsoleNew/GemCrafting/CWitch",
+    "Name": "Occult"
+  },
+  {
+    "_rid": 2,
+    "Id": "Ranger",
+    "Character": 2,
+    "ListBackground": "Art/2DArt/UIImages/InGame/Gemcutting/GemcuttingListRanger",
+    "Icon": "Art/2DArt/UIImages/InGame/GemcuttingNew/GemcuttingIconBow",
+    "ConsoleIcon": "Art/2DArt/UIImages/InGame/ConsoleNew/GemCrafting/CRanger",
+    "Name": "Bow"
+  },
+  {
+    "_rid": 3,
+    "Id": "Gladiator",
+    "Character": 3,
+    "ListBackground": "Art/2DArt/UIImages/InGame/Gemcutting/GemcuttingListGladiator",
+    "Icon": "Art/2DArt/UIImages/InGame/GemcuttingNew/GemcuttingIconSword",
+    "ConsoleIcon": "Art/2DArt/UIImages/InGame/ConsoleNew/GemCrafting/CGladiator",
+    "Name": "Sword"
+  },
+  {
+    "_rid": 4,
+    "Id": "Assassin",
+    "Character": 4,
+    "ListBackground": "Art/2DArt/UIImages/InGame/Gemcutting/GemcuttingListShadow",
+    "Icon": "Art/2DArt/UIImages/InGame/GemcuttingNew/GemcuttingIconDagger",
+    "ConsoleIcon": "Art/2DArt/UIImages/InGame/ConsoleNew/GemCrafting/CAssassin",
+    "Name": "Dagger"
+  },
+  {
+    "_rid": 5,
+    "Id": "Templar",
+    "Character": 5,
+    "ListBackground": "Art/2DArt/UIImages/InGame/Gemcutting/GemcuttingListTemplar",
+    "Icon": "Art/2DArt/UIImages/InGame/GemcuttingNew/GemcuttingIconFlail",
+    "ConsoleIcon": "Art/2DArt/UIImages/InGame/ConsoleNew/GemCrafting/CTemplar",
+    "Name": "Flail"
+  },
+  {
+    "_rid": 6,
+    "Id": "Brute",
+    "Character": 6,
+    "ListBackground": "Art/2DArt/UIImages/InGame/Gemcutting/GemcuttingListWarrior",
+    "Icon": "Art/2DArt/UIImages/InGame/GemcuttingNew/GemcuttingIconMace",
+    "ConsoleIcon": "Art/2DArt/UIImages/InGame/ConsoleNew/GemCrafting/CWarrior",
+    "Name": "Mace"
+  },
+  {
+    "_rid": 7,
+    "Id": "Sorceress",
+    "Character": 7,
+    "ListBackground": "Art/2DArt/UIImages/InGame/Gemcutting/GemcuttingListSorceress",
+    "Icon": "Art/2DArt/UIImages/InGame/GemcuttingNew/GemcuttingIconElemental",
+    "ConsoleIcon": "Art/2DArt/UIImages/InGame/ConsoleNew/GemCrafting/CSoreress",
+    "Name": "Elemental"
+  },
+  {
+    "_rid": 8,
+    "Id": "Huntress",
+    "Character": 8,
+    "ListBackground": "Art/2DArt/UIImages/InGame/Gemcutting/GemcuttingListHuntress",
+    "Icon": "Art/2DArt/UIImages/InGame/GemcuttingNew/GemcuttingIconSpear",
+    "ConsoleIcon": "Art/2DArt/UIImages/InGame/ConsoleNew/GemCrafting/CHuntress",
+    "Name": "Spear"
+  },
+  {
+    "_rid": 9,
+    "Id": "Mercenary",
+    "Character": 9,
+    "ListBackground": "Art/2DArt/UIImages/InGame/Gemcutting/GemcuttingListMercenary",
+    "Icon": "Art/2DArt/UIImages/InGame/GemcuttingNew/GemcuttingIconCrossbow",
+    "ConsoleIcon": "Art/2DArt/UIImages/InGame/ConsoleNew/GemCrafting/CMercenery",
+    "Name": "Crossbow"
+  },
+  {
+    "_rid": 10,
+    "Id": "Monk",
+    "Character": 10,
+    "ListBackground": "Art/2DArt/UIImages/InGame/Gemcutting/GemcuttingListMonk",
+    "Icon": "Art/2DArt/UIImages/InGame/GemcuttingNew/GemcuttingIconQuarterstaff",
+    "ConsoleIcon": "Art/2DArt/UIImages/InGame/ConsoleNew/GemCrafting/CMonk",
+    "Name": "Quarterstaff"
+  },
+  {
+    "_rid": 11,
+    "Id": "Druid",
+    "Character": 11,
+    "ListBackground": "Art/2DArt/UIImages/InGame/Gemcutting/GemcuttingListDruid",
+    "Icon": "Art/2DArt/UIImages/InGame/GemcuttingNew/GemcuttingIconPrimal",
+    "ConsoleIcon": "Art/2DArt/UIImages/InGame/ConsoleNew/GemCrafting/CDruid",
+    "Name": "Primal"
+  }
+]

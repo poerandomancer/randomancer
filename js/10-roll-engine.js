@@ -1,14 +1,13 @@
 import { renderOathAwareText, renderSecondaryWeaponLine, setActiveSkillsTab, setSkillsTabsAvailability } from './01-meta-and-domready.js';
 import { renderSummaryFromSnapshot } from './02-summary-view.js';
-import { getLockState, syncLockUIFromState } from './00-locks-and-snapshots.js';
 import { getBindFatesFromApp } from './04-app-state.js';
 import { sample } from './05-tags-and-scorer.js';
-import { COHESION_MODES, applyHardRestrictions, buildBuildContext, cohesionThreshold, currentMode, lookupAscendancyIdByName, pickByCohesion, resolveCohesionMode, validOffhands } from './06-cohesion.js';
+import { applyHardRestrictions, buildBuildContext, cohesionThreshold, lookupAscendancyIdByName, pickByCohesion, validOffhands } from './06-cohesion.js';
 import { renderPassiveRecommendations, rollRecommendedSkills } from './07-skills-render.js';
 import { dataReady, ensureDataPreload } from './08-data-load.js';
 import { pickRecommendedAscendancyNodes, pickRecommendedKeystones, pickRecommendedNotables } from '../passivesEngine.js';
 
-// ---------- overlay + ascendancy art ----------
+// ---------- ascendancy art ----------
 function updateAscArt(asc){
   const el = document.getElementById('asc-art');
   if (!el) return;
@@ -41,28 +40,6 @@ const showBindFatesError = (msg) => {
     window.showBindFatesError(msg);
   }
 };
-const AIL_COLORS = {
-  ignite:"rgba(255, 80, 0, 0.08)",
-  freeze:"rgba(90, 160, 255, 0.08)",
-  shock:"rgba(220, 220, 80, 0.07)",
-  poison:"rgba(90, 255, 120, 0.08)",
-  bleed:"rgba(255, 60, 60, 0.08)"
-};
-function updateAilmentOverlay(ailments){
-  const panel=document.querySelector('.panel'); if(!panel) return;
-  const names = (Array.isArray(ailments) ? ailments.map(a => String(a.name||a).toLowerCase()) : []);
-  if(names.length===0){
-    panel.style.setProperty('--overlay-gradient','linear-gradient(135deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 100%)'); return;
-  }
-  const c1 = AIL_COLORS[names[0]] || 'rgba(255,255,255,0.0)';
-  if(names.length>1){
-    const c2 = AIL_COLORS[names[1]] || 'rgba(255,255,255,0.0)';
-    panel.style.setProperty('--overlay-gradient', `linear-gradient(135deg, ${c1} 0%, ${c2} 70%, rgba(0,0,0,0.85) 100%)`);
-  }else{
-    panel.style.setProperty('--overlay-gradient', `linear-gradient(135deg, ${c1} 0%, rgba(0,0,0,0.85) 100%)`);
-  }
-}
-
 
 // ---------- dictionary builders (TRUE Map) ----------
 function buildGemDictionary(gems){
@@ -414,21 +391,17 @@ function generateFlavorLine(cls, asc, ailments, tactics){
   return sample(pool);
 }
 
-
-function resetSecondaryWeaponSetUI(showButton){
-
+function resetSecondaryWeaponSetUI(){
   const weapons2El = document.getElementById('weapons-set2');
   if (weapons2El) {
     weapons2El.textContent = '';
     weapons2El.hidden = true;
   }
+
   const grid2 = document.getElementById('skills-grid-2');
   if (grid2) grid2.innerHTML = '';
-  const btn = document.getElementById('weapon-set2-btn');
-  if (btn) {
-    btn.textContent = 'Add Weapon Set II';
-    btn.hidden = !showButton;
-  }
+
+  // WS2 is toggle-driven; no button UI.
   setSkillsTabsAvailability(false);
   setActiveSkillsTab('1');
 }
@@ -445,9 +418,7 @@ function rollSecondaryWeaponSet(dataWrap){
   if (!data || !current.className || current.weapon2) return null;
 
   const base = data.Classes?.[current.className]?.attributes || {};
-  const th = (typeof cohesionThreshold === 'number')
-    ? cohesionThreshold
-    : (COHESION_MODES[currentMode] ?? COHESION_MODES.cohesive);
+  const th = (typeof cohesionThreshold === 'number') ? cohesionThreshold : 3/4;
 
   const bind = getBindFatesFromApp();
   const weaponCfg = bind.weapon || { oaths: [], abominations: [] };
@@ -495,8 +466,8 @@ function rollSecondaryWeaponSet(dataWrap){
   return { weapon, offhand, wOaths };
 }
 
-async function handleSecondaryWeaponSetSelection(){
-  const data = await ensureDataPreload();
+async function handleSecondaryWeaponSetSelection(dataWrap){
+  const data = dataWrap || await ensureDataPreload();
   const coreData = resolveCoreData(data);
   const current = window.App?.state?.currentRoll || window.CURRENT_ROLL || {};
   if (!current.weapon || current.weapon2) return;
@@ -536,7 +507,8 @@ async function handleSecondaryWeaponSetSelection(){
     window.App.mergeCurrentRoll({
       weapon2: weaponName,
       offhand2: offhandName,
-      recommendedSkills2: skillSnapshot.skills || []
+      recommendedSkills2: skillSnapshot.skills || [],
+      synergySupports2: skillSnapshot.synergySupports || []
     });
   }
 
@@ -545,8 +517,6 @@ async function handleSecondaryWeaponSetSelection(){
     window.CURRENT_ROLL.offhand2 = offhandName;
   }
 
-  const set2Btn = document.getElementById('weapon-set2-btn');
-  if (set2Btn) set2Btn.hidden = true;
   setSkillsTabsAvailability(true);
   setActiveSkillsTab('1');
   
@@ -635,9 +605,7 @@ function rollBuild(dataWrap){
 
   showBindFatesError('');
 
-    const th = (typeof cohesionThreshold === 'number')
-    ? cohesionThreshold
-    : (COHESION_MODES[currentMode] ?? COHESION_MODES.cohesive);
+    const th = (typeof cohesionThreshold === 'number') ? cohesionThreshold : 3/4;
 
   const bind = getBindFatesFromApp();
 
@@ -810,108 +778,225 @@ function rollBuild(dataWrap){
 // Ailments/Tactics roll (with duplicate prevention + cohesion bias)
   let ailmentSet = [];
   let tacticSet  = [];
+
+  const mechanicsTarget = (() => {
+    const g = (typeof window.getCombatMechanicsCount === 'function') ? window.getCombatMechanicsCount() : null;
+    let s = null;
+    try { s = Number(localStorage.getItem('randomancer_mechanics_count')); } catch {}
+    const n = (g ?? s ?? 2);
+    return (n === 1 || n === 2 || n === 3) ? n : 2;
+  })();
+
   const r = Math.random();
 
   const allAil = data.Ailments || [];
   const allTac = filterTacticsByStrictRules(data.Tactics || [], weapon, offhand);
 
-  const validAil = allAil.filter((a) => !cAboms.has(a.name));
-  const validTac = allTac.filter((t) => !cAboms.has(t.name));
+  const validAil = allAil.filter((a) => a && !cAboms.has(a.name));
+  const validTac = allTac.filter((t) => t && !cAboms.has(t.name));
 
   const mechanics = [
     ...validAil.map((a) => ({ kind: 'ailment', ref: a })),
     ...validTac.map((t) => ({ kind: 'tactic', ref: t }))
   ];
 
-  const pickMechanic = (pool, excludeNames = []) => {
-    const filtered = pool.filter((m) => m && !excludeNames.includes(m.ref?.name));
-    if (!filtered.length) return null;
-    const picked = pickByCohesion(filtered.map((m) => m.ref), base, th) || filtered[Math.floor(Math.random() * filtered.length)].ref;
-    return filtered.find((m) => m.ref === picked || m.ref?.name === picked?.name) || filtered[0];
-  };
-
-	const oathMech = mechanics.filter((m) => cOaths.has(m.ref?.name));
-	const neutralMech = mechanics.filter((m) => !cOaths.has(m.ref?.name));
-	
-	const picks = [];
-	
-	// If Tier-3 mechanics anchor picked 1–2 active mechanics earlier, FORCE those here.
-	const forcedNames =
-	  Array.isArray(activeMechanicOathNames) && activeMechanicOathNames.length
-		? activeMechanicOathNames.slice(0, 2)
-		: null;
-	
-	if (forcedNames) {
-	  for (const nm of forcedNames) {
-		const m = mechanics.find(x => x?.ref?.name === nm);
-		if (m) picks.push(m);
-	  }
-	
-	  // If only one forced mechanic, fill second like the normal oath logic.
-	  if (picks.length === 1) {
-		const second = pickMechanic(neutralMech, [picks[0]?.ref?.name]);
-		if (second) picks.push(second);
-	  }
-	
-	  // Safety fallback (should be rare)
-	  while (picks.length < 2) {
-		const next = pickMechanic(mechanics, picks.map(p => p?.ref?.name).filter(Boolean));
-		if (!next) break;
-		picks.push(next);
-	  }
-	} else if (oathMech.length >= 2) {
-	  const first = pickMechanic(oathMech);
-	  const second = pickMechanic(oathMech, [first?.ref?.name]);
-	  picks.push(first, second);
-	} else if (oathMech.length === 1) {
-	  const first = oathMech[0];
-	  const second = pickMechanic(neutralMech, [first?.ref?.name]);
-	  if (first) picks.push(first);
-	  if (second) picks.push(second);
-	} else {
-	  const thLocal = th;
-	
-	  const pickAilmentFrom = (pool, excludeNames = []) => {
-		const filtered = pool.filter(a => a && !excludeNames.includes(a.name));
-		if (!filtered.length) return null;
-		return (pickByCohesion(filtered, base, thLocal) || filtered[Math.floor(Math.random() * filtered.length)]);
-	  };
-	
-	  const pickTacticFrom = (pool, excludeNames = []) => {
-		const filtered = pool.filter(t => t && !excludeNames.includes(t.name));
-		if (!filtered.length) return null;
-		return (pickByCohesion(filtered, base, thLocal) || filtered[Math.floor(Math.random() * filtered.length)]);
-	  };
-	
-	  if (r < 0.6) {
-		const a1 = pickAilmentFrom(validAil);
-		const tPool = validTac;
-		const t1 = pickTacticFrom(tPool);
-		if (a1) picks.push({ kind: 'ailment', ref: a1 });
-		if (t1) picks.push({ kind: 'tactic', ref: t1 });
-	  } else if (r < 0.8) {
-		const a1 = pickAilmentFrom(validAil);
-		const a2 = a1 ? pickAilmentFrom(validAil, [a1.name]) : pickAilmentFrom(validAil);
-		if (a1) picks.push({ kind: 'ailment', ref: a1 });
-		if (a2) picks.push({ kind: 'ailment', ref: a2 });
-	  } else {
-		const tPool = validTac;
-		const t1 = pickTacticFrom(tPool);
-		const t2 = t1 ? pickTacticFrom(tPool, [t1.name]) : pickTacticFrom(tPool);
-		if (t1) picks.push({ kind: 'tactic', ref: t1 });
-		if (t2) picks.push({ kind: 'tactic', ref: t2 });
-	  }
-	}
-
-  const cleanPicks = picks.filter(Boolean).slice(0, 2);
-
-  if (cleanPicks.length < 2) {
-    showBindFatesError('No valid combat mechanics with your current Oaths & Abominations.');
+  if (mechanics.length < mechanicsTarget) {
+    showBindFatesError(`Not enough valid combat mechanics to roll ${mechanicsTarget} with your current Oaths & Abominations.`);
     return;
   }
 
-  ailmentSet = cleanPicks.filter(m => m.kind === 'ailment').map(m => m.ref);
-  tacticSet  = cleanPicks.filter(m => m.kind === 'tactic').map(m => m.ref);
+  const pickMechanic = (pool, excludeNames = []) => {
+    const filtered = pool.filter((m) => m && !excludeNames.includes(m.ref?.name));
+    if (!filtered.length) return null;
+    const pickedRef =
+      pickByCohesion(filtered.map((m) => m.ref), base, th) ||
+      filtered[Math.floor(Math.random() * filtered.length)].ref;
+    return filtered.find((m) => m.ref === pickedRef || m.ref?.name === pickedRef?.name) || filtered[0];
+  };
+
+  const oathMech = mechanics.filter((m) => cOaths.has(m.ref?.name));
+  const neutralMech = mechanics.filter((m) => !cOaths.has(m.ref?.name));
+
+  const picks = [];
+
+  // If Tier-3 mechanics anchor picked 1–2 active mechanics earlier, FORCE those here (up to target).
+  const forcedNames =
+    Array.isArray(activeMechanicOathNames) && activeMechanicOathNames.length
+      ? activeMechanicOathNames.slice(0, Math.min(mechanicsTarget, 2))
+      : null;
+
+  if (forcedNames) {
+    for (const nm of forcedNames) {
+      const m = mechanics.find((x) => x?.ref?.name === nm);
+      if (m) picks.push(m);
+    }
+
+    // Fill remaining slots, prefer non-oath mechanics if available.
+    while (picks.length < mechanicsTarget) {
+      const exclude = picks.map((p) => p?.ref?.name).filter(Boolean);
+      const next =
+        (neutralMech.length ? pickMechanic(neutralMech, exclude) : null) ||
+        pickMechanic(mechanics, exclude);
+      if (!next) break;
+      picks.push(next);
+    }
+  } else if (oathMech.length >= mechanicsTarget) {
+    // Enough oath mechanics to satisfy the full target count.
+    while (picks.length < mechanicsTarget) {
+      const exclude = picks.map((p) => p?.ref?.name).filter(Boolean);
+      const next = pickMechanic(oathMech, exclude);
+      if (!next) break;
+      picks.push(next);
+    }
+  } else if (oathMech.length > 0) {
+    // Some oath mechanics exist; include them first, then fill from neutral.
+    while (picks.length < Math.min(oathMech.length, mechanicsTarget)) {
+      const exclude = picks.map((p) => p?.ref?.name).filter(Boolean);
+      const next = pickMechanic(oathMech, exclude);
+      if (!next) break;
+      picks.push(next);
+    }
+
+    while (picks.length < mechanicsTarget) {
+      const exclude = picks.map((p) => p?.ref?.name).filter(Boolean);
+      const next =
+        (neutralMech.length ? pickMechanic(neutralMech, exclude) : null) ||
+        pickMechanic(mechanics, exclude);
+      if (!next) break;
+      picks.push(next);
+    }
+  } else {
+    const thLocal = th;
+
+    const pickAilmentFrom = (pool, excludeNames = []) => {
+      const filtered = pool.filter((a) => a && !excludeNames.includes(a.name));
+      if (!filtered.length) return null;
+      return pickByCohesion(filtered, base, thLocal) || filtered[Math.floor(Math.random() * filtered.length)];
+    };
+
+    const pickTacticFrom = (pool, excludeNames = []) => {
+      const filtered = pool.filter((t) => t && !excludeNames.includes(t.name));
+      if (!filtered.length) return null;
+      return pickByCohesion(filtered, base, thLocal) || filtered[Math.floor(Math.random() * filtered.length)];
+    };
+
+    if (mechanicsTarget === 1) {
+	  const hasAil = validAil.length > 0;
+	  const hasTac = validTac.length > 0;
+	
+	  // 50/50 split when both pools exist
+	  const wantAilment = (hasAil && hasTac)
+		? (Math.random() < 0.5)
+		: hasAil;
+	
+	  if (wantAilment) {
+		const a1 = pickAilmentFrom(validAil);
+		if (a1) picks.push({ kind: 'ailment', ref: a1 });
+		else {
+		  const t1 = pickTacticFrom(validTac);
+		  if (t1) picks.push({ kind: 'tactic', ref: t1 });
+		}
+	  } else {
+		const t1 = pickTacticFrom(validTac);
+		if (t1) picks.push({ kind: 'tactic', ref: t1 });
+		else {
+		  const a1 = pickAilmentFrom(validAil);
+		  if (a1) picks.push({ kind: 'ailment', ref: a1 });
+		}
+	  }
+	}
+ else if (mechanicsTarget === 2) {
+      // Preserve existing 2-mechanic weighting:
+      // ~60% mixed, ~20% double-ailment, ~20% double-tactic
+      if (r < 0.6) {
+        const a1 = pickAilmentFrom(validAil);
+        const t1 = pickTacticFrom(validTac);
+        if (a1) picks.push({ kind: 'ailment', ref: a1 });
+        if (t1) picks.push({ kind: 'tactic', ref: t1 });
+      } else if (r < 0.8) {
+        const a1 = pickAilmentFrom(validAil);
+        const a2 = a1 ? pickAilmentFrom(validAil, [a1.name]) : pickAilmentFrom(validAil);
+        if (a1) picks.push({ kind: 'ailment', ref: a1 });
+        if (a2) picks.push({ kind: 'ailment', ref: a2 });
+      } else {
+        const t1 = pickTacticFrom(validTac);
+        const t2 = t1 ? pickTacticFrom(validTac, [t1.name]) : pickTacticFrom(validTac);
+        if (t1) picks.push({ kind: 'tactic', ref: t1 });
+        if (t2) picks.push({ kind: 'tactic', ref: t2 });
+      }
+    } else {
+      // mechanicsTarget === 3
+      // Keep the same overall feel:
+      // ~60% skew toward mixed sets (2+1), ~20% triple-ailment, ~20% triple-tactic
+      if (r < 0.6) {
+        const preferAilHeavy = Math.random() < 0.5;
+        if (preferAilHeavy) {
+          const a1 = pickAilmentFrom(validAil);
+          const a2 = a1 ? pickAilmentFrom(validAil, [a1.name]) : pickAilmentFrom(validAil);
+          const t1 = pickTacticFrom(validTac);
+          if (a1) picks.push({ kind: 'ailment', ref: a1 });
+          if (a2) picks.push({ kind: 'ailment', ref: a2 });
+          if (t1) picks.push({ kind: 'tactic', ref: t1 });
+        } else {
+          const t1 = pickTacticFrom(validTac);
+          const t2 = t1 ? pickTacticFrom(validTac, [t1.name]) : pickTacticFrom(validTac);
+          const a1 = pickAilmentFrom(validAil);
+          if (t1) picks.push({ kind: 'tactic', ref: t1 });
+          if (t2) picks.push({ kind: 'tactic', ref: t2 });
+          if (a1) picks.push({ kind: 'ailment', ref: a1 });
+        }
+      } else if (r < 0.8) {
+        const a1 = pickAilmentFrom(validAil);
+        const a2 = a1 ? pickAilmentFrom(validAil, [a1.name]) : pickAilmentFrom(validAil);
+        const used = [a1?.name, a2?.name].filter(Boolean);
+        const a3 = used.length ? pickAilmentFrom(validAil, used) : pickAilmentFrom(validAil);
+        if (a1) picks.push({ kind: 'ailment', ref: a1 });
+        if (a2) picks.push({ kind: 'ailment', ref: a2 });
+        if (a3) picks.push({ kind: 'ailment', ref: a3 });
+      } else {
+        const t1 = pickTacticFrom(validTac);
+        const t2 = t1 ? pickTacticFrom(validTac, [t1.name]) : pickTacticFrom(validTac);
+        const used = [t1?.name, t2?.name].filter(Boolean);
+        const t3 = used.length ? pickTacticFrom(validTac, used) : pickTacticFrom(validTac);
+        if (t1) picks.push({ kind: 'tactic', ref: t1 });
+        if (t2) picks.push({ kind: 'tactic', ref: t2 });
+        if (t3) picks.push({ kind: 'tactic', ref: t3 });
+      }
+    }
+  }
+
+  // Ensure we end up with mechanicsTarget unique picks, if possible.
+  const uniquePicks = [];
+  const seen = new Set();
+  for (const p of picks.filter(Boolean)) {
+    const nm = p?.ref?.name;
+    if (!nm || seen.has(nm)) continue;
+    seen.add(nm);
+    uniquePicks.push(p);
+  }
+
+  // Safety fill (should be rare): top up to target from the full pool.
+  while (uniquePicks.length < mechanicsTarget) {
+    const exclude = uniquePicks.map((p) => p?.ref?.name).filter(Boolean);
+    const next = pickMechanic(mechanics, exclude);
+    if (!next) break;
+    const nm = next?.ref?.name;
+    if (nm && !seen.has(nm)) {
+      seen.add(nm);
+      uniquePicks.push(next);
+    }
+  }
+
+  const cleanPicks = uniquePicks.slice(0, mechanicsTarget);
+
+  if (cleanPicks.length < mechanicsTarget) {
+    showBindFatesError(`Not enough valid combat mechanics to roll ${mechanicsTarget} with your current Oaths & Abominations.`);
+    return;
+  }
+
+  ailmentSet = cleanPicks.filter((m) => m.kind === 'ailment').map((m) => m.ref);
+  tacticSet  = cleanPicks.filter((m) => m.kind === 'tactic').map((m) => m.ref);
+
 
   document.getElementById('class')?.replaceChildren(document.createTextNode(clsName || ''));
   renderOathAwareText(document.getElementById('ascendancy'), asc || '', ascOaths);
@@ -928,7 +1013,7 @@ function rollBuild(dataWrap){
     weaponParts,
     wOaths
   );
-  resetSecondaryWeaponSetUI(true);
+  resetSecondaryWeaponSetUI();
   document.getElementById('defense')?.replaceChildren(document.createTextNode(pickedDefense?.name || ''));
   document.getElementById('defstrat')?.replaceChildren(document.createTextNode(pickedDefStrat?.name || ''));
 
@@ -943,10 +1028,6 @@ function rollBuild(dataWrap){
     tacticSet.filter(Boolean).map(t => t.name),
     cOaths
   );
-
-  updateAilmentOverlay(ailmentSet.filter(Boolean));
-
-
 
   // Balance aggregation
 	const add=(a,b)=>({strength:(a.strength||0)+(b.strength||0), dexterity:(a.dexterity||0)+(b.dexterity||0), intelligence:(a.intelligence||0)+(b.intelligence||0)});
@@ -989,7 +1070,6 @@ function rollBuild(dataWrap){
   const buildFlavor = generateFlavorLine(clsName, asc, ailmentSet.filter(Boolean), tacticSet.filter(Boolean));
   document.getElementById('build-name').textContent = buildName;
   document.getElementById('build-subtext').textContent = buildFlavor;
-  const cohesionModeName = resolveCohesionMode(window.App?.state?.cohesionMode ?? currentMode);
 
   const baseSnapshot = {
     snapshotVersion: 1,
@@ -1015,8 +1095,6 @@ function rollBuild(dataWrap){
     attributes: { strength: S, dexterity: D, intelligence: I },
     rollAttr: { strength: S, dexterity: D, intelligence: I },
     defenseObj: pickedDefense || null,
-    cohesionStatus: 'ok',
-    cohesionModeName,
     recommendedSkills2: []
   };
 
@@ -1041,8 +1119,7 @@ function rollBuild(dataWrap){
           weapon2: '',
           offhand2: '',
           rollAttr: { strength: S, dexterity: D, intelligence: I },
-          tagProfile: null,
-          cohesionModeName
+          tagProfile: null
         };
 
   // Skills (weapon-limited + synergy scoring)
@@ -1051,6 +1128,7 @@ function rollBuild(dataWrap){
     window.App.mergeCurrentRoll({
       recommendedSkills: skillSnapshot.skills || [],
       recommendedPersistentBuff: skillSnapshot.persistentBuff || null,
+      synergySupports: skillSnapshot.synergySupports || [],
       tagProfile: skillSnapshot.tagProfile || window.CURRENT_ROLL.tagProfile || null
     });
   }
@@ -1077,28 +1155,17 @@ function rollBuild(dataWrap){
 
   // Uniques: trigger the synergy engine directly using the current roll snapshot
   try {
-    const locks = getLockState();
-    const current = window.App?.state?.currentRoll || window.CURRENT_ROLL || {};
+	  if (typeof window.RandomancerRefreshUniques === 'function') {
+		window.RandomancerRefreshUniques(window.CURRENT_ROLL);
+	  }
+	} catch (e) {
+	  console.warn('[Randomancer] uniques refresh failed', e);
+	}
 
-    if (!locks.uniques) {
-      if (typeof window.RandomancerRefreshUniques === 'function') {
-        window.RandomancerRefreshUniques(window.CURRENT_ROLL);
-      }
-    } else {
-      ensureUniqueSection();
-      if (Array.isArray(current.recommendedUniques) && current.recommendedUniques.length && typeof window.RandomancerRenderUniquesFromNames === 'function') {
-        window.RandomancerRenderUniquesFromNames(current.recommendedUniques);
-      }
-    }
-  } catch (e) {
-    console.warn('[Randomancer] uniques refresh failed', e);
-  }
 
   // Reveal build output panels now that we have a roll
   const appEl = document.getElementById('app');
   if (appEl) appEl.dataset.hasRoll = 'true';
-
-  syncLockUIFromState();
 
   // Ensure Summary view stays in sync with the latest roll snapshot (covers App.roll capture-phase funnel).
   try {
@@ -1132,13 +1199,33 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       try {
+        if (typeof window.RandomancerHandleRollOverride === 'function') {
+          const handled = await window.RandomancerHandleRollOverride({ rollBtn, statusEl });
+          if (handled) return;
+        }
+
         const data = await ensureDataPreload();
+        if (typeof window.RandomancerPrepareBuildRoll === 'function') {
+          window.RandomancerPrepareBuildRoll();
+        }
         rollBuild(data);
+        if (typeof window.RandomancerAfterBuildRoll === "function") {
+          window.RandomancerAfterBuildRoll();
+        }
         
         const ws2Toggle = document.getElementById('weapon-set2-toggle');
 		if (ws2Toggle?.checked) {
 		  try {
-			await handleSecondaryWeaponSetSelection();
+			await handleSecondaryWeaponSetSelection(data);
+
+            // Re-refresh uniques now that weapon2/offhand2 may be present
+            try {
+              if (typeof window.RandomancerRefreshUniques === 'function') {
+                window.RandomancerRefreshUniques(window.CURRENT_ROLL);
+              }
+            } catch (e) {
+              console.warn('[Randomancer] uniques re-refresh after ws2 failed', e);
+            }
 		  } catch (err) {
 			console.error('[secondary weapons] roll failed:', err);
 		  }
@@ -1183,15 +1270,47 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+  
+    // --- Combat mechanics count (1/2/3) dot control ---
+  const mechBtn = document.getElementById('mechanics-count-btn');
+  if (mechBtn) {
+    const STORAGE_KEY = 'randomancer_mechanics_count';
+    const dots = Array.from(mechBtn.querySelectorAll('.rm-dotstep__dot'));
 
-  const weaponSet2Btn = document.getElementById('weapon-set2-btn');
-  if (weaponSet2Btn) {
-    weaponSet2Btn.addEventListener('click', () => {
-      handleSecondaryWeaponSetSelection().catch(err => {
-        console.error('[secondary weapons] roll failed:', err);
-      });
+    const clampCount = (n) => (n === 1 || n === 2 || n === 3) ? n : 2;
+
+    const loadCount = () => {
+      try { return clampCount(Number(localStorage.getItem(STORAGE_KEY))); }
+      catch { return 2; }
+    };
+
+    let count = loadCount();
+
+    const paint = () => {
+      dots.forEach((dot, i) => dot.classList.toggle('is-on', i < count));
+      mechBtn.setAttribute('aria-label', `Combat mechanics: ${count}`);
+		mechBtn.title = `Combat Mechanics: roll ${count} ailments/tactics`;
+    };
+
+    paint();
+
+    window.getCombatMechanicsCount = () => count;
+    
+    window.setCombatMechanicsCount = function (n) {
+	  count = clampCount(Number(n));
+	  try { localStorage.setItem(STORAGE_KEY, String(count)); } catch {}
+	  paint();
+	};
+
+
+    // Cycle: 2 -> 3 -> 1 -> 2 ...
+    mechBtn.addEventListener('click', () => {
+      count = (count % 3) + 1;
+      try { localStorage.setItem(STORAGE_KEY, String(count)); } catch {}
+      paint();
     });
   }
+
 
   const skillsTabs = document.getElementById('skills-tabs');
   if (skillsTabs) {
@@ -1203,28 +1322,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-  const toggle = document.getElementById('weapon-set2-toggle');
-  if (!toggle) return;
-
-  // Reflect existing roll state (if applicable)
-  const current = window.App?.state?.currentRoll;
-  if (current?.weapon2) {
-    toggle.checked = true;
-  }
-
-  // ❌ No behavior on change
-  toggle.addEventListener('change', () => {
-    // Intentionally empty.
-    // Toggle state is read during roll.
-  });
-});
-
 
 export {
-  handleSecondaryWeaponSetSelection,
-  resetSecondaryWeaponSetUI,
   rollBuild,
-  updateAilmentOverlay,
   updateAscArt
 };

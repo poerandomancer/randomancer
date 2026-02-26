@@ -3,6 +3,13 @@
 
 /* Unique card frame */
 .unique-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+
+  /* Fixed, uniform card height (matches the skill-card sizing var) */
+  height: var(--skill-card-max);
+
   background: #12100c;
   border: 1px solid rgba(255, 200, 120, 0.45);
   border-radius: 14px;
@@ -11,6 +18,7 @@
     inset 0 0 0 1px rgba(255, 200, 140, 0.05);
   overflow: hidden;
 }
+
 
 /* Header: align with skill card title + subtitle stack */
 .unique-header{
@@ -73,12 +81,19 @@
 
 /* Lines */
 .unique-lines {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+
   padding: 10px 14px 12px;
   color: #e4d9c9;
   font-size: 0.95rem;
   font-weight: 500;
   letter-spacing: 0.01em;
 }
+
 
 .unique-line {
   margin: 2px 0;

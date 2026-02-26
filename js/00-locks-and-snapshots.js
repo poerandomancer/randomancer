@@ -20,94 +20,17 @@ import { buildBuildContext } from './06-cohesion.js';
 import { applyGemBorderFromReqWeights, grantLine, renderSupportCards } from './07-skills-render.js';
 import { ensureDataPreload } from './08-data-load.js';
 import { renderPassiveRecommendations } from './07-skills-render.js';
-import { updateAilmentOverlay, updateAscArt } from './10-roll-engine.js';
+import { updateAscArt } from './10-roll-engine.js';
 import {
   pickRecommendedAscendancyNodes,
   pickRecommendedKeystones,
   pickRecommendedNotables,
 } from '../passivesEngine.js';
-import { DEFAULT_LOCKS } from './00-locks-defaults.js';
-
-// ----- Section Locks (centralized state + UI sync) -----
-function getLockState(){
-  const appState = window.App?.state;
-  const existing = (appState && appState.locks) || window.__LOCK_STATE__ || {};
-  const merged = { ...DEFAULT_LOCKS, ...existing };
-  if (appState) {
-    appState.locks = merged;
-  } else {
-    window.__LOCK_STATE__ = merged;
-  }
-  return merged;
-}
-
-function syncLockUIFromState(){
-  const locks = getLockState();
-  document.querySelectorAll('.section-header').forEach(header => {
-    const section = header?.dataset?.section;
-    if (!section) return;
-
-    const locked = !!locks[section];
-
-    // Existing header + button state
-    header.dataset.locked = locked ? 'true' : 'false';
-    const btn = header.querySelector('.lock-toggle');
-    if (btn) {
-      btn.setAttribute('aria-pressed', locked ? 'true' : 'false');
-    }
-
-    // NEW: mark the whole section wrapper so CSS can show a stronger "locked" state
-    const container = header.closest('.sect');
-    if (container) {
-      container.dataset.locked = locked ? 'true' : 'false';
-    }
-  });
-}
-
-if (typeof window !== 'undefined') {
-  window.syncLockUIFromState = syncLockUIFromState;
-}
-
-
-function wireLockButton(btn){
-  if (!btn || btn.__lockInit) return;
-  btn.__lockInit = true;
-  btn.addEventListener('click', (e) => {
-    const header = e.currentTarget.closest('.section-header');
-    if (!header) return;
-    const section = header.dataset.section;
-    if (!section) return;
-
-    const locks = getLockState();
-    const nowLocked = header.dataset.locked !== 'true';
-    locks[section] = nowLocked;
-
-    // Existing header + button state
-    header.dataset.locked = nowLocked ? 'true' : 'false';
-    e.currentTarget.setAttribute('aria-pressed', nowLocked ? 'true' : 'false');
-
-    // NEW: toggle the flag on the section wrapper for the overlay
-    const container = header.closest('.sect');
-    if (container) {
-      container.dataset.locked = nowLocked ? 'true' : 'false';
-    }
-
-    // Keep the Build Code in sync (now includes locks + passives)
-    if (typeof window.RandomancerUpdateBuildCodeUI === 'function') {
-      window.RandomancerUpdateBuildCodeUI();
-    }
-  });
-}
-
-
-function initSectionLocks(){
-  document.querySelectorAll('.section-header .lock-toggle').forEach(wireLockButton);
-  syncLockUIFromState();
-}
 
 /* === Build Codes + Saved Builds (v0.9 preview) === */
 (function(){
   const STORAGE_KEY = 'randomancer_saved_builds_v1';
+  const CHALLENGE_STORAGE_KEY = 'randomancer_saved_challenges_v1';
   const MAX_SAVED = 10;
 
   const safeBtoa = (str) => {
@@ -118,15 +41,21 @@ function initSectionLocks(){
   };
 
   const currentSnap = () => (window.App?.state?.currentRoll) ? window.App.state.currentRoll : null;
+  const currentChallenge = () => (window.CURRENT_CHALLENGE_CONTRACT && typeof window.CURRENT_CHALLENGE_CONTRACT === 'object') ? window.CURRENT_CHALLENGE_CONTRACT : null;
   const savedOverlay = document.getElementById('saved-overlay');
   const savedCloseBtn = document.getElementById('saved-close');
   const savedFab = document.getElementById('saved-fab');
   let lastSavedFocus = null;
 
+  const isChallengeMode = () => {
+    const toggle = document.getElementById('randomancer-mode-toggle');
+    if (toggle) return !!toggle.checked;
+    try { return localStorage.getItem('randomancer_mode') === 'challenge'; } catch { return false; }
+  };
+
   function encodeSnapshot(snap){
     if (!snap || typeof snap !== 'object') return '';
     
-    // TODO: include section lock state in saved snapshots once we support persisting locks
     const compact = {
       v: snap.snapshotVersion || 1,
       c: snap.className || '',
@@ -144,12 +73,14 @@ function initSectionLocks(){
       attr: snap.attributes || { strength:0, dexterity:0, intelligence:0 },
       rs: Array.isArray(snap.recommendedSkills) ? snap.recommendedSkills : [],
       rs2: Array.isArray(snap.recommendedSkills2) ? snap.recommendedSkills2 : [],
+      ss: Array.isArray(snap.synergySupports) ? snap.synergySupports : [],
+      ss2: Array.isArray(snap.synergySupports2) ? snap.synergySupports2 : [],
       pb: snap.recommendedPersistentBuff || null,
       u: Array.isArray(snap.recommendedUniques)
         ? snap.recommendedUniques.map(u => (typeof u === 'string' ? u : (u && typeof u === 'object' ? u.name : null))).filter(Boolean)
         : [],
 
-      // passives (packed) + section locks so rehydrated builds preserve these panels
+      // passives (packed) so rehydrated builds preserve these panels
       p: (() => {
         const pass = snap.passives;
         if (!pass || typeof pass !== 'object') return null;
@@ -172,7 +103,8 @@ function initSectionLocks(){
           k: packList(pass.keystones, 2),
           n: packList(pass.notables, 8)
         };
-      })(),
+      })()
+
     };
 
     return safeBtoa(JSON.stringify(compact));
@@ -203,6 +135,8 @@ function initSectionLocks(){
         attributes: raw.attr || { strength:0, dexterity:0, intelligence:0 },
         recommendedSkills: raw.rs || [],
         recommendedSkills2: raw.rs2 || [],
+        synergySupports: raw.ss || [],
+        synergySupports2: raw.ss2 || [],
         recommendedPersistentBuff: raw.pb || null,
         recommendedUniques: raw.u || [],
 
@@ -231,14 +165,78 @@ function initSectionLocks(){
     }
   }
 
-  function setElText(sel, txt){ const el = document.querySelector(sel); if (el) el.textContent = txt || ''; }
-
-  function showAppShell(){
-    const intro = document.getElementById('intro');
-    if (intro) intro.remove();
-    const app = document.getElementById('app');
-    if (app) app.classList.remove('hidden');
+  function encodeChallengeContract(contract){
+    if (!contract || typeof contract !== 'object') return '';
+    const compact = {
+      v: 1,
+      title: contract.title || '',
+      subtitle: contract.subtitle || '',
+      severity: contract.severity || 'cruel',
+      taskCount: Number(contract.taskCount) || 2,
+      tasks: Array.isArray(contract.tasks)
+        ? contract.tasks.map(t => ({
+            id: t?.id || '',
+            role: t?.role || '',
+            shortLabel: t?.shortLabel || '',
+            line: t?.line || '',
+            slots: t?.slots && typeof t.slots === 'object' ? t.slots : {}
+          }))
+        : [],
+      cf: contract.challengeFates && typeof contract.challengeFates === 'object'
+        ? contract.challengeFates
+        : { anchors: { favor: [], ban: [] }, twistCategories: { favor: [], ban: [] } }
+    };
+    return safeBtoa(JSON.stringify(compact));
   }
+
+  function decodeChallengeContract(code){
+    if (!code) return null;
+    const json = safeAtob(code);
+    if (!json) return null;
+    try {
+      const raw = JSON.parse(json);
+      if (!raw || typeof raw !== 'object') return null;
+      return {
+        mode: 'challenge',
+        title: raw.title || '',
+        subtitle: raw.subtitle || '',
+        severity: raw.severity || 'cruel',
+        taskCount: Number(raw.taskCount) || 2,
+        tasks: Array.isArray(raw.tasks) ? raw.tasks : [],
+        challengeFates: raw.cf && typeof raw.cf === 'object'
+          ? raw.cf
+          : { anchors: { favor: [], ban: [] }, twistCategories: { favor: [], ban: [] } }
+      };
+    } catch {
+      return null;
+    }
+  }
+
+  async function applyChallengeCode(code){
+    const contract = decodeChallengeContract(code);
+    if (!contract) return false;
+    if (typeof window.RandomancerSetMode === 'function') {
+      window.RandomancerSetMode('challenge');
+    }
+    const render = () => {
+      if (typeof window.RandomancerRenderChallengeContract === 'function') {
+        window.RandomancerRenderChallengeContract(contract);
+        return true;
+      }
+      return false;
+    };
+    if (render()) return true;
+    await new Promise(r => setTimeout(r, 40));
+    return render();
+  }
+
+  function challengeSummaryText(contract){
+    if (!contract) return '';
+    const lines = (contract.tasks || []).map(t => `• ${t.line || ''}`.trim()).filter(Boolean);
+    return [contract.title || 'Challenge Contract', contract.subtitle || '', ...lines].filter(Boolean).join('\n');
+  }
+
+  function setElText(sel, txt){ const el = document.querySelector(sel); if (el) el.textContent = txt || ''; }
 
   function renderAttributesFromSnapshot(attr){
     if (!attr) return;
@@ -269,8 +267,16 @@ function initSectionLocks(){
       const card = document.createElement('div');
       card.className = 'skill-card';
 
-      const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
-        ? `<div class="skill-subtitle">${g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')}</div>`
+      const requiresText = (g?.weapon_requirements?.display)
+        ? String(g.weapon_requirements.display)
+        : (typeof g.req_text === 'string' && g.req_text)
+          ? g.req_text
+          : (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
+            ? g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')
+            : '';
+
+      const requiresSubtitle = requiresText
+        ? `<div class="skill-subtitle">${requiresText}</div>`
         : '';
 
       const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
@@ -297,7 +303,25 @@ function initSectionLocks(){
     });
   }
 
-  function renderSkillsFromSnapshot(snap){
+  
+
+  function renderSynergySupportsFromSnapshot(supportEntries, grid, gemDict){
+    if (!grid) return;
+    const ids = Array.isArray(supportEntries) ? supportEntries.filter(Boolean) : [];
+    if (!ids.length) return;
+
+    const card = document.createElement('div');
+    card.className = 'skill-card wide';
+    card.id = (grid.id === 'skills-grid-2') ? 'synergy-supports-section-2' : 'synergy-supports-section';
+    card.innerHTML = `
+      <div class="skill-title">Synergy Supports</div>
+      <div class="skill-subtitle">Supports that reinforce multiple rolled mechanics.</div>
+      <div class="supports">${renderSupportCards(ids, gemDict)}</div>
+    `;
+    grid.appendChild(card);
+  }
+
+function renderSkillsFromSnapshot(snap){
     const grid = document.getElementById('skills-grid');
     const grid2 = document.getElementById('skills-grid-2');
     if (!grid) return;
@@ -306,8 +330,10 @@ function initSectionLocks(){
     const gemDict = buildGemDictionary(gems);
 
     renderSkillCardsFromSnapshot(snap.recommendedSkills || [], grid, gemDict);
+    renderSynergySupportsFromSnapshot(snap.synergySupports || [], grid, gemDict);
     if (grid2) {
       renderSkillCardsFromSnapshot(snap.recommendedSkills2 || [], grid2, gemDict);
+      renderSynergySupportsFromSnapshot(snap.synergySupports2 || [], grid2, gemDict);
     }
 
     if (snap.recommendedPersistentBuff) {
@@ -347,9 +373,17 @@ function initSectionLocks(){
     const grid = wrap.querySelector('#persistent-buff-grid');
     if (!grid) return;
 
-    const requiresSubtitle = (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
-      ? `<div class="skill-subtitle">${g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')}</div>`
-      : '';
+    const requiresText = (g?.weapon_requirements?.display)
+        ? String(g.weapon_requirements.display)
+        : (typeof g.req_text === 'string' && g.req_text)
+          ? g.req_text
+          : (Array.isArray(g.required_weapon_types) && g.required_weapon_types.length)
+            ? g.required_weapon_types.map(x => x[0].toUpperCase() + x.slice(1)).join(', ')
+            : '';
+
+      const requiresSubtitle = requiresText
+        ? `<div class="skill-subtitle">${requiresText}</div>`
+        : '';
     const allTags = Array.isArray(g.tags) ? g.tags.slice() : [];
     const br = Array.isArray(g.bracket_tags) ? g.bracket_tags : [];
     const rest = allTags.filter(t => !br.includes(t));
@@ -387,20 +421,11 @@ function renderSnapshotToDom(snap){
       weapons2El.hidden = !weapons2Txt;
     }
     const hasSet2 = hasSecondaryWeaponSet(snap);
-    // ✅ Sync Weapon Set II toggle state from the loaded/active snapshot
-	const ws2Toggle = document.getElementById('weapon-set2-toggle');
-	if (ws2Toggle) {
-	  ws2Toggle.checked = hasSet2;
-	}
 
     setElText('#defense', snap.defense || '');
     setElText('#defstrat', snap.defStrat || '');
     setElText('#ailments', Array.isArray(snap.ailmentList) ? snap.ailmentList.join(' & ') : (snap.ailments || ''));
     setElText('#tactics', Array.isArray(snap.tacticList) ? snap.tacticList.join(' & ') : (snap.tactics || ''));
-    const ailments = Array.isArray(snap.ailmentList)
-      ? snap.ailmentList
-      : (snap.ailments ? snap.ailments.split(/\s*&\s*/).filter(Boolean) : []);
-    updateAilmentOverlay(ailments);
     setElText('#build-name', snap.buildName || '');
     setElText('#build-subtext', snap.flavor || '');
     // Keep the Summary view in sync on every roll (and do this early so it still updates even if later renderers fail).
@@ -440,7 +465,6 @@ function renderSnapshotToDom(snap){
   if (!snap) return false;
 
   const dataWrap = await ensureDataPreload();
-  showAppShell();
 
   // Back-compat: older build codes didn't store passives; rebuild them from the snapshot context.
   if (!snap.passives) {
@@ -481,8 +505,16 @@ function renderSnapshotToDom(snap){
       return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
     } catch { return []; }
   }
+  function loadSavedChallenges(){
+    try {
+      return JSON.parse(localStorage.getItem(CHALLENGE_STORAGE_KEY) || '[]');
+    } catch { return []; }
+  }
   function persistSaved(list){
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list.slice(0, MAX_SAVED))); } catch {}
+  }
+  function persistSavedChallenges(list){
+    try { localStorage.setItem(CHALLENGE_STORAGE_KEY, JSON.stringify(list.slice(0, MAX_SAVED))); } catch {}
   }
 
   function syncSaveButtonState(code){
@@ -512,6 +544,7 @@ function renderSnapshotToDom(snap){
 
   function openSavedOverlay(){
     if (!savedOverlay) return;
+    updateSavedLabels();
     renderSavedList();
     lastSavedFocus = document.activeElement;
     savedOverlay.hidden = false;
@@ -525,14 +558,15 @@ function renderSnapshotToDom(snap){
   }
 
   function renderSavedList(){
-    const list = loadSaved();
+    const challengeMode = isChallengeMode();
+    const list = challengeMode ? loadSavedChallenges() : loadSaved();
     const wrap = document.getElementById('saved-builds-list');
     if (!wrap) return;
     wrap.innerHTML = '';
     if (!list.length) {
       const empty = document.createElement('div');
       empty.className = 'saved-empty';
-      empty.textContent = 'No saved builds yet.';
+      empty.textContent = challengeMode ? 'No saved challenges yet.' : 'No saved builds yet.';
       wrap.appendChild(empty);
       return;
     }
@@ -540,13 +574,32 @@ function renderSnapshotToDom(snap){
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'saved-item';
-      btn.innerHTML = `<span class="name">${entry.name || 'Saved Build'}</span><span class="meta">${entry.meta || ''}</span>`;
+      btn.innerHTML = `<span class="name">${entry.name || (challengeMode ? 'Saved Challenge' : 'Saved Build')}</span><span class="meta">${entry.meta || ''}</span>`;
       btn.addEventListener('click', async () => {
-        const ok = await applyBuildCode(entry.code);
+        const ok = challengeMode
+          ? await applyChallengeCode(entry.code)
+          : await applyBuildCode(entry.code);
         if (ok) closeSavedOverlay();
       });
       wrap.appendChild(btn);
     });
+  }
+
+  function updateSavedLabels(){
+    const challengeMode = isChallengeMode();
+    const savedTitle = document.getElementById('saved-title');
+    const savedSubtitle = document.querySelector('.saved-subtitle');
+    const savedFabEl = document.getElementById('saved-fab');
+    const menuSavedLabel = document.querySelector('.header-menu-item[data-action="saved"] .header-menu-label');
+
+    const noun = challengeMode ? 'Challenges' : 'Builds';
+    if (savedTitle) savedTitle.textContent = `Saved ${noun}`;
+    if (savedSubtitle) savedSubtitle.textContent = `Preserves your last 10 Saved ${noun}`;
+    if (savedFabEl) {
+      savedFabEl.setAttribute('aria-label', `View Saved ${noun}`);
+      savedFabEl.setAttribute('title', `View Saved ${noun}`);
+    }
+    if (menuSavedLabel) menuSavedLabel.textContent = `Saved ${noun}`;
   }
 
   function saveCurrentBuild(){
@@ -573,6 +626,46 @@ function renderSnapshotToDom(snap){
     renderSavedList();
     updateCodeUI(code);
     syncSaveButtonState(code);
+  }
+
+  function saveCurrentChallenge(){
+    const contract = currentChallenge();
+    if (!contract) return;
+    const code = encodeChallengeContract(contract);
+    if (!code) return;
+
+    const list = loadSavedChallenges();
+    const existingIndex = list.findIndex(e => e.code === code);
+    if (existingIndex >= 0) {
+      list.splice(existingIndex, 1);
+      persistSavedChallenges(list);
+    } else {
+      const entry = {
+        code,
+        name: contract.title || 'Challenge Contract',
+        meta: [contract.severity, contract.subtitle].filter(Boolean).join(' • ')
+      };
+      const existing = list.filter(e => e.code !== code);
+      existing.unshift(entry);
+      persistSavedChallenges(existing);
+    }
+    renderSavedList();
+    syncChallengeSaveButtonState(code);
+  }
+
+  function syncChallengeSaveButtonState(code){
+    const btn = document.getElementById('challenge-actions-save');
+    if (!btn) return;
+
+    const ico = btn.querySelector('.copy-menu-ico');
+    const label = btn.querySelector('.copy-menu-label');
+    const list = loadSavedChallenges();
+    const activeCode = code || (() => { const c = currentChallenge(); return encodeChallengeContract(c); })();
+    const saved = !!(activeCode && list.some(e => e.code === activeCode));
+
+    if (ico) ico.textContent = saved ? '★' : '☆';
+    if (label) label.textContent = saved ? 'Challenge Saved' : 'Save Challenge';
+    btn.classList.toggle('is-saved', saved);
   }
   
   function normalizeHandedWeaponLabel(label) {
@@ -659,6 +752,12 @@ function renderSnapshotToDom(snap){
 	const actionCopySummary = document.getElementById('build-actions-copy-summary');
 	const actionCopyLink = document.getElementById('build-actions-copy-link');
 	const actionPoe = document.getElementById('build-actions-poe-ninja');
+	const challengeActionsWrap = document.getElementById('challenge-actions-wrap');
+	const challengeActionsBtn = document.getElementById('challenge-actions-btn');
+	const challengeActionsMenu = document.getElementById('challenge-actions-menu');
+	const challengeActionSave = document.getElementById('challenge-actions-save');
+	const challengeActionCopySummary = document.getElementById('challenge-actions-copy-summary');
+	const challengeActionCopyLink = document.getElementById('challenge-actions-copy-link');
 	
 	const closeActionsMenu = () => {
 	  if (!actionsMenu || !actionsBtn) return;
@@ -677,6 +776,22 @@ function renderSnapshotToDom(snap){
 	  if (actionsMenu.hidden) openActionsMenu();
 	  else closeActionsMenu();
 	};
+
+	const closeChallengeActionsMenu = () => {
+	  if (!challengeActionsMenu || !challengeActionsBtn) return;
+	  challengeActionsMenu.hidden = true;
+	  challengeActionsBtn.setAttribute('aria-expanded', 'false');
+	};
+
+	const toggleChallengeActionsMenu = () => {
+	  if (!challengeActionsMenu || !challengeActionsBtn) return;
+	  if (challengeActionsMenu.hidden) {
+	    challengeActionsMenu.hidden = false;
+	    challengeActionsBtn.setAttribute('aria-expanded', 'true');
+	  } else {
+	    closeChallengeActionsMenu();
+	  }
+	};
 	
 	const safeCopy = (text) => {
 	  if (!text) return;
@@ -692,11 +807,25 @@ function renderSnapshotToDom(snap){
 	  url.searchParams.set('build', code);
 	  return url.toString();
 	};
+
+	const challengeShareUrl = (contract) => {
+	  const code = encodeChallengeContract(contract);
+	  if (!code) return '';
+	  const url = new URL(location.href);
+	  url.searchParams.set('challenge', code);
+	  return url.toString();
+	};
 	
 	actionsBtn?.addEventListener('click', (e) => {
 	  e.preventDefault();
 	  e.stopPropagation();
 	  toggleActionsMenu();
+	});
+
+	challengeActionsBtn?.addEventListener('click', (e) => {
+	  e.preventDefault();
+	  e.stopPropagation();
+	  toggleChallengeActionsMenu();
 	});
 	
 	// Save Build (toggles saved/unsaved) — no immediate UI mutation beyond save logic
@@ -750,6 +879,25 @@ function renderSnapshotToDom(snap){
 		closeActionsMenu();
 	  });
 	}
+
+	challengeActionSave?.addEventListener('click', () => {
+	  saveCurrentChallenge();
+	});
+
+	challengeActionCopySummary?.addEventListener('click', async () => {
+	  const contract = currentChallenge();
+	  const ok = await copyTextToClipboard(challengeSummaryText(contract));
+	  showToast(ok ? 'Challenge Summary copied to clipboard!' : 'Could not copy Challenge Summary.');
+	  syncChallengeSaveButtonState();
+	});
+
+	challengeActionCopyLink?.addEventListener('click', async () => {
+	  const contract = currentChallenge();
+	  const url = challengeShareUrl(contract);
+	  const ok = await copyTextToClipboard(url);
+	  showToast(ok ? 'Challenge URL copied to clipboard!' : 'Could not copy Challenge URL.');
+	  syncChallengeSaveButtonState();
+	});
 	
 	document.addEventListener('click', (e) => {
 	  if (!actionsMenu || actionsMenu.hidden) return;
@@ -757,9 +905,19 @@ function renderSnapshotToDom(snap){
 	  if (actionsWrap && t instanceof Node && actionsWrap.contains(t)) return;
 	  closeActionsMenu();
 	});
+
+	document.addEventListener('click', (e) => {
+	  if (!challengeActionsMenu || challengeActionsMenu.hidden) return;
+	  const t = e.target;
+	  if (challengeActionsWrap && t instanceof Node && challengeActionsWrap.contains(t)) return;
+	  closeChallengeActionsMenu();
+	});
 	
 	document.addEventListener('keydown', (e) => {
-	  if (e.key === 'Escape') closeActionsMenu();
+	  if (e.key === 'Escape') {
+	    closeActionsMenu();
+	    closeChallengeActionsMenu();
+	  }
 	});
 
     const savedListFab = savedFab;
@@ -785,6 +943,17 @@ function renderSnapshotToDom(snap){
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && savedOverlay && !savedOverlay.hidden) closeSavedOverlay();
     });
+
+    document.addEventListener('randomancer:mode-change', () => {
+      updateSavedLabels();
+      if (savedOverlay && !savedOverlay.hidden) renderSavedList();
+    });
+
+    document.addEventListener('randomancer:challenge-rendered', () => {
+      syncChallengeSaveButtonState();
+    });
+
+    updateSavedLabels();
   }
   
   let __toastTimer = null;
@@ -834,8 +1003,53 @@ function renderSnapshotToDom(snap){
 	}
 
 
+
+
+  function cloneJsonSafe(value){
+    if (!value || typeof value !== 'object') return null;
+    try {
+      if (typeof structuredClone === 'function') return structuredClone(value);
+    } catch {}
+    try { return JSON.parse(JSON.stringify(value)); } catch { return null; }
+  }
+
+  function clearBuildResultsToEmpty(){
+    const appEl = document.getElementById('app');
+    if (appEl) appEl.dataset.hasRoll = 'false';
+    const ascArt = document.getElementById('asc-art');
+    if (ascArt) {
+      ascArt.classList.remove('show');
+      ascArt.style.removeProperty('--asc-img');
+      delete ascArt.dataset.ascPath;
+    }
+    const ids = [
+      'class','ascendancy','weapons','weapons-set2','defense','defstrat','ailments','tactics','build-name','build-subtext',
+      'summary-line-1','summary-line-2','summary-line-3','summary-line-4','summary-line-5','balance-bar','balance-text'
+    ];
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (id === 'balance-bar') {
+        el.style.removeProperty('width');
+      } else {
+        el.textContent = '';
+      }
+    });
+    const ws2 = document.getElementById('weapons-set2');
+    if (ws2) ws2.hidden = true;
+    const summary = document.getElementById('summary-panel');
+    if (summary) summary.hidden = true;
+    if (window.App?.state) window.App.state.currentRoll = null;
+    window.CURRENT_ROLL = null;
+  }
+
   function autoLoadFromQuery(){
     const q = getQueryParams();
+    const challengeCode = q.get('challenge') || q.get('challengeCode');
+    if (challengeCode) {
+      applyChallengeCode(challengeCode);
+      return;
+    }
     const code = q.get('build') || q.get('buildCode');
     if (code) applyBuildCode(code);
   }
@@ -877,11 +1091,20 @@ function renderSnapshotToDom(snap){
     renderSavedList();
     subscribeToRolls();
     syncSaveButtonState();
+    syncChallengeSaveButtonState();
     autoLoadFromQuery();
   });
 
   window.RandomancerEncodeSnapshot = encodeSnapshot;
   window.RandomancerApplyBuildCode = applyBuildCode;
+  window.RandomancerGetCurrentBuildSnapshot = () => cloneJsonSafe(currentSnap());
+  window.RandomancerRenderBuildSnapshot = (snap) => {
+    if (!snap || typeof snap !== 'object') return false;
+    if (window.App?.mergeCurrentRoll) window.App.mergeCurrentRoll({ ...snap });
+    renderSnapshotToDom(snap);
+    return true;
+  };
+  window.RandomancerClearBuildResults = clearBuildResultsToEmpty;
   window.RandomancerUpdateBuildCodeUI = () => {
     const snap = currentSnap();
     const code = encodeSnapshot(snap);
@@ -889,5 +1112,3 @@ function renderSnapshotToDom(snap){
     return code;
   };
 })();
-
-export { DEFAULT_LOCKS, getLockState, initSectionLocks, syncLockUIFromState };

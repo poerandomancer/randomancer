@@ -103,10 +103,6 @@ import { buildTagIDF } from './05-tags-and-scorer.js';
 		    weapons2El.textContent = weapons2Txt;
 		    weapons2El.hidden = !weapons2Txt;
 		  }
-		  const set2Btn = document.querySelector('#weapon-set2-btn');
-		  if (set2Btn) {
-		    set2Btn.hidden = !!(s.weapon2 || s.offhand2) || !s.weapon;
-		  }
 		  setSkillsTabsAvailability(!!(s.weapon2 || s.offhand2));
 			  try { renderSummaryFromSnapshot(s); } catch (e) {}
 		}catch(e){ /*no-op*/ }
@@ -138,7 +134,7 @@ import { buildTagIDF } from './05-tags-and-scorer.js';
     // Patch App.roll to include optional pre‑gate
     const prevRoll = App.roll || function(mode){
       if (typeof window.rollBuild === 'function'){
-        try{ window.rollBuild(App.state?.cohesionMode ?? (mode||1)); }catch(e){}
+        try{ window.rollBuild(App.state?.DATA || window.DATA); }catch(e){}
       } else {
         const btn = document.querySelector('#roll'); if (btn) btn.click();
       }
@@ -153,7 +149,7 @@ import { buildTagIDF } from './05-tags-and-scorer.js';
           attempts++;
           // trigger a roll via legacy path
           if (typeof window.rollBuild === 'function'){
-            try{ window.rollBuild(App.state?.cohesionMode ?? (mode||1)); }catch(e){}
+            try{ window.rollBuild(App.state?.DATA || window.DATA); }catch(e){}
           } else {
             const btn = document.querySelector('#roll'); if (btn) btn.click();
           }
@@ -186,31 +182,6 @@ import { buildTagIDF } from './05-tags-and-scorer.js';
       
       return true;
     };
-
-    // Funnel the Roll button to App.roll (capture phase) so every roll uses the unified pipeline
-	document.addEventListener('DOMContentLoaded', () => {
-	  const btn = document.querySelector('#roll');
-	  if (btn && !btn.__appRollHooked){
-		btn.__appRollHooked = true;
-		btn.addEventListener('click', (e) => {
-		  e.stopImmediatePropagation();
-		  e.preventDefault();
-		  try {
-			// Prefer the unified App.roll entrypoint
-			if (window.App && typeof window.App.roll === 'function') {
-			  window.App.roll();
-			} else if (typeof window.rollBuild === 'function') {
-			  // Fallback: legacy behavior if App.roll isn't ready for some reason
-			  window.rollBuild();
-			}
-		  } catch (err) {
-			console.warn('[App.roll hook] click handler error', err);
-		  }
-		}, true);
-		console.log('[App.roll] capture-phase funnel active');
-	  }
-	});
-
   });
 })();
 
