@@ -1192,16 +1192,30 @@ document.addEventListener('DOMContentLoaded', () => {
   if (rollBtn) {
     const statusEl = rollBtn.querySelector('.roll-status');
     rollBtn.addEventListener('click', async () => {
+      if (window.RandomancerRevealController?.isRevealing?.()) {
+        window.RandomancerRevealController.skipReveal();
+        return;
+      }
+
       // Tiny loading hint if data is still warming up
       rollBtn.classList.add('is-loading');
       if (statusEl && !dataReady) {
         statusEl.textContent = 'Preparing the fates…';
       }
 
+      let revealMode = 'build';
       try {
         if (typeof window.RandomancerHandleRollOverride === 'function') {
           const handled = await window.RandomancerHandleRollOverride({ rollBtn, statusEl });
-          if (handled) return;
+          if (handled) {
+            revealMode = (typeof window.RandomancerGetMode === 'function' && window.RandomancerGetMode() === 'challenge') ? 'challenge' : 'build';
+          } else {
+            revealMode = 'build';
+          }
+          if (handled) {
+            await window.RandomancerRevealController?.startReveal?.({ triggerEl: rollBtn, mode: revealMode });
+            return;
+          }
         }
 
         const data = await ensureDataPreload();
@@ -1254,6 +1268,8 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch {}
           }, 0);
         } catch {}
+
+        await window.RandomancerRevealController?.startReveal?.({ triggerEl: rollBtn, mode: revealMode });
       } catch (err) {
         console.error('[Randomancer] roll failed:', err);
         if (statusEl) {

@@ -194,7 +194,8 @@
         Click <strong>Roll Your Fate</strong> to begin.
       </div>
 
-      <div class="roll-sticky">
+      <div class="action-bar" id="actionBar">
+        <div class="roll-sticky">
         <button id="roll" class="roll-btn roll-btn">
           <img src="images/dice.png" alt="The Randomancer – Path of Exile 2 build randomizer thrice dice icon" class="btn-ico">
           <span class="roll-text">Roll Your Fate</span>
@@ -207,6 +208,7 @@
             <path d="M20.5 4.5v3.75h-3.75" />
           </svg>
         </button>
+      </div>
       </div>
 
       <div class="controls-rail mode-switch-under-roll">
@@ -305,6 +307,7 @@
 
 
 
+      <div id="buildTop" aria-hidden="true"></div>
       <div id="build-roll-banner" class="build-roll-banner" aria-live="polite">
         <div class="build-panel-tabs view-mode-tabs">
 				<div class="skills-tab is-active" data-view="detailed">Detailed</div>
@@ -318,7 +321,7 @@
         </p>
       </section>
 
-      <section id="challenge-panel" class="panel is-hidden" aria-label="Challenge Contract">
+      <section id="challenge-panel" class="panel is-hidden" aria-label="Challenge Contract" data-reveal="challenge">
         <div class="panel-actions">
           <div class="copy-menu" id="challenge-actions-wrap">
             <button id="challenge-actions-btn" class="icon-btn" type="button" aria-label="Challenge actions" title="Challenge actions" aria-haspopup="menu" aria-expanded="false">
@@ -344,7 +347,7 @@
           </div>
         </div>
         <div id="challenge-contract-output" class="challenge-contract-output" aria-live="polite">
-          <div class="build-title-block">
+          <div class="build-title-block" data-reveal="title">
             <h3 id="challenge-contract-title" class="build-name"></h3>
             <p id="challenge-contract-subtitle" class="build-subtext"></p>
           </div>
@@ -383,7 +386,7 @@
 			  </div>
 			</div>
         </div>
-        <div class="build-title-block">
+        <div class="build-title-block" data-reveal="title">
 			<div id="build-name" class="build-name"></div>
 			<div id="build-subtext" class="build-subtext"></div>
 		</div>
@@ -395,7 +398,7 @@
           <div id="summary-line-5" class="summary-row"></div>
         </div>
 
-          <div class="sect">
+          <div class="sect" data-reveal="archetype">
           <div class="sect-head section-header">
             <div class="section-title-row">
               <h3 class="section-title">Archetype</h3>
@@ -415,7 +418,7 @@
           </div>
         </div>
         <hr class="gold subtle"/>
-        <div class="sect">
+        <div class="sect" data-reveal="mechanics">
           <div class="sect-head section-header">
             <div class="section-title-row">
               <h3 class="section-title">Combat Mechanics</h3>
@@ -428,7 +431,7 @@
           </div>
         </div>
         <hr class="gold subtle"/>
-        <div class="sect">
+        <div class="sect" data-reveal="defenses">
           <div class="sect-head section-header">
             <div class="section-title-row">
               <h3 class="section-title">Survivability</h3>
@@ -450,7 +453,7 @@
         </div>
       </section>
 
-      <section id="skills-panel" class="panel panel--skills">
+      <section id="skills-panel" class="panel panel--skills" data-reveal="skills">
 		<div class="sect">
             <div class="sect-head">
               <h3 class="section-title">Recommended Skills</h3>
@@ -465,11 +468,11 @@
           </div>
       </section>
 
-      <section id="uniques-panel" class="panel panel--uniques">
+      <section id="uniques-panel" class="panel panel--uniques" data-reveal="uniques">
         <div id="uniques-mount"></div>
       </section>
 
-      <section id="passives-panel" class="panel panel--passives hidden">
+      <section id="passives-panel" class="panel panel--passives hidden" data-reveal="passives">
         <div class="panel-header">
           <h2 class="panel-title">Recommended Passives</h2>
           <p class="panel-subtitle">Ascendancy points, keystones, and notables that resonate with this build.</p>

@@ -284,3 +284,59 @@ body.challenge-mode .challenge-empty-flavor{
   margin-top: 0 !important; /* ensure resume isn’t offset either */
   align-self: center;       /* extra belt-and-suspenders */
 }
+
+:root{
+  --action-bar-offset: 0px;
+}
+
+.action-bar{
+  position: sticky;
+  top: 0;
+  z-index: 65;
+  width: min(640px, 92%);
+  margin: .6rem auto .35rem;
+  padding: .45rem .65rem;
+  border: 1px solid rgba(212,175,55,0.2);
+  border-radius: 999px;
+  background: color-mix(in srgb, rgba(14,14,18,0.9) 88%, transparent);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 20px rgba(0,0,0,.28);
+}
+
+.action-bar .roll-sticky{
+  margin-top: 0;
+}
+
+.roll-btn{
+  position: relative;
+  overflow: hidden;
+}
+
+.roll-btn-tracer{
+  position: absolute;
+  inset: -5px;
+  width: calc(100% + 10px);
+  height: calc(100% + 10px);
+  pointer-events: none;
+}
+
+.roll-btn-tracer circle{
+  fill: none;
+  stroke: rgba(232,198,120,.95);
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 4px rgba(212,175,55,.45));
+  stroke-dasharray: var(--ring-length, 360);
+  stroke-dashoffset: var(--ring-length, 360);
+  animation: tracerRing 720ms cubic-bezier(.25,.62,.3,1) forwards;
+}
+
+@keyframes tracerRing{
+  to { stroke-dashoffset: 0; opacity: 0.25; }
+}
+
+@media (max-width: 960px) {
+  .roll-sticky { position: static; bottom: auto; z-index: auto; pointer-events: auto; }
+  .roll-sticky .roll-btn,
+  .roll-sticky .resume-roll-btn { pointer-events:auto; }
+}

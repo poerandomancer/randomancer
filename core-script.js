@@ -39,6 +39,7 @@ import './js/06-cohesion.js';
 import './js/07-skills-render.js';
 import './js/08-data-load.js';
 import './js/09-bind-fates-ui.js';
+import './js/18-reveal-controller.js';
 import './js/10-roll-engine.js';
 import './js/11-pre-gate-and-sync.js';
 import './js/12-uniques-engine.js';
