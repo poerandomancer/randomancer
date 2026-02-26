@@ -181,7 +181,10 @@ import {
             line: t?.line || '',
             slots: t?.slots && typeof t.slots === 'object' ? t.slots : {}
           }))
-        : []
+        : [],
+      cf: contract.challengeFates && typeof contract.challengeFates === 'object'
+        ? contract.challengeFates
+        : { anchors: { favor: [], ban: [] }, twistCategories: { favor: [], ban: [] } }
     };
     return safeBtoa(JSON.stringify(compact));
   }
@@ -199,7 +202,10 @@ import {
         subtitle: raw.subtitle || '',
         severity: raw.severity || 'cruel',
         taskCount: Number(raw.taskCount) || 2,
-        tasks: Array.isArray(raw.tasks) ? raw.tasks : []
+        tasks: Array.isArray(raw.tasks) ? raw.tasks : [],
+        challengeFates: raw.cf && typeof raw.cf === 'object'
+          ? raw.cf
+          : { anchors: { favor: [], ban: [] }, twistCategories: { favor: [], ban: [] } }
       };
     } catch {
       return null;

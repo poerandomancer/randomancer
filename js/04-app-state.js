@@ -53,6 +53,12 @@ const App = window.App = (() => {
       combat:     { oaths: [], abominations: [] }
     },
 
+    // Challenge-mode equivalent of Bind the Fates.
+    challengeFates: {
+      anchors: { favor: [], ban: [] },
+      twistCategories: { favor: [], ban: [] }
+    },
+
     // dev toggle for “single-entry” behavior
     singleEntryMode: true
   };
@@ -103,6 +109,25 @@ const App = window.App = (() => {
       oaths: safe(next?.oaths),
       abominations: safe(next?.abominations)
     };
+  }
+
+  function getChallengeFates(){
+    return state.challengeFates;
+  }
+
+  function setChallengeFatesCategory(category, next){
+    if (!state.challengeFates[category]) return;
+    const safe = (arr) => Array.from(new Set((arr || []).filter(Boolean)));
+    state.challengeFates[category] = {
+      favor: safe(next?.favor),
+      ban: safe(next?.ban)
+    };
+  }
+
+  function setChallengeFates(next){
+    const src = next && typeof next === 'object' ? next : {};
+    setChallengeFatesCategory('anchors', src.anchors);
+    setChallengeFatesCategory('twistCategories', src.twistCategories);
   }
 
 
@@ -202,7 +227,21 @@ const App = window.App = (() => {
     }
   }
 
-  return { state, bootstrap, setCohesion, legacyInit, roll, captureCurrentRollFromDOM, mergeCurrentRoll, getBindFates, setBindFatesCategory, modules: { Config, RulesEngine } };
+  return {
+    state,
+    bootstrap,
+    setCohesion,
+    legacyInit,
+    roll,
+    captureCurrentRollFromDOM,
+    mergeCurrentRoll,
+    getBindFates,
+    setBindFatesCategory,
+    getChallengeFates,
+    setChallengeFatesCategory,
+    setChallengeFates,
+    modules: { Config, RulesEngine }
+  };
 })();
 
 function getBindFatesFromApp(){
