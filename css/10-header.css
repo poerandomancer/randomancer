@@ -32,24 +32,29 @@ header{
 }
 
 .header-details-toggle{
-  border:1px solid rgba(200,168,107,.32);
-  background:rgba(12,12,14,.66);
+  border:0;
+  background:transparent;
   color:var(--muted);
-  width:1.35rem;
-  height:1.35rem;
-  border-radius:999px;
   display:inline-flex;
   align-items:center;
   justify-content:center;
   cursor:pointer;
   padding:0;
-  margin-top:.2rem;
-  transition:transform 180ms ease, color 160ms ease, border-color 160ms ease;
+  margin-top:.1rem;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:color 160ms ease, opacity 140ms ease;
+}
+
+.rc-header.rc-header--collapsed .header-details-toggle{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
 }
 
 .header-details-toggle:hover{
   color:var(--gold);
-  border-color:rgba(200,168,107,.58);
 }
 
 .header-details-toggle:focus-visible{
@@ -58,7 +63,7 @@ header{
 }
 
 .header-details-toggle__chevron{
-  font-size:.64rem;
+  font-size:.45rem;
   line-height:1;
   display:inline-block;
   transform-origin:50% 50%;
