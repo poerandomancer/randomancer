@@ -174,10 +174,11 @@ strong, b { font-weight: 600; }
 
 .rc-reveal-fog{
   position:absolute;
-  inset:0;
+  inset:12px 0 0;
   pointer-events:none;
   z-index:30;
   opacity:0;
+  border-radius:14px 14px 0 0;
   background:
     radial-gradient(140% 110% at 50% 34%, rgba(140,122,92,0.32), rgba(12,11,13,0.66) 65%),
     linear-gradient(180deg, rgba(8,8,10,0.0) 0%, rgba(8,8,10,0.32) 14%, rgba(8,8,10,0.74) 100%);
