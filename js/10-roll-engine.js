@@ -16,20 +16,36 @@ function updateAscArt(asc){
   // Avoid redundant work if we're already showing this art
   if (el.dataset.ascPath === path && el.classList.contains('show')) return;
   el.dataset.ascPath = path;
-
-  // Fade out current art
-  el.classList.remove('show');
+  const hasCurrent = !!el.style.getPropertyValue('--asc-img');
+  const token = String(Date.now());
+  el.dataset.ascToken = token;
 
   // Preload the new image before fading it in
   const img = new Image();
   img.onload = () => {
     // If another roll changed the target meanwhile, bail
-    if (el.dataset.ascPath !== path) return;
-    el.style.setProperty('--asc-img', `url('${path}')`);
-    // Next frame, fade in the new art
-    requestAnimationFrame(() => {
+    if (el.dataset.ascPath !== path || el.dataset.ascToken !== token) return;
+
+    // First reveal: just fade in the base art.
+    if (!hasCurrent) {
+      el.style.setProperty('--asc-img', `url('${path}')`);
+      requestAnimationFrame(() => el.classList.add('show'));
+      return;
+    }
+
+    // Crossfade from old -> new art over ~1.9s using the overlay layer.
+    el.style.setProperty('--asc-next-img', `url('${path}')`);
+    el.classList.remove('is-crossfading');
+    void el.offsetWidth;
+    el.classList.add('is-crossfading');
+
+    window.setTimeout(() => {
+      if (el.dataset.ascPath !== path || el.dataset.ascToken !== token) return;
+      el.style.setProperty('--asc-img', `url('${path}')`);
+      el.classList.remove('is-crossfading');
+      el.style.removeProperty('--asc-next-img');
       el.classList.add('show');
-    });
+    }, 1900);
   };
   img.src = path;
 }

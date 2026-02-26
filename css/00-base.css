@@ -60,16 +60,32 @@ body[data-mode="challenge"]{
 
 .asc-art{
   position:fixed; inset:0; opacity:0; pointer-events:none;
-  transition:opacity .5s ease, filter 1900ms ease-out;
+  --asc-fade-ms: 1900ms;
+  transition:opacity var(--asc-fade-ms) ease, filter 1900ms ease-out;
   background-image:
     linear-gradient(135deg, rgba(0,0,0,0.25), rgba(0,0,0,0.6)),
     var(--asc-img);
   background-position:center; background-size:cover; background-repeat:no-repeat;
   filter:saturate(.9) brightness(1.05);
 }
+.asc-art::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity var(--asc-fade-ms) ease;
+  background-image:
+    linear-gradient(135deg, rgba(0,0,0,0.25), rgba(0,0,0,0.6)),
+    var(--asc-next-img);
+  background-position:center;
+  background-size:cover;
+  background-repeat:no-repeat;
+}
+.asc-art.is-crossfading::after{ opacity: .92; }
 .asc-art.show{ opacity:.92; }
 .asc-art.is-revealing-art{
-  filter:saturate(.82) brightness(.82) blur(6px);
+  filter:saturate(.62) brightness(.52) blur(14px);
 }
 .asc-art.show.is-defogging-art{
   filter:saturate(.9) brightness(1.05) blur(0);
