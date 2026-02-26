@@ -15,7 +15,7 @@
       "cruel": 7,
       "diabolical": 6
     },
-    "template": "Choose {CLASS} and wield {WEAPON}.",
+    "template": "Choose {CLASS}. Wield {WEAPON}.",
     "shortLabel": "Oath of Arms",
     "slots": {
       "CLASS": {
@@ -179,7 +179,7 @@
       "cruel": 7,
       "diabolical": 7
     },
-    "template": "Choose {CLASS} and allocate {KEYSTONE} on the passive tree.",
+    "template": "Choose {CLASS}. Allocate {KEYSTONE} on the passive tree.",
     "shortLabel": "Keystone Covenant",
     "slots": {
       "CLASS": {
@@ -215,7 +215,7 @@
       "cruel": 7,
       "diabolical": 6
     },
-    "template": "Choose {CLASS} and make {ACTIVE_SKILL} your signature skill.",
+    "template": "Choose {CLASS}. Make {ACTIVE_SKILL} your signature skill.",
     "shortLabel": "Signature Rite",
     "slots": {
       "CLASS": {
@@ -280,7 +280,7 @@
       "cruel": 6,
       "diabolical": 5
     },
-    "template": "Choose {CLASS} and {SKILL_FAMILY_RULE} {SKILL_FAMILY}.",
+    "template": "Choose {CLASS}. Then {SKILL_FAMILY_RULE} {SKILL_FAMILY}.",
     "shortLabel": "Lineage Oath",
     "slots": {
       "CLASS": {
@@ -319,7 +319,7 @@
       "cruel": 4,
       "diabolical": 3
     },
-    "template": "Choose {CLASS} and {SKILL_FAMILY_RULE} {SKILL_FAMILY}. Maintain {DEFENSE}.",
+    "template": "Choose {CLASS}. Then {SKILL_FAMILY_RULE} {SKILL_FAMILY}. Maintain {DEFENSE}.",
     "shortLabel": "Lineage Bulwark",
     "slots": {
       "CLASS": {
@@ -366,7 +366,7 @@
       "cruel": 6,
       "diabolical": 4
     },
-    "template": "Banned: Charms.",
+    "template": "Do not equip Charms.",
     "shortLabel": "Charmless Pact",
     "effects": {
       "bans": {
@@ -393,7 +393,7 @@
       "cruel": 0,
       "diabolical": 6
     },
-    "template": "Banned: Flasks.",
+    "template": "Do not equip Flasks.",
     "shortLabel": "Dry Covenant",
     "effects": {
       "bans": {
@@ -420,7 +420,7 @@
       "cruel": 6,
       "diabolical": 4
     },
-    "template": "Banned: Unique items.",
+    "template": "Do not equip Unique items.",
     "shortLabel": "No Relics",
     "effects": {
       "bans": {
@@ -450,8 +450,8 @@
       "cruel": 6,
       "diabolical": 6
     },
-    "template": "Loot only Normal gear. No vendors. No trade. Craft everything yourself.",
-    "shortLabel": "Scavenger\u2019s Oath",
+    "template": "Loot only Normal gear. Do not use vendors. Do not trade. Craft everything yourself.",
+    "shortLabel": "Scavenger’s Oath",
     "effects": {
       "bans": {
         "vendors": true,
@@ -484,7 +484,7 @@
       "cruel": 6,
       "diabolical": 6
     },
-    "template": "Your only damage is your default weapon attack. No damaging active skills.",
+    "template": "Deal damage only with your default weapon attack. Do not use damaging active skills.",
     "shortLabel": "The First Strike",
     "effects": {
       "locks": {
@@ -548,7 +548,7 @@
       "cruel": 6,
       "diabolical": 6
     },
-    "template": "Limit yourself to at most 2 damaging active skills.",
+    "template": "Use at most 2 damaging active skills.",
     "shortLabel": "Twofold Arsenal",
     "effects": {
       "limits": {
@@ -580,7 +580,7 @@
       "cruel": 6,
       "diabolical": 4
     },
-    "template": "Limit yourself to 1 damaging active skill.",
+    "template": "Use only 1 damaging active skill.",
     "shortLabel": "Monomancy",
     "effects": {
       "limits": {
@@ -644,7 +644,7 @@
       "cruel": 0,
       "diabolical": 6
     },
-    "template": "Across your entire build, equip at most 3 Support Gems total.",
+    "template": "Across your entire build, socket at most 3 Support Gems in total.",
     "shortLabel": "Three Threads",
     "effects": {
       "limits": {
@@ -728,7 +728,7 @@
       "skills"
     ],
     "minSeverity": "mild",
-    "template": "Banned: Herald skills.",
+    "template": "Do not use Herald skills.",
     "shortLabel": "Mute Choir",
     "weights": {
       "mild": 7,
@@ -769,7 +769,7 @@
       "gear"
     ],
     "minSeverity": "cruel",
-    "template": "Banned: Amulets.",
+    "template": "Do not equip Amulets.",
     "shortLabel": "Bare Throat",
     "weights": {
       "mild": 0,
@@ -789,7 +789,7 @@
       "gear"
     ],
     "minSeverity": "mild",
-    "template": "Banned: Belts.",
+    "template": "Do not equip Belts.",
     "shortLabel": "Unbelted",
     "weights": {
       "mild": 7,
@@ -815,7 +815,7 @@
       "cruel": 6,
       "diabolical": 4
     },
-    "template": "Banned: persistent buff skills.",
+    "template": "Do not use persistent buff skills.",
     "shortLabel": "Fleeting Boons",
     "effects": {
       "bans": {
@@ -841,7 +841,7 @@
       "cruel": 6,
       "diabolical": 6
     },
-    "template": "On the passive tree, you may only allocate {ATTRIBUTE} attribute nodes.",
+    "template": "On the passive tree, allocate only {ATTRIBUTE} attribute nodes.",
     "shortLabel": "Single Virtue",
     "slots": {
       "ATTRIBUTE": {
@@ -875,7 +875,7 @@
       "cruel": 6,
       "diabolical": 6
     },
-    "template": "You must use at least one skill from the {SKILL_FAMILY} family.",
+    "template": "Use at least one skill from the {SKILL_FAMILY} family.",
     "shortLabel": "Bloodright",
     "slots": {
       "SKILL_FAMILY": {
@@ -1046,7 +1046,7 @@
       "cruel": 6,
       "diabolical": 6
     },
-    "template": "Your Weapon(s) must not be Rare.",
+    "template": "Do not equip Rare Weapons.",
     "shortLabel": "Unforged Steel",
     "conflictTags": [
       "rarity_policy"
@@ -1075,7 +1075,7 @@
       "cruel": 5,
       "diabolical": 4
     },
-    "template": "Keep at least 1 Normal item and at least 1 Magic item equipped.",
+    "template": "Equip at least 1 Normal item and at least 1 Magic item.",
     "shortLabel": "Rarity Mosaic",
     "conflictTags": [
       "rarity_policy"
@@ -1382,7 +1382,7 @@
       "cruel": 6,
       "diabolical": 4
     },
-    "template": "All equipped Charms must be Normal-rarity.",
+    "template": "Equip only Normal-rarity Charms.",
     "shortLabel": "Humble Charms",
     "conflictTags": [
       "rarity_policy"
@@ -1412,7 +1412,7 @@
       "cruel": 6,
       "diabolical": 4
     },
-    "template": "All equipped Flasks must be Normal-rarity.",
+    "template": "Equip only Normal-rarity Flasks.",
     "shortLabel": "Plain Draughts",
     "conflictTags": [
       "rarity_policy"
@@ -1470,7 +1470,7 @@
       "cruel": 6,
       "diabolical": 4
     },
-    "template": "Do not equip any Jewels in the passive tree.",
+    "template": "Do not socket any Jewels in the passive tree.",
     "shortLabel": "No Jewels",
     "conflictTags": [
       "tree_policy"
