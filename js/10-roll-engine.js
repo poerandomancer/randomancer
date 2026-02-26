@@ -336,13 +336,13 @@ const NAME_TENDENCIES = {
   "Critical Hit": ["Precision","Execution","Fatal Point","Keen Edge","Perfect Strike","Deadly Aim"],
   "Totems": ["Idols","Effigies","Wards","Pillars","Runes","Totemcraft"],
   "Warcry": ["Battlecry","Roar","Oathcall","War Chant","Howl","Shout"],
-  "Marks": ["Brand","Sigil","Lock-On","Hunter's Mark","Aim","Marksmanship"],
+  "Marks": ["Brand","Sigil","Hunter's Mark","Aim","Marksmanship"],
   "Curses": ["Hex","Malison","Doom","Bane","Witchsign","Cursecraft"],
   "Minions": ["Thralls","Servitors","Legion","Swarm","Retinue","Gravebound"],
   "Companions": ["Pack","Familiar","Beastbond","Hunt Pack","Allies","Bond"],
   "Thorns": ["Barbs","Spines","Briar","Needles","Thornwall","Razors"],
   "Culling Strike": ["Cull","Last Rites","Final Cut","Reaping","Mercy","Execution"],
-  "Slow/Maim/Hinder": ["Maim","Snare","Hamstring","Drag","Quagmire","Hinder"],
+  "Slow/Maim/Hinder": ["Maim","Snare","Hamstring","Quagmire","Hinder"],
   "Chaos Damage": ["Entropy","Ruin","Blight","Abyss","Chaos","Void"]
 };
 
@@ -360,7 +360,7 @@ const NAME_TENDENCY_FORMS = {
   "Critical Hit": ["Precise","Lethal","Keen-Edged"],
   "Totems": ["Totemic","Ward-Set","Idolbound"],
   "Warcry": ["Roaring","Howling","Battle-Chanting"],
-  "Marks": ["Marked","Locking-On","Branding"],
+  "Marks": ["Marked","Branding"],
   "Curses": ["Hexing","Cursing","Doomcalling"],
   "Minions": ["Swarming","Gravecalling","Thrall-Summoning"],
   "Companions": ["Packbound","Beastbonded","Familiar-Led"],
