@@ -60,14 +60,36 @@ body[data-mode="challenge"]{
 
 .asc-art{
   position:fixed; inset:0; opacity:0; pointer-events:none;
-  transition:opacity .5s ease;
+  --asc-fade-ms: 2400ms;
+  transition:opacity var(--asc-fade-ms) ease, filter 2400ms ease-out;
   background-image:
     linear-gradient(135deg, rgba(0,0,0,0.25), rgba(0,0,0,0.6)),
     var(--asc-img);
   background-position:center; background-size:cover; background-repeat:no-repeat;
   filter:saturate(.9) brightness(1.05);
 }
+.asc-art::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity var(--asc-fade-ms) ease;
+  background-image:
+    linear-gradient(135deg, rgba(0,0,0,0.25), rgba(0,0,0,0.6)),
+    var(--asc-next-img);
+  background-position:center;
+  background-size:cover;
+  background-repeat:no-repeat;
+}
+.asc-art.is-crossfading::after{ opacity: .92; }
 .asc-art.show{ opacity:.92; }
+.asc-art.is-revealing-art{
+  filter:saturate(.62) brightness(.52) blur(14px);
+}
+.asc-art.show.is-defogging-art{
+  filter:saturate(.9) brightness(1.05) blur(0);
+}
 
 body.challenge-mode .asc-art,
 body.challenge-mode .asc-art.show,
@@ -118,6 +140,15 @@ body[data-mode="challenge"] .asc-art.show{
   background: rgba(0,0,0,.28);
   isolation:isolate;
   transition: background-color .5s ease, filter .5s ease;
+}
+
+#app.is-revealing-art{
+  filter: brightness(.85) saturate(.9);
+}
+
+#app.is-defogging-art{
+  filter: none;
+  transition: filter 2400ms ease-out;
 }
 
 #app::after{
