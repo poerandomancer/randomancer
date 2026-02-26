@@ -43,9 +43,9 @@ function countChallengeFatesSelections(fates) {
   return counts;
 }
 
-function updateBindFatesSummary(){
+function updateBindFatesSummary(explicitMode){
   const summaryEl = document.getElementById('bind-fates-summary');
-  const mode = ensureMode();
+  const mode = explicitMode || ensureMode();
   const counts = mode === 'challenge'
     ? countChallengeFatesSelections(window.App?.getChallengeFates?.())
     : countBindFatesSelections(window.App?.getBindFates ? window.App.getBindFates() : getBindFatesFromApp());
@@ -436,7 +436,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     clearBindFatesSelections();
   });
 
-  document.addEventListener('randomancer:mode-change', () => updateBindFatesSummary());
+  document.addEventListener('randomancer:mode-change', (evt) => updateBindFatesSummary(evt?.detail?.mode));
 
   if (window.App && typeof window.App.bootstrap === 'function') {
     window.App.bootstrap().then(() => {
