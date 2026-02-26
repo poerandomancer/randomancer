@@ -278,16 +278,16 @@ border-top: 1px dotted var(--gold);
   .weapon-set2-control .toggle-label{ gap: 7px; }
 
   .weapon-set2-control .toggle-text,
-  .weapon-set2-control #mechanics-count-btn .rm-dotstep__label{
+  .weapon-set2-control :is(#mechanics-count-btn, .mechanics-like-btn) .rm-dotstep__label{
     font-size: 0.90rem;
   }
 
-  .weapon-set2-control #mechanics-count-btn .rm-dotstep__dots{
+  .weapon-set2-control :is(#mechanics-count-btn, .mechanics-like-btn) .rm-dotstep__dots{
     padding: 0 6px;  /* slimmer capsule */
     gap: 4px;
   }
 
-  .weapon-set2-control #mechanics-count-btn .rm-dotstep__dot{
+  .weapon-set2-control :is(#mechanics-count-btn, .mechanics-like-btn) .rm-dotstep__dot{
     width: 9px;
     height: 9px;
   }
@@ -398,7 +398,7 @@ input:checked
 }
 
 /* Remove the older pill styling from the mechanics button in THIS row */
-.weapon-set2-control #mechanics-count-btn{
+.weapon-set2-control :is(#mechanics-count-btn, .mechanics-like-btn){
   background: none;
   border: none;
   padding: 0;
@@ -406,7 +406,7 @@ input:checked
 }
 
 /* Make dots capsule mimic toggle-ui off-state styling */
-.weapon-set2-control #mechanics-count-btn .rm-dotstep__dots{
+.weapon-set2-control :is(#mechanics-count-btn, .mechanics-like-btn) .rm-dotstep__dots{
   height: 22px;
   display: inline-flex;
   align-items: center;
@@ -425,7 +425,7 @@ input:checked
 }
 
 /* --- Mechanics dots: force visible + kill any inherited toggle-knob pseudo --- */
-.weapon-set2-control #mechanics-count-btn{
+.weapon-set2-control :is(#mechanics-count-btn, .mechanics-like-btn){
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -433,13 +433,13 @@ input:checked
 }
 
 /* If any old styles are injecting a knob via ::after, nuke it */
-.weapon-set2-control #mechanics-count-btn .rm-dotstep__dots::after,
-.weapon-set2-control #mechanics-count-btn .rm-dotstep__dot::after{
+.weapon-set2-control :is(#mechanics-count-btn, .mechanics-like-btn) .rm-dotstep__dots::after,
+.weapon-set2-control :is(#mechanics-count-btn, .mechanics-like-btn) .rm-dotstep__dot::after{
   content: none !important;
 }
 
 /* Force dots to have real size (empty spans otherwise "disappear") */
-.weapon-set2-control #mechanics-count-btn .rm-dotstep__dot{
+.weapon-set2-control :is(#mechanics-count-btn, .mechanics-like-btn) .rm-dotstep__dot{
   display: inline-block;
   width: 8px;
   height: 8px;
@@ -454,19 +454,19 @@ input:checked
 }
 
 /* Gold "on" dots */
-.weapon-set2-control #mechanics-count-btn .rm-dotstep__dot.is-on{
+.weapon-set2-control :is(#mechanics-count-btn, .mechanics-like-btn) .rm-dotstep__dot.is-on{
   background: rgba(212, 174, 90, 0.95);
   box-shadow:
     0 0 10px rgba(212,170,80,0.35),
     inset 0 0 0 1px rgba(0,0,0,0.28);
 }
 
-.weapon-set2-control #mechanics-count-btn .rm-dotstep__dot{
+.weapon-set2-control :is(#mechanics-count-btn, .mechanics-like-btn) .rm-dotstep__dot{
   background: rgba(255,255,255,0.38);
 }
 
 /* --- Force Mechanics button typography to match Weapon toggle text --- */
-.weapon-set2-control #mechanics-count-btn{
+.weapon-set2-control :is(#mechanics-count-btn, .mechanics-like-btn){
   font: inherit;                 /* KEY: stop system button font */
   color: inherit;
   letter-spacing: inherit;
@@ -478,19 +478,19 @@ input:checked
 }
 
 /* Make the label span inherit too (belt + suspenders) */
-.weapon-set2-control #mechanics-count-btn .rm-dotstep__label{
+.weapon-set2-control :is(#mechanics-count-btn, .mechanics-like-btn) .rm-dotstep__label{
   font: inherit;
   line-height: 1;
 }
 
-.weapon-set2-control #mechanics-count-btn{
+.weapon-set2-control :is(#mechanics-count-btn, .mechanics-like-btn){
   font-weight: 600;              /* matches .toggle-label */
 }
 
 /* --- Mechanics hover + focus polish --- */
 
 /* Hover: warm up the capsule slightly, like the weapon toggle */
-.weapon-set2-control #mechanics-count-btn:hover .rm-dotstep__dots{
+.weapon-set2-control :is(#mechanics-count-btn, .mechanics-like-btn):hover .rm-dotstep__dots{
   border-color: rgba(212,170,80,0.45);
   box-shadow:
     0 0 6px rgba(212,170,80,0.20),
@@ -500,16 +500,16 @@ input:checked
 }
 
 /* Optional: give the label a subtle gold hint on hover */
-.weapon-set2-control #mechanics-count-btn:hover .rm-dotstep__label{
+.weapon-set2-control :is(#mechanics-count-btn, .mechanics-like-btn):hover .rm-dotstep__label{
   color: rgba(255,245,220,0.92);
 }
 
 /* Focus-visible: clean keyboard focus ring (only when tabbing) */
-.weapon-set2-control #mechanics-count-btn:focus{
+.weapon-set2-control :is(#mechanics-count-btn, .mechanics-like-btn):focus{
   outline: none;
 }
 
-.weapon-set2-control #mechanics-count-btn:focus-visible .rm-dotstep__dots{
+.weapon-set2-control :is(#mechanics-count-btn, .mechanics-like-btn):focus-visible .rm-dotstep__dots{
   outline: 2px solid rgba(212,170,80,0.75);
   outline-offset: 3px;
   box-shadow:
@@ -520,15 +520,15 @@ input:checked
 }
 
 /* Press: tiny downward nudge + slight dim, like a physical toggle */
-.weapon-set2-control #mechanics-count-btn:active{
+.weapon-set2-control :is(#mechanics-count-btn, .mechanics-like-btn):active{
   transform: translateY(1px);
 }
 
-.weapon-set2-control #mechanics-count-btn:active .rm-dotstep__dots{
+.weapon-set2-control :is(#mechanics-count-btn, .mechanics-like-btn):active .rm-dotstep__dots{
   filter: brightness(0.95);
 }
 
-.weapon-set2-control #mechanics-count-btn{
+.weapon-set2-control :is(#mechanics-count-btn, .mechanics-like-btn){
   transition: transform 80ms ease;
 }
 
@@ -589,6 +589,7 @@ input:checked
 .bind-fates-section-head{ display:flex; flex-direction:column; gap:2px; margin-bottom:6px; }
 .bind-fates-section-head h4{ margin:0; color:var(--silver); letter-spacing:.02em; }
 .bind-fates-hint{ margin:0; color:var(--muted); font-size:0.95rem; }
+.bind-fates-warning{ color:#d48f8f; }
 .bind-fates-divider{ border:0; border-top:1px solid rgba(200,168,107,0.22); margin:10px 0; }
 .bind-fates-list{
   display:grid;

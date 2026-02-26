@@ -1199,8 +1199,19 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       try {
+        if (typeof window.RandomancerHandleRollOverride === 'function') {
+          const handled = await window.RandomancerHandleRollOverride({ rollBtn, statusEl });
+          if (handled) return;
+        }
+
         const data = await ensureDataPreload();
+        if (typeof window.RandomancerPrepareBuildRoll === 'function') {
+          window.RandomancerPrepareBuildRoll();
+        }
         rollBuild(data);
+        if (typeof window.RandomancerAfterBuildRoll === "function") {
+          window.RandomancerAfterBuildRoll();
+        }
         
         const ws2Toggle = document.getElementById('weapon-set2-toggle');
 		if (ws2Toggle?.checked) {
