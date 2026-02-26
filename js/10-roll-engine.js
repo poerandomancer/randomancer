@@ -42,9 +42,12 @@ const showBindFatesError = (msg) => {
 };
 
 const REVEAL_MS = 1900;
+const REVEAL_HOLD_MS = 90;
 const revealController = {
   isRevealing: false,
-  revealTimer: null
+  revealTimer: null,
+  defogKickoffTimer: null,
+  artDefogTimer: null
 };
 
 function prefersReducedMotion() {
@@ -85,6 +88,14 @@ function finishReveal() {
     clearTimeout(revealController.revealTimer);
     revealController.revealTimer = null;
   }
+  if (revealController.defogKickoffTimer) {
+    clearTimeout(revealController.defogKickoffTimer);
+    revealController.defogKickoffTimer = null;
+  }
+  if (revealController.artDefogTimer) {
+    clearTimeout(revealController.artDefogTimer);
+    revealController.artDefogTimer = null;
+  }
 
   resultsStage?.classList.remove('is-revealing', 'is-defogging');
   ascArt?.classList.remove('is-revealing-art', 'is-defogging-art');
@@ -122,24 +133,24 @@ function startReveal() {
   app?.classList.remove('is-defogging-art');
 
   void resultsStage.offsetWidth;
-  requestAnimationFrame(() => {
+  revealController.defogKickoffTimer = setTimeout(() => {
     resultsStage.classList.add('is-defogging');
     app?.classList.add('is-defogging-art');
-  });
+    revealController.defogKickoffTimer = null;
+  }, REVEAL_HOLD_MS);
 
   if (ascArt?.classList.contains('show')) {
     ascArt.classList.add('is-revealing-art');
     ascArt.classList.remove('is-defogging-art');
-    requestAnimationFrame(() => {
-      setTimeout(() => {
-        ascArt.classList.add('is-defogging-art');
-      }, 120);
-    });
+    revealController.artDefogTimer = setTimeout(() => {
+      ascArt.classList.add('is-defogging-art');
+      revealController.artDefogTimer = null;
+    }, REVEAL_HOLD_MS + 120);
   }
 
   revealController.revealTimer = setTimeout(() => {
     finishReveal();
-  }, REVEAL_MS);
+  }, REVEAL_MS + REVEAL_HOLD_MS);
 }
 
 // ---------- dictionary builders (TRUE Map) ----------
