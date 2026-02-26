@@ -181,14 +181,15 @@ strong, b { font-weight: 600; }
   background:
     radial-gradient(140% 110% at 50% 28%, rgba(140,122,92,0.32), rgba(12,11,13,0.66) 65%),
     linear-gradient(180deg, rgba(8,8,10,0.38), rgba(8,8,10,0.74));
-  transition: opacity 1900ms ease-out;
+  transition:none;
 }
 
 .results-stage.is-revealing .rc-reveal-fog{
   opacity:1;
 }
 
-.results-stage.is-defogging .rc-reveal-fog{
+.results-stage.is-revealing.is-defogging .rc-reveal-fog{
+  transition: opacity 1900ms ease-out;
   opacity:0;
 }
 
