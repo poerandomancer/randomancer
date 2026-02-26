@@ -172,7 +172,7 @@ body[data-mode="challenge"] #app::after{
   background: rgba(0,0,0,0.96);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 380ms ease;
+  transition: opacity 520ms ease;
 }
 
 .mode-transition.is-on{
@@ -185,6 +185,16 @@ body[data-mode="challenge"] #app::after{
   text-transform: uppercase;
   font-size: clamp(.82rem, 1.6vw, 1rem);
   color: rgba(236, 231, 224, 0.92);
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+}
+
+.mode-transition.is-entering-challenge .mode-transition__label{
+  color: var(--challenge-crimson);
+}
+
+.mode-transition.is-entering-build .mode-transition__label{
+  color: var(--gold);
 }
 
 @media (prefers-reduced-motion: reduce){

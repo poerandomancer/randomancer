@@ -5,7 +5,7 @@ import { getFamilySkillNames, resolveSkillFamily } from './17-skill-family-utils
 const MODE_KEY = 'randomancer_mode';
 const STASHED_BUILD_KEY = 'stashedBuildState';
 const STASHED_CHALLENGE_KEY = 'stashedChallengeState';
-const MODE_TRANSITION_MS = 380;
+const MODE_TRANSITION_MS = 520;
 const MODES = {
   STANDARD: 'standard',
   CHALLENGE: 'challenge'
@@ -651,7 +651,7 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function runModeTransition(label, swapFn) {
+async function runModeTransition({ label, targetMode }, swapFn) {
   const overlay = document.getElementById('modeTransition');
   const labelEl = document.getElementById('modeTransitionLabel');
   if (!overlay || prefersReducedMotion()) {
@@ -660,11 +660,14 @@ async function runModeTransition(label, swapFn) {
   }
 
   if (labelEl) labelEl.textContent = label || '';
+  overlay.classList.toggle('is-entering-challenge', targetMode === MODES.CHALLENGE);
+  overlay.classList.toggle('is-entering-build', targetMode === MODES.STANDARD);
   overlay.classList.add('is-on');
   await sleep(MODE_TRANSITION_MS);
   swapFn?.();
   await sleep(MODE_TRANSITION_MS);
   overlay.classList.remove('is-on');
+  overlay.classList.remove('is-entering-challenge', 'is-entering-build');
 }
 
 function cloneJsonSafe(value) {
@@ -1044,7 +1047,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       ? 'Entering Challenge Mode…'
       : 'Returning to Build Mode…';
 
-    await runModeTransition(label, () => {
+    await runModeTransition({ label, targetMode }, () => {
       const nextMode = setMode(targetMode);
       syncMode(nextMode);
     });
