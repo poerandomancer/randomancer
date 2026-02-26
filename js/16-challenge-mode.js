@@ -688,10 +688,28 @@ function hydrateStash() {
   try {
     stashedBuildState = JSON.parse(localStorage.getItem(STASHED_BUILD_KEY) || 'null');
     stashedChallengeState = JSON.parse(localStorage.getItem(STASHED_CHALLENGE_KEY) || 'null');
+    if (!isValidStashableBuildState(stashedBuildState)) stashedBuildState = null;
+    if (!isValidStashableChallengeState(stashedChallengeState)) stashedChallengeState = null;
+    persistStash();
   } catch {
     stashedBuildState = null;
     stashedChallengeState = null;
   }
+}
+
+function isValidStashableBuildState(snap) {
+  if (!snap || typeof snap !== 'object') return false;
+  const hasCoreIdentity = !!(snap.className || snap.ascendancy || snap.buildName);
+  const hasCoreSelections = !!(snap.weapon || snap.defense || snap.tactics || snap.ailments);
+  const hasSkills = Array.isArray(snap.recommendedSkills) && snap.recommendedSkills.length > 0;
+  return hasCoreIdentity || hasCoreSelections || hasSkills;
+}
+
+function isValidStashableChallengeState(contract) {
+  if (!contract || typeof contract !== 'object') return false;
+  const hasTitle = typeof contract.title === 'string' && contract.title.trim().length > 0;
+  const hasTasks = Array.isArray(contract.tasks) && contract.tasks.length > 0;
+  return hasTitle && hasTasks;
 }
 
 function clearChallengeResultsToEmpty() {
@@ -726,17 +744,20 @@ function updateResumePrompts(mode) {
 }
 
 function stashCurrentBuildState() {
+  const hasBuildRoll = document.getElementById('app')?.dataset?.hasRoll === 'true';
+  if (!hasBuildRoll) return;
   const snap = typeof window.RandomancerGetCurrentBuildSnapshot === 'function'
     ? window.RandomancerGetCurrentBuildSnapshot()
     : cloneJsonSafe(window.App?.state?.currentRoll || window.CURRENT_ROLL);
-  if (!snap) return;
+  if (!isValidStashableBuildState(snap)) return;
   stashedBuildState = snap;
   persistStash();
 }
 
 function stashCurrentChallengeState() {
+  if (!challengeHasRoll) return;
   const contract = cloneJsonSafe(window.CURRENT_CHALLENGE_CONTRACT);
-  if (!contract) return;
+  if (!isValidStashableChallengeState(contract)) return;
   stashedChallengeState = contract;
   persistStash();
 }
