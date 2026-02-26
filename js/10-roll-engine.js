@@ -70,6 +70,21 @@ function prefersReducedMotion() {
   return window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
 }
 
+const HEADER_MODES = {
+  BUILD: 'build',
+  CHALLENGE: 'challenge'
+};
+
+const headerCollapsedByMode = {
+  [HEADER_MODES.BUILD]: false,
+  [HEADER_MODES.CHALLENGE]: false
+};
+
+function getActiveHeaderMode() {
+  const mode = document.body?.dataset?.mode;
+  return mode === HEADER_MODES.CHALLENGE ? HEADER_MODES.CHALLENGE : HEADER_MODES.BUILD;
+}
+
 function setHeaderCollapsed(collapsed, instant = false) {
   const header = document.getElementById('app-header');
   const toggle = document.getElementById('header-details-toggle');
@@ -91,8 +106,21 @@ function setHeaderCollapsed(collapsed, instant = false) {
   });
 }
 
+function setModeHeaderCollapsed(mode, collapsed, instant = false) {
+  const headerMode = mode === HEADER_MODES.CHALLENGE ? HEADER_MODES.CHALLENGE : HEADER_MODES.BUILD;
+  headerCollapsedByMode[headerMode] = !!collapsed;
+  if (getActiveHeaderMode() === headerMode) {
+    setHeaderCollapsed(!!collapsed, instant);
+  }
+}
+
+function syncHeaderCollapsedForMode(mode, instant = false) {
+  const headerMode = mode === HEADER_MODES.CHALLENGE ? HEADER_MODES.CHALLENGE : HEADER_MODES.BUILD;
+  setHeaderCollapsed(!!headerCollapsedByMode[headerMode], instant);
+}
+
 function collapseHeaderForRoll() {
-  setHeaderCollapsed(true, prefersReducedMotion());
+  setModeHeaderCollapsed(getActiveHeaderMode(), true, prefersReducedMotion());
 }
 
 function finishReveal() {
@@ -1320,10 +1348,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const headerToggleBtn = document.getElementById('header-details-toggle');
 
   headerToggleBtn?.addEventListener('click', () => {
-    const header = document.getElementById('app-header');
-    const collapsed = header?.classList.contains('rc-header--collapsed');
-    setHeaderCollapsed(!collapsed, prefersReducedMotion());
+    const activeMode = getActiveHeaderMode();
+    const collapsed = !!headerCollapsedByMode[activeMode];
+    setModeHeaderCollapsed(activeMode, !collapsed, prefersReducedMotion());
   });
+
+  document.addEventListener('randomancer:mode-change', (event) => {
+    const mode = event?.detail?.mode === 'challenge' ? HEADER_MODES.CHALLENGE : HEADER_MODES.BUILD;
+    syncHeaderCollapsedForMode(mode, prefersReducedMotion());
+  });
+
+  syncHeaderCollapsedForMode(getActiveHeaderMode(), true);
 
   document.addEventListener('keydown', (evt) => {
     if (!revealController.isRevealing) return;
