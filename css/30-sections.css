@@ -143,3 +143,127 @@ body[data-mode="challenge"] .label,
 body.challenge-mode .label{
   color:#8e96a2;
 }
+
+/* --- Dramatic reveal sequence --- */
+body.is-revealing::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:radial-gradient(circle at 50% 30%, rgba(255,220,150,0.05) 0%, rgba(8,8,11,0.18) 55%, rgba(6,6,8,0.24) 100%);
+  opacity:0;
+  z-index:40;
+  animation:dimFade 780ms ease both;
+}
+
+body.is-revealing .build-title-block{
+  position:relative;
+}
+
+body.is-revealing .build-title-block::before{
+  content:"";
+  position:absolute;
+  inset:-8px -10px;
+  pointer-events:none;
+  border-radius:10px;
+  background:radial-gradient(circle at 50% 45%, rgba(214,174,95,0.17), transparent 72%);
+  animation:spotlightFade 880ms ease both;
+}
+
+.reveal-step{
+  position:relative;
+  transition:opacity 210ms ease, transform 210ms ease;
+  will-change:opacity, transform;
+}
+
+.reveal-step.reveal-hidden{
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(8px) rotateX(1.1deg);
+}
+
+.reveal-step.reveal-stamp .label,
+.reveal-step.reveal-stamp .section-title,
+.reveal-step.reveal-stamp h3{
+  position:relative;
+  z-index:1;
+}
+
+.reveal-step.reveal-stamp .label::before,
+.reveal-step.reveal-stamp .section-title::before,
+.reveal-step.reveal-stamp h3::before{
+  content:"";
+  position:absolute;
+  left:-8px;
+  right:-8px;
+  top:50%;
+  height:1.15em;
+  transform:translateY(-50%) scale(1.06);
+  border-radius:999px;
+  background:radial-gradient(circle at 50% 50%, rgba(212,175,107,0.2), rgba(212,175,107,0));
+  opacity:0;
+  z-index:-1;
+  animation:stampPop 240ms ease;
+}
+
+.reveal-shuffle{
+  animation:shufflePulse 420ms ease;
+}
+
+.reveal-title-glint{
+  position:relative;
+  overflow:hidden;
+}
+
+.reveal-title-glint::after{
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  width:42%;
+  left:-50%;
+  background:linear-gradient(100deg, transparent 0%, rgba(255,245,208,0.05) 40%, rgba(255,245,208,0.35) 52%, rgba(255,245,208,0.05) 64%, transparent 100%);
+  animation:titleGlint 180ms ease-out;
+  pointer-events:none;
+}
+
+@keyframes shufflePulse{
+  0%{ opacity:1; filter:blur(0); transform:translateX(0); }
+  30%{ opacity:.88; filter:blur(1px); transform:translateX(1px); }
+  60%{ opacity:.95; filter:blur(.4px); transform:translateX(-1px); }
+  100%{ opacity:1; filter:blur(0); transform:translateX(0); }
+}
+
+@keyframes stampPop{
+  0%{ opacity:0; transform:translateY(-50%) scale(1.06); }
+  30%{ opacity:.95; }
+  100%{ opacity:0; transform:translateY(-50%) scale(1); }
+}
+
+@keyframes dimFade{
+  0%{ opacity:0; }
+  20%{ opacity:1; }
+  100%{ opacity:.75; }
+}
+
+@keyframes spotlightFade{
+  0%{ opacity:0; }
+  20%{ opacity:1; }
+  100%{ opacity:.1; }
+}
+
+@keyframes titleGlint{
+  from{ left:-50%; }
+  to{ left:115%; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  body.is-revealing::before,
+  body.is-revealing .build-title-block::before,
+  .reveal-step,
+  .reveal-shuffle,
+  .reveal-title-glint::after{
+    animation:none !important;
+    transition:none !important;
+  }
+}

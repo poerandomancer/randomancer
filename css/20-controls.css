@@ -284,3 +284,43 @@ body.challenge-mode .challenge-empty-flavor{
   margin-top: 0 !important; /* ensure resume isn’t offset either */
   align-self: center;       /* extra belt-and-suspenders */
 }
+
+.roll-btn{
+  position: relative;
+  isolation: isolate;
+}
+
+.roll-btn.is-reveal-trigger{
+  animation:rollPress 520ms ease;
+}
+
+.roll-btn.is-reveal-trigger::after{
+  content:"";
+  position:absolute;
+  inset:-6px;
+  border-radius:999px;
+  pointer-events:none;
+  border:1px solid color-mix(in srgb, var(--mode-accent, var(--gold)) 72%, transparent);
+  opacity:.85;
+  box-shadow:0 0 0 1px rgba(212,175,107,0.16), 0 0 12px rgba(212,175,107,0.18);
+  animation:ringRotate 620ms ease-out 1;
+}
+
+@keyframes rollPress{
+  0%{ transform:scale(1); }
+  38%{ transform:scale(0.98); }
+  100%{ transform:scale(1); }
+}
+
+@keyframes ringRotate{
+  0%{ transform:rotate(0deg) scale(0.98); opacity:0; }
+  20%{ opacity:.88; }
+  100%{ transform:rotate(300deg) scale(1.02); opacity:0; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .roll-btn.is-reveal-trigger,
+  .roll-btn.is-reveal-trigger::after{
+    animation:none !important;
+  }
+}

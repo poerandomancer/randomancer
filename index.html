@@ -344,11 +344,11 @@
           </div>
         </div>
         <div id="challenge-contract-output" class="challenge-contract-output" aria-live="polite">
-          <div class="build-title-block">
+          <div class="build-title-block" data-reveal="challenge-title">
             <h3 id="challenge-contract-title" class="build-name"></h3>
             <p id="challenge-contract-subtitle" class="build-subtext"></p>
           </div>
-          <div id="challenge-contract-lines" class="summary-panel challenge-contract-lines"></div>
+          <div id="challenge-contract-lines" class="summary-panel challenge-contract-lines" data-reveal="challenge-lines"></div>
         </div>
       </section>
 
@@ -383,7 +383,7 @@
 			  </div>
 			</div>
         </div>
-        <div class="build-title-block">
+        <div class="build-title-block" data-reveal="title">
 			<div id="build-name" class="build-name"></div>
 			<div id="build-subtext" class="build-subtext"></div>
 		</div>
@@ -403,9 +403,9 @@
             <div class="underline"></div>
           </div>
           <div class="grid two">
-            <div><span class="label">Class</span><span id="class"></span></div>
-            <div><span class="label">Ascendancy</span><span id="ascendancy"></span></div>
-            <div class="wide">
+            <div data-reveal="class"><span class="label">Class</span><span id="class"></span></div>
+            <div data-reveal="ascendancy"><span class="label">Ascendancy</span><span id="ascendancy"></span></div>
+            <div class="wide" data-reveal="weapons">
               <span class="label">Weapons</span>
               <div class="weapon-sets">
                 <span id="weapons"></span>
@@ -415,7 +415,7 @@
           </div>
         </div>
         <hr class="gold subtle"/>
-        <div class="sect">
+        <div class="sect" data-reveal="mechanics">
           <div class="sect-head section-header">
             <div class="section-title-row">
               <h3 class="section-title">Combat Mechanics</h3>
@@ -428,7 +428,7 @@
           </div>
         </div>
         <hr class="gold subtle"/>
-        <div class="sect">
+        <div class="sect" data-reveal="defenses">
           <div class="sect-head section-header">
             <div class="section-title-row">
               <h3 class="section-title">Survivability</h3>
@@ -450,7 +450,7 @@
         </div>
       </section>
 
-      <section id="skills-panel" class="panel panel--skills">
+      <section id="skills-panel" class="panel panel--skills" data-reveal="skills">
 		<div class="sect">
             <div class="sect-head">
               <h3 class="section-title">Recommended Skills</h3>
@@ -465,11 +465,11 @@
           </div>
       </section>
 
-      <section id="uniques-panel" class="panel panel--uniques">
+      <section id="uniques-panel" class="panel panel--uniques" data-reveal="uniques">
         <div id="uniques-mount"></div>
       </section>
 
-      <section id="passives-panel" class="panel panel--passives hidden">
+      <section id="passives-panel" class="panel panel--passives hidden" data-reveal="passives">
         <div class="panel-header">
           <h2 class="panel-title">Recommended Passives</h2>
           <p class="panel-subtitle">Ascendancy points, keystones, and notables that resonate with this build.</p>

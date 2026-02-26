@@ -1186,12 +1186,128 @@ function rollBuild(dataWrap){
 
 }
 
+// ---------- dramatic reveal controller ----------
+const REVEAL_MQ = (typeof window !== 'undefined' && typeof window.matchMedia === 'function')
+  ? window.matchMedia('(prefers-reduced-motion: reduce)')
+  : null;
+
+const revealController = {
+  isRevealing: false,
+  skipRequested: false,
+  timers: new Set(),
+  cleanupFns: [],
+  mode: null,
+  triggerBtn: null,
+  get reducedMotion(){ return !!REVEAL_MQ?.matches; },
+  queue(fn, ms){
+    const id = setTimeout(() => { this.timers.delete(id); fn(); }, ms);
+    this.timers.add(id);
+  },
+  clearTimers(){ this.timers.forEach(id => clearTimeout(id)); this.timers.clear(); },
+  runCleanup(){
+    this.cleanupFns.forEach(fn => { try { fn(); } catch {} });
+    this.cleanupFns = [];
+  },
+  begin({ mode, triggerBtn }){
+    if (this.reducedMotion) return;
+    this.isRevealing = true;
+    this.skipRequested = false;
+    this.mode = mode;
+    this.triggerBtn = triggerBtn || null;
+    document.body.classList.add('is-revealing', `is-revealing-${mode}`);
+    if (this.triggerBtn) this.triggerBtn.classList.add('is-reveal-trigger');
+
+    const shuffleTarget = mode === 'challenge'
+      ? document.getElementById('challenge-contract-output')
+      : document.getElementById('build-panel');
+    if (shuffleTarget) {
+      shuffleTarget.classList.add('reveal-shuffle');
+      this.queue(() => shuffleTarget.classList.remove('reveal-shuffle'), 420);
+    }
+
+    const steps = mode === 'challenge'
+      ? [
+          document.querySelector('[data-reveal="challenge-title"]'),
+          document.querySelector('[data-reveal="challenge-lines"]')
+        ]
+      : [
+          document.querySelector('[data-reveal="class"]'),
+          document.querySelector('[data-reveal="ascendancy"]'),
+          document.querySelector('[data-reveal="weapons"]'),
+          document.querySelector('[data-reveal="mechanics"]'),
+          document.querySelector('[data-reveal="defenses"]'),
+          document.querySelector('[data-reveal="skills"]'),
+          document.querySelector('[data-reveal="passives"]'),
+          document.querySelector('[data-reveal="uniques"]')
+        ];
+
+    steps.filter(Boolean).forEach((el, idx) => {
+      el.classList.add('reveal-step', 'reveal-hidden');
+      const delay = 300 + (idx * 120);
+      this.queue(() => {
+        el.classList.remove('reveal-hidden');
+        el.classList.add('reveal-stamp');
+        this.queue(() => el.classList.remove('reveal-stamp'), 260);
+      }, delay);
+    });
+
+    const flourishDelay = 300 + (steps.filter(Boolean).length * 120) + 120;
+    this.queue(() => {
+      const title = mode === 'challenge'
+        ? document.querySelector('[data-reveal="challenge-title"]')
+        : document.querySelector('[data-reveal="title"]');
+      if (title) {
+        title.classList.remove('reveal-title-glint');
+        void title.offsetWidth;
+        title.classList.add('reveal-title-glint');
+      }
+    }, flourishDelay);
+
+    this.queue(() => this.complete(), flourishDelay + 220);
+  },
+  complete(){
+    this.clearTimers();
+    document.querySelectorAll('.reveal-step').forEach(el => {
+      el.classList.remove('reveal-step', 'reveal-hidden', 'reveal-stamp');
+    });
+    document.querySelectorAll('.reveal-title-glint').forEach(el => el.classList.remove('reveal-title-glint'));
+    document.querySelectorAll('.reveal-shuffle').forEach(el => el.classList.remove('reveal-shuffle'));
+    if (this.triggerBtn) this.triggerBtn.classList.remove('is-reveal-trigger');
+    document.body.classList.remove('is-revealing', 'is-revealing-standard', 'is-revealing-challenge');
+    this.isRevealing = false;
+    this.skipRequested = false;
+    this.mode = null;
+    this.triggerBtn = null;
+    this.runCleanup();
+  },
+  skip(){
+    if (!this.isRevealing) return false;
+    this.skipRequested = true;
+    this.complete();
+    return true;
+  }
+};
+
+function revealSkipOnSpace(event){
+  if (!revealController.isRevealing) return;
+  if (event.code !== 'Space') return;
+  event.preventDefault();
+  revealController.skip();
+}
+
+document.addEventListener('keydown', revealSkipOnSpace);
+
 // ---------- roll button + weapon set wiring ----------
 document.addEventListener('DOMContentLoaded', () => {
   const rollBtn = document.getElementById('roll');
   if (rollBtn) {
     const statusEl = rollBtn.querySelector('.roll-status');
     rollBtn.addEventListener('click', async () => {
+      if (revealController.isRevealing) {
+        revealController.skip();
+        return;
+      }
+
       // Tiny loading hint if data is still warming up
       rollBtn.classList.add('is-loading');
       if (statusEl && !dataReady) {
@@ -1199,9 +1315,23 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       try {
+        let mode = 'standard';
+        if (typeof window.RandomancerGetMode === 'function' && window.RandomancerGetMode() === 'challenge') {
+          mode = 'challenge';
+        }
+
+        if (!revealController.reducedMotion) {
+          revealController.begin({ mode, triggerBtn: rollBtn });
+        }
+
         if (typeof window.RandomancerHandleRollOverride === 'function') {
           const handled = await window.RandomancerHandleRollOverride({ rollBtn, statusEl });
-          if (handled) return;
+          if (handled) {
+            if (revealController.reducedMotion) {
+              revealController.complete();
+            }
+            return;
+          }
         }
 
         const data = await ensureDataPreload();
@@ -1212,7 +1342,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (typeof window.RandomancerAfterBuildRoll === "function") {
           window.RandomancerAfterBuildRoll();
         }
-        
+
         const ws2Toggle = document.getElementById('weapon-set2-toggle');
 		if (ws2Toggle?.checked) {
 		  try {
@@ -1254,11 +1384,16 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch {}
           }, 0);
         } catch {}
+
+        if (revealController.reducedMotion) {
+          revealController.complete();
+        }
       } catch (err) {
         console.error('[Randomancer] roll failed:', err);
         if (statusEl) {
           statusEl.textContent = 'Something went wrong. Try again.';
         }
+        revealController.complete();
       } finally {
         // Clear the loading state once data has loaded or failed
         setTimeout(() => {
