@@ -190,7 +190,7 @@ strong, b { font-weight: 600; }
 }
 
 .results-stage.is-revealing.is-defogging .rc-reveal-fog{
-  transition: opacity 1900ms ease-out;
+  transition: opacity 2400ms ease-out;
   opacity:0;
 }
 

@@ -33,7 +33,7 @@ function updateAscArt(asc){
       return;
     }
 
-    // Crossfade from old -> new art over ~1.9s using the overlay layer.
+    // Crossfade from old -> new art over ~2.4s using the overlay layer.
     el.style.setProperty('--asc-next-img', `url('${path}')`);
     el.classList.remove('is-crossfading');
     void el.offsetWidth;
@@ -45,7 +45,7 @@ function updateAscArt(asc){
       el.classList.remove('is-crossfading');
       el.style.removeProperty('--asc-next-img');
       el.classList.add('show');
-    }, 1900);
+    }, 2400);
   };
   img.src = path;
 }
@@ -57,7 +57,7 @@ const showBindFatesError = (msg) => {
   }
 };
 
-const REVEAL_MS = 1900;
+const REVEAL_MS = 2400;
 const REVEAL_HOLD_MS = 90;
 const revealController = {
   isRevealing: false,
