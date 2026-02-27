@@ -5,7 +5,9 @@
 .codex-header{ position:sticky; top:0; z-index:4; background:linear-gradient(180deg, rgba(12,14,18,0.98), rgba(12,14,18,0.88)); padding-bottom:.5rem; }
 .codex-filter-row{ display:flex; gap:.5rem; align-items:center; margin:.5rem 0; }
 #codex-search{ flex:1; background:rgba(0,0,0,.35); border:1px solid rgba(121,182,206,0.42); color:#dcebf1; border-radius:8px; padding:.45rem .6rem; }
-#codex-clear-tags{ border:1px solid rgba(121,182,206,.4); background:rgba(121,182,206,.12); color:#dcebf1; border-radius:999px; padding:.35rem .7rem; }
+#codex-clear-tags,
+#codex-expand-all,
+#codex-collapse-all{ border:1px solid rgba(121,182,206,.4); background:rgba(121,182,206,.12); color:#dcebf1; border-radius:999px; padding:.35rem .7rem; }
 .codex-results-count{ color:var(--codex-accent); font-size:.9rem; }
 .codex-tag-chips{ display:flex; flex-wrap:wrap; gap:.35rem; margin:.4rem 0 .2rem; }
 .codex-tag-chips .tag-pill{ cursor:pointer; text-transform:none; }

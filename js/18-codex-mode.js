@@ -6,6 +6,7 @@ const state = {
   passiveKind: 'keystone',
   q: '',
   tags: new Set(),
+  openGroups: new Set(),
   selectedId: null,
   index: []
 };
@@ -94,14 +95,12 @@ function renderList() {
   });
 
   const html = Array.from(groups.entries()).map(([group, items]) => `
-    <details class="codex-group" open>
+    <details class="codex-group" data-group="${esc(group)}" ${state.openGroups.has(group) ? 'open' : ''}>
       <summary>${esc(group)} (${items.length})</summary>
       ${items.slice(0, 250).map(i => `<button class="codex-item ${state.selectedId===i.id?'is-active':''}" data-entry-id="${esc(i.id)}"><strong>${mark(i.name)}</strong><small>${i.type==='skill' ? `crafting: ${esc(i.extraFields?.craftingType || '—')} · ` : ''}${mark((i.text || '').slice(0, 130))}</small></button>`).join('')}
     </details>
   `).join('');
   els.list.innerHTML = html;
-
-  if (!state.selectedId || !entries.some(e => e.id === state.selectedId)) selectEntry(entries[0].id);
 }
 
 function render() {
@@ -127,6 +126,23 @@ function buildIndex() {
   const out = [];
   const passives = data.passivesEnriched?.nodes || [];
   const ascMetaMap = data.ascendancyByName || {};
+  const keystoneTooltips = data.keystoneTooltips || {};
+
+  function getKeystoneText(node) {
+    const key = node?.name;
+    const tip = (key && (keystoneTooltips[key] || keystoneTooltips[key.replace(/[’]/g, "'")])) || null;
+    const tipLines = Array.isArray(tip?.lines) ? tip.lines.map(String).filter(Boolean) : [];
+    if (tipLines.length) return tipLines.join(' • ');
+    return (node.lines || node.rawStats || []).join(' • ') || node.flavour || '';
+  }
+
+  function deriveCraftingType(gem) {
+    const direct = gem?.crafting_type;
+    if (direct) return String(direct);
+    const types = Array.isArray(gem?.crafting?.types_raw) ? gem.crafting.types_raw.filter(Boolean) : [];
+    if (types.length) return types.join(' / ');
+    return '—';
+  }
 
   passives.forEach(n => {
     const text = (n.lines || n.rawStats || []).join(' • ') || n.flavour || '';
@@ -149,7 +165,8 @@ function buildIndex() {
       return;
     }
     if ((n.type === 'keystone' || n.type === 'notable') && !n.ascendancy) {
-      out.push({ id: n.id, type: n.type, pillar: 'passives', group: n.type === 'keystone' ? 'Keystones' : 'Notables', name: n.name, text, tags, extraFields: {}, sourceRef: 'passivesEnriched' });
+      const passiveText = n.type === 'keystone' ? getKeystoneText(n) : text;
+      out.push({ id: n.id, type: n.type, pillar: 'passives', group: n.type === 'keystone' ? 'Keystones' : 'Notables', name: n.name, text: passiveText, tags: normalizeTags(n.tags, passiveText), extraFields: {}, sourceRef: 'passivesEnriched' });
     }
   });
 
@@ -164,7 +181,7 @@ function buildIndex() {
       const g = index?.skillsById?.get?.(sid);
       if (!g) return;
       const text = g.description || g.support_text || '';
-      out.push({ id: `skill:${sid}`, type: 'skill', pillar: 'skills', group: fam.name, name: g.name || g.base_item?.display_name || sid, text, tags: normalizeTags(g.tags, text), extraFields: { craftingType: g.crafting_type || g.crafting?.crafting_type || '—' }, sourceRef: 'skills_enriched' });
+      out.push({ id: `skill:${sid}`, type: 'skill', pillar: 'skills', group: fam.name, name: g.name || g.base_item?.display_name || sid, text, tags: normalizeTags(g.tags, text), extraFields: { craftingType: deriveCraftingType(g) }, sourceRef: 'skills_enriched' });
     });
   });
 
@@ -181,8 +198,17 @@ function bind() {
 
   els.search?.addEventListener('input', (e) => { state.q = e.target.value || ''; render(); });
   document.getElementById('codex-clear-tags')?.addEventListener('click', () => { state.tags.clear(); render(); });
-  document.querySelectorAll('[data-codex-pillar]').forEach(btn => btn.addEventListener('click', () => { state.pillar = btn.dataset.codexPillar; state.selectedId = null; render(); }));
-  document.querySelectorAll('[data-passive-kind]').forEach(btn => btn.addEventListener('click', () => { state.passiveKind = btn.dataset.passiveKind; state.selectedId = null; render(); }));
+  document.getElementById('codex-expand-all')?.addEventListener('click', () => {
+    const groups = new Set(state.index.filter(matches).map(e => e.group || 'Other'));
+    state.openGroups = groups;
+    renderList();
+  });
+  document.getElementById('codex-collapse-all')?.addEventListener('click', () => {
+    state.openGroups.clear();
+    renderList();
+  });
+  document.querySelectorAll('[data-codex-pillar]').forEach(btn => btn.addEventListener('click', () => { state.pillar = btn.dataset.codexPillar; state.selectedId = null; state.openGroups.clear(); render(); }));
+  document.querySelectorAll('[data-passive-kind]').forEach(btn => btn.addEventListener('click', () => { state.passiveKind = btn.dataset.passiveKind; state.selectedId = null; state.openGroups.clear(); render(); }));
 
   els.tags?.addEventListener('click', (e) => {
     const chip = e.target.closest('[data-tag]');
@@ -198,6 +224,15 @@ function bind() {
     selectEntry(row.dataset.entryId);
     renderList();
   });
+
+  els.list?.addEventListener('toggle', (e) => {
+    const details = e.target;
+    if (!(details instanceof HTMLDetailsElement)) return;
+    const group = details.dataset.group;
+    if (!group) return;
+    if (details.open) state.openGroups.add(group);
+    else state.openGroups.delete(group);
+  }, true);
 
   document.addEventListener('randomancer:mode-change', (evt) => {
     const mode = evt.detail?.mode;
