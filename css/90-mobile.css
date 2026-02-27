@@ -74,14 +74,6 @@ img, video { max-width: 100%; height: auto; }
     transition: opacity var(--asc-fade-ms) ease;
   }
 
-  /* Keep mobile art treatment stable during roll reveal/defog states.
-     The reveal classes intentionally remove blur on desktop, but on mobile
-     that can make the darkened/blurred treatment disappear mid-crossfade. */
-  .asc-art.is-revealing-art,
-  .asc-art.show.is-defogging-art {
-    filter: blur(3px) saturate(.9) brightness(1.05);
-  }
-
   .asc-art.show {
     opacity: .92;
   }
