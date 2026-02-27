@@ -62,8 +62,7 @@ const REVEAL_HOLD_MS = 90;
 const revealController = {
   isRevealing: false,
   revealTimer: null,
-  defogKickoffTimer: null,
-  artDefogTimer: null
+  defogKickoffTimer: null
 };
 
 function prefersReducedMotion() {
@@ -136,11 +135,6 @@ function finishReveal() {
     clearTimeout(revealController.defogKickoffTimer);
     revealController.defogKickoffTimer = null;
   }
-  if (revealController.artDefogTimer) {
-    clearTimeout(revealController.artDefogTimer);
-    revealController.artDefogTimer = null;
-  }
-
   resultsStage?.classList.remove('is-revealing', 'is-defogging');
   ascArt?.classList.remove('is-revealing-art', 'is-defogging-art');
   app?.classList.remove('is-revealing-art', 'is-defogging-art');
@@ -183,14 +177,7 @@ function startReveal() {
     revealController.defogKickoffTimer = null;
   }, REVEAL_HOLD_MS);
 
-  if (ascArt?.classList.contains('show')) {
-    ascArt.classList.add('is-revealing-art');
-    ascArt.classList.remove('is-defogging-art');
-    revealController.artDefogTimer = setTimeout(() => {
-      ascArt.classList.add('is-defogging-art');
-      revealController.artDefogTimer = null;
-    }, REVEAL_HOLD_MS + 120);
-  }
+  ascArt?.classList.remove('is-revealing-art', 'is-defogging-art');
 
   revealController.revealTimer = setTimeout(() => {
     finishReveal();
