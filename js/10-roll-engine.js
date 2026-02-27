@@ -34,13 +34,7 @@ function updateAscArt(asc){
       ascCrossfadeTimer = null;
     }
 
-    // If a previous crossfade is in progress, promote its target to the new base so
-    // interrupted rolls still transition from the currently visible art instead of snapping.
     const wasCrossfading = el.classList.contains('is-crossfading');
-    const interruptedTarget = el.style.getPropertyValue('--asc-next-img');
-    if (wasCrossfading && interruptedTarget) {
-      el.style.setProperty('--asc-img', interruptedTarget);
-    }
 
     // First reveal: just fade in the base art.
     if (!hasCurrent && !wasCrossfading) {
