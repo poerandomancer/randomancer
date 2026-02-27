@@ -44,8 +44,11 @@ function updateAscArt(asc){
     }
 
     // Crossfade from current -> new art over ~2.4s using the overlay layer.
+    // Force-reset the overlay state so rapid interruptions don't keep a stale
+    // high-opacity overlay that makes the next image appear to pop in.
     el.classList.remove('is-crossfading');
     el.style.removeProperty('--asc-next-img');
+    void el.offsetWidth;
 
     requestAnimationFrame(() => {
       if (el.dataset.ascPath !== path || el.dataset.ascToken !== token) return;
