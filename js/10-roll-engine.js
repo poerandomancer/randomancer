@@ -8,44 +8,66 @@ import { dataReady, ensureDataPreload } from './08-data-load.js';
 import { pickRecommendedAscendancyNodes, pickRecommendedKeystones, pickRecommendedNotables } from '../passivesEngine.js';
 
 // ---------- ascendancy art ----------
+const ASC_CROSSFADE_MS = 2400;
+let ascCrossfadeTimer = null;
+
 function updateAscArt(asc){
   const el = document.getElementById('asc-art');
   if (!el) return;
   const path = `/images/ascendancies/${asc.toLowerCase().replace(/\s+/g,'-')}.webp`;
 
-  // Avoid redundant work if we're already showing this art
-  if (el.dataset.ascPath === path && el.classList.contains('show')) return;
+  // Avoid redundant work if we're already showing this art.
+  if (el.dataset.ascPath === path && !el.classList.contains('is-crossfading') && el.classList.contains('show')) return;
   el.dataset.ascPath = path;
   const hasCurrent = !!el.style.getPropertyValue('--asc-img');
   const token = String(Date.now());
   el.dataset.ascToken = token;
 
-  // Preload the new image before fading it in
+  // Preload the new image before fading it in.
   const img = new Image();
   img.onload = () => {
-    // If another roll changed the target meanwhile, bail
+    // If another roll changed the target meanwhile, bail.
     if (el.dataset.ascPath !== path || el.dataset.ascToken !== token) return;
 
+    if (ascCrossfadeTimer) {
+      clearTimeout(ascCrossfadeTimer);
+      ascCrossfadeTimer = null;
+    }
+
+    // If a previous crossfade is in progress, promote its target to the new base so
+    // interrupted rolls still transition from the currently visible art instead of snapping.
+    const wasCrossfading = el.classList.contains('is-crossfading');
+    const interruptedTarget = el.style.getPropertyValue('--asc-next-img');
+    if (wasCrossfading && interruptedTarget) {
+      el.style.setProperty('--asc-img', interruptedTarget);
+    }
+
     // First reveal: just fade in the base art.
-    if (!hasCurrent) {
+    if (!hasCurrent && !wasCrossfading) {
       el.style.setProperty('--asc-img', `url('${path}')`);
       requestAnimationFrame(() => el.classList.add('show'));
       return;
     }
 
-    // Crossfade from old -> new art over ~2.4s using the overlay layer.
-    el.style.setProperty('--asc-next-img', `url('${path}')`);
+    // Crossfade from current -> new art over ~2.4s using the overlay layer.
     el.classList.remove('is-crossfading');
-    void el.offsetWidth;
-    el.classList.add('is-crossfading');
+    el.style.removeProperty('--asc-next-img');
 
-    window.setTimeout(() => {
+    requestAnimationFrame(() => {
       if (el.dataset.ascPath !== path || el.dataset.ascToken !== token) return;
-      el.style.setProperty('--asc-img', `url('${path}')`);
-      el.classList.remove('is-crossfading');
-      el.style.removeProperty('--asc-next-img');
-      el.classList.add('show');
-    }, 2400);
+
+      el.style.setProperty('--asc-next-img', `url('${path}')`);
+      el.classList.add('is-crossfading');
+
+      ascCrossfadeTimer = window.setTimeout(() => {
+        if (el.dataset.ascPath !== path || el.dataset.ascToken !== token) return;
+        el.style.setProperty('--asc-img', `url('${path}')`);
+        el.classList.remove('is-crossfading');
+        el.style.removeProperty('--asc-next-img');
+        el.classList.add('show');
+        ascCrossfadeTimer = null;
+      }, ASC_CROSSFADE_MS);
+    });
   };
   img.src = path;
 }
