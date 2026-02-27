@@ -8,7 +8,8 @@ const STASHED_CHALLENGE_KEY = 'stashedChallengeState';
 const MODE_TRANSITION_MS = 380;
 const MODES = {
   STANDARD: 'standard',
-  CHALLENGE: 'challenge'
+  CHALLENGE: 'challenge',
+  CODEX: 'codex'
 };
 const SEVERITY_ORDER = ['mild', 'cruel', 'diabolical'];
 let challengeHasRoll = false;
@@ -19,6 +20,7 @@ let stashedChallengeState = null;
 
 const STANDARD_LEDE_HTML = 'Tune <strong>Cohesion</strong> for tighter themes or wilder chaos. Use <strong>Bind the Fates</strong> to favor or ban certain options. Toggle <strong>Weapon Set II</strong> for an additional weapon set, and choose <strong>Combat Mechanics</strong>: 1-3 for ailment/tactic depth.<br><strong>---</strong><br>Click <strong>Roll Your Fate</strong> to begin.';
 const CHALLENGE_LEDE_TEXT = '<strong>Challenge Mode</strong> rolls a <strong>Contract</strong>, not a build. Use <strong>Bind the Fates</strong> to favor or ban certain options. Choose 1–3 <strong>Tasks</strong>, set <strong>Severity</strong>, then <strong>Draft a Contract</strong> to receive a stacked set of constraints to overcome.<br><strong>---</strong><br>Click <strong>Draft Contract</strong> to begin.';
+const CODEX_LEDE_TEXT = '<strong>Codex Mode</strong> is a non-random library for browsing Path of Exile 2 data. Explore <strong>Ascendancy</strong>, <strong>Skills</strong>, and <strong>Passives</strong> with search and tags.<br><strong>---</strong><br>Select an entry to inspect full details.';
 
 let CHALLENGE_TEMPLATE_BY_ID = Object.create(null);
 
@@ -764,43 +766,53 @@ function stashCurrentChallengeState() {
 
 function getMode() {
   try {
+    const qp = new URLSearchParams(location.search);
+    const fromUrl = qp.get('mode');
+    if (fromUrl === MODES.CHALLENGE || fromUrl === MODES.CODEX) return fromUrl;
     const stored = localStorage.getItem(MODE_KEY);
-    if (stored === MODES.CHALLENGE) return MODES.CHALLENGE;
+    if (stored === MODES.CHALLENGE || stored === MODES.CODEX) return stored;
   } catch {}
   return MODES.STANDARD;
 }
 
 function setMode(mode) {
-  const next = mode === MODES.CHALLENGE ? MODES.CHALLENGE : MODES.STANDARD;
+  const next = [MODES.STANDARD, MODES.CHALLENGE, MODES.CODEX].includes(mode) ? mode : MODES.STANDARD;
   try { localStorage.setItem(MODE_KEY, next); } catch {}
+  try {
+    const params = new URLSearchParams(location.search);
+    if (next === MODES.STANDARD) params.delete('mode');
+    else params.set('mode', next);
+    history.replaceState(null, '', `${location.pathname}${params.toString() ? `?${params.toString()}` : ''}`);
+  } catch {}
   try { document.dispatchEvent(new CustomEvent('randomancer:mode-change', { detail: { mode: next } })); } catch {}
   return next;
 }
 
-function setChallengeVisibility(active) {
+function setChallengeVisibility(mode) {
   const standardControls = document.getElementById('standard-controls');
   const challengeControls = document.getElementById('challenge-controls');
+  const isChallenge = mode === MODES.CHALLENGE;
+  const isCodex = mode === MODES.CODEX;
 
   if (standardControls) {
     Array.from(standardControls.children || []).forEach((child) => {
       const keepVisible = child.classList?.contains('bind-fates-row');
-      child.classList.toggle('is-hidden', active && !keepVisible);
+      child.classList.toggle('is-hidden', (isChallenge && !keepVisible) || isCodex);
     });
   }
-  challengeControls?.classList.toggle('is-hidden', !active);
+  challengeControls?.classList.toggle('is-hidden', !isChallenge);
+  document.getElementById('roll')?.closest('.roll-sticky')?.classList.toggle('is-hidden', isCodex);
 }
 
 function setHeaderLede(mode) {
   const lede = document.getElementById('app-lede');
   if (!lede) return;
-  if (mode === MODES.CHALLENGE) {
-    lede.innerHTML = CHALLENGE_LEDE_TEXT;
-  } else {
-    lede.innerHTML = STANDARD_LEDE_HTML;
-  }
+  if (mode === MODES.CHALLENGE) lede.innerHTML = CHALLENGE_LEDE_TEXT;
+  else if (mode === MODES.CODEX) lede.innerHTML = CODEX_LEDE_TEXT;
+  else lede.innerHTML = STANDARD_LEDE_HTML;
 }
 
-function setChallengePanels(active) {
+function setChallengePanels(mode) {
   const challengePanel = document.getElementById('challenge-panel');
   const challengeDivider = document.getElementById('challenge-empty-divider');
   const challengeFlavor = document.getElementById('challenge-empty-flavor');
@@ -810,26 +822,28 @@ function setChallengePanels(active) {
   const uniquesPanel = document.getElementById('uniques-panel');
   const passivesPanel = document.getElementById('passives-panel');
   const emptyState = document.getElementById('empty-state');
+  const codexPanel = document.getElementById('codex-panel');
   const hasStandardRoll = document.getElementById('app')?.dataset?.hasRoll === 'true';
+  const isChallenge = mode === MODES.CHALLENGE;
+  const isCodex = mode === MODES.CODEX;
 
-  const showChallengeEmpty = active && !challengeHasRoll;
-  const showChallengePanel = active && challengeHasRoll;
-  const showStandardEmpty = !active && !hasStandardRoll;
+  const showChallengeEmpty = isChallenge && !challengeHasRoll;
+  const showChallengePanel = isChallenge && challengeHasRoll;
+  const showStandardEmpty = !isChallenge && !isCodex && !hasStandardRoll;
 
   challengePanel?.classList.toggle('is-hidden', !showChallengePanel);
   challengeDivider?.classList.toggle('is-hidden', !showChallengeEmpty);
   challengeFlavor?.classList.toggle('is-hidden', !showChallengeEmpty);
-  buildBanner?.classList.toggle('is-hidden', active);
-  buildPanel?.classList.toggle('is-hidden', active);
-  skillsPanel?.classList.toggle('is-hidden', active);
-  uniquesPanel?.classList.toggle('is-hidden', active);
-  passivesPanel?.classList.toggle('is-hidden', active);
+  buildBanner?.classList.toggle('is-hidden', isChallenge || isCodex);
+  buildPanel?.classList.toggle('is-hidden', isChallenge || isCodex);
+  skillsPanel?.classList.toggle('is-hidden', isChallenge || isCodex);
+  uniquesPanel?.classList.toggle('is-hidden', isChallenge || isCodex);
+  passivesPanel?.classList.toggle('is-hidden', isChallenge || isCodex);
+  codexPanel?.classList.toggle('is-hidden', !isCodex);
 
-  if (emptyState) {
-    emptyState.classList.toggle('is-hidden', !showStandardEmpty);
-  }
+  if (emptyState) emptyState.classList.toggle('is-hidden', !showStandardEmpty);
 
-  updateResumePrompts(active ? MODES.CHALLENGE : MODES.STANDARD);
+  updateResumePrompts(mode);
 }
 
 function setChallengeFlavorLine() {
@@ -909,7 +923,7 @@ function renderChallengeContract(contract) {
   }
   try { document.dispatchEvent(new CustomEvent('randomancer:challenge-rendered')); } catch {}
 
-  setChallengePanels(true);
+  setChallengePanels(getMode());
 }
 
 function updateChallengeTaskButton() {
@@ -967,15 +981,16 @@ async function handleChallengeRoll({ statusEl }) {
 
 function syncMode(mode) {
   const isChallenge = mode === MODES.CHALLENGE;
-  const modeToggle = document.getElementById('randomancer-mode-toggle');
+  const isCodex = mode === MODES.CODEX;
   const modeToggleControl = document.getElementById('randomancer-mode-control');
   const app = document.getElementById('app');
 
   document.body?.classList.toggle('challenge-mode', isChallenge);
-  if (document.body) document.body.dataset.mode = isChallenge ? 'challenge' : 'build';
+  document.body?.classList.toggle('codex-mode', isCodex);
+  if (document.body) document.body.dataset.mode = isChallenge ? 'challenge' : (isCodex ? 'codex' : 'build');
   setHeaderLede(mode);
-  setChallengeVisibility(isChallenge);
-  setChallengePanels(isChallenge);
+  setChallengeVisibility(mode);
+  setChallengePanels(mode);
 
   if (app && !isChallenge && app.dataset.hasRoll !== 'true') {
     app.dataset.hasRoll = 'false';
@@ -990,19 +1005,16 @@ function syncMode(mode) {
   const rollText = document.querySelector('#roll .roll-text');
   if (rollText) rollText.textContent = isChallenge ? 'Draft Contract' : 'Roll Your Fate';
 
-  if (modeToggle) modeToggle.checked = isChallenge;
-  modeToggleControl?.classList.toggle('is-challenge', isChallenge);
+  modeToggleControl?.querySelectorAll('[data-mode-target]').forEach((btn) => {
+    const on = btn.dataset.modeTarget === mode;
+    btn.classList.toggle('is-active', on);
+    btn.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const modeToggle = document.getElementById('randomancer-mode-toggle');
+  const modeControl = document.getElementById('randomancer-mode-control');
   const initialMode = getMode();
-
-  // Mode toggle labels
-  const stdLabel = document.querySelector('.mode-toggle-text[data-mode="standard"]');
-  const chLabel  = document.querySelector('.mode-toggle-text[data-mode="challenge"]');
-  if (stdLabel) stdLabel.textContent = 'Build Mode';
-  if (chLabel)  chLabel.textContent  = 'Challenge Mode';
 
   hydrateStash();
   stabilizeLedeHeight();
@@ -1038,11 +1050,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  modeToggle?.addEventListener('change', async event => {
-    const targetMode = event.target?.checked ? MODES.CHALLENGE : MODES.STANDARD;
+  modeControl?.addEventListener('click', async (event) => {
+    const btn = event.target?.closest?.('[data-mode-target]');
+    if (!btn) return;
+    const targetMode = btn.dataset.modeTarget;
+    if (![MODES.STANDARD, MODES.CHALLENGE, MODES.CODEX].includes(targetMode)) return;
     const label = targetMode === MODES.CHALLENGE
       ? 'Entering Challenge Mode…'
-      : 'Returning to Build Mode…';
+      : targetMode === MODES.CODEX ? 'Opening Codex…' : 'Returning to Build Mode…';
 
     await runModeTransition(label, () => {
       const nextMode = setMode(targetMode);

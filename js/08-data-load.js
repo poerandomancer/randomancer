@@ -107,6 +107,21 @@ async function loadData() {
       console.warn('[Skill Families] Library missing or index build failed; Skill Family pickers/tooltips will be disabled.');
     }
     
+
+    const ascendancyCatalogRaw = await tryLoad('data/datamined/ascendancy.json');
+    const ascendancyCatalog = Array.isArray(ascendancyCatalogRaw) ? ascendancyCatalogRaw : [];
+    const ascendancyByName = Object.create(null);
+    ascendancyCatalog.forEach((row) => {
+      const name = row?.Name;
+      if (!name || String(name).startsWith('[DNT-UNUSED]')) return;
+      ascendancyByName[name] = {
+        name,
+        className: row.Character || null,
+        description: row.FlavourText || null,
+        uiArt: row.UIArt || null
+      };
+    });
+
     // Optional keystone tooltip overrides (human-readable effect lines)
     const keystoneTooltipsRaw = await tryLoad('data/enriched/keystone_tooltips.json');
     const keystoneTooltips = (keystoneTooltipsRaw && typeof keystoneTooltipsRaw === 'object' && !Array.isArray(keystoneTooltipsRaw))
@@ -125,7 +140,9 @@ async function loadData() {
       skillFamilyById,
       skillFamilyResolved,
       skillFamilyCounts,
-      skillFamilyOptions
+      skillFamilyOptions,
+      ascendancyCatalog,
+      ascendancyByName
     };
     console.log("[Global DATA initialized]", window.DATA);
 

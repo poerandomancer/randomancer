@@ -238,12 +238,11 @@
 
       <div class="controls-rail mode-switch-under-roll">
         <div class="mode-switch-row" role="group" aria-label="Randomancer mode">
-          <label id="randomancer-mode-control" class="mode-toggle" for="randomancer-mode-toggle">
-            <span class="mode-toggle-text" data-mode="standard">Build</span>
-            <input type="checkbox" id="randomancer-mode-toggle" aria-label="Toggle Challenge mode">
-            <span class="toggle-ui" aria-hidden="true"></span>
-            <span class="mode-toggle-text" data-mode="challenge">Challenge</span>
-          </label>
+          <div id="randomancer-mode-control" class="mode-segmented" role="tablist" aria-label="Randomancer mode switcher">
+            <button class="mode-segment is-active" type="button" role="tab" aria-selected="true" data-mode-target="standard">Build</button>
+            <button class="mode-segment" type="button" role="tab" aria-selected="false" data-mode-target="challenge">Challenge</button>
+            <button class="mode-segment" type="button" role="tab" aria-selected="false" data-mode-target="codex">Codex</button>
+          </div>
         </div>
       </div>
 	</header>
@@ -330,8 +329,32 @@
         <hr id="challenge-empty-divider" class="gold subtle challenge-empty-divider is-hidden" aria-hidden="true"/>
         <div id="challenge-empty-flavor" class="challenge-empty-flavor is-hidden" aria-live="polite"></div>
 
-
-
+      <section id="codex-panel" class="panel codex-panel is-hidden" aria-label="Codex Library">
+        <div class="codex-header">
+          <div class="build-panel-tabs codex-pillars" role="tablist" aria-label="Codex pillars">
+            <button class="skills-tab is-active" type="button" role="tab" data-codex-pillar="ascendancy" aria-selected="true">Ascendancy</button>
+            <button class="skills-tab" type="button" role="tab" data-codex-pillar="skills" aria-selected="false">Skills</button>
+            <button class="skills-tab" type="button" role="tab" data-codex-pillar="passives" aria-selected="false">Passives</button>
+          </div>
+          <div class="codex-filter-row">
+            <input id="codex-search" type="search" placeholder="Search names, descriptions, tags…" autocomplete="off" />
+            <button id="codex-clear-tags" type="button">Clear Tags</button>
+            <span id="codex-results-count" class="codex-results-count">0 results</span>
+          </div>
+          <div id="codex-tag-chips" class="codex-tag-chips" aria-label="Codex tag filters"></div>
+          <div id="codex-passive-toggle" class="build-panel-tabs codex-passive-toggle is-hidden" role="tablist" aria-label="Passives type">
+            <button class="skills-tab is-active" type="button" data-passive-kind="keystone" aria-selected="true">Keystones</button>
+            <button class="skills-tab" type="button" data-passive-kind="notable" aria-selected="false">Notables</button>
+          </div>
+        </div>
+        <div class="codex-layout">
+          <div id="codex-list" class="codex-list" aria-live="polite"></div>
+          <aside id="codex-inspector" class="codex-inspector">
+            <h3>Inspector</h3>
+            <p>Select an entry to inspect its details.</p>
+          </aside>
+        </div>
+      </section>
 
       <div id="build-roll-banner" class="build-roll-banner" aria-live="polite">
         <div class="build-panel-tabs view-mode-tabs">
