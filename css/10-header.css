@@ -98,12 +98,32 @@ header{
     linear-gradient(to right, rgba(8,8,9,0.96), rgba(24,20,14,0.94));
   box-shadow:0 0 6px rgba(0,0,0,.7);
   white-space:nowrap;
-  pointer-events:none; /* keeps it from interfering with header clicks */
 }
 
 .patch-indicator strong{
   color:var(--gold);
   font-weight:600;
+}
+
+.patch-indicator__social-link{
+  display:inline-flex;
+  align-items:center;
+  color:var(--muted);
+  text-decoration:none;
+  vertical-align:middle;
+  margin-left:0.2rem;
+}
+
+.patch-indicator__social-link:hover,
+.patch-indicator__social-link:focus-visible{
+  color:var(--gold);
+}
+
+.patch-indicator__social-icon{
+  width:0.95rem;
+  height:0.95rem;
+  fill:currentColor;
+  display:block;
 }
 
 /* Soften bold weight across the UI (avoids chunky/synthetic 700 weight in some browsers) */
