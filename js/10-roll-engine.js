@@ -8,44 +8,63 @@ import { dataReady, ensureDataPreload } from './08-data-load.js';
 import { pickRecommendedAscendancyNodes, pickRecommendedKeystones, pickRecommendedNotables } from '../passivesEngine.js';
 
 // ---------- ascendancy art ----------
+const ASC_CROSSFADE_MS = 1400;
+let ascCrossfadeTimer = null;
+
 function updateAscArt(asc){
   const el = document.getElementById('asc-art');
   if (!el) return;
   const path = `/images/ascendancies/${asc.toLowerCase().replace(/\s+/g,'-')}.webp`;
 
-  // Avoid redundant work if we're already showing this art
-  if (el.dataset.ascPath === path && el.classList.contains('show')) return;
+  // Avoid redundant work if we're already showing this art.
+  if (el.dataset.ascPath === path && !el.classList.contains('is-crossfading') && el.classList.contains('show')) return;
   el.dataset.ascPath = path;
   const hasCurrent = !!el.style.getPropertyValue('--asc-img');
   const token = String(Date.now());
   el.dataset.ascToken = token;
 
-  // Preload the new image before fading it in
+  // Preload the new image before fading it in.
   const img = new Image();
   img.onload = () => {
-    // If another roll changed the target meanwhile, bail
+    // If another roll changed the target meanwhile, bail.
     if (el.dataset.ascPath !== path || el.dataset.ascToken !== token) return;
 
+    if (ascCrossfadeTimer) {
+      clearTimeout(ascCrossfadeTimer);
+      ascCrossfadeTimer = null;
+    }
+
+    const wasCrossfading = el.classList.contains('is-crossfading');
+
     // First reveal: just fade in the base art.
-    if (!hasCurrent) {
+    if (!hasCurrent && !wasCrossfading) {
       el.style.setProperty('--asc-img', `url('${path}')`);
       requestAnimationFrame(() => el.classList.add('show'));
       return;
     }
 
-    // Crossfade from old -> new art over ~2.4s using the overlay layer.
-    el.style.setProperty('--asc-next-img', `url('${path}')`);
+    // Crossfade from current -> new art over ~2.4s using the overlay layer.
+    // Force-reset the overlay state so rapid interruptions don't keep a stale
+    // high-opacity overlay that makes the next image appear to pop in.
     el.classList.remove('is-crossfading');
+    el.style.removeProperty('--asc-next-img');
     void el.offsetWidth;
-    el.classList.add('is-crossfading');
 
-    window.setTimeout(() => {
+    requestAnimationFrame(() => {
       if (el.dataset.ascPath !== path || el.dataset.ascToken !== token) return;
-      el.style.setProperty('--asc-img', `url('${path}')`);
-      el.classList.remove('is-crossfading');
-      el.style.removeProperty('--asc-next-img');
-      el.classList.add('show');
-    }, 2400);
+
+      el.style.setProperty('--asc-next-img', `url('${path}')`);
+      el.classList.add('is-crossfading');
+
+      ascCrossfadeTimer = window.setTimeout(() => {
+        if (el.dataset.ascPath !== path || el.dataset.ascToken !== token) return;
+        el.style.setProperty('--asc-img', `url('${path}')`);
+        el.classList.remove('is-crossfading');
+        el.style.removeProperty('--asc-next-img');
+        el.classList.add('show');
+        ascCrossfadeTimer = null;
+      }, ASC_CROSSFADE_MS);
+    });
   };
   img.src = path;
 }
@@ -62,8 +81,7 @@ const REVEAL_HOLD_MS = 90;
 const revealController = {
   isRevealing: false,
   revealTimer: null,
-  defogKickoffTimer: null,
-  artDefogTimer: null
+  defogKickoffTimer: null
 };
 
 function prefersReducedMotion() {
@@ -136,11 +154,6 @@ function finishReveal() {
     clearTimeout(revealController.defogKickoffTimer);
     revealController.defogKickoffTimer = null;
   }
-  if (revealController.artDefogTimer) {
-    clearTimeout(revealController.artDefogTimer);
-    revealController.artDefogTimer = null;
-  }
-
   resultsStage?.classList.remove('is-revealing', 'is-defogging');
   ascArt?.classList.remove('is-revealing-art', 'is-defogging-art');
   app?.classList.remove('is-revealing-art', 'is-defogging-art');
@@ -183,14 +196,7 @@ function startReveal() {
     revealController.defogKickoffTimer = null;
   }, REVEAL_HOLD_MS);
 
-  if (ascArt?.classList.contains('show')) {
-    ascArt.classList.add('is-revealing-art');
-    ascArt.classList.remove('is-defogging-art');
-    revealController.artDefogTimer = setTimeout(() => {
-      ascArt.classList.add('is-defogging-art');
-      revealController.artDefogTimer = null;
-    }, REVEAL_HOLD_MS + 120);
-  }
+  ascArt?.classList.remove('is-revealing-art', 'is-defogging-art');
 
   revealController.revealTimer = setTimeout(() => {
     finishReveal();
