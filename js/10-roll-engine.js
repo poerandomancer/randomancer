@@ -1371,8 +1371,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusEl = rollBtn.querySelector('.roll-status');
     rollBtn.addEventListener('click', async () => {
       if (revealController.isRevealing) {
+        // Let this click both dismiss the current reveal and immediately trigger
+        // the next roll/contract draft.
         skipReveal();
-        return;
       }
 
       // Tiny loading hint if data is still warming up
