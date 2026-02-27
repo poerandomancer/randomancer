@@ -8,7 +8,7 @@ import { dataReady, ensureDataPreload } from './08-data-load.js';
 import { pickRecommendedAscendancyNodes, pickRecommendedKeystones, pickRecommendedNotables } from '../passivesEngine.js';
 
 // ---------- ascendancy art ----------
-const ASC_CROSSFADE_MS = 2400;
+const ASC_CROSSFADE_MS = 1400;
 let ascCrossfadeTimer = null;
 
 function updateAscArt(asc){
