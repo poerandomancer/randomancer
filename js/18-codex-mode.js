@@ -197,6 +197,14 @@ function buildIndex() {
     return true;
   }
 
+  function isAtlasNotable(node) {
+    if (!node || node.type !== 'notable') return false;
+    const id = String(node.id || '');
+    if (/^atlas/i.test(id)) return true;
+    const hay = `${node.name || ''} ${(node.lines || []).join(' ')} ${(node.tags || []).join(' ')}`.toLowerCase();
+    return hay.includes('atlas');
+  }
+
   passives.forEach(n => {
     const text = (n.lines || n.rawStats || []).join(' • ') || n.flavour || '';
     const tags = normalizeTags(n.tags, text);
@@ -218,6 +226,7 @@ function buildIndex() {
       return;
     }
     if ((n.type === 'keystone' || n.type === 'notable') && !n.ascendancy) {
+      if (isAtlasNotable(n)) return;
       const passiveText = n.type === 'keystone' ? getKeystoneText(n) : text;
       out.push({ id: n.id, type: n.type, pillar: 'passives', group: n.type === 'keystone' ? 'Keystones' : 'Notables', name: n.name, text: passiveText, tags: normalizeTags(n.tags, passiveText), extraFields: {}, sourceRef: 'passivesEnriched' });
     }
