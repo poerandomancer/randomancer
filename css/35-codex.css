@@ -6,14 +6,14 @@
 .codex-filter-row{ display:flex; gap:.5rem; align-items:center; margin:.5rem 0; }
 #codex-search{ flex:1; background:rgba(0,0,0,.35); border:1px solid rgba(121,182,206,0.42); color:#dcebf1; border-radius:8px; padding:.45rem .6rem; }
 #codex-clear-tags,
-#codex-expand-all,
-#codex-collapse-all{ border:1px solid rgba(121,182,206,.4); background:rgba(121,182,206,.12); color:#dcebf1; border-radius:999px; padding:.35rem .7rem; }
+.codex-list-actions .codex-nav-btn{ border:1px solid rgba(121,182,206,.4); background:rgba(121,182,206,.12); color:#dcebf1; border-radius:999px; padding:.35rem .7rem; }
 .codex-results-count{ color:var(--codex-accent); font-size:.9rem; }
 .codex-tag-chips{ display:flex; flex-wrap:wrap; gap:.35rem; margin:.4rem 0 .2rem; }
 .codex-tag-chips .tag-pill{ cursor:pointer; text-transform:none; }
 .codex-tag-chips .tag-pill.is-active{ border-color:rgba(121,182,206,.9); background:rgba(121,182,206,.22); color:#d8f3ff; }
 .codex-layout{ display:grid; grid-template-columns:minmax(260px,42%) 1fr; gap:.7rem; }
 .codex-list,.codex-inspector{ background:rgba(6,8,10,.58); border:1px solid rgba(121,182,206,.2); border-radius:10px; padding:.65rem; min-height:520px; max-height:68vh; overflow:auto; }
+.codex-list-actions{ display:flex; gap:.45rem; margin-bottom:.55rem; position:sticky; top:0; z-index:1; background:rgba(6,8,10,.9); padding-bottom:.35rem; }
 .codex-group{ border:1px solid rgba(121,182,206,.18); border-radius:8px; margin-bottom:.55rem; }
 .codex-group > summary{ cursor:pointer; padding:.45rem .6rem; color:#b6d9e7; font-weight:600; }
 .codex-item{ display:block; width:100%; text-align:left; border:0; background:rgba(0,0,0,.2); color:#e8e8e8; margin:.3rem; padding:.45rem .55rem; border-radius:6px; cursor:pointer; }

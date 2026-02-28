@@ -5,7 +5,7 @@ const state = {
   passiveKind: 'keystone',
   q: '',
   tags: new Set(),
-  openGroups: new Set(),
+  openGroupsByView: new Map(),
   selectedId: null,
   index: []
 };
@@ -72,7 +72,19 @@ function renderTags(entries) {
   const freq = new Map();
   entries.forEach(e => (e.tags || []).forEach(t => freq.set(t, (freq.get(t) || 0) + 1)));
   const top = Array.from(freq.entries()).sort((a,b)=>b[1]-a[1]).slice(0, 40);
-  els.tags.innerHTML = top.map(([t,c]) => `<button class="tag-pill ${state.tags.has(t)?'is-active':''}" data-tag="${esc(t)}">${esc(t)} <small>${c}</small></button>`).join('');
+  const selectedMissing = Array.from(state.tags).filter((t) => !freq.has(t)).map((t) => [t, 0]);
+  const chips = [...top, ...selectedMissing];
+  els.tags.innerHTML = chips.map(([t,c]) => `<button class="tag-pill ${state.tags.has(t)?'is-active':''}" data-tag="${esc(t)}">${esc(t)} <small>${c}</small></button>`).join('');
+}
+
+function getViewKey() {
+  return state.pillar === 'passives' ? `passives:${state.passiveKind}` : state.pillar;
+}
+
+function getOpenGroupsSet() {
+  const key = getViewKey();
+  if (!state.openGroupsByView.has(key)) state.openGroupsByView.set(key, new Set());
+  return state.openGroupsByView.get(key);
 }
 
 function renderList() {
@@ -93,13 +105,21 @@ function renderList() {
     groups.get(key).push(e);
   });
 
+  const openGroups = getOpenGroupsSet();
+  const controlsHtml = `
+    <div class="codex-list-actions" aria-label="Navigation group controls">
+      <button type="button" class="codex-nav-btn" data-codex-list-action="expand">Expand All</button>
+      <button type="button" class="codex-nav-btn" data-codex-list-action="collapse">Collapse All</button>
+    </div>
+  `;
+
   const html = Array.from(groups.entries()).map(([group, items]) => `
-    <details class="codex-group" data-group="${esc(group)}" ${state.openGroups.has(group) ? 'open' : ''}>
+    <details class="codex-group" data-group="${esc(group)}" ${openGroups.has(group) ? 'open' : ''}>
       <summary>${esc(group)} (${items.length})</summary>
       ${items.slice(0, 250).map(i => `<button class="codex-item ${state.selectedId===i.id?'is-active':''}" data-entry-id="${esc(i.id)}"><strong>${mark(i.name)}</strong><small>${i.type==='skill' ? `crafting: ${esc(i.extraFields?.craftingType || 'Implicit')} · ` : ''}${mark((i.text || '').slice(0, 130))}</small></button>`).join('')}
     </details>
   `).join('');
-  els.list.innerHTML = html;
+  els.list.innerHTML = `${controlsHtml}${html}`;
 }
 
 function render() {
@@ -214,17 +234,8 @@ function bind() {
 
   els.search?.addEventListener('input', (e) => { state.q = e.target.value || ''; render(); });
   document.getElementById('codex-clear-tags')?.addEventListener('click', () => { state.tags.clear(); render(); });
-  document.getElementById('codex-expand-all')?.addEventListener('click', () => {
-    const groups = new Set(state.index.filter(matches).map(e => e.group || 'Other'));
-    state.openGroups = groups;
-    renderList();
-  });
-  document.getElementById('codex-collapse-all')?.addEventListener('click', () => {
-    state.openGroups.clear();
-    renderList();
-  });
-  document.querySelectorAll('[data-codex-pillar]').forEach(btn => btn.addEventListener('click', () => { state.pillar = btn.dataset.codexPillar; state.selectedId = null; state.openGroups.clear(); render(); }));
-  document.querySelectorAll('[data-passive-kind]').forEach(btn => btn.addEventListener('click', () => { state.passiveKind = btn.dataset.passiveKind; state.selectedId = null; state.openGroups.clear(); render(); }));
+  document.querySelectorAll('[data-codex-pillar]').forEach(btn => btn.addEventListener('click', () => { state.pillar = btn.dataset.codexPillar; state.selectedId = null; render(); }));
+  document.querySelectorAll('[data-passive-kind]').forEach(btn => btn.addEventListener('click', () => { state.passiveKind = btn.dataset.passiveKind; state.selectedId = null; render(); }));
 
   els.tags?.addEventListener('click', (e) => {
     const chip = e.target.closest('[data-tag]');
@@ -235,6 +246,20 @@ function bind() {
   });
 
   els.list?.addEventListener('click', (e) => {
+    const actionBtn = e.target.closest('[data-codex-list-action]');
+    if (actionBtn) {
+      const mode = actionBtn.dataset.codexListAction;
+      const openGroups = getOpenGroupsSet();
+      if (mode === 'expand') {
+        const groups = new Set(state.index.filter(matches).map(en => en.group || 'Other'));
+        state.openGroupsByView.set(getViewKey(), groups);
+      } else if (mode === 'collapse') {
+        openGroups.clear();
+      }
+      renderList();
+      return;
+    }
+
     const row = e.target.closest('[data-entry-id]');
     if (!row) return;
     selectEntry(row.dataset.entryId);
@@ -246,8 +271,9 @@ function bind() {
     if (!(details instanceof HTMLDetailsElement)) return;
     const group = details.dataset.group;
     if (!group) return;
-    if (details.open) state.openGroups.add(group);
-    else state.openGroups.delete(group);
+    const openGroups = getOpenGroupsSet();
+    if (details.open) openGroups.add(group);
+    else openGroups.delete(group);
   }, true);
 
   document.addEventListener('randomancer:mode-change', (evt) => {
