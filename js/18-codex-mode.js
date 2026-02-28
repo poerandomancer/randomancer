@@ -60,7 +60,7 @@ function selectEntry(id) {
     <p><strong>${esc(entry.group || 'Library')}</strong></p>
     ${entry.image ? `<img src="${esc(entry.image)}" alt="${esc(entry.group)}" style="max-width:100%;border-radius:8px;margin-bottom:.5rem;">` : ''}
     ${entry.extraFields?.className ? `<p><strong>Class:</strong> ${esc(entry.extraFields.className)}</p>` : ''}
-    ${entry.type === 'skill' ? `<p><strong>Crafting Type:</strong> ${esc(entry.extraFields?.craftingType || '—')}</p>` : ''}
+    ${entry.type === 'skill' ? `<p><strong>Crafting Type:</strong> ${esc(entry.extraFields?.craftingType || 'Implicit')}</p>` : ''}
     ${entry.type === 'ascendancy_node' ? `<p><strong>Official Description:</strong> ${esc(entry.extraFields?.officialDescription || 'Description unavailable in current dataset.')}</p>` : ''}
     <p>${mark(entry.text || 'Description unavailable in current dataset.')}</p>
     <div class="skill-tags">${(entry.tags || []).slice(0, 24).map(t => `<span class="tag-pill">${esc(t)}</span>`).join('')}</div>
@@ -96,7 +96,7 @@ function renderList() {
   const html = Array.from(groups.entries()).map(([group, items]) => `
     <details class="codex-group" data-group="${esc(group)}" ${state.openGroups.has(group) ? 'open' : ''}>
       <summary>${esc(group)} (${items.length})</summary>
-      ${items.slice(0, 250).map(i => `<button class="codex-item ${state.selectedId===i.id?'is-active':''}" data-entry-id="${esc(i.id)}"><strong>${mark(i.name)}</strong><small>${i.type==='skill' ? `crafting: ${esc(i.extraFields?.craftingType || '—')} · ` : ''}${mark((i.text || '').slice(0, 130))}</small></button>`).join('')}
+      ${items.slice(0, 250).map(i => `<button class="codex-item ${state.selectedId===i.id?'is-active':''}" data-entry-id="${esc(i.id)}"><strong>${mark(i.name)}</strong><small>${i.type==='skill' ? `crafting: ${esc(i.extraFields?.craftingType || 'Implicit')} · ` : ''}${mark((i.text || '').slice(0, 130))}</small></button>`).join('')}
     </details>
   `).join('');
   els.list.innerHTML = html;
@@ -140,16 +140,17 @@ function buildIndex() {
     if (direct) return String(direct);
     const types = Array.isArray(gem?.crafting?.types_raw) ? gem.crafting.types_raw.filter(Boolean) : [];
     if (types.length) return types.join(' / ');
-    return '—';
+    return 'Implicit';
   }
 
   function isBrowsableSkill(gem) {
-    const hay = `${gem?.name || ''} ${gem?.id || ''} ${gem?.base_item?.display_name || ''}`.toLowerCase();
+    const hay = `${gem?.name || ''} ${gem?.id || ''} ${gem?.base_item?.display_name || ''} ${gem?.description || ''} ${gem?.support_text || ''}`.toLowerCase();
     if (!hay.trim()) return false;
     if (hay.includes('dnt')) return false;
     if (hay.includes('unused')) return false;
     if (hay.includes('playtest')) return false;
     if (hay.includes('default')) return false;
+    if (hay.includes('coming soon')) return false;
     return true;
   }
 
