@@ -12,8 +12,11 @@
 .codex-tag-chips .tag-pill{ cursor:pointer; text-transform:none; }
 .codex-tag-chips .tag-pill.is-active{ border-color:rgba(121,182,206,.9); background:rgba(121,182,206,.22); color:#d8f3ff; }
 .codex-layout{ display:grid; grid-template-columns:minmax(260px,42%) 1fr; gap:.7rem; }
-.codex-list,.codex-inspector{ background:rgba(6,8,10,.58); border:1px solid rgba(121,182,206,.2); border-radius:10px; padding:.65rem; min-height:520px; max-height:68vh; overflow:auto; }
-.codex-list-actions{ display:flex; gap:.45rem; margin-bottom:.55rem; position:sticky; top:0; z-index:1; background:rgba(6,8,10,.9); padding-bottom:.35rem; }
+.codex-list,.codex-inspector{ background:rgba(6,8,10,.58); border:1px solid rgba(121,182,206,.2); border-radius:10px; padding:.65rem; min-height:520px; max-height:68vh; }
+.codex-list{ display:flex; flex-direction:column; overflow:hidden; }
+.codex-list-scroll{ flex:1 1 auto; min-height:0; overflow:auto; padding-right:.2rem; }
+.codex-list-actions{ display:flex; gap:.45rem; margin-bottom:.55rem; }
+.codex-inspector{ overflow:auto; }
 .codex-group{ border:1px solid rgba(121,182,206,.18); border-radius:8px; margin-bottom:.55rem; }
 .codex-group > summary{ cursor:pointer; padding:.45rem .6rem; color:#b6d9e7; font-weight:600; }
 .codex-item{ display:block; width:100%; text-align:left; border:0; background:rgba(0,0,0,.2); color:#e8e8e8; margin:.3rem; padding:.45rem .55rem; border-radius:6px; cursor:pointer; }

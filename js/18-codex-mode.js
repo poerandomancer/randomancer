@@ -3,11 +3,13 @@ import { ensureDataPreload } from './08-data-load.js';
 const state = {
   pillar: 'ascendancy',
   passiveKind: 'keystone',
+  gearKind: 'uniques',
   q: '',
   tags: new Set(),
   openGroupsByView: new Map(),
   selectedId: null,
-  index: []
+  index: [],
+  uniquesItems: []
 };
 
 const els = {};
@@ -33,6 +35,7 @@ function mark(txt) {
 function matches(entry) {
   if (entry.pillar !== state.pillar) return false;
   if (state.pillar === 'passives' && entry.type !== state.passiveKind) return false;
+  if (state.pillar === 'gear' && entry.type !== state.gearKind) return false;
   const hay = `${entry.name} ${entry.text} ${(entry.tags || []).join(' ')}`.toLowerCase();
   const q = state.q.trim().toLowerCase();
   if (q && !hay.includes(q)) return false;
@@ -46,6 +49,7 @@ function updateUrl() {
   p.set('mode', 'codex');
   p.set('pillar', state.pillar);
   if (state.pillar === 'passives') p.set('passive', state.passiveKind); else p.delete('passive');
+  if (state.pillar === 'gear') p.set('gear', state.gearKind); else p.delete('gear');
   if (state.q) p.set('q', state.q); else p.delete('q');
   if (state.tags.size) p.set('tags', Array.from(state.tags).join(',')); else p.delete('tags');
   history.replaceState(null, '', `${location.pathname}?${p.toString()}`);
@@ -55,14 +59,18 @@ function selectEntry(id) {
   state.selectedId = id;
   const entry = state.index.find(e => e.id === id);
   if (!entry || !els.inspector) return;
+  const uniqueLines = Array.isArray(entry.extraFields?.lines) ? entry.extraFields.lines : [];
   els.inspector.innerHTML = `
     <h3>${esc(entry.name)}</h3>
     <p><strong>${esc(entry.group || 'Library')}</strong></p>
     ${entry.image ? `<img src="${esc(entry.image)}" alt="${esc(entry.group)}" style="max-width:100%;border-radius:8px;margin-bottom:.5rem;">` : ''}
     ${entry.extraFields?.className ? `<p><strong>Class:</strong> ${esc(entry.extraFields.className)}</p>` : ''}
     ${entry.type === 'skill' ? `<p><strong>Crafting Type:</strong> ${esc(entry.extraFields?.craftingType || 'Implicit')}</p>` : ''}
+    ${entry.type === 'uniques' ? `<p><strong>Slot:</strong> ${esc(entry.extraFields?.slot || 'Unknown')}</p>` : ''}
     ${entry.type === 'ascendancy_node' ? `<p><strong>Official Description:</strong> ${esc(entry.extraFields?.officialDescription || 'Description unavailable in current dataset.')}</p>` : ''}
+    ${entry.type === 'uniques' ? `<p><strong>Description:</strong> ${mark(entry.extraFields?.description || 'Description unavailable in current dataset.')}</p>` : ''}
     <p>${mark(entry.text || 'Description unavailable in current dataset.')}</p>
+    ${entry.type === 'uniques' && uniqueLines.length ? `<div><strong>Lines:</strong><ul>${uniqueLines.map((ln) => `<li>${mark(ln)}</li>`).join('')}</ul></div>` : ''}
     <div class="skill-tags">${(entry.tags || []).slice(0, 24).map(t => `<span class="tag-pill">${esc(t)}</span>`).join('')}</div>
   `;
 }
@@ -78,7 +86,9 @@ function renderTags(entries) {
 }
 
 function getViewKey() {
-  return state.pillar === 'passives' ? `passives:${state.passiveKind}` : state.pillar;
+  if (state.pillar === 'passives') return `passives:${state.passiveKind}`;
+  if (state.pillar === 'gear') return `gear:${state.gearKind}`;
+  return state.pillar;
 }
 
 function getOpenGroupsSet() {
@@ -93,7 +103,13 @@ function renderList() {
   if (els.count) els.count.textContent = `${entries.length} result${entries.length === 1 ? '' : 's'}`;
   renderTags(entries);
   if (!entries.length) {
-    els.list.innerHTML = '<div class="codex-empty">No results found. Try a different search or clear tags.</div>';
+    const controlsHtml = `
+      <div class="codex-list-actions" aria-label="Navigation group controls">
+        <button type="button" class="codex-nav-btn" data-codex-list-action="expand">Expand All</button>
+        <button type="button" class="codex-nav-btn" data-codex-list-action="collapse">Collapse All</button>
+      </div>
+    `;
+    els.list.innerHTML = `${controlsHtml}<div class="codex-list-scroll"><div class="codex-empty">No results found. Try a different search or clear tags.</div></div>`;
     if (els.inspector) els.inspector.innerHTML = '<h3>Inspector</h3><p>No entry selected.</p>';
     return;
   }
@@ -119,7 +135,7 @@ function renderList() {
       ${items.slice(0, 250).map(i => `<button class="codex-item ${state.selectedId===i.id?'is-active':''}" data-entry-id="${esc(i.id)}"><strong>${mark(i.name)}</strong><small>${i.type==='skill' ? `crafting: ${esc(i.extraFields?.craftingType || 'Implicit')} · ` : ''}${mark((i.text || '').slice(0, 130))}</small></button>`).join('')}
     </details>
   `).join('');
-  els.list.innerHTML = `${controlsHtml}${html}`;
+  els.list.innerHTML = `${controlsHtml}<div class="codex-list-scroll">${html}</div>`;
 }
 
 function render() {
@@ -129,9 +145,16 @@ function render() {
     btn.setAttribute('aria-selected', on ? 'true' : 'false');
   });
   const passiveToggle = document.getElementById('codex-passive-toggle');
+  const gearToggle = document.getElementById('codex-gear-toggle');
   passiveToggle?.classList.toggle('is-hidden', state.pillar !== 'passives');
+  gearToggle?.classList.toggle('is-hidden', state.pillar !== 'gear');
   passiveToggle?.querySelectorAll('[data-passive-kind]').forEach(btn => {
     const on = btn.dataset.passiveKind === state.passiveKind;
+    btn.classList.toggle('is-active', on);
+    btn.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+  gearToggle?.querySelectorAll('[data-gear-kind]').forEach(btn => {
+    const on = btn.dataset.gearKind === state.gearKind;
     btn.classList.toggle('is-active', on);
     btn.setAttribute('aria-selected', on ? 'true' : 'false');
   });
@@ -221,6 +244,53 @@ function buildIndex() {
     });
   });
 
+  const uniques = Array.isArray(state.uniquesItems) ? state.uniquesItems : [];
+  uniques.forEach((u, idx) => {
+    const name = u?.name || `Unique ${idx + 1}`;
+    const slot = u?.slot || 'Unknown';
+    const lines = Array.isArray(u?.lines) ? u.lines.filter(Boolean) : [];
+    const tags = normalizeTags(u?.tags, `${name} ${slot} ${lines.join(' ')}`);
+    out.push({
+      id: `unique:${slot}:${name}:${idx}`,
+      type: 'uniques',
+      pillar: 'gear',
+      group: slot,
+      name,
+      text: lines.join(' • ') || 'No details available in current dataset.',
+      tags,
+      extraFields: {
+        slot,
+        description: u?.base ? `Base: ${u.base}` : 'Description unavailable in current dataset.',
+        lines
+      },
+      sourceRef: 'uniques_enriched'
+    });
+  });
+
+  out.push({
+    id: 'gear-placeholder-implicits',
+    type: 'implicits',
+    pillar: 'gear',
+    group: 'Implicits',
+    name: 'Implicit Mod Library (Coming Soon)',
+    text: 'Implicit item metadata will appear here in a future pass.',
+    tags: ['implicit', 'placeholder'],
+    extraFields: {},
+    sourceRef: 'placeholder'
+  });
+
+  out.push({
+    id: 'gear-placeholder-mods',
+    type: 'mods',
+    pillar: 'gear',
+    group: 'Gear Mods',
+    name: 'Gear Mod Library (Coming Soon)',
+    text: 'Global gear modifiers and affix references will appear here in a future pass.',
+    tags: ['mods', 'placeholder'],
+    extraFields: {},
+    sourceRef: 'placeholder'
+  });
+
   state.index = out;
 }
 
@@ -236,6 +306,7 @@ function bind() {
   document.getElementById('codex-clear-tags')?.addEventListener('click', () => { state.tags.clear(); render(); });
   document.querySelectorAll('[data-codex-pillar]').forEach(btn => btn.addEventListener('click', () => { state.pillar = btn.dataset.codexPillar; state.selectedId = null; render(); }));
   document.querySelectorAll('[data-passive-kind]').forEach(btn => btn.addEventListener('click', () => { state.passiveKind = btn.dataset.passiveKind; state.selectedId = null; render(); }));
+  document.querySelectorAll('[data-gear-kind]').forEach(btn => btn.addEventListener('click', () => { state.gearKind = btn.dataset.gearKind; state.selectedId = null; render(); }));
 
   els.tags?.addEventListener('click', (e) => {
     const chip = e.target.closest('[data-tag]');
@@ -285,9 +356,11 @@ function bind() {
 function hydrateFromUrl() {
   const p = new URLSearchParams(location.search);
   const pillar = p.get('pillar');
-  if (pillar && ['ascendancy','skills','passives'].includes(pillar)) state.pillar = pillar;
+  if (pillar && ['ascendancy','skills','passives','gear'].includes(pillar)) state.pillar = pillar;
   const passiveKind = p.get('passive');
   if (passiveKind && ['keystone','notable'].includes(passiveKind)) state.passiveKind = passiveKind;
+  const gearKind = p.get('gear');
+  if (gearKind && ['uniques','implicits','mods'].includes(gearKind)) state.gearKind = gearKind;
   state.q = p.get('q') || '';
   state.tags = new Set((p.get('tags') || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean));
 }
@@ -296,6 +369,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   bind();
   hydrateFromUrl();
   await ensureDataPreload();
+  try {
+    const res = await fetch('data/enriched/uniques_enriched.json');
+    const json = await res.json();
+    state.uniquesItems = Array.isArray(json?.items) ? json.items : [];
+  } catch {
+    state.uniquesItems = [];
+  }
   buildIndex();
   render();
 });
