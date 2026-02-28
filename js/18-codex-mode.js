@@ -198,6 +198,21 @@ function buildIndex() {
     return 'Implicit';
   }
 
+  function deriveSupportAttributeGroup(gem) {
+    const rw = gem?.requirement_weights;
+    const weights = {
+      strength: Number(rw?.strength || 0),
+      dexterity: Number(rw?.dexterity || 0),
+      intelligence: Number(rw?.intelligence || 0)
+    };
+    const order = ['strength', 'dexterity', 'intelligence'];
+    let best = 'strength';
+    for (const key of order) {
+      if (weights[key] > weights[best]) best = key;
+    }
+    return best;
+  }
+
   function isBrowsableSkill(gem) {
     const hay = `${gem?.name || ''} ${gem?.id || ''} ${gem?.base_item?.display_name || ''} ${gem?.description || ''} ${gem?.support_text || ''}`.toLowerCase();
     if (!hay.trim()) return false;
@@ -253,15 +268,17 @@ function buildIndex() {
     const text = g.description || g.support_text || '';
     const craftingType = deriveCraftingType(g);
     const skillKind = g?.type === 'support' ? 'support' : 'active';
+    const supportAffinity = skillKind === 'support' ? deriveSupportAttributeGroup(g) : null;
+    const skillGroup = skillKind === 'support' ? supportAffinity : craftingType;
     out.push({
       id: `skill:${sid}`,
       type: 'skill',
       pillar: 'skills',
-      group: craftingType,
+      group: skillGroup,
       name,
       text,
-      tags: normalizeTags(g.tags, `${text} ${craftingType}`),
-      extraFields: { craftingType, skillKind },
+      tags: normalizeTags(g.tags, `${text} ${craftingType} ${supportAffinity || ''}`),
+      extraFields: { craftingType, skillKind, supportAffinity },
       sourceRef: 'skills_enriched'
     });
   });
