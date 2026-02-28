@@ -60,14 +60,16 @@ function selectEntry(id) {
   const entry = state.index.find(e => e.id === id);
   if (!entry || !els.inspector) return;
   const uniqueLines = Array.isArray(entry.extraFields?.lines) ? entry.extraFields.lines : [];
+  const ascendancyMeta = entry.type === 'ascendancy_node'
+    ? `${esc(entry.group || 'Ascendancy')}${entry.extraFields?.officialDescription ? ` | ${esc(entry.extraFields.officialDescription)}` : ''}`
+    : null;
   els.inspector.innerHTML = `
     <h3>${esc(entry.name)}</h3>
-    <p><strong>${esc(entry.group || 'Library')}</strong></p>
+    <p><strong>${ascendancyMeta || esc(entry.group || 'Library')}</strong></p>
     ${entry.image ? `<img src="${esc(entry.image)}" alt="${esc(entry.group)}" style="max-width:100%;border-radius:8px;margin-bottom:.5rem;">` : ''}
-    ${entry.extraFields?.className ? `<p><strong>Class:</strong> ${esc(entry.extraFields.className)}</p>` : ''}
+    ${entry.extraFields?.className && entry.type !== 'ascendancy_node' ? `<p><strong>Class:</strong> ${esc(entry.extraFields.className)}</p>` : ''}
     ${entry.type === 'skill' ? `<p><strong>Crafting Type:</strong> ${esc(entry.extraFields?.craftingType || 'Implicit')}</p>` : ''}
     ${entry.type === 'uniques' ? `<p><strong>Slot:</strong> ${esc(entry.extraFields?.slot || 'Unknown')}</p>` : ''}
-    ${entry.type === 'ascendancy_node' ? `<p><strong>Official Description:</strong> ${esc(entry.extraFields?.officialDescription || 'Description unavailable in current dataset.')}</p>` : ''}
     ${entry.type === 'uniques' ? `<p><strong>Description:</strong> ${mark(entry.extraFields?.description || 'Description unavailable in current dataset.')}</p>` : ''}
     <p>${mark(entry.text || 'Description unavailable in current dataset.')}</p>
     ${entry.type === 'uniques' && uniqueLines.length ? `<div><strong>Lines:</strong><ul>${uniqueLines.map((ln) => `<li>${mark(ln)}</li>`).join('')}</ul></div>` : ''}
