@@ -1,5 +1,4 @@
 import { ensureDataPreload } from './08-data-load.js';
-import { resolveSkillFamily } from './17-skill-family-utils.js';
 
 const state = {
   pillar: 'ascendancy',
@@ -144,6 +143,16 @@ function buildIndex() {
     return '—';
   }
 
+  function isBrowsableSkill(gem) {
+    const hay = `${gem?.name || ''} ${gem?.id || ''} ${gem?.base_item?.display_name || ''}`.toLowerCase();
+    if (!hay.trim()) return false;
+    if (hay.includes('dnt')) return false;
+    if (hay.includes('unused')) return false;
+    if (hay.includes('playtest')) return false;
+    if (hay.includes('default')) return false;
+    return true;
+  }
+
   passives.forEach(n => {
     const text = (n.lines || n.rawStats || []).join(' • ') || n.flavour || '';
     const tags = normalizeTags(n.tags, text);
@@ -170,18 +179,24 @@ function buildIndex() {
     }
   });
 
-  const fams = data.skillFamilyLib?.families || [];
-  const index = data.skillFamilyIndex;
-  fams.forEach((fam) => {
-    let ids = data.skillFamilyResolved?.get?.(fam.name);
-    if (!ids && index) ids = resolveSkillFamily(fam, index, data.skillFamilyLib);
-    const arr = Array.from(ids || []);
-    out.push({ id: `family:${fam.id || fam.name}`, type: 'skill_family', pillar: 'skills', group: 'Skill Families', name: fam.name, text: `Family with ${arr.length} skills`, tags: normalizeTags(fam.query?.all || [], fam.name), extraFields: {}, sourceRef: 'skill_families' });
-    arr.forEach((sid) => {
-      const g = index?.skillsById?.get?.(sid);
-      if (!g) return;
-      const text = g.description || g.support_text || '';
-      out.push({ id: `skill:${sid}`, type: 'skill', pillar: 'skills', group: fam.name, name: g.name || g.base_item?.display_name || sid, text, tags: normalizeTags(g.tags, text), extraFields: { craftingType: deriveCraftingType(g) }, sourceRef: 'skills_enriched' });
+  const gems = Array.isArray(data.gems) ? data.gems : [];
+  gems.forEach((g) => {
+    if (!isBrowsableSkill(g)) return;
+    const sid = g.id || g.base_item?.id || g.name;
+    const name = g.name || g.base_item?.display_name || sid;
+    if (!sid || !name) return;
+    const text = g.description || g.support_text || '';
+    const craftingType = deriveCraftingType(g);
+    out.push({
+      id: `skill:${sid}`,
+      type: 'skill',
+      pillar: 'skills',
+      group: craftingType,
+      name,
+      text,
+      tags: normalizeTags(g.tags, `${text} ${craftingType}`),
+      extraFields: { craftingType },
+      sourceRef: 'skills_enriched'
     });
   });
 
