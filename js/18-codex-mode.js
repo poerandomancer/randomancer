@@ -3,6 +3,7 @@ import { ensureDataPreload } from './08-data-load.js';
 const state = {
   pillar: 'ascendancy',
   passiveKind: 'keystone',
+  skillKind: 'active',
   gearKind: 'uniques',
   q: '',
   tags: new Set(),
@@ -35,6 +36,7 @@ function mark(txt) {
 function matches(entry) {
   if (entry.pillar !== state.pillar) return false;
   if (state.pillar === 'passives' && entry.type !== state.passiveKind) return false;
+  if (state.pillar === 'skills' && entry.type === 'skill' && entry.extraFields?.skillKind !== state.skillKind) return false;
   if (state.pillar === 'gear' && entry.type !== state.gearKind) return false;
   const hay = `${entry.name} ${entry.text} ${(entry.tags || []).join(' ')}`.toLowerCase();
   const q = state.q.trim().toLowerCase();
@@ -49,6 +51,7 @@ function updateUrl() {
   p.set('mode', 'codex');
   p.set('pillar', state.pillar);
   if (state.pillar === 'passives') p.set('passive', state.passiveKind); else p.delete('passive');
+  if (state.pillar === 'skills') p.set('skill', state.skillKind); else p.delete('skill');
   if (state.pillar === 'gear') p.set('gear', state.gearKind); else p.delete('gear');
   if (state.q) p.set('q', state.q); else p.delete('q');
   if (state.tags.size) p.set('tags', Array.from(state.tags).join(',')); else p.delete('tags');
@@ -147,11 +150,18 @@ function render() {
     btn.setAttribute('aria-selected', on ? 'true' : 'false');
   });
   const passiveToggle = document.getElementById('codex-passive-toggle');
+  const skillsToggle = document.getElementById('codex-skills-toggle');
   const gearToggle = document.getElementById('codex-gear-toggle');
   passiveToggle?.classList.toggle('is-hidden', state.pillar !== 'passives');
+  skillsToggle?.classList.toggle('is-hidden', state.pillar !== 'skills');
   gearToggle?.classList.toggle('is-hidden', state.pillar !== 'gear');
   passiveToggle?.querySelectorAll('[data-passive-kind]').forEach(btn => {
     const on = btn.dataset.passiveKind === state.passiveKind;
+    btn.classList.toggle('is-active', on);
+    btn.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+  skillsToggle?.querySelectorAll('[data-skill-kind]').forEach(btn => {
+    const on = btn.dataset.skillKind === state.skillKind;
     btn.classList.toggle('is-active', on);
     btn.setAttribute('aria-selected', on ? 'true' : 'false');
   });
@@ -242,6 +252,7 @@ function buildIndex() {
     if (!sid || !name) return;
     const text = g.description || g.support_text || '';
     const craftingType = deriveCraftingType(g);
+    const skillKind = g?.type === 'support' ? 'support' : 'active';
     out.push({
       id: `skill:${sid}`,
       type: 'skill',
@@ -250,7 +261,7 @@ function buildIndex() {
       name,
       text,
       tags: normalizeTags(g.tags, `${text} ${craftingType}`),
-      extraFields: { craftingType },
+      extraFields: { craftingType, skillKind },
       sourceRef: 'skills_enriched'
     });
   });
@@ -317,6 +328,7 @@ function bind() {
   document.getElementById('codex-clear-tags')?.addEventListener('click', () => { state.tags.clear(); render(); });
   document.querySelectorAll('[data-codex-pillar]').forEach(btn => btn.addEventListener('click', () => { state.pillar = btn.dataset.codexPillar; state.selectedId = null; render(); }));
   document.querySelectorAll('[data-passive-kind]').forEach(btn => btn.addEventListener('click', () => { state.passiveKind = btn.dataset.passiveKind; state.selectedId = null; render(); }));
+  document.querySelectorAll('[data-skill-kind]').forEach(btn => btn.addEventListener('click', () => { state.skillKind = btn.dataset.skillKind; state.selectedId = null; render(); }));
   document.querySelectorAll('[data-gear-kind]').forEach(btn => btn.addEventListener('click', () => { state.gearKind = btn.dataset.gearKind; state.selectedId = null; render(); }));
 
   els.tags?.addEventListener('click', (e) => {
@@ -370,6 +382,8 @@ function hydrateFromUrl() {
   if (pillar && ['ascendancy','skills','passives','gear'].includes(pillar)) state.pillar = pillar;
   const passiveKind = p.get('passive');
   if (passiveKind && ['keystone','notable'].includes(passiveKind)) state.passiveKind = passiveKind;
+  const skillKind = p.get('skill');
+  if (skillKind && ['active','support'].includes(skillKind)) state.skillKind = skillKind;
   const gearKind = p.get('gear');
   if (gearKind && ['uniques','implicits','mods'].includes(gearKind)) state.gearKind = gearKind;
   state.q = p.get('q') || '';
