@@ -284,3 +284,29 @@ body.challenge-mode .challenge-empty-flavor{
   margin-top: 0 !important; /* ensure resume isn’t offset either */
   align-self: center;       /* extra belt-and-suspenders */
 }
+
+.mode-segmented{
+  display:inline-flex;
+  align-items:center;
+  border:1px solid rgba(200,168,107,0.35);
+  border-radius:999px;
+  overflow:hidden;
+  background:rgba(10,10,12,0.8);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,0.35);
+}
+.mode-segment{
+  border:0;
+  background:transparent;
+  color:rgba(235,235,235,0.6);
+  font-weight:600;
+  letter-spacing:.03em;
+  padding:.42rem .9rem;
+  cursor:pointer;
+}
+.mode-segment.is-active{
+  color:var(--mode-accent, var(--gold));
+  background:linear-gradient(180deg, rgba(200,168,107,0.25), rgba(0,0,0,0.22));
+  text-shadow:0 0 8px color-mix(in srgb, var(--mode-accent, var(--gold)) 45%, transparent);
+}
+body[data-mode="challenge"] .mode-segment.is-active{ --mode-accent:#bf4b55; }
+body[data-mode="codex"] .mode-segment.is-active{ --mode-accent:#79b6ce; }

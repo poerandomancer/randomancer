@@ -21,8 +21,8 @@ function hasCategory(task, cat) {
 
 function ensureMode() {
   if (document.body?.classList.contains('challenge-mode')) return 'challenge';
-  const toggle = document.getElementById('randomancer-mode-toggle');
-  return toggle?.checked ? 'challenge' : 'standard';
+  const mode = window.RandomancerGetMode?.();
+  return mode === 'challenge' ? 'challenge' : 'standard';
 }
 
 function countBindFatesSelections(bind){
