@@ -11,6 +11,15 @@
 .codex-tag-chips{ display:flex; flex-wrap:wrap; gap:.35rem; margin:.4rem 0 .2rem; }
 .codex-tag-chips .tag-pill{ cursor:pointer; text-transform:none; }
 .codex-tag-chips .tag-pill.is-active{ border-color:rgba(121,182,206,.9); background:rgba(121,182,206,.22); color:#d8f3ff; }
+.codex-pins-tray{ margin:.4rem 0 .2rem; padding:.45rem .5rem; border:1px solid rgba(121,182,206,.25); border-radius:8px; background:rgba(6,10,14,.45); }
+.codex-pins-head{ display:flex; align-items:center; justify-content:space-between; gap:.5rem; margin-bottom:.35rem; }
+.codex-pins-title{ font-size:.85rem; color:#b9ddeb; letter-spacing:.03em; }
+.codex-pin-list{ display:flex; flex-wrap:wrap; gap:.3rem; margin:.2rem 0 .35rem; }
+.codex-pin-chip{ border:1px solid rgba(121,182,206,.5); border-radius:999px; background:rgba(121,182,206,.16); color:#def3fb; padding:.15rem .55rem; display:inline-flex; align-items:center; gap:.35rem; }
+.codex-pin-remove{ border:0; background:transparent; color:#def3fb; cursor:pointer; font-size:.95rem; line-height:1; }
+.codex-pin-actions{ display:flex; gap:.45rem; align-items:center; }
+.codex-pin-actions button{ border:1px solid rgba(121,182,206,.35); background:rgba(121,182,206,.1); color:#dcebf1; border-radius:999px; padding:.2rem .55rem; }
+.codex-pin-query{ font-size:.78rem; color:#9fbdc9; white-space:nowrap; overflow:auto; }
 .codex-layout{ display:grid; grid-template-columns:minmax(260px,42%) 1fr; gap:.7rem; }
 .codex-list,.codex-inspector{ background:rgba(6,8,10,.58); border:1px solid rgba(121,182,206,.2); border-radius:10px; padding:.65rem; min-height:520px; max-height:68vh; }
 .codex-list{ display:flex; flex-direction:column; overflow:hidden; }
@@ -23,6 +32,9 @@
 .codex-item small{ color:#b8c4cc; display:block; }
 .codex-item.is-active{ outline:1px solid rgba(121,182,206,.65); background:rgba(121,182,206,.12); }
 .codex-inspector h3{ margin-top:0; color:#cce8f2; }
+.codex-inspector-head{ display:flex; align-items:center; justify-content:space-between; gap:.5rem; }
+.codex-pin-toggle{ border:1px solid rgba(121,182,206,.45); background:rgba(121,182,206,.12); color:#dff2f9; border-radius:999px; padding:.22rem .55rem; cursor:pointer; }
+.codex-pin-toggle.is-pinned{ background:rgba(121,182,206,.35); box-shadow:0 0 8px rgba(121,182,206,.3) inset; }
 .codex-empty{ color:#9eaab1; padding:.75rem; }
 .codex-mark{ background:rgba(121,182,206,.25); color:#e9f7ff; padding:0 .1rem; border-radius:2px; }
 body[data-mode="codex"] .subtitle{ color:#98ccdf; }

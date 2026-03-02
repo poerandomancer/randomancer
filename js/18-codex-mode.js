@@ -8,6 +8,7 @@ const state = {
   q: '',
   tags: new Set(),
   openGroupsByView: new Map(),
+  pinnedIds: new Set(),
   selectedId: null,
   index: [],
   uniquesItems: []
@@ -63,11 +64,15 @@ function selectEntry(id) {
   const entry = state.index.find(e => e.id === id);
   if (!entry || !els.inspector) return;
   const uniqueLines = Array.isArray(entry.extraFields?.lines) ? entry.extraFields.lines : [];
+  const isPinned = state.pinnedIds.has(entry.id);
   const ascendancyMeta = entry.type === 'ascendancy_node'
     ? `${esc(entry.group || 'Ascendancy')}${entry.extraFields?.officialDescription ? ` | ${esc(entry.extraFields.officialDescription)}` : ''}`
     : null;
   els.inspector.innerHTML = `
-    <h3>${esc(entry.name)}</h3>
+    <div class="codex-inspector-head">
+      <h3>${esc(entry.name)}</h3>
+      <button type="button" class="codex-pin-toggle ${isPinned ? 'is-pinned' : ''}" data-pin-id="${esc(entry.id)}" aria-pressed="${isPinned ? 'true' : 'false'}">📌 ${isPinned ? 'Pinned' : 'Pin'}</button>
+    </div>
     <p><strong>${ascendancyMeta || esc(entry.group || 'Library')}</strong></p>
     ${entry.image ? `<img src="${esc(entry.image)}" alt="${esc(entry.group)}" style="max-width:100%;border-radius:8px;margin-bottom:.5rem;">` : ''}
     ${entry.extraFields?.className && entry.type !== 'ascendancy_node' ? `<p><strong>Class:</strong> ${esc(entry.extraFields.className)}</p>` : ''}
@@ -88,6 +93,36 @@ function renderTags(entries) {
   const selectedMissing = Array.from(state.tags).filter((t) => !freq.has(t)).map((t) => [t, 0]);
   const chips = [...top, ...selectedMissing];
   els.tags.innerHTML = chips.map(([t,c]) => `<button class="tag-pill ${state.tags.has(t)?'is-active':''}" data-tag="${esc(t)}">${esc(t)} <small>${c}</small></button>`).join('');
+}
+
+function buildPoeNinjaSeed() {
+  const names = Array.from(state.pinnedIds)
+    .map((id) => state.index.find((entry) => entry.id === id)?.name)
+    .filter(Boolean);
+  return names.join(' | ');
+}
+
+function renderPinsTray() {
+  const tray = document.getElementById('codex-pins-tray');
+  if (!tray) return;
+  const pins = Array.from(state.pinnedIds)
+    .map((id) => state.index.find((entry) => entry.id === id))
+    .filter(Boolean);
+  const seed = buildPoeNinjaSeed();
+
+  tray.innerHTML = `
+    <div class="codex-pins-head">
+      <span class="codex-pins-title">Pinned for poe.ninja filter (${pins.length})</span>
+      <div class="codex-pin-actions">
+        <button type="button" data-pin-action="copy" ${seed ? '' : 'disabled'}>Copy</button>
+        <button type="button" data-pin-action="clear" ${pins.length ? '' : 'disabled'}>Clear</button>
+      </div>
+    </div>
+    <div class="codex-pin-list">
+      ${pins.map((entry) => `<span class="codex-pin-chip">${esc(entry.name)}<button type="button" class="codex-pin-remove" data-unpin-id="${esc(entry.id)}" aria-label="Unpin ${esc(entry.name)}">×</button></span>`).join('') || '<span class="codex-empty">No pinned entries yet.</span>'}
+    </div>
+    <div class="codex-pin-query">${seed ? esc(seed) : 'Pin entries to build a poe.ninja seed string.'}</div>
+  `;
 }
 
 function getViewKey() {
@@ -172,6 +207,7 @@ function render() {
   });
   if (els.search) els.search.value = state.q;
   renderList();
+  renderPinsTray();
   updateUrl();
 }
 
@@ -386,6 +422,41 @@ function bind() {
     if (details.open) openGroups.add(group);
     else openGroups.delete(group);
   }, true);
+
+  els.inspector?.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-pin-id]');
+    if (!btn) return;
+    const id = btn.dataset.pinId;
+    if (!id) return;
+    if (state.pinnedIds.has(id)) state.pinnedIds.delete(id);
+    else state.pinnedIds.add(id);
+    selectEntry(id);
+    renderPinsTray();
+  });
+
+  document.getElementById('codex-pins-tray')?.addEventListener('click', async (e) => {
+    const unpin = e.target.closest('[data-unpin-id]');
+    if (unpin) {
+      const id = unpin.dataset.unpinId;
+      if (id) state.pinnedIds.delete(id);
+      if (state.selectedId === id) selectEntry(id);
+      renderPinsTray();
+      return;
+    }
+    const action = e.target.closest('[data-pin-action]')?.dataset.pinAction;
+    if (!action) return;
+    if (action === 'clear') {
+      state.pinnedIds.clear();
+      if (state.selectedId) selectEntry(state.selectedId);
+      renderPinsTray();
+      return;
+    }
+    if (action === 'copy') {
+      const seed = buildPoeNinjaSeed();
+      if (!seed) return;
+      try { await navigator.clipboard.writeText(seed); } catch {}
+    }
+  });
 
   document.addEventListener('randomancer:mode-change', (evt) => {
     const mode = evt.detail?.mode;
