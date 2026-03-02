@@ -18,7 +18,7 @@
 /* Pillar tabs float above and attach to panel frame */
 .codex-pillars{
   position:absolute;
-  left:14px;
+  left:1.25rem;
   top:-1.55rem;
   z-index:7;
   display:flex;
@@ -76,8 +76,9 @@
 .codex-gear-toggle {
   margin-top: .6rem;
   margin-bottom: -.35rem;
-  padding-left: .25rem;
+  padding-left: 0;
   width: fit-content;
+  margin-left: 0;
   position: relative;
   z-index: 3;
 }
