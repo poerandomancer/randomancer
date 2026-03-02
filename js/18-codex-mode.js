@@ -35,7 +35,9 @@ function mark(txt) {
 }
 
 function matches(entry) {
-  if (entry.pillar !== state.pillar) return false;
+  if (state.pillar === 'pinned') {
+    if (!state.pinnedIds.has(entry.id)) return false;
+  } else if (entry.pillar !== state.pillar) return false;
   if (state.pillar === 'passives' && entry.type !== state.passiveKind) return false;
   if (state.pillar === 'skills' && entry.type === 'skill' && entry.extraFields?.skillKind !== state.skillKind) return false;
   if (state.pillar === 'gear' && entry.type !== state.gearKind) return false;
@@ -103,14 +105,13 @@ function buildPoeNinjaSeed() {
 }
 
 function renderPinsTray() {
-  const tray = document.getElementById('codex-pins-tray');
-  if (!tray) return;
+  if (!els.list) return;
   const pins = Array.from(state.pinnedIds)
     .map((id) => state.index.find((entry) => entry.id === id))
     .filter(Boolean);
   const seed = buildPoeNinjaSeed();
 
-  tray.innerHTML = `
+  els.list.innerHTML = `
     <div class="codex-pins-head">
       <span class="codex-pins-title">Pinned for poe.ninja filter (${pins.length})</span>
       <div class="codex-pin-actions">
@@ -206,8 +207,10 @@ function render() {
     btn.setAttribute('aria-selected', on ? 'true' : 'false');
   });
   if (els.search) els.search.value = state.q;
-  renderList();
-  renderPinsTray();
+  if (state.pillar === 'pinned') renderPinsTray();
+  else renderList();
+  const pinnedTab = document.getElementById('codex-pinned-tab');
+  if (pinnedTab) pinnedTab.textContent = `Pinned (${state.pinnedIds.size})`;
   updateUrl();
 }
 
@@ -431,16 +434,16 @@ function bind() {
     if (state.pinnedIds.has(id)) state.pinnedIds.delete(id);
     else state.pinnedIds.add(id);
     selectEntry(id);
-    renderPinsTray();
+    render();
   });
 
-  document.getElementById('codex-pins-tray')?.addEventListener('click', async (e) => {
+  els.list?.addEventListener('click', async (e) => {
     const unpin = e.target.closest('[data-unpin-id]');
     if (unpin) {
       const id = unpin.dataset.unpinId;
       if (id) state.pinnedIds.delete(id);
       if (state.selectedId === id) selectEntry(id);
-      renderPinsTray();
+      render();
       return;
     }
     const action = e.target.closest('[data-pin-action]')?.dataset.pinAction;
@@ -448,7 +451,7 @@ function bind() {
     if (action === 'clear') {
       state.pinnedIds.clear();
       if (state.selectedId) selectEntry(state.selectedId);
-      renderPinsTray();
+      render();
       return;
     }
     if (action === 'copy') {
@@ -467,7 +470,7 @@ function bind() {
 function hydrateFromUrl() {
   const p = new URLSearchParams(location.search);
   const pillar = p.get('pillar');
-  if (pillar && ['ascendancy','skills','passives','gear'].includes(pillar)) state.pillar = pillar;
+  if (pillar && ['ascendancy','skills','passives','gear','pinned'].includes(pillar)) state.pillar = pillar;
   const passiveKind = p.get('passive');
   if (passiveKind && ['keystone','notable'].includes(passiveKind)) state.passiveKind = passiveKind;
   const skillKind = p.get('skill');

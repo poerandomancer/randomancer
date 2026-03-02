@@ -35,6 +35,8 @@
 .codex-inspector-head{ display:flex; align-items:center; justify-content:space-between; gap:.5rem; }
 .codex-pin-toggle{ border:1px solid rgba(121,182,206,.45); background:rgba(121,182,206,.12); color:#dff2f9; border-radius:999px; padding:.22rem .55rem; cursor:pointer; }
 .codex-pin-toggle.is-pinned{ background:rgba(121,182,206,.35); box-shadow:0 0 8px rgba(121,182,206,.3) inset; }
+.skills-tab.codex-pinned-tab{ border-color:rgba(121,182,206,.45); color:#a9d7e9; }
+.skills-tab.codex-pinned-tab.is-active{ color:#dff6ff; border-color:rgba(121,182,206,.85); text-shadow:0 0 8px rgba(121,182,206,.55); box-shadow:0 0 10px rgba(121,182,206,.28); }
 .codex-empty{ color:#9eaab1; padding:.75rem; }
 .codex-mark{ background:rgba(121,182,206,.25); color:#e9f7ff; padding:0 .1rem; border-radius:2px; }
 body[data-mode="codex"] .subtitle{ color:#98ccdf; }
