@@ -44,6 +44,7 @@ function matches(entry) {
   const hay = `${entry.name} ${entry.text} ${(entry.tags || []).join(' ')}`.toLowerCase();
   const q = state.q.trim().toLowerCase();
   if (q && !hay.includes(q)) return false;
+  if (state.pillar === 'pinned') return true;
   for (const t of state.tags) if (!(entry.tags || []).includes(t)) return false;
   return true;
 }
@@ -120,7 +121,7 @@ function renderPinsTray() {
       </div>
     </div>
     <div class="codex-pin-list">
-      ${pins.map((entry) => `<span class="codex-pin-chip">${esc(entry.name)}<button type="button" class="codex-pin-remove" data-unpin-id="${esc(entry.id)}" aria-label="Unpin ${esc(entry.name)}">×</button></span>`).join('') || '<span class="codex-empty">No pinned entries yet.</span>'}
+      ${pins.map((entry) => `<span class="codex-pin-chip" role="button" tabindex="0" data-select-id="${esc(entry.id)}" aria-label="Inspect pinned ${esc(entry.name)}">${esc(entry.name)}<button type="button" class="codex-pin-remove" data-unpin-id="${esc(entry.id)}" aria-label="Unpin ${esc(entry.name)}">×</button></span>`).join('') || '<span class="codex-empty">No pinned entries yet.</span>'}
     </div>
     <div class="codex-pin-query">${seed ? esc(seed) : 'Pin entries to build a poe.ninja seed string.'}</div>
   `;
@@ -446,6 +447,15 @@ function bind() {
       render();
       return;
     }
+    const pick = e.target.closest('[data-select-id]');
+    if (pick) {
+      const id = pick.dataset.selectId;
+      if (id) {
+        state.selectedId = id;
+        selectEntry(id);
+      }
+      return;
+    }
     const action = e.target.closest('[data-pin-action]')?.dataset.pinAction;
     if (!action) return;
     if (action === 'clear') {
@@ -459,6 +469,17 @@ function bind() {
       if (!seed) return;
       try { await navigator.clipboard.writeText(seed); } catch {}
     }
+  });
+
+  els.list?.addEventListener('keydown', (e) => {
+    const pick = e.target.closest('[data-select-id]');
+    if (!pick) return;
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    e.preventDefault();
+    const id = pick.dataset.selectId;
+    if (!id) return;
+    state.selectedId = id;
+    selectEntry(id);
   });
 
   document.addEventListener('randomancer:mode-change', (evt) => {
