@@ -125,7 +125,7 @@
 .codex-pin-remove{ border:0; background:transparent; color:#def3fb; cursor:pointer; font-size:.95rem; line-height:1; }
 .codex-pin-actions{ display:flex; gap:.45rem; align-items:center; }
 .codex-pin-actions button{ border:1px solid rgba(121,182,206,.35); background:rgba(121,182,206,.1); color:#dcebf1; border-radius:999px; padding:.2rem .55rem; cursor:pointer; }
-.codex-pin-query{ font-size:.78rem; color:#9fbdc9; white-space:nowrap; overflow:auto; }
+.codex-pin-query{ font-size:.78rem; color:#9fbdc9; white-space:normal; overflow-wrap:anywhere; word-break:break-word; }
 
 .codex-empty{ color:#9eaab1; padding:.75rem; }
 .codex-mark{ background:rgba(121,182,206,.25); color:#e9f7ff; padding:0 .1rem; border-radius:2px; }
