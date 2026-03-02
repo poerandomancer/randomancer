@@ -98,11 +98,32 @@ function renderTags(entries) {
   els.tags.innerHTML = chips.map(([t,c]) => `<button class="tag-pill ${state.tags.has(t)?'is-active':''}" data-tag="${esc(t)}">${esc(t)} <small>${c}</small></button>`).join('');
 }
 
-function buildPoeNinjaSeed() {
-  const names = Array.from(state.pinnedIds)
-    .map((id) => state.index.find((entry) => entry.id === id)?.name)
-    .filter(Boolean);
-  return names.join(' | ');
+function buildPoeNinjaUrl() {
+  const league = window.RANDOMANCER?.support?.league?.poeNinjaSlug || 'standard';
+  const url = new URL(`https://poe.ninja/poe2/builds/${league}`);
+
+  Array.from(state.pinnedIds)
+    .map((id) => state.index.find((entry) => entry.id === id))
+    .filter(Boolean)
+    .forEach((entry) => {
+      const name = entry.name;
+      if (!name) return;
+
+      if (entry.type === 'ascendancy_node' || entry.type === 'keystone') {
+        url.searchParams.append('keypassives', name);
+        return;
+      }
+      if (entry.type === 'skill') {
+        if (entry.extraFields?.skillKind === 'support') url.searchParams.append('allskills', name);
+        else url.searchParams.append('skills', name);
+        return;
+      }
+      if (entry.type === 'uniques') {
+        url.searchParams.append('items', name);
+      }
+    });
+
+  return url.toString();
 }
 
 function renderPinsTray() {
@@ -110,20 +131,22 @@ function renderPinsTray() {
   const pins = Array.from(state.pinnedIds)
     .map((id) => state.index.find((entry) => entry.id === id))
     .filter(Boolean);
-  const seed = buildPoeNinjaSeed();
+  const filterUrl = buildPoeNinjaUrl();
+  const hasParams = filterUrl.includes('?');
 
   els.list.innerHTML = `
     <div class="codex-pins-head">
-      <span class="codex-pins-title">Pinned for poe.ninja filter (${pins.length})</span>
+      <span class="codex-pins-title">Pinned Items (${pins.length})</span>
       <div class="codex-pin-actions">
-        <button type="button" data-pin-action="copy" ${seed ? '' : 'disabled'}>Copy</button>
+        <button type="button" data-pin-action="copy" ${hasParams ? '' : 'disabled'}>Copy</button>
         <button type="button" data-pin-action="clear" ${pins.length ? '' : 'disabled'}>Clear</button>
       </div>
     </div>
     <div class="codex-pin-list">
       ${pins.map((entry) => `<span class="codex-pin-chip" role="button" tabindex="0" data-select-id="${esc(entry.id)}" aria-label="Inspect pinned ${esc(entry.name)}">${esc(entry.name)}<button type="button" class="codex-pin-remove" data-unpin-id="${esc(entry.id)}" aria-label="Unpin ${esc(entry.name)}">×</button></span>`).join('') || '<span class="codex-empty">No pinned entries yet.</span>'}
     </div>
-    <div class="codex-pin-query">${seed ? esc(seed) : 'Pin entries to build a poe.ninja seed string.'}</div>
+    <div class="codex-pin-query">Pin entries to build a poe.ninja filter url.</div>
+    <div class="codex-pin-query">${hasParams ? esc(filterUrl) : ''}</div>
   `;
 }
 
@@ -208,6 +231,7 @@ function render() {
     btn.setAttribute('aria-selected', on ? 'true' : 'false');
   });
   if (els.search) els.search.value = state.q;
+  if (els.tags) els.tags.style.display = state.pillar === 'pinned' ? 'none' : '';
   if (state.pillar === 'pinned') renderPinsTray();
   else renderList();
   const pinnedTab = document.getElementById('codex-pinned-tab');
@@ -465,9 +489,9 @@ function bind() {
       return;
     }
     if (action === 'copy') {
-      const seed = buildPoeNinjaSeed();
-      if (!seed) return;
-      try { await navigator.clipboard.writeText(seed); } catch {}
+      const filterUrl = buildPoeNinjaUrl();
+      if (!filterUrl.includes('?')) return;
+      try { await navigator.clipboard.writeText(filterUrl); } catch {}
     }
   });
 
