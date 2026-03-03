@@ -202,3 +202,131 @@ body[data-mode="codex"] .subtitle{ color:#98ccdf; }
 
 /* Ensure nav-pane decorative top rail stays off (tabs handle the tabbed-pane look). */
 .codex-list::before{ display:none; }
+
+
+/* =========================================================
+   Codex Ember Accent + Scroll Containment Overrides (v8)
+   - Toned-down rust/ember accent (driven by --codex-ember vars in 00-base.css)
+   - Make pillar tabs behave like subtabs: grey idle, ember active (no aqua/white)
+   - Boost selected tag pill highlight
+   - Keep left nav content contained via scrollable mount
+   ========================================================= */
+
+.codex-panel{
+  --codex-accent: var(--codex-ember);
+  --codex-accent-rgb: var(--codex-ember-rgb);
+  border-color: rgba(var(--codex-accent-rgb), 0.35);
+}
+
+.codex-panel .codex-list,
+.codex-panel .codex-inspector{
+  border-color: rgba(var(--codex-accent-rgb), 0.20);
+}
+
+/* Pillar tabs: override the aqua/white codex-specific rules to match the global .skills-tab pattern */
+.codex-panel .codex-pillars .skills-tab{
+  border-color: rgba(var(--codex-accent-rgb), 0.35);
+  background: rgba(16,16,20,0.55);
+  color: rgba(210,210,220,0.75);
+}
+.codex-panel .codex-pillars .skills-tab.is-active{
+  color: var(--codex-accent);
+  border-color: rgba(var(--codex-accent-rgb), 0.70);
+  background: rgba(20,20,24,0.78);
+  box-shadow:
+    0 0 12px rgba(var(--codex-accent-rgb), 0.18),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+}
+.codex-panel .skills-tab.codex-pinned-tab{
+  color: rgba(210,210,220,0.75);
+  border-color: rgba(var(--codex-accent-rgb), 0.35);
+}
+.codex-panel .skills-tab.codex-pinned-tab.is-active{
+  color: var(--codex-accent);
+  border-color: rgba(var(--codex-accent-rgb), 0.72);
+  background: rgba(28,18,12,0.70);
+}
+
+/* Sub-tabs rails inherit the same look (remove any lingering aqua borders) */
+.codex-panel .codex-passive-toggle .skills-tab,
+.codex-panel .codex-skills-toggle .skills-tab,
+.codex-panel .codex-gear-toggle .skills-tab{
+  border-color: rgba(var(--codex-accent-rgb), 0.35);
+  background: rgba(16,16,20,0.55);
+}
+.codex-panel .codex-passive-toggle .skills-tab.is-active,
+.codex-panel .codex-skills-toggle .skills-tab.is-active,
+.codex-panel .codex-gear-toggle .skills-tab.is-active{
+  color: var(--codex-accent);
+  border-color: rgba(var(--codex-accent-rgb), 0.70);
+  background: rgba(20,20,24,0.78);
+  box-shadow:
+    0 0 12px rgba(var(--codex-accent-rgb), 0.18),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+/* Inputs / buttons in codex header */
+.codex-panel #codex-search{
+  border-color: rgba(var(--codex-accent-rgb), 0.42);
+}
+.codex-panel #codex-clear-tags,
+.codex-panel .codex-list-actions .codex-nav-btn{
+  border-color: rgba(var(--codex-accent-rgb), 0.40);
+  background: rgba(var(--codex-accent-rgb), 0.10);
+}
+
+/* Selected tag pill: brighter/more impactful */
+.codex-tag-chips .tag-pill.is-active{
+  border-color: rgba(var(--codex-accent-rgb), 0.72);
+  color: #fff3e6;
+  box-shadow:
+    0 0 0 1px rgba(var(--codex-accent-rgb), 0.55),
+    0 0 18px rgba(var(--codex-accent-rgb), 0.35),
+    0 0 34px rgba(var(--codex-accent-rgb), 0.22);
+  text-shadow: 0 0 10px rgba(var(--codex-accent-rgb), 0.25);
+}
+
+/* BUGFIX: keep left navigation content contained in a scroll panel
+   (outer .codex-list must stay overflow:visible so tabs can protrude) */
+.codex-list-mount{
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding-top: .35rem;
+}
+
+
+/* =========================================================
+   Codex: Force ember borders (fix for rgba(var(--x)) parsing fallback)
+   ========================================================= */
+.codex-panel{
+  --codex-accent: var(--codex-ember);
+  --codex-accent-rgb: var(--codex-ember-rgb);
+}
+
+/* Panel frame */
+.codex-panel.panel{
+  border-color: rgba(var(--codex-accent-rgb), 0.45) !important;
+  box-shadow:
+    0 0 0 1px rgba(var(--codex-accent-rgb), 0.10),
+    0 18px 50px rgba(0,0,0,0.45);
+}
+
+/* Inner columns */
+.codex-panel .codex-list,
+.codex-panel .codex-inspector{
+  border-color: rgba(var(--codex-accent-rgb), 0.22) !important;
+}
+
+/* Tag pills: default + active */
+.codex-panel .tag-pill{
+  border-color: rgba(var(--codex-accent-rgb), 0.28) !important;
+}
+.codex-panel .tag-pill.is-active,
+.codex-panel .codex-tag-chips .tag-pill.is-active{
+  border-color: rgba(var(--codex-accent-rgb), 0.78) !important;
+  box-shadow:
+    0 0 0 1px rgba(var(--codex-accent-rgb), 0.55),
+    0 0 18px rgba(var(--codex-accent-rgb), 0.35),
+    0 0 34px rgba(var(--codex-accent-rgb), 0.22) !important;
+}

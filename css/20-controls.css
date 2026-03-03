@@ -305,8 +305,8 @@ body.challenge-mode .challenge-empty-flavor{
 }
 .mode-segment.is-active{
   color:var(--mode-accent, var(--gold));
-  background:linear-gradient(180deg, rgba(200,168,107,0.25), rgba(0,0,0,0.22));
+  background:linear-gradient(180deg, color-mix(in srgb, var(--mode-accent, var(--gold)) 28%, transparent), rgba(0,0,0,0.22));
   text-shadow:0 0 8px color-mix(in srgb, var(--mode-accent, var(--gold)) 45%, transparent);
 }
 body[data-mode="challenge"] .mode-segment.is-active{ --mode-accent:#bf4b55; }
-body[data-mode="codex"] .mode-segment.is-active{ --mode-accent:#79b6ce; }
+body[data-mode="codex"] .mode-segment.is-active{ --mode-accent: var(--codex-ember); }
