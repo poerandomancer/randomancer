@@ -2,14 +2,13 @@ import { ensureDataPreload } from './08-data-load.js';
 
 const state = {
   pillar: 'ascendancy',
-  passiveKind: 'keystone',
   skillKind: 'active',
   gearKind: 'uniques',
   q: '',
   tags: new Set(),
   openGroupsByView: new Map(),
+  expandedByAccordion: new Map(),
   pinnedIds: new Set(),
-  selectedId: null,
   index: [],
   uniquesItems: []
 };
@@ -37,8 +36,9 @@ function mark(txt) {
 function matches(entry) {
   if (state.pillar === 'pinned') {
     if (!state.pinnedIds.has(entry.id)) return false;
-  } else if (entry.pillar !== state.pillar) return false;
-  if (state.pillar === 'passives' && entry.type !== state.passiveKind) return false;
+  } else if (entry.pillar !== state.pillar) {
+    return false;
+  }
   if (state.pillar === 'skills' && entry.type === 'skill' && entry.extraFields?.skillKind !== state.skillKind) return false;
   if (state.pillar === 'gear' && entry.type !== state.gearKind) return false;
   const hay = `${entry.name} ${entry.text} ${(entry.tags || []).join(' ')}`.toLowerCase();
@@ -54,38 +54,12 @@ function updateUrl() {
   const p = new URLSearchParams(location.search);
   p.set('mode', 'codex');
   p.set('pillar', state.pillar);
-  if (state.pillar === 'passives') p.set('passive', state.passiveKind); else p.delete('passive');
   if (state.pillar === 'skills') p.set('skill', state.skillKind); else p.delete('skill');
   if (state.pillar === 'gear') p.set('gear', state.gearKind); else p.delete('gear');
   if (state.q) p.set('q', state.q); else p.delete('q');
   if (state.tags.size) p.set('tags', Array.from(state.tags).join(',')); else p.delete('tags');
+  p.delete('passive');
   history.replaceState(null, '', `${location.pathname}?${p.toString()}`);
-}
-
-function selectEntry(id) {
-  state.selectedId = id;
-  const entry = state.index.find(e => e.id === id);
-  if (!entry || !els.inspector) return;
-  const uniqueLines = Array.isArray(entry.extraFields?.lines) ? entry.extraFields.lines : [];
-  const isPinned = state.pinnedIds.has(entry.id);
-  const ascendancyMeta = entry.type === 'ascendancy_node'
-    ? `${esc(entry.group || 'Ascendancy')}${entry.extraFields?.officialDescription ? ` | ${esc(entry.extraFields.officialDescription)}` : ''}`
-    : null;
-  els.inspector.innerHTML = `
-    <div class="codex-inspector-head">
-      <h3>${esc(entry.name)}</h3>
-      <button type="button" class="codex-pin-toggle ${isPinned ? 'is-pinned' : ''}" data-pin-id="${esc(entry.id)}" aria-pressed="${isPinned ? 'true' : 'false'}">📌 ${isPinned ? 'Pinned' : 'Pin'}</button>
-    </div>
-    <p><strong>${ascendancyMeta || esc(entry.group || 'Library')}</strong></p>
-    ${entry.image ? `<img src="${esc(entry.image)}" alt="${esc(entry.group)}" style="max-width:100%;border-radius:8px;margin-bottom:.5rem;">` : ''}
-    ${entry.extraFields?.className && entry.type !== 'ascendancy_node' ? `<p><strong>Class:</strong> ${esc(entry.extraFields.className)}</p>` : ''}
-    ${entry.type === 'skill' ? `<p><strong>Crafting Type:</strong> ${esc(entry.extraFields?.craftingType || 'Implicit')}</p>` : ''}
-    ${entry.type === 'uniques' ? `<p><strong>Slot:</strong> ${esc(entry.extraFields?.slot || 'Unknown')}</p>` : ''}
-    ${entry.type === 'uniques' ? `<p><strong>Description:</strong> ${mark(entry.extraFields?.description || 'Description unavailable in current dataset.')}</p>` : ''}
-    <p>${mark(entry.text || 'Description unavailable in current dataset.')}</p>
-    ${entry.type === 'uniques' && uniqueLines.length ? `<div><strong>Lines:</strong><ul>${uniqueLines.map((ln) => `<li>${mark(ln)}</li>`).join('')}</ul></div>` : ''}
-    <div class="skill-tags">${(entry.tags || []).slice(0, 24).map(t => `<span class="tag-pill">${esc(t)}</span>`).join('')}</div>
-  `;
 }
 
 function renderTags(entries) {
@@ -130,29 +104,31 @@ function renderPinsTray() {
   if (!els.listMount) return;
   const pins = Array.from(state.pinnedIds)
     .map((id) => state.index.find((entry) => entry.id === id))
-    .filter(Boolean);
+    .filter(Boolean)
+    .sort((a, b) => a.name.localeCompare(b.name));
   const filterUrl = buildPoeNinjaUrl();
   const hasParams = filterUrl.includes('?');
 
   els.listMount.innerHTML = `
-    <div class="codex-pins-head">
-      <span class="codex-pins-title">Pinned Items (${pins.length})</span>
-      <div class="codex-pin-actions">
-        <button type="button" data-pin-action="copy" ${hasParams ? '' : 'disabled'}>Copy</button>
-        <button type="button" data-pin-action="clear" ${pins.length ? '' : 'disabled'}>Clear</button>
+    <div class="codex-pins-tray">
+      <div class="codex-pins-head">
+        <span class="codex-pins-title">Pinned Items (${pins.length})</span>
+        <div class="codex-pin-actions">
+          ${hasParams ? '<button type="button" data-pin-action="view-ninja" aria-label="View in poe.ninja"><span aria-hidden="true">🥷</span> View in poe.ninja</button>' : ''}
+          <button type="button" data-pin-action="clear" ${pins.length ? '' : 'disabled'}>Clear</button>
+        </div>
       </div>
+      <div class="codex-pin-list">
+        ${pins.map((entry) => `<span class="codex-pin-chip" role="button" tabindex="0" data-select-id="${esc(entry.id)}" aria-label="Jump to pinned ${esc(entry.name)}">${esc(entry.name)}<button type="button" class="codex-pin-remove" data-unpin-id="${esc(entry.id)}" aria-label="Unpin ${esc(entry.name)}">×</button></span>`).join('') || '<span class="codex-empty">No pinned entries yet.</span>'}
+      </div>
+      <div class="codex-pin-query">Pin entries to build a poe.ninja filter url.</div>
     </div>
-    <div class="codex-pin-list">
-      ${pins.map((entry) => `<span class="codex-pin-chip" role="button" tabindex="0" data-select-id="${esc(entry.id)}" aria-label="Inspect pinned ${esc(entry.name)}">${esc(entry.name)}<button type="button" class="codex-pin-remove" data-unpin-id="${esc(entry.id)}" aria-label="Unpin ${esc(entry.name)}">×</button></span>`).join('') || '<span class="codex-empty">No pinned entries yet.</span>'}
-    </div>
-    <div class="codex-pin-query">Pin entries to build a poe.ninja filter url.</div>
-    <div class="codex-pin-query">${hasParams ? esc(filterUrl) : ''}</div>
   `;
 }
 
 function getViewKey() {
-  if (state.pillar === 'passives') return `passives:${state.passiveKind}`;
   if (state.pillar === 'gear') return `gear:${state.gearKind}`;
+  if (state.pillar === 'skills') return `skills:${state.skillKind}`;
   return state.pillar;
 }
 
@@ -162,11 +138,69 @@ function getOpenGroupsSet() {
   return state.openGroupsByView.get(key);
 }
 
+function accordionStateKey(group) {
+  return `${getViewKey()}::${group}`;
+}
+
+function getExpandedId(group) {
+  return state.expandedByAccordion.get(accordionStateKey(group)) || null;
+}
+
+function setExpandedId(group, id) {
+  const key = accordionStateKey(group);
+  if (id) state.expandedByAccordion.set(key, id);
+  else state.expandedByAccordion.delete(key);
+}
+
+function getEntryMeta(entry) {
+  if (entry.type === 'skill') return `Crafting: ${entry.extraFields?.craftingType || 'Implicit'}`;
+  if (entry.type === 'uniques') return `Slot: ${entry.extraFields?.slot || 'Unknown'}`;
+  return '';
+}
+
+function pinIconSvg() {
+  return '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7 2.2 13.8 5.3l-1.3 1.3-1.1-.3-2.6 2.6 2.3 2.3-.9.9-2.3-2.3-3.4 3.4-.7-.7 3.4-3.4L4.9 7.1l.9-.9 2.3 2.3 2.6-2.6-.3-1.1z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>';
+}
+
+function renderCodexRow(entry, group) {
+  const expanded = getExpandedId(group) === entry.id;
+  const isPinned = state.pinnedIds.has(entry.id);
+  const meta = getEntryMeta(entry);
+  const rowBody = expanded ? `
+    <div class="codex-row-body" id="codex-body-${esc(entry.id)}">
+      <p>${mark(entry.text || 'Description unavailable in current dataset.')}</p>
+      ${(entry.tags || []).length ? `<div class="codex-row-tags">${entry.tags.slice(0, 24).map((t) => `<span class="tag-pill">${esc(t)}</span>`).join('')}</div>` : ''}
+    </div>
+  ` : '';
+  const rawText = entry.text || '';
+  const isTruncated = rawText.length > 130;
+  const previewText = rawText.slice(0, 130);
+  const previewDisplay = isTruncated ? `${previewText}…` : previewText;
+  const subline = !expanded
+    ? `${meta ? `${esc(meta)}${previewDisplay ? ' · ' : ''}` : ''}${previewDisplay ? mark(previewDisplay) : ''}`
+    : (meta ? esc(meta) : '');
+
+  return `
+    <article class="codex-row ${expanded ? 'is-expanded' : ''}" data-entry-id="${esc(entry.id)}" data-group="${esc(group)}" role="button" tabindex="0" aria-expanded="${expanded ? 'true' : 'false'}" aria-controls="codex-body-${esc(entry.id)}">
+      <div class="codex-row-head">
+        <span class="codex-row-chevron" aria-hidden="true">▸</span>
+        <div class="codex-row-copy">
+          <strong>${mark(entry.name)}</strong>
+          ${subline ? `<small>${subline}</small>` : ''}
+        </div>
+        <button type="button" class="codex-pin-icon ${isPinned ? 'is-pinned' : ''}" data-pin-id="${esc(entry.id)}" aria-label="${isPinned ? `Unpin ${esc(entry.name)}` : `Pin ${esc(entry.name)}`}" aria-pressed="${isPinned ? 'true' : 'false'}">${pinIconSvg()}</button>
+      </div>
+      ${rowBody}
+    </article>
+  `;
+}
+
 function renderList() {
   if (!els.listMount) return;
   const entries = state.index.filter(matches);
   if (els.count) els.count.textContent = `${entries.length} result${entries.length === 1 ? '' : 's'}`;
   renderTags(entries);
+
   if (!entries.length) {
     const controlsHtml = `
       <div class="codex-list-actions" aria-label="Navigation group controls">
@@ -175,16 +209,20 @@ function renderList() {
       </div>
     `;
     els.listMount.innerHTML = `${controlsHtml}<div class="codex-list-scroll"><div class="codex-empty">No results found. Try a different search or clear tags.</div></div>`;
-    if (els.inspector) els.inspector.innerHTML = '<h3>Inspector</h3><p>No entry selected.</p>';
     return;
   }
 
   const groups = new Map();
-  entries.forEach(e => {
-    const key = e.group || 'Other';
-    if (!groups.has(key)) groups.set(key, []);
-    groups.get(key).push(e);
-  });
+  if (state.pillar === 'passives') {
+    groups.set('Keystones', entries.filter((e) => e.type === 'keystone'));
+    groups.set('Notables', entries.filter((e) => e.type === 'notable'));
+  } else {
+    entries.forEach((e) => {
+      const key = e.group || 'Other';
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(e);
+    });
+  }
 
   const openGroups = getOpenGroupsSet();
   const controlsHtml = `
@@ -194,13 +232,30 @@ function renderList() {
     </div>
   `;
 
-  const html = Array.from(groups.entries()).map(([group, items]) => `
-    <details class="codex-group" data-group="${esc(group)}" ${openGroups.has(group) ? 'open' : ''}>
-      <summary>${esc(group)} (${items.length})</summary>
-      ${items.slice(0, 250).map(i => `<button class="codex-item ${state.selectedId===i.id?'is-active':''}" data-entry-id="${esc(i.id)}"><strong>${mark(i.name)}</strong><small>${i.type==='skill' ? `crafting: ${esc(i.extraFields?.craftingType || 'Implicit')} · ` : ''}${mark((i.text || '').slice(0, 130))}</small></button>`).join('')}
-    </details>
-  `).join('');
+  const html = Array.from(groups.entries()).map(([group, items]) => {
+    const itemsHtml = items.length
+      ? items.slice(0, 250).map((item) => renderCodexRow(item, group)).join('')
+      : '<div class="codex-empty">No matching entries in this section.</div>';
+    return `
+      <details class="codex-group" data-group="${esc(group)}" ${openGroups.has(group) ? 'open' : ''}>
+        <summary>${esc(group)} (${items.length})</summary>
+        <div class="codex-group-rows">${itemsHtml}</div>
+      </details>
+    `;
+  }).join('');
+
   els.listMount.innerHTML = `${controlsHtml}<div class="codex-list-scroll">${html}</div>`;
+}
+
+function applyPinnedJump(id) {
+  const entry = state.index.find((item) => item.id === id);
+  if (!entry) return;
+  state.pillar = entry.pillar;
+  if (entry.type === 'skill') state.skillKind = entry.extraFields?.skillKind || 'active';
+  if (entry.pillar === 'gear') state.gearKind = entry.type;
+  const group = entry.group || (entry.type === 'keystone' ? 'Keystones' : entry.type === 'notable' ? 'Notables' : 'Other');
+  getOpenGroupsSet().add(group);
+  setExpandedId(group, id);
 }
 
 function render() {
@@ -209,21 +264,15 @@ function render() {
     btn.classList.toggle('is-active', on);
     btn.setAttribute('aria-selected', on ? 'true' : 'false');
   });
-  const passiveToggle = document.getElementById('codex-passive-toggle');
+
   const skillsToggle = document.getElementById('codex-skills-toggle');
   const gearToggle = document.getElementById('codex-gear-toggle');
-  passiveToggle?.classList.toggle('is-hidden', state.pillar !== 'passives');
   skillsToggle?.classList.toggle('is-hidden', state.pillar !== 'skills');
   gearToggle?.classList.toggle('is-hidden', state.pillar !== 'gear');
 
-  const hasSubtabs = (state.pillar === 'skills' || state.pillar === 'passives' || state.pillar === 'gear');
+  const hasSubtabs = (state.pillar === 'skills' || state.pillar === 'gear');
   els.panel?.classList.toggle('codex--has-subtabs', hasSubtabs);
 
-  passiveToggle?.querySelectorAll('[data-passive-kind]').forEach(btn => {
-    const on = btn.dataset.passiveKind === state.passiveKind;
-    btn.classList.toggle('is-active', on);
-    btn.setAttribute('aria-selected', on ? 'true' : 'false');
-  });
   skillsToggle?.querySelectorAll('[data-skill-kind]').forEach(btn => {
     const on = btn.dataset.skillKind === state.skillKind;
     btn.classList.toggle('is-active', on);
@@ -234,10 +283,11 @@ function render() {
     btn.classList.toggle('is-active', on);
     btn.setAttribute('aria-selected', on ? 'true' : 'false');
   });
+
   if (els.search) els.search.value = state.q;
   if (els.tags) els.tags.style.display = state.pillar === 'pinned' ? 'none' : '';
-  if (state.pillar === 'pinned') renderPinsTray();
-  else renderList();
+  if (state.pillar === 'pinned') renderPinsTray(); else renderList();
+
   const pinnedTab = document.getElementById('codex-pinned-tab');
   if (pinnedTab) pinnedTab.textContent = `Pinned (${state.pinnedIds.size})`;
   updateUrl();
@@ -275,9 +325,7 @@ function buildIndex() {
     };
     const order = ['strength', 'dexterity', 'intelligence'];
     let best = 'strength';
-    for (const key of order) {
-      if (weights[key] > weights[best]) best = key;
-    }
+    for (const key of order) if (weights[key] > weights[best]) best = key;
     return best;
   }
 
@@ -323,7 +371,17 @@ function buildIndex() {
     if ((n.type === 'keystone' || n.type === 'notable') && !n.ascendancy) {
       if (isAtlasNotable(n)) return;
       const passiveText = n.type === 'keystone' ? getKeystoneText(n) : text;
-      out.push({ id: n.id, type: n.type, pillar: 'passives', group: n.type === 'keystone' ? 'Keystones' : 'Notables', name: n.name, text: passiveText, tags: normalizeTags(n.tags, passiveText), extraFields: {}, sourceRef: 'passivesEnriched' });
+      out.push({
+        id: n.id,
+        type: n.type,
+        pillar: 'passives',
+        group: n.type === 'keystone' ? 'Keystones' : 'Notables',
+        name: n.name,
+        text: passiveText,
+        tags: normalizeTags(n.tags, passiveText),
+        extraFields: {},
+        sourceRef: 'passivesEnriched'
+      });
     }
   });
 
@@ -407,15 +465,13 @@ function bind() {
   els.tags = document.getElementById('codex-tag-chips');
   els.list = document.getElementById('codex-list');
   els.listMount = document.getElementById('codex-list-mount');
-  els.inspector = document.getElementById('codex-inspector');
   els.count = document.getElementById('codex-results-count');
 
   els.search?.addEventListener('input', (e) => { state.q = e.target.value || ''; render(); });
-  document.getElementById('codex-clear-tags')?.addEventListener('click', () => { state.tags.clear(); render(); });
-  document.querySelectorAll('[data-codex-pillar]').forEach(btn => btn.addEventListener('click', () => { state.pillar = btn.dataset.codexPillar; state.selectedId = null; render(); }));
-  document.querySelectorAll('[data-passive-kind]').forEach(btn => btn.addEventListener('click', () => { state.passiveKind = btn.dataset.passiveKind; state.selectedId = null; render(); }));
-  document.querySelectorAll('[data-skill-kind]').forEach(btn => btn.addEventListener('click', () => { state.skillKind = btn.dataset.skillKind; state.selectedId = null; render(); }));
-  document.querySelectorAll('[data-gear-kind]').forEach(btn => btn.addEventListener('click', () => { state.gearKind = btn.dataset.gearKind; state.selectedId = null; render(); }));
+  document.getElementById('codex-clear-tags')?.addEventListener('click', () => { state.tags.clear(); state.q = ''; render(); });
+  document.querySelectorAll('[data-codex-pillar]').forEach(btn => btn.addEventListener('click', () => { state.pillar = btn.dataset.codexPillar; render(); }));
+  document.querySelectorAll('[data-skill-kind]').forEach(btn => btn.addEventListener('click', () => { state.skillKind = btn.dataset.skillKind; render(); }));
+  document.querySelectorAll('[data-gear-kind]').forEach(btn => btn.addEventListener('click', () => { state.gearKind = btn.dataset.gearKind; render(); }));
 
   els.tags?.addEventListener('click', (e) => {
     const chip = e.target.closest('[data-tag]');
@@ -425,13 +481,17 @@ function bind() {
     render();
   });
 
-  els.list?.addEventListener('click', (e) => {
+  els.list?.addEventListener('click', async (e) => {
     const actionBtn = e.target.closest('[data-codex-list-action]');
     if (actionBtn) {
       const mode = actionBtn.dataset.codexListAction;
       const openGroups = getOpenGroupsSet();
       if (mode === 'expand') {
         const groups = new Set(state.index.filter(matches).map(en => en.group || 'Other'));
+        if (state.pillar === 'passives') {
+          groups.add('Keystones');
+          groups.add('Notables');
+        }
         state.openGroupsByView.set(getViewKey(), groups);
       } else if (mode === 'collapse') {
         openGroups.clear();
@@ -440,10 +500,78 @@ function bind() {
       return;
     }
 
+    const pinBtn = e.target.closest('[data-pin-id]');
+    if (pinBtn) {
+      e.stopPropagation();
+      const id = pinBtn.dataset.pinId;
+      if (!id) return;
+      if (state.pinnedIds.has(id)) state.pinnedIds.delete(id);
+      else state.pinnedIds.add(id);
+      render();
+      return;
+    }
+
+    const unpin = e.target.closest('[data-unpin-id]');
+    if (unpin) {
+      const id = unpin.dataset.unpinId;
+      if (id) state.pinnedIds.delete(id);
+      render();
+      return;
+    }
+
+    const pick = e.target.closest('[data-select-id]');
+    if (pick) {
+      const id = pick.dataset.selectId;
+      if (id) {
+        applyPinnedJump(id);
+        render();
+      }
+      return;
+    }
+
     const row = e.target.closest('[data-entry-id]');
-    if (!row) return;
-    selectEntry(row.dataset.entryId);
+    if (!row) {
+      const action = e.target.closest('[data-pin-action]')?.dataset.pinAction;
+      if (!action) return;
+      if (action === 'clear') {
+        state.pinnedIds.clear();
+        render();
+        return;
+      }
+      if (action === 'view-ninja') {
+        const filterUrl = buildPoeNinjaUrl();
+        if (!filterUrl.includes('?')) return;
+        window.open(filterUrl, '_blank', 'noopener,noreferrer');
+      }
+      return;
+    }
+
+    const group = row.dataset.group || 'Other';
+    const id = row.dataset.entryId;
+    const current = getExpandedId(group);
+    setExpandedId(group, current === id ? null : id);
     renderList();
+  });
+
+  els.list?.addEventListener('keydown', (e) => {
+    const row = e.target.closest('[data-entry-id]');
+    if (row && (e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault();
+      const group = row.dataset.group || 'Other';
+      const id = row.dataset.entryId;
+      const current = getExpandedId(group);
+      setExpandedId(group, current === id ? null : id);
+      renderList();
+      return;
+    }
+
+    const pick = e.target.closest('[data-select-id]');
+    if (!pick || (e.key !== 'Enter' && e.key !== ' ')) return;
+    e.preventDefault();
+    const id = pick.dataset.selectId;
+    if (!id) return;
+    applyPinnedJump(id);
+    render();
   });
 
   els.list?.addEventListener('toggle', (e) => {
@@ -456,61 +584,6 @@ function bind() {
     else openGroups.delete(group);
   }, true);
 
-  els.inspector?.addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-pin-id]');
-    if (!btn) return;
-    const id = btn.dataset.pinId;
-    if (!id) return;
-    if (state.pinnedIds.has(id)) state.pinnedIds.delete(id);
-    else state.pinnedIds.add(id);
-    selectEntry(id);
-    render();
-  });
-
-  els.list?.addEventListener('click', async (e) => {
-    const unpin = e.target.closest('[data-unpin-id]');
-    if (unpin) {
-      const id = unpin.dataset.unpinId;
-      if (id) state.pinnedIds.delete(id);
-      if (state.selectedId === id) selectEntry(id);
-      render();
-      return;
-    }
-    const pick = e.target.closest('[data-select-id]');
-    if (pick) {
-      const id = pick.dataset.selectId;
-      if (id) {
-        state.selectedId = id;
-        selectEntry(id);
-      }
-      return;
-    }
-    const action = e.target.closest('[data-pin-action]')?.dataset.pinAction;
-    if (!action) return;
-    if (action === 'clear') {
-      state.pinnedIds.clear();
-      if (state.selectedId) selectEntry(state.selectedId);
-      render();
-      return;
-    }
-    if (action === 'copy') {
-      const filterUrl = buildPoeNinjaUrl();
-      if (!filterUrl.includes('?')) return;
-      try { await navigator.clipboard.writeText(filterUrl); } catch {}
-    }
-  });
-
-  els.list?.addEventListener('keydown', (e) => {
-    const pick = e.target.closest('[data-select-id]');
-    if (!pick) return;
-    if (e.key !== 'Enter' && e.key !== ' ') return;
-    e.preventDefault();
-    const id = pick.dataset.selectId;
-    if (!id) return;
-    state.selectedId = id;
-    selectEntry(id);
-  });
-
   document.addEventListener('randomancer:mode-change', (evt) => {
     const mode = evt.detail?.mode;
     els.panel?.classList.toggle('is-hidden', mode !== 'codex');
@@ -521,8 +594,6 @@ function hydrateFromUrl() {
   const p = new URLSearchParams(location.search);
   const pillar = p.get('pillar');
   if (pillar && ['ascendancy','skills','passives','gear','pinned'].includes(pillar)) state.pillar = pillar;
-  const passiveKind = p.get('passive');
-  if (passiveKind && ['keystone','notable'].includes(passiveKind)) state.passiveKind = passiveKind;
   const skillKind = p.get('skill');
   if (skillKind && ['active','support'].includes(skillKind)) state.skillKind = skillKind;
   const gearKind = p.get('gear');
