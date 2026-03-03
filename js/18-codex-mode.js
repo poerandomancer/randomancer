@@ -469,7 +469,7 @@ function bind() {
   els.count = document.getElementById('codex-results-count');
 
   els.search?.addEventListener('input', (e) => { state.q = e.target.value || ''; render(); });
-  document.getElementById('codex-clear-tags')?.addEventListener('click', () => { state.tags.clear(); render(); });
+  document.getElementById('codex-clear-tags')?.addEventListener('click', () => { state.tags.clear(); state.q = ''; render(); });
   document.querySelectorAll('[data-codex-pillar]').forEach(btn => btn.addEventListener('click', () => { state.pillar = btn.dataset.codexPillar; render(); }));
   document.querySelectorAll('[data-skill-kind]').forEach(btn => btn.addEventListener('click', () => { state.skillKind = btn.dataset.skillKind; render(); }));
   document.querySelectorAll('[data-gear-kind]').forEach(btn => btn.addEventListener('click', () => { state.gearKind = btn.dataset.gearKind; render(); }));
