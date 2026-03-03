@@ -397,7 +397,7 @@ body[data-mode="codex"] .mode-segmented{
 
   /* Ensure vertical centering across fonts/browsers */
   line-height: 1;
-  transform: translateY(.5px);
+  transform: translateY(-.5px);
 
   position: relative;
   z-index: 1;
