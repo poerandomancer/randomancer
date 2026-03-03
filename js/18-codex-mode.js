@@ -155,7 +155,6 @@ function setExpandedId(group, id) {
 
 function getEntryMeta(entry) {
   if (entry.type === 'skill') return `Crafting: ${entry.extraFields?.craftingType || 'Implicit'}`;
-  if (entry.type === 'ascendancy_node' && entry.extraFields?.className) return `Class: ${entry.extraFields.className}`;
   if (entry.type === 'uniques') return `Slot: ${entry.extraFields?.slot || 'Unknown'}`;
   return '';
 }
@@ -174,6 +173,10 @@ function renderCodexRow(entry, group) {
       ${(entry.tags || []).length ? `<div class="codex-row-tags">${entry.tags.slice(0, 24).map((t) => `<span class="tag-pill">${esc(t)}</span>`).join('')}</div>` : ''}
     </div>
   ` : '';
+  const previewText = (entry.text || '').slice(0, 130);
+  const subline = !expanded
+    ? `${meta ? `${esc(meta)}${previewText ? ' · ' : ''}` : ''}${previewText ? mark(previewText) : ''}`
+    : (meta ? esc(meta) : '');
 
   return `
     <article class="codex-row ${expanded ? 'is-expanded' : ''}" data-entry-id="${esc(entry.id)}" data-group="${esc(group)}" role="button" tabindex="0" aria-expanded="${expanded ? 'true' : 'false'}" aria-controls="codex-body-${esc(entry.id)}">
@@ -181,7 +184,7 @@ function renderCodexRow(entry, group) {
         <span class="codex-row-chevron" aria-hidden="true">▸</span>
         <div class="codex-row-copy">
           <strong>${mark(entry.name)}</strong>
-          <small>${meta ? `${esc(meta)} · ` : ''}${mark((entry.text || '').slice(0, 130))}</small>
+          ${subline ? `<small>${subline}</small>` : ''}
         </div>
         <button type="button" class="codex-pin-icon ${isPinned ? 'is-pinned' : ''}" data-pin-id="${esc(entry.id)}" aria-label="${isPinned ? `Unpin ${esc(entry.name)}` : `Pin ${esc(entry.name)}`}" aria-pressed="${isPinned ? 'true' : 'false'}">${pinIconSvg()}</button>
       </div>
