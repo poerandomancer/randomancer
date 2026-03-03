@@ -330,3 +330,25 @@ body[data-mode="codex"] .subtitle{ color:#98ccdf; }
     0 0 18px rgba(var(--codex-accent-rgb), 0.35),
     0 0 34px rgba(var(--codex-accent-rgb), 0.22) !important;
 }
+
+/* Codex: remove legacy aqua text */
+body[data-mode="codex"] .subtitle{
+  color: var(--muted) !important;
+}
+
+body[data-mode="codex"] #codex-search,
+body[data-mode="codex"] .codex-list-actions .codex-nav-btn,
+body[data-mode="codex"] .codex-pin-toggle,
+body[data-mode="codex"] .codex-pin-chip,
+body[data-mode="codex"] .codex-pin-remove,
+body[data-mode="codex"] .codex-pin-actions button{
+  color: var(--ink) !important;
+}
+
+body[data-mode="codex"] .codex-group > summary{
+  color: rgba(228,224,216,0.82) !important;
+}
+
+body[data-mode="codex"] .codex-inspector h3{
+  color: rgba(228,224,216,0.92) !important;
+}
