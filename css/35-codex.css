@@ -17,11 +17,15 @@
 
 /* Pillar tabs float above and attach to panel frame */
 .codex-pillars{
+  /* Attach tabs to the TOP border of the .panel (like real tabbed panels).
+     .panel adds padding-top: 1rem before the first child. Tabs are 28px tall. */
   position:absolute;
   left:1.25rem;
-  top:-1.55rem;
+  right:1.25rem;
+  top: calc(-1rem - 28px);
   z-index:7;
   display:flex;
+  align-items:flex-end;
   gap:.35rem;
   margin:0;
 }
@@ -93,17 +97,61 @@
 }
 
 .codex-layout{ display:grid; grid-template-columns:minmax(260px,42%) 1fr; gap:.7rem; margin-top:.55rem; }
+
+.codex-panel.codex--has-subtabs .codex-layout{
+  /* Leave room between sticky header and panel frames so left sub-tabs can protrude upward */
+  margin-top: calc(.55rem + 28px);
+}
 .codex-list,.codex-inspector{ background:rgba(6,8,10,.58); border:1px solid rgba(121,182,206,.2); border-radius:10px; padding:.65rem; min-height:520px; max-height:68vh; }
 .codex-list{ display:flex; flex-direction:column; overflow:hidden; position:relative; }
-.codex-list::before{
+
+/* --- Codex: left navigation sub-tabs should behave like real panel tabs --- */
+.codex-list{
+  /* allow the tabs to hang over the top border without being clipped */
+  overflow:visible;
+  /* make room for the tab row so it doesn't overlap the content */
+  padding-top: calc(.65rem + 28px);
+}
+/* kill the decorative top rail; the border + tabs handle the "tabbed pane" look */
+.codex-list::before{ display:none; }
+
+/* wrapper that sits ON the nav panel's top border */
+.codex-list-tabs{
+  position:absolute;
+  left:.65rem;
+  right:.65rem;
+  /* Straddle the nav panel's top border: 28px tall tabs => bottom aligns at y=0 */
+  top:-28px;
+  z-index:30;
+  pointer-events:auto;
+}
+
+/* each toggle row behaves like a tab rail */
+.codex-list-tabs .build-panel-tabs{
+  display:flex;
+  gap:.35rem;
+  align-items:flex-end;
+  position:relative;
+  margin:0;
+  padding-bottom:0;
+}
+/* subtle rail behind the tabs (optional) */
+.codex-list-tabs .build-panel-tabs::after{
   content:"";
   position:absolute;
   left:0;
   right:0;
-  top:0;
+  bottom:0;
   height:1px;
-  background:linear-gradient(90deg, rgba(121,182,206,.2), rgba(121,182,206,.55), rgba(121,182,206,.2));
+  background: linear-gradient(90deg, transparent, rgba(0,0,0,.55), transparent);
+  opacity:.35;
+  pointer-events:none;
 }
+.codex-list-tabs .skills-tab{ margin-bottom:-1px; }
+/* only one sub-tab row should be visible at a time */
+.codex-list-tabs .is-hidden{ display:none !important; }
+
+.codex-list::before{ display:none; }
 .codex-list-scroll{ flex:1 1 auto; min-height:0; overflow:auto; padding-right:.2rem; }
 .codex-list-actions{ display:flex; gap:.45rem; margin-bottom:.55rem; position:sticky; top:0; z-index:2; background:rgba(6,8,10,.92); padding-bottom:.35rem; }
 .codex-inspector{ overflow:auto; }
@@ -142,3 +190,6 @@ body[data-mode="codex"] .subtitle{ color:#98ccdf; }
   .codex-skills-toggle,
   .codex-gear-toggle{ margin-bottom:.25rem; }
 }
+
+/* Ensure nav-pane decorative top rail stays off (tabs handle the tabbed-pane look). */
+.codex-list::before{ display:none; }

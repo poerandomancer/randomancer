@@ -127,14 +127,14 @@ function buildPoeNinjaUrl() {
 }
 
 function renderPinsTray() {
-  if (!els.list) return;
+  if (!els.listMount) return;
   const pins = Array.from(state.pinnedIds)
     .map((id) => state.index.find((entry) => entry.id === id))
     .filter(Boolean);
   const filterUrl = buildPoeNinjaUrl();
   const hasParams = filterUrl.includes('?');
 
-  els.list.innerHTML = `
+  els.listMount.innerHTML = `
     <div class="codex-pins-head">
       <span class="codex-pins-title">Pinned Items (${pins.length})</span>
       <div class="codex-pin-actions">
@@ -163,7 +163,7 @@ function getOpenGroupsSet() {
 }
 
 function renderList() {
-  if (!els.list) return;
+  if (!els.listMount) return;
   const entries = state.index.filter(matches);
   if (els.count) els.count.textContent = `${entries.length} result${entries.length === 1 ? '' : 's'}`;
   renderTags(entries);
@@ -174,7 +174,7 @@ function renderList() {
         <button type="button" class="codex-nav-btn" data-codex-list-action="collapse">Collapse All</button>
       </div>
     `;
-    els.list.innerHTML = `${controlsHtml}<div class="codex-list-scroll"><div class="codex-empty">No results found. Try a different search or clear tags.</div></div>`;
+    els.listMount.innerHTML = `${controlsHtml}<div class="codex-list-scroll"><div class="codex-empty">No results found. Try a different search or clear tags.</div></div>`;
     if (els.inspector) els.inspector.innerHTML = '<h3>Inspector</h3><p>No entry selected.</p>';
     return;
   }
@@ -200,7 +200,7 @@ function renderList() {
       ${items.slice(0, 250).map(i => `<button class="codex-item ${state.selectedId===i.id?'is-active':''}" data-entry-id="${esc(i.id)}"><strong>${mark(i.name)}</strong><small>${i.type==='skill' ? `crafting: ${esc(i.extraFields?.craftingType || 'Implicit')} · ` : ''}${mark((i.text || '').slice(0, 130))}</small></button>`).join('')}
     </details>
   `).join('');
-  els.list.innerHTML = `${controlsHtml}<div class="codex-list-scroll">${html}</div>`;
+  els.listMount.innerHTML = `${controlsHtml}<div class="codex-list-scroll">${html}</div>`;
 }
 
 function render() {
@@ -215,6 +215,10 @@ function render() {
   passiveToggle?.classList.toggle('is-hidden', state.pillar !== 'passives');
   skillsToggle?.classList.toggle('is-hidden', state.pillar !== 'skills');
   gearToggle?.classList.toggle('is-hidden', state.pillar !== 'gear');
+
+  const hasSubtabs = (state.pillar === 'skills' || state.pillar === 'passives' || state.pillar === 'gear');
+  els.panel?.classList.toggle('codex--has-subtabs', hasSubtabs);
+
   passiveToggle?.querySelectorAll('[data-passive-kind]').forEach(btn => {
     const on = btn.dataset.passiveKind === state.passiveKind;
     btn.classList.toggle('is-active', on);
@@ -402,6 +406,7 @@ function bind() {
   els.search = document.getElementById('codex-search');
   els.tags = document.getElementById('codex-tag-chips');
   els.list = document.getElementById('codex-list');
+  els.listMount = document.getElementById('codex-list-mount');
   els.inspector = document.getElementById('codex-inspector');
   els.count = document.getElementById('codex-results-count');
 
