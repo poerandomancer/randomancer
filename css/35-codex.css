@@ -182,14 +182,23 @@
 body[data-mode="codex"] .subtitle{ color:#98ccdf; }
 
 @media (max-width: 900px){
-  .codex-pillars{ position:static; margin-bottom:.55rem; }
-  .codex-layout{ grid-template-columns:1fr; margin-top:.2rem; }
+  /* Keep the pillar tabs attached to the panel frame on mobile too. */
+  .codex-pillars{
+    position:absolute;
+    left:.85rem;
+    right:.85rem;
+    top: calc(-1rem - 28px);
+    flex-wrap:wrap;
+    row-gap:.35rem;
+  }
+
+  /* Single-column layout */
+  .codex-layout{ grid-template-columns:1fr; }
+
   .codex-list,.codex-inspector{ max-height:none; min-height:0; }
   .codex-filter-row{ flex-wrap:wrap; }
-  .codex-passive-toggle,
-  .codex-skills-toggle,
-  .codex-gear-toggle{ margin-bottom:.25rem; }
 }
+
 
 /* Ensure nav-pane decorative top rail stays off (tabs handle the tabbed-pane look). */
 .codex-list::before{ display:none; }
