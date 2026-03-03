@@ -121,7 +121,12 @@ function renderPinsTray() {
       <div class="codex-pin-list">
         ${pins.map((entry) => `<span class="codex-pin-chip" role="button" tabindex="0" data-select-id="${esc(entry.id)}" aria-label="Jump to pinned ${esc(entry.name)}">${esc(entry.name)}<button type="button" class="codex-pin-remove" data-unpin-id="${esc(entry.id)}" aria-label="Unpin ${esc(entry.name)}">×</button></span>`).join('') || '<span class="codex-empty">No pinned entries yet.</span>'}
       </div>
+<<<<<<< Updated upstream
       <div class="codex-pin-query">Pin entries to build a poe.ninja filter url.</div>
+=======
+      <div class="codex-pin-query">Pin Ascendancy, Keystone, Skill, and Gear entries to build a poe.ninja filter url.</div>
+      <div class="codex-pin-query">${hasParams ? esc(filterUrl) : ''}</div>
+>>>>>>> Stashed changes
     </div>
   `;
 }

@@ -20,7 +20,7 @@ let stashedChallengeState = null;
 
 const STANDARD_LEDE_HTML = 'Tune <strong>Cohesion</strong> for tighter themes or wilder chaos. Use <strong>Bind the Fates</strong> to favor or ban certain options. Toggle <strong>Weapon Set II</strong> for an additional weapon set, and choose <strong>Combat Mechanics</strong>: 1-3 for ailment/tactic depth.<br><strong>---</strong><br>Click <strong>Roll Your Fate</strong> to begin.';
 const CHALLENGE_LEDE_TEXT = '<strong>Challenge Mode</strong> rolls a <strong>Contract</strong>, not a build. Use <strong>Bind the Fates</strong> to favor or ban certain options. Choose 1–3 <strong>Tasks</strong>, set <strong>Severity</strong>, then <strong>Draft a Contract</strong> to receive a stacked set of constraints to overcome.<br><strong>---</strong><br>Click <strong>Draft Contract</strong> to begin.';
-const CODEX_LEDE_TEXT = '<strong>Codex Mode</strong> is a non-random library for browsing Path of Exile 2 data. Explore <strong>Ascendancy</strong>, <strong>Skills</strong>, and <strong>Passives</strong> with search and tags.<br><strong>---</strong><br>Select an entry to inspect full details.';
+const CODEX_LEDE_TEXT = '<strong>Codex Mode</strong> is a non-random library for browsing Path of Exile 2 data. Explore <strong>Ascendancy</strong>, <strong>Skills</strong>, <strong>Passives</strong>, and <strong>Gear</strong> with search and tags.<br><strong>---</strong><br>Select an entry to inspect full details.';
 
 let CHALLENGE_TEMPLATE_BY_ID = Object.create(null);
 
