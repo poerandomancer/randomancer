@@ -173,9 +173,12 @@ function renderCodexRow(entry, group) {
       ${(entry.tags || []).length ? `<div class="codex-row-tags">${entry.tags.slice(0, 24).map((t) => `<span class="tag-pill">${esc(t)}</span>`).join('')}</div>` : ''}
     </div>
   ` : '';
-  const previewText = (entry.text || '').slice(0, 130);
+  const rawText = entry.text || '';
+  const isTruncated = rawText.length > 130;
+  const previewText = rawText.slice(0, 130);
+  const previewDisplay = isTruncated ? `${previewText}…` : previewText;
   const subline = !expanded
-    ? `${meta ? `${esc(meta)}${previewText ? ' · ' : ''}` : ''}${previewText ? mark(previewText) : ''}`
+    ? `${meta ? `${esc(meta)}${previewDisplay ? ' · ' : ''}` : ''}${previewDisplay ? mark(previewDisplay) : ''}`
     : (meta ? esc(meta) : '');
 
   return `
