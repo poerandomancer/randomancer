@@ -19,11 +19,59 @@ const els = {};
 const esc = (s) => String(s || '').replace(/[&<>"']/g, (m) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
 const slug = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
+const CODEX_TAG_STOPLIST = new Set([
+  'helmet', 'body armour', 'body armor', 'gloves', 'boots', 'belt',
+  'ring', 'amulet',
+  'wand', 'bow', 'staff', 'mace', 'sword', 'axe', 'dagger', 'spear', 'crossbow', 'quarterstaff',
+  'flail', 'focus', 'shield', 'buckler', 'quiver', 'sceptre', 'claw',
+  'javelin', 'trap', 'flask'
+]);
+
+const CODEX_TAG_VARIANTS = new Map([
+  ['minions', 'minion'],
+  ['charges', 'charge'],
+  ['bleeding', 'bleed'],
+  ['bled', 'bleed'],
+  ['shocked', 'shock'],
+  ['shocking', 'shock'],
+  ['ignited', 'ignite'],
+  ['igniting', 'ignite'],
+  ['poisoned', 'poison'],
+  ['poisoning', 'poison'],
+  ['recouped', 'recoup'],
+  ['recouping', 'recoup']
+]);
+
+function normalizeCodexTag(tag) {
+  const raw = String(tag || '').toLowerCase().replace(/[\[\]]/g, '').replace(/[_-]+/g, ' ').trim();
+  if (!raw) return null;
+  const collapsed = raw.replace(/\s+/g, ' ');
+
+  const isFamilyTag = collapsed.startsWith('family:');
+  if (/^grants?:/.test(collapsed) || /^grants?\s/.test(collapsed) || collapsed.includes('grants skill')) return null;
+
+  const canonical = CODEX_TAG_VARIANTS.get(collapsed) || collapsed;
+  if (!isFamilyTag && CODEX_TAG_STOPLIST.has(canonical)) return null;
+
+  if (!isFamilyTag) return canonical;
+  const suffix = canonical.slice('family:'.length).trim();
+  if (!suffix) return null;
+  return `family:${suffix}`;
+}
+
 function normalizeTags(tags, text) {
-  const set = new Set((Array.isArray(tags) ? tags : []).map(t => String(t || '').trim().toLowerCase()).filter(Boolean));
+  const set = new Set();
+  (Array.isArray(tags) ? tags : []).forEach((t) => {
+    const normalized = normalizeCodexTag(t);
+    if (normalized) set.add(normalized);
+  });
   const scan = String(text || '').toLowerCase();
   const derives = ['fire','cold','lightning','chaos','physical','minion','projectile','totem','melee','spell','attack','crit','bleed','poison','stun'];
-  derives.forEach(t => { if (scan.includes(t)) set.add(t); });
+  derives.forEach((t) => {
+    if (!scan.includes(t)) return;
+    const normalized = normalizeCodexTag(t);
+    if (normalized) set.add(normalized);
+  });
   return Array.from(set);
 }
 
@@ -67,7 +115,7 @@ function renderTags(entries) {
   if (!els.tags) return;
   const freq = new Map();
   entries.forEach(e => (e.tags || []).forEach(t => freq.set(t, (freq.get(t) || 0) + 1)));
-  const top = Array.from(freq.entries()).sort((a,b)=>b[1]-a[1]).slice(0, 40);
+  const top = Array.from(freq.entries()).sort((a,b)=>b[1]-a[1]).slice(0, 50);
   const selectedMissing = Array.from(state.tags).filter((t) => !freq.has(t)).map((t) => [t, 0]);
   const chips = [...top, ...selectedMissing];
   els.tags.innerHTML = chips.map(([t,c]) => `<button class="tag-pill ${state.tags.has(t)?'is-active':''}" data-tag="${esc(t)}">${esc(t)} <small>${c}</small></button>`).join('');
@@ -542,7 +590,8 @@ function bind() {
   els.tags?.addEventListener('click', (e) => {
     const chip = e.target.closest('[data-tag]');
     if (!chip) return;
-    const t = chip.dataset.tag;
+    const t = normalizeCodexTag(chip.dataset.tag);
+    if (!t) return;
     if (state.tags.has(t)) state.tags.delete(t); else state.tags.add(t);
     render();
   });
@@ -665,7 +714,12 @@ function hydrateFromUrl() {
   const gearKind = p.get('gear');
   if (gearKind && ['uniques','implicits','mods'].includes(gearKind)) state.gearKind = gearKind;
   state.q = p.get('q') || '';
-  state.tags = new Set((p.get('tags') || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean));
+  state.tags = new Set(
+    (p.get('tags') || '')
+      .split(',')
+      .map((s) => normalizeCodexTag(s))
+      .filter(Boolean)
+  );
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -708,7 +762,7 @@ window.RandomancerCodex = {
   setState(next = {}) {
     if (next.pillar) state.pillar = next.pillar;
     if (next.q != null) state.q = String(next.q);
-    if (Array.isArray(next.tags)) state.tags = new Set(next.tags);
+    if (Array.isArray(next.tags)) state.tags = new Set(next.tags.map((tag) => normalizeCodexTag(tag)).filter(Boolean));
     render();
   },
   refresh() { buildIndex(); render(); }

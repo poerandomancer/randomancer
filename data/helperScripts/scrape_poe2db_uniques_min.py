@@ -16,8 +16,7 @@ Fields per unique:
     - Craft tags (from PoE2DB mod meta blocks)
     - Families (from PoE2DB mod meta blocks) as "family:<family>"
     - Bracket tags extracted from mod lines: [Label|Tag] -> "tag"
-    - Slot/base tokens
-    - Granted skill tokens: "grants:<skill>"
+    - Normalized + de-duplicated tags (craft tags, family tags, bracket tags)
 
 Output: poe2db_uniques_min.json
 
@@ -88,6 +87,52 @@ def norm_ws(s: str) -> str:
 def strip_square_brackets_chars(s: str) -> str:
     """Remove literal '[' and ']' characters (defensive cleanup)."""
     return (s or "").replace("[", "").replace("]", "")
+
+TAG_VARIANTS = {
+    "minions": "minion",
+    "charges": "charge",
+    "bleeding": "bleed",
+    "bled": "bleed",
+    "shocked": "shock",
+    "shocking": "shock",
+    "ignited": "ignite",
+    "igniting": "ignite",
+    "poisoned": "poison",
+    "poisoning": "poison",
+    "recouped": "recoup",
+    "recouping": "recoup",
+}
+
+TAG_STOPLIST = {
+    "helmet", "body armour", "body armor", "gloves", "boots", "belt",
+    "ring", "amulet",
+    "wand", "bow", "staff", "mace", "sword", "axe", "dagger", "spear", "crossbow", "quarterstaff",
+    "flail", "focus", "shield", "buckler", "quiver", "sceptre", "claw",
+    "javelin", "trap", "flask",
+}
+
+def normalize_tag(tag: Any) -> Optional[str]:
+    raw = norm_ws(str(tag or "").lower().replace("_", " ").replace("-", " "))
+    raw = strip_square_brackets_chars(raw)
+    raw = norm_ws(raw)
+    if not raw:
+        return None
+
+    if re.match(r"^grants?:", raw) or re.match(r"^grants?\s", raw) or "grants skill" in raw:
+        return None
+
+    is_family = raw.startswith("family:")
+    normalized = TAG_VARIANTS.get(raw, raw)
+    if not is_family and normalized in TAG_STOPLIST:
+        return None
+
+    if is_family:
+        suffix = norm_ws(normalized.split(":", 1)[1] if ":" in normalized else "")
+        if not suffix:
+            return None
+        return f"family:{suffix}"
+
+    return normalized
 
 def safe_int(x: Any) -> Optional[int]:
     try:
@@ -162,7 +207,7 @@ def values_to_text(values: Any) -> Optional[str]:
 def extract_bracket_tags(s: str) -> List[str]:
     tags = []
     for _label, tag in BRACKET_PAT.findall(s or ""):
-        t = norm_ws(tag).lower().replace(" ", "_")
+        t = normalize_tag(tag)
         if t:
             tags.append(t)
     # de-dupe preserve order
@@ -495,20 +540,14 @@ def main() -> int:
             for t in bracket_tags:
                 tags.add(strip_square_brackets_chars(t))
 
-            # slot/base tags
-            if slot:
-                tags.add(strip_square_brackets_chars(slot).lower().replace(" ", "_"))
-            if base:
-                tags.add(strip_square_brackets_chars(base).lower().replace(" ", "_"))
-
-            # granted skill name tags
-            for gs in granted_skills:
-                gsn = norm_ws(str(gs.get("name") or ""))
-                if not gsn:
+            normalized_tags: List[str] = []
+            seen_tags = set()
+            for t in tags:
+                nt = normalize_tag(t)
+                if not nt or nt in seen_tags:
                     continue
-                gsn2 = strip_square_brackets_chars(gsn)
-                tags.add(f"grants:{gsn2.lower().replace(' ', '_')}")
-                tags.add(gsn2.lower().replace(' ', '_'))
+                seen_tags.add(nt)
+                normalized_tags.append(nt)
 
             key = f"{strip_square_brackets_chars(name)}||{strip_square_brackets_chars(base)}" if base else strip_square_brackets_chars(name)
 
@@ -522,7 +561,7 @@ def main() -> int:
                 "explicit_mods": explicit_mods,
                 "flavour_text": flavour_text,
                 "granted_skills": granted_skills,
-                "tags": sorted(tags),
+                "tags": sorted(normalized_tags),
                 "source": {"id": page_id, "url": url, "label": ref.label},
             }
 
