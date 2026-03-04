@@ -10,7 +10,8 @@ const state = {
   expandedByAccordion: new Map(),
   pinnedIds: new Set(),
   index: [],
-  uniquesItems: []
+  uniquesItems: [],
+  uniquesLoadWarning: ''
 };
 
 const els = {};
@@ -155,8 +156,57 @@ function setExpandedId(group, id) {
 
 function getEntryMeta(entry) {
   if (entry.type === 'skill') return `Crafting: ${entry.extraFields?.craftingType || 'Implicit'}`;
-  if (entry.type === 'uniques') return `Slot: ${entry.extraFields?.slot || 'Unknown'}`;
+  if (entry.type === 'uniques') {
+    const base = entry.extraFields?.base;
+    const slot = entry.extraFields?.slot;
+    if (base && slot) return `${base} · ${slot}`;
+    return base || slot || 'Unknown item class';
+  }
   return '';
+}
+
+function formatRequirements(req) {
+  if (!req || typeof req !== 'object') return '';
+  const parts = [];
+  if (Number.isFinite(Number(req.level)) && Number(req.level) > 0) parts.push(`Level ${Number(req.level)}`);
+  if (Number.isFinite(Number(req.str)) && Number(req.str) > 0) parts.push(`Str ${Number(req.str)}`);
+  if (Number.isFinite(Number(req.dex)) && Number(req.dex) > 0) parts.push(`Dex ${Number(req.dex)}`);
+  if (Number.isFinite(Number(req.int)) && Number(req.int) > 0) parts.push(`Int ${Number(req.int)}`);
+  return parts.join(' · ');
+}
+
+function renderUniqueSection(title, lines) {
+  if (!Array.isArray(lines) || !lines.length) return '';
+  const body = lines.map((line) => `<li>${mark(line)}</li>`).join('');
+  return `<div class="codex-unique-section"><div class="codex-unique-label">${esc(title)}</div><ul>${body}</ul></div>`;
+}
+
+function renderGrantedSkills(skills) {
+  if (!Array.isArray(skills) || !skills.length) return '';
+  const rows = skills.map((skill) => {
+    const name = skill?.name || 'Unknown Skill';
+    const level = Number.isFinite(Number(skill?.level)) ? ` (Lvl ${Number(skill.level)})` : '';
+    return `<li>${mark(`${name}${level}`)}</li>`;
+  }).join('');
+  return `<div class="codex-unique-section"><div class="codex-unique-label">Granted Skills</div><ul>${rows}</ul></div>`;
+}
+
+function renderUniqueBody(entry) {
+  const reqLine = formatRequirements(entry.extraFields?.requirements);
+  const implicit = renderUniqueSection('Implicit Mods', entry.extraFields?.implicitMods);
+  const explicit = renderUniqueSection('Explicit Mods', entry.extraFields?.explicitMods);
+  const grantedSkills = renderGrantedSkills(entry.extraFields?.grantedSkills);
+  const flavour = Array.isArray(entry.extraFields?.flavourText) ? entry.extraFields.flavourText.filter(Boolean) : [];
+  return `
+    <div class="codex-row-body" id="codex-body-${esc(entry.id)}">
+      ${reqLine ? `<p><strong>Requirements:</strong> ${mark(reqLine)}</p>` : ''}
+      ${implicit}
+      ${explicit}
+      ${grantedSkills}
+      ${flavour.length ? `<div class="codex-unique-flavour">${flavour.map((line) => `<p>${mark(line)}</p>`).join('')}</div>` : ''}
+      ${(entry.tags || []).length ? `<div class="codex-row-tags">${entry.tags.slice(0, 24).map((t) => `<span class="tag-pill">${esc(t)}</span>`).join('')}</div>` : ''}
+    </div>
+  `;
 }
 
 function pinIconSvg() {
@@ -167,12 +217,12 @@ function renderCodexRow(entry, group) {
   const expanded = getExpandedId(group) === entry.id;
   const isPinned = state.pinnedIds.has(entry.id);
   const meta = getEntryMeta(entry);
-  const rowBody = expanded ? `
+  const rowBody = expanded ? (entry.type === 'uniques' ? renderUniqueBody(entry) : `
     <div class="codex-row-body" id="codex-body-${esc(entry.id)}">
       <p>${mark(entry.text || 'Description unavailable in current dataset.')}</p>
       ${(entry.tags || []).length ? `<div class="codex-row-tags">${entry.tags.slice(0, 24).map((t) => `<span class="tag-pill">${esc(t)}</span>`).join('')}</div>` : ''}
     </div>
-  ` : '';
+  `) : '';
   const rawText = entry.text || '';
   const isTruncated = rawText.length > 130;
   const previewText = rawText.slice(0, 130);
@@ -199,6 +249,9 @@ function renderCodexRow(entry, group) {
 function renderList() {
   if (!els.listMount) return;
   const entries = state.index.filter(matches);
+  const warningHtml = (state.pillar === 'gear' && state.gearKind === 'uniques' && state.uniquesLoadWarning)
+    ? `<div class="codex-empty">${esc(state.uniquesLoadWarning)}</div>`
+    : '';
   if (els.count) els.count.textContent = `${entries.length} result${entries.length === 1 ? '' : 's'}`;
   renderTags(entries);
 
@@ -209,7 +262,7 @@ function renderList() {
         <button type="button" class="codex-nav-btn" data-codex-list-action="collapse">Collapse All</button>
       </div>
     `;
-    els.listMount.innerHTML = `${controlsHtml}<div class="codex-list-scroll"><div class="codex-empty">No results found. Try a different search or clear tags.</div></div>`;
+    els.listMount.innerHTML = `${controlsHtml}<div class="codex-list-scroll">${warningHtml}<div class="codex-empty">No results found. Try a different search or clear tags.</div></div>`;
     return;
   }
 
@@ -245,7 +298,7 @@ function renderList() {
     `;
   }).join('');
 
-  els.listMount.innerHTML = `${controlsHtml}<div class="codex-list-scroll">${html}</div>`;
+  els.listMount.innerHTML = `${controlsHtml}<div class="codex-list-scroll">${warningHtml}${html}</div>`;
 }
 
 function applyPinnedJump(id) {
@@ -411,25 +464,37 @@ function buildIndex() {
   });
 
   const uniques = Array.isArray(state.uniquesItems) ? state.uniquesItems : [];
-  uniques.forEach((u, idx) => {
-    const name = u?.name || `Unique ${idx + 1}`;
+  uniques.forEach((u) => {
+    const name = u?.name;
+    if (!name) return;
     const slot = u?.slot || 'Unknown';
-    const lines = Array.isArray(u?.lines) ? u.lines.filter(Boolean) : [];
-    const tags = normalizeTags(u?.tags, `${name} ${slot} ${lines.join(' ')}`);
+    const base = u?.base || '';
+    const implicitMods = Array.isArray(u?.implicit_mods) ? u.implicit_mods.filter(Boolean) : [];
+    const explicitMods = Array.isArray(u?.explicit_mods) ? u.explicit_mods.filter(Boolean) : [];
+    const flavourText = Array.isArray(u?.flavour_text) ? u.flavour_text.filter(Boolean) : [];
+    const lines = [...implicitMods, ...explicitMods];
+    const tags = normalizeTags(u?.tags, `${name} ${base} ${slot} ${lines.join(' ')}`);
+    const stableKey = String(u?.key || `${name}||${base || slot}`);
+    const sourceId = String(u?.id || u?.source?.id || 'unknown');
     out.push({
-      id: `unique:${slot}:${name}:${idx}`,
+      id: `unique:${stableKey}`,
       type: 'uniques',
       pillar: 'gear',
       group: slot,
       name,
-      text: lines.join(' • ') || 'No details available in current dataset.',
+      text: `${base ? `${base} • ` : ''}${lines.join(' • ')}` || 'No details available in current dataset.',
       tags,
       extraFields: {
         slot,
-        description: u?.base ? `Base: ${u.base}` : 'Description unavailable in current dataset.',
-        lines
+        base,
+        requirements: u?.requirements || {},
+        implicitMods,
+        explicitMods,
+        grantedSkills: Array.isArray(u?.granted_skills) ? u.granted_skills : [],
+        flavourText,
+        sourceId
       },
-      sourceRef: 'uniques_enriched'
+      sourceRef: 'poe2db_uniques_min'
     });
   });
 
@@ -607,13 +672,34 @@ document.addEventListener('DOMContentLoaded', async () => {
   bind();
   hydrateFromUrl();
   await ensureDataPreload();
-  try {
-    const res = await fetch('data/enriched/uniques_enriched.json');
-    const json = await res.json();
-    state.uniquesItems = Array.isArray(json?.items) ? json.items : [];
-  } catch {
-    state.uniquesItems = [];
+
+  async function loadCodexUniques() {
+    try {
+      const res = await fetch('data/enriched/poe2db_uniques_min.json');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const json = await res.json();
+      const mapped = Object.entries(json?.items || {})
+        .map(([id, record]) => ({ id, ...(record || {}) }))
+        .filter((record) => record && !record.error && record.name)
+        .sort((a, b) => (a.name || '').localeCompare(b.name || '') || (a.base || '').localeCompare(b.base || ''));
+      state.uniquesLoadWarning = '';
+      return mapped;
+    } catch {
+      try {
+        const fallbackRes = await fetch('data/enriched/uniques_enriched.json');
+        if (!fallbackRes.ok) throw new Error(`HTTP ${fallbackRes.status}`);
+        const fallbackJson = await fallbackRes.json();
+        const fallbackItems = Array.isArray(fallbackJson?.items) ? fallbackJson.items : [];
+        state.uniquesLoadWarning = 'Using fallback uniques dataset. To refresh Codex uniques, generate and commit data/enriched/poe2db_uniques_min.json.';
+        return fallbackItems;
+      } catch {
+        state.uniquesLoadWarning = 'Uniques dataset unavailable. Generate and commit data/enriched/poe2db_uniques_min.json to enable Codex uniques browsing.';
+        return [];
+      }
+    }
   }
+
+  state.uniquesItems = await loadCodexUniques();
   buildIndex();
   render();
 });

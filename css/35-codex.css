@@ -409,6 +409,12 @@ body[data-mode="codex"] .codex-inspector h3{
   line-height:1.45;
 }
 .codex-row-body p{ margin:0; }
+.codex-unique-section{ margin-top:.5rem; }
+.codex-unique-label{ font-size:.76rem; text-transform:uppercase; letter-spacing:.06em; color:rgba(228,224,216,.72); margin-bottom:.2rem; }
+.codex-unique-section ul{ margin:0; padding-left:1.05rem; }
+.codex-unique-section li{ margin:.12rem 0; }
+.codex-unique-flavour{ margin-top:.5rem; opacity:.72; font-style:italic; }
+.codex-unique-flavour p + p{ margin-top:.18rem; }
 .codex-row-tags{ display:flex; flex-wrap:wrap; gap:5px; margin-top:.4rem; }
 .codex-row-tags .tag-pill{ font-size:.7rem; padding:1px 7px; }
 
