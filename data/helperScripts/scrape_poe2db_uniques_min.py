@@ -2,7 +2,7 @@
 """
 scrape_poe2db_uniques_min.py
 
-Scrape PoE2DB uniques into a minimal, app-focused dataset:
+Scrape PoE2DB uniques into a minimal, app-focused dataset.
 
 Fields per unique:
 - Name
@@ -26,8 +26,8 @@ Usage:
   python3 scrape_poe2db_uniques_min.py --lang us --out data/enriched/poe2db_uniques_min.json --resume --verbose
 
 Notes:
-- This script is designed to be run as a dev/build step. Commit the JSON; do NOT fetch PoE2DB at runtime.
-- If you previously ran an older version with --resume, delete the output file and re-run to rebuild with the new fields.
+- Run this as a dev/build step. Commit the JSON; do NOT fetch PoE2DB at runtime.
+- If you previously ran an older version with --resume, delete the output JSON and re-run to rebuild with the updated fields.
 """
 
 from __future__ import annotations
@@ -84,6 +84,10 @@ def fetch_html(url: str, timeout: float = 25.0) -> str:
 
 def norm_ws(s: str) -> str:
     return re.sub(r"\s+", " ", (s or "").strip())
+
+def strip_square_brackets_chars(s: str) -> str:
+    """Remove literal '[' and ']' characters (defensive cleanup)."""
+    return (s or "").replace("[", "").replace("]", "")
 
 def safe_int(x: Any) -> Optional[int]:
     try:
@@ -161,6 +165,7 @@ def extract_bracket_tags(s: str) -> List[str]:
         t = norm_ws(tag).lower().replace(" ", "_")
         if t:
             tags.append(t)
+    # de-dupe preserve order
     seen = set()
     out = []
     for t in tags:
@@ -171,6 +176,7 @@ def extract_bracket_tags(s: str) -> List[str]:
     return out
 
 def strip_brackets_for_display(s: str) -> str:
+    # [Label|Tag] -> Label
     return BRACKET_PAT.sub(lambda m: m.group(1), s or "")
 
 def normalize_mod_lines(arr: Any) -> List[str]:
@@ -184,13 +190,13 @@ def normalize_mod_lines(arr: Any) -> List[str]:
     return out
 
 def parse_requirements_from_display(text_lines: List[str]) -> Optional[Dict[str, Optional[int]]]:
-    """Parse visible 'Requires:' line."""
+    """Parse visible 'Requires:' line (preferred)."""
     for ln in text_lines[:250]:
         s = norm_ws(ln)
         if not s.lower().startswith("requires:"):
             continue
 
-        s2 = strip_brackets_for_display(s)
+        s2 = strip_square_brackets_chars(strip_brackets_for_display(s))
 
         lvl_m = re.search(r"\bLevel\s*(\d+)", s2, re.I)
         str_m = re.search(r"\b(\d+)\s*(?:Str|Strength)\b", s2, re.I)
@@ -208,7 +214,10 @@ def parse_requirements_from_display(text_lines: List[str]) -> Optional[Dict[str,
     return None
 
 def parse_requirements_from_item_json(item_json: dict) -> Dict[str, Optional[int]]:
-    """Parse requirements[] where name may be bracketed like '[Dexterity|Dex]'."""
+    """
+    Parse requirements[] where name may be bracketed like:
+      "[Dexterity|Dex]", "[Strength|Str]", "[Intelligence|Int]".
+    """
     reqs = item_json.get("requirements")
     if not isinstance(reqs, list):
         return {"level": None, "str": None, "dex": None, "int": None}
@@ -223,6 +232,7 @@ def parse_requirements_from_item_json(item_json: dict) -> Dict[str, Optional[int
             continue
 
         nml = nm.lower()
+
         if nml == "level" or ("|level" in nml):
             out["level"] = val
             continue
@@ -237,7 +247,10 @@ def parse_requirements_from_item_json(item_json: dict) -> Dict[str, Optional[int
     return out
 
 def parse_slot_from_item_json_properties(item_json: dict) -> Optional[str]:
-    """Prefer properties[].name where values is empty and name isn't a stat property."""
+    """
+    Prefer properties[].name where values is empty and name isn't a common stat property.
+    Many PoE2DB embedded JSON blobs include the item class here.
+    """
     props = item_json.get("properties")
     if not isinstance(props, list):
         return None
@@ -250,7 +263,7 @@ def parse_slot_from_item_json_properties(item_json: dict) -> Optional[str]:
             continue
         vals = p.get("values")
         if vals is None or (isinstance(vals, list) and len(vals) == 0):
-            return nm
+            return strip_square_brackets_chars(strip_brackets_for_display(nm)).strip()
 
     return None
 
@@ -258,7 +271,7 @@ def parse_slot_from_page_text(text_lines: List[str]) -> Optional[str]:
     for ln in text_lines[:350]:
         s = norm_ws(ln)
         if s.lower().startswith("item class:"):
-            return norm_ws(s.split(":", 1)[1])
+            return strip_square_brackets_chars(strip_brackets_for_display(norm_ws(s.split(":", 1)[1]))).strip()
     return None
 
 def extract_mod_meta_tags_and_families(text_lines: List[str]) -> Dict[str, List[str]]:
@@ -281,23 +294,64 @@ def extract_mod_meta_tags_and_families(text_lines: List[str]) -> Dict[str, List[
     return {"families": sorted(families), "craft_tags": sorted(craft_tags)}
 
 def normalize_granted_skills(gs: Any) -> List[dict]:
+    """
+    Normalize item_json.grantedSkills entries.
+
+    PoE2DB commonly encodes:
+      {"name":"Grants Skill","values":[["Level 15 Power Siphon", 25]], "icon": ...}
+
+    Output:
+      [{"name":"Power Siphon","level":15,"icon":...,"raw":"Level 15 Power Siphon"}]
+    """
     if not isinstance(gs, list):
         return []
-    out = []
+    out: List[dict] = []
+    lvl_name_pat = re.compile(r"^Level\s+(\d+)\s+(.+)$", re.I)
+
     for e in gs:
         if not isinstance(e, dict):
             continue
-        name = norm_ws(str(e.get("name") or ""))
-        if not name:
-            continue
-        rec = {"name": name}
-        lvl = safe_int(e.get("level"))
-        if lvl is not None:
-            rec["level"] = lvl
+
+        raw_name = norm_ws(str(e.get("name") or ""))
+        raw_val = None
+
+        vals = e.get("values")
+        if isinstance(vals, list) and vals:
+            first = vals[0]
+            if isinstance(first, list) and first:
+                raw_val = norm_ws(str(first[0]))
+
         icon = e.get("icon")
-        if isinstance(icon, str) and icon.strip():
-            rec["icon"] = icon.strip()
+        icon = icon.strip() if isinstance(icon, str) else None
+
+        parsed_name = ""
+        parsed_level: Optional[int] = None
+
+        if raw_val:
+            v = strip_square_brackets_chars(strip_brackets_for_display(raw_val)).strip()
+            m = lvl_name_pat.match(v)
+            if m:
+                parsed_level = safe_int(m.group(1))
+                parsed_name = norm_ws(m.group(2))
+            else:
+                parsed_name = norm_ws(v)
+
+        if not parsed_name:
+            parsed_name = strip_square_brackets_chars(strip_brackets_for_display(raw_name)).strip()
+
+        if parsed_name.lower() in {"grants skill", "grants"} and not raw_val:
+            continue
+
+        rec: Dict[str, Any] = {"name": parsed_name}
+        if parsed_level is not None:
+            rec["level"] = parsed_level
+        if raw_val:
+            rec["raw"] = raw_val
+        if icon:
+            rec["icon"] = icon
+
         out.append(rec)
+
     return out
 
 @dataclass(frozen=True)
@@ -306,6 +360,10 @@ class UniqueRef:
     href: str
 
 def discover_unique_refs(listing_html: str, lang: str) -> List[UniqueRef]:
+    """
+    Discover uniques from the Unique_item listing using icon <img> anchors.
+    Filter by art paths containing "/Uniques/" to avoid grabbing skill icons.
+    """
     soup = BeautifulSoup(listing_html, "html.parser")
     refs: List[UniqueRef] = []
     seen = set()
@@ -390,9 +448,12 @@ def main() -> int:
 
             name = norm_ws(str(item_json.get("name") or "")) or ref.label.split(" ")[0]
             base = norm_ws(str(item_json.get("typeLine") or ""))
+            name = strip_square_brackets_chars(strip_brackets_for_display(name)).strip()
+            base = strip_square_brackets_chars(strip_brackets_for_display(base)).strip()
 
             # Slot (item class)
             slot = parse_slot_from_item_json_properties(item_json) or parse_slot_from_page_text(text_lines) or None
+            slot = strip_square_brackets_chars(strip_brackets_for_display(slot)).strip() if slot else None
 
             # Requirements
             req = parse_requirements_from_display(text_lines) or parse_requirements_from_item_json(item_json)
@@ -408,18 +469,21 @@ def main() -> int:
 
             for ln in implicit_mods_raw:
                 for t in extract_bracket_tags(ln):
-                    bracket_tags.add(t)
-                implicit_mods.append(norm_ws(strip_brackets_for_display(ln)))
+                    bracket_tags.add(strip_square_brackets_chars(t))
+                implicit_mods.append(norm_ws(strip_square_brackets_chars(strip_brackets_for_display(ln))))
 
             for ln in explicit_mods_raw:
                 for t in extract_bracket_tags(ln):
-                    bracket_tags.add(t)
-                explicit_mods.append(norm_ws(strip_brackets_for_display(ln)))
+                    bracket_tags.add(strip_square_brackets_chars(t))
+                explicit_mods.append(norm_ws(strip_square_brackets_chars(strip_brackets_for_display(ln))))
 
             # Flavour text
-            flavour_text = [norm_ws(strip_brackets_for_display(x)) for x in normalize_mod_lines(item_json.get("flavourText"))]
+            flavour_text = [
+                norm_ws(strip_square_brackets_chars(strip_brackets_for_display(x)))
+                for x in normalize_mod_lines(item_json.get("flavourText"))
+            ]
 
-            # Granted skills (minimized)
+            # Granted skills (minimized, parsed from values)
             granted_skills = normalize_granted_skills(item_json.get("grantedSkills"))
 
             # Tags from mod meta blocks
@@ -427,24 +491,26 @@ def main() -> int:
 
             tags = set(meta_tags["craft_tags"])
             for fam in meta_tags["families"]:
-                tags.add(f"family:{fam.lower()}")
+                tags.add(f"family:{strip_square_brackets_chars(fam).lower()}")
             for t in bracket_tags:
-                tags.add(t)
+                tags.add(strip_square_brackets_chars(t))
 
             # slot/base tags
             if slot:
-                tags.add(slot.lower().replace(" ", "_"))
+                tags.add(strip_square_brackets_chars(slot).lower().replace(" ", "_"))
             if base:
-                tags.add(base.lower().replace(" ", "_"))
+                tags.add(strip_square_brackets_chars(base).lower().replace(" ", "_"))
 
             # granted skill name tags
             for gs in granted_skills:
                 gsn = norm_ws(str(gs.get("name") or ""))
-                if gsn:
-                    tags.add(f"grants:{gsn.lower().replace(' ', '_')}")
-                    tags.add(gsn.lower().replace(' ', '_'))
+                if not gsn:
+                    continue
+                gsn2 = strip_square_brackets_chars(gsn)
+                tags.add(f"grants:{gsn2.lower().replace(' ', '_')}")
+                tags.add(gsn2.lower().replace(' ', '_'))
 
-            key = f"{name}||{base}" if base else name
+            key = f"{strip_square_brackets_chars(name)}||{strip_square_brackets_chars(base)}" if base else strip_square_brackets_chars(name)
 
             rec = {
                 "key": key,
@@ -470,7 +536,7 @@ def main() -> int:
 
         out_obj = {
             "_meta": {
-                "schema": "poe2db_uniques_min_v2",
+                "schema": "poe2db_uniques_min_v3",
                 "locale": args.lang,
                 "listing_url": listing_url,
                 "count": len(items),
