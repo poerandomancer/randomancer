@@ -17,6 +17,11 @@
   --challenge-iron: #7f8792;
   --challenge-crimson: #9f2f37;
   --challenge-crimson-soft: rgba(159,47,55,0.35);
+
+  --codex-ember: #84331a;
+  --codex-ember-rgb: 196, 90, 42;
+  --codex-ember-soft: rgba(196,90,42,0.35);
+  --codex-ember-weak: rgba(196,90,42,0.12);
 }
 
 body[data-mode="build"]{
@@ -27,6 +32,12 @@ body[data-mode="challenge"]{
   --mode-accent: var(--challenge-crimson);
   --gold: var(--challenge-crimson);
   --edge: var(--challenge-crimson-soft);
+}
+
+body[data-mode="codex"]{
+  --mode-accent: var(--codex-ember);
+  --gold: var(--codex-ember);
+  --edge: var(--codex-ember-soft);
 }
 
 *{ box-sizing:border-box; }

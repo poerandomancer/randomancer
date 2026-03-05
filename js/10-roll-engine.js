@@ -90,17 +90,25 @@ function prefersReducedMotion() {
 
 const HEADER_MODES = {
   BUILD: 'build',
-  CHALLENGE: 'challenge'
+  CHALLENGE: 'challenge',
+  CODEX: 'codex'
 };
 
 const headerCollapsedByMode = {
   [HEADER_MODES.BUILD]: false,
-  [HEADER_MODES.CHALLENGE]: false
+  [HEADER_MODES.CHALLENGE]: false,
+  [HEADER_MODES.CODEX]: false
 };
+
+function resolveHeaderMode(mode) {
+  if (mode === HEADER_MODES.CHALLENGE) return HEADER_MODES.CHALLENGE;
+  if (mode === HEADER_MODES.CODEX) return HEADER_MODES.CODEX;
+  return HEADER_MODES.BUILD;
+}
 
 function getActiveHeaderMode() {
   const mode = document.body?.dataset?.mode;
-  return mode === HEADER_MODES.CHALLENGE ? HEADER_MODES.CHALLENGE : HEADER_MODES.BUILD;
+  return resolveHeaderMode(mode);
 }
 
 function setHeaderCollapsed(collapsed, instant = false) {
@@ -125,7 +133,7 @@ function setHeaderCollapsed(collapsed, instant = false) {
 }
 
 function setModeHeaderCollapsed(mode, collapsed, instant = false) {
-  const headerMode = mode === HEADER_MODES.CHALLENGE ? HEADER_MODES.CHALLENGE : HEADER_MODES.BUILD;
+  const headerMode = resolveHeaderMode(mode);
   headerCollapsedByMode[headerMode] = !!collapsed;
   if (getActiveHeaderMode() === headerMode) {
     setHeaderCollapsed(!!collapsed, instant);
@@ -133,7 +141,7 @@ function setModeHeaderCollapsed(mode, collapsed, instant = false) {
 }
 
 function syncHeaderCollapsedForMode(mode, instant = false) {
-  const headerMode = mode === HEADER_MODES.CHALLENGE ? HEADER_MODES.CHALLENGE : HEADER_MODES.BUILD;
+  const headerMode = resolveHeaderMode(mode);
   setHeaderCollapsed(!!headerCollapsedByMode[headerMode], instant);
 }
 
@@ -1360,7 +1368,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.addEventListener('randomancer:mode-change', (event) => {
-    const mode = event?.detail?.mode === 'challenge' ? HEADER_MODES.CHALLENGE : HEADER_MODES.BUILD;
+    const mode = resolveHeaderMode(event?.detail?.mode);
     syncHeaderCollapsedForMode(mode, prefersReducedMotion());
   });
 

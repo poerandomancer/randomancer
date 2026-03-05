@@ -1,0 +1,445 @@
+.codex-panel{
+  --codex-accent:#79b6ce;
+  border-color:rgba(121,182,206,0.35);
+  margin-top: 1.35rem;
+  position: relative;
+  overflow: visible;
+}
+
+.codex-header{
+  position:sticky;
+  top:0;
+  z-index:4;
+  background:linear-gradient(180deg, rgba(12,14,18,0.98), rgba(12,14,18,0.88));
+  padding-top:.35rem;
+  padding-bottom:.5rem;
+}
+
+/* Pillar tabs float above and attach to panel frame */
+.codex-pillars{
+  /* Attach tabs to the TOP border of the .panel (like real tabbed panels).
+     .panel adds padding-top: 1rem before the first child. Tabs are 28px tall. */
+  position:absolute;
+  left:1.25rem;
+  right:1.25rem;
+  top: calc(-1rem - 28px);
+  z-index:7;
+  display:flex;
+  align-items:flex-end;
+  gap:.35rem;
+  margin:0;
+}
+
+.codex-pillars .skills-tab {
+  border-color: rgba(121,182,206,.5);
+  background: rgba(10,14,18,.95);
+  color: rgba(182,220,236,.86);
+}
+
+.codex-pillars .skills-tab.is-active {
+  color: #def3fb;
+  border-color: rgba(121,182,206,.9);
+  box-shadow: 0 0 10px rgba(121,182,206,.2), inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+
+.codex-pillars .codex-pinned-tab{ margin-left:auto; }
+.skills-tab.codex-pinned-tab{ border-color:rgba(121,182,206,.6); color:#8fd7ee; }
+.skills-tab.codex-pinned-tab.is-active{ color:#e8f9ff; border-color:rgba(121,182,206,.95); background:rgba(18,39,47,.86); }
+
+.codex-filter-row{ display:flex; gap:.5rem; align-items:center; margin:.5rem 0; }
+#codex-search{ flex:1; background:rgba(0,0,0,.35); border:1px solid rgba(121,182,206,0.42); color:#dcebf1; border-radius:8px; padding:.45rem .6rem; }
+#codex-clear-tags,
+.codex-list-actions .codex-nav-btn{ border:1px solid rgba(121,182,206,.4); background:rgba(121,182,206,.12); color:#dcebf1; border-radius:999px; padding:.35rem .7rem; cursor:pointer; }
+.codex-results-count{ color:var(--codex-accent); font-size:.9rem; }
+
+/* Tag pills mirror unique card pills */
+.codex-tag-chips{ display:flex; flex-wrap:wrap; gap:6px; margin:.45rem 0 .9rem; }
+.codex-tag-chips .tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 200, 140, 0.35);
+  background: radial-gradient(160% at 10% 30%, rgba(140, 90, 35, 0.30) 0%, rgba(35, 26, 16, 0.45) 60%, rgba(8, 5, 2, 0.9) 100%);
+  font-size: 0.78rem;
+  letter-spacing: 0.2px;
+  line-height: 1.2;
+  color: #f5e3cf;
+  text-transform: none;
+  cursor:pointer;
+}
+.codex-tag-chips .tag-pill.is-active {
+  box-shadow: 0 0 0 1px rgba(255, 210, 140, 0.45), 0 0 12px rgba(255, 180, 90, 0.25);
+  color: #fff2df;
+  border-color: rgba(255, 210, 140, 0.5);
+}
+
+/* Sub-tabs are visually connected to left nav panel */
+.codex-passive-toggle,
+.codex-skills-toggle,
+.codex-gear-toggle {
+  margin-top: .6rem;
+  margin-bottom: -.35rem;
+  padding-left: 0;
+  width: fit-content;
+  margin-left: 0;
+  position: relative;
+  z-index: 3;
+}
+
+.codex-passive-toggle .skills-tab,
+.codex-skills-toggle .skills-tab,
+.codex-gear-toggle .skills-tab {
+  border-color: rgba(121,182,206,.42);
+  background: rgba(9,12,16,.92);
+}
+
+.codex-layout{ display:grid; grid-template-columns:minmax(260px,42%) 1fr; gap:.7rem; margin-top:.55rem; }
+
+.codex-panel.codex--has-subtabs .codex-layout{
+  /* Leave room between sticky header and panel frames so left sub-tabs can protrude upward */
+  margin-top: calc(.55rem + 28px);
+}
+.codex-list,.codex-inspector{ background:rgba(6,8,10,.58); border:1px solid rgba(121,182,206,.2); border-radius:10px; padding:.65rem; min-height:520px; max-height:68vh; }
+.codex-list{ display:flex; flex-direction:column; overflow:hidden; position:relative; }
+
+/* --- Codex: left navigation sub-tabs should behave like real panel tabs --- */
+.codex-list{
+  /* allow the tabs to hang over the top border without being clipped */
+  overflow:visible;
+  /* make room for the tab row so it doesn't overlap the content */
+  padding-top: calc(.65rem + 28px);
+}
+/* kill the decorative top rail; the border + tabs handle the "tabbed pane" look */
+.codex-list::before{ display:none; }
+
+/* wrapper that sits ON the nav panel's top border */
+.codex-list-tabs{
+  position:absolute;
+  left:.65rem;
+  right:.65rem;
+  /* Straddle the nav panel's top border: 28px tall tabs => bottom aligns at y=0 */
+  top:-28px;
+  z-index:30;
+  pointer-events:auto;
+}
+
+/* each toggle row behaves like a tab rail */
+.codex-list-tabs .build-panel-tabs{
+  display:flex;
+  gap:.35rem;
+  align-items:flex-end;
+  position:relative;
+  margin:0;
+  padding-bottom:0;
+}
+/* subtle rail behind the tabs (optional) */
+.codex-list-tabs .build-panel-tabs::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:1px;
+  background: linear-gradient(90deg, transparent, rgba(0,0,0,.55), transparent);
+  opacity:.35;
+  pointer-events:none;
+}
+.codex-list-tabs .skills-tab{ margin-bottom:-1px; }
+/* only one sub-tab row should be visible at a time */
+.codex-list-tabs .is-hidden{ display:none !important; }
+
+.codex-list::before{ display:none; }
+.codex-list-scroll{ flex:1 1 auto; min-height:0; overflow:auto; padding-right:.2rem; }
+.codex-list-actions{ display:flex; gap:.45rem; margin-bottom:.55rem; position:relative; z-index:1; background:rgba(6,8,10,.92); padding-bottom:.35rem; }
+.codex-inspector{ overflow:auto; }
+
+.codex-group{ border:1px solid rgba(121,182,206,.18); border-radius:8px; margin-bottom:.55rem; }
+.codex-group > summary{ cursor:pointer; padding:.45rem .6rem; color:#b6d9e7; font-weight:600; }
+.codex-item{ display:block; width:100%; text-align:left; border:0; background:rgba(0,0,0,.2); color:#e8e8e8; margin:.3rem; padding:.45rem .55rem; border-radius:6px; cursor:pointer; }
+.codex-item small{ color:#b8c4cc; display:block; }
+.codex-item.is-active{ outline:1px solid rgba(121,182,206,.65); background:rgba(121,182,206,.12); }
+
+.codex-inspector h3{ margin-top:0; color:#cce8f2; }
+.codex-inspector-head{ display:flex; align-items:center; justify-content:space-between; gap:.5rem; }
+.codex-pin-toggle{ border:1px solid rgba(121,182,206,.45); background:rgba(121,182,206,.12); color:#dff2f9; border-radius:999px; padding:.22rem .55rem; cursor:pointer; }
+.codex-pin-toggle.is-pinned{ background:rgba(121,182,206,.35); box-shadow:0 0 8px rgba(121,182,206,.3) inset; }
+
+.codex-pins-tray{ margin:.4rem 0 .2rem; padding:.45rem .5rem; border:1px solid rgba(121,182,206,.25); border-radius:8px; background:rgba(6,10,14,.45); }
+.codex-pins-head{ display:flex; align-items:center; justify-content:space-between; gap:.5rem; margin-bottom:.35rem; }
+.codex-pins-title{ font-size:.85rem; color:#b9ddeb; letter-spacing:.03em; }
+.codex-pin-list{ display:flex; flex-wrap:wrap; gap:.3rem; margin:.2rem 0 .35rem; }
+.codex-pin-chip{ border:1px solid rgba(121,182,206,.5); border-radius:999px; background:rgba(121,182,206,.16); color:#def3fb; padding:.15rem .55rem; display:inline-flex; align-items:center; gap:.35rem; cursor:pointer; }
+.codex-pin-remove{ border:0; background:transparent; color:#def3fb; cursor:pointer; font-size:.95rem; line-height:1; }
+.codex-pin-actions{ display:flex; gap:.45rem; align-items:center; }
+.codex-pin-actions button{ border:1px solid rgba(121,182,206,.35); background:rgba(121,182,206,.1); color:#dcebf1; border-radius:999px; padding:.2rem .55rem; cursor:pointer; }
+.codex-pin-query{ font-size:.78rem; color:#9fbdc9; white-space:normal; overflow-wrap:anywhere; word-break:break-word; }
+
+.codex-empty{ color:#9eaab1; padding:.75rem; }
+.codex-mark{ background:rgba(121,182,206,.25); color:#e9f7ff; padding:0 .1rem; border-radius:2px; }
+body[data-mode="codex"] .subtitle{ color:#98ccdf; }
+
+@media (max-width: 900px){
+  /* Keep the pillar tabs attached to the panel frame on mobile too. */
+  .codex-pillars{
+    position:absolute;
+    left:.85rem;
+    right:.85rem;
+    top: calc(-1rem - 28px);
+    flex-wrap:wrap;
+    row-gap:.35rem;
+  }
+
+  /* Single-column layout */
+  .codex-layout{ grid-template-columns:1fr; }
+
+  .codex-list,.codex-inspector{ max-height:none; min-height:0; }
+  .codex-filter-row{ flex-wrap:wrap; }
+}
+
+
+/* Ensure nav-pane decorative top rail stays off (tabs handle the tabbed-pane look). */
+.codex-list::before{ display:none; }
+
+
+/* =========================================================
+   Codex Ember Accent + Scroll Containment Overrides (v8)
+   - Toned-down rust/ember accent (driven by --codex-ember vars in 00-base.css)
+   - Make pillar tabs behave like subtabs: grey idle, ember active (no aqua/white)
+   - Boost selected tag pill highlight
+   - Keep left nav content contained via scrollable mount
+   ========================================================= */
+
+.codex-panel{
+  --codex-accent: var(--codex-ember);
+  --codex-accent-rgb: var(--codex-ember-rgb);
+  border-color: rgba(var(--codex-accent-rgb), 0.35);
+}
+
+.codex-panel .codex-list,
+.codex-panel .codex-inspector{
+  border-color: rgba(var(--codex-accent-rgb), 0.20);
+}
+
+/* Pillar tabs: override the aqua/white codex-specific rules to match the global .skills-tab pattern */
+.codex-panel .codex-pillars .skills-tab{
+  border-color: rgba(var(--codex-accent-rgb), 0.35);
+  background: rgba(16,16,20,0.55);
+  color: rgba(210,210,220,0.75);
+}
+.codex-panel .codex-pillars .skills-tab.is-active{
+  color: var(--codex-accent);
+  border-color: rgba(var(--codex-accent-rgb), 0.70);
+  background: rgba(20,20,24,0.78);
+  box-shadow:
+    0 0 12px rgba(var(--codex-accent-rgb), 0.18),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+}
+.codex-panel .skills-tab.codex-pinned-tab{
+  color: rgba(210,210,220,0.75);
+  border-color: rgba(var(--codex-accent-rgb), 0.35);
+}
+.codex-panel .skills-tab.codex-pinned-tab.is-active{
+  color: var(--codex-accent);
+  border-color: rgba(var(--codex-accent-rgb), 0.72);
+  background: rgba(28,18,12,0.70);
+}
+
+/* Sub-tabs rails inherit the same look (remove any lingering aqua borders) */
+.codex-panel .codex-passive-toggle .skills-tab,
+.codex-panel .codex-skills-toggle .skills-tab,
+.codex-panel .codex-gear-toggle .skills-tab{
+  border-color: rgba(var(--codex-accent-rgb), 0.35);
+  background: rgba(16,16,20,0.55);
+}
+.codex-panel .codex-passive-toggle .skills-tab.is-active,
+.codex-panel .codex-skills-toggle .skills-tab.is-active,
+.codex-panel .codex-gear-toggle .skills-tab.is-active{
+  color: var(--codex-accent);
+  border-color: rgba(var(--codex-accent-rgb), 0.70);
+  background: rgba(20,20,24,0.78);
+  box-shadow:
+    0 0 12px rgba(var(--codex-accent-rgb), 0.18),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+/* Inputs / buttons in codex header */
+.codex-panel #codex-search{
+  border-color: rgba(var(--codex-accent-rgb), 0.42);
+}
+.codex-panel #codex-clear-tags,
+.codex-panel .codex-list-actions .codex-nav-btn{
+  border-color: rgba(var(--codex-accent-rgb), 0.40);
+  background: rgba(var(--codex-accent-rgb), 0.10);
+}
+
+/* Selected tag pill: brighter/more impactful */
+.codex-tag-chips .tag-pill.is-active{
+  border-color: rgba(var(--codex-accent-rgb), 0.72);
+  color: #fff3e6;
+  box-shadow:
+    0 0 0 1px rgba(var(--codex-accent-rgb), 0.55),
+    0 0 18px rgba(var(--codex-accent-rgb), 0.35),
+    0 0 34px rgba(var(--codex-accent-rgb), 0.22);
+  text-shadow: 0 0 10px rgba(var(--codex-accent-rgb), 0.25);
+}
+
+/* BUGFIX: keep left navigation content contained in a scroll panel
+   (outer .codex-list must stay overflow:visible so tabs can protrude) */
+.codex-list-mount{
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding-top: .35rem;
+}
+
+
+/* =========================================================
+   Codex: Force ember borders (fix for rgba(var(--x)) parsing fallback)
+   ========================================================= */
+.codex-panel{
+  --codex-accent: var(--codex-ember);
+  --codex-accent-rgb: var(--codex-ember-rgb);
+}
+
+/* Panel frame */
+.codex-panel.panel{
+  border-color: rgba(var(--codex-accent-rgb), 0.45) !important;
+  box-shadow:
+    0 0 0 1px rgba(var(--codex-accent-rgb), 0.10),
+    0 18px 50px rgba(0,0,0,0.45);
+}
+
+/* Inner columns */
+.codex-panel .codex-list,
+.codex-panel .codex-inspector{
+  border-color: rgba(var(--codex-accent-rgb), 0.22) !important;
+}
+
+/* Tag pills: default + active */
+.codex-panel .tag-pill{
+  border-color: rgba(var(--codex-accent-rgb), 0.28) !important;
+}
+.codex-panel .tag-pill.is-active,
+.codex-panel .codex-tag-chips .tag-pill.is-active{
+  border-color: rgba(var(--codex-accent-rgb), 0.78) !important;
+  box-shadow:
+    0 0 0 1px rgba(var(--codex-accent-rgb), 0.55),
+    0 0 18px rgba(var(--codex-accent-rgb), 0.35),
+    0 0 34px rgba(var(--codex-accent-rgb), 0.22) !important;
+}
+
+/* Codex: remove legacy aqua text */
+body[data-mode="codex"] .subtitle{
+  color: var(--muted) !important;
+}
+
+body[data-mode="codex"] #codex-search,
+body[data-mode="codex"] .codex-list-actions .codex-nav-btn,
+body[data-mode="codex"] .codex-pin-toggle,
+body[data-mode="codex"] .codex-pin-chip,
+body[data-mode="codex"] .codex-pin-remove,
+body[data-mode="codex"] .codex-pin-actions button{
+  color: var(--ink) !important;
+}
+
+body[data-mode="codex"] .codex-group > summary{
+  color: rgba(228,224,216,0.82) !important;
+}
+
+body[data-mode="codex"] .codex-inspector h3{
+  color: rgba(228,224,216,0.92) !important;
+}
+/* Codex structure refresh: no inspector pane, inline row expansion */
+.codex-layout{
+  display:block;
+  margin-top:.55rem;
+}
+
+.codex-list{
+  min-height:520px;
+  max-height:68vh;
+  padding-top:.65rem;
+}
+
+.codex-panel.codex--has-subtabs .codex-layout{ margin-top: calc(.55rem + 28px); }
+.codex-panel.codex--has-subtabs .codex-list{ padding-top: calc(.65rem + 28px); }
+
+.codex-group-rows{ padding:.2rem .3rem .4rem; }
+.codex-row{
+  border:1px solid rgba(var(--codex-accent-rgb),0.18);
+  background:rgba(0,0,0,.2);
+  border-radius:7px;
+  margin:.32rem;
+  cursor:pointer;
+}
+.codex-row:hover{ border-color:rgba(var(--codex-accent-rgb),0.35); }
+.codex-row:focus-visible{
+  outline:1px solid rgba(var(--codex-accent-rgb),0.72);
+  outline-offset:1px;
+}
+.codex-row-head{
+  display:flex;
+  align-items:flex-start;
+  gap:.45rem;
+  padding:.45rem .55rem;
+}
+.codex-row-copy{ flex:1; min-width:0; }
+.codex-row-copy strong{ display:block; }
+.codex-row-copy small{ color:#b8c4cc; display:block; }
+.codex-row-chevron{
+  color:rgba(226,216,206,.68);
+  transition:transform .16s ease;
+  margin-top:.1rem;
+}
+.codex-row.is-expanded .codex-row-chevron{ transform:rotate(90deg); }
+.codex-row.is-expanded{
+  border-color:rgba(var(--codex-accent-rgb),0.62);
+  box-shadow:0 0 0 1px rgba(var(--codex-accent-rgb),0.28), 0 0 14px rgba(var(--codex-accent-rgb),0.12);
+}
+.codex-row-body{
+  margin:.1rem .55rem .55rem 1.55rem;
+  padding:.45rem .55rem;
+  border-top:1px solid rgba(var(--codex-accent-rgb),0.15);
+  background:rgba(var(--codex-accent-rgb),0.06);
+  border-radius:6px;
+  font-size:.9rem;
+  line-height:1.45;
+}
+.codex-row-body p{ margin:0; }
+.codex-unique-section{ margin-top:.5rem; }
+.codex-unique-label{ font-size:.76rem; text-transform:uppercase; letter-spacing:.06em; color:rgba(228,224,216,.72); margin-bottom:.2rem; }
+.codex-unique-section ul{ margin:0; padding-left:1.05rem; }
+.codex-unique-section li{ margin:.12rem 0; }
+.codex-unique-flavour{ margin-top:.5rem; opacity:.72; font-style:italic; }
+.codex-unique-flavour p + p{ margin-top:.18rem; }
+.codex-row-tags{ display:flex; flex-wrap:wrap; gap:5px; margin-top:.4rem; }
+.codex-row-tags .tag-pill{ font-size:.7rem; padding:1px 7px; }
+
+.codex-pin-icon{
+  width:16px;
+  height:16px;
+  border:0;
+  background:transparent;
+  color:rgba(226,216,206,.62);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  margin-top:.1rem;
+  cursor:pointer;
+  transition:transform .16s ease, color .16s ease, filter .16s ease;
+}
+.codex-pin-icon:hover{ color:rgba(245,228,208,.92); }
+.codex-pin-icon.is-pinned{
+  color:rgba(var(--codex-accent-rgb),0.95);
+  transform:rotate(-20deg);
+  filter:drop-shadow(0 0 5px rgba(var(--codex-accent-rgb),0.4));
+}
+.codex-pin-icon svg{ width:100%; height:100%; }
+
+@media (max-width: 900px){
+  .codex-list{ max-height:none; min-height:0; }
+}
