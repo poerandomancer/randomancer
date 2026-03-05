@@ -537,3 +537,16 @@ body[data-mode="codex"] .codex-inspector h3{
     height:min(72vh, calc(100vh - 230px));
   }
 }
+
+/* Codex layering fix: keep tree pane visually below tags/header block */
+.codex-panel .codex-header{
+  position:relative;
+  top:auto;
+  z-index:3;
+}
+
+.codex-panel .codex-layout{
+  position:relative;
+  z-index:1;
+  margin-top:.5rem;
+}
