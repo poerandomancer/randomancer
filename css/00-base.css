@@ -98,7 +98,9 @@ body[data-mode="challenge"]{
 body.challenge-mode .asc-art,
 body.challenge-mode .asc-art.show,
 body[data-mode="challenge"] .asc-art,
-body[data-mode="challenge"] .asc-art.show{
+body[data-mode="challenge"] .asc-art.show,
+body[data-mode="codex"] .asc-art,
+body[data-mode="codex"] .asc-art.show{
   opacity: 0 !important;
 }
 
