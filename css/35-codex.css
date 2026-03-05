@@ -443,3 +443,69 @@ body[data-mode="codex"] .codex-inspector h3{
 @media (max-width: 900px){
   .codex-list{ max-height:none; min-height:0; }
 }
+
+/* Codex tree accordion refresh */
+.codex-panel .codex-layout{ display:block; margin-top:.45rem; }
+.codex-panel .codex-list{ min-height:520px; max-height:68vh; padding:.45rem; overflow:hidden; }
+.codex-panel .codex-list-mount{ padding-top:0; }
+.codex-panel .codex-list-scroll{ padding-right:.1rem; }
+
+.codex-panel details.rc-acc{ border:0; margin:0; }
+.codex-panel details.rc-acc > summary{ list-style:none; cursor:pointer; }
+.codex-panel details.rc-acc > summary::-webkit-details-marker{ display:none; }
+
+.codex-panel .codex-group{ border-bottom:1px solid rgba(var(--codex-accent-rgb),0.2); }
+.codex-panel .codex-group:last-child{ border-bottom:0; }
+.codex-panel .codex-group > summary{
+  position:relative;
+  padding:.5rem .55rem .5rem 1.3rem;
+  color:rgba(232,223,209,0.9);
+  font-weight:600;
+}
+.codex-panel .codex-group > summary::before,
+.codex-panel .codex-row > summary::before{
+  content:'▸';
+  position:absolute;
+  left:.45rem;
+  top:50%;
+  transform:translateY(-50%);
+  color:rgba(var(--codex-accent-rgb),0.78);
+  transition:transform .15s ease;
+}
+.codex-panel details[open] > summary::before{ transform:translateY(-50%) rotate(90deg); }
+
+.codex-panel .codex-group-rows{ margin-left:.85rem; border-left:1px solid rgba(var(--codex-accent-rgb),0.14); padding-left:.45rem; }
+.codex-panel .codex-group-rows--nested{ margin-left:.3rem; }
+
+.codex-panel .codex-row{
+  border-top:1px solid rgba(var(--codex-accent-rgb),0.12);
+  background:transparent;
+  border-radius:0;
+  margin:0;
+}
+.codex-panel .codex-row:first-child{ border-top:0; }
+.codex-panel .codex-row-head{
+  position:relative;
+  padding:.48rem .45rem .48rem 1.2rem;
+  display:flex;
+  align-items:flex-start;
+  gap:.4rem;
+}
+.codex-panel .codex-row-copy small{ color:rgba(205,197,186,0.68); }
+.codex-panel .codex-row:focus-within > summary,
+.codex-panel .codex-group > summary:focus-visible,
+.codex-panel .codex-row > summary:focus-visible{
+  outline:1px solid rgba(var(--codex-accent-rgb),0.75);
+  outline-offset:1px;
+  border-radius:4px;
+}
+.codex-panel .codex-row-body{
+  margin:.1rem 0 .45rem .9rem;
+  padding:.42rem .5rem;
+  border:1px solid rgba(var(--codex-accent-rgb),0.16);
+  border-radius:5px;
+  background:rgba(var(--codex-accent-rgb),0.06);
+}
+.codex-panel .codex-unique-body{ font-size:.9rem; line-height:1.4; }
+.codex-panel .codex-count{ opacity:.72; font-weight:500; }
+.codex-panel .codex-row-chevron{ display:none; }
