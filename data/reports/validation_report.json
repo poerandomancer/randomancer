@@ -1,13 +1,71 @@
 {
-  "generated_at": "2026-03-06T18:02:55.825657+00:00",
+  "generated_at": "2026-03-06T18:19:54.123993+00:00",
   "ok": true,
   "messages": [
+    "OK: /workspace/randomancer/data/canonical/uniques.json",
     "OK: /workspace/randomancer/data/enriched/skills_enriched.json",
     "OK: /workspace/randomancer/data/enriched/passives_enriched.json",
     "OK: /workspace/randomancer/data/enriched/uniques_enriched.json",
-    "OK: /workspace/randomancer/data/runtime/runtime_index.json"
+    "OK: /workspace/randomancer/data/runtime/runtime_index.json",
+    "Unique hygiene warnings found: 12"
   ],
   "duplicate_passive_node_ids": [],
+  "uniques_hygiene": {
+    "issue_count": 12,
+    "critical_issue_count": 0,
+    "warning_issue_count": 12,
+    "sample_critical_issues": [],
+    "sample_warning_issues": [
+      {
+        "context": "unique.atziri-s",
+        "issue": "missing_slot"
+      },
+      {
+        "context": "unique.atziri-s",
+        "issue": "missing_readable_mods"
+      },
+      {
+        "context": "unique.atziri-s--slot--base",
+        "issue": "missing_slot"
+      },
+      {
+        "context": "unique.atziri-s--slot--base",
+        "issue": "missing_readable_mods"
+      },
+      {
+        "context": "unique.edit",
+        "issue": "missing_slot"
+      },
+      {
+        "context": "unique.edit",
+        "issue": "missing_readable_mods"
+      },
+      {
+        "context": "unique.flesh",
+        "issue": "missing_slot"
+      },
+      {
+        "context": "unique.flesh",
+        "issue": "missing_readable_mods"
+      },
+      {
+        "context": "unique.heart-of-the-well",
+        "issue": "missing_readable_mods"
+      },
+      {
+        "context": "unique.mj-lner",
+        "issue": "missing_slot"
+      },
+      {
+        "context": "unique.mj-lner",
+        "issue": "missing_readable_mods"
+      },
+      {
+        "context": "unique.tabula-rasa",
+        "issue": "missing_readable_mods"
+      }
+    ]
+  },
   "tag_hygiene": {
     "issue_count": 0,
     "sample_issues": []

@@ -4,9 +4,9 @@ enrich_uniques.py
 
 Offline unique-item enrichment for Randomancer.
 
-Reads datamined PoE2 unique data from:
+Reads canonical PoE2 uniques data from:
 
-    data/datamined/Uniques/*.json     (per-slot files: amulet.json, bow.json, ...)
+    data/canonical/uniques.json
 
 and writes the compact, app-ready file:
 
@@ -438,47 +438,40 @@ def extract_tags(lines: list[str], core: dict[str, Any]) -> dict[str, Any]:
 # Datamined reader
 # -------------------------
 
-def iter_datamined_items(uniques_root: Path) -> Iterable[Dict[str, Any]]:
-    """
-    Iterate over per-slot JSON files in data/datamined/Uniques.
-
-    Each file is a list of newline-joined strings. We convert each into:
-      { "slot": <slot>, "name": <line0>, "base": <line1>, "lines": [all lines...] }
-    """
-    if not uniques_root.exists():
-        print(f"[enrich_uniques] ERROR: {uniques_root} does not exist", file=sys.stderr)
+def iter_canonical_items(canonical_path: Path) -> Iterable[Dict[str, Any]]:
+    if not canonical_path.exists():
+        print(f"[enrich_uniques] ERROR: {canonical_path} does not exist", file=sys.stderr)
         return
 
-    for path in sorted(uniques_root.glob("*.json")):
-        slot = path.stem
+    try:
+        with canonical_path.open("r", encoding="utf-8") as f:
+            payload = json.load(f)
+    except Exception as e:
+        print(f"[enrich_uniques] ERROR: Failed to load {canonical_path}: {e}", file=sys.stderr)
+        return
 
-        try:
-            with path.open("r", encoding="utf-8") as f:
-                data = json.load(f)
-        except Exception as e:
-            print(f"[enrich_uniques] WARNING: Failed to load {path}: {e}", file=sys.stderr)
+    items = payload.get("items", []) if isinstance(payload, dict) else []
+    for row in items:
+        if not isinstance(row, dict):
+            continue
+        name = str(row.get("name") or "").strip()
+        base = str(row.get("base_type") or "").strip()
+        slot = str(row.get("slot") or "").strip()
+        if not name:
             continue
 
-        if not isinstance(data, list):
-            continue
-
-        for text in data:
-            if not isinstance(text, str):
-                continue
-            lines = text.splitlines()
-            if len(lines) < 2:
-                continue
-            name = lines[0].strip()
-            base = lines[1].strip()
-            if not name and not base:
-                continue
-
-            yield {
-                "slot": slot,
-                "name": name,
-                "base": base,
-                "lines": lines,
-            }
+        mods = [str(x).strip() for x in (row.get("mods") or []) if str(x).strip()]
+        lines = [name, base, *mods]
+        yield {
+            "id": str(row.get("id") or ""),
+            "slot": slot,
+            "name": name,
+            "base": base,
+            "lines": lines,
+            "source": row.get("source", {}),
+            "flavour_text": row.get("flavour_text", []),
+            "granted_skills": row.get("granted_skills", []),
+        }
 
 
 # -------------------------
@@ -490,22 +483,24 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     here = Path(__file__).resolve().parent
     data_root = here.parent  # data/
-    uniques_root = data_root / "datamined" / "Uniques"
+    canonical_path = data_root / "canonical" / "uniques.json"
     out_dir = data_root / "enriched"
     out_path = out_dir / "uniques_enriched.json"
 
     core = load_core_data(data_root)
 
     items_out: List[Dict[str, Any]] = []
-    for item in iter_datamined_items(uniques_root):
+    for item in iter_canonical_items(canonical_path):
         extracted = extract_tags(item["lines"], core)
         items_out.append({
+            "id": item.get("id"),
             "slot": item["slot"],
             "name": item["name"],
             "base": item["base"],
             "tags": extracted["tags"],
             "lines": item["lines"],
             "meta": extracted["meta"],
+            "source": item.get("source", {}),
         })
 
     out_dir.mkdir(parents=True, exist_ok=True)

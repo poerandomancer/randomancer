@@ -43,6 +43,19 @@ Tag normalization now runs through shared utilities and config-driven overrides:
 
 Pipeline validation now includes tag-hygiene checks and emits `data/reports/tag_report.json`.
 
+## Phase 3 uniques migration
+
+Uniques are now the first scraped-first canonical entity family:
+
+- Normalized scraped uniques: `data/normalized/scraped/uniques_scraped_normalized.json`
+- Canonical uniques: `data/canonical/uniques.json`
+- Enriched app-compatible uniques: `data/enriched/uniques_enriched.json`
+
+Related reports:
+
+- `data/reports/uniques_migration_report.json`
+- `data/reports/validation_report.json` (`uniques_hygiene` section)
+
 ## Run
 
 ```bash

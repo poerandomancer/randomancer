@@ -1,0 +1,19 @@
+{
+  "generated_at": "2026-03-06T18:19:52.294683+00:00",
+  "source_policy": "scraped_first_canonical_uniques",
+  "counts": {
+    "raw_scraped": 375,
+    "normalized_scraped": 375,
+    "canonical_uniques": 375,
+    "enriched_uniques": 375
+  },
+  "quality": {
+    "missing_slot": 5,
+    "missing_base_type": 5,
+    "duplicate_ids": []
+  },
+  "source_file": "data/raw/scraped/poe2db_uniques_min.json",
+  "canonical_file": "data/canonical/uniques.json",
+  "normalized_file": "data/normalized/scraped/uniques_scraped_normalized.json",
+  "enriched_file": "data/enriched/uniques_enriched.json"
+}

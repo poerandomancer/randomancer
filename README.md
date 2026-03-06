@@ -86,6 +86,8 @@ It introduces explicit `raw -> normalized -> canonical -> enriched -> runtime` b
 
 Phase 2 adds shared tag normalization via `scripts/shared/tag_utils.py` with config-driven overrides under `data/overrides/tag_overrides/` and a `data/reports/tag_report.json` output.
 
+Phase 3 migrates uniques to scraped-first canonical flow (`data/normalized/scraped/uniques_scraped_normalized.json` → `data/canonical/uniques.json` → `data/enriched/uniques_enriched.json`) with `data/reports/uniques_migration_report.json`.
+
 See `docs/data-pipeline.md` for details and scope notes for this phase.
 
 ## Development Notes

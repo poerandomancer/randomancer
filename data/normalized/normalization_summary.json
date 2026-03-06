@@ -1,10 +1,17 @@
 {
-  "generated_at": "2026-03-06T18:02:49.902713+00:00",
-  "phase": "phase_1_scaffold",
-  "notes": "Normalization stage scaffolded. Source-policy migrations deferred to later phases.",
+  "generated_at": "2026-03-06T18:19:51.448659+00:00",
+  "phase": "phase_3_uniques_scraped_first",
+  "notes": "Normalization stage includes scraped-first uniques normalization.",
   "sources_detected": {
     "datamined_skills_tables": true,
     "datamined_uniques": true,
     "scraped_uniques_min": true
+  },
+  "uniques": {
+    "count": 375,
+    "missing_slot": 5,
+    "missing_base_type": 5,
+    "source_file": "data/raw/scraped/poe2db_uniques_min.json",
+    "output": "data/normalized/scraped/uniques_scraped_normalized.json"
   }
 }

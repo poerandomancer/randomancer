@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-06T18:02:50.828957+00:00",
+  "generated_at": "2026-03-06T18:19:52.297075+00:00",
   "families": {
     "skills": {
       "source": "data/enriched/skills_enriched.json",
@@ -177,94 +177,94 @@
     },
     "uniques": {
       "source": "data/enriched/uniques_enriched.json",
-      "total_tags": 1437,
-      "unique_tags": 59,
+      "total_tags": 1005,
+      "unique_tags": 50,
       "top_tags": [
         [
-          "physical",
-          100
-        ],
-        [
           "armour",
-          93
+          87
         ],
         [
-          "energy shield",
-          91
+          "physical",
+          69
         ],
         [
           "liferegen",
-          67
+          60
         ],
         [
           "liferegeneration",
-          67
+          60
         ],
         [
           "regen",
-          67
-        ],
-        [
-          "physical damage",
-          62
+          60
         ],
         [
           "evasion",
           57
         ],
         [
-          "crit",
-          47
+          "physical damage",
+          57
         ],
         [
           "attack speed",
-          40
+          42
         ],
         [
-          "heavystun",
-          39
-        ],
-        [
-          "stun",
-          39
-        ],
-        [
-          "cold resistance",
-          36
-        ],
-        [
-          "chaos resistance",
-          35
+          "crit",
+          41
         ],
         [
           "fire",
-          34
-        ],
-        [
-          "fire resistance",
-          32
-        ],
-        [
-          "lightning resistance",
-          32
-        ],
-        [
-          "lightning",
-          31
-        ],
-        [
-          "cold",
           29
         ],
         [
-          "movement speed",
+          "lightning",
           28
+        ],
+        [
+          "movement speed",
+          27
+        ],
+        [
+          "cold",
+          26
+        ],
+        [
+          "fire damage",
+          24
+        ],
+        [
+          "chaos",
+          20
+        ],
+        [
+          "chill",
+          20
+        ],
+        [
+          "freeze",
+          20
+        ],
+        [
+          "lightning damage",
+          20
+        ],
+        [
+          "cast speed",
+          19
+        ],
+        [
+          "bleed",
+          16
         ]
       ]
     }
   },
   "summary": {
-    "total_tags_seen": 13495,
-    "unique_tags": 670
+    "total_tags_seen": 13063,
+    "unique_tags": 668
   }
 }

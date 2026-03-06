@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-06T18:02:51.110261+00:00",
+  "generated_at": "2026-03-06T18:19:52.500725+00:00",
   "success": true,
   "stages": {
     "inputs": {
@@ -8,7 +8,6 @@
         "ok": true,
         "missing_required": [],
         "missing_optional": [
-          "data/raw/scraped/poe2db_uniques_min.json",
           "data/raw/handcrafted/display_overrides.json"
         ]
       }
@@ -40,25 +39,105 @@
     "validate": {
       "status": "success",
       "details": {
-        "generated_at": "2026-03-06T18:02:50.826585+00:00",
+        "generated_at": "2026-03-06T18:19:52.270809+00:00",
         "ok": true,
         "messages": [
+          "OK: /workspace/randomancer/data/canonical/uniques.json",
           "OK: /workspace/randomancer/data/enriched/skills_enriched.json",
           "OK: /workspace/randomancer/data/enriched/passives_enriched.json",
           "OK: /workspace/randomancer/data/enriched/uniques_enriched.json",
-          "OK: /workspace/randomancer/data/runtime/runtime_index.json"
+          "OK: /workspace/randomancer/data/runtime/runtime_index.json",
+          "Unique hygiene warnings found: 12"
         ],
         "duplicate_passive_node_ids": [],
+        "uniques_hygiene": {
+          "issue_count": 12,
+          "critical_issue_count": 0,
+          "warning_issue_count": 12,
+          "sample_critical_issues": [],
+          "sample_warning_issues": [
+            {
+              "context": "unique.atziri-s",
+              "issue": "missing_slot"
+            },
+            {
+              "context": "unique.atziri-s",
+              "issue": "missing_readable_mods"
+            },
+            {
+              "context": "unique.atziri-s--slot--base",
+              "issue": "missing_slot"
+            },
+            {
+              "context": "unique.atziri-s--slot--base",
+              "issue": "missing_readable_mods"
+            },
+            {
+              "context": "unique.edit",
+              "issue": "missing_slot"
+            },
+            {
+              "context": "unique.edit",
+              "issue": "missing_readable_mods"
+            },
+            {
+              "context": "unique.flesh",
+              "issue": "missing_slot"
+            },
+            {
+              "context": "unique.flesh",
+              "issue": "missing_readable_mods"
+            },
+            {
+              "context": "unique.heart-of-the-well",
+              "issue": "missing_readable_mods"
+            },
+            {
+              "context": "unique.mj-lner",
+              "issue": "missing_slot"
+            },
+            {
+              "context": "unique.mj-lner",
+              "issue": "missing_readable_mods"
+            },
+            {
+              "context": "unique.tabula-rasa",
+              "issue": "missing_readable_mods"
+            }
+          ]
+        },
         "tag_hygiene": {
           "issue_count": 0,
           "sample_issues": []
         }
       }
     },
+    "uniques_report": {
+      "status": "success",
+      "details": {
+        "generated_at": "2026-03-06T18:19:52.294683+00:00",
+        "source_policy": "scraped_first_canonical_uniques",
+        "counts": {
+          "raw_scraped": 375,
+          "normalized_scraped": 375,
+          "canonical_uniques": 375,
+          "enriched_uniques": 375
+        },
+        "quality": {
+          "missing_slot": 5,
+          "missing_base_type": 5,
+          "duplicate_ids": []
+        },
+        "source_file": "data/raw/scraped/poe2db_uniques_min.json",
+        "canonical_file": "data/canonical/uniques.json",
+        "normalized_file": "data/normalized/scraped/uniques_scraped_normalized.json",
+        "enriched_file": "data/enriched/uniques_enriched.json"
+      }
+    },
     "tag_report": {
       "status": "success",
       "details": {
-        "generated_at": "2026-03-06T18:02:50.828957+00:00",
+        "generated_at": "2026-03-06T18:19:52.297075+00:00",
         "families": {
           "skills": {
             "source": "data/enriched/skills_enriched.json",
@@ -236,95 +315,95 @@
           },
           "uniques": {
             "source": "data/enriched/uniques_enriched.json",
-            "total_tags": 1437,
-            "unique_tags": 59,
+            "total_tags": 1005,
+            "unique_tags": 50,
             "top_tags": [
               [
-                "physical",
-                100
-              ],
-              [
                 "armour",
-                93
+                87
               ],
               [
-                "energy shield",
-                91
+                "physical",
+                69
               ],
               [
                 "liferegen",
-                67
+                60
               ],
               [
                 "liferegeneration",
-                67
+                60
               ],
               [
                 "regen",
-                67
-              ],
-              [
-                "physical damage",
-                62
+                60
               ],
               [
                 "evasion",
                 57
               ],
               [
-                "crit",
-                47
+                "physical damage",
+                57
               ],
               [
                 "attack speed",
-                40
+                42
               ],
               [
-                "heavystun",
-                39
-              ],
-              [
-                "stun",
-                39
-              ],
-              [
-                "cold resistance",
-                36
-              ],
-              [
-                "chaos resistance",
-                35
+                "crit",
+                41
               ],
               [
                 "fire",
-                34
-              ],
-              [
-                "fire resistance",
-                32
-              ],
-              [
-                "lightning resistance",
-                32
-              ],
-              [
-                "lightning",
-                31
-              ],
-              [
-                "cold",
                 29
               ],
               [
-                "movement speed",
+                "lightning",
                 28
+              ],
+              [
+                "movement speed",
+                27
+              ],
+              [
+                "cold",
+                26
+              ],
+              [
+                "fire damage",
+                24
+              ],
+              [
+                "chaos",
+                20
+              ],
+              [
+                "chill",
+                20
+              ],
+              [
+                "freeze",
+                20
+              ],
+              [
+                "lightning damage",
+                20
+              ],
+              [
+                "cast speed",
+                19
+              ],
+              [
+                "bleed",
+                16
               ]
             ]
           }
         },
         "summary": {
-          "total_tags_seen": 13495,
-          "unique_tags": 670
+          "total_tags_seen": 13063,
+          "unique_tags": 668
         }
       }
     },

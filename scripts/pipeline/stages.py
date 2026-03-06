@@ -7,6 +7,8 @@ from typing import Any
 from scripts.shared.file_utils import ensure_dir, file_size, load_json, write_json
 from scripts.shared.report_utils import utc_now_iso
 from scripts.shared.tag_utils import is_blacklisted, normalize_tag_candidate
+from scripts.normalize.normalize_uniques_scraped import normalize_scraped_uniques
+from scripts.canonical.build_canonical_uniques import build_canonical_uniques
 from scripts.shared.validation_utils import check_json_file
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -30,6 +32,11 @@ def check_inputs() -> dict[str, Any]:
 
     missing_required = [str(path.relative_to(ROOT)) for path in required if not path.exists()]
     missing_warnings = [str(path.relative_to(ROOT)) for path in warnings if not path.exists()]
+    has_scraped_uniques = (DATA / 'raw' / 'scraped' / 'poe2db_uniques_min.json').exists() or (
+        DATA / 'enriched' / 'poe2db_uniques_min.json'
+    ).exists()
+    if not has_scraped_uniques:
+        missing_required.append('data/raw/scraped/poe2db_uniques_min.json (or data/enriched/poe2db_uniques_min.json fallback)')
 
     return {
         'ok': not missing_required,
@@ -40,15 +47,18 @@ def check_inputs() -> dict[str, Any]:
 
 def run_normalize_stage() -> dict[str, Any]:
     normalized_dir = ensure_dir(DATA / 'normalized')
+    uniques_result = normalize_scraped_uniques()
     payload = {
         'generated_at': utc_now_iso(),
-        'phase': 'phase_1_scaffold',
-        'notes': 'Normalization stage scaffolded. Source-policy migrations deferred to later phases.',
+        'phase': 'phase_3_uniques_scraped_first',
+        'notes': 'Normalization stage includes scraped-first uniques normalization.',
         'sources_detected': {
             'datamined_skills_tables': (DATA / 'datamined' / 'skills_tables').exists(),
             'datamined_uniques': (DATA / 'datamined' / 'Uniques').exists(),
-            'scraped_uniques_min': (DATA / 'enriched' / 'poe2db_uniques_min.json').exists(),
+            'scraped_uniques_min': (DATA / 'raw' / 'scraped' / 'poe2db_uniques_min.json').exists()
+            or (DATA / 'enriched' / 'poe2db_uniques_min.json').exists(),
         },
+        'uniques': uniques_result,
     }
     out = normalized_dir / 'normalization_summary.json'
     write_json(out, payload)
@@ -57,13 +67,16 @@ def run_normalize_stage() -> dict[str, Any]:
 
 def run_canonical_stage() -> dict[str, Any]:
     canonical_dir = ensure_dir(DATA / 'canonical')
+    uniques_result = build_canonical_uniques()
     payload = {
         'generated_at': utc_now_iso(),
-        'phase': 'phase_1_scaffold',
+        'phase': 'phase_3_uniques_scraped_first',
         'notes': [
             'Canonical stage boundary established.',
-            'Canonical source migrations for uniques/passives are intentionally deferred.',
+            'Uniques canonical dataset is now scraped-first.',
+            'Passives canonical migration is intentionally deferred.',
         ],
+        'uniques': uniques_result,
     }
     out = canonical_dir / 'canonical_summary.json'
     write_json(out, payload)
@@ -72,7 +85,7 @@ def run_canonical_stage() -> dict[str, Any]:
 
 def _run_script(script_path: Path) -> tuple[int, str]:
     cmd = ['python', str(script_path)]
-    proc = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, check=False)
+    proc = subprocess.run(cmd, cwd=script_path.parent, capture_output=True, text=True, check=False)
     output = (proc.stdout + '\n' + proc.stderr).strip()
     return proc.returncode, output
 
@@ -125,6 +138,7 @@ def run_runtime_stage() -> dict[str, Any]:
 
 def run_validation_stage() -> dict[str, Any]:
     checks = [
+        DATA / 'canonical' / 'uniques.json',
         DATA / 'enriched' / 'skills_enriched.json',
         DATA / 'enriched' / 'passives_enriched.json',
         DATA / 'enriched' / 'uniques_enriched.json',
@@ -153,6 +167,13 @@ def run_validation_stage() -> dict[str, Any]:
         ok = False
         messages.append(f'Duplicate passive node IDs found: {duplicate_ids[:10]}')
 
+    unique_validation = validate_uniques_hygiene()
+    if unique_validation['critical_issue_count'] > 0:
+        ok = False
+        messages.append(f"Unique hygiene critical issues found: {unique_validation['critical_issue_count']}")
+    if unique_validation['warning_issue_count'] > 0:
+        messages.append(f"Unique hygiene warnings found: {unique_validation['warning_issue_count']}")
+
     tag_issues = validate_tag_hygiene()
     if tag_issues['issue_count'] > 0:
         ok = False
@@ -163,6 +184,7 @@ def run_validation_stage() -> dict[str, Any]:
         'ok': ok,
         'messages': messages,
         'duplicate_passive_node_ids': duplicate_ids,
+        'uniques_hygiene': unique_validation,
         'tag_hygiene': tag_issues,
     }
     write_json(REPORTS / 'validation_report.json', validation_report)
@@ -275,6 +297,91 @@ def validate_tag_hygiene() -> dict[str, Any]:
     }
 
 
+def validate_uniques_hygiene() -> dict[str, Any]:
+    critical_issues: list[dict[str, Any]] = []
+    warning_issues: list[dict[str, Any]] = []
+
+    canonical = load_json(DATA / 'canonical' / 'uniques.json') if (DATA / 'canonical' / 'uniques.json').exists() else {}
+    items = canonical.get('items', []) if isinstance(canonical, dict) else []
+    seen_ids: set[str] = set()
+
+    for row in items:
+        if not isinstance(row, dict):
+            continue
+        uid = str(row.get('id', '')).strip()
+        name = str(row.get('name', '')).strip()
+        slot = str(row.get('slot', '')).strip()
+        mods = row.get('mods', [])
+        context = uid or name or 'unknown'
+
+        if not uid:
+            critical_issues.append({'context': context, 'issue': 'missing_id'})
+        elif uid in seen_ids:
+            critical_issues.append({'context': context, 'issue': 'duplicate_id'})
+        seen_ids.add(uid)
+
+        if not name:
+            critical_issues.append({'context': context, 'issue': 'missing_name'})
+        if not slot:
+            warning_issues.append({'context': context, 'issue': 'missing_slot'})
+        if not isinstance(mods, list) or len(mods) == 0:
+            warning_issues.append({'context': context, 'issue': 'missing_readable_mods'})
+
+    return {
+        'issue_count': len(critical_issues) + len(warning_issues),
+        'critical_issue_count': len(critical_issues),
+        'warning_issue_count': len(warning_issues),
+        'sample_critical_issues': critical_issues[:50],
+        'sample_warning_issues': warning_issues[:50],
+    }
+
+
+def generate_uniques_migration_report() -> dict[str, Any]:
+    raw_source = DATA / 'raw' / 'scraped' / 'poe2db_uniques_min.json'
+    fallback_source = DATA / 'enriched' / 'poe2db_uniques_min.json'
+    source_path = raw_source if raw_source.exists() else fallback_source
+
+    raw_payload = load_json(source_path) if source_path.exists() else {}
+    raw_count = len((raw_payload.get('items') or {})) if isinstance(raw_payload, dict) else 0
+
+    normalized_payload = load_json(DATA / 'normalized' / 'scraped' / 'uniques_scraped_normalized.json') if (DATA / 'normalized' / 'scraped' / 'uniques_scraped_normalized.json').exists() else {}
+    normalized_items = normalized_payload.get('items', []) if isinstance(normalized_payload, dict) else []
+
+    canonical_payload = load_json(DATA / 'canonical' / 'uniques.json') if (DATA / 'canonical' / 'uniques.json').exists() else {}
+    canonical_items = canonical_payload.get('items', []) if isinstance(canonical_payload, dict) else []
+
+    enriched_payload = load_json(DATA / 'enriched' / 'uniques_enriched.json') if (DATA / 'enriched' / 'uniques_enriched.json').exists() else {}
+    enriched_items = enriched_payload.get('items', []) if isinstance(enriched_payload, dict) else []
+
+    missing_slot = sum(1 for row in normalized_items if isinstance(row, dict) and not str(row.get('slot', '')).strip())
+    missing_base = sum(1 for row in normalized_items if isinstance(row, dict) and not str(row.get('base_type', '')).strip())
+
+    ids = [str(row.get('id', '')) for row in canonical_items if isinstance(row, dict)]
+    duplicate_ids = sorted({uid for uid in ids if uid and ids.count(uid) > 1})
+
+    report = {
+        'generated_at': utc_now_iso(),
+        'source_policy': 'scraped_first_canonical_uniques',
+        'counts': {
+            'raw_scraped': raw_count,
+            'normalized_scraped': len(normalized_items),
+            'canonical_uniques': len(canonical_items),
+            'enriched_uniques': len(enriched_items),
+        },
+        'quality': {
+            'missing_slot': missing_slot,
+            'missing_base_type': missing_base,
+            'duplicate_ids': duplicate_ids,
+        },
+        'source_file': str(source_path.relative_to(ROOT)) if source_path.exists() else '',
+        'canonical_file': 'data/canonical/uniques.json',
+        'normalized_file': 'data/normalized/scraped/uniques_scraped_normalized.json',
+        'enriched_file': 'data/enriched/uniques_enriched.json',
+    }
+    write_json(REPORTS / 'uniques_migration_report.json', report)
+    return report
+
+
 def update_version_manifest(stage_results: dict[str, Any]) -> dict[str, Any]:
     manifest_path = ROOT / 'version_manifest.json'
     existing: dict[str, Any] = {}
@@ -290,7 +397,7 @@ def update_version_manifest(stage_results: dict[str, Any]) -> dict[str, Any]:
     existing['last_pipeline_run_at'] = utc_now_iso()
     existing['pipeline'] = {
         'entrypoint': 'scripts/pipeline/run_pipeline.py',
-        'phase': 'phase_1_foundation',
+        'phase': 'phase_3_uniques_scraped_first',
         'stages': {key: value.get('status', 'unknown') for key, value in stage_results.items()},
     }
     write_json(manifest_path, existing)

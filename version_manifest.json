@@ -1,9 +1,9 @@
 {
   "schema": "randomancer_pipeline_manifest_v1",
-  "last_pipeline_run_at": "2026-03-06T18:02:51.109905+00:00",
+  "last_pipeline_run_at": "2026-03-06T18:19:52.500470+00:00",
   "pipeline": {
     "entrypoint": "scripts/pipeline/run_pipeline.py",
-    "phase": "phase_1_foundation",
+    "phase": "phase_3_uniques_scraped_first",
     "stages": {
       "inputs": "success",
       "normalize": "success",
@@ -11,6 +11,7 @@
       "enrich": "skipped",
       "runtime": "success",
       "validate": "success",
+      "uniques_report": "success",
       "tag_report": "success"
     }
   }

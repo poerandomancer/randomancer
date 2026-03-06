@@ -15,6 +15,7 @@ from scripts.pipeline.stages import (  # noqa: E402
     REPORTS,
     check_inputs,
     generate_tag_report,
+    generate_uniques_migration_report,
     run_canonical_stage,
     run_enrich_stage,
     run_normalize_stage,
@@ -65,6 +66,7 @@ def run_pipeline(skip_enrich: bool = False) -> tuple[int, dict[str, Any]]:
 
         validation = run_validation_stage()
         stage_results['validate'] = _stage('success' if validation.get('ok') else 'failed', validation)
+        stage_results['uniques_report'] = _stage('success', generate_uniques_migration_report())
         stage_results['tag_report'] = _stage('success', generate_tag_report())
         stage_results['manifest'] = _stage('success', update_version_manifest(stage_results))
 
@@ -76,7 +78,7 @@ def run_pipeline(skip_enrich: bool = False) -> tuple[int, dict[str, Any]]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description='Randomancer Phase 1 data pipeline orchestrator')
+    parser = argparse.ArgumentParser(description='Randomancer data pipeline orchestrator (Phase 3 uniques migration aware)')
     parser.add_argument('--skip-enrich', action='store_true', help='Skip running enrichment helper scripts')
     args = parser.parse_args()
 
@@ -85,7 +87,7 @@ def main() -> int:
     ensure_dir(report_path.parent)
     report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
 
-    print('=== Randomancer Data Pipeline (Phase 1) ===')
+    print('=== Randomancer Data Pipeline (Phase 3) ===')
     print(f"Status: {'SUCCESS' if report['success'] else 'FAILED'}")
     for stage_name, stage in report['stages'].items():
         print(f" - {stage_name}: {stage['status']}")

@@ -1,8 +1,14 @@
 {
-  "generated_at": "2026-03-06T18:02:49.903238+00:00",
-  "phase": "phase_1_scaffold",
+  "generated_at": "2026-03-06T18:19:51.491750+00:00",
+  "phase": "phase_3_uniques_scraped_first",
   "notes": [
     "Canonical stage boundary established.",
-    "Canonical source migrations for uniques/passives are intentionally deferred."
-  ]
+    "Uniques canonical dataset is now scraped-first.",
+    "Passives canonical migration is intentionally deferred."
+  ],
+  "uniques": {
+    "count": 375,
+    "duplicate_ids": [],
+    "output": "data/canonical/uniques.json"
+  }
 }
