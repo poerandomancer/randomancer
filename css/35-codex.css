@@ -550,3 +550,8 @@ body[data-mode="codex"] .codex-inspector h3{
   z-index:1;
   margin-top:.5rem;
 }
+
+/* Codex tree UX: avoid duplicate text when a row is expanded */
+.codex-panel .codex-row[open] .codex-row-copy small{
+  display:none;
+}
