@@ -6,8 +6,7 @@ const state = {
   gearKind: 'uniques',
   q: '',
   tags: new Set(),
-  openGroupsByView: new Map(),
-  expandedByAccordion: new Map(),
+  openAccordionsByView: new Map(),
   pinnedIds: new Set(),
   index: [],
   uniquesItems: [],
@@ -88,8 +87,6 @@ function matches(entry) {
   } else if (entry.pillar !== state.pillar) {
     return false;
   }
-  if (state.pillar === 'skills' && entry.type === 'skill' && entry.extraFields?.skillKind !== state.skillKind) return false;
-  if (state.pillar === 'gear' && entry.type !== state.gearKind) return false;
   const hay = `${entry.name} ${entry.text} ${(entry.tags || []).join(' ')}`.toLowerCase();
   const q = state.q.trim().toLowerCase();
   if (q && !hay.includes(q)) return false;
@@ -103,8 +100,8 @@ function updateUrl() {
   const p = new URLSearchParams(location.search);
   p.set('mode', 'codex');
   p.set('pillar', state.pillar);
-  if (state.pillar === 'skills') p.set('skill', state.skillKind); else p.delete('skill');
-  if (state.pillar === 'gear') p.set('gear', state.gearKind); else p.delete('gear');
+  p.delete('skill');
+  p.delete('gear');
   if (state.q) p.set('q', state.q); else p.delete('q');
   if (state.tags.size) p.set('tags', Array.from(state.tags).join(',')); else p.delete('tags');
   p.delete('passive');
@@ -176,29 +173,53 @@ function renderPinsTray() {
 }
 
 function getViewKey() {
-  if (state.pillar === 'gear') return `gear:${state.gearKind}`;
-  if (state.pillar === 'skills') return `skills:${state.skillKind}`;
   return state.pillar;
 }
 
-function getOpenGroupsSet() {
+function getOpenAccordionsSet() {
   const key = getViewKey();
-  if (!state.openGroupsByView.has(key)) state.openGroupsByView.set(key, new Set());
-  return state.openGroupsByView.get(key);
+  if (!state.openAccordionsByView.has(key)) state.openAccordionsByView.set(key, new Set());
+  return state.openAccordionsByView.get(key);
 }
 
-function accordionStateKey(group) {
-  return `${getViewKey()}::${group}`;
+function renderAccSummary(title, count) {
+  return `${esc(title)}${Number.isFinite(count) ? ` <span class="codex-count">(${count})</span>` : ''}`;
 }
 
-function getExpandedId(group) {
-  return state.expandedByAccordion.get(accordionStateKey(group)) || null;
+function renderCodexRow(entry, keyPrefix) {
+  const isPinned = state.pinnedIds.has(entry.id);
+  const meta = getEntryMeta(entry);
+  const rawText = entry.text || '';
+  const isTruncated = rawText.length > 130;
+  const previewText = rawText.slice(0, 130);
+  const previewDisplay = isTruncated ? `${previewText}…` : previewText;
+  const summaryMeta = `${meta ? `${esc(meta)}${previewDisplay ? ' · ' : ''}` : ''}${previewDisplay ? mark(previewDisplay) : ''}`;
+
+  return `
+    <details class="rc-acc rc-acc--row codex-row" data-acc-key="${esc(`${keyPrefix}::${entry.id}`)}">
+      <summary class="codex-row-head">
+        <div class="codex-row-copy">
+          <strong>${mark(entry.name)}</strong>
+          ${summaryMeta ? `<small>${summaryMeta}</small>` : ''}
+        </div>
+        <button type="button" class="codex-pin-icon ${isPinned ? 'is-pinned' : ''}" data-pin-id="${esc(entry.id)}" aria-label="${isPinned ? `Unpin ${esc(entry.name)}` : `Pin ${esc(entry.name)}`}" aria-pressed="${isPinned ? 'true' : 'false'}">${pinIconSvg()}</button>
+      </summary>
+      <div class="codex-row-body" id="codex-body-${esc(entry.id)}">
+        ${entry.type === 'uniques' ? renderUniqueBody(entry) : `<p>${mark(entry.text || 'Description unavailable in current dataset.')}</p>`}
+        ${(entry.type !== 'uniques' && (entry.tags || []).length) ? `<div class="codex-row-tags">${entry.tags.slice(0, 24).map((t) => `<span class="tag-pill">${esc(t)}</span>`).join('')}</div>` : ''}
+      </div>
+    </details>
+  `;
 }
 
-function setExpandedId(group, id) {
-  const key = accordionStateKey(group);
-  if (id) state.expandedByAccordion.set(key, id);
-  else state.expandedByAccordion.delete(key);
+function renderGroupAccordion(groupName, items, keyPrefix) {
+  const childPrefix = `${keyPrefix}::${groupName}`;
+  return `
+    <details class="rc-acc codex-group" data-acc-key="${esc(childPrefix)}">
+      <summary>${renderAccSummary(groupName, items.length)}</summary>
+      <div class="codex-group-rows">${items.map((item) => renderCodexRow(item, childPrefix)).join('')}</div>
+    </details>
+  `;
 }
 
 function getEntryMeta(entry) {
@@ -245,7 +266,7 @@ function renderUniqueBody(entry) {
   const grantedSkills = renderGrantedSkills(entry.extraFields?.grantedSkills);
   const flavour = Array.isArray(entry.extraFields?.flavourText) ? entry.extraFields.flavourText.filter(Boolean) : [];
   return `
-    <div class="codex-row-body" id="codex-body-${esc(entry.id)}">
+    <div class="codex-unique-body">
       ${reqLine ? `<p><strong>Requirements:</strong> ${mark(reqLine)}</p>` : ''}
       ${implicit}
       ${explicit}
@@ -260,92 +281,65 @@ function pinIconSvg() {
   return '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7 2.2 13.8 5.3l-1.3 1.3-1.1-.3-2.6 2.6 2.3 2.3-.9.9-2.3-2.3-3.4 3.4-.7-.7 3.4-3.4L4.9 7.1l.9-.9 2.3 2.3 2.6-2.6-.3-1.1z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>';
 }
 
-function renderCodexRow(entry, group) {
-  const expanded = getExpandedId(group) === entry.id;
-  const isPinned = state.pinnedIds.has(entry.id);
-  const meta = getEntryMeta(entry);
-  const rowBody = expanded ? (entry.type === 'uniques' ? renderUniqueBody(entry) : `
-    <div class="codex-row-body" id="codex-body-${esc(entry.id)}">
-      <p>${mark(entry.text || 'Description unavailable in current dataset.')}</p>
-      ${(entry.tags || []).length ? `<div class="codex-row-tags">${entry.tags.slice(0, 24).map((t) => `<span class="tag-pill">${esc(t)}</span>`).join('')}</div>` : ''}
-    </div>
-  `) : '';
-  const rawText = entry.text || '';
-  const isTruncated = rawText.length > 130;
-  const previewText = rawText.slice(0, 130);
-  const previewDisplay = isTruncated ? `${previewText}…` : previewText;
-  const subline = !expanded
-    ? `${meta ? `${esc(meta)}${previewDisplay ? ' · ' : ''}` : ''}${previewDisplay ? mark(previewDisplay) : ''}`
-    : (meta ? esc(meta) : '');
-
-  return `
-    <article class="codex-row ${expanded ? 'is-expanded' : ''}" data-entry-id="${esc(entry.id)}" data-group="${esc(group)}" role="button" tabindex="0" aria-expanded="${expanded ? 'true' : 'false'}" aria-controls="codex-body-${esc(entry.id)}">
-      <div class="codex-row-head">
-        <span class="codex-row-chevron" aria-hidden="true">▸</span>
-        <div class="codex-row-copy">
-          <strong>${mark(entry.name)}</strong>
-          ${subline ? `<small>${subline}</small>` : ''}
-        </div>
-        <button type="button" class="codex-pin-icon ${isPinned ? 'is-pinned' : ''}" data-pin-id="${esc(entry.id)}" aria-label="${isPinned ? `Unpin ${esc(entry.name)}` : `Pin ${esc(entry.name)}`}" aria-pressed="${isPinned ? 'true' : 'false'}">${pinIconSvg()}</button>
-      </div>
-      ${rowBody}
-    </article>
-  `;
-}
-
 function renderList() {
   if (!els.listMount) return;
   const entries = state.index.filter(matches);
-  const warningHtml = (state.pillar === 'gear' && state.gearKind === 'uniques' && state.uniquesLoadWarning)
+  const warningHtml = (state.pillar === 'gear' && state.uniquesLoadWarning)
     ? `<div class="codex-empty">${esc(state.uniquesLoadWarning)}</div>`
     : '';
   if (els.count) els.count.textContent = `${entries.length} result${entries.length === 1 ? '' : 's'}`;
   renderTags(entries);
 
   if (!entries.length) {
-    const controlsHtml = `
-      <div class="codex-list-actions" aria-label="Navigation group controls">
-        <button type="button" class="codex-nav-btn" data-codex-list-action="expand">Expand All</button>
-        <button type="button" class="codex-nav-btn" data-codex-list-action="collapse">Collapse All</button>
-      </div>
-    `;
-    els.listMount.innerHTML = `${controlsHtml}<div class="codex-list-scroll">${warningHtml}<div class="codex-empty">No results found. Try a different search or clear tags.</div></div>`;
+    els.listMount.innerHTML = `<div class="codex-list-scroll">${warningHtml}<div class="codex-empty">No results found. Try a different search or clear tags.</div></div>`;
     return;
   }
+  const openSet = getOpenAccordionsSet();
+  const hasSavedOpen = openSet.size > 0;
+  let html = '';
 
-  const groups = new Map();
-  if (state.pillar === 'passives') {
-    groups.set('Keystones', entries.filter((e) => e.type === 'keystone'));
-    groups.set('Notables', entries.filter((e) => e.type === 'notable'));
+  if (state.pillar === 'skills' || state.pillar === 'gear') {
+    const categories = state.pillar === 'skills'
+      ? [
+        { key: 'active', label: 'Active', items: entries.filter((e) => e.extraFields?.skillKind === 'active') },
+        { key: 'support', label: 'Support', items: entries.filter((e) => e.extraFields?.skillKind === 'support') }
+      ]
+      : [
+        { key: 'uniques', label: 'Uniques', items: entries.filter((e) => e.type === 'uniques') },
+        { key: 'implicits', label: 'Implicits', items: entries.filter((e) => e.type === 'implicits') },
+        { key: 'mods', label: 'Gear Mods', items: entries.filter((e) => e.type === 'mods') }
+      ];
+
+    html = categories.map((category, index) => {
+      const catKey = `category::${category.key}`;
+      const open = openSet.has(catKey) || (!hasSavedOpen && index === 0);
+      const byGroup = new Map();
+      category.items.forEach((item) => {
+        const g = item.group || 'Other';
+        if (!byGroup.has(g)) byGroup.set(g, []);
+        byGroup.get(g).push(item);
+      });
+      const groupsHtml = Array.from(byGroup.entries()).map(([groupName, items]) => renderGroupAccordion(groupName, items.slice(0, 250), catKey)).join('') || '<div class="codex-empty">No matching entries in this section.</div>';
+      return `<details class="rc-acc codex-group" data-acc-key="${esc(catKey)}" ${open ? 'open' : ''}><summary>${renderAccSummary(category.label, category.items.length)}</summary><div class="codex-group-rows codex-group-rows--nested">${groupsHtml}</div></details>`;
+    }).join('');
   } else {
-    entries.forEach((e) => {
-      const key = e.group || 'Other';
-      if (!groups.has(key)) groups.set(key, []);
-      groups.get(key).push(e);
-    });
+    const groups = new Map();
+    if (state.pillar === 'passives') {
+      groups.set('Keystones', entries.filter((e) => e.type === 'keystone'));
+      groups.set('Notables', entries.filter((e) => e.type === 'notable'));
+    } else {
+      entries.forEach((e) => {
+        const key = e.group || 'Other';
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(e);
+      });
+    }
+    html = Array.from(groups.entries()).map(([group, items]) => renderGroupAccordion(group, items.slice(0, 250), 'group')).join('');
   }
 
-  const openGroups = getOpenGroupsSet();
-  const controlsHtml = `
-    <div class="codex-list-actions" aria-label="Navigation group controls">
-      <button type="button" class="codex-nav-btn" data-codex-list-action="expand">Expand All</button>
-      <button type="button" class="codex-nav-btn" data-codex-list-action="collapse">Collapse All</button>
-    </div>
-  `;
-
-  const html = Array.from(groups.entries()).map(([group, items]) => {
-    const itemsHtml = items.length
-      ? items.slice(0, 250).map((item) => renderCodexRow(item, group)).join('')
-      : '<div class="codex-empty">No matching entries in this section.</div>';
-    return `
-      <details class="codex-group" data-group="${esc(group)}" ${openGroups.has(group) ? 'open' : ''}>
-        <summary>${esc(group)} (${items.length})</summary>
-        <div class="codex-group-rows">${itemsHtml}</div>
-      </details>
-    `;
-  }).join('');
-
-  els.listMount.innerHTML = `${controlsHtml}<div class="codex-list-scroll">${warningHtml}${html}</div>`;
+  els.listMount.innerHTML = `<div class="codex-list-scroll">${warningHtml}${html}</div>`;
+  applyAccordionState();
+  initExclusiveAccordion(els.listMount, { detailsSelector: 'details.rc-acc', allowNoneOpen: true });
 }
 
 function applyPinnedJump(id) {
@@ -355,32 +349,51 @@ function applyPinnedJump(id) {
   if (entry.type === 'skill') state.skillKind = entry.extraFields?.skillKind || 'active';
   if (entry.pillar === 'gear') state.gearKind = entry.type;
   const group = entry.group || (entry.type === 'keystone' ? 'Keystones' : entry.type === 'notable' ? 'Notables' : 'Other');
-  getOpenGroupsSet().add(group);
-  setExpandedId(group, id);
+  const openSet = getOpenAccordionsSet();
+  const category = entry.pillar === 'skills' ? `category::${entry.extraFields?.skillKind || 'active'}` : entry.pillar === 'gear' ? `category::${entry.type}` : null;
+  if (category) openSet.add(category);
+  openSet.add(`${category || 'group'}::${group}`);
+  openSet.add(`${category || 'group'}::${group}::${id}`);
+}
+
+function applyAccordionState() {
+  const openSet = getOpenAccordionsSet();
+  els.listMount?.querySelectorAll('details.rc-acc[data-acc-key]').forEach((details) => {
+    details.open = openSet.has(details.dataset.accKey);
+  });
+}
+
+function initExclusiveAccordion(rootEl, { detailsSelector = 'details.rc-acc', allowNoneOpen = true } = {}) {
+  if (!rootEl || rootEl.dataset.exclusiveInit === 'true') return;
+  rootEl.dataset.exclusiveInit = 'true';
+  rootEl.addEventListener('toggle', (evt) => {
+    const details = evt.target;
+    if (!(details instanceof HTMLDetailsElement) || !details.matches(detailsSelector)) return;
+    const key = details.dataset.accKey;
+    if (key) {
+      const openSet = getOpenAccordionsSet();
+      if (details.open) openSet.add(key);
+      else openSet.delete(key);
+    }
+    if (!details.open && !allowNoneOpen) {
+      details.open = true;
+      return;
+    }
+    if (!details.open) return;
+    const parent = details.parentElement;
+    if (!parent) return;
+    Array.from(parent.children).forEach((child) => {
+      if (!(child instanceof HTMLDetailsElement) || child === details || !child.matches(detailsSelector)) return;
+      child.open = false;
+      const childKey = child.dataset.accKey;
+      if (childKey) getOpenAccordionsSet().delete(childKey);
+    });
+  }, true);
 }
 
 function render() {
   document.querySelectorAll('[data-codex-pillar]').forEach(btn => {
     const on = btn.dataset.codexPillar === state.pillar;
-    btn.classList.toggle('is-active', on);
-    btn.setAttribute('aria-selected', on ? 'true' : 'false');
-  });
-
-  const skillsToggle = document.getElementById('codex-skills-toggle');
-  const gearToggle = document.getElementById('codex-gear-toggle');
-  skillsToggle?.classList.toggle('is-hidden', state.pillar !== 'skills');
-  gearToggle?.classList.toggle('is-hidden', state.pillar !== 'gear');
-
-  const hasSubtabs = (state.pillar === 'skills' || state.pillar === 'gear');
-  els.panel?.classList.toggle('codex--has-subtabs', hasSubtabs);
-
-  skillsToggle?.querySelectorAll('[data-skill-kind]').forEach(btn => {
-    const on = btn.dataset.skillKind === state.skillKind;
-    btn.classList.toggle('is-active', on);
-    btn.setAttribute('aria-selected', on ? 'true' : 'false');
-  });
-  gearToggle?.querySelectorAll('[data-gear-kind]').forEach(btn => {
-    const on = btn.dataset.gearKind === state.gearKind;
     btn.classList.toggle('is-active', on);
     btn.setAttribute('aria-selected', on ? 'true' : 'false');
   });
@@ -583,8 +596,6 @@ function bind() {
   els.search?.addEventListener('input', (e) => { state.q = e.target.value || ''; render(); });
   document.getElementById('codex-clear-tags')?.addEventListener('click', () => { state.tags.clear(); state.q = ''; render(); });
   document.querySelectorAll('[data-codex-pillar]').forEach(btn => btn.addEventListener('click', () => { state.pillar = btn.dataset.codexPillar; render(); }));
-  document.querySelectorAll('[data-skill-kind]').forEach(btn => btn.addEventListener('click', () => { state.skillKind = btn.dataset.skillKind; render(); }));
-  document.querySelectorAll('[data-gear-kind]').forEach(btn => btn.addEventListener('click', () => { state.gearKind = btn.dataset.gearKind; render(); }));
 
   els.tags?.addEventListener('click', (e) => {
     const chip = e.target.closest('[data-tag]');
@@ -596,26 +607,9 @@ function bind() {
   });
 
   els.list?.addEventListener('click', async (e) => {
-    const actionBtn = e.target.closest('[data-codex-list-action]');
-    if (actionBtn) {
-      const mode = actionBtn.dataset.codexListAction;
-      const openGroups = getOpenGroupsSet();
-      if (mode === 'expand') {
-        const groups = new Set(state.index.filter(matches).map(en => en.group || 'Other'));
-        if (state.pillar === 'passives') {
-          groups.add('Keystones');
-          groups.add('Notables');
-        }
-        state.openGroupsByView.set(getViewKey(), groups);
-      } else if (mode === 'collapse') {
-        openGroups.clear();
-      }
-      renderList();
-      return;
-    }
-
     const pinBtn = e.target.closest('[data-pin-id]');
     if (pinBtn) {
+      e.preventDefault();
       e.stopPropagation();
       const id = pinBtn.dataset.pinId;
       if (!id) return;
@@ -643,42 +637,22 @@ function bind() {
       return;
     }
 
-    const row = e.target.closest('[data-entry-id]');
-    if (!row) {
-      const action = e.target.closest('[data-pin-action]')?.dataset.pinAction;
-      if (!action) return;
-      if (action === 'clear') {
-        state.pinnedIds.clear();
-        render();
-        return;
-      }
-      if (action === 'view-ninja') {
-        const filterUrl = buildPoeNinjaUrl();
-        if (!filterUrl.includes('?')) return;
-        window.open(filterUrl, '_blank', 'noopener,noreferrer');
-      }
+    const action = e.target.closest('[data-pin-action]')?.dataset.pinAction;
+    if (!action) return;
+    if (action === 'clear') {
+      state.pinnedIds.clear();
+      render();
       return;
     }
+    if (action === 'view-ninja') {
+      const filterUrl = buildPoeNinjaUrl();
+      if (!filterUrl.includes('?')) return;
+      window.open(filterUrl, '_blank', 'noopener,noreferrer');
+    }
 
-    const group = row.dataset.group || 'Other';
-    const id = row.dataset.entryId;
-    const current = getExpandedId(group);
-    setExpandedId(group, current === id ? null : id);
-    renderList();
   });
 
   els.list?.addEventListener('keydown', (e) => {
-    const row = e.target.closest('[data-entry-id]');
-    if (row && (e.key === 'Enter' || e.key === ' ')) {
-      e.preventDefault();
-      const group = row.dataset.group || 'Other';
-      const id = row.dataset.entryId;
-      const current = getExpandedId(group);
-      setExpandedId(group, current === id ? null : id);
-      renderList();
-      return;
-    }
-
     const pick = e.target.closest('[data-select-id]');
     if (!pick || (e.key !== 'Enter' && e.key !== ' ')) return;
     e.preventDefault();
@@ -687,17 +661,6 @@ function bind() {
     applyPinnedJump(id);
     render();
   });
-
-  els.list?.addEventListener('toggle', (e) => {
-    const details = e.target;
-    if (!(details instanceof HTMLDetailsElement)) return;
-    const group = details.dataset.group;
-    if (!group) return;
-    const openGroups = getOpenGroupsSet();
-    if (details.open) openGroups.add(group);
-    else openGroups.delete(group);
-  }, true);
-
   document.addEventListener('randomancer:mode-change', (evt) => {
     const mode = evt.detail?.mode;
     els.panel?.classList.toggle('is-hidden', mode !== 'codex');
@@ -708,10 +671,6 @@ function hydrateFromUrl() {
   const p = new URLSearchParams(location.search);
   const pillar = p.get('pillar');
   if (pillar && ['ascendancy','skills','passives','gear','pinned'].includes(pillar)) state.pillar = pillar;
-  const skillKind = p.get('skill');
-  if (skillKind && ['active','support'].includes(skillKind)) state.skillKind = skillKind;
-  const gearKind = p.get('gear');
-  if (gearKind && ['uniques','implicits','mods'].includes(gearKind)) state.gearKind = gearKind;
   state.q = p.get('q') || '';
   state.tags = new Set(
     (p.get('tags') || '')
