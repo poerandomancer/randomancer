@@ -1,0 +1,61 @@
+{
+  "generated_at": "2026-03-06T17:46:24.737332+00:00",
+  "success": true,
+  "stages": {
+    "inputs": {
+      "status": "success",
+      "details": {
+        "ok": true,
+        "missing_required": [],
+        "missing_optional": [
+          "data/raw/scraped/poe2db_uniques_min.json",
+          "data/raw/handcrafted/display_overrides.json"
+        ]
+      }
+    },
+    "normalize": {
+      "status": "success",
+      "details": {
+        "output": "data/normalized/normalization_summary.json"
+      }
+    },
+    "canonical": {
+      "status": "success",
+      "details": {
+        "output": "data/canonical/canonical_summary.json"
+      }
+    },
+    "enrich": {
+      "status": "skipped",
+      "details": {
+        "reason": "--skip-enrich flag was provided"
+      }
+    },
+    "runtime": {
+      "status": "success",
+      "details": {
+        "output": "data/runtime/runtime_index.json"
+      }
+    },
+    "validate": {
+      "status": "success",
+      "details": {
+        "generated_at": "2026-03-06T17:46:24.736412+00:00",
+        "ok": true,
+        "messages": [
+          "OK: /workspace/randomancer/data/enriched/skills_enriched.json",
+          "OK: /workspace/randomancer/data/enriched/passives_enriched.json",
+          "OK: /workspace/randomancer/data/enriched/uniques_enriched.json",
+          "OK: /workspace/randomancer/data/runtime/runtime_index.json"
+        ],
+        "duplicate_passive_node_ids": []
+      }
+    },
+    "manifest": {
+      "status": "success",
+      "details": {
+        "manifest_path": "version_manifest.json"
+      }
+    }
+  }
+}

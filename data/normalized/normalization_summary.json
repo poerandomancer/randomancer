@@ -1,0 +1,10 @@
+{
+  "generated_at": "2026-03-06T17:46:24.638164+00:00",
+  "phase": "phase_1_scaffold",
+  "notes": "Normalization stage scaffolded. Source-policy migrations deferred to later phases.",
+  "sources_detected": {
+    "datamined_skills_tables": true,
+    "datamined_uniques": true,
+    "scraped_uniques_min": true
+  }
+}

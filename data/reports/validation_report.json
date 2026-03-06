@@ -1,0 +1,11 @@
+{
+  "generated_at": "2026-03-06T17:46:34.760862+00:00",
+  "ok": true,
+  "messages": [
+    "OK: /workspace/randomancer/data/enriched/skills_enriched.json",
+    "OK: /workspace/randomancer/data/enriched/passives_enriched.json",
+    "OK: /workspace/randomancer/data/enriched/uniques_enriched.json",
+    "OK: /workspace/randomancer/data/runtime/runtime_index.json"
+  ],
+  "duplicate_passive_node_ids": []
+}

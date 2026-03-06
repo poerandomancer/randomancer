@@ -75,6 +75,17 @@ Datamined/reference sources live under `data/datamined/` and are used for enrich
 
 ---
 
+
+## Data pipeline (Phase 1)
+
+A new staged data-pipeline scaffold is available with a single entrypoint:
+
+- `python scripts/pipeline/run_pipeline.py`
+
+It introduces explicit `raw -> normalized -> canonical -> enriched -> runtime` boundaries and generates pipeline/validation reports in `data/reports/` while preserving current enriched outputs for app compatibility.
+
+See `docs/data-pipeline.md` for details and scope notes for this phase.
+
 ## Development Notes
 - Preserve user-facing behavior unless intentionally changing UX.
 - Prefer small, surgical patches over rewrites.
