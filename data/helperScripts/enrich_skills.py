@@ -39,34 +39,18 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple
 
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts.shared.tag_utils import process_tags
+
 
 # --------------------------- Tag normalization ---------------------------
 
-RAW_ALIAS = [
-    ("critical", "crit"),
-    ("damage over time", "dot"),
-    ("damageovertime", "dot"),
-    ("marks", "mark"),
-    ("armourbreak", "armourbreak"),
-    ("armorbreak", "armourbreak"),
-    ("heavy stun", "heavystun"),
-    ("heavystun", "heavystun"),
-    ("life regeneration", "liferegeneration"),
-    ("culling strike", "cullingstrike"),
-    ("block recovery", "blockrecovery"),
-]
-
-
-def _base_normalize(s: Any) -> str:
-    return re.sub(r"[^a-z0-9]+", "", str(s or "").lower())
-
-
-_ALIAS_MAP: Dict[str, str] = {_base_normalize(a): _base_normalize(b) for a, b in RAW_ALIAS}
-
-
 def norm_tag(s: Any) -> str:
-    t = _base_normalize(s)
-    return _ALIAS_MAP.get(t, t)
+    result = process_tags([s], entity='skills', sort_tags=False)
+    return result.tags[0] if result.tags else ''
 
 
 

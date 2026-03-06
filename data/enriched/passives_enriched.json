@@ -55,8 +55,8 @@
         "Keystone fire spells become chaos spells"
       ],
       "tags": [
-        "Chaos",
-        "Fire"
+        "chaos",
+        "fire"
       ],
       "flavour": "Let the Darkness consume you.\r\nBeyond the veil of death,\r\nthere burns a black fire.",
       "rawStats": [
@@ -124,7 +124,7 @@
         "Keystone chaos inoculation"
       ],
       "tags": [
-        "Chaos"
+        "chaos"
       ],
       "flavour": "Give up everything in pursuit of greatness - even life itself.",
       "rawStats": [
@@ -486,7 +486,7 @@
         "Keystone mana shield"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "While the mind endures, so too will the body.",
       "rawStats": [
@@ -576,7 +576,7 @@
         "Keystone druidic rage"
       ],
       "tags": [
-        "Rage"
+        "rage"
       ],
       "flavour": "The irrepressible spirit of the wilds burns within you, roaring to be let loose.",
       "rawStats": [
@@ -842,7 +842,7 @@
         "Gain unbound ailment stacks"
       ],
       "tags": [
-        "Ailments"
+        "ailments"
       ],
       "flavour": "",
       "rawStats": [
@@ -866,7 +866,7 @@
         "-35% Master of elements evasion rating   final"
       ],
       "tags": [
-        "Evasion"
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -890,7 +890,7 @@
         "Trigger wild strike on attack crit"
       ],
       "tags": [
-        "Attack",
+        "attack",
         "crit"
       ],
       "flavour": "",
@@ -993,7 +993,7 @@
         "+20% Physical hit and dot damage   taken as chaos"
       ],
       "tags": [
-        "Physical"
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -1017,7 +1017,7 @@
         "Ancestral slam every other slam"
       ],
       "tags": [
-        "Slam"
+        "slam"
       ],
       "flavour": "",
       "rawStats": [
@@ -1063,7 +1063,7 @@
         "+10% Armour break damage   dealt as armour break"
       ],
       "tags": [
-        "Armour",
+        "armour",
         "armourbreak"
       ],
       "flavour": "",
@@ -1156,7 +1156,7 @@
         "+50% Chance to gain 1 more frenzy charge"
       ],
       "tags": [
-        "Frenzy"
+        "frenzy"
       ],
       "flavour": "",
       "rawStats": [
@@ -1180,7 +1180,7 @@
         "Life mana flasks restore mana life"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -1228,7 +1228,7 @@
         "Ascendancy enable fire djinn passive"
       ],
       "tags": [
-        "Fire"
+        "fire"
       ],
       "flavour": "\"You have forsaken your duty to my akhara. Yes... we do not abide weakness. But we also do not abide madness in the fervour of battle! Your slain dekhara will have their justice. You must pay.\" \r\n\r\nVarashta condemned Ruzhan to the ritual of the barya, sentenced to serve as a Djinn.",
       "rawStats": [
@@ -1274,8 +1274,8 @@
         "+6 Ascendancy beidats gaze mana + per X maximum life"
       ],
       "tags": [
-        "Life",
-        "Mana"
+        "life",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -1299,9 +1299,9 @@
         "+8 Ascendancy beidats hand energy shield + per X maximum life"
       ],
       "tags": [
-        "Energy Shield",
-        "Life",
-        "Shield"
+        "energy shield",
+        "life",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -1325,7 +1325,7 @@
         "+25 Ascendancy beidats will spirit + per X maximum life"
       ],
       "tags": [
-        "Life"
+        "life"
       ],
       "flavour": "",
       "rawStats": [
@@ -1349,7 +1349,7 @@
         "+4% Unholy might granted magnitude   per 100 maximum mana"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -1373,7 +1373,7 @@
         "Aggravate bleeding when inflicted vs cursed enemy"
       ],
       "tags": [
-        "Bleed"
+        "bleed"
       ],
       "flavour": "",
       "rawStats": [
@@ -1409,7 +1409,7 @@
         "You and allies in presence all damage can ignite"
       ],
       "tags": [
-        "Ignite"
+        "ignite"
       ],
       "flavour": "",
       "rawStats": [
@@ -1481,7 +1481,7 @@
         "+30% Ascendency tactician totem skill speed   final"
       ],
       "tags": [
-        "Totems"
+        "totem"
       ],
       "flavour": "",
       "rawStats": [
@@ -1505,7 +1505,7 @@
         "Sorcery ward applies to physical chaos"
       ],
       "tags": [
-        "Physical"
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -1529,7 +1529,7 @@
         "Chaos damage resistance is doubled"
       ],
       "tags": [
-        "Chaos"
+        "chaos"
       ],
       "flavour": "",
       "rawStats": [
@@ -1553,9 +1553,9 @@
         "+50% Modifiers to fire resistance also apply to cold lightning resistance at   value"
       ],
       "tags": [
-        "Cold",
-        "Fire",
-        "Lightning"
+        "cold",
+        "fire",
+        "lightning"
       ],
       "flavour": "",
       "rawStats": [
@@ -1691,7 +1691,6 @@
         "+25% Gain additional crit chance from   chance to hit over 100"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -1782,8 +1781,8 @@
         "Body armour grants base armour applies to chaos damage"
       ],
       "tags": [
-        "Armour",
-        "Chaos"
+        "armour",
+        "chaos"
       ],
       "flavour": "",
       "rawStats": [
@@ -1807,7 +1806,7 @@
         "+1% Maximum darkness   per capped chaos damage resistance"
       ],
       "tags": [
-        "Chaos"
+        "chaos"
       ],
       "flavour": "",
       "rawStats": [
@@ -1853,8 +1852,8 @@
         "+1% Ascendancy shaman spell damage   final per 2 rage"
       ],
       "tags": [
-        "Rage",
-        "Spell"
+        "rage",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -1878,8 +1877,8 @@
         "+25% Your slam aftershock chance"
       ],
       "tags": [
-        "Shock",
-        "Slam"
+        "shock",
+        "slam"
       ],
       "flavour": "",
       "rawStats": [
@@ -1903,7 +1902,7 @@
         "+5% Spells sacrifice   of your energy shield"
       ],
       "tags": [
-        "Energy Shield"
+        "energy shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -1927,7 +1926,7 @@
         "+3 Gain X instilling lightning when charge is consumed"
       ],
       "tags": [
-        "Lightning"
+        "lightning"
       ],
       "flavour": "",
       "rawStats": [
@@ -2061,7 +2060,7 @@
         "Your life cannot change while you have energy shield"
       ],
       "tags": [
-        "Energy Shield"
+        "energy shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -2109,10 +2108,10 @@
         "+50% Body armour grants armour   applies to fire cold lightning damage"
       ],
       "tags": [
-        "Armour",
-        "Cold",
-        "Fire",
-        "Lightning"
+        "armour",
+        "cold",
+        "fire",
+        "lightning"
       ],
       "flavour": "",
       "rawStats": [
@@ -2148,7 +2147,7 @@
         "+20% Arcane surge effect on self   per 10  missing mana"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -2172,7 +2171,6 @@
         "-30% Oracle hits eventually crit with critical strike multiplier   final per failed roll"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -2197,9 +2195,9 @@
         "Modifiers to maximum fire resistance apply to maximum cold and lightning resistance"
       ],
       "tags": [
-        "Cold",
-        "Fire",
-        "Lightning"
+        "cold",
+        "fire",
+        "lightning"
       ],
       "flavour": "",
       "rawStats": [
@@ -2223,8 +2221,8 @@
         "+360% Base rage regeneration rate per minute"
       ],
       "tags": [
-        "Rage",
-        "liferegeneration"
+        "liferegeneration",
+        "rage"
       ],
       "flavour": "",
       "rawStats": [
@@ -2350,7 +2348,6 @@
         "+50% Infernalist critical strike multiplier   final"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -2375,7 +2372,7 @@
         "Hit damage remove from mana before life while mana higher than life"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -2411,8 +2408,8 @@
         "Body armour grants unaffected by damaging ailments"
       ],
       "tags": [
-        "Ailments",
-        "Armour"
+        "ailments",
+        "armour"
       ],
       "flavour": "",
       "rawStats": [
@@ -2436,7 +2433,7 @@
         "Can apply additional chill"
       ],
       "tags": [
-        "Chill"
+        "chill"
       ],
       "flavour": "",
       "rawStats": [
@@ -2482,7 +2479,7 @@
         "Create chilling ground on freeze"
       ],
       "tags": [
-        "Chill"
+        "chill"
       ],
       "flavour": "",
       "rawStats": [
@@ -2506,7 +2503,7 @@
         "+25% Chance   to create shocking ground on shock"
       ],
       "tags": [
-        "Shock"
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -2542,7 +2539,7 @@
         "Warbringer overbreak armour"
       ],
       "tags": [
-        "Armour",
+        "armour",
         "armourbreak"
       ],
       "flavour": "",
@@ -2623,7 +2620,7 @@
         "+1 Gain X volatility on inflicting elemental ailment"
       ],
       "tags": [
-        "Ailments"
+        "ailments"
       ],
       "flavour": "",
       "rawStats": [
@@ -2647,7 +2644,7 @@
         "Can equip staff with focus"
       ],
       "tags": [
-        "Staff"
+        "staff"
       ],
       "flavour": "",
       "rawStats": [
@@ -2693,8 +2690,7 @@
         "+100% Body armour grants x base self critical strike multiplier -"
       ],
       "tags": [
-        "Armour",
-        "Crit",
+        "armour",
         "crit"
       ],
       "flavour": "",
@@ -2821,8 +2817,8 @@
         "+15% Body armour grants x maximum life"
       ],
       "tags": [
-        "Armour",
-        "Life"
+        "armour",
+        "life"
       ],
       "flavour": "",
       "rawStats": [
@@ -2846,7 +2842,7 @@
         "+60% Body armour grants glory generation"
       ],
       "tags": [
-        "Armour"
+        "armour"
       ],
       "flavour": "",
       "rawStats": [
@@ -2892,8 +2888,8 @@
         "+180% Body armour grants x life regeneration rate per minute"
       ],
       "tags": [
-        "Armour",
-        "Life",
+        "armour",
+        "life",
         "liferegeneration"
       ],
       "flavour": "",
@@ -2986,7 +2982,7 @@
         "+25% Drain   max mana to activate expended charms"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -3022,8 +3018,8 @@
         "+25% Body armour grants x physical damage taken   as fire"
       ],
       "tags": [
-        "Armour",
-        "Physical"
+        "armour",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -3047,8 +3043,8 @@
         "+3 Num cascade aftershocks every third slam"
       ],
       "tags": [
-        "Shock",
-        "Slam"
+        "shock",
+        "slam"
       ],
       "flavour": "",
       "rawStats": [
@@ -3094,7 +3090,7 @@
         "+15% Titan maximum life   final"
       ],
       "tags": [
-        "Life"
+        "life"
       ],
       "flavour": "",
       "rawStats": [
@@ -3140,7 +3136,6 @@
         "Life leech also recovers based on elemental damage types"
       ],
       "tags": [
-        "Leech",
         "leech"
       ],
       "flavour": "",
@@ -3201,7 +3196,7 @@
         "Allies in presence have unholy might while you not on low mana"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -3269,8 +3264,8 @@
         "-35% Witchhunter armour evasion   final"
       ],
       "tags": [
-        "Armour",
-        "Evasion"
+        "armour",
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -3294,7 +3289,7 @@
         "Double number of poison you can inflict"
       ],
       "tags": [
-        "Poison"
+        "poison"
       ],
       "flavour": "",
       "rawStats": [
@@ -3330,8 +3325,8 @@
         "+25% Real weapon attack added physical damage   of weapon item accuracy"
       ],
       "tags": [
-        "Attack",
-        "Physical"
+        "attack",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -3377,7 +3372,7 @@
         "+20% Base deflection rating   of armour"
       ],
       "tags": [
-        "Armour"
+        "armour"
       ],
       "flavour": "",
       "rawStats": [
@@ -3423,8 +3418,8 @@
         "+40% Ascendancy lich spells consume power charges for spell damage   final"
       ],
       "tags": [
-        "Power",
-        "Spell"
+        "power",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -3460,7 +3455,7 @@
         "+200% Infernal flame instead of mana at   ratio"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -3484,7 +3479,7 @@
         "+1% Chronomancer grant cast speed"
       ],
       "tags": [
-        "Spell"
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -3576,8 +3571,8 @@
         "+35% Block chance from equipped shield is"
       ],
       "tags": [
-        "Block",
-        "Shield"
+        "block",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -3645,7 +3640,7 @@
         "+33% Explode cursed enemies for 25  life as physical on kill chance"
       ],
       "tags": [
-        "Physical"
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -3669,7 +3664,7 @@
         "+33% Explode cursed enemies for 25  life as chaos on kill chance"
       ],
       "tags": [
-        "Chaos"
+        "chaos"
       ],
       "flavour": "",
       "rawStats": [
@@ -3751,9 +3746,9 @@
         "+60% Current energy shield   as physical damage reduction"
       ],
       "tags": [
-        "Energy Shield",
-        "Physical",
-        "Shield"
+        "energy shield",
+        "physical",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -3777,7 +3772,7 @@
         "Skill cost base life equal to base mana"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -3823,8 +3818,7 @@
         "Leech also recovers based on chaos damage as well"
       ],
       "tags": [
-        "Chaos",
-        "Leech",
+        "chaos",
         "leech"
       ],
       "flavour": "",
@@ -3849,7 +3843,7 @@
         "Gain elemental archon when you cast a spell while on high infernal flame"
       ],
       "tags": [
-        "Spell"
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -3873,7 +3867,7 @@
         "All damage can shock"
       ],
       "tags": [
-        "Shock"
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -3897,7 +3891,7 @@
         "All damage can chill"
       ],
       "tags": [
-        "Chill"
+        "chill"
       ],
       "flavour": "",
       "rawStats": [
@@ -3921,7 +3915,7 @@
         "Cannot use non normal body armour"
       ],
       "tags": [
-        "Armour"
+        "armour"
       ],
       "flavour": "",
       "rawStats": [
@@ -3945,8 +3939,8 @@
         "+360% Regenerate mana equal to x  of life per minute"
       ],
       "tags": [
-        "Mana",
-        "liferegeneration"
+        "liferegeneration",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -3970,7 +3964,7 @@
         "+100% Body armour grants thorns damage"
       ],
       "tags": [
-        "Armour"
+        "armour"
       ],
       "flavour": "",
       "rawStats": [
@@ -3994,7 +3988,7 @@
         "Double evasion rating from gloves helmets boots"
       ],
       "tags": [
-        "Evasion"
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -4018,7 +4012,7 @@
         "Double armour effect"
       ],
       "tags": [
-        "Armour"
+        "armour"
       ],
       "flavour": "",
       "rawStats": [
@@ -4064,7 +4058,7 @@
         "+50% Ascendancy titan damage reduction rating from body armour   final"
       ],
       "tags": [
-        "Armour"
+        "armour"
       ],
       "flavour": "",
       "rawStats": [
@@ -4132,7 +4126,7 @@
         "Can apply additional shock"
       ],
       "tags": [
-        "Shock"
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -4156,7 +4150,6 @@
         "Critical strikes ignore positive elemental resistances"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -4181,9 +4174,8 @@
         "+1500% Base spell critical strike chance override permyriad"
       ],
       "tags": [
-        "Crit",
-        "Spell",
-        "crit"
+        "crit",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -4207,7 +4199,7 @@
         "+20% Body armour grants x strength"
       ],
       "tags": [
-        "Armour"
+        "armour"
       ],
       "flavour": "",
       "rawStats": [
@@ -4231,7 +4223,7 @@
         "+40% Ascendancy tactician suppressing fire hit damage immobilisation multiplier   final"
       ],
       "tags": [
-        "Fire"
+        "fire"
       ],
       "flavour": "",
       "rawStats": [
@@ -4255,7 +4247,7 @@
         "+2 Gain X instilling cold when charge is consumed"
       ],
       "tags": [
-        "Cold"
+        "cold"
       ],
       "flavour": "",
       "rawStats": [
@@ -4279,7 +4271,7 @@
         "+50% Elemental damage reduction   from evasion rating"
       ],
       "tags": [
-        "Evasion"
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -4325,8 +4317,8 @@
         "+75% Body armour grants x base fire damage resistance"
       ],
       "tags": [
-        "Armour",
-        "Fire"
+        "armour",
+        "fire"
       ],
       "flavour": "",
       "rawStats": [
@@ -4374,7 +4366,7 @@
         "+3% Maximum fire resistance +1 per X corresponding support"
       ],
       "tags": [
-        "Fire"
+        "fire"
       ],
       "flavour": "",
       "rawStats": [
@@ -4398,8 +4390,8 @@
         "+40% Djinn ascendancy energy shield recharge rate   final on low energy shield"
       ],
       "tags": [
-        "Energy Shield",
-        "Shield"
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -4511,7 +4503,7 @@
         "+50% Chance   to double effect of removing frenzy charges"
       ],
       "tags": [
-        "Frenzy"
+        "frenzy"
       ],
       "flavour": "",
       "rawStats": [
@@ -4557,7 +4549,7 @@
         "+30% Body armour grants spirit"
       ],
       "tags": [
-        "Armour"
+        "armour"
       ],
       "flavour": "",
       "rawStats": [
@@ -4603,7 +4595,7 @@
         "+20% Base block   damage taken"
       ],
       "tags": [
-        "Block"
+        "block"
       ],
       "flavour": "",
       "rawStats": [
@@ -4773,7 +4765,7 @@
         "+100% Elemental damage removed from mana before life"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -4797,9 +4789,8 @@
         "+1000 Base life leech from all spell damage permyriad"
       ],
       "tags": [
-        "Leech",
-        "Spell",
-        "leech"
+        "leech",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -4835,8 +4826,8 @@
         "+25% Corpses in your area of effect explode dealing   maximum life physical damage on warcry"
       ],
       "tags": [
-        "Life",
-        "Physical"
+        "life",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -4860,7 +4851,7 @@
         "+25% Aura grant   base main hand attack damage to nearby allies"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -5006,7 +4997,7 @@
         "+20% Damage removed from your nearest totem before life or es"
       ],
       "tags": [
-        "Totems"
+        "totem"
       ],
       "flavour": "",
       "rawStats": [
@@ -5053,7 +5044,7 @@
         "+20% Base stun recovery"
       ],
       "tags": [
-        "Energy Shield"
+        "energy shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -5136,9 +5127,9 @@
         "+40% Passive adamant recovery notable additive armour modifiers apply to energy shield recharge rate at   value"
       ],
       "tags": [
-        "Armour",
-        "Energy Shield",
-        "Shield"
+        "armour",
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -5163,7 +5154,7 @@
         "+4 Melee strike range + if youve dealt projectile attack hit recently"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -5247,7 +5238,7 @@
         "+8% Attack speed   if enemy killed recently"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -5278,7 +5269,7 @@
         "+25% Projectile ailment chance"
       ],
       "tags": [
-        "Ailments"
+        "ailments"
       ],
       "flavour": "",
       "rawStats": [
@@ -5303,9 +5294,9 @@
         "-20% Life regeneration rate"
       ],
       "tags": [
-        "Life",
-        "Mana",
-        "liferegeneration"
+        "life",
+        "liferegeneration",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -5337,7 +5328,7 @@
         "+20% Hit damage freeze multiplier"
       ],
       "tags": [
-        "Shock"
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -5369,7 +5360,7 @@
         "-5% Movement speed penalty   while performing action"
       ],
       "tags": [
-        "Evasion"
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -5400,7 +5391,7 @@
         "+30% Your aftershock area of effect"
       ],
       "tags": [
-        "Shock"
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -5425,7 +5416,7 @@
         "-15% Base slow potency"
       ],
       "tags": [
-        "Ailments",
+        "ailments",
         "slow"
       ],
       "flavour": "",
@@ -5457,8 +5448,8 @@
         "+10% Base aggravate bleeding on attack hit chance"
       ],
       "tags": [
-        "Attack",
-        "Bleed"
+        "attack",
+        "bleed"
       ],
       "flavour": "",
       "rawStats": [
@@ -5482,7 +5473,7 @@
         "+100% Evasion rating   if sprinting"
       ],
       "tags": [
-        "Evasion"
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -5507,8 +5498,8 @@
         "+30% Evasion rating   if you have hit an enemy recently"
       ],
       "tags": [
-        "Attack",
-        "Evasion"
+        "attack",
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -5540,8 +5531,8 @@
         "+40% Physical damage   while affected by herald of blood"
       ],
       "tags": [
-        "Chaos",
-        "Physical"
+        "chaos",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -5655,7 +5646,7 @@
         "+10% Mana recovery rate   while affected by a mana flask"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -5687,9 +5678,9 @@
         "+20% Shock effect"
       ],
       "tags": [
-        "Mana",
-        "Shock",
-        "liferegeneration"
+        "liferegeneration",
+        "mana",
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -5721,8 +5712,8 @@
         "+15% Attack damage"
       ],
       "tags": [
-        "Attack",
-        "Minions"
+        "attack",
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -5754,9 +5745,9 @@
         "+8% Attack and cast speed   on placing totem"
       ],
       "tags": [
-        "Attack",
-        "Spell",
-        "Totems"
+        "attack",
+        "spell",
+        "totem"
       ],
       "flavour": "",
       "rawStats": [
@@ -5788,8 +5779,8 @@
         "+20% Totem placement range"
       ],
       "tags": [
-        "Attack",
-        "Totems"
+        "attack",
+        "totem"
       ],
       "flavour": "",
       "rawStats": [
@@ -5820,8 +5811,8 @@
         "+12% Attack and cast speed   on placing totem"
       ],
       "tags": [
-        "Attack",
-        "Spell"
+        "attack",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -5846,8 +5837,8 @@
         "+180% Totems regenerate   life per minute"
       ],
       "tags": [
-        "Totems",
-        "liferegeneration"
+        "liferegeneration",
+        "totem"
       ],
       "flavour": "",
       "rawStats": [
@@ -5879,8 +5870,8 @@
         "+50% Totem placement range"
       ],
       "tags": [
-        "Spell",
-        "Totems"
+        "spell",
+        "totem"
       ],
       "flavour": "",
       "rawStats": [
@@ -5911,7 +5902,7 @@
         "+4% Totems attack speed   per active totem"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -5936,9 +5927,9 @@
         "+60% Maximum energy shield from body armour"
       ],
       "tags": [
-        "Armour",
-        "Energy Shield",
-        "Shield"
+        "armour",
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -6014,7 +6005,7 @@
         "+15 Maximum rage"
       ],
       "tags": [
-        "Rage"
+        "rage"
       ],
       "flavour": "",
       "rawStats": [
@@ -6068,7 +6059,6 @@
         "-30% Damage"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -6101,7 +6091,7 @@
         "+10 Base intelligence"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -6132,7 +6122,7 @@
         "+15% Mana recovery rate"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -6156,8 +6146,8 @@
         "+3% Spell damage   per 100 maximum mana"
       ],
       "tags": [
-        "Mana",
-        "Spell"
+        "mana",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -6182,9 +6172,9 @@
         "+6 Generate x charges for mana flasks per minute"
       ],
       "tags": [
-        "Energy Shield",
-        "Mana",
-        "Shield"
+        "energy shield",
+        "mana",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -6216,7 +6206,7 @@
         "+12% Area of effect   while you have arcane surge"
       ],
       "tags": [
-        "Spell"
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -6247,7 +6237,7 @@
         "+3% Remnant recover   mana on pickup"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -6271,8 +6261,8 @@
         "Gain archon elemental when energy shield recharge starts"
       ],
       "tags": [
-        "Energy Shield",
-        "Shield"
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -6296,7 +6286,7 @@
         "+20% Gain archon elemental when you ignite enemy chance"
       ],
       "tags": [
-        "Ignite"
+        "ignite"
       ],
       "flavour": "",
       "rawStats": [
@@ -6320,7 +6310,7 @@
         "Gain archon elemental after spending 100% of your maximum mana"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -6367,8 +6357,8 @@
         "+15% Area of effect   while totem active"
       ],
       "tags": [
-        "Attack",
-        "Totems"
+        "attack",
+        "totem"
       ],
       "flavour": "",
       "rawStats": [
@@ -6399,8 +6389,8 @@
         "+30% Stun threshold based on   energy shield instead of life"
       ],
       "tags": [
-        "Energy Shield",
-        "Shield"
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -6425,9 +6415,9 @@
         "+10% Gain arcane surge on crit   chance"
       ],
       "tags": [
-        "Mana",
         "crit",
-        "liferegeneration"
+        "liferegeneration",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -6458,7 +6448,7 @@
         "+10% Minion commanded skill damage   per different persistent minion in presence"
       ],
       "tags": [
-        "Minions"
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -6482,7 +6472,7 @@
         "+3% Attack speed"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -6507,7 +6497,7 @@
         "+25% Stun threshold   when on full life"
       ],
       "tags": [
-        "Ailments"
+        "ailments"
       ],
       "flavour": "",
       "rawStats": [
@@ -6539,8 +6529,8 @@
         "+16% Ailment threshold + from   maximum energy shield"
       ],
       "tags": [
-        "Ailments",
-        "Energy Shield"
+        "ailments",
+        "energy shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -6572,7 +6562,7 @@
         "+10% Base cooldown speed"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -6655,9 +6645,8 @@
         "+25 Critical strike multiplier with dagger +"
       ],
       "tags": [
-        "Crit",
-        "Dagger",
-        "crit"
+        "crit",
+        "dagger"
       ],
       "flavour": "",
       "rawStats": [
@@ -6682,8 +6671,8 @@
         "+50% Evasion   if hit recently"
       ],
       "tags": [
-        "Armour",
-        "Evasion"
+        "armour",
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -6727,7 +6716,7 @@
         "+6% Flail attack speed"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -6781,9 +6770,8 @@
         "-10% Base mana cost -"
       ],
       "tags": [
-        "Crit",
-        "Mana",
-        "crit"
+        "crit",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -6839,9 +6827,9 @@
         "+15% Physical damage reduction rating"
       ],
       "tags": [
-        "Energy Shield",
-        "Physical",
-        "Shield"
+        "energy shield",
+        "physical",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -6873,7 +6861,7 @@
         "+5% Skill speed"
       ],
       "tags": [
-        "Physical"
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -6904,7 +6892,7 @@
         "+8 Maximum rage"
       ],
       "tags": [
-        "Rage"
+        "rage"
       ],
       "flavour": "",
       "rawStats": [
@@ -6929,10 +6917,9 @@
         "+20% Base self critical strike multiplier -"
       ],
       "tags": [
-        "Crit",
-        "Evasion",
-        "Physical",
-        "crit"
+        "crit",
+        "evasion",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -6985,8 +6972,8 @@
         "+100% Body armour evasion rating"
       ],
       "tags": [
-        "Armour",
-        "Evasion"
+        "armour",
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -7033,8 +7020,8 @@
         "+8% Attack area of effect"
       ],
       "tags": [
-        "Attack",
-        "Life"
+        "attack",
+        "life"
       ],
       "flavour": "",
       "rawStats": [
@@ -7066,8 +7053,8 @@
         "+1 Gain x rage on melee hit"
       ],
       "tags": [
-        "Physical",
-        "Rage"
+        "physical",
+        "rage"
       ],
       "flavour": "",
       "rawStats": [
@@ -7143,7 +7130,7 @@
         "+20% Freeze applies cold damage taken"
       ],
       "tags": [
-        "Cold"
+        "cold"
       ],
       "flavour": "",
       "rawStats": [
@@ -7175,8 +7162,7 @@
         "+15 Base strength"
       ],
       "tags": [
-        "Armour",
-        "Crit",
+        "armour",
         "crit"
       ],
       "flavour": "",
@@ -7209,8 +7195,7 @@
         "+15% Critical strike chance while dual wielding"
       ],
       "tags": [
-        "Attack",
-        "Crit",
+        "attack",
         "crit"
       ],
       "flavour": "",
@@ -7243,8 +7228,8 @@
         "+16% Attack damage"
       ],
       "tags": [
-        "Attack",
-        "Fire"
+        "attack",
+        "fire"
       ],
       "flavour": "",
       "rawStats": [
@@ -7276,7 +7261,7 @@
         "+10% Faster bleed"
       ],
       "tags": [
-        "Bleed"
+        "bleed"
       ],
       "flavour": "",
       "rawStats": [
@@ -7360,7 +7345,7 @@
         "+10% Attacks chance to blind on hit"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -7392,7 +7377,7 @@
         "+6% Base skill cost life instead of mana"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -7424,8 +7409,8 @@
         "+15% Base bleeding effect"
       ],
       "tags": [
-        "Bleed",
-        "Physical"
+        "bleed",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -7457,9 +7442,9 @@
         "+25% Life regeneration rate"
       ],
       "tags": [
-        "Life",
-        "Mana",
-        "liferegeneration"
+        "life",
+        "liferegeneration",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -7490,7 +7475,7 @@
         "+8 Rage gained on life flask use"
       ],
       "tags": [
-        "Rage"
+        "rage"
       ],
       "flavour": "",
       "rawStats": [
@@ -7515,9 +7500,8 @@
         "+15% Life leech amount   while shapeshifted"
       ],
       "tags": [
-        "Leech",
-        "Life",
         "leech",
+        "life",
         "liferegeneration"
       ],
       "flavour": "",
@@ -7550,7 +7534,7 @@
         "+15% Base bleeding effect"
       ],
       "tags": [
-        "Bleed"
+        "bleed"
       ],
       "flavour": "",
       "rawStats": [
@@ -7582,7 +7566,6 @@
         "+25% Base life leech rate"
       ],
       "tags": [
-        "Leech",
         "leech"
       ],
       "flavour": "",
@@ -7615,7 +7598,7 @@
         "+4% Base movement velocity"
       ],
       "tags": [
-        "Evasion"
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -7647,7 +7630,7 @@
         "+10% Accuracy rating"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -7701,7 +7684,7 @@
         "+30% Warcry skill area of effect"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -7733,7 +7716,6 @@
         "+25% Critical strike chance"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -7795,9 +7777,9 @@
         "Physical spell damage can pin on critical hit"
       ],
       "tags": [
-        "Physical",
-        "Spell",
-        "crit"
+        "crit",
+        "physical",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -7821,7 +7803,7 @@
         "+10% Gain spell damage   for each second shapeshifted capped when reverting for duration"
       ],
       "tags": [
-        "Spell"
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -7890,8 +7872,8 @@
         "+1% Recover   maximum mana on kill"
       ],
       "tags": [
-        "Mana",
-        "cullingstrike"
+        "cullingstrike",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -7922,7 +7904,7 @@
         "+60% Lightning skill additional chain chance"
       ],
       "tags": [
-        "Lightning"
+        "lightning"
       ],
       "flavour": "",
       "rawStats": [
@@ -7947,7 +7929,7 @@
         "+50% Empowered attack hit damage stun multiplier"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -8001,7 +7983,7 @@
         "+10% Chance to double armour effect on hit"
       ],
       "tags": [
-        "Armour",
+        "armour",
         "armourbreak"
       ],
       "flavour": "",
@@ -8064,7 +8046,7 @@
         "+10% Base elemental status ailment duration"
       ],
       "tags": [
-        "Ailments"
+        "ailments"
       ],
       "flavour": "",
       "rawStats": [
@@ -8096,7 +8078,7 @@
         "+10 Base strength"
       ],
       "tags": [
-        "Fire"
+        "fire"
       ],
       "flavour": "",
       "rawStats": [
@@ -8128,7 +8110,7 @@
         "+10 Base intelligence"
       ],
       "tags": [
-        "Cold"
+        "cold"
       ],
       "flavour": "",
       "rawStats": [
@@ -8160,7 +8142,7 @@
         "+10 Base dexterity"
       ],
       "tags": [
-        "Lightning"
+        "lightning"
       ],
       "flavour": "",
       "rawStats": [
@@ -8192,7 +8174,7 @@
         "+20% Damage"
       ],
       "tags": [
-        "Minions"
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -8322,7 +8304,7 @@
         "-10% Maximum mana"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -8354,7 +8336,7 @@
         "-25% Base poison duration"
       ],
       "tags": [
-        "Poison"
+        "poison"
       ],
       "flavour": "",
       "rawStats": [
@@ -8386,7 +8368,7 @@
         "+10% Base reduce enemy fire resistance"
       ],
       "tags": [
-        "Fire"
+        "fire"
       ],
       "flavour": "",
       "rawStats": [
@@ -8418,8 +8400,8 @@
         "+15% Ignite duration"
       ],
       "tags": [
-        "Fire",
-        "Ignite"
+        "fire",
+        "ignite"
       ],
       "flavour": "",
       "rawStats": [
@@ -8450,7 +8432,7 @@
         "+12% Non skill base physical damage   to gain as fire"
       ],
       "tags": [
-        "Physical"
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -8527,7 +8509,6 @@
         "-5% Skill speed"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -8560,9 +8541,9 @@
         "+4% Maximum mana"
       ],
       "tags": [
-        "Energy Shield",
-        "Mana",
-        "Shield"
+        "energy shield",
+        "mana",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -8698,7 +8679,6 @@
         "+50% Critical strike chance"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -8731,7 +8711,7 @@
         "+100% Evasion rating   if have not been hit recently"
       ],
       "tags": [
-        "Evasion"
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -8763,9 +8743,9 @@
         "+6% Attack and cast speed   on placing totem"
       ],
       "tags": [
-        "Attack",
-        "Spell",
-        "Totems"
+        "attack",
+        "spell",
+        "totem"
       ],
       "flavour": "",
       "rawStats": [
@@ -8797,7 +8777,7 @@
         "-15% Spell damage"
       ],
       "tags": [
-        "Spell"
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -8859,8 +8839,8 @@
         "+5% Physical damage from hits   taken as random element"
       ],
       "tags": [
-        "Attack",
-        "Physical"
+        "attack",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -8892,7 +8872,7 @@
         "+15% Base projectile speed"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -8924,7 +8904,7 @@
         "+40% Evasion rating   if you dodge rolled recently"
       ],
       "tags": [
-        "Evasion"
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -9007,7 +8987,7 @@
         "+20% Block chance   if you have at least 100 tribute"
       ],
       "tags": [
-        "Block"
+        "block"
       ],
       "flavour": "",
       "rawStats": [
@@ -9032,9 +9012,9 @@
         "+20% Evasion rating   while you have energy shield"
       ],
       "tags": [
-        "Energy Shield",
-        "Evasion",
-        "Shield"
+        "energy shield",
+        "evasion",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -9066,11 +9046,11 @@
         "+8% Non skill base physical damage   to gain as cold vs shocked enemies"
       ],
       "tags": [
-        "Chill",
-        "Cold",
-        "Lightning",
-        "Physical",
-        "Shock"
+        "chill",
+        "cold",
+        "lightning",
+        "physical",
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -9102,7 +9082,7 @@
         "+20% Attack damage"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -9134,7 +9114,7 @@
         "+10% Life recovery rate"
       ],
       "tags": [
-        "Life"
+        "life"
       ],
       "flavour": "",
       "rawStats": [
@@ -9166,7 +9146,7 @@
         "+20% Additional combo gain chance"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -9258,8 +9238,8 @@
         "+8% Base damage removed from mana before life"
       ],
       "tags": [
-        "Attack",
-        "Mana"
+        "attack",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -9343,7 +9323,7 @@
         "+20% Chill duration"
       ],
       "tags": [
-        "Chill"
+        "chill"
       ],
       "flavour": "",
       "rawStats": [
@@ -9375,9 +9355,9 @@
         "-30% Chill effectiveness on self"
       ],
       "tags": [
-        "Armour",
-        "Chill",
-        "Cold"
+        "armour",
+        "chill",
+        "cold"
       ],
       "flavour": "",
       "rawStats": [
@@ -9500,9 +9480,8 @@
         "+25% Trap critical strike chance"
       ],
       "tags": [
-        "Crit",
-        "Traps",
-        "crit"
+        "crit",
+        "traps"
       ],
       "flavour": "",
       "rawStats": [
@@ -9527,8 +9506,8 @@
         "+20% Hit damage freeze multiplier"
       ],
       "tags": [
-        "Cold",
-        "Fire"
+        "cold",
+        "fire"
       ],
       "flavour": "",
       "rawStats": [
@@ -9664,8 +9643,8 @@
         "+20% One handed attack ailment chance"
       ],
       "tags": [
-        "Ailments",
-        "Attack"
+        "ailments",
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -9696,10 +9675,9 @@
         "+25% Chance to poison on critical strike with dagger"
       ],
       "tags": [
-        "Crit",
-        "Dagger",
-        "Poison",
-        "crit"
+        "crit",
+        "dagger",
+        "poison"
       ],
       "flavour": "",
       "rawStats": [
@@ -9754,8 +9732,8 @@
         "+15% Chill duration"
       ],
       "tags": [
-        "Chill",
-        "Cold"
+        "chill",
+        "cold"
       ],
       "flavour": "",
       "rawStats": [
@@ -9787,7 +9765,7 @@
         "+10 Base strength"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -9819,7 +9797,7 @@
         "+10% Flasks   chance to not consume charges"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -9850,8 +9828,8 @@
         "+2% Every 4 seconds regenerate   of armour and evasion as life over 1 second"
       ],
       "tags": [
-        "Armour",
-        "Evasion",
+        "armour",
+        "evasion",
         "liferegeneration"
       ],
       "flavour": "",
@@ -9877,8 +9855,8 @@
         "+40% Cold damage   while affected by herald of ice"
       ],
       "tags": [
-        "Cold",
-        "Lightning"
+        "cold",
+        "lightning"
       ],
       "flavour": "",
       "rawStats": [
@@ -9910,9 +9888,9 @@
         "+1% Minion attack speed   per rage"
       ],
       "tags": [
-        "Attack",
-        "Minions",
-        "Rage"
+        "attack",
+        "minion",
+        "rage"
       ],
       "flavour": "",
       "rawStats": [
@@ -9944,7 +9922,7 @@
         "+30% Minion damage"
       ],
       "tags": [
-        "Minions"
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -9976,7 +9954,7 @@
         "+5% Base chance to daze"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -10008,7 +9986,7 @@
         "+2% Maximum lightning resistance   if at least 5 green supports socketed"
       ],
       "tags": [
-        "Lightning"
+        "lightning"
       ],
       "flavour": "",
       "rawStats": [
@@ -10040,8 +10018,8 @@
         "+15% Base mana cost efficiency"
       ],
       "tags": [
-        "Mana",
-        "liferegeneration"
+        "liferegeneration",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -10127,7 +10105,7 @@
         "+5% Base debuff slow magnitude"
       ],
       "tags": [
-        "Physical",
+        "physical",
         "slow"
       ],
       "flavour": "",
@@ -10182,9 +10160,8 @@
         "+25% Spell critical strike chance"
       ],
       "tags": [
-        "Crit",
-        "Spell",
-        "crit"
+        "crit",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -10216,8 +10193,8 @@
         "-15% Energy shield recharge rate"
       ],
       "tags": [
-        "Energy Shield",
-        "Shield"
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -10249,7 +10226,6 @@
         "-25% Global defences"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -10281,7 +10257,7 @@
         "+100% Shield defences"
       ],
       "tags": [
-        "Shield"
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -10328,7 +10304,7 @@
         "+40% Parry successfully parrying projectile gives damage   to your next melee attack"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -10360,7 +10336,7 @@
         "+30% Shock chance   vs electrocuted enemies"
       ],
       "tags": [
-        "Shock"
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -10392,9 +10368,9 @@
         "+20 Energy shield gained on block"
       ],
       "tags": [
-        "Block",
-        "Energy Shield",
-        "Shield"
+        "block",
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -10426,8 +10402,8 @@
         "+30% Fire damage"
       ],
       "tags": [
-        "Fire",
-        "Physical"
+        "fire",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -10459,7 +10435,7 @@
         "Gain endurance charge on heavy stunning rare or unique enemy"
       ],
       "tags": [
-        "Endurance",
+        "endurance",
         "heavystun"
       ],
       "flavour": "",
@@ -10515,7 +10491,7 @@
         "+8 Max rage + per glory skill used in last 6 seconds"
       ],
       "tags": [
-        "Rage"
+        "rage"
       ],
       "flavour": "",
       "rawStats": [
@@ -10540,7 +10516,7 @@
         "+20% Base poison effect"
       ],
       "tags": [
-        "Poison"
+        "poison"
       ],
       "flavour": "",
       "rawStats": [
@@ -10571,8 +10547,8 @@
         "+15% Empowered attack physical damage   to gain as fire"
       ],
       "tags": [
-        "Attack",
-        "Physical"
+        "attack",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -10597,7 +10573,7 @@
         "+6% Non skill base elemental damage   to gain as fire"
       ],
       "tags": [
-        "Fire"
+        "fire"
       ],
       "flavour": "",
       "rawStats": [
@@ -10629,8 +10605,8 @@
         "+25% Maim on hit   vs poisoned enemies"
       ],
       "tags": [
-        "Poison",
-        "maim"
+        "maim",
+        "poison"
       ],
       "flavour": "",
       "rawStats": [
@@ -10661,7 +10637,6 @@
         "+25% Critical strike chance"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -10687,9 +10662,8 @@
         "+15% Spell critical strike chance"
       ],
       "tags": [
-        "Crit",
-        "Spell",
-        "crit"
+        "crit",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -10751,8 +10725,7 @@
         "+20% Non damaging ailment effect   with critical strikes"
       ],
       "tags": [
-        "Ailments",
-        "Crit",
+        "ailments",
         "crit"
       ],
       "flavour": "",
@@ -10785,9 +10758,9 @@
         "+25% Physical damage"
       ],
       "tags": [
-        "Armour",
-        "Physical",
-        "armourbreak"
+        "armour",
+        "armourbreak",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -10849,9 +10822,9 @@
         "+25% Armour break and sundered armour duration"
       ],
       "tags": [
-        "Armour",
-        "Attack",
-        "armourbreak"
+        "armour",
+        "armourbreak",
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -10883,7 +10856,7 @@
         "+30% Hit damage stun multiplier"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -10914,7 +10887,7 @@
         "+40% Elemental damage with attack skills   while using flask"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -10961,7 +10934,7 @@
         "+5% Minion maximum all elemental resistances"
       ],
       "tags": [
-        "Minions"
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -11037,8 +11010,8 @@
         "Immune to shock if majority green supports socketed"
       ],
       "tags": [
-        "Ignite",
-        "Shock"
+        "ignite",
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -11124,12 +11097,11 @@
         "+20% Spell impale magnitude"
       ],
       "tags": [
-        "Armour",
-        "Crit",
-        "Physical",
-        "Spell",
+        "armour",
         "armourbreak",
-        "crit"
+        "crit",
+        "physical",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -11161,8 +11133,8 @@
         "+12% Stun threshold + from   maximum energy shield"
       ],
       "tags": [
-        "Energy Shield",
-        "Shield"
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -11245,7 +11217,7 @@
         "+1 Chaos skill gem level +"
       ],
       "tags": [
-        "Chaos"
+        "chaos"
       ],
       "flavour": "",
       "rawStats": [
@@ -11269,8 +11241,8 @@
         "+100% Daze enemies on block with shield raised chance"
       ],
       "tags": [
-        "Block",
-        "Shield"
+        "block",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -11295,9 +11267,9 @@
         "+25% Minion maximum life"
       ],
       "tags": [
-        "Evasion",
-        "Life",
-        "Minions"
+        "evasion",
+        "life",
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -11328,7 +11300,6 @@
         "+25% Melee critical strike chance"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -11354,7 +11325,6 @@
         "+10% Critical strike chance"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -11386,9 +11356,8 @@
         "+50 Invocation spell critical strike multiplier +"
       ],
       "tags": [
-        "Crit",
-        "Spell",
-        "crit"
+        "crit",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -11435,9 +11404,8 @@
         "+20% Minion critical strike chance"
       ],
       "tags": [
-        "Crit",
-        "Minions",
-        "crit"
+        "crit",
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -11468,7 +11436,7 @@
         "+35% Physical damage"
       ],
       "tags": [
-        "Physical"
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -11523,7 +11491,6 @@
         "+25% Critical strike chance   vs enemies further than 6m distance"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -11579,7 +11546,7 @@
         "+20% Ailment duration   vs cursed enemy"
       ],
       "tags": [
-        "Ailments"
+        "ailments"
       ],
       "flavour": "",
       "rawStats": [
@@ -11604,7 +11571,7 @@
         "-8% Freeze applies cold resistance +"
       ],
       "tags": [
-        "Cold"
+        "cold"
       ],
       "flavour": "",
       "rawStats": [
@@ -11636,7 +11603,7 @@
         "+15% Base skill cost efficiency"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -11667,7 +11634,7 @@
         "+1 Number of additional poison stacks if you have at least 100 tribute"
       ],
       "tags": [
-        "Poison"
+        "poison"
       ],
       "flavour": "",
       "rawStats": [
@@ -11691,7 +11658,7 @@
         "+4000 Aggravate bleeding older than ms on hit"
       ],
       "tags": [
-        "Bleed"
+        "bleed"
       ],
       "flavour": "",
       "rawStats": [
@@ -11716,7 +11683,7 @@
         "+50% Heavy stun poise decay rate"
       ],
       "tags": [
-        "Block",
+        "block",
         "heavystun"
       ],
       "flavour": "",
@@ -11749,8 +11716,8 @@
         "+5 Mana gained on block"
       ],
       "tags": [
-        "Block",
-        "Mana"
+        "block",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -11781,7 +11748,7 @@
         "+4% Additional maximum block"
       ],
       "tags": [
-        "Block"
+        "block"
       ],
       "flavour": "",
       "rawStats": [
@@ -11805,8 +11772,8 @@
         "+120% Armour and evasion on low life"
       ],
       "tags": [
-        "Armour",
-        "Evasion"
+        "armour",
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -11890,7 +11857,7 @@
         "+4% Non skill base all damage   to gain as fire per different grenade type fired in past 8 seconds"
       ],
       "tags": [
-        "Fire"
+        "fire"
       ],
       "flavour": "",
       "rawStats": [
@@ -11915,8 +11882,8 @@
         "+25% Energy shield delay -"
       ],
       "tags": [
-        "Energy Shield",
-        "Shield"
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -11948,7 +11915,6 @@
         "+25% Base self critical strike multiplier -"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -11981,7 +11947,7 @@
         "+40% Life recovery   from flasks while on low life"
       ],
       "tags": [
-        "Life",
+        "life",
         "liferegeneration"
       ],
       "flavour": "",
@@ -12013,7 +11979,7 @@
         "+25% Trap damage"
       ],
       "tags": [
-        "Traps"
+        "traps"
       ],
       "flavour": "",
       "rawStats": [
@@ -12068,7 +12034,7 @@
         "Cannot have more than 1 damaging ailment"
       ],
       "tags": [
-        "Ailments"
+        "ailments"
       ],
       "flavour": "",
       "rawStats": [
@@ -12130,7 +12096,7 @@
         "+15% Attack area damage"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -12161,7 +12127,7 @@
         "+25% Trap damage"
       ],
       "tags": [
-        "Traps"
+        "traps"
       ],
       "flavour": "",
       "rawStats": [
@@ -12186,9 +12152,9 @@
         "+15% Physical damage reduction rating"
       ],
       "tags": [
-        "Energy Shield",
-        "Physical",
-        "Shield"
+        "energy shield",
+        "physical",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -12219,8 +12185,7 @@
         "+250% Attack additional critical strike chance permyriad vs parried enemies if you have at least 100 tribute"
       ],
       "tags": [
-        "Attack",
-        "Crit",
+        "attack",
         "crit"
       ],
       "flavour": "",
@@ -12267,8 +12232,7 @@
         "+35% Critical strike chance   vs enemies without elemental status ailments"
       ],
       "tags": [
-        "Ailments",
-        "Crit",
+        "ailments",
         "crit"
       ],
       "flavour": "",
@@ -12293,9 +12257,8 @@
         "+25 Spell critical strike multiplier + while wielding staff"
       ],
       "tags": [
-        "Crit",
-        "Spell",
-        "crit"
+        "crit",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -12342,7 +12305,7 @@
         "+10% Attack area of effect"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -12403,7 +12366,6 @@
         "+40% Critical strike chance   if have not crit recently"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -12429,7 +12391,7 @@
         "+5% Non skill base all damage   to gain as chaos"
       ],
       "tags": [
-        "Chaos"
+        "chaos"
       ],
       "flavour": "",
       "rawStats": [
@@ -12460,7 +12422,6 @@
         "+30% Critical strike chance   vs blinded enemies"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -12538,7 +12499,6 @@
         "+10% Base chance to daze"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -12571,7 +12531,7 @@
         "+5% Base chance to daze"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -12706,8 +12666,8 @@
         "+35% Ignite magnitude   against poisoned enemies"
       ],
       "tags": [
-        "Ignite",
-        "Poison"
+        "ignite",
+        "poison"
       ],
       "flavour": "",
       "rawStats": [
@@ -12732,9 +12692,9 @@
         "+25% Spell damage   while es full"
       ],
       "tags": [
-        "Energy Shield",
-        "Shield",
-        "Spell"
+        "energy shield",
+        "shield",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -12766,8 +12726,8 @@
         "+5% Non skill base lightning damage   to gain as cold"
       ],
       "tags": [
-        "Lightning",
-        "Shock"
+        "lightning",
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -12904,8 +12864,8 @@
         "+15% Shapeshift slam skill aftershock chance"
       ],
       "tags": [
-        "Shock",
-        "Slam"
+        "shock",
+        "slam"
       ],
       "flavour": "",
       "rawStats": [
@@ -12929,7 +12889,7 @@
         "+30% Elemental damage   if enemy ignited recently"
       ],
       "tags": [
-        "Ignite"
+        "ignite"
       ],
       "flavour": "",
       "rawStats": [
@@ -12953,7 +12913,7 @@
         "+30% Elemental damage   if enemy chilled recently"
       ],
       "tags": [
-        "Chill"
+        "chill"
       ],
       "flavour": "",
       "rawStats": [
@@ -12999,7 +12959,7 @@
         "+30% Elemental damage   if enemy shocked recently"
       ],
       "tags": [
-        "Shock"
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -13023,7 +12983,7 @@
         "+4% Cast speed   per num unique spells cast recently"
       ],
       "tags": [
-        "Spell"
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -13048,7 +13008,7 @@
         "+20% Charges gained"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -13080,8 +13040,8 @@
         "+15% Mana regeneration rate"
       ],
       "tags": [
-        "Mana",
-        "liferegeneration"
+        "liferegeneration",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -13157,8 +13117,8 @@
         "+15% Mana regeneration rate"
       ],
       "tags": [
-        "Mana",
-        "liferegeneration"
+        "liferegeneration",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -13189,7 +13149,7 @@
         "+30% chance for crossbow reload to be instant"
       ],
       "tags": [
-        "Bow"
+        "bow"
       ],
       "flavour": "",
       "rawStats": [
@@ -13214,8 +13174,8 @@
         "+15% Ailment threshold + from   maximum energy shield"
       ],
       "tags": [
-        "Ailments",
-        "Energy Shield"
+        "ailments",
+        "energy shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -13247,7 +13207,7 @@
         "+6% Non skill base elemental damage   to gain as lightning"
       ],
       "tags": [
-        "Lightning"
+        "lightning"
       ],
       "flavour": "",
       "rawStats": [
@@ -13279,8 +13239,8 @@
         "+1% Base maximum lightning damage resistance"
       ],
       "tags": [
-        "Lightning",
-        "Shock"
+        "lightning",
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -13311,7 +13271,7 @@
         "+8% Non skill base all damage   to gain as lightning while shapeshifted"
       ],
       "tags": [
-        "Lightning"
+        "lightning"
       ],
       "flavour": "",
       "rawStats": [
@@ -13336,8 +13296,8 @@
         "+5% Base chance to daze"
       ],
       "tags": [
-        "Lightning",
-        "Physical"
+        "lightning",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -13369,8 +13329,8 @@
         "+15% Shock duration"
       ],
       "tags": [
-        "Lightning",
-        "Shock"
+        "lightning",
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -13401,8 +13361,8 @@
         "+25% Physical damage   to gain as lightning vs electrocuted"
       ],
       "tags": [
-        "Lightning",
-        "Physical"
+        "lightning",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -13508,7 +13468,7 @@
         "Immune to ignite while archon"
       ],
       "tags": [
-        "Ignite"
+        "ignite"
       ],
       "flavour": "",
       "rawStats": [
@@ -13532,7 +13492,7 @@
         "Immune to freeze chill while archon"
       ],
       "tags": [
-        "Chill"
+        "chill"
       ],
       "flavour": "",
       "rawStats": [
@@ -13556,7 +13516,7 @@
         "Immune to shock while archon"
       ],
       "tags": [
-        "Shock"
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -13581,8 +13541,8 @@
         "+50% Ignite chance"
       ],
       "tags": [
-        "Ignite",
-        "Shock"
+        "ignite",
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -13613,8 +13573,8 @@
         "+12% Attack damage   for each different non instant spell youve cast in the past 8 seconds"
       ],
       "tags": [
-        "Attack",
-        "Spell"
+        "attack",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -13638,7 +13598,7 @@
         "+30% Minion damage   if enemy hit recently"
       ],
       "tags": [
-        "Minions"
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -13663,7 +13623,7 @@
         "+10% Base cold damage resistance"
       ],
       "tags": [
-        "Cold"
+        "cold"
       ],
       "flavour": "",
       "rawStats": [
@@ -13694,7 +13654,7 @@
         "+30% Spell damage   if have consumed infusion recently"
       ],
       "tags": [
-        "Spell"
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -13718,8 +13678,8 @@
         "+40% Spell damage   if minion died recently"
       ],
       "tags": [
-        "Minions",
-        "Spell"
+        "minion",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -13795,7 +13755,7 @@
         "+1 Cold skill gem level +"
       ],
       "tags": [
-        "Cold"
+        "cold"
       ],
       "flavour": "",
       "rawStats": [
@@ -13819,7 +13779,7 @@
         "+25% Reapply enemy shock on consuming enemy shock chance"
       ],
       "tags": [
-        "Shock"
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -13865,7 +13825,7 @@
         "+2 Max endurance charges"
       ],
       "tags": [
-        "Endurance"
+        "endurance"
       ],
       "flavour": "",
       "rawStats": [
@@ -13890,7 +13850,7 @@
         "+10% Physical damage taken recouped as life"
       ],
       "tags": [
-        "Physical"
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -13944,7 +13904,7 @@
         "+20% Evasion rating"
       ],
       "tags": [
-        "Evasion"
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -14020,8 +13980,8 @@
         "+20% Energy shield delay -  while affected by archon"
       ],
       "tags": [
-        "Energy Shield",
-        "Shield"
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -14053,8 +14013,8 @@
         "+30% Energy shield recharge rate"
       ],
       "tags": [
-        "Energy Shield",
-        "Shield"
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -14085,8 +14045,8 @@
         "+4% Attack area of effect   per enemy ignited last 8 seconds"
       ],
       "tags": [
-        "Attack",
-        "Ignite"
+        "attack",
+        "ignite"
       ],
       "flavour": "",
       "rawStats": [
@@ -14111,9 +14071,9 @@
         "+25% Maximum energy shield"
       ],
       "tags": [
-        "Energy Shield",
-        "Life",
-        "Shield"
+        "energy shield",
+        "life",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -14145,7 +14105,7 @@
         "+8% Dexterity"
       ],
       "tags": [
-        "Evasion"
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -14176,8 +14136,8 @@
         "+12% Spell damage   for each different non instant attack youve used in the past 8 seconds"
       ],
       "tags": [
-        "Attack",
-        "Spell"
+        "attack",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -14223,7 +14183,7 @@
         "+10 Maximum rage + while wielding axe"
       ],
       "tags": [
-        "Rage"
+        "rage"
       ],
       "flavour": "",
       "rawStats": [
@@ -14248,9 +14208,9 @@
         "+13% Minion chaos resistance"
       ],
       "tags": [
-        "Chaos",
-        "Minions",
-        "Physical"
+        "chaos",
+        "minion",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -14282,7 +14242,7 @@
         "+18% Skill effect duration"
       ],
       "tags": [
-        "Chaos"
+        "chaos"
       ],
       "flavour": "",
       "rawStats": [
@@ -14366,8 +14326,8 @@
         "+10% Cast speed   for 4 seconds on attack"
       ],
       "tags": [
-        "Attack",
-        "Spell"
+        "attack",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -14398,7 +14358,7 @@
         "+50% Break   armour on pin"
       ],
       "tags": [
-        "Armour",
+        "armour",
         "armourbreak"
       ],
       "flavour": "",
@@ -14424,9 +14384,8 @@
         "-10% Critical strike chance"
       ],
       "tags": [
-        "Crit",
-        "Spell",
-        "crit"
+        "crit",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -14479,7 +14438,7 @@
         "+10% Poison duration   per poison applied recently"
       ],
       "tags": [
-        "Poison"
+        "poison"
       ],
       "flavour": "",
       "rawStats": [
@@ -14534,7 +14493,7 @@
         "-30% Evasion rating   if have not been hit recently"
       ],
       "tags": [
-        "Evasion"
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -14566,7 +14525,7 @@
         "+3% Base movement velocity"
       ],
       "tags": [
-        "Evasion"
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -14598,8 +14557,8 @@
         "+10 Base intelligence"
       ],
       "tags": [
-        "Energy Shield",
-        "Shield"
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -14673,7 +14632,7 @@
         "+30% Shock chance"
       ],
       "tags": [
-        "Shock"
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -14705,8 +14664,8 @@
         "+50% Mana regeneration rate   while moving"
       ],
       "tags": [
-        "Mana",
-        "liferegeneration"
+        "liferegeneration",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -14738,9 +14697,9 @@
         "+3% Lose   of life and energy shield when you use a chaos skill"
       ],
       "tags": [
-        "Chaos",
-        "Energy Shield",
-        "Shield"
+        "chaos",
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -14838,7 +14797,6 @@
         "+25% Critical strike chance   if triggered skill recently"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -14893,7 +14851,6 @@
         "+50 Archon grants base critical strike multiplier +"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -14972,7 +14929,7 @@
         "+20% Base minion duration"
       ],
       "tags": [
-        "Minions"
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -15004,10 +14961,10 @@
         "+15% Ignite shock chill duration"
       ],
       "tags": [
-        "Ailments",
-        "Chill",
-        "Ignite",
-        "Shock"
+        "ailments",
+        "chill",
+        "ignite",
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -15039,7 +14996,7 @@
         "+30% Ailment chance   vs rare or unique enemy"
       ],
       "tags": [
-        "Ailments"
+        "ailments"
       ],
       "flavour": "",
       "rawStats": [
@@ -15071,8 +15028,8 @@
         "+20% Empowered attack damage"
       ],
       "tags": [
-        "Attack",
-        "Fire"
+        "attack",
+        "fire"
       ],
       "flavour": "",
       "rawStats": [
@@ -15104,7 +15061,7 @@
         "+15% Base skill area of effect"
       ],
       "tags": [
-        "Fire"
+        "fire"
       ],
       "flavour": "",
       "rawStats": [
@@ -15136,8 +15093,8 @@
         "+30% Armour break amount   vs enemies affected by ailments"
       ],
       "tags": [
-        "Ailments",
-        "Armour",
+        "ailments",
+        "armour",
         "armourbreak"
       ],
       "flavour": "",
@@ -15170,8 +15127,8 @@
         "+20% Ailment chance   vs exposed"
       ],
       "tags": [
-        "Ailments",
-        "Cold"
+        "ailments",
+        "cold"
       ],
       "flavour": "",
       "rawStats": [
@@ -15203,8 +15160,8 @@
         "+15% Ailment duration   vs exposed"
       ],
       "tags": [
-        "Ailments",
-        "Fire"
+        "ailments",
+        "fire"
       ],
       "flavour": "",
       "rawStats": [
@@ -15236,9 +15193,8 @@
         "+15% Critical strike chance   vs exposed"
       ],
       "tags": [
-        "Crit",
-        "Lightning",
-        "crit"
+        "crit",
+        "lightning"
       ],
       "flavour": "",
       "rawStats": [
@@ -15269,7 +15225,7 @@
         "Remove ignite on warcry"
       ],
       "tags": [
-        "Ignite"
+        "ignite"
       ],
       "flavour": "",
       "rawStats": [
@@ -15346,7 +15302,7 @@
         "+1% Attack speed   per 200 accuracy rating"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -15377,7 +15333,7 @@
         "+1% Attack speed   per 25 dex"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -15402,8 +15358,8 @@
         "+25% Base self ignite duration -"
       ],
       "tags": [
-        "Ailments",
-        "Ignite"
+        "ailments",
+        "ignite"
       ],
       "flavour": "",
       "rawStats": [
@@ -15456,7 +15412,7 @@
         "+12% Damaging ailments deal damage   faster"
       ],
       "tags": [
-        "Ailments"
+        "ailments"
       ],
       "flavour": "",
       "rawStats": [
@@ -15480,7 +15436,6 @@
         "Base life leech does not stop at full life"
       ],
       "tags": [
-        "Leech",
         "leech"
       ],
       "flavour": "",
@@ -15528,7 +15483,7 @@
         "Enemies you curse cannot recharge energy shield"
       ],
       "tags": [
-        "Energy Shield"
+        "energy shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -15560,7 +15515,7 @@
         "+10% Deflection rating   while surrounded"
       ],
       "tags": [
-        "Block"
+        "block"
       ],
       "flavour": "",
       "rawStats": [
@@ -15615,7 +15570,7 @@
         "Arrow speed additive modifiers also apply to bow damage"
       ],
       "tags": [
-        "Bow"
+        "bow"
       ],
       "flavour": "",
       "rawStats": [
@@ -15640,8 +15595,8 @@
         "+20% Stun threshold"
       ],
       "tags": [
-        "Evasion",
-        "Physical"
+        "evasion",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -15673,8 +15628,8 @@
         "+25% Base self shock duration -"
       ],
       "tags": [
-        "Ailments",
-        "Shock"
+        "ailments",
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -15705,7 +15660,7 @@
         "+2 Max frenzy charges"
       ],
       "tags": [
-        "Frenzy"
+        "frenzy"
       ],
       "flavour": "",
       "rawStats": [
@@ -15730,7 +15685,7 @@
         "+20% Cast speed   when on low life"
       ],
       "tags": [
-        "Spell"
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -15875,7 +15830,7 @@
         "+15% Base reduce enemy fire resistance"
       ],
       "tags": [
-        "Fire"
+        "fire"
       ],
       "flavour": "",
       "rawStats": [
@@ -15900,8 +15855,8 @@
         "-5% Ignites apply fire resistance +"
       ],
       "tags": [
-        "Fire",
-        "Ignite"
+        "fire",
+        "ignite"
       ],
       "flavour": "",
       "rawStats": [
@@ -15933,7 +15888,6 @@
         "+80% Damage   vs enemies on full life"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -15966,7 +15920,7 @@
         "+30% Base chance to poison on hit   vs non poisoned enemies"
       ],
       "tags": [
-        "Poison"
+        "poison"
       ],
       "flavour": "",
       "rawStats": [
@@ -16042,8 +15996,8 @@
         "-40% Ignite effect on self"
       ],
       "tags": [
-        "Fire",
-        "Ignite"
+        "fire",
+        "ignite"
       ],
       "flavour": "",
       "rawStats": [
@@ -16074,8 +16028,8 @@
         "+2% Non skill base all damage   to gain as fire per endurance charge consumed recently"
       ],
       "tags": [
-        "Endurance",
-        "Fire"
+        "endurance",
+        "fire"
       ],
       "flavour": "",
       "rawStats": [
@@ -16100,8 +16054,8 @@
         "+30% Shock chance"
       ],
       "tags": [
-        "Lightning",
-        "Shock"
+        "lightning",
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -16133,7 +16087,7 @@
         "+20% Parry skill effect duration"
       ],
       "tags": [
-        "Block"
+        "block"
       ],
       "flavour": "",
       "rawStats": [
@@ -16165,7 +16119,7 @@
         "+21% Ailment threshold"
       ],
       "tags": [
-        "Ailments"
+        "ailments"
       ],
       "flavour": "",
       "rawStats": [
@@ -16197,9 +16151,9 @@
         "+4% Maximum life   to convert to maximum energy shield"
       ],
       "tags": [
-        "Energy Shield",
-        "Life",
-        "Minions"
+        "energy shield",
+        "life",
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -16255,8 +16209,8 @@
         "+5 Base dexterity and intelligence"
       ],
       "tags": [
-        "Attack",
-        "Spell"
+        "attack",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -16288,8 +16242,8 @@
         "+15% Mana regeneration rate"
       ],
       "tags": [
-        "Mana",
-        "liferegeneration"
+        "liferegeneration",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -16381,7 +16335,6 @@
         "+10 Base intelligence"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -16414,7 +16367,7 @@
         "-10% Base resist all elements"
       ],
       "tags": [
-        "Minions"
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -16445,7 +16398,7 @@
         "+15% Base attack damage penetrates elemental resist"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -16560,10 +16513,10 @@
         "+10% Attack damage   per active totem in presence"
       ],
       "tags": [
-        "Armour",
-        "Attack",
-        "Evasion",
-        "Totems"
+        "armour",
+        "attack",
+        "evasion",
+        "totem"
       ],
       "flavour": "",
       "rawStats": [
@@ -16595,9 +16548,8 @@
         "+20% Base life leech amount"
       ],
       "tags": [
-        "Armour",
-        "Evasion",
-        "Leech",
+        "armour",
+        "evasion",
         "leech"
       ],
       "flavour": "",
@@ -16682,7 +16634,7 @@
         "+100% Attack damage   while surrounded"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -16744,7 +16696,7 @@
         "-20% Accuracy rating"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -16775,7 +16727,6 @@
         "-50% Enemies you blind have critical strike chance"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -16801,9 +16752,9 @@
         "+15% Mana regeneration rate"
       ],
       "tags": [
-        "Mana",
-        "Shock",
-        "liferegeneration"
+        "liferegeneration",
+        "mana",
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -16835,7 +16786,7 @@
         "-5% Movement speed penalty   while performing action"
       ],
       "tags": [
-        "Evasion"
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -16867,7 +16818,7 @@
         "+1 Max frenzy charges"
       ],
       "tags": [
-        "Frenzy"
+        "frenzy"
       ],
       "flavour": "",
       "rawStats": [
@@ -16898,7 +16849,7 @@
         "+10% Minion commanded skill damage   per different persistent minion in presence"
       ],
       "tags": [
-        "Minions"
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -16922,7 +16873,7 @@
         "+30 Debilitate enemies within X metres while active blocking"
       ],
       "tags": [
-        "Block"
+        "block"
       ],
       "flavour": "",
       "rawStats": [
@@ -16969,8 +16920,8 @@
         "-40% Chill effectiveness on self"
       ],
       "tags": [
-        "Chill",
-        "Cold"
+        "chill",
+        "cold"
       ],
       "flavour": "",
       "rawStats": [
@@ -17001,7 +16952,7 @@
         "+8% Non skill base all damage   to gain as cold while shapeshifted"
       ],
       "tags": [
-        "Cold"
+        "cold"
       ],
       "flavour": "",
       "rawStats": [
@@ -17025,7 +16976,7 @@
         "+1 Maximum cold infusion stacks"
       ],
       "tags": [
-        "Cold"
+        "cold"
       ],
       "flavour": "",
       "rawStats": [
@@ -17050,9 +17001,9 @@
         "+15% Life regeneration rate"
       ],
       "tags": [
-        "Life",
-        "Mana",
-        "liferegeneration"
+        "life",
+        "liferegeneration",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -17083,7 +17034,7 @@
         "+25% Crossbow damage   per ammo type fired in past 10 seconds"
       ],
       "tags": [
-        "Bow"
+        "bow"
       ],
       "flavour": "",
       "rawStats": [
@@ -17108,7 +17059,7 @@
         "+80% Ignite chance"
       ],
       "tags": [
-        "Ignite"
+        "ignite"
       ],
       "flavour": "",
       "rawStats": [
@@ -17140,7 +17091,7 @@
         "+5% Movement speed   if 10 green supports socketed"
       ],
       "tags": [
-        "Life"
+        "life"
       ],
       "flavour": "",
       "rawStats": [
@@ -17172,10 +17123,10 @@
         "+5% Attack and cast speed   with lightning skills"
       ],
       "tags": [
-        "Attack",
-        "Lightning",
-        "Shock",
-        "Spell"
+        "attack",
+        "lightning",
+        "shock",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -17206,8 +17157,8 @@
         "+8% Evasion rating   to gain as armour"
       ],
       "tags": [
-        "Armour",
-        "Evasion"
+        "armour",
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -17292,7 +17243,7 @@
         "+2% Gain maximum power charges on power charge gained   chance"
       ],
       "tags": [
-        "Power"
+        "power"
       ],
       "flavour": "",
       "rawStats": [
@@ -17324,7 +17275,7 @@
         "-25% Reservation efficiency   of minion skills"
       ],
       "tags": [
-        "Minions"
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -17356,7 +17307,7 @@
         "+120% Allies in presence life regeneration rate per minute equal to your maximum life"
       ],
       "tags": [
-        "Life",
+        "life",
         "liferegeneration"
       ],
       "flavour": "",
@@ -17389,7 +17340,7 @@
         "+6% Non skill base elemental damage   to gain as cold"
       ],
       "tags": [
-        "Cold"
+        "cold"
       ],
       "flavour": "",
       "rawStats": [
@@ -17442,7 +17393,7 @@
         "+3% Damage taken goes to life mana es over 4 seconds"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -17489,9 +17440,8 @@
         "+40% Physical damage"
       ],
       "tags": [
-        "Leech",
-        "Physical",
-        "leech"
+        "leech",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -17575,7 +17525,7 @@
         "+2% You gain   life when one of your minions is revived"
       ],
       "tags": [
-        "Minions"
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -17606,9 +17556,9 @@
         "+4% Attack damage   per 75 armour or evasion on shield"
       ],
       "tags": [
-        "Armour",
-        "Attack",
-        "Evasion"
+        "armour",
+        "attack",
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -17654,7 +17604,7 @@
         "+5% Maximum life   if you have at least 100 tribute"
       ],
       "tags": [
-        "Life"
+        "life"
       ],
       "flavour": "",
       "rawStats": [
@@ -17678,9 +17628,8 @@
         "+40 Minion critical strike multiplier +"
       ],
       "tags": [
-        "Crit",
-        "Minions",
-        "crit"
+        "crit",
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -17705,7 +17654,7 @@
         "+10% Chance to gain 1 more endurance charge"
       ],
       "tags": [
-        "Endurance"
+        "endurance"
       ],
       "flavour": "",
       "rawStats": [
@@ -17767,7 +17716,7 @@
         "+20% Minion cooldown recovery"
       ],
       "tags": [
-        "Minions"
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -17851,7 +17800,7 @@
         "+30% Ancestral boosted attack damage"
       ],
       "tags": [
-        "Attack",
+        "attack",
         "heavystun"
       ],
       "flavour": "",
@@ -17906,7 +17855,7 @@
         "+3% Recover   life per endurance charge consumed"
       ],
       "tags": [
-        "Endurance"
+        "endurance"
       ],
       "flavour": "",
       "rawStats": [
@@ -17967,7 +17916,7 @@
         "Bleeding enemies cannot regenerate life"
       ],
       "tags": [
-        "Bleed",
+        "bleed",
         "liferegeneration"
       ],
       "flavour": "",
@@ -17992,7 +17941,7 @@
         "+16% Non skill base all damage   to gain as cold with empowered attacks"
       ],
       "tags": [
-        "Cold"
+        "cold"
       ],
       "flavour": "",
       "rawStats": [
@@ -18069,8 +18018,8 @@
         "+20% Ailment threshold + from   maximum energy shield"
       ],
       "tags": [
-        "Ailments",
-        "Energy Shield"
+        "ailments",
+        "energy shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -18132,7 +18081,7 @@
         "+40% Flask life recovery rate"
       ],
       "tags": [
-        "Life",
+        "life",
         "liferegeneration"
       ],
       "flavour": "",
@@ -18165,8 +18114,8 @@
         "+20% Totem additional physical damage reduction"
       ],
       "tags": [
-        "Physical",
-        "Totems"
+        "physical",
+        "totem"
       ],
       "flavour": "",
       "rawStats": [
@@ -18220,9 +18169,8 @@
         "+15% Critical strike chance   vs shocked enemies"
       ],
       "tags": [
-        "Crit",
-        "Shock",
-        "crit"
+        "crit",
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -18253,7 +18201,7 @@
         "+20% Damage   per enemy elemental ailment"
       ],
       "tags": [
-        "Ailments"
+        "ailments"
       ],
       "flavour": "",
       "rawStats": [
@@ -18278,8 +18226,8 @@
         "+16% Skill effect duration"
       ],
       "tags": [
-        "Cold",
-        "Spell"
+        "cold",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -18311,7 +18259,7 @@
         "+5% Base cast speed"
       ],
       "tags": [
-        "Spell"
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -18373,7 +18321,6 @@
         "+25% Projectile daze chance   vs enemies further than 6m"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -18406,7 +18353,7 @@
         "+30% Life regeneration rate per minute   if have been hit recently"
       ],
       "tags": [
-        "Life",
+        "life",
         "liferegeneration"
       ],
       "flavour": "",
@@ -18439,7 +18386,6 @@
         "+10 Base strength"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -18472,7 +18418,6 @@
         "+10 Base intelligence"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -18504,7 +18449,7 @@
         "-75% Enemies in presence life regeneration"
       ],
       "tags": [
-        "Life",
+        "life",
         "liferegeneration"
       ],
       "flavour": "",
@@ -18530,9 +18475,9 @@
         "-30% Ignite effect on self"
       ],
       "tags": [
-        "Armour",
-        "Fire",
-        "Ignite"
+        "armour",
+        "fire",
+        "ignite"
       ],
       "flavour": "",
       "rawStats": [
@@ -18564,7 +18509,7 @@
         "-5% Attack speed"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -18595,7 +18540,7 @@
         "+150% Armour + from   strength requirements from boots gloves helmets"
       ],
       "tags": [
-        "Armour"
+        "armour"
       ],
       "flavour": "",
       "rawStats": [
@@ -18619,7 +18564,7 @@
         "+25% Sword damage"
       ],
       "tags": [
-        "Sword"
+        "sword"
       ],
       "flavour": "",
       "rawStats": [
@@ -18644,8 +18589,8 @@
         "+5% Base all damage bypass energy shield"
       ],
       "tags": [
-        "Energy Shield",
-        "Shield"
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -18866,9 +18811,9 @@
         "+20% Physical bow damage"
       ],
       "tags": [
-        "Bow",
-        "Physical",
-        "cullingstrike"
+        "bow",
+        "cullingstrike",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -18900,8 +18845,8 @@
         "+20% Ailment chance"
       ],
       "tags": [
-        "Ailments",
-        "Physical"
+        "ailments",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -18984,7 +18929,7 @@
         "+10% Base damage removed from mana before life"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -19009,7 +18954,7 @@
         "+25% Stun threshold   while shapeshifted"
       ],
       "tags": [
-        "Armour"
+        "armour"
       ],
       "flavour": "",
       "rawStats": [
@@ -19041,7 +18986,7 @@
         "+25% Stun threshold   when on full life"
       ],
       "tags": [
-        "Evasion"
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -19190,9 +19135,9 @@
         "+10% Block chance"
       ],
       "tags": [
-        "Block",
-        "Life",
-        "Minions"
+        "block",
+        "life",
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -19224,7 +19169,7 @@
         "+8% Base projectile speed"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -19256,8 +19201,8 @@
         "+25% Armour   if hit enemy with melee attack recently"
       ],
       "tags": [
-        "Armour",
-        "Attack"
+        "armour",
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -19343,7 +19288,7 @@
         "-80% Notable knockback distance   final for blocked hits"
       ],
       "tags": [
-        "Block"
+        "block"
       ],
       "flavour": "",
       "rawStats": [
@@ -19488,7 +19433,7 @@
         "+200% Ice crystal maximum life"
       ],
       "tags": [
-        "Life"
+        "life"
       ],
       "flavour": "",
       "rawStats": [
@@ -19512,8 +19457,8 @@
         "+50% Gain   maximum energy shield as freeze threshold +"
       ],
       "tags": [
-        "Energy Shield",
-        "Shield"
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -19537,8 +19482,8 @@
         "+1% Fire damage   per rage"
       ],
       "tags": [
-        "Fire",
-        "Rage"
+        "fire",
+        "rage"
       ],
       "flavour": "",
       "rawStats": [
@@ -19563,7 +19508,7 @@
         "+2% Stun threshold   per rage"
       ],
       "tags": [
-        "Rage"
+        "rage"
       ],
       "flavour": "",
       "rawStats": [
@@ -19595,8 +19540,8 @@
         "+20% Light radius"
       ],
       "tags": [
-        "Energy Shield",
-        "Shield"
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -19658,7 +19603,7 @@
         "+6% Attack speed   during flask effect"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -19690,9 +19635,9 @@
         "+50% Evasion rating   if energy shield recharge started in past 2 seconds"
       ],
       "tags": [
-        "Energy Shield",
-        "Evasion",
-        "Shield"
+        "energy shield",
+        "evasion",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -19724,7 +19669,7 @@
         "+10 Base strength"
       ],
       "tags": [
-        "Ignite"
+        "ignite"
       ],
       "flavour": "",
       "rawStats": [
@@ -19756,7 +19701,7 @@
         "+10 Base intelligence"
       ],
       "tags": [
-        "Life"
+        "life"
       ],
       "flavour": "",
       "rawStats": [
@@ -19788,11 +19733,10 @@
         "+15% Maximum energy shield"
       ],
       "tags": [
-        "Energy Shield",
-        "Leech",
-        "Mana",
-        "Shield",
-        "leech"
+        "energy shield",
+        "leech",
+        "mana",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -19824,7 +19768,7 @@
         "+12% Area of effect   if have stunned an enemy recently"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -19856,7 +19800,7 @@
         "+20% Hit damage stun multiplier"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -19949,7 +19893,7 @@
         "+150% Defend with   armour against hits from distance greater than 6m"
       ],
       "tags": [
-        "Armour"
+        "armour"
       ],
       "flavour": "",
       "rawStats": [
@@ -19974,8 +19918,8 @@
         "+5% Cast speed   while holding staff"
       ],
       "tags": [
-        "Spell",
-        "Staff"
+        "spell",
+        "staff"
       ],
       "flavour": "",
       "rawStats": [
@@ -20028,7 +19972,7 @@
         "+150% Life regeneration rate per minute   while surrounded"
       ],
       "tags": [
-        "Life",
+        "life",
         "liferegeneration"
       ],
       "flavour": "",
@@ -20054,7 +19998,7 @@
         "+60% Ignite chance"
       ],
       "tags": [
-        "Ignite"
+        "ignite"
       ],
       "flavour": "",
       "rawStats": [
@@ -20137,7 +20081,7 @@
         "+10% Chance to inflict 10 incision on attack hit"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -20161,7 +20105,7 @@
         "+1 Maximum fire infusion stacks"
       ],
       "tags": [
-        "Fire"
+        "fire"
       ],
       "flavour": "",
       "rawStats": [
@@ -20186,7 +20130,7 @@
         "+20 Base maximum life"
       ],
       "tags": [
-        "Life"
+        "life"
       ],
       "flavour": "",
       "rawStats": [
@@ -20261,7 +20205,7 @@
         "Gain a power charge when you consume an elemental infusion"
       ],
       "tags": [
-        "Power"
+        "power"
       ],
       "flavour": "",
       "rawStats": [
@@ -20330,7 +20274,7 @@
         "+16% Attack speed   if you have not attacked recently"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -20362,8 +20306,8 @@
         "+37 Attack maximum added lightning damage"
       ],
       "tags": [
-        "Attack",
-        "Lightning"
+        "attack",
+        "lightning"
       ],
       "flavour": "",
       "rawStats": [
@@ -20395,9 +20339,9 @@
         "+20% Maximum energy shield"
       ],
       "tags": [
-        "Energy Shield",
-        "Evasion",
-        "Shield"
+        "energy shield",
+        "evasion",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -20428,7 +20372,7 @@
         "+10% Base damage removed from mana before life"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -20453,8 +20397,8 @@
         "+12% Mana regeneration rate"
       ],
       "tags": [
-        "Mana",
-        "liferegeneration"
+        "liferegeneration",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -20573,9 +20517,9 @@
         "+2 Ailment threshold + from lowest of base boots evasion rating and armour"
       ],
       "tags": [
-        "Ailments",
-        "Armour",
-        "Evasion"
+        "ailments",
+        "armour",
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -20600,9 +20544,9 @@
         "+20% Energy shield delay -  while shapeshifted"
       ],
       "tags": [
-        "Armour",
-        "Energy Shield",
-        "Shield"
+        "armour",
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -20634,7 +20578,7 @@
         "+15% Damaging ailment duration"
       ],
       "tags": [
-        "Ailments"
+        "ailments"
       ],
       "flavour": "",
       "rawStats": [
@@ -20718,8 +20662,8 @@
         "+20% Aggravate bleeding on exerted attack hit chance"
       ],
       "tags": [
-        "Attack",
-        "Bleed"
+        "attack",
+        "bleed"
       ],
       "flavour": "",
       "rawStats": [
@@ -20750,8 +20694,8 @@
         "+35% Mana regeneration rate   while stationary"
       ],
       "tags": [
-        "Mana",
-        "liferegeneration"
+        "liferegeneration",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -20805,7 +20749,7 @@
         "+1% Recover   maximum life per glory consumed"
       ],
       "tags": [
-        "Life"
+        "life"
       ],
       "flavour": "",
       "rawStats": [
@@ -20829,8 +20773,8 @@
         "+1% Consume rage when reverting to recover x  maximum life per rage"
       ],
       "tags": [
-        "Life",
-        "Rage"
+        "life",
+        "rage"
       ],
       "flavour": "",
       "rawStats": [
@@ -20854,7 +20798,7 @@
         "+40% Invocation spell chance to cost half energy"
       ],
       "tags": [
-        "Spell"
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -20879,8 +20823,8 @@
         "+10% Base mana cost efficiency"
       ],
       "tags": [
-        "Mana",
-        "Spell"
+        "mana",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -20934,8 +20878,8 @@
         "-10% Base slow potency"
       ],
       "tags": [
-        "Armour",
-        "Energy Shield",
+        "armour",
+        "energy shield",
         "slow"
       ],
       "flavour": "",
@@ -20967,7 +20911,7 @@
         "+100% Armour break and sundered armour duration"
       ],
       "tags": [
-        "Armour",
+        "armour",
         "armourbreak"
       ],
       "flavour": "",
@@ -21075,10 +21019,9 @@
         "+20% Spell critical strike chance"
       ],
       "tags": [
-        "Crit",
-        "Physical",
-        "Spell",
-        "crit"
+        "crit",
+        "physical",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -21109,7 +21052,6 @@
         "+40 Spear critical strike multiplier +"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -21135,7 +21077,7 @@
         "+10% Ballista attack speed"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -21167,7 +21109,7 @@
         "+60% Attack damage   when on low life"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -21250,7 +21192,7 @@
         "+2 Temporary minion limit +"
       ],
       "tags": [
-        "Minions"
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -21275,7 +21217,7 @@
         "+25% Attack damage   while surrounded"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -21369,7 +21311,7 @@
         "+15% Skill effect duration"
       ],
       "tags": [
-        "Spell"
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -21401,7 +21343,7 @@
         "+10% Skill effect duration"
       ],
       "tags": [
-        "Poison"
+        "poison"
       ],
       "flavour": "",
       "rawStats": [
@@ -21433,7 +21375,7 @@
         "+20% Damaging ailment duration"
       ],
       "tags": [
-        "Ailments"
+        "ailments"
       ],
       "flavour": "",
       "rawStats": [
@@ -21464,8 +21406,8 @@
         "+30% Attack mana cost efficiency   during mana flask"
       ],
       "tags": [
-        "Attack",
-        "Mana"
+        "attack",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -21489,7 +21431,7 @@
         "+5% Maximum mana   if you have at least 100 tribute"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -21513,7 +21455,7 @@
         "+1% Damage   per 1  block chance"
       ],
       "tags": [
-        "Block"
+        "block"
       ],
       "flavour": "",
       "rawStats": [
@@ -21567,7 +21509,6 @@
         "+50% Critical strike chance against enemies on full life"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -21592,8 +21533,8 @@
         "+1 Evasion rating + per 1 armour on gloves"
       ],
       "tags": [
-        "Armour",
-        "Evasion"
+        "armour",
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -21618,8 +21559,8 @@
         "+2% Recover   maximum life on killing poisoned enemy"
       ],
       "tags": [
-        "Life",
-        "Poison"
+        "life",
+        "poison"
       ],
       "flavour": "",
       "rawStats": [
@@ -21651,9 +21592,9 @@
         "+23% Minion chaos resistance"
       ],
       "tags": [
-        "Chaos",
-        "Minions",
-        "Physical"
+        "chaos",
+        "minion",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -21715,10 +21656,10 @@
         "+15% Minion maximum life"
       ],
       "tags": [
-        "Life",
-        "Mana",
-        "Minions",
-        "liferegeneration"
+        "life",
+        "liferegeneration",
+        "mana",
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -21749,7 +21690,7 @@
         "+3% Recover   maximum life on kill"
       ],
       "tags": [
-        "Life"
+        "life"
       ],
       "flavour": "",
       "rawStats": [
@@ -21773,7 +21714,6 @@
         "+25% Base life leech amount"
       ],
       "tags": [
-        "Leech",
         "leech"
       ],
       "flavour": "",
@@ -21798,7 +21738,7 @@
         "+35% Minion resummon speed   if all active minions are companions"
       ],
       "tags": [
-        "Minions"
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -21856,9 +21796,9 @@
         "+8% Attack and cast speed   with lightning skills"
       ],
       "tags": [
-        "Attack",
-        "Lightning",
-        "Spell"
+        "attack",
+        "lightning",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -21889,7 +21829,7 @@
         "+30% Chance for extra damage roll with lightning damage"
       ],
       "tags": [
-        "Lightning"
+        "lightning"
       ],
       "flavour": "",
       "rawStats": [
@@ -21966,7 +21906,7 @@
         "+15% Skill effect duration"
       ],
       "tags": [
-        "Chaos"
+        "chaos"
       ],
       "flavour": "",
       "rawStats": [
@@ -22028,7 +21968,7 @@
         "+3% Minion maximum all elemental resistances"
       ],
       "tags": [
-        "Minions"
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -22090,7 +22030,7 @@
         "+40% Attack damage   vs maimed enemies"
       ],
       "tags": [
-        "Attack",
+        "attack",
         "maim"
       ],
       "flavour": "",
@@ -22123,8 +22063,7 @@
         "+15% Attack critical strike chance"
       ],
       "tags": [
-        "Attack",
-        "Crit",
+        "attack",
         "crit"
       ],
       "flavour": "",
@@ -22187,7 +22126,7 @@
         "+15% Minion skill area of effect"
       ],
       "tags": [
-        "Minions"
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -22240,7 +22179,7 @@
         "+12% Reservation efficiency   of minion skills"
       ],
       "tags": [
-        "Minions"
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -22286,7 +22225,7 @@
         "+60% Poison effect   vs non poisoned enemies"
       ],
       "tags": [
-        "Poison"
+        "poison"
       ],
       "flavour": "",
       "rawStats": [
@@ -22311,7 +22250,7 @@
         "+15 Base intelligence"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -22402,8 +22341,8 @@
         "+40% Mana regeneration rate   while shapeshifted"
       ],
       "tags": [
-        "Mana",
-        "liferegeneration"
+        "liferegeneration",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -22428,7 +22367,7 @@
         "+10% Chance to gain 1 more power charge"
       ],
       "tags": [
-        "Power"
+        "power"
       ],
       "flavour": "",
       "rawStats": [
@@ -22459,7 +22398,7 @@
         "+50% Minion damage   while you have at least two different active offerings"
       ],
       "tags": [
-        "Minions"
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -22484,7 +22423,7 @@
         "+30% Physical damage reduction rating"
       ],
       "tags": [
-        "Physical"
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -22515,7 +22454,7 @@
         "+8% Non skill base physical damage   to gain as chaos"
       ],
       "tags": [
-        "Physical"
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -22540,7 +22479,7 @@
         "+25% Maim on hit"
       ],
       "tags": [
-        "Attack",
+        "attack",
         "maim"
       ],
       "flavour": "",
@@ -22573,8 +22512,8 @@
         "+20% Mana regeneration rate"
       ],
       "tags": [
-        "Mana",
-        "liferegeneration"
+        "liferegeneration",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -22606,10 +22545,9 @@
         "+25% Ailment chance   vs rare or unique enemy"
       ],
       "tags": [
-        "Ailments",
-        "Leech",
-        "Mana",
-        "leech"
+        "ailments",
+        "leech",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -22663,7 +22601,7 @@
         "+4% Movement speed   if used a mark recently"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -22749,9 +22687,8 @@
         "+25% Quarterstaff accuracy rating"
       ],
       "tags": [
-        "Crit",
-        "Staff",
-        "crit"
+        "crit",
+        "staff"
       ],
       "flavour": "",
       "rawStats": [
@@ -22783,7 +22720,7 @@
         "+6% Allies in presence attack speed"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -22815,7 +22752,7 @@
         "+60% Allies in presence life regeneration rate per minute equal to your maximum life"
       ],
       "tags": [
-        "Life",
+        "life",
         "liferegeneration"
       ],
       "flavour": "",
@@ -22848,8 +22785,8 @@
         "+8% Crossbow attack speed"
       ],
       "tags": [
-        "Attack",
-        "Bow"
+        "attack",
+        "bow"
       ],
       "flavour": "",
       "rawStats": [
@@ -22933,7 +22870,7 @@
         "+15% Broken armour and sundered armour debuff effect"
       ],
       "tags": [
-        "Armour",
+        "armour",
         "armourbreak"
       ],
       "flavour": "",
@@ -23050,9 +22987,9 @@
         "-10% Maximum mana"
       ],
       "tags": [
-        "Energy Shield",
-        "Mana",
-        "Shield"
+        "energy shield",
+        "mana",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -23083,8 +23020,8 @@
         "+1% Permanent fire damage   per second of ignite up to 10"
       ],
       "tags": [
-        "Fire",
-        "Ignite"
+        "fire",
+        "ignite"
       ],
       "flavour": "",
       "rawStats": [
@@ -23131,9 +23068,9 @@
         "+15% Mana regeneration rate"
       ],
       "tags": [
-        "Mana",
-        "Spell",
-        "liferegeneration"
+        "liferegeneration",
+        "mana",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -23165,7 +23102,7 @@
         "+15 Base intelligence"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -23197,8 +23134,8 @@
         "+25% Base mana cost efficiency   while on low mana"
       ],
       "tags": [
-        "Mana",
-        "liferegeneration"
+        "liferegeneration",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -23230,8 +23167,8 @@
         "-15% Minion attack speed"
       ],
       "tags": [
-        "Attack",
-        "Minions"
+        "attack",
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -23293,7 +23230,7 @@
         "+3% Totem maximum all elemental resistances"
       ],
       "tags": [
-        "Totems"
+        "totem"
       ],
       "flavour": "",
       "rawStats": [
@@ -23325,8 +23262,8 @@
         "+15% Base mana cost efficiency"
       ],
       "tags": [
-        "Mana",
-        "liferegeneration"
+        "liferegeneration",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -23358,9 +23295,9 @@
         "+24% Maximum energy shield"
       ],
       "tags": [
-        "Energy Shield",
-        "Evasion",
-        "Shield"
+        "energy shield",
+        "evasion",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -23391,10 +23328,10 @@
         "+3% Minion armour break physical damage   dealt as armour break"
       ],
       "tags": [
-        "Armour",
-        "Minions",
-        "Physical",
-        "armourbreak"
+        "armour",
+        "armourbreak",
+        "minion",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -23418,8 +23355,8 @@
         "+10% Minion maximum life"
       ],
       "tags": [
-        "Life",
-        "Minions"
+        "life",
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -23466,7 +23403,7 @@
         "+5% Non skill base all damage   to gain as fire"
       ],
       "tags": [
-        "Physical"
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -23498,8 +23435,8 @@
         "+50% Fire damage   while ignited"
       ],
       "tags": [
-        "Fire",
-        "Ignite"
+        "fire",
+        "ignite"
       ],
       "flavour": "",
       "rawStats": [
@@ -23530,7 +23467,7 @@
         "+8% Non skill base all damage   to gain as fire while shapeshifted"
       ],
       "tags": [
-        "Fire"
+        "fire"
       ],
       "flavour": "",
       "rawStats": [
@@ -23555,7 +23492,6 @@
         "+25 Critical strike multiplier + if have dealt non crit recently"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -23588,7 +23524,7 @@
         "-5% Base slow potency"
       ],
       "tags": [
-        "Armour",
+        "armour",
         "slow"
       ],
       "flavour": "",
@@ -23621,7 +23557,6 @@
         "+20 Flail critical strike multiplier +"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -23653,7 +23588,7 @@
         "+24% Chance to fire 1 additional projectile   with rollover"
       ],
       "tags": [
-        "Fire"
+        "fire"
       ],
       "flavour": "",
       "rawStats": [
@@ -23730,8 +23665,8 @@
         "+30% Stun threshold   when on full life"
       ],
       "tags": [
-        "Energy Shield",
-        "Shield"
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -23762,8 +23697,8 @@
         "+2% Spell damage   per rage"
       ],
       "tags": [
-        "Rage",
-        "Spell"
+        "rage",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -23788,9 +23723,9 @@
         "+16% Maximum energy shield"
       ],
       "tags": [
-        "Energy Shield",
-        "Physical",
-        "Shield"
+        "energy shield",
+        "physical",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -23821,7 +23756,7 @@
         "+4 Ailment threshold + per dexterity"
       ],
       "tags": [
-        "Ailments"
+        "ailments"
       ],
       "flavour": "",
       "rawStats": [
@@ -23846,7 +23781,7 @@
         "+20% Elemental damage"
       ],
       "tags": [
-        "Ailments"
+        "ailments"
       ],
       "flavour": "",
       "rawStats": [
@@ -23878,8 +23813,7 @@
         "+30% Attack critical strike chance"
       ],
       "tags": [
-        "Attack",
-        "Crit",
+        "attack",
         "crit"
       ],
       "flavour": "",
@@ -23944,7 +23878,7 @@
         "+20% Life regeneration rate"
       ],
       "tags": [
-        "Life",
+        "life",
         "liferegeneration"
       ],
       "flavour": "",
@@ -23976,9 +23910,8 @@
         "+40% Minion critical strike chance"
       ],
       "tags": [
-        "Crit",
-        "Minions",
-        "crit"
+        "crit",
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -24003,8 +23936,8 @@
         "-10% Minion life recovery rate"
       ],
       "tags": [
-        "Life",
-        "Minions"
+        "life",
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -24035,7 +23968,7 @@
         "+12% Non skill base all damage   to gain as chaos with spells"
       ],
       "tags": [
-        "Chaos"
+        "chaos"
       ],
       "flavour": "",
       "rawStats": [
@@ -24060,7 +23993,7 @@
         "+10% Attack damage"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -24114,7 +24047,7 @@
         "+20% Companion maximum life"
       ],
       "tags": [
-        "Life"
+        "life"
       ],
       "flavour": "",
       "rawStats": [
@@ -24167,8 +24100,8 @@
         "+40% Mana regeneration rate   on full life"
       ],
       "tags": [
-        "Mana",
-        "liferegeneration"
+        "liferegeneration",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -24296,7 +24229,7 @@
         "-50% Ignite effect on self"
       ],
       "tags": [
-        "Ignite"
+        "ignite"
       ],
       "flavour": "",
       "rawStats": [
@@ -24321,7 +24254,7 @@
         "+30% Quarterstaff hit damage stun multiplier"
       ],
       "tags": [
-        "Staff"
+        "staff"
       ],
       "flavour": "",
       "rawStats": [
@@ -24352,8 +24285,8 @@
         "+1 Quarterstaff skills that consume power charges count as consuming x additional power charges"
       ],
       "tags": [
-        "Power",
-        "Staff"
+        "power",
+        "staff"
       ],
       "flavour": "",
       "rawStats": [
@@ -24377,8 +24310,8 @@
         "+25% Mana regeneration rate"
       ],
       "tags": [
-        "Mana",
-        "liferegeneration"
+        "liferegeneration",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -24500,7 +24433,7 @@
         "+2 Max power charges"
       ],
       "tags": [
-        "Power"
+        "power"
       ],
       "flavour": "",
       "rawStats": [
@@ -24524,9 +24457,9 @@
         "+25% Physical damage   to gain as fire vs heavy stunned"
       ],
       "tags": [
-        "Fire",
-        "Physical",
-        "heavystun"
+        "fire",
+        "heavystun",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -24551,8 +24484,8 @@
         "+10% Lightning penetration   while on low mana"
       ],
       "tags": [
-        "Lightning",
-        "Mana"
+        "lightning",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -24584,7 +24517,7 @@
         "-5% Attack speed"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -24616,8 +24549,7 @@
         "+20 Attack critical strike multiplier +"
       ],
       "tags": [
-        "Attack",
-        "Crit",
+        "attack",
         "crit"
       ],
       "flavour": "",
@@ -24650,8 +24582,8 @@
         "-15% Base mana cost -"
       ],
       "tags": [
-        "Mana",
-        "Spell"
+        "mana",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -24682,8 +24614,8 @@
         "+5% Gain attack damage   for each your minion in presence capped"
       ],
       "tags": [
-        "Attack",
-        "Minions"
+        "attack",
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -24729,7 +24661,7 @@
         "+100 Projectiles pierce enemies with fully broken armour"
       ],
       "tags": [
-        "Armour",
+        "armour",
         "armourbreak"
       ],
       "flavour": "",
@@ -24755,8 +24687,8 @@
         "-20% Energy shield delay -"
       ],
       "tags": [
-        "Energy Shield",
-        "Shield"
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -24820,9 +24752,8 @@
         "+20% Aggravate bleeding on attack crit chance"
       ],
       "tags": [
-        "Attack",
-        "Bleed",
-        "Crit",
+        "attack",
+        "bleed",
         "crit"
       ],
       "flavour": "",
@@ -24855,7 +24786,7 @@
         "+40% Jagged ground duration"
       ],
       "tags": [
-        "Bleed"
+        "bleed"
       ],
       "flavour": "",
       "rawStats": [
@@ -24887,7 +24818,7 @@
         "+20% Hit damage freeze multiplier"
       ],
       "tags": [
-        "Chill"
+        "chill"
       ],
       "flavour": "",
       "rawStats": [
@@ -24919,7 +24850,7 @@
         "+12% Hit damage immobilisation multiplier"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -25038,7 +24969,7 @@
         "+30% Broken armour and sundered armour debuff effect"
       ],
       "tags": [
-        "Armour",
+        "armour",
         "armourbreak"
       ],
       "flavour": "",
@@ -25125,8 +25056,7 @@
         "+100% Accuracy rating   equal to   attack critical strike chance"
       ],
       "tags": [
-        "Attack",
-        "Crit",
+        "attack",
         "crit"
       ],
       "flavour": "",
@@ -25225,7 +25155,7 @@
         "+10% Base poison duration"
       ],
       "tags": [
-        "Poison"
+        "poison"
       ],
       "flavour": "",
       "rawStats": [
@@ -25250,8 +25180,8 @@
         "+25% Physical damage reduction rating"
       ],
       "tags": [
-        "Armour",
-        "Physical"
+        "armour",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -25327,7 +25257,7 @@
         "-5% Base cast speed"
       ],
       "tags": [
-        "Spell"
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -25359,7 +25289,7 @@
         "+25% Shock duration"
       ],
       "tags": [
-        "Shock"
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -25391,9 +25321,8 @@
         "-15% Crossbow attack speed"
       ],
       "tags": [
-        "Attack",
-        "Bow",
-        "Crit",
+        "attack",
+        "bow",
         "crit"
       ],
       "flavour": "",
@@ -25426,9 +25355,9 @@
         "+4% Minion attack and cast speed"
       ],
       "tags": [
-        "Attack",
-        "Minions",
-        "Spell"
+        "attack",
+        "minion",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -25481,7 +25410,7 @@
         "+2% Spell damage   per 10 strength"
       ],
       "tags": [
-        "Spell"
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -25505,7 +25434,7 @@
         "+6% Base cast speed"
       ],
       "tags": [
-        "Spell"
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -25529,9 +25458,8 @@
         "+30% Invocation spell critical strike chance"
       ],
       "tags": [
-        "Crit",
-        "Spell",
-        "crit"
+        "crit",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -25585,7 +25513,6 @@
         "+1% Volatility critical strike chance   to grant"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -25611,7 +25538,7 @@
         "+6% Attack speed"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -25664,7 +25591,6 @@
         "+100 Critical strike multiplier vs enemies on full life +"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -25690,7 +25616,7 @@
         "+100 Allies in presence accuracy rating"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -25774,8 +25700,8 @@
         "+15% Base attack skill cost efficiency"
       ],
       "tags": [
-        "Attack",
-        "Mana"
+        "attack",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -25807,7 +25733,7 @@
         "+15% Skill area of effect   if enemy killed recently"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -25839,7 +25765,7 @@
         "+8% Attack speed"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -25900,7 +25826,7 @@
         "+12 Maximum rage + while shapeshifted"
       ],
       "tags": [
-        "Rage"
+        "rage"
       ],
       "flavour": "",
       "rawStats": [
@@ -25925,7 +25851,6 @@
         "+10% Critical strike chance   while shapeshifted"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -25958,7 +25883,7 @@
         "+8% Attack area of effect"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -26049,10 +25974,10 @@
         "+30% Armour   applies to fire cold lightning damage"
       ],
       "tags": [
-        "Armour",
-        "Cold",
-        "Fire",
-        "Lightning"
+        "armour",
+        "cold",
+        "fire",
+        "lightning"
       ],
       "flavour": "",
       "rawStats": [
@@ -26077,7 +26002,7 @@
         "+2% Gain maximum frenzy charges on frenzy charge gained   chance"
       ],
       "tags": [
-        "Frenzy"
+        "frenzy"
       ],
       "flavour": "",
       "rawStats": [
@@ -26161,8 +26086,8 @@
         "+120% Defend with   armour against ranged attacks"
       ],
       "tags": [
-        "Armour",
-        "Physical"
+        "armour",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -26216,7 +26141,7 @@
         "+16% Skill effect duration"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -26247,7 +26172,7 @@
         "-25% Rage decay speed"
       ],
       "tags": [
-        "Rage"
+        "rage"
       ],
       "flavour": "",
       "rawStats": [
@@ -26302,7 +26227,7 @@
         "+15% Damaging ailment duration"
       ],
       "tags": [
-        "Ailments"
+        "ailments"
       ],
       "flavour": "",
       "rawStats": [
@@ -26333,8 +26258,8 @@
         "+12% Spell skills fire 2 additional projectiles final chance"
       ],
       "tags": [
-        "Fire",
-        "Spell"
+        "fire",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -26359,7 +26284,7 @@
         "Broken armour enemies cannot regenerate life"
       ],
       "tags": [
-        "Armour",
+        "armour",
         "armourbreak",
         "liferegeneration",
         "maim"
@@ -26416,8 +26341,8 @@
         "+10 Base intelligence"
       ],
       "tags": [
-        "Energy Shield",
-        "Shield"
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -26448,7 +26373,7 @@
         "+10% Witch passive maximum lightning damage   final"
       ],
       "tags": [
-        "Lightning"
+        "lightning"
       ],
       "flavour": "",
       "rawStats": [
@@ -26472,7 +26397,6 @@
         "+40 One handed melee critical strike multiplier +"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -26497,8 +26421,8 @@
         "+24% Chance to fire 1 additional projectile   with rollover with bow attacks"
       ],
       "tags": [
-        "Bow",
-        "Fire"
+        "bow",
+        "fire"
       ],
       "flavour": "",
       "rawStats": [
@@ -26555,8 +26479,8 @@
         "+30% Energy shield delay -  when not on full life"
       ],
       "tags": [
-        "Energy Shield",
-        "Shield"
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -26684,8 +26608,8 @@
         "+25% Energy shield delay -"
       ],
       "tags": [
-        "Energy Shield",
-        "Shield"
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -26739,7 +26663,7 @@
         "+30 Accuracy rating"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -26771,8 +26695,8 @@
         "+20 Base maximum mana"
       ],
       "tags": [
-        "Mana",
-        "Shock"
+        "mana",
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -26826,7 +26750,7 @@
         "-10% Base mana cost -"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -26858,7 +26782,7 @@
         "+10 Base intelligence"
       ],
       "tags": [
-        "Spell"
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -26920,7 +26844,7 @@
         "+15 Base dexterity"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -26974,7 +26898,7 @@
         "+30% Parry evasion rating   during parry"
       ],
       "tags": [
-        "Evasion"
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -27006,10 +26930,10 @@
         "+20% Mana regeneration rate"
       ],
       "tags": [
-        "Energy Shield",
-        "Mana",
-        "Shield",
-        "liferegeneration"
+        "energy shield",
+        "liferegeneration",
+        "mana",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -27040,8 +26964,8 @@
         "Energy shield recharge start when minions reform"
       ],
       "tags": [
-        "Energy Shield",
-        "Shield"
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -27066,7 +26990,7 @@
         "+6% Damage taken goes to life over 4 seconds"
       ],
       "tags": [
-        "Minions"
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -27098,9 +27022,9 @@
         "+20% Maximum energy shield"
       ],
       "tags": [
-        "Armour",
-        "Energy Shield",
-        "Shield"
+        "armour",
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -27183,7 +27107,7 @@
         "+60% Life regeneration rate per minute   if used life flask in past 10 seconds"
       ],
       "tags": [
-        "Life",
+        "life",
         "liferegeneration"
       ],
       "flavour": "",
@@ -27209,9 +27133,9 @@
         "+30% Life regeneration rate per minute"
       ],
       "tags": [
-        "Life",
-        "Physical",
-        "liferegeneration"
+        "life",
+        "liferegeneration",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -27243,9 +27167,9 @@
         "+20% Minion movement speed"
       ],
       "tags": [
-        "Attack",
-        "Minions",
-        "Spell"
+        "attack",
+        "minion",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -27277,7 +27201,6 @@
         "+10% Critical strike chance"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -27466,7 +27389,7 @@
         "+20% Area skill knockback chance"
       ],
       "tags": [
-        "Spell"
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -27498,7 +27421,7 @@
         "+5% Damage taken goes to life over 4 seconds"
       ],
       "tags": [
-        "Life",
+        "life",
         "liferegeneration"
       ],
       "flavour": "",
@@ -27531,8 +27454,7 @@
         "-20% Critical strike chance"
       ],
       "tags": [
-        "Attack",
-        "Crit",
+        "attack",
         "crit"
       ],
       "flavour": "",
@@ -27565,7 +27487,7 @@
         "+30% Active block maximum distance"
       ],
       "tags": [
-        "Block",
+        "block",
         "heavystun"
       ],
       "flavour": "",
@@ -27657,7 +27579,7 @@
         "+15% Attack area of effect   while wielding quarterstaff"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -27681,7 +27603,7 @@
         "+25% Minion resummon speed"
       ],
       "tags": [
-        "Minions"
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -27727,7 +27649,7 @@
         "+75% Thorns damage   if blocked recently"
       ],
       "tags": [
-        "Block"
+        "block"
       ],
       "flavour": "",
       "rawStats": [
@@ -27751,7 +27673,7 @@
         "+50% Plant skill armour break amount   when wet"
       ],
       "tags": [
-        "Armour",
+        "armour",
         "armourbreak"
       ],
       "flavour": "",
@@ -27776,8 +27698,8 @@
         "+30% Crossbow attack   chance to not consume ammo if reloaded recently"
       ],
       "tags": [
-        "Attack",
-        "Bow"
+        "attack",
+        "bow"
       ],
       "flavour": "",
       "rawStats": [
@@ -27801,8 +27723,8 @@
         "+1000 Base body armour permyriad to gain as physical thorns damage"
       ],
       "tags": [
-        "Armour",
-        "Physical"
+        "armour",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -27827,9 +27749,9 @@
         "+25% Armour break amount"
       ],
       "tags": [
-        "Armour",
-        "Attack",
-        "armourbreak"
+        "armour",
+        "armourbreak",
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -27890,7 +27812,7 @@
         "+15% Spell area of effect"
       ],
       "tags": [
-        "Spell"
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -27945,7 +27867,7 @@
         "+10% Minions have   chance to inflict wither on hit"
       ],
       "tags": [
-        "Minions"
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -27976,7 +27898,7 @@
         "+25% Sword damage"
       ],
       "tags": [
-        "Sword"
+        "sword"
       ],
       "flavour": "",
       "rawStats": [
@@ -28067,7 +27989,7 @@
         "-10% Spell area damage"
       ],
       "tags": [
-        "Spell"
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -28099,7 +28021,7 @@
         "+10% Spear attack speed"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -28130,8 +28052,8 @@
         "+8% Gain physical thorns damage equal to x  of maximum life while shapeshifted"
       ],
       "tags": [
-        "Life",
-        "Physical"
+        "life",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -28156,7 +28078,7 @@
         "+35% Spell area damage"
       ],
       "tags": [
-        "Spell"
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -28187,9 +28109,9 @@
         "+1 Energy shield + per 8 helmet armour"
       ],
       "tags": [
-        "Armour",
-        "Energy Shield",
-        "Shield"
+        "armour",
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -28214,7 +28136,7 @@
         "-5% Movement speed penalty   while performing action"
       ],
       "tags": [
-        "Fire"
+        "fire"
       ],
       "flavour": "",
       "rawStats": [
@@ -28245,7 +28167,7 @@
         "+40% Bleeding magnitude   against pinned enemies"
       ],
       "tags": [
-        "Bleed"
+        "bleed"
       ],
       "flavour": "",
       "rawStats": [
@@ -28270,7 +28192,7 @@
         "+30% Hit damage pin multiplier"
       ],
       "tags": [
-        "Bleed"
+        "bleed"
       ],
       "flavour": "",
       "rawStats": [
@@ -28302,9 +28224,9 @@
         "+6% Totem skill attack speed"
       ],
       "tags": [
-        "Attack",
-        "Spell",
-        "Totems"
+        "attack",
+        "spell",
+        "totem"
       ],
       "flavour": "",
       "rawStats": [
@@ -28336,7 +28258,7 @@
         "+15% Base life cost"
       ],
       "tags": [
-        "Spell"
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -28368,7 +28290,7 @@
         "+15% Attacks chance to blind on hit"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -28400,9 +28322,9 @@
         "+60% Life regeneration rate per minute"
       ],
       "tags": [
-        "Life",
-        "Mana",
-        "liferegeneration"
+        "life",
+        "liferegeneration",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -28434,7 +28356,7 @@
         "-40% Self bleed duration"
       ],
       "tags": [
-        "Bleed"
+        "bleed"
       ],
       "flavour": "",
       "rawStats": [
@@ -28466,7 +28388,7 @@
         "+15% Accuracy rating"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -28498,8 +28420,8 @@
         "+1 Max frenzy charges"
       ],
       "tags": [
-        "Evasion",
-        "Frenzy"
+        "evasion",
+        "frenzy"
       ],
       "flavour": "",
       "rawStats": [
@@ -28531,7 +28453,6 @@
         "-20% Base life leech rate"
       ],
       "tags": [
-        "Leech",
         "leech"
       ],
       "flavour": "",
@@ -28594,8 +28515,8 @@
         "+20% Energy shield delay -  while shapeshifted"
       ],
       "tags": [
-        "Energy Shield",
-        "Shield"
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -28627,8 +28548,8 @@
         "+40% Chance to inflict incision on attack hit"
       ],
       "tags": [
-        "Attack",
-        "Bleed"
+        "attack",
+        "bleed"
       ],
       "flavour": "",
       "rawStats": [
@@ -28660,7 +28581,7 @@
         "+10% Faster burn"
       ],
       "tags": [
-        "Ignite"
+        "ignite"
       ],
       "flavour": "",
       "rawStats": [
@@ -28774,7 +28695,7 @@
         "-40% Ignite effect on self"
       ],
       "tags": [
-        "Ignite"
+        "ignite"
       ],
       "flavour": "",
       "rawStats": [
@@ -28806,7 +28727,7 @@
         "+20% Stun threshold   when on full life"
       ],
       "tags": [
-        "Energy Shield"
+        "energy shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -28838,7 +28759,7 @@
         "+40% Reservation efficiency   of minion skills"
       ],
       "tags": [
-        "Minions"
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -28870,8 +28791,7 @@
         "+10% Attack critical strike chance"
       ],
       "tags": [
-        "Attack",
-        "Crit",
+        "attack",
         "crit"
       ],
       "flavour": "",
@@ -28904,9 +28824,9 @@
         "+30% Evasion   if hit recently"
       ],
       "tags": [
-        "Energy Shield",
-        "Evasion",
-        "Shield"
+        "energy shield",
+        "evasion",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -28968,7 +28888,7 @@
         "+5% Attack speed"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -28999,7 +28919,7 @@
         "+30% Physical damage   while shapeshifted"
       ],
       "tags": [
-        "Physical"
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -29053,7 +28973,7 @@
         "-60% Ice crystal maximum life"
       ],
       "tags": [
-        "Life"
+        "life"
       ],
       "flavour": "",
       "rawStats": [
@@ -29078,7 +28998,7 @@
         "+20% Chill duration"
       ],
       "tags": [
-        "Chill"
+        "chill"
       ],
       "flavour": "",
       "rawStats": [
@@ -29109,7 +29029,7 @@
         "+50% Armour break   of armour on heavy stunning"
       ],
       "tags": [
-        "Armour",
+        "armour",
         "armourbreak",
         "heavystun"
       ],
@@ -29136,8 +29056,8 @@
         "+5% Base chance to daze"
       ],
       "tags": [
-        "Cold",
-        "Physical"
+        "cold",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -29169,7 +29089,7 @@
         "-10% Base all ailment duration on self"
       ],
       "tags": [
-        "Ailments"
+        "ailments"
       ],
       "flavour": "",
       "rawStats": [
@@ -29201,9 +29121,9 @@
         "+40% Energy shield delay -"
       ],
       "tags": [
-        "Block",
-        "Energy Shield",
-        "Shield"
+        "block",
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -29235,7 +29155,7 @@
         "+40% Block recovery"
       ],
       "tags": [
-        "Block"
+        "block"
       ],
       "flavour": "",
       "rawStats": [
@@ -29266,7 +29186,7 @@
         "+30% Attack damage   if youve shapeshifted to animal recently"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -29291,8 +29211,8 @@
         "+3% Movement speed   while you have energy shield"
       ],
       "tags": [
-        "Energy Shield",
-        "Shield"
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -29324,8 +29244,8 @@
         "-10% Base all ailment duration on self"
       ],
       "tags": [
-        "Ailments",
-        "Energy Shield"
+        "ailments",
+        "energy shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -29386,7 +29306,7 @@
         "+1 Maximum lightning infusion stacks"
       ],
       "tags": [
-        "Lightning"
+        "lightning"
       ],
       "flavour": "",
       "rawStats": [
@@ -29411,9 +29331,9 @@
         "-30% Shocked effect on self"
       ],
       "tags": [
-        "Armour",
-        "Lightning",
-        "Shock"
+        "armour",
+        "lightning",
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -29444,7 +29364,7 @@
         "+25% Area of effect   if enemy stunned with two handed melee weapon recently"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -29529,8 +29449,8 @@
         "-25% Enemies affected by your hazards recently have   evasion rating"
       ],
       "tags": [
-        "Armour",
-        "Evasion"
+        "armour",
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -29562,9 +29482,8 @@
         "+15 Base spell critical strike multiplier +"
       ],
       "tags": [
-        "Crit",
-        "Spell",
-        "crit"
+        "crit",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -29629,7 +29548,7 @@
         "+30% Hit damage   vs ignited enemies"
       ],
       "tags": [
-        "Ignite"
+        "ignite"
       ],
       "flavour": "",
       "rawStats": [
@@ -29653,7 +29572,7 @@
         "+30% Hit damage   vs chilled enemies"
       ],
       "tags": [
-        "Chill"
+        "chill"
       ],
       "flavour": "",
       "rawStats": [
@@ -29677,7 +29596,7 @@
         "+30% Damage vs shocked enemies"
       ],
       "tags": [
-        "Shock"
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -29702,8 +29621,8 @@
         "+20% Ailment threshold"
       ],
       "tags": [
-        "Ailments",
-        "Minions"
+        "ailments",
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -29735,10 +29654,9 @@
         "+5% Dagger attack speed"
       ],
       "tags": [
-        "Attack",
-        "Crit",
-        "Dagger",
-        "crit"
+        "attack",
+        "crit",
+        "dagger"
       ],
       "flavour": "",
       "rawStats": [
@@ -29770,7 +29688,7 @@
         "-5% Attack speed"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -29802,9 +29720,8 @@
         "+2% Recover   maximum mana on kill"
       ],
       "tags": [
-        "Leech",
-        "Mana",
-        "leech"
+        "leech",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -29836,7 +29753,6 @@
         "+35% Critical strike chance   vs immobilised enemies"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -29893,7 +29809,7 @@
         "+20% Projectile ailment chance"
       ],
       "tags": [
-        "Ailments"
+        "ailments"
       ],
       "flavour": "",
       "rawStats": [
@@ -29925,7 +29841,7 @@
         "Unaffected by chill during dodge roll"
       ],
       "tags": [
-        "Chill"
+        "chill"
       ],
       "flavour": "",
       "rawStats": [
@@ -29957,7 +29873,7 @@
         "+20% Ignite duration"
       ],
       "tags": [
-        "Ignite"
+        "ignite"
       ],
       "flavour": "",
       "rawStats": [
@@ -30021,8 +29937,8 @@
         "+15% Damaging ailment duration"
       ],
       "tags": [
-        "Ailments",
-        "Fire"
+        "ailments",
+        "fire"
       ],
       "flavour": "",
       "rawStats": [
@@ -30053,7 +29969,6 @@
         "+40% Arrow critical strike chance   max as distance travelled increases"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -30079,7 +29994,7 @@
         "+10 Base intelligence"
       ],
       "tags": [
-        "Cold"
+        "cold"
       ],
       "flavour": "",
       "rawStats": [
@@ -30110,8 +30025,8 @@
         "+20% Energy shield recovery rate"
       ],
       "tags": [
-        "Energy Shield",
-        "Shield"
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -30136,7 +30051,7 @@
         "+29% Chaos damage"
       ],
       "tags": [
-        "Chaos"
+        "chaos"
       ],
       "flavour": "",
       "rawStats": [
@@ -30168,7 +30083,7 @@
         "+20% Crossbow damage"
       ],
       "tags": [
-        "Bow"
+        "bow"
       ],
       "flavour": "",
       "rawStats": [
@@ -30199,10 +30114,10 @@
         "+12 Maximum energy shield +1 per x body armour evasion rating"
       ],
       "tags": [
-        "Armour",
-        "Energy Shield",
-        "Evasion",
-        "Shield"
+        "armour",
+        "energy shield",
+        "evasion",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -30227,8 +30142,8 @@
         "+15% Evasion rating"
       ],
       "tags": [
-        "Evasion",
-        "Spell"
+        "evasion",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -30260,7 +30175,7 @@
         "+10 Base dexterity"
       ],
       "tags": [
-        "Spell"
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -30313,7 +30228,7 @@
         "+50% Thorns damage has   chance to ignore armour"
       ],
       "tags": [
-        "Armour"
+        "armour"
       ],
       "flavour": "",
       "rawStats": [
@@ -30338,10 +30253,10 @@
         "+2% Attack damage   per 75 armour or evasion on shield"
       ],
       "tags": [
-        "Armour",
-        "Attack",
-        "Evasion",
-        "Shield"
+        "armour",
+        "attack",
+        "evasion",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -30395,9 +30310,9 @@
         "+25% Maximum energy shield"
       ],
       "tags": [
-        "Energy Shield",
-        "Physical",
-        "Shield"
+        "energy shield",
+        "physical",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -30429,7 +30344,7 @@
         "+20% Global defences"
       ],
       "tags": [
-        "Chaos"
+        "chaos"
       ],
       "flavour": "",
       "rawStats": [
@@ -30461,8 +30376,8 @@
         "+13% Base chaos damage resistance"
       ],
       "tags": [
-        "Chaos",
-        "Spell"
+        "chaos",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -30494,7 +30409,7 @@
         "+30% Totem duration"
       ],
       "tags": [
-        "Totems"
+        "totem"
       ],
       "flavour": "",
       "rawStats": [
@@ -30590,7 +30505,6 @@
         "+8% Skill speed   while shapeshifted"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -30674,10 +30588,10 @@
         "+3% Minion armour break physical damage   dealt as armour break"
       ],
       "tags": [
-        "Armour",
-        "Minions",
-        "Physical",
-        "armourbreak"
+        "armour",
+        "armourbreak",
+        "minion",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -30702,8 +30616,8 @@
         "+30% Hit damage stun multiplier"
       ],
       "tags": [
-        "Ailments",
-        "Armour",
+        "ailments",
+        "armour",
         "armourbreak"
       ],
       "flavour": "",
@@ -30758,8 +30672,8 @@
         "+10% Your mace strike melee splash chance"
       ],
       "tags": [
-        "Shock",
-        "Slam"
+        "shock",
+        "slam"
       ],
       "flavour": "",
       "rawStats": [
@@ -30865,7 +30779,7 @@
         "-20% Accuracy rating   while moving"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -30918,7 +30832,7 @@
         "+50% Shock enemies in 150cm radius on shock chance"
       ],
       "tags": [
-        "Shock"
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -30973,7 +30887,7 @@
         "-20% Base poison effect"
       ],
       "tags": [
-        "Poison"
+        "poison"
       ],
       "flavour": "",
       "rawStats": [
@@ -31005,7 +30919,7 @@
         "+20% Physical damage"
       ],
       "tags": [
-        "Physical"
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -31036,7 +30950,7 @@
         "+50% Knockback chance   against bleeding enemies with hits"
       ],
       "tags": [
-        "Bleed"
+        "bleed"
       ],
       "flavour": "",
       "rawStats": [
@@ -31061,7 +30975,7 @@
         "+30% Melee damage   if youve dealt projectile attack hit recently"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -31092,7 +31006,7 @@
         "+25% Sword damage"
       ],
       "tags": [
-        "Sword"
+        "sword"
       ],
       "flavour": "",
       "rawStats": [
@@ -31147,8 +31061,8 @@
         "+60% Life regeneration rate per minute   while affected by damaging ailment"
       ],
       "tags": [
-        "Ailments",
-        "Life",
+        "ailments",
+        "life",
         "liferegeneration"
       ],
       "flavour": "",
@@ -31235,7 +31149,7 @@
         "Deflected hits cannot directly inflict maim on self"
       ],
       "tags": [
-        "Bleed",
+        "bleed",
         "maim"
       ],
       "flavour": "",
@@ -31350,8 +31264,8 @@
         "+4% Base movement velocity"
       ],
       "tags": [
-        "Mana",
-        "liferegeneration"
+        "liferegeneration",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -31412,7 +31326,7 @@
         "+16% Attack speed   during flask effect"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -31466,7 +31380,7 @@
         "+15% Recoup   elemental damage as energy shield"
       ],
       "tags": [
-        "Energy Shield"
+        "energy shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -31491,8 +31405,8 @@
         "+15% Base reduce enemy lightning resistance"
       ],
       "tags": [
-        "Cold",
-        "Lightning"
+        "cold",
+        "lightning"
       ],
       "flavour": "",
       "rawStats": [
@@ -31524,8 +31438,8 @@
         "+8% Base reduce enemy lightning resistance"
       ],
       "tags": [
-        "Cold",
-        "Lightning"
+        "cold",
+        "lightning"
       ],
       "flavour": "",
       "rawStats": [
@@ -31556,7 +31470,7 @@
         "+20% Damage   per enemy elemental ailment"
       ],
       "tags": [
-        "Ailments"
+        "ailments"
       ],
       "flavour": "",
       "rawStats": [
@@ -31581,7 +31495,6 @@
         "+15% Critical strike chance"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -31614,8 +31527,8 @@
         "-40% Shocked effect on self"
       ],
       "tags": [
-        "Lightning",
-        "Shock"
+        "lightning",
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -31677,7 +31590,7 @@
         "+2% Gain maximum endurance charges on endurance charge gained   chance"
       ],
       "tags": [
-        "Endurance"
+        "endurance"
       ],
       "flavour": "",
       "rawStats": [
@@ -31760,8 +31673,8 @@
         "+2 Stun threshold + from lowest of base helmet evasion rating and armour"
       ],
       "tags": [
-        "Armour",
-        "Evasion"
+        "armour",
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -31827,8 +31740,7 @@
         "+100% Attack additional critical strike chance permyriad"
       ],
       "tags": [
-        "Attack",
-        "Crit",
+        "attack",
         "crit"
       ],
       "flavour": "",
@@ -31913,7 +31825,7 @@
         "+80% Body armour"
       ],
       "tags": [
-        "Armour"
+        "armour"
       ],
       "flavour": "",
       "rawStats": [
@@ -31938,8 +31850,8 @@
         "+30 Base maximum mana"
       ],
       "tags": [
-        "Mana",
-        "liferegeneration"
+        "liferegeneration",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -31971,10 +31883,10 @@
         "+25% Physical damage"
       ],
       "tags": [
-        "Ailments",
-        "Armour",
-        "Physical",
-        "armourbreak"
+        "ailments",
+        "armour",
+        "armourbreak",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -32005,8 +31917,8 @@
         "+2 Evasion rating + per 1 helmet energy shield"
       ],
       "tags": [
-        "Energy Shield",
-        "Evasion"
+        "energy shield",
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -32030,7 +31942,7 @@
         "+30% Life regeneration rate   while using life flask"
       ],
       "tags": [
-        "Life",
+        "life",
         "liferegeneration"
       ],
       "flavour": "",
@@ -32056,9 +31968,8 @@
         "+8% Cast speed   if have crit recently"
       ],
       "tags": [
-        "Crit",
-        "Spell",
-        "crit"
+        "crit",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -32089,7 +32000,7 @@
         "+4% Gain max rage on rage gain from hit   chance"
       ],
       "tags": [
-        "Rage"
+        "rage"
       ],
       "flavour": "",
       "rawStats": [
@@ -32114,10 +32025,9 @@
         "Unaffected by chill while mana leeching"
       ],
       "tags": [
-        "Chill",
-        "Leech",
-        "Mana",
-        "leech"
+        "chill",
+        "leech",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -32149,8 +32059,7 @@
         "+25 Critical strike multiplier + vs stunned enemies"
       ],
       "tags": [
-        "Attack",
-        "Crit",
+        "attack",
         "crit"
       ],
       "flavour": "",
@@ -32183,8 +32092,8 @@
         "+3% Totems spells cast speed   per active totem"
       ],
       "tags": [
-        "Spell",
-        "Totems"
+        "spell",
+        "totem"
       ],
       "flavour": "",
       "rawStats": [
@@ -32238,7 +32147,7 @@
         "+10 Base dexterity"
       ],
       "tags": [
-        "Lightning"
+        "lightning"
       ],
       "flavour": "",
       "rawStats": [
@@ -32292,7 +32201,7 @@
         "+12% Attack area of effect"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -32324,7 +32233,7 @@
         "+1% Movement speed   for 4 seconds on block"
       ],
       "tags": [
-        "Block"
+        "block"
       ],
       "flavour": "",
       "rawStats": [
@@ -32378,7 +32287,7 @@
         "+20% Physical damage"
       ],
       "tags": [
-        "Physical"
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -32410,7 +32319,7 @@
         "+12% Parry attack speed   if youve parried recently"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -32502,9 +32411,8 @@
         "+20% Attack critical strike chance"
       ],
       "tags": [
-        "Ailments",
-        "Attack",
-        "Crit",
+        "ailments",
+        "attack",
         "crit"
       ],
       "flavour": "",
@@ -32537,7 +32445,7 @@
         "+2% Recover maximum life on enemy killed chance"
       ],
       "tags": [
-        "Life"
+        "life"
       ],
       "flavour": "",
       "rawStats": [
@@ -32568,7 +32476,7 @@
         "+20% Physical damage taken recouped as life"
       ],
       "tags": [
-        "Physical"
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -32615,11 +32523,11 @@
         "+15% Armour   applies to fire cold lightning damage"
       ],
       "tags": [
-        "Armour",
-        "Cold",
-        "Fire",
-        "Lightning",
-        "Physical"
+        "armour",
+        "cold",
+        "fire",
+        "lightning",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -32651,9 +32559,8 @@
         "+20% Physical damage"
       ],
       "tags": [
-        "Crit",
-        "Physical",
-        "crit"
+        "crit",
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -32737,7 +32644,7 @@
         "+6% Attack speed   if have been hit recently"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -32791,7 +32698,7 @@
         "-40% Self poison duration"
       ],
       "tags": [
-        "Poison"
+        "poison"
       ],
       "flavour": "",
       "rawStats": [
@@ -32875,7 +32782,7 @@
         "+10% Skill speed   if consumed frenzy charge recently"
       ],
       "tags": [
-        "Frenzy"
+        "frenzy"
       ],
       "flavour": "",
       "rawStats": [
@@ -32989,9 +32896,9 @@
         "+15% Broken armour and sundered armour debuff effect"
       ],
       "tags": [
-        "Armour",
-        "Fire",
-        "armourbreak"
+        "armour",
+        "armourbreak",
+        "fire"
       ],
       "flavour": "",
       "rawStats": [
@@ -33023,8 +32930,7 @@
         "+20% Critical strike chance   vs marked enemies"
       ],
       "tags": [
-        "Ailments",
-        "Crit",
+        "ailments",
         "crit"
       ],
       "flavour": "",
@@ -33057,9 +32963,8 @@
         "+1 Max power charges"
       ],
       "tags": [
-        "Crit",
-        "Power",
-        "crit"
+        "crit",
+        "power"
       ],
       "flavour": "",
       "rawStats": [
@@ -33091,8 +32996,7 @@
         "+30% Base self critical strike multiplier -"
       ],
       "tags": [
-        "Ailments",
-        "Crit",
+        "ailments",
         "crit"
       ],
       "flavour": "",
@@ -33177,7 +33081,7 @@
         "+40% Evasion rating   while moving"
       ],
       "tags": [
-        "Evasion"
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -33209,7 +33113,7 @@
         "+3% Evasion   per 10 intelligence"
       ],
       "tags": [
-        "Evasion"
+        "evasion"
       ],
       "flavour": "",
       "rawStats": [
@@ -33293,7 +33197,7 @@
         "+40% Life regeneration rate   while stationary"
       ],
       "tags": [
-        "Life",
+        "life",
         "liferegeneration"
       ],
       "flavour": "",
@@ -33326,7 +33230,7 @@
         "+20% Charms   chance to not consume charges"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -33387,7 +33291,7 @@
         "+25% Chance to gain 1 more endurance charge"
       ],
       "tags": [
-        "Endurance"
+        "endurance"
       ],
       "flavour": "",
       "rawStats": [
@@ -33411,7 +33315,7 @@
         "+25% Chance to gain 1 more power charge"
       ],
       "tags": [
-        "Power"
+        "power"
       ],
       "flavour": "",
       "rawStats": [
@@ -33435,7 +33339,6 @@
         "Life leech is instant for empowered attacks"
       ],
       "tags": [
-        "Leech",
         "leech"
       ],
       "flavour": "",
@@ -33460,7 +33363,6 @@
         "Life leeched from hits also leeches same amount to companions"
       ],
       "tags": [
-        "Leech",
         "leech"
       ],
       "flavour": "",
@@ -33485,7 +33387,6 @@
         "+600% Base thorns critical strike chance"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -33510,7 +33411,7 @@
         "+2% Incision you inflict applies   increased physical damage taken"
       ],
       "tags": [
-        "Physical"
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -33534,7 +33435,7 @@
         "+20% Attack speed   while surrounded"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -33558,7 +33459,7 @@
         "+3% attack damage per glory consumed for 6 seconds up to 100"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -33583,7 +33484,6 @@
         "-20% Critical strike chance"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -33616,7 +33516,7 @@
         "+50% Shock chance   vs electrocuted enemies"
       ],
       "tags": [
-        "Shock"
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -33732,7 +33632,7 @@
         "+20% Life regeneration rate   while moving"
       ],
       "tags": [
-        "Life",
+        "life",
         "liferegeneration"
       ],
       "flavour": "",
@@ -33795,10 +33695,10 @@
         "Immune to poison if helmet grants higher evasion than armour"
       ],
       "tags": [
-        "Armour",
-        "Bleed",
-        "Evasion",
-        "Poison"
+        "armour",
+        "bleed",
+        "evasion",
+        "poison"
       ],
       "flavour": "",
       "rawStats": [
@@ -33830,7 +33730,6 @@
         "+25% Thorns proc chance   against non melee hits if you have at least 200 tribute"
       ],
       "tags": [
-        "Leech",
         "leech"
       ],
       "flavour": "",
@@ -33885,7 +33784,7 @@
         "+25% Hit damage   vs ignited enemies"
       ],
       "tags": [
-        "Ignite"
+        "ignite"
       ],
       "flavour": "",
       "rawStats": [
@@ -33939,8 +33838,8 @@
         "+50% Shield defences"
       ],
       "tags": [
-        "Block",
-        "Shield"
+        "block",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -33971,7 +33870,7 @@
         "+40% Poison duration   against slowed enemies"
       ],
       "tags": [
-        "Poison",
+        "poison",
         "slow"
       ],
       "flavour": "",
@@ -33996,7 +33895,7 @@
         "Immune to poison"
       ],
       "tags": [
-        "Poison"
+        "poison"
       ],
       "flavour": "",
       "rawStats": [
@@ -34149,7 +34048,6 @@
         "+10 Base dexterity"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -34182,7 +34080,7 @@
         "+20% Companion maximum life"
       ],
       "tags": [
-        "Life"
+        "life"
       ],
       "flavour": "",
       "rawStats": [
@@ -34213,7 +34111,7 @@
         "+50% Skill mana costs converted to life costs   during life flask"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -34238,7 +34136,7 @@
         "-10% Spell skill projectile speed"
       ],
       "tags": [
-        "Spell"
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -34270,7 +34168,7 @@
         "+15% Spell skill projectile speed"
       ],
       "tags": [
-        "Spell"
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -34301,7 +34199,7 @@
         "+20% Physical damage prevented recouped as life   if you have at least 100 tribute"
       ],
       "tags": [
-        "Physical"
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -34391,10 +34289,10 @@
         "+40% Armour   applies to fire cold lightning damage if you have at least 100 tribute"
       ],
       "tags": [
-        "Armour",
-        "Cold",
-        "Fire",
-        "Lightning"
+        "armour",
+        "cold",
+        "fire",
+        "lightning"
       ],
       "flavour": "",
       "rawStats": [
@@ -34419,7 +34317,7 @@
         "+3% Maximum life"
       ],
       "tags": [
-        "Life"
+        "life"
       ],
       "flavour": "",
       "rawStats": [
@@ -34451,7 +34349,7 @@
         "+10% Base cold damage resistance"
       ],
       "tags": [
-        "Cold"
+        "cold"
       ],
       "flavour": "",
       "rawStats": [
@@ -34483,8 +34381,8 @@
         "+25% Chill effect"
       ],
       "tags": [
-        "Chill",
-        "Shock"
+        "chill",
+        "shock"
       ],
       "flavour": "",
       "rawStats": [
@@ -34516,7 +34414,7 @@
         "+30% Ailment threshold"
       ],
       "tags": [
-        "Ailments"
+        "ailments"
       ],
       "flavour": "",
       "rawStats": [
@@ -34569,7 +34467,7 @@
         "+1 Maximum endurance charges + if you have at least 100 tribute"
       ],
       "tags": [
-        "Endurance"
+        "endurance"
       ],
       "flavour": "",
       "rawStats": [
@@ -34593,7 +34491,7 @@
         "Ignore armour movement penalties if you have at least 100 tribute"
       ],
       "tags": [
-        "Armour"
+        "armour"
       ],
       "flavour": "",
       "rawStats": [
@@ -34617,7 +34515,7 @@
         "+1 Maximum power charges + if you have at least 100 tribute"
       ],
       "tags": [
-        "Power"
+        "power"
       ],
       "flavour": "",
       "rawStats": [
@@ -34702,7 +34600,7 @@
         "+30% Accuracy rating   while moving"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -34733,7 +34631,7 @@
         "+1 Maximum frenzy charges + if you have at least 100 tribute"
       ],
       "tags": [
-        "Frenzy"
+        "frenzy"
       ],
       "flavour": "",
       "rawStats": [
@@ -34758,7 +34656,7 @@
         "-20% Rage decay speed"
       ],
       "tags": [
-        "Rage"
+        "rage"
       ],
       "flavour": "",
       "rawStats": [
@@ -34908,8 +34806,8 @@
         "+30% Life regeneration rate   while stationary"
       ],
       "tags": [
-        "Armour",
-        "Life",
+        "armour",
+        "life",
         "liferegeneration"
       ],
       "flavour": "",
@@ -34942,7 +34840,7 @@
         "+2% Maximum fire resistance   if at least 5 red supports socketed"
       ],
       "tags": [
-        "Fire"
+        "fire"
       ],
       "flavour": "",
       "rawStats": [
@@ -34973,7 +34871,7 @@
         "+18% Non skill base physical damage   to gain as lightning"
       ],
       "tags": [
-        "Physical"
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -34997,7 +34895,7 @@
         "+20% Minion resummon speed   if you have at least 100 tribute"
       ],
       "tags": [
-        "Minions"
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -35022,7 +34920,6 @@
         "+20% Life leech   is instant if you have at least 200 tribute"
       ],
       "tags": [
-        "Leech",
         "leech"
       ],
       "flavour": "",
@@ -35055,7 +34952,6 @@
         "Enemies near marked enemy are blinded"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -35088,7 +34984,7 @@
         "+30% Companion chaos resistance"
       ],
       "tags": [
-        "Chaos"
+        "chaos"
       ],
       "flavour": "",
       "rawStats": [
@@ -35119,7 +35015,7 @@
         "+3 Gain X volatility on persistent minion death"
       ],
       "tags": [
-        "Minions"
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -35144,7 +35040,7 @@
         "-15% Base slow potency"
       ],
       "tags": [
-        "Block",
+        "block",
         "slow"
       ],
       "flavour": "",
@@ -35177,7 +35073,7 @@
         "-8% Base slow potency"
       ],
       "tags": [
-        "Attack",
+        "attack",
         "slow"
       ],
       "flavour": "",
@@ -35314,8 +35210,8 @@
         "-50% Base bleeding magnitude   on self"
       ],
       "tags": [
-        "Armour",
-        "Bleed"
+        "armour",
+        "bleed"
       ],
       "flavour": "",
       "rawStats": [
@@ -35368,7 +35264,6 @@
         "+1000 Base life leech from all thorns damage permyriad"
       ],
       "tags": [
-        "Leech",
         "leech"
       ],
       "flavour": "",
@@ -35394,8 +35289,8 @@
         "+1% Armour   per rage"
       ],
       "tags": [
-        "Armour",
-        "Rage"
+        "armour",
+        "rage"
       ],
       "flavour": "",
       "rawStats": [
@@ -35427,7 +35322,7 @@
         "+15% One handed melee accuracy rating"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -35459,7 +35354,7 @@
         "+10 Base dexterity"
       ],
       "tags": [
-        "Attack"
+        "attack"
       ],
       "flavour": "",
       "rawStats": [
@@ -35491,7 +35386,7 @@
         "+10 Life gained on block"
       ],
       "tags": [
-        "Block"
+        "block"
       ],
       "flavour": "",
       "rawStats": [
@@ -35545,9 +35440,9 @@
         "+180% Minion life regeneration rate per minute"
       ],
       "tags": [
-        "Life",
-        "Minions",
-        "liferegeneration"
+        "life",
+        "liferegeneration",
+        "minion"
       ],
       "flavour": "",
       "rawStats": [
@@ -35578,7 +35473,7 @@
         "+33% Hit damage   vs enemies affected by ailments"
       ],
       "tags": [
-        "Ailments"
+        "ailments"
       ],
       "flavour": "",
       "rawStats": [
@@ -35625,7 +35520,7 @@
         "-3% Enemies chaos resistance   while cursed"
       ],
       "tags": [
-        "Chaos"
+        "chaos"
       ],
       "flavour": "",
       "rawStats": [
@@ -35709,7 +35604,7 @@
         "+20% Base fire damage resistance"
       ],
       "tags": [
-        "Fire"
+        "fire"
       ],
       "flavour": "",
       "rawStats": [
@@ -35740,7 +35635,6 @@
         "+20% Leech   is instant"
       ],
       "tags": [
-        "Leech",
         "leech"
       ],
       "flavour": "",
@@ -35766,9 +35660,8 @@
         "-10% Maximum mana"
       ],
       "tags": [
-        "Crit",
-        "Mana",
-        "crit"
+        "crit",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -35874,8 +35767,8 @@
         "-30% Curse effect on self"
       ],
       "tags": [
-        "Energy Shield",
-        "Shield"
+        "energy shield",
+        "shield"
       ],
       "flavour": "",
       "rawStats": [
@@ -35907,7 +35800,7 @@
         "Remove curse on mana flask use"
       ],
       "tags": [
-        "Mana"
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -35939,8 +35832,8 @@
         "+300 Allies in presence regenerate X rage per minute if you gained rage recently"
       ],
       "tags": [
-        "Rage",
-        "liferegeneration"
+        "liferegeneration",
+        "rage"
       ],
       "flavour": "",
       "rawStats": [
@@ -36054,7 +35947,7 @@
         "+30% Hit damage   vs enemies affected by ailments"
       ],
       "tags": [
-        "Ailments"
+        "ailments"
       ],
       "flavour": "",
       "rawStats": [
@@ -36148,8 +36041,8 @@
         "+6 Generate x charges for mana flasks per minute"
       ],
       "tags": [
-        "Life",
-        "Mana"
+        "life",
+        "mana"
       ],
       "flavour": "",
       "rawStats": [
@@ -36202,8 +36095,8 @@
         "+30% Crossbow attack   chance to not consume ammo if reloaded recently"
       ],
       "tags": [
-        "Attack",
-        "Bow"
+        "attack",
+        "bow"
       ],
       "flavour": "",
       "rawStats": [
@@ -36228,9 +36121,9 @@
         "+20% Critical hit damage bonus   if consumed power charge recently"
       ],
       "tags": [
-        "Mana",
-        "Power",
-        "crit"
+        "crit",
+        "mana",
+        "power"
       ],
       "flavour": "",
       "rawStats": [
@@ -36262,9 +36155,9 @@
         "+8% Attack and cast speed   while affected by a mana flask"
       ],
       "tags": [
-        "Attack",
-        "Mana",
-        "Spell"
+        "attack",
+        "mana",
+        "spell"
       ],
       "flavour": "",
       "rawStats": [
@@ -36296,9 +36189,9 @@
         "Knockback on crit with quarterstaff"
       ],
       "tags": [
-        "Attack",
-        "Staff",
-        "crit"
+        "attack",
+        "crit",
+        "staff"
       ],
       "flavour": "",
       "rawStats": [
@@ -36352,7 +36245,7 @@
         "-25% Global defences"
       ],
       "tags": [
-        "Block"
+        "block"
       ],
       "flavour": "",
       "rawStats": [
@@ -36517,7 +36410,6 @@
         "+30% Critical strike chance   if youve shapeshifted to animal recently"
       ],
       "tags": [
-        "Crit",
         "crit"
       ],
       "flavour": "",
@@ -36616,7 +36508,7 @@
         "+40% Elemental ailment chance   if youve shapeshifted to animal recently"
       ],
       "tags": [
-        "Ailments"
+        "ailments"
       ],
       "flavour": "",
       "rawStats": [

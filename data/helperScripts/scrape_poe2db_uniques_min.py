@@ -44,6 +44,12 @@ from urllib.parse import urljoin
 import requests
 from bs4 import BeautifulSoup  # pip install beautifulsoup4
 
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts.shared.tag_utils import process_tags
+
 POE2DB_HOST = "https://poe2db.tw"
 LISTING_PATH = "Unique_item"
 
@@ -88,51 +94,11 @@ def strip_square_brackets_chars(s: str) -> str:
     """Remove literal '[' and ']' characters (defensive cleanup)."""
     return (s or "").replace("[", "").replace("]", "")
 
-TAG_VARIANTS = {
-    "minions": "minion",
-    "charges": "charge",
-    "bleeding": "bleed",
-    "bled": "bleed",
-    "shocked": "shock",
-    "shocking": "shock",
-    "ignited": "ignite",
-    "igniting": "ignite",
-    "poisoned": "poison",
-    "poisoning": "poison",
-    "recouped": "recoup",
-    "recouping": "recoup",
-}
-
-TAG_STOPLIST = {
-    "helmet", "body armour", "body armor", "gloves", "boots", "belt",
-    "ring", "amulet",
-    "wand", "bow", "staff", "mace", "sword", "axe", "dagger", "spear", "crossbow", "quarterstaff",
-    "flail", "focus", "shield", "buckler", "quiver", "sceptre", "claw",
-    "javelin", "trap", "flask",
-}
-
 def normalize_tag(tag: Any) -> Optional[str]:
     raw = norm_ws(str(tag or "").lower().replace("_", " ").replace("-", " "))
     raw = strip_square_brackets_chars(raw)
-    raw = norm_ws(raw)
-    if not raw:
-        return None
-
-    if re.match(r"^grants?:", raw) or re.match(r"^grants?\s", raw) or "grants skill" in raw:
-        return None
-
-    is_family = raw.startswith("family:")
-    normalized = TAG_VARIANTS.get(raw, raw)
-    if not is_family and normalized in TAG_STOPLIST:
-        return None
-
-    if is_family:
-        suffix = norm_ws(normalized.split(":", 1)[1] if ":" in normalized else "")
-        if not suffix:
-            return None
-        return f"family:{suffix}"
-
-    return normalized
+    result = process_tags([raw], entity='uniques', sort_tags=False)
+    return result.tags[0] if result.tags else None
 
 def safe_int(x: Any) -> Optional[int]:
     try:

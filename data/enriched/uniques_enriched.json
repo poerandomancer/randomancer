@@ -15,7 +15,7 @@
           "block",
           "hinder",
           "maim",
-          "movement_speed",
+          "movement speed",
           "slow"
         ]
       },
@@ -46,7 +46,7 @@
           "block"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -65,7 +65,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "physical_mitigation"
+          "physical mitigation"
         ]
       },
       "lines": [
@@ -82,7 +82,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "physical_mitigation"
+          "physical mitigation"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -134,7 +134,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "all_elemental_resistance"
+          "all elemental resistance"
         ]
       },
       "lines": [
@@ -153,7 +153,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "all_elemental_resistance"
+          "all elemental resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -176,8 +176,7 @@
         ],
         "raw": [
           "crit",
-          "critical",
-          "lightning_resistance"
+          "lightning resistance"
         ]
       },
       "lines": [
@@ -196,11 +195,10 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [
-          "lightning_resistance"
+          "lightning resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -422,10 +420,9 @@
           "Critical Hit"
         ],
         "raw": [
-          "attack_speed",
-          "cast_speed",
-          "crit",
-          "critical"
+          "attack speed",
+          "cast speed",
+          "crit"
         ]
       },
       "lines": [
@@ -442,13 +439,12 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [],
         "tags_utility": [
-          "attack_speed",
-          "cast_speed"
+          "attack speed",
+          "cast speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -551,7 +547,7 @@
           "Life Regeneration"
         ],
         "raw": [
-          "fire_resistance",
+          "fire resistance",
           "liferegen",
           "liferegeneration",
           "regen"
@@ -571,7 +567,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "fire_resistance",
+          "fire resistance",
           "liferegen",
           "liferegeneration",
           "regen"
@@ -644,7 +640,7 @@
         "raw": [
           "chill",
           "cold",
-          "cold_resistance",
+          "cold resistance",
           "freeze"
         ]
       },
@@ -669,7 +665,7 @@
           "freeze"
         ],
         "tags_defense": [
-          "cold_resistance"
+          "cold resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -723,9 +719,8 @@
           "Energy Shield"
         ],
         "raw": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "crit",
-          "critical",
           "energy shield"
         ]
       },
@@ -741,11 +736,10 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "energy shield"
         ],
         "tags_utility": [],
@@ -768,7 +762,7 @@
           "Life Regeneration"
         ],
         "raw": [
-          "chaos_resistance",
+          "chaos resistance",
           "liferegen",
           "liferegeneration",
           "regen"
@@ -787,7 +781,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "chaos_resistance",
+          "chaos resistance",
           "liferegen",
           "liferegeneration",
           "regen"
@@ -813,7 +807,7 @@
         ],
         "raw": [
           "block",
-          "cast_speed"
+          "cast speed"
         ]
       },
       "lines": [
@@ -832,7 +826,7 @@
           "block"
         ],
         "tags_utility": [
-          "cast_speed"
+          "cast speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -926,7 +920,6 @@
         ],
         "raw": [
           "crit",
-          "critical",
           "heavystun",
           "liferegen",
           "liferegeneration",
@@ -953,7 +946,6 @@
       "meta": {
         "tags_offense": [
           "crit",
-          "critical",
           "heavystun",
           "physical",
           "stun"
@@ -981,7 +973,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "fire_resistance"
+          "fire resistance"
         ]
       },
       "lines": [
@@ -1003,7 +995,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "fire_resistance"
+          "fire resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -1027,7 +1019,7 @@
           "Shock"
         ],
         "raw": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "chill",
           "cold",
           "electrocute",
@@ -1067,7 +1059,7 @@
           "shock"
         ],
         "tags_defense": [
-          "all_elemental_resistance"
+          "all elemental resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -1165,7 +1157,7 @@
         "raw": [
           "liferegen",
           "liferegeneration",
-          "lightning_resistance",
+          "lightning resistance",
           "regen"
         ]
       },
@@ -1188,7 +1180,7 @@
         "tags_defense": [
           "liferegen",
           "liferegeneration",
-          "lightning_resistance",
+          "lightning resistance",
           "regen"
         ],
         "tags_utility": [],
@@ -1293,7 +1285,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "chaos_resistance"
+          "chaos resistance"
         ]
       },
       "lines": [
@@ -1312,7 +1304,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "chaos_resistance"
+          "chaos resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -1430,7 +1422,7 @@
         ],
         "raw": [
           "armour",
-          "fire_resistance"
+          "fire resistance"
         ]
       },
       "lines": [
@@ -1452,7 +1444,7 @@
         "tags_offense": [],
         "tags_defense": [
           "armour",
-          "fire_resistance"
+          "fire resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -1548,7 +1540,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "cold_resistance"
+          "cold resistance"
         ]
       },
       "lines": [
@@ -1565,7 +1557,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "cold_resistance"
+          "cold resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -1585,7 +1577,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "all_elemental_resistance"
+          "all elemental resistance"
         ]
       },
       "lines": [
@@ -1601,7 +1593,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "all_elemental_resistance"
+          "all elemental resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -1741,8 +1733,7 @@
           "Minions"
         ],
         "raw": [
-          "minion",
-          "minions"
+          "minion"
         ]
       },
       "lines": [
@@ -1762,14 +1753,12 @@
       ],
       "meta": {
         "tags_offense": [
-          "minion",
-          "minions"
+          "minion"
         ],
         "tags_defense": [],
         "tags_utility": [],
         "tags_anti": [
-          "minion",
-          "minions"
+          "minion"
         ],
         "attributes": {
           "str": 0,
@@ -1883,7 +1872,7 @@
           "Heavy Stun"
         ],
         "raw": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "armour",
           "heavystun",
           "physical",
@@ -1911,7 +1900,7 @@
           "stun"
         ],
         "tags_defense": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "armour"
         ],
         "tags_utility": [],
@@ -1939,7 +1928,7 @@
           "liferegen",
           "liferegeneration",
           "physical",
-          "physical_mitigation",
+          "physical mitigation",
           "regen",
           "stun"
         ]
@@ -1965,7 +1954,7 @@
         "tags_defense": [
           "liferegen",
           "liferegeneration",
-          "physical_mitigation",
+          "physical mitigation",
           "regen"
         ],
         "tags_utility": [],
@@ -1992,7 +1981,6 @@
         "raw": [
           "armour",
           "crit",
-          "critical",
           "heavystun",
           "physical",
           "stun"
@@ -2015,7 +2003,6 @@
       "meta": {
         "tags_offense": [
           "crit",
-          "critical",
           "heavystun",
           "physical",
           "stun"
@@ -2093,10 +2080,10 @@
         ],
         "raw": [
           "armour",
-          "fire_resistance",
+          "fire resistance",
           "hinder",
           "maim",
-          "movement_speed",
+          "movement speed",
           "slow"
         ]
       },
@@ -2117,10 +2104,10 @@
         ],
         "tags_defense": [
           "armour",
-          "fire_resistance"
+          "fire resistance"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -2145,10 +2132,10 @@
         "raw": [
           "armour",
           "bleed",
-          "fire_resistance",
+          "fire resistance",
           "liferegen",
           "liferegeneration",
-          "lightning_resistance",
+          "lightning resistance",
           "physical",
           "regen"
         ]
@@ -2174,10 +2161,10 @@
         ],
         "tags_defense": [
           "armour",
-          "fire_resistance",
+          "fire resistance",
           "liferegen",
           "liferegeneration",
-          "lightning_resistance",
+          "lightning resistance",
           "regen"
         ],
         "tags_utility": [],
@@ -2241,7 +2228,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "all_elemental_resistance"
+          "all elemental resistance"
         ]
       },
       "lines": [
@@ -2256,7 +2243,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "all_elemental_resistance"
+          "all elemental resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -2373,7 +2360,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "fire_resistance"
+          "fire resistance"
         ]
       },
       "lines": [
@@ -2391,13 +2378,13 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "fire_resistance"
+          "fire resistance"
         ],
         "tags_utility": [],
         "tags_anti": [
           "fire",
           "ignite",
-          "physical_mitigation"
+          "physical mitigation"
         ],
         "attributes": {
           "str": 2,
@@ -2418,7 +2405,7 @@
           "Evasion"
         ],
         "raw": [
-          "cold_resistance",
+          "cold resistance",
           "deflect",
           "deflection",
           "evasion"
@@ -2440,7 +2427,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "cold_resistance",
+          "cold resistance",
           "deflect",
           "deflection",
           "evasion"
@@ -2514,7 +2501,7 @@
           "Life Regeneration"
         ],
         "raw": [
-          "cold_resistance",
+          "cold resistance",
           "evasion",
           "liferegen",
           "liferegeneration",
@@ -2535,7 +2522,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "cold_resistance",
+          "cold resistance",
           "evasion",
           "liferegen",
           "liferegeneration",
@@ -2562,7 +2549,7 @@
         ],
         "raw": [
           "evasion",
-          "movement_speed"
+          "movement speed"
         ]
       },
       "lines": [
@@ -2579,7 +2566,7 @@
           "evasion"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -2657,7 +2644,7 @@
           "Life Regeneration"
         ],
         "raw": [
-          "chaos_resistance",
+          "chaos resistance",
           "deflect",
           "deflection",
           "evasion",
@@ -2683,7 +2670,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "chaos_resistance",
+          "chaos resistance",
           "deflect",
           "deflection",
           "evasion",
@@ -2714,10 +2701,10 @@
           "Evasion"
         ],
         "raw": [
-          "cold_resistance",
+          "cold resistance",
           "evasion",
-          "lightning_resistance",
-          "movement_speed"
+          "lightning resistance",
+          "movement speed"
         ]
       },
       "lines": [
@@ -2740,15 +2727,15 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "cold_resistance",
+          "cold resistance",
           "evasion",
-          "lightning_resistance"
+          "lightning resistance"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [
-          "fire_resistance"
+          "fire resistance"
         ],
         "attributes": {
           "str": 0,
@@ -2813,9 +2800,9 @@
           "Evasion"
         ],
         "raw": [
-          "cooldown_recovery",
+          "cooldown recovery",
           "evasion",
-          "fire_resistance"
+          "fire resistance"
         ]
       },
       "lines": [
@@ -2835,10 +2822,10 @@
         "tags_offense": [],
         "tags_defense": [
           "evasion",
-          "fire_resistance"
+          "fire resistance"
         ],
         "tags_utility": [
-          "cooldown_recovery"
+          "cooldown recovery"
         ],
         "tags_anti": [],
         "attributes": {
@@ -2950,7 +2937,7 @@
           "Energy Shield"
         ],
         "raw": [
-          "cold_resistance",
+          "cold resistance",
           "energy shield"
         ]
       },
@@ -2968,7 +2955,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "cold_resistance",
+          "cold resistance",
           "energy shield"
         ],
         "tags_utility": [],
@@ -3043,9 +3030,9 @@
         "raw": [
           "energy shield",
           "fire",
-          "fire_resistance",
+          "fire resistance",
           "ignite",
-          "physical_mitigation",
+          "physical mitigation",
           "thorns"
         ]
       },
@@ -3069,8 +3056,8 @@
         ],
         "tags_defense": [
           "energy shield",
-          "fire_resistance",
-          "physical_mitigation"
+          "fire resistance",
+          "physical mitigation"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -3133,7 +3120,7 @@
           "Energy Shield"
         ],
         "raw": [
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield"
         ]
       },
@@ -3152,7 +3139,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield"
         ],
         "tags_utility": [],
@@ -3175,7 +3162,7 @@
           "Energy Shield"
         ],
         "raw": [
-          "cold_resistance",
+          "cold resistance",
           "energy shield"
         ]
       },
@@ -3192,7 +3179,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "cold_resistance",
+          "cold resistance",
           "energy shield"
         ],
         "tags_utility": [],
@@ -3216,10 +3203,9 @@
           "Minions"
         ],
         "raw": [
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield",
-          "minion",
-          "minions"
+          "minion"
         ]
       },
       "lines": [
@@ -3235,11 +3221,10 @@
       ],
       "meta": {
         "tags_offense": [
-          "minion",
-          "minions"
+          "minion"
         ],
         "tags_defense": [
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield"
         ],
         "tags_utility": [],
@@ -3263,7 +3248,7 @@
         ],
         "raw": [
           "energy shield",
-          "lightning_resistance"
+          "lightning resistance"
         ]
       },
       "lines": [
@@ -3281,7 +3266,7 @@
         "tags_offense": [],
         "tags_defense": [
           "energy shield",
-          "lightning_resistance"
+          "lightning resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -3304,7 +3289,7 @@
           "Life Regeneration"
         ],
         "raw": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "energy shield",
           "liferegen",
           "liferegeneration",
@@ -3329,7 +3314,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "energy shield",
           "liferegen",
           "liferegeneration",
@@ -3355,7 +3340,7 @@
           "Energy Shield"
         ],
         "raw": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "energy shield"
         ]
       },
@@ -3375,7 +3360,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "energy shield"
         ],
         "tags_utility": [],
@@ -3398,7 +3383,7 @@
           "Energy Shield"
         ],
         "raw": [
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield"
         ]
       },
@@ -3416,7 +3401,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield"
         ],
         "tags_utility": [],
@@ -3441,8 +3426,7 @@
         ],
         "raw": [
           "energy shield",
-          "minion",
-          "minions"
+          "minion"
         ]
       },
       "lines": [
@@ -3456,8 +3440,7 @@
       ],
       "meta": {
         "tags_offense": [
-          "minion",
-          "minions"
+          "minion"
         ],
         "tags_defense": [
           "energy shield"
@@ -3483,7 +3466,7 @@
         ],
         "raw": [
           "armour",
-          "cold_resistance"
+          "cold resistance"
         ]
       },
       "lines": [
@@ -3501,11 +3484,11 @@
         "tags_offense": [],
         "tags_defense": [
           "armour",
-          "cold_resistance"
+          "cold resistance"
         ],
         "tags_utility": [],
         "tags_anti": [
-          "fire_resistance"
+          "fire resistance"
         ],
         "attributes": {
           "str": 0,
@@ -3622,7 +3605,7 @@
           "Armour"
         ],
         "raw": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "armour"
         ]
       },
@@ -3644,7 +3627,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "armour"
         ],
         "tags_utility": [],
@@ -3670,7 +3653,7 @@
           "armour",
           "lightning",
           "lightning damage",
-          "lightning_resistance"
+          "lightning resistance"
         ]
       },
       "lines": [
@@ -3689,7 +3672,7 @@
         ],
         "tags_defense": [
           "armour",
-          "lightning_resistance"
+          "lightning resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -3839,7 +3822,7 @@
         ],
         "tags_utility": [],
         "tags_anti": [
-          "lightning_resistance"
+          "lightning resistance"
         ],
         "attributes": {
           "str": 0,
@@ -3963,7 +3946,7 @@
           "Armour"
         ],
         "raw": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "armour"
         ]
       },
@@ -3979,12 +3962,12 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "armour"
         ],
         "tags_utility": [],
         "tags_anti": [
-          "chaos_resistance"
+          "chaos resistance"
         ],
         "attributes": {
           "str": 0,
@@ -4005,7 +3988,7 @@
         ],
         "raw": [
           "armour",
-          "chaos_resistance"
+          "chaos resistance"
         ]
       },
       "lines": [
@@ -4027,7 +4010,7 @@
         "tags_offense": [],
         "tags_defense": [
           "armour",
-          "chaos_resistance"
+          "chaos resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -4103,7 +4086,7 @@
           "Armour & Energy Shield"
         ],
         "raw": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "armour",
           "energy shield"
         ]
@@ -4119,7 +4102,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "armour",
           "energy shield"
         ],
@@ -4144,7 +4127,7 @@
         ],
         "raw": [
           "armour",
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield"
         ]
       },
@@ -4165,12 +4148,12 @@
         "tags_offense": [],
         "tags_defense": [
           "armour",
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield"
         ],
         "tags_utility": [],
         "tags_anti": [
-          "fire_resistance"
+          "fire resistance"
         ],
         "attributes": {
           "str": 0,
@@ -4190,7 +4173,7 @@
           "Thorns"
         ],
         "raw": [
-          "cold_resistance",
+          "cold resistance",
           "thorns"
         ]
       },
@@ -4207,7 +4190,7 @@
           "thorns"
         ],
         "tags_defense": [
-          "cold_resistance"
+          "cold resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -4289,7 +4272,7 @@
         ],
         "raw": [
           "armour",
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield"
         ]
       },
@@ -4313,7 +4296,7 @@
         "tags_offense": [],
         "tags_defense": [
           "armour",
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield"
         ],
         "tags_utility": [],
@@ -4344,9 +4327,7 @@
           "curses",
           "energy shield",
           "minion",
-          "minions",
-          "totem",
-          "totems"
+          "totem"
         ]
       },
       "lines": [
@@ -4365,9 +4346,7 @@
           "curse",
           "curses",
           "minion",
-          "minions",
-          "totem",
-          "totems"
+          "totem"
         ],
         "tags_defense": [
           "armour",
@@ -4395,9 +4374,8 @@
         ],
         "raw": [
           "armour",
-          "chaos_resistance",
+          "chaos resistance",
           "crit",
-          "critical",
           "energy shield"
         ]
       },
@@ -4416,12 +4394,11 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [
           "armour",
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield"
         ],
         "tags_utility": [],
@@ -4446,9 +4423,9 @@
         ],
         "raw": [
           "armour",
-          "cold_resistance",
+          "cold resistance",
           "energy shield",
-          "fire_resistance",
+          "fire resistance",
           "liferegen",
           "liferegeneration",
           "regen"
@@ -4470,9 +4447,9 @@
         "tags_offense": [],
         "tags_defense": [
           "armour",
-          "cold_resistance",
+          "cold resistance",
           "energy shield",
-          "fire_resistance",
+          "fire resistance",
           "liferegen",
           "liferegeneration",
           "regen"
@@ -4542,12 +4519,12 @@
           "Evasion & Energy Shield"
         ],
         "raw": [
-          "chaos_resistance",
+          "chaos resistance",
           "curse",
           "curses",
           "energy shield",
           "evasion",
-          "movement_speed"
+          "movement speed"
         ]
       },
       "lines": [
@@ -4569,12 +4546,12 @@
           "curses"
         ],
         "tags_defense": [
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield",
           "evasion"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -4597,7 +4574,7 @@
         "raw": [
           "energy shield",
           "evasion",
-          "lightning_resistance"
+          "lightning resistance"
         ]
       },
       "lines": [
@@ -4616,7 +4593,7 @@
         "tags_defense": [
           "energy shield",
           "evasion",
-          "lightning_resistance"
+          "lightning resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -4639,7 +4616,7 @@
         ],
         "raw": [
           "evasion",
-          "fire_resistance"
+          "fire resistance"
         ]
       },
       "lines": [
@@ -4657,7 +4634,7 @@
         "tags_offense": [],
         "tags_defense": [
           "evasion",
-          "fire_resistance"
+          "fire resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -4679,10 +4656,10 @@
           "Shock"
         ],
         "raw": [
-          "cold_resistance",
+          "cold resistance",
           "electrocute",
           "lightning",
-          "lightning_resistance",
+          "lightning resistance",
           "shock"
         ]
       },
@@ -4706,8 +4683,8 @@
           "shock"
         ],
         "tags_defense": [
-          "cold_resistance",
-          "lightning_resistance"
+          "cold resistance",
+          "lightning resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -4735,7 +4712,7 @@
           "energy shield",
           "evasion",
           "freeze",
-          "lightning_resistance"
+          "lightning resistance"
         ]
       },
       "lines": [
@@ -4758,7 +4735,7 @@
         "tags_defense": [
           "energy shield",
           "evasion",
-          "lightning_resistance"
+          "lightning resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -4831,9 +4808,9 @@
           "Life Regeneration"
         ],
         "raw": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "armour",
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield",
           "fire",
           "heavystun",
@@ -4925,9 +4902,9 @@
           "stun"
         ],
         "tags_defense": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "armour",
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield",
           "liferegen",
           "liferegeneration",
@@ -4935,8 +4912,7 @@
         ],
         "tags_utility": [],
         "tags_anti": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "attributes": {
           "str": 0,
@@ -4954,11 +4930,11 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "all_elemental_resistance",
-          "chaos_resistance",
-          "cold_resistance",
-          "fire_resistance",
-          "lightning_resistance"
+          "all elemental resistance",
+          "chaos resistance",
+          "cold resistance",
+          "fire resistance",
+          "lightning resistance"
         ]
       },
       "lines": [
@@ -4974,11 +4950,11 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "all_elemental_resistance",
-          "chaos_resistance",
-          "cold_resistance",
-          "fire_resistance",
-          "lightning_resistance"
+          "all elemental resistance",
+          "chaos resistance",
+          "cold resistance",
+          "fire resistance",
+          "lightning resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -5031,9 +5007,9 @@
         "raw": [
           "fire",
           "fire damage",
-          "fire_resistance",
+          "fire resistance",
           "ignite",
-          "movement_speed"
+          "movement speed"
         ]
       },
       "lines": [
@@ -5055,10 +5031,10 @@
           "ignite"
         ],
         "tags_defense": [
-          "fire_resistance"
+          "fire resistance"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -5080,7 +5056,7 @@
         ],
         "raw": [
           "armour",
-          "movement_speed"
+          "movement speed"
         ]
       },
       "lines": [
@@ -5099,7 +5075,7 @@
           "armour"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -5121,7 +5097,7 @@
         ],
         "raw": [
           "armour",
-          "movement_speed"
+          "movement speed"
         ]
       },
       "lines": [
@@ -5142,7 +5118,7 @@
           "armour"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -5196,7 +5172,7 @@
         ],
         "tags_utility": [],
         "tags_anti": [
-          "physical_mitigation"
+          "physical mitigation"
         ],
         "attributes": {
           "str": 0,
@@ -5217,7 +5193,7 @@
         ],
         "raw": [
           "armour",
-          "movement_speed"
+          "movement speed"
         ]
       },
       "lines": [
@@ -5237,7 +5213,7 @@
           "armour"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -5261,9 +5237,8 @@
         ],
         "raw": [
           "crit",
-          "critical",
           "heavystun",
-          "movement_speed",
+          "movement speed",
           "physical",
           "stun",
           "thorns"
@@ -5284,7 +5259,6 @@
       "meta": {
         "tags_offense": [
           "crit",
-          "critical",
           "heavystun",
           "physical",
           "stun",
@@ -5292,7 +5266,7 @@
         ],
         "tags_defense": [],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -5314,7 +5288,7 @@
         ],
         "raw": [
           "evasion",
-          "movement_speed",
+          "movement speed",
           "physical",
           "physical damage"
         ]
@@ -5336,7 +5310,7 @@
           "evasion"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -5358,8 +5332,8 @@
         ],
         "raw": [
           "evasion",
-          "lightning_resistance",
-          "movement_speed"
+          "lightning resistance",
+          "movement speed"
         ]
       },
       "lines": [
@@ -5378,10 +5352,10 @@
         "tags_offense": [],
         "tags_defense": [
           "evasion",
-          "lightning_resistance"
+          "lightning resistance"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -5403,8 +5377,8 @@
         ],
         "raw": [
           "evasion",
-          "lightning_resistance",
-          "movement_speed"
+          "lightning resistance",
+          "movement speed"
         ]
       },
       "lines": [
@@ -5424,10 +5398,10 @@
         "tags_offense": [],
         "tags_defense": [
           "evasion",
-          "lightning_resistance"
+          "lightning resistance"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -5451,8 +5425,7 @@
         "raw": [
           "energy shield",
           "minion",
-          "minions",
-          "movement_speed"
+          "movement speed"
         ]
       },
       "lines": [
@@ -5472,14 +5445,13 @@
       ],
       "meta": {
         "tags_offense": [
-          "minion",
-          "minions"
+          "minion"
         ],
         "tags_defense": [
           "energy shield"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -5501,7 +5473,7 @@
         ],
         "raw": [
           "energy shield",
-          "movement_speed"
+          "movement speed"
         ]
       },
       "lines": [
@@ -5521,7 +5493,7 @@
           "energy shield"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -5546,7 +5518,7 @@
           "energy shield",
           "hinder",
           "maim",
-          "movement_speed",
+          "movement speed",
           "slow"
         ]
       },
@@ -5568,7 +5540,7 @@
           "energy shield"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -5590,11 +5562,11 @@
           "Energy Shield"
         ],
         "raw": [
-          "cast_speed",
+          "cast speed",
           "curse",
           "curses",
           "energy shield",
-          "movement_speed"
+          "movement speed"
         ]
       },
       "lines": [
@@ -5618,8 +5590,8 @@
           "energy shield"
         ],
         "tags_utility": [
-          "cast_speed",
-          "movement_speed"
+          "cast speed",
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -5641,7 +5613,7 @@
         ],
         "raw": [
           "energy shield",
-          "movement_speed"
+          "movement speed"
         ]
       },
       "lines": [
@@ -5665,7 +5637,7 @@
           "energy shield"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -5687,8 +5659,8 @@
         ],
         "raw": [
           "armour",
-          "lightning_resistance",
-          "movement_speed"
+          "lightning resistance",
+          "movement speed"
         ]
       },
       "lines": [
@@ -5704,10 +5676,10 @@
         "tags_offense": [],
         "tags_defense": [
           "armour",
-          "lightning_resistance"
+          "lightning resistance"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -5731,7 +5703,7 @@
         "raw": [
           "armour",
           "heavystun",
-          "movement_speed",
+          "movement speed",
           "physical",
           "stun"
         ]
@@ -5757,7 +5729,7 @@
           "armour"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -5850,7 +5822,7 @@
           "armour",
           "deflect",
           "deflection",
-          "fire_resistance",
+          "fire resistance",
           "heavystun",
           "physical",
           "stun"
@@ -5879,7 +5851,7 @@
           "armour",
           "deflect",
           "deflection",
-          "fire_resistance"
+          "fire resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -5907,7 +5879,7 @@
           "energy shield",
           "lightning",
           "lightning damage",
-          "movement_speed",
+          "movement speed",
           "shock"
         ]
       },
@@ -5933,7 +5905,7 @@
           "energy shield"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -5959,7 +5931,7 @@
           "bleed",
           "energy shield",
           "evasion",
-          "movement_speed",
+          "movement speed",
           "physical",
           "thorns"
         ]
@@ -5984,7 +5956,7 @@
           "evasion"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -6005,10 +5977,10 @@
           "Evasion & Energy Shield"
         ],
         "raw": [
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield",
           "evasion",
-          "movement_speed"
+          "movement speed"
         ]
       },
       "lines": [
@@ -6025,12 +5997,12 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield",
           "evasion"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -6053,10 +6025,9 @@
         ],
         "raw": [
           "crit",
-          "critical",
           "energy shield",
           "evasion",
-          "movement_speed"
+          "movement speed"
         ]
       },
       "lines": [
@@ -6075,15 +6046,14 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [
           "energy shield",
           "evasion"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -6109,7 +6079,7 @@
           "energy shield",
           "fire",
           "ignite",
-          "movement_speed"
+          "movement speed"
         ]
       },
       "lines": [
@@ -6134,7 +6104,7 @@
           "energy shield"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -6155,8 +6125,7 @@
           "Critical Hit"
         ],
         "raw": [
-          "crit",
-          "critical"
+          "crit"
         ]
       },
       "lines": [
@@ -6176,8 +6145,7 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [],
         "tags_utility": [],
@@ -6282,7 +6250,7 @@
         "tags_defense": [],
         "tags_utility": [],
         "tags_anti": [
-          "physical_mitigation"
+          "physical mitigation"
         ],
         "attributes": {
           "str": 0,
@@ -6300,7 +6268,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "physical",
           "physical damage"
         ]
@@ -6327,7 +6295,7 @@
         ],
         "tags_defense": [],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -6346,7 +6314,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "attack_speed"
+          "attack speed"
         ]
       },
       "lines": [
@@ -6361,7 +6329,7 @@
         "tags_offense": [],
         "tags_defense": [],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -6383,7 +6351,6 @@
         ],
         "raw": [
           "crit",
-          "critical",
           "physical",
           "physical damage"
         ]
@@ -6402,7 +6369,6 @@
       "meta": {
         "tags_offense": [
           "crit",
-          "critical",
           "physical",
           "physical damage"
         ],
@@ -6467,7 +6433,7 @@
           "Shock"
         ],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "chaos",
           "chaos damage",
           "electrocute",
@@ -6499,7 +6465,7 @@
         ],
         "tags_defense": [],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -6548,7 +6514,6 @@
         ],
         "raw": [
           "crit",
-          "critical",
           "physical",
           "physical damage"
         ]
@@ -6569,7 +6534,6 @@
       "meta": {
         "tags_offense": [
           "crit",
-          "critical",
           "physical",
           "physical damage"
         ],
@@ -6592,7 +6556,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "physical",
           "physical damage"
         ]
@@ -6617,7 +6581,7 @@
         ],
         "tags_defense": [],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -6683,7 +6647,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "physical",
           "physical damage"
         ]
@@ -6706,7 +6670,7 @@
         ],
         "tags_defense": [],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -7378,7 +7342,6 @@
           "liferegen",
           "liferegeneration",
           "minion",
-          "minions",
           "regen"
         ]
       },
@@ -7395,8 +7358,7 @@
       ],
       "meta": {
         "tags_offense": [
-          "minion",
-          "minions"
+          "minion"
         ],
         "tags_defense": [
           "energy shield",
@@ -7461,9 +7423,8 @@
           "Energy Shield"
         ],
         "raw": [
-          "chaos_resistance",
+          "chaos resistance",
           "crit",
-          "critical",
           "energy shield"
         ]
       },
@@ -7484,11 +7445,10 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield"
         ],
         "tags_utility": [],
@@ -7515,7 +7475,7 @@
           "energy shield",
           "liferegen",
           "liferegeneration",
-          "lightning_resistance",
+          "lightning resistance",
           "regen"
         ]
       },
@@ -7537,7 +7497,7 @@
           "energy shield",
           "liferegen",
           "liferegeneration",
-          "lightning_resistance",
+          "lightning resistance",
           "regen"
         ],
         "tags_utility": [],
@@ -7562,7 +7522,6 @@
         ],
         "raw": [
           "crit",
-          "critical",
           "energy shield"
         ]
       },
@@ -7582,8 +7541,7 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [
           "energy shield"
@@ -7685,7 +7643,6 @@
         "raw": [
           "armour",
           "crit",
-          "critical",
           "leech",
           "life leech",
           "lifeleech"
@@ -7704,8 +7661,7 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [
           "armour",
@@ -7737,7 +7693,6 @@
         "raw": [
           "armour",
           "crit",
-          "critical",
           "thorns"
         ]
       },
@@ -7754,7 +7709,6 @@
       "meta": {
         "tags_offense": [
           "crit",
-          "critical",
           "thorns"
         ],
         "tags_defense": [
@@ -7762,8 +7716,7 @@
         ],
         "tags_utility": [],
         "tags_anti": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "attributes": {
           "str": 0,
@@ -7907,7 +7860,7 @@
         ],
         "raw": [
           "armour",
-          "attack_speed",
+          "attack speed",
           "heavystun",
           "physical",
           "physical damage",
@@ -7939,7 +7892,7 @@
           "armour"
         ],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -7964,7 +7917,7 @@
           "chill",
           "cold",
           "cold damage",
-          "cold_resistance",
+          "cold resistance",
           "evasion",
           "freeze"
         ]
@@ -7988,7 +7941,7 @@
           "freeze"
         ],
         "tags_defense": [
-          "cold_resistance",
+          "cold resistance",
           "evasion"
         ],
         "tags_utility": [],
@@ -8011,7 +7964,7 @@
           "Evasion"
         ],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "evasion"
         ]
       },
@@ -8030,7 +7983,7 @@
           "evasion"
         ],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -8052,9 +8005,8 @@
           "Evasion"
         ],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "crit",
-          "critical",
           "evasion"
         ]
       },
@@ -8072,18 +8024,16 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [
           "evasion"
         ],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "attributes": {
           "str": 0,
@@ -8105,7 +8055,6 @@
         ],
         "raw": [
           "crit",
-          "critical",
           "evasion",
           "physical",
           "physical damage"
@@ -8128,7 +8077,6 @@
       "meta": {
         "tags_offense": [
           "crit",
-          "critical",
           "physical",
           "physical damage"
         ],
@@ -8158,7 +8106,7 @@
         ],
         "raw": [
           "chaos",
-          "chaos_resistance",
+          "chaos resistance",
           "evasion",
           "liferegen",
           "liferegeneration",
@@ -8184,7 +8132,7 @@
           "poison"
         ],
         "tags_defense": [
-          "chaos_resistance",
+          "chaos resistance",
           "evasion",
           "liferegen",
           "liferegeneration",
@@ -8210,11 +8158,11 @@
           "Energy Shield"
         ],
         "raw": [
-          "cold_resistance",
+          "cold resistance",
           "energy shield",
           "fire",
           "fire damage",
-          "fire_resistance"
+          "fire resistance"
         ]
       },
       "lines": [
@@ -8237,9 +8185,9 @@
           "fire damage"
         ],
         "tags_defense": [
-          "cold_resistance",
+          "cold resistance",
           "energy shield",
-          "fire_resistance"
+          "fire resistance"
         ],
         "tags_utility": [],
         "tags_anti": [
@@ -8264,7 +8212,7 @@
           "Energy Shield"
         ],
         "raw": [
-          "cast_speed",
+          "cast speed",
           "energy shield"
         ]
       },
@@ -8282,7 +8230,7 @@
           "energy shield"
         ],
         "tags_utility": [
-          "cast_speed"
+          "cast speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -8303,7 +8251,7 @@
           "Energy Shield"
         ],
         "raw": [
-          "cast_speed",
+          "cast speed",
           "energy shield"
         ]
       },
@@ -8323,7 +8271,7 @@
           "energy shield"
         ],
         "tags_utility": [
-          "cast_speed"
+          "cast speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -8352,7 +8300,7 @@
           "lifeleech",
           "lightning",
           "lightning damage",
-          "lightning_resistance"
+          "lightning resistance"
         ]
       },
       "lines": [
@@ -8376,7 +8324,7 @@
           "leech",
           "life leech",
           "lifeleech",
-          "lightning_resistance"
+          "lightning resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -8398,7 +8346,7 @@
           "Energy Shield"
         ],
         "raw": [
-          "cast_speed",
+          "cast speed",
           "energy shield",
           "lightning",
           "lightning damage"
@@ -8421,7 +8369,7 @@
           "energy shield"
         ],
         "tags_utility": [
-          "cast_speed"
+          "cast speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -8482,9 +8430,8 @@
           "Life Regeneration"
         ],
         "raw": [
-          "cold_resistance",
+          "cold resistance",
           "crit",
-          "critical",
           "energy shield",
           "liferegen",
           "liferegeneration",
@@ -8504,11 +8451,10 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [
-          "cold_resistance",
+          "cold resistance",
           "energy shield",
           "liferegen",
           "liferegeneration",
@@ -8516,8 +8462,7 @@
         ],
         "tags_utility": [],
         "tags_anti": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "attributes": {
           "str": 0,
@@ -8537,13 +8482,13 @@
         "raw": [
           "cold",
           "cold damage",
-          "cold_resistance",
+          "cold resistance",
           "fire",
           "fire damage",
-          "fire_resistance",
+          "fire resistance",
           "lightning",
           "lightning damage",
-          "lightning_resistance"
+          "lightning resistance"
         ]
       },
       "lines": [
@@ -8571,9 +8516,9 @@
           "lightning damage"
         ],
         "tags_defense": [
-          "cold_resistance",
-          "fire_resistance",
-          "lightning_resistance"
+          "cold resistance",
+          "fire resistance",
+          "lightning resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -8596,7 +8541,7 @@
         ],
         "raw": [
           "armour",
-          "attack_speed"
+          "attack speed"
         ]
       },
       "lines": [
@@ -8613,7 +8558,7 @@
           "armour"
         ],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -8670,8 +8615,8 @@
         ],
         "raw": [
           "armour",
-          "attack_speed",
-          "chaos_resistance"
+          "attack speed",
+          "chaos resistance"
         ]
       },
       "lines": [
@@ -8689,10 +8634,10 @@
         "tags_offense": [],
         "tags_defense": [
           "armour",
-          "chaos_resistance"
+          "chaos resistance"
         ],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -8715,10 +8660,10 @@
         ],
         "raw": [
           "armour",
-          "attack_speed",
+          "attack speed",
           "cull",
           "culling",
-          "culling strike"
+          "cullingstrike"
         ]
       },
       "lines": [
@@ -8736,13 +8681,13 @@
         "tags_offense": [
           "cull",
           "culling",
-          "culling strike"
+          "cullingstrike"
         ],
         "tags_defense": [
           "armour"
         ],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -8764,7 +8709,7 @@
         ],
         "raw": [
           "armour",
-          "attack_speed",
+          "attack speed",
           "physical",
           "physical damage"
         ]
@@ -8789,7 +8734,7 @@
           "armour"
         ],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -8811,12 +8756,12 @@
         ],
         "raw": [
           "armour",
-          "attack_speed",
+          "attack speed",
           "fire",
           "fire damage",
           "lightning",
           "lightning damage",
-          "lightning_resistance"
+          "lightning resistance"
         ]
       },
       "lines": [
@@ -8839,10 +8784,10 @@
         ],
         "tags_defense": [
           "armour",
-          "lightning_resistance"
+          "lightning resistance"
         ],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -8865,11 +8810,11 @@
         "raw": [
           "cold",
           "cold damage",
-          "cold_resistance",
+          "cold resistance",
           "energy shield",
           "fire",
           "fire damage",
-          "fire_resistance"
+          "fire resistance"
         ]
       },
       "lines": [
@@ -8891,9 +8836,9 @@
           "fire damage"
         ],
         "tags_defense": [
-          "cold_resistance",
+          "cold resistance",
           "energy shield",
-          "fire_resistance"
+          "fire resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -8916,7 +8861,7 @@
         ],
         "raw": [
           "armour",
-          "cold_resistance",
+          "cold resistance",
           "energy shield"
         ]
       },
@@ -8935,7 +8880,7 @@
         "tags_offense": [],
         "tags_defense": [
           "armour",
-          "cold_resistance",
+          "cold resistance",
           "energy shield"
         ],
         "tags_utility": [],
@@ -8965,7 +8910,7 @@
           "hinder",
           "liferegen",
           "liferegeneration",
-          "lightning_resistance",
+          "lightning resistance",
           "maim",
           "regen",
           "slow"
@@ -8994,7 +8939,7 @@
           "energy shield",
           "liferegen",
           "liferegeneration",
-          "lightning_resistance",
+          "lightning resistance",
           "regen"
         ],
         "tags_utility": [],
@@ -9074,7 +9019,6 @@
         ],
         "raw": [
           "crit",
-          "critical",
           "energy shield",
           "evasion"
         ]
@@ -9092,8 +9036,7 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [
           "energy shield",
@@ -9117,7 +9060,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "lightning",
           "lightning damage"
         ]
@@ -9142,7 +9085,7 @@
         ],
         "tags_defense": [],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -9165,7 +9108,6 @@
         ],
         "raw": [
           "crit",
-          "critical",
           "energy shield",
           "evasion"
         ]
@@ -9183,8 +9125,7 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [
           "energy shield",
@@ -9211,7 +9152,7 @@
           "Poison"
         ],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "chaos",
           "energy shield",
           "evasion",
@@ -9239,7 +9180,7 @@
           "evasion"
         ],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -9261,14 +9202,13 @@
           "Evasion & Energy Shield"
         ],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "crit",
-          "critical",
           "energy shield",
           "evasion",
           "lightning",
           "lightning damage",
-          "lightning_resistance"
+          "lightning resistance"
         ]
       },
       "lines": [
@@ -9286,17 +9226,16 @@
       "meta": {
         "tags_offense": [
           "crit",
-          "critical",
           "lightning",
           "lightning damage"
         ],
         "tags_defense": [
           "energy shield",
           "evasion",
-          "lightning_resistance"
+          "lightning resistance"
         ],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -9456,7 +9395,7 @@
           "Leech"
         ],
         "raw": [
-          "fire_resistance",
+          "fire resistance",
           "leech",
           "life leech",
           "lifeleech"
@@ -9476,7 +9415,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "fire_resistance",
+          "fire resistance",
           "leech",
           "life leech",
           "lifeleech"
@@ -9708,7 +9647,7 @@
           "Evasion"
         ],
         "raw": [
-          "cold_resistance",
+          "cold resistance",
           "evasion"
         ]
       },
@@ -9723,7 +9662,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "cold_resistance",
+          "cold resistance",
           "evasion"
         ],
         "tags_utility": [],
@@ -9748,9 +9687,8 @@
         ],
         "raw": [
           "crit",
-          "critical",
           "evasion",
-          "lightning_resistance"
+          "lightning resistance"
         ]
       },
       "lines": [
@@ -9765,12 +9703,11 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [
           "evasion",
-          "lightning_resistance"
+          "lightning resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -9875,7 +9812,7 @@
           "Evasion"
         ],
         "raw": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "evasion"
         ]
       },
@@ -9889,7 +9826,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "evasion"
         ],
         "tags_utility": [],
@@ -9916,11 +9853,11 @@
           "chill",
           "cold",
           "cold damage",
-          "cold_resistance",
+          "cold resistance",
           "evasion",
           "fire",
           "fire damage",
-          "fire_resistance",
+          "fire resistance",
           "freeze"
         ]
       },
@@ -9944,9 +9881,9 @@
           "freeze"
         ],
         "tags_defense": [
-          "cold_resistance",
+          "cold resistance",
           "evasion",
-          "fire_resistance"
+          "fire resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -9969,8 +9906,8 @@
           "Life Regeneration"
         ],
         "raw": [
-          "chaos_resistance",
-          "cold_resistance",
+          "chaos resistance",
+          "cold resistance",
           "evasion",
           "liferegen",
           "liferegeneration",
@@ -9991,8 +9928,8 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "chaos_resistance",
-          "cold_resistance",
+          "chaos resistance",
+          "cold resistance",
           "evasion",
           "liferegen",
           "liferegeneration",
@@ -10021,7 +9958,7 @@
         "raw": [
           "cull",
           "culling",
-          "culling strike",
+          "cullingstrike",
           "evasion"
         ]
       },
@@ -10037,7 +9974,7 @@
         "tags_offense": [
           "cull",
           "culling",
-          "culling strike"
+          "cullingstrike"
         ],
         "tags_defense": [
           "evasion"
@@ -10066,7 +10003,7 @@
           "evasion",
           "fire",
           "fire damage",
-          "fire_resistance",
+          "fire resistance",
           "ignite"
         ]
       },
@@ -10086,7 +10023,7 @@
         ],
         "tags_defense": [
           "evasion",
-          "fire_resistance"
+          "fire resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -10113,7 +10050,6 @@
           "companion",
           "companions",
           "crit",
-          "critical",
           "evasion"
         ]
       },
@@ -10131,8 +10067,7 @@
         "tags_offense": [
           "companion",
           "companions",
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [
           "evasion"
@@ -10219,7 +10154,7 @@
         ],
         "tags_utility": [],
         "tags_anti": [
-          "fire_resistance"
+          "fire resistance"
         ],
         "attributes": {
           "str": 0,
@@ -10279,7 +10214,7 @@
           "Energy Shield"
         ],
         "raw": [
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield"
         ]
       },
@@ -10297,7 +10232,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield"
         ],
         "tags_utility": [],
@@ -10320,7 +10255,7 @@
           "Energy Shield"
         ],
         "raw": [
-          "cold_resistance",
+          "cold resistance",
           "energy shield"
         ]
       },
@@ -10339,7 +10274,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "cold_resistance",
+          "cold resistance",
           "energy shield"
         ],
         "tags_utility": [],
@@ -10410,7 +10345,7 @@
           "Life Regeneration"
         ],
         "raw": [
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield",
           "liferegen",
           "liferegeneration",
@@ -10428,7 +10363,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield",
           "liferegen",
           "liferegeneration",
@@ -10456,7 +10391,6 @@
         ],
         "raw": [
           "crit",
-          "critical",
           "energy shield"
         ]
       },
@@ -10476,8 +10410,7 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [
           "energy shield"
@@ -10502,7 +10435,7 @@
           "Energy Shield"
         ],
         "raw": [
-          "cast_speed",
+          "cast speed",
           "energy shield",
           "physical",
           "physical damage"
@@ -10527,7 +10460,7 @@
           "energy shield"
         ],
         "tags_utility": [
-          "cast_speed"
+          "cast speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -10550,9 +10483,8 @@
         ],
         "raw": [
           "crit",
-          "critical",
           "energy shield",
-          "lightning_resistance"
+          "lightning resistance"
         ]
       },
       "lines": [
@@ -10568,12 +10500,11 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [
           "energy shield",
-          "lightning_resistance"
+          "lightning resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -10597,8 +10528,7 @@
         ],
         "raw": [
           "armour",
-          "crit",
-          "critical"
+          "crit"
         ]
       },
       "lines": [
@@ -10615,8 +10545,7 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [
           "armour"
@@ -10645,7 +10574,6 @@
         "raw": [
           "armour",
           "crit",
-          "critical",
           "liferegen",
           "liferegeneration",
           "regen"
@@ -10669,8 +10597,7 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [
           "armour",
@@ -10699,13 +10626,12 @@
           "Life Regeneration"
         ],
         "raw": [
-          "cold_resistance",
+          "cold resistance",
           "crit",
-          "critical",
-          "fire_resistance",
+          "fire resistance",
           "liferegen",
           "liferegeneration",
-          "lightning_resistance",
+          "lightning resistance",
           "regen"
         ]
       },
@@ -10747,15 +10673,14 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [
-          "cold_resistance",
-          "fire_resistance",
+          "cold resistance",
+          "fire resistance",
           "liferegen",
           "liferegeneration",
-          "lightning_resistance",
+          "lightning resistance",
           "regen"
         ],
         "tags_utility": [],
@@ -10812,7 +10737,7 @@
         ],
         "raw": [
           "armour",
-          "lightning_resistance"
+          "lightning resistance"
         ]
       },
       "lines": [
@@ -10830,7 +10755,7 @@
         "tags_offense": [],
         "tags_defense": [
           "armour",
-          "lightning_resistance"
+          "lightning resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -10857,7 +10782,6 @@
           "armour",
           "bleed",
           "crit",
-          "critical",
           "physical"
         ]
       },
@@ -10876,7 +10800,6 @@
         "tags_offense": [
           "bleed",
           "crit",
-          "critical",
           "physical"
         ],
         "tags_defense": [
@@ -10960,7 +10883,7 @@
           "ignite",
           "lightning",
           "maim",
-          "movement_speed",
+          "movement speed",
           "shock",
           "slow"
         ]
@@ -10997,7 +10920,7 @@
           "energy shield"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -11127,7 +11050,7 @@
         ],
         "raw": [
           "armour",
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield"
         ]
       },
@@ -11147,7 +11070,7 @@
         "tags_offense": [],
         "tags_defense": [
           "armour",
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield"
         ],
         "tags_utility": [],
@@ -11258,7 +11181,6 @@
         "raw": [
           "chaos",
           "crit",
-          "critical",
           "energy shield",
           "evasion",
           "poison"
@@ -11280,7 +11202,6 @@
         "tags_offense": [
           "chaos",
           "crit",
-          "critical",
           "poison"
         ],
         "tags_defense": [
@@ -11305,10 +11226,10 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "chaos_resistance",
-          "cold_resistance",
-          "fire_resistance",
-          "lightning_resistance"
+          "chaos resistance",
+          "cold resistance",
+          "fire resistance",
+          "lightning resistance"
         ]
       },
       "lines": [
@@ -11326,10 +11247,10 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "chaos_resistance",
-          "cold_resistance",
-          "fire_resistance",
-          "lightning_resistance"
+          "chaos resistance",
+          "cold resistance",
+          "fire resistance",
+          "lightning resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -11349,7 +11270,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "chaos_resistance",
+          "chaos resistance",
           "physical",
           "physical damage"
         ]
@@ -11370,11 +11291,11 @@
           "physical damage"
         ],
         "tags_defense": [
-          "chaos_resistance"
+          "chaos resistance"
         ],
         "tags_utility": [],
         "tags_anti": [
-          "all_elemental_resistance"
+          "all elemental resistance"
         ],
         "attributes": {
           "str": 0,
@@ -11429,7 +11350,6 @@
         ],
         "raw": [
           "crit",
-          "critical",
           "energy shield",
           "evasion"
         ]
@@ -11446,8 +11366,7 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [
           "energy shield",
@@ -11477,7 +11396,7 @@
           "evasion",
           "lightning",
           "lightning damage",
-          "lightning_resistance"
+          "lightning resistance"
         ]
       },
       "lines": [
@@ -11501,7 +11420,7 @@
         "tags_defense": [
           "energy shield",
           "evasion",
-          "lightning_resistance"
+          "lightning resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -11526,7 +11445,7 @@
           "Shock"
         ],
         "raw": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "chill",
           "cold",
           "cold damage",
@@ -11566,7 +11485,7 @@
           "shock"
         ],
         "tags_defense": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "energy shield",
           "evasion"
         ],
@@ -11591,9 +11510,8 @@
           "Evasion & Energy Shield"
         ],
         "raw": [
-          "chaos_resistance",
+          "chaos resistance",
           "crit",
-          "critical",
           "energy shield",
           "evasion"
         ]
@@ -11613,11 +11531,10 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield",
           "evasion"
         ],
@@ -11755,8 +11672,8 @@
         "tags_defense": [],
         "tags_utility": [],
         "tags_anti": [
-          "all_elemental_resistance",
-          "chaos_resistance"
+          "all elemental resistance",
+          "chaos resistance"
         ],
         "attributes": {
           "str": 0,
@@ -11830,7 +11747,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "all_elemental_resistance"
+          "all elemental resistance"
         ]
       },
       "lines": [
@@ -11845,7 +11762,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "all_elemental_resistance"
+          "all elemental resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -11946,10 +11863,9 @@
           "Marks"
         ],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "heavystun",
           "mark",
-          "marks",
           "physical",
           "physical damage",
           "stun"
@@ -11972,14 +11888,13 @@
         "tags_offense": [
           "heavystun",
           "mark",
-          "marks",
           "physical",
           "physical damage",
           "stun"
         ],
         "tags_defense": [],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -12006,10 +11921,9 @@
           "cold",
           "cold damage",
           "crit",
-          "critical",
           "cull",
           "culling",
-          "culling strike",
+          "cullingstrike",
           "freeze",
           "physical",
           "physical damage"
@@ -12034,10 +11948,9 @@
           "cold",
           "cold damage",
           "crit",
-          "critical",
           "cull",
           "culling",
-          "culling strike",
+          "cullingstrike",
           "freeze",
           "physical",
           "physical damage"
@@ -12063,7 +11976,7 @@
           "Heavy Stun"
         ],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "heavystun",
           "physical",
           "physical damage",
@@ -12092,7 +12005,7 @@
         ],
         "tags_defense": [],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -12111,7 +12024,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "physical",
           "physical damage"
         ]
@@ -12139,7 +12052,7 @@
         ],
         "tags_defense": [],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -12164,7 +12077,6 @@
           "chaos",
           "chaos damage",
           "crit",
-          "critical",
           "physical",
           "physical damage"
         ]
@@ -12184,7 +12096,6 @@
           "chaos",
           "chaos damage",
           "crit",
-          "critical",
           "physical",
           "physical damage"
         ],
@@ -12207,7 +12118,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "lightning",
           "lightning damage"
         ]
@@ -12232,7 +12143,7 @@
         ],
         "tags_defense": [],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -12255,9 +12166,8 @@
         ],
         "raw": [
           "armourbreak",
-          "attack_speed",
+          "attack speed",
           "crit",
-          "critical",
           "physical",
           "physical damage"
         ]
@@ -12280,13 +12190,12 @@
         "tags_offense": [
           "armourbreak",
           "crit",
-          "critical",
           "physical",
           "physical damage"
         ],
         "tags_defense": [],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -12305,7 +12214,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "cold",
           "cold damage",
           "lightning",
@@ -12337,7 +12246,7 @@
         ],
         "tags_defense": [],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -12358,9 +12267,8 @@
           "Minions"
         ],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "minion",
-          "minions",
           "physical",
           "physical damage"
         ]
@@ -12381,13 +12289,12 @@
       "meta": {
         "tags_offense": [
           "minion",
-          "minions",
           "physical",
           "physical damage"
         ],
         "tags_defense": [],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -12411,7 +12318,7 @@
           "armourbreak",
           "fire",
           "fire damage",
-          "fire_resistance",
+          "fire resistance",
           "physical",
           "physical damage"
         ]
@@ -12440,7 +12347,7 @@
           "physical damage"
         ],
         "tags_defense": [
-          "fire_resistance"
+          "fire resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -12460,7 +12367,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "lightning",
           "lightning damage",
           "physical",
@@ -12488,7 +12395,7 @@
         ],
         "tags_defense": [],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -12511,9 +12418,7 @@
         ],
         "raw": [
           "crit",
-          "critical",
           "minion",
-          "minions",
           "physical",
           "physical damage"
         ]
@@ -12534,9 +12439,7 @@
       "meta": {
         "tags_offense": [
           "crit",
-          "critical",
           "minion",
-          "minions",
           "physical",
           "physical damage"
         ],
@@ -12607,8 +12510,8 @@
           "Life Regeneration"
         ],
         "raw": [
-          "all_elemental_resistance",
-          "attack_speed",
+          "all elemental resistance",
+          "attack speed",
           "liferegen",
           "liferegeneration",
           "physical",
@@ -12637,13 +12540,13 @@
           "physical damage"
         ],
         "tags_defense": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "liferegen",
           "liferegeneration",
           "regen"
         ],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -12665,9 +12568,8 @@
           "Slow/Maim/Hinder"
         ],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "crit",
-          "critical",
           "hinder",
           "maim",
           "physical",
@@ -12690,7 +12592,6 @@
       "meta": {
         "tags_offense": [
           "crit",
-          "critical",
           "hinder",
           "maim",
           "physical",
@@ -12699,7 +12600,7 @@
         ],
         "tags_defense": [],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -12768,7 +12669,6 @@
         ],
         "raw": [
           "crit",
-          "critical",
           "physical",
           "physical damage"
         ]
@@ -12787,7 +12687,6 @@
       "meta": {
         "tags_offense": [
           "crit",
-          "critical",
           "physical",
           "physical damage"
         ],
@@ -12864,9 +12763,8 @@
           "Heavy Stun"
         ],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "crit",
-          "critical",
           "heavystun",
           "physical",
           "physical damage",
@@ -12887,7 +12785,6 @@
       "meta": {
         "tags_offense": [
           "crit",
-          "critical",
           "heavystun",
           "physical",
           "physical damage",
@@ -12895,7 +12792,7 @@
         ],
         "tags_defense": [],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -12914,7 +12811,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "physical",
           "physical damage"
         ]
@@ -12937,7 +12834,7 @@
         ],
         "tags_defense": [],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -12958,11 +12855,11 @@
           "Freeze"
         ],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "chill",
           "cold",
           "cold damage",
-          "cold_resistance",
+          "cold resistance",
           "freeze",
           "physical",
           "physical damage"
@@ -12991,10 +12888,10 @@
           "physical damage"
         ],
         "tags_defense": [
-          "cold_resistance"
+          "cold resistance"
         ],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -13018,13 +12915,12 @@
           "Shock"
         ],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "chaos",
           "chaos damage",
           "chill",
           "cold",
           "crit",
-          "critical",
           "electrocute",
           "freeze",
           "lightning",
@@ -13051,7 +12947,6 @@
           "chill",
           "cold",
           "crit",
-          "critical",
           "electrocute",
           "freeze",
           "lightning",
@@ -13061,7 +12956,7 @@
         ],
         "tags_defense": [],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -13125,7 +13020,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "attack_speed"
+          "attack speed"
         ]
       },
       "lines": [
@@ -13139,7 +13034,7 @@
         "tags_offense": [],
         "tags_defense": [],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -13158,7 +13053,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "physical",
           "physical damage"
         ]
@@ -13184,7 +13079,7 @@
         ],
         "tags_defense": [],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -13305,7 +13200,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "all_elemental_resistance"
+          "all elemental resistance"
         ]
       },
       "lines": [
@@ -13320,7 +13215,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "all_elemental_resistance"
+          "all elemental resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -13346,7 +13241,7 @@
         "raw": [
           "chaos",
           "chaos damage",
-          "chaos_resistance",
+          "chaos resistance",
           "fire",
           "fire damage",
           "ignite",
@@ -13374,7 +13269,7 @@
           "ignite"
         ],
         "tags_defense": [
-          "chaos_resistance",
+          "chaos resistance",
           "liferegen",
           "liferegeneration",
           "regen"
@@ -13454,10 +13349,10 @@
         ],
         "raw": [
           "bleed",
-          "cold_resistance",
+          "cold resistance",
           "fire",
           "fire damage",
-          "fire_resistance",
+          "fire resistance",
           "physical",
           "physical damage"
         ]
@@ -13481,8 +13376,8 @@
           "physical damage"
         ],
         "tags_defense": [
-          "cold_resistance",
-          "fire_resistance"
+          "cold resistance",
+          "fire resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -13504,12 +13399,12 @@
           "Life Regeneration"
         ],
         "raw": [
-          "cold_resistance",
+          "cold resistance",
           "liferegen",
           "liferegeneration",
           "lightning",
           "lightning damage",
-          "lightning_resistance",
+          "lightning resistance",
           "regen"
         ]
       },
@@ -13533,10 +13428,10 @@
           "lightning damage"
         ],
         "tags_defense": [
-          "cold_resistance",
+          "cold resistance",
           "liferegen",
           "liferegeneration",
-          "lightning_resistance",
+          "lightning resistance",
           "regen"
         ],
         "tags_utility": [],
@@ -13557,7 +13452,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "chaos_resistance",
+          "chaos resistance",
           "physical",
           "physical damage"
         ]
@@ -13580,7 +13475,7 @@
           "physical damage"
         ],
         "tags_defense": [
-          "chaos_resistance"
+          "chaos resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -13611,7 +13506,7 @@
           "liferegeneration",
           "lightning",
           "lightning damage",
-          "lightning_resistance",
+          "lightning resistance",
           "regen"
         ]
       },
@@ -13638,7 +13533,7 @@
         "tags_defense": [
           "liferegen",
           "liferegeneration",
-          "lightning_resistance",
+          "lightning resistance",
           "regen"
         ],
         "tags_utility": [],
@@ -13664,7 +13559,7 @@
         "raw": [
           "fire",
           "fire damage",
-          "fire_resistance",
+          "fire resistance",
           "ignite",
           "liferegen",
           "liferegeneration",
@@ -13688,7 +13583,7 @@
           "ignite"
         ],
         "tags_defense": [
-          "fire_resistance",
+          "fire resistance",
           "liferegen",
           "liferegeneration",
           "regen"
@@ -13758,7 +13653,7 @@
           "Curses"
         ],
         "raw": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "curse",
           "curses"
         ]
@@ -13778,7 +13673,7 @@
           "curses"
         ],
         "tags_defense": [
-          "all_elemental_resistance"
+          "all elemental resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -13800,7 +13695,7 @@
           "Life Regeneration"
         ],
         "raw": [
-          "cold_resistance",
+          "cold resistance",
           "liferegen",
           "liferegeneration",
           "regen"
@@ -13823,7 +13718,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "cold_resistance",
+          "cold resistance",
           "liferegen",
           "liferegeneration",
           "regen"
@@ -13852,7 +13747,7 @@
           "Chaos Damage"
         ],
         "raw": [
-          "cast_speed",
+          "cast speed",
           "chaos",
           "chaos damage"
         ]
@@ -13874,7 +13769,7 @@
         ],
         "tags_defense": [],
         "tags_utility": [
-          "cast_speed"
+          "cast speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -13895,9 +13790,8 @@
           "Critical Hit"
         ],
         "raw": [
-          "all_elemental_resistance",
-          "crit",
-          "critical"
+          "all elemental resistance",
+          "crit"
         ]
       },
       "lines": [
@@ -13913,11 +13807,10 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [
-          "all_elemental_resistance"
+          "all elemental resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -13971,12 +13864,11 @@
           "Minions"
         ],
         "raw": [
-          "cast_speed",
+          "cast speed",
           "liferegen",
           "liferegeneration",
           "minion",
-          "minions",
-          "physical_mitigation",
+          "physical mitigation",
           "regen"
         ]
       },
@@ -13993,17 +13885,16 @@
       ],
       "meta": {
         "tags_offense": [
-          "minion",
-          "minions"
+          "minion"
         ],
         "tags_defense": [
           "liferegen",
           "liferegeneration",
-          "physical_mitigation",
+          "physical mitigation",
           "regen"
         ],
         "tags_utility": [
-          "cast_speed"
+          "cast speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -14028,7 +13919,7 @@
           "chaos",
           "chill",
           "cold",
-          "cold_mitigation",
+          "cold mitigation",
           "freeze",
           "physical",
           "physical damage",
@@ -14060,7 +13951,7 @@
           "poison"
         ],
         "tags_defense": [
-          "cold_mitigation"
+          "cold mitigation"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -14112,7 +14003,7 @@
         "raw": [
           "electrocute",
           "lightning",
-          "lightning_resistance",
+          "lightning resistance",
           "shock"
         ]
       },
@@ -14132,7 +14023,7 @@
           "shock"
         ],
         "tags_defense": [
-          "lightning_resistance"
+          "lightning resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -14156,7 +14047,7 @@
         "raw": [
           "chaos",
           "chaos damage",
-          "chaos_resistance"
+          "chaos resistance"
         ]
       },
       "lines": [
@@ -14174,7 +14065,7 @@
           "chaos damage"
         ],
         "tags_defense": [
-          "chaos_resistance"
+          "chaos resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -14198,7 +14089,7 @@
         "raw": [
           "chaos",
           "chaos damage",
-          "chaos_resistance"
+          "chaos resistance"
         ]
       },
       "lines": [
@@ -14218,7 +14109,7 @@
           "chaos damage"
         ],
         "tags_defense": [
-          "chaos_resistance"
+          "chaos resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -14274,7 +14165,7 @@
           "chill",
           "cold",
           "cold damage",
-          "cold_resistance",
+          "cold resistance",
           "freeze"
         ]
       },
@@ -14296,7 +14187,7 @@
           "freeze"
         ],
         "tags_defense": [
-          "cold_resistance"
+          "cold resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -14367,9 +14258,8 @@
           "Critical Hit"
         ],
         "raw": [
-          "chaos_resistance",
-          "crit",
-          "critical"
+          "chaos resistance",
+          "crit"
         ]
       },
       "lines": [
@@ -14384,11 +14274,10 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [
-          "chaos_resistance"
+          "chaos resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -14408,9 +14297,9 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "cold_resistance",
-          "fire_resistance",
-          "lightning_resistance"
+          "cold resistance",
+          "fire resistance",
+          "lightning resistance"
         ]
       },
       "lines": [
@@ -14433,9 +14322,9 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "cold_resistance",
-          "fire_resistance",
-          "lightning_resistance"
+          "cold resistance",
+          "fire resistance",
+          "lightning resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -14455,7 +14344,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "cast_speed"
+          "cast speed"
         ]
       },
       "lines": [
@@ -14475,7 +14364,7 @@
         "tags_offense": [],
         "tags_defense": [],
         "tags_utility": [
-          "cast_speed"
+          "cast speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -14496,7 +14385,7 @@
           "Curses"
         ],
         "raw": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "curse",
           "curses"
         ]
@@ -14519,7 +14408,7 @@
           "curses"
         ],
         "tags_defense": [
-          "all_elemental_resistance"
+          "all elemental resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -14545,7 +14434,7 @@
           "bleed",
           "chill",
           "cold",
-          "cold_mitigation",
+          "cold mitigation",
           "freeze",
           "physical",
           "physical damage"
@@ -14575,7 +14464,7 @@
           "physical damage"
         ],
         "tags_defense": [
-          "cold_mitigation"
+          "cold mitigation"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -14595,9 +14484,9 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "cold_resistance",
-          "fire_resistance",
-          "lightning_resistance"
+          "cold resistance",
+          "fire resistance",
+          "lightning resistance"
         ]
       },
       "lines": [
@@ -14619,9 +14508,9 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "cold_resistance",
-          "fire_resistance",
-          "lightning_resistance"
+          "cold resistance",
+          "fire resistance",
+          "lightning resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -14687,7 +14576,7 @@
         "raw": [
           "cold",
           "cold damage",
-          "cold_resistance",
+          "cold resistance",
           "liferegen",
           "liferegeneration",
           "lightning",
@@ -14714,7 +14603,7 @@
           "lightning damage"
         ],
         "tags_defense": [
-          "cold_resistance",
+          "cold resistance",
           "liferegen",
           "liferegeneration",
           "regen"
@@ -14746,7 +14635,6 @@
           "liferegen",
           "liferegeneration",
           "minion",
-          "minions",
           "regen"
         ]
       },
@@ -14767,8 +14655,7 @@
         "tags_offense": [
           "chaos",
           "chaos damage",
-          "minion",
-          "minions"
+          "minion"
         ],
         "tags_defense": [
           "liferegen",
@@ -15165,10 +15052,10 @@
         "raw": [
           "armour",
           "block",
-          "chaos_resistance",
+          "chaos resistance",
           "fire",
           "fire damage",
-          "fire_resistance",
+          "fire resistance",
           "heavystun",
           "physical",
           "stun"
@@ -15197,8 +15084,8 @@
         "tags_defense": [
           "armour",
           "block",
-          "chaos_resistance",
-          "fire_resistance"
+          "chaos resistance",
+          "fire resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -15280,7 +15167,7 @@
         "raw": [
           "armour",
           "block",
-          "chaos_resistance"
+          "chaos resistance"
         ]
       },
       "lines": [
@@ -15304,7 +15191,7 @@
         "tags_defense": [
           "armour",
           "block",
-          "chaos_resistance"
+          "chaos resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -15542,7 +15429,7 @@
           "heavystun",
           "hinder",
           "maim",
-          "movement_speed",
+          "movement speed",
           "physical",
           "slow",
           "stun"
@@ -15572,7 +15459,7 @@
           "armour"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -15593,7 +15480,7 @@
           "Armour"
         ],
         "raw": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "armour"
         ]
       },
@@ -15612,7 +15499,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "armour"
         ],
         "tags_utility": [],
@@ -15683,7 +15570,7 @@
         ],
         "raw": [
           "block",
-          "chaos_resistance",
+          "chaos resistance",
           "liferegen",
           "liferegeneration",
           "physical",
@@ -15713,7 +15600,7 @@
         ],
         "tags_defense": [
           "block",
-          "chaos_resistance",
+          "chaos resistance",
           "liferegen",
           "liferegeneration",
           "regen"
@@ -15829,7 +15716,7 @@
           "chill",
           "cold",
           "cold damage",
-          "cold_resistance",
+          "cold resistance",
           "evasion",
           "freeze",
           "heavystun",
@@ -15865,7 +15752,7 @@
           "thorns"
         ],
         "tags_defense": [
-          "cold_resistance",
+          "cold resistance",
           "evasion"
         ],
         "tags_utility": [],
@@ -15886,7 +15773,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "all_elemental_resistance"
+          "all elemental resistance"
         ]
       },
       "lines": [
@@ -15904,7 +15791,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "all_elemental_resistance"
+          "all elemental resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -15983,9 +15870,8 @@
           "Evasion"
         ],
         "raw": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "crit",
-          "critical",
           "evasion"
         ]
       },
@@ -16002,11 +15888,10 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "evasion"
         ],
         "tags_utility": [],
@@ -16029,10 +15914,10 @@
           "Evasion"
         ],
         "raw": [
-          "cold_resistance",
+          "cold resistance",
           "evasion",
-          "fire_resistance",
-          "lightning_resistance"
+          "fire resistance",
+          "lightning resistance"
         ]
       },
       "lines": [
@@ -16097,10 +15982,10 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "cold_resistance",
+          "cold resistance",
           "evasion",
-          "fire_resistance",
-          "lightning_resistance"
+          "fire resistance",
+          "lightning resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -16166,9 +16051,9 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "cold_resistance",
-          "fire_resistance",
-          "movement_speed"
+          "cold resistance",
+          "fire resistance",
+          "movement speed"
         ]
       },
       "lines": [
@@ -16191,11 +16076,11 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "cold_resistance",
-          "fire_resistance"
+          "cold resistance",
+          "fire resistance"
         ],
         "tags_utility": [
-          "movement_speed"
+          "movement speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -16318,7 +16203,7 @@
         ],
         "raw": [
           "armour",
-          "cooldown_recovery",
+          "cooldown recovery",
           "energy shield",
           "liferegen",
           "liferegeneration",
@@ -16345,7 +16230,7 @@
           "regen"
         ],
         "tags_utility": [
-          "cooldown_recovery"
+          "cooldown recovery"
         ],
         "tags_anti": [],
         "attributes": {
@@ -16415,7 +16300,7 @@
         "raw": [
           "armour",
           "block",
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield",
           "liferegen",
           "liferegeneration",
@@ -16442,7 +16327,7 @@
         "tags_defense": [
           "armour",
           "block",
-          "chaos_resistance",
+          "chaos resistance",
           "energy shield",
           "liferegen",
           "liferegeneration",
@@ -16468,7 +16353,7 @@
           "Armour & Energy Shield"
         ],
         "raw": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "armour",
           "energy shield"
         ]
@@ -16494,7 +16379,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "all_elemental_resistance",
+          "all elemental resistance",
           "armour",
           "energy shield"
         ],
@@ -16518,7 +16403,7 @@
           "Life Regeneration"
         ],
         "raw": [
-          "fire_resistance",
+          "fire resistance",
           "liferegen",
           "liferegeneration",
           "regen"
@@ -16538,7 +16423,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "fire_resistance",
+          "fire resistance",
           "liferegen",
           "liferegeneration",
           "regen"
@@ -16561,9 +16446,9 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "cold_resistance",
-          "fire_resistance",
-          "lightning_resistance"
+          "cold resistance",
+          "fire resistance",
+          "lightning resistance"
         ]
       },
       "lines": [
@@ -16581,9 +16466,9 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "cold_resistance",
-          "fire_resistance",
-          "lightning_resistance"
+          "cold resistance",
+          "fire resistance",
+          "lightning resistance"
         ],
         "tags_utility": [],
         "tags_anti": [
@@ -16607,7 +16492,7 @@
           "Slow/Maim/Hinder"
         ],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "hinder",
           "maim",
           "physical",
@@ -16638,7 +16523,7 @@
         ],
         "tags_defense": [],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -16659,7 +16544,7 @@
           "Evasion"
         ],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "evasion",
           "physical",
           "physical damage"
@@ -16687,7 +16572,7 @@
           "evasion"
         ],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -16807,7 +16692,7 @@
           "Shock"
         ],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "electrocute",
           "lightning",
           "lightning damage",
@@ -16839,7 +16724,7 @@
         ],
         "tags_defense": [],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -16861,7 +16746,7 @@
           "Leech"
         ],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "chaos",
           "chaos damage",
           "leech",
@@ -16901,7 +16786,7 @@
           "lifeleech"
         ],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -16923,7 +16808,6 @@
         ],
         "raw": [
           "crit",
-          "critical",
           "physical",
           "physical damage"
         ]
@@ -16946,7 +16830,6 @@
       "meta": {
         "tags_offense": [
           "crit",
-          "critical",
           "physical",
           "physical damage"
         ],
@@ -16969,7 +16852,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "physical",
           "physical damage"
         ]
@@ -16994,7 +16877,7 @@
         ],
         "tags_defense": [],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -17015,7 +16898,7 @@
           "Chaos Damage"
         ],
         "raw": [
-          "cast_speed",
+          "cast speed",
           "chaos",
           "chaos damage"
         ]
@@ -17037,7 +16920,7 @@
         ],
         "tags_defense": [],
         "tags_utility": [
-          "cast_speed"
+          "cast speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -17111,7 +16994,7 @@
           "Shock"
         ],
         "raw": [
-          "cast_speed",
+          "cast speed",
           "electrocute",
           "liferegen",
           "liferegeneration",
@@ -17149,7 +17032,7 @@
           "regen"
         ],
         "tags_utility": [
-          "cast_speed"
+          "cast speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -17170,7 +17053,7 @@
           "Ignite"
         ],
         "raw": [
-          "cast_speed",
+          "cast speed",
           "fire",
           "fire damage",
           "ignite"
@@ -17197,7 +17080,7 @@
         ],
         "tags_defense": [],
         "tags_utility": [
-          "cast_speed"
+          "cast speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -17216,8 +17099,8 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "all_elemental_resistance",
-          "cast_speed"
+          "all elemental resistance",
+          "cast speed"
         ]
       },
       "lines": [
@@ -17236,10 +17119,10 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "all_elemental_resistance"
+          "all elemental resistance"
         ],
         "tags_utility": [
-          "cast_speed"
+          "cast speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -17260,7 +17143,7 @@
           "Freeze"
         ],
         "raw": [
-          "cast_speed",
+          "cast speed",
           "chill",
           "cold",
           "cold damage",
@@ -17291,7 +17174,7 @@
         ],
         "tags_defense": [],
         "tags_utility": [
-          "cast_speed"
+          "cast speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -17310,7 +17193,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "cast_speed"
+          "cast speed"
         ]
       },
       "lines": [
@@ -17336,7 +17219,7 @@
         "tags_offense": [],
         "tags_defense": [],
         "tags_utility": [
-          "cast_speed"
+          "cast speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -17403,8 +17286,7 @@
           "Critical Hit"
         ],
         "raw": [
-          "crit",
-          "critical"
+          "crit"
         ]
       },
       "lines": [
@@ -17418,8 +17300,7 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [],
         "tags_utility": [],
@@ -17443,11 +17324,10 @@
           "Life Regeneration"
         ],
         "raw": [
-          "attack_speed",
+          "attack speed",
           "cold",
           "cold damage",
           "crit",
-          "critical",
           "liferegen",
           "liferegeneration",
           "lightning",
@@ -17472,7 +17352,6 @@
           "cold",
           "cold damage",
           "crit",
-          "critical",
           "lightning",
           "lightning damage"
         ],
@@ -17482,7 +17361,7 @@
           "regen"
         ],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -17548,7 +17427,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "attack_speed"
+          "attack speed"
         ]
       },
       "lines": [
@@ -17568,7 +17447,7 @@
         "tags_offense": [],
         "tags_defense": [],
         "tags_utility": [
-          "attack_speed"
+          "attack speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -17589,7 +17468,7 @@
         "raw": [
           "fire",
           "fire damage",
-          "fire_resistance",
+          "fire resistance",
           "physical",
           "physical damage"
         ]
@@ -17615,7 +17494,7 @@
           "physical damage"
         ],
         "tags_defense": [
-          "fire_resistance"
+          "fire resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -17642,7 +17521,7 @@
           "bleed",
           "chaos",
           "chaos damage",
-          "chaos_resistance",
+          "chaos resistance",
           "curse",
           "curses",
           "physical",
@@ -17705,7 +17584,7 @@
           "physical damage"
         ],
         "tags_defense": [
-          "chaos_resistance"
+          "chaos resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],
@@ -17725,7 +17604,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "cast_speed"
+          "cast speed"
         ]
       },
       "lines": [
@@ -17746,10 +17625,10 @@
         "tags_offense": [],
         "tags_defense": [],
         "tags_utility": [
-          "cast_speed"
+          "cast speed"
         ],
         "tags_anti": [
-          "all_elemental_resistance"
+          "all elemental resistance"
         ],
         "attributes": {
           "str": 0,
@@ -17769,7 +17648,7 @@
           "Life Regeneration"
         ],
         "raw": [
-          "cast_speed",
+          "cast speed",
           "liferegen",
           "liferegeneration",
           "regen"
@@ -17805,7 +17684,7 @@
           "regen"
         ],
         "tags_utility": [
-          "cast_speed"
+          "cast speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -17826,8 +17705,7 @@
           "Critical Hit"
         ],
         "raw": [
-          "crit",
-          "critical"
+          "crit"
         ]
       },
       "lines": [
@@ -17842,8 +17720,7 @@
       ],
       "meta": {
         "tags_offense": [
-          "crit",
-          "critical"
+          "crit"
         ],
         "tags_defense": [],
         "tags_utility": [],
@@ -17864,7 +17741,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "cast_speed"
+          "cast speed"
         ]
       },
       "lines": [
@@ -17881,7 +17758,7 @@
         "tags_offense": [],
         "tags_defense": [],
         "tags_utility": [
-          "cast_speed"
+          "cast speed"
         ],
         "tags_anti": [],
         "attributes": {
@@ -17940,7 +17817,7 @@
       "tags": {
         "canonical": [],
         "raw": [
-          "chaos_resistance"
+          "chaos resistance"
         ]
       },
       "lines": [
@@ -17957,7 +17834,7 @@
       "meta": {
         "tags_offense": [],
         "tags_defense": [
-          "chaos_resistance"
+          "chaos resistance"
         ],
         "tags_utility": [],
         "tags_anti": [],

@@ -1,0 +1,270 @@
+{
+  "generated_at": "2026-03-06T18:02:50.828957+00:00",
+  "families": {
+    "skills": {
+      "source": "data/enriched/skills_enriched.json",
+      "total_tags": 10734,
+      "unique_tags": 650,
+      "top_tags": [
+        [
+          "support",
+          594
+        ],
+        [
+          "attack",
+          383
+        ],
+        [
+          "area",
+          343
+        ],
+        [
+          "intelligence",
+          236
+        ],
+        [
+          "hitdamage",
+          235
+        ],
+        [
+          "duration",
+          223
+        ],
+        [
+          "melee",
+          196
+        ],
+        [
+          "spell",
+          190
+        ],
+        [
+          "buff",
+          181
+        ],
+        [
+          "attackinplace",
+          178
+        ],
+        [
+          "persistent",
+          176
+        ],
+        [
+          "projectile",
+          176
+        ],
+        [
+          "mace",
+          167
+        ],
+        [
+          "usablewhilemoving",
+          164
+        ],
+        [
+          "dexterity",
+          148
+        ],
+        [
+          "trigger",
+          138
+        ],
+        [
+          "strength",
+          136
+        ],
+        [
+          "elemental",
+          135
+        ],
+        [
+          "physical",
+          135
+        ],
+        [
+          "bow",
+          134
+        ]
+      ]
+    },
+    "passives": {
+      "source": "data/enriched/passives_enriched.json",
+      "total_tags": 1324,
+      "unique_tags": 41,
+      "top_tags": [
+        [
+          "attack",
+          133
+        ],
+        [
+          "crit",
+          105
+        ],
+        [
+          "armour",
+          80
+        ],
+        [
+          "mana",
+          79
+        ],
+        [
+          "spell",
+          65
+        ],
+        [
+          "energy shield",
+          62
+        ],
+        [
+          "physical",
+          59
+        ],
+        [
+          "life",
+          54
+        ],
+        [
+          "shield",
+          54
+        ],
+        [
+          "liferegeneration",
+          52
+        ],
+        [
+          "ailments",
+          49
+        ],
+        [
+          "evasion",
+          45
+        ],
+        [
+          "minion",
+          45
+        ],
+        [
+          "fire",
+          41
+        ],
+        [
+          "shock",
+          35
+        ],
+        [
+          "lightning",
+          33
+        ],
+        [
+          "cold",
+          29
+        ],
+        [
+          "ignite",
+          26
+        ],
+        [
+          "block",
+          23
+        ],
+        [
+          "armourbreak",
+          21
+        ]
+      ]
+    },
+    "uniques": {
+      "source": "data/enriched/uniques_enriched.json",
+      "total_tags": 1437,
+      "unique_tags": 59,
+      "top_tags": [
+        [
+          "physical",
+          100
+        ],
+        [
+          "armour",
+          93
+        ],
+        [
+          "energy shield",
+          91
+        ],
+        [
+          "liferegen",
+          67
+        ],
+        [
+          "liferegeneration",
+          67
+        ],
+        [
+          "regen",
+          67
+        ],
+        [
+          "physical damage",
+          62
+        ],
+        [
+          "evasion",
+          57
+        ],
+        [
+          "crit",
+          47
+        ],
+        [
+          "attack speed",
+          40
+        ],
+        [
+          "heavystun",
+          39
+        ],
+        [
+          "stun",
+          39
+        ],
+        [
+          "cold resistance",
+          36
+        ],
+        [
+          "chaos resistance",
+          35
+        ],
+        [
+          "fire",
+          34
+        ],
+        [
+          "fire resistance",
+          32
+        ],
+        [
+          "lightning resistance",
+          32
+        ],
+        [
+          "lightning",
+          31
+        ],
+        [
+          "cold",
+          29
+        ],
+        [
+          "movement speed",
+          28
+        ]
+      ]
+    }
+  },
+  "summary": {
+    "total_tags_seen": 13495,
+    "unique_tags": 670
+  }
+}

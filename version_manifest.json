@@ -1,6 +1,6 @@
 {
   "schema": "randomancer_pipeline_manifest_v1",
-  "last_pipeline_run_at": "2026-03-06T17:46:24.737136+00:00",
+  "last_pipeline_run_at": "2026-03-06T18:02:51.109905+00:00",
   "pipeline": {
     "entrypoint": "scripts/pipeline/run_pipeline.py",
     "phase": "phase_1_foundation",
@@ -10,7 +10,8 @@
       "canonical": "success",
       "enrich": "skipped",
       "runtime": "success",
-      "validate": "success"
+      "validate": "success",
+      "tag_report": "success"
     }
   }
 }

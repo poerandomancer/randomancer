@@ -61,6 +61,12 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence
 
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts.shared.tag_utils import process_tags
+
 
 # -------------------------
 # Load project mechanic vocab (core-data)
@@ -406,16 +412,22 @@ def extract_tags(lines: list[str], core: dict[str, Any]) -> dict[str, Any]:
     # Canonical: remove any legacy value
     canon.discard("Chaos Damage Over Time")
 
+    normalized_raw = process_tags(list(raw), entity='uniques')
+    normalized_offense = process_tags(list(offense), entity='uniques')
+    normalized_defense = process_tags(list(defense), entity='uniques')
+    normalized_utility = process_tags(list(utility), entity='uniques')
+    normalized_anti = process_tags(list(anti), entity='uniques')
+
     return {
         "tags": {
             "canonical": sorted(canon),
-            "raw": sorted(raw),
+            "raw": normalized_raw.tags,
         },
         "meta": {
-            "tags_offense": sorted(offense),
-            "tags_defense": sorted(defense),
-            "tags_utility": sorted(utility),
-            "tags_anti": sorted(anti),
+            "tags_offense": normalized_offense.tags,
+            "tags_defense": normalized_defense.tags,
+            "tags_utility": normalized_utility.tags,
+            "tags_anti": normalized_anti.tags,
             "attributes": extract_attributes(lines),
             "primary_defense": prim,
         }

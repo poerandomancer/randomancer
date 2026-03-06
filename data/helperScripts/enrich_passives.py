@@ -24,6 +24,12 @@ from pathlib import Path
 from collections import Counter
 import re
 
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts.shared.tag_utils import process_tags
+
 TEXT_TAG_RULES = [
     # Armour break / shattered armour
     (re.compile(r"(?:break|broken|breaks)\s+armou?r|armou?r\s*(?:break|broken)", re.I), "armourbreak"),
@@ -371,7 +377,8 @@ def derive_tags(raw_stats, lines=None):
             if rx.search(txt_lower):
                 tags.add(tag)
 
-    return sorted(tags)
+    normalized = process_tags(list(tags), entity='passives')
+    return normalized.tags
 
 
 

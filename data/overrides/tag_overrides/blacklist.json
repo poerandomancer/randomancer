@@ -1,0 +1,42 @@
+{
+  "global": [
+    "",
+    "unknown"
+  ],
+  "prefixes": [
+    "grants:",
+    "grants "
+  ],
+  "uniques": [
+    "helmet",
+    "body armour",
+    "body armor",
+    "gloves",
+    "boots",
+    "belt",
+    "ring",
+    "amulet",
+    "wand",
+    "bow",
+    "staff",
+    "mace",
+    "sword",
+    "axe",
+    "dagger",
+    "spear",
+    "crossbow",
+    "quarterstaff",
+    "flail",
+    "focus",
+    "shield",
+    "buckler",
+    "quiver",
+    "sceptre",
+    "claw",
+    "javelin",
+    "trap",
+    "flask"
+  ],
+  "skills": [],
+  "passives": []
+}

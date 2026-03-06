@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-06T17:46:24.638549+00:00",
+  "generated_at": "2026-03-06T18:02:49.903658+00:00",
   "runtime_inputs": [
     {
       "path": "data/core-data.json",
@@ -9,17 +9,17 @@
     {
       "path": "data/enriched/skills_enriched.json",
       "exists": true,
-      "bytes": 2763125
+      "bytes": 2741080
     },
     {
       "path": "data/enriched/passives_enriched.json",
       "exists": true,
-      "bytes": 906321
+      "bytes": 904514
     },
     {
       "path": "data/enriched/uniques_enriched.json",
       "exists": true,
-      "bytes": 448446
+      "bytes": 445765
     }
   ]
 }

@@ -6,6 +6,7 @@ from typing import Any
 
 from scripts.shared.file_utils import ensure_dir, file_size, load_json, write_json
 from scripts.shared.report_utils import utc_now_iso
+from scripts.shared.tag_utils import is_blacklisted, normalize_tag_candidate
 from scripts.shared.validation_utils import check_json_file
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -152,14 +153,126 @@ def run_validation_stage() -> dict[str, Any]:
         ok = False
         messages.append(f'Duplicate passive node IDs found: {duplicate_ids[:10]}')
 
+    tag_issues = validate_tag_hygiene()
+    if tag_issues['issue_count'] > 0:
+        ok = False
+        messages.append(f"Tag hygiene issues found: {tag_issues['issue_count']}")
+
     validation_report = {
         'generated_at': utc_now_iso(),
         'ok': ok,
         'messages': messages,
         'duplicate_passive_node_ids': duplicate_ids,
+        'tag_hygiene': tag_issues,
     }
     write_json(REPORTS / 'validation_report.json', validation_report)
     return validation_report
+
+
+def generate_tag_report() -> dict[str, Any]:
+    report: dict[str, Any] = {
+        'generated_at': utc_now_iso(),
+        'families': {},
+        'summary': {
+            'total_tags_seen': 0,
+            'unique_tags': 0,
+        },
+    }
+
+    family_sources = {
+        'skills': DATA / 'enriched' / 'skills_enriched.json',
+        'passives': DATA / 'enriched' / 'passives_enriched.json',
+        'uniques': DATA / 'enriched' / 'uniques_enriched.json',
+    }
+
+    all_tags: set[str] = set()
+
+    for family, path in family_sources.items():
+        info = {'source': str(path.relative_to(ROOT)), 'total_tags': 0, 'unique_tags': 0, 'top_tags': []}
+        if not path.exists():
+            info['missing'] = True
+            report['families'][family] = info
+            continue
+
+        payload = load_json(path)
+        tags: list[str] = []
+        if family == 'skills' and isinstance(payload, list):
+            for row in payload:
+                if isinstance(row, dict):
+                    tags.extend([str(t) for t in (row.get('tags') or []) if str(t).strip()])
+        elif family == 'passives' and isinstance(payload, dict):
+            for node in payload.get('nodes', []):
+                if isinstance(node, dict):
+                    tags.extend([str(t) for t in (node.get('tags') or []) if str(t).strip()])
+        elif family == 'uniques' and isinstance(payload, dict):
+            for item in payload.get('items', []):
+                if not isinstance(item, dict):
+                    continue
+                tag_block = item.get('tags') or {}
+                if isinstance(tag_block, dict):
+                    tags.extend([str(t) for t in (tag_block.get('raw') or []) if str(t).strip()])
+
+        normalized = [normalize_tag_candidate(tag) for tag in tags if normalize_tag_candidate(tag)]
+        all_tags.update(normalized)
+
+        counts: dict[str, int] = {}
+        for tag in normalized:
+            counts[tag] = counts.get(tag, 0) + 1
+
+        info['total_tags'] = len(normalized)
+        info['unique_tags'] = len(counts)
+        info['top_tags'] = sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))[:20]
+        report['families'][family] = info
+
+    report['summary']['total_tags_seen'] = sum(v.get('total_tags', 0) for v in report['families'].values())
+    report['summary']['unique_tags'] = len(all_tags)
+    write_json(REPORTS / 'tag_report.json', report)
+    return report
+
+
+def validate_tag_hygiene() -> dict[str, Any]:
+    issues: list[dict[str, Any]] = []
+
+    def inspect(entity: str, tags: list[str], context: str) -> None:
+        seen: set[str] = set()
+        for tag in tags:
+            normalized = normalize_tag_candidate(tag)
+            if not normalized:
+                issues.append({'entity': entity, 'context': context, 'tag': tag, 'issue': 'empty'})
+                continue
+            if normalized in seen:
+                issues.append({'entity': entity, 'context': context, 'tag': normalized, 'issue': 'duplicate'})
+            seen.add(normalized)
+            if is_blacklisted(normalized, entity=entity):
+                issues.append({'entity': entity, 'context': context, 'tag': normalized, 'issue': 'blacklisted'})
+            if normalized.startswith('grants:') or normalized.startswith('grants '):
+                issues.append({'entity': entity, 'context': context, 'tag': normalized, 'issue': 'suspicious_prefix'})
+
+    skills = load_json(DATA / 'enriched' / 'skills_enriched.json') if (DATA / 'enriched' / 'skills_enriched.json').exists() else []
+    if isinstance(skills, list):
+        for row in skills[:5000]:
+            if isinstance(row, dict):
+                inspect('skills', [str(t) for t in (row.get('tags') or [])], str(row.get('id', 'unknown')))
+
+    passives = load_json(DATA / 'enriched' / 'passives_enriched.json') if (DATA / 'enriched' / 'passives_enriched.json').exists() else {}
+    if isinstance(passives, dict):
+        for node in passives.get('nodes', [])[:5000]:
+            if isinstance(node, dict):
+                inspect('passives', [str(t) for t in (node.get('tags') or [])], str(node.get('id', 'unknown')))
+
+    uniques = load_json(DATA / 'enriched' / 'uniques_enriched.json') if (DATA / 'enriched' / 'uniques_enriched.json').exists() else {}
+    if isinstance(uniques, dict):
+        for item in uniques.get('items', [])[:5000]:
+            if not isinstance(item, dict):
+                continue
+            tag_block = item.get('tags') or {}
+            raw_tags = tag_block.get('raw') if isinstance(tag_block, dict) else []
+            inspect('uniques', [str(t) for t in (raw_tags or [])], str(item.get('name', 'unknown')))
+
+    return {
+        'issue_count': len(issues),
+        'sample_issues': issues[:50],
+    }
 
 
 def update_version_manifest(stage_results: dict[str, Any]) -> dict[str, Any]:

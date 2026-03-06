@@ -31,6 +31,18 @@ Pipeline-oriented data folders are organized under `data/`:
 Phase 1 intentionally focuses on structure and orchestration only.
 Major source-policy migrations (for uniques/passives) are deferred.
 
+## Phase 2 tag architecture
+
+Tag normalization now runs through shared utilities and config-driven overrides:
+
+- `scripts/shared/tag_utils.py`
+- `data/overrides/tag_overrides/aliases.json`
+- `data/overrides/tag_overrides/blacklist.json`
+- `data/overrides/tag_overrides/visibility_rules.json`
+- `data/overrides/tag_overrides/weights.json`
+
+Pipeline validation now includes tag-hygiene checks and emits `data/reports/tag_report.json`.
+
 ## Run
 
 ```bash

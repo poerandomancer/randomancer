@@ -1,0 +1,7 @@
+{
+  "visible_prefixes": [
+    "family:"
+  ],
+  "internal_prefixes": [],
+  "notes": "Phase 2 scaffold; future phases can classify display vs search-only tags."
+}

@@ -1,0 +1,41 @@
+{
+  "global": {
+    "critical": "crit",
+    "critical strike": "crit",
+    "bleeding": "bleed",
+    "bleeds": "bleed",
+    "bleeded": "bleed",
+    "shocked": "shock",
+    "shocking": "shock",
+    "ignited": "ignite",
+    "igniting": "ignite",
+    "poisoned": "poison",
+    "poisoning": "poison",
+    "chilled": "chill",
+    "chilling": "chill",
+    "freezing": "freeze",
+    "frozen": "freeze",
+    "slams": "slam",
+    "projectiles": "projectile",
+    "totems": "totem",
+    "minions": "minion",
+    "marks": "mark",
+    "offerings": "offering",
+    "grenades": "grenade",
+    "corpses": "corpse",
+    "damage over time": "dot",
+    "damageovertime": "dot",
+    "life regeneration": "liferegeneration",
+    "culling strike": "cullingstrike",
+    "block recovery": "blockrecovery",
+    "armorbreak": "armourbreak",
+    "heavy stun": "heavystun"
+  },
+  "skills": {
+    "heavystun": "heavystun"
+  },
+  "passives": {},
+  "uniques": {
+    "body armor": "body armour"
+  }
+}

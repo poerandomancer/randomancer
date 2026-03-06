@@ -84,6 +84,8 @@ A new staged data-pipeline scaffold is available with a single entrypoint:
 
 It introduces explicit `raw -> normalized -> canonical -> enriched -> runtime` boundaries and generates pipeline/validation reports in `data/reports/` while preserving current enriched outputs for app compatibility.
 
+Phase 2 adds shared tag normalization via `scripts/shared/tag_utils.py` with config-driven overrides under `data/overrides/tag_overrides/` and a `data/reports/tag_report.json` output.
+
 See `docs/data-pipeline.md` for details and scope notes for this phase.
 
 ## Development Notes

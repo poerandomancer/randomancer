@@ -14,6 +14,7 @@ if str(ROOT) not in sys.path:
 from scripts.pipeline.stages import (  # noqa: E402
     REPORTS,
     check_inputs,
+    generate_tag_report,
     run_canonical_stage,
     run_enrich_stage,
     run_normalize_stage,
@@ -64,6 +65,7 @@ def run_pipeline(skip_enrich: bool = False) -> tuple[int, dict[str, Any]]:
 
         validation = run_validation_stage()
         stage_results['validate'] = _stage('success' if validation.get('ok') else 'failed', validation)
+        stage_results['tag_report'] = _stage('success', generate_tag_report())
         stage_results['manifest'] = _stage('success', update_version_manifest(stage_results))
 
         success = all(value['status'] in {'success', 'skipped'} for value in stage_results.values())
