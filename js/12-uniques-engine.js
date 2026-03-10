@@ -1,4 +1,5 @@
 import { TagUtils, defensePseudoTags } from './05-tags-and-scorer.js';
+import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
 
 /* === Randomancer: Uniques Synergy — canonical engine (v0.8.2) === */
 (function(){
@@ -214,21 +215,91 @@ import { TagUtils, defensePseudoTags } from './05-tags-and-scorer.js';
 
 
 async function loadUniquesM(){
-    const url = 'data/enriched/uniques_enriched.json?v=' + Date.now();
-    const r = await fetch(url, {cache:'no-store'});
-    if (!r.ok) throw new Error('HTTP '+r.status);
-    const data = await r.json();
-    return Array.isArray(data) ? data : (data.items||[]);
+    const primaryUrl = 'data/enriched/poe2db_uniques_min.json?v=' + Date.now();
+    const fallbackUrl = 'data/enriched/uniques_enriched.json?v=' + Date.now();
+
+    try {
+      const r = await fetch(primaryUrl, { cache:'no-store' });
+      if (!r.ok) throw new Error('HTTP '+r.status);
+      const data = await r.json();
+      const adapted = adaptPoe2dbUniquesPayload(data);
+      if (adapted.length) return adapted;
+      throw new Error('No compatible uniques in poe2db payload');
+    } catch (err) {
+      console.warn('[u79b2m] failed to load poe2db uniques for build mode, using legacy fallback', err);
+      const r = await fetch(fallbackUrl, { cache:'no-store' });
+      if (!r.ok) throw new Error('HTTP '+r.status);
+      const data = await r.json();
+      return Array.isArray(data) ? data : (data.items || []);
+    }
+  }
+
+  const UNIQUE_TAG_DEBUG = {
+    seen: new Set(),
+    matched: new Set(),
+    mismatches: new Map()
+  };
+
+  function maybeLogUniqueTagDiagnostics(items, rolledSet){
+    const params = new URLSearchParams(window.location.search || '');
+    if (params.get('debug') !== '1') return;
+
+    const rolled = new Set(Array.from(rolledSet || []).map((t) => norm(t)));
+
+    items.forEach((item) => {
+      const tags = Array.from(getItemTagSet(item));
+      tags.forEach((tag) => {
+        UNIQUE_TAG_DEBUG.seen.add(tag);
+        if (rolled.has(tag)) {
+          UNIQUE_TAG_DEBUG.matched.add(tag);
+        } else {
+          UNIQUE_TAG_DEBUG.mismatches.set(tag, (UNIQUE_TAG_DEBUG.mismatches.get(tag) || 0) + 1);
+        }
+      });
+    });
+
+    const unmatchedCount = UNIQUE_TAG_DEBUG.seen.size - UNIQUE_TAG_DEBUG.matched.size;
+    const top = Array.from(UNIQUE_TAG_DEBUG.mismatches.entries())
+      .filter(([tag]) => !UNIQUE_TAG_DEBUG.matched.has(tag))
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 8)
+      .map(([tag, count]) => `${tag}:${count}`)
+      .join(', ');
+
+    console.info(
+      `[u79b2m][debug] unique tag coverage seen=${UNIQUE_TAG_DEBUG.seen.size} matched=${UNIQUE_TAG_DEBUG.matched.size} unmatched=${unmatchedCount}${top ? ` top_unmatched=${top}` : ''}`
+    );
+  }
+
+  function getGrantedSkillTags(item){
+    if (!item) return [];
+    if (Array.isArray(item.__grantedSkillTags)) return item.__grantedSkillTags;
+
+    const entries = getGrantedSkillEntries(item);
+    const out = new Set();
+
+    entries.forEach((entry) => {
+      const skillTags = Array.isArray(entry?.tags) ? entry.tags : [];
+      skillTags.forEach((t) => {
+        const n = norm(t);
+        if (n) out.add(n);
+      });
+    });
+
+    const tags = Array.from(out);
+    item.__grantedSkillTags = tags;
+    return tags;
   }
 
   function getItemTagSet(item){
     const raw = (item.tags && item.tags.raw) || [];
     const canon = filterCanonicalsByEvidence(item);
     const derived = deriveExtraTags(item.lines || []);
+    const grantedSkillTags = getGrantedSkillTags(item);
     const acc = [];
 
     // normalize raw + derived tags directly
-    for (const t of [...raw, ...derived]){
+    for (const t of [...raw, ...derived, ...grantedSkillTags]){
       if (!t) continue;
       const n = norm(t);
       if (n) acc.push(n);
@@ -748,112 +819,200 @@ function ensureUniqueSection(){
     const tags = Array.from(getItemTagSet(item)).sort();
     return tags.map(t=>`<span class="tag-pill pill${rolledSet.has(t)?' matched':''}" data-tag="${t}">${t}</span>`).join('');
   }
-  function highlight(lines, rolledSet){
-	  const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-	  // Skip the first 2 lines (name + base) – they’re in the header
-	  let out = (lines || []).slice(2).join('\n');
-	
-	  // Highlight any text that matches the rolled profile tags
-	  rolledSet.forEach(t => {
-		if (!t) return;
-		const rx = new RegExp(esc(String(t)), 'ig');
-		out = out.replace(rx, m => `<span class="hit">${m}</span>`);
-	  });
-	
-	  return out
-		.split('\n')
-		.map(L => L.trim())
-		.filter(L => L.length) // drop empty lines
-		.map(L => `<div class="unique-line">${L}</div>`)
-		.join('');
-	}
-	
-	function buildUniqueReason(it, rolledSet) {
-	  if (!it) return '';
-	
-	  // Use the same tag logic as scoring + pill rendering
-	  const tagSet = getItemTagSet(it);        // returns a Set of normalized tags
-	  const tags = Array.from(tagSet);
-	  if (!tags.length) return '';
-	
-	  const hasRolled =
-		rolledSet &&
-		typeof rolledSet.has === 'function' &&
-		rolledSet.size > 0;
-	
-	  const matched = [];
-	  const unmatched = [];
-	
-	  for (const t of tags) {
-		if (!t) continue;
-	
-		// rolledSet already holds normalized tags (from rolledByCategory/expandTags)
-		if (hasRolled && rolledSet.has(t)) {
-		  matched.push(t);
-		} else {
-		  unmatched.push(t);
-		}
-	  }
-	
-	  // Prefer tags that actually match the rolled profile; otherwise just
-	  // describe the item by its own tags.
-	  const source = (hasRolled && matched.length) ? matched : tags;
-	  const main = source.slice(0, 3); // up to 3 tags
-	
-	  if (!main.length) return '';
-	
-	  const humanList = (arr) => {
-		const pretty = (s) => {
-		  s = String(s || '').trim();
-		  if (!s) return s;
-		  return s[0].toUpperCase() + s.slice(1);
-		};
-		const p = arr.map(pretty);
-		if (p.length === 1) return p[0];
-		if (p.length === 2) return `${p[0]} and ${p[1]}`;
-		return `${p[0]}, ${p[1]} and ${p[2]}`;
-	  };
-	
-	  const list = humanList(main);
-	
-	  if (hasRolled && matched.length) {
-		return `Synergizes with your ${list} focus.`;
-	  }
-	  return `Adds ${list} to your build.`;
-	}
 
+  function highlightText(text, rolledSet){
+    const esc = s => s.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&');
+    let out = String(text || '');
+    rolledSet.forEach((t) => {
+      if (!t) return;
+      const rx = new RegExp(esc(String(t)), 'ig');
+      out = out.replace(rx, m => `<span class="hit">${m}</span>`);
+    });
+    return out;
+  }
+
+  function renderLines(lines, rolledSet, lineClass='unique-line'){
+    return (Array.isArray(lines) ? lines : [])
+      .map((line) => String(line || '').trim())
+      .filter(Boolean)
+      .map((line) => `<div class="${lineClass}">${highlightText(line, rolledSet)}</div>`)
+      .join('');
+  }
+
+  function getSectionLines(it, kind){
+    const fromMeta = Array.isArray(it?.meta?.[kind]) ? it.meta[kind] : [];
+    if (fromMeta.length) return fromMeta;
+
+    if (kind === 'explicit_mods') {
+      return Array.isArray(it?.lines) ? it.lines.slice(2).filter(Boolean) : [];
+    }
+    return [];
+  }
+
+  function formatRequirements(it){
+    const req = it?.requirements || {};
+    const pairs = [
+      ['level', 'Level'],
+      ['str', 'STR'],
+      ['dex', 'DEX'],
+      ['int', 'INT']
+    ];
+
+    const parts = pairs
+      .map(([key, label]) => {
+        const val = req[key];
+        if (val == null || val === '' || Number(val) === 0) return null;
+        return `${label} ${val}`;
+      })
+      .filter(Boolean);
+
+    return parts.length ? `Requires: ${parts.join(', ')}` : '';
+  }
+
+
+  function normalizeSkillKey(value){
+    return String(value || '')
+      .toLowerCase()
+      .replace(/\[[^\]]+\|([^\]]+)\]/g, '$1')
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim();
+  }
+
+  function getSkillLookup(){
+    if (window.__uniqueSkillLookup && window.__uniqueSkillLookup.size) return window.__uniqueSkillLookup;
+
+    const map = new Map();
+    const gems = Array.isArray(window.DATA?.gems) ? window.DATA.gems : [];
+
+    gems.forEach((g) => {
+      const names = [g?.name, g?.base_item?.display_name, g?.support_name].filter(Boolean);
+      names.forEach((n) => {
+        const key = normalizeSkillKey(n);
+        if (!key || map.has(key)) return;
+        map.set(key, g);
+      });
+    });
+
+    window.__uniqueSkillLookup = map;
+    return map;
+  }
+
+  function getGrantedSkillEntries(it){
+    const granted = Array.isArray(it?.granted_skills) ? it.granted_skills : [];
+    if (!granted.length) return [];
+
+    const skillsByName = getSkillLookup();
+    return granted
+      .map((entry) => {
+        const name = String(entry?.name || entry?.raw || entry || '').trim();
+        if (!name) return null;
+
+        const key = normalizeSkillKey(name);
+        const g = key ? skillsByName.get(key) : null;
+        const desc = String(g?.description || g?.support_text || '').trim();
+        const tags = Array.isArray(g?.tags) ? g.tags : [];
+
+        return {
+          name,
+          description: desc,
+          tags
+        };
+      })
+      .filter(Boolean);
+  }
+
+  function renderGrantedSkills(it){
+    const entries = getGrantedSkillEntries(it);
+    if (!entries.length) return '';
+
+    return entries
+      .map((entry) => {
+        const line = `Grants: ${entry.name}`;
+        const detail = entry.description ? `<div class="unique-granted-desc">${highlightText(entry.description, new Set())}</div>` : '';
+        return `<div class="unique-granted-item"><div class="unique-line">${highlightText(line, new Set())}</div>${detail}</div>`;
+      })
+      .join('');
+  }
+
+  function buildUniqueReason(it, rolledSet) {
+    if (!it) return '';
+
+    const tagSet = getItemTagSet(it);
+    const tags = Array.from(tagSet);
+    if (!tags.length) return '';
+
+    const hasRolled =
+      rolledSet &&
+      typeof rolledSet.has === 'function' &&
+      rolledSet.size > 0;
+
+    const matched = [];
+    for (const t of tags) {
+      if (!t) continue;
+      if (hasRolled && rolledSet.has(t)) matched.push(t);
+    }
+
+    const source = (hasRolled && matched.length) ? matched : tags;
+    const main = source.slice(0, 3);
+    if (!main.length) return '';
+
+    const humanList = (arr) => {
+      const p = arr.map((s) => {
+        s = String(s || '').trim();
+        return s ? s[0].toUpperCase() + s.slice(1) : s;
+      });
+      if (p.length === 1) return p[0];
+      if (p.length === 2) return `${p[0]} and ${p[1]}`;
+      return `${p[0]}, ${p[1]} and ${p[2]}`;
+    };
+
+    const list = humanList(main);
+    if (hasRolled && matched.length) return `Synergizes with your ${list} focus.`;
+    return `Adds ${list} to your build.`;
+  }
 
   function renderUniques(items, rolledSet){
-	  const grid = ensureUniqueSection();
-	  if (!grid) {
-		setTimeout(() => renderUniques(items, rolledSet), 120);
-		return;
-	  }
-	
-	  grid.innerHTML = items.map(it => {
-		const pills = pillsFor(it, rolledSet);
-		const lines = highlight(it.lines, rolledSet);
-		const reason = buildUniqueReason(it, rolledSet);
-	
-		return `
-		  <div class="unique-card">
-			<div class="unique-header">
-			  <div class="unique-name">${it.name}</div>
-			  <div class="unique-base">${it.base}</div>
-			</div>
-			<div class="skill-divider"></div>
-			<div class="tags-row">
-			  ${pills}
-			</div>
-			<div class="unique-lines">
-			  ${reason ? `<div class="unique-highlights">${reason}</div>` : ''}
-			  ${lines}
-			</div>
-		  </div>
-		`;
+    const grid = ensureUniqueSection();
+    if (!grid) {
+      setTimeout(() => renderUniques(items, rolledSet), 120);
+      return;
+    }
 
-	  }).join('');
-	}
+    grid.innerHTML = items.map(it => {
+      const pills = pillsFor(it, rolledSet);
+      const reason = buildUniqueReason(it, rolledSet);
+      const requirements = formatRequirements(it);
+      const flavourLines = getSectionLines(it, 'flavour_text');
+      const implicitLines = getSectionLines(it, 'implicit_mods');
+      const explicitLines = getSectionLines(it, 'explicit_mods');
+      const grantedSkillsHtml = renderGrantedSkills(it);
+      const hasGrantedSkills = !!grantedSkillsHtml;
+
+      return `
+        <div class="unique-card">
+          <div class="unique-header">
+            <div class="unique-name">${it.name}</div>
+            <div class="unique-base">${it.base}</div>
+            ${requirements ? `<div class="unique-req">${requirements}</div>` : ''}
+          </div>
+          <div class="skill-divider"></div>
+          <div class="unique-lines">
+            ${reason ? `<div class="unique-highlights">${reason}</div>` : ''}
+            ${flavourLines.length ? `<div class="unique-flavour">${renderLines(flavourLines, rolledSet, 'unique-flavour-line')}</div>` : ''}
+            ${implicitLines.length ? `<div class="unique-gold-divider"></div><div class="unique-section unique-section--implicit">${renderLines(implicitLines, rolledSet)}</div>` : ''}
+            ${(!implicitLines.length && flavourLines.length && explicitLines.length) ? `<div class="unique-gold-divider"></div>` : ''}
+            ${implicitLines.length && explicitLines.length ? `<div class="unique-gold-divider"></div>` : ''}
+            ${explicitLines.length ? `<div class="unique-section unique-section--explicit">${renderLines(explicitLines, rolledSet)}</div>` : ''}
+            ${hasGrantedSkills && explicitLines.length ? `<div class="unique-gold-divider"></div>` : ''}
+            ${hasGrantedSkills && !explicitLines.length && (implicitLines.length || flavourLines.length) ? `<div class="unique-gold-divider"></div>` : ''}
+            ${hasGrantedSkills ? `<div class="unique-section unique-section--granted">${grantedSkillsHtml}</div>` : ''}
+            ${pills ? `<div class="unique-gold-divider"></div><div class="tags-row tags-row--bottom">${pills}</div>` : ''}
+          </div>
+        </div>
+      `;
+
+    }).join('');
+  }
 
 
     async function refreshUniques(snap){
@@ -869,6 +1028,7 @@ function ensureUniqueSection(){
                 ]);
                 const allow = allowedSlots(snap);
                 const picks = pickPasses(items, rolled, snap);
+                maybeLogUniqueTagDiagnostics(items, rolledSet);
 
                 if (window.App && typeof window.App.mergeCurrentRoll === 'function') {
                   window.App.mergeCurrentRoll({ recommendedUniques: picks.map(p => p.name) });
