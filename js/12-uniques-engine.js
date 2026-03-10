@@ -271,14 +271,35 @@ async function loadUniquesM(){
     );
   }
 
+  function getGrantedSkillTags(item){
+    if (!item) return [];
+    if (Array.isArray(item.__grantedSkillTags)) return item.__grantedSkillTags;
+
+    const entries = getGrantedSkillEntries(item);
+    const out = new Set();
+
+    entries.forEach((entry) => {
+      const skillTags = Array.isArray(entry?.tags) ? entry.tags : [];
+      skillTags.forEach((t) => {
+        const n = norm(t);
+        if (n) out.add(n);
+      });
+    });
+
+    const tags = Array.from(out);
+    item.__grantedSkillTags = tags;
+    return tags;
+  }
+
   function getItemTagSet(item){
     const raw = (item.tags && item.tags.raw) || [];
     const canon = filterCanonicalsByEvidence(item);
     const derived = deriveExtraTags(item.lines || []);
+    const grantedSkillTags = getGrantedSkillTags(item);
     const acc = [];
 
     // normalize raw + derived tags directly
-    for (const t of [...raw, ...derived]){
+    for (const t of [...raw, ...derived, ...grantedSkillTags]){
       if (!t) continue;
       const n = norm(t);
       if (n) acc.push(n);
@@ -889,10 +910,12 @@ function ensureUniqueSection(){
         const key = normalizeSkillKey(name);
         const g = key ? skillsByName.get(key) : null;
         const desc = String(g?.description || g?.support_text || '').trim();
+        const tags = Array.isArray(g?.tags) ? g.tags : [];
 
         return {
           name,
-          description: desc
+          description: desc,
+          tags
         };
       })
       .filter(Boolean);
