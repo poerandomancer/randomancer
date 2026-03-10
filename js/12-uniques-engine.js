@@ -848,6 +848,69 @@ function ensureUniqueSection(){
     return parts.length ? `Requires: ${parts.join(', ')}` : '';
   }
 
+
+  function normalizeSkillKey(value){
+    return String(value || '')
+      .toLowerCase()
+      .replace(/\[[^\]]+\|([^\]]+)\]/g, '$1')
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim();
+  }
+
+  function getSkillLookup(){
+    if (window.__uniqueSkillLookup && window.__uniqueSkillLookup.size) return window.__uniqueSkillLookup;
+
+    const map = new Map();
+    const gems = Array.isArray(window.DATA?.gems) ? window.DATA.gems : [];
+
+    gems.forEach((g) => {
+      const names = [g?.name, g?.base_item?.display_name, g?.support_name].filter(Boolean);
+      names.forEach((n) => {
+        const key = normalizeSkillKey(n);
+        if (!key || map.has(key)) return;
+        map.set(key, g);
+      });
+    });
+
+    window.__uniqueSkillLookup = map;
+    return map;
+  }
+
+  function getGrantedSkillEntries(it){
+    const granted = Array.isArray(it?.granted_skills) ? it.granted_skills : [];
+    if (!granted.length) return [];
+
+    const skillsByName = getSkillLookup();
+    return granted
+      .map((entry) => {
+        const name = String(entry?.name || entry?.raw || entry || '').trim();
+        if (!name) return null;
+
+        const key = normalizeSkillKey(name);
+        const g = key ? skillsByName.get(key) : null;
+        const desc = String(g?.description || g?.support_text || '').trim();
+
+        return {
+          name,
+          description: desc
+        };
+      })
+      .filter(Boolean);
+  }
+
+  function renderGrantedSkills(it){
+    const entries = getGrantedSkillEntries(it);
+    if (!entries.length) return '';
+
+    return entries
+      .map((entry) => {
+        const line = `Grants: ${entry.name}`;
+        const detail = entry.description ? `<div class="unique-granted-desc">${highlightText(entry.description, new Set())}</div>` : '';
+        return `<div class="unique-granted-item"><div class="unique-line">${highlightText(line, new Set())}</div>${detail}</div>`;
+      })
+      .join('');
+  }
+
   function buildUniqueReason(it, rolledSet) {
     if (!it) return '';
 
@@ -899,6 +962,8 @@ function ensureUniqueSection(){
       const flavourLines = getSectionLines(it, 'flavour_text');
       const implicitLines = getSectionLines(it, 'implicit_mods');
       const explicitLines = getSectionLines(it, 'explicit_mods');
+      const grantedSkillsHtml = renderGrantedSkills(it);
+      const hasGrantedSkills = !!grantedSkillsHtml;
 
       return `
         <div class="unique-card">
@@ -915,6 +980,9 @@ function ensureUniqueSection(){
             ${(!implicitLines.length && flavourLines.length && explicitLines.length) ? `<div class="unique-gold-divider"></div>` : ''}
             ${implicitLines.length && explicitLines.length ? `<div class="unique-gold-divider"></div>` : ''}
             ${explicitLines.length ? `<div class="unique-section unique-section--explicit">${renderLines(explicitLines, rolledSet)}</div>` : ''}
+            ${hasGrantedSkills && explicitLines.length ? `<div class="unique-gold-divider"></div>` : ''}
+            ${hasGrantedSkills && !explicitLines.length && (implicitLines.length || flavourLines.length) ? `<div class="unique-gold-divider"></div>` : ''}
+            ${hasGrantedSkills ? `<div class="unique-section unique-section--granted">${grantedSkillsHtml}</div>` : ''}
             ${pills ? `<div class="unique-gold-divider"></div><div class="tags-row tags-row--bottom">${pills}</div>` : ''}
           </div>
         </div>

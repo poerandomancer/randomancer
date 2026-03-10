@@ -157,3 +157,15 @@
 .tags-row--bottom {
   margin: 0;
 }
+
+
+.unique-section--granted .unique-granted-item + .unique-granted-item {
+  margin-top: .35rem;
+}
+
+.unique-granted-desc {
+  margin: 2px 0 0 0;
+  color: rgba(224, 214, 198, 0.82);
+  font-size: .84rem;
+  line-height: 1.25;
+}
