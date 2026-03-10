@@ -13,10 +13,8 @@ Fields per unique:
 - Flavour Text
 - Granted skills
 - Tags:
-    - Craft tags (from PoE2DB mod meta blocks)
-    - Families (from PoE2DB mod meta blocks) as "family:<family>"
     - Bracket tags extracted from mod lines: [Label|Tag] -> "tag"
-    - Normalized + de-duplicated tags (craft tags, family tags, bracket tags)
+    - Normalized + de-duplicated bracket tags only
 
 Output: poe2db_uniques_min.json
 
@@ -89,50 +87,93 @@ def strip_square_brackets_chars(s: str) -> str:
     return (s or "").replace("[", "").replace("]", "")
 
 TAG_VARIANTS = {
+    # existing / obvious single-word tense-plural cleanup
     "minions": "minion",
     "charges": "charge",
     "bleeding": "bleed",
     "bled": "bleed",
     "shocked": "shock",
+    "shocks": "shock",
     "shocking": "shock",
     "ignited": "ignite",
+    "ignites": "ignite",
     "igniting": "ignite",
     "poisoned": "poison",
+    "poisons": "poison",
     "poisoning": "poison",
     "recouped": "recoup",
     "recouping": "recoup",
-}
 
-TAG_STOPLIST = {
-    "helmet", "body armour", "body armor", "gloves", "boots", "belt",
-    "ring", "amulet",
-    "wand", "bow", "staff", "mace", "sword", "axe", "dagger", "spear", "crossbow", "quarterstaff",
-    "flail", "focus", "shield", "buckler", "quiver", "sceptre", "claw",
-    "javelin", "trap", "flask",
+    # high-value generic plurals / inflections
+    "attacks": "attack",
+    "hits": "hit",
+    "hitting": "hit",
+    "blocked": "block",
+    "blocking": "block",
+    "spells": "spell",
+    "projectiles": "projectile",
+    "leeches": "leech",
+    "leeched": "leech",
+    "chilled": "chill",
+    "frozen": "freeze",
+    "stunned": "stun",
+
+    # phrase-level variants that are clearly the same mechanic
+    "critical_hits": "critical_hit",
+    "critically_hit": "critical_hit",
+
+    # charge families
+    "power_charges": "power_charge",
+    "frenzy_charges": "frenzy_charge",
+
+    # stun families
+    "heavy_stuns": "heavy_stun",
+    "heavy_stunned": "heavy_stun",
+    "light_stunned": "light_stun",
+
+    # common nouns that are showing up in plural form
+    "curses": "curse",
+    "warcries": "warcry",
+    "totems": "totem",
+    "weapons": "weapon",
+    "allies": "ally",
+    "corpses": "corpse",
+    "attributes": "attribute",
+    "flasks": "flask",
+    "charms": "charm",
+    
+    # semantic variants
+    "breaks_armour": "armour_break",
+    "fully_armour_broken": "armour_break",
+
+    "leeched_as_life": "life_leech",
+    "leeching_life": "life_leech",
+
+    # optional, depending on how broad you want Build Mode matching to be
+    "aggravating_any_bleeding": "bleed",
+    "aggravates_all_ignites": "ignite",
 }
 
 def normalize_tag(tag: Any) -> Optional[str]:
-    raw = norm_ws(str(tag or "").lower().replace("_", " ").replace("-", " "))
+    raw = str(tag or "").lower()
     raw = strip_square_brackets_chars(raw)
-    raw = norm_ws(raw)
+
+    if raw.startswith("grants:") or raw.startswith("grants "):
+        return None
+
+    raw = raw.replace("'", "")
+    raw = raw.replace("-", "_")
+    raw = raw.replace(" ", "_")
+    raw = re.sub(r"[^a-z0-9_]+", "_", raw)
+    raw = re.sub(r"_+", "_", raw).strip("_")
+
     if not raw:
         return None
 
-    if re.match(r"^grants?:", raw) or re.match(r"^grants?\s", raw) or "grants skill" in raw:
+    if raw == "shrine" or raw.endswith("_shrine"):
         return None
 
-    is_family = raw.startswith("family:")
-    normalized = TAG_VARIANTS.get(raw, raw)
-    if not is_family and normalized in TAG_STOPLIST:
-        return None
-
-    if is_family:
-        suffix = norm_ws(normalized.split(":", 1)[1] if ":" in normalized else "")
-        if not suffix:
-            return None
-        return f"family:{suffix}"
-
-    return normalized
+    return TAG_VARIANTS.get(raw, raw)
 
 def safe_int(x: Any) -> Optional[int]:
     try:
@@ -318,25 +359,6 @@ def parse_slot_from_page_text(text_lines: List[str]) -> Optional[str]:
         if s.lower().startswith("item class:"):
             return strip_square_brackets_chars(strip_brackets_for_display(norm_ws(s.split(":", 1)[1]))).strip()
     return None
-
-def extract_mod_meta_tags_and_families(text_lines: List[str]) -> Dict[str, List[str]]:
-    families = set()
-    craft_tags = set()
-
-    for ln in text_lines:
-        s = norm_ws(ln)
-        if s.startswith("Family "):
-            fam = s[len("Family "):].strip()
-            if fam:
-                families.add(fam)
-        elif s.startswith("Craft Tags"):
-            tail = s[len("Craft Tags"):].strip()
-            for tok in re.split(r"[,\s]+", tail):
-                tok = tok.strip()
-                if tok:
-                    craft_tags.add(tok.lower())
-
-    return {"families": sorted(families), "craft_tags": sorted(craft_tags)}
 
 def normalize_granted_skills(gs: Any) -> List[dict]:
     """
@@ -531,18 +553,10 @@ def main() -> int:
             # Granted skills (minimized, parsed from values)
             granted_skills = normalize_granted_skills(item_json.get("grantedSkills"))
 
-            # Tags from mod meta blocks
-            meta_tags = extract_mod_meta_tags_and_families(text_lines)
-
-            tags = set(meta_tags["craft_tags"])
-            for fam in meta_tags["families"]:
-                tags.add(f"family:{strip_square_brackets_chars(fam).lower()}")
-            for t in bracket_tags:
-                tags.add(strip_square_brackets_chars(t))
-
+						# Tags: bracket-derived only
             normalized_tags: List[str] = []
             seen_tags = set()
-            for t in tags:
+            for t in sorted(bracket_tags):
                 nt = normalize_tag(t)
                 if not nt or nt in seen_tags:
                     continue
@@ -575,7 +589,7 @@ def main() -> int:
 
         out_obj = {
             "_meta": {
-                "schema": "poe2db_uniques_min_v3",
+                "schema": "poe2db_uniques_min_v4",
                 "locale": args.lang,
                 "listing_url": listing_url,
                 "count": len(items),
