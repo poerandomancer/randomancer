@@ -117,3 +117,43 @@
 
 
 
+
+
+.unique-req {
+  margin-top: .35rem;
+  color: rgba(235, 220, 196, 0.92);
+  font-size: .82rem;
+  letter-spacing: .01em;
+}
+
+.unique-flavour {
+  margin-bottom: .25rem;
+}
+
+.unique-flavour-line {
+  margin: 2px 0;
+  color: rgba(232, 214, 190, 0.78);
+  font-family: 'Cormorant Infant', serif;
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.unique-gold-divider {
+  height: 3px;
+  margin: .45rem 0 .55rem;
+  background:
+    radial-gradient(circle at left, transparent 70%, rgba(0,0,0,0.9) 100%),
+    radial-gradient(circle at right, transparent 70%, rgba(0,0,0,0.9) 100%),
+    linear-gradient(90deg, transparent, rgba(200,168,107,0.65), transparent);
+  border-radius: 50%;
+  opacity: .85;
+}
+
+.unique-section {
+  margin-bottom: .1rem;
+}
+
+.tags-row--bottom {
+  margin: 0;
+}

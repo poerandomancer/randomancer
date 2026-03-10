@@ -798,112 +798,129 @@ function ensureUniqueSection(){
     const tags = Array.from(getItemTagSet(item)).sort();
     return tags.map(t=>`<span class="tag-pill pill${rolledSet.has(t)?' matched':''}" data-tag="${t}">${t}</span>`).join('');
   }
-  function highlight(lines, rolledSet){
-	  const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-	  // Skip the first 2 lines (name + base) – they’re in the header
-	  let out = (lines || []).slice(2).join('\n');
-	
-	  // Highlight any text that matches the rolled profile tags
-	  rolledSet.forEach(t => {
-		if (!t) return;
-		const rx = new RegExp(esc(String(t)), 'ig');
-		out = out.replace(rx, m => `<span class="hit">${m}</span>`);
-	  });
-	
-	  return out
-		.split('\n')
-		.map(L => L.trim())
-		.filter(L => L.length) // drop empty lines
-		.map(L => `<div class="unique-line">${L}</div>`)
-		.join('');
-	}
-	
-	function buildUniqueReason(it, rolledSet) {
-	  if (!it) return '';
-	
-	  // Use the same tag logic as scoring + pill rendering
-	  const tagSet = getItemTagSet(it);        // returns a Set of normalized tags
-	  const tags = Array.from(tagSet);
-	  if (!tags.length) return '';
-	
-	  const hasRolled =
-		rolledSet &&
-		typeof rolledSet.has === 'function' &&
-		rolledSet.size > 0;
-	
-	  const matched = [];
-	  const unmatched = [];
-	
-	  for (const t of tags) {
-		if (!t) continue;
-	
-		// rolledSet already holds normalized tags (from rolledByCategory/expandTags)
-		if (hasRolled && rolledSet.has(t)) {
-		  matched.push(t);
-		} else {
-		  unmatched.push(t);
-		}
-	  }
-	
-	  // Prefer tags that actually match the rolled profile; otherwise just
-	  // describe the item by its own tags.
-	  const source = (hasRolled && matched.length) ? matched : tags;
-	  const main = source.slice(0, 3); // up to 3 tags
-	
-	  if (!main.length) return '';
-	
-	  const humanList = (arr) => {
-		const pretty = (s) => {
-		  s = String(s || '').trim();
-		  if (!s) return s;
-		  return s[0].toUpperCase() + s.slice(1);
-		};
-		const p = arr.map(pretty);
-		if (p.length === 1) return p[0];
-		if (p.length === 2) return `${p[0]} and ${p[1]}`;
-		return `${p[0]}, ${p[1]} and ${p[2]}`;
-	  };
-	
-	  const list = humanList(main);
-	
-	  if (hasRolled && matched.length) {
-		return `Synergizes with your ${list} focus.`;
-	  }
-	  return `Adds ${list} to your build.`;
-	}
 
+  function highlightText(text, rolledSet){
+    const esc = s => s.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&');
+    let out = String(text || '');
+    rolledSet.forEach((t) => {
+      if (!t) return;
+      const rx = new RegExp(esc(String(t)), 'ig');
+      out = out.replace(rx, m => `<span class="hit">${m}</span>`);
+    });
+    return out;
+  }
+
+  function renderLines(lines, rolledSet, lineClass='unique-line'){
+    return (Array.isArray(lines) ? lines : [])
+      .map((line) => String(line || '').trim())
+      .filter(Boolean)
+      .map((line) => `<div class="${lineClass}">${highlightText(line, rolledSet)}</div>`)
+      .join('');
+  }
+
+  function getSectionLines(it, kind){
+    const fromMeta = Array.isArray(it?.meta?.[kind]) ? it.meta[kind] : [];
+    if (fromMeta.length) return fromMeta;
+
+    if (kind === 'explicit_mods') {
+      return Array.isArray(it?.lines) ? it.lines.slice(2).filter(Boolean) : [];
+    }
+    return [];
+  }
+
+  function formatRequirements(it){
+    const req = it?.requirements || {};
+    const pairs = [
+      ['level', 'Level'],
+      ['str', 'STR'],
+      ['dex', 'DEX'],
+      ['int', 'INT']
+    ];
+
+    const parts = pairs
+      .map(([key, label]) => {
+        const val = req[key];
+        if (val == null || val === '' || Number(val) === 0) return null;
+        return `${label} ${val}`;
+      })
+      .filter(Boolean);
+
+    return parts.length ? `Requires: ${parts.join(', ')}` : '';
+  }
+
+  function buildUniqueReason(it, rolledSet) {
+    if (!it) return '';
+
+    const tagSet = getItemTagSet(it);
+    const tags = Array.from(tagSet);
+    if (!tags.length) return '';
+
+    const hasRolled =
+      rolledSet &&
+      typeof rolledSet.has === 'function' &&
+      rolledSet.size > 0;
+
+    const matched = [];
+    for (const t of tags) {
+      if (!t) continue;
+      if (hasRolled && rolledSet.has(t)) matched.push(t);
+    }
+
+    const source = (hasRolled && matched.length) ? matched : tags;
+    const main = source.slice(0, 3);
+    if (!main.length) return '';
+
+    const humanList = (arr) => {
+      const p = arr.map((s) => {
+        s = String(s || '').trim();
+        return s ? s[0].toUpperCase() + s.slice(1) : s;
+      });
+      if (p.length === 1) return p[0];
+      if (p.length === 2) return `${p[0]} and ${p[1]}`;
+      return `${p[0]}, ${p[1]} and ${p[2]}`;
+    };
+
+    const list = humanList(main);
+    if (hasRolled && matched.length) return `Synergizes with your ${list} focus.`;
+    return `Adds ${list} to your build.`;
+  }
 
   function renderUniques(items, rolledSet){
-	  const grid = ensureUniqueSection();
-	  if (!grid) {
-		setTimeout(() => renderUniques(items, rolledSet), 120);
-		return;
-	  }
-	
-	  grid.innerHTML = items.map(it => {
-		const pills = pillsFor(it, rolledSet);
-		const lines = highlight(it.lines, rolledSet);
-		const reason = buildUniqueReason(it, rolledSet);
-	
-		return `
-		  <div class="unique-card">
-			<div class="unique-header">
-			  <div class="unique-name">${it.name}</div>
-			  <div class="unique-base">${it.base}</div>
-			</div>
-			<div class="skill-divider"></div>
-			<div class="tags-row">
-			  ${pills}
-			</div>
-			<div class="unique-lines">
-			  ${reason ? `<div class="unique-highlights">${reason}</div>` : ''}
-			  ${lines}
-			</div>
-		  </div>
-		`;
+    const grid = ensureUniqueSection();
+    if (!grid) {
+      setTimeout(() => renderUniques(items, rolledSet), 120);
+      return;
+    }
 
-	  }).join('');
-	}
+    grid.innerHTML = items.map(it => {
+      const pills = pillsFor(it, rolledSet);
+      const reason = buildUniqueReason(it, rolledSet);
+      const requirements = formatRequirements(it);
+      const flavourLines = getSectionLines(it, 'flavour_text');
+      const implicitLines = getSectionLines(it, 'implicit_mods');
+      const explicitLines = getSectionLines(it, 'explicit_mods');
+
+      return `
+        <div class="unique-card">
+          <div class="unique-header">
+            <div class="unique-name">${it.name}</div>
+            <div class="unique-base">${it.base}</div>
+            ${requirements ? `<div class="unique-req">${requirements}</div>` : ''}
+          </div>
+          <div class="skill-divider"></div>
+          <div class="unique-lines">
+            ${reason ? `<div class="unique-highlights">${reason}</div>` : ''}
+            ${flavourLines.length ? `<div class="unique-flavour">${renderLines(flavourLines, rolledSet, 'unique-flavour-line')}</div>` : ''}
+            ${implicitLines.length ? `<div class="unique-gold-divider"></div><div class="unique-section unique-section--implicit">${renderLines(implicitLines, rolledSet)}</div>` : ''}
+            ${implicitLines.length && explicitLines.length ? `<div class="unique-gold-divider"></div>` : ''}
+            ${explicitLines.length ? `<div class="unique-section unique-section--explicit">${renderLines(explicitLines, rolledSet)}</div>` : ''}
+            ${pills ? `<div class="unique-gold-divider"></div><div class="tags-row tags-row--bottom">${pills}</div>` : ''}
+          </div>
+        </div>
+      `;
+
+    }).join('');
+  }
 
 
     async function refreshUniques(snap){
