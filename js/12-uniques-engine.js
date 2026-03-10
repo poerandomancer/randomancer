@@ -1,4 +1,5 @@
 import { TagUtils, defensePseudoTags } from './05-tags-and-scorer.js';
+import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
 
 /* === Randomancer: Uniques Synergy — canonical engine (v0.8.2) === */
 (function(){
@@ -214,11 +215,60 @@ import { TagUtils, defensePseudoTags } from './05-tags-and-scorer.js';
 
 
 async function loadUniquesM(){
-    const url = 'data/enriched/uniques_enriched.json?v=' + Date.now();
-    const r = await fetch(url, {cache:'no-store'});
-    if (!r.ok) throw new Error('HTTP '+r.status);
-    const data = await r.json();
-    return Array.isArray(data) ? data : (data.items||[]);
+    const primaryUrl = 'data/enriched/poe2db_uniques_min.json?v=' + Date.now();
+    const fallbackUrl = 'data/enriched/uniques_enriched.json?v=' + Date.now();
+
+    try {
+      const r = await fetch(primaryUrl, { cache:'no-store' });
+      if (!r.ok) throw new Error('HTTP '+r.status);
+      const data = await r.json();
+      const adapted = adaptPoe2dbUniquesPayload(data);
+      if (adapted.length) return adapted;
+      throw new Error('No compatible uniques in poe2db payload');
+    } catch (err) {
+      console.warn('[u79b2m] failed to load poe2db uniques for build mode, using legacy fallback', err);
+      const r = await fetch(fallbackUrl, { cache:'no-store' });
+      if (!r.ok) throw new Error('HTTP '+r.status);
+      const data = await r.json();
+      return Array.isArray(data) ? data : (data.items || []);
+    }
+  }
+
+  const UNIQUE_TAG_DEBUG = {
+    seen: new Set(),
+    matched: new Set(),
+    mismatches: new Map()
+  };
+
+  function maybeLogUniqueTagDiagnostics(items, rolledSet){
+    const params = new URLSearchParams(window.location.search || '');
+    if (params.get('debug') !== '1') return;
+
+    const rolled = new Set(Array.from(rolledSet || []).map((t) => norm(t)));
+
+    items.forEach((item) => {
+      const tags = Array.from(getItemTagSet(item));
+      tags.forEach((tag) => {
+        UNIQUE_TAG_DEBUG.seen.add(tag);
+        if (rolled.has(tag)) {
+          UNIQUE_TAG_DEBUG.matched.add(tag);
+        } else {
+          UNIQUE_TAG_DEBUG.mismatches.set(tag, (UNIQUE_TAG_DEBUG.mismatches.get(tag) || 0) + 1);
+        }
+      });
+    });
+
+    const unmatchedCount = UNIQUE_TAG_DEBUG.seen.size - UNIQUE_TAG_DEBUG.matched.size;
+    const top = Array.from(UNIQUE_TAG_DEBUG.mismatches.entries())
+      .filter(([tag]) => !UNIQUE_TAG_DEBUG.matched.has(tag))
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 8)
+      .map(([tag, count]) => `${tag}:${count}`)
+      .join(', ');
+
+    console.info(
+      `[u79b2m][debug] unique tag coverage seen=${UNIQUE_TAG_DEBUG.seen.size} matched=${UNIQUE_TAG_DEBUG.matched.size} unmatched=${unmatchedCount}${top ? ` top_unmatched=${top}` : ''}`
+    );
   }
 
   function getItemTagSet(item){
@@ -869,6 +919,7 @@ function ensureUniqueSection(){
                 ]);
                 const allow = allowedSlots(snap);
                 const picks = pickPasses(items, rolled, snap);
+                maybeLogUniqueTagDiagnostics(items, rolledSet);
 
                 if (window.App && typeof window.App.mergeCurrentRoll === 'function') {
                   window.App.mergeCurrentRoll({ recommendedUniques: picks.map(p => p.name) });
