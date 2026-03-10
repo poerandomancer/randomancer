@@ -912,6 +912,7 @@ function ensureUniqueSection(){
             ${reason ? `<div class="unique-highlights">${reason}</div>` : ''}
             ${flavourLines.length ? `<div class="unique-flavour">${renderLines(flavourLines, rolledSet, 'unique-flavour-line')}</div>` : ''}
             ${implicitLines.length ? `<div class="unique-gold-divider"></div><div class="unique-section unique-section--implicit">${renderLines(implicitLines, rolledSet)}</div>` : ''}
+            ${(!implicitLines.length && flavourLines.length && explicitLines.length) ? `<div class="unique-gold-divider"></div>` : ''}
             ${implicitLines.length && explicitLines.length ? `<div class="unique-gold-divider"></div>` : ''}
             ${explicitLines.length ? `<div class="unique-section unique-section--explicit">${renderLines(explicitLines, rolledSet)}</div>` : ''}
             ${pills ? `<div class="unique-gold-divider"></div><div class="tags-row tags-row--bottom">${pills}</div>` : ''}
