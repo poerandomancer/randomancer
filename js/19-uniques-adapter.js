@@ -7,7 +7,7 @@ const SLOT_MAP = new Map([
   ['boots', 'boots'],
   ['ring', 'ring'],
   ['amulet', 'amulet'],
-  ['talisman', 'amulet'],
+  ['talisman', 'talisman'],
   ['belt', 'belt'],
   ['jewel', 'jewel'],
   ['flask', 'flask'],

@@ -204,6 +204,7 @@ import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
 		if (hasWord('focus'))    add('focus');
 		if (hasWord('soulcore')) add('soulcore');
 		if (hasWord('trap tool') || hasWord('traptool')) add('traptool');
+		if (hasWord('talisman')) add('talisman');
 	
 		// expose staff vs quarterstaff intent for weaponSlotAllowed, if you still use those
 		allow.__wtxt = weaponText;
@@ -394,7 +395,7 @@ async function loadUniquesM(){
 function weaponSlotAllowed(it, slotAllow){
     if (!slotAllow || !slotAllow.has) return true;
     // Non-weapon slots just rely on presence in the allowed set
-    if (!['bow','crossbow','staff','spear','sword','mace','axe','claw','wand','sceptre','shield','buckler','focus','soulcore','traptool'].includes(it.slot)) {
+    if (!['bow','crossbow','staff','spear','sword','mace','axe','claw','wand','sceptre','shield','buckler','focus','soulcore','traptool','talisman'].includes(it.slot)) {
       return slotAllow.has(it.slot);
     }
     if (it.slot !== 'staff') {
@@ -448,7 +449,7 @@ function weaponSlotAllowed(it, slotAllow){
   // - No recency penalty (deferred)
   // -------------------------
 
-  const WEAPON_SLOTS = new Set(['bow','crossbow','staff','spear','sword','mace','axe','claw','wand','sceptre','shield','buckler','focus','soulcore','traptool','quiver']);
+  const WEAPON_SLOTS = new Set(['bow','crossbow','staff','spear','sword','mace','axe','claw','wand','sceptre','shield','buckler','focus','soulcore','traptool','talisman','quiver']);
   const ARMOUR_SLOTS = new Set(['helmet','body','gloves','boots']);
 
   // Hard caps per slot (prevents duplicate armour slots like double body).
@@ -518,6 +519,7 @@ function weaponSlotAllowed(it, slotAllow){
     if (hasWord('focus'))    add('focus');
     if (hasWord('soulcore')) add('soulcore');
     if (hasWord('trap tool') || hasWord('traptool')) add('traptool');
+    if (hasWord('talisman')) add('talisman');
 
     allow.__wtxt = weaponText;
     allow.__wantsQuarterstaff = wantsQuarterstaff;
