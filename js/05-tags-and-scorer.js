@@ -23,6 +23,19 @@ const TagUtils = (() => {
     ['life regeneration', 'liferegeneration'],
     ['culling strike', 'cullingstrike'],
     ['block recovery', 'blockrecovery'],
+
+    // build-mode unique/tag normalization expansion
+    ['critical weakness', 'critical'],
+    ['critical weakness', 'criticalhit'],
+    ['critical damage bonus', 'critical'],
+    ['critical damage bonus', 'criticalhit'],
+    ['electrocution', 'shock'],
+    ['decimating strike', 'cull'],
+    ['decimating strike', 'cullingstrike'],
+    ['culled', 'cull'],
+    ['culled', 'cullingstrike'],
+    ['shocked ground', 'shock'],
+    ['thorns damage', 'thorns'],
   ];
 
   const alias = new Map();
