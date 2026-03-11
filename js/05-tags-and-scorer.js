@@ -36,6 +36,7 @@ const TagUtils = (() => {
     ['culled', 'cullingstrike'],
     ['shocked ground', 'shock'],
     ['thorns damage', 'thorns'],
+    ['chance to block', 'block'],
   ];
 
   const alias = new Map();
