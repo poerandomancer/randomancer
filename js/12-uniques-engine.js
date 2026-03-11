@@ -237,7 +237,10 @@ async function loadUniquesM(){
   const UNIQUE_TAG_DEBUG = {
     seen: new Set(),
     matched: new Set(),
-    mismatches: new Map()
+    mismatches: new Map(),
+    primarySeen: new Set(),
+    defensiveSeen: new Set(),
+    defensiveOnlyMatches: 0
   };
 
   function maybeLogUniqueTagDiagnostics(items, rolledSet){
@@ -247,7 +250,15 @@ async function loadUniquesM(){
     const rolled = new Set(Array.from(rolledSet || []).map((t) => norm(t)));
 
     items.forEach((item) => {
-      const tags = Array.from(getItemTagSet(item));
+      const buckets = getItemTagBuckets(item);
+      const tags = Array.from(buckets.all);
+      const matchedPrimary = Array.from(buckets.primary).some((tag) => rolled.has(tag));
+      const matchedDefensive = Array.from(buckets.defensive).some((tag) => rolled.has(tag));
+      if (!matchedPrimary && matchedDefensive) UNIQUE_TAG_DEBUG.defensiveOnlyMatches += 1;
+
+      buckets.primary.forEach((tag) => UNIQUE_TAG_DEBUG.primarySeen.add(tag));
+      buckets.defensive.forEach((tag) => UNIQUE_TAG_DEBUG.defensiveSeen.add(tag));
+
       tags.forEach((tag) => {
         UNIQUE_TAG_DEBUG.seen.add(tag);
         if (rolled.has(tag)) {
@@ -267,7 +278,7 @@ async function loadUniquesM(){
       .join(', ');
 
     console.info(
-      `[u79b2m][debug] unique tag coverage seen=${UNIQUE_TAG_DEBUG.seen.size} matched=${UNIQUE_TAG_DEBUG.matched.size} unmatched=${unmatchedCount}${top ? ` top_unmatched=${top}` : ''}`
+      `[u79b2m][debug] unique tag coverage seen=${UNIQUE_TAG_DEBUG.seen.size} matched=${UNIQUE_TAG_DEBUG.matched.size} unmatched=${unmatchedCount} primary_seen=${UNIQUE_TAG_DEBUG.primarySeen.size} defensive_seen=${UNIQUE_TAG_DEBUG.defensiveSeen.size} defensive_only_matches=${UNIQUE_TAG_DEBUG.defensiveOnlyMatches}${top ? ` top_unmatched=${top}` : ''}`
     );
   }
 
@@ -291,18 +302,42 @@ async function loadUniquesM(){
     return tags;
   }
 
-  function getItemTagSet(item){
+  function normalizeUniqueTagPattern(value){
+    return String(value || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '_')
+      .replace(/^_+|_+$/g, '');
+  }
+
+  function isDefensiveUniqueTag(tag){
+    const p = normalizeUniqueTagPattern(tag);
+    if (!p) return false;
+
+    return (
+      p.endsWith('_resistance') ||
+      (p.startsWith('maximum_') && p.endsWith('_resistance')) ||
+      p.includes('_duration_on_you') ||
+      p.includes('_effect_on_you') ||
+      p.startsWith('cannot_be_') ||
+      p.startsWith('avoid_') ||
+      p.includes('chance_to_avoid')
+    );
+  }
+
+  function getItemTagBuckets(item){
+    if (item && item.__tagBuckets) return item.__tagBuckets;
+
     const raw = (item.tags && item.tags.raw) || [];
     const canon = filterCanonicalsByEvidence(item);
     const derived = deriveExtraTags(item.lines || []);
     const grantedSkillTags = getGrantedSkillTags(item);
-    const acc = [];
+    const entries = [];
 
     // normalize raw + derived tags directly
     for (const t of [...raw, ...derived, ...grantedSkillTags]){
       if (!t) continue;
       const n = norm(t);
-      if (n) acc.push(n);
+      if (n) entries.push({ raw: t, n });
     }
 
     // expand canonical labels, including compound ones like "Slow/Maim/Hinder"
@@ -314,26 +349,44 @@ async function loadUniquesM(){
       if (parts.length > 1){
         for (const p of parts){
           const n = norm(p);
-          if (n) acc.push(n);
+          if (n) entries.push({ raw: p, n });
         }
         continue;
       }
       const n = norm(lbl);
       if (n === 'slowmaimhinder'){
-        acc.push('slow','maim','hinder');
+        entries.push({ raw: 'slow', n: 'slow' });
+        entries.push({ raw: 'maim', n: 'maim' });
+        entries.push({ raw: 'hinder', n: 'hinder' });
       } else if (n){
-        acc.push(n);
+        entries.push({ raw: lbl, n });
       }
     }
 
-    return new Set(acc);
+    const all = new Set();
+    const primary = new Set();
+    const defensive = new Set();
+    for (const entry of entries){
+      if (!entry?.n) continue;
+      all.add(entry.n);
+      if (isDefensiveUniqueTag(entry.raw)) defensive.add(entry.n);
+      else primary.add(entry.n);
+    }
+
+    const buckets = { all, primary, defensive };
+    if (item) item.__tagBuckets = buckets;
+    return buckets;
+  }
+
+  function getItemTagSet(item){
+    return getItemTagBuckets(item).all;
   }
   function scoreItem(it, rolled, slotAllow){
-    const all = getItemTagSet(it);
+    const primary = getItemTagBuckets(it).primary;
     let s = 0;
-    for (const t of rolled.tactics)  if (all.has(t)) s += 3.0;
-    for (const t of rolled.ailments) if (all.has(t)) s += 1.7;
-    for (const t of rolled.def)      if (all.has(t)) s += 1.2;
+    for (const t of rolled.tactics)  if (primary.has(t)) s += 3.0;
+    for (const t of rolled.ailments) if (primary.has(t)) s += 1.7;
+    for (const t of rolled.def)      if (primary.has(t)) s += 1.2;
     if (slotAllow && slotAllow.has && slotAllow.has(it.slot)) s += 0.6;
     return s;
   }
@@ -507,7 +560,7 @@ function weaponSlotAllowed(it, slotAllow){
 
 
   function scoreWeaponPass(it, rolled){
-	  const all = getItemTagSet(it);
+	  const all = getItemTagBuckets(it).primary;
 	  let s = 0;
 	
 	  // Tactics are still the strongest signal.
@@ -521,15 +574,15 @@ function weaponSlotAllowed(it, slotAllow){
 
 
   function scoreArmourPass(it, rolled, state){
-    const all = getItemTagSet(it);
+    const { all, primary } = getItemTagBuckets(it);
     let s = 0;
 
     // Offense-first, tactics lead
-    for (const t of rolled.tactics)  if (all.has(t)) s += 4.0;
-    for (const t of rolled.ailments) if (all.has(t)) s += 2.0;
+    for (const t of rolled.tactics)  if (primary.has(t)) s += 4.0;
+    for (const t of rolled.ailments) if (primary.has(t)) s += 2.0;
 
     // Defensive strategy / primary defense (secondary)
-    for (const t of rolled.def)      if (all.has(t)) s += 1.5;
+    for (const t of rolled.def)      if (primary.has(t)) s += 1.5;
 
     // Small bump for resistance coverage (tie-breaker, not a primary driver)
     if (all.has(TAG_ALL_ELE_RES)) s += 0.6;
@@ -627,23 +680,23 @@ function weaponSlotAllowed(it, slotAllow){
   // -------------------------
 
   function scoreUtilityPass(it, rolled, state){
-    const all = getItemTagSet(it);
+    const { all, primary } = getItemTagBuckets(it);
     let match = 0;
     let s = 0;
 
     // Tactics (primary driver)
     for (const t of rolled.tactics){
-      if (all.has(t)){ s += 4.0; match += 4.0; }
+      if (primary.has(t)){ s += 4.0; match += 4.0; }
     }
 
     // Offense: ailments + mapped elements (ignite->fire, freeze->cold, shock->lightning)
     for (const t of expandedWeaponAilmentTags(rolled)){
-      if (all.has(t)){ s += 2.0; match += 2.0; }
+      if (primary.has(t)){ s += 2.0; match += 2.0; }
     }
 
     // Defensive strategy (secondary)
     for (const t of rolled.def){
-      if (all.has(t)){ s += 1.5; match += 1.5; }
+      if (primary.has(t)){ s += 1.5; match += 1.5; }
     }
 
     // Resistances as light tie-breaker (never part of match qualification)
@@ -937,8 +990,8 @@ function ensureUniqueSection(){
   function buildUniqueReason(it, rolledSet) {
     if (!it) return '';
 
-    const tagSet = getItemTagSet(it);
-    const tags = Array.from(tagSet);
+    const buckets = getItemTagBuckets(it);
+    const tags = Array.from(buckets.primary.size ? buckets.primary : buckets.all);
     if (!tags.length) return '';
 
     const hasRolled =
