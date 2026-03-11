@@ -7,7 +7,7 @@ const SLOT_MAP = new Map([
   ['boots', 'boots'],
   ['ring', 'ring'],
   ['amulet', 'amulet'],
-  ['talisman', 'amulet'],
+  ['talisman', 'talisman'],
   ['belt', 'belt'],
   ['jewel', 'jewel'],
   ['flask', 'flask'],
@@ -35,10 +35,23 @@ const SLOT_MAP = new Map([
 ]);
 
 const TAG_ALIAS = new Map([
-  ['armorbreak', 'armourbreak'],
-  ['allresistance', 'all_elemental_resistance'],
-  ['elementalresistance', 'all_elemental_resistance'],
-  ['movespeed', 'movement_speed']
+  ['armorbreak', ['armourbreak']],
+  ['allresistance', ['all_elemental_resistance']],
+  ['elementalresistance', ['all_elemental_resistance']],
+  ['movespeed', ['movement_speed']],
+
+  // Requested build-mode normalization aliases
+  ['critical_weakness', ['critical_hit', 'critical']],
+  ['critical_damage_bonus', ['critical_hit', 'critical']],
+  ['electrocution', ['shock']],
+  ['decimating_strike', ['culling_strike', 'cull']],
+  ['culled', ['cull', 'culling_strike']],
+  ['exposure', ['ignite', 'chill', 'shock']],
+  ['elemental_ailment', ['ignite', 'chill', 'shock']],
+  ['elemental_damage', ['ignite', 'chill', 'shock']],
+  ['shocked_ground', ['shock']],
+  ['thorns_damage', ['thorns']],
+  ['chance_to_block', ['block']]
 ]);
 
 function normalizeUniqueSlot(slotLabel) {
@@ -55,9 +68,8 @@ function normalizeUniqueTagsForBuild(tags) {
     if (!cleaned) return;
     raw.add(cleaned);
 
-    const canonical = TagUtils.norm(cleaned);
-    const aliasTo = TAG_ALIAS.get(canonical);
-    if (aliasTo) raw.add(aliasTo);
+    const aliasTo = TAG_ALIAS.get(cleaned) || TAG_ALIAS.get(TagUtils.norm(cleaned));
+    if (Array.isArray(aliasTo)) aliasTo.forEach((mapped) => raw.add(mapped));
   });
 
   return Array.from(raw);

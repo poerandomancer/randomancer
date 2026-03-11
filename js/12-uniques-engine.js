@@ -48,7 +48,7 @@ import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
     if (/\bhinder(?:ed|ing|s)?\b|\bhindrance\b/.test(txt)) out.push('hinder');
     if (/\bslow(?:ed|ing|s)?\b|\bslowing\b/.test(txt)) out.push('slow');
     if (/\bmaim(?:ed|ing|s)?\b/.test(txt)) out.push('maim');
-    if (/\blife\s+regen(eration)?\b|\bregenerat(e|es|ed|ing|ion)\b/.test(txt)) out.push('liferegeneration');
+    if (/\blife\s+regen(?:eration)?\b/.test(txt)) out.push('liferegeneration');
     if (/\bleech(ed|ing|es)?\b/.test(txt)) out.push('leech');
     if (/\bcrit(ical|s|ically| chance)?\b|\bcritical\s+strike\b/.test(txt)) out.push('critical');
     return out;
@@ -60,7 +60,7 @@ import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
     Shock: /\bshock(ed|ing|s)?\b/i,
     Bleed: /\bbleed(ing|s|ed)?\b/i,
     Poison: /\bpoison(ed|ing|s)?\b/i,
-    'Life Regeneration': /\blife\s+regen(eration)?\b|\bregenerat(e|es|ed|ing|ion)\b/i,
+    'Life Regeneration': /\blife\s+regen(?:eration)?\b/i,
     Leech: /\bleech(ed|ing|es)?\b/i,
     'Culling Strike': /\bculling\s+strike\b/i,
     'Heavy Stun': /\bstun(ned|ning|s)?\b|\bheavy\s+stun\b|\bstun\s+threshold\b/i,
@@ -204,6 +204,7 @@ import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
 		if (hasWord('focus'))    add('focus');
 		if (hasWord('soulcore')) add('soulcore');
 		if (hasWord('trap tool') || hasWord('traptool')) add('traptool');
+		if (hasWord('talisman')) add('talisman');
 	
 		// expose staff vs quarterstaff intent for weaponSlotAllowed, if you still use those
 		allow.__wtxt = weaponText;
@@ -394,7 +395,7 @@ async function loadUniquesM(){
 function weaponSlotAllowed(it, slotAllow){
     if (!slotAllow || !slotAllow.has) return true;
     // Non-weapon slots just rely on presence in the allowed set
-    if (!['bow','crossbow','staff','spear','sword','mace','axe','claw','wand','sceptre','shield','buckler','focus','soulcore','traptool'].includes(it.slot)) {
+    if (!['bow','crossbow','staff','spear','sword','mace','axe','claw','wand','sceptre','shield','buckler','focus','soulcore','traptool','talisman'].includes(it.slot)) {
       return slotAllow.has(it.slot);
     }
     if (it.slot !== 'staff') {
@@ -448,7 +449,7 @@ function weaponSlotAllowed(it, slotAllow){
   // - No recency penalty (deferred)
   // -------------------------
 
-  const WEAPON_SLOTS = new Set(['bow','crossbow','staff','spear','sword','mace','axe','claw','wand','sceptre','shield','buckler','focus','soulcore','traptool','quiver']);
+  const WEAPON_SLOTS = new Set(['bow','crossbow','staff','spear','sword','mace','axe','claw','wand','sceptre','shield','buckler','focus','soulcore','traptool','talisman','quiver']);
   const ARMOUR_SLOTS = new Set(['helmet','body','gloves','boots']);
 
   // Hard caps per slot (prevents duplicate armour slots like double body).
@@ -518,6 +519,7 @@ function weaponSlotAllowed(it, slotAllow){
     if (hasWord('focus'))    add('focus');
     if (hasWord('soulcore')) add('soulcore');
     if (hasWord('trap tool') || hasWord('traptool')) add('traptool');
+    if (hasWord('talisman')) add('talisman');
 
     allow.__wtxt = weaponText;
     allow.__wantsQuarterstaff = wantsQuarterstaff;
@@ -582,7 +584,7 @@ function weaponSlotAllowed(it, slotAllow){
     for (const t of rolled.ailments) if (primary.has(t)) s += 2.0;
 
     // Defensive strategy / primary defense (secondary)
-    for (const t of rolled.def)      if (primary.has(t)) s += 1.5;
+    for (const t of rolled.def)      if (primary.has(t)) s += 2.5;
 
     // Small bump for resistance coverage (tie-breaker, not a primary driver)
     if (all.has(TAG_ALL_ELE_RES)) s += 0.6;
@@ -650,9 +652,7 @@ function weaponSlotAllowed(it, slotAllow){
     if (!scored.length) return [];
 
     const best = scored[0].s || 0;
-    if (best < 3.0) return []; // avoid forcing weak armour picks
-
-    const pick1 = weightedPickFromBand(scored, 0.70, 3.0);
+    const pick1 = weightedPickFromBand(scored, 0.70, 0);
     if (!pick1) return [];
 
     used.add(pick1.name);
@@ -696,7 +696,7 @@ function weaponSlotAllowed(it, slotAllow){
 
     // Defensive strategy (secondary)
     for (const t of rolled.def){
-      if (primary.has(t)){ s += 1.5; match += 1.5; }
+      if (primary.has(t)){ s += 2.5; match += 2.5; }
     }
 
     // Resistances as light tie-breaker (never part of match qualification)
