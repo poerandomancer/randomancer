@@ -47,3 +47,5 @@ import './js/14-feedback-menu.js';
 import './js/17-skill-family-utils.js';
 import './js/15-challenge-engine.js';
 import './js/16-challenge-mode.js';
+
+import './js/18-codex-mode.js';

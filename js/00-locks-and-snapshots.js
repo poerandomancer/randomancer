@@ -48,8 +48,8 @@ import {
   let lastSavedFocus = null;
 
   const isChallengeMode = () => {
-    const toggle = document.getElementById('randomancer-mode-toggle');
-    if (toggle) return !!toggle.checked;
+    const mode = window.RandomancerGetMode?.();
+    if (mode) return mode === 'challenge';
     try { return localStorage.getItem('randomancer_mode') === 'challenge'; } catch { return false; }
   };
 

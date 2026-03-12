@@ -5,6 +5,75 @@ header{
   text-shadow:0 1px 2px rgba(0,0,0,.6);
 }
 
+.rc-header-topbar{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:.45rem;
+}
+
+.rc-header-extra{
+  overflow:hidden;
+  max-height:320px;
+  opacity:1;
+  transition:max-height 220ms ease-out, opacity 220ms ease-out, margin 220ms ease-out;
+}
+
+.rc-header.rc-header--collapsed .rc-header-extra{
+  max-height:0;
+  opacity:0;
+  margin:0;
+  pointer-events:none;
+}
+
+.rc-header.rc-header--no-anim .rc-header-extra,
+.rc-header.rc-header--no-anim .header-details-toggle__chevron{
+  transition:none !important;
+}
+
+.header-details-toggle{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  padding:0;
+  margin-top:.1rem;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:color 160ms ease, opacity 140ms ease;
+}
+
+.rc-header.rc-header--collapsed .header-details-toggle{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+
+.header-details-toggle:hover{
+  color:var(--gold);
+}
+
+.header-details-toggle:focus-visible{
+  outline:1px solid rgba(200,168,107,.75);
+  outline-offset:2px;
+}
+
+.header-details-toggle__chevron{
+  font-size:.45rem;
+  line-height:1;
+  display:inline-block;
+  transform-origin:50% 50%;
+  transition:transform 220ms ease;
+}
+
+.rc-header.rc-header--collapsed .header-details-toggle__chevron{
+  transform:rotate(-90deg);
+}
+
 .title{
   letter-spacing:.04em;
   font-weight:600;
@@ -29,12 +98,32 @@ header{
     linear-gradient(to right, rgba(8,8,9,0.96), rgba(24,20,14,0.94));
   box-shadow:0 0 6px rgba(0,0,0,.7);
   white-space:nowrap;
-  pointer-events:none; /* keeps it from interfering with header clicks */
 }
 
 .patch-indicator strong{
   color:var(--gold);
   font-weight:600;
+}
+
+.patch-indicator__social-link{
+  display:inline-flex;
+  align-items:center;
+  color:var(--muted);
+  text-decoration:none;
+  vertical-align:middle;
+  margin-left:0.2rem;
+}
+
+.patch-indicator__social-link:hover,
+.patch-indicator__social-link:focus-visible{
+  color:var(--gold);
+}
+
+.patch-indicator__social-icon{
+  width:0.95rem;
+  height:0.95rem;
+  fill:currentColor;
+  display:block;
 }
 
 /* Soften bold weight across the UI (avoids chunky/synthetic 700 weight in some browsers) */
@@ -103,6 +192,50 @@ strong, b { font-weight: 600; }
   text-align:center;
 }
 .app-lede strong{ color:var(--gold); font-weight:600; }
+
+.results-stage{
+  position:relative;
+}
+
+.rc-reveal-fog{
+  position:absolute;
+  inset:12px 0 0;
+  pointer-events:none;
+  z-index:30;
+  opacity:0;
+  border-radius:14px 14px 0 0;
+  background:
+    radial-gradient(140% 110% at 50% 34%, rgba(140,122,92,0.32), rgba(12,11,13,0.66) 65%),
+    linear-gradient(180deg, rgba(8,8,10,0.0) 0%, rgba(8,8,10,0.32) 14%, rgba(8,8,10,0.74) 100%);
+  transition:none;
+}
+
+.results-stage.is-revealing .rc-reveal-fog{
+  opacity:1;
+}
+
+.results-stage.is-revealing.is-defogging .rc-reveal-fog{
+  transition: opacity 2400ms ease-out;
+  opacity:0;
+}
+
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .rc-reveal-fog{
+    background:rgba(8,8,10,0.5);
+    -webkit-backdrop-filter: blur(18px) saturate(1.02);
+    backdrop-filter: blur(18px) saturate(1.02);
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .rc-header-extra,
+  .header-details-toggle,
+  .header-details-toggle__chevron,
+  .rc-reveal-fog{
+    transition:none !important;
+    animation:none !important;
+  }
+}
 
 /* --- Rolled build banner (attached to each roll) --- */
 .build-roll-banner{

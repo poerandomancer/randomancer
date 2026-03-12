@@ -8,27 +8,62 @@ import { dataReady, ensureDataPreload } from './08-data-load.js';
 import { pickRecommendedAscendancyNodes, pickRecommendedKeystones, pickRecommendedNotables } from '../passivesEngine.js';
 
 // ---------- ascendancy art ----------
+const ASC_CROSSFADE_MS = 1400;
+let ascCrossfadeTimer = null;
+
 function updateAscArt(asc){
   const el = document.getElementById('asc-art');
   if (!el) return;
   const path = `/images/ascendancies/${asc.toLowerCase().replace(/\s+/g,'-')}.webp`;
 
-  // Avoid redundant work if we're already showing this art
-  if (el.dataset.ascPath === path && el.classList.contains('show')) return;
+  // Avoid redundant work if we're already showing this art.
+  if (el.dataset.ascPath === path && !el.classList.contains('is-crossfading') && el.classList.contains('show')) return;
   el.dataset.ascPath = path;
+  const hasCurrent = !!el.style.getPropertyValue('--asc-img');
+  const token = String(Date.now());
+  el.dataset.ascToken = token;
 
-  // Fade out current art
-  el.classList.remove('show');
-
-  // Preload the new image before fading it in
+  // Preload the new image before fading it in.
   const img = new Image();
   img.onload = () => {
-    // If another roll changed the target meanwhile, bail
-    if (el.dataset.ascPath !== path) return;
-    el.style.setProperty('--asc-img', `url('${path}')`);
-    // Next frame, fade in the new art
+    // If another roll changed the target meanwhile, bail.
+    if (el.dataset.ascPath !== path || el.dataset.ascToken !== token) return;
+
+    if (ascCrossfadeTimer) {
+      clearTimeout(ascCrossfadeTimer);
+      ascCrossfadeTimer = null;
+    }
+
+    const wasCrossfading = el.classList.contains('is-crossfading');
+
+    // First reveal: just fade in the base art.
+    if (!hasCurrent && !wasCrossfading) {
+      el.style.setProperty('--asc-img', `url('${path}')`);
+      requestAnimationFrame(() => el.classList.add('show'));
+      return;
+    }
+
+    // Crossfade from current -> new art over ~2.4s using the overlay layer.
+    // Force-reset the overlay state so rapid interruptions don't keep a stale
+    // high-opacity overlay that makes the next image appear to pop in.
+    el.classList.remove('is-crossfading');
+    el.style.removeProperty('--asc-next-img');
+    void el.offsetWidth;
+
     requestAnimationFrame(() => {
-      el.classList.add('show');
+      if (el.dataset.ascPath !== path || el.dataset.ascToken !== token) return;
+
+      el.style.setProperty('--asc-next-img', `url('${path}')`);
+      el.classList.add('is-crossfading');
+
+      ascCrossfadeTimer = window.setTimeout(() => {
+        if (el.dataset.ascPath !== path || el.dataset.ascToken !== token) return;
+        el.style.setProperty('--asc-img', `url('${path}')`);
+        el.classList.remove('is-crossfading');
+        el.style.removeProperty('--asc-next-img');
+        el.classList.add('show');
+        ascCrossfadeTimer = null;
+      }, ASC_CROSSFADE_MS);
     });
   };
   img.src = path;
@@ -40,6 +75,141 @@ const showBindFatesError = (msg) => {
     window.showBindFatesError(msg);
   }
 };
+
+const REVEAL_MS = 2400;
+const REVEAL_HOLD_MS = 90;
+const revealController = {
+  isRevealing: false,
+  revealTimer: null,
+  defogKickoffTimer: null
+};
+
+function prefersReducedMotion() {
+  return window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+}
+
+const HEADER_MODES = {
+  BUILD: 'build',
+  CHALLENGE: 'challenge',
+  CODEX: 'codex'
+};
+
+const headerCollapsedByMode = {
+  [HEADER_MODES.BUILD]: false,
+  [HEADER_MODES.CHALLENGE]: false,
+  [HEADER_MODES.CODEX]: false
+};
+
+function resolveHeaderMode(mode) {
+  if (mode === HEADER_MODES.CHALLENGE) return HEADER_MODES.CHALLENGE;
+  if (mode === HEADER_MODES.CODEX) return HEADER_MODES.CODEX;
+  return HEADER_MODES.BUILD;
+}
+
+function getActiveHeaderMode() {
+  const mode = document.body?.dataset?.mode;
+  return resolveHeaderMode(mode);
+}
+
+function setHeaderCollapsed(collapsed, instant = false) {
+  const header = document.getElementById('app-header');
+  const toggle = document.getElementById('header-details-toggle');
+  if (!header) return;
+
+  const alreadyCollapsed = header.classList.contains('rc-header--collapsed');
+  if (alreadyCollapsed === collapsed) return;
+
+  const oldHeight = header.getBoundingClientRect().height;
+  if (instant) header.classList.add('rc-header--no-anim');
+  header.classList.toggle('rc-header--collapsed', collapsed);
+  if (toggle) toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+
+  requestAnimationFrame(() => {
+    const newHeight = header.getBoundingClientRect().height;
+    const delta = oldHeight - newHeight;
+    if (delta) window.scrollBy(0, -delta);
+    if (instant) header.classList.remove('rc-header--no-anim');
+  });
+}
+
+function setModeHeaderCollapsed(mode, collapsed, instant = false) {
+  const headerMode = resolveHeaderMode(mode);
+  headerCollapsedByMode[headerMode] = !!collapsed;
+  if (getActiveHeaderMode() === headerMode) {
+    setHeaderCollapsed(!!collapsed, instant);
+  }
+}
+
+function syncHeaderCollapsedForMode(mode, instant = false) {
+  const headerMode = resolveHeaderMode(mode);
+  setHeaderCollapsed(!!headerCollapsedByMode[headerMode], instant);
+}
+
+function collapseHeaderForRoll() {
+  setModeHeaderCollapsed(getActiveHeaderMode(), true, prefersReducedMotion());
+}
+
+function finishReveal() {
+  const resultsStage = document.getElementById('results-stage');
+  const ascArt = document.getElementById('asc-art');
+  const app = document.getElementById('app');
+
+  if (revealController.revealTimer) {
+    clearTimeout(revealController.revealTimer);
+    revealController.revealTimer = null;
+  }
+  if (revealController.defogKickoffTimer) {
+    clearTimeout(revealController.defogKickoffTimer);
+    revealController.defogKickoffTimer = null;
+  }
+  resultsStage?.classList.remove('is-revealing', 'is-defogging');
+  ascArt?.classList.remove('is-revealing-art', 'is-defogging-art');
+  app?.classList.remove('is-revealing-art', 'is-defogging-art');
+  revealController.isRevealing = false;
+}
+
+function skipReveal() {
+  if (!revealController.isRevealing) return;
+  finishReveal();
+}
+
+function startReveal() {
+  const resultsStage = document.getElementById('results-stage');
+  const ascArt = document.getElementById('asc-art');
+  const app = document.getElementById('app');
+  if (!resultsStage) return;
+
+  collapseHeaderForRoll();
+
+  if (prefersReducedMotion()) {
+    finishReveal();
+    return;
+  }
+
+  if (revealController.revealTimer) {
+    clearTimeout(revealController.revealTimer);
+    revealController.revealTimer = null;
+  }
+
+  revealController.isRevealing = true;
+  resultsStage.classList.add('is-revealing');
+  resultsStage.classList.remove('is-defogging');
+  app?.classList.add('is-revealing-art');
+  app?.classList.remove('is-defogging-art');
+
+  void resultsStage.offsetWidth;
+  revealController.defogKickoffTimer = setTimeout(() => {
+    resultsStage.classList.add('is-defogging');
+    app?.classList.add('is-defogging-art');
+    revealController.defogKickoffTimer = null;
+  }, REVEAL_HOLD_MS);
+
+  ascArt?.classList.remove('is-revealing-art', 'is-defogging-art');
+
+  revealController.revealTimer = setTimeout(() => {
+    finishReveal();
+  }, REVEAL_MS + REVEAL_HOLD_MS);
+}
 
 // ---------- dictionary builders (TRUE Map) ----------
 function buildGemDictionary(gems){
@@ -208,13 +378,13 @@ const NAME_TENDENCIES = {
   "Critical Hit": ["Precision","Execution","Fatal Point","Keen Edge","Perfect Strike","Deadly Aim"],
   "Totems": ["Idols","Effigies","Wards","Pillars","Runes","Totemcraft"],
   "Warcry": ["Battlecry","Roar","Oathcall","War Chant","Howl","Shout"],
-  "Marks": ["Brand","Sigil","Lock-On","Hunter's Mark","Aim","Marksmanship"],
+  "Marks": ["Brand","Sigil","Hunter's Mark","Aim","Marksmanship"],
   "Curses": ["Hex","Malison","Doom","Bane","Witchsign","Cursecraft"],
   "Minions": ["Thralls","Servitors","Legion","Swarm","Retinue","Gravebound"],
   "Companions": ["Pack","Familiar","Beastbond","Hunt Pack","Allies","Bond"],
   "Thorns": ["Barbs","Spines","Briar","Needles","Thornwall","Razors"],
   "Culling Strike": ["Cull","Last Rites","Final Cut","Reaping","Mercy","Execution"],
-  "Slow/Maim/Hinder": ["Maim","Snare","Hamstring","Drag","Quagmire","Hinder"],
+  "Slow/Maim/Hinder": ["Maim","Snare","Hamstring","Quagmire","Hinder"],
   "Chaos Damage": ["Entropy","Ruin","Blight","Abyss","Chaos","Void"]
 };
 
@@ -232,7 +402,7 @@ const NAME_TENDENCY_FORMS = {
   "Critical Hit": ["Precise","Lethal","Keen-Edged"],
   "Totems": ["Totemic","Ward-Set","Idolbound"],
   "Warcry": ["Roaring","Howling","Battle-Chanting"],
-  "Marks": ["Marked","Locking-On","Branding"],
+  "Marks": ["Marked","Branding"],
   "Curses": ["Hexing","Cursing","Doomcalling"],
   "Minions": ["Swarming","Gravecalling","Thrall-Summoning"],
   "Companions": ["Packbound","Beastbonded","Familiar-Led"],
@@ -1189,9 +1359,37 @@ function rollBuild(dataWrap){
 // ---------- roll button + weapon set wiring ----------
 document.addEventListener('DOMContentLoaded', () => {
   const rollBtn = document.getElementById('roll');
+  const headerToggleBtn = document.getElementById('header-details-toggle');
+
+  headerToggleBtn?.addEventListener('click', () => {
+    const activeMode = getActiveHeaderMode();
+    const collapsed = !!headerCollapsedByMode[activeMode];
+    setModeHeaderCollapsed(activeMode, !collapsed, prefersReducedMotion());
+  });
+
+  document.addEventListener('randomancer:mode-change', (event) => {
+    const mode = resolveHeaderMode(event?.detail?.mode);
+    syncHeaderCollapsedForMode(mode, prefersReducedMotion());
+  });
+
+  syncHeaderCollapsedForMode(getActiveHeaderMode(), true);
+
+  document.addEventListener('keydown', (evt) => {
+    if (!revealController.isRevealing) return;
+    if (evt.code !== 'Space') return;
+    evt.preventDefault();
+    skipReveal();
+  });
+
   if (rollBtn) {
     const statusEl = rollBtn.querySelector('.roll-status');
     rollBtn.addEventListener('click', async () => {
+      if (revealController.isRevealing) {
+        // Let this click both dismiss the current reveal and immediately trigger
+        // the next roll/contract draft.
+        skipReveal();
+      }
+
       // Tiny loading hint if data is still warming up
       rollBtn.classList.add('is-loading');
       if (statusEl && !dataReady) {
@@ -1201,7 +1399,12 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         if (typeof window.RandomancerHandleRollOverride === 'function') {
           const handled = await window.RandomancerHandleRollOverride({ rollBtn, statusEl });
-          if (handled) return;
+          if (handled) {
+            if (window.CURRENT_CHALLENGE_CONTRACT) {
+              startReveal();
+            }
+            return;
+          }
         }
 
         const data = await ensureDataPreload();
@@ -1212,6 +1415,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (typeof window.RandomancerAfterBuildRoll === "function") {
           window.RandomancerAfterBuildRoll();
         }
+        startReveal();
         
         const ws2Toggle = document.getElementById('weapon-set2-toggle');
 		if (ws2Toggle?.checked) {

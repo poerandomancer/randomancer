@@ -366,7 +366,7 @@
       "cruel": 6,
       "diabolical": 4
     },
-    "template": "Do not equip Charms.",
+    "template": "Do not equip any Charms.",
     "shortLabel": "Charmless Pact",
     "effects": {
       "bans": {
@@ -393,7 +393,7 @@
       "cruel": 0,
       "diabolical": 6
     },
-    "template": "Do not equip Flasks.",
+    "template": "Do not equip any Flasks.",
     "shortLabel": "Dry Covenant",
     "effects": {
       "bans": {
@@ -420,7 +420,7 @@
       "cruel": 6,
       "diabolical": 4
     },
-    "template": "Do not equip Unique items.",
+    "template": "Do not equip any Unique items.",
     "shortLabel": "No Relics",
     "effects": {
       "bans": {
@@ -484,7 +484,7 @@
       "cruel": 6,
       "diabolical": 6
     },
-    "template": "Deal damage only with your default weapon attack. Do not use damaging active skills.",
+    "template": "Deal damage only with your default weapon attack. Do not use any other damaging active skills.",
     "shortLabel": "The First Strike",
     "effects": {
       "locks": {
@@ -728,7 +728,7 @@
       "skills"
     ],
     "minSeverity": "mild",
-    "template": "Do not use Herald skills.",
+    "template": "Do not use any Herald skills.",
     "shortLabel": "Mute Choir",
     "weights": {
       "mild": 7,
@@ -769,7 +769,7 @@
       "gear"
     ],
     "minSeverity": "cruel",
-    "template": "Do not equip Amulets.",
+    "template": "Do not equip any Amulets.",
     "shortLabel": "Bare Throat",
     "weights": {
       "mild": 0,
@@ -789,7 +789,7 @@
       "gear"
     ],
     "minSeverity": "mild",
-    "template": "Do not equip Belts.",
+    "template": "Do not equip any Belts.",
     "shortLabel": "Unbelted",
     "weights": {
       "mild": 7,
@@ -815,7 +815,7 @@
       "cruel": 6,
       "diabolical": 4
     },
-    "template": "Do not use persistent buff skills.",
+    "template": "Do not use any persistent buff skills.",
     "shortLabel": "Fleeting Boons",
     "effects": {
       "bans": {
@@ -1091,7 +1091,7 @@
     ]
   },
   {
-    "id": "F10_rainbow_mosaic",
+    "id": "F10_rarity_rainbow",
     "role": "twist",
     "directive": "mandate",
     "strength": "hard",
@@ -1106,7 +1106,7 @@
       "diabolical": 6
     },
     "template": "Equip at least 1 Normal, 1 Magic, 1 Rare, and 1 Unique item.",
-    "shortLabel": "Rainbow Mosaic",
+    "shortLabel": "Rarity Rainbow",
     "conflictTags": [
       "rarity_policy"
     ],

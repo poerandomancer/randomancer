@@ -1,4 +1,6 @@
 import { TagUtils, defensePseudoTags } from './05-tags-and-scorer.js';
+import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
+import { ensureMarketBadgeDelegation, hydrateMarketBadges, renderMarketBadgeMarkup } from './features/market-price.js';
 
 /* === Randomancer: Uniques Synergy — canonical engine (v0.8.2) === */
 (function(){
@@ -26,6 +28,23 @@ import { TagUtils, defensePseudoTags } from './05-tags-and-scorer.js';
     return { get: (name) => byName.get(name) || byNorm.get(norm(name)) || [] };
   }
 
+
+  function combatOathTacticTags(){
+    const bind = window.App?.state?.bindFates;
+    const combatCfg = bind?.combat || { oaths: [] };
+    const oathNames = Array.isArray(combatCfg?.oaths) ? combatCfg.oaths : [];
+    if (!oathNames.length) return [];
+
+    const tacticNameSet = new Set((window.DATA?.Tactics || []).map((t) => t?.name).filter(Boolean));
+    const idx = dataIndex();
+    const out = new Set();
+    oathNames.forEach((name) => {
+      if (!tacticNameSet.has(name)) return;
+      idx.get(name).forEach((t) => { if (t) out.add(t); });
+    });
+    return Array.from(out);
+  }
+
   function expandTags(arr){
     const out = new Set();
     for (let t of (arr||[])){
@@ -47,9 +66,10 @@ import { TagUtils, defensePseudoTags } from './05-tags-and-scorer.js';
     if (/\bhinder(?:ed|ing|s)?\b|\bhindrance\b/.test(txt)) out.push('hinder');
     if (/\bslow(?:ed|ing|s)?\b|\bslowing\b/.test(txt)) out.push('slow');
     if (/\bmaim(?:ed|ing|s)?\b/.test(txt)) out.push('maim');
-    if (/\blife\s+regen(eration)?\b|\bregenerat(e|es|ed|ing|ion)\b/.test(txt)) out.push('liferegeneration');
+    if (/\blife\s+regen(?:eration)?\b/.test(txt)) out.push('liferegeneration');
     if (/\bleech(ed|ing|es)?\b/.test(txt)) out.push('leech');
     if (/\bcrit(ical|s|ically| chance)?\b|\bcritical\s+strike\b/.test(txt)) out.push('critical');
+    if (/\bculling\s*strike\b|\bcullingstrike\b|\bcull(?:ed|ing|s)?\b/.test(txt)) out.push('cullingstrike');
     return out;
   }
 
@@ -59,9 +79,9 @@ import { TagUtils, defensePseudoTags } from './05-tags-and-scorer.js';
     Shock: /\bshock(ed|ing|s)?\b/i,
     Bleed: /\bbleed(ing|s|ed)?\b/i,
     Poison: /\bpoison(ed|ing|s)?\b/i,
-    'Life Regeneration': /\blife\s+regen(eration)?\b|\bregenerat(e|es|ed|ing|ion)\b/i,
+    'Life Regeneration': /\blife\s+regen(?:eration)?\b/i,
     Leech: /\bleech(ed|ing|es)?\b/i,
-    'Culling Strike': /\bculling\s+strike\b/i,
+    'Culling Strike': /\bculling\s*strike\b|\bcullingstrike\b|\bcull(?:ed|ing|s)?\b/i,
     'Heavy Stun': /\bstun(ned|ning|s)?\b|\bheavy\s+stun\b|\bstun\s+threshold\b/i,
     Block: /\bchance\s+to\s+block\b|\bblock(ed|ing|s)?\b/i,
   };
@@ -95,7 +115,7 @@ import { TagUtils, defensePseudoTags } from './05-tags-and-scorer.js';
     function rolledByCategory(snap){
 	  const state = getRollSnapshot(snap);
 	  if (!state) {
-		return { tactics: [], ailments: [], def: [] };
+		return { tactics: [], ailments: [], def: [], defStrat: [], defPrimary: [] };
 	  }
 	
 	  // ——— PREFER ENRICHED SNAPSHOT (tacticSet / ailmentSet / defStrat objects) ———
@@ -109,25 +129,30 @@ import { TagUtils, defensePseudoTags } from './05-tags-and-scorer.js';
 		  expandTags(
 			(state.tacticSet || []).flatMap(t => t?.tags || [])
 		  )
-		);
+		).filter((t) => t !== 'physical');
+		const oathTactics = combatOathTacticTags();
+		if (oathTactics.length) tagsT.push(...oathTactics);
 	
 		const tagsA = Array.from(
 		  expandTags(
 			(state.ailmentSet || []).flatMap(a => a?.tags || [])
 		  )
-		);
+		).filter((t) => t !== 'physical');
 	
-		const tagsD = Array.from(
-		  expandTags([
-			...(state.defStrat?.tags || []),
-			...defensePseudoTags(state.defense && state.defense.name)
-		  ])
+		const tagsDStrat = Array.from(
+		  expandTags(state.defStrat?.tags || [])
 		);
+		const tagsDPrimary = Array.from(
+		  expandTags(defensePseudoTags(state.defense && state.defense.name))
+		);
+		const tagsD = Array.from(new Set([...tagsDStrat, ...tagsDPrimary]));
 	
 		return {
-		  tactics: tagsT,
+		  tactics: Array.from(new Set(tagsT)),
 		  ailments: tagsA,
 		  def: tagsD,
+		  defStrat: tagsDStrat,
+		  defPrimary: tagsDPrimary,
 		};
 	  }
 	
@@ -144,21 +169,26 @@ import { TagUtils, defensePseudoTags } from './05-tags-and-scorer.js';
 	
 	  const tagsT = Array.from(
 		expandTags(namesT.flatMap(n => idx.get(n)))
-	  );
+	  ).filter((t) => t !== 'physical');
+	  const oathTactics = combatOathTacticTags();
+	  if (oathTactics.length) tagsT.push(...oathTactics);
 	  const tagsA = Array.from(
 		expandTags(namesA.flatMap(n => idx.get(n)))
+	  ).filter((t) => t !== 'physical');
+	  const tagsDStrat = Array.from(
+		expandTags(namesD.flatMap(n => idx.get(n)))
 	  );
-	  const tagsD = Array.from(
-		expandTags([
-		  ...namesD.flatMap(n => idx.get(n)),
-		  ...defensePseudoTags(state.defense || state.defenseName)
-		])
+	  const tagsDPrimary = Array.from(
+		expandTags(defensePseudoTags(state.defense || state.defenseName))
 	  );
+	  const tagsD = Array.from(new Set([...tagsDStrat, ...tagsDPrimary]));
 	
 	  return {
-		tactics: tagsT,
+		tactics: Array.from(new Set(tagsT)),
 		ailments: tagsA,
 		def: tagsD,
+		defStrat: tagsDStrat,
+		defPrimary: tagsDPrimary,
 	  };
 	}
 
@@ -203,6 +233,7 @@ import { TagUtils, defensePseudoTags } from './05-tags-and-scorer.js';
 		if (hasWord('focus'))    add('focus');
 		if (hasWord('soulcore')) add('soulcore');
 		if (hasWord('trap tool') || hasWord('traptool')) add('traptool');
+		if (hasWord('talisman')) add('talisman');
 	
 		// expose staff vs quarterstaff intent for weaponSlotAllowed, if you still use those
 		allow.__wtxt = weaponText;
@@ -214,24 +245,129 @@ import { TagUtils, defensePseudoTags } from './05-tags-and-scorer.js';
 
 
 async function loadUniquesM(){
-    const url = 'data/enriched/uniques_enriched.json?v=' + Date.now();
-    const r = await fetch(url, {cache:'no-store'});
-    if (!r.ok) throw new Error('HTTP '+r.status);
-    const data = await r.json();
-    return Array.isArray(data) ? data : (data.items||[]);
+    const primaryUrl = 'data/enriched/poe2db_uniques_min.json?v=' + Date.now();
+    const fallbackUrl = 'data/enriched/uniques_enriched.json?v=' + Date.now();
+
+    try {
+      const r = await fetch(primaryUrl, { cache:'no-store' });
+      if (!r.ok) throw new Error('HTTP '+r.status);
+      const data = await r.json();
+      const adapted = adaptPoe2dbUniquesPayload(data);
+      if (adapted.length) return adapted;
+      throw new Error('No compatible uniques in poe2db payload');
+    } catch (err) {
+      console.warn('[u79b2m] failed to load poe2db uniques for build mode, using legacy fallback', err);
+      const r = await fetch(fallbackUrl, { cache:'no-store' });
+      if (!r.ok) throw new Error('HTTP '+r.status);
+      const data = await r.json();
+      return Array.isArray(data) ? data : (data.items || []);
+    }
   }
 
-  function getItemTagSet(item){
+  const UNIQUE_TAG_DEBUG = {
+    seen: new Set(),
+    matched: new Set(),
+    mismatches: new Map(),
+    primarySeen: new Set(),
+    defensiveSeen: new Set(),
+    defensiveOnlyMatches: 0
+  };
+
+  function maybeLogUniqueTagDiagnostics(items, rolledSet){
+    const params = new URLSearchParams(window.location.search || '');
+    if (params.get('debug') !== '1') return;
+
+    const rolled = new Set(Array.from(rolledSet || []).map((t) => norm(t)));
+
+    items.forEach((item) => {
+      const buckets = getItemTagBuckets(item);
+      const tags = Array.from(buckets.all);
+      const matchedPrimary = Array.from(buckets.primary).some((tag) => rolled.has(tag));
+      const matchedDefensive = Array.from(buckets.defensive).some((tag) => rolled.has(tag));
+      if (!matchedPrimary && matchedDefensive) UNIQUE_TAG_DEBUG.defensiveOnlyMatches += 1;
+
+      buckets.primary.forEach((tag) => UNIQUE_TAG_DEBUG.primarySeen.add(tag));
+      buckets.defensive.forEach((tag) => UNIQUE_TAG_DEBUG.defensiveSeen.add(tag));
+
+      tags.forEach((tag) => {
+        UNIQUE_TAG_DEBUG.seen.add(tag);
+        if (rolled.has(tag)) {
+          UNIQUE_TAG_DEBUG.matched.add(tag);
+        } else {
+          UNIQUE_TAG_DEBUG.mismatches.set(tag, (UNIQUE_TAG_DEBUG.mismatches.get(tag) || 0) + 1);
+        }
+      });
+    });
+
+    const unmatchedCount = UNIQUE_TAG_DEBUG.seen.size - UNIQUE_TAG_DEBUG.matched.size;
+    const top = Array.from(UNIQUE_TAG_DEBUG.mismatches.entries())
+      .filter(([tag]) => !UNIQUE_TAG_DEBUG.matched.has(tag))
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 8)
+      .map(([tag, count]) => `${tag}:${count}`)
+      .join(', ');
+
+    console.info(
+      `[u79b2m][debug] unique tag coverage seen=${UNIQUE_TAG_DEBUG.seen.size} matched=${UNIQUE_TAG_DEBUG.matched.size} unmatched=${unmatchedCount} primary_seen=${UNIQUE_TAG_DEBUG.primarySeen.size} defensive_seen=${UNIQUE_TAG_DEBUG.defensiveSeen.size} defensive_only_matches=${UNIQUE_TAG_DEBUG.defensiveOnlyMatches}${top ? ` top_unmatched=${top}` : ''}`
+    );
+  }
+
+  function getGrantedSkillTags(item){
+    if (!item) return [];
+    if (Array.isArray(item.__grantedSkillTags)) return item.__grantedSkillTags;
+
+    const entries = getGrantedSkillEntries(item);
+    const out = new Set();
+
+    entries.forEach((entry) => {
+      const skillTags = Array.isArray(entry?.tags) ? entry.tags : [];
+      skillTags.forEach((t) => {
+        const n = norm(t);
+        if (n) out.add(n);
+      });
+    });
+
+    const tags = Array.from(out);
+    item.__grantedSkillTags = tags;
+    return tags;
+  }
+
+  function normalizeUniqueTagPattern(value){
+    return String(value || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '_')
+      .replace(/^_+|_+$/g, '');
+  }
+
+  function isDefensiveUniqueTag(tag){
+    const p = normalizeUniqueTagPattern(tag);
+    if (!p) return false;
+
+    return (
+      p.endsWith('_resistance') ||
+      (p.startsWith('maximum_') && p.endsWith('_resistance')) ||
+      p.includes('_duration_on_you') ||
+      p.includes('_effect_on_you') ||
+      p.startsWith('cannot_be_') ||
+      p.startsWith('avoid_') ||
+      p.includes('chance_to_avoid')
+    );
+  }
+
+  function getItemTagBuckets(item){
+    if (item && item.__tagBuckets) return item.__tagBuckets;
+
     const raw = (item.tags && item.tags.raw) || [];
     const canon = filterCanonicalsByEvidence(item);
     const derived = deriveExtraTags(item.lines || []);
-    const acc = [];
+    const grantedSkillTags = getGrantedSkillTags(item);
+    const entries = [];
 
     // normalize raw + derived tags directly
-    for (const t of [...raw, ...derived]){
+    for (const t of [...raw, ...derived, ...grantedSkillTags]){
       if (!t) continue;
       const n = norm(t);
-      if (n) acc.push(n);
+      if (n && n !== 'physical') entries.push({ raw: t, n });
     }
 
     // expand canonical labels, including compound ones like "Slow/Maim/Hinder"
@@ -243,26 +379,44 @@ async function loadUniquesM(){
       if (parts.length > 1){
         for (const p of parts){
           const n = norm(p);
-          if (n) acc.push(n);
+          if (n && n !== 'physical') entries.push({ raw: p, n });
         }
         continue;
       }
       const n = norm(lbl);
       if (n === 'slowmaimhinder'){
-        acc.push('slow','maim','hinder');
-      } else if (n){
-        acc.push(n);
+        entries.push({ raw: 'slow', n: 'slow' });
+        entries.push({ raw: 'maim', n: 'maim' });
+        entries.push({ raw: 'hinder', n: 'hinder' });
+      } else if (n && n !== 'physical'){
+        entries.push({ raw: lbl, n });
       }
     }
 
-    return new Set(acc);
+    const all = new Set();
+    const primary = new Set();
+    const defensive = new Set();
+    for (const entry of entries){
+      if (!entry?.n) continue;
+      all.add(entry.n);
+      if (isDefensiveUniqueTag(entry.raw)) defensive.add(entry.n);
+      else primary.add(entry.n);
+    }
+
+    const buckets = { all, primary, defensive };
+    if (item) item.__tagBuckets = buckets;
+    return buckets;
+  }
+
+  function getItemTagSet(item){
+    return getItemTagBuckets(item).all;
   }
   function scoreItem(it, rolled, slotAllow){
-    const all = getItemTagSet(it);
+    const primary = getItemTagBuckets(it).primary;
     let s = 0;
-    for (const t of rolled.tactics)  if (all.has(t)) s += 3.0;
-    for (const t of rolled.ailments) if (all.has(t)) s += 1.7;
-    for (const t of rolled.def)      if (all.has(t)) s += 1.2;
+    for (const t of rolled.tactics)  if (primary.has(t)) s += 3.0;
+    for (const t of rolled.ailments) if (primary.has(t)) s += 1.7;
+    for (const t of rolled.def)      if (primary.has(t)) s += 1.2;
     if (slotAllow && slotAllow.has && slotAllow.has(it.slot)) s += 0.6;
     return s;
   }
@@ -270,7 +424,7 @@ async function loadUniquesM(){
 function weaponSlotAllowed(it, slotAllow){
     if (!slotAllow || !slotAllow.has) return true;
     // Non-weapon slots just rely on presence in the allowed set
-    if (!['bow','crossbow','staff','spear','sword','mace','axe','claw','wand','sceptre','shield','buckler','focus','soulcore','traptool'].includes(it.slot)) {
+    if (!['bow','crossbow','staff','spear','sword','mace','axe','claw','wand','sceptre','shield','buckler','focus','soulcore','traptool','talisman'].includes(it.slot)) {
       return slotAllow.has(it.slot);
     }
     if (it.slot !== 'staff') {
@@ -324,7 +478,7 @@ function weaponSlotAllowed(it, slotAllow){
   // - No recency penalty (deferred)
   // -------------------------
 
-  const WEAPON_SLOTS = new Set(['bow','crossbow','staff','spear','sword','mace','axe','claw','wand','sceptre','shield','buckler','focus','soulcore','traptool','quiver']);
+  const WEAPON_SLOTS = new Set(['bow','crossbow','staff','spear','sword','mace','axe','claw','wand','sceptre','shield','buckler','focus','soulcore','traptool','talisman','quiver']);
   const ARMOUR_SLOTS = new Set(['helmet','body','gloves','boots']);
 
   // Hard caps per slot (prevents duplicate armour slots like double body).
@@ -394,6 +548,7 @@ function weaponSlotAllowed(it, slotAllow){
     if (hasWord('focus'))    add('focus');
     if (hasWord('soulcore')) add('soulcore');
     if (hasWord('trap tool') || hasWord('traptool')) add('traptool');
+    if (hasWord('talisman')) add('talisman');
 
     allow.__wtxt = weaponText;
     allow.__wantsQuarterstaff = wantsQuarterstaff;
@@ -436,7 +591,7 @@ function weaponSlotAllowed(it, slotAllow){
 
 
   function scoreWeaponPass(it, rolled){
-	  const all = getItemTagSet(it);
+	  const all = getItemTagBuckets(it).primary;
 	  let s = 0;
 	
 	  // Tactics are still the strongest signal.
@@ -450,15 +605,21 @@ function weaponSlotAllowed(it, slotAllow){
 
 
   function scoreArmourPass(it, rolled, state){
-    const all = getItemTagSet(it);
+    const { all, primary } = getItemTagBuckets(it);
     let s = 0;
 
     // Offense-first, tactics lead
-    for (const t of rolled.tactics)  if (all.has(t)) s += 4.0;
-    for (const t of rolled.ailments) if (all.has(t)) s += 2.0;
+    for (const t of rolled.tactics)  if (primary.has(t)) s += 4.0;
+    for (const t of rolled.ailments) if (primary.has(t)) s += 2.0;
 
-    // Defensive strategy / primary defense (secondary)
-    for (const t of rolled.def)      if (all.has(t)) s += 1.5;
+    // Defensive strategy (secondary): only strategy tags participate in direct weighted matching.
+    for (const t of (rolled.defStrat || []))   if (primary.has(t)) s += 1.0;
+
+    // Primary defense alignment as a small tie-breaker (not a primary driver).
+    let primaryDefHits = 0;
+    for (const t of (rolled.defPrimary || [])) if (primary.has(t)) primaryDefHits += 1;
+    if (primaryDefHits) s += Math.min(0.4, primaryDefHits * 0.2);
+
 
     // Small bump for resistance coverage (tie-breaker, not a primary driver)
     if (all.has(TAG_ALL_ELE_RES)) s += 0.6;
@@ -526,9 +687,8 @@ function weaponSlotAllowed(it, slotAllow){
     if (!scored.length) return [];
 
     const best = scored[0].s || 0;
-    if (best < 3.0) return []; // avoid forcing weak armour picks
 
-    const pick1 = weightedPickFromBand(scored, 0.70, 3.0);
+    const pick1 = weightedPickFromBand(scored, 0.60, 0);
     if (!pick1) return [];
 
     used.add(pick1.name);
@@ -540,7 +700,7 @@ function weaponSlotAllowed(it, slotAllow){
     if (!scored2.length) return [pick1];
 
     const best2 = scored2[0].s || 0;
-    const abs2 = Math.max(2.6, best * 0.55);
+    const abs2 = Math.max(2.2, best * 0.45);
     if (best2 < abs2) return [pick1];
 
     const pick2 = weightedPickFromBand(scored2, 0.75, abs2);
@@ -556,23 +716,26 @@ function weaponSlotAllowed(it, slotAllow){
   // -------------------------
 
   function scoreUtilityPass(it, rolled, state){
-    const all = getItemTagSet(it);
+    const { all, primary } = getItemTagBuckets(it);
     let match = 0;
     let s = 0;
 
     // Tactics (primary driver)
     for (const t of rolled.tactics){
-      if (all.has(t)){ s += 4.0; match += 4.0; }
+      if (primary.has(t)){ s += 4.0; match += 4.0; }
     }
 
     // Offense: ailments + mapped elements (ignite->fire, freeze->cold, shock->lightning)
     for (const t of expandedWeaponAilmentTags(rolled)){
-      if (all.has(t)){ s += 2.0; match += 2.0; }
+      if (primary.has(t)){ s += 2.0; match += 2.0; }
     }
 
-    // Defensive strategy (secondary)
-    for (const t of rolled.def){
-      if (all.has(t)){ s += 1.5; match += 1.5; }
+    // Defensive strategy / primary defense (secondary, strategy favored)
+    for (const t of (rolled.defStrat || rolled.def || [])){
+      if (primary.has(t)){ s += 1.0; match += 1.0; }
+    }
+    for (const t of (rolled.defPrimary || [])){
+      if (primary.has(t)){ s += 0.4; match += 0.4; }
     }
 
     // Resistances as light tie-breaker (never part of match qualification)
@@ -748,112 +911,204 @@ function ensureUniqueSection(){
     const tags = Array.from(getItemTagSet(item)).sort();
     return tags.map(t=>`<span class="tag-pill pill${rolledSet.has(t)?' matched':''}" data-tag="${t}">${t}</span>`).join('');
   }
-  function highlight(lines, rolledSet){
-	  const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-	  // Skip the first 2 lines (name + base) – they’re in the header
-	  let out = (lines || []).slice(2).join('\n');
-	
-	  // Highlight any text that matches the rolled profile tags
-	  rolledSet.forEach(t => {
-		if (!t) return;
-		const rx = new RegExp(esc(String(t)), 'ig');
-		out = out.replace(rx, m => `<span class="hit">${m}</span>`);
-	  });
-	
-	  return out
-		.split('\n')
-		.map(L => L.trim())
-		.filter(L => L.length) // drop empty lines
-		.map(L => `<div class="unique-line">${L}</div>`)
-		.join('');
-	}
-	
-	function buildUniqueReason(it, rolledSet) {
-	  if (!it) return '';
-	
-	  // Use the same tag logic as scoring + pill rendering
-	  const tagSet = getItemTagSet(it);        // returns a Set of normalized tags
-	  const tags = Array.from(tagSet);
-	  if (!tags.length) return '';
-	
-	  const hasRolled =
-		rolledSet &&
-		typeof rolledSet.has === 'function' &&
-		rolledSet.size > 0;
-	
-	  const matched = [];
-	  const unmatched = [];
-	
-	  for (const t of tags) {
-		if (!t) continue;
-	
-		// rolledSet already holds normalized tags (from rolledByCategory/expandTags)
-		if (hasRolled && rolledSet.has(t)) {
-		  matched.push(t);
-		} else {
-		  unmatched.push(t);
-		}
-	  }
-	
-	  // Prefer tags that actually match the rolled profile; otherwise just
-	  // describe the item by its own tags.
-	  const source = (hasRolled && matched.length) ? matched : tags;
-	  const main = source.slice(0, 3); // up to 3 tags
-	
-	  if (!main.length) return '';
-	
-	  const humanList = (arr) => {
-		const pretty = (s) => {
-		  s = String(s || '').trim();
-		  if (!s) return s;
-		  return s[0].toUpperCase() + s.slice(1);
-		};
-		const p = arr.map(pretty);
-		if (p.length === 1) return p[0];
-		if (p.length === 2) return `${p[0]} and ${p[1]}`;
-		return `${p[0]}, ${p[1]} and ${p[2]}`;
-	  };
-	
-	  const list = humanList(main);
-	
-	  if (hasRolled && matched.length) {
-		return `Synergizes with your ${list} focus.`;
-	  }
-	  return `Adds ${list} to your build.`;
-	}
 
+  function highlightText(text, rolledSet){
+    const esc = s => s.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&');
+    let out = String(text || '');
+    rolledSet.forEach((t) => {
+      if (!t) return;
+      const rx = new RegExp(esc(String(t)), 'ig');
+      out = out.replace(rx, m => `<span class="hit">${m}</span>`);
+    });
+    return out;
+  }
+
+  function renderLines(lines, rolledSet, lineClass='unique-line'){
+    return (Array.isArray(lines) ? lines : [])
+      .map((line) => String(line || '').trim())
+      .filter(Boolean)
+      .map((line) => `<div class="${lineClass}">${highlightText(line, rolledSet)}</div>`)
+      .join('');
+  }
+
+  function getSectionLines(it, kind){
+    const fromMeta = Array.isArray(it?.meta?.[kind]) ? it.meta[kind] : [];
+    if (fromMeta.length) return fromMeta;
+
+    if (kind === 'explicit_mods') {
+      return Array.isArray(it?.lines) ? it.lines.slice(2).filter(Boolean) : [];
+    }
+    return [];
+  }
+
+  function formatRequirements(it){
+    const req = it?.requirements || {};
+    const pairs = [
+      ['level', 'Level'],
+      ['str', 'STR'],
+      ['dex', 'DEX'],
+      ['int', 'INT']
+    ];
+
+    const parts = pairs
+      .map(([key, label]) => {
+        const val = req[key];
+        if (val == null || val === '' || Number(val) === 0) return null;
+        return `${label} ${val}`;
+      })
+      .filter(Boolean);
+
+    return parts.length ? `Requires: ${parts.join(', ')}` : '';
+  }
+
+
+  function normalizeSkillKey(value){
+    return String(value || '')
+      .toLowerCase()
+      .replace(/\[[^\]]+\|([^\]]+)\]/g, '$1')
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim();
+  }
+
+  function getSkillLookup(){
+    if (window.__uniqueSkillLookup && window.__uniqueSkillLookup.size) return window.__uniqueSkillLookup;
+
+    const map = new Map();
+    const gems = Array.isArray(window.DATA?.gems) ? window.DATA.gems : [];
+
+    gems.forEach((g) => {
+      const names = [g?.name, g?.base_item?.display_name, g?.support_name].filter(Boolean);
+      names.forEach((n) => {
+        const key = normalizeSkillKey(n);
+        if (!key || map.has(key)) return;
+        map.set(key, g);
+      });
+    });
+
+    window.__uniqueSkillLookup = map;
+    return map;
+  }
+
+  function getGrantedSkillEntries(it){
+    const granted = Array.isArray(it?.granted_skills) ? it.granted_skills : [];
+    if (!granted.length) return [];
+
+    const skillsByName = getSkillLookup();
+    return granted
+      .map((entry) => {
+        const name = String(entry?.name || entry?.raw || entry || '').trim();
+        if (!name) return null;
+
+        const key = normalizeSkillKey(name);
+        const g = key ? skillsByName.get(key) : null;
+        const desc = String(g?.description || g?.support_text || '').trim();
+        const tags = Array.isArray(g?.tags) ? g.tags : [];
+
+        return {
+          name,
+          description: desc,
+          tags
+        };
+      })
+      .filter(Boolean);
+  }
+
+  function renderGrantedSkills(it){
+    const entries = getGrantedSkillEntries(it);
+    if (!entries.length) return '';
+
+    return entries
+      .map((entry) => {
+        const line = `Grants: ${entry.name}`;
+        const detail = entry.description ? `<div class="unique-granted-desc">${highlightText(entry.description, new Set())}</div>` : '';
+        return `<div class="unique-granted-item"><div class="unique-line">${highlightText(line, new Set())}</div>${detail}</div>`;
+      })
+      .join('');
+  }
+
+  function buildUniqueReason(it, rolledSet) {
+    if (!it) return '';
+
+    const buckets = getItemTagBuckets(it);
+    const tags = Array.from(buckets.primary.size ? buckets.primary : buckets.all);
+    if (!tags.length) return '';
+
+    const hasRolled =
+      rolledSet &&
+      typeof rolledSet.has === 'function' &&
+      rolledSet.size > 0;
+
+    const matched = [];
+    for (const t of tags) {
+      if (!t) continue;
+      if (hasRolled && rolledSet.has(t)) matched.push(t);
+    }
+
+    const source = (hasRolled && matched.length) ? matched : tags;
+    const main = source.slice(0, 3);
+    if (!main.length) return '';
+
+    const humanList = (arr) => {
+      const p = arr.map((s) => {
+        s = String(s || '').trim();
+        return s ? s[0].toUpperCase() + s.slice(1) : s;
+      });
+      if (p.length === 1) return p[0];
+      if (p.length === 2) return `${p[0]} and ${p[1]}`;
+      return `${p[0]}, ${p[1]} and ${p[2]}`;
+    };
+
+    const list = humanList(main);
+    if (hasRolled && matched.length) return `Synergizes with your ${list} focus.`;
+    return `Adds ${list} to your build.`;
+  }
 
   function renderUniques(items, rolledSet){
-	  const grid = ensureUniqueSection();
-	  if (!grid) {
-		setTimeout(() => renderUniques(items, rolledSet), 120);
-		return;
-	  }
-	
-	  grid.innerHTML = items.map(it => {
-		const pills = pillsFor(it, rolledSet);
-		const lines = highlight(it.lines, rolledSet);
-		const reason = buildUniqueReason(it, rolledSet);
-	
-		return `
-		  <div class="unique-card">
-			<div class="unique-header">
-			  <div class="unique-name">${it.name}</div>
-			  <div class="unique-base">${it.base}</div>
-			</div>
-			<div class="skill-divider"></div>
-			<div class="tags-row">
-			  ${pills}
-			</div>
-			<div class="unique-lines">
-			  ${reason ? `<div class="unique-highlights">${reason}</div>` : ''}
-			  ${lines}
-			</div>
-		  </div>
-		`;
+    ensureMarketBadgeDelegation();
+    const grid = ensureUniqueSection();
+    if (!grid) {
+      setTimeout(() => renderUniques(items, rolledSet), 120);
+      return;
+    }
 
-	  }).join('');
-	}
+    grid.innerHTML = items.map(it => {
+      const pills = pillsFor(it, rolledSet);
+      const reason = buildUniqueReason(it, rolledSet);
+      const requirements = formatRequirements(it);
+      const flavourLines = getSectionLines(it, 'flavour_text');
+      const implicitLines = getSectionLines(it, 'implicit_mods');
+      const explicitLines = getSectionLines(it, 'explicit_mods');
+      const grantedSkillsHtml = renderGrantedSkills(it);
+      const hasGrantedSkills = !!grantedSkillsHtml;
+
+      return `
+        <div class="unique-card">
+          ${renderMarketBadgeMarkup(it, { context: 'build' })}
+          <div class="unique-header">
+            <div class="unique-name">${it.name}</div>
+            <div class="unique-base">${it.base}</div>
+            ${requirements ? `<div class="unique-req">${requirements}</div>` : ''}
+          </div>
+          <div class="skill-divider"></div>
+          <div class="unique-lines">
+            ${reason ? `<div class="unique-highlights">${reason}</div>` : ''}
+            ${flavourLines.length ? `<div class="unique-flavour">${renderLines(flavourLines, rolledSet, 'unique-flavour-line')}</div>` : ''}
+            ${implicitLines.length ? `<div class="unique-gold-divider"></div><div class="unique-section unique-section--implicit">${renderLines(implicitLines, rolledSet)}</div>` : ''}
+            ${(!implicitLines.length && flavourLines.length && explicitLines.length) ? `<div class="unique-gold-divider"></div>` : ''}
+            ${implicitLines.length && explicitLines.length ? `<div class="unique-gold-divider"></div>` : ''}
+            ${explicitLines.length ? `<div class="unique-section unique-section--explicit">${renderLines(explicitLines, rolledSet)}</div>` : ''}
+            ${hasGrantedSkills && explicitLines.length ? `<div class="unique-gold-divider"></div>` : ''}
+            ${hasGrantedSkills && !explicitLines.length && (implicitLines.length || flavourLines.length) ? `<div class="unique-gold-divider"></div>` : ''}
+            ${hasGrantedSkills ? `<div class="unique-section unique-section--granted">${grantedSkillsHtml}</div>` : ''}
+            ${pills ? `<div class="unique-gold-divider"></div><div class="tags-row tags-row--bottom">${pills}</div>` : ''}
+          </div>
+        </div>
+      `;
+
+    }).join('');
+
+    hydrateMarketBadges(grid);
+  }
 
 
     async function refreshUniques(snap){
@@ -869,6 +1124,7 @@ function ensureUniqueSection(){
                 ]);
                 const allow = allowedSlots(snap);
                 const picks = pickPasses(items, rolled, snap);
+                maybeLogUniqueTagDiagnostics(items, rolledSet);
 
                 if (window.App && typeof window.App.mergeCurrentRoll === 'function') {
                   window.App.mergeCurrentRoll({ recommendedUniques: picks.map(p => p.name) });

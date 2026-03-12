@@ -17,6 +17,11 @@
   --challenge-iron: #7f8792;
   --challenge-crimson: #9f2f37;
   --challenge-crimson-soft: rgba(159,47,55,0.35);
+
+  --codex-ember: #84331a;
+  --codex-ember-rgb: 196, 90, 42;
+  --codex-ember-soft: rgba(196,90,42,0.35);
+  --codex-ember-weak: rgba(196,90,42,0.12);
 }
 
 body[data-mode="build"]{
@@ -27,6 +32,12 @@ body[data-mode="challenge"]{
   --mode-accent: var(--challenge-crimson);
   --gold: var(--challenge-crimson);
   --edge: var(--challenge-crimson-soft);
+}
+
+body[data-mode="codex"]{
+  --mode-accent: var(--codex-ember);
+  --gold: var(--codex-ember);
+  --edge: var(--codex-ember-soft);
 }
 
 *{ box-sizing:border-box; }
@@ -60,19 +71,36 @@ body[data-mode="challenge"]{
 
 .asc-art{
   position:fixed; inset:0; opacity:0; pointer-events:none;
-  transition:opacity .5s ease;
+  --asc-fade-ms: 1100ms;
+  transition:opacity var(--asc-fade-ms) ease;
   background-image:
     linear-gradient(135deg, rgba(0,0,0,0.25), rgba(0,0,0,0.6)),
     var(--asc-img);
   background-position:center; background-size:cover; background-repeat:no-repeat;
-  filter:saturate(.9) brightness(1.05);
 }
+.asc-art::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity var(--asc-fade-ms) ease;
+  background-image:
+    linear-gradient(135deg, rgba(0,0,0,0.25), rgba(0,0,0,0.6)),
+    var(--asc-next-img);
+  background-position:center;
+  background-size:cover;
+  background-repeat:no-repeat;
+}
+.asc-art.is-crossfading::after{ opacity: .92; }
 .asc-art.show{ opacity:.92; }
 
 body.challenge-mode .asc-art,
 body.challenge-mode .asc-art.show,
 body[data-mode="challenge"] .asc-art,
-body[data-mode="challenge"] .asc-art.show{
+body[data-mode="challenge"] .asc-art.show,
+body[data-mode="codex"] .asc-art,
+body[data-mode="codex"] .asc-art.show{
   opacity: 0 !important;
 }
 
@@ -118,6 +146,15 @@ body[data-mode="challenge"] .asc-art.show{
   background: rgba(0,0,0,.28);
   isolation:isolate;
   transition: background-color .5s ease, filter .5s ease;
+}
+
+#app.is-revealing-art{
+  filter: brightness(.85) saturate(.9);
+}
+
+#app.is-defogging-art{
+  filter: none;
+  transition: filter 2400ms ease-out;
 }
 
 #app::after{
