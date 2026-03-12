@@ -606,18 +606,15 @@ function weaponSlotAllowed(it, slotAllow){
   function scoreArmourPass(it, rolled, state){
     const { all, primary } = getItemTagBuckets(it);
     let s = 0;
-    const hasCullingTactic = (rolled.tactics || []).includes('cullingstrike');
 
     // Offense-first, tactics lead
     for (const t of rolled.tactics)  if (primary.has(t)) s += 4.0;
     for (const t of rolled.ailments) if (primary.has(t)) s += 2.0;
 
     // Defensive strategy / primary defense (secondary, strategy favored)
-    for (const t of (rolled.defStrat || rolled.def || []))   if (primary.has(t)) s += 1.2;
-    for (const t of (rolled.defPrimary || []))                if (primary.has(t)) s += 0.6;
+    for (const t of (rolled.defStrat || rolled.def || []))   if (primary.has(t)) s += 1.0;
+    for (const t of (rolled.defPrimary || []))                if (primary.has(t)) s += 0.4;
 
-    // Culling tactic-specific affinity: prioritize true culling uniques when Culling Strike is rolled.
-    if (hasCullingTactic && primary.has('cullingstrike')) s += 3.0;
 
     // Small bump for resistance coverage (tie-breaker, not a primary driver)
     if (all.has(TAG_ALL_ELE_RES)) s += 0.6;
@@ -686,7 +683,7 @@ function weaponSlotAllowed(it, slotAllow){
 
     const best = scored[0].s || 0;
 
-    const pick1 = weightedPickFromBand(scored, 0.70, 0);
+    const pick1 = weightedPickFromBand(scored, 0.60, 0);
     if (!pick1) return [];
 
     used.add(pick1.name);
@@ -698,7 +695,7 @@ function weaponSlotAllowed(it, slotAllow){
     if (!scored2.length) return [pick1];
 
     const best2 = scored2[0].s || 0;
-    const abs2 = Math.max(2.6, best * 0.55);
+    const abs2 = Math.max(2.2, best * 0.45);
     if (best2 < abs2) return [pick1];
 
     const pick2 = weightedPickFromBand(scored2, 0.75, abs2);
@@ -730,10 +727,10 @@ function weaponSlotAllowed(it, slotAllow){
 
     // Defensive strategy / primary defense (secondary, strategy favored)
     for (const t of (rolled.defStrat || rolled.def || [])){
-      if (primary.has(t)){ s += 1.2; match += 1.2; }
+      if (primary.has(t)){ s += 1.0; match += 1.0; }
     }
     for (const t of (rolled.defPrimary || [])){
-      if (primary.has(t)){ s += 0.6; match += 0.6; }
+      if (primary.has(t)){ s += 0.4; match += 0.4; }
     }
 
     // Resistances as light tie-breaker (never part of match qualification)
