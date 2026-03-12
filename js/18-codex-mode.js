@@ -96,19 +96,6 @@ function matches(entry) {
   return true;
 }
 
-function updateUrl() {
-  if (window.RandomancerGetMode?.() !== 'codex') return;
-  const p = new URLSearchParams(location.search);
-  p.set('mode', 'codex');
-  p.set('pillar', state.pillar);
-  p.delete('skill');
-  p.delete('gear');
-  if (state.q) p.set('q', state.q); else p.delete('q');
-  if (state.tags.size) p.set('tags', Array.from(state.tags).join(',')); else p.delete('tags');
-  p.delete('passive');
-  history.replaceState(null, '', `${location.pathname}?${p.toString()}`);
-}
-
 function renderTags(entries) {
   if (!els.tags) return;
   const freq = new Map();
@@ -407,7 +394,6 @@ function render() {
 
   const pinnedTab = document.getElementById('codex-pinned-tab');
   if (pinnedTab) pinnedTab.textContent = `Pinned (${state.pinnedIds.size})`;
-  updateUrl();
 }
 
 function buildIndex() {
