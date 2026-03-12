@@ -161,6 +161,16 @@ async function getPricecheckResult(args: {
       ttl_hours: ttlHours,
     });
   } catch (err) {
+    logPricecheckUpstreamError(err, {
+      league,
+      name,
+      leagueNorm,
+      itemNameNorm,
+      hasCachedSnapshot: !!cached,
+      cachedFetchedAt: cached?.fetched_at ?? null,
+      cachedFreshUntil: cached?.fresh_until ?? null,
+    });
+
     if (cached) {
       return withSnapshotMeta(parseStoredResult(cached), {
         source: "stale-cache",
@@ -173,6 +183,26 @@ async function getPricecheckResult(args: {
 
     throw err;
   }
+}
+
+function logPricecheckUpstreamError(
+  err: unknown,
+  context: {
+    league: string;
+    name: string;
+    leagueNorm: string;
+    itemNameNorm: string;
+    hasCachedSnapshot: boolean;
+    cachedFetchedAt: string | null;
+    cachedFreshUntil: string | null;
+  },
+): void {
+  const message = err instanceof Error ? err.message : String(err);
+
+  console.error("[pricecheck] upstream live fetch failed", {
+    ...context,
+    error: message,
+  });
 }
 
 async function getSnapshot(
