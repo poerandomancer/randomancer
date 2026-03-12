@@ -1,5 +1,6 @@
 import { TagUtils, defensePseudoTags } from './05-tags-and-scorer.js';
 import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
+import { ensureMarketBadgeDelegation, hydrateMarketBadges, renderMarketBadgeMarkup } from './features/market-price.js';
 
 /* === Randomancer: Uniques Synergy — canonical engine (v0.8.2) === */
 (function(){
@@ -1063,6 +1064,7 @@ function ensureUniqueSection(){
   }
 
   function renderUniques(items, rolledSet){
+    ensureMarketBadgeDelegation();
     const grid = ensureUniqueSection();
     if (!grid) {
       setTimeout(() => renderUniques(items, rolledSet), 120);
@@ -1081,6 +1083,7 @@ function ensureUniqueSection(){
 
       return `
         <div class="unique-card">
+          ${renderMarketBadgeMarkup(it, { context: 'build' })}
           <div class="unique-header">
             <div class="unique-name">${it.name}</div>
             <div class="unique-base">${it.base}</div>
@@ -1103,6 +1106,8 @@ function ensureUniqueSection(){
       `;
 
     }).join('');
+
+    hydrateMarketBadges(grid);
   }
 
 
