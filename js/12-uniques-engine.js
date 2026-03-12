@@ -27,6 +27,23 @@ import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
     return { get: (name) => byName.get(name) || byNorm.get(norm(name)) || [] };
   }
 
+
+  function combatOathTacticTags(){
+    const bind = window.App?.state?.bindFates;
+    const combatCfg = bind?.combat || { oaths: [] };
+    const oathNames = Array.isArray(combatCfg?.oaths) ? combatCfg.oaths : [];
+    if (!oathNames.length) return [];
+
+    const tacticNameSet = new Set((window.DATA?.Tactics || []).map((t) => t?.name).filter(Boolean));
+    const idx = dataIndex();
+    const out = new Set();
+    oathNames.forEach((name) => {
+      if (!tacticNameSet.has(name)) return;
+      idx.get(name).forEach((t) => { if (t) out.add(t); });
+    });
+    return Array.from(out);
+  }
+
   function expandTags(arr){
     const out = new Set();
     for (let t of (arr||[])){
@@ -51,6 +68,7 @@ import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
     if (/\blife\s+regen(?:eration)?\b/.test(txt)) out.push('liferegeneration');
     if (/\bleech(ed|ing|es)?\b/.test(txt)) out.push('leech');
     if (/\bcrit(ical|s|ically| chance)?\b|\bcritical\s+strike\b/.test(txt)) out.push('critical');
+    if (/\bculling\s*strike\b|\bcullingstrike\b|\bcull(?:ed|ing|s)?\b/.test(txt)) out.push('cullingstrike');
     return out;
   }
 
@@ -62,7 +80,7 @@ import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
     Poison: /\bpoison(ed|ing|s)?\b/i,
     'Life Regeneration': /\blife\s+regen(?:eration)?\b/i,
     Leech: /\bleech(ed|ing|es)?\b/i,
-    'Culling Strike': /\bculling\s+strike\b/i,
+    'Culling Strike': /\bculling\s*strike\b|\bcullingstrike\b|\bcull(?:ed|ing|s)?\b/i,
     'Heavy Stun': /\bstun(ned|ning|s)?\b|\bheavy\s+stun\b|\bstun\s+threshold\b/i,
     Block: /\bchance\s+to\s+block\b|\bblock(ed|ing|s)?\b/i,
   };
@@ -96,7 +114,7 @@ import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
     function rolledByCategory(snap){
 	  const state = getRollSnapshot(snap);
 	  if (!state) {
-		return { tactics: [], ailments: [], def: [] };
+		return { tactics: [], ailments: [], def: [], defStrat: [], defPrimary: [] };
 	  }
 	
 	  // ——— PREFER ENRICHED SNAPSHOT (tacticSet / ailmentSet / defStrat objects) ———
@@ -110,25 +128,30 @@ import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
 		  expandTags(
 			(state.tacticSet || []).flatMap(t => t?.tags || [])
 		  )
-		);
+		).filter((t) => t !== 'physical');
+		const oathTactics = combatOathTacticTags();
+		if (oathTactics.length) tagsT.push(...oathTactics);
 	
 		const tagsA = Array.from(
 		  expandTags(
 			(state.ailmentSet || []).flatMap(a => a?.tags || [])
 		  )
-		);
+		).filter((t) => t !== 'physical');
 	
-		const tagsD = Array.from(
-		  expandTags([
-			...(state.defStrat?.tags || []),
-			...defensePseudoTags(state.defense && state.defense.name)
-		  ])
+		const tagsDStrat = Array.from(
+		  expandTags(state.defStrat?.tags || [])
 		);
+		const tagsDPrimary = Array.from(
+		  expandTags(defensePseudoTags(state.defense && state.defense.name))
+		);
+		const tagsD = Array.from(new Set([...tagsDStrat, ...tagsDPrimary]));
 	
 		return {
-		  tactics: tagsT,
+		  tactics: Array.from(new Set(tagsT)),
 		  ailments: tagsA,
 		  def: tagsD,
+		  defStrat: tagsDStrat,
+		  defPrimary: tagsDPrimary,
 		};
 	  }
 	
@@ -145,21 +168,26 @@ import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
 	
 	  const tagsT = Array.from(
 		expandTags(namesT.flatMap(n => idx.get(n)))
-	  );
+	  ).filter((t) => t !== 'physical');
+	  const oathTactics = combatOathTacticTags();
+	  if (oathTactics.length) tagsT.push(...oathTactics);
 	  const tagsA = Array.from(
 		expandTags(namesA.flatMap(n => idx.get(n)))
+	  ).filter((t) => t !== 'physical');
+	  const tagsDStrat = Array.from(
+		expandTags(namesD.flatMap(n => idx.get(n)))
 	  );
-	  const tagsD = Array.from(
-		expandTags([
-		  ...namesD.flatMap(n => idx.get(n)),
-		  ...defensePseudoTags(state.defense || state.defenseName)
-		])
+	  const tagsDPrimary = Array.from(
+		expandTags(defensePseudoTags(state.defense || state.defenseName))
 	  );
+	  const tagsD = Array.from(new Set([...tagsDStrat, ...tagsDPrimary]));
 	
 	  return {
-		tactics: tagsT,
+		tactics: Array.from(new Set(tagsT)),
 		ailments: tagsA,
 		def: tagsD,
+		defStrat: tagsDStrat,
+		defPrimary: tagsDPrimary,
 	  };
 	}
 
@@ -338,7 +366,7 @@ async function loadUniquesM(){
     for (const t of [...raw, ...derived, ...grantedSkillTags]){
       if (!t) continue;
       const n = norm(t);
-      if (n) entries.push({ raw: t, n });
+      if (n && n !== 'physical') entries.push({ raw: t, n });
     }
 
     // expand canonical labels, including compound ones like "Slow/Maim/Hinder"
@@ -350,7 +378,7 @@ async function loadUniquesM(){
       if (parts.length > 1){
         for (const p of parts){
           const n = norm(p);
-          if (n) entries.push({ raw: p, n });
+          if (n && n !== 'physical') entries.push({ raw: p, n });
         }
         continue;
       }
@@ -359,7 +387,7 @@ async function loadUniquesM(){
         entries.push({ raw: 'slow', n: 'slow' });
         entries.push({ raw: 'maim', n: 'maim' });
         entries.push({ raw: 'hinder', n: 'hinder' });
-      } else if (n){
+      } else if (n && n !== 'physical'){
         entries.push({ raw: lbl, n });
       }
     }
@@ -583,8 +611,14 @@ function weaponSlotAllowed(it, slotAllow){
     for (const t of rolled.tactics)  if (primary.has(t)) s += 4.0;
     for (const t of rolled.ailments) if (primary.has(t)) s += 2.0;
 
-    // Defensive strategy / primary defense (secondary)
-    for (const t of rolled.def)      if (primary.has(t)) s += 2.5;
+    // Defensive strategy (secondary): only strategy tags participate in direct weighted matching.
+    for (const t of (rolled.defStrat || []))   if (primary.has(t)) s += 1.0;
+
+    // Primary defense alignment as a small tie-breaker (not a primary driver).
+    let primaryDefHits = 0;
+    for (const t of (rolled.defPrimary || [])) if (primary.has(t)) primaryDefHits += 1;
+    if (primaryDefHits) s += Math.min(0.4, primaryDefHits * 0.2);
+
 
     // Small bump for resistance coverage (tie-breaker, not a primary driver)
     if (all.has(TAG_ALL_ELE_RES)) s += 0.6;
@@ -652,7 +686,8 @@ function weaponSlotAllowed(it, slotAllow){
     if (!scored.length) return [];
 
     const best = scored[0].s || 0;
-    const pick1 = weightedPickFromBand(scored, 0.70, 0);
+
+    const pick1 = weightedPickFromBand(scored, 0.60, 0);
     if (!pick1) return [];
 
     used.add(pick1.name);
@@ -664,7 +699,7 @@ function weaponSlotAllowed(it, slotAllow){
     if (!scored2.length) return [pick1];
 
     const best2 = scored2[0].s || 0;
-    const abs2 = Math.max(2.6, best * 0.55);
+    const abs2 = Math.max(2.2, best * 0.45);
     if (best2 < abs2) return [pick1];
 
     const pick2 = weightedPickFromBand(scored2, 0.75, abs2);
@@ -694,9 +729,12 @@ function weaponSlotAllowed(it, slotAllow){
       if (primary.has(t)){ s += 2.0; match += 2.0; }
     }
 
-    // Defensive strategy (secondary)
-    for (const t of rolled.def){
-      if (primary.has(t)){ s += 2.5; match += 2.5; }
+    // Defensive strategy / primary defense (secondary, strategy favored)
+    for (const t of (rolled.defStrat || rolled.def || [])){
+      if (primary.has(t)){ s += 1.0; match += 1.0; }
+    }
+    for (const t of (rolled.defPrimary || [])){
+      if (primary.has(t)){ s += 0.4; match += 0.4; }
     }
 
     // Resistances as light tie-breaker (never part of match qualification)

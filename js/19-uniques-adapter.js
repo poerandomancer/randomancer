@@ -48,7 +48,6 @@ const TAG_ALIAS = new Map([
   ['culled', ['cull', 'culling_strike']],
   ['exposure', ['ignite', 'chill', 'shock']],
   ['elemental_ailment', ['ignite', 'chill', 'shock']],
-  ['elemental_damage', ['ignite', 'chill', 'shock']],
   ['shocked_ground', ['shock']],
   ['thorns_damage', ['thorns']],
   ['chance_to_block', ['block']]
