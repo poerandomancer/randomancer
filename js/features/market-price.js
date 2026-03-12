@@ -188,7 +188,7 @@ function renderIcon(state, estimate) {
     return '<span class="market-badge__empty" aria-hidden="true">N/A</span>';
   }
 
-  return '<svg viewBox="0 0 24 24" class="market-badge__svg" aria-hidden="true" focusable="false"><path d="M12 4v2m-7 2h14M8 8l-2.6 5.4a2.6 2.6 0 0 0 5.2 0L8 8Zm8 0-2.6 5.4a2.6 2.6 0 0 0 5.2 0L16 8ZM9 20h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  return '<span class="market-badge__emoji" aria-hidden="true">⚖</span>';
 }
 
 function getTooltipForState(state) {

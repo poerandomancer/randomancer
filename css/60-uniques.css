@@ -221,6 +221,13 @@
   justify-content: center;
 }
 
+
+.market-badge__emoji {
+  font-size: 18px;
+  line-height: 1;
+  display: inline-block;
+}
+
 .market-badge__svg,
 .market-badge__currency-icon {
   width: 20px;
