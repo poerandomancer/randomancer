@@ -651,7 +651,6 @@ function weaponSlotAllowed(it, slotAllow){
   }
 
   function pickArmourPass(items, rolled, state, seedPicks=[]){
-    const ARMOUR_SCORE_MIN = 1.5;
     const used = new Set((seedPicks||[]).map(p => p && p.name).filter(Boolean));
     const scored = items
       .filter(it => ARMOUR_SLOTS.has(it.slot) && !used.has(it.name))
@@ -661,9 +660,8 @@ function weaponSlotAllowed(it, slotAllow){
     if (!scored.length) return [];
 
     const best = scored[0].s || 0;
-    if (best < ARMOUR_SCORE_MIN) return [];
 
-    const pick1 = weightedPickFromBand(scored, 0.70, ARMOUR_SCORE_MIN);
+    const pick1 = weightedPickFromBand(scored, 0.70, 0);
     if (!pick1) return [];
 
     used.add(pick1.name);
