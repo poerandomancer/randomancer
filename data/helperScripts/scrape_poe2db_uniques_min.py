@@ -426,41 +426,78 @@ class UniqueRef:
     label: str
     href: str
 
+@dataclass(frozen=True)
+class UniqueRef:
+    label: str
+    href: str
+
+def href_slug_to_label(href: str) -> str:
+    slug = (href or "").rstrip("/").rsplit("/", 1)[-1]
+    slug = slug.replace("_", " ")
+    return norm_ws(slug)
+
 def discover_unique_refs(listing_html: str, lang: str) -> List[UniqueRef]:
     """
-    Discover uniques from the Unique_item listing using icon <img> anchors.
-    Filter by art paths containing "/Uniques/" to avoid grabbing skill icons.
+    Discover candidate unique item pages from the Unique_item listing.
+
+    More flexible than the old image-art heuristic:
+    - accepts any in-site /{lang}/... link from the listing
+    - prefers visible text labels
+    - falls back to img alt/title or slug-derived label
+    - final item validation happens after fetch
     """
     soup = BeautifulSoup(listing_html, "html.parser")
     refs: List[UniqueRef] = []
     seen = set()
 
-    for a in soup.find_all("a"):
-        img = a.find("img")
-        if not img:
-            continue
-        src = (img.get("src") or img.get("data-src") or "").strip()
-        if "/Uniques/" not in src:
+    href_pat = re.compile(rf"^/{re.escape(lang)}/[^#?]+$")
+
+    for a in soup.find_all("a", href=href_pat):
+        href = (a.get("href") or "").strip()
+        if not href:
             continue
 
-        nxt = a.find_next("a", href=re.compile(rf"^/{re.escape(lang)}/"))
-        if not nxt:
+        href_norm = href.rstrip("/")
+        if href_norm.lower() == f"/{lang}/unique_item":
             continue
 
-        href = (nxt.get("href") or "").strip()
-        label = norm_ws(nxt.get_text(" ", strip=True))
-        if not href or not label:
-            continue
-        if href in seen:
-            continue
-        seen.add(href)
+        # Best-effort label extraction
+        label = norm_ws(a.get_text(" ", strip=True))
 
-        if href.rstrip("/").lower() == f"/{lang}/unique_item":
+        if not label:
+            img = a.find("img")
+            if img:
+                label = norm_ws(
+                    str(img.get("alt") or img.get("title") or "")
+                )
+
+        if not label:
+            label = href_slug_to_label(href)
+
+        if not label:
             continue
 
-        refs.append(UniqueRef(label=label, href=href))
+        if href_norm in seen:
+            continue
+        seen.add(href_norm)
+
+        refs.append(UniqueRef(label=label, href=href_norm))
 
     return refs
+
+def looks_like_item_page(item_json: dict, text_lines: List[str]) -> bool:
+    if isinstance(item_json, dict):
+        if norm_ws(str(item_json.get("name") or "")):
+            return True
+        if norm_ws(str(item_json.get("typeLine") or "")):
+            return True
+        if parse_slot_from_item_json_properties(item_json):
+            return True
+
+    if parse_slot_from_page_text(text_lines):
+        return True
+
+    return False
 
 def main() -> int:
     ap = argparse.ArgumentParser()
@@ -512,6 +549,11 @@ def main() -> int:
             text_lines = soup.get_text("\n").splitlines()
 
             item_json = extract_embedded_item_json(html) or {}
+            
+            if not looks_like_item_page(item_json, text_lines):
+            	if args.verbose:
+            		print(f"[skip-nonitem] {ref.label} -> {url}")
+            	continue
 
             name = norm_ws(str(item_json.get("name") or "")) or ref.label.split(" ")[0]
             base = norm_ws(str(item_json.get("typeLine") or ""))

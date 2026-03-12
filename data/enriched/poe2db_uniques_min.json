@@ -3,8 +3,8 @@
     "schema": "poe2db_uniques_min_v4",
     "locale": "us",
     "listing_url": "https://poe2db.tw/us/Unique_item",
-    "count": 375,
-    "generated_epoch": 1773117444
+    "count": 399,
+    "generated_epoch": 1773274467
   },
   "by_key": {
     "Brynhand's Mark||Wooden Club": "/us/Brynhands_Mark",
@@ -12,7 +12,6 @@
     "Trenchtimbre||Spiked Club": "/us/Trenchtimbre",
     "Sculpted Suffering||Warpick": "/us/Sculpted_Suffering",
     "Nebuloch||Execratus Hammer": "/us/Nebuloch",
-    "Mjölner": "/us/Mj%C3%B6lner",
     "Olrovasara||Torment Club": "/us/Olrovasara",
     "Hoghunt||Felled Greatclub": "/us/Hoghunt",
     "Hrimnor's Hymn||Oak Greathammer": "/us/Hrimnors_Hymn",
@@ -28,6 +27,7 @@
     "Splinter of Lorrata||Hardwood Spear": "/us/Splinter_of_Lorrata",
     "Tyranny's Grip||Ironhead Spear": "/us/Tyrannys_Grip",
     "Chainsting||Hunting Spear": "/us/Chainsting",
+    "Skysliver||Winged Spear": "/us/Skysliver",
     "Daevata's Wind||War Spear": "/us/Daevatas_Wind",
     "Tangletongue||Forked Spear": "/us/Tangletongue",
     "Saitha's Spear||Barbed Spear": "/us/Saithas_Spear",
@@ -52,7 +52,6 @@
     "The Burden of Shadows||Chiming Staff": "/us/The_Burden_of_Shadows",
     "The Unborn Lich||Ravenous Staff": "/us/The_Unborn_Lich",
     "The Whispering Ice||Permafrost Staff": "/us/The_Whispering_Ice",
-    "Atziri's": "/us/Atziris_Step",
     "Widowhail||Crude Bow": "/us/Widowhail",
     "Quill Rain||Shortbow": "/us/Quill_Rain",
     "Splinterheart||Recurve Bow": "/us/Splinterheart",
@@ -155,6 +154,7 @@
     "The Black Insignia||Corsair Cap": "/us/The_Black_Insignia",
     "Starkonja's Head||Leatherbound Hood": "/us/Starkonjas_Head",
     "Heatshiver||Velvet Cap": "/us/Heatshiver",
+    "Myris Uxor||Covert Hood": "/us/Myris_Uxor",
     "Alpha's Howl||Armoured Cap": "/us/Alphas_Howl",
     "Crown of Thorns||Twig Circlet": "/us/Crown_of_Thorns",
     "The Devouring Diadem||Wicker Tiara": "/us/The_Devouring_Diadem",
@@ -166,6 +166,7 @@
     "Scold's Bridle||Jade Tiara": "/us/Scolds_Bridle",
     "Indigon||Magus Tiara": "/us/Indigon",
     "Greymake||Brimmed Helm": "/us/Greymake",
+    "Erian's Cobble||Guarded Helm": "/us/Erians_Cobble",
     "Ironride||Visored Helm": "/us/Ironride",
     "The Smiling Knight||Cowled Helm": "/us/The_Smiling_Knight",
     "The Vile Knight||Shielded Helm": "/us/The_Vile_Knight",
@@ -255,6 +256,7 @@
     "Saffell's Frame||Emblem Crest Shield": "/us/Saffells_Frame",
     "Crest of Ardura||Jingling Crest Shield": "/us/Crest_of_Ardura",
     "Mahuxotl's Machination||Omen Crest Shield": "/us/Mahuxotls_Machination",
+    "Rise of the Phoenix||Omen Crest Shield": "/us/Rise_of_the_Phoenix",
     "Dunkelhalt||Leather Buckler": "/us/Dunkelhalt",
     "Nocturne||Wooden Buckler": "/us/Nocturne",
     "Rondel de Ezo||Plated Buckler": "/us/Rondel_de_Ezo",
@@ -282,10 +284,21 @@
     "The Surrender||Stone Tower Shield": "/us/The_Surrender",
     "Prism Guardian||Intricate Crest Shield": "/us/Prism_Guardian",
     "Rathpith Globe||Sacred Focus": "/us/Rathpith_Globe",
+    "Heroic Tragedy||Timeless Jewel": "/us/Heroic_Tragedy",
     "Undying Hate||Timeless Jewel": "/us/Undying_Hate",
     "Grand Spectrum||Ruby": "/us/Grand_Spectrum",
+    "Megalomaniac||Diamond": "/us/Megalomaniac",
+    "From Nothing||Diamond": "/us/From_Nothing",
+    "Controlled Metamorphosis||Diamond": "/us/Controlled_Metamorphosis",
+    "Prism of Belief||Diamond": "/us/Prism_of_Belief",
+    "The Adorned||Diamond": "/us/The_Adorned",
     "Heart of the Well||Diamond": "/us/Heart_of_the_Well",
-    "Flesh": "/us/Flesh_Crucible",
+    "Against the Darkness||Time-Lost Diamond": "/us/Against_the_Darkness",
+    "The Peacemaker's Draught||Amphora Relic": "/us/The_Peacemakers_Draught",
+    "The Desperate Alliance||Vase Relic": "/us/The_Desperate_Alliance",
+    "The Changing Seasons||Seal Relic": "/us/The_Changing_Seasons",
+    "The Burden of Leadership||Tapestry Relic": "/us/The_Burden_of_Leadership",
+    "The Last Flame||Incense Relic": "/us/The_Last_Flame",
     "Asphyxia's Wrath||Broadhead Quiver": "/us/Asphyxias_Wrath",
     "Blackgleam||Fire Quiver": "/us/Blackgleam",
     "The Lethal Draw||Sacral Quiver": "/us/The_Lethal_Draw",
@@ -319,6 +332,7 @@
     "Eye of Chayula||Gold Amulet": "/us/Eye_of_Chayula",
     "Serpent's Egg||Gold Amulet": "/us/Serpents_Egg",
     "Blackheart||Iron Ring": "/us/Blackheart",
+    "Icefang Orbit||Iron Ring": "/us/Icefang_Orbit",
     "Prized Pain||Iron Ring": "/us/Prized_Pain",
     "Venopuncture||Iron Ring": "/us/Venopuncture",
     "Doedre's Damning||Lazuli Ring": "/us/Doedres_Damning",
@@ -328,11 +342,13 @@
     "Blistering Bond||Ruby Ring": "/us/Blistering_Bond",
     "Polcirkeln||Sapphire Ring": "/us/Polcirkeln",
     "Dream Fragments||Sapphire Ring": "/us/Dream_Fragments",
+    "Whisper of the Brotherhood||Sapphire Ring": "/us/Whisper_of_the_Brotherhood",
     "The Burrower||Topaz Ring": "/us/The_Burrower",
     "Call of the Brotherhood||Topaz Ring": "/us/Call_of_the_Brotherhood",
     "Levinstone||Topaz Ring": "/us/Levinstone",
     "Ming's Heart||Amethyst Ring": "/us/Mings_Heart",
     "Original Sin||Amethyst Ring": "/us/Original_Sin",
+    "Blackflame||Amethyst Ring": "/us/Blackflame",
     "Vigilant View||Emerald Ring": "/us/Vigilant_View",
     "Death Rush||Emerald Ring": "/us/Death_Rush",
     "Thief's Torment||Emerald Ring": "/us/Thiefs_Torment",
@@ -379,8 +395,17 @@
     "Valako's Roar||Topaz Charm": "/us/Valakos_Roar",
     "Forsaken Bangle||Amethyst Charm": "/us/Forsaken_Bangle",
     "Rite of Passage||Golden Charm": "/us/Rite_of_Passage",
+    "Kalandra's Touch||Ring": "/us/Kalandras_Touch",
     "Sekhema's Resolve||Ring": "/us/Sekhemas_Resolve",
-    "Edit": "/us/marked?id=Unique_item"
+    "Wraeclast Besieged||Breach Precursor Tablet": "/us/Wraeclast_Besieged",
+    "Forgotten By Time||Expedition Precursor Tablet": "/us/Forgotten_By_Time",
+    "Clear Skies||Delirium Precursor Tablet": "/us/Clear_Skies",
+    "Freedom of Faith||Ritual Precursor Tablet": "/us/Freedom_of_Faith",
+    "The Grand Project||Precursor Tablet": "/us/The_Grand_Project",
+    "Visions of Paradise||Precursor Tablet": "/us/Visions_of_Paradise",
+    "Season of the Hunt||Overseer Precursor Tablet": "/us/Season_of_the_Hunt",
+    "Cruel Hegemony||Overseer Precursor Tablet": "/us/Cruel_Hegemony",
+    "Unforeseen Consequences||Abyss Precursor Tablet": "/us/Unforeseen_Consequences"
   },
   "items": {
     "/us/Brynhands_Mark": {
@@ -564,28 +589,6 @@
         "id": "/us/Nebuloch",
         "url": "https://poe2db.tw/us/Nebuloch",
         "label": "Nebuloch Execratus Hammer"
-      }
-    },
-    "/us/Mj%C3%B6lner": {
-      "key": "Mjölner",
-      "name": "Mjölner",
-      "base": "",
-      "slot": null,
-      "requirements": {
-        "level": null,
-        "str": null,
-        "dex": null,
-        "int": null
-      },
-      "implicit_mods": [],
-      "explicit_mods": [],
-      "flavour_text": [],
-      "granted_skills": [],
-      "tags": [],
-      "source": {
-        "id": "/us/Mj%C3%B6lner",
-        "url": "https://poe2db.tw/us/Mj%C3%B6lner",
-        "label": "Mjölner Torment Club"
       }
     },
     "/us/Olrovasara": {
@@ -1147,6 +1150,46 @@
         "id": "/us/Chainsting",
         "url": "https://poe2db.tw/us/Chainsting",
         "label": "Chainsting Hunting Spear"
+      }
+    },
+    "/us/Skysliver": {
+      "key": "Skysliver||Winged Spear",
+      "name": "Skysliver",
+      "base": "Winged Spear",
+      "slot": "Spear",
+      "requirements": {
+        "level": 16,
+        "str": 12,
+        "dex": 25,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "No Physical Damage",
+        "Adds 1 to 86 Lightning Damage",
+        "23% increased Attack Speed",
+        "68% increased chance to Shock",
+        "BooleanDamageRoll for each DamageTypes"
+      ],
+      "flavour_text": [
+        "Heads fall to the sand, just as the star fell from the sky"
+      ],
+      "granted_skills": [
+        {
+          "name": "Spear Throw",
+          "raw": "Spear Throw",
+          "icon": "https://web.poecdn.com/gen/image/WzIxLDE0LHsiayI6IjJEQXJ0L1NraWxsSWNvbnMvSHVudHJlc3NJY2VTcGVhciIsInJlYWxtIjoicG9lMiJ9XQ/da079143ea/HuntressIceSpear.png"
+        }
+      ],
+      "tags": [
+        "damage_type",
+        "lightning",
+        "rolls_only_the_minimum_or_maximum_damage_value"
+      ],
+      "source": {
+        "id": "/us/Skysliver",
+        "url": "https://poe2db.tw/us/Skysliver",
+        "label": "Skysliver Winged Spear"
       }
     },
     "/us/Daevatas_Wind": {
@@ -2141,28 +2184,6 @@
         "id": "/us/The_Whispering_Ice",
         "url": "https://poe2db.tw/us/The_Whispering_Ice",
         "label": "The Whispering Ice Permafrost Staff"
-      }
-    },
-    "/us/Atziris_Rule": {
-      "key": "Atziri's",
-      "name": "Atziri's",
-      "base": "",
-      "slot": null,
-      "requirements": {
-        "level": null,
-        "str": null,
-        "dex": null,
-        "int": null
-      },
-      "implicit_mods": [],
-      "explicit_mods": [],
-      "flavour_text": [],
-      "granted_skills": [],
-      "tags": [],
-      "source": {
-        "id": "/us/Atziris_Rule",
-        "url": "https://poe2db.tw/us/Atziris_Rule",
-        "label": "Atziri's Rule Reflecting Staff"
       }
     },
     "/us/Widowhail": {
@@ -6001,6 +6022,39 @@
         "label": "Heatshiver Velvet Cap"
       }
     },
+    "/us/Myris_Uxor": {
+      "key": "Myris Uxor||Covert Hood",
+      "name": "Myris Uxor",
+      "base": "Covert Hood",
+      "slot": "Helmet",
+      "requirements": {
+        "level": 56,
+        "str": null,
+        "dex": 79,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "49% increased Evasion Rating",
+        "+135 to Accuracy Rating",
+        "+55 to maximum Mana",
+        "100% increased CullingStrike Threshold"
+      ],
+      "flavour_text": [
+        "The end always comes sooner than we think."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "accuracy",
+        "culling_strike",
+        "evasion"
+      ],
+      "source": {
+        "id": "/us/Myris_Uxor",
+        "url": "https://poe2db.tw/us/Myris_Uxor",
+        "label": "Myris Uxor Covert Hood"
+      }
+    },
     "/us/Alphas_Howl": {
       "key": "Alpha's Howl||Armoured Cap",
       "name": "Alpha's Howl",
@@ -6383,6 +6437,57 @@
         "id": "/us/Greymake",
         "url": "https://poe2db.tw/us/Greymake",
         "label": "Greymake Brimmed Helm"
+      }
+    },
+    "/us/Erians_Cobble": {
+      "key": "Erian's Cobble||Guarded Helm",
+      "name": "Erian's Cobble",
+      "base": "Guarded Helm",
+      "slot": "Helmet",
+      "requirements": {
+        "level": 11,
+        "str": 11,
+        "dex": 11,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "+9 to Armour",
+        "+1 to Evasion Rating",
+        "+2 to maximum EnergyShield",
+        "+5 to Accuracy Rating",
+        "+23 to maximum Life",
+        "+15 to maximum Mana",
+        "8% increased ItemRarity found",
+        "19% increased Critical Chance",
+        "+8 to Strength",
+        "+3 to Dexterity",
+        "+6 to Intelligence",
+        "+2% to Resistances",
+        "+1% to Resistances",
+        "2.9 Life Regeneration per second"
+      ],
+      "flavour_text": [
+        "Sometimes patching up your",
+        "equipment gets out of hand."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "accuracy",
+        "armour",
+        "cold_resistance",
+        "critical_hit",
+        "dexterity",
+        "energy_shield",
+        "fire_resistance",
+        "intelligence",
+        "rarity_of_items",
+        "strength"
+      ],
+      "source": {
+        "id": "/us/Erians_Cobble",
+        "url": "https://poe2db.tw/us/Erians_Cobble",
+        "label": "Erian's Cobble Guarded Helm"
       }
     },
     "/us/Ironride": {
@@ -9675,6 +9780,47 @@
         "label": "Mahuxotl's Machination Omen Crest Shield"
       }
     },
+    "/us/Rise_of_the_Phoenix": {
+      "key": "Rise of the Phoenix||Omen Crest Shield",
+      "name": "Rise of the Phoenix",
+      "base": "Omen Crest Shield",
+      "slot": "Shield",
+      "requirements": {
+        "level": 36,
+        "str": 30,
+        "dex": null,
+        "int": 30
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "+5% to MaximumResistances",
+        "+22% to Resistances",
+        "+25% to Resistances while on LowLife",
+        "Regenerate 3% of maximum Life per second",
+        "Regenerate 3% of maximum Life per second while on LowLife"
+      ],
+      "flavour_text": [
+        "My bearer shall be guarded by flame,",
+        "for I am the phoenix, forever radiant in glory."
+      ],
+      "granted_skills": [
+        {
+          "name": "Raise Shield",
+          "raw": "Raise Shield",
+          "icon": "https://web.poecdn.com/gen/image/WzIxLDE0LHsiayI6IjJEQXJ0L1NraWxsSWNvbnMvQnJ1dGVTaGllbGRCbG9jayIsInJlYWxtIjoicG9lMiJ9XQ/117cb43abb/BruteShieldBlock.png"
+        }
+      ],
+      "tags": [
+        "fire_resistance",
+        "low_life",
+        "maximum_fire_resistance"
+      ],
+      "source": {
+        "id": "/us/Rise_of_the_Phoenix",
+        "url": "https://poe2db.tw/us/Rise_of_the_Phoenix",
+        "label": "Rise of the Phoenix Omen Crest Shield"
+      }
+    },
     "/us/Dunkelhalt": {
       "key": "Dunkelhalt||Leather Buckler",
       "name": "Dunkelhalt",
@@ -10566,28 +10712,6 @@
         "label": "Voll's Protector Plated Vestments"
       }
     },
-    "/us/Atziris_Step": {
-      "key": "Atziri's",
-      "name": "Atziri's",
-      "base": "",
-      "slot": null,
-      "requirements": {
-        "level": null,
-        "str": null,
-        "dex": null,
-        "int": null
-      },
-      "implicit_mods": [],
-      "explicit_mods": [],
-      "flavour_text": [],
-      "granted_skills": [],
-      "tags": [],
-      "source": {
-        "id": "/us/Atziris_Step",
-        "url": "https://poe2db.tw/us/Atziris_Step",
-        "label": "Atziri's Step Cinched Boots"
-      }
-    },
     "/us/The_Surrender": {
       "key": "The Surrender||Stone Tower Shield",
       "name": "The Surrender",
@@ -10705,6 +10829,34 @@
         "label": "Rathpith Globe Sacred Focus"
       }
     },
+    "/us/Heroic_Tragedy": {
+      "key": "Heroic Tragedy||Timeless Jewel",
+      "name": "Heroic Tragedy",
+      "base": "Timeless Jewel",
+      "slot": "Jewel",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "Remembrancing 7495 songworthy deeds by the line of Olroth Passives in radius are Conquered by the Kalguur",
+        "Historic"
+      ],
+      "flavour_text": [
+        "They believed themselves courageous and selfless,",
+        "but that bravery became the doom at their door."
+      ],
+      "granted_skills": [],
+      "tags": [],
+      "source": {
+        "id": "/us/Heroic_Tragedy",
+        "url": "https://poe2db.tw/us/Heroic_Tragedy",
+        "label": "Heroic Tragedy Timeless Jewel"
+      }
+    },
     "/us/Undying_Hate": {
       "key": "Undying Hate||Timeless Jewel",
       "name": "Undying Hate",
@@ -10761,6 +10913,148 @@
         "label": "Grand Spectrum Ruby"
       }
     },
+    "/us/Megalomaniac": {
+      "key": "Megalomaniac||Diamond",
+      "name": "Megalomaniac",
+      "base": "Diamond",
+      "slot": "Jewel",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [],
+      "flavour_text": [
+        "If you're going to act like you're better",
+        "than everyone else, make sure you are."
+      ],
+      "granted_skills": [],
+      "tags": [],
+      "source": {
+        "id": "/us/Megalomaniac",
+        "url": "https://poe2db.tw/us/Megalomaniac",
+        "label": "Megalomaniac Diamond"
+      }
+    },
+    "/us/From_Nothing": {
+      "key": "From Nothing||Diamond",
+      "name": "From Nothing",
+      "base": "Diamond",
+      "slot": "Jewel",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "Passives in Radius of passive_keystone_unwavering_stance_ can be Allocated without being connected to your tree"
+      ],
+      "flavour_text": [
+        "They clawed their way up from the agonising depths of nonexistence,",
+        "breathing deep with joy the exquisite light of meaning."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "unwavering_stance"
+      ],
+      "source": {
+        "id": "/us/From_Nothing",
+        "url": "https://poe2db.tw/us/From_Nothing",
+        "label": "From Nothing Diamond"
+      }
+    },
+    "/us/Controlled_Metamorphosis": {
+      "key": "Controlled Metamorphosis||Diamond",
+      "name": "Controlled Metamorphosis",
+      "base": "Diamond",
+      "slot": "Jewel",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "Only affects Passives in Massive Ring",
+        "Passives in Radius can be Allocated without being connected to your tree",
+        "-7% to all ElementalDamage Resistances"
+      ],
+      "flavour_text": [
+        "Our world was dying, but we chose to survive.",
+        "We broke free from the chains within."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "elemental"
+      ],
+      "source": {
+        "id": "/us/Controlled_Metamorphosis",
+        "url": "https://poe2db.tw/us/Controlled_Metamorphosis",
+        "label": "Controlled Metamorphosis Diamond"
+      }
+    },
+    "/us/Prism_of_Belief": {
+      "key": "Prism of Belief||Diamond",
+      "name": "Prism of Belief",
+      "base": "Diamond",
+      "slot": "Jewel",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "+1 to Level of all Wave of Frost Skills"
+      ],
+      "flavour_text": [
+        "Entropy can be reversed."
+      ],
+      "granted_skills": [],
+      "tags": [],
+      "source": {
+        "id": "/us/Prism_of_Belief",
+        "url": "https://poe2db.tw/us/Prism_of_Belief",
+        "label": "Prism of Belief Diamond"
+      }
+    },
+    "/us/The_Adorned": {
+      "key": "The Adorned||Diamond",
+      "name": "The Adorned",
+      "base": "Diamond",
+      "slot": "Jewel",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "96% increased Effect of Jewel Socket Passive Skills containing Corrupted ItemRarity Jewel"
+      ],
+      "flavour_text": [
+        "At their height, the Vaal glittered under the sun.",
+        "A decade, a century, an aeon of prosperity...",
+        "now nothing more than a passing wonder."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "jewels",
+        "magic"
+      ],
+      "source": {
+        "id": "/us/The_Adorned",
+        "url": "https://poe2db.tw/us/The_Adorned",
+        "label": "The Adorned Diamond"
+      }
+    },
     "/us/Heart_of_the_Well": {
       "key": "Heart of the Well||Diamond",
       "name": "Heart of the Well",
@@ -10786,11 +11080,11 @@
         "label": "Heart of the Well Diamond"
       }
     },
-    "/us/Flesh_Crucible": {
-      "key": "Flesh",
-      "name": "Flesh",
-      "base": "",
-      "slot": null,
+    "/us/Against_the_Darkness": {
+      "key": "Against the Darkness||Time-Lost Diamond",
+      "name": "Against the Darkness",
+      "base": "Time-Lost Diamond",
+      "slot": "Jewel",
       "requirements": {
         "level": null,
         "str": null,
@@ -10798,14 +11092,172 @@
         "int": null
       },
       "implicit_mods": [],
-      "explicit_mods": [],
-      "flavour_text": [],
+      "explicit_mods": [
+        "SmallPassive Skills in Radius also grant +3% to Resistances",
+        "Notable Passive Skills in Radius also grant 3% increased Intelligence"
+      ],
+      "flavour_text": [
+        "After the fires, in the depths of the Winter of the World, all life in the Vastiri banded together. Whether serpent, hyena, human, or golem, hated enemies clasped hand to claw, built refuge, and fought side by side against the Abyssals. Thus, the Third Pact was born."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "lightning_resistance",
+        "small_passive"
+      ],
+      "source": {
+        "id": "/us/Against_the_Darkness",
+        "url": "https://poe2db.tw/us/Against_the_Darkness",
+        "label": "Against the Darkness Time-Lost Diamond"
+      }
+    },
+    "/us/The_Peacemakers_Draught": {
+      "key": "The Peacemaker's Draught||Amphora Relic",
+      "name": "The Peacemaker's Draught",
+      "base": "Amphora Relic",
+      "slot": "Relic",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "Zarokh, the Temporal drops an additional Barya",
+        "Your Defences are zero",
+        "This item is destroyed when applied to a Trial"
+      ],
+      "flavour_text": [
+        "Centuries of peace brought immense wealth to Keth,",
+        "but many worried that it had also left the people soft."
+      ],
       "granted_skills": [],
       "tags": [],
       "source": {
-        "id": "/us/Flesh_Crucible",
-        "url": "https://poe2db.tw/us/Flesh_Crucible",
-        "label": "Flesh Crucible Diamond"
+        "id": "/us/The_Peacemakers_Draught",
+        "url": "https://poe2db.tw/us/The_Peacemakers_Draught",
+        "label": "The Peacemaker's Draught Amphora Relic"
+      }
+    },
+    "/us/The_Desperate_Alliance": {
+      "key": "The Desperate Alliance||Vase Relic",
+      "name": "The Desperate Alliance",
+      "base": "Vase Relic",
+      "slot": "Relic",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "Zarokh, the Temporal drops Against the Darkness",
+        "Zarokh, the Temporal deals 100% more Damage",
+        "Zarokh, the Temporal takes 75% less Damage",
+        "This item is destroyed when applied to a Trial"
+      ],
+      "flavour_text": [
+        "By fire and ice, perhaps the end of the world.",
+        "They did not fall on their knees and lament."
+      ],
+      "granted_skills": [],
+      "tags": [],
+      "source": {
+        "id": "/us/The_Desperate_Alliance",
+        "url": "https://poe2db.tw/us/The_Desperate_Alliance",
+        "label": "The Desperate Alliance Vase Relic"
+      }
+    },
+    "/us/The_Changing_Seasons": {
+      "key": "The Changing Seasons||Seal Relic",
+      "name": "The Changing Seasons",
+      "base": "Seal Relic",
+      "slot": "Relic",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "Zarokh, the Temporal drops Sandstorm Visage",
+        "Cannot restore Honour",
+        "This item is destroyed when applied to a Trial"
+      ],
+      "flavour_text": [
+        "All rejoiced when Solerai and Lundara shattered the grey sky,",
+        "but with the cold banished, sandier climes began to creep in..."
+      ],
+      "granted_skills": [],
+      "tags": [],
+      "source": {
+        "id": "/us/The_Changing_Seasons",
+        "url": "https://poe2db.tw/us/The_Changing_Seasons",
+        "label": "The Changing Seasons Seal Relic"
+      }
+    },
+    "/us/The_Burden_of_Leadership": {
+      "key": "The Burden of Leadership||Tapestry Relic",
+      "name": "The Burden of Leadership",
+      "base": "Tapestry Relic",
+      "slot": "Relic",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "Zarokh, the Temporal drops Sekhema's Resolve",
+        "Rooms are unknown on the Trial Map",
+        "This item is destroyed when applied to a Trial"
+      ],
+      "flavour_text": [
+        "The path forward is unknown,",
+        "but someone must lead.",
+        "Let it be the best of us."
+      ],
+      "granted_skills": [],
+      "tags": [],
+      "source": {
+        "id": "/us/The_Burden_of_Leadership",
+        "url": "https://poe2db.tw/us/The_Burden_of_Leadership",
+        "label": "The Burden of Leadership Tapestry Relic"
+      }
+    },
+    "/us/The_Last_Flame": {
+      "key": "The Last Flame||Incense Relic",
+      "name": "The Last Flame",
+      "base": "Incense Relic",
+      "slot": "Relic",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "Zarokh, the Temporal drops Temporalis",
+        "Damage taken cannot be DamageAbsorption",
+        "Maximum Honour is 1",
+        "Cannot be used with Trials below level 80",
+        "This item is destroyed when applied to a Trial"
+      ],
+      "flavour_text": [
+        "In the coldest depths of the Winter of the World, overrun by darkness and fighting to the last, life itself clung to existence by the barest remaining thread."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "absorbed"
+      ],
+      "source": {
+        "id": "/us/The_Last_Flame",
+        "url": "https://poe2db.tw/us/The_Last_Flame",
+        "label": "The Last Flame Incense Relic"
       }
     },
     "/us/Asphyxias_Wrath": {
@@ -12016,6 +12468,49 @@
         "label": "Blackheart Iron Ring"
       }
     },
+    "/us/Icefang_Orbit": {
+      "key": "Icefang Orbit||Iron Ring",
+      "name": "Icefang Orbit",
+      "base": "Iron Ring",
+      "slot": "Ring",
+      "requirements": {
+        "level": 36,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [
+        "Adds 1 to 4 Physical Damage to Attack"
+      ],
+      "explicit_mods": [
+        "Adds 6 to 10 Physical Damage to Attack",
+        "+23 to Dexterity",
+        "18% chance to Poison on HitDamage",
+        "DamageTypes taken from HitDamage while Poison Contributes to BuffMagnitude of Chill on you",
+        "DamageTypes from HitDamage against Poison targets Contributes to Chill BuffMagnitude",
+        "16% increased BuffMagnitude of Poison you inflict"
+      ],
+      "flavour_text": [
+        "Those members of the Brotherhood who employ the venom of",
+        "Trarthan ice snakes must take great care with the volatile substance."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "all_damage",
+        "attack",
+        "contributes",
+        "dexterity",
+        "hit",
+        "magnitude",
+        "physical",
+        "poison"
+      ],
+      "source": {
+        "id": "/us/Icefang_Orbit",
+        "url": "https://poe2db.tw/us/Icefang_Orbit",
+        "label": "Icefang Orbit Iron Ring"
+      }
+    },
     "/us/Prized_Pain": {
       "key": "Prized Pain||Iron Ring",
       "name": "Prized Pain",
@@ -12341,6 +12836,43 @@
         "label": "Dream Fragments Sapphire Ring"
       }
     },
+    "/us/Whisper_of_the_Brotherhood": {
+      "key": "Whisper of the Brotherhood||Sapphire Ring",
+      "name": "Whisper of the Brotherhood",
+      "base": "Sapphire Ring",
+      "slot": "Ring",
+      "requirements": {
+        "level": 32,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [
+        "+26% to Resistances"
+      ],
+      "explicit_mods": [
+        "10% increased SkillSpeed",
+        "+16 to Dexterity",
+        "26% increased Mana Regeneration Rate",
+        "100% of Cold Damage Conversion to Lightning Damage"
+      ],
+      "flavour_text": [
+        "Forged by the last remaining brother",
+        "to return all that was once given."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "cold_resistance",
+        "converted",
+        "dexterity",
+        "skill_speed"
+      ],
+      "source": {
+        "id": "/us/Whisper_of_the_Brotherhood",
+        "url": "https://poe2db.tw/us/Whisper_of_the_Brotherhood",
+        "label": "Whisper of the Brotherhood Sapphire Ring"
+      }
+    },
     "/us/The_Burrower": {
       "key": "The Burrower||Topaz Ring",
       "name": "The Burrower",
@@ -12516,6 +13048,42 @@
         "id": "/us/Original_Sin",
         "url": "https://poe2db.tw/us/Original_Sin",
         "label": "Original Sin Amethyst Ring"
+      }
+    },
+    "/us/Blackflame": {
+      "key": "Blackflame||Amethyst Ring",
+      "name": "Blackflame",
+      "base": "Amethyst Ring",
+      "slot": "Ring",
+      "requirements": {
+        "level": 20,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [
+        "+7% to Resistances"
+      ],
+      "explicit_mods": [
+        "25% increased Mana Regeneration Rate",
+        "50% increased Ignite BuffMagnitude",
+        "50% reduced Ignite Duration on Enemies",
+        "Enemies Ignite by you take Chaos Damage instead of Fire Damage from Ignite"
+      ],
+      "flavour_text": [
+        "Beyond the veil of death, there burns a fire",
+        "by whose light night is borne."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "chaos_resistance",
+        "ignite",
+        "magnitude"
+      ],
+      "source": {
+        "id": "/us/Blackflame",
+        "url": "https://poe2db.tw/us/Blackflame",
+        "label": "Blackflame Amethyst Ring"
       }
     },
     "/us/Vigilant_View": {
@@ -14158,6 +14726,32 @@
         "label": "Rite of Passage Golden Charm"
       }
     },
+    "/us/Kalandras_Touch": {
+      "key": "Kalandra's Touch||Ring",
+      "name": "Kalandra's Touch",
+      "base": "Ring",
+      "slot": "Ring",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "Reflects opposite Ring"
+      ],
+      "flavour_text": [
+        "Power is a matter of perspective."
+      ],
+      "granted_skills": [],
+      "tags": [],
+      "source": {
+        "id": "/us/Kalandras_Touch",
+        "url": "https://poe2db.tw/us/Kalandras_Touch",
+        "label": "Kalandra's Touch Ring"
+      }
+    },
     "/us/Sekhemas_Resolve": {
       "key": "Sekhema's Resolve||Ring",
       "name": "Sekhema's Resolve",
@@ -14193,26 +14787,306 @@
         "label": "Sekhema's Resolve Ring"
       }
     },
-    "/us/marked?id=Unique_item": {
-      "key": "Edit",
-      "name": "Edit",
-      "base": "",
-      "slot": null,
+    "/us/Wraeclast_Besieged": {
+      "key": "Wraeclast Besieged||Breach Precursor Tablet",
+      "name": "Wraeclast Besieged",
+      "base": "Breach Precursor Tablet",
+      "slot": "Tablet",
       "requirements": {
         "level": null,
         "str": null,
         "dex": null,
         "int": null
       },
-      "implicit_mods": [],
-      "explicit_mods": [],
-      "flavour_text": [],
+      "implicit_mods": [
+        "Adds an ContainsBreach to a Map 5 uses remaining"
+      ],
+      "explicit_mods": [
+        "ContainsBreach expand to at least 20 metres in radius ContainsBreach remain open while there are alive Breach Monsters",
+        "ContainsBreach in Map have 18% reduced Monster density"
+      ],
+      "flavour_text": [
+        "In his broken madness, Xesht spills forth the hordes,",
+        "reaching out to wreak pain and ruination."
+      ],
       "granted_skills": [],
-      "tags": [],
+      "tags": [
+        "breaches",
+        "otherworldy_breach"
+      ],
       "source": {
-        "id": "/us/marked?id=Unique_item",
-        "url": "https://poe2db.tw/us/marked?id=Unique_item",
-        "label": "Edit"
+        "id": "/us/Wraeclast_Besieged",
+        "url": "https://poe2db.tw/us/Wraeclast_Besieged",
+        "label": "Wraeclast Besieged Breach Precursor Tablet"
+      }
+    },
+    "/us/Forgotten_By_Time": {
+      "key": "Forgotten By Time||Expedition Precursor Tablet",
+      "name": "Forgotten By Time",
+      "base": "Expedition Precursor Tablet",
+      "slot": "Tablet",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [
+        "Adds a ContainsExpedition to a Map 5 uses remaining"
+      ],
+      "explicit_mods": [
+        "ContainsExpedition Monsters in your Maps spawn with half of their Life missing",
+        "Runic Monsters in your Maps are Duplicated"
+      ],
+      "flavour_text": [
+        "Before the starlight barrier failed, before the end came,",
+        "countless Kalguuran settlers sought a new life on Wraeclast.",
+        "Of the towns they founded and the lives they lived, little remains..."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "expedition",
+        "kalguuran_expedition"
+      ],
+      "source": {
+        "id": "/us/Forgotten_By_Time",
+        "url": "https://poe2db.tw/us/Forgotten_By_Time",
+        "label": "Forgotten By Time Expedition Precursor Tablet"
+      }
+    },
+    "/us/Clear_Skies": {
+      "key": "Clear Skies||Delirium Precursor Tablet",
+      "name": "Clear Skies",
+      "base": "Delirium Precursor Tablet",
+      "slot": "Tablet",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [
+        "Adds a ContainsDelirium to a Map 5 uses remaining"
+      ],
+      "explicit_mods": [
+        "ContainsDelirium Fog in your Maps never dissipates",
+        "Delirious in Map increases 4% faster with distance from the mirror"
+      ],
+      "flavour_text": [
+        "A simple instruction that will purify an entire region,",
+        "making it safe and kind for weary travellers."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "delirium",
+        "mirror_of_delirium"
+      ],
+      "source": {
+        "id": "/us/Clear_Skies",
+        "url": "https://poe2db.tw/us/Clear_Skies",
+        "label": "Clear Skies Delirium Precursor Tablet"
+      }
+    },
+    "/us/Freedom_of_Faith": {
+      "key": "Freedom of Faith||Ritual Precursor Tablet",
+      "name": "Freedom of Faith",
+      "base": "Ritual Precursor Tablet",
+      "slot": "Tablet",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [
+        "Adds ContainsRitual to a Map 5 uses remaining"
+      ],
+      "explicit_mods": [
+        "Favours at ContainsRitual in Area costs 13% increased Tribute",
+        "Can Reroll Favours at ContainsRitual in your Maps twice as many times"
+      ],
+      "flavour_text": [
+        "When darkness comes, we pray for light.",
+        "When darkness is all that there is,",
+        "we pray for death."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "ritual_altars"
+      ],
+      "source": {
+        "id": "/us/Freedom_of_Faith",
+        "url": "https://poe2db.tw/us/Freedom_of_Faith",
+        "label": "Freedom of Faith Ritual Precursor Tablet"
+      }
+    },
+    "/us/The_Grand_Project": {
+      "key": "The Grand Project||Precursor Tablet",
+      "name": "The Grand Project",
+      "base": "Precursor Tablet",
+      "slot": "Tablet",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [
+        "Adds ContainsIrradiated to a Map 1 use remaining"
+      ],
+      "explicit_mods": [
+        "Can only be applied to PrecursorTower Completing the Tower makes all nearby Maps accessible"
+      ],
+      "flavour_text": [
+        "\"I see a pattern in these towers. Whoever the Precursors were, they sought to master",
+        "this world, to shape it as they saw fit. My people had the same ambition...\""
+      ],
+      "granted_skills": [],
+      "tags": [
+        "irradiated",
+        "precursor_tower_maps"
+      ],
+      "source": {
+        "id": "/us/The_Grand_Project",
+        "url": "https://poe2db.tw/us/The_Grand_Project",
+        "label": "The Grand Project Precursor Tablet"
+      }
+    },
+    "/us/Visions_of_Paradise": {
+      "key": "Visions of Paradise||Precursor Tablet",
+      "name": "Visions of Paradise",
+      "base": "Precursor Tablet",
+      "slot": "Tablet",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [
+        "Adds ContainsIrradiated to a Map 1 use remaining"
+      ],
+      "explicit_mods": [
+        "If Map was not previously IrradiatedNonAtlas, completing Map adds IrradiatedNonAtlas instead"
+      ],
+      "flavour_text": [
+        "\"If they had ever completed the tower network,",
+        "it could have changed the face of the world...\""
+      ],
+      "granted_skills": [],
+      "tags": [
+        "irradiated",
+        "irradiation"
+      ],
+      "source": {
+        "id": "/us/Visions_of_Paradise",
+        "url": "https://poe2db.tw/us/Visions_of_Paradise",
+        "label": "Visions of Paradise Precursor Tablet"
+      }
+    },
+    "/us/Season_of_the_Hunt": {
+      "key": "Season of the Hunt||Overseer Precursor Tablet",
+      "name": "Season of the Hunt",
+      "base": "Overseer Precursor Tablet",
+      "slot": "Tablet",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [
+        "ContainsMapBoss the MapBoss of a Map 5 uses remaining"
+      ],
+      "explicit_mods": [
+        "MapBoss are Hunted by AzmeriSpirit"
+      ],
+      "flavour_text": [
+        "Darkness and light, naught but forest between.",
+        "As the forest fades, the twilight hunt begins."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "azmeri_spirits",
+        "empowers",
+        "map_boss",
+        "map_bosses"
+      ],
+      "source": {
+        "id": "/us/Season_of_the_Hunt",
+        "url": "https://poe2db.tw/us/Season_of_the_Hunt",
+        "label": "Season of the Hunt Overseer Precursor Tablet"
+      }
+    },
+    "/us/Cruel_Hegemony": {
+      "key": "Cruel Hegemony||Overseer Precursor Tablet",
+      "name": "Cruel Hegemony",
+      "base": "Overseer Precursor Tablet",
+      "slot": "Tablet",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [
+        "ContainsMapBoss the MapBoss of a Map 5 uses remaining"
+      ],
+      "explicit_mods": [
+        "MapBoss have 1 additional MonsterModifiers"
+      ],
+      "flavour_text": [
+        "The lash of the whip,",
+        "the ire of the tithe...",
+        "the press of the boot."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "empowers",
+        "map_boss",
+        "map_bosses",
+        "modifier"
+      ],
+      "source": {
+        "id": "/us/Cruel_Hegemony",
+        "url": "https://poe2db.tw/us/Cruel_Hegemony",
+        "label": "Cruel Hegemony Overseer Precursor Tablet"
+      }
+    },
+    "/us/Unforeseen_Consequences": {
+      "key": "Unforeseen Consequences||Abyss Precursor Tablet",
+      "name": "Unforeseen Consequences",
+      "base": "Abyss Precursor Tablet",
+      "slot": "Tablet",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [
+        "Adds ContainsAbyss to a Map 1 use remaining"
+      ],
+      "explicit_mods": [
+        "4 additional Rarity Monsters are spawned from ContainsAbyss in Map",
+        "Map is overrun by the ContainsAbyss",
+        "Map contains 16 additional ContainsAbyss"
+      ],
+      "flavour_text": [
+        "The Well was naught.",
+        "The Precursors dug too deep.",
+        "The Well always had been."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "abyssal",
+        "abysses",
+        "rare"
+      ],
+      "source": {
+        "id": "/us/Unforeseen_Consequences",
+        "url": "https://poe2db.tw/us/Unforeseen_Consequences",
+        "label": "Unforeseen Consequences Abyss Precursor Tablet"
       }
     }
   }
