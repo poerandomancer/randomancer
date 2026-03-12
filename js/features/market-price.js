@@ -96,7 +96,7 @@ function parseEstimatePrice(estimatedPrice) {
   const currencyKey = normalizeCurrency(match[2]);
   const amountLabel = Number.isFinite(amount) ? formatPriceValue(amount) : '';
   const currencyLabel = CURRENCY_ABBREVIATION[currencyKey] || match[2].toLowerCase();
-  const label = `${amountLabel} ${currencyLabel}`.trim();
+  const label = `${amountLabel}x ${currencyLabel}`.trim();
 
   return { amount, currencyKey, label };
 }
