@@ -169,3 +169,106 @@
   font-size: .84rem;
   line-height: 1.25;
 }
+
+/* ===== v0.8.5: Market estimate badge (Build + shared base) ===== */
+.unique-card {
+  position: relative;
+}
+
+.market-badge {
+  position: absolute;
+  top: .42rem;
+  right: .42rem;
+  z-index: 2;
+  width: 50px;
+  min-height: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.market-badge__button {
+  width: 34px;
+  height: 34px;
+  border-radius: 0;
+  border: 0;
+  background: transparent;
+  color: rgba(241, 226, 200, 0.9);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+}
+
+.market-badge__button:hover,
+.market-badge__button:focus-visible {
+  color: rgba(255, 232, 185, 0.98);
+  filter: drop-shadow(0 0 6px rgba(255, 206, 122, 0.32));
+  outline: none;
+}
+
+.market-badge__button:disabled {
+  cursor: wait;
+}
+
+.market-badge__icon {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.market-badge__emoji {
+  font-size: 18px;
+  line-height: 1;
+  display: inline-block;
+}
+
+.market-badge__svg,
+.market-badge__currency-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  display: block;
+}
+
+.market-badge__label {
+  font-size: .64rem;
+  line-height: 1;
+  font-weight: 600;
+  color: rgba(245, 234, 214, 0.92);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
+  white-space: nowrap;
+}
+
+.market-badge__spinner {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  border: 2px solid rgba(245, 229, 201, 0.25);
+  border-top-color: rgba(245, 229, 201, 0.95);
+  animation: market-spin .75s linear infinite;
+}
+
+@keyframes market-spin {
+  to { transform: rotate(360deg); }
+}
+
+.market-badge__empty {
+  font-size: .6rem;
+  font-weight: 700;
+  letter-spacing: .01em;
+}
+
+.market-badge.is-empty,
+.market-badge.is-error {
+  opacity: .82;
+}
+
+.market-badge.is-success .market-badge__button {
+  filter: drop-shadow(0 0 7px rgba(255, 214, 130, 0.38));
+}

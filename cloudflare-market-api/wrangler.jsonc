@@ -1,0 +1,22 @@
+{
+  "name": "randomancer-market-poc",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-03-11",
+  "workers_dev": false,
+  "routes": [
+    {
+      "pattern": "api.therandomancer.com",
+      "custom_domain": true
+    }
+  ],
+  "vars": {
+    "PRICE_SNAPSHOT_TTL_HOURS": "12"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "randomancer-market-db",
+      "database_id": "942eb73c-933b-452a-b7b0-82276590b9c8"
+    }
+  ]
+}

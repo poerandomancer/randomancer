@@ -1,4 +1,5 @@
 import { ensureDataPreload } from './08-data-load.js';
+import { ensureMarketBadgeDelegation, hydrateMarketBadges, renderMarketBadgeMarkup } from './features/market-price.js';
 
 const state = {
   pillar: 'ascendancy',
@@ -93,19 +94,6 @@ function matches(entry) {
   if (state.pillar === 'pinned') return true;
   for (const t of state.tags) if (!(entry.tags || []).includes(t)) return false;
   return true;
-}
-
-function updateUrl() {
-  if (window.RandomancerGetMode?.() !== 'codex') return;
-  const p = new URLSearchParams(location.search);
-  p.set('mode', 'codex');
-  p.set('pillar', state.pillar);
-  p.delete('skill');
-  p.delete('gear');
-  if (state.q) p.set('q', state.q); else p.delete('q');
-  if (state.tags.size) p.set('tags', Array.from(state.tags).join(',')); else p.delete('tags');
-  p.delete('passive');
-  history.replaceState(null, '', `${location.pathname}?${p.toString()}`);
 }
 
 function renderTags(entries) {
@@ -267,6 +255,7 @@ function renderUniqueBody(entry) {
   const flavour = Array.isArray(entry.extraFields?.flavourText) ? entry.extraFields.flavourText.filter(Boolean) : [];
   return `
     <div class="codex-unique-body">
+      ${renderMarketBadgeMarkup({ name: entry.name }, { context: 'codex' })}
       ${reqLine ? `<p><strong>Requirements:</strong> ${mark(reqLine)}</p>` : ''}
       ${implicit}
       ${explicit}
@@ -338,6 +327,7 @@ function renderList() {
   }
 
   els.listMount.innerHTML = `<div class="codex-list-scroll">${warningHtml}${html}</div>`;
+  hydrateMarketBadges(els.listMount);
   applyAccordionState();
   initExclusiveAccordion(els.listMount, { detailsSelector: 'details.rc-acc', allowNoneOpen: true });
 }
@@ -404,7 +394,6 @@ function render() {
 
   const pinnedTab = document.getElementById('codex-pinned-tab');
   if (pinnedTab) pinnedTab.textContent = `Pinned (${state.pinnedIds.size})`;
-  updateUrl();
 }
 
 function buildIndex() {
@@ -586,6 +575,7 @@ function buildIndex() {
 }
 
 function bind() {
+  ensureMarketBadgeDelegation();
   els.panel = document.getElementById('codex-panel');
   els.search = document.getElementById('codex-search');
   els.tags = document.getElementById('codex-tag-chips');
