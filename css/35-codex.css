@@ -570,8 +570,6 @@ body[data-mode="codex"] .codex-inspector h3{
 .codex-panel .codex-unique-body .market-badge__button {
   width: 32px;
   height: 32px;
-  border-radius: 9px;
-  background: rgba(15, 12, 8, 0.76);
 }
 
 .codex-panel .codex-unique-body .market-badge__label {

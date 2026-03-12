@@ -191,9 +191,9 @@
 .market-badge__button {
   width: 34px;
   height: 34px;
-  border-radius: 10px;
-  border: 1px solid rgba(236, 206, 148, 0.36);
-  background: rgba(13, 11, 8, 0.82);
+  border-radius: 0;
+  border: 0;
+  background: transparent;
   color: rgba(241, 226, 200, 0.9);
   display: inline-flex;
   align-items: center;
@@ -204,8 +204,8 @@
 
 .market-badge__button:hover,
 .market-badge__button:focus-visible {
-  border-color: rgba(255, 221, 165, 0.72);
-  box-shadow: 0 0 0 1px rgba(255, 220, 164, 0.25), 0 0 10px rgba(255, 201, 120, 0.18);
+  color: rgba(255, 232, 185, 0.98);
+  filter: drop-shadow(0 0 6px rgba(255, 206, 122, 0.32));
   outline: none;
 }
 
@@ -263,6 +263,5 @@
 }
 
 .market-badge.is-success .market-badge__button {
-  border-color: rgba(255, 232, 174, 0.7);
-  box-shadow: 0 0 0 1px rgba(255, 219, 154, 0.2), 0 0 12px rgba(255, 210, 120, 0.18);
+  filter: drop-shadow(0 0 7px rgba(255, 214, 130, 0.38));
 }

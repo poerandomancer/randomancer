@@ -188,7 +188,7 @@ function renderIcon(state, estimate) {
     return '<span class="market-badge__empty" aria-hidden="true">N/A</span>';
   }
 
-  return '<svg viewBox="0 0 24 24" class="market-badge__svg" aria-hidden="true" focusable="false"><path d="M7 6h10m-8 4h6m-7 8 1.2-3.6a4 4 0 1 1 5.6 0L16 18H8Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  return '<svg viewBox="0 0 24 24" class="market-badge__svg" aria-hidden="true" focusable="false"><path d="M12 4v2m-7 2h14M8 8l-2.6 5.4a2.6 2.6 0 0 0 5.2 0L8 8Zm8 0-2.6 5.4a2.6 2.6 0 0 0 5.2 0L16 8ZM9 20h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 }
 
 function getTooltipForState(state) {
