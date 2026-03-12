@@ -1,4 +1,5 @@
 import { ensureDataPreload } from './08-data-load.js';
+import { ensureMarketBadgeDelegation, hydrateMarketBadges, renderMarketBadgeMarkup } from './features/market-price.js';
 
 const state = {
   pillar: 'ascendancy',
@@ -267,6 +268,7 @@ function renderUniqueBody(entry) {
   const flavour = Array.isArray(entry.extraFields?.flavourText) ? entry.extraFields.flavourText.filter(Boolean) : [];
   return `
     <div class="codex-unique-body">
+      ${renderMarketBadgeMarkup({ name: entry.name }, { context: 'codex' })}
       ${reqLine ? `<p><strong>Requirements:</strong> ${mark(reqLine)}</p>` : ''}
       ${implicit}
       ${explicit}
@@ -338,6 +340,7 @@ function renderList() {
   }
 
   els.listMount.innerHTML = `<div class="codex-list-scroll">${warningHtml}${html}</div>`;
+  hydrateMarketBadges(els.listMount);
   applyAccordionState();
   initExclusiveAccordion(els.listMount, { detailsSelector: 'details.rc-acc', allowNoneOpen: true });
 }
@@ -586,6 +589,7 @@ function buildIndex() {
 }
 
 function bind() {
+  ensureMarketBadgeDelegation();
   els.panel = document.getElementById('codex-panel');
   els.search = document.getElementById('codex-search');
   els.tags = document.getElementById('codex-tag-chips');
