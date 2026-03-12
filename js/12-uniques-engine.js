@@ -27,6 +27,23 @@ import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
     return { get: (name) => byName.get(name) || byNorm.get(norm(name)) || [] };
   }
 
+
+  function combatOathTacticTags(){
+    const bind = window.App?.state?.bindFates;
+    const combatCfg = bind?.combat || { oaths: [] };
+    const oathNames = Array.isArray(combatCfg?.oaths) ? combatCfg.oaths : [];
+    if (!oathNames.length) return [];
+
+    const tacticNameSet = new Set((window.DATA?.Tactics || []).map((t) => t?.name).filter(Boolean));
+    const idx = dataIndex();
+    const out = new Set();
+    oathNames.forEach((name) => {
+      if (!tacticNameSet.has(name)) return;
+      idx.get(name).forEach((t) => { if (t) out.add(t); });
+    });
+    return Array.from(out);
+  }
+
   function expandTags(arr){
     const out = new Set();
     for (let t of (arr||[])){
@@ -63,7 +80,7 @@ import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
     Poison: /\bpoison(ed|ing|s)?\b/i,
     'Life Regeneration': /\blife\s+regen(?:eration)?\b/i,
     Leech: /\bleech(ed|ing|es)?\b/i,
-    'Culling Strike': /\bculling\s+strike\b/i,
+    'Culling Strike': /\bculling\s*strike\b|\bcullingstrike\b|\bcull(?:ed|ing|s)?\b/i,
     'Heavy Stun': /\bstun(ned|ning|s)?\b|\bheavy\s+stun\b|\bstun\s+threshold\b/i,
     Block: /\bchance\s+to\s+block\b|\bblock(ed|ing|s)?\b/i,
   };
@@ -112,6 +129,8 @@ import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
 			(state.tacticSet || []).flatMap(t => t?.tags || [])
 		  )
 		).filter((t) => t !== 'physical');
+		const oathTactics = combatOathTacticTags();
+		if (oathTactics.length) tagsT.push(...oathTactics);
 	
 		const tagsA = Array.from(
 		  expandTags(
@@ -128,7 +147,7 @@ import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
 		const tagsD = Array.from(new Set([...tagsDStrat, ...tagsDPrimary]));
 	
 		return {
-		  tactics: tagsT,
+		  tactics: Array.from(new Set(tagsT)),
 		  ailments: tagsA,
 		  def: tagsD,
 		  defStrat: tagsDStrat,
@@ -150,6 +169,8 @@ import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
 	  const tagsT = Array.from(
 		expandTags(namesT.flatMap(n => idx.get(n)))
 	  ).filter((t) => t !== 'physical');
+	  const oathTactics = combatOathTacticTags();
+	  if (oathTactics.length) tagsT.push(...oathTactics);
 	  const tagsA = Array.from(
 		expandTags(namesA.flatMap(n => idx.get(n)))
 	  ).filter((t) => t !== 'physical');
@@ -162,7 +183,7 @@ import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
 	  const tagsD = Array.from(new Set([...tagsDStrat, ...tagsDPrimary]));
 	
 	  return {
-		tactics: tagsT,
+		tactics: Array.from(new Set(tagsT)),
 		ailments: tagsA,
 		def: tagsD,
 		defStrat: tagsDStrat,
