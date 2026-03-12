@@ -584,7 +584,7 @@ function weaponSlotAllowed(it, slotAllow){
     for (const t of rolled.ailments) if (primary.has(t)) s += 2.0;
 
     // Defensive strategy / primary defense (secondary)
-    for (const t of rolled.def)      if (primary.has(t)) s += 2.5;
+    for (const t of rolled.def)      if (primary.has(t)) s += 1.5;
 
     // Small bump for resistance coverage (tie-breaker, not a primary driver)
     if (all.has(TAG_ALL_ELE_RES)) s += 0.6;
@@ -643,6 +643,7 @@ function weaponSlotAllowed(it, slotAllow){
   }
 
   function pickArmourPass(items, rolled, state, seedPicks=[]){
+    const ARMOUR_SCORE_MIN = 1.5;
     const used = new Set((seedPicks||[]).map(p => p && p.name).filter(Boolean));
     const scored = items
       .filter(it => ARMOUR_SLOTS.has(it.slot) && !used.has(it.name))
@@ -652,7 +653,9 @@ function weaponSlotAllowed(it, slotAllow){
     if (!scored.length) return [];
 
     const best = scored[0].s || 0;
-    const pick1 = weightedPickFromBand(scored, 0.70, 0);
+    if (best < ARMOUR_SCORE_MIN) return [];
+
+    const pick1 = weightedPickFromBand(scored, 0.70, ARMOUR_SCORE_MIN);
     if (!pick1) return [];
 
     used.add(pick1.name);
@@ -696,7 +699,7 @@ function weaponSlotAllowed(it, slotAllow){
 
     // Defensive strategy (secondary)
     for (const t of rolled.def){
-      if (primary.has(t)){ s += 2.5; match += 2.5; }
+      if (primary.has(t)){ s += 1.5; match += 1.5; }
     }
 
     // Resistances as light tie-breaker (never part of match qualification)
