@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "schema": "poe2db_uniques_min_v3",
+    "schema": "poe2db_uniques_min_v4",
     "locale": "us",
     "listing_url": "https://poe2db.tw/us/Unique_item",
-    "count": 375,
-    "generated_epoch": 1772597454
+    "count": 399,
+    "generated_epoch": 1773274467
   },
   "by_key": {
     "Brynhand's Mark||Wooden Club": "/us/Brynhands_Mark",
@@ -12,7 +12,6 @@
     "Trenchtimbre||Spiked Club": "/us/Trenchtimbre",
     "Sculpted Suffering||Warpick": "/us/Sculpted_Suffering",
     "Nebuloch||Execratus Hammer": "/us/Nebuloch",
-    "Mjölner": "/us/Mj%C3%B6lner",
     "Olrovasara||Torment Club": "/us/Olrovasara",
     "Hoghunt||Felled Greatclub": "/us/Hoghunt",
     "Hrimnor's Hymn||Oak Greathammer": "/us/Hrimnors_Hymn",
@@ -28,6 +27,7 @@
     "Splinter of Lorrata||Hardwood Spear": "/us/Splinter_of_Lorrata",
     "Tyranny's Grip||Ironhead Spear": "/us/Tyrannys_Grip",
     "Chainsting||Hunting Spear": "/us/Chainsting",
+    "Skysliver||Winged Spear": "/us/Skysliver",
     "Daevata's Wind||War Spear": "/us/Daevatas_Wind",
     "Tangletongue||Forked Spear": "/us/Tangletongue",
     "Saitha's Spear||Barbed Spear": "/us/Saithas_Spear",
@@ -52,7 +52,6 @@
     "The Burden of Shadows||Chiming Staff": "/us/The_Burden_of_Shadows",
     "The Unborn Lich||Ravenous Staff": "/us/The_Unborn_Lich",
     "The Whispering Ice||Permafrost Staff": "/us/The_Whispering_Ice",
-    "Atziri's": "/us/Atziris_Step",
     "Widowhail||Crude Bow": "/us/Widowhail",
     "Quill Rain||Shortbow": "/us/Quill_Rain",
     "Splinterheart||Recurve Bow": "/us/Splinterheart",
@@ -155,6 +154,7 @@
     "The Black Insignia||Corsair Cap": "/us/The_Black_Insignia",
     "Starkonja's Head||Leatherbound Hood": "/us/Starkonjas_Head",
     "Heatshiver||Velvet Cap": "/us/Heatshiver",
+    "Myris Uxor||Covert Hood": "/us/Myris_Uxor",
     "Alpha's Howl||Armoured Cap": "/us/Alphas_Howl",
     "Crown of Thorns||Twig Circlet": "/us/Crown_of_Thorns",
     "The Devouring Diadem||Wicker Tiara": "/us/The_Devouring_Diadem",
@@ -166,6 +166,7 @@
     "Scold's Bridle||Jade Tiara": "/us/Scolds_Bridle",
     "Indigon||Magus Tiara": "/us/Indigon",
     "Greymake||Brimmed Helm": "/us/Greymake",
+    "Erian's Cobble||Guarded Helm": "/us/Erians_Cobble",
     "Ironride||Visored Helm": "/us/Ironride",
     "The Smiling Knight||Cowled Helm": "/us/The_Smiling_Knight",
     "The Vile Knight||Shielded Helm": "/us/The_Vile_Knight",
@@ -255,6 +256,7 @@
     "Saffell's Frame||Emblem Crest Shield": "/us/Saffells_Frame",
     "Crest of Ardura||Jingling Crest Shield": "/us/Crest_of_Ardura",
     "Mahuxotl's Machination||Omen Crest Shield": "/us/Mahuxotls_Machination",
+    "Rise of the Phoenix||Omen Crest Shield": "/us/Rise_of_the_Phoenix",
     "Dunkelhalt||Leather Buckler": "/us/Dunkelhalt",
     "Nocturne||Wooden Buckler": "/us/Nocturne",
     "Rondel de Ezo||Plated Buckler": "/us/Rondel_de_Ezo",
@@ -282,10 +284,21 @@
     "The Surrender||Stone Tower Shield": "/us/The_Surrender",
     "Prism Guardian||Intricate Crest Shield": "/us/Prism_Guardian",
     "Rathpith Globe||Sacred Focus": "/us/Rathpith_Globe",
+    "Heroic Tragedy||Timeless Jewel": "/us/Heroic_Tragedy",
     "Undying Hate||Timeless Jewel": "/us/Undying_Hate",
     "Grand Spectrum||Ruby": "/us/Grand_Spectrum",
+    "Megalomaniac||Diamond": "/us/Megalomaniac",
+    "From Nothing||Diamond": "/us/From_Nothing",
+    "Controlled Metamorphosis||Diamond": "/us/Controlled_Metamorphosis",
+    "Prism of Belief||Diamond": "/us/Prism_of_Belief",
+    "The Adorned||Diamond": "/us/The_Adorned",
     "Heart of the Well||Diamond": "/us/Heart_of_the_Well",
-    "Flesh": "/us/Flesh_Crucible",
+    "Against the Darkness||Time-Lost Diamond": "/us/Against_the_Darkness",
+    "The Peacemaker's Draught||Amphora Relic": "/us/The_Peacemakers_Draught",
+    "The Desperate Alliance||Vase Relic": "/us/The_Desperate_Alliance",
+    "The Changing Seasons||Seal Relic": "/us/The_Changing_Seasons",
+    "The Burden of Leadership||Tapestry Relic": "/us/The_Burden_of_Leadership",
+    "The Last Flame||Incense Relic": "/us/The_Last_Flame",
     "Asphyxia's Wrath||Broadhead Quiver": "/us/Asphyxias_Wrath",
     "Blackgleam||Fire Quiver": "/us/Blackgleam",
     "The Lethal Draw||Sacral Quiver": "/us/The_Lethal_Draw",
@@ -319,6 +332,7 @@
     "Eye of Chayula||Gold Amulet": "/us/Eye_of_Chayula",
     "Serpent's Egg||Gold Amulet": "/us/Serpents_Egg",
     "Blackheart||Iron Ring": "/us/Blackheart",
+    "Icefang Orbit||Iron Ring": "/us/Icefang_Orbit",
     "Prized Pain||Iron Ring": "/us/Prized_Pain",
     "Venopuncture||Iron Ring": "/us/Venopuncture",
     "Doedre's Damning||Lazuli Ring": "/us/Doedres_Damning",
@@ -328,11 +342,13 @@
     "Blistering Bond||Ruby Ring": "/us/Blistering_Bond",
     "Polcirkeln||Sapphire Ring": "/us/Polcirkeln",
     "Dream Fragments||Sapphire Ring": "/us/Dream_Fragments",
+    "Whisper of the Brotherhood||Sapphire Ring": "/us/Whisper_of_the_Brotherhood",
     "The Burrower||Topaz Ring": "/us/The_Burrower",
     "Call of the Brotherhood||Topaz Ring": "/us/Call_of_the_Brotherhood",
     "Levinstone||Topaz Ring": "/us/Levinstone",
     "Ming's Heart||Amethyst Ring": "/us/Mings_Heart",
     "Original Sin||Amethyst Ring": "/us/Original_Sin",
+    "Blackflame||Amethyst Ring": "/us/Blackflame",
     "Vigilant View||Emerald Ring": "/us/Vigilant_View",
     "Death Rush||Emerald Ring": "/us/Death_Rush",
     "Thief's Torment||Emerald Ring": "/us/Thiefs_Torment",
@@ -379,8 +395,17 @@
     "Valako's Roar||Topaz Charm": "/us/Valakos_Roar",
     "Forsaken Bangle||Amethyst Charm": "/us/Forsaken_Bangle",
     "Rite of Passage||Golden Charm": "/us/Rite_of_Passage",
+    "Kalandra's Touch||Ring": "/us/Kalandras_Touch",
     "Sekhema's Resolve||Ring": "/us/Sekhemas_Resolve",
-    "Edit": "/us/marked?id=Unique_item"
+    "Wraeclast Besieged||Breach Precursor Tablet": "/us/Wraeclast_Besieged",
+    "Forgotten By Time||Expedition Precursor Tablet": "/us/Forgotten_By_Time",
+    "Clear Skies||Delirium Precursor Tablet": "/us/Clear_Skies",
+    "Freedom of Faith||Ritual Precursor Tablet": "/us/Freedom_of_Faith",
+    "The Grand Project||Precursor Tablet": "/us/The_Grand_Project",
+    "Visions of Paradise||Precursor Tablet": "/us/Visions_of_Paradise",
+    "Season of the Hunt||Overseer Precursor Tablet": "/us/Season_of_the_Hunt",
+    "Cruel Hegemony||Overseer Precursor Tablet": "/us/Cruel_Hegemony",
+    "Unforeseen Consequences||Abyss Precursor Tablet": "/us/Unforeseen_Consequences"
   },
   "items": {
     "/us/Brynhands_Mark": {
@@ -408,11 +433,9 @@
       "granted_skills": [],
       "tags": [
         "accuracy",
-        "mace",
         "physical",
         "strength",
-        "stun",
-        "wooden_club"
+        "stun"
       ],
       "source": {
         "id": "/us/Brynhands_Mark",
@@ -450,11 +473,9 @@
         "contributes",
         "critical_hit",
         "culling_strike",
-        "frozen",
-        "hits",
-        "mace",
-        "physical",
-        "slim_mace"
+        "freeze",
+        "hit",
+        "physical"
       ],
       "source": {
         "id": "/us/Frostbreath",
@@ -486,10 +507,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "mace",
         "minion",
-        "physical",
-        "spiked_club"
+        "physical"
       ],
       "source": {
         "id": "/us/Trenchtimbre",
@@ -523,13 +542,10 @@
       ],
       "granted_skills": [],
       "tags": [
-        "breaks_armour",
+        "armour_break",
         "critical_damage_bonus",
-        "fully_armour_broken",
-        "hits",
-        "mace",
-        "physical",
-        "warpick"
+        "hit",
+        "physical"
       ],
       "source": {
         "id": "/us/Sculpted_Suffering",
@@ -563,40 +579,16 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attacks",
+        "attack",
         "critical_damage_bonus",
-        "critically_hit",
+        "critical_hit",
         "endurance_charge",
-        "execratus_hammer",
-        "mace",
         "physical"
       ],
       "source": {
         "id": "/us/Nebuloch",
         "url": "https://poe2db.tw/us/Nebuloch",
         "label": "Nebuloch Execratus Hammer"
-      }
-    },
-    "/us/Mj%C3%B6lner": {
-      "key": "Mjölner",
-      "name": "Mjölner",
-      "base": "",
-      "slot": null,
-      "requirements": {
-        "level": null,
-        "str": null,
-        "dex": null,
-        "int": null
-      },
-      "implicit_mods": [],
-      "explicit_mods": [],
-      "flavour_text": [],
-      "granted_skills": [],
-      "tags": [],
-      "source": {
-        "id": "/us/Mj%C3%B6lner",
-        "url": "https://poe2db.tw/us/Mj%C3%B6lner",
-        "label": "Mjölner Torment Club"
       }
     },
     "/us/Olrovasara": {
@@ -624,10 +616,8 @@
       "granted_skills": [],
       "tags": [
         "accuracy",
-        "hitting",
-        "lightning",
-        "mace",
-        "torment_club"
+        "hit",
+        "lightning"
       ],
       "source": {
         "id": "/us/Olrovasara",
@@ -662,8 +652,6 @@
       "granted_skills": [],
       "tags": [
         "critical_hit",
-        "felled_greatclub",
-        "mace",
         "physical",
         "strength"
       ],
@@ -700,8 +688,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "mace",
-        "oak_greathammer",
         "strength",
         "stun"
       ],
@@ -736,11 +722,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "critical_hits",
+        "critical_hit",
         "crushes",
-        "forge_maul",
-        "heavy_stunned",
-        "mace",
+        "heavy_stun",
         "physical",
         "stun"
       ],
@@ -773,9 +757,7 @@
       "granted_skills": [],
       "tags": [
         "electrocution",
-        "lightning",
-        "mace",
-        "studded_greatclub"
+        "lightning"
       ],
       "source": {
         "id": "/us/Brain_Rattler",
@@ -809,16 +791,14 @@
       ],
       "granted_skills": [],
       "tags": [
-        "bleeding",
-        "cultist_greathammer",
+        "bleed",
         "empowered_attacks",
         "hit",
-        "leeches",
-        "mace",
+        "leech",
         "physical",
         "splash_damage",
         "strikes",
-        "warcries"
+        "warcry"
       ],
       "source": {
         "id": "/us/The_Empty_Roar",
@@ -852,9 +832,7 @@
       "granted_skills": [],
       "tags": [
         "always_hits",
-        "light_radius",
-        "mace",
-        "temple_maul"
+        "light_radius"
       ],
       "source": {
         "id": "/us/Shyaba",
@@ -886,8 +864,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "leaden_greathammer",
-        "mace",
         "physical",
         "spirit"
       ],
@@ -925,11 +901,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attributes",
+        "attribute",
         "critical_hit",
-        "critical_hits",
-        "crumbling_maul",
-        "mace",
         "physical_damage"
       ],
       "source": {
@@ -967,12 +940,10 @@
       "tags": [
         "all_damage",
         "contributes",
-        "hits",
+        "hit",
         "intelligence",
-        "mace",
         "magnitude",
         "melee",
-        "pointed_maul",
         "stun"
       ],
       "source": {
@@ -1012,10 +983,8 @@
       "tags": [
         "accuracy",
         "crushes",
-        "heavy_stuns",
-        "mace",
-        "stun",
-        "totemic_greatclub"
+        "heavy_stun",
+        "stun"
       ],
       "source": {
         "id": "/us/Marohi_Erqi",
@@ -1049,9 +1018,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "elemental",
-        "giant_maul",
-        "mace"
+        "elemental"
       ],
       "source": {
         "id": "/us/The_Hammer_of_Faith",
@@ -1089,13 +1056,9 @@
         }
       ],
       "tags": [
-        "grants:spear_throw",
-        "hardwood_spear",
         "hit",
         "physical",
-        "poisons",
-        "spear",
-        "spear_throw"
+        "poison"
       ],
       "source": {
         "id": "/us/Splinter_of_Lorrata",
@@ -1129,11 +1092,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attacks",
+        "attack",
         "hit",
-        "ironhead_spear",
         "knocks_back",
-        "spear",
         "splash_damage",
         "strength",
         "strikes"
@@ -1179,21 +1140,56 @@
         "accuracy",
         "all_damage",
         "contributes",
-        "grants:spear_throw",
         "hit",
-        "hits",
-        "hunting_spear",
         "maim",
         "physical",
         "pin",
-        "projectile",
-        "spear",
-        "spear_throw"
+        "projectile"
       ],
       "source": {
         "id": "/us/Chainsting",
         "url": "https://poe2db.tw/us/Chainsting",
         "label": "Chainsting Hunting Spear"
+      }
+    },
+    "/us/Skysliver": {
+      "key": "Skysliver||Winged Spear",
+      "name": "Skysliver",
+      "base": "Winged Spear",
+      "slot": "Spear",
+      "requirements": {
+        "level": 16,
+        "str": 12,
+        "dex": 25,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "No Physical Damage",
+        "Adds 1 to 86 Lightning Damage",
+        "23% increased Attack Speed",
+        "68% increased chance to Shock",
+        "BooleanDamageRoll for each DamageTypes"
+      ],
+      "flavour_text": [
+        "Heads fall to the sand, just as the star fell from the sky"
+      ],
+      "granted_skills": [
+        {
+          "name": "Spear Throw",
+          "raw": "Spear Throw",
+          "icon": "https://web.poecdn.com/gen/image/WzIxLDE0LHsiayI6IjJEQXJ0L1NraWxsSWNvbnMvSHVudHJlc3NJY2VTcGVhciIsInJlYWxtIjoicG9lMiJ9XQ/da079143ea/HuntressIceSpear.png"
+        }
+      ],
+      "tags": [
+        "damage_type",
+        "lightning",
+        "rolls_only_the_minimum_or_maximum_damage_value"
+      ],
+      "source": {
+        "id": "/us/Skysliver",
+        "url": "https://poe2db.tw/us/Skysliver",
+        "label": "Skysliver Winged Spear"
       }
     },
     "/us/Daevatas_Wind": {
@@ -1229,13 +1225,9 @@
         }
       ],
       "tags": [
-        "grants:spear_throw",
         "hit",
         "physical",
-        "projectile",
-        "spear",
-        "spear_throw",
-        "war_spear"
+        "projectile"
       ],
       "source": {
         "id": "/us/Daevatas_Wind",
@@ -1277,12 +1269,8 @@
         "bifurcates_critical_hits",
         "converted",
         "critical_hit",
-        "forked_spear",
-        "grants:spear_throw",
         "intelligence",
-        "physical",
-        "spear",
-        "spear_throw"
+        "physical"
       ],
       "source": {
         "id": "/us/Tangletongue",
@@ -1323,16 +1311,11 @@
         }
       ],
       "tags": [
-        "aggravates_all_ignites",
-        "aggravating_any_bleeding",
-        "barbed_spear",
-        "bleeding",
+        "bleed",
         "fire",
-        "grants:spear_throw",
         "hit",
-        "physical",
-        "spear",
-        "spear_throw"
+        "ignite",
+        "physical"
       ],
       "source": {
         "id": "/us/Saithas_Spear",
@@ -1378,16 +1361,10 @@
       ],
       "tags": [
         "chaos_surges",
-        "chaotic_surge",
         "charge",
-        "grants:chaotic_surge",
-        "grants:spear_throw",
-        "helix_spear",
-        "leeches",
+        "leech",
         "life_leech",
-        "physical",
-        "spear",
-        "spear_throw"
+        "physical"
       ],
       "source": {
         "id": "/us/Spire_of_Ire",
@@ -1418,13 +1395,11 @@
       ],
       "granted_skills": [],
       "tags": [
-        "bleeding",
+        "bleed",
         "hit",
         "physical",
-        "quarterstaff",
         "strength",
-        "thorns",
-        "wrapped_quarterstaff"
+        "thorns"
       ],
       "source": {
         "id": "/us/The_Blood_Thorn",
@@ -1460,11 +1435,8 @@
       "granted_skills": [],
       "tags": [
         "attack",
-        "attacks",
         "dexterity",
         "intelligence",
-        "long_quarterstaff",
-        "quarterstaff",
         "strength"
       ],
       "source": {
@@ -1502,10 +1474,8 @@
         "accuracy",
         "fire",
         "fire_resistance",
-        "gothic_quarterstaff",
         "light_radius",
-        "magnitude",
-        "quarterstaff"
+        "magnitude"
       ],
       "source": {
         "id": "/us/The_Sentry",
@@ -1539,10 +1509,8 @@
       "granted_skills": [],
       "tags": [
         "cold",
-        "crescent_quarterstaff",
         "critical_hit",
         "lightning",
-        "quarterstaff",
         "spirit"
       ],
       "source": {
@@ -1578,11 +1546,9 @@
       "tags": [
         "accuracy",
         "dazes",
-        "heavy_stunned",
+        "heavy_stun",
         "hit",
         "physical",
-        "quarterstaff",
-        "steelpoint_quarterstaff",
         "stun"
       ],
       "source": {
@@ -1614,11 +1580,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attacks",
+        "attack",
         "critical_hit",
-        "elemental",
-        "quarterstaff",
-        "wyrm_quarterstaff"
+        "elemental"
       ],
       "source": {
         "id": "/us/Collapsing_Horizon",
@@ -1657,13 +1621,9 @@
         }
       ],
       "tags": [
-        "chaos_bolt",
         "chaos_resistance",
-        "grants:chaos_bolt",
         "hit",
-        "spells",
-        "wand",
-        "withered_wand"
+        "spell"
       ],
       "source": {
         "id": "/us/The_Wicked_Quill",
@@ -1701,13 +1661,9 @@
         }
       ],
       "tags": [
-        "bleeding",
-        "bone_blast",
-        "bone_wand",
+        "bleed",
         "converted",
-        "grants:bone_blast",
-        "hit",
-        "wand"
+        "hit"
       ],
       "source": {
         "id": "/us/Sanguine_Diviner",
@@ -1747,12 +1703,8 @@
         }
       ],
       "tags": [
-        "attuned_wand",
-        "grants:mana_drain",
-        "leeches",
-        "mana_drain",
-        "spell",
-        "wand"
+        "leech",
+        "spell"
       ],
       "source": {
         "id": "/us/Lifesprig",
@@ -1800,15 +1752,8 @@
       ],
       "tags": [
         "elemental",
-        "grants:pinnacle_of_power",
-        "grants:power_siphon",
-        "pinnacle_of_power",
         "power_charge",
-        "power_charges",
-        "power_siphon",
-        "siphoning_wand",
-        "spell",
-        "wand"
+        "spell"
       ],
       "source": {
         "id": "/us/Adonias_Ego",
@@ -1846,13 +1791,9 @@
         }
       ],
       "tags": [
-        "corpses",
+        "corpse",
         "critical_hit_chance",
-        "grants:volatile_dead",
-        "spells",
-        "volatile_dead",
-        "volatile_wand",
-        "wand"
+        "spell"
       ],
       "source": {
         "id": "/us/Enezuns_Charge",
@@ -1890,12 +1831,7 @@
           "icon": "https://web.poecdn.com/gen/image/WzIxLDE0LHsiayI6IjJEQXJ0L1NraWxsSWNvbnMvRGVjb21wb3NlU2tpbGwiLCJyZWFsbSI6InBvZTIifV0/69a4297605/DecomposeSkill.png"
         }
       ],
-      "tags": [
-        "acrid_wand",
-        "decompose",
-        "grants:decompose",
-        "wand"
-      ],
+      "tags": [],
       "source": {
         "id": "/us/Cursecarver",
         "url": "https://poe2db.tw/us/Cursecarver",
@@ -1939,13 +1875,7 @@
         }
       ],
       "tags": [
-        "ashen_staff",
-        "ember_fusillade",
-        "firebolt",
-        "grants:ember_fusillade",
-        "grants:firebolt",
-        "spell",
-        "staff"
+        "spell"
       ],
       "source": {
         "id": "/us/Dusk_Vigil",
@@ -1986,12 +1916,7 @@
         }
       ],
       "tags": [
-        "freeze",
-        "freezing_shards",
-        "frozen",
-        "gelid_staff",
-        "grants:freezing_shards",
-        "staff"
+        "freeze"
       ],
       "source": {
         "id": "/us/Taryns_Shiver",
@@ -2036,13 +1961,7 @@
         }
       ],
       "tags": [
-        "grants:lightning_bolt",
-        "grants:spark",
-        "lightning_bolt",
-        "shocked",
-        "spark",
-        "staff",
-        "voltaic_staff"
+        "shock"
       ],
       "source": {
         "id": "/us/Earthbound",
@@ -2082,14 +2001,9 @@
         }
       ],
       "tags": [
-        "grants:solar_orb",
         "ignite",
-        "ignites",
         "magnitude",
-        "pyrophyte_staff",
-        "solar_orb",
-        "spread",
-        "staff"
+        "spread"
       ],
       "source": {
         "id": "/us/The_Searing_Touch",
@@ -2128,14 +2042,10 @@
         }
       ],
       "tags": [
-        "chiming_staff",
         "elemental",
-        "grants:sigil_of_power",
         "light_radius",
-        "projectiles",
-        "sigil_of_power",
-        "spells",
-        "staff"
+        "projectile",
+        "spell"
       ],
       "source": {
         "id": "/us/Sire_of_Shards",
@@ -2174,11 +2084,7 @@
       ],
       "tags": [
         "chaos_damage",
-        "chiming_staff",
-        "converted",
-        "grants:sigil_of_power",
-        "sigil_of_power",
-        "staff"
+        "converted"
       ],
       "source": {
         "id": "/us/The_Burden_of_Shadows",
@@ -2222,13 +2128,7 @@
         }
       ],
       "tags": [
-        "desecrated_modifier",
-        "feast_of_flesh",
-        "grants:feast_of_flesh",
-        "grants:his_foul_emergence",
-        "his_foul_emergence",
-        "ravenous_staff",
-        "staff"
+        "desecrated_modifier"
       ],
       "source": {
         "id": "/us/The_Unborn_Lich",
@@ -2278,40 +2178,12 @@
       "tags": [
         "cold",
         "elemental",
-        "grants:heart_of_ice",
-        "grants:icestorm",
-        "heart_of_ice",
-        "icestorm",
-        "permafrost_staff",
-        "spell",
-        "staff"
+        "spell"
       ],
       "source": {
         "id": "/us/The_Whispering_Ice",
         "url": "https://poe2db.tw/us/The_Whispering_Ice",
         "label": "The Whispering Ice Permafrost Staff"
-      }
-    },
-    "/us/Atziris_Rule": {
-      "key": "Atziri's",
-      "name": "Atziri's",
-      "base": "",
-      "slot": null,
-      "requirements": {
-        "level": null,
-        "str": null,
-        "dex": null,
-        "int": null
-      },
-      "implicit_mods": [],
-      "explicit_mods": [],
-      "flavour_text": [],
-      "granted_skills": [],
-      "tags": [],
-      "source": {
-        "id": "/us/Atziris_Rule",
-        "url": "https://poe2db.tw/us/Atziris_Rule",
-        "label": "Atziri's Rule Reflecting Staff"
       }
     },
     "/us/Widowhail": {
@@ -2335,10 +2207,7 @@
         "healing, no revenge. There was only... emptiness.\""
       ],
       "granted_skills": [],
-      "tags": [
-        "bow",
-        "crude_bow"
-      ],
+      "tags": [],
       "source": {
         "id": "/us/Widowhail",
         "url": "https://poe2db.tw/us/Widowhail",
@@ -2370,9 +2239,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "bow",
-        "dexterity",
-        "shortbow"
+        "dexterity"
       ],
       "source": {
         "id": "/us/Quill_Rain",
@@ -2405,9 +2272,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "accuracy",
-        "bow",
-        "recurve_bow"
+        "accuracy"
       ],
       "source": {
         "id": "/us/Splinterheart",
@@ -2442,9 +2307,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attacks",
-        "bow",
-        "composite_bow",
+        "attack",
         "dexterity",
         "element",
         "extra",
@@ -2484,10 +2347,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attacks",
-        "bow",
+        "attack",
         "critical_damage_bonus",
-        "dualstring_bow",
         "surpassing"
       ],
       "source": {
@@ -2521,12 +2382,10 @@
       ],
       "granted_skills": [],
       "tags": [
-        "bow",
         "critical_hit",
         "forking",
-        "leeches",
-        "physical",
-        "zealot_bow"
+        "leech",
+        "physical"
       ],
       "source": {
         "id": "/us/Slivertongue",
@@ -2569,14 +2428,10 @@
         }
       ],
       "tags": [
-        "artillery_bow",
-        "bow",
         "fire",
-        "grants:phantasmal_arrow",
-        "hits",
+        "hit",
         "ignite",
         "magnitude",
-        "phantasmal_arrow",
         "spectral_fire"
       ],
       "source": {
@@ -2614,10 +2469,8 @@
       "granted_skills": [],
       "tags": [
         "accuracy",
-        "attacks",
-        "bow",
+        "attack",
         "dexterity",
-        "heavy_bow",
         "presence"
       ],
       "source": {
@@ -2651,12 +2504,10 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attacks",
+        "attack",
         "chill",
         "cold",
-        "crossbow",
-        "freeze",
-        "makeshift_crossbow"
+        "freeze"
       ],
       "source": {
         "id": "/us/Mist_Whisper",
@@ -2691,9 +2542,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attacks",
-        "crossbow",
-        "tense_crossbow"
+        "attack",
+        "crossbow"
       ],
       "source": {
         "id": "/us/Rampart_Raptor",
@@ -2736,11 +2586,7 @@
       "tags": [
         "cold_surges",
         "critical_hit",
-        "crossbow",
-        "dyad_crossbow",
         "fire_surges",
-        "gemini_surge",
-        "grants:gemini_surge",
         "physical"
       ],
       "source": {
@@ -2780,11 +2626,7 @@
         }
       ],
       "tags": [
-        "grants:skeletal_warrior_minion",
-        "intelligence",
-        "rattling_sceptre",
-        "sceptre",
-        "skeletal_warrior_minion"
+        "intelligence"
       ],
       "source": {
         "id": "/us/The_Dark_Defiler",
@@ -2823,11 +2665,7 @@
         }
       ],
       "tags": [
-        "grants:malice",
         "leech_that_mana",
-        "malice",
-        "omen_sceptre",
-        "sceptre",
         "spirit"
       ],
       "source": {
@@ -2867,15 +2705,11 @@
         }
       ],
       "tags": [
-        "allies",
+        "ally",
         "elemental_damage",
         "gain",
-        "grants:purity_of_fire",
         "presence",
-        "purity_of_fire",
-        "resistance",
-        "sceptre",
-        "shrine_sceptre"
+        "resistance"
       ],
       "source": {
         "id": "/us/Sacred_Flame",
@@ -2917,16 +2751,11 @@
         }
       ],
       "tags": [
-        "allies",
+        "ally",
         "attack",
         "fire",
-        "grants:purity_of_fire",
-        "guided_meteoric_shrine",
         "light_radius",
         "presence",
-        "purity_of_fire",
-        "sceptre",
-        "shrine_sceptre",
         "strength"
       ],
       "source": {
@@ -2970,17 +2799,12 @@
         }
       ],
       "tags": [
-        "allies",
+        "ally",
         "attack",
         "cold",
-        "grants:purity_of_ice",
-        "guided_freezing_shrine",
         "intelligence",
         "light_radius",
-        "presence",
-        "purity_of_ice",
-        "sceptre",
-        "shrine_sceptre"
+        "presence"
       ],
       "source": {
         "id": "/us/Guiding_Palm_of_the_Eye",
@@ -3023,17 +2847,12 @@
         }
       ],
       "tags": [
-        "allies",
+        "ally",
         "attack",
         "dexterity",
-        "grants:purity_of_lightning",
-        "guided_tempest_shrine",
         "light_radius",
         "lightning",
-        "presence",
-        "purity_of_lightning",
-        "sceptre",
-        "shrine_sceptre"
+        "presence"
       ],
       "source": {
         "id": "/us/Guiding_Palm_of_the_Mind",
@@ -3076,16 +2895,11 @@
         }
       ],
       "tags": [
-        "allies",
+        "ally",
         "attack",
-        "attributes",
-        "dreaming_gloom_shrine",
-        "grants:impurity",
-        "impurity",
+        "attribute",
         "light_radius",
-        "presence",
-        "sceptre",
-        "shrine_sceptre"
+        "presence"
       ],
       "source": {
         "id": "/us/Palm_of_the_Dreamer",
@@ -3119,12 +2933,10 @@
       ],
       "granted_skills": [],
       "tags": [
-        "changeling_talisman",
         "druidic_prowess",
         "hindered",
         "intelligence",
-        "physical",
-        "talisman"
+        "physical"
       ],
       "source": {
         "id": "/us/Amor_Mandragora",
@@ -3167,13 +2979,9 @@
         }
       ],
       "tags": [
-        "cackling_companions",
-        "familial_talisman",
-        "grants:cackling_companions",
         "intelligence",
-        "minions",
-        "strength",
-        "talisman"
+        "minion",
+        "strength"
       ],
       "source": {
         "id": "/us/Hyssegs_Claw",
@@ -3207,11 +3015,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attributes",
+        "attribute",
         "modifier",
-        "presence",
-        "talisman",
-        "vicious_talisman"
+        "presence"
       ],
       "source": {
         "id": "/us/The_Flesh_Poppet",
@@ -3243,9 +3049,7 @@
       "granted_skills": [],
       "tags": [
         "cold",
-        "lightning",
-        "mace",
-        "plated_mace"
+        "lightning"
       ],
       "source": {
         "id": "/us/Seeing_Stars",
@@ -3278,11 +3082,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "bow",
         "contributes",
         "converted",
-        "fanatic_bow",
-        "hits",
+        "hit",
         "lightning"
       ],
       "source": {
@@ -3326,11 +3128,8 @@
         }
       ],
       "tags": [
-        "compose_requiem",
         "crossbow",
-        "desolate_crossbow",
-        "grants:compose_requiem",
-        "leeches",
+        "leech",
         "physical"
       ],
       "source": {
@@ -3380,15 +3179,9 @@
       ],
       "tags": [
         "fire",
-        "grants:shattering_spite",
-        "grants:spear_throw",
         "hit",
         "lightning",
-        "presence",
-        "pronged_spear",
-        "shattering_spite",
-        "spear",
-        "spear_throw"
+        "presence"
       ],
       "source": {
         "id": "/us/Atziris_Contempt",
@@ -3432,15 +3225,11 @@
         }
       ],
       "tags": [
-        "ashbark_talisman",
         "convert",
         "fire",
-        "grants:molten_crash",
         "magnitude",
-        "molten_crash",
         "presence",
-        "strength",
-        "talisman"
+        "strength"
       ],
       "source": {
         "id": "/us/Fury_of_the_King",
@@ -3472,9 +3261,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attacks",
-        "body_armour",
-        "rusted_cuirass",
+        "attack",
         "stun_threshold",
         "surrounded"
       ],
@@ -3510,10 +3297,8 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "body_armour",
         "elemental",
         "elemental_damage",
-        "fur_plate",
         "intelligence",
         "strength",
         "stun_threshold"
@@ -3549,11 +3334,9 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "bleeding",
-        "body_armour",
+        "bleed",
         "debuffs",
         "hit",
-        "iron_cuirass",
         "physical",
         "slowing",
         "thorns"
@@ -3589,11 +3372,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attributes",
-        "body_armour",
+        "attribute",
         "fire_resistance",
-        "lightning_resistance",
-        "raider_plate"
+        "lightning_resistance"
       ],
       "source": {
         "id": "/us/The_Road_Warrior",
@@ -3626,9 +3407,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "armour",
-        "body_armour",
-        "maraketh_cuirass"
+        "armour"
       ],
       "source": {
         "id": "/us/Titanrot_Cataphract",
@@ -3662,9 +3441,7 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "body_armour",
-        "recouped",
-        "steel_plate",
+        "recoup",
         "strength",
         "stun_threshold"
       ],
@@ -3698,10 +3475,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "body_armour",
         "elemental",
-        "endurance_charge",
-        "full_plate"
+        "endurance_charge"
       ],
       "source": {
         "id": "/us/Kingsguard",
@@ -3735,10 +3510,8 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "body_armour",
         "fire_resistance",
-        "rarity_of_items",
-        "vaal_cuirass"
+        "rarity_of_items"
       ],
       "source": {
         "id": "/us/Greeds_Embrace",
@@ -3770,9 +3543,7 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "body_armour",
-        "champion_cuirass",
-        "critical_hits",
+        "critical_hit",
         "maximum_elemental_resistances",
         "stun_threshold"
       ],
@@ -3805,8 +3576,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "body_armour",
-        "conqueror_plate",
         "stun_threshold"
       ],
       "source": {
@@ -3839,11 +3608,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "body_armour",
-        "critically_hit",
+        "critical_hit",
         "evasion",
         "hit",
-        "leather_vest",
         "rage"
       ],
       "source": {
@@ -3875,10 +3642,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "body_armour",
         "dexterity",
-        "evasion_rating",
-        "quilted_vest"
+        "evasion_rating"
       ],
       "source": {
         "id": "/us/Foxshade",
@@ -3910,10 +3675,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "body_armour",
         "fire_resistance",
-        "ignited",
-        "pathfinder_coat",
+        "ignite",
         "strength"
       ],
       "source": {
@@ -3954,15 +3717,11 @@
         }
       ],
       "tags": [
-        "blink",
-        "body_armour",
         "cooldown_recovery_rate",
         "dexterity",
         "evasion",
         "fire_resistance",
-        "grants:blink",
-        "intelligence",
-        "shrouded_vest"
+        "intelligence"
       ],
       "source": {
         "id": "/us/Sands_of_Silk",
@@ -3997,13 +3756,11 @@
       ],
       "granted_skills": [],
       "tags": [
-        "body_armour",
         "cold_resistance",
         "deflection_rating",
         "dexterity",
         "evasion",
-        "evasion_rating",
-        "rhoahide_coat"
+        "evasion_rating"
       ],
       "source": {
         "id": "/us/Briskwrap",
@@ -4038,11 +3795,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "body_armour",
         "cold_resistance",
         "evasion",
-        "hit",
-        "studded_vest"
+        "hit"
       ],
       "source": {
         "id": "/us/Dustbloom",
@@ -4075,10 +3830,8 @@
       "granted_skills": [],
       "tags": [
         "attribute",
-        "body_armour",
         "evasion",
-        "hits",
-        "scout's_vest"
+        "hit"
       ],
       "source": {
         "id": "/us/The_Rat_Cage",
@@ -4111,13 +3864,11 @@
       ],
       "granted_skills": [],
       "tags": [
-        "body_armour",
         "chaos_resistance",
         "deflection_rating",
         "evasion",
         "evasion_rating",
-        "poisoned",
-        "serpentscale_coat"
+        "poison"
       ],
       "source": {
         "id": "/us/Quatls_Molt",
@@ -4155,12 +3906,10 @@
       "granted_skills": [],
       "tags": [
         "a_maximum_of_75",
-        "body_armour",
         "cold_resistance",
         "evasion",
         "fire_resistance",
-        "lightning_resistance",
-        "smuggler_coat"
+        "lightning_resistance"
       ],
       "source": {
         "id": "/us/Queen_of_the_Forest",
@@ -4196,12 +3945,10 @@
       ],
       "granted_skills": [],
       "tags": [
-        "body_armour",
         "companions",
         "evasion",
         "poison",
-        "spirit",
-        "strider_vest"
+        "spirit"
       ],
       "source": {
         "id": "/us/Yriels_Fostering",
@@ -4237,8 +3984,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "armoured_vest",
-        "body_armour",
         "dexterity",
         "elemental_ailment_threshold",
         "evasion",
@@ -4273,11 +4018,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "body_armour",
         "chaos_resistance",
         "converted",
-        "energy_shield",
-        "tattered_robe"
+        "energy_shield"
       ],
       "source": {
         "id": "/us/Ghostwrithe",
@@ -4308,11 +4051,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "body_armour",
         "energy_shield",
         "energy_shield_recharge",
-        "energy_shield_recharge_rate",
-        "feathered_robe"
+        "energy_shield_recharge_rate"
       ],
       "source": {
         "id": "/us/Bitterbloom",
@@ -4343,10 +4084,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "body_armour",
         "cold_resistance",
         "energy_shield",
-        "hexer's_robe",
         "intelligence",
         "sacrifice"
       ],
@@ -4381,10 +4120,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "body_armour",
-        "bone_raiment",
         "energy_shield",
-        "minions",
+        "minion",
         "resistance",
         "revive"
       ],
@@ -4418,13 +4155,11 @@
       ],
       "granted_skills": [],
       "tags": [
-        "body_armour",
         "energy_shield",
         "fire",
         "fire_resistance",
         "ignite",
         "physical",
-        "silk_robe",
         "thorns"
       ],
       "source": {
@@ -4458,11 +4193,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "body_armour",
         "elemental",
         "energy_shield",
-        "recouped",
-        "silk_robe"
+        "recoup"
       ],
       "source": {
         "id": "/us/Temporalis",
@@ -4496,11 +4229,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "body_armour",
         "energy_shield",
         "energy_shield_recharge",
         "intelligence",
-        "keth_raiment",
         "lightning_resistance",
         "slower_start_of_energy_shield_recharge"
       ],
@@ -4534,13 +4265,11 @@
       ],
       "granted_skills": [],
       "tags": [
-        "body_armour",
         "chaos_resistance",
         "energy_shield",
         "intelligence",
         "recharges",
-        "strength",
-        "votive_raiment"
+        "strength"
       ],
       "source": {
         "id": "/us/Tetzlapokals_Desire",
@@ -4579,12 +4308,8 @@
         }
       ],
       "tags": [
-        "altar_robe",
-        "body_armour",
         "energy_shield",
-        "grants:life_remnants",
-        "leeched_as_life",
-        "life_remnants"
+        "life_leech"
       ],
       "source": {
         "id": "/us/The_Covenant",
@@ -4616,9 +4341,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "body_armour",
         "cold_resistance",
-        "elementalist_robe",
         "energy_shield",
         "energy_shield_recharge_rate",
         "recharge_delay",
@@ -4656,10 +4379,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "body_armour",
         "energy_shield",
-        "minions",
-        "plated_raiment",
+        "minion",
         "unholy_might"
       ],
       "source": {
@@ -4698,9 +4419,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "body_armour",
-        "energy_shield",
-        "havoc_raiment"
+        "energy_shield"
       ],
       "source": {
         "id": "/us/Cloak_of_Defiance",
@@ -4737,11 +4456,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "body_armour",
         "elemental_damage",
         "energy_shield",
         "energy_shield_recharge_rate",
-        "enlightened_robe",
         "intelligence",
         "spirit"
       ],
@@ -4777,9 +4494,7 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "bleeding",
-        "body_armour",
-        "chain_mail",
+        "bleed",
         "evasion",
         "stun_threshold"
       ],
@@ -4816,13 +4531,11 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "body_armour",
         "cold_resistance",
         "evasion",
         "fire_resistance",
-        "hits",
-        "low_life",
-        "rogue_armour"
+        "hit",
+        "low_life"
       ],
       "source": {
         "id": "/us/The_Barrow_Dweller",
@@ -4855,13 +4568,11 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "body_armour",
         "evasion",
         "iron_grip",
         "iron_will",
         "strength",
-        "stun_threshold",
-        "vagabond_armour"
+        "stun_threshold"
       ],
       "source": {
         "id": "/us/Irongrasp",
@@ -4895,9 +4606,7 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "attributes",
-        "body_armour",
-        "cloaked_mail",
+        "attribute",
         "evasion",
         "spirit"
       ],
@@ -4933,10 +4642,8 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "body_armour",
         "evasion",
-        "explorer_armour",
-        "flasks",
+        "flask",
         "physical",
         "stun_threshold",
         "thorns"
@@ -4972,12 +4679,10 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "body_armour",
         "chaos_resistance",
-        "charms",
+        "charm",
         "elemental",
-        "evasion",
-        "explorer_armour"
+        "evasion"
       ],
       "source": {
         "id": "/us/Pragmatism",
@@ -5012,11 +4717,9 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "body_armour",
         "evasion",
         "lightning_damage",
-        "lightning_resistance",
-        "scale_mail"
+        "lightning_resistance"
       ],
       "source": {
         "id": "/us/Doryanis_Prototype",
@@ -5052,10 +4755,8 @@
       "tags": [
         "ailment_threshold",
         "armour",
-        "body_armour",
         "chaos_resistance",
         "evasion",
-        "knight_armour",
         "reserved"
       ],
       "source": {
@@ -5092,11 +4793,9 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "body_armour",
         "evasion",
-        "hits",
+        "hit",
         "intimidated",
-        "knight_armour",
         "presence"
       ],
       "source": {
@@ -5138,15 +4837,11 @@
         }
       ],
       "tags": [
-        "ancestral_mail",
         "armour",
-        "body_armour",
         "dexterity",
         "evasion",
-        "grants:valako's_charge",
-        "hits",
-        "lightning_resistance",
-        "valako's_charge"
+        "hit",
+        "lightning_resistance"
       ],
       "source": {
         "id": "/us/Lightning_Coil",
@@ -5200,15 +4895,7 @@
         }
       ],
       "tags": [
-        "body_armour",
         "elemental",
-        "grants:herald_of_ash",
-        "grants:herald_of_ice",
-        "grants:herald_of_thunder",
-        "herald_of_ash",
-        "herald_of_ice",
-        "herald_of_thunder",
-        "heroic_armour",
         "presence"
       ],
       "source": {
@@ -5241,10 +4928,8 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "body_armour",
         "elemental",
         "energy_shield",
-        "pilgrim_vestments",
         "spirit"
       ],
       "source": {
@@ -5278,10 +4963,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "body_armour",
         "cold_resistance",
         "intelligence",
-        "mail_vestments",
         "strength",
         "thorns_damage"
       ],
@@ -5316,12 +4999,10 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "body_armour",
         "chaos_resistance",
         "energy_shield",
         "fire_resistance",
-        "flask",
-        "shaman_mantle"
+        "flask"
       ],
       "source": {
         "id": "/us/Husk_of_Dreams",
@@ -5356,12 +5037,10 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "body_armour",
         "energy_shield",
         "intelligence",
-        "sacrificial_mantle",
         "strength",
-        "totems"
+        "totem"
       ],
       "source": {
         "id": "/us/Soul_Mantle",
@@ -5396,11 +5075,9 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "body_armour",
-        "cleric_vestments",
         "energy_shield",
         "energy_shield_recharge_rate",
-        "hits",
+        "hit",
         "ignite"
       ],
       "source": {
@@ -5438,14 +5115,12 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "body_armour",
         "cold_resistance",
         "energy_shield",
         "energy_shield_recharge_rate",
         "fire_resistance",
         "gain",
-        "spirit",
-        "tideseer_mantle"
+        "spirit"
       ],
       "source": {
         "id": "/us/Waveshaper",
@@ -5478,9 +5153,7 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "body_armour",
         "energy_shield",
-        "gilded_vestments",
         "life_leech",
         "overflow"
       ],
@@ -5519,12 +5192,10 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "body_armour",
         "chaos_resistance",
-        "corvus_mantle",
         "energy_shield",
         "intelligence",
-        "recouped",
+        "recoup",
         "spirit",
         "strength"
       ],
@@ -5559,10 +5230,8 @@
       "granted_skills": [],
       "tags": [
         "aggravated",
-        "body_armour",
         "dexterity",
-        "energy_shield",
-        "hermit_garb"
+        "energy_shield"
       ],
       "source": {
         "id": "/us/Apron_of_Emiran",
@@ -5595,13 +5264,11 @@
       ],
       "granted_skills": [],
       "tags": [
-        "body_armour",
         "dexterity",
         "evasion",
         "fire_resistance",
         "light_radius",
-        "smoke_cloud",
-        "waxed_jacket"
+        "smoke_cloud"
       ],
       "source": {
         "id": "/us/Gloomform",
@@ -5636,15 +5303,13 @@
       "granted_skills": [],
       "tags": [
         "all_damage",
-        "body_armour",
         "chill",
         "cold_resistance",
         "contributes",
         "energy_shield",
         "faster_start_of_energy_shield_recharge",
-        "hits",
-        "lightning_resistance",
-        "marabout_garb"
+        "hit",
+        "lightning_resistance"
       ],
       "source": {
         "id": "/us/Sierran_Inheritance",
@@ -5675,13 +5340,11 @@
       ],
       "granted_skills": [],
       "tags": [
-        "body_armour",
         "energy_shield",
         "evasion_rating",
         "hit",
         "lightning_resistance",
-        "recently",
-        "wayfarer_jacket"
+        "recently"
       ],
       "source": {
         "id": "/us/The_Dancing_Mirage",
@@ -5713,13 +5376,10 @@
       ],
       "granted_skills": [],
       "tags": [
-        "anchorite_garb",
-        "body_armour",
         "hit",
         "lightning_resistance",
         "power_charge",
-        "power_charges",
-        "shocks"
+        "shock"
       ],
       "source": {
         "id": "/us/Redflare_Conduit",
@@ -5754,9 +5414,7 @@
       "granted_skills": [],
       "tags": [
         "attribute",
-        "body_armour",
         "energy_shield",
-        "scalper's_jacket",
         "soul_eater"
       ],
       "source": {
@@ -5800,13 +5458,9 @@
         }
       ],
       "tags": [
-        "assassin_garb",
-        "body_armour",
         "chaos_resistance",
-        "curses",
-        "energy_shield",
-        "grants:withering_presence",
-        "withering_presence"
+        "curse",
+        "energy_shield"
       ],
       "source": {
         "id": "/us/Cospris_Will",
@@ -5840,11 +5494,9 @@
       "tags": [
         "armour",
         "dexterity",
-        "helmet",
         "hit",
         "rage",
         "rarity_of_items",
-        "rusted_greathelm",
         "stun_threshold"
       ],
       "source": {
@@ -5878,11 +5530,9 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "helmet",
         "hit",
         "rage",
         "rarity_of_items",
-        "rusted_greathelm",
         "strength"
       ],
       "source": {
@@ -5917,8 +5567,6 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "helmet",
-        "soldier_greathelm",
         "unwavering_stance"
       ],
       "source": {
@@ -5953,9 +5601,7 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "helmet",
-        "light_radius",
-        "wrapped_greathelm"
+        "light_radius"
       ],
       "source": {
         "id": "/us/Black_Sun_Crest",
@@ -5983,10 +5629,7 @@
         "moments of blood and battle, we truly live."
       ],
       "granted_skills": [],
-      "tags": [
-        "helmet",
-        "spired_greathelm"
-      ],
+      "tags": [],
       "source": {
         "id": "/us/Thrillsteel",
         "url": "https://poe2db.tw/us/Thrillsteel",
@@ -6018,11 +5661,8 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "corpses",
-        "elite_greathelm",
-        "helmet",
+        "corpse",
         "strength",
-        "warcries",
         "warcry"
       ],
       "source": {
@@ -6058,12 +5698,10 @@
       "tags": [
         "accuracy",
         "fire_resistance",
-        "helmet",
-        "hits",
-        "leeching_life",
+        "hit",
+        "life_leech",
         "light_radius",
-        "same_amount",
-        "warrior_greathelm"
+        "same_amount"
       ],
       "source": {
         "id": "/us/Corona_of_the_Red_Sun",
@@ -6096,8 +5734,6 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "fierce_greathelm",
-        "helmet",
         "presence",
         "reserved",
         "stun_threshold"
@@ -6133,9 +5769,7 @@
       "granted_skills": [],
       "tags": [
         "chaos_resistance",
-        "cold_resistance",
-        "helmet",
-        "shabby_hood"
+        "cold_resistance"
       ],
       "source": {
         "id": "/us/Innsmouth",
@@ -6166,8 +5800,6 @@
       "granted_skills": [],
       "tags": [
         "elemental",
-        "felt_cap",
-        "helmet",
         "rarity_of_items"
       ],
       "source": {
@@ -6201,9 +5833,7 @@
       "tags": [
         "evasion",
         "fire_resistance",
-        "helmet",
-        "ignited",
-        "lace_hood",
+        "ignite",
         "light_radius"
       ],
       "source": {
@@ -6236,11 +5866,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "charms",
+        "charm",
         "dexterity",
-        "evasion",
-        "helmet",
-        "hunter_hood"
+        "evasion"
       ],
       "source": {
         "id": "/us/Elevore",
@@ -6274,10 +5902,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attributes",
-        "helmet",
-        "surrounded",
-        "viper_cap"
+        "attribute",
+        "surrounded"
       ],
       "source": {
         "id": "/us/Constricting_Command",
@@ -6310,10 +5936,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "corsair_cap",
         "critical_hit",
         "evasion",
-        "helmet",
         "hit",
         "lightning_resistance",
         "rarity_of_items"
@@ -6352,9 +5976,7 @@
         "critical_hit",
         "dexterity",
         "evasion",
-        "helmet",
-        "hits",
-        "leatherbound_hood",
+        "hit",
         "low_life"
       ],
       "source": {
@@ -6392,14 +6014,45 @@
         "cold_resistance",
         "evasion",
         "fire_resistance",
-        "helmet",
-        "magnitude",
-        "velvet_cap"
+        "magnitude"
       ],
       "source": {
         "id": "/us/Heatshiver",
         "url": "https://poe2db.tw/us/Heatshiver",
         "label": "Heatshiver Velvet Cap"
+      }
+    },
+    "/us/Myris_Uxor": {
+      "key": "Myris Uxor||Covert Hood",
+      "name": "Myris Uxor",
+      "base": "Covert Hood",
+      "slot": "Helmet",
+      "requirements": {
+        "level": 56,
+        "str": null,
+        "dex": 79,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "49% increased Evasion Rating",
+        "+135 to Accuracy Rating",
+        "+55 to maximum Mana",
+        "100% increased CullingStrike Threshold"
+      ],
+      "flavour_text": [
+        "The end always comes sooner than we think."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "accuracy",
+        "culling_strike",
+        "evasion"
+      ],
+      "source": {
+        "id": "/us/Myris_Uxor",
+        "url": "https://poe2db.tw/us/Myris_Uxor",
+        "label": "Myris Uxor Covert Hood"
       }
     },
     "/us/Alphas_Howl": {
@@ -6427,10 +6080,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "armoured_cap",
         "cold_resistance",
         "evasion",
-        "helmet",
         "spirit"
       ],
       "source": {
@@ -6464,11 +6115,9 @@
       "granted_skills": [],
       "tags": [
         "energy_shield",
-        "helmet",
         "pain_attunement",
         "physical",
-        "thorns",
-        "twig_circlet"
+        "thorns"
       ],
       "source": {
         "id": "/us/Crown_of_Thorns",
@@ -6502,9 +6151,7 @@
       "tags": [
         "chaos_resistance",
         "energy_shield",
-        "helmet",
-        "intelligence",
-        "wicker_tiara"
+        "intelligence"
       ],
       "source": {
         "id": "/us/The_Devouring_Diadem",
@@ -6537,11 +6184,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "beaded_circlet",
         "critical_hit",
         "eldritch_battery",
         "energy_shield",
-        "helmet",
         "lightning_resistance",
         "rarity_of_items"
       ],
@@ -6575,11 +6220,9 @@
       "granted_skills": [],
       "tags": [
         "blinded",
-        "chain_tiara",
         "critical_weakness",
         "dexterity",
         "energy_shield",
-        "helmet",
         "presence"
       ],
       "source": {
@@ -6614,9 +6257,7 @@
       "granted_skills": [],
       "tags": [
         "chaos_resistance",
-        "energy_shield",
-        "feathered_tiara",
-        "helmet"
+        "energy_shield"
       ],
       "source": {
         "id": "/us/Mask_of_the_Stitched_Demon",
@@ -6650,8 +6291,6 @@
       "tags": [
         "energy_shield",
         "gain",
-        "gold_circlet",
-        "helmet",
         "rarity_of_items"
       ],
       "source": {
@@ -6688,12 +6327,10 @@
       "granted_skills": [],
       "tags": [
         "accuracy",
-        "attacks",
-        "attributes",
+        "attack",
+        "attribute",
         "energy_shield",
-        "fire_resistance",
-        "helmet",
-        "vermeil_circlet"
+        "fire_resistance"
       ],
       "source": {
         "id": "/us/Crown_of_Eyes",
@@ -6728,9 +6365,7 @@
       "granted_skills": [],
       "tags": [
         "damage",
-        "energy_shield",
-        "helmet",
-        "jade_tiara"
+        "energy_shield"
       ],
       "source": {
         "id": "/us/Scolds_Bridle",
@@ -6763,9 +6398,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "energy_shield",
-        "helmet",
-        "magus_tiara"
+        "energy_shield"
       ],
       "source": {
         "id": "/us/Indigon",
@@ -6796,9 +6429,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "brimmed_helm",
         "dexterity",
-        "helmet",
         "intelligence",
         "strength"
       ],
@@ -6806,6 +6437,57 @@
         "id": "/us/Greymake",
         "url": "https://poe2db.tw/us/Greymake",
         "label": "Greymake Brimmed Helm"
+      }
+    },
+    "/us/Erians_Cobble": {
+      "key": "Erian's Cobble||Guarded Helm",
+      "name": "Erian's Cobble",
+      "base": "Guarded Helm",
+      "slot": "Helmet",
+      "requirements": {
+        "level": 11,
+        "str": 11,
+        "dex": 11,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "+9 to Armour",
+        "+1 to Evasion Rating",
+        "+2 to maximum EnergyShield",
+        "+5 to Accuracy Rating",
+        "+23 to maximum Life",
+        "+15 to maximum Mana",
+        "8% increased ItemRarity found",
+        "19% increased Critical Chance",
+        "+8 to Strength",
+        "+3 to Dexterity",
+        "+6 to Intelligence",
+        "+2% to Resistances",
+        "+1% to Resistances",
+        "2.9 Life Regeneration per second"
+      ],
+      "flavour_text": [
+        "Sometimes patching up your",
+        "equipment gets out of hand."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "accuracy",
+        "armour",
+        "cold_resistance",
+        "critical_hit",
+        "dexterity",
+        "energy_shield",
+        "fire_resistance",
+        "intelligence",
+        "rarity_of_items",
+        "strength"
+      ],
+      "source": {
+        "id": "/us/Erians_Cobble",
+        "url": "https://poe2db.tw/us/Erians_Cobble",
+        "label": "Erian's Cobble Guarded Helm"
       }
     },
     "/us/Ironride": {
@@ -6834,9 +6516,7 @@
       "tags": [
         "armour",
         "evasion",
-        "helmet",
-        "lightning_resistance",
-        "visored_helm"
+        "lightning_resistance"
       ],
       "source": {
         "id": "/us/Ironride",
@@ -6870,12 +6550,9 @@
       "tags": [
         "accuracy",
         "armour",
-        "attacks",
-        "cowled_helm",
+        "attack",
         "critical_hit",
-        "critically_hit",
-        "evasion",
-        "helmet"
+        "evasion"
       ],
       "source": {
         "id": "/us/The_Smiling_Knight",
@@ -6910,9 +6587,7 @@
         "armour",
         "damage_with_hits",
         "evasion",
-        "helmet",
-        "rare_or_unique",
-        "shielded_helm"
+        "rare_or_unique"
       ],
       "source": {
         "id": "/us/The_Vile_Knight",
@@ -6945,10 +6620,8 @@
       "tags": [
         "accuracy",
         "armour",
-        "closed_helm",
         "critical_hit",
         "evasion",
-        "helmet",
         "perfect_timing"
       ],
       "source": {
@@ -6988,9 +6661,7 @@
         "armour",
         "axes",
         "critical_hit",
-        "decorated_helm",
         "evasion",
-        "helmet",
         "maces",
         "swords"
       ],
@@ -7023,8 +6694,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "helmet",
-        "iron_crown",
         "rarity_of_items"
       ],
       "source": {
@@ -7062,8 +6731,6 @@
         "chill",
         "effect",
         "energy_shield",
-        "helmet",
-        "horned_crown",
         "ignite",
         "magnitude",
         "shock"
@@ -7102,10 +6769,8 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "cultist_crown",
         "energy_shield",
-        "helmet",
-        "hits",
+        "hit",
         "physical",
         "rarity_of_items",
         "retaliate_against_all",
@@ -7143,11 +6808,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attributes",
+        "attribute",
         "elemental",
-        "helmet",
-        "light_radius",
-        "martyr_crown"
+        "light_radius"
       ],
       "source": {
         "id": "/us/Veil_of_the_Night",
@@ -7178,8 +6841,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "heavy_crown",
-        "helmet",
         "intelligence",
         "light_radius",
         "rarity_of_items"
@@ -7216,9 +6877,7 @@
       "tags": [
         "armour",
         "energy_shield",
-        "helmet",
-        "hits",
-        "spiritbone_crown"
+        "hit"
       ],
       "source": {
         "id": "/us/Keeper_of_the_Arc",
@@ -7250,9 +6909,7 @@
       "granted_skills": [],
       "tags": [
         "chaos_resistance",
-        "elemental",
-        "helmet",
-        "hewn_mask"
+        "elemental"
       ],
       "source": {
         "id": "/us/The_Hollow_Mask",
@@ -7289,10 +6946,8 @@
         "blood_magic",
         "critical_hit_chance",
         "energy_shield",
-        "face_mask",
-        "helmet",
         "intelligence",
-        "spells",
+        "spell",
         "strength"
       ],
       "source": {
@@ -7325,10 +6980,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "allies",
+        "ally",
         "dexterity",
-        "helmet",
-        "hooded_mask",
         "presence"
       ],
       "source": {
@@ -7363,12 +7016,9 @@
       "granted_skills": [],
       "tags": [
         "critical_hit",
-        "critical_hits",
         "dexterity",
         "energy_shield",
-        "helmet",
-        "intelligence",
-        "veiled_mask"
+        "intelligence"
       ],
       "source": {
         "id": "/us/Atsaks_Sight",
@@ -7404,9 +7054,7 @@
         "attribute",
         "chaos_resistance",
         "critical_hit",
-        "energy_shield",
-        "helmet",
-        "tribal_mask"
+        "energy_shield"
       ],
       "source": {
         "id": "/us/The_Vertex",
@@ -7444,9 +7092,7 @@
         "chaos_resistance",
         "cold_resistance",
         "fire_resistance",
-        "helmet",
-        "lightning_resistance",
-        "tribal_mask"
+        "lightning_resistance"
       ],
       "source": {
         "id": "/us/Glimpse_of_Chaos",
@@ -7485,10 +7131,8 @@
         "contributes",
         "elemental",
         "energy_shield",
-        "helmet",
-        "hits",
-        "magnitudes",
-        "solid_mask"
+        "hit",
+        "magnitudes"
       ],
       "source": {
         "id": "/us/The_Three_Dragons",
@@ -7525,10 +7169,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attacks",
-        "death_mask",
+        "attack",
         "energy_shield",
-        "helmet",
         "lightning_resistance"
       ],
       "source": {
@@ -7564,11 +7206,9 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "attacks",
-        "giant's_blood",
-        "gloves",
+        "attack",
+        "giants_blood",
         "physical",
-        "riveted_mitts",
         "strength"
       ],
       "source": {
@@ -7603,9 +7243,7 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "gloves",
-        "skill_speed",
-        "tempered_mitts"
+        "skill_speed"
       ],
       "source": {
         "id": "/us/Lochtonial_Caress",
@@ -7638,10 +7276,8 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "bolstered_mitts",
         "critical_damage_bonus",
-        "critical_hits",
-        "gloves",
+        "critical_hit",
         "physical",
         "thorns"
       ],
@@ -7678,10 +7314,7 @@
       "tags": [
         "armour",
         "critical_hit",
-        "critical_hits",
-        "gloves",
-        "intelligence",
-        "moulded_mitts"
+        "intelligence"
       ],
       "source": {
         "id": "/us/Atziris_Acuity",
@@ -7715,9 +7348,7 @@
       "tags": [
         "armour",
         "charge",
-        "gloves",
         "hit",
-        "moulded_mitts",
         "rage"
       ],
       "source": {
@@ -7753,9 +7384,7 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "gloves",
-        "strength",
-        "titan_mitts"
+        "strength"
       ],
       "source": {
         "id": "/us/Empires_Grasp",
@@ -7786,13 +7415,11 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attacks",
+        "attack",
         "critical_damage_bonus",
         "critical_hit",
-        "gloves",
         "physical",
-        "suede_bracers",
-        "weapons"
+        "weapon"
       ],
       "source": {
         "id": "/us/Northpaw",
@@ -7825,13 +7452,11 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attacks",
+        "attack",
         "chill",
         "cold_resistance",
         "evasion",
-        "firm_bracers",
         "freeze",
-        "gloves",
         "magnitude"
       ],
       "source": {
@@ -7866,9 +7491,7 @@
       "tags": [
         "accuracy",
         "evasion",
-        "gloves",
-        "intelligence",
-        "sectioned_bracers"
+        "intelligence"
       ],
       "source": {
         "id": "/us/Idle_Hands",
@@ -7905,11 +7528,8 @@
       "tags": [
         "chaos_resistance",
         "evasion",
-        "gloves",
         "hit",
-        "poison",
-        "poisons",
-        "spined_bracers"
+        "poison"
       ],
       "source": {
         "id": "/us/Snakebite",
@@ -7947,8 +7567,6 @@
         "critical_hit",
         "dexterity",
         "evasion",
-        "fine_bracers",
-        "gloves",
         "rerolled"
       ],
       "source": {
@@ -7986,9 +7604,7 @@
       "granted_skills": [],
       "tags": [
         "converted",
-        "elemental_damage",
-        "gloves",
-        "torn_gloves"
+        "elemental_damage"
       ],
       "source": {
         "id": "/us/Painters_Servant",
@@ -8024,9 +7640,7 @@
         "cold_resistance",
         "energy_shield",
         "fire_resistance",
-        "gloves",
-        "magnitude",
-        "sombre_gloves"
+        "magnitude"
       ],
       "source": {
         "id": "/us/Candlemaker",
@@ -8059,9 +7673,7 @@
       "granted_skills": [],
       "tags": [
         "energy_shield",
-        "gloves",
-        "intelligence",
-        "stitched_gloves"
+        "intelligence"
       ],
       "source": {
         "id": "/us/Doedres_Tenure",
@@ -8095,9 +7707,7 @@
         "dexterity",
         "electrocution",
         "energy_shield",
-        "gloves",
-        "hits",
-        "jewelled_gloves"
+        "hit"
       ],
       "source": {
         "id": "/us/Kitokos_Current",
@@ -8131,9 +7741,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "energy_shield",
-        "gloves",
-        "intricate_gloves"
+        "energy_shield"
       ],
       "source": {
         "id": "/us/Demon_Stitcher",
@@ -8169,9 +7777,7 @@
         "cold_resistance",
         "critical_hit",
         "energy_shield",
-        "gloves",
-        "intelligence",
-        "pauascale_gloves"
+        "intelligence"
       ],
       "source": {
         "id": "/us/Nightscale",
@@ -8204,10 +7810,8 @@
       "granted_skills": [],
       "tags": [
         "elemental",
-        "embroidered_gloves",
         "energy_shield",
-        "gloves",
-        "hits",
+        "hit",
         "penetrate",
         "penetrates",
         "rarity_of_items"
@@ -8243,12 +7847,10 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "attacks",
+        "attack",
         "attribute",
         "evasion",
-        "gloves",
-        "physical",
-        "ringmail_gauntlets"
+        "physical"
       ],
       "source": {
         "id": "/us/Jarngreipr",
@@ -8280,8 +7882,6 @@
       "tags": [
         "armour",
         "evasion",
-        "gloves",
-        "layered_gauntlets",
         "lose",
         "rarity_of_items"
       ],
@@ -8317,9 +7917,7 @@
       "tags": [
         "armour",
         "culling_strike",
-        "doubled_gauntlets",
-        "evasion",
-        "gloves"
+        "evasion"
       ],
       "source": {
         "id": "/us/Deathblow",
@@ -8357,9 +7955,7 @@
         "converted",
         "dexterity",
         "evasion",
-        "gloves",
         "lightning_resistance",
-        "plate_gauntlets",
         "strength"
       ],
       "source": {
@@ -8392,10 +7988,8 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "burnished_gauntlets",
         "decimating_strike",
         "evasion",
-        "gloves",
         "intelligence"
       ],
       "source": {
@@ -8434,9 +8028,7 @@
         "armour",
         "chaos_resistance",
         "evasion",
-        "gloves",
-        "lose",
-        "ornate_gauntlets"
+        "lose"
       ],
       "source": {
         "id": "/us/Death_Articulated",
@@ -8472,9 +8064,7 @@
       "tags": [
         "armour",
         "cold_resistance",
-        "energy_shield",
-        "gloves",
-        "rope_cuffs"
+        "energy_shield"
       ],
       "source": {
         "id": "/us/Gravebind",
@@ -8507,14 +8097,12 @@
       ],
       "granted_skills": [],
       "tags": [
-        "aged_cuffs",
         "armour",
-        "chilled",
-        "curses",
+        "chill",
+        "curse",
         "energy_shield",
-        "gloves",
-        "ignited",
-        "shocked"
+        "ignite",
+        "shock"
       ],
       "source": {
         "id": "/us/Shackles_of_the_Wretched",
@@ -8550,8 +8138,6 @@
         "converted",
         "energy_shield",
         "fire_resistance",
-        "gloves",
-        "goldcast_cuffs",
         "intelligence"
       ],
       "source": {
@@ -8591,11 +8177,9 @@
         "attribute",
         "debuffs",
         "energy_shield",
-        "gloves",
         "immobilise",
         "lightning_resistance",
-        "slow_magnitude",
-        "verisium_cuffs"
+        "slow_magnitude"
       ],
       "source": {
         "id": "/us/The_Prisoners_Manacles",
@@ -8629,10 +8213,7 @@
         "all_damage",
         "contributes",
         "energy_shield",
-        "gauze_wraps",
-        "gloves",
         "hit",
-        "hits",
         "poison"
       ],
       "source": {
@@ -8668,9 +8249,7 @@
       "tags": [
         "critical_damage_bonus",
         "energy_shield",
-        "flasks",
-        "gloves",
-        "linen_wraps"
+        "flask"
       ],
       "source": {
         "id": "/us/Killjoy",
@@ -8708,10 +8287,8 @@
         "critical_hit",
         "energy_shield",
         "exposure",
-        "gloves",
-        "igniting",
-        "linen_wraps",
-        "shocking"
+        "ignite",
+        "shock"
       ],
       "source": {
         "id": "/us/Blessed_Bonds",
@@ -8744,11 +8321,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attacks",
+        "attack",
         "dexterity",
-        "gloves",
-        "intelligence",
-        "spiral_wraps"
+        "intelligence"
       ],
       "source": {
         "id": "/us/Hand_of_Wisdom_and_Action",
@@ -8781,12 +8356,10 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attacks",
+        "attack",
         "converted",
         "energy_shield",
         "energy_shield_leech",
-        "furtive_wraps",
-        "gloves",
         "intelligence",
         "life_leech",
         "lightning_resistance"
@@ -8830,13 +8403,9 @@
         }
       ],
       "tags": [
-        "crackling_palm",
         "critical_hit",
         "energy_shield",
-        "gloves",
-        "grants:crackling_palm",
-        "lightning_resistance",
-        "utility_wraps"
+        "lightning_resistance"
       ],
       "source": {
         "id": "/us/Thunderfist",
@@ -8868,9 +8437,7 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "attacks",
-        "boots",
-        "rough_greaves",
+        "attack",
         "stun_threshold"
       ],
       "source": {
@@ -8910,10 +8477,6 @@
       ],
       "tags": [
         "armour",
-        "boots",
-        "decompose",
-        "grants:decompose",
-        "iron_greaves",
         "strength"
       ],
       "source": {
@@ -8948,8 +8511,6 @@
       "tags": [
         "ailment",
         "armour",
-        "boots",
-        "bronze_greaves",
         "hit"
       ],
       "source": {
@@ -8982,9 +8543,7 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "attribute",
-        "boots",
-        "trimmed_greaves"
+        "attribute"
       ],
       "source": {
         "id": "/us/Trampletoe",
@@ -9016,11 +8575,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "boots",
         "fire_resistance",
-        "ignited_ground",
-        "ignites",
-        "stone_greaves"
+        "ignite",
+        "ignited_ground"
       ],
       "source": {
         "id": "/us/Birth_of_Fury",
@@ -9052,9 +8609,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "boots",
         "critical_hit",
-        "laced_boots",
         "physical",
         "stun_threshold",
         "thorns"
@@ -9090,9 +8645,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "boots",
         "dexterity",
-        "embossed_boots",
         "evasion",
         "hit",
         "lightning_resistance",
@@ -9128,10 +8681,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "boots",
         "dexterity",
         "evasion",
-        "lizardscale_boots",
         "pinning"
       ],
       "source": {
@@ -9164,12 +8715,10 @@
       ],
       "granted_skills": [],
       "tags": [
-        "boots",
         "energy_shield",
         "energy_shield_recharge_rate",
         "faster_start_of_energy_shield_recharge",
-        "intelligence",
-        "straw_sandals"
+        "intelligence"
       ],
       "source": {
         "id": "/us/Luminous_Pace",
@@ -9200,11 +8749,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "boots",
         "dexterity",
         "energy_shield",
-        "slows",
-        "wrapped_sandals"
+        "slows"
       ],
       "source": {
         "id": "/us/Wanderlust",
@@ -9237,10 +8784,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "boots",
         "energy_shield",
-        "lattice_sandals",
-        "minions"
+        "minion"
       ],
       "source": {
         "id": "/us/Bones_of_Ullr",
@@ -9273,13 +8818,11 @@
       ],
       "granted_skills": [],
       "tags": [
-        "boots",
         "dexterity",
         "energy_shield",
         "intelligence",
         "low_life",
         "rarity",
-        "silk_slippers",
         "strength"
       ],
       "source": {
@@ -9313,10 +8856,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "boots",
-        "curses",
+        "curse",
         "energy_shield",
-        "feathered_sandals",
         "intelligence"
       ],
       "source": {
@@ -9351,10 +8892,8 @@
       "tags": [
         "ailment_threshold",
         "armour",
-        "boots",
         "evasion",
         "iron_reflexes",
-        "mail_sabatons",
         "stun_threshold"
       ],
       "source": {
@@ -9391,11 +8930,8 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "boots",
-        "braced_sabatons",
         "evasion",
         "frenzy_charge",
-        "frenzy_charges",
         "light_radius",
         "lightning_resistance"
       ],
@@ -9431,12 +8967,10 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "boots",
         "chill",
         "evasion",
         "freeze",
         "shock",
-        "stacked_sabatons",
         "stun_recovery"
       ],
       "source": {
@@ -9480,13 +9014,9 @@
       ],
       "tags": [
         "armour",
-        "black_powder_blitz",
-        "boots",
-        "covered_sabatons",
         "deflection_rating",
         "evasion",
         "fire_resistance",
-        "grants:black_powder_blitz",
         "rarity_of_items",
         "stun_threshold"
       ],
@@ -9521,10 +9051,8 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "attacks",
-        "boots",
+        "attack",
         "energy_shield",
-        "secured_leggings",
         "shocked_ground"
       ],
       "source": {
@@ -9558,10 +9086,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "boots",
         "chaos_resistance",
-        "energy_shield",
-        "threaded_shoes"
+        "energy_shield"
       ],
       "source": {
         "id": "/us/Ghostmarch",
@@ -9594,13 +9120,10 @@
       ],
       "granted_skills": [],
       "tags": [
-        "boots",
         "critical_damage_bonus",
         "energy_shield",
-        "hunting_shoes",
         "intelligence",
-        "power_charge",
-        "power_charges"
+        "power_charge"
       ],
       "source": {
         "id": "/us/Powertread",
@@ -9632,12 +9155,10 @@
       ],
       "granted_skills": [],
       "tags": [
-        "bleeding",
-        "boots",
+        "bleed",
         "energy_shield",
         "presence",
-        "thorns",
-        "velour_shoes"
+        "thorns"
       ],
       "source": {
         "id": "/us/Beetlebite",
@@ -9677,10 +9198,6 @@
       ],
       "tags": [
         "armour",
-        "grants:raise_shield",
-        "raise_shield",
-        "shield",
-        "splintered_tower_shield",
         "strength",
         "stun_threshold"
       ],
@@ -9720,10 +9237,6 @@
         }
       ],
       "tags": [
-        "grants:raise_shield",
-        "painted_tower_shield",
-        "raise_shield",
-        "shield",
         "strength",
         "stun_threshold"
       ],
@@ -9764,14 +9277,10 @@
       ],
       "tags": [
         "armour",
-        "blocked",
-        "braced_tower_shield",
+        "block",
         "chaos_resistance",
         "culled",
-        "grants:raise_shield",
-        "hits",
-        "raise_shield",
-        "shield"
+        "hit"
       ],
       "source": {
         "id": "/us/Doomgate",
@@ -9810,12 +9319,8 @@
       ],
       "tags": [
         "armour",
-        "barricade_tower_shield",
         "elemental",
-        "exposure",
-        "grants:raise_shield",
-        "raise_shield",
-        "shield"
+        "exposure"
       ],
       "source": {
         "id": "/us/Window_to_Paradise",
@@ -9853,12 +9358,8 @@
       ],
       "tags": [
         "armour",
-        "blocking",
-        "grants:raise_shield",
-        "poisons",
-        "raise_shield",
-        "rampart_tower_shield",
-        "shield"
+        "block",
+        "poison"
       ],
       "source": {
         "id": "/us/Lycosidae",
@@ -9897,12 +9398,8 @@
       ],
       "tags": [
         "armour",
-        "grants:raise_shield",
-        "heraldric_tower_shield",
         "power",
         "presence",
-        "raise_shield",
-        "shield",
         "strength",
         "stun_threshold"
       ],
@@ -9947,15 +9444,9 @@
       ],
       "tags": [
         "armour",
-        "blocked",
-        "cast_on_block",
-        "crucible_tower_shield",
+        "block",
         "damage",
-        "grants:cast_on_block",
-        "grants:raise_shield",
-        "hits",
-        "raise_shield",
-        "shield"
+        "hit"
       ],
       "source": {
         "id": "/us/Svalinn",
@@ -9997,13 +9488,9 @@
       ],
       "tags": [
         "armour",
-        "blacksteel_tower_shield",
         "chance_to_block",
         "chaos_resistance",
         "fire_resistance",
-        "grants:raise_shield",
-        "raise_shield",
-        "shield",
         "stun_threshold"
       ],
       "source": {
@@ -10047,11 +9534,7 @@
       "tags": [
         "armour",
         "evasion",
-        "grants:raise_shield",
-        "hardwood_targe",
-        "lose",
-        "raise_shield",
-        "shield"
+        "lose"
       ],
       "source": {
         "id": "/us/Arvils_Wheel",
@@ -10090,12 +9573,8 @@
       ],
       "tags": [
         "cold_resistance",
-        "crescent_targe",
         "dexterity",
         "fire_resistance",
-        "grants:raise_shield",
-        "raise_shield",
-        "shield",
         "strength"
       ],
       "source": {
@@ -10134,13 +9613,9 @@
       ],
       "tags": [
         "armour",
-        "blazon_crest_shield",
-        "blocked",
+        "block",
         "energy_shield",
-        "grants:raise_shield",
-        "raise_shield",
-        "recouped",
-        "shield"
+        "recoup"
       ],
       "source": {
         "id": "/us/Alkem_Eira",
@@ -10179,11 +9654,7 @@
       "tags": [
         "armour",
         "chaos_resistance",
-        "energy_shield",
-        "grants:raise_shield",
-        "raise_shield",
-        "shield",
-        "sigil_crest_shield"
+        "energy_shield"
       ],
       "source": {
         "id": "/us/Oaksworn",
@@ -10222,13 +9693,9 @@
       ],
       "tags": [
         "cold_resistance",
-        "emblem_crest_shield",
         "fire_resistance",
-        "grants:raise_shield",
         "lightning_resistance",
-        "maximum_resistances",
-        "raise_shield",
-        "shield"
+        "maximum_resistances"
       ],
       "source": {
         "id": "/us/Saffells_Frame",
@@ -10269,11 +9736,7 @@
         "armour",
         "cooldown_recovery_rate",
         "energy_shield",
-        "grants:raise_shield",
-        "intelligence",
-        "jingling_crest_shield",
-        "raise_shield",
-        "shield"
+        "intelligence"
       ],
       "source": {
         "id": "/us/Crest_of_Ardura",
@@ -10309,16 +9772,53 @@
       ],
       "tags": [
         "everlasting_sacrifice",
-        "grants:raise_shield",
-        "omen_crest_shield",
-        "raise_shield",
-        "shield",
         "soul_cores"
       ],
       "source": {
         "id": "/us/Mahuxotls_Machination",
         "url": "https://poe2db.tw/us/Mahuxotls_Machination",
         "label": "Mahuxotl's Machination Omen Crest Shield"
+      }
+    },
+    "/us/Rise_of_the_Phoenix": {
+      "key": "Rise of the Phoenix||Omen Crest Shield",
+      "name": "Rise of the Phoenix",
+      "base": "Omen Crest Shield",
+      "slot": "Shield",
+      "requirements": {
+        "level": 36,
+        "str": 30,
+        "dex": null,
+        "int": 30
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "+5% to MaximumResistances",
+        "+22% to Resistances",
+        "+25% to Resistances while on LowLife",
+        "Regenerate 3% of maximum Life per second",
+        "Regenerate 3% of maximum Life per second while on LowLife"
+      ],
+      "flavour_text": [
+        "My bearer shall be guarded by flame,",
+        "for I am the phoenix, forever radiant in glory."
+      ],
+      "granted_skills": [
+        {
+          "name": "Raise Shield",
+          "raw": "Raise Shield",
+          "icon": "https://web.poecdn.com/gen/image/WzIxLDE0LHsiayI6IjJEQXJ0L1NraWxsSWNvbnMvQnJ1dGVTaGllbGRCbG9jayIsInJlYWxtIjoicG9lMiJ9XQ/117cb43abb/BruteShieldBlock.png"
+        }
+      ],
+      "tags": [
+        "fire_resistance",
+        "low_life",
+        "maximum_fire_resistance"
+      ],
+      "source": {
+        "id": "/us/Rise_of_the_Phoenix",
+        "url": "https://poe2db.tw/us/Rise_of_the_Phoenix",
+        "label": "Rise of the Phoenix Omen Crest Shield"
       }
     },
     "/us/Dunkelhalt": {
@@ -10353,14 +9853,10 @@
         }
       ],
       "tags": [
-        "blocked",
-        "buckler",
-        "grants:parry",
-        "hits",
-        "leather_buckler",
+        "block",
+        "hit",
         "magnitude",
-        "parried_debuff",
-        "parry"
+        "parried_debuff"
       ],
       "source": {
         "id": "/us/Dunkelhalt",
@@ -10399,13 +9895,9 @@
         }
       ],
       "tags": [
-        "buckler",
         "elemental",
-        "grants:parry",
         "parried",
-        "parried_debuff",
-        "parry",
-        "wooden_buckler"
+        "parried_debuff"
       ],
       "source": {
         "id": "/us/Nocturne",
@@ -10444,13 +9936,9 @@
         }
       ],
       "tags": [
-        "buckler",
         "dexterity",
         "evasion",
-        "grants:parry",
-        "parry",
-        "plated_buckler",
-        "projectiles"
+        "projectile"
       ],
       "source": {
         "id": "/us/Rondel_de_Ezo",
@@ -10489,12 +9977,8 @@
       ],
       "tags": [
         "block",
-        "buckler",
         "chaos_resistance",
-        "corrupted_blood",
-        "grants:parry",
-        "iron_buckler",
-        "parry"
+        "corrupted_blood"
       ],
       "source": {
         "id": "/us/Bloodbarrier",
@@ -10533,14 +10017,10 @@
         }
       ],
       "tags": [
-        "buckler",
         "cold",
         "cold_resistance",
         "evasion",
-        "grants:parry",
         "maximum_cold_resistance",
-        "parry",
-        "ridged_buckler",
         "thorns"
       ],
       "source": {
@@ -10579,14 +10059,10 @@
         }
       ],
       "tags": [
-        "buckler",
         "critical_weakness",
         "elemental",
         "evasion",
-        "grants:parry",
-        "parry",
-        "parrying",
-        "spiked_buckler"
+        "parrying"
       ],
       "source": {
         "id": "/us/Silverthorne",
@@ -10624,13 +10100,9 @@
         }
       ],
       "tags": [
-        "buckler",
         "evasion",
-        "grants:parry",
         "intelligence",
-        "ornate_buckler",
-        "parried_debuff",
-        "parry"
+        "parried_debuff"
       ],
       "source": {
         "id": "/us/Calgyras_Arc",
@@ -10672,14 +10144,10 @@
         }
       ],
       "tags": [
-        "array_buckler",
-        "buckler",
         "evasion",
-        "grants:parry",
         "maximum_cold_resistance",
         "maximum_fire_resistance",
-        "maximum_lightning_resistance",
-        "parry"
+        "maximum_lightning_resistance"
       ],
       "source": {
         "id": "/us/Sunsplinter",
@@ -10712,9 +10180,7 @@
       "tags": [
         "energy_shield",
         "energy_shield_recharge",
-        "focus",
-        "intelligence",
-        "twig_focus"
+        "intelligence"
       ],
       "source": {
         "id": "/us/Deathrattle",
@@ -10748,9 +10214,7 @@
       "granted_skills": [],
       "tags": [
         "energy_shield",
-        "focus",
-        "light_radius",
-        "woven_focus"
+        "light_radius"
       ],
       "source": {
         "id": "/us/Threaded_Light",
@@ -10783,14 +10247,12 @@
       ],
       "granted_skills": [],
       "tags": [
-        "antler_focus",
         "chaos_resistance",
-        "critical_hits",
+        "critical_hit",
         "critical_weakness",
         "energy_shield",
-        "focus",
         "intelligence",
-        "spells"
+        "spell"
       ],
       "source": {
         "id": "/us/Effigy_of_Cruelty",
@@ -10823,10 +10285,7 @@
       "granted_skills": [],
       "tags": [
         "energy_shield",
-        "engraved_focus",
-        "focus",
-        "minions",
-        "minions'"
+        "minion"
       ],
       "source": {
         "id": "/us/Carrion_Call",
@@ -10857,10 +10316,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "focus",
         "low_life",
-        "low_mana",
-        "tonal_focus"
+        "low_mana"
       ],
       "source": {
         "id": "/us/Serpents_Lesson",
@@ -10893,9 +10350,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "crystal_focus",
         "energy_shield",
-        "focus",
         "lightning_resistance",
         "maximum_lightning_resistance"
       ],
@@ -10934,11 +10389,8 @@
         "energy_shield",
         "energy_shield_recharge_rate",
         "faster_start_of_energy_shield_recharge",
-        "focus",
         "hit",
-        "hits",
-        "poisoned",
-        "voodoo_focus"
+        "poison"
       ],
       "source": {
         "id": "/us/Apeps_Supremacy",
@@ -10961,10 +10413,7 @@
       "explicit_mods": [],
       "flavour_text": [],
       "granted_skills": [],
-      "tags": [
-        "body_armour",
-        "garment"
-      ],
+      "tags": [],
       "source": {
         "id": "/us/Tabula_Rasa",
         "url": "https://poe2db.tw/us/Tabula_Rasa",
@@ -10996,14 +10445,12 @@
       ],
       "granted_skills": [],
       "tags": [
-        "body_armour",
         "chaos_resistance",
         "cold_resistance",
         "elemental",
         "elemental_ailment_threshold",
         "energy_shield",
         "fire_resistance",
-        "garment",
         "lightning_resistance",
         "uncapped"
       ],
@@ -11038,11 +10485,9 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "body_armour",
         "defences",
         "energy_shield",
         "evasion",
-        "grand_regalia",
         "spirit",
         "stun_threshold"
       ],
@@ -11083,11 +10528,9 @@
       "tags": [
         "armour",
         "attribute",
-        "body_armour",
         "converted",
         "elemental",
         "energy_shield",
-        "sacrificial_regalia",
         "soul_cores"
       ],
       "source": {
@@ -11124,8 +10567,6 @@
         "attribute",
         "energy_shield",
         "evasion",
-        "grand_visage",
-        "helmet",
         "light_radius",
         "support_gem"
       ],
@@ -11161,8 +10602,6 @@
         "armour",
         "energy_shield",
         "evasion",
-        "gloves",
-        "grand_manchettes",
         "immobilise",
         "skill_speed"
       ],
@@ -11196,11 +10635,9 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "boots",
         "energy_shield",
         "evasion",
-        "grand_cuisses",
-        "hits",
+        "hit",
         "skill_speed"
       ],
       "source": {
@@ -11231,8 +10668,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "golden_visage",
-        "helmet",
         "rarity_of_items"
       ],
       "source": {
@@ -11266,39 +10701,15 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "body_armour",
         "chaos_resistance",
         "critical_hit",
         "energy_shield",
-        "plated_vestments",
         "power_charge"
       ],
       "source": {
         "id": "/us/Volls_Protector",
         "url": "https://poe2db.tw/us/Volls_Protector",
         "label": "Voll's Protector Plated Vestments"
-      }
-    },
-    "/us/Atziris_Step": {
-      "key": "Atziri's",
-      "name": "Atziri's",
-      "base": "",
-      "slot": null,
-      "requirements": {
-        "level": null,
-        "str": null,
-        "dex": null,
-        "int": null
-      },
-      "implicit_mods": [],
-      "explicit_mods": [],
-      "flavour_text": [],
-      "granted_skills": [],
-      "tags": [],
-      "source": {
-        "id": "/us/Atziris_Step",
-        "url": "https://poe2db.tw/us/Atziris_Step",
-        "label": "Atziri's Step Cinched Boots"
       }
     },
     "/us/The_Surrender": {
@@ -11333,10 +10744,6 @@
       ],
       "tags": [
         "armour",
-        "grants:raise_shield",
-        "raise_shield",
-        "shield",
-        "stone_tower_shield",
         "stun_threshold"
       ],
       "source": {
@@ -11379,10 +10786,6 @@
         "dexterity",
         "elemental",
         "energy_shield",
-        "grants:raise_shield",
-        "intricate_crest_shield",
-        "raise_shield",
-        "shield",
         "spirit"
       ],
       "source": {
@@ -11418,14 +10821,40 @@
       "tags": [
         "critical_hit_chance",
         "energy_shield",
-        "focus",
-        "sacred_focus",
-        "spells"
+        "spell"
       ],
       "source": {
         "id": "/us/Rathpith_Globe",
         "url": "https://poe2db.tw/us/Rathpith_Globe",
         "label": "Rathpith Globe Sacred Focus"
+      }
+    },
+    "/us/Heroic_Tragedy": {
+      "key": "Heroic Tragedy||Timeless Jewel",
+      "name": "Heroic Tragedy",
+      "base": "Timeless Jewel",
+      "slot": "Jewel",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "Remembrancing 7495 songworthy deeds by the line of Olroth Passives in radius are Conquered by the Kalguur",
+        "Historic"
+      ],
+      "flavour_text": [
+        "They believed themselves courageous and selfless,",
+        "but that bravery became the doom at their door."
+      ],
+      "granted_skills": [],
+      "tags": [],
+      "source": {
+        "id": "/us/Heroic_Tragedy",
+        "url": "https://poe2db.tw/us/Heroic_Tragedy",
+        "label": "Heroic Tragedy Timeless Jewel"
       }
     },
     "/us/Undying_Hate": {
@@ -11450,9 +10879,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "desecration_makes_this_item_unstable",
-        "jewel",
-        "timeless_jewel"
+        "desecration_makes_this_item_unstable"
       ],
       "source": {
         "id": "/us/Undying_Hate",
@@ -11479,14 +10906,153 @@
         "A wellspring of vitality bubbling from within."
       ],
       "granted_skills": [],
-      "tags": [
-        "jewel",
-        "ruby"
-      ],
+      "tags": [],
       "source": {
         "id": "/us/Grand_Spectrum",
         "url": "https://poe2db.tw/us/Grand_Spectrum",
         "label": "Grand Spectrum Ruby"
+      }
+    },
+    "/us/Megalomaniac": {
+      "key": "Megalomaniac||Diamond",
+      "name": "Megalomaniac",
+      "base": "Diamond",
+      "slot": "Jewel",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [],
+      "flavour_text": [
+        "If you're going to act like you're better",
+        "than everyone else, make sure you are."
+      ],
+      "granted_skills": [],
+      "tags": [],
+      "source": {
+        "id": "/us/Megalomaniac",
+        "url": "https://poe2db.tw/us/Megalomaniac",
+        "label": "Megalomaniac Diamond"
+      }
+    },
+    "/us/From_Nothing": {
+      "key": "From Nothing||Diamond",
+      "name": "From Nothing",
+      "base": "Diamond",
+      "slot": "Jewel",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "Passives in Radius of passive_keystone_unwavering_stance_ can be Allocated without being connected to your tree"
+      ],
+      "flavour_text": [
+        "They clawed their way up from the agonising depths of nonexistence,",
+        "breathing deep with joy the exquisite light of meaning."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "unwavering_stance"
+      ],
+      "source": {
+        "id": "/us/From_Nothing",
+        "url": "https://poe2db.tw/us/From_Nothing",
+        "label": "From Nothing Diamond"
+      }
+    },
+    "/us/Controlled_Metamorphosis": {
+      "key": "Controlled Metamorphosis||Diamond",
+      "name": "Controlled Metamorphosis",
+      "base": "Diamond",
+      "slot": "Jewel",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "Only affects Passives in Massive Ring",
+        "Passives in Radius can be Allocated without being connected to your tree",
+        "-7% to all ElementalDamage Resistances"
+      ],
+      "flavour_text": [
+        "Our world was dying, but we chose to survive.",
+        "We broke free from the chains within."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "elemental"
+      ],
+      "source": {
+        "id": "/us/Controlled_Metamorphosis",
+        "url": "https://poe2db.tw/us/Controlled_Metamorphosis",
+        "label": "Controlled Metamorphosis Diamond"
+      }
+    },
+    "/us/Prism_of_Belief": {
+      "key": "Prism of Belief||Diamond",
+      "name": "Prism of Belief",
+      "base": "Diamond",
+      "slot": "Jewel",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "+1 to Level of all Wave of Frost Skills"
+      ],
+      "flavour_text": [
+        "Entropy can be reversed."
+      ],
+      "granted_skills": [],
+      "tags": [],
+      "source": {
+        "id": "/us/Prism_of_Belief",
+        "url": "https://poe2db.tw/us/Prism_of_Belief",
+        "label": "Prism of Belief Diamond"
+      }
+    },
+    "/us/The_Adorned": {
+      "key": "The Adorned||Diamond",
+      "name": "The Adorned",
+      "base": "Diamond",
+      "slot": "Jewel",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "96% increased Effect of Jewel Socket Passive Skills containing Corrupted ItemRarity Jewel"
+      ],
+      "flavour_text": [
+        "At their height, the Vaal glittered under the sun.",
+        "A decade, a century, an aeon of prosperity...",
+        "now nothing more than a passing wonder."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "jewels",
+        "magic"
+      ],
+      "source": {
+        "id": "/us/The_Adorned",
+        "url": "https://poe2db.tw/us/The_Adorned",
+        "label": "The Adorned Diamond"
       }
     },
     "/us/Heart_of_the_Well": {
@@ -11507,21 +11073,18 @@
         "forever sinking under the weight of the newly dead."
       ],
       "granted_skills": [],
-      "tags": [
-        "diamond",
-        "jewel"
-      ],
+      "tags": [],
       "source": {
         "id": "/us/Heart_of_the_Well",
         "url": "https://poe2db.tw/us/Heart_of_the_Well",
         "label": "Heart of the Well Diamond"
       }
     },
-    "/us/Flesh_Crucible": {
-      "key": "Flesh",
-      "name": "Flesh",
-      "base": "",
-      "slot": null,
+    "/us/Against_the_Darkness": {
+      "key": "Against the Darkness||Time-Lost Diamond",
+      "name": "Against the Darkness",
+      "base": "Time-Lost Diamond",
+      "slot": "Jewel",
       "requirements": {
         "level": null,
         "str": null,
@@ -11529,14 +11092,172 @@
         "int": null
       },
       "implicit_mods": [],
-      "explicit_mods": [],
-      "flavour_text": [],
+      "explicit_mods": [
+        "SmallPassive Skills in Radius also grant +3% to Resistances",
+        "Notable Passive Skills in Radius also grant 3% increased Intelligence"
+      ],
+      "flavour_text": [
+        "After the fires, in the depths of the Winter of the World, all life in the Vastiri banded together. Whether serpent, hyena, human, or golem, hated enemies clasped hand to claw, built refuge, and fought side by side against the Abyssals. Thus, the Third Pact was born."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "lightning_resistance",
+        "small_passive"
+      ],
+      "source": {
+        "id": "/us/Against_the_Darkness",
+        "url": "https://poe2db.tw/us/Against_the_Darkness",
+        "label": "Against the Darkness Time-Lost Diamond"
+      }
+    },
+    "/us/The_Peacemakers_Draught": {
+      "key": "The Peacemaker's Draught||Amphora Relic",
+      "name": "The Peacemaker's Draught",
+      "base": "Amphora Relic",
+      "slot": "Relic",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "Zarokh, the Temporal drops an additional Barya",
+        "Your Defences are zero",
+        "This item is destroyed when applied to a Trial"
+      ],
+      "flavour_text": [
+        "Centuries of peace brought immense wealth to Keth,",
+        "but many worried that it had also left the people soft."
+      ],
       "granted_skills": [],
       "tags": [],
       "source": {
-        "id": "/us/Flesh_Crucible",
-        "url": "https://poe2db.tw/us/Flesh_Crucible",
-        "label": "Flesh Crucible Diamond"
+        "id": "/us/The_Peacemakers_Draught",
+        "url": "https://poe2db.tw/us/The_Peacemakers_Draught",
+        "label": "The Peacemaker's Draught Amphora Relic"
+      }
+    },
+    "/us/The_Desperate_Alliance": {
+      "key": "The Desperate Alliance||Vase Relic",
+      "name": "The Desperate Alliance",
+      "base": "Vase Relic",
+      "slot": "Relic",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "Zarokh, the Temporal drops Against the Darkness",
+        "Zarokh, the Temporal deals 100% more Damage",
+        "Zarokh, the Temporal takes 75% less Damage",
+        "This item is destroyed when applied to a Trial"
+      ],
+      "flavour_text": [
+        "By fire and ice, perhaps the end of the world.",
+        "They did not fall on their knees and lament."
+      ],
+      "granted_skills": [],
+      "tags": [],
+      "source": {
+        "id": "/us/The_Desperate_Alliance",
+        "url": "https://poe2db.tw/us/The_Desperate_Alliance",
+        "label": "The Desperate Alliance Vase Relic"
+      }
+    },
+    "/us/The_Changing_Seasons": {
+      "key": "The Changing Seasons||Seal Relic",
+      "name": "The Changing Seasons",
+      "base": "Seal Relic",
+      "slot": "Relic",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "Zarokh, the Temporal drops Sandstorm Visage",
+        "Cannot restore Honour",
+        "This item is destroyed when applied to a Trial"
+      ],
+      "flavour_text": [
+        "All rejoiced when Solerai and Lundara shattered the grey sky,",
+        "but with the cold banished, sandier climes began to creep in..."
+      ],
+      "granted_skills": [],
+      "tags": [],
+      "source": {
+        "id": "/us/The_Changing_Seasons",
+        "url": "https://poe2db.tw/us/The_Changing_Seasons",
+        "label": "The Changing Seasons Seal Relic"
+      }
+    },
+    "/us/The_Burden_of_Leadership": {
+      "key": "The Burden of Leadership||Tapestry Relic",
+      "name": "The Burden of Leadership",
+      "base": "Tapestry Relic",
+      "slot": "Relic",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "Zarokh, the Temporal drops Sekhema's Resolve",
+        "Rooms are unknown on the Trial Map",
+        "This item is destroyed when applied to a Trial"
+      ],
+      "flavour_text": [
+        "The path forward is unknown,",
+        "but someone must lead.",
+        "Let it be the best of us."
+      ],
+      "granted_skills": [],
+      "tags": [],
+      "source": {
+        "id": "/us/The_Burden_of_Leadership",
+        "url": "https://poe2db.tw/us/The_Burden_of_Leadership",
+        "label": "The Burden of Leadership Tapestry Relic"
+      }
+    },
+    "/us/The_Last_Flame": {
+      "key": "The Last Flame||Incense Relic",
+      "name": "The Last Flame",
+      "base": "Incense Relic",
+      "slot": "Relic",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "Zarokh, the Temporal drops Temporalis",
+        "Damage taken cannot be DamageAbsorption",
+        "Maximum Honour is 1",
+        "Cannot be used with Trials below level 80",
+        "This item is destroyed when applied to a Trial"
+      ],
+      "flavour_text": [
+        "In the coldest depths of the Winter of the World, overrun by darkness and fighting to the last, life itself clung to existence by the barest remaining thread."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "absorbed"
+      ],
+      "source": {
+        "id": "/us/The_Last_Flame",
+        "url": "https://poe2db.tw/us/The_Last_Flame",
+        "label": "The Last Flame Incense Relic"
       }
     },
     "/us/Asphyxias_Wrath": {
@@ -11568,15 +11289,13 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attacks",
-        "broadhead_quiver",
-        "chilled",
+        "attack",
+        "chill",
         "cold",
         "cold_resistance",
-        "hits",
+        "hit",
         "magnitude",
-        "physical",
-        "quiver"
+        "physical"
       ],
       "source": {
         "id": "/us/Asphyxias_Wrath",
@@ -11611,13 +11330,11 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attacks",
+        "attack",
         "fire",
-        "fire_quiver",
-        "ignited",
+        "ignite",
         "magnitude",
-        "projectiles",
-        "quiver"
+        "projectile"
       ],
       "source": {
         "id": "/us/Blackgleam",
@@ -11650,10 +11367,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attacks",
-        "pierce",
-        "quiver",
-        "sacral_quiver"
+        "attack",
+        "pierce"
       ],
       "source": {
         "id": "/us/The_Lethal_Draw",
@@ -11687,10 +11402,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attacks",
-        "blunt_quiver",
-        "physical",
-        "quiver"
+        "attack",
+        "physical"
       ],
       "source": {
         "id": "/us/Rearguard",
@@ -11733,12 +11446,8 @@
         }
       ],
       "tags": [
-        "attacks",
-        "bursting_fen_toad",
-        "grants:bursting_fen_toad",
-        "physical",
-        "quiver",
-        "toxic_quiver"
+        "attack",
+        "physical"
       ],
       "source": {
         "id": "/us/Murkshaft",
@@ -11774,8 +11483,6 @@
         "covetous",
         "crescendo",
         "diamond",
-        "primed_quiver",
-        "quiver",
         "reversing",
         "splinter"
       ],
@@ -11816,12 +11523,10 @@
         "critical_hit",
         "deflection_rating",
         "evasion_rating",
-        "hits",
-        "penetrating_quiver",
+        "hit",
         "pierce",
         "pierced",
-        "projectiles",
-        "quiver"
+        "projectile"
       ],
       "source": {
         "id": "/us/Drillneck",
@@ -11855,14 +11560,12 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attacks",
+        "attack",
         "chaos",
         "contributes",
         "critical_hit_chance",
-        "hits",
-        "physical",
-        "quiver",
-        "visceral_quiver"
+        "hit",
+        "physical"
       ],
       "source": {
         "id": "/us/Beyond_Reach",
@@ -11897,8 +11600,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "amulet",
-        "crimson_amulet",
         "fire_resistance",
         "light_radius"
       ],
@@ -11933,8 +11634,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "amulet",
-        "crimson_amulet",
         "dexterity"
       ],
       "source": {
@@ -11968,8 +11667,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "amulet",
-        "azure_amulet",
         "energy_shield",
         "gain"
       ],
@@ -12005,10 +11702,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "amulet",
-        "azure_amulet",
         "critical_hit",
-        "critical_hits",
         "stun_threshold"
       ],
       "source": {
@@ -12041,9 +11735,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "amber_amulet",
-        "amulet",
-        "flasks",
+        "flask",
         "strength"
       ],
       "source": {
@@ -12078,11 +11770,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "amber_amulet",
-        "amulet",
-        "attributes",
+        "attribute",
         "elemental",
-        "leeched",
+        "leech",
         "strength"
       ],
       "source": {
@@ -12116,8 +11806,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "amber_amulet",
-        "amulet",
         "fire_resistance",
         "strength"
       ],
@@ -12152,10 +11840,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "amulet",
         "dexterity",
-        "evasion_rating",
-        "jade_amulet"
+        "evasion_rating"
       ],
       "source": {
         "id": "/us/Surefooted_Sigil",
@@ -12196,14 +11882,9 @@
         }
       ],
       "tags": [
-        "amulet",
         "critical_hit",
-        "critical_hits",
         "dexterity",
-        "grants:lightning_bolt",
         "ignore",
-        "jade_amulet",
-        "lightning_bolt",
         "lightning_resistance"
       ],
       "source": {
@@ -12238,10 +11919,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "amulet",
         "dexterity",
         "hit",
-        "jade_amulet",
         "strength"
       ],
       "source": {
@@ -12275,10 +11954,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "amulet",
         "energy_shield",
         "intelligence",
-        "lapis_amulet",
         "spirit"
       ],
       "source": {
@@ -12312,12 +11989,10 @@
       ],
       "granted_skills": [],
       "tags": [
-        "amulet",
-        "chilled",
+        "chill",
         "cold_resistance",
         "hit",
         "intelligence",
-        "lapis_amulet",
         "penetrates"
       ],
       "source": {
@@ -12351,11 +12026,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "amulet",
         "block",
         "focus",
-        "intelligence",
-        "lapis_amulet"
+        "intelligence"
       ],
       "source": {
         "id": "/us/Stone_of_Lazhwar",
@@ -12389,11 +12062,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "amulet",
         "critical_hit",
         "elemental",
         "energy_shield",
-        "lunar_amulet",
         "skill_speed"
       ],
       "source": {
@@ -12428,8 +12099,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "amulet",
-        "bloodstone_amulet",
         "skill_speed"
       ],
       "source": {
@@ -12463,8 +12132,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "amulet",
-        "bloodstone_amulet",
         "elemental",
         "elemental_ailment",
         "elemental_damage"
@@ -12501,9 +12168,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "amulet",
-        "attributes",
-        "stellar_amulet"
+        "attribute"
       ],
       "source": {
         "id": "/us/Astramentis",
@@ -12539,14 +12204,12 @@
       ],
       "granted_skills": [],
       "tags": [
-        "allies",
-        "amulet",
+        "ally",
         "attack",
-        "attributes",
+        "attribute",
         "critical_damage_bonus",
         "critical_hit",
-        "presence",
-        "stellar_amulet"
+        "presence"
       ],
       "source": {
         "id": "/us/Fixation_of_Yix",
@@ -12577,10 +12240,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "amulet",
-        "attributes",
-        "instilled",
-        "stellar_amulet"
+        "attribute",
+        "instilled"
       ],
       "source": {
         "id": "/us/Strugglescream",
@@ -12620,12 +12281,8 @@
       ],
       "tags": [
         "accuracy",
-        "amulet",
-        "attributes",
-        "blinded",
-        "future-past",
-        "grants:future-past",
-        "stellar_amulet"
+        "attribute",
+        "blinded"
       ],
       "source": {
         "id": "/us/Hinekoras_Sight",
@@ -12660,11 +12317,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "amulet",
-        "critical_hits",
+        "critical_hit",
         "elemental_resistances",
         "light_radius",
-        "solar_amulet",
         "spirit"
       ],
       "source": {
@@ -12699,9 +12354,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "amulet",
         "rarity_of_items",
-        "solar_amulet",
         "spirit"
       ],
       "source": {
@@ -12734,10 +12387,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "amulet",
-        "attributes",
-        "gold_amulet",
-        "light_stunned",
+        "attribute",
+        "light_stun",
         "rarity_of_items"
       ],
       "source": {
@@ -12772,11 +12423,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "amulet",
-        "attributes",
+        "attribute",
         "chaos_resistance",
         "charge",
-        "gold_amulet",
         "rarity_of_items"
       ],
       "source": {
@@ -12809,16 +12458,57 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attacks",
+        "attack",
         "hit",
-        "iron_ring",
-        "physical",
-        "ring"
+        "physical"
       ],
       "source": {
         "id": "/us/Blackheart",
         "url": "https://poe2db.tw/us/Blackheart",
         "label": "Blackheart Iron Ring"
+      }
+    },
+    "/us/Icefang_Orbit": {
+      "key": "Icefang Orbit||Iron Ring",
+      "name": "Icefang Orbit",
+      "base": "Iron Ring",
+      "slot": "Ring",
+      "requirements": {
+        "level": 36,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [
+        "Adds 1 to 4 Physical Damage to Attack"
+      ],
+      "explicit_mods": [
+        "Adds 6 to 10 Physical Damage to Attack",
+        "+23 to Dexterity",
+        "18% chance to Poison on HitDamage",
+        "DamageTypes taken from HitDamage while Poison Contributes to BuffMagnitude of Chill on you",
+        "DamageTypes from HitDamage against Poison targets Contributes to Chill BuffMagnitude",
+        "16% increased BuffMagnitude of Poison you inflict"
+      ],
+      "flavour_text": [
+        "Those members of the Brotherhood who employ the venom of",
+        "Trarthan ice snakes must take great care with the volatile substance."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "all_damage",
+        "attack",
+        "contributes",
+        "dexterity",
+        "hit",
+        "magnitude",
+        "physical",
+        "poison"
+      ],
+      "source": {
+        "id": "/us/Icefang_Orbit",
+        "url": "https://poe2db.tw/us/Icefang_Orbit",
+        "label": "Icefang Orbit Iron Ring"
       }
     },
     "/us/Prized_Pain": {
@@ -12846,10 +12536,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attacks",
-        "iron_ring",
+        "attack",
         "physical",
-        "ring",
         "strength",
         "thorns"
       ],
@@ -12888,15 +12576,12 @@
       "granted_skills": [],
       "tags": [
         "all_damage",
-        "attacks",
-        "bleeding",
+        "attack",
+        "bleed",
         "contributes",
         "hit",
-        "hits",
-        "iron_ring",
         "magnitude",
         "physical",
-        "ring",
         "strength"
       ],
       "source": {
@@ -12929,9 +12614,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "elemental",
-        "lazuli_ring",
-        "ring"
+        "elemental"
       ],
       "source": {
         "id": "/us/Doedres_Damning",
@@ -12965,9 +12648,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "flasks",
-        "lazuli_ring",
-        "ring"
+        "flask"
       ],
       "source": {
         "id": "/us/Glowswarm",
@@ -13003,9 +12684,7 @@
         "chaos_resistance",
         "critical_hit_chance",
         "critical_spell_damage_bonus",
-        "lazuli_ring",
-        "ring",
-        "spells"
+        "spell"
       ],
       "source": {
         "id": "/us/Seed_of_Cataclysm",
@@ -13039,9 +12718,7 @@
       "granted_skills": [],
       "tags": [
         "fire_resistance",
-        "ignites",
-        "ring",
-        "ruby_ring",
+        "ignite",
         "spread"
       ],
       "source": {
@@ -13077,9 +12754,7 @@
       "granted_skills": [],
       "tags": [
         "cold_resistance",
-        "fire_resistance",
-        "ring",
-        "ruby_ring"
+        "fire_resistance"
       ],
       "source": {
         "id": "/us/Blistering_Bond",
@@ -13115,11 +12790,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "chilled",
+        "chill",
         "cold_resistance",
-        "hits",
-        "ring",
-        "sapphire_ring",
+        "hit",
         "shattered",
         "strength"
       ],
@@ -13154,15 +12827,50 @@
       ],
       "granted_skills": [],
       "tags": [
-        "chilled",
-        "cold_resistance",
-        "ring",
-        "sapphire_ring"
+        "chill",
+        "cold_resistance"
       ],
       "source": {
         "id": "/us/Dream_Fragments",
         "url": "https://poe2db.tw/us/Dream_Fragments",
         "label": "Dream Fragments Sapphire Ring"
+      }
+    },
+    "/us/Whisper_of_the_Brotherhood": {
+      "key": "Whisper of the Brotherhood||Sapphire Ring",
+      "name": "Whisper of the Brotherhood",
+      "base": "Sapphire Ring",
+      "slot": "Ring",
+      "requirements": {
+        "level": 32,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [
+        "+26% to Resistances"
+      ],
+      "explicit_mods": [
+        "10% increased SkillSpeed",
+        "+16 to Dexterity",
+        "26% increased Mana Regeneration Rate",
+        "100% of Cold Damage Conversion to Lightning Damage"
+      ],
+      "flavour_text": [
+        "Forged by the last remaining brother",
+        "to return all that was once given."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "cold_resistance",
+        "converted",
+        "dexterity",
+        "skill_speed"
+      ],
+      "source": {
+        "id": "/us/Whisper_of_the_Brotherhood",
+        "url": "https://poe2db.tw/us/Whisper_of_the_Brotherhood",
+        "label": "Whisper of the Brotherhood Sapphire Ring"
       }
     },
     "/us/The_Burrower": {
@@ -13194,10 +12902,8 @@
       "granted_skills": [],
       "tags": [
         "cold_resistance",
-        "hitting",
-        "lightning_resistance",
-        "ring",
-        "topaz_ring"
+        "hit",
+        "lightning_resistance"
       ],
       "source": {
         "id": "/us/The_Burrower",
@@ -13235,9 +12941,7 @@
         "converted",
         "freeze",
         "intelligence",
-        "lightning_resistance",
-        "ring",
-        "topaz_ring"
+        "lightning_resistance"
       ],
       "source": {
         "id": "/us/Call_of_the_Brotherhood",
@@ -13269,9 +12973,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "lightning_resistance",
-        "ring",
-        "topaz_ring"
+        "lightning_resistance"
       ],
       "source": {
         "id": "/us/Levinstone",
@@ -13306,9 +13008,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "amethyst_ring",
-        "chaos_resistance",
-        "ring"
+        "chaos_resistance"
       ],
       "source": {
         "id": "/us/Mings_Heart",
@@ -13340,16 +13040,50 @@
       ],
       "granted_skills": [],
       "tags": [
-        "amethyst_ring",
         "chaos_resistance",
         "converted",
-        "elemental_damage",
-        "ring"
+        "elemental_damage"
       ],
       "source": {
         "id": "/us/Original_Sin",
         "url": "https://poe2db.tw/us/Original_Sin",
         "label": "Original Sin Amethyst Ring"
+      }
+    },
+    "/us/Blackflame": {
+      "key": "Blackflame||Amethyst Ring",
+      "name": "Blackflame",
+      "base": "Amethyst Ring",
+      "slot": "Ring",
+      "requirements": {
+        "level": 20,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [
+        "+7% to Resistances"
+      ],
+      "explicit_mods": [
+        "25% increased Mana Regeneration Rate",
+        "50% increased Ignite BuffMagnitude",
+        "50% reduced Ignite Duration on Enemies",
+        "Enemies Ignite by you take Chaos Damage instead of Fire Damage from Ignite"
+      ],
+      "flavour_text": [
+        "Beyond the veil of death, there burns a fire",
+        "by whose light night is borne."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "chaos_resistance",
+        "ignite",
+        "magnitude"
+      ],
+      "source": {
+        "id": "/us/Blackflame",
+        "url": "https://poe2db.tw/us/Blackflame",
+        "label": "Blackflame Amethyst Ring"
       }
     },
     "/us/Vigilant_View": {
@@ -13382,10 +13116,8 @@
       "tags": [
         "accuracy",
         "dexterity",
-        "emerald_ring",
         "evade",
-        "rarity_of_items",
-        "ring"
+        "rarity_of_items"
       ],
       "source": {
         "id": "/us/Vigilant_View",
@@ -13419,9 +13151,7 @@
       "granted_skills": [],
       "tags": [
         "accuracy",
-        "emerald_ring",
-        "leech",
-        "ring"
+        "leech"
       ],
       "source": {
         "id": "/us/Death_Rush",
@@ -13463,12 +13193,10 @@
       "granted_skills": [],
       "tags": [
         "accuracy",
-        "attacks",
-        "curses",
+        "attack",
+        "curse",
         "elemental",
-        "emerald_ring",
-        "rarity_of_items",
-        "ring"
+        "rarity_of_items"
       ],
       "source": {
         "id": "/us/Thiefs_Torment",
@@ -13501,10 +13229,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "allies",
-        "pearl_ring",
-        "presence",
-        "ring"
+        "ally",
+        "presence"
       ],
       "source": {
         "id": "/us/Evergrasping_Ring",
@@ -13540,10 +13266,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "pearl_ring",
-        "projectiles",
-        "ring",
-        "spells"
+        "projectile",
+        "spell"
       ],
       "source": {
         "id": "/us/Snakepit",
@@ -13579,10 +13303,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "minions",
-        "pearl_ring",
-        "revive",
-        "ring"
+        "minion",
+        "revive"
       ],
       "source": {
         "id": "/us/Heartbound_Loop",
@@ -13619,9 +13341,7 @@
         "critical_hit",
         "elemental",
         "light_radius",
-        "prismatic_ring",
-        "rarity_of_items",
-        "ring"
+        "rarity_of_items"
       ],
       "source": {
         "id": "/us/Gifts_from_Above",
@@ -13653,10 +13373,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attributes",
-        "gold_ring",
-        "rarity_of_items",
-        "ring"
+        "attribute",
+        "rarity_of_items"
       ],
       "source": {
         "id": "/us/Perandus_Seal",
@@ -13690,9 +13408,7 @@
       "tags": [
         "dexterity",
         "elemental",
-        "gold_ring",
-        "rarity_of_items",
-        "ring"
+        "rarity_of_items"
       ],
       "source": {
         "id": "/us/Andvarius",
@@ -13732,10 +13448,8 @@
       "tags": [
         "cold_resistance",
         "fire_resistance",
-        "gold_ring",
         "lightning_resistance",
         "rarity_of_items",
-        "ring",
         "spirit"
       ],
       "source": {
@@ -13771,12 +13485,10 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attacks",
+        "attack",
         "chaos_resistance",
         "lose",
-        "rarity_of_items",
-        "ring",
-        "unset_ring"
+        "rarity_of_items"
       ],
       "source": {
         "id": "/us/Bursting_Decay",
@@ -13812,15 +13524,13 @@
       ],
       "granted_skills": [],
       "tags": [
-        "abyssal_signet",
         "abyssal_wasting",
-        "curses",
+        "curse",
         "evasion_rating",
         "hit",
         "light_radius",
         "presence",
-        "ring",
-        "spells",
+        "spell",
         "triggered"
       ],
       "source": {
@@ -13856,11 +13566,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "belt",
         "cold_resistance",
         "flask",
-        "flasks",
-        "rawhide_belt",
         "strength"
       ],
       "source": {
@@ -13895,11 +13602,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "belt",
         "elemental",
-        "flasks",
-        "rawhide_belt",
-        "recouped"
+        "flask",
+        "recoup"
       ],
       "source": {
         "id": "/us/Midnight_Braid",
@@ -13934,9 +13639,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "belt",
-        "flasks",
-        "linen_belt"
+        "flask"
       ],
       "source": {
         "id": "/us/Keelhaul",
@@ -13973,12 +13676,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "belt",
         "flask",
-        "flasks",
         "intelligence",
-        "linen_belt",
-        "minions"
+        "minion"
       ],
       "source": {
         "id": "/us/Umbilicus_Immortalis",
@@ -14013,12 +13713,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "belt",
         "flask",
-        "flasks",
         "low_life",
-        "low_mana",
-        "wide_belt"
+        "low_mana"
       ],
       "source": {
         "id": "/us/Birthright_Buckle",
@@ -14052,11 +13749,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "belt",
         "flask",
         "lightning_resistance",
-        "shocked",
-        "wide_belt"
+        "shock"
       ],
       "source": {
         "id": "/us/Byrnabas",
@@ -14092,13 +13787,10 @@
       ],
       "granted_skills": [],
       "tags": [
-        "belt",
         "chaos_resistance",
         "flask",
-        "flasks",
         "lose",
-        "overflow",
-        "wide_belt"
+        "overflow"
       ],
       "source": {
         "id": "/us/The_Gnashing_Sash",
@@ -14134,11 +13826,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "belt",
         "energy_shield",
         "intelligence",
-        "leech",
-        "long_belt"
+        "leech"
       ],
       "source": {
         "id": "/us/Soul_Tether",
@@ -14173,9 +13863,7 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "belt",
         "physical_damage",
-        "plate_belt",
         "strength"
       ],
       "source": {
@@ -14209,10 +13897,7 @@
         "All creatures have the potential for greatness or unequivocal failure."
       ],
       "granted_skills": [],
-      "tags": [
-        "belt",
-        "ornate_belt"
-      ],
+      "tags": [],
       "source": {
         "id": "/us/Ryslathas_Coil",
         "url": "https://poe2db.tw/us/Ryslathas_Coil",
@@ -14246,12 +13931,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "belt",
         "dexterity",
         "flask",
-        "flasks",
         "low_life",
-        "mail_belt",
         "strength"
       ],
       "source": {
@@ -14294,11 +13976,7 @@
         }
       ],
       "tags": [
-        "belt",
-        "cast_on_charm_use",
-        "dexterity",
-        "double_belt",
-        "grants:cast_on_charm_use"
+        "dexterity"
       ],
       "source": {
         "id": "/us/Bijouborne",
@@ -14333,9 +14011,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "belt",
-        "flasks",
-        "heavy_belt",
+        "flask",
         "stun_threshold"
       ],
       "source": {
@@ -14373,9 +14049,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "belt",
         "dexterity",
-        "heavy_belt",
         "modifiers",
         "rare",
         "strength",
@@ -14413,10 +14087,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "belt",
-        "charms",
+        "charm",
         "corrupted_blood",
-        "heavy_belt",
         "life_flasks",
         "strength",
         "stun_threshold"
@@ -14454,9 +14126,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "belt",
-        "flask",
-        "utility_belt"
+        "flask"
       ],
       "source": {
         "id": "/us/Ingenuity",
@@ -14490,11 +14160,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "belt",
         "energy_shield",
-        "fine_belt",
         "flask",
-        "flasks",
         "intelligence"
       ],
       "source": {
@@ -14530,9 +14197,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "belt",
-        "fine_belt",
-        "flasks"
+        "flask"
       ],
       "source": {
         "id": "/us/Darkness_Enthroned",
@@ -14567,11 +14232,9 @@
       ],
       "granted_skills": [],
       "tags": [
-        "flask",
-        "gargantuan_life_flask",
         "hit",
         "rage",
-        "recouped"
+        "recoup"
       ],
       "source": {
         "id": "/us/Blood_of_the_Warrior",
@@ -14603,10 +14266,7 @@
         "he fights for you!"
       ],
       "granted_skills": [],
-      "tags": [
-        "flask",
-        "ultimate_life_flask"
-      ],
+      "tags": [],
       "source": {
         "id": "/us/Olroths_Resolve",
         "url": "https://poe2db.tw/us/Olroths_Resolve",
@@ -14635,10 +14295,7 @@
         "- Lavianga, former advisor to Kaom"
       ],
       "granted_skills": [],
-      "tags": [
-        "flask",
-        "gargantuan_mana_flask"
-      ],
+      "tags": [],
       "source": {
         "id": "/us/Laviangas_Spirits",
         "url": "https://poe2db.tw/us/Laviangas_Spirits",
@@ -14668,9 +14325,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "chaos_damage",
-        "flask",
-        "ultimate_mana_flask"
+        "chaos_damage"
       ],
       "source": {
         "id": "/us/Melting_Maelstrom",
@@ -14703,9 +14358,7 @@
       "granted_skills": [],
       "tags": [
         "charge",
-        "charm",
-        "energy_shield_recharge",
-        "thawing_charm"
+        "energy_shield_recharge"
       ],
       "source": {
         "id": "/us/Nascent_Hope",
@@ -14737,9 +14390,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "charm",
-        "consecrated_ground",
-        "staunching_charm"
+        "consecrated_ground"
       ],
       "source": {
         "id": "/us/Sanguis_Heroum",
@@ -14771,10 +14422,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "antidote_charm",
-        "charm",
-        "flask's",
-        "poisoned"
+        "flask",
+        "poison"
       ],
       "source": {
         "id": "/us/Arakaalis_Gift",
@@ -14807,11 +14456,8 @@
       "granted_skills": [],
       "tags": [
         "charge",
-        "charm",
-        "dousing_charm",
-        "ignited",
-        "ignited_ground",
-        "igniting"
+        "ignite",
+        "ignited_ground"
       ],
       "source": {
         "id": "/us/Beiras_Anguish",
@@ -14843,10 +14489,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "charm",
-        "grounding_charm",
-        "hitting",
-        "shocked"
+        "hit",
+        "shock"
       ],
       "source": {
         "id": "/us/The_Black_Cat",
@@ -14878,9 +14522,7 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "charm",
-        "stone_charm",
-        "stunned"
+        "stun"
       ],
       "source": {
         "id": "/us/For_Utopia",
@@ -14911,10 +14553,7 @@
         "- Vorm, the Twice-Pardoned"
       ],
       "granted_skills": [],
-      "tags": [
-        "charm",
-        "silver_charm"
-      ],
+      "tags": [],
       "source": {
         "id": "/us/The_Fall_of_the_Axe",
         "url": "https://poe2db.tw/us/The_Fall_of_the_Axe",
@@ -14944,9 +14583,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "charm",
-        "hit",
-        "ruby_charm"
+        "hit"
       ],
       "source": {
         "id": "/us/Ngamahus_Chosen",
@@ -14980,10 +14617,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "charm",
         "hit",
-        "power_charge",
-        "sapphire_charm"
+        "power_charge"
       ],
       "source": {
         "id": "/us/Breath_of_the_Mountains",
@@ -15015,10 +14650,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "charm",
         "frenzy_charge",
-        "hit",
-        "topaz_charm"
+        "hit"
       ],
       "source": {
         "id": "/us/Valakos_Roar",
@@ -15050,10 +14683,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "amethyst_charm",
-        "charm",
         "hit",
-        "recouped"
+        "recoup"
       ],
       "source": {
         "id": "/us/Forsaken_Bangle",
@@ -15084,8 +14715,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "charm",
-        "golden_charm",
         "possessed",
         "rare",
         "spirit_of_the_stag",
@@ -15095,6 +14724,32 @@
         "id": "/us/Rite_of_Passage",
         "url": "https://poe2db.tw/us/Rite_of_Passage",
         "label": "Rite of Passage Golden Charm"
+      }
+    },
+    "/us/Kalandras_Touch": {
+      "key": "Kalandra's Touch||Ring",
+      "name": "Kalandra's Touch",
+      "base": "Ring",
+      "slot": "Ring",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [],
+      "explicit_mods": [
+        "Reflects opposite Ring"
+      ],
+      "flavour_text": [
+        "Power is a matter of perspective."
+      ],
+      "granted_skills": [],
+      "tags": [],
+      "source": {
+        "id": "/us/Kalandras_Touch",
+        "url": "https://poe2db.tw/us/Kalandras_Touch",
+        "label": "Kalandra's Touch Ring"
       }
     },
     "/us/Sekhemas_Resolve": {
@@ -15122,10 +14777,9 @@
       "granted_skills": [],
       "tags": [
         "area_penalties",
-        "attributes",
+        "attribute",
         "fire",
-        "rarity_of_items",
-        "ring"
+        "rarity_of_items"
       ],
       "source": {
         "id": "/us/Sekhemas_Resolve",
@@ -15133,26 +14787,306 @@
         "label": "Sekhema's Resolve Ring"
       }
     },
-    "/us/marked?id=Unique_item": {
-      "key": "Edit",
-      "name": "Edit",
-      "base": "",
-      "slot": null,
+    "/us/Wraeclast_Besieged": {
+      "key": "Wraeclast Besieged||Breach Precursor Tablet",
+      "name": "Wraeclast Besieged",
+      "base": "Breach Precursor Tablet",
+      "slot": "Tablet",
       "requirements": {
         "level": null,
         "str": null,
         "dex": null,
         "int": null
       },
-      "implicit_mods": [],
-      "explicit_mods": [],
-      "flavour_text": [],
+      "implicit_mods": [
+        "Adds an ContainsBreach to a Map 5 uses remaining"
+      ],
+      "explicit_mods": [
+        "ContainsBreach expand to at least 20 metres in radius ContainsBreach remain open while there are alive Breach Monsters",
+        "ContainsBreach in Map have 18% reduced Monster density"
+      ],
+      "flavour_text": [
+        "In his broken madness, Xesht spills forth the hordes,",
+        "reaching out to wreak pain and ruination."
+      ],
       "granted_skills": [],
-      "tags": [],
+      "tags": [
+        "breaches",
+        "otherworldy_breach"
+      ],
       "source": {
-        "id": "/us/marked?id=Unique_item",
-        "url": "https://poe2db.tw/us/marked?id=Unique_item",
-        "label": "Edit"
+        "id": "/us/Wraeclast_Besieged",
+        "url": "https://poe2db.tw/us/Wraeclast_Besieged",
+        "label": "Wraeclast Besieged Breach Precursor Tablet"
+      }
+    },
+    "/us/Forgotten_By_Time": {
+      "key": "Forgotten By Time||Expedition Precursor Tablet",
+      "name": "Forgotten By Time",
+      "base": "Expedition Precursor Tablet",
+      "slot": "Tablet",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [
+        "Adds a ContainsExpedition to a Map 5 uses remaining"
+      ],
+      "explicit_mods": [
+        "ContainsExpedition Monsters in your Maps spawn with half of their Life missing",
+        "Runic Monsters in your Maps are Duplicated"
+      ],
+      "flavour_text": [
+        "Before the starlight barrier failed, before the end came,",
+        "countless Kalguuran settlers sought a new life on Wraeclast.",
+        "Of the towns they founded and the lives they lived, little remains..."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "expedition",
+        "kalguuran_expedition"
+      ],
+      "source": {
+        "id": "/us/Forgotten_By_Time",
+        "url": "https://poe2db.tw/us/Forgotten_By_Time",
+        "label": "Forgotten By Time Expedition Precursor Tablet"
+      }
+    },
+    "/us/Clear_Skies": {
+      "key": "Clear Skies||Delirium Precursor Tablet",
+      "name": "Clear Skies",
+      "base": "Delirium Precursor Tablet",
+      "slot": "Tablet",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [
+        "Adds a ContainsDelirium to a Map 5 uses remaining"
+      ],
+      "explicit_mods": [
+        "ContainsDelirium Fog in your Maps never dissipates",
+        "Delirious in Map increases 4% faster with distance from the mirror"
+      ],
+      "flavour_text": [
+        "A simple instruction that will purify an entire region,",
+        "making it safe and kind for weary travellers."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "delirium",
+        "mirror_of_delirium"
+      ],
+      "source": {
+        "id": "/us/Clear_Skies",
+        "url": "https://poe2db.tw/us/Clear_Skies",
+        "label": "Clear Skies Delirium Precursor Tablet"
+      }
+    },
+    "/us/Freedom_of_Faith": {
+      "key": "Freedom of Faith||Ritual Precursor Tablet",
+      "name": "Freedom of Faith",
+      "base": "Ritual Precursor Tablet",
+      "slot": "Tablet",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [
+        "Adds ContainsRitual to a Map 5 uses remaining"
+      ],
+      "explicit_mods": [
+        "Favours at ContainsRitual in Area costs 13% increased Tribute",
+        "Can Reroll Favours at ContainsRitual in your Maps twice as many times"
+      ],
+      "flavour_text": [
+        "When darkness comes, we pray for light.",
+        "When darkness is all that there is,",
+        "we pray for death."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "ritual_altars"
+      ],
+      "source": {
+        "id": "/us/Freedom_of_Faith",
+        "url": "https://poe2db.tw/us/Freedom_of_Faith",
+        "label": "Freedom of Faith Ritual Precursor Tablet"
+      }
+    },
+    "/us/The_Grand_Project": {
+      "key": "The Grand Project||Precursor Tablet",
+      "name": "The Grand Project",
+      "base": "Precursor Tablet",
+      "slot": "Tablet",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [
+        "Adds ContainsIrradiated to a Map 1 use remaining"
+      ],
+      "explicit_mods": [
+        "Can only be applied to PrecursorTower Completing the Tower makes all nearby Maps accessible"
+      ],
+      "flavour_text": [
+        "\"I see a pattern in these towers. Whoever the Precursors were, they sought to master",
+        "this world, to shape it as they saw fit. My people had the same ambition...\""
+      ],
+      "granted_skills": [],
+      "tags": [
+        "irradiated",
+        "precursor_tower_maps"
+      ],
+      "source": {
+        "id": "/us/The_Grand_Project",
+        "url": "https://poe2db.tw/us/The_Grand_Project",
+        "label": "The Grand Project Precursor Tablet"
+      }
+    },
+    "/us/Visions_of_Paradise": {
+      "key": "Visions of Paradise||Precursor Tablet",
+      "name": "Visions of Paradise",
+      "base": "Precursor Tablet",
+      "slot": "Tablet",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [
+        "Adds ContainsIrradiated to a Map 1 use remaining"
+      ],
+      "explicit_mods": [
+        "If Map was not previously IrradiatedNonAtlas, completing Map adds IrradiatedNonAtlas instead"
+      ],
+      "flavour_text": [
+        "\"If they had ever completed the tower network,",
+        "it could have changed the face of the world...\""
+      ],
+      "granted_skills": [],
+      "tags": [
+        "irradiated",
+        "irradiation"
+      ],
+      "source": {
+        "id": "/us/Visions_of_Paradise",
+        "url": "https://poe2db.tw/us/Visions_of_Paradise",
+        "label": "Visions of Paradise Precursor Tablet"
+      }
+    },
+    "/us/Season_of_the_Hunt": {
+      "key": "Season of the Hunt||Overseer Precursor Tablet",
+      "name": "Season of the Hunt",
+      "base": "Overseer Precursor Tablet",
+      "slot": "Tablet",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [
+        "ContainsMapBoss the MapBoss of a Map 5 uses remaining"
+      ],
+      "explicit_mods": [
+        "MapBoss are Hunted by AzmeriSpirit"
+      ],
+      "flavour_text": [
+        "Darkness and light, naught but forest between.",
+        "As the forest fades, the twilight hunt begins."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "azmeri_spirits",
+        "empowers",
+        "map_boss",
+        "map_bosses"
+      ],
+      "source": {
+        "id": "/us/Season_of_the_Hunt",
+        "url": "https://poe2db.tw/us/Season_of_the_Hunt",
+        "label": "Season of the Hunt Overseer Precursor Tablet"
+      }
+    },
+    "/us/Cruel_Hegemony": {
+      "key": "Cruel Hegemony||Overseer Precursor Tablet",
+      "name": "Cruel Hegemony",
+      "base": "Overseer Precursor Tablet",
+      "slot": "Tablet",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [
+        "ContainsMapBoss the MapBoss of a Map 5 uses remaining"
+      ],
+      "explicit_mods": [
+        "MapBoss have 1 additional MonsterModifiers"
+      ],
+      "flavour_text": [
+        "The lash of the whip,",
+        "the ire of the tithe...",
+        "the press of the boot."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "empowers",
+        "map_boss",
+        "map_bosses",
+        "modifier"
+      ],
+      "source": {
+        "id": "/us/Cruel_Hegemony",
+        "url": "https://poe2db.tw/us/Cruel_Hegemony",
+        "label": "Cruel Hegemony Overseer Precursor Tablet"
+      }
+    },
+    "/us/Unforeseen_Consequences": {
+      "key": "Unforeseen Consequences||Abyss Precursor Tablet",
+      "name": "Unforeseen Consequences",
+      "base": "Abyss Precursor Tablet",
+      "slot": "Tablet",
+      "requirements": {
+        "level": null,
+        "str": null,
+        "dex": null,
+        "int": null
+      },
+      "implicit_mods": [
+        "Adds ContainsAbyss to a Map 1 use remaining"
+      ],
+      "explicit_mods": [
+        "4 additional Rarity Monsters are spawned from ContainsAbyss in Map",
+        "Map is overrun by the ContainsAbyss",
+        "Map contains 16 additional ContainsAbyss"
+      ],
+      "flavour_text": [
+        "The Well was naught.",
+        "The Precursors dug too deep.",
+        "The Well always had been."
+      ],
+      "granted_skills": [],
+      "tags": [
+        "abyssal",
+        "abysses",
+        "rare"
+      ],
+      "source": {
+        "id": "/us/Unforeseen_Consequences",
+        "url": "https://poe2db.tw/us/Unforeseen_Consequences",
+        "label": "Unforeseen Consequences Abyss Precursor Tablet"
       }
     }
   }
