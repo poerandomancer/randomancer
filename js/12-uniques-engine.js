@@ -606,6 +606,7 @@ function weaponSlotAllowed(it, slotAllow){
   function scoreArmourPass(it, rolled, state){
     const { all, primary } = getItemTagBuckets(it);
     let s = 0;
+    const hasCullingTactic = (rolled.tactics || []).includes('cullingstrike');
 
     // Offense-first, tactics lead
     for (const t of rolled.tactics)  if (primary.has(t)) s += 4.0;
@@ -614,6 +615,9 @@ function weaponSlotAllowed(it, slotAllow){
     // Defensive strategy / primary defense (secondary, strategy favored)
     for (const t of (rolled.defStrat || rolled.def || []))   if (primary.has(t)) s += 1.5;
     for (const t of (rolled.defPrimary || []))                if (primary.has(t)) s += 1.0;
+
+    // Culling tactic-specific affinity: prioritize true culling uniques when Culling Strike is rolled.
+    if (hasCullingTactic && primary.has('cullingstrike')) s += 3.0;
 
     // Small bump for resistance coverage (tie-breaker, not a primary driver)
     if (all.has(TAG_ALL_ELE_RES)) s += 0.6;
