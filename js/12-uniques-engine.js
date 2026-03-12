@@ -51,6 +51,7 @@ import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
     if (/\blife\s+regen(?:eration)?\b/.test(txt)) out.push('liferegeneration');
     if (/\bleech(ed|ing|es)?\b/.test(txt)) out.push('leech');
     if (/\bcrit(ical|s|ically| chance)?\b|\bcritical\s+strike\b/.test(txt)) out.push('critical');
+    if (/\bculling\s*strike\b|\bcullingstrike\b|\bcull(?:ed|ing|s)?\b/.test(txt)) out.push('cullingstrike');
     return out;
   }
 
@@ -110,13 +111,13 @@ import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
 		  expandTags(
 			(state.tacticSet || []).flatMap(t => t?.tags || [])
 		  )
-		);
+		).filter((t) => t !== 'physical');
 	
 		const tagsA = Array.from(
 		  expandTags(
 			(state.ailmentSet || []).flatMap(a => a?.tags || [])
 		  )
-		);
+		).filter((t) => t !== 'physical');
 	
 		const tagsDStrat = Array.from(
 		  expandTags(state.defStrat?.tags || [])
@@ -148,10 +149,10 @@ import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
 	
 	  const tagsT = Array.from(
 		expandTags(namesT.flatMap(n => idx.get(n)))
-	  );
+	  ).filter((t) => t !== 'physical');
 	  const tagsA = Array.from(
 		expandTags(namesA.flatMap(n => idx.get(n)))
-	  );
+	  ).filter((t) => t !== 'physical');
 	  const tagsDStrat = Array.from(
 		expandTags(namesD.flatMap(n => idx.get(n)))
 	  );
@@ -344,7 +345,7 @@ async function loadUniquesM(){
     for (const t of [...raw, ...derived, ...grantedSkillTags]){
       if (!t) continue;
       const n = norm(t);
-      if (n) entries.push({ raw: t, n });
+      if (n && n !== 'physical') entries.push({ raw: t, n });
     }
 
     // expand canonical labels, including compound ones like "Slow/Maim/Hinder"
@@ -356,7 +357,7 @@ async function loadUniquesM(){
       if (parts.length > 1){
         for (const p of parts){
           const n = norm(p);
-          if (n) entries.push({ raw: p, n });
+          if (n && n !== 'physical') entries.push({ raw: p, n });
         }
         continue;
       }
@@ -365,7 +366,7 @@ async function loadUniquesM(){
         entries.push({ raw: 'slow', n: 'slow' });
         entries.push({ raw: 'maim', n: 'maim' });
         entries.push({ raw: 'hinder', n: 'hinder' });
-      } else if (n){
+      } else if (n && n !== 'physical'){
         entries.push({ raw: lbl, n });
       }
     }
