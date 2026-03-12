@@ -613,8 +613,8 @@ function weaponSlotAllowed(it, slotAllow){
     for (const t of rolled.ailments) if (primary.has(t)) s += 2.0;
 
     // Defensive strategy / primary defense (secondary, strategy favored)
-    for (const t of (rolled.defStrat || rolled.def || []))   if (primary.has(t)) s += 1.5;
-    for (const t of (rolled.defPrimary || []))                if (primary.has(t)) s += 1.0;
+    for (const t of (rolled.defStrat || rolled.def || []))   if (primary.has(t)) s += 1.2;
+    for (const t of (rolled.defPrimary || []))                if (primary.has(t)) s += 0.6;
 
     // Culling tactic-specific affinity: prioritize true culling uniques when Culling Strike is rolled.
     if (hasCullingTactic && primary.has('cullingstrike')) s += 3.0;
@@ -730,10 +730,10 @@ function weaponSlotAllowed(it, slotAllow){
 
     // Defensive strategy / primary defense (secondary, strategy favored)
     for (const t of (rolled.defStrat || rolled.def || [])){
-      if (primary.has(t)){ s += 1.5; match += 1.5; }
+      if (primary.has(t)){ s += 1.2; match += 1.2; }
     }
     for (const t of (rolled.defPrimary || [])){
-      if (primary.has(t)){ s += 1.0; match += 1.0; }
+      if (primary.has(t)){ s += 0.6; match += 0.6; }
     }
 
     // Resistances as light tie-breaker (never part of match qualification)
