@@ -14,7 +14,7 @@ const ICON_BY_CURRENCY = Object.freeze({
   regal: 'images/currency/regal.png',
   alchemy: 'images/currency/alchemy.png',
   annulment: 'images/currency/annulment.png',
-  aaal: 'images/currency/aaal.png',
+  vaal: 'images/currency/vaal.png',
   chance: 'images/currency/chance.png',
   transmutation: 'images/currency/transmutation.png',
   augmentation: 'images/currency/augmentation.png'
@@ -52,7 +52,7 @@ const CURRENCY_ABBREVIATION = Object.freeze({
   regal: 'regal',
   alchemy: 'alch',
   annulment: 'annul',
-  aaal: 'aaal',
+  vaal: 'vaal',
   chance: 'chance',
   transmutation: 'trans',
   augmentation: 'aug'
