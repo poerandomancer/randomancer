@@ -96,7 +96,7 @@ import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
     function rolledByCategory(snap){
 	  const state = getRollSnapshot(snap);
 	  if (!state) {
-		return { tactics: [], ailments: [], def: [] };
+		return { tactics: [], ailments: [], def: [], defStrat: [], defPrimary: [] };
 	  }
 	
 	  // ——— PREFER ENRICHED SNAPSHOT (tacticSet / ailmentSet / defStrat objects) ———
@@ -118,17 +118,20 @@ import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
 		  )
 		);
 	
-		const tagsD = Array.from(
-		  expandTags([
-			...(state.defStrat?.tags || []),
-			...defensePseudoTags(state.defense && state.defense.name)
-		  ])
+		const tagsDStrat = Array.from(
+		  expandTags(state.defStrat?.tags || [])
 		);
+		const tagsDPrimary = Array.from(
+		  expandTags(defensePseudoTags(state.defense && state.defense.name))
+		);
+		const tagsD = Array.from(new Set([...tagsDStrat, ...tagsDPrimary]));
 	
 		return {
 		  tactics: tagsT,
 		  ailments: tagsA,
 		  def: tagsD,
+		  defStrat: tagsDStrat,
+		  defPrimary: tagsDPrimary,
 		};
 	  }
 	
@@ -149,17 +152,20 @@ import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
 	  const tagsA = Array.from(
 		expandTags(namesA.flatMap(n => idx.get(n)))
 	  );
-	  const tagsD = Array.from(
-		expandTags([
-		  ...namesD.flatMap(n => idx.get(n)),
-		  ...defensePseudoTags(state.defense || state.defenseName)
-		])
+	  const tagsDStrat = Array.from(
+		expandTags(namesD.flatMap(n => idx.get(n)))
 	  );
+	  const tagsDPrimary = Array.from(
+		expandTags(defensePseudoTags(state.defense || state.defenseName))
+	  );
+	  const tagsD = Array.from(new Set([...tagsDStrat, ...tagsDPrimary]));
 	
 	  return {
 		tactics: tagsT,
 		ailments: tagsA,
 		def: tagsD,
+		defStrat: tagsDStrat,
+		defPrimary: tagsDPrimary,
 	  };
 	}
 
@@ -583,8 +589,9 @@ function weaponSlotAllowed(it, slotAllow){
     for (const t of rolled.tactics)  if (primary.has(t)) s += 4.0;
     for (const t of rolled.ailments) if (primary.has(t)) s += 2.0;
 
-    // Defensive strategy / primary defense (secondary)
-    for (const t of rolled.def)      if (primary.has(t)) s += 1.5;
+    // Defensive strategy / primary defense (secondary, strategy favored)
+    for (const t of (rolled.defStrat || rolled.def || []))   if (primary.has(t)) s += 1.5;
+    for (const t of (rolled.defPrimary || []))                if (primary.has(t)) s += 1.0;
 
     // Small bump for resistance coverage (tie-breaker, not a primary driver)
     if (all.has(TAG_ALL_ELE_RES)) s += 0.6;
@@ -697,9 +704,12 @@ function weaponSlotAllowed(it, slotAllow){
       if (primary.has(t)){ s += 2.0; match += 2.0; }
     }
 
-    // Defensive strategy (secondary)
-    for (const t of rolled.def){
+    // Defensive strategy / primary defense (secondary, strategy favored)
+    for (const t of (rolled.defStrat || rolled.def || [])){
       if (primary.has(t)){ s += 1.5; match += 1.5; }
+    }
+    for (const t of (rolled.defPrimary || [])){
+      if (primary.has(t)){ s += 1.0; match += 1.0; }
     }
 
     // Resistances as light tie-breaker (never part of match qualification)
