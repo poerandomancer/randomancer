@@ -611,9 +611,13 @@ function weaponSlotAllowed(it, slotAllow){
     for (const t of rolled.tactics)  if (primary.has(t)) s += 4.0;
     for (const t of rolled.ailments) if (primary.has(t)) s += 2.0;
 
-    // Defensive strategy / primary defense (secondary, strategy favored)
-    for (const t of (rolled.defStrat || rolled.def || []))   if (primary.has(t)) s += 1.0;
-    for (const t of (rolled.defPrimary || []))                if (primary.has(t)) s += 0.4;
+    // Defensive strategy (secondary): only strategy tags participate in direct weighted matching.
+    for (const t of (rolled.defStrat || []))   if (primary.has(t)) s += 1.0;
+
+    // Primary defense alignment as a small tie-breaker (not a primary driver).
+    let primaryDefHits = 0;
+    for (const t of (rolled.defPrimary || [])) if (primary.has(t)) primaryDefHits += 1;
+    if (primaryDefHits) s += Math.min(0.4, primaryDefHits * 0.2);
 
 
     // Small bump for resistance coverage (tie-breaker, not a primary driver)
