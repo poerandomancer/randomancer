@@ -44,10 +44,12 @@ TEXT_TAG_RULES = [
     (re.compile(r"\bcrit(ical|s|ically| chance)?\b|\bcritical\s+strike\b", re.I), "crit"),
 ]
 
-INPUT_PASSIVES = "../datamined/passiveskills.json"
-INPUT_STATS = "../datamined/stats.json"
-INPUT_ASCENDANCY = "../datamined/ascendancy.json"
-OUTPUT_FILE = "../enriched/passives_enriched.json"
+HERE = Path(__file__).resolve().parent
+DATA_ROOT = HERE.parent
+INPUT_PASSIVES = DATA_ROOT / "datamined" / "passiveskills.json"
+INPUT_STATS = DATA_ROOT / "datamined" / "stats.json"
+INPUT_ASCENDANCY = DATA_ROOT / "datamined" / "ascendancy.json"
+OUTPUT_FILE = DATA_ROOT / "enriched" / "passives_enriched.json"
 
 
 # ---------- helpers ----------
@@ -380,16 +382,11 @@ def derive_tags(raw_stats, lines=None):
 # ---------- main ----------
 
 def main():
-    cwd = Path(".").resolve()
-    print(f"Loading data from {cwd}...")
+    print(f"Loading data from {DATA_ROOT}...")
 
-    passive_path = cwd / INPUT_PASSIVES
-    stats_path = cwd / INPUT_STATS
-    asc_path = cwd / INPUT_ASCENDANCY
-
-    passive_skills = load_json(passive_path)
-    stats = load_json(stats_path)
-    ascendancy_entries = load_json(asc_path)
+    passive_skills = load_json(INPUT_PASSIVES)
+    stats = load_json(INPUT_STATS)
+    ascendancy_entries = load_json(INPUT_ASCENDANCY)
 
     # Map _rid -> stat obj
     stat_by_rid = {s.get("_rid"): s for s in stats}
@@ -445,12 +442,12 @@ def main():
         "ascendancies": ascendancies,
     }
 
-    out_path = cwd / OUTPUT_FILE
-    with out_path.open("w", encoding="utf-8") as f:
+    OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
+    with OUTPUT_FILE.open("w", encoding="utf-8") as f:
         json.dump(output, f, indent=2, ensure_ascii=False)
 
     counts = Counter(n["type"] for n in enriched_nodes)
-    print(f"Wrote {len(enriched_nodes)} nodes to {out_path}")
+    print(f"Wrote {len(enriched_nodes)} nodes to {OUTPUT_FILE}")
     print("By type:", dict(counts))
 
 

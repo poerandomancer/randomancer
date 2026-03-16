@@ -73,6 +73,22 @@ Runtime JSON:
 
 Datamined/reference sources live under `data/datamined/` and are used for enrichment and future updates.
 
+
+### Tag normalization workflow
+- `data/tag_normalization_rules.json` is the single source of truth for shared tag normalization rules.
+- `js/generated/tag-normalization-rules.js` is generated from that JSON for browser runtime use.
+- `js/tag-normalization.js` contains runtime helper functions (canonicalization, expansion, matching).
+- `data/helperScripts/lib/tag_normalization.py` is the helper-layer Python implementation used by data scripts.
+
+Useful maintenance commands:
+- `make normalize-tags-check` (default validator mode)
+- `make normalize-tags-strict` (strict validator mode)
+- `make normalize-tags-audit` (refreshes `data/enriched/tag_vocab_audit.json`)
+- `python data/helperScripts/validate_tag_normalization.py --relaxed` (mixed-format tags become warnings)
+
+CI guardrail:
+- `.github/workflows/tag-normalization-check.yml` regenerates rules, fails on generated-file drift, runs validator, and emits an audit JSON file during CI.
+
 ---
 
 ## Development Notes
