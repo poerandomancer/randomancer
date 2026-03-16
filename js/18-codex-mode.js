@@ -28,6 +28,14 @@ const CODEX_UI_TAG_STOPLIST = new Set([
   'javelin', 'trap', 'flask'
 ]);
 
+// Codex-local heuristic policy for derived tags.
+// This is intentionally UI/search vocabulary (not shared global normalization rules).
+const CODEX_DERIVED_TAG_VOCAB = [
+  'fire', 'cold', 'lightning', 'chaos', 'physical',
+  'minion', 'projectile', 'totem', 'melee', 'spell',
+  'attack', 'crit', 'bleed', 'poison', 'stun'
+];
+
 
 function canonicalizeCodexTag(tag) {
   const raw = String(tag || '').trim();
@@ -63,8 +71,7 @@ function normalizeTags(tags, text) {
     if (normalized) set.add(normalized);
   });
   const scan = String(text || '').toLowerCase();
-  const derives = ['fire','cold','lightning','chaos','physical','minion','projectile','totem','melee','spell','attack','crit','bleed','poison','stun'];
-  derives.forEach((t) => {
+  CODEX_DERIVED_TAG_VOCAB.forEach((t) => {
     if (!scan.includes(t)) return;
     const normalized = toCodexDisplayTag(t);
     if (normalized) set.add(normalized);

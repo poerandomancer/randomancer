@@ -5,17 +5,18 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from pathlib import Path
 from typing import Iterable
 
 from generate_tag_rules_js import OUTPUT_PATH as GENERATED_JS_PATH
 from generate_tag_rules_js import RULES_JSON_PATH, build_js_module
-from lib.tag_normalization import canonicalize_tag, expand_match_keys, load_rules
+from lib.tag_normalization import canonicalize_tag, expand_match_keys, load_rules, to_match_key
 
 
 HERE = Path(__file__).resolve().parent
 REPO_ROOT = HERE.parents[1]
-
+SKILL_FAMILIES_PATH = REPO_ROOT / "data" / "skill_families.json"
 
 MODE_PROFILES = {
     "default": {
@@ -30,6 +31,37 @@ MODE_PROFILES = {
         "enforce_mixed_format": False,
         "enforce_rejected_tags": True,
     },
+}
+
+CODEX_UI_TAG_STOPLIST = {
+    "helmet",
+    "body armour",
+    "body armor",
+    "gloves",
+    "boots",
+    "belt",
+    "ring",
+    "amulet",
+    "wand",
+    "bow",
+    "staff",
+    "mace",
+    "sword",
+    "axe",
+    "dagger",
+    "spear",
+    "crossbow",
+    "quarterstaff",
+    "flail",
+    "focus",
+    "shield",
+    "buckler",
+    "quiver",
+    "sceptre",
+    "claw",
+    "javelin",
+    "trap",
+    "flask",
 }
 
 
@@ -63,6 +95,114 @@ def check_sanity_cases() -> None:
 
     if canonicalize_tag("grants:Fireball") is not None:
         fail("grants:* canonicalization should be rejected")
+
+
+def _normalize_family_overlay_key(raw_tag: str, strip_chars_regex: str) -> str:
+    base_key = to_match_key(raw_tag)
+    return re.sub(strip_chars_regex, "", base_key)
+
+
+def _normalize_family_tag(raw_tag: str, family_lib: dict) -> str:
+    shared_canonical = canonicalize_tag(raw_tag)
+    strip_re = family_lib.get("tag_normalization", {}).get("strip_chars_regex", "[^a-z0-9]+")
+    shared_key = _normalize_family_overlay_key(shared_canonical or raw_tag, strip_re)
+
+    local_aliases = family_lib.get("tag_normalization", {}).get("alias_to_canonical", {})
+    local_target = local_aliases.get(shared_key)
+    if not local_target:
+        return shared_key
+
+    return _normalize_family_overlay_key(canonicalize_tag(local_target) or local_target, strip_re)
+
+
+def _to_codex_display_tag(raw_tag: str) -> str | None:
+    raw = str(raw_tag or "").strip()
+    if not raw:
+        return None
+
+    lowered = raw.lower().replace("[", "").replace("]", "").replace("_", " ").replace("-", " ").strip()
+    if lowered.startswith("family:"):
+        suffix = lowered[len("family:") :].strip()
+        return f"family:{suffix}" if suffix else None
+
+    canonical = canonicalize_tag(raw)
+    if not canonical:
+        return None
+
+    display = canonical.replace("_", " ")
+    if display in CODEX_UI_TAG_STOPLIST:
+        return None
+    return display
+
+
+def check_normalization_boundary_regressions() -> None:
+    family_lib = json.loads(SKILL_FAMILIES_PATH.read_text(encoding="utf-8"))
+
+    # Codex URL/query hydration boundary checks.
+    codex_checks = [
+        ("block chance", "chance to block"),
+        ("family:minions", "family:minions"),
+    ]
+    for raw, expected in codex_checks:
+        got = _to_codex_display_tag(raw)
+        if got != expected:
+            fail(f"Codex URL hydration regression for {raw!r}: got {got!r}, expected {expected!r}")
+
+    if _to_codex_display_tag("ring") is not None:
+        fail("Codex URL hydration regression: stoplisted tag 'ring' should be filtered")
+
+    # Family query alias normalization boundary checks.
+    family_alias_checks = [
+        ("companions", "companion", "companion"),
+        ("freezable", "freeze", "freeze"),
+    ]
+    for alias, canonical, expected_key in family_alias_checks:
+        alias_key = _normalize_family_tag(alias, family_lib)
+        canonical_key = _normalize_family_tag(canonical, family_lib)
+        if alias_key != canonical_key or alias_key != expected_key:
+            fail(
+                "Family query alias regression: "
+                f"alias={alias!r}->{alias_key!r}, canonical={canonical!r}->{canonical_key!r}, expected={expected_key!r}"
+            )
+
+
+def check_family_local_alias_overlap(mode: str) -> list[str]:
+    family_lib = json.loads(SKILL_FAMILIES_PATH.read_text(encoding="utf-8"))
+    tag_norm = family_lib.get("tag_normalization", {})
+    aliases = tag_norm.get("alias_to_canonical", {})
+    strip_re = tag_norm.get("strip_chars_regex", "[^a-z0-9]+")
+
+    overlaps = []
+    for local_alias, local_target in sorted(aliases.items()):
+        global_canonical = canonicalize_tag(local_alias, reject_grants=False)
+        global_outcome = _normalize_family_overlay_key(global_canonical or local_alias, strip_re)
+        local_outcome = _normalize_family_overlay_key(canonicalize_tag(local_target, reject_grants=False) or local_target, strip_re)
+        if global_outcome != local_outcome:
+            continue
+        overlaps.append(
+            {
+                "family": "__library_overlay__",
+                "alias": local_alias,
+                "global_canonical": global_canonical or local_alias,
+                "local_target": local_target,
+                "redundant": True,
+            }
+        )
+
+    warnings: list[str] = []
+    if overlaps:
+        header = f"Family-local aliases likely redundant with shared/global normalization: {len(overlaps)}"
+        if mode == "strict":
+            warnings.append(f"[STRICT NOTICE] {header}")
+        else:
+            warnings.append(header)
+        for row in overlaps[:10]:
+            warnings.append(
+                "  - family={family} alias={alias} global={global_canonical} local={local_target} redundant={redundant}".format(
+                    **row
+                )
+            )
+    return warnings
 
 
 def _iter_primary_tags() -> Iterable[str]:
@@ -134,7 +274,9 @@ def main() -> int:
     _ = load_rules()
     check_js_generated_sync()
     check_sanity_cases()
+    check_normalization_boundary_regressions()
     warnings = check_dataset_tags(mode)
+    warnings.extend(check_family_local_alias_overlap(mode))
     for warning in warnings:
         print(f"[validate_tag_normalization] WARN: {warning}")
 
