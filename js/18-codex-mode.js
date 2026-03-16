@@ -1,5 +1,6 @@
 import { ensureDataPreload } from './08-data-load.js';
 import { ensureMarketBadgeDelegation, hydrateMarketBadges, renderMarketBadgeMarkup } from './features/market-price.js';
+import { canonicalizeTag, isNoiseTag } from './tag-normalization.js';
 
 const state = {
   pillar: 'ascendancy',
@@ -27,36 +28,22 @@ const CODEX_TAG_STOPLIST = new Set([
   'javelin', 'trap', 'flask'
 ]);
 
-const CODEX_TAG_VARIANTS = new Map([
-  ['minions', 'minion'],
-  ['charges', 'charge'],
-  ['bleeding', 'bleed'],
-  ['bled', 'bleed'],
-  ['shocked', 'shock'],
-  ['shocking', 'shock'],
-  ['ignited', 'ignite'],
-  ['igniting', 'ignite'],
-  ['poisoned', 'poison'],
-  ['poisoning', 'poison'],
-  ['recouped', 'recoup'],
-  ['recouping', 'recoup']
-]);
 
 function normalizeCodexTag(tag) {
-  const raw = String(tag || '').toLowerCase().replace(/[\[\]]/g, '').replace(/[_-]+/g, ' ').trim();
+  const raw = String(tag || '').trim();
   if (!raw) return null;
-  const collapsed = raw.replace(/\s+/g, ' ');
 
-  const isFamilyTag = collapsed.startsWith('family:');
-  if (/^grants?:/.test(collapsed) || /^grants?\s/.test(collapsed) || collapsed.includes('grants skill')) return null;
+  const lowered = raw.toLowerCase().replace(/[\[\]]/g, '').replace(/[_-]+/g, ' ').trim();
+  const isFamilyTag = lowered.startsWith('family:');
+  if (isFamilyTag) {
+    const suffix = lowered.slice('family:'.length).trim();
+    return suffix ? `family:${suffix}` : null;
+  }
 
-  const canonical = CODEX_TAG_VARIANTS.get(collapsed) || collapsed;
-  if (!isFamilyTag && CODEX_TAG_STOPLIST.has(canonical)) return null;
-
-  if (!isFamilyTag) return canonical;
-  const suffix = canonical.slice('family:'.length).trim();
-  if (!suffix) return null;
-  return `family:${suffix}`;
+  const canonical = canonicalizeTag(raw);
+  if (!canonical) return null;
+  if (isNoiseTag(canonical) || CODEX_TAG_STOPLIST.has(canonical.replace(/_/g, ' '))) return null;
+  return canonical.replace(/_/g, ' ');
 }
 
 function normalizeTags(tags, text) {
@@ -687,17 +674,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       state.uniquesLoadWarning = '';
       return mapped;
     } catch {
-      try {
-        const fallbackRes = await fetch('data/enriched/uniques_enriched.json');
-        if (!fallbackRes.ok) throw new Error(`HTTP ${fallbackRes.status}`);
-        const fallbackJson = await fallbackRes.json();
-        const fallbackItems = Array.isArray(fallbackJson?.items) ? fallbackJson.items : [];
-        state.uniquesLoadWarning = 'Using fallback uniques dataset. To refresh Codex uniques, generate and commit data/enriched/poe2db_uniques_min.json.';
-        return fallbackItems;
-      } catch {
-        state.uniquesLoadWarning = 'Uniques dataset unavailable. Generate and commit data/enriched/poe2db_uniques_min.json to enable Codex uniques browsing.';
-        return [];
-      }
+      state.uniquesLoadWarning = 'Uniques dataset unavailable. Generate and commit data/enriched/poe2db_uniques_min.json to enable Codex uniques browsing.';
+      return [];
     }
   }
 

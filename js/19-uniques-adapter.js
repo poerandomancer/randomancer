@@ -1,4 +1,4 @@
-import { TagUtils } from './05-tags-and-scorer.js';
+import { expandCanonicalTag, toMatchKey } from './tag-normalization.js';
 
 const SLOT_MAP = new Map([
   ['body armour', 'body'],
@@ -34,24 +34,6 @@ const SLOT_MAP = new Map([
   ['soulcore', 'soulcore']
 ]);
 
-const TAG_ALIAS = new Map([
-  ['armorbreak', ['armourbreak']],
-  ['allresistance', ['all_elemental_resistance']],
-  ['elementalresistance', ['all_elemental_resistance']],
-  ['movespeed', ['movement_speed']],
-
-  // Requested build-mode normalization aliases
-  ['critical_weakness', ['critical_hit', 'critical']],
-  ['critical_damage_bonus', ['critical_hit', 'critical']],
-  ['electrocution', ['shock']],
-  ['decimating_strike', ['culling_strike', 'cull']],
-  ['culled', ['cull', 'culling_strike']],
-  ['exposure', ['ignite', 'chill', 'shock']],
-  ['elemental_ailment', ['ignite', 'chill', 'shock']],
-  ['shocked_ground', ['shock']],
-  ['thorns_damage', ['thorns']],
-  ['chance_to_block', ['block']]
-]);
 
 function normalizeUniqueSlot(slotLabel) {
   const key = String(slotLabel || '').trim().toLowerCase();
@@ -59,19 +41,18 @@ function normalizeUniqueSlot(slotLabel) {
 }
 
 function normalizeUniqueTagsForBuild(tags) {
-  const src = Array.isArray(tags) ? tags : [];
-  const raw = new Set();
+  const source = Array.isArray(tags) ? tags : [];
+  const canonical = new Set();
 
-  src.forEach((tag) => {
-    const cleaned = String(tag || '').trim().toLowerCase().replace(/\s+/g, '_');
-    if (!cleaned) return;
-    raw.add(cleaned);
-
-    const aliasTo = TAG_ALIAS.get(cleaned) || TAG_ALIAS.get(TagUtils.norm(cleaned));
-    if (Array.isArray(aliasTo)) aliasTo.forEach((mapped) => raw.add(mapped));
+  source.forEach((tag) => {
+    expandCanonicalTag(tag).forEach((value) => canonical.add(value));
   });
 
-  return Array.from(raw);
+  const raw = Array.from(canonical);
+  return {
+    raw,
+    normalized: raw.map((t) => toMatchKey(t)).filter(Boolean)
+  };
 }
 
 function formatGrantedSkillLine(skill) {
@@ -112,7 +93,7 @@ function transformPoe2dbUnique(record) {
     slot,
     lines,
     tags: {
-      raw: normalizeUniqueTagsForBuild(record?.tags),
+      ...normalizeUniqueTagsForBuild(record?.tags),
       canonical: []
     },
     requirements: record?.requirements || {},
