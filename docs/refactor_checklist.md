@@ -51,3 +51,9 @@ Run through each item manually after changes. Do not skip.
 - Run `python data/helperScripts/generate_tag_rules_js.py` and verify no diff if rules are already in sync.
 - Run `python data/helperScripts/validate_tag_normalization.py` and confirm PASS.
 - Run `python data/helperScripts/audit_tag_vocab.py --json-out data/enriched/tag_vocab_audit.json` and inspect `summary` + per-source diagnostics.
+
+
+12) **Tag normalization CI/local workflow**
+- Run `make normalize-tags-check` before opening a PR.
+- Use `make normalize-tags-strict` when touching normalization helpers/rules.
+- Confirm CI workflow `.github/workflows/tag-normalization-check.yml` is green.

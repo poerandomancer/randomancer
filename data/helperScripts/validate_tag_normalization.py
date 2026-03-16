@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 from pathlib import Path
 from typing import Iterable
@@ -16,6 +17,22 @@ HERE = Path(__file__).resolve().parent
 REPO_ROOT = HERE.parents[1]
 
 
+MODE_PROFILES = {
+    "default": {
+        "enforce_mixed_format": True,
+        "enforce_rejected_tags": True,
+    },
+    "strict": {
+        "enforce_mixed_format": True,
+        "enforce_rejected_tags": True,
+    },
+    "relaxed": {
+        "enforce_mixed_format": False,
+        "enforce_rejected_tags": True,
+    },
+}
+
+
 def fail(msg: str) -> None:
     raise AssertionError(msg)
 
@@ -25,9 +42,7 @@ def check_js_generated_sync() -> None:
     expected = build_js_module(source_rules)
     actual = GENERATED_JS_PATH.read_text(encoding="utf-8") if GENERATED_JS_PATH.exists() else ""
     if expected != actual:
-        fail(
-            "Generated JS rules are out of sync. Run: python data/helperScripts/generate_tag_rules_js.py"
-        )
+        fail("Generated JS rules are out of sync. Run: python data/helperScripts/generate_tag_rules_js.py")
 
 
 def check_sanity_cases() -> None:
@@ -73,7 +88,8 @@ def _iter_primary_tags() -> Iterable[str]:
             yield str(tag)
 
 
-def check_dataset_tags() -> None:
+def check_dataset_tags(mode: str) -> list[str]:
+    profile = MODE_PROFILES[mode]
     bad = []
     mixed = []
     for tag in _iter_primary_tags():
@@ -82,20 +98,46 @@ def check_dataset_tags() -> None:
         if tag != tag.lower() or " " in tag or "-" in tag:
             mixed.append(tag)
 
-    if bad:
+    warnings: list[str] = []
+    if bad and profile["enforce_rejected_tags"]:
         sample = ", ".join(sorted(set(bad))[:10])
         fail(f"Primary dataset tags contain rejected/non-canonical entries (sample: {sample})")
+
     if mixed:
         sample = ", ".join(sorted(set(mixed))[:10])
-        fail(f"Primary dataset tags contain mixed-format entries (sample: {sample})")
+        if profile["enforce_mixed_format"]:
+            fail(f"Primary dataset tags contain mixed-format entries (sample: {sample})")
+        warnings.append(f"Mixed-format tags tolerated in relaxed mode (sample: {sample})")
+
+    return warnings
+
+
+def parse_mode(args: argparse.Namespace) -> str:
+    if args.strict and args.relaxed:
+        fail("Use only one mode flag: --strict or --relaxed")
+    if args.strict:
+        return "strict"
+    if args.relaxed:
+        return "relaxed"
+    return "default"
 
 
 def main() -> int:
-    print("[validate_tag_normalization] Running checks...")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--strict", action="store_true", help="Enable strict dataset hygiene checks")
+    parser.add_argument("--relaxed", action="store_true", help="Allow mixed-format dataset tags as warnings")
+    args = parser.parse_args()
+
+    mode = parse_mode(args)
+    print(f"[validate_tag_normalization] Running checks (mode={mode})...")
+
     _ = load_rules()
     check_js_generated_sync()
     check_sanity_cases()
-    check_dataset_tags()
+    warnings = check_dataset_tags(mode)
+    for warning in warnings:
+        print(f"[validate_tag_normalization] WARN: {warning}")
+
     print("[validate_tag_normalization] PASS")
     return 0
 

@@ -72,7 +72,8 @@ Reference / datamined (not necessarily used directly at runtime):
 - Runtime helper layer: `js/tag-normalization.js`.
 - Pipeline/helper layer: `data/helperScripts/lib/tag_normalization.py`.
 - Diagnostics and guardrails:
-  - `python data/helperScripts/audit_tag_vocab.py --json-out data/enriched/tag_vocab_audit.json`
-  - `python data/helperScripts/validate_tag_normalization.py`
+  - Local: `make normalize-tags-check`, `make normalize-tags-strict`, `make normalize-tags-audit`
+  - Validator mode toggle: `python data/helperScripts/validate_tag_normalization.py --relaxed`
+  - CI: `.github/workflows/tag-normalization-check.yml` checks generated-rules sync + validator health.
 
 Family-local alias overlays in skill-family resolution remain intentionally supported and are not replaced by the global rules file.

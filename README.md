@@ -81,9 +81,13 @@ Datamined/reference sources live under `data/datamined/` and are used for enrich
 - `data/helperScripts/lib/tag_normalization.py` is the helper-layer Python implementation used by data scripts.
 
 Useful maintenance commands:
-- `python data/helperScripts/generate_tag_rules_js.py`
-- `python data/helperScripts/audit_tag_vocab.py --json-out data/enriched/tag_vocab_audit.json`
-- `python data/helperScripts/validate_tag_normalization.py`
+- `make normalize-tags-check` (default validator mode)
+- `make normalize-tags-strict` (strict validator mode)
+- `make normalize-tags-audit` (refreshes `data/enriched/tag_vocab_audit.json`)
+- `python data/helperScripts/validate_tag_normalization.py --relaxed` (mixed-format tags become warnings)
+
+CI guardrail:
+- `.github/workflows/tag-normalization-check.yml` regenerates rules, fails on generated-file drift, runs validator, and emits an audit JSON file during CI.
 
 ---
 

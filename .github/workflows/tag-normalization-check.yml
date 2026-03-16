@@ -1,0 +1,30 @@
+name: Tag Normalization Check
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+
+jobs:
+  tag-normalization:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Regenerate JS rules from JSON
+        run: python data/helperScripts/generate_tag_rules_js.py
+
+      - name: Verify generated JS rules are committed
+        run: git diff --exit-code -- js/generated/tag-normalization-rules.js
+
+      - name: Validate tag normalization (default mode)
+        run: python data/helperScripts/validate_tag_normalization.py
+
+      - name: Produce audit artifact JSON
+        run: python data/helperScripts/audit_tag_vocab.py --json-out /tmp/tag_vocab_audit.json
