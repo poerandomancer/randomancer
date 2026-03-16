@@ -5,6 +5,9 @@ enrich_uniques.py
 Offline unique-item enrichment for Randomancer.
 
 NOTE: Legacy/non-runtime dataset generator kept for reference tooling.
+This script is intentionally quarantined and is NOT used by the runtime app path.
+Runtime uniques source is `data/enriched/poe2db_uniques_min.json`.
+`data/enriched/uniques_enriched.json` is legacy/reference output only.
 
 Reads datamined PoE2 unique data from:
 

@@ -14,41 +14,29 @@
   "tag_normalization": {
     "strip_chars_regex": "[^a-z0-9]+",
     "alias_to_canonical": {
-      "bleeds": "bleed",
       "bleedable": "bleed",
-      "poisons": "poison",
       "poisonable": "poison",
-      "ignites": "ignite",
       "igniteable": "ignite",
-      "shocks": "shock",
       "shockable": "shock",
-      "frozen": "freeze",
       "freezing": "freeze",
-      "freezes": "freeze",
       "freezable": "freeze",
       "companions": "companion"
     },
     "canonical_to_aliases": {
       "bleed": [
-        "bleeds",
         "bleedable"
       ],
       "poison": [
-        "poisons",
         "poisonable"
       ],
       "ignite": [
-        "ignites",
         "igniteable"
       ],
       "shock": [
-        "shocks",
         "shockable"
       ],
       "freeze": [
-        "frozen",
         "freezing",
-        "freezes",
         "freezable"
       ],
       "companion": [

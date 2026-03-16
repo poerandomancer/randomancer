@@ -76,4 +76,12 @@ Reference / datamined (not necessarily used directly at runtime):
   - Validator mode toggle: `python data/helperScripts/validate_tag_normalization.py --relaxed`
   - CI: `.github/workflows/tag-normalization-check.yml` checks generated-rules sync + validator health.
 
-Family-local alias overlays in skill-family resolution remain intentionally supported and are not replaced by the global rules file.
+Family-local alias overlays in skill-family resolution remain intentionally supported, but only as family-specific query convenience.
+
+Boundary policy:
+- Shared/global normalization (`data/tag_normalization_rules.json` + generated/runtime helpers) owns canonicalization, alias resolution, and match semantics.
+- Local overlays should only implement feature-local policy (e.g. Codex UI filtering/display and family-local grouping aliases).
+
+Legacy uniques enrichment:
+- `data/helperScripts/enrich_uniques.py` is legacy/reference tooling and is not part of the runtime data path.
+- Runtime uniques source is `data/enriched/poe2db_uniques_min.json`.

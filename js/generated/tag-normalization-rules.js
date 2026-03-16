@@ -12,6 +12,7 @@ const RULES = {
     "attributes": "attribute",
     "bled": "bleed",
     "bleeding": "bleed",
+    "bleeds": "bleed",
     "block recovery": "block_recovery",
     "block_chance": "chance_to_block",
     "blockchance": "chance_to_block",

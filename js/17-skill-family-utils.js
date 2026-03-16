@@ -1,4 +1,4 @@
-import { toMatchKey } from './tag-normalization.js';
+import { canonicalizeTag, toMatchKey } from './tag-normalization.js';
 
 /**
  * Skill Family utilities (Challenge Mode)
@@ -10,14 +10,25 @@ import { toMatchKey } from './tag-normalization.js';
  * Intended to be used with skills_enriched.json and skill_families.json.
  */
 
+function normalizeFamilyOverlayKey(rawTag, familyLib) {
+  const baseKey = toMatchKey(rawTag);
+  const stripRe = new RegExp(familyLib?.tag_normalization?.strip_chars_regex || '[^a-z0-9]+', 'g');
+  return baseKey.replace(stripRe, '');
+}
+
 export function normalizeTag(rawTag, familyLib) {
   if (rawTag == null) return '';
-  const stripRe = new RegExp(familyLib?.tag_normalization?.strip_chars_regex || '[^a-z0-9]+', 'g');
-  let t = toMatchKey(rawTag);
-  t = t.replace(stripRe, '');
+
+  // Shared/global normalization owns canonicalization and baseline match semantics.
+  const canonical = canonicalizeTag(rawTag);
+  const sharedKey = normalizeFamilyOverlayKey(canonical ?? rawTag, familyLib);
+
+  // Family-local alias overlays are intentionally a small, local post-pass.
   const map = familyLib?.tag_normalization?.alias_to_canonical || {};
-  if (map[t]) t = toMatchKey(map[t]);
-  return t;
+  const localAlias = map[sharedKey];
+  if (!localAlias) return sharedKey;
+
+  return normalizeFamilyOverlayKey(canonicalizeTag(localAlias) ?? localAlias, familyLib);
 }
 
 export function isEligibleSkillForFamilies(skill) {
