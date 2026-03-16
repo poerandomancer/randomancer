@@ -31,5 +31,7 @@ console.log(tip);
   - Support gems (`type !== "active"`)
   - DNT/Unused (id/name includes `DNT` or `UNUSED`)
 - Matching uses the **union** of `taxonomy.gem_tags`, `taxonomy.skill_types`, and `effect_tags`
-- Tags are normalized via shared helpers/rules (`data/tag_normalization_rules.json` + `js/tag-normalization.js`).
-- Family-local alias overlays in `skill_families.json` still apply by design for family-specific matching behavior.
+- Normalization boundary:
+  - Shared/global helpers/rules (`data/tag_normalization_rules.json` + `js/tag-normalization.js`) own canonicalization and baseline match semantics.
+  - Family-local aliases in `skill_families.json` are a small post-pass overlay for family-specific grouping/search convenience only.
+- Keep family-local overlays minimal: if an alias is global/project-wide, it belongs in shared rules instead.

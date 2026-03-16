@@ -1,6 +1,6 @@
 import { ensureDataPreload } from './08-data-load.js';
 import { ensureMarketBadgeDelegation, hydrateMarketBadges, renderMarketBadgeMarkup } from './features/market-price.js';
-import { canonicalizeTag, isNoiseTag } from './tag-normalization.js';
+import { canonicalizeTag, displayTag, isNoiseTag } from './tag-normalization.js';
 
 const state = {
   pillar: 'ascendancy',
@@ -20,7 +20,7 @@ const els = {};
 const esc = (s) => String(s || '').replace(/[&<>"']/g, (m) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
 const slug = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
-const CODEX_TAG_STOPLIST = new Set([
+const CODEX_UI_TAG_STOPLIST = new Set([
   'helmet', 'body armour', 'body armor', 'gloves', 'boots', 'belt',
   'ring', 'amulet',
   'wand', 'bow', 'staff', 'mace', 'sword', 'axe', 'dagger', 'spear', 'crossbow', 'quarterstaff',
@@ -29,7 +29,7 @@ const CODEX_TAG_STOPLIST = new Set([
 ]);
 
 
-function normalizeCodexTag(tag) {
+function canonicalizeCodexTag(tag) {
   const raw = String(tag || '').trim();
   if (!raw) return null;
 
@@ -41,22 +41,32 @@ function normalizeCodexTag(tag) {
   }
 
   const canonical = canonicalizeTag(raw);
-  if (!canonical) return null;
-  if (isNoiseTag(canonical) || CODEX_TAG_STOPLIST.has(canonical.replace(/_/g, ' '))) return null;
-  return canonical.replace(/_/g, ' ');
+  return canonical || null;
+}
+
+function isCodexUiFilteredTag(canonicalTag) {
+  if (!canonicalTag) return true;
+  if (isNoiseTag(canonicalTag)) return true;
+  return CODEX_UI_TAG_STOPLIST.has(displayTag(canonicalTag));
+}
+
+function toCodexDisplayTag(tag) {
+  const canonical = canonicalizeCodexTag(tag);
+  if (!canonical || isCodexUiFilteredTag(canonical)) return null;
+  return displayTag(canonical);
 }
 
 function normalizeTags(tags, text) {
   const set = new Set();
   (Array.isArray(tags) ? tags : []).forEach((t) => {
-    const normalized = normalizeCodexTag(t);
+    const normalized = toCodexDisplayTag(t);
     if (normalized) set.add(normalized);
   });
   const scan = String(text || '').toLowerCase();
   const derives = ['fire','cold','lightning','chaos','physical','minion','projectile','totem','melee','spell','attack','crit','bleed','poison','stun'];
   derives.forEach((t) => {
     if (!scan.includes(t)) return;
-    const normalized = normalizeCodexTag(t);
+    const normalized = toCodexDisplayTag(t);
     if (normalized) set.add(normalized);
   });
   return Array.from(set);
@@ -577,7 +587,7 @@ function bind() {
   els.tags?.addEventListener('click', (e) => {
     const chip = e.target.closest('[data-tag]');
     if (!chip) return;
-    const t = normalizeCodexTag(chip.dataset.tag);
+    const t = toCodexDisplayTag(chip.dataset.tag);
     if (!t) return;
     if (state.tags.has(t)) state.tags.delete(t); else state.tags.add(t);
     render();
@@ -652,7 +662,7 @@ function hydrateFromUrl() {
   state.tags = new Set(
     (p.get('tags') || '')
       .split(',')
-      .map((s) => normalizeCodexTag(s))
+      .map((s) => toCodexDisplayTag(s))
       .filter(Boolean)
   );
 }
@@ -688,7 +698,7 @@ window.RandomancerCodex = {
   setState(next = {}) {
     if (next.pillar) state.pillar = next.pillar;
     if (next.q != null) state.q = String(next.q);
-    if (Array.isArray(next.tags)) state.tags = new Set(next.tags.map((tag) => normalizeCodexTag(tag)).filter(Boolean));
+    if (Array.isArray(next.tags)) state.tags = new Set(next.tags.map((tag) => toCodexDisplayTag(tag)).filter(Boolean));
     render();
   },
   refresh() { buildIndex(); render(); }
