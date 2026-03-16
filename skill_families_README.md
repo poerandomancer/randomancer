@@ -1,7 +1,7 @@
 # Skill Families (Challenge Mode)
 
 Files:
-- `skill_families.json` — library of family definitions + tag normalization rules
+- `skill_families.json` — library of family definitions + family-local alias overlay rules
 - `skill_family_utils.js` — helper utilities to resolve families and format tooltips
 
 ## Basic usage (vanilla)
@@ -31,4 +31,5 @@ console.log(tip);
   - Support gems (`type !== "active"`)
   - DNT/Unused (id/name includes `DNT` or `UNUSED`)
 - Matching uses the **union** of `taxonomy.gem_tags`, `taxonomy.skill_types`, and `effect_tags`
-- Tags are normalized (lowercase, strip punctuation), then run through alias mapping in `skill_families.json`
+- Tags are normalized via shared helpers/rules (`data/tag_normalization_rules.json` + `js/tag-normalization.js`).
+- Family-local alias overlays in `skill_families.json` still apply by design for family-specific matching behavior.

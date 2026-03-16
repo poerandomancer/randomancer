@@ -1,14 +1,229 @@
 {
-  "skills_enriched": {
-    "count": 634
+  "schema_version": "phase3.v1",
+  "generated_at": "2026-03-16T16:01:34.760106+00:00",
+  "summary": {
+    "sources": 4,
+    "total_distinct_raw_count": 944,
+    "total_distinct_canonical_count": 943,
+    "total_rejected_count": 0,
+    "total_collision_count": 1
   },
-  "passives_enriched": {
-    "count": 42
-  },
-  "poe2db_uniques_min": {
-    "count": 231
-  },
-  "skill_families": {
-    "count": 37
+  "sources": {
+    "skills_enriched": {
+      "distinct_raw_count": 634,
+      "distinct_canonical_count": 634,
+      "rejected_count": 0,
+      "suspicious_mixed_format_count": 0,
+      "collision_count": 0,
+      "top_canonical_tags": [
+        {
+          "tag": "support",
+          "count": 594
+        },
+        {
+          "tag": "attack",
+          "count": 383
+        },
+        {
+          "tag": "area",
+          "count": 343
+        },
+        {
+          "tag": "projectile",
+          "count": 292
+        },
+        {
+          "tag": "intelligence",
+          "count": 236
+        },
+        {
+          "tag": "hitdamage",
+          "count": 235
+        },
+        {
+          "tag": "duration",
+          "count": 223
+        },
+        {
+          "tag": "hit",
+          "count": 212
+        },
+        {
+          "tag": "minion",
+          "count": 197
+        },
+        {
+          "tag": "melee",
+          "count": 196
+        }
+      ],
+      "sample_rejected": [],
+      "sample_mixed_format": [],
+      "sample_collisions": []
+    },
+    "passives_enriched": {
+      "distinct_raw_count": 42,
+      "distinct_canonical_count": 42,
+      "rejected_count": 0,
+      "suspicious_mixed_format_count": 0,
+      "collision_count": 0,
+      "top_canonical_tags": [
+        {
+          "tag": "attack",
+          "count": 133
+        },
+        {
+          "tag": "crit",
+          "count": 105
+        },
+        {
+          "tag": "critical_hit",
+          "count": 88
+        },
+        {
+          "tag": "armour",
+          "count": 80
+        },
+        {
+          "tag": "mana",
+          "count": 79
+        },
+        {
+          "tag": "spell",
+          "count": 65
+        },
+        {
+          "tag": "energy_shield",
+          "count": 62
+        },
+        {
+          "tag": "physical",
+          "count": 59
+        },
+        {
+          "tag": "life",
+          "count": 54
+        },
+        {
+          "tag": "shield",
+          "count": 54
+        }
+      ],
+      "sample_rejected": [],
+      "sample_mixed_format": [],
+      "sample_collisions": []
+    },
+    "poe2db_uniques_min": {
+      "distinct_raw_count": 231,
+      "distinct_canonical_count": 231,
+      "rejected_count": 0,
+      "suspicious_mixed_format_count": 0,
+      "collision_count": 0,
+      "top_canonical_tags": [
+        {
+          "tag": "energy_shield",
+          "count": 90
+        },
+        {
+          "tag": "armour",
+          "count": 83
+        },
+        {
+          "tag": "hit",
+          "count": 66
+        },
+        {
+          "tag": "evasion",
+          "count": 58
+        },
+        {
+          "tag": "intelligence",
+          "count": 45
+        },
+        {
+          "tag": "strength",
+          "count": 43
+        },
+        {
+          "tag": "dexterity",
+          "count": 42
+        },
+        {
+          "tag": "physical",
+          "count": 40
+        },
+        {
+          "tag": "critical_hit",
+          "count": 38
+        },
+        {
+          "tag": "attack",
+          "count": 38
+        }
+      ],
+      "sample_rejected": [],
+      "sample_mixed_format": [],
+      "sample_collisions": []
+    },
+    "skill_families_queries": {
+      "distinct_raw_count": 37,
+      "distinct_canonical_count": 36,
+      "rejected_count": 0,
+      "suspicious_mixed_format_count": 0,
+      "collision_count": 1,
+      "top_canonical_tags": [
+        {
+          "tag": "spell",
+          "count": 9
+        },
+        {
+          "tag": "attack",
+          "count": 5
+        },
+        {
+          "tag": "fire",
+          "count": 4
+        },
+        {
+          "tag": "cold",
+          "count": 4
+        },
+        {
+          "tag": "lightning",
+          "count": 4
+        },
+        {
+          "tag": "shapeshift",
+          "count": 4
+        },
+        {
+          "tag": "chaos",
+          "count": 2
+        },
+        {
+          "tag": "plant",
+          "count": 2
+        },
+        {
+          "tag": "bleed",
+          "count": 2
+        },
+        {
+          "tag": "physical",
+          "count": 1
+        }
+      ],
+      "sample_rejected": [],
+      "sample_mixed_format": [],
+      "sample_collisions": [
+        {
+          "canonical": "bleed",
+          "raw_variants": [
+            "bleed",
+            "bleeding"
+          ]
+        }
+      ]
+    }
   }
 }

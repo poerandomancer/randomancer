@@ -45,6 +45,14 @@ import requests
 from bs4 import BeautifulSoup  # pip install beautifulsoup4
 
 POE2DB_HOST = "https://poe2db.tw"
+HERE = Path(__file__).resolve().parent
+REPO_ROOT = HERE.parents[1]
+
+
+def resolve_repo_path(path_str: str) -> Path:
+    path = Path(path_str)
+    return path if path.is_absolute() else REPO_ROOT / path
+
 LISTING_PATH = "Unique_item"
 
 # Embedded JSON starts like {"realm":"poe2", ...}
@@ -443,7 +451,7 @@ def main() -> int:
     ap.add_argument("--verbose", action="store_true")
     args = ap.parse_args()
 
-    out_path = Path(args.out)
+    out_path = resolve_repo_path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     existing = {}

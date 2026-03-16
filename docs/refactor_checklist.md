@@ -45,3 +45,9 @@ Run through each item manually after changes. Do not skip.
 - Info opens/closes.
 - Feedback opens link.
 - Mobile menu opens/closes and triggers items correctly.
+
+
+11) **Tag normalization guardrails**
+- Run `python data/helperScripts/generate_tag_rules_js.py` and verify no diff if rules are already in sync.
+- Run `python data/helperScripts/validate_tag_normalization.py` and confirm PASS.
+- Run `python data/helperScripts/audit_tag_vocab.py --json-out data/enriched/tag_vocab_audit.json` and inspect `summary` + per-source diagnostics.
