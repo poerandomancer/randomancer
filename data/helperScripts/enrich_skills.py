@@ -39,35 +39,17 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple
 
+from lib.tag_normalization import canonicalize_tag, normalize_tag_list
+
 
 # --------------------------- Tag normalization ---------------------------
 
-RAW_ALIAS = [
-    ("critical", "crit"),
-    ("damage over time", "dot"),
-    ("damageovertime", "dot"),
-    ("marks", "mark"),
-    ("armourbreak", "armourbreak"),
-    ("armorbreak", "armourbreak"),
-    ("heavy stun", "heavystun"),
-    ("heavystun", "heavystun"),
-    ("life regeneration", "liferegeneration"),
-    ("culling strike", "cullingstrike"),
-    ("block recovery", "blockrecovery"),
-]
-
-
-def _base_normalize(s: Any) -> str:
-    return re.sub(r"[^a-z0-9]+", "", str(s or "").lower())
-
-
-_ALIAS_MAP: Dict[str, str] = {_base_normalize(a): _base_normalize(b) for a, b in RAW_ALIAS}
-
-
 def norm_tag(s: Any) -> str:
-    t = _base_normalize(s)
-    return _ALIAS_MAP.get(t, t)
+    return canonicalize_tag(s) or ""
 
+
+def uniq_canonical(tags: Iterable[Any]) -> List[str]:
+    return normalize_tag_list(list(tags), expand=False, match_keys=False)
 
 
 # ---------- effect tag derivation (from GrantedEffect stat sets) ----------
@@ -392,7 +374,7 @@ def derive_taxonomy(gem_tags: List[str], skill_types: List[str]) -> Dict[str, An
         role.append("damage")
 
     return {
-        "gem_tags": sorted({t.lower() for t in gem_tags if t}),
+        "gem_tags": uniq_canonical(gem_tags),
         "skill_types": sorted({t.lower() for t in skill_types if t}),
         "damage_types": damage_types,
         "delivery": delivery,
@@ -630,25 +612,16 @@ def enrich_from_tables(table_dir: Path, out_path: Path) -> Tuple[List[Dict[str, 
         bracket_tags = extract_bracket_tags(desc)
 
         # merged tags for scoring / matching
-        merged_tags: List[str] = []
-        for t in gem_tag_ids:
-            nt = norm_tag(t)
-            if nt and nt not in merged_tags:
-                merged_tags.append(nt)
-        for t in skill_types:
-            nt = norm_tag(t)
-            if nt and nt not in merged_tags:
-                merged_tags.append(nt)
-        for t in schools + affin:
-            nt = norm_tag(t)
-            if nt and nt not in merged_tags:
-                merged_tags.append(nt)
-        for t in bracket_tags:
-            if t and t not in merged_tags:
-                merged_tags.append(t)
+        merged_tags = uniq_canonical([
+            *gem_tag_ids,
+            *skill_types,
+            *schools,
+            *affin,
+            *bracket_tags,
+        ])
 
         taxonomy = derive_taxonomy(gem_tag_ids, skill_types)
-        effect_tags = derive_effect_tags_from_granted_effects(granted_effect_rids, granted_by_rid, statsets_by_rid, stat_id_by_rid)
+        effect_tags = uniq_canonical(derive_effect_tags_from_granted_effects(granted_effect_rids, granted_by_rid, statsets_by_rid, stat_id_by_rid))
 
         # build output gem
         base_id = str(base.get("Id") or "")
@@ -675,8 +648,8 @@ def enrich_from_tables(table_dir: Path, out_path: Path) -> Tuple[List[Dict[str, 
             },
             "crafting": {
                 "types_raw": craft_names,
-                "schools": schools,
-                "weapon_affinities": affin,
+                "schools": uniq_canonical(schools),
+                "weapon_affinities": uniq_canonical(affin),
             },
             "taxonomy": taxonomy,
             "effect_tags": effect_tags,

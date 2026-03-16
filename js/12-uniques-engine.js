@@ -246,7 +246,6 @@ import { ensureMarketBadgeDelegation, hydrateMarketBadges, renderMarketBadgeMark
 
 async function loadUniquesM(){
     const primaryUrl = 'data/enriched/poe2db_uniques_min.json?v=' + Date.now();
-    const fallbackUrl = 'data/enriched/uniques_enriched.json?v=' + Date.now();
 
     try {
       const r = await fetch(primaryUrl, { cache:'no-store' });
@@ -256,11 +255,8 @@ async function loadUniquesM(){
       if (adapted.length) return adapted;
       throw new Error('No compatible uniques in poe2db payload');
     } catch (err) {
-      console.warn('[u79b2m] failed to load poe2db uniques for build mode, using legacy fallback', err);
-      const r = await fetch(fallbackUrl, { cache:'no-store' });
-      if (!r.ok) throw new Error('HTTP '+r.status);
-      const data = await r.json();
-      return Array.isArray(data) ? data : (data.items || []);
+      console.warn('[u79b2m] failed to load poe2db uniques for build mode', err);
+      return [];
     }
   }
 

@@ -1,5 +1,6 @@
 import { ensureDataPreload } from './08-data-load.js';
 import { resolveSkillFamily } from './17-skill-family-utils.js';
+import { toMatchKey } from './tag-normalization.js';
 
 const SEVERITY_ORDER = { mild: 1, cruel: 2, diabolical: 3 };
 
@@ -354,7 +355,7 @@ async function buildPickerContext() {
   const activeGems = gems.filter(g => g?.type === 'active');
   const supportGems = gems.filter(g => g?.type === 'support');
 
-  const normalizeTag = (t) => String(t || '').trim().toLowerCase().replace(/\s+/g, '_');
+  const normalizeTag = (t) => toMatchKey(t);
 
   const isDevPlaceholderGem = (g) => {
     const s = String(g?.name || g?.base_item?.display_name || g?.id || '');

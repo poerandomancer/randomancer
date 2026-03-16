@@ -14,7 +14,6 @@
   "tag_normalization": {
     "strip_chars_regex": "[^a-z0-9]+",
     "alias_to_canonical": {
-      "bleeding": "bleed",
       "bleeds": "bleed",
       "bleedable": "bleed",
       "poisons": "poison",
@@ -27,14 +26,10 @@
       "freezing": "freeze",
       "freezes": "freeze",
       "freezable": "freeze",
-      "projectiles": "projectile",
-      "minions": "minion",
-      "corpses": "corpse",
       "companions": "companion"
     },
     "canonical_to_aliases": {
       "bleed": [
-        "bleeding",
         "bleeds",
         "bleedable"
       ],
@@ -55,15 +50,6 @@
         "freezing",
         "freezes",
         "freezable"
-      ],
-      "projectile": [
-        "projectiles"
-      ],
-      "minion": [
-        "minions"
-      ],
-      "corpse": [
-        "corpses"
       ],
       "companion": [
         "companions"
@@ -371,30 +357,58 @@
         "missing_tags_in_dataset": []
       }
     },
-		{
-			"id": "corpse_skills",
-			"name": "Corpse Skills",
-			"query": { "any": ["corpse"] },
-			"dev": { "current_match_count": 0, "missing_tags_in_dataset": [] }
-		},
-		{
-			"id": "offering_skills",
-			"name": "Offering Skills",
-			"query": { "any": ["offering"] },
-			"dev": { "current_match_count": 0, "missing_tags_in_dataset": [] }
-		},
-		{
-			"id": "curse_skills",
-			"name": "Curse Skills",
-			"query": { "any": ["curse"] },
-			"dev": { "current_match_count": 0, "missing_tags_in_dataset": [] }
-		},
-		{
-			"id": "mark_skills",
-			"name": "Mark Skills",
-			"query": { "any": ["mark"] },
-			"dev": { "current_match_count": 0, "missing_tags_in_dataset": [] }
-		},
+    {
+      "id": "corpse_skills",
+      "name": "Corpse Skills",
+      "query": {
+        "any": [
+          "corpse"
+        ]
+      },
+      "dev": {
+        "current_match_count": 0,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "offering_skills",
+      "name": "Offering Skills",
+      "query": {
+        "any": [
+          "offering"
+        ]
+      },
+      "dev": {
+        "current_match_count": 0,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "curse_skills",
+      "name": "Curse Skills",
+      "query": {
+        "any": [
+          "curse"
+        ]
+      },
+      "dev": {
+        "current_match_count": 0,
+        "missing_tags_in_dataset": []
+      }
+    },
+    {
+      "id": "mark_skills",
+      "name": "Mark Skills",
+      "query": {
+        "any": [
+          "mark"
+        ]
+      },
+      "dev": {
+        "current_match_count": 0,
+        "missing_tags_in_dataset": []
+      }
+    },
     {
       "id": "necrotic_skills",
       "name": "Necrotic Skills",

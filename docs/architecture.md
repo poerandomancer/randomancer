@@ -55,7 +55,7 @@ Runtime-loaded:
 - `data/core-data.json`
 - `data/enriched/passives_enriched.json`
 - `data/enriched/skills_enriched.json`
-- `data/enriched/uniques_enriched.json`
+- `data/enriched/poe2db_uniques_min.json`
 
 Reference / datamined (not necessarily used directly at runtime):
 - `data/datamined/*`
