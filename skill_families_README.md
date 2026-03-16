@@ -35,3 +35,6 @@ console.log(tip);
   - Shared/global helpers/rules (`data/tag_normalization_rules.json` + `js/tag-normalization.js`) own canonicalization and baseline match semantics.
   - Family-local aliases in `skill_families.json` are a small post-pass overlay for family-specific grouping/search convenience only.
 - Keep family-local overlays minimal: if an alias is global/project-wide, it belongs in shared rules instead.
+- `python data/helperScripts/validate_tag_normalization.py` now emits lightweight overlap warnings when a family-local alias appears already covered by shared/global normalization rules.
+- Codex derived-tag vocabulary remains a Codex-local heuristic policy (in `js/18-codex-mode.js`), not part of shared normalization rules.
+- The validator includes tiny boundary regression checks for Codex URL tag hydration and family-query alias resolution behavior.
