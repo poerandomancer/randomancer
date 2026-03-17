@@ -405,16 +405,6 @@ function buildIndex() {
   const out = [];
   const passives = data.passivesEnriched?.nodes || [];
   const ascMetaMap = data.ascendancyByName || {};
-  const keystoneTooltips = data.keystoneTooltips || {};
-
-  function getKeystoneText(node) {
-    const key = node?.name;
-    const tip = (key && (keystoneTooltips[key] || keystoneTooltips[key.replace(/[’]/g, "'")])) || null;
-    const tipLines = Array.isArray(tip?.lines) ? tip.lines.map(String).filter(Boolean) : [];
-    if (tipLines.length) return tipLines.join(' • ');
-    return (node.lines || node.rawStats || []).join(' • ') || node.flavour || '';
-  }
-
   function deriveCraftingType(gem) {
     const direct = gem?.crafting_type;
     if (direct) return String(direct);
@@ -477,7 +467,7 @@ function buildIndex() {
     }
     if ((n.type === 'keystone' || n.type === 'notable') && !n.ascendancy) {
       if (isAtlasNotable(n)) return;
-      const passiveText = n.type === 'keystone' ? getKeystoneText(n) : text;
+      const passiveText = text;
       out.push({
         id: n.id,
         type: n.type,
