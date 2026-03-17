@@ -134,6 +134,68 @@ def poe2db_slug(name: str) -> str:
     return quote(s, safe=":_-")
 
 
+SITE_METADATA_PATTERNS = [
+    re.compile(r"^name\s+show\s+full\s+descriptions$", re.I),
+    re.compile(r"^id\b", re.I),
+    re.compile(r"^icon\b", re.I),
+    re.compile(r"^ascendancyid\b", re.I),
+    re.compile(r"^passiveskillshash\b", re.I),
+    re.compile(r"^tags\b", re.I),
+    re.compile(r"^is(?:keystone|notable|ascendancystart|multiplechoice|multiplechoiceoption|blighted|jewelsocket|mastery|proxy|used|royale)\b", re.I),
+    re.compile(r"^wikis\s+content\s+is\s+available\s+under\b", re.I),
+    re.compile(r"^cc\s+by", re.I),
+    re.compile(r"^unless\s+otherwise\s+noted\b", re.I),
+    re.compile(r"^copyright\b", re.I),
+    re.compile(r"^(sites|news|about site|community)$", re.I),
+    re.compile(r"^(edit|reset)$", re.I),
+    re.compile(r"^(version changes|implicit|support|from\s*/\d+|supported by\s*/\d+|recommended support gems\s*/\d+)$", re.I),
+    re.compile(r"^(level effect|additional effects from quality)\b", re.I),
+    re.compile(r"^(acronym|basetype|class|targettypes|type|itemtype|activeskillscode|buffgroupsid|isbuffdefinition|buffmergemodesid|isskillbuff)\b", re.I),
+    re.compile(r"^(poe2db\.tw|poedb\.tw|tlidb\.com|paldb\.cc)$", re.I),
+]
+
+SKILL_PAGE_METADATA_PATTERNS = [
+    re.compile(r"^level:\b", re.I),
+    re.compile(r"^requires:\b", re.I),
+    re.compile(r"^attack damage:\b", re.I),
+    re.compile(r"^cooldown time:\b", re.I),
+    re.compile(r"^additional effects from quality:\b", re.I),
+    re.compile(r"^quality display\b", re.I),
+    re.compile(r"^base \w+", re.I),
+    re.compile(r"^skill desired amount override\b", re.I),
+    re.compile(r"^skill disabled unless cloned\b", re.I),
+    re.compile(r"^hide minion frame\b", re.I),
+    re.compile(r"^chance to be triggered\b", re.I),
+    re.compile(r"^is area damage\b", re.I),
+]
+
+
+def is_site_metadata_line(line: str) -> bool:
+    lowered = re.sub(r"\s+", " ", str(line or "")).strip()
+    if not lowered:
+        return True
+    for rx in SITE_METADATA_PATTERNS:
+        if rx.search(lowered):
+            return True
+    if "show full descriptions" in lowered.lower():
+        return True
+    if "passiveskillshash" in lowered.lower():
+        return True
+    if "iskeystone:" in lowered.lower() or "isnotable:" in lowered.lower():
+        return True
+    return False
+
+
+def is_skill_page_metadata_line(line: str) -> bool:
+    lowered = re.sub(r"\s+", " ", str(line or "")).strip()
+    if not lowered:
+        return True
+    for rx in SKILL_PAGE_METADATA_PATTERNS:
+        if rx.search(lowered):
+            return True
+    return False
+
+
 def sanitize_scraped_lines(lines, node_name, node_type, ascendancy_name=None):
     node_key = normalize_name_key(node_name)
     ascendancy_key = normalize_name_key(ascendancy_name or "")
@@ -145,6 +207,8 @@ def sanitize_scraped_lines(lines, node_name, node_type, ascendancy_name=None):
         if not ln:
             continue
         if re.fullmatch(r"[^\w]+", ln):
+            continue
+        if is_site_metadata_line(ln) or is_skill_page_metadata_line(ln):
             continue
 
         ln_key = normalize_name_key(ln)
@@ -165,11 +229,11 @@ def sanitize_scraped_lines(lines, node_name, node_type, ascendancy_name=None):
             continue
         if re.match(r"^[A-Za-z ]+\s*:\s*$", ln) and lowered in {"ascendancy", "character", "class"}:
             continue
-        if (
-            node_type == "ascendancy"
-            and re.match(r"^(ascendancy|character|class)\b", lowered)
-            and len(ln.split()) <= 4
-        ):
+        if re.match(r"^\[dnt\]", lowered, flags=re.I):
+            continue
+        if re.search(r"\b(?:supported by|recommended support gems|version history|wikis content|community wiki)\b", lowered, flags=re.I):
+            continue
+        if node_type == "ascendancy" and re.match(r"^(ascendancy|character|class)\b", lowered) and len(ln.split()) <= 4:
             continue
         if lowered_no_space in {"ascendancy", "character", "class", "attr/5", "attr/10"}:
             continue
@@ -194,23 +258,29 @@ def is_valid_scraped_description(lines, node_name, node_type):
         words = re.findall(r"[A-Za-z0-9%+']+", ln)
         if len(words) <= 1:
             chip_like += 1
+        if is_site_metadata_line(ln) or is_skill_page_metadata_line(ln):
+            metadata_like += 1
         if re.search(r"\b(ascendancy|character|class|name|level|meta|attr|command)\b", lowered):
             metadata_like += 1
         if re.fullmatch(r"\(?\d+[—-]\d+\)?", lowered) or re.fullmatch(r"[+\-]?\d+(?:\.\d+)?%?", lowered):
             numeric_like += 1
-        if re.match(r"^(gain|deal up to|you have|\+\d+ to|enemies in your|body armou?r grants)\b", lowered) and len(words) <= 5:
+        if re.match(r"^(gain|deal up to|you have|\+\d+ to|enemies in your|body armou?r grants|can only use a|modifiers to|reserves? \d+% of life|every \d+ rage)\b", lowered) and len(words) <= 6:
             incomplete_like += 1
-        if lowered.endswith((" to", " up to", " your", " have", " grants")):
+        if lowered.endswith((" to", " up to", " your", " have", " grants", " can", " with", " from", " of", " per")):
             incomplete_like += 1
-        if re.search(r"\b(gain|increased|more|less|chance|when|while|cannot|you|deal|recover|inflict|consume|trigger|convert|grants|regenerate|maximum|additional)\b", lowered):
+        if re.search(r"\b(gain|gains|increased|more|less|chance|when|while|cannot|you|deal|recover|inflict|consume|trigger|convert|converts|grants|regenerate|maximum|additional|reserve|reserves|apply|applies|damage|charges?|hits?|attacks?|spells?|totems?|projectiles?|armour|evasion|mana|life|shield|resistance|surges?)\b", lowered):
             meaningful += 1
 
-    if len(lines) == 1 and (meaningful == 0 or incomplete_like > 0):
-        return False, "single_non_meaningful_line"
+    if len(lines) == 1:
+        if metadata_like or numeric_like:
+            return False, "single_non_meaningful_line"
+        if incomplete_like > 0:
+            return False, "single_incomplete_line"
+        return True, None
     if chip_like >= max(2, len(lines) - 1):
         return False, "mostly_single_word_lines"
-    if metadata_like >= max(1, len(lines) - 1):
-        return False, "mostly_metadata_lines"
+    if metadata_like >= 1:
+        return False, "contains_metadata_lines"
     if node_type == "ascendancy" and numeric_like >= max(1, len(lines) - 1):
         return False, "mostly_numeric_fragments"
     if node_type == "ascendancy" and incomplete_like >= max(1, len(lines) - 1):
@@ -300,6 +370,21 @@ def stitch_scraped_fragments(raw_lines, node_name, node_type):
     return out
 
 
+def clean_skill_name_candidate(value: str):
+    c = re.sub(r"\s+", " ", str(value or "")).strip(" -:•,.")
+    if not c or is_site_metadata_line(c) or is_skill_page_metadata_line(c):
+        return None
+    if not re.search(r"[A-Za-z]", c):
+        return None
+    if re.search(r"^(name|level|class|ascendancy|character|command|aoe|meta|trigger|duration|buff|persistent|requires)$", c, flags=re.I):
+        return None
+    if re.fullmatch(r"[+\-]?\d+(?:\.\d+)?%?", c):
+        return None
+    if len(c.split()) > 10:
+        return None
+    return c
+
+
 def extract_skill_fallback_line(raw_lines):
     if not raw_lines:
         return None
@@ -307,26 +392,21 @@ def extract_skill_fallback_line(raw_lines):
     for i, ln in enumerate(raw_lines):
         m = re.search(r"grants?\s+skill\s*:?\s*(.+)$", ln, flags=re.I)
         if m:
-            skill = re.sub(r"\s+", " ", m.group(1)).strip(" -:•")
-            if skill and not re.search(r"^(name|level|class|ascendancy)$", skill, flags=re.I):
+            skill = clean_skill_name_candidate(m.group(1))
+            if skill:
                 return f"Grants Skill: {skill}"
-            if i + 1 < len(raw_lines):
-                nxt = re.sub(r"\s+", " ", raw_lines[i + 1]).strip(" -:•")
-                if nxt and re.search(r"[A-Za-z]", nxt) and len(nxt.split()) <= 8:
+            for cand in raw_lines[i + 1:i + 4]:
+                nxt = clean_skill_name_candidate(cand)
+                if nxt:
                     return f"Grants Skill: {nxt}"
 
     for i, ln in enumerate(raw_lines):
         if re.search(r"\b(command|djinn|grants?|skill)\b", ln, flags=re.I):
             for cand in raw_lines[i + 1:i + 4]:
-                c = re.sub(r"\s+", " ", cand).strip(" -:•")
-                if not c or re.search(r"^(name|level|class|ascendancy|command|aoe)$", c, flags=re.I):
-                    continue
-                if re.fullmatch(r"[+\-]?\d+(?:\.\d+)?%?", c):
-                    continue
-                if len(c.split()) <= 8:
+                c = clean_skill_name_candidate(cand)
+                if c:
                     return f"Grants Skill: {c}"
     return None
-
 
 def derive_scraped_tags(lines):
     blob = "\n".join(lines or [])
@@ -337,31 +417,113 @@ def derive_scraped_tags(lines):
     return normalize_tag_list(tags, expand=False, match_keys=False)
 
 
+def is_attr_heading_for_name(line: str, name: str) -> bool:
+    if not line or "attr /" not in line.lower():
+        return False
+    stripped = re.sub(r"^#+\s*", "", str(line or "")).strip()
+    stripped = re.sub(r"\s*attr\s*/\s*\d+.*$", "", stripped, flags=re.I).strip()
+    return normalize_name_key(stripped) == normalize_name_key(name)
+
+
+def find_best_attr_index(lines, name: str, node_type: str):
+    candidates = []
+    for i, ln in enumerate(lines or []):
+        if not is_attr_heading_for_name(ln, name):
+            continue
+        lookback = lines[max(0, i - 18):i]
+        score = i
+        if node_type == "ascendancy":
+            if any(re.match(r"^ascendancy\s*:", x, re.I) for x in lookback):
+                score += 10000
+            if any(re.match(r"^character\s*:", x, re.I) for x in lookback):
+                score += 10000
+            if any("grants skill" in x.lower() for x in lookback):
+                score += 2500
+        else:
+            if any(normalize_name_key(x) == normalize_name_key(name) for x in lookback):
+                score += 1000
+        candidates.append((score, i))
+    if not candidates:
+        return None
+    candidates.sort()
+    return candidates[-1][1]
+
+
+def extract_attr_section_lines(lines, name: str, node_type: str):
+    attr_idx = find_best_attr_index(lines, name, node_type)
+    if attr_idx is None:
+        return []
+
+    node_key = normalize_name_key(name)
+    window_start = max(0, attr_idx - 24)
+    window = lines[window_start:attr_idx]
+    anchor = None
+
+    if node_type == "ascendancy":
+        for j in range(len(window) - 1, -1, -1):
+            if re.match(r"^character\s*:", window[j], re.I):
+                anchor = j + 1
+                break
+        if anchor is None:
+            for j in range(len(window) - 1, -1, -1):
+                if re.match(r"^ascendancy\s*:", window[j], re.I):
+                    anchor = j + 1
+                    break
+
+    if anchor is None:
+        for j in range(len(window) - 1, -1, -1):
+            if normalize_name_key(window[j]) == node_key:
+                anchor = j + 1
+                break
+
+    if anchor is None:
+        anchor = 0
+
+    collected = []
+    for ln in window[anchor:]:
+        lowered = ln.lower().strip()
+        if not lowered:
+            continue
+        if is_site_metadata_line(ln):
+            continue
+        if re.match(r"^(ascendancy|character|class)\s*:", ln, re.I):
+            continue
+        if lowered in CLASS_NAMES:
+            continue
+        if normalize_name_key(ln) == node_key:
+            continue
+        collected.append(ln)
+
+    return collected
+
+
 def fallback_fetch_single_passive(name: str, node_type: str, lang: str, timeout: float = 8.0):
     html = fetch_html(f"{POE2DB_HOST}/{lang}/{poe2db_slug(name)}", timeout=timeout)
     lines = html_to_lines(html)
-    idx = None
-    node_key = normalize_name_key(name)
-    for i, ln in enumerate(lines):
-        if normalize_name_key(ln) == node_key:
-            idx = i
-            break
-    if idx is None:
-        return None
 
-    collected = []
-    for ln in lines[idx + 1:]:
-        lower = ln.lower().strip()
-        if re.search(r"^(community wiki|location|mechanics|vendor|related|gallery|version history|patch notes|item acquisition|supported by)\b", lower, flags=re.I):
-            break
-        if normalize_name_key(ln) == node_key and collected:
-            break
-        if lower in {"keystone", "ascendancy", "notable", "passive"}:
-            continue
-        if ln not in collected:
-            collected.append(ln)
-        if len(collected) >= 30:
-            break
+    collected = extract_attr_section_lines(lines, name, node_type)
+
+    if not collected:
+        idx = None
+        node_key = normalize_name_key(name)
+        matching_indices = [i for i, ln in enumerate(lines) if normalize_name_key(ln) == node_key]
+        if matching_indices:
+            idx = matching_indices[-1]
+        if idx is None:
+            return None
+
+        for ln in lines[idx + 1:]:
+            lower = ln.lower().strip()
+            if re.search(r"^(community wiki|location|mechanics|vendor|related|gallery|version history|patch notes|item acquisition|supported by|wikis content|sites|news|about site|community)\b", lower, flags=re.I):
+                break
+            if normalize_name_key(ln) == node_key and collected:
+                break
+            if lower in {"keystone", "ascendancy", "notable", "passive"}:
+                continue
+            if ln not in collected:
+                collected.append(ln)
+            if len(collected) >= 20:
+                break
 
     stitched = stitch_scraped_fragments(collected, name, node_type)
     sanitized = sanitize_scraped_lines(stitched, name, node_type)
