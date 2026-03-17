@@ -77,11 +77,22 @@ METADATA_EXACT_TOKENS = {
     "meta",
     "command",
     "aoe",
-    "projectile",
-    "fire",
-    "cold",
-    "lightning",
-    "chaos",
+}
+
+METADATA_LABEL_ROWS = {
+    "name",
+    "id",
+    "family",
+    "metadata",
+    "weight",
+    "icon",
+    "tags",
+    "skill gem",
+    "support gem",
+    "ascendancy class",
+    "can be equipped in",
+    "grantedeffectsperlevel",
+    "passiveskillshash",
 }
 
 CLASS_NAMES = {
@@ -96,6 +107,24 @@ CLASS_NAMES = {
     "templar",
     "shadow",
     "scion",
+}
+
+CLASS_PREFIX_LABELS = {
+    "huntress",
+    "druid",
+    "warrior",
+    "ranger",
+    "witch",
+    "sorceress",
+    "monk",
+    "mercenary",
+    "duelist",
+    "marauder",
+    "templar",
+    "shadow",
+    "scion",
+    "amazon",
+    "ritualist",
 }
 
 
@@ -161,7 +190,7 @@ SKILL_PAGE_METADATA_PATTERNS = [
     re.compile(r"^cooldown time:\b", re.I),
     re.compile(r"^additional effects from quality:\b", re.I),
     re.compile(r"^quality display\b", re.I),
-    re.compile(r"^base \w+", re.I),
+    re.compile(r"^base [^:]{1,40}:", re.I),
     re.compile(r"^skill desired amount override\b", re.I),
     re.compile(r"^skill disabled unless cloned\b", re.I),
     re.compile(r"^hide minion frame\b", re.I),
@@ -183,7 +212,100 @@ def is_site_metadata_line(line: str) -> bool:
         return True
     if "iskeystone:" in lowered.lower() or "isnotable:" in lowered.lower():
         return True
+    compact = lowered.lower().strip(" :")
+    if compact in METADATA_LABEL_ROWS:
+        return True
+    if re.match(r"^(name|id|family|metadata|weight|version|hash)\s*:\s*\S+", lowered, re.I):
+        return True
+    if re.match(r"^(tags|ascendancy class|skill gem|support gem|can be equipped in)\s*:", lowered, re.I):
+        return True
+    if re.search(r"\b(last bumped on|grantedeffectsperlevel|passiveskillshash|show full descriptions)\b", lowered, re.I):
+        return True
+    if re.search(r"\b(tags\s+iskeystone|isnotable|isascendancystart)\b", lowered, re.I):
+        return True
     return False
+
+
+def looks_incomplete_effect_line(line: str) -> bool:
+    ln = re.sub(r"\s+", " ", str(line or "")).strip()
+    if not ln:
+        return True
+    lowered = ln.lower()
+    words = re.findall(r"[A-Za-z0-9%+']+", ln)
+
+    if len(words) == 1 and lowered in {"gain", "you", "can", "instead", "with", "for", "of"}:
+        return True
+    if len(words) <= 2 and lowered in {"you can", "with hits instead", "deflection rating"}:
+        return True
+    if len(words) <= 3 and re.match(r"^(gain|base critical hit chance|deal up to|body armou?r grants)\b", lowered):
+        return True
+    if re.match(r"^(for|with|instead|and|or|to|of|from|per|when|while|consume)\b", lowered):
+        return True
+    if re.search(r"\bfor spells is \d+$", lowered):
+        return True
+    if re.fullmatch(r"[+\-]?\d+(?:\.\d+)?", lowered):
+        return True
+    if re.search(r"(\+|\-|\*|/)$", lowered):
+        return True
+    if re.match(r"^grants?\s+skill\s*:?$", lowered):
+        return True
+    if re.search(r"\ban additional$", lowered):
+        return True
+    if lowered.endswith((" for", " with", " of", " to", " per", " instead", " your", " can", " grants", " is")):
+        return True
+    return False
+
+
+def strip_class_prefix_from_effect_line(line: str) -> str:
+    ln = re.sub(r"\s+", " ", str(line or "")).strip()
+    parts = ln.split(" ", 1)
+    if len(parts) != 2:
+        return ln
+    prefix = normalize_name_key(parts[0])
+    rest = parts[1].strip()
+    if prefix not in CLASS_PREFIX_LABELS or not rest:
+        return ln
+    if re.match(r"^(grants?\s+skill\b|every\s+\d+|you\b|skills?\b|attacks?\b|hits?\b|life\b|mana\b|gain\b|deal\b|recover\b|projectiles?\b|totems?\b|minions?\b|while\b|when\b|\+\d)", rest, re.I):
+        return rest
+    return ln
+
+
+def extract_meta_skill_page_lines(lines, node_name: str):
+    if not lines:
+        return []
+    attr_idx = find_best_attr_index(lines, node_name, "ascendancy")
+    end = attr_idx if attr_idx is not None else min(len(lines), 80)
+    head = lines[:end]
+
+    node_key = normalize_name_key(node_name)
+    start = 0
+    matches = [i for i, ln in enumerate(head) if normalize_name_key(ln) == node_key]
+    if matches:
+        start = matches[-1] + 1
+
+    block = []
+    skill_style_cues = 0
+    for ln in head[start:start + 36]:
+        low = ln.lower().strip()
+        if not low:
+            continue
+        if re.match(r"^(ascendancy|character|class)\s*:", ln, re.I):
+            continue
+        if re.search(r"^(requires:|attack damage:|cooldown time:|version history|community wiki|supported by|recommended support gems|skill gem|support gem)", low):
+            break
+        if is_site_metadata_line(ln) or is_skill_page_metadata_line(ln):
+            continue
+        if low in CLASS_NAMES:
+            continue
+        if normalize_name_key(ln) == node_key:
+            continue
+        if re.search(r"\b(grants?\s+skill|cooldown|critical hit chance|projectile|mirage|mark|fires?)\b", low):
+            skill_style_cues += 1
+        block.append(ln)
+
+    if skill_style_cues == 0:
+        return []
+    return block
 
 
 def is_skill_page_metadata_line(line: str) -> bool:
@@ -204,6 +326,7 @@ def sanitize_scraped_lines(lines, node_name, node_type, ascendancy_name=None):
 
     for raw in lines or []:
         ln = re.sub(r"\s+", " ", str(raw or "")).strip()
+        ln = strip_class_prefix_from_effect_line(ln)
         if not ln:
             continue
         if re.fullmatch(r"[^\w]+", ln):
@@ -268,6 +391,8 @@ def is_valid_scraped_description(lines, node_name, node_type):
             incomplete_like += 1
         if lowered.endswith((" to", " up to", " your", " have", " grants", " can", " with", " from", " of", " per")):
             incomplete_like += 1
+        if looks_incomplete_effect_line(ln):
+            incomplete_like += 1
         if re.search(r"\b(gain|gains|increased|more|less|chance|when|while|cannot|you|deal|recover|inflict|consume|trigger|convert|converts|grants|regenerate|maximum|additional|reserve|reserves|apply|applies|damage|charges?|hits?|attacks?|spells?|totems?|projectiles?|armour|evasion|mana|life|shield|resistance|surges?)\b", lowered):
             meaningful += 1
 
@@ -314,7 +439,9 @@ def stitch_scraped_fragments(raw_lines, node_name, node_type):
     seen = set()
     for raw in raw_lines or []:
         ln = re.sub(r"\s+", " ", str(raw or "")).strip()
-        if not ln or re.fullmatch(r"[^\w]+", ln):
+        if not ln:
+            continue
+        if re.fullmatch(r"[^\w]+", ln) and ln != "%":
             continue
         if ln not in seen:
             seen.add(ln)
@@ -334,6 +461,9 @@ def stitch_scraped_fragments(raw_lines, node_name, node_type):
             return True
         return len(words) <= 3
 
+    def line_starts_like_suffix(line: str) -> bool:
+        return bool(re.match(r"^(for|with|instead|of|from|per|to|and|or|you can|consume)\b", line.lower().strip()))
+
     for ln in cleaned:
         if not stitched:
             stitched.append(ln)
@@ -346,6 +476,8 @@ def stitch_scraped_fragments(raw_lines, node_name, node_type):
             or prev_lower.endswith((" to", " have", " up to", " your", " grants", " gain"))
             or (is_fragment_piece(prev) and is_fragment_piece(ln))
             or ln.startswith("%")
+            or line_starts_like_suffix(ln)
+            or looks_incomplete_effect_line(prev)
         )
 
         if not should_merge:
@@ -367,7 +499,20 @@ def stitch_scraped_fragments(raw_lines, node_name, node_type):
         if ln not in seen_out:
             seen_out.add(ln)
             out.append(ln)
-    return out
+    repaired = []
+    for idx, ln in enumerate(out):
+        if not repaired:
+            repaired.append(ln)
+            continue
+        prev = repaired[-1]
+        if looks_incomplete_effect_line(prev) or line_starts_like_suffix(ln):
+            merged = re.sub(r"\s+", " ", f"{prev} {ln}").strip()
+            if len(merged) <= 180:
+                repaired[-1] = merged
+                continue
+        repaired.append(ln)
+
+    return repaired
 
 
 def clean_skill_name_candidate(value: str):
@@ -497,13 +642,61 @@ def extract_attr_section_lines(lines, name: str, node_type: str):
     return collected
 
 
-def fallback_fetch_single_passive(name: str, node_type: str, lang: str, timeout: float = 8.0):
-    html = fetch_html(f"{POE2DB_HOST}/{lang}/{poe2db_slug(name)}", timeout=timeout)
-    lines = html_to_lines(html)
+def extract_node_lines_from_ascendancy_overview(lines, node_name: str):
+    node_key = normalize_name_key(node_name)
+    start_indices = [i for i, ln in enumerate(lines or []) if normalize_name_key(ln) == node_key]
+    if not start_indices:
+        return []
 
-    collected = extract_attr_section_lines(lines, name, node_type)
+    best = start_indices[-1]
+    for idx in start_indices:
+        window = lines[idx:idx + 48]
+        if any(is_attr_heading_for_name(x, node_name) for x in window):
+            best = idx
+            break
 
-    if not collected:
+    block = []
+    for ln in lines[best + 1:best + 48]:
+        low = ln.lower().strip()
+        if not low:
+            continue
+        if normalize_name_key(ln) == node_key and block:
+            break
+        if re.search(r"^(community wiki|version history|patch notes|wikis content|sites|news|about site|community)\b", low):
+            break
+        if re.search(r"\b(attr\s*/\s*\d+)\b", low) and block:
+            break
+        if re.match(r"^(ascendancy|character|class)\s*:", ln, re.I):
+            continue
+        block.append(ln)
+    return block
+
+
+def fallback_fetch_single_passive(name: str, node_type: str, lang: str, timeout: float = 8.0, ascendancy_name: str = None):
+    direct_404 = False
+    try:
+        html = fetch_html(f"{POE2DB_HOST}/{lang}/{poe2db_slug(name)}", timeout=timeout)
+    except Exception as exc:
+        if getattr(exc, "code", None) == 404 and node_type == "ascendancy" and ascendancy_name:
+            direct_404 = True
+            html = ""
+        else:
+            raise
+
+    lines = html_to_lines(html) if html else []
+
+    collected = []
+    used_overview_fallback = False
+    source = "poe2db"
+    if lines:
+        if node_type == "ascendancy":
+            skill_style_lines = extract_meta_skill_page_lines(lines, name)
+            if skill_style_lines:
+                collected = skill_style_lines
+                source = "poe2db_skill_page"
+        if not collected:
+            collected = extract_attr_section_lines(lines, name, node_type)
+    if lines and not collected:
         idx = None
         node_key = normalize_name_key(name)
         matching_indices = [i for i, ln in enumerate(lines) if normalize_name_key(ln) == node_key]
@@ -525,8 +718,23 @@ def fallback_fetch_single_passive(name: str, node_type: str, lang: str, timeout:
             if len(collected) >= 20:
                 break
 
+    if (direct_404 or not collected) and node_type == "ascendancy" and ascendancy_name:
+        try:
+            overview_html = fetch_html(f"{POE2DB_HOST}/{lang}/{poe2db_slug(ascendancy_name)}", timeout=timeout)
+            overview_lines = html_to_lines(overview_html)
+            local_block = extract_node_lines_from_ascendancy_overview(overview_lines, name)
+            if not local_block:
+                local_block = extract_attr_section_lines(overview_lines, name, node_type)
+            if local_block:
+                collected = local_block
+                used_overview_fallback = True
+                source = "poe2db_overview"
+        except Exception:
+            pass
+
     stitched = stitch_scraped_fragments(collected, name, node_type)
     sanitized = sanitize_scraped_lines(stitched, name, node_type)
+    metadata_only = bool(collected) and not sanitized
     if not sanitized and not collected:
         return None
     return {
@@ -535,7 +743,8 @@ def fallback_fetch_single_passive(name: str, node_type: str, lang: str, timeout:
         "rawLines": collected,
         "lines": sanitized,
         "tags": derive_scraped_tags(sanitized),
-        "source": "poe2db",
+        "metadataOnly": metadata_only,
+        "source": "poe2db_overview" if used_overview_fallback else source,
     }
 
 
@@ -572,7 +781,13 @@ def collect_scraped_passives(target_nodes, lang: str, timeout: float, disable_ne
         if not key or key in by_name:
             continue
         try:
-            scraped = fallback_fetch_single_passive(node.get("name"), node.get("type"), lang=lang, timeout=timeout)
+            scraped = fallback_fetch_single_passive(
+                node.get("name"),
+                node.get("type"),
+                lang=lang,
+                timeout=timeout,
+                ascendancy_name=node.get("ascendancy"),
+            )
         except Exception as exc:
             network_errors.append(f"{node.get('name')}: {exc}")
             continue
@@ -827,7 +1042,7 @@ def main():
     for node in passive_skills:
         cls = classify_node(node, ascendancy_names_by_id)
         if cls and cls["type"] in {"keystone", "ascendancy"}:
-            target_nodes.append({"name": node.get("Name"), "type": cls["type"]})
+            target_nodes.append({"name": node.get("Name"), "type": cls["type"], "ascendancy": cls.get("ascendancy")})
 
     scrape_by_name, scrape_by_slug, network_errors = collect_scraped_passives(
         target_nodes,
@@ -852,6 +1067,9 @@ def main():
         "ascendancyBlankLinesAfterMerge": 0,
         "statlessAscendancyNodesUsingSkillFallback": 0,
         "scrapedFragmentRejections": 0,
+        "overviewPageFallbackMatches": 0,
+        "truncatedFragmentRejections": 0,
+        "footerLeakRejections": 0,
         "unmatchedNames": [],
         "networkErrors": network_errors,
     }
@@ -879,14 +1097,20 @@ def main():
         ) if scrape_entry else []
 
         scrape_valid, scrape_rejected_reason = is_valid_scraped_description(scraped_lines, node.get("Name"), node_type) if scrape_entry else (False, None)
+        if scrape_entry and not scrape_valid and scrape_entry.get("metadataOnly"):
+            scrape_rejected_reason = "metadata_only_page"
         should_prefer_scrape = node_type in {"keystone", "ascendancy"} and bool(scrape_entry) and scrape_valid
+
+        if scrape_entry and scrape_entry.get("source") == "poe2db_overview":
+            report["overviewPageFallbackMatches"] += 1
+        if scrape_entry and any(is_site_metadata_line(x) for x in raw_scraped_lines):
+            report["footerLeakRejections"] += 1
 
         skill_fallback_lines = []
         if (
             node_type == "ascendancy"
             and scrape_entry
             and not scrape_valid
-            and not datamined_lines
             and not raw_stats
         ):
             skill_fallback = extract_skill_fallback_line(raw_scraped_lines)
@@ -938,6 +1162,8 @@ def main():
             report["scrapeMatchesRejectedForBadLines"] += 1
             if scrape_rejected_reason and "fragment" in scrape_rejected_reason:
                 report["scrapedFragmentRejections"] += 1
+            if scrape_rejected_reason and ("incomplete" in scrape_rejected_reason or "fragment" in scrape_rejected_reason):
+                report["truncatedFragmentRejections"] += 1
             if len(report["badScrapeLineSamples"]) < 12:
                 report["badScrapeLineSamples"].append({
                     "name": node.get("Name"),
