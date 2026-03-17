@@ -41,6 +41,14 @@ except Exception:
 
 
 POE2DB_HOST = "https://poe2db.tw"
+HERE = Path(__file__).resolve().parent
+REPO_ROOT = HERE.parents[1]
+
+
+def resolve_repo_path(path_str: str) -> Path:
+    path = Path(path_str)
+    return path if path.is_absolute() else REPO_ROOT / path
+
 
 
 def load_project_keystone_names(passives_enriched_path: Path) -> Tuple[Set[str], Set[str]]:
@@ -258,8 +266,8 @@ def main() -> int:
     ap.add_argument("--verbose", action="store_true")
     args = ap.parse_args()
 
-    passives_path = Path(args.passives_enriched)
-    out_path = Path(args.out)
+    passives_path = resolve_repo_path(args.passives_enriched)
+    out_path = resolve_repo_path(args.out)
 
     if not passives_path.exists():
         print(f"[error] passives_enriched not found: {passives_path}", file=sys.stderr)

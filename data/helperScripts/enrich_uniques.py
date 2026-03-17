@@ -4,6 +4,11 @@ enrich_uniques.py
 
 Offline unique-item enrichment for Randomancer.
 
+NOTE: Legacy/non-runtime dataset generator kept for reference tooling.
+This script is intentionally quarantined and is NOT used by the runtime app path.
+Runtime uniques source is `data/enriched/poe2db_uniques_min.json`.
+`data/enriched/uniques_enriched.json` is legacy/reference output only.
+
 Reads datamined PoE2 unique data from:
 
     data/datamined/Uniques/*.json     (per-slot files: amulet.json, bow.json, ...)
@@ -60,6 +65,8 @@ import re
 import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence
+
+from lib.tag_normalization import canonicalize_tag, normalize_tag_list
 
 
 # -------------------------
@@ -406,10 +413,13 @@ def extract_tags(lines: list[str], core: dict[str, Any]) -> dict[str, Any]:
     # Canonical: remove any legacy value
     canon.discard("Chaos Damage Over Time")
 
+    canonical_tags = normalize_tag_list(sorted(canon), expand=False, match_keys=False)
+    raw_tags = normalize_tag_list(sorted(raw), expand=False, match_keys=False)
+
     return {
         "tags": {
-            "canonical": sorted(canon),
-            "raw": sorted(raw),
+            "canonical": canonical_tags,
+            "raw": raw_tags,
         },
         "meta": {
             "tags_offense": sorted(offense),

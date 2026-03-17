@@ -24,10 +24,12 @@ from pathlib import Path
 from collections import Counter
 import re
 
+from lib.tag_normalization import canonicalize_tag, normalize_tag_list
+
 TEXT_TAG_RULES = [
     # Armour break / shattered armour
-    (re.compile(r"(?:break|broken|breaks)\s+armou?r|armou?r\s*(?:break|broken)", re.I), "armourbreak"),
-    (re.compile(r"(armou?r.*shatter|shatter.*armou?r)", re.I), "armourbreak"),
+    (re.compile(r"(?:break|broken|breaks)\s+armou?r|armou?r\s*(?:break|broken)", re.I), "armour_break"),
+    (re.compile(r"(armou?r.*shatter|shatter.*armou?r)", re.I), "armour_break"),
 
     # Tempo / mobility debuffs
     (re.compile(r"\bhinder(?:ed|ing|s)?\b|\bhindrance\b", re.I), "hinder"),
@@ -35,17 +37,19 @@ TEXT_TAG_RULES = [
     (re.compile(r"\bmaim(?:ed|ing|s)?\b", re.I), "maim"),
 
     # Sustain / resource
-    (re.compile(r"\blife\s+regen(eration)?\b|\bregenerat(e|es|ed|ing|ion)\b", re.I), "liferegeneration"),
+    (re.compile(r"\blife\s+regen(eration)?\b|\bregenerat(e|es|ed|ing|ion)\b", re.I), "life_regeneration"),
     (re.compile(r"\bleech(ed|ing|es)?\b", re.I), "leech"),
 
     # Crit support
     (re.compile(r"\bcrit(ical|s|ically| chance)?\b|\bcritical\s+strike\b", re.I), "crit"),
 ]
 
-INPUT_PASSIVES = "../datamined/passiveskills.json"
-INPUT_STATS = "../datamined/stats.json"
-INPUT_ASCENDANCY = "../datamined/ascendancy.json"
-OUTPUT_FILE = "../enriched/passives_enriched.json"
+HERE = Path(__file__).resolve().parent
+DATA_ROOT = HERE.parent
+INPUT_PASSIVES = DATA_ROOT / "datamined" / "passiveskills.json"
+INPUT_STATS = DATA_ROOT / "datamined" / "stats.json"
+INPUT_ASCENDANCY = DATA_ROOT / "datamined" / "ascendancy.json"
+OUTPUT_FILE = DATA_ROOT / "enriched" / "passives_enriched.json"
 
 
 # ---------- helpers ----------
@@ -254,140 +258,135 @@ def extract_stat_lines(node: dict, stat_by_rid: dict, max_lines: int):
 def derive_tags(raw_stats, lines=None):
     tags = set()
 
-    for s in raw_stats:
-        stat_id = (s.get("id") or "").lower()
+    def add(tag: str):
+        canonical = canonicalize_tag(tag)
+        if canonical:
+            tags.add(canonical)
 
-        # Defences
+    for st in raw_stats or []:
+        stat_id = (st.get("id") or "").lower()
+
+        # Defenses / sustain
         if "maximum_life" in stat_id or "life_regeneration" in stat_id:
-            tags.add("Life")
+            add("life")
         if "energy_shield" in stat_id:
-            tags.add("Energy Shield")
+            add("energy_shield")
         if "evasion" in stat_id:
-            tags.add("Evasion")
-        if "armour" in stat_id:
-            tags.add("Armour")
+            add("evasion")
+        if "armour" in stat_id or "armor" in stat_id:
+            add("armour")
         if "block" in stat_id:
-            tags.add("Block")
+            add("block")
 
         # Mana / resources
         if "mana" in stat_id:
-            tags.add("Mana")
+            add("mana")
         if "rage" in stat_id:
-            tags.add("Rage")
+            add("rage")
         if "frenzy_charge" in stat_id:
-            tags.add("Frenzy")
+            add("frenzy_charge")
         if "endurance_charge" in stat_id:
-            tags.add("Endurance")
+            add("endurance_charge")
         if "power_charge" in stat_id:
-            tags.add("Power")
+            add("power_charge")
 
         # Offence (generic)
         if "attack_" in stat_id or "weapon_" in stat_id:
-            tags.add("Attack")
+            add("attack")
         if "cast_speed" in stat_id or "spell_" in stat_id:
-            tags.add("Spell")
+            add("spell")
         if "critical_strike" in stat_id or "crit_chance" in stat_id:
-            tags.add("Crit")
+            add("critical_hit")
 
         # Damage types
         if "fire_" in stat_id:
-            tags.add("Fire")
+            add("fire")
         if "cold_" in stat_id:
-            tags.add("Cold")
+            add("cold")
         if "lightning_" in stat_id:
-            tags.add("Lightning")
+            add("lightning")
         if "chaos_" in stat_id:
-            tags.add("Chaos")
+            add("chaos")
         if "physical_" in stat_id or "phys_" in stat_id:
-            tags.add("Physical")
+            add("physical")
 
         # Ailments
         if "ignite" in stat_id:
-            tags.add("Ignite")
+            add("ignite")
         if "bleed" in stat_id or "bleeding" in stat_id:
-            tags.add("Bleed")
+            add("bleed")
         if "poison" in stat_id:
-            tags.add("Poison")
+            add("poison")
         if "shock" in stat_id:
-            tags.add("Shock")
+            add("shock")
         if "chill" in stat_id:
-            tags.add("Chill")
+            add("chill")
         if "ailment" in stat_id:
-            tags.add("Ailments")
+            add("ailment")
 
         # Archetypes
         if "minion_" in stat_id:
-            tags.add("Minions")
+            add("minion")
         if "totem_" in stat_id:
-            tags.add("Totems")
+            add("totem")
         if "trap_" in stat_id:
-            tags.add("Traps")
+            add("trap")
         if "mine_" in stat_id:
-            tags.add("Mines")
+            add("mine")
         if "slam" in stat_id:
-            tags.add("Slam")
+            add("slam")
 
         # Weapon hints
         if "bow_" in stat_id:
-            tags.add("Bow")
+            add("bow")
         if "staff_" in stat_id:
-            tags.add("Staff")
+            add("staff")
         if "sword_" in stat_id:
-            tags.add("Sword")
+            add("sword")
         if "axe_" in stat_id:
-            tags.add("Axe")
+            add("axe")
         if "claw_" in stat_id:
-            tags.add("Claw")
+            add("claw")
         if "dagger_" in stat_id:
-            tags.add("Dagger")
+            add("dagger")
         if "wand_" in stat_id:
-            tags.add("Wand")
+            add("wand")
         if "shield_" in stat_id:
-            tags.add("Shield")
+            add("shield")
 
-        # Leech
         if "leech" in stat_id:
-            tags.add("Leech")
-
-        # NEW: debuff / tempo / armour-break-y stats from IDs
+            add("leech")
         if "armour_break" in stat_id:
-            tags.add("armourbreak")
+            add("armour_break")
         if "slow" in stat_id:
-            tags.add("slow")
+            add("slow")
         if "hinder" in stat_id:
-            tags.add("hinder")
+            add("hinder")
         if "maim" in stat_id:
-            tags.add("maim")
+            add("maim")
         if "culling_strike" in stat_id:
-            tags.add("cullingstrike")
+            add("culling_strike")
         if "heavy_stun" in stat_id or "heavystun" in stat_id:
-            tags.add("heavystun")
+            add("heavy_stun")
 
-    # Text-based hints from the already-formatted lines
     if lines:
-        txt = "\n".join(lines)
-        txt_lower = txt.lower()
+        txt_lower = "\n".join(lines).lower()
         for rx, tag in TEXT_TAG_RULES:
             if rx.search(txt_lower):
-                tags.add(tag)
+                add(tag)
 
-    return sorted(tags)
+    return sorted(normalize_tag_list(list(tags), expand=False, match_keys=False))
 
 
 
 # ---------- main ----------
 
 def main():
-    cwd = Path(".").resolve()
-    print(f"Loading data from {cwd}...")
+    print(f"Loading data from {DATA_ROOT}...")
 
-    passive_path = cwd / INPUT_PASSIVES
-    stats_path = cwd / INPUT_STATS
-    asc_path = cwd / INPUT_ASCENDANCY
-
-    passive_skills = load_json(passive_path)
-    stats = load_json(stats_path)
-    ascendancy_entries = load_json(asc_path)
+    passive_skills = load_json(INPUT_PASSIVES)
+    stats = load_json(INPUT_STATS)
+    ascendancy_entries = load_json(INPUT_ASCENDANCY)
 
     # Map _rid -> stat obj
     stat_by_rid = {s.get("_rid"): s for s in stats}
@@ -443,12 +442,12 @@ def main():
         "ascendancies": ascendancies,
     }
 
-    out_path = cwd / OUTPUT_FILE
-    with out_path.open("w", encoding="utf-8") as f:
+    OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
+    with OUTPUT_FILE.open("w", encoding="utf-8") as f:
         json.dump(output, f, indent=2, ensure_ascii=False)
 
     counts = Counter(n["type"] for n in enriched_nodes)
-    print(f"Wrote {len(enriched_nodes)} nodes to {out_path}")
+    print(f"Wrote {len(enriched_nodes)} nodes to {OUTPUT_FILE}")
     print("By type:", dict(counts))
 
 

@@ -6,9 +6,9 @@
       "base": "Bloodstone Amulet",
       "tags": {
         "canonical": [
-          "Armour",
-          "Block",
-          "Slow/Maim/Hinder"
+          "armour",
+          "block",
+          "slow_maim_hinder"
         ],
         "raw": [
           "armour",
@@ -172,11 +172,10 @@
       "base": "Jade Amulet",
       "tags": {
         "canonical": [
-          "Critical Hit"
+          "critical_hit"
         ],
         "raw": [
           "crit",
-          "critical",
           "lightning_resistance"
         ]
       },
@@ -219,11 +218,11 @@
       "base": "Jade Amulet",
       "tags": {
         "canonical": [
-          "Life Regeneration"
+          "life_regeneration"
         ],
         "raw": [
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -269,13 +268,13 @@
       "base": "Azure Amulet",
       "tags": {
         "canonical": [
-          "Energy Shield",
-          "Life Regeneration"
+          "energy_shield",
+          "life_regeneration"
         ],
         "raw": [
-          "energy shield",
+          "energy_shield",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -317,10 +316,10 @@
       "base": "Gold Amulet",
       "tags": {
         "canonical": [
-          "Heavy Stun"
+          "heavy_stun"
         ],
         "raw": [
-          "heavystun",
+          "heavy_stun",
           "physical",
           "stun"
         ]
@@ -365,15 +364,15 @@
       "base": "Solar Amulet",
       "tags": {
         "canonical": [
-          "Ignite",
-          "Life Regeneration"
+          "ignite",
+          "life_regeneration"
         ],
         "raw": [
           "fire",
-          "fire damage",
+          "fire_damage",
           "ignite",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -419,13 +418,12 @@
       "base": "Stellar Amulet",
       "tags": {
         "canonical": [
-          "Critical Hit"
+          "critical_hit"
         ],
         "raw": [
           "attack_speed",
           "cast_speed",
-          "crit",
-          "critical"
+          "crit"
         ]
       },
       "lines": [
@@ -466,7 +464,7 @@
       "base": "Stellar Amulet",
       "tags": {
         "canonical": [
-          "Evasion"
+          "evasion"
         ],
         "raw": [
           "evasion"
@@ -506,11 +504,11 @@
       "base": "Crimson Amulet",
       "tags": {
         "canonical": [
-          "Life Regeneration"
+          "life_regeneration"
         ],
         "raw": [
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -548,12 +546,12 @@
       "base": "Crimson Amulet",
       "tags": {
         "canonical": [
-          "Life Regeneration"
+          "life_regeneration"
         ],
         "raw": [
           "fire_resistance",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -593,13 +591,13 @@
       "base": "Lapis Amulet",
       "tags": {
         "canonical": [
-          "Energy Shield",
-          "Life Regeneration"
+          "energy_shield",
+          "life_regeneration"
         ],
         "raw": [
-          "energy shield",
+          "energy_shield",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -639,7 +637,7 @@
       "base": "Lapis Amulet",
       "tags": {
         "canonical": [
-          "Freeze"
+          "freeze"
         ],
         "raw": [
           "chill",
@@ -719,14 +717,13 @@
       "base": "Lunar Amulet",
       "tags": {
         "canonical": [
-          "Critical Hit",
-          "Energy Shield"
+          "critical_hit",
+          "energy_shield"
         ],
         "raw": [
           "all_elemental_resistance",
           "crit",
-          "critical",
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -765,12 +762,12 @@
       "base": "Gold Amulet",
       "tags": {
         "canonical": [
-          "Life Regeneration"
+          "life_regeneration"
         ],
         "raw": [
           "chaos_resistance",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -809,7 +806,7 @@
       "base": "Lapis Amulet",
       "tags": {
         "canonical": [
-          "Block"
+          "block"
         ],
         "raw": [
           "block",
@@ -850,7 +847,7 @@
       "base": "Jade Amulet",
       "tags": {
         "canonical": [
-          "Evasion"
+          "evasion"
         ],
         "raw": [
           "evasion"
@@ -920,16 +917,15 @@
       "base": "Azure Amulet",
       "tags": {
         "canonical": [
-          "Critical Hit",
-          "Heavy Stun",
-          "Life Regeneration"
+          "critical_hit",
+          "heavy_stun",
+          "life_regeneration"
         ],
         "raw": [
           "crit",
-          "critical",
-          "heavystun",
+          "heavy_stun",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "physical",
           "regen",
           "stun"
@@ -1022,9 +1018,9 @@
       "base": "Bloodstone Amulet",
       "tags": {
         "canonical": [
-          "Freeze",
-          "Ignite",
-          "Shock"
+          "freeze",
+          "ignite",
+          "shock"
         ],
         "raw": [
           "all_elemental_resistance",
@@ -1120,7 +1116,7 @@
       "base": "Wide Belt",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "armour"
@@ -1160,11 +1156,11 @@
       "base": "Wide Belt",
       "tags": {
         "canonical": [
-          "Life Regeneration"
+          "life_regeneration"
         ],
         "raw": [
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "lightning_resistance",
           "regen"
         ]
@@ -1245,7 +1241,7 @@
       "base": "Fine Belt",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "armour"
@@ -1331,15 +1327,15 @@
       "base": "Plate Belt",
       "tags": {
         "canonical": [
-          "Armour",
-          "Life Regeneration"
+          "armour",
+          "life_regeneration"
         ],
         "raw": [
           "armour",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "physical",
-          "physical damage",
+          "physical_damage",
           "regen"
         ]
       },
@@ -1383,10 +1379,10 @@
       "base": "Heavy Belt",
       "tags": {
         "canonical": [
-          "Heavy Stun"
+          "heavy_stun"
         ],
         "raw": [
-          "heavystun",
+          "heavy_stun",
           "physical",
           "stun"
         ]
@@ -1426,7 +1422,7 @@
       "base": "Plate Belt",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "armour",
@@ -1653,10 +1649,10 @@
       "base": "Fine Belt",
       "tags": {
         "canonical": [
-          "Energy Shield"
+          "energy_shield"
         ],
         "raw": [
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -1692,13 +1688,13 @@
       "base": "Long Belt",
       "tags": {
         "canonical": [
-          "Energy Shield",
-          "Leech"
+          "energy_shield",
+          "leech"
         ],
         "raw": [
-          "energy shield",
+          "energy_shield",
           "leech",
-          "life leech",
+          "life_leech",
           "lifeleech"
         ]
       },
@@ -1738,11 +1734,10 @@
       "base": "Linen Belt",
       "tags": {
         "canonical": [
-          "Minions"
+          "minion"
         ],
         "raw": [
-          "minion",
-          "minions"
+          "minion"
         ]
       },
       "lines": [
@@ -1786,10 +1781,10 @@
       "base": "Heavy Belt",
       "tags": {
         "canonical": [
-          "Heavy Stun"
+          "heavy_stun"
         ],
         "raw": [
-          "heavystun",
+          "heavy_stun",
           "physical",
           "stun"
         ]
@@ -1831,10 +1826,10 @@
       "base": "Heavy Belt",
       "tags": {
         "canonical": [
-          "Heavy Stun"
+          "heavy_stun"
         ],
         "raw": [
-          "heavystun",
+          "heavy_stun",
           "physical",
           "stun"
         ]
@@ -1879,13 +1874,13 @@
       "base": "Fur Plate",
       "tags": {
         "canonical": [
-          "Armour",
-          "Heavy Stun"
+          "armour",
+          "heavy_stun"
         ],
         "raw": [
           "all_elemental_resistance",
           "armour",
-          "heavystun",
+          "heavy_stun",
           "physical",
           "stun"
         ]
@@ -1931,13 +1926,13 @@
       "base": "Rusted Cuirass",
       "tags": {
         "canonical": [
-          "Heavy Stun",
-          "Life Regeneration"
+          "heavy_stun",
+          "life_regeneration"
         ],
         "raw": [
-          "heavystun",
+          "heavy_stun",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "physical",
           "physical_mitigation",
           "regen",
@@ -1985,15 +1980,14 @@
       "base": "Champion Cuirass",
       "tags": {
         "canonical": [
-          "Armour",
-          "Critical Hit",
-          "Heavy Stun"
+          "armour",
+          "critical_hit",
+          "heavy_stun"
         ],
         "raw": [
           "armour",
           "crit",
-          "critical",
-          "heavystun",
+          "heavy_stun",
           "physical",
           "stun"
         ]
@@ -2040,9 +2034,9 @@
       "base": "Iron Cuirass",
       "tags": {
         "canonical": [
-          "Armour",
-          "Bleed",
-          "Thorns"
+          "armour",
+          "bleed",
+          "thorns"
         ],
         "raw": [
           "armour",
@@ -2088,8 +2082,8 @@
       "base": "Vaal Cuirass",
       "tags": {
         "canonical": [
-          "Armour",
-          "Slow/Maim/Hinder"
+          "armour",
+          "slow_maim_hinder"
         ],
         "raw": [
           "armour",
@@ -2138,16 +2132,16 @@
       "base": "Raider Plate",
       "tags": {
         "canonical": [
-          "Armour",
-          "Bleed",
-          "Life Regeneration"
+          "armour",
+          "bleed",
+          "life_regeneration"
         ],
         "raw": [
           "armour",
           "bleed",
           "fire_resistance",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "lightning_resistance",
           "physical",
           "regen"
@@ -2197,10 +2191,10 @@
       "base": "Conqueror Plate",
       "tags": {
         "canonical": [
-          "Heavy Stun"
+          "heavy_stun"
         ],
         "raw": [
-          "heavystun",
+          "heavy_stun",
           "physical",
           "stun"
         ]
@@ -2275,13 +2269,13 @@
       "base": "Maraketh Cuirass",
       "tags": {
         "canonical": [
-          "Armour",
-          "Life Regeneration"
+          "armour",
+          "life_regeneration"
         ],
         "raw": [
           "armour",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -2323,14 +2317,14 @@
       "base": "Steel Plate",
       "tags": {
         "canonical": [
-          "Armour",
-          "Heavy Stun"
+          "armour",
+          "heavy_stun"
         ],
         "raw": [
           "armour",
-          "heavystun",
+          "heavy_stun",
           "physical",
-          "physical damage",
+          "physical_damage",
           "stun"
         ]
       },
@@ -2414,8 +2408,8 @@
       "base": "Rhoahide Coat",
       "tags": {
         "canonical": [
-          "Deflection",
-          "Evasion"
+          "deflection",
+          "evasion"
         ],
         "raw": [
           "cold_resistance",
@@ -2462,13 +2456,13 @@
       "base": "Leather Vest",
       "tags": {
         "canonical": [
-          "Evasion",
-          "Life Regeneration"
+          "evasion",
+          "life_regeneration"
         ],
         "raw": [
           "evasion",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -2510,14 +2504,14 @@
       "base": "Studded Vest",
       "tags": {
         "canonical": [
-          "Evasion",
-          "Life Regeneration"
+          "evasion",
+          "life_regeneration"
         ],
         "raw": [
           "cold_resistance",
           "evasion",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -2558,7 +2552,7 @@
       "base": "Quilted Vest",
       "tags": {
         "canonical": [
-          "Evasion"
+          "evasion"
         ],
         "raw": [
           "evasion",
@@ -2597,13 +2591,13 @@
       "base": "Armoured Vest",
       "tags": {
         "canonical": [
-          "Evasion",
-          "Freeze"
+          "evasion",
+          "freeze"
         ],
         "raw": [
           "chill",
           "cold",
-          "cold damage",
+          "cold_damage",
           "evasion",
           "freeze"
         ]
@@ -2652,9 +2646,9 @@
       "base": "Serpentscale Coat",
       "tags": {
         "canonical": [
-          "Deflection",
-          "Evasion",
-          "Life Regeneration"
+          "deflection",
+          "evasion",
+          "life_regeneration"
         ],
         "raw": [
           "chaos_resistance",
@@ -2662,7 +2656,7 @@
           "deflection",
           "evasion",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -2711,7 +2705,7 @@
       "base": "Smuggler Coat",
       "tags": {
         "canonical": [
-          "Evasion"
+          "evasion"
         ],
         "raw": [
           "cold_resistance",
@@ -2765,14 +2759,14 @@
       "base": "Scout's Vest",
       "tags": {
         "canonical": [
-          "Evasion"
+          "evasion"
         ],
         "raw": [
           "evasion",
           "fire",
-          "fire damage",
+          "fire_damage",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -2810,7 +2804,7 @@
       "base": "Shrouded Vest",
       "tags": {
         "canonical": [
-          "Evasion"
+          "evasion"
         ],
         "raw": [
           "cooldown_recovery",
@@ -2856,10 +2850,10 @@
       "base": "Strider Vest",
       "tags": {
         "canonical": [
-          "Bleed",
-          "Companions",
-          "Evasion",
-          "Poison"
+          "bleed",
+          "companions",
+          "evasion",
+          "poison"
         ],
         "raw": [
           "bleed",
@@ -2911,10 +2905,10 @@
       "base": "Feathered Robe",
       "tags": {
         "canonical": [
-          "Energy Shield"
+          "energy_shield"
         ],
         "raw": [
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -2947,11 +2941,11 @@
       "base": "Hexer's Robe",
       "tags": {
         "canonical": [
-          "Energy Shield"
+          "energy_shield"
         ],
         "raw": [
           "cold_resistance",
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -2988,13 +2982,13 @@
       "base": "Havoc Raiment",
       "tags": {
         "canonical": [
-          "Energy Shield",
-          "Life Regeneration"
+          "energy_shield",
+          "life_regeneration"
         ],
         "raw": [
-          "energy shield",
+          "energy_shield",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -3036,12 +3030,12 @@
       "base": "Silk Robe",
       "tags": {
         "canonical": [
-          "Energy Shield",
-          "Ignite",
-          "Thorns"
+          "energy_shield",
+          "ignite",
+          "thorns"
         ],
         "raw": [
-          "energy shield",
+          "energy_shield",
           "fire",
           "fire_resistance",
           "ignite",
@@ -3089,10 +3083,10 @@
       "base": "Altar Robe",
       "tags": {
         "canonical": [
-          "Energy Shield"
+          "energy_shield"
         ],
         "raw": [
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -3130,11 +3124,11 @@
       "base": "Tattered Robe",
       "tags": {
         "canonical": [
-          "Energy Shield"
+          "energy_shield"
         ],
         "raw": [
           "chaos_resistance",
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -3172,11 +3166,11 @@
       "base": "Elementalist Robe",
       "tags": {
         "canonical": [
-          "Energy Shield"
+          "energy_shield"
         ],
         "raw": [
           "cold_resistance",
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -3212,14 +3206,13 @@
       "base": "Bone Raiment",
       "tags": {
         "canonical": [
-          "Energy Shield",
-          "Minions"
+          "energy_shield",
+          "minion"
         ],
         "raw": [
           "chaos_resistance",
-          "energy shield",
-          "minion",
-          "minions"
+          "energy_shield",
+          "minion"
         ]
       },
       "lines": [
@@ -3259,10 +3252,10 @@
       "base": "Keth Raiment",
       "tags": {
         "canonical": [
-          "Energy Shield"
+          "energy_shield"
         ],
         "raw": [
-          "energy shield",
+          "energy_shield",
           "lightning_resistance"
         ]
       },
@@ -3300,14 +3293,14 @@
       "base": "Enlightened Robe",
       "tags": {
         "canonical": [
-          "Energy Shield",
-          "Life Regeneration"
+          "energy_shield",
+          "life_regeneration"
         ],
         "raw": [
           "all_elemental_resistance",
-          "energy shield",
+          "energy_shield",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -3352,11 +3345,11 @@
       "base": "Silk Robe",
       "tags": {
         "canonical": [
-          "Energy Shield"
+          "energy_shield"
         ],
         "raw": [
           "all_elemental_resistance",
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -3395,11 +3388,11 @@
       "base": "Votive Raiment",
       "tags": {
         "canonical": [
-          "Energy Shield"
+          "energy_shield"
         ],
         "raw": [
           "chaos_resistance",
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -3436,13 +3429,12 @@
       "base": "Plated Raiment",
       "tags": {
         "canonical": [
-          "Energy Shield",
-          "Minions"
+          "energy_shield",
+          "minion"
         ],
         "raw": [
-          "energy shield",
-          "minion",
-          "minions"
+          "energy_shield",
+          "minion"
         ]
       },
       "lines": [
@@ -3479,7 +3471,7 @@
       "base": "Rogue Armour",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "armour",
@@ -3522,13 +3514,13 @@
       "base": "Explorer Armour",
       "tags": {
         "canonical": [
-          "Armour",
-          "Heavy Stun",
-          "Thorns"
+          "armour",
+          "heavy_stun",
+          "thorns"
         ],
         "raw": [
           "armour",
-          "heavystun",
+          "heavy_stun",
           "physical",
           "stun",
           "thorns"
@@ -3572,14 +3564,14 @@
       "base": "Chain Mail",
       "tags": {
         "canonical": [
-          "Armour",
-          "Bleed",
-          "Heavy Stun"
+          "armour",
+          "bleed",
+          "heavy_stun"
         ],
         "raw": [
           "armour",
           "bleed",
-          "heavystun",
+          "heavy_stun",
           "physical",
           "stun"
         ]
@@ -3619,7 +3611,7 @@
       "base": "Heroic Armour",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "all_elemental_resistance",
@@ -3664,12 +3656,12 @@
       "base": "Scale Mail",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "armour",
           "lightning",
-          "lightning damage",
+          "lightning_damage",
           "lightning_resistance"
         ]
       },
@@ -3708,13 +3700,13 @@
       "base": "Lamellar Mail",
       "tags": {
         "canonical": [
-          "Armour",
-          "Life Regeneration"
+          "armour",
+          "life_regeneration"
         ],
         "raw": [
           "armour",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -3755,12 +3747,12 @@
       "base": "Vagabond Armour",
       "tags": {
         "canonical": [
-          "Armour",
-          "Heavy Stun"
+          "armour",
+          "heavy_stun"
         ],
         "raw": [
           "armour",
-          "heavystun",
+          "heavy_stun",
           "physical",
           "stun"
         ]
@@ -3802,14 +3794,14 @@
       "base": "Ancestral Mail",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "armour",
           "lightning",
-          "lightning damage",
+          "lightning_damage",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -3856,13 +3848,13 @@
       "base": "Cloaked Mail",
       "tags": {
         "canonical": [
-          "Armour",
-          "Life Regeneration"
+          "armour",
+          "life_regeneration"
         ],
         "raw": [
           "armour",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -3904,7 +3896,7 @@
       "base": "Knight Armour",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "armour"
@@ -3960,7 +3952,7 @@
       "base": "Explorer Armour",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "all_elemental_resistance",
@@ -4001,7 +3993,7 @@
       "base": "Knight Armour",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "armour",
@@ -4046,16 +4038,16 @@
       "base": "Gilded Vestments",
       "tags": {
         "canonical": [
-          "Armour & Energy Shield",
-          "Bleed",
-          "Leech"
+          "armour_energy_shield",
+          "bleed",
+          "leech"
         ],
         "raw": [
           "armour",
           "bleed",
-          "energy shield",
+          "energy_shield",
           "leech",
-          "life leech",
+          "life_leech",
           "lifeleech",
           "physical"
         ]
@@ -4100,12 +4092,12 @@
       "base": "Pilgrim Vestments",
       "tags": {
         "canonical": [
-          "Armour & Energy Shield"
+          "armour_energy_shield"
         ],
         "raw": [
           "all_elemental_resistance",
           "armour",
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -4140,12 +4132,12 @@
       "base": "Shaman Mantle",
       "tags": {
         "canonical": [
-          "Armour & Energy Shield"
+          "armour_energy_shield"
         ],
         "raw": [
           "armour",
           "chaos_resistance",
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -4187,7 +4179,7 @@
       "base": "Mail Vestments",
       "tags": {
         "canonical": [
-          "Thorns"
+          "thorns"
         ],
         "raw": [
           "cold_resistance",
@@ -4226,19 +4218,19 @@
       "base": "Cleric Vestments",
       "tags": {
         "canonical": [
-          "Armour & Energy Shield",
-          "Bleed",
-          "Ignite",
-          "Life Regeneration"
+          "armour_energy_shield",
+          "bleed",
+          "ignite",
+          "life_regeneration"
         ],
         "raw": [
           "armour",
           "bleed",
-          "energy shield",
+          "energy_shield",
           "fire",
           "ignite",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "physical",
           "regen"
         ]
@@ -4285,12 +4277,12 @@
       "base": "Corvus Mantle",
       "tags": {
         "canonical": [
-          "Armour & Energy Shield"
+          "armour_energy_shield"
         ],
         "raw": [
           "armour",
           "chaos_resistance",
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -4333,20 +4325,17 @@
       "base": "Sacrificial Mantle",
       "tags": {
         "canonical": [
-          "Armour & Energy Shield",
-          "Curses",
-          "Minions",
-          "Totems"
+          "armour_energy_shield",
+          "curse",
+          "minion",
+          "totem"
         ],
         "raw": [
           "armour",
           "curse",
-          "curses",
-          "energy shield",
+          "energy_shield",
           "minion",
-          "minions",
-          "totem",
-          "totems"
+          "totem"
         ]
       },
       "lines": [
@@ -4390,15 +4379,14 @@
       "base": "{variant:1}Ironclad Vestments",
       "tags": {
         "canonical": [
-          "Armour & Energy Shield",
-          "Critical Hit"
+          "armour_energy_shield",
+          "critical_hit"
         ],
         "raw": [
           "armour",
           "chaos_resistance",
           "crit",
-          "critical",
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -4441,16 +4429,16 @@
       "base": "Tideseer Mantle",
       "tags": {
         "canonical": [
-          "Armour & Energy Shield",
-          "Life Regeneration"
+          "armour_energy_shield",
+          "life_regeneration"
         ],
         "raw": [
           "armour",
           "cold_resistance",
-          "energy shield",
+          "energy_shield",
           "fire_resistance",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -4494,12 +4482,12 @@
       "base": "Hermit Garb",
       "tags": {
         "canonical": [
-          "Bleed",
-          "Evasion & Energy Shield"
+          "bleed",
+          "evasion_energy_shield"
         ],
         "raw": [
           "bleed",
-          "energy shield",
+          "energy_shield",
           "evasion",
           "physical"
         ]
@@ -4538,14 +4526,13 @@
       "base": "Assassin Garb",
       "tags": {
         "canonical": [
-          "Curses",
-          "Evasion & Energy Shield"
+          "curse",
+          "evasion_energy_shield"
         ],
         "raw": [
           "chaos_resistance",
           "curse",
-          "curses",
-          "energy shield",
+          "energy_shield",
           "evasion",
           "movement_speed"
         ]
@@ -4592,10 +4579,10 @@
       "base": "Wayfarer Jacket",
       "tags": {
         "canonical": [
-          "Evasion & Energy Shield"
+          "evasion_energy_shield"
         ],
         "raw": [
-          "energy shield",
+          "energy_shield",
           "evasion",
           "lightning_resistance"
         ]
@@ -4635,7 +4622,7 @@
       "base": "Waxed Jacket",
       "tags": {
         "canonical": [
-          "Evasion"
+          "evasion"
         ],
         "raw": [
           "evasion",
@@ -4676,7 +4663,7 @@
       "base": "Anchorite Garb",
       "tags": {
         "canonical": [
-          "Shock"
+          "shock"
         ],
         "raw": [
           "cold_resistance",
@@ -4726,13 +4713,13 @@
       "base": "Marabout Garb",
       "tags": {
         "canonical": [
-          "Evasion & Energy Shield",
-          "Freeze"
+          "evasion_energy_shield",
+          "freeze"
         ],
         "raw": [
           "chill",
           "cold",
-          "energy shield",
+          "energy_shield",
           "evasion",
           "freeze",
           "lightning_resistance"
@@ -4777,14 +4764,14 @@
       "base": "Scalper's Jacket",
       "tags": {
         "canonical": [
-          "Evasion & Energy Shield",
-          "Life Regeneration"
+          "evasion_energy_shield",
+          "life_regeneration"
         ],
         "raw": [
-          "energy shield",
+          "energy_shield",
           "evasion",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -4825,21 +4812,21 @@
       "base": "Grand Regalia",
       "tags": {
         "canonical": [
-          "Armour & Energy Shield",
-          "Heavy Stun",
-          "Ignite",
-          "Life Regeneration"
+          "armour_energy_shield",
+          "heavy_stun",
+          "ignite",
+          "life_regeneration"
         ],
         "raw": [
           "all_elemental_resistance",
           "armour",
           "chaos_resistance",
-          "energy shield",
+          "energy_shield",
           "fire",
-          "heavystun",
+          "heavy_stun",
           "ignite",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "physical",
           "regen",
           "stun"
@@ -5026,11 +5013,11 @@
       "base": "Stone Greaves",
       "tags": {
         "canonical": [
-          "Ignite"
+          "ignite"
         ],
         "raw": [
           "fire",
-          "fire damage",
+          "fire_damage",
           "fire_resistance",
           "ignite",
           "movement_speed"
@@ -5076,7 +5063,7 @@
       "base": "Iron Greaves",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "armour",
@@ -5117,7 +5104,7 @@
       "base": "Bronze Greaves",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "armour",
@@ -5160,14 +5147,14 @@
       "base": "Rough Greaves",
       "tags": {
         "canonical": [
-          "Armour",
-          "Block",
-          "Heavy Stun"
+          "armour",
+          "block",
+          "heavy_stun"
         ],
         "raw": [
           "armour",
           "block",
-          "heavystun",
+          "heavy_stun",
           "physical",
           "stun"
         ]
@@ -5213,7 +5200,7 @@
       "base": "Trimmed Greaves",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "armour",
@@ -5255,14 +5242,13 @@
       "base": "Laced Boots",
       "tags": {
         "canonical": [
-          "Critical Hit",
-          "Heavy Stun",
-          "Thorns"
+          "critical_hit",
+          "heavy_stun",
+          "thorns"
         ],
         "raw": [
           "crit",
-          "critical",
-          "heavystun",
+          "heavy_stun",
           "movement_speed",
           "physical",
           "stun",
@@ -5310,13 +5296,13 @@
       "base": "Lizardscale Boots",
       "tags": {
         "canonical": [
-          "Evasion"
+          "evasion"
         ],
         "raw": [
           "evasion",
           "movement_speed",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -5354,7 +5340,7 @@
       "base": "Embossed Boots",
       "tags": {
         "canonical": [
-          "Evasion"
+          "evasion"
         ],
         "raw": [
           "evasion",
@@ -5399,7 +5385,7 @@
       "base": "Steeltoe Boots",
       "tags": {
         "canonical": [
-          "Evasion"
+          "evasion"
         ],
         "raw": [
           "evasion",
@@ -5445,13 +5431,12 @@
       "base": "Lattice Sandals",
       "tags": {
         "canonical": [
-          "Energy Shield",
-          "Minions"
+          "energy_shield",
+          "minion"
         ],
         "raw": [
-          "energy shield",
+          "energy_shield",
           "minion",
-          "minions",
           "movement_speed"
         ]
       },
@@ -5497,10 +5482,10 @@
       "base": "Straw Sandals",
       "tags": {
         "canonical": [
-          "Energy Shield"
+          "energy_shield"
         ],
         "raw": [
-          "energy shield",
+          "energy_shield",
           "movement_speed"
         ]
       },
@@ -5539,11 +5524,11 @@
       "base": "Wrapped Sandals",
       "tags": {
         "canonical": [
-          "Energy Shield",
-          "Slow/Maim/Hinder"
+          "energy_shield",
+          "slow_maim_hinder"
         ],
         "raw": [
-          "energy shield",
+          "energy_shield",
           "hinder",
           "maim",
           "movement_speed",
@@ -5586,14 +5571,13 @@
       "base": "Feathered Sandals",
       "tags": {
         "canonical": [
-          "Curses",
-          "Energy Shield"
+          "curse",
+          "energy_shield"
         ],
         "raw": [
           "cast_speed",
           "curse",
-          "curses",
-          "energy shield",
+          "energy_shield",
           "movement_speed"
         ]
       },
@@ -5637,10 +5621,10 @@
       "base": "Silk Slippers",
       "tags": {
         "canonical": [
-          "Energy Shield"
+          "energy_shield"
         ],
         "raw": [
-          "energy shield",
+          "energy_shield",
           "movement_speed"
         ]
       },
@@ -5683,7 +5667,7 @@
       "base": "Braced Sabatons",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "armour",
@@ -5725,12 +5709,12 @@
       "base": "Mail Sabatons",
       "tags": {
         "canonical": [
-          "Armour",
-          "Heavy Stun"
+          "armour",
+          "heavy_stun"
         ],
         "raw": [
           "armour",
-          "heavystun",
+          "heavy_stun",
           "movement_speed",
           "physical",
           "stun"
@@ -5775,11 +5759,11 @@
       "base": "Stacked Sabatons",
       "tags": {
         "canonical": [
-          "Armour",
-          "Freeze",
-          "Heavy Stun",
-          "Life Regeneration",
-          "Shock"
+          "armour",
+          "freeze",
+          "heavy_stun",
+          "life_regeneration",
+          "shock"
         ],
         "raw": [
           "armour",
@@ -5787,9 +5771,9 @@
           "cold",
           "electrocute",
           "freeze",
-          "heavystun",
+          "heavy_stun",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "lightning",
           "physical",
           "regen",
@@ -5842,16 +5826,16 @@
       "base": "Covered Sabatons",
       "tags": {
         "canonical": [
-          "Armour",
-          "Deflection",
-          "Heavy Stun"
+          "armour",
+          "deflection",
+          "heavy_stun"
         ],
         "raw": [
           "armour",
           "deflect",
           "deflection",
           "fire_resistance",
-          "heavystun",
+          "heavy_stun",
           "physical",
           "stun"
         ]
@@ -5898,15 +5882,15 @@
       "base": "Secured Leggings",
       "tags": {
         "canonical": [
-          "Armour & Energy Shield",
-          "Shock"
+          "armour_energy_shield",
+          "shock"
         ],
         "raw": [
           "armour",
           "electrocute",
-          "energy shield",
+          "energy_shield",
           "lightning",
-          "lightning damage",
+          "lightning_damage",
           "movement_speed",
           "shock"
         ]
@@ -5951,13 +5935,13 @@
       "base": "Velour Shoes",
       "tags": {
         "canonical": [
-          "Bleed",
-          "Evasion & Energy Shield",
-          "Thorns"
+          "bleed",
+          "evasion_energy_shield",
+          "thorns"
         ],
         "raw": [
           "bleed",
-          "energy shield",
+          "energy_shield",
           "evasion",
           "movement_speed",
           "physical",
@@ -6002,11 +5986,11 @@
       "base": "Threaded Shoes",
       "tags": {
         "canonical": [
-          "Evasion & Energy Shield"
+          "evasion_energy_shield"
         ],
         "raw": [
           "chaos_resistance",
-          "energy shield",
+          "energy_shield",
           "evasion",
           "movement_speed"
         ]
@@ -6048,13 +6032,12 @@
       "base": "Hunting Shoes",
       "tags": {
         "canonical": [
-          "Critical Hit",
-          "Evasion & Energy Shield"
+          "critical_hit",
+          "evasion_energy_shield"
         ],
         "raw": [
           "crit",
-          "critical",
-          "energy shield",
+          "energy_shield",
           "evasion",
           "movement_speed"
         ]
@@ -6101,12 +6084,12 @@
       "base": "Grand Cuisses",
       "tags": {
         "canonical": [
-          "Armour & Energy Shield",
-          "Ignite"
+          "armour_energy_shield",
+          "ignite"
         ],
         "raw": [
           "armour",
-          "energy shield",
+          "energy_shield",
           "fire",
           "ignite",
           "movement_speed"
@@ -6152,11 +6135,10 @@
       "base": "Dualstring Bow",
       "tags": {
         "canonical": [
-          "Critical Hit"
+          "critical_hit"
         ],
         "raw": [
-          "crit",
-          "critical"
+          "crit"
         ]
       },
       "lines": [
@@ -6197,13 +6179,13 @@
       "base": "Composite Bow",
       "tags": {
         "canonical": [
-          "Life Regeneration"
+          "life_regeneration"
         ],
         "raw": [
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "physical",
-          "physical damage",
+          "physical_damage",
           "regen"
         ]
       },
@@ -6246,14 +6228,13 @@
       "base": "Artillery Bow",
       "tags": {
         "canonical": [
-          "Curses",
-          "Ignite"
+          "curse",
+          "ignite"
         ],
         "raw": [
           "curse",
-          "curses",
           "fire",
-          "fire damage",
+          "fire_damage",
           "ignite"
         ]
       },
@@ -6302,7 +6283,7 @@
         "raw": [
           "attack_speed",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -6379,13 +6360,12 @@
       "base": "Zealot Bow",
       "tags": {
         "canonical": [
-          "Critical Hit"
+          "critical_hit"
         ],
         "raw": [
           "crit",
-          "critical",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -6426,7 +6406,7 @@
         "canonical": [],
         "raw": [
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -6463,16 +6443,16 @@
       "base": "Fanatic Bow",
       "tags": {
         "canonical": [
-          "Chaos Damage",
-          "Shock"
+          "chaos_damage",
+          "shock"
         ],
         "raw": [
           "attack_speed",
           "chaos",
-          "chaos damage",
+          "chaos_damage",
           "electrocute",
           "lightning",
-          "lightning damage",
+          "lightning_damage",
           "shock"
         ]
       },
@@ -6544,13 +6524,12 @@
       "base": "Dyad Crossbow",
       "tags": {
         "canonical": [
-          "Critical Hit"
+          "critical_hit"
         ],
         "raw": [
           "crit",
-          "critical",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -6594,7 +6573,7 @@
         "raw": [
           "attack_speed",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -6635,12 +6614,12 @@
       "base": "Makeshift Crossbow",
       "tags": {
         "canonical": [
-          "Freeze"
+          "freeze"
         ],
         "raw": [
           "chill",
           "cold",
-          "cold damage",
+          "cold_damage",
           "freeze"
         ]
       },
@@ -6685,7 +6664,7 @@
         "raw": [
           "attack_speed",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -6790,11 +6769,11 @@
       "base": "Ultimate Mana Flask",
       "tags": {
         "canonical": [
-          "Chaos Damage"
+          "chaos_damage"
         ],
         "raw": [
           "chaos",
-          "chaos damage"
+          "chaos_damage"
         ]
       },
       "lines": [
@@ -6834,7 +6813,7 @@
       "base": "Antidote Charm",
       "tags": {
         "canonical": [
-          "Poison"
+          "poison"
         ],
         "raw": [
           "chaos",
@@ -6873,11 +6852,11 @@
       "base": "Dousing Charm",
       "tags": {
         "canonical": [
-          "Ignite"
+          "ignite"
         ],
         "raw": [
           "fire",
-          "fire damage",
+          "fire_damage",
           "ignite"
         ]
       },
@@ -6914,12 +6893,12 @@
       "base": "Grounding Charm",
       "tags": {
         "canonical": [
-          "Shock"
+          "shock"
         ],
         "raw": [
           "electrocute",
           "lightning",
-          "lightning damage",
+          "lightning_damage",
           "shock"
         ]
       },
@@ -6959,7 +6938,7 @@
         "canonical": [],
         "raw": [
           "cold",
-          "cold damage"
+          "cold_damage"
         ]
       },
       "lines": [
@@ -6994,7 +6973,7 @@
       "base": "Silver Charm",
       "tags": {
         "canonical": [
-          "Slow/Maim/Hinder"
+          "slow_maim_hinder"
         ],
         "raw": [
           "hinder",
@@ -7034,12 +7013,12 @@
       "base": "Stone Charm",
       "tags": {
         "canonical": [
-          "Armour",
-          "Heavy Stun"
+          "armour",
+          "heavy_stun"
         ],
         "raw": [
           "armour",
-          "heavystun",
+          "heavy_stun",
           "physical",
           "stun"
         ]
@@ -7077,11 +7056,11 @@
       "base": "Amethyst Charm",
       "tags": {
         "canonical": [
-          "Chaos Damage"
+          "chaos_damage"
         ],
         "raw": [
           "chaos",
-          "chaos damage"
+          "chaos_damage"
         ]
       },
       "lines": [
@@ -7116,13 +7095,13 @@
       "base": "Thawing Charm",
       "tags": {
         "canonical": [
-          "Energy Shield",
-          "Freeze"
+          "energy_shield",
+          "freeze"
         ],
         "raw": [
           "chill",
           "cold",
-          "energy shield",
+          "energy_shield",
           "freeze"
         ]
       },
@@ -7163,7 +7142,7 @@
         "canonical": [],
         "raw": [
           "fire",
-          "fire damage"
+          "fire_damage"
         ]
       },
       "lines": [
@@ -7246,7 +7225,7 @@
       "base": "Staunching Charm",
       "tags": {
         "canonical": [
-          "Bleed"
+          "bleed"
         ],
         "raw": [
           "bleed",
@@ -7287,7 +7266,7 @@
         "canonical": [],
         "raw": [
           "lightning",
-          "lightning damage"
+          "lightning_damage"
         ]
       },
       "lines": [
@@ -7322,14 +7301,14 @@
       "base": "Voodoo Focus",
       "tags": {
         "canonical": [
-          "Chaos Damage",
-          "Energy Shield",
-          "Poison"
+          "chaos_damage",
+          "energy_shield",
+          "poison"
         ],
         "raw": [
           "chaos",
-          "chaos damage",
-          "energy shield",
+          "chaos_damage",
+          "energy_shield",
           "poison"
         ]
       },
@@ -7369,16 +7348,15 @@
       "base": "Engraved Focus",
       "tags": {
         "canonical": [
-          "Energy Shield",
-          "Life Regeneration",
-          "Minions"
+          "energy_shield",
+          "life_regeneration",
+          "minion"
         ],
         "raw": [
-          "energy shield",
+          "energy_shield",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "minion",
-          "minions",
           "regen"
         ]
       },
@@ -7421,10 +7399,10 @@
       "base": "Twig Focus",
       "tags": {
         "canonical": [
-          "Energy Shield"
+          "energy_shield"
         ],
         "raw": [
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -7457,14 +7435,13 @@
       "base": "Antler Focus",
       "tags": {
         "canonical": [
-          "Critical Hit",
-          "Energy Shield"
+          "critical_hit",
+          "energy_shield"
         ],
         "raw": [
           "chaos_resistance",
           "crit",
-          "critical",
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -7508,13 +7485,13 @@
       "base": "Crystal Focus",
       "tags": {
         "canonical": [
-          "Energy Shield",
-          "Life Regeneration"
+          "energy_shield",
+          "life_regeneration"
         ],
         "raw": [
-          "energy shield",
+          "energy_shield",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "lightning_resistance",
           "regen"
         ]
@@ -7557,13 +7534,12 @@
       "base": "Sacred Focus",
       "tags": {
         "canonical": [
-          "Critical Hit",
-          "Energy Shield"
+          "critical_hit",
+          "energy_shield"
         ],
         "raw": [
           "crit",
-          "critical",
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -7635,13 +7611,13 @@
       "base": "Woven Focus",
       "tags": {
         "canonical": [
-          "Energy Shield",
-          "Life Regeneration"
+          "energy_shield",
+          "life_regeneration"
         ],
         "raw": [
-          "energy shield",
+          "energy_shield",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -7678,16 +7654,15 @@
       "base": "Moulded Mitts",
       "tags": {
         "canonical": [
-          "Armour",
-          "Critical Hit",
-          "Leech"
+          "armour",
+          "critical_hit",
+          "leech"
         ],
         "raw": [
           "armour",
           "crit",
-          "critical",
           "leech",
-          "life leech",
+          "life_leech",
           "lifeleech"
         ]
       },
@@ -7730,14 +7705,13 @@
       "base": "Bolstered Mitts",
       "tags": {
         "canonical": [
-          "Armour",
-          "Critical Hit",
-          "Thorns"
+          "armour",
+          "critical_hit",
+          "thorns"
         ],
         "raw": [
           "armour",
           "crit",
-          "critical",
           "thorns"
         ]
       },
@@ -7780,7 +7754,7 @@
       "base": "Moulded Mitts",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "armour"
@@ -7820,7 +7794,7 @@
       "base": "Tempered Mitts",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "armour"
@@ -7859,12 +7833,12 @@
       "base": "Titan Mitts",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "armour",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -7902,15 +7876,15 @@
       "base": "Riveted Mitts",
       "tags": {
         "canonical": [
-          "Armour",
-          "Heavy Stun"
+          "armour",
+          "heavy_stun"
         ],
         "raw": [
           "armour",
           "attack_speed",
-          "heavystun",
+          "heavy_stun",
           "physical",
-          "physical damage",
+          "physical_damage",
           "stun"
         ]
       },
@@ -7957,13 +7931,13 @@
       "base": "Firm Bracers",
       "tags": {
         "canonical": [
-          "Evasion",
-          "Freeze"
+          "evasion",
+          "freeze"
         ],
         "raw": [
           "chill",
           "cold",
-          "cold damage",
+          "cold_damage",
           "cold_resistance",
           "evasion",
           "freeze"
@@ -8008,7 +7982,7 @@
       "base": "Sectioned Bracers",
       "tags": {
         "canonical": [
-          "Evasion"
+          "evasion"
         ],
         "raw": [
           "attack_speed",
@@ -8048,13 +8022,12 @@
       "base": "Fine Bracers",
       "tags": {
         "canonical": [
-          "Critical Hit",
-          "Evasion"
+          "critical_hit",
+          "evasion"
         ],
         "raw": [
           "attack_speed",
           "crit",
-          "critical",
           "evasion"
         ]
       },
@@ -8100,15 +8073,14 @@
       "base": "Suede Bracers",
       "tags": {
         "canonical": [
-          "Critical Hit",
-          "Evasion"
+          "critical_hit",
+          "evasion"
         ],
         "raw": [
           "crit",
-          "critical",
           "evasion",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -8152,16 +8124,16 @@
       "base": "Spined Bracers",
       "tags": {
         "canonical": [
-          "Evasion",
-          "Life Regeneration",
-          "Poison"
+          "evasion",
+          "life_regeneration",
+          "poison"
         ],
         "raw": [
           "chaos",
           "chaos_resistance",
           "evasion",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "poison",
           "regen"
         ]
@@ -8207,13 +8179,13 @@
       "base": "Sombre Gloves",
       "tags": {
         "canonical": [
-          "Energy Shield"
+          "energy_shield"
         ],
         "raw": [
           "cold_resistance",
-          "energy shield",
+          "energy_shield",
           "fire",
-          "fire damage",
+          "fire_damage",
           "fire_resistance"
         ]
       },
@@ -8261,11 +8233,11 @@
       "base": "Intricate Gloves",
       "tags": {
         "canonical": [
-          "Energy Shield"
+          "energy_shield"
         ],
         "raw": [
           "cast_speed",
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -8300,11 +8272,11 @@
       "base": "Stitched Gloves",
       "tags": {
         "canonical": [
-          "Energy Shield"
+          "energy_shield"
         ],
         "raw": [
           "cast_speed",
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -8341,17 +8313,17 @@
       "base": "Furtive Wraps",
       "tags": {
         "canonical": [
-          "Evasion & Energy Shield",
-          "Leech"
+          "evasion_energy_shield",
+          "leech"
         ],
         "raw": [
-          "energy shield",
+          "energy_shield",
           "evasion",
           "leech",
-          "life leech",
+          "life_leech",
           "lifeleech",
           "lightning",
-          "lightning damage",
+          "lightning_damage",
           "lightning_resistance"
         ]
       },
@@ -8395,13 +8367,13 @@
       "base": "Jewelled Gloves",
       "tags": {
         "canonical": [
-          "Energy Shield"
+          "energy_shield"
         ],
         "raw": [
           "cast_speed",
-          "energy shield",
+          "energy_shield",
           "lightning",
-          "lightning damage"
+          "lightning_damage"
         ]
       },
       "lines": [
@@ -8439,10 +8411,10 @@
       "base": "Embroidered Gloves",
       "tags": {
         "canonical": [
-          "Energy Shield"
+          "energy_shield"
         ],
         "raw": [
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -8477,17 +8449,16 @@
       "base": "Pauascale Gloves",
       "tags": {
         "canonical": [
-          "Critical Hit",
-          "Energy Shield",
-          "Life Regeneration"
+          "critical_hit",
+          "energy_shield",
+          "life_regeneration"
         ],
         "raw": [
           "cold_resistance",
           "crit",
-          "critical",
-          "energy shield",
+          "energy_shield",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -8536,13 +8507,13 @@
         "canonical": [],
         "raw": [
           "cold",
-          "cold damage",
+          "cold_damage",
           "cold_resistance",
           "fire",
-          "fire damage",
+          "fire_damage",
           "fire_resistance",
           "lightning",
-          "lightning damage",
+          "lightning_damage",
           "lightning_resistance"
         ]
       },
@@ -8592,7 +8563,7 @@
       "base": "Burnished Gauntlets",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "armour",
@@ -8631,7 +8602,7 @@
       "base": "Layered Gauntlets",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "armour"
@@ -8666,7 +8637,7 @@
       "base": "Ornate Gauntlets",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "armour",
@@ -8710,15 +8681,15 @@
       "base": "Doubled Gauntlets",
       "tags": {
         "canonical": [
-          "Armour",
-          "Culling Strike"
+          "armour",
+          "culling_strike"
         ],
         "raw": [
           "armour",
           "attack_speed",
           "cull",
           "culling",
-          "culling strike"
+          "culling_strike"
         ]
       },
       "lines": [
@@ -8760,13 +8731,13 @@
       "base": "Ringmail Gauntlets",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "armour",
           "attack_speed",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -8807,15 +8778,15 @@
       "base": "Plate Gauntlets",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "armour",
           "attack_speed",
           "fire",
-          "fire damage",
+          "fire_damage",
           "lightning",
-          "lightning damage",
+          "lightning_damage",
           "lightning_resistance"
         ]
       },
@@ -8860,15 +8831,15 @@
       "base": "Goldcast Cuffs",
       "tags": {
         "canonical": [
-          "Energy Shield"
+          "energy_shield"
         ],
         "raw": [
           "cold",
-          "cold damage",
+          "cold_damage",
           "cold_resistance",
-          "energy shield",
+          "energy_shield",
           "fire",
-          "fire damage",
+          "fire_damage",
           "fire_resistance"
         ]
       },
@@ -8912,12 +8883,12 @@
       "base": "Rope Cuffs",
       "tags": {
         "canonical": [
-          "Armour & Energy Shield"
+          "armour_energy_shield"
         ],
         "raw": [
           "armour",
           "cold_resistance",
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -8955,16 +8926,16 @@
       "base": "Verisium Cuffs",
       "tags": {
         "canonical": [
-          "Armour & Energy Shield",
-          "Life Regeneration",
-          "Slow/Maim/Hinder"
+          "armour_energy_shield",
+          "life_regeneration",
+          "slow_maim_hinder"
         ],
         "raw": [
           "armour",
-          "energy shield",
+          "energy_shield",
           "hinder",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "lightning_resistance",
           "maim",
           "regen",
@@ -9014,14 +8985,13 @@
       "base": "Aged Cuffs",
       "tags": {
         "canonical": [
-          "Armour & Energy Shield",
-          "Curses"
+          "armour_energy_shield",
+          "curse"
         ],
         "raw": [
           "armour",
           "curse",
-          "curses",
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -9069,13 +9039,12 @@
       "base": "Linen Wraps",
       "tags": {
         "canonical": [
-          "Critical Hit",
-          "Evasion & Energy Shield"
+          "critical_hit",
+          "evasion_energy_shield"
         ],
         "raw": [
           "crit",
-          "critical",
-          "energy shield",
+          "energy_shield",
           "evasion"
         ]
       },
@@ -9119,7 +9088,7 @@
         "raw": [
           "attack_speed",
           "lightning",
-          "lightning damage"
+          "lightning_damage"
         ]
       },
       "lines": [
@@ -9160,13 +9129,12 @@
       "base": "Linen Wraps",
       "tags": {
         "canonical": [
-          "Critical Hit",
-          "Evasion & Energy Shield"
+          "critical_hit",
+          "evasion_energy_shield"
         ],
         "raw": [
           "crit",
-          "critical",
-          "energy shield",
+          "energy_shield",
           "evasion"
         ]
       },
@@ -9207,13 +9175,13 @@
       "base": "Gauze Wraps",
       "tags": {
         "canonical": [
-          "Evasion & Energy Shield",
-          "Poison"
+          "evasion_energy_shield",
+          "poison"
         ],
         "raw": [
           "attack_speed",
           "chaos",
-          "energy shield",
+          "energy_shield",
           "evasion",
           "poison"
         ]
@@ -9257,17 +9225,16 @@
       "base": "Utility Wraps",
       "tags": {
         "canonical": [
-          "Critical Hit",
-          "Evasion & Energy Shield"
+          "critical_hit",
+          "evasion_energy_shield"
         ],
         "raw": [
           "attack_speed",
           "crit",
-          "critical",
-          "energy shield",
+          "energy_shield",
           "evasion",
           "lightning",
-          "lightning damage",
+          "lightning_damage",
           "lightning_resistance"
         ]
       },
@@ -9314,12 +9281,12 @@
       "base": "Grand Manchettes",
       "tags": {
         "canonical": [
-          "Armour & Energy Shield",
-          "Ignite"
+          "armour_energy_shield",
+          "ignite"
         ],
         "raw": [
           "armour",
-          "energy shield",
+          "energy_shield",
           "fire",
           "ignite"
         ]
@@ -9363,7 +9330,7 @@
       "base": "Wrapped Greathelm",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "armour"
@@ -9400,15 +9367,15 @@
       "base": "Fierce Greathelm",
       "tags": {
         "canonical": [
-          "Armour",
-          "Heavy Stun",
-          "Life Regeneration"
+          "armour",
+          "heavy_stun",
+          "life_regeneration"
         ],
         "raw": [
           "armour",
-          "heavystun",
+          "heavy_stun",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "physical",
           "regen",
           "stun"
@@ -9453,12 +9420,12 @@
       "base": "Warrior Greathelm",
       "tags": {
         "canonical": [
-          "Leech"
+          "leech"
         ],
         "raw": [
           "fire_resistance",
           "leech",
-          "life leech",
+          "life_leech",
           "lifeleech"
         ]
       },
@@ -9498,13 +9465,13 @@
       "base": "Elite Greathelm",
       "tags": {
         "canonical": [
-          "Armour",
-          "Warcry"
+          "armour",
+          "warcry"
         ],
         "raw": [
           "armour",
           "physical",
-          "physical damage",
+          "physical_damage",
           "warcry"
         ]
       },
@@ -9545,13 +9512,13 @@
       "base": "Soldier Greathelm",
       "tags": {
         "canonical": [
-          "Armour",
-          "Life Regeneration"
+          "armour",
+          "life_regeneration"
         ],
         "raw": [
           "armour",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -9592,7 +9559,7 @@
       "base": "Rusted Greathelm",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "armour"
@@ -9658,12 +9625,12 @@
       "base": "Rusted Greathelm",
       "tags": {
         "canonical": [
-          "Armour",
-          "Heavy Stun"
+          "armour",
+          "heavy_stun"
         ],
         "raw": [
           "armour",
-          "heavystun",
+          "heavy_stun",
           "physical",
           "stun"
         ]
@@ -9705,7 +9672,7 @@
       "base": "Armoured Cap",
       "tags": {
         "canonical": [
-          "Evasion"
+          "evasion"
         ],
         "raw": [
           "cold_resistance",
@@ -9743,12 +9710,11 @@
       "base": "Corsair Cap",
       "tags": {
         "canonical": [
-          "Critical Hit",
-          "Evasion"
+          "critical_hit",
+          "evasion"
         ],
         "raw": [
           "crit",
-          "critical",
           "evasion",
           "lightning_resistance"
         ]
@@ -9789,11 +9755,11 @@
       "base": "Viper Cap",
       "tags": {
         "canonical": [
-          "Life Regeneration"
+          "life_regeneration"
         ],
         "raw": [
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -9833,7 +9799,7 @@
       "base": "Hunter Hood",
       "tags": {
         "canonical": [
-          "Evasion"
+          "evasion"
         ],
         "raw": [
           "evasion"
@@ -9872,7 +9838,7 @@
       "base": "Felt Cap",
       "tags": {
         "canonical": [
-          "Evasion"
+          "evasion"
         ],
         "raw": [
           "all_elemental_resistance",
@@ -9909,17 +9875,17 @@
       "base": "Velvet Cap",
       "tags": {
         "canonical": [
-          "Evasion",
-          "Freeze"
+          "evasion",
+          "freeze"
         ],
         "raw": [
           "chill",
           "cold",
-          "cold damage",
+          "cold_damage",
           "cold_resistance",
           "evasion",
           "fire",
-          "fire damage",
+          "fire_damage",
           "fire_resistance",
           "freeze"
         ]
@@ -9965,15 +9931,15 @@
       "base": "Shabby Hood",
       "tags": {
         "canonical": [
-          "Evasion",
-          "Life Regeneration"
+          "evasion",
+          "life_regeneration"
         ],
         "raw": [
           "chaos_resistance",
           "cold_resistance",
           "evasion",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -10015,13 +9981,13 @@
       "base": "Covert Hood",
       "tags": {
         "canonical": [
-          "Culling Strike",
-          "Evasion"
+          "culling_strike",
+          "evasion"
         ],
         "raw": [
           "cull",
           "culling",
-          "culling strike",
+          "culling_strike",
           "evasion"
         ]
       },
@@ -10059,13 +10025,13 @@
       "base": "Lace Hood",
       "tags": {
         "canonical": [
-          "Evasion",
-          "Ignite"
+          "evasion",
+          "ignite"
         ],
         "raw": [
           "evasion",
           "fire",
-          "fire damage",
+          "fire_damage",
           "fire_resistance",
           "ignite"
         ]
@@ -10105,15 +10071,14 @@
       "base": "Leatherbound Hood",
       "tags": {
         "canonical": [
-          "Companions",
-          "Critical Hit",
-          "Evasion"
+          "companions",
+          "critical_hit",
+          "evasion"
         ],
         "raw": [
           "companion",
           "companions",
           "crit",
-          "critical",
           "evasion"
         ]
       },
@@ -10154,10 +10119,10 @@
       "base": "Gold Circlet",
       "tags": {
         "canonical": [
-          "Energy Shield"
+          "energy_shield"
         ],
         "raw": [
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -10196,10 +10161,10 @@
       "base": "Vermeil Circlet",
       "tags": {
         "canonical": [
-          "Energy Shield"
+          "energy_shield"
         ],
         "raw": [
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -10236,11 +10201,11 @@
       "base": "Twig Circlet",
       "tags": {
         "canonical": [
-          "Energy Shield",
-          "Thorns"
+          "energy_shield",
+          "thorns"
         ],
         "raw": [
-          "energy shield",
+          "energy_shield",
           "thorns"
         ]
       },
@@ -10276,11 +10241,11 @@
       "base": "Wicker Tiara",
       "tags": {
         "canonical": [
-          "Energy Shield"
+          "energy_shield"
         ],
         "raw": [
           "chaos_resistance",
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -10317,11 +10282,11 @@
       "base": "Chain Tiara",
       "tags": {
         "canonical": [
-          "Energy Shield"
+          "energy_shield"
         ],
         "raw": [
           "cold_resistance",
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -10359,10 +10324,10 @@
       "base": "Magus Tiara",
       "tags": {
         "canonical": [
-          "Energy Shield"
+          "energy_shield"
         ],
         "raw": [
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -10406,14 +10371,14 @@
       "base": "Feathered Tiara",
       "tags": {
         "canonical": [
-          "Energy Shield",
-          "Life Regeneration"
+          "energy_shield",
+          "life_regeneration"
         ],
         "raw": [
           "chaos_resistance",
-          "energy shield",
+          "energy_shield",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -10451,13 +10416,12 @@
       "base": "Chain Tiara",
       "tags": {
         "canonical": [
-          "Critical Hit",
-          "Energy Shield"
+          "critical_hit",
+          "energy_shield"
         ],
         "raw": [
           "crit",
-          "critical",
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -10499,13 +10463,13 @@
       "base": "Jade Tiara",
       "tags": {
         "canonical": [
-          "Energy Shield"
+          "energy_shield"
         ],
         "raw": [
           "cast_speed",
-          "energy shield",
+          "energy_shield",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -10545,13 +10509,12 @@
       "base": "Beaded Circlet",
       "tags": {
         "canonical": [
-          "Critical Hit",
-          "Energy Shield"
+          "critical_hit",
+          "energy_shield"
         ],
         "raw": [
           "crit",
-          "critical",
-          "energy shield",
+          "energy_shield",
           "lightning_resistance"
         ]
       },
@@ -10592,13 +10555,12 @@
       "base": "Closed Helm",
       "tags": {
         "canonical": [
-          "Armour",
-          "Critical Hit"
+          "armour",
+          "critical_hit"
         ],
         "raw": [
           "armour",
-          "crit",
-          "critical"
+          "crit"
         ]
       },
       "lines": [
@@ -10638,16 +10600,15 @@
       "base": "Decorated Helm",
       "tags": {
         "canonical": [
-          "Armour",
-          "Critical Hit",
-          "Life Regeneration"
+          "armour",
+          "critical_hit",
+          "life_regeneration"
         ],
         "raw": [
           "armour",
           "crit",
-          "critical",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -10695,16 +10656,15 @@
       "base": "Guarded Helm",
       "tags": {
         "canonical": [
-          "Critical Hit",
-          "Life Regeneration"
+          "critical_hit",
+          "life_regeneration"
         ],
         "raw": [
           "cold_resistance",
           "crit",
-          "critical",
           "fire_resistance",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "lightning_resistance",
           "regen"
         ]
@@ -10808,7 +10768,7 @@
       "base": "Visored Helm",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "armour",
@@ -10849,15 +10809,14 @@
       "base": "Cowled Helm",
       "tags": {
         "canonical": [
-          "Armour",
-          "Bleed",
-          "Critical Hit"
+          "armour",
+          "bleed",
+          "critical_hit"
         ],
         "raw": [
           "armour",
           "bleed",
           "crit",
-          "critical",
           "physical"
         ]
       },
@@ -10899,13 +10858,13 @@
       "base": "Shielded Helm",
       "tags": {
         "canonical": [
-          "Armour",
-          "Life Regeneration"
+          "armour",
+          "life_regeneration"
         ],
         "raw": [
           "armour",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -10942,18 +10901,18 @@
       "base": "Horned Crown",
       "tags": {
         "canonical": [
-          "Armour & Energy Shield",
-          "Freeze",
-          "Ignite",
-          "Shock",
-          "Slow/Maim/Hinder"
+          "armour_energy_shield",
+          "freeze",
+          "ignite",
+          "shock",
+          "slow_maim_hinder"
         ],
         "raw": [
           "armour",
           "chill",
           "cold",
           "electrocute",
-          "energy shield",
+          "energy_shield",
           "fire",
           "freeze",
           "hinder",
@@ -11045,12 +11004,12 @@
       "base": "Cultist Crown",
       "tags": {
         "canonical": [
-          "Armour & Energy Shield",
-          "Thorns"
+          "armour_energy_shield",
+          "thorns"
         ],
         "raw": [
           "armour",
-          "energy shield",
+          "energy_shield",
           "thorns"
         ]
       },
@@ -11123,12 +11082,12 @@
       "base": "Spiritbone Crown",
       "tags": {
         "canonical": [
-          "Armour & Energy Shield"
+          "armour_energy_shield"
         ],
         "raw": [
           "armour",
           "chaos_resistance",
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -11167,14 +11126,14 @@
       "base": "Spiritbone Crown",
       "tags": {
         "canonical": [
-          "Armour & Energy Shield",
-          "Life Regeneration"
+          "armour_energy_shield",
+          "life_regeneration"
         ],
         "raw": [
           "armour",
-          "energy shield",
+          "energy_shield",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -11251,15 +11210,14 @@
       "base": "Veiled Mask",
       "tags": {
         "canonical": [
-          "Critical Hit",
-          "Evasion & Energy Shield",
-          "Poison"
+          "critical_hit",
+          "evasion_energy_shield",
+          "poison"
         ],
         "raw": [
           "chaos",
           "crit",
-          "critical",
-          "energy shield",
+          "energy_shield",
           "evasion",
           "poison"
         ]
@@ -11351,7 +11309,7 @@
         "raw": [
           "chaos_resistance",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -11424,13 +11382,12 @@
       "base": "Face Mask",
       "tags": {
         "canonical": [
-          "Critical Hit",
-          "Evasion & Energy Shield"
+          "critical_hit",
+          "evasion_energy_shield"
         ],
         "raw": [
           "crit",
-          "critical",
-          "energy shield",
+          "energy_shield",
           "evasion"
         ]
       },
@@ -11470,13 +11427,13 @@
       "base": "Death Mask",
       "tags": {
         "canonical": [
-          "Evasion & Energy Shield"
+          "evasion_energy_shield"
         ],
         "raw": [
-          "energy shield",
+          "energy_shield",
           "evasion",
           "lightning",
-          "lightning damage",
+          "lightning_damage",
           "lightning_resistance"
         ]
       },
@@ -11520,25 +11477,25 @@
       "base": "Solid Mask",
       "tags": {
         "canonical": [
-          "Evasion & Energy Shield",
-          "Freeze",
-          "Ignite",
-          "Shock"
+          "evasion_energy_shield",
+          "freeze",
+          "ignite",
+          "shock"
         ],
         "raw": [
           "all_elemental_resistance",
           "chill",
           "cold",
-          "cold damage",
+          "cold_damage",
           "electrocute",
-          "energy shield",
+          "energy_shield",
           "evasion",
           "fire",
-          "fire damage",
+          "fire_damage",
           "freeze",
           "ignite",
           "lightning",
-          "lightning damage",
+          "lightning_damage",
           "shock"
         ]
       },
@@ -11587,14 +11544,13 @@
       "base": "Tribal Mask",
       "tags": {
         "canonical": [
-          "Critical Hit",
-          "Evasion & Energy Shield"
+          "critical_hit",
+          "evasion_energy_shield"
         ],
         "raw": [
           "chaos_resistance",
           "crit",
-          "critical",
-          "energy shield",
+          "energy_shield",
           "evasion"
         ]
       },
@@ -11638,12 +11594,12 @@
       "base": "Grand Visage",
       "tags": {
         "canonical": [
-          "Armour & Energy Shield",
-          "Ignite"
+          "armour_energy_shield",
+          "ignite"
         ],
         "raw": [
           "armour",
-          "energy shield",
+          "energy_shield",
           "fire",
           "ignite"
         ]
@@ -11942,16 +11898,15 @@
       "base": "Wooden Club",
       "tags": {
         "canonical": [
-          "Heavy Stun",
-          "Marks"
+          "heavy_stun",
+          "mark"
         ],
         "raw": [
           "attack_speed",
-          "heavystun",
+          "heavy_stun",
           "mark",
-          "marks",
           "physical",
-          "physical damage",
+          "physical_damage",
           "stun"
         ]
       },
@@ -11997,22 +11952,21 @@
       "base": "Slim Mace",
       "tags": {
         "canonical": [
-          "Critical Hit",
-          "Culling Strike",
-          "Freeze"
+          "critical_hit",
+          "culling_strike",
+          "freeze"
         ],
         "raw": [
           "chill",
           "cold",
-          "cold damage",
+          "cold_damage",
           "crit",
-          "critical",
           "cull",
           "culling",
-          "culling strike",
+          "culling_strike",
           "freeze",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -12060,13 +12014,13 @@
       "base": "Totemic Greatclub",
       "tags": {
         "canonical": [
-          "Heavy Stun"
+          "heavy_stun"
         ],
         "raw": [
           "attack_speed",
-          "heavystun",
+          "heavy_stun",
           "physical",
-          "physical damage",
+          "physical_damage",
           "stun"
         ]
       },
@@ -12113,7 +12067,7 @@
         "raw": [
           "attack_speed",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -12157,16 +12111,15 @@
       "base": "Brigand Mace",
       "tags": {
         "canonical": [
-          "Chaos Damage",
-          "Critical Hit"
+          "chaos_damage",
+          "critical_hit"
         ],
         "raw": [
           "chaos",
-          "chaos damage",
+          "chaos_damage",
           "crit",
-          "critical",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -12209,7 +12162,7 @@
         "raw": [
           "attack_speed",
           "lightning",
-          "lightning damage"
+          "lightning_damage"
         ]
       },
       "lines": [
@@ -12250,16 +12203,15 @@
       "base": "Warpick",
       "tags": {
         "canonical": [
-          "Armour Break",
-          "Critical Hit"
+          "armour_break",
+          "critical_hit"
         ],
         "raw": [
-          "armourbreak",
+          "armour_break",
           "attack_speed",
           "crit",
-          "critical",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -12307,9 +12259,9 @@
         "raw": [
           "attack_speed",
           "cold",
-          "cold damage",
+          "cold_damage",
           "lightning",
-          "lightning damage"
+          "lightning_damage"
         ]
       },
       "lines": [
@@ -12355,14 +12307,13 @@
       "base": "Spiked Club",
       "tags": {
         "canonical": [
-          "Minions"
+          "minion"
         ],
         "raw": [
           "attack_speed",
           "minion",
-          "minions",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -12405,15 +12356,15 @@
       "base": "Smithing Hammer",
       "tags": {
         "canonical": [
-          "Armour Break"
+          "armour_break"
         ],
         "raw": [
-          "armourbreak",
+          "armour_break",
           "fire",
-          "fire damage",
+          "fire_damage",
           "fire_resistance",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -12462,9 +12413,9 @@
         "raw": [
           "attack_speed",
           "lightning",
-          "lightning damage",
+          "lightning_damage",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -12506,16 +12457,14 @@
       "base": "Leaden Greathammer",
       "tags": {
         "canonical": [
-          "Critical Hit",
-          "Minions"
+          "critical_hit",
+          "minion"
         ],
         "raw": [
           "crit",
-          "critical",
           "minion",
-          "minions",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -12558,12 +12507,12 @@
       "base": "Cultist Greathammer",
       "tags": {
         "canonical": [
-          "Bleed"
+          "bleed"
         ],
         "raw": [
           "bleed",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -12604,15 +12553,15 @@
       "base": "Giant Maul",
       "tags": {
         "canonical": [
-          "Life Regeneration"
+          "life_regeneration"
         ],
         "raw": [
           "all_elemental_resistance",
           "attack_speed",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "physical",
-          "physical damage",
+          "physical_damage",
           "regen"
         ]
       },
@@ -12661,17 +12610,16 @@
       "base": "Felled Greatclub",
       "tags": {
         "canonical": [
-          "Critical Hit",
-          "Slow/Maim/Hinder"
+          "critical_hit",
+          "slow_maim_hinder"
         ],
         "raw": [
           "attack_speed",
           "crit",
-          "critical",
           "hinder",
           "maim",
           "physical",
-          "physical damage",
+          "physical_damage",
           "slow"
         ]
       },
@@ -12717,12 +12665,12 @@
       "base": "Oak Greathammer",
       "tags": {
         "canonical": [
-          "Heavy Stun"
+          "heavy_stun"
         ],
         "raw": [
-          "heavystun",
+          "heavy_stun",
           "physical",
-          "physical damage",
+          "physical_damage",
           "stun"
         ]
       },
@@ -12764,13 +12712,12 @@
       "base": "Crumbling Maul",
       "tags": {
         "canonical": [
-          "Critical Hit"
+          "critical_hit"
         ],
         "raw": [
           "crit",
-          "critical",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -12809,16 +12756,16 @@
       "base": "Pointed Maul",
       "tags": {
         "canonical": [
-          "Freeze",
-          "Heavy Stun"
+          "freeze",
+          "heavy_stun"
         ],
         "raw": [
           "chill",
           "cold",
           "freeze",
-          "heavystun",
+          "heavy_stun",
           "physical",
-          "physical damage",
+          "physical_damage",
           "stun"
         ]
       },
@@ -12860,16 +12807,15 @@
       "base": "Forge Maul",
       "tags": {
         "canonical": [
-          "Critical Hit",
-          "Heavy Stun"
+          "critical_hit",
+          "heavy_stun"
         ],
         "raw": [
           "attack_speed",
           "crit",
-          "critical",
-          "heavystun",
+          "heavy_stun",
           "physical",
-          "physical damage",
+          "physical_damage",
           "stun"
         ]
       },
@@ -12916,7 +12862,7 @@
         "raw": [
           "attack_speed",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -12955,17 +12901,17 @@
       "base": "Broadhead Quiver",
       "tags": {
         "canonical": [
-          "Freeze"
+          "freeze"
         ],
         "raw": [
           "attack_speed",
           "chill",
           "cold",
-          "cold damage",
+          "cold_damage",
           "cold_resistance",
           "freeze",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -13012,24 +12958,23 @@
       "base": "Visceral Quiver",
       "tags": {
         "canonical": [
-          "Chaos Damage",
-          "Critical Hit",
-          "Freeze",
-          "Shock"
+          "chaos_damage",
+          "critical_hit",
+          "freeze",
+          "shock"
         ],
         "raw": [
           "attack_speed",
           "chaos",
-          "chaos damage",
+          "chaos_damage",
           "chill",
           "cold",
           "crit",
-          "critical",
           "electrocute",
           "freeze",
           "lightning",
           "physical",
-          "physical damage",
+          "physical_damage",
           "shock"
         ]
       },
@@ -13079,11 +13024,11 @@
       "base": "Fire Quiver",
       "tags": {
         "canonical": [
-          "Ignite"
+          "ignite"
         ],
         "raw": [
           "fire",
-          "fire damage",
+          "fire_damage",
           "ignite"
         ]
       },
@@ -13160,7 +13105,7 @@
         "raw": [
           "attack_speed",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -13202,12 +13147,12 @@
       "base": "Toxic Quiver",
       "tags": {
         "canonical": [
-          "Poison"
+          "poison"
         ],
         "raw": [
           "chaos",
           "physical",
-          "physical damage",
+          "physical_damage",
           "poison"
         ]
       },
@@ -13249,16 +13194,16 @@
       "base": "Blunt Quiver",
       "tags": {
         "canonical": [
-          "Armour",
-          "Block",
-          "Heavy Stun"
+          "armour",
+          "block",
+          "heavy_stun"
         ],
         "raw": [
           "armour",
           "block",
-          "heavystun",
+          "heavy_stun",
           "physical",
-          "physical damage",
+          "physical_damage",
           "stun"
         ]
       },
@@ -13339,19 +13284,19 @@
       "base": "Amethyst Ring",
       "tags": {
         "canonical": [
-          "Chaos Damage",
-          "Ignite",
-          "Life Regeneration"
+          "chaos_damage",
+          "ignite",
+          "life_regeneration"
         ],
         "raw": [
           "chaos",
-          "chaos damage",
+          "chaos_damage",
           "chaos_resistance",
           "fire",
-          "fire damage",
+          "fire_damage",
           "ignite",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -13396,16 +13341,16 @@
       "base": "Iron Ring",
       "tags": {
         "canonical": [
-          "Chaos Damage",
-          "Life Regeneration"
+          "chaos_damage",
+          "life_regeneration"
         ],
         "raw": [
           "chaos",
-          "chaos damage",
+          "chaos_damage",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "physical",
-          "physical damage",
+          "physical_damage",
           "regen"
         ]
       },
@@ -13450,16 +13395,16 @@
       "base": "Ruby Ring",
       "tags": {
         "canonical": [
-          "Bleed"
+          "bleed"
         ],
         "raw": [
           "bleed",
           "cold_resistance",
           "fire",
-          "fire damage",
+          "fire_damage",
           "fire_resistance",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -13501,14 +13446,14 @@
       "base": "Topaz Ring",
       "tags": {
         "canonical": [
-          "Life Regeneration"
+          "life_regeneration"
         ],
         "raw": [
           "cold_resistance",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "lightning",
-          "lightning damage",
+          "lightning_damage",
           "lightning_resistance",
           "regen"
         ]
@@ -13559,7 +13504,7 @@
         "raw": [
           "chaos_resistance",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -13599,18 +13544,18 @@
       "base": "Topaz Ring",
       "tags": {
         "canonical": [
-          "Freeze",
-          "Life Regeneration"
+          "freeze",
+          "life_regeneration"
         ],
         "raw": [
           "chill",
           "cold",
-          "cold damage",
+          "cold_damage",
           "freeze",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "lightning",
-          "lightning damage",
+          "lightning_damage",
           "lightning_resistance",
           "regen"
         ]
@@ -13658,16 +13603,16 @@
       "base": "Ruby Ring",
       "tags": {
         "canonical": [
-          "Ignite",
-          "Life Regeneration"
+          "ignite",
+          "life_regeneration"
         ],
         "raw": [
           "fire",
-          "fire damage",
+          "fire_damage",
           "fire_resistance",
           "ignite",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -13710,13 +13655,13 @@
       "base": "Emerald Ring",
       "tags": {
         "canonical": [
-          "Evasion",
-          "Leech"
+          "evasion",
+          "leech"
         ],
         "raw": [
           "evasion",
           "leech",
-          "life leech",
+          "life_leech",
           "lifeleech"
         ]
       },
@@ -13755,12 +13700,11 @@
       "base": "Lazuli Ring",
       "tags": {
         "canonical": [
-          "Curses"
+          "curse"
         ],
         "raw": [
           "all_elemental_resistance",
-          "curse",
-          "curses"
+          "curse"
         ]
       },
       "lines": [
@@ -13797,12 +13741,12 @@
       "base": "Sapphire Ring",
       "tags": {
         "canonical": [
-          "Life Regeneration"
+          "life_regeneration"
         ],
         "raw": [
           "cold_resistance",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -13849,12 +13793,12 @@
       "base": "Pearl Ring",
       "tags": {
         "canonical": [
-          "Chaos Damage"
+          "chaos_damage"
         ],
         "raw": [
           "cast_speed",
           "chaos",
-          "chaos damage"
+          "chaos_damage"
         ]
       },
       "lines": [
@@ -13892,12 +13836,11 @@
       "base": "Prismatic Ring",
       "tags": {
         "canonical": [
-          "Critical Hit"
+          "critical_hit"
         ],
         "raw": [
           "all_elemental_resistance",
-          "crit",
-          "critical"
+          "crit"
         ]
       },
       "lines": [
@@ -13967,15 +13910,14 @@
       "base": "Pearl Ring",
       "tags": {
         "canonical": [
-          "Life Regeneration",
-          "Minions"
+          "life_regeneration",
+          "minion"
         ],
         "raw": [
           "cast_speed",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "minion",
-          "minions",
           "physical_mitigation",
           "regen"
         ]
@@ -14021,8 +13963,8 @@
       "base": "Iron Ring",
       "tags": {
         "canonical": [
-          "Freeze",
-          "Poison"
+          "freeze",
+          "poison"
         ],
         "raw": [
           "chaos",
@@ -14031,7 +13973,7 @@
           "cold_mitigation",
           "freeze",
           "physical",
-          "physical damage",
+          "physical_damage",
           "poison"
         ]
       },
@@ -14107,7 +14049,7 @@
       "base": "Topaz Ring",
       "tags": {
         "canonical": [
-          "Shock"
+          "shock"
         ],
         "raw": [
           "electrocute",
@@ -14151,11 +14093,11 @@
       "base": "Amethyst Ring",
       "tags": {
         "canonical": [
-          "Chaos Damage"
+          "chaos_damage"
         ],
         "raw": [
           "chaos",
-          "chaos damage",
+          "chaos_damage",
           "chaos_resistance"
         ]
       },
@@ -14193,11 +14135,11 @@
       "base": "Amethyst Ring",
       "tags": {
         "canonical": [
-          "Chaos Damage"
+          "chaos_damage"
         ],
         "raw": [
           "chaos",
-          "chaos damage",
+          "chaos_damage",
           "chaos_resistance"
         ]
       },
@@ -14268,12 +14210,12 @@
       "base": "Sapphire Ring",
       "tags": {
         "canonical": [
-          "Freeze"
+          "freeze"
         ],
         "raw": [
           "chill",
           "cold",
-          "cold damage",
+          "cold_damage",
           "cold_resistance",
           "freeze"
         ]
@@ -14315,13 +14257,13 @@
       "base": "Iron Ring",
       "tags": {
         "canonical": [
-          "Heavy Stun",
-          "Thorns"
+          "heavy_stun",
+          "thorns"
         ],
         "raw": [
-          "heavystun",
+          "heavy_stun",
           "physical",
-          "physical damage",
+          "physical_damage",
           "stun",
           "thorns"
         ]
@@ -14364,12 +14306,11 @@
       "base": "Lazuli Ring",
       "tags": {
         "canonical": [
-          "Critical Hit"
+          "critical_hit"
         ],
         "raw": [
           "chaos_resistance",
-          "crit",
-          "critical"
+          "crit"
         ]
       },
       "lines": [
@@ -14493,12 +14434,11 @@
       "base": "Emerald Ring",
       "tags": {
         "canonical": [
-          "Curses"
+          "curse"
         ],
         "raw": [
           "all_elemental_resistance",
-          "curse",
-          "curses"
+          "curse"
         ]
       },
       "lines": [
@@ -14538,8 +14478,8 @@
       "base": "Iron Ring",
       "tags": {
         "canonical": [
-          "Bleed",
-          "Freeze"
+          "bleed",
+          "freeze"
         ],
         "raw": [
           "bleed",
@@ -14548,7 +14488,7 @@
           "cold_mitigation",
           "freeze",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -14640,7 +14580,7 @@
       "base": "Emerald Ring",
       "tags": {
         "canonical": [
-          "Evasion"
+          "evasion"
         ],
         "raw": [
           "evasion"
@@ -14682,16 +14622,16 @@
       "base": "Sapphire Ring",
       "tags": {
         "canonical": [
-          "Life Regeneration"
+          "life_regeneration"
         ],
         "raw": [
           "cold",
-          "cold damage",
+          "cold_damage",
           "cold_resistance",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "lightning",
-          "lightning damage",
+          "lightning_damage",
           "regen"
         ]
       },
@@ -14736,17 +14676,16 @@
       "base": "Rattling Sceptre",
       "tags": {
         "canonical": [
-          "Chaos Damage",
-          "Life Regeneration",
-          "Minions"
+          "chaos_damage",
+          "life_regeneration",
+          "minion"
         ],
         "raw": [
           "chaos",
-          "chaos damage",
+          "chaos_damage",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "minion",
-          "minions",
           "regen"
         ]
       },
@@ -14792,15 +14731,15 @@
       "base": "Omen Sceptre",
       "tags": {
         "canonical": [
-          "Leech",
-          "Life Regeneration"
+          "leech",
+          "life_regeneration"
         ],
         "raw": [
           "leech",
-          "life leech",
+          "life_leech",
           "lifeleech",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -14842,17 +14781,17 @@
       "base": "Shrine Sceptre",
       "tags": {
         "canonical": [
-          "Life Regeneration"
+          "life_regeneration"
         ],
         "raw": [
           "cold",
-          "cold damage",
+          "cold_damage",
           "fire",
-          "fire damage",
+          "fire_damage",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "lightning",
-          "lightning damage",
+          "lightning_damage",
           "regen"
         ]
       },
@@ -14910,13 +14849,13 @@
       "base": "Shrine Sceptre",
       "tags": {
         "canonical": [
-          "Life Regeneration"
+          "life_regeneration"
         ],
         "raw": [
           "cold",
-          "cold damage",
+          "cold_damage",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -14961,13 +14900,13 @@
       "base": "Shrine Sceptre",
       "tags": {
         "canonical": [
-          "Life Regeneration"
+          "life_regeneration"
         ],
         "raw": [
           "fire",
-          "fire damage",
+          "fire_damage",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -15012,13 +14951,13 @@
       "base": "Shrine Sceptre",
       "tags": {
         "canonical": [
-          "Life Regeneration"
+          "life_regeneration"
         ],
         "raw": [
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "lightning",
-          "lightning damage",
+          "lightning_damage",
           "regen"
         ]
       },
@@ -15063,11 +15002,11 @@
       "base": "Shrine Sceptre",
       "tags": {
         "canonical": [
-          "Chaos Damage"
+          "chaos_damage"
         ],
         "raw": [
           "chaos",
-          "chaos damage"
+          "chaos_damage"
         ]
       },
       "lines": [
@@ -15107,15 +15046,15 @@
       "base": "Shrine Sceptre",
       "tags": {
         "canonical": [
-          "Ignite",
-          "Life Regeneration"
+          "ignite",
+          "life_regeneration"
         ],
         "raw": [
           "fire",
-          "fire damage",
+          "fire_damage",
           "ignite",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -15158,18 +15097,18 @@
       "base": "Blacksteel Tower Shield",
       "tags": {
         "canonical": [
-          "Armour",
-          "Block",
-          "Heavy Stun"
+          "armour",
+          "block",
+          "heavy_stun"
         ],
         "raw": [
           "armour",
           "block",
           "chaos_resistance",
           "fire",
-          "fire damage",
+          "fire_damage",
           "fire_resistance",
-          "heavystun",
+          "heavy_stun",
           "physical",
           "stun"
         ]
@@ -15217,15 +15156,15 @@
       "base": "Splintered Tower Shield",
       "tags": {
         "canonical": [
-          "Armour",
-          "Heavy Stun",
-          "Life Regeneration"
+          "armour",
+          "heavy_stun",
+          "life_regeneration"
         ],
         "raw": [
           "armour",
-          "heavystun",
+          "heavy_stun",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "physical",
           "regen",
           "stun"
@@ -15274,8 +15213,8 @@
       "base": "Braced Tower Shield",
       "tags": {
         "canonical": [
-          "Armour",
-          "Block"
+          "armour",
+          "block"
         ],
         "raw": [
           "armour",
@@ -15323,16 +15262,16 @@
       "base": "Rampart Tower Shield",
       "tags": {
         "canonical": [
-          "Armour",
-          "Block",
-          "Chaos Damage",
-          "Poison"
+          "armour",
+          "block",
+          "chaos_damage",
+          "poison"
         ],
         "raw": [
           "armour",
           "block",
           "chaos",
-          "chaos damage",
+          "chaos_damage",
           "poison"
         ]
       },
@@ -15378,14 +15317,14 @@
       "base": "Heraldric Tower Shield",
       "tags": {
         "canonical": [
-          "Armour",
-          "Block",
-          "Heavy Stun"
+          "armour",
+          "block",
+          "heavy_stun"
         ],
         "raw": [
           "armour",
           "block",
-          "heavystun",
+          "heavy_stun",
           "physical",
           "stun"
         ]
@@ -15432,14 +15371,14 @@
       "base": "{variant:1}Stone Tower Shield",
       "tags": {
         "canonical": [
-          "Armour",
-          "Block",
-          "Heavy Stun"
+          "armour",
+          "block",
+          "heavy_stun"
         ],
         "raw": [
           "armour",
           "block",
-          "heavystun",
+          "heavy_stun",
           "physical",
           "stun"
         ]
@@ -15484,8 +15423,8 @@
       "base": "Crucible Tower Shield",
       "tags": {
         "canonical": [
-          "Armour",
-          "Block"
+          "armour",
+          "block"
         ],
         "raw": [
           "armour",
@@ -15533,13 +15472,13 @@
       "base": "Effigial Tower Shield",
       "tags": {
         "canonical": [
-          "Armour",
-          "Heavy Stun",
-          "Slow/Maim/Hinder"
+          "armour",
+          "heavy_stun",
+          "slow_maim_hinder"
         ],
         "raw": [
           "armour",
-          "heavystun",
+          "heavy_stun",
           "hinder",
           "maim",
           "movement_speed",
@@ -15590,7 +15529,7 @@
       "base": "Barricade Tower Shield",
       "tags": {
         "canonical": [
-          "Armour"
+          "armour"
         ],
         "raw": [
           "all_elemental_resistance",
@@ -15632,12 +15571,12 @@
       "base": "Painted Tower Shield",
       "tags": {
         "canonical": [
-          "Block",
-          "Heavy Stun"
+          "block",
+          "heavy_stun"
         ],
         "raw": [
           "block",
-          "heavystun",
+          "heavy_stun",
           "physical",
           "stun"
         ]
@@ -15678,16 +15617,16 @@
       "base": "Iron Buckler",
       "tags": {
         "canonical": [
-          "Block",
-          "Life Regeneration"
+          "block",
+          "life_regeneration"
         ],
         "raw": [
           "block",
           "chaos_resistance",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "physical",
-          "physical damage",
+          "physical_damage",
           "regen"
         ]
       },
@@ -15735,7 +15674,7 @@
       "base": "Ornate Buckler",
       "tags": {
         "canonical": [
-          "Evasion"
+          "evasion"
         ],
         "raw": [
           "evasion"
@@ -15775,8 +15714,8 @@
       "base": "Leather Buckler",
       "tags": {
         "canonical": [
-          "Block",
-          "Evasion"
+          "block",
+          "evasion"
         ],
         "raw": [
           "block",
@@ -15820,21 +15759,21 @@
       "base": "Ridged Buckler",
       "tags": {
         "canonical": [
-          "Evasion",
-          "Freeze",
-          "Heavy Stun",
-          "Thorns"
+          "evasion",
+          "freeze",
+          "heavy_stun",
+          "thorns"
         ],
         "raw": [
           "chill",
           "cold",
-          "cold damage",
+          "cold_damage",
           "cold_resistance",
           "evasion",
           "freeze",
-          "heavystun",
+          "heavy_stun",
           "physical",
-          "physical damage",
+          "physical_damage",
           "stun",
           "thorns"
         ]
@@ -15923,18 +15862,17 @@
       "base": "Plated Buckler",
       "tags": {
         "canonical": [
-          "Block",
-          "Curses",
-          "Evasion",
-          "Life Regeneration"
+          "block",
+          "curse",
+          "evasion",
+          "life_regeneration"
         ],
         "raw": [
           "block",
           "curse",
-          "curses",
           "evasion",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -15979,13 +15917,12 @@
       "base": "Spiked Buckler",
       "tags": {
         "canonical": [
-          "Critical Hit",
-          "Evasion"
+          "critical_hit",
+          "evasion"
         ],
         "raw": [
           "all_elemental_resistance",
           "crit",
-          "critical",
           "evasion"
         ]
       },
@@ -16026,7 +15963,7 @@
       "base": "Array Buckler",
       "tags": {
         "canonical": [
-          "Evasion"
+          "evasion"
         ],
         "raw": [
           "cold_resistance",
@@ -16119,8 +16056,8 @@
       "base": "Hardwood Targe",
       "tags": {
         "canonical": [
-          "Armour",
-          "Block"
+          "armour",
+          "block"
         ],
         "raw": [
           "armour",
@@ -16213,14 +16150,14 @@
       "base": "Pelage Targe",
       "tags": {
         "canonical": [
-          "Armour",
-          "Block",
-          "Heavy Stun"
+          "armour",
+          "block",
+          "heavy_stun"
         ],
         "raw": [
           "armour",
           "block",
-          "heavystun",
+          "heavy_stun",
           "physical",
           "stun"
         ]
@@ -16265,13 +16202,13 @@
       "base": "Blazon Crest Shield",
       "tags": {
         "canonical": [
-          "Armour & Energy Shield",
-          "Block"
+          "armour_energy_shield",
+          "block"
         ],
         "raw": [
           "armour",
           "block",
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -16313,15 +16250,15 @@
       "base": "Jingling Crest Shield",
       "tags": {
         "canonical": [
-          "Armour & Energy Shield",
-          "Life Regeneration"
+          "armour_energy_shield",
+          "life_regeneration"
         ],
         "raw": [
           "armour",
           "cooldown_recovery",
-          "energy shield",
+          "energy_shield",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -16363,11 +16300,11 @@
       "base": "Omen Crest Shield",
       "tags": {
         "canonical": [
-          "Armour & Energy Shield"
+          "armour_energy_shield"
         ],
         "raw": [
           "armour",
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -16408,17 +16345,17 @@
       "base": "Variant: Pre 0.2.0",
       "tags": {
         "canonical": [
-          "Armour & Energy Shield",
-          "Block",
-          "Life Regeneration"
+          "armour_energy_shield",
+          "block",
+          "life_regeneration"
         ],
         "raw": [
           "armour",
           "block",
           "chaos_resistance",
-          "energy shield",
+          "energy_shield",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -16465,12 +16402,12 @@
       "base": "Sectarian Crest Shield",
       "tags": {
         "canonical": [
-          "Armour & Energy Shield"
+          "armour_energy_shield"
         ],
         "raw": [
           "all_elemental_resistance",
           "armour",
-          "energy shield"
+          "energy_shield"
         ]
       },
       "lines": [
@@ -16515,12 +16452,12 @@
       "base": "Omen Crest Shield",
       "tags": {
         "canonical": [
-          "Life Regeneration"
+          "life_regeneration"
         ],
         "raw": [
           "fire_resistance",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -16604,14 +16541,14 @@
       "base": "Hunting Spear",
       "tags": {
         "canonical": [
-          "Slow/Maim/Hinder"
+          "slow_maim_hinder"
         ],
         "raw": [
           "attack_speed",
           "hinder",
           "maim",
           "physical",
-          "physical damage",
+          "physical_damage",
           "slow"
         ]
       },
@@ -16656,13 +16593,13 @@
       "base": "War Spear",
       "tags": {
         "canonical": [
-          "Evasion"
+          "evasion"
         ],
         "raw": [
           "attack_speed",
           "evasion",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -16705,16 +16642,16 @@
       "base": "Barbed Spear",
       "tags": {
         "canonical": [
-          "Bleed",
-          "Ignite"
+          "bleed",
+          "ignite"
         ],
         "raw": [
           "bleed",
           "fire",
-          "fire damage",
+          "fire_damage",
           "ignite",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -16756,12 +16693,12 @@
       "base": "Hardwood Spear",
       "tags": {
         "canonical": [
-          "Poison"
+          "poison"
         ],
         "raw": [
           "chaos",
           "physical",
-          "physical damage",
+          "physical_damage",
           "poison"
         ]
       },
@@ -16804,15 +16741,15 @@
       "base": "Winged Spear",
       "tags": {
         "canonical": [
-          "Shock"
+          "shock"
         ],
         "raw": [
           "attack_speed",
           "electrocute",
           "lightning",
-          "lightning damage",
+          "lightning_damage",
           "physical",
-          "physical damage",
+          "physical_damage",
           "shock"
         ]
       },
@@ -16857,18 +16794,18 @@
       "base": "Helix Spear",
       "tags": {
         "canonical": [
-          "Chaos Damage",
-          "Leech"
+          "chaos_damage",
+          "leech"
         ],
         "raw": [
           "attack_speed",
           "chaos",
-          "chaos damage",
+          "chaos_damage",
           "leech",
-          "life leech",
+          "life_leech",
           "lifeleech",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -16919,13 +16856,12 @@
       "base": "Forked Spear",
       "tags": {
         "canonical": [
-          "Critical Hit"
+          "critical_hit"
         ],
         "raw": [
           "crit",
-          "critical",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -16971,7 +16907,7 @@
         "raw": [
           "attack_speed",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -17012,12 +16948,12 @@
       "base": "Chiming Staff",
       "tags": {
         "canonical": [
-          "Chaos Damage"
+          "chaos_damage"
         ],
         "raw": [
           "cast_speed",
           "chaos",
-          "chaos damage"
+          "chaos_damage"
         ]
       },
       "lines": [
@@ -17055,13 +16991,13 @@
       "base": "Ashen Staff",
       "tags": {
         "canonical": [
-          "Life Regeneration"
+          "life_regeneration"
         ],
         "raw": [
           "fire",
-          "fire damage",
+          "fire_damage",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -17107,16 +17043,16 @@
       "base": "Voltaic Staff",
       "tags": {
         "canonical": [
-          "Life Regeneration",
-          "Shock"
+          "life_regeneration",
+          "shock"
         ],
         "raw": [
           "cast_speed",
           "electrocute",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "lightning",
-          "lightning damage",
+          "lightning_damage",
           "regen",
           "shock"
         ]
@@ -17167,12 +17103,12 @@
       "base": "Pyrophyte Staff",
       "tags": {
         "canonical": [
-          "Ignite"
+          "ignite"
         ],
         "raw": [
           "cast_speed",
           "fire",
-          "fire damage",
+          "fire_damage",
           "ignite"
         ]
       },
@@ -17257,13 +17193,13 @@
       "base": "Gelid Staff",
       "tags": {
         "canonical": [
-          "Freeze"
+          "freeze"
         ],
         "raw": [
           "cast_speed",
           "chill",
           "cold",
-          "cold damage",
+          "cold_damage",
           "freeze"
         ]
       },
@@ -17354,13 +17290,13 @@
       "base": "Wrapped Quarterstaff",
       "tags": {
         "canonical": [
-          "Bleed",
-          "Thorns"
+          "bleed",
+          "thorns"
         ],
         "raw": [
           "bleed",
           "physical",
-          "physical damage",
+          "physical_damage",
           "thorns"
         ]
       },
@@ -17400,11 +17336,10 @@
       "base": "Wyrm Quarterstaff",
       "tags": {
         "canonical": [
-          "Critical Hit"
+          "critical_hit"
         ],
         "raw": [
-          "crit",
-          "critical"
+          "crit"
         ]
       },
       "lines": [
@@ -17439,19 +17374,18 @@
       "base": "Crescent Quarterstaff",
       "tags": {
         "canonical": [
-          "Critical Hit",
-          "Life Regeneration"
+          "critical_hit",
+          "life_regeneration"
         ],
         "raw": [
           "attack_speed",
           "cold",
-          "cold damage",
+          "cold_damage",
           "crit",
-          "critical",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "lightning",
-          "lightning damage",
+          "lightning_damage",
           "regen"
         ]
       },
@@ -17500,12 +17434,12 @@
       "base": "Steelpoint Quarterstaff",
       "tags": {
         "canonical": [
-          "Heavy Stun"
+          "heavy_stun"
         ],
         "raw": [
-          "heavystun",
+          "heavy_stun",
           "physical",
-          "physical damage",
+          "physical_damage",
           "stun"
         ]
       },
@@ -17588,10 +17522,10 @@
         "canonical": [],
         "raw": [
           "fire",
-          "fire damage",
+          "fire_damage",
           "fire_resistance",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -17634,19 +17568,18 @@
       "base": "Ravenous Staff",
       "tags": {
         "canonical": [
-          "Bleed",
-          "Chaos Damage",
-          "Curses"
+          "bleed",
+          "chaos_damage",
+          "curse"
         ],
         "raw": [
           "bleed",
           "chaos",
-          "chaos damage",
+          "chaos_damage",
           "chaos_resistance",
           "curse",
-          "curses",
           "physical",
-          "physical damage"
+          "physical_damage"
         ]
       },
       "lines": [
@@ -17766,12 +17699,12 @@
       "base": "Acrid Wand",
       "tags": {
         "canonical": [
-          "Life Regeneration"
+          "life_regeneration"
         ],
         "raw": [
           "cast_speed",
           "liferegen",
-          "liferegeneration",
+          "life_regeneration",
           "regen"
         ]
       },
@@ -17823,11 +17756,10 @@
       "base": "Volatile Wand",
       "tags": {
         "canonical": [
-          "Critical Hit"
+          "critical_hit"
         ],
         "raw": [
-          "crit",
-          "critical"
+          "crit"
         ]
       },
       "lines": [
@@ -17899,7 +17831,7 @@
       "base": "Bone Wand",
       "tags": {
         "canonical": [
-          "Bleed"
+          "bleed"
         ],
         "raw": [
           "bleed",

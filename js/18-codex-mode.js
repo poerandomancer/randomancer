@@ -1,5 +1,6 @@
 import { ensureDataPreload } from './08-data-load.js';
 import { ensureMarketBadgeDelegation, hydrateMarketBadges, renderMarketBadgeMarkup } from './features/market-price.js';
+import { canonicalizeTag, displayTag, isNoiseTag } from './tag-normalization.js';
 
 const state = {
   pillar: 'ascendancy',
@@ -19,7 +20,7 @@ const els = {};
 const esc = (s) => String(s || '').replace(/[&<>"']/g, (m) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
 const slug = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
-const CODEX_TAG_STOPLIST = new Set([
+const CODEX_UI_TAG_STOPLIST = new Set([
   'helmet', 'body armour', 'body armor', 'gloves', 'boots', 'belt',
   'ring', 'amulet',
   'wand', 'bow', 'staff', 'mace', 'sword', 'axe', 'dagger', 'spear', 'crossbow', 'quarterstaff',
@@ -27,49 +28,52 @@ const CODEX_TAG_STOPLIST = new Set([
   'javelin', 'trap', 'flask'
 ]);
 
-const CODEX_TAG_VARIANTS = new Map([
-  ['minions', 'minion'],
-  ['charges', 'charge'],
-  ['bleeding', 'bleed'],
-  ['bled', 'bleed'],
-  ['shocked', 'shock'],
-  ['shocking', 'shock'],
-  ['ignited', 'ignite'],
-  ['igniting', 'ignite'],
-  ['poisoned', 'poison'],
-  ['poisoning', 'poison'],
-  ['recouped', 'recoup'],
-  ['recouping', 'recoup']
-]);
+// Codex-local heuristic policy for derived tags.
+// This is intentionally UI/search vocabulary (not shared global normalization rules).
+const CODEX_DERIVED_TAG_VOCAB = [
+  'fire', 'cold', 'lightning', 'chaos', 'physical',
+  'minion', 'projectile', 'totem', 'melee', 'spell',
+  'attack', 'crit', 'bleed', 'poison', 'stun'
+];
 
-function normalizeCodexTag(tag) {
-  const raw = String(tag || '').toLowerCase().replace(/[\[\]]/g, '').replace(/[_-]+/g, ' ').trim();
+
+function canonicalizeCodexTag(tag) {
+  const raw = String(tag || '').trim();
   if (!raw) return null;
-  const collapsed = raw.replace(/\s+/g, ' ');
 
-  const isFamilyTag = collapsed.startsWith('family:');
-  if (/^grants?:/.test(collapsed) || /^grants?\s/.test(collapsed) || collapsed.includes('grants skill')) return null;
+  const lowered = raw.toLowerCase().replace(/[\[\]]/g, '').replace(/[_-]+/g, ' ').trim();
+  const isFamilyTag = lowered.startsWith('family:');
+  if (isFamilyTag) {
+    const suffix = lowered.slice('family:'.length).trim();
+    return suffix ? `family:${suffix}` : null;
+  }
 
-  const canonical = CODEX_TAG_VARIANTS.get(collapsed) || collapsed;
-  if (!isFamilyTag && CODEX_TAG_STOPLIST.has(canonical)) return null;
+  const canonical = canonicalizeTag(raw);
+  return canonical || null;
+}
 
-  if (!isFamilyTag) return canonical;
-  const suffix = canonical.slice('family:'.length).trim();
-  if (!suffix) return null;
-  return `family:${suffix}`;
+function isCodexUiFilteredTag(canonicalTag) {
+  if (!canonicalTag) return true;
+  if (isNoiseTag(canonicalTag)) return true;
+  return CODEX_UI_TAG_STOPLIST.has(displayTag(canonicalTag));
+}
+
+function toCodexDisplayTag(tag) {
+  const canonical = canonicalizeCodexTag(tag);
+  if (!canonical || isCodexUiFilteredTag(canonical)) return null;
+  return displayTag(canonical);
 }
 
 function normalizeTags(tags, text) {
   const set = new Set();
   (Array.isArray(tags) ? tags : []).forEach((t) => {
-    const normalized = normalizeCodexTag(t);
+    const normalized = toCodexDisplayTag(t);
     if (normalized) set.add(normalized);
   });
   const scan = String(text || '').toLowerCase();
-  const derives = ['fire','cold','lightning','chaos','physical','minion','projectile','totem','melee','spell','attack','crit','bleed','poison','stun'];
-  derives.forEach((t) => {
+  CODEX_DERIVED_TAG_VOCAB.forEach((t) => {
     if (!scan.includes(t)) return;
-    const normalized = normalizeCodexTag(t);
+    const normalized = toCodexDisplayTag(t);
     if (normalized) set.add(normalized);
   });
   return Array.from(set);
@@ -590,7 +594,7 @@ function bind() {
   els.tags?.addEventListener('click', (e) => {
     const chip = e.target.closest('[data-tag]');
     if (!chip) return;
-    const t = normalizeCodexTag(chip.dataset.tag);
+    const t = toCodexDisplayTag(chip.dataset.tag);
     if (!t) return;
     if (state.tags.has(t)) state.tags.delete(t); else state.tags.add(t);
     render();
@@ -665,7 +669,7 @@ function hydrateFromUrl() {
   state.tags = new Set(
     (p.get('tags') || '')
       .split(',')
-      .map((s) => normalizeCodexTag(s))
+      .map((s) => toCodexDisplayTag(s))
       .filter(Boolean)
   );
 }
@@ -687,17 +691,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       state.uniquesLoadWarning = '';
       return mapped;
     } catch {
-      try {
-        const fallbackRes = await fetch('data/enriched/uniques_enriched.json');
-        if (!fallbackRes.ok) throw new Error(`HTTP ${fallbackRes.status}`);
-        const fallbackJson = await fallbackRes.json();
-        const fallbackItems = Array.isArray(fallbackJson?.items) ? fallbackJson.items : [];
-        state.uniquesLoadWarning = 'Using fallback uniques dataset. To refresh Codex uniques, generate and commit data/enriched/poe2db_uniques_min.json.';
-        return fallbackItems;
-      } catch {
-        state.uniquesLoadWarning = 'Uniques dataset unavailable. Generate and commit data/enriched/poe2db_uniques_min.json to enable Codex uniques browsing.';
-        return [];
-      }
+      state.uniquesLoadWarning = 'Uniques dataset unavailable. Generate and commit data/enriched/poe2db_uniques_min.json to enable Codex uniques browsing.';
+      return [];
     }
   }
 
@@ -710,7 +705,7 @@ window.RandomancerCodex = {
   setState(next = {}) {
     if (next.pillar) state.pillar = next.pillar;
     if (next.q != null) state.q = String(next.q);
-    if (Array.isArray(next.tags)) state.tags = new Set(next.tags.map((tag) => normalizeCodexTag(tag)).filter(Boolean));
+    if (Array.isArray(next.tags)) state.tags = new Set(next.tags.map((tag) => toCodexDisplayTag(tag)).filter(Boolean));
     render();
   },
   refresh() { buildIndex(); render(); }

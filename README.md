@@ -69,9 +69,33 @@ Runtime JSON:
 - `data/core-data.json`
 - `data/enriched/skills_enriched.json`
 - `data/enriched/passives_enriched.json`
-- `data/enriched/uniques_enriched.json`
+- `data/enriched/poe2db_uniques_min.json`
 
 Datamined/reference sources live under `data/datamined/` and are used for enrichment and future updates.
+
+Legacy/reference helper tooling:
+- `data/helperScripts/enrich_uniques.py` is quarantined as legacy/reference-only enrichment tooling.
+- It is **not** a runtime dependency; runtime Codex/gear uniques data comes from `data/enriched/poe2db_uniques_min.json`.
+- `data/enriched/uniques_enriched.json` is legacy output and not an active runtime source.
+
+
+### Tag normalization workflow
+- `data/tag_normalization_rules.json` is the single source of truth for shared tag normalization rules.
+- `js/generated/tag-normalization-rules.js` is generated from that JSON for browser runtime use.
+- `js/tag-normalization.js` contains runtime helper functions (canonicalization, expansion, matching).
+- `data/helperScripts/lib/tag_normalization.py` is the helper-layer Python implementation used by data scripts.
+- Boundary policy:
+  - Shared/global normalization owns canonicalization, alias resolution, and match semantics.
+  - Local overlays are limited to feature-specific policy (for example: Codex UI tag filtering/presentation, and skill-family local alias/grouping convenience).
+
+Useful maintenance commands:
+- `make normalize-tags-check` (default validator mode)
+- `make normalize-tags-strict` (strict validator mode)
+- `make normalize-tags-audit` (refreshes `data/enriched/tag_vocab_audit.json`)
+- `python data/helperScripts/validate_tag_normalization.py --relaxed` (mixed-format tags become warnings)
+
+CI guardrail:
+- `.github/workflows/tag-normalization-check.yml` regenerates rules, fails on generated-file drift, runs validator, and emits an audit JSON file during CI.
 
 ---
 

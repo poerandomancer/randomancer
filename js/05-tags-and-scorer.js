@@ -1,58 +1,38 @@
+import { expandMatchKeys, toMatchKey } from './tag-normalization.js';
+
 // ---------- Tag utilities (shared normalizer + alias map) ----------
-const TagUtils = (() => {
-  function baseNormalize(s) {
-    // canonical form: lowercase, strip non-alphanumerics
-    return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '');
-  }
+const TagUtils = {
+  norm: (s) => toMatchKey(s),
+  expand: (s) => expandMatchKeys(s),
+  alias: new Map()
+};
 
-  // Union of aliases from:
-  // - v0.7 scorer helpers
-  // - uniques engine extra tags
-  const RAW_ALIAS = [
-    // v0.7 scorer
-    ['critical', 'crit'],
-    ['damage over time', 'dot'],
-    ['damageovertime', 'dot'],
-    ['marks', 'mark'],
-    ['armourbreak', 'armourbreak'],
-
-    // uniques engine
-    ['armorbreak', 'armourbreak'],
-    ['heavy stun', 'heavystun'],
-    ['heavystun', 'heavystun'],
-    ['life regeneration', 'liferegeneration'],
-    ['culling strike', 'cullingstrike'],
-    ['block recovery', 'blockrecovery'],
-
-    // build-mode unique/tag normalization expansion
-    ['critical weakness', 'critical'],
-    ['critical weakness', 'criticalhit'],
-    ['critical damage bonus', 'critical'],
-    ['critical damage bonus', 'criticalhit'],
-    ['electrocution', 'shock'],
-    ['decimating strike', 'cull'],
-    ['decimating strike', 'cullingstrike'],
-    ['culled', 'cull'],
-    ['culled', 'cullingstrike'],
-    ['shocked ground', 'shock'],
-    ['thorns damage', 'thorns'],
-    ['chance to block', 'block'],
-  ];
-
-  const alias = new Map();
-  RAW_ALIAS.forEach(([from, to]) => {
-    const k = baseNormalize(from);
-    const v = baseNormalize(to);
-    alias.set(k, v);
-  });
-
-  function norm(s) {
-    const t = baseNormalize(s);
-    return alias.get(t) || t;
-  }
-
-  return { norm, alias };
-})();
+// Compatibility alias map (match-key -> primary match-key).
+[
+  'critical',
+  'damage over time',
+  'damageovertime',
+  'marks',
+  'armourbreak',
+  'armorbreak',
+  'heavy stun',
+  'heavystun',
+  'life regeneration',
+  'culling strike',
+  'block recovery',
+  'critical weakness',
+  'critical damage bonus',
+  'electrocution',
+  'decimating strike',
+  'culled',
+  'shocked ground',
+  'thorns damage',
+  'chance to block'
+].forEach((from) => {
+  const expanded = expandMatchKeys(from);
+  if (!expanded.length) return;
+  TagUtils.alias.set(toMatchKey(from), expanded[0]);
+});
 
 // Expose alias map for older code that expects window.TAG_ALIASES
 window.TAG_ALIASES = TagUtils.alias;
@@ -155,7 +135,7 @@ window.TAG_ALIASES = TagUtils.alias;
 })();
 
 function normalizeTag(s){
-  return TagUtils.norm(s);
+  return toMatchKey(s);
 }
 
 // ---------- dictionary builders (TRUE Map) ----------
@@ -232,7 +212,7 @@ function sample(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 const TAG_ALIASES = window.TAG_ALIASES || TagUtils.alias;
 
 function normTagPlus(s){
-  return TagUtils.norm(s);
+  return toMatchKey(s);
 }
 
 // derive simple weapon/offhand hint tags
