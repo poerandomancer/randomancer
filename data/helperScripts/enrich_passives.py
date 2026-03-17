@@ -77,11 +77,6 @@ METADATA_EXACT_TOKENS = {
     "meta",
     "command",
     "aoe",
-    "projectile",
-    "fire",
-    "cold",
-    "lightning",
-    "chaos",
 }
 
 METADATA_LABEL_ROWS = {
@@ -112,6 +107,24 @@ CLASS_NAMES = {
     "templar",
     "shadow",
     "scion",
+}
+
+CLASS_PREFIX_LABELS = {
+    "huntress",
+    "druid",
+    "warrior",
+    "ranger",
+    "witch",
+    "sorceress",
+    "monk",
+    "mercenary",
+    "duelist",
+    "marauder",
+    "templar",
+    "shadow",
+    "scion",
+    "amazon",
+    "ritualist",
 }
 
 
@@ -234,9 +247,65 @@ def looks_incomplete_effect_line(line: str) -> bool:
         return True
     if re.search(r"(\+|\-|\*|/)$", lowered):
         return True
+    if re.match(r"^grants?\s+skill\s*:?$", lowered):
+        return True
+    if re.search(r"\ban additional$", lowered):
+        return True
     if lowered.endswith((" for", " with", " of", " to", " per", " instead", " your", " can", " grants", " is")):
         return True
     return False
+
+
+def strip_class_prefix_from_effect_line(line: str) -> str:
+    ln = re.sub(r"\s+", " ", str(line or "")).strip()
+    parts = ln.split(" ", 1)
+    if len(parts) != 2:
+        return ln
+    prefix = normalize_name_key(parts[0])
+    rest = parts[1].strip()
+    if prefix not in CLASS_PREFIX_LABELS or not rest:
+        return ln
+    if re.match(r"^(grants?\s+skill\b|every\s+\d+|you\b|skills?\b|attacks?\b|hits?\b|life\b|mana\b|gain\b|deal\b|recover\b|projectiles?\b|totems?\b|minions?\b|while\b|when\b|\+\d)", rest, re.I):
+        return rest
+    return ln
+
+
+def extract_meta_skill_page_lines(lines, node_name: str):
+    if not lines:
+        return []
+    attr_idx = find_best_attr_index(lines, node_name, "ascendancy")
+    end = attr_idx if attr_idx is not None else min(len(lines), 80)
+    head = lines[:end]
+
+    node_key = normalize_name_key(node_name)
+    start = 0
+    matches = [i for i, ln in enumerate(head) if normalize_name_key(ln) == node_key]
+    if matches:
+        start = matches[-1] + 1
+
+    block = []
+    skill_style_cues = 0
+    for ln in head[start:start + 36]:
+        low = ln.lower().strip()
+        if not low:
+            continue
+        if re.match(r"^(ascendancy|character|class)\s*:", ln, re.I):
+            continue
+        if re.search(r"^(requires:|attack damage:|cooldown time:|version history|community wiki|supported by|recommended support gems|skill gem|support gem)", low):
+            break
+        if is_site_metadata_line(ln) or is_skill_page_metadata_line(ln):
+            continue
+        if low in CLASS_NAMES:
+            continue
+        if normalize_name_key(ln) == node_key:
+            continue
+        if re.search(r"\b(grants?\s+skill|cooldown|critical hit chance|projectile|mirage|mark|fires?)\b", low):
+            skill_style_cues += 1
+        block.append(ln)
+
+    if skill_style_cues == 0:
+        return []
+    return block
 
 
 def is_skill_page_metadata_line(line: str) -> bool:
@@ -257,6 +326,7 @@ def sanitize_scraped_lines(lines, node_name, node_type, ascendancy_name=None):
 
     for raw in lines or []:
         ln = re.sub(r"\s+", " ", str(raw or "")).strip()
+        ln = strip_class_prefix_from_effect_line(ln)
         if not ln:
             continue
         if re.fullmatch(r"[^\w]+", ln):
@@ -617,8 +687,15 @@ def fallback_fetch_single_passive(name: str, node_type: str, lang: str, timeout:
 
     collected = []
     used_overview_fallback = False
+    source = "poe2db"
     if lines:
-        collected = extract_attr_section_lines(lines, name, node_type)
+        if node_type == "ascendancy":
+            skill_style_lines = extract_meta_skill_page_lines(lines, name)
+            if skill_style_lines:
+                collected = skill_style_lines
+                source = "poe2db_skill_page"
+        if not collected:
+            collected = extract_attr_section_lines(lines, name, node_type)
     if lines and not collected:
         idx = None
         node_key = normalize_name_key(name)
@@ -651,11 +728,13 @@ def fallback_fetch_single_passive(name: str, node_type: str, lang: str, timeout:
             if local_block:
                 collected = local_block
                 used_overview_fallback = True
+                source = "poe2db_overview"
         except Exception:
             pass
 
     stitched = stitch_scraped_fragments(collected, name, node_type)
     sanitized = sanitize_scraped_lines(stitched, name, node_type)
+    metadata_only = bool(collected) and not sanitized
     if not sanitized and not collected:
         return None
     return {
@@ -664,7 +743,8 @@ def fallback_fetch_single_passive(name: str, node_type: str, lang: str, timeout:
         "rawLines": collected,
         "lines": sanitized,
         "tags": derive_scraped_tags(sanitized),
-        "source": "poe2db_overview" if used_overview_fallback else "poe2db",
+        "metadataOnly": metadata_only,
+        "source": "poe2db_overview" if used_overview_fallback else source,
     }
 
 
@@ -1017,6 +1097,8 @@ def main():
         ) if scrape_entry else []
 
         scrape_valid, scrape_rejected_reason = is_valid_scraped_description(scraped_lines, node.get("Name"), node_type) if scrape_entry else (False, None)
+        if scrape_entry and not scrape_valid and scrape_entry.get("metadataOnly"):
+            scrape_rejected_reason = "metadata_only_page"
         should_prefer_scrape = node_type in {"keystone", "ascendancy"} and bool(scrape_entry) and scrape_valid
 
         if scrape_entry and scrape_entry.get("source") == "poe2db_overview":
@@ -1029,7 +1111,6 @@ def main():
             node_type == "ascendancy"
             and scrape_entry
             and not scrape_valid
-            and not datamined_lines
             and not raw_stats
         ):
             skill_fallback = extract_skill_fallback_line(raw_scraped_lines)
