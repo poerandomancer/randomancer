@@ -63,6 +63,34 @@ MANUAL_SCRAPE_ALIASES = {
     "giants blood": "giant s blood",
 }
 
+METADATA_EXACT_TOKENS = {
+    "keystone",
+    "ascendancy",
+    "notable",
+    "passive",
+    "name",
+    "level",
+    "buff",
+    "persistent",
+    "trigger",
+    "duration",
+    "meta",
+}
+
+CLASS_NAMES = {
+    "warrior",
+    "ranger",
+    "witch",
+    "sorceress",
+    "monk",
+    "mercenary",
+    "duelist",
+    "marauder",
+    "templar",
+    "shadow",
+    "scion",
+}
+
 
 def load_json(path: Path):
     try:
@@ -91,8 +119,86 @@ def normalize_name_key(name: str) -> str:
 
 
 def poe2db_slug(name: str) -> str:
-    s = str(name or "").strip().replace("’", "'").replace(" ", "_")
+    s = str(name or "").strip().replace("’", "'")
+    s = s.replace("'", "")
+    s = re.sub(r"[,!\.:;()\"“”‘’]+", " ", s)
+    s = re.sub(r"[^A-Za-z0-9]+", "_", s)
+    s = s.strip("_")
     return quote(s, safe=":_-")
+
+
+def sanitize_scraped_lines(lines, node_name, node_type, ascendancy_name=None):
+    node_key = normalize_name_key(node_name)
+    ascendancy_key = normalize_name_key(ascendancy_name or "")
+    out = []
+    seen = set()
+
+    for raw in lines or []:
+        ln = re.sub(r"\s+", " ", str(raw or "")).strip()
+        if not ln:
+            continue
+        if re.fullmatch(r"[^\w]+", ln):
+            continue
+
+        ln_key = normalize_name_key(ln)
+        lowered = ln.lower().strip(" :")
+        lowered_no_space = lowered.replace(" ", "")
+
+        if ln_key == node_key:
+            continue
+        if ascendancy_key and ln_key == ascendancy_key:
+            continue
+        if lowered in CLASS_NAMES:
+            continue
+        if lowered in METADATA_EXACT_TOKENS:
+            continue
+        if re.match(r"^(ascendancy|character|class)\s*:\s*", ln, flags=re.I):
+            continue
+        if re.search(r"\battr\s*/\s*\d+\b", ln, flags=re.I):
+            continue
+        if re.match(r"^[A-Za-z ]+\s*:\s*$", ln) and lowered in {"ascendancy", "character", "class"}:
+            continue
+        if (
+            node_type == "ascendancy"
+            and re.match(r"^(ascendancy|character|class)\b", lowered)
+            and len(ln.split()) <= 4
+        ):
+            continue
+        if lowered_no_space in {"ascendancy", "character", "class", "attr/5", "attr/10"}:
+            continue
+
+        if ln not in seen:
+            seen.add(ln)
+            out.append(ln)
+    return out
+
+
+def is_valid_scraped_description(lines, node_name, node_type):
+    if not lines:
+        return False, "empty_after_sanitize"
+
+    meaningful = 0
+    chip_like = 0
+    metadata_like = 0
+    for ln in lines:
+        words = re.findall(r"[A-Za-z0-9']+", ln)
+        lowered = ln.lower()
+        if len(words) <= 1:
+            chip_like += 1
+        if re.search(r"\b(ascendancy|character|class|name|level|meta|attr)\b", lowered):
+            metadata_like += 1
+        if (len(words) >= 2 and any(ch.isdigit() for ch in ln)) or re.search(r"\b(gain|increased|more|less|chance|when|while|cannot|you|deal|recover|inflict|consume|trigger)\b", lowered):
+            meaningful += 1
+
+    if len(lines) == 1 and meaningful == 0:
+        return False, "single_non_meaningful_line"
+    if chip_like >= max(2, len(lines) - 1):
+        return False, "mostly_single_word_lines"
+    if metadata_like >= max(1, len(lines) - 1):
+        return False, "mostly_metadata_lines"
+    if meaningful == 0 and node_type == "ascendancy":
+        return False, "no_meaningful_ascendancy_lines"
+    return True, None
 
 
 def fetch_html(url: str, timeout: float = 8.0) -> str:
@@ -148,6 +254,7 @@ def fallback_fetch_single_passive(name: str, lang: str, timeout: float = 8.0):
         if len(collected) >= 6:
             break
 
+    collected = sanitize_scraped_lines(collected, name, "keystone")
     if not collected:
         return None
     return {
@@ -164,6 +271,7 @@ def load_legacy_keystone_scrapes(path: Path):
     out = {}
     for name, row in payload.items():
         lines = [str(x).strip() for x in (row or {}).get("lines", []) if str(x).strip()]
+        lines = sanitize_scraped_lines(lines, name, "keystone")
         if not lines:
             continue
         out[normalize_name_key(name)] = {
@@ -463,6 +571,9 @@ def main():
         "nodesUsingScrapedLines": 0,
         "nodesUsingDataminedFallback": 0,
         "nodesWithTagsEnhancedByScraping": 0,
+        "nodesUsingSanitizedScrapedLines": 0,
+        "scrapeMatchesRejectedForBadLines": 0,
+        "badScrapeLineSamples": [],
         "unmatchedNames": [],
         "networkErrors": network_errors,
     }
@@ -477,13 +588,21 @@ def main():
         derived_tags = derive_tags(raw_stats, datamined_lines)
 
         scrape_entry, matched_by = pick_scrape_entry(node.get("Name"), scrape_by_name, scrape_by_slug)
-        scraped_lines = scrape_entry.get("lines", []) if scrape_entry else []
-        scraped_tags = scrape_entry.get("tags", []) if scrape_entry else []
-
         node_type = classification["type"]
-        should_prefer_scrape = node_type in {"keystone", "ascendancy"} and bool(scraped_lines)
+        raw_scraped_lines = scrape_entry.get("lines", []) if scrape_entry else []
+        scraped_lines = sanitize_scraped_lines(
+            raw_scraped_lines,
+            node.get("Name"),
+            node_type,
+            ascendancy_name=classification.get("ascendancy"),
+        ) if scrape_entry else []
+
+        scrape_valid, scrape_rejected_reason = is_valid_scraped_description(scraped_lines, node.get("Name"), node_type) if scrape_entry else (False, None)
+        should_prefer_scrape = node_type in {"keystone", "ascendancy"} and bool(scrape_entry) and scrape_valid
         final_lines = scraped_lines if should_prefer_scrape else datamined_lines
         description_source = "scraped" if should_prefer_scrape else "datamined"
+
+        scraped_tags = derive_scraped_tags(scraped_lines) if scrape_entry and scrape_valid else []
 
         merged_tags = []
         tag_sources = []
@@ -516,8 +635,20 @@ def main():
 
         if should_prefer_scrape:
             report["nodesUsingScrapedLines"] += 1
+            report["nodesUsingSanitizedScrapedLines"] += 1
         else:
             report["nodesUsingDataminedFallback"] += 1
+
+        if scrape_entry and not scrape_valid:
+            report["scrapeMatchesRejectedForBadLines"] += 1
+            if len(report["badScrapeLineSamples"]) < 12:
+                report["badScrapeLineSamples"].append({
+                    "name": node.get("Name"),
+                    "type": node_type,
+                    "reason": scrape_rejected_reason,
+                    "rawSample": raw_scraped_lines[:6],
+                    "sanitizedSample": scraped_lines[:6],
+                })
         if set(final_tags) - set(derived_tags):
             report["nodesWithTagsEnhancedByScraping"] += 1
 
@@ -540,6 +671,7 @@ def main():
                 "descriptionSource": description_source,
                 "scrapeMatched": bool(scrape_entry),
                 "scrapeMatchedBy": matched_by,
+                "scrapeRejectedReason": scrape_rejected_reason if (scrape_entry and not scrape_valid) else None,
                 "tagSources": sorted(set(tag_sources)),
             }
         )
