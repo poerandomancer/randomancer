@@ -23,6 +23,9 @@
       ]
     }
   ],
+  "ascendancyBlankLinesAfterMerge": 34,
+  "statlessAscendancyNodesUsingSkillFallback": 0,
+  "scrapedFragmentRejections": 0,
   "unmatchedNames": [
     "...and I Shall Rage",
     "...and Protect me from Harm",
