@@ -3,14 +3,25 @@
   "keystonesScrapeMatched": 37,
   "keystonesUnmatched": 0,
   "totalAscendancyNodes": 196,
-  "ascendancyScrapeMatched": 193,
-  "ascendancyUnmatched": 3,
-  "nodesUsingScrapedLines": 195,
-  "nodesUsingDataminedFallback": 1145,
-  "nodesWithTagsEnhancedByScraping": 65,
-  "nodesUsingSanitizedScrapedLines": 195,
-  "scrapeMatchesRejectedForBadLines": 35,
+  "ascendancyScrapeMatched": 194,
+  "ascendancyUnmatched": 2,
+  "nodesUsingScrapedLines": 220,
+  "nodesUsingDataminedFallback": 1120,
+  "nodesWithTagsEnhancedByScraping": 77,
+  "nodesUsingSanitizedScrapedLines": 220,
+  "scrapeMatchesRejectedForBadLines": 11,
   "badScrapeLineSamples": [
+    {
+      "name": "Conduit",
+      "type": "keystone",
+      "reason": "single_incomplete_line",
+      "rawSample": [
+        "If you would gain a Charge, Allies in your Presence gain that Charge instead"
+      ],
+      "sanitizedSample": [
+        "If you would gain a Charge, Allies in your Presence gain that Charge instead"
+      ]
+    },
     {
       "name": "Hollow Palm Technique",
       "type": "keystone",
@@ -31,197 +42,162 @@
       ]
     },
     {
-      "name": "Hulking Form",
-      "type": "ascendancy",
-      "reason": "mostly_incomplete_fragments",
-      "rawSample": [
-        "50",
-        "% increased effect of",
-        "Small Passive",
-        "Skills"
-      ],
-      "sanitizedSample": [
-        "50% increased effect of",
-        "Small Passive Skills"
-      ]
-    },
-    {
-      "name": "Anvil's Weight",
-      "type": "ascendancy",
-      "reason": "mostly_incomplete_fragments",
-      "rawSample": [
-        "Break Armour",
-        "equal to",
-        "10",
-        "% of",
-        "Hit Damage",
-        "dealt"
-      ],
-      "sanitizedSample": [
-        "Break Armour equal to 10% of",
-        "Hit Damage dealt"
-      ]
-    },
-    {
-      "name": "Kitavan Imprint",
-      "type": "ascendancy",
-      "reason": "mostly_incomplete_fragments",
-      "rawSample": [
-        "Body Armour grants",
-        "60",
-        "% increased",
-        "Glory",
-        "generation",
-        "base physical damage reduction rating no display [200]"
-      ],
-      "sanitizedSample": [
-        "Body Armour grants 60% increased",
-        "Glory generation"
-      ]
-    },
-    {
       "name": "Spiked Plates",
       "type": "ascendancy",
-      "reason": "mostly_incomplete_fragments",
+      "reason": "no_meaningful_ascendancy_lines",
       "rawSample": [
-        "Body Armour grants",
-        "100",
-        "% increased",
-        "Thorns",
-        "damage",
-        "base physical damage reduction rating no display [200]"
+        "Glory",
+        "generation",
+        "base physical damage reduction rating no display"
       ],
       "sanitizedSample": [
-        "Body Armour grants 100% increased",
-        "Thorns damage"
+        "Glory generation",
+        "base physical damage reduction rating no display"
       ]
     },
     {
       "name": "Support Straps",
       "type": "ascendancy",
-      "reason": "mostly_incomplete_fragments",
+      "reason": "no_meaningful_ascendancy_lines",
       "rawSample": [
-        "Body Armour grants",
-        "20",
-        "% increased",
-        "Strength",
-        "base physical damage reduction rating no display [200]"
+        "Thorns",
+        "damage",
+        "base physical damage reduction rating no display"
       ],
       "sanitizedSample": [
-        "Body Armour grants 20% increased",
-        "Strength"
+        "Thorns damage",
+        "base physical damage reduction rating no display"
       ]
     },
     {
-      "name": "Tribute to Utula",
+      "name": "Shaper of Storms",
       "type": "ascendancy",
-      "reason": "mostly_incomplete_fragments",
+      "reason": "no_meaningful_ascendancy_lines",
       "rawSample": [
-        "Body Armour grants",
-        "30",
-        "% increased",
-        "Spirit",
-        "base physical damage reduction rating no display [200]"
+        "Ascendancy:",
+        "Stormweaver",
+        "Character:",
+        "Sorceress",
+        "All Damage",
+        "from"
       ],
       "sanitizedSample": [
-        "Body Armour grants 30% increased",
-        "Spirit"
+        "All Damage from Hits",
+        "Contributes to Shock Chance"
       ]
     },
     {
-      "name": "Leather Bindings",
+      "name": "Shaper of Winter",
       "type": "ascendancy",
-      "reason": "mostly_incomplete_fragments",
+      "reason": "no_meaningful_ascendancy_lines",
       "rawSample": [
-        "Body Armour grants regenerate",
-        "3",
-        "% of maximum Life per second",
-        "base physical damage reduction rating no display [200]"
+        "Ascendancy:",
+        "Stormweaver",
+        "Character:",
+        "Sorceress",
+        "All Damage",
+        "from"
       ],
       "sanitizedSample": [
-        "Body Armour grants regenerate",
-        "3% of maximum Life per second"
+        "All Damage from Hits",
+        "Contributes to Chill Magnitude"
       ]
     },
     {
-      "name": "Flowing Metal",
+      "name": "Ruzhan's Trap",
       "type": "ascendancy",
-      "reason": "mostly_incomplete_fragments",
+      "reason": "contains_metadata_lines",
       "rawSample": [
-        "Body Armour grants",
-        "+50",
-        "% of",
-        "Armour",
-        "also applies to",
-        "Elemental Damage"
+        "Command",
+        "AoE",
+        ",",
+        "Projectile",
+        ",",
+        "Fire"
       ],
       "sanitizedSample": [
-        "Body Armour grants +50% of",
-        "Armour also applies to Elemental Damage"
+        "Command AoE Projectile Fire",
+        "Cost: (4—47) Mana",
+        "Chance: 7.00% Projectile Speed:",
+        "Ruzhan to hurl his greatsword, spreading hazardous runes on the ground where it lands. If an enemy steps on a rune, it erupts in a fiery tornado that deals"
       ]
     },
     {
-      "name": "Molten Symbol",
+      "name": "Ruzhan's Reckoning",
       "type": "ascendancy",
-      "reason": "mostly_incomplete_fragments",
+      "reason": "contains_metadata_lines",
       "rawSample": [
-        "Body Armour grants",
-        "25",
-        "% of",
-        "Physical",
-        "Damage from",
-        "Hits"
+        "Command",
+        "AoE",
+        ",",
+        "Fire",
+        "Level:",
+        "(1—20)"
       ],
       "sanitizedSample": [
-        "Body Armour grants 25% of",
-        "Physical Damage from Hits",
-        "taken as Fire Damage"
+        "Command AoE Fire Level:",
+        "(1—20) Cost: (6—68) Mana",
+        "Ruzhan to teleport to the target location. Upon arrival, the Djinn deals",
+        "damage to enemies around him then slams his blazing sword into the ground, creating a wave of lava that also deals"
       ]
     },
     {
-      "name": "Dedication to Kitava",
+      "name": "Sunder my Enemies...",
       "type": "ascendancy",
       "reason": "mostly_incomplete_fragments",
       "rawSample": [
-        "Body Armour grants +100% of",
-        "Armour",
-        "also applies to",
-        "Chaos Damage",
-        "base physical damage reduction rating no display [200]"
+        "Grants Skill:",
+        "Unbound Avatar",
+        "gain unbound ailment stacks"
       ],
       "sanitizedSample": [
-        "Body Armour grants +100% of",
-        "Armour also applies to Chaos Damage"
+        "Grants Skill: Unbound Avatar",
+        "gain unbound ailment stacks"
       ]
     },
     {
-      "name": "Heatproofing",
+      "name": "Sap of Nightmares",
       "type": "ascendancy",
-      "reason": "mostly_incomplete_fragments",
+      "reason": "no_meaningful_ascendancy_lines",
       "rawSample": [
-        "Body Armour grants",
-        "Unaffected",
-        "by",
-        "Damaging Ailments",
-        "base physical damage reduction rating no display [200]"
+        "Ascendancy:",
+        "Acolyte of Chayula",
+        "Character:",
+        "Monk",
+        "Leech",
+        "recovers based on"
       ],
       "sanitizedSample": [
-        "Body Armour grants Unaffected",
-        "by Damaging Ailments"
+        "Damage as well as",
+        "Physical Damage"
+      ]
+    },
+    {
+      "name": "Brew Concoction",
+      "type": "ascendancy",
+      "reason": "contains_metadata_lines",
+      "rawSample": [
+        "Ascendancy:",
+        "Pathfinder",
+        "Character:",
+        "Ranger",
+        "Explosive Concoction",
+        "Ascendancy:"
+      ],
+      "sanitizedSample": [
+        "Explosive Concoction Ascendancy: Pathfinder",
+        "Explosive Concoction Shattering Concoction",
+        "Grants Skill: Shattering Concoction"
       ]
     }
   ],
-  "ascendancyBlankLinesAfterMerge": 6,
-  "statlessAscendancyNodesUsingSkillFallback": 1,
-  "scrapedFragmentRejections": 19,
+  "ascendancyBlankLinesAfterMerge": 1,
+  "statlessAscendancyNodesUsingSkillFallback": 3,
+  "scrapedFragmentRejections": 1,
+  "overviewPageFallbackMatches": 102,
   "unmatchedNames": [
-    "Cannons, Ready!",
-    "Judge, Jury, and Executioner",
-    "Stay Light, Use Cover"
+    "Contagious Contamination",
+    "Tale Woman's Attunement"
   ],
-  "networkErrors": [
-    "Stay Light, Use Cover: HTTP Error 404: Not Found",
-    "Cannons, Ready!: HTTP Error 404: Not Found",
-    "Judge, Jury, and Executioner: HTTP Error 404: Not Found"
-  ]
+  "networkErrors": []
 }
