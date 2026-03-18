@@ -1,0 +1,203 @@
+{
+  "totalKeystones": 37,
+  "keystonesScrapeMatched": 37,
+  "keystonesUnmatched": 0,
+  "totalAscendancyNodes": 196,
+  "ascendancyScrapeMatched": 194,
+  "ascendancyUnmatched": 2,
+  "nodesUsingScrapedLines": 220,
+  "nodesUsingDataminedFallback": 1120,
+  "nodesWithTagsEnhancedByScraping": 77,
+  "nodesUsingSanitizedScrapedLines": 220,
+  "scrapeMatchesRejectedForBadLines": 11,
+  "badScrapeLineSamples": [
+    {
+      "name": "Conduit",
+      "type": "keystone",
+      "reason": "single_incomplete_line",
+      "rawSample": [
+        "If you would gain a Charge, Allies in your Presence gain that Charge instead"
+      ],
+      "sanitizedSample": [
+        "If you would gain a Charge, Allies in your Presence gain that Charge instead"
+      ]
+    },
+    {
+      "name": "Hollow Palm Technique",
+      "type": "keystone",
+      "reason": "contains_metadata_lines",
+      "rawSample": [
+        "Can Attack as though using a Quarterstaff while both of your hand slots are empty",
+        "Unarmed Attacks that would use your Quarterstaff's damage gain:",
+        "• Physical damage based on their Skill Level",
+        "• 1% more Attack Speed per 75 Item Evasion Rating on Equipped Armour Items",
+        "• +0.1% to Critical Hit Chance per 10 Item Energy Shield on Equipped Armour Items"
+      ],
+      "sanitizedSample": [
+        "Can Attack as though using a Quarterstaff while both of your hand slots are empty",
+        "Unarmed Attacks that would use your Quarterstaff's damage gain:",
+        "• Physical damage based on their Skill Level",
+        "• 1% more Attack Speed per 75 Item Evasion Rating on Equipped Armour Items",
+        "• +0.1% to Critical Hit Chance per 10 Item Energy Shield on Equipped Armour Items"
+      ]
+    },
+    {
+      "name": "Spiked Plates",
+      "type": "ascendancy",
+      "reason": "no_meaningful_ascendancy_lines",
+      "rawSample": [
+        "Glory",
+        "generation",
+        "base physical damage reduction rating no display"
+      ],
+      "sanitizedSample": [
+        "Glory generation",
+        "base physical damage reduction rating no display"
+      ]
+    },
+    {
+      "name": "Support Straps",
+      "type": "ascendancy",
+      "reason": "no_meaningful_ascendancy_lines",
+      "rawSample": [
+        "Thorns",
+        "damage",
+        "base physical damage reduction rating no display"
+      ],
+      "sanitizedSample": [
+        "Thorns damage",
+        "base physical damage reduction rating no display"
+      ]
+    },
+    {
+      "name": "Shaper of Storms",
+      "type": "ascendancy",
+      "reason": "no_meaningful_ascendancy_lines",
+      "rawSample": [
+        "Ascendancy:",
+        "Stormweaver",
+        "Character:",
+        "Sorceress",
+        "All Damage",
+        "from"
+      ],
+      "sanitizedSample": [
+        "All Damage from Hits",
+        "Contributes to Shock Chance"
+      ]
+    },
+    {
+      "name": "Shaper of Winter",
+      "type": "ascendancy",
+      "reason": "no_meaningful_ascendancy_lines",
+      "rawSample": [
+        "Ascendancy:",
+        "Stormweaver",
+        "Character:",
+        "Sorceress",
+        "All Damage",
+        "from"
+      ],
+      "sanitizedSample": [
+        "All Damage from Hits",
+        "Contributes to Chill Magnitude"
+      ]
+    },
+    {
+      "name": "Ruzhan's Trap",
+      "type": "ascendancy",
+      "reason": "contains_metadata_lines",
+      "rawSample": [
+        "Command",
+        "AoE",
+        ",",
+        "Projectile",
+        ",",
+        "Fire"
+      ],
+      "sanitizedSample": [
+        "Command AoE Projectile Fire",
+        "Cost: (4—47) Mana",
+        "Chance: 7.00% Projectile Speed:",
+        "Ruzhan to hurl his greatsword, spreading hazardous runes on the ground where it lands. If an enemy steps on a rune, it erupts in a fiery tornado that deals"
+      ]
+    },
+    {
+      "name": "Ruzhan's Reckoning",
+      "type": "ascendancy",
+      "reason": "contains_metadata_lines",
+      "rawSample": [
+        "Command",
+        "AoE",
+        ",",
+        "Fire",
+        "Level:",
+        "(1—20)"
+      ],
+      "sanitizedSample": [
+        "Command AoE Fire Level:",
+        "(1—20) Cost: (6—68) Mana",
+        "Ruzhan to teleport to the target location. Upon arrival, the Djinn deals",
+        "damage to enemies around him then slams his blazing sword into the ground, creating a wave of lava that also deals"
+      ]
+    },
+    {
+      "name": "Sunder my Enemies...",
+      "type": "ascendancy",
+      "reason": "mostly_incomplete_fragments",
+      "rawSample": [
+        "Grants Skill:",
+        "Unbound Avatar",
+        "gain unbound ailment stacks"
+      ],
+      "sanitizedSample": [
+        "Grants Skill: Unbound Avatar",
+        "gain unbound ailment stacks"
+      ]
+    },
+    {
+      "name": "Sap of Nightmares",
+      "type": "ascendancy",
+      "reason": "no_meaningful_ascendancy_lines",
+      "rawSample": [
+        "Ascendancy:",
+        "Acolyte of Chayula",
+        "Character:",
+        "Monk",
+        "Leech",
+        "recovers based on"
+      ],
+      "sanitizedSample": [
+        "Damage as well as",
+        "Physical Damage"
+      ]
+    },
+    {
+      "name": "Brew Concoction",
+      "type": "ascendancy",
+      "reason": "contains_metadata_lines",
+      "rawSample": [
+        "Ascendancy:",
+        "Pathfinder",
+        "Character:",
+        "Ranger",
+        "Explosive Concoction",
+        "Ascendancy:"
+      ],
+      "sanitizedSample": [
+        "Explosive Concoction Ascendancy: Pathfinder",
+        "Explosive Concoction Shattering Concoction",
+        "Grants Skill: Shattering Concoction"
+      ]
+    }
+  ],
+  "ascendancyBlankLinesAfterMerge": 1,
+  "statlessAscendancyNodesUsingSkillFallback": 3,
+  "scrapedFragmentRejections": 1,
+  "overviewPageFallbackMatches": 102,
+  "unmatchedNames": [
+    "Contagious Contamination",
+    "Tale Woman's Attunement"
+  ],
+  "networkErrors": []
+}

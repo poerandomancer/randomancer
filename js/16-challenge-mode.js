@@ -225,14 +225,8 @@ function getTooltipPayload(slotKey, value) {
   }
 
   if (slotKey === 'KEYSTONE') {
-    const lib = window.DATA?.keystoneTooltips || {};
-    const entry = lib[value] || lib[value?.replace(/[’]/g, "'")];
-    let lines = Array.isArray(entry?.lines) ? entry.lines.slice() : null;
-
-    if (!lines || !lines.length) {
-      const node = passiveIndexByName()[value];
-      lines = Array.isArray(node?.lines) ? node.lines.slice() : [];
-    }
+    const node = passiveIndexByName()[value];
+    let lines = Array.isArray(node?.lines) ? node.lines.slice() : [];
 
     lines = (lines || [])
       .map(l => String(l))
