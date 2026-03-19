@@ -5,12 +5,94 @@
   "totalAscendancyNodes": 196,
   "ascendancyScrapeMatched": 194,
   "ascendancyUnmatched": 2,
-  "nodesUsingScrapedLines": 222,
-  "nodesUsingDataminedFallback": 1118,
-  "nodesWithTagsEnhancedByScraping": 78,
-  "nodesUsingSanitizedScrapedLines": 222,
-  "scrapeMatchesRejectedForBadLines": 9,
+  "nodesUsingScrapedLines": 218,
+  "nodesUsingDataminedFallback": 1122,
+  "nodesWithTagsEnhancedByScraping": 75,
+  "nodesUsingSanitizedScrapedLines": 218,
+  "scrapeMatchesRejectedForBadLines": 13,
   "badScrapeLineSamples": [
+    {
+      "name": "Iron Reflexes",
+      "type": "keystone",
+      "reason": "mostly_single_word_lines",
+      "rawSample": [
+        "Converts",
+        "all",
+        "Evasion Rating",
+        "to",
+        "Armour"
+      ],
+      "sanitizedSample": [
+        "Converts",
+        "all",
+        "Evasion Rating",
+        "to",
+        "Armour"
+      ]
+    },
+    {
+      "name": "Glancing Blows",
+      "type": "keystone",
+      "reason": "mostly_single_word_lines",
+      "rawSample": [
+        "Chance to",
+        "Evade",
+        "is",
+        "Unlucky",
+        "Deflect",
+        "Lucky"
+      ],
+      "sanitizedSample": [
+        "Chance to",
+        "Evade",
+        "is",
+        "Unlucky",
+        "Deflect",
+        "Lucky"
+      ]
+    },
+    {
+      "name": "Elemental Equilibrium",
+      "type": "keystone",
+      "reason": "mostly_single_word_lines",
+      "rawSample": [
+        "Create",
+        "Lightning",
+        "Infusion",
+        "Remnants",
+        "instead of",
+        "Fire"
+      ],
+      "sanitizedSample": [
+        "Create",
+        "Lightning",
+        "Infusion",
+        "Remnants",
+        "instead of",
+        "Fire"
+      ]
+    },
+    {
+      "name": "Hollow Palm Technique",
+      "type": "keystone",
+      "reason": "contains_metadata_lines",
+      "rawSample": [
+        "Can",
+        "Attack",
+        "as though using a",
+        "Quarterstaff",
+        "while both of your hand slots are empty",
+        "Unarmed"
+      ],
+      "sanitizedSample": [
+        "Can",
+        "Attack",
+        "as though using a",
+        "Quarterstaff",
+        "while both of your hand slots are empty",
+        "Unarmed"
+      ]
+    },
     {
       "name": "Spiked Plates",
       "type": "ascendancy",
@@ -140,24 +222,6 @@
       "sanitizedSample": [
         "Damage as well as",
         "Physical Damage"
-      ]
-    },
-    {
-      "name": "Brew Concoction",
-      "type": "ascendancy",
-      "reason": "contains_metadata_lines",
-      "rawSample": [
-        "Ascendancy:",
-        "Pathfinder",
-        "Character:",
-        "Ranger",
-        "Explosive Concoction",
-        "Ascendancy:"
-      ],
-      "sanitizedSample": [
-        "Explosive Concoction Ascendancy: Pathfinder",
-        "Explosive Concoction Shattering Concoction",
-        "Grants Skill: Shattering Concoction"
       ]
     }
   ],

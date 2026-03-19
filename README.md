@@ -1,111 +1,84 @@
-# The Randomancer — PoE2 Build Randomizer
+# Randomancer update pipeline skeleton (v3)
 
-**The Randomancer** is a single-page, front-end web app that generates themed, semi-cohesive **Path of Exile 2** build ideas. It’s designed to be **fun and inspirational**—not a simulator—using lightweight rules and synergy scoring to avoid obviously broken combinations while still embracing chaos.
+This pass remains intentionally **orchestration-only**.
 
-Live site: https://therandomancer.com/
+It does **not** replace or rewrite the logic inside your existing helper scripts. Instead, it:
 
----
+- shells out to the current helper scripts in a controlled order
+- verifies that expected outputs exist
+- snapshots artifact summaries and hashes before/after
+- writes a structured report to `data/reports/update_runs/`
+- prints a compact terminal summary
+- optionally adds a **semantic stability** layer so the wrapper can distinguish byte-only drift from likely content drift
 
-## What it does
+That keeps the boundary you called out intact:
 
-When you click **Roll Your Fate**, The Randomancer generates a build “archetype” and supporting recommendations, including:
+> Given the same helper scripts, the same inputs, the same flags, and the same external conditions, this pipeline should produce the same enriched outputs because it is only coordinating the existing scripts.
 
-- Class / Ascendancy theme
-- Weapon setup (optionally including a **Weapon Set II** alternate setup)
-- Defensive strategy
-- Combat mechanics (ailments + tactics)
-- Recommended active skills + suggested supports
-- Recommended passives
-- Recommended uniques (when applicable)
+## Files
 
-The output is meant to inspire build concepts you can refine in-game—not to replace real planning tools.
+- `data/helperScripts/update_app_data.py`
+- `data/helperScripts/lib/pipeline_runner.py`
+- `data/helperScripts/lib/pipeline_diff.py`
+- `data/helperScripts/lib/__init__.py`
 
----
+## Profiles
 
-## Core controls (next-roll controls)
+- `full-patch`
+- `fast-local`
+- `tags-only`
+- `verify-only`
+- `skills-only`
+- `passives-only`
+- `uniques-only`
+- `keystones-only`
 
-The control panel affects your **next roll**:
+## Examples
 
-- **Cohesion**  
-  A continuous threshold that biases rolls toward **tighter themes** (higher cohesion) or **wilder chaos** (lower cohesion).  
-  The roll engine includes a safety net that relaxes restrictions when needed to avoid dead ends.
+```bash
+python data/helperScripts/update_app_data.py --profile verify-only --fail-fast
+python data/helperScripts/update_app_data.py --profile fast-local --fail-fast
+python data/helperScripts/update_app_data.py --profile full-patch --poe-version 0.4.x --resume --fail-fast
+python data/helperScripts/update_app_data.py --profile tags-only --strict
+python data/helperScripts/update_app_data.py --profile skills-only --semantic-stability-check
+```
 
-- **Bind the Fates**  
-  Oath (prefer) or Abominate (ban) options for the next roll—useful for steering the generator without hard-locking sections.
+## Semantic stability mode
 
-- **Weapon Set II**  
-  When enabled, the generator rolls an **alternate weapon setup** and unlocks a second Skills tab for that setup.
+Use `--semantic-stability-check` when you want the report to classify changed artifacts as one of:
 
-- **Combat Mechanics (1–3)**  
-  Controls how many mechanics (ailments + tactics) the build leans into.
+- `unchanged`
+- `byte_changed_semantically_same`
+- `semantic_changed`
+- `artifact_presence_changed`
 
----
+This is meant to answer questions like:
 
-## Build codes & saved builds (snapshot-only)
+- “Did the helper just reorder arrays or object entries?”
+- “Did the file hash change, but the semantic content stay effectively the same?”
+- “Did something materially change in the enriched output?”
 
-The Randomancer supports sharing and restoring builds via **build codes** / **saved builds**.
+The implementation is still **reporting-only**:
 
-Important: build codes are **snapshots of the rolled build only**.  
-They do **not** store or restore control settings (cohesion value, bind-fates selections, weapon set toggle state, combat mechanics setting, etc.). Loading a build code should render the build without changing your current controls.
+- it computes a second normalized fingerprint for each tracked artifact
+- it ignores row ordering at the artifact level for list-backed outputs
+- it normalizes dictionary key order and scalar-list order when computing semantic hashes
+- it does **not** rewrite any output files or modify helper behavior
 
-Saved builds are stored locally in your browser (via `localStorage`).
+In other words, this mode helps you interpret rerun drift. It does not change generation logic.
 
----
+## Notes
 
-## Project structure
+- `enrich_skills.py` is treated as a no-argument script, matching the current uploaded version.
+- `enrich_passives.py` still owns its own logic. The wrapper only forwards `--lang`, `--timeout`, and optionally `--disable-network`.
+- `generate_keystone_tooltips.py` and `scrape_poe2db_uniques_min.py` are treated as network-backed steps and are skipped when `--disable-network` is provided.
+- The report includes both raw SHA-256 hashes and semantic SHA-256 hashes for tracked artifacts.
 
-This repo is a front-end project (no server required).
-
-### Key files
-- `index.html` — main single-page layout
-- `styles.css` — aggregated styles
-- `core-script.js` — main JS entrypoint that imports modules from `/js/`
-- `/css/` — layered styling files
-- `/js/` — modular JS system
-- `/data/` — runtime JSON datasets
-
-### Data sources
-Runtime JSON:
-- `data/core-data.json`
-- `data/enriched/skills_enriched.json`
-- `data/enriched/passives_enriched.json`
-- `data/enriched/poe2db_uniques_min.json`
-
-Datamined/reference sources live under `data/datamined/` and are used for enrichment and future updates.
-
-Legacy/reference helper tooling:
-- `data/helperScripts/enrich_uniques.py` is quarantined as legacy/reference-only enrichment tooling.
-- It is **not** a runtime dependency; runtime Codex/gear uniques data comes from `data/enriched/poe2db_uniques_min.json`.
-- `data/enriched/uniques_enriched.json` is legacy output and not an active runtime source.
+Important caveat: semantic stability is intentionally conservative. It is designed to tell you when a raw byte hash changed **without obvious content drift**. It should not be treated as a formal proof that two files are identical in every meaningful way. Its job is to help separate likely ordering noise from likely real content changes.
 
 
-### Tag normalization workflow
-- `data/tag_normalization_rules.json` is the single source of truth for shared tag normalization rules.
-- `js/generated/tag-normalization-rules.js` is generated from that JSON for browser runtime use.
-- `js/tag-normalization.js` contains runtime helper functions (canonicalization, expansion, matching).
-- `data/helperScripts/lib/tag_normalization.py` is the helper-layer Python implementation used by data scripts.
-- Boundary policy:
-  - Shared/global normalization owns canonicalization, alias resolution, and match semantics.
-  - Local overlays are limited to feature-specific policy (for example: Codex UI tag filtering/presentation, and skill-family local alias/grouping convenience).
+## v4 hardening
 
-Useful maintenance commands:
-- `make normalize-tags-check` (default validator mode)
-- `make normalize-tags-strict` (strict validator mode)
-- `make normalize-tags-audit` (refreshes `data/enriched/tag_vocab_audit.json`)
-- `python data/helperScripts/validate_tag_normalization.py --relaxed` (mixed-format tags become warnings)
-
-CI guardrail:
-- `.github/workflows/tag-normalization-check.yml` regenerates rules, fails on generated-file drift, runs validator, and emits an audit JSON file during CI.
-
----
-
-## Development Notes
-- Preserve user-facing behavior unless intentionally changing UX.
-- Prefer small, surgical patches over rewrites.
-- Keep roll output robust: if cohesion or constraints make a roll too tight, the engine should degrade gracefully rather than fail.
-
----
-
-## Disclaimer
-Path of Exile 2 and related assets are trademarks of Grinding Gear Games.
-This project is a fan-made tool and is not affiliated with or endorsed by Grinding Gear Games.
+- `generate_keystone_tooltips` is invoked with `--allow-fallback`.
+- The pipeline now fails that step if `data/enriched/keystone_tooltips.json` is written but contains zero entries.
+- Python 3.9 compatibility: removed `dataclass(slots=True)` usage in the wrapper modules.

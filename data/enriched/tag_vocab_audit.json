@@ -1,6 +1,6 @@
 {
   "schema_version": "phase3.v1",
-  "generated_at": "2026-03-19T18:08:44.881711+00:00",
+  "generated_at": "2026-03-19T18:55:03.852781+00:00",
   "summary": {
     "sources": 4,
     "total_distinct_raw_count": 947,
@@ -70,7 +70,7 @@
       "top_canonical_tags": [
         {
           "tag": "attack",
-          "count": 136
+          "count": 135
         },
         {
           "tag": "crit",
@@ -82,7 +82,7 @@
         },
         {
           "tag": "life",
-          "count": 86
+          "count": 87
         },
         {
           "tag": "armour",
@@ -94,7 +94,7 @@
         },
         {
           "tag": "physical",
-          "count": 79
+          "count": 78
         },
         {
           "tag": "energy_shield",
@@ -105,8 +105,8 @@
           "count": 68
         },
         {
-          "tag": "fire",
-          "count": 55
+          "tag": "life_regeneration",
+          "count": 56
         }
       ],
       "sample_rejected": [],

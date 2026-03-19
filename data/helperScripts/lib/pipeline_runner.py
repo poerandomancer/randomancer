@@ -273,6 +273,11 @@ def run_step(ctx: PipelineContext, step: PipelineStep) -> dict[str, Any]:
         for key in step.summary_artifact_keys:
             artifact_summary[key] = summarize_artifact_key(ctx.repo_root, key)
 
+        if step.name == "generate_keystone_tooltips":
+            entries = artifact_summary.get("keystone_tooltips", {}).get("entries", 0)
+            if not isinstance(entries, int) or entries <= 0:
+                errors.append("Generated keystone_tooltips.json is empty. Treating this as a failed step.")
+
     status = "passed" if not errors else "failed"
     note = step.description or ""
     if status == "failed" and errors:

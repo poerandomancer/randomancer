@@ -200,6 +200,7 @@ def build_steps(ctx: PipelineContext) -> list[PipelineStep]:
                 ctx.lang,
                 "--timeout",
                 str(ctx.timeout),
+                "--allow-fallback",
                 *( ["--verbose"] if ctx.verbose else [] ),
             ],
             outputs=[ctx.repo_root / "data/enriched/keystone_tooltips.json"],
