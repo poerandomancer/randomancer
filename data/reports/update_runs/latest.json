@@ -1,0 +1,634 @@
+{
+  "schema_version": "update_pipeline.v3",
+  "run_id": "2026-03-19T18-02-25+00-00",
+  "profile": "full-patch",
+  "poe_version": "0.4.x",
+  "status": "passed_with_warnings",
+  "started_at": "2026-03-19T18:02:25+00:00",
+  "finished_at": "2026-03-19T18:08:44+00:00",
+  "duration_ms": 379000,
+  "environment": {
+    "python_version": "3.9.6",
+    "cwd": "/Users/ttrombadore/git/randomancer",
+    "lang": "us",
+    "timeout": 20.0,
+    "sleep": 0.25,
+    "resume": false,
+    "disable_network": false,
+    "strict": false,
+    "fail_fast": true,
+    "semantic_stability_check": true
+  },
+  "guarantees": {
+    "orchestration_only": true,
+    "note": "This pipeline does not replace or rewrite enrichment logic. It only invokes the existing helper scripts, verifies outputs, and summarizes results."
+  },
+  "git": {
+    "available": true,
+    "branch": "update-pipeline",
+    "commit": "82a8fa631e57dd72e61588bc39d2bd2c7b7409ee",
+    "dirty": true
+  },
+  "steps": [
+    {
+      "name": "generate_tag_rules_js",
+      "status": "passed",
+      "duration_ms": 33,
+      "returncode": 0,
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "/Users/ttrombadore/git/randomancer/data/helperScripts/generate_tag_rules_js.py"
+      ],
+      "description": "Sync browser tag rules from the shared JSON source.",
+      "outputs": [
+        "js/generated/tag-normalization-rules.js"
+      ],
+      "warnings": [],
+      "errors": [],
+      "stdout_tail": "Wrote /Users/ttrombadore/git/randomancer/js/generated/tag-normalization-rules.js",
+      "stderr_tail": "",
+      "artifact_summary": {}
+    },
+    {
+      "name": "enrich_skills",
+      "status": "passed",
+      "duration_ms": 277,
+      "returncode": 0,
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "/Users/ttrombadore/git/randomancer/data/helperScripts/enrich_skills.py"
+      ],
+      "description": "Rebuild skills_enriched from local datamined skill tables.",
+      "outputs": [
+        "data/enriched/skills_enriched.json"
+      ],
+      "warnings": [],
+      "errors": [],
+      "stdout_tail": "[enrich_skills] Loading tables from /Users/ttrombadore/git/randomancer/data/datamined/skills_tables\n[enrich_skills] effect_tags enabled: 7450 statsets, 24877 stats\n[enrich_skills] Wrote 1103 gems (active=509 support=594) to /Users/ttrombadore/git/randomancer/data/enriched/skills_enriched.json\n[enrich_skills] Missing base=0 effect=0 granted=0",
+      "stderr_tail": "",
+      "artifact_summary": {
+        "skills_enriched": {
+          "exists": true,
+          "bytes": 2716793,
+          "sha256": "7dc1401af4dc7ad6ad4639eccbf35d7f3ee0d247e9ea5842a3428a2d78d8e901",
+          "semantic_sha256": "86259fc2788395988c1b21d8c6e1d22d48d5ecdb49027d25468e86e16743d934",
+          "rows": 1103,
+          "active_count": 509,
+          "support_count": 594,
+          "distinct_tag_count": 633,
+          "distinct_effect_tag_count": 19,
+          "row_identity_set_sha256": "2b1072bd85c9546b60f5a02bac760139bd9809d900dadf83db0b3c1c52cd3020"
+        }
+      }
+    },
+    {
+      "name": "enrich_passives",
+      "status": "passed",
+      "duration_ms": 81754,
+      "returncode": 0,
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "/Users/ttrombadore/git/randomancer/data/helperScripts/enrich_passives.py",
+        "--lang",
+        "us",
+        "--timeout",
+        "20.0"
+      ],
+      "description": "Rebuild passives_enriched and passive_scrape_report.",
+      "outputs": [
+        "data/enriched/passives_enriched.json",
+        "data/enriched/passive_scrape_report.json"
+      ],
+      "warnings": [],
+      "errors": [],
+      "stdout_tail": "Wrote 1340 nodes to /Users/ttrombadore/git/randomancer/data/enriched/passives_enriched.json\nWrote scrape coverage report to /Users/ttrombadore/git/randomancer/data/enriched/passive_scrape_report.json\nBy type: {'keystone': 37, 'ascendancy': 196, 'notable': 1107}",
+      "stderr_tail": "",
+      "artifact_summary": {
+        "passives_enriched": {
+          "exists": true,
+          "bytes": 1505360,
+          "sha256": "06eb40abb5b7eae3abc3896ea772b6d4bfa3ea83981db3fcf6f300aec49894d7",
+          "semantic_sha256": "581713f64c9c703de9a8f4adb17517de9233a92ed56332e520786b2f73a70d9a",
+          "nodes": 1340,
+          "keystone_count": 37,
+          "ascendancy_count": 196,
+          "notable_count": 1107,
+          "distinct_tag_count": 44,
+          "scrape_matched_count": 231,
+          "ascendancy_group_count": 21,
+          "row_identity_set_sha256": "82688cf88028c04e898be773cade9ee61f3a63e8bb8e9afb9e66d6ca730d827e"
+        },
+        "passive_scrape_report": {
+          "exists": true,
+          "bytes": 4534,
+          "sha256": "7f0a59ec6a2309cd5795c2090443cca28fcb9b99dab5215ec933090fda26010b",
+          "semantic_sha256": "ac1ab1ee076dba7d2ede404b3b31d5f402a1789abf65207799fe2a1813eb9412",
+          "totalKeystones": 37,
+          "keystonesScrapeMatched": 37,
+          "keystonesUnmatched": 0,
+          "totalAscendancyNodes": 196,
+          "ascendancyScrapeMatched": 194,
+          "ascendancyUnmatched": 2,
+          "nodesUsingScrapedLines": 222,
+          "nodesUsingDataminedFallback": 1118,
+          "nodesWithTagsEnhancedByScraping": 78,
+          "nodesUsingSanitizedScrapedLines": 222,
+          "scrapeMatchesRejectedForBadLines": 9,
+          "ascendancyBlankLinesAfterMerge": 1,
+          "statlessAscendancyNodesUsingSkillFallback": 3,
+          "scrapedFragmentRejections": 1,
+          "overviewPageFallbackMatches": 102,
+          "network_error_count": 0
+        }
+      }
+    },
+    {
+      "name": "scrape_poe2db_uniques_min",
+      "status": "passed",
+      "duration_ms": 259098,
+      "returncode": 0,
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "/Users/ttrombadore/git/randomancer/data/helperScripts/scrape_poe2db_uniques_min.py",
+        "--lang",
+        "us",
+        "--timeout",
+        "20.0",
+        "--sleep",
+        "0.25"
+      ],
+      "description": "Refresh the runtime uniques scrape from PoE2DB.",
+      "outputs": [
+        "data/enriched/poe2db_uniques_min.json"
+      ],
+      "warnings": [],
+      "errors": [],
+      "stdout_tail": "",
+      "stderr_tail": "/Users/ttrombadore/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020\n  warnings.warn(",
+      "artifact_summary": {
+        "poe2db_uniques_min": {
+          "exists": true,
+          "bytes": 441968,
+          "sha256": "90b3d7f9fe9b8bbf7fc394b78c7ddca2b3e66c533989c0a6b012d3f3ff172c0a",
+          "semantic_sha256": "7191fa62c36a246fc06774088a021a1f44206eed0665795ba60513a0e66a08a3",
+          "items": 399,
+          "slot_count": 25,
+          "distinct_tag_count": 232,
+          "items_with_granted_skills": 72,
+          "row_identity_set_sha256": "8cbe43079bfc7e922736968f513942c2b0c9dc9a3885a352b8326f7f97b07c76"
+        }
+      }
+    },
+    {
+      "name": "generate_keystone_tooltips",
+      "status": "passed",
+      "duration_ms": 628,
+      "returncode": 0,
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "/Users/ttrombadore/git/randomancer/data/helperScripts/generate_keystone_tooltips.py",
+        "--passives-enriched",
+        "data/enriched/passives_enriched.json",
+        "--out",
+        "data/enriched/keystone_tooltips.json",
+        "--lang",
+        "us",
+        "--timeout",
+        "20.0"
+      ],
+      "description": "Rebuild keystone tooltips from passives_enriched + PoE2DB.",
+      "outputs": [
+        "data/enriched/keystone_tooltips.json"
+      ],
+      "warnings": [],
+      "errors": [],
+      "stdout_tail": "",
+      "stderr_tail": "/Users/ttrombadore/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020\n  warnings.warn(",
+      "artifact_summary": {
+        "keystone_tooltips": {
+          "exists": true,
+          "bytes": 6677,
+          "sha256": "fe4380722bed1ccb68a8ea731a78f5fee969a742b36eb9bfe95fa23bdf9096c2",
+          "semantic_sha256": "9affc06647446793f35f4d033ce80baa7795536b9d0bf226f6b840a33dda710d",
+          "entries": 33,
+          "line_count": 229
+        }
+      }
+    },
+    {
+      "name": "validate_tag_normalization",
+      "status": "passed",
+      "duration_ms": 92,
+      "returncode": 0,
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "/Users/ttrombadore/git/randomancer/data/helperScripts/validate_tag_normalization.py"
+      ],
+      "description": "Run tag normalization regression checks.",
+      "outputs": [],
+      "warnings": [],
+      "errors": [],
+      "stdout_tail": "[validate_tag_normalization] Running checks (mode=default)...\n[validate_tag_normalization] PASS",
+      "stderr_tail": "",
+      "artifact_summary": {}
+    },
+    {
+      "name": "audit_tag_vocab",
+      "status": "passed",
+      "duration_ms": 89,
+      "returncode": 0,
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "/Users/ttrombadore/git/randomancer/data/helperScripts/audit_tag_vocab.py",
+        "--json-out",
+        "data/enriched/tag_vocab_audit.json"
+      ],
+      "description": "Generate the machine-readable tag vocabulary audit.",
+      "outputs": [
+        "data/enriched/tag_vocab_audit.json"
+      ],
+      "warnings": [],
+      "errors": [],
+      "stdout_tail": "  - intelligence: 45\n  - strength: 43\n  - dexterity: 42\n  - physical: 40\n  - attack: 38\n  - elemental: 32\n\n## skill_families_queries\ndistinct raw tags: 37\ndistinct canonical tags: 36\ncollisions (raw -> same canonical), top 10:\n  - bleed: bleed, bleeding\ntop canonical tags:\n  - spell: 9\n  - attack: 5\n  - fire: 4\n  - cold: 4\n  - lightning: 4\n  - shapeshift: 4\n  - chaos: 2\n  - plant: 2\n  - bleed: 2\n  - physical: 1\n\nWrote JSON report to /Users/ttrombadore/git/randomancer/data/enriched/tag_vocab_audit.json",
+      "stderr_tail": "",
+      "artifact_summary": {
+        "tag_vocab_audit": {
+          "exists": true,
+          "bytes": 4604,
+          "sha256": "1a564be65fb2597c02beec429305a5989bf881ade94e4d595964da8b9509fe35",
+          "semantic_sha256": "01be500a195a1f39d9e9b38ae214d8b8663d6a90ac10d37c42673f9fd5ad6853",
+          "total_distinct_raw_count": 947,
+          "total_distinct_canonical_count": 946,
+          "total_rejected_count": 0,
+          "total_collision_count": 1
+        }
+      }
+    }
+  ],
+  "artifacts": {
+    "skills_enriched": "data/enriched/skills_enriched.json",
+    "passives_enriched": "data/enriched/passives_enriched.json",
+    "poe2db_uniques_min": "data/enriched/poe2db_uniques_min.json",
+    "keystone_tooltips": "data/enriched/keystone_tooltips.json",
+    "passive_scrape_report": "data/enriched/passive_scrape_report.json",
+    "tag_vocab_audit": "data/enriched/tag_vocab_audit.json"
+  },
+  "diff": {
+    "skills_enriched": {
+      "active_count": {
+        "before": null,
+        "after": 509
+      },
+      "bytes": {
+        "before": null,
+        "after": 2716793
+      },
+      "distinct_effect_tag_count": {
+        "before": null,
+        "after": 19
+      },
+      "distinct_tag_count": {
+        "before": null,
+        "after": 633
+      },
+      "row_identity_set_sha256": {
+        "before": null,
+        "after": "2b1072bd85c9546b60f5a02bac760139bd9809d900dadf83db0b3c1c52cd3020"
+      },
+      "rows": {
+        "before": null,
+        "after": 1103
+      },
+      "semantic_sha256": {
+        "before": null,
+        "after": "86259fc2788395988c1b21d8c6e1d22d48d5ecdb49027d25468e86e16743d934"
+      },
+      "sha256": {
+        "before": null,
+        "after": "7dc1401af4dc7ad6ad4639eccbf35d7f3ee0d247e9ea5842a3428a2d78d8e901"
+      },
+      "support_count": {
+        "before": null,
+        "after": 594
+      },
+      "exists": {
+        "before": false,
+        "after": true
+      }
+    },
+    "passives_enriched": {
+      "ascendancy_count": {
+        "before": null,
+        "after": 196
+      },
+      "ascendancy_group_count": {
+        "before": null,
+        "after": 21
+      },
+      "bytes": {
+        "before": null,
+        "after": 1505360
+      },
+      "distinct_tag_count": {
+        "before": null,
+        "after": 44
+      },
+      "keystone_count": {
+        "before": null,
+        "after": 37
+      },
+      "nodes": {
+        "before": null,
+        "after": 1340
+      },
+      "notable_count": {
+        "before": null,
+        "after": 1107
+      },
+      "row_identity_set_sha256": {
+        "before": null,
+        "after": "82688cf88028c04e898be773cade9ee61f3a63e8bb8e9afb9e66d6ca730d827e"
+      },
+      "scrape_matched_count": {
+        "before": null,
+        "after": 231
+      },
+      "semantic_sha256": {
+        "before": null,
+        "after": "581713f64c9c703de9a8f4adb17517de9233a92ed56332e520786b2f73a70d9a"
+      },
+      "sha256": {
+        "before": null,
+        "after": "06eb40abb5b7eae3abc3896ea772b6d4bfa3ea83981db3fcf6f300aec49894d7"
+      },
+      "exists": {
+        "before": false,
+        "after": true
+      }
+    },
+    "poe2db_uniques_min": {
+      "bytes": {
+        "before": null,
+        "after": 441968
+      },
+      "distinct_tag_count": {
+        "before": null,
+        "after": 232
+      },
+      "items": {
+        "before": null,
+        "after": 399
+      },
+      "items_with_granted_skills": {
+        "before": null,
+        "after": 72
+      },
+      "row_identity_set_sha256": {
+        "before": null,
+        "after": "8cbe43079bfc7e922736968f513942c2b0c9dc9a3885a352b8326f7f97b07c76"
+      },
+      "semantic_sha256": {
+        "before": null,
+        "after": "7191fa62c36a246fc06774088a021a1f44206eed0665795ba60513a0e66a08a3"
+      },
+      "sha256": {
+        "before": null,
+        "after": "90b3d7f9fe9b8bbf7fc394b78c7ddca2b3e66c533989c0a6b012d3f3ff172c0a"
+      },
+      "slot_count": {
+        "before": null,
+        "after": 25
+      },
+      "exists": {
+        "before": false,
+        "after": true
+      }
+    },
+    "keystone_tooltips": {
+      "bytes": {
+        "before": null,
+        "after": 6677
+      },
+      "entries": {
+        "before": null,
+        "after": 33
+      },
+      "line_count": {
+        "before": null,
+        "after": 229
+      },
+      "semantic_sha256": {
+        "before": null,
+        "after": "9affc06647446793f35f4d033ce80baa7795536b9d0bf226f6b840a33dda710d"
+      },
+      "sha256": {
+        "before": null,
+        "after": "fe4380722bed1ccb68a8ea731a78f5fee969a742b36eb9bfe95fa23bdf9096c2"
+      },
+      "exists": {
+        "before": false,
+        "after": true
+      }
+    },
+    "passive_scrape_report": {
+      "ascendancyBlankLinesAfterMerge": {
+        "before": null,
+        "after": 1
+      },
+      "ascendancyScrapeMatched": {
+        "before": null,
+        "after": 194
+      },
+      "ascendancyUnmatched": {
+        "before": null,
+        "after": 2
+      },
+      "bytes": {
+        "before": null,
+        "after": 4534
+      },
+      "keystonesScrapeMatched": {
+        "before": null,
+        "after": 37
+      },
+      "keystonesUnmatched": {
+        "before": null,
+        "after": 0
+      },
+      "network_error_count": {
+        "before": null,
+        "after": 0
+      },
+      "nodesUsingDataminedFallback": {
+        "before": null,
+        "after": 1118
+      },
+      "nodesUsingSanitizedScrapedLines": {
+        "before": null,
+        "after": 222
+      },
+      "nodesUsingScrapedLines": {
+        "before": null,
+        "after": 222
+      },
+      "nodesWithTagsEnhancedByScraping": {
+        "before": null,
+        "after": 78
+      },
+      "overviewPageFallbackMatches": {
+        "before": null,
+        "after": 102
+      },
+      "scrapeMatchesRejectedForBadLines": {
+        "before": null,
+        "after": 9
+      },
+      "scrapedFragmentRejections": {
+        "before": null,
+        "after": 1
+      },
+      "semantic_sha256": {
+        "before": null,
+        "after": "ac1ab1ee076dba7d2ede404b3b31d5f402a1789abf65207799fe2a1813eb9412"
+      },
+      "sha256": {
+        "before": null,
+        "after": "7f0a59ec6a2309cd5795c2090443cca28fcb9b99dab5215ec933090fda26010b"
+      },
+      "statlessAscendancyNodesUsingSkillFallback": {
+        "before": null,
+        "after": 3
+      },
+      "totalAscendancyNodes": {
+        "before": null,
+        "after": 196
+      },
+      "totalKeystones": {
+        "before": null,
+        "after": 37
+      },
+      "exists": {
+        "before": false,
+        "after": true
+      }
+    },
+    "tag_vocab_audit": {
+      "bytes": {
+        "before": null,
+        "after": 4604
+      },
+      "semantic_sha256": {
+        "before": null,
+        "after": "01be500a195a1f39d9e9b38ae214d8b8663d6a90ac10d37c42673f9fd5ad6853"
+      },
+      "sha256": {
+        "before": null,
+        "after": "1a564be65fb2597c02beec429305a5989bf881ade94e4d595964da8b9509fe35"
+      },
+      "total_collision_count": {
+        "before": null,
+        "after": 1
+      },
+      "total_distinct_canonical_count": {
+        "before": null,
+        "after": 946
+      },
+      "total_distinct_raw_count": {
+        "before": null,
+        "after": 947
+      },
+      "total_rejected_count": {
+        "before": null,
+        "after": 0
+      },
+      "exists": {
+        "before": false,
+        "after": true
+      }
+    }
+  },
+  "semantic_stability": {
+    "skills_enriched": {
+      "before_exists": false,
+      "after_exists": true,
+      "raw_hash_changed": true,
+      "semantic_hash_changed": true,
+      "classification": "artifact_presence_changed",
+      "changed_count_fields": [
+        "rows",
+        "active_count",
+        "support_count",
+        "distinct_tag_count",
+        "distinct_effect_tag_count"
+      ]
+    },
+    "passives_enriched": {
+      "before_exists": false,
+      "after_exists": true,
+      "raw_hash_changed": true,
+      "semantic_hash_changed": true,
+      "classification": "artifact_presence_changed",
+      "changed_count_fields": [
+        "nodes",
+        "distinct_tag_count",
+        "keystone_count",
+        "ascendancy_count",
+        "notable_count",
+        "scrape_matched_count",
+        "ascendancy_group_count"
+      ]
+    },
+    "poe2db_uniques_min": {
+      "before_exists": false,
+      "after_exists": true,
+      "raw_hash_changed": true,
+      "semantic_hash_changed": true,
+      "classification": "artifact_presence_changed",
+      "changed_count_fields": [
+        "items",
+        "distinct_tag_count",
+        "slot_count",
+        "items_with_granted_skills"
+      ]
+    },
+    "keystone_tooltips": {
+      "before_exists": false,
+      "after_exists": true,
+      "raw_hash_changed": true,
+      "semantic_hash_changed": true,
+      "classification": "artifact_presence_changed",
+      "changed_count_fields": [
+        "entries",
+        "line_count"
+      ]
+    },
+    "passive_scrape_report": {
+      "before_exists": false,
+      "after_exists": true,
+      "raw_hash_changed": true,
+      "semantic_hash_changed": true,
+      "classification": "artifact_presence_changed"
+    },
+    "tag_vocab_audit": {
+      "before_exists": false,
+      "after_exists": true,
+      "raw_hash_changed": true,
+      "semantic_hash_changed": true,
+      "classification": "artifact_presence_changed",
+      "changed_count_fields": [
+        "total_distinct_raw_count",
+        "total_distinct_canonical_count",
+        "total_rejected_count",
+        "total_collision_count"
+      ]
+    }
+  },
+  "warnings": [
+    "Git working tree is dirty."
+  ],
+  "errors": [],
+  "report_files": {
+    "timestamped": "data/reports/update_runs/update_report_20260319_180844.json",
+    "stable": "data/reports/update_runs/latest.json"
+  }
+}

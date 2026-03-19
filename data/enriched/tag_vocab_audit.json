@@ -1,10 +1,10 @@
 {
   "schema_version": "phase3.v1",
-  "generated_at": "2026-03-16T16:28:27.482445+00:00",
+  "generated_at": "2026-03-19T18:08:44.881711+00:00",
   "summary": {
     "sources": 4,
-    "total_distinct_raw_count": 944,
-    "total_distinct_canonical_count": 943,
+    "total_distinct_raw_count": 947,
+    "total_distinct_canonical_count": 946,
     "total_rejected_count": 0,
     "total_collision_count": 1
   },
@@ -62,51 +62,51 @@
       "sample_collisions": []
     },
     "passives_enriched": {
-      "distinct_raw_count": 42,
-      "distinct_canonical_count": 42,
+      "distinct_raw_count": 44,
+      "distinct_canonical_count": 44,
       "rejected_count": 0,
       "suspicious_mixed_format_count": 0,
       "collision_count": 0,
       "top_canonical_tags": [
         {
           "tag": "attack",
-          "count": 133
+          "count": 136
         },
         {
           "tag": "crit",
-          "count": 105
+          "count": 111
         },
         {
           "tag": "critical_hit",
-          "count": 88
-        },
-        {
-          "tag": "armour",
-          "count": 80
-        },
-        {
-          "tag": "mana",
-          "count": 79
-        },
-        {
-          "tag": "spell",
-          "count": 65
-        },
-        {
-          "tag": "energy_shield",
-          "count": 62
-        },
-        {
-          "tag": "physical",
-          "count": 59
+          "count": 97
         },
         {
           "tag": "life",
-          "count": 54
+          "count": 86
         },
         {
-          "tag": "shield",
-          "count": 54
+          "tag": "armour",
+          "count": 86
+        },
+        {
+          "tag": "mana",
+          "count": 85
+        },
+        {
+          "tag": "physical",
+          "count": 79
+        },
+        {
+          "tag": "energy_shield",
+          "count": 73
+        },
+        {
+          "tag": "spell",
+          "count": 68
+        },
+        {
+          "tag": "fire",
+          "count": 55
         }
       ],
       "sample_rejected": [],
@@ -114,8 +114,8 @@
       "sample_collisions": []
     },
     "poe2db_uniques_min": {
-      "distinct_raw_count": 231,
-      "distinct_canonical_count": 231,
+      "distinct_raw_count": 232,
+      "distinct_canonical_count": 232,
       "rejected_count": 0,
       "suspicious_mixed_format_count": 0,
       "collision_count": 0,
@@ -130,7 +130,7 @@
         },
         {
           "tag": "hit",
-          "count": 66
+          "count": 63
         },
         {
           "tag": "evasion",
@@ -153,12 +153,12 @@
           "count": 40
         },
         {
-          "tag": "critical_hit",
+          "tag": "attack",
           "count": 38
         },
         {
-          "tag": "attack",
-          "count": 38
+          "tag": "elemental",
+          "count": 32
         }
       ],
       "sample_rejected": [],

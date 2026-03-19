@@ -5,42 +5,12 @@
   "totalAscendancyNodes": 196,
   "ascendancyScrapeMatched": 194,
   "ascendancyUnmatched": 2,
-  "nodesUsingScrapedLines": 220,
-  "nodesUsingDataminedFallback": 1120,
-  "nodesWithTagsEnhancedByScraping": 77,
-  "nodesUsingSanitizedScrapedLines": 220,
-  "scrapeMatchesRejectedForBadLines": 11,
+  "nodesUsingScrapedLines": 222,
+  "nodesUsingDataminedFallback": 1118,
+  "nodesWithTagsEnhancedByScraping": 78,
+  "nodesUsingSanitizedScrapedLines": 222,
+  "scrapeMatchesRejectedForBadLines": 9,
   "badScrapeLineSamples": [
-    {
-      "name": "Conduit",
-      "type": "keystone",
-      "reason": "single_incomplete_line",
-      "rawSample": [
-        "If you would gain a Charge, Allies in your Presence gain that Charge instead"
-      ],
-      "sanitizedSample": [
-        "If you would gain a Charge, Allies in your Presence gain that Charge instead"
-      ]
-    },
-    {
-      "name": "Hollow Palm Technique",
-      "type": "keystone",
-      "reason": "contains_metadata_lines",
-      "rawSample": [
-        "Can Attack as though using a Quarterstaff while both of your hand slots are empty",
-        "Unarmed Attacks that would use your Quarterstaff's damage gain:",
-        "• Physical damage based on their Skill Level",
-        "• 1% more Attack Speed per 75 Item Evasion Rating on Equipped Armour Items",
-        "• +0.1% to Critical Hit Chance per 10 Item Energy Shield on Equipped Armour Items"
-      ],
-      "sanitizedSample": [
-        "Can Attack as though using a Quarterstaff while both of your hand slots are empty",
-        "Unarmed Attacks that would use your Quarterstaff's damage gain:",
-        "• Physical damage based on their Skill Level",
-        "• 1% more Attack Speed per 75 Item Evasion Rating on Equipped Armour Items",
-        "• +0.1% to Critical Hit Chance per 10 Item Energy Shield on Equipped Armour Items"
-      ]
-    },
     {
       "name": "Spiked Plates",
       "type": "ascendancy",

@@ -4,7 +4,7 @@
     "locale": "us",
     "listing_url": "https://poe2db.tw/us/Unique_item",
     "count": 399,
-    "generated_epoch": 1773274467
+    "generated_epoch": 1773943723
   },
   "by_key": {
     "Brynhand's Mark||Wooden Club": "/us/Brynhands_Mark",
@@ -581,7 +581,7 @@
       "tags": [
         "attack",
         "critical_damage_bonus",
-        "critical_hit",
+        "critically_hit",
         "endurance_charge",
         "physical"
       ],
@@ -616,7 +616,7 @@
       "granted_skills": [],
       "tags": [
         "accuracy",
-        "hit",
+        "hitting",
         "lightning"
       ],
       "source": {
@@ -722,7 +722,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "critical_hit",
+        "critical_hits",
         "crushes",
         "heavy_stun",
         "physical",
@@ -903,6 +903,7 @@
       "tags": [
         "attribute",
         "critical_hit",
+        "critical_hits",
         "physical_damage"
       ],
       "source": {
@@ -2542,8 +2543,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attack",
-        "crossbow"
+        "attack"
       ],
       "source": {
         "id": "/us/Rampart_Raptor",
@@ -2705,7 +2705,7 @@
         }
       ],
       "tags": [
-        "ally",
+        "allies",
         "elemental_damage",
         "gain",
         "presence",
@@ -2751,7 +2751,7 @@
         }
       ],
       "tags": [
-        "ally",
+        "allies",
         "attack",
         "fire",
         "light_radius",
@@ -2799,7 +2799,7 @@
         }
       ],
       "tags": [
-        "ally",
+        "allies",
         "attack",
         "cold",
         "intelligence",
@@ -2847,7 +2847,7 @@
         }
       ],
       "tags": [
-        "ally",
+        "allies",
         "attack",
         "dexterity",
         "light_radius",
@@ -2895,7 +2895,7 @@
         }
       ],
       "tags": [
-        "ally",
+        "allies",
         "attack",
         "attribute",
         "light_radius",
@@ -3128,7 +3128,6 @@
         }
       ],
       "tags": [
-        "crossbow",
         "leech",
         "physical"
       ],
@@ -3543,7 +3542,7 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "critical_hit",
+        "critical_hits",
         "maximum_elemental_resistances",
         "stun_threshold"
       ],
@@ -3608,7 +3607,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "critical_hit",
+        "critically_hit",
         "evasion",
         "hit",
         "rage"
@@ -4643,7 +4642,6 @@
       "tags": [
         "armour",
         "evasion",
-        "flask",
         "physical",
         "stun_threshold",
         "thorns"
@@ -5001,8 +4999,7 @@
         "armour",
         "chaos_resistance",
         "energy_shield",
-        "fire_resistance",
-        "flask"
+        "fire_resistance"
       ],
       "source": {
         "id": "/us/Husk_of_Dreams",
@@ -6552,6 +6549,7 @@
         "armour",
         "attack",
         "critical_hit",
+        "critically_hit",
         "evasion"
       ],
       "source": {
@@ -6980,7 +6978,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "ally",
+        "allies",
         "dexterity",
         "presence"
       ],
@@ -7016,6 +7014,7 @@
       "granted_skills": [],
       "tags": [
         "critical_hit",
+        "critical_hits",
         "dexterity",
         "energy_shield",
         "intelligence"
@@ -7277,7 +7276,7 @@
       "tags": [
         "armour",
         "critical_damage_bonus",
-        "critical_hit",
+        "critical_hits",
         "physical",
         "thorns"
       ],
@@ -7314,6 +7313,7 @@
       "tags": [
         "armour",
         "critical_hit",
+        "critical_hits",
         "intelligence"
       ],
       "source": {
@@ -7419,7 +7419,7 @@
         "critical_damage_bonus",
         "critical_hit",
         "physical",
-        "weapon"
+        "weapons"
       ],
       "source": {
         "id": "/us/Northpaw",
@@ -8248,8 +8248,7 @@
       "granted_skills": [],
       "tags": [
         "critical_damage_bonus",
-        "energy_shield",
-        "flask"
+        "energy_shield"
       ],
       "source": {
         "id": "/us/Killjoy",
@@ -10248,7 +10247,7 @@
       "granted_skills": [],
       "tags": [
         "chaos_resistance",
-        "critical_hit",
+        "critical_hits",
         "critical_weakness",
         "energy_shield",
         "intelligence",
@@ -11703,6 +11702,7 @@
       "granted_skills": [],
       "tags": [
         "critical_hit",
+        "critical_hits",
         "stun_threshold"
       ],
       "source": {
@@ -11735,7 +11735,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "flask",
         "strength"
       ],
       "source": {
@@ -11772,7 +11771,7 @@
       "tags": [
         "attribute",
         "elemental",
-        "leech",
+        "leeched",
         "strength"
       ],
       "source": {
@@ -11883,6 +11882,7 @@
       ],
       "tags": [
         "critical_hit",
+        "critical_hits",
         "dexterity",
         "ignore",
         "lightning_resistance"
@@ -12027,7 +12027,6 @@
       "granted_skills": [],
       "tags": [
         "block",
-        "focus",
         "intelligence"
       ],
       "source": {
@@ -12204,7 +12203,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "ally",
+        "allies",
         "attack",
         "attribute",
         "critical_damage_bonus",
@@ -12317,7 +12316,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "critical_hit",
+        "critical_hits",
         "elemental_resistances",
         "light_radius",
         "spirit"
@@ -12647,9 +12646,7 @@
         "blissfully unaware of their flight from the sirens."
       ],
       "granted_skills": [],
-      "tags": [
-        "flask"
-      ],
+      "tags": [],
       "source": {
         "id": "/us/Glowswarm",
         "url": "https://poe2db.tw/us/Glowswarm",
@@ -12902,7 +12899,7 @@
       "granted_skills": [],
       "tags": [
         "cold_resistance",
-        "hit",
+        "hitting",
         "lightning_resistance"
       ],
       "source": {
@@ -13229,7 +13226,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "ally",
+        "allies",
         "presence"
       ],
       "source": {
@@ -13567,7 +13564,6 @@
       "granted_skills": [],
       "tags": [
         "cold_resistance",
-        "flask",
         "strength"
       ],
       "source": {
@@ -13603,7 +13599,6 @@
       "granted_skills": [],
       "tags": [
         "elemental",
-        "flask",
         "recoup"
       ],
       "source": {
@@ -13638,9 +13633,7 @@
         "there exists a flow..."
       ],
       "granted_skills": [],
-      "tags": [
-        "flask"
-      ],
+      "tags": [],
       "source": {
         "id": "/us/Keelhaul",
         "url": "https://poe2db.tw/us/Keelhaul",
@@ -13676,7 +13669,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "flask",
         "intelligence",
         "minion"
       ],
@@ -13713,7 +13705,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "flask",
         "low_life",
         "low_mana"
       ],
@@ -13749,7 +13740,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "flask",
         "lightning_resistance",
         "shock"
       ],
@@ -13788,7 +13778,6 @@
       "granted_skills": [],
       "tags": [
         "chaos_resistance",
-        "flask",
         "lose",
         "overflow"
       ],
@@ -13932,7 +13921,6 @@
       "granted_skills": [],
       "tags": [
         "dexterity",
-        "flask",
         "low_life",
         "strength"
       ],
@@ -14011,7 +13999,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "flask",
         "stun_threshold"
       ],
       "source": {
@@ -14125,9 +14112,7 @@
         "the Maji more than they ever expected."
       ],
       "granted_skills": [],
-      "tags": [
-        "flask"
-      ],
+      "tags": [],
       "source": {
         "id": "/us/Ingenuity",
         "url": "https://poe2db.tw/us/Ingenuity",
@@ -14161,7 +14146,6 @@
       "granted_skills": [],
       "tags": [
         "energy_shield",
-        "flask",
         "intelligence"
       ],
       "source": {
@@ -14196,9 +14180,7 @@
         "No conqueror, no conquered, only searing Light."
       ],
       "granted_skills": [],
-      "tags": [
-        "flask"
-      ],
+      "tags": [],
       "source": {
         "id": "/us/Darkness_Enthroned",
         "url": "https://poe2db.tw/us/Darkness_Enthroned",
@@ -14422,7 +14404,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "flask",
         "poison"
       ],
       "source": {
@@ -14489,7 +14470,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "hit",
+        "hitting",
         "shock"
       ],
       "source": {

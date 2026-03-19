@@ -16,7 +16,7 @@ class PipelineError(RuntimeError):
     pass
 
 
-@dataclass(slots=True)
+@dataclass
 class PipelineContext:
     repo_root: Path
     script_dir: Path
@@ -36,7 +36,7 @@ class PipelineContext:
     timestamped_report_enabled: bool = True
 
 
-@dataclass(slots=True)
+@dataclass
 class PipelineStep:
     name: str
     command: list[str]
