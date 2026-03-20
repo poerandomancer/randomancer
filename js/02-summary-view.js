@@ -1,5 +1,6 @@
 import { formatWeaponLine } from './01-meta-and-domready.js';
 import { buildGemDictionary, lookupGem } from './05-tags-and-scorer.js';
+import { getFamilySkillNames, resolveSkillFamily } from './17-skill-family-utils.js';
 
 const CARD_PARAM = 'card';
 const CARD_TYPE_BUILD = 'build';
@@ -7,7 +8,7 @@ const CARD_TYPE_CHALLENGE = 'challenge';
 const CARD_STATE_KEY = 'rm_card_overlay';
 const BUILD_SAVE_STORAGE_KEY = 'randomancer_saved_builds_v1';
 const CHALLENGE_SAVE_STORAGE_KEY = 'randomancer_saved_challenges_v1';
-const SKILL_TOOLTIP_KEYS = new Set(['ACTIVE_SKILL', 'SUPPORT', 'PERSISTENT_BUFF', 'UNIQUE', 'PASSIVE']);
+const SKILL_TOOLTIP_KEYS = new Set(['ACTIVE_SKILL', 'SUPPORT', 'PERSISTENT_BUFF', 'UNIQUE', 'PASSIVE', 'KEYSTONE', 'SKILL_FAMILY', 'SKILL_FAMILY_2']);
 
 let tooltipEl = null;
 let tooltipTarget = null;
@@ -56,6 +57,32 @@ function getGemDescription(entry) {
 function getPassiveDescription(name) {
   const node = (window.DATA?.passivesEnriched?.nodes || []).find((item) => item?.name === name) || null;
   return (Array.isArray(node?.lines) ? node.lines : []).map(stripBracketMarkup).filter(Boolean).join(' ');
+}
+
+function getSkillFamilyTooltipPayload(name) {
+  const core = window.DATA || {};
+  const lib = core.skillFamilyLib;
+  const index = core.skillFamilyIndex;
+  if (!name || !lib || !index) return null;
+
+  let fam = core.skillFamilyByName?.[name] || null;
+  if (!fam) {
+    const hit = Object.keys(core.skillFamilyByName || {}).find((key) => String(key).toLowerCase() === String(name).toLowerCase());
+    fam = hit ? core.skillFamilyByName[hit] : null;
+  }
+  if (!fam) return null;
+
+  let matchIds = null;
+  if (core.skillFamilyResolved && typeof core.skillFamilyResolved.get === 'function') {
+    matchIds = core.skillFamilyResolved.get(fam.name);
+  }
+  if (!matchIds) matchIds = resolveSkillFamily(fam, index, lib);
+  if (!matchIds || !matchIds.size) return null;
+
+  const { names, total, remaining } = getFamilySkillNames(fam, index, matchIds, { max: 28 });
+  const lines = names.slice();
+  if (remaining > 0) lines.push(`+${remaining} more`);
+  return { title: `${fam.name} (${total})`, lines };
 }
 
 function getUniqueSourceCollection() {
@@ -212,10 +239,19 @@ function deriveBuildCardModel(snap) {
   };
 }
 
-function describeChallengeSlot(slotKey, value) {
-  if (slotKey === 'ACTIVE_SKILL') return getGemDescription(value);
-  if (slotKey === 'KEYSTONE') return getPassiveDescription(value);
-  return '';
+function getChallengeTooltipPayload(slotKey, value) {
+  if (slotKey === 'ACTIVE_SKILL') {
+    const description = getGemDescription(value);
+    return description ? { title: value, lines: [description] } : null;
+  }
+  if (slotKey === 'KEYSTONE') {
+    const description = getPassiveDescription(value);
+    return description ? { title: value, lines: [description] } : null;
+  }
+  if (slotKey === 'SKILL_FAMILY' || slotKey === 'SKILL_FAMILY_2') {
+    return getSkillFamilyTooltipPayload(value);
+  }
+  return null;
 }
 
 function deriveChallengeCardModel(contract) {
@@ -229,7 +265,15 @@ function deriveChallengeCardModel(contract) {
       line: task.line || '',
       slotEntries: Object.entries(task.slots || {})
         .filter(([, value]) => value)
-        .map(([slotKey, value]) => createNamedItem(String(value), slotKey, describeChallengeSlot(slotKey, value)))
+        .map(([slotKey, value]) => {
+          const tooltip = getChallengeTooltipPayload(slotKey, String(value));
+          return createNamedItem(
+            String(value),
+            slotKey,
+            tooltip?.lines?.join(' ') || '',
+            tooltip ? { tipTitle: tooltip.title, tipLines: tooltip.lines } : {}
+          );
+        })
     }))
   };
 }
