@@ -319,6 +319,54 @@
 .rc-tooltip__fade{ display:none; }
 .rc-tooltip__hint{ margin-top:.5rem; color:var(--muted); font-size:.75rem; }
 
+.rc-tooltip__grid{
+  display:grid;
+  gap:.75rem;
+}
+.rc-tooltip__skilllist{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.35rem;
+}
+.rc-tip-skill{
+  appearance:none;
+  border:1px solid rgba(212,170,80,0.28);
+  border-radius:999px;
+  padding:.26rem .72rem;
+  background:rgba(34,26,20,0.92);
+  color:#efe3c7;
+  font: inherit;
+  line-height:1.2;
+  letter-spacing:.01em;
+  cursor:pointer;
+  transition:background .16s ease, border-color .16s ease, color .16s ease, box-shadow .16s ease;
+}
+.rc-tip-skill:hover,
+.rc-tip-skill:focus-visible{
+  outline:none;
+  background:rgba(63,40,26,0.96);
+  border-color:rgba(255,222,160,0.6);
+  color:#fff1cb;
+  box-shadow:0 0 0 1px rgba(255,225,159,0.14);
+}
+.rc-tip-skill.is-selected{
+  background:rgba(96,48,40,0.9);
+  border-color:rgba(214,89,95,0.58);
+  color:#ffe4d6;
+}
+.rc-tooltip__detail{
+  display:grid;
+  gap:.35rem;
+}
+.rc-tooltip__detail-title{
+  color:var(--gold);
+  font-weight:700;
+}
+.rc-tooltip__detail-body{
+  color:var(--silver);
+  line-height:1.45;
+}
+
 @media (max-width: 720px){
   .card-overlay{
     padding:12px 0;
