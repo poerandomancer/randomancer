@@ -47,7 +47,7 @@
 }
 .card-overlay__body,
 .card-overlay__error{
-  width:min(540px, calc(100% - 6px));
+  width:min(calc((100vh - 28px) * (806 / 1375)), calc(100vw - 18px), 806px);
   margin:0 auto;
 }
 .card-overlay__body{ padding: 0 0 .6rem; }
@@ -86,7 +86,9 @@
   overflow:hidden;
   border-radius:32px;
   padding:1.15rem 1.2rem 1.1rem;
-  min-height: min(82vh, 780px);
+  width:100%;
+  aspect-ratio: 806 / 1375;
+  min-height:0;
   color: var(--ink);
   border:2px solid rgba(212,170,80,0.28);
   background:
@@ -150,9 +152,23 @@
   background:
     radial-gradient(circle at 50% 18%, rgba(255,235,187,0.16), transparent 28%),
     linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.76)),
+    url('/images/card-texture-front.png') center/cover no-repeat,
     url('/images/challenge-background.png') center/cover no-repeat;
+  background-blend-mode: screen, multiply, normal, normal;
   filter: blur(2px) saturate(.76) brightness(.5);
   transform: scale(1.08);
+}
+.rc-card--challenge::after{
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0) 24%),
+    radial-gradient(circle at 18% 22%, rgba(255,246,214,0.10) 0, rgba(255,246,214,0.02) 12%, transparent 38%),
+    radial-gradient(circle at 78% 74%, rgba(34,24,18,0.18) 0, rgba(34,24,18,0.06) 18%, transparent 46%),
+    repeating-linear-gradient(115deg, rgba(255,244,218,0.028) 0 2px, rgba(28,21,18,0.03) 2px 4px, transparent 4px 9px),
+    url('/images/card-texture-front.png') center/cover no-repeat;
+  background-blend-mode: screen, soft-light, multiply, soft-light, normal;
+  opacity:.42;
+  mix-blend-mode:overlay;
+  filter: contrast(1.34) brightness(.88) saturate(.92);
 }
 .rc-card > *{ position:relative; z-index:1; }
 
@@ -296,9 +312,37 @@
 @media (max-width: 720px){
   .card-overlay .rm-info-dialog{ width:min(460px, calc(100% - 22px)); }
   .card-overlay__body,
-  .card-overlay__error{ width:min(410px, calc(100% - 26px)); }
-  .rc-card{ min-height:0; padding:1rem .9rem .95rem; border-radius:26px; }
+  .card-overlay__error{ width:min(calc((100vh - 24px) * (806 / 1375)), calc(100vw - 20px), 410px); }
+  .rc-card{ padding:1rem .9rem .95rem; border-radius:26px; }
   .rc-card__actions{ top:.92rem; right:.82rem; }
   .rc-card__hero{ padding:2.8rem 2.4rem 1.1rem; }
   .rc-card__title{ font-size: clamp(1.36rem, 5.6vw, 1.86rem); }
+}
+
+
+.rc-card__body--challenge{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:calc(100% - 12.5rem);
+  padding:0 1rem 1.5rem;
+}
+.rc-contract--challenge-labels{
+  width:100%;
+  align-content:center;
+  gap:1rem;
+}
+.rc-contract__clause--label-only{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:4.4rem;
+  padding:.85rem 0;
+}
+.rc-contract__clause--label-only .rc-print-block__label{
+  margin:0;
+  font-family:'Cinzel', serif;
+  font-size:clamp(1.15rem, 2.5vw, 1.65rem);
+  letter-spacing:.08em;
+  color:#f2ede4;
 }

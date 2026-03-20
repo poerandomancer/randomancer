@@ -212,29 +212,14 @@ function deriveBuildCardModel(snap) {
   };
 }
 
-function describeChallengeSlot(slotKey, value) {
-  if (slotKey === 'ACTIVE_SKILL') return getGemDescription(value);
-  if (slotKey === 'KEYSTONE') return getPassiveDescription(value);
-  return '';
-}
-
 function deriveChallengeCardModel(contract) {
   if (!contract) return null;
-  const anchor = (contract.tasks || []).find((task) => task?.role === 'anchor') || null;
-  const twist = (contract.tasks || []).find((task) => task?.role === 'twist') || null;
   return {
     type: CARD_TYPE_CHALLENGE,
     title: contract.title || 'Challenge Contract',
     subtitle: contract.subtitle || '',
-    severity: contract.severity || '',
-    anchor: anchor?.line || '',
-    twist: twist?.line || '',
     clauses: (contract.tasks || []).map((task) => ({
-      label: task.shortLabel || task.role || 'Clause',
-      line: task.line || '',
-      slotEntries: Object.entries(task.slots || {})
-        .filter(([, value]) => value)
-        .map(([slotKey, value]) => createNamedItem(String(value), slotKey, describeChallengeSlot(slotKey, value)))
+      label: task.shortLabel || task.role || 'Clause'
     }))
   };
 }
@@ -391,15 +376,9 @@ function renderBuildCard(model, face = 'front', actionsHtml = '') {
 }
 
 function renderChallengeClause(clause) {
-  let line = escapeHtml(clause.line || '');
-  clause.slotEntries.forEach((entry) => {
-    if (!entry?.name) return;
-    line = line.replace(escapeHtml(entry.name), renderInteractiveName(entry, 'challenge'));
-  });
   return `
-    <div class="rc-contract__clause">
+    <div class="rc-contract__clause rc-contract__clause--label-only">
       <div class="rc-print-block__label">${escapeHtml(clause.label)}</div>
-      <div class="rc-contract__line">${line}</div>
     </div>
   `;
 }
@@ -409,10 +388,7 @@ function renderChallengeCard(model, actionsHtml = '') {
     <article class="rc-card rc-card--challenge">
       ${renderCardHeader(actionsHtml, model.title, model.subtitle)}
       <div class="rc-card__body rc-card__body--challenge">
-        ${model.anchor ? `<section class="rc-print-row"><div class="rc-print-row__label">Anchor</div><div class="rc-print-row__value">${escapeHtml(model.anchor)}</div></section>` : ''}
-        ${model.twist ? `<section class="rc-print-row"><div class="rc-print-row__label">Twist</div><div class="rc-print-row__value">${escapeHtml(model.twist)}</div></section>` : ''}
-        ${model.severity ? `<section class="rc-print-row"><div class="rc-print-row__label">Severity</div><div class="rc-print-row__value">${escapeHtml(model.severity)}</div></section>` : ''}
-        ${model.clauses?.length ? `<div class="rc-contract">${model.clauses.map(renderChallengeClause).join('')}</div>` : ''}
+        ${model.clauses?.length ? `<div class="rc-contract rc-contract--challenge-labels">${model.clauses.map(renderChallengeClause).join('')}</div>` : ''}
       </div>
     </article>
   `;
