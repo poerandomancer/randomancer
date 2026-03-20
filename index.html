@@ -550,13 +550,7 @@ document.addEventListener('DOMContentLoaded', () => {
 <div id="card-overlay" class="rm-info-overlay card-overlay" hidden>
   <div class="rm-info-backdrop" data-close="1"></div>
   <div class="rm-info-dialog card-dialog" role="dialog" aria-modal="true" aria-labelledby="card-overlay-title">
-    <div class="card-dialog__chrome">
-      <div id="card-overlay-title" class="card-dialog__title">Card View</div>
-      <div class="card-dialog__controls">
-        <div id="card-overlay-actions" class="card-overlay__actions"></div>
-        <button id="card-overlay-close" class="icon-btn card-action-btn card-action-btn--close" aria-label="Close" title="Close"><span aria-hidden="true">×</span></button>
-      </div>
-    </div>
+    <div id="card-overlay-title" class="card-dialog__sr">Card View</div>
     <div id="card-overlay-error" class="card-overlay__error" hidden></div>
     <div id="card-overlay-body" class="card-overlay__body"></div>
   </div>

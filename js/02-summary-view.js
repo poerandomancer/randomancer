@@ -5,6 +5,8 @@ const CARD_PARAM = 'card';
 const CARD_TYPE_BUILD = 'build';
 const CARD_TYPE_CHALLENGE = 'challenge';
 const CARD_STATE_KEY = 'rm_card_overlay';
+const BUILD_SAVE_STORAGE_KEY = 'randomancer_saved_builds_v1';
+const CHALLENGE_SAVE_STORAGE_KEY = 'randomancer_saved_challenges_v1';
 const SKILL_TOOLTIP_KEYS = new Set(['ACTIVE_SKILL', 'SUPPORT', 'PERSISTENT_BUFF', 'UNIQUE', 'PASSIVE']);
 
 let tooltipEl = null;
@@ -54,13 +56,32 @@ function getPassiveDescription(name) {
   return (Array.isArray(node?.lines) ? node.lines : []).map(stripBracketMarkup).filter(Boolean).join(' ');
 }
 
-function getUniqueDescription(name) {
+function getUniqueSourceCollection() {
   const uniques = window.DATA?.uniques || window.DATA?.poe2dbUniques || window.DATA?.poe2db_uniques_min || [];
-  const found = Array.isArray(uniques)
-    ? uniques.find((item) => item?.name === name || item?.base_item?.display_name === name)
-    : null;
-  const lines = Array.isArray(found?.lines) ? found.lines : Array.isArray(found?.explicit) ? found.explicit : [];
-  return lines.map(stripBracketMarkup).filter(Boolean).join(' ');
+  if (Array.isArray(uniques)) return uniques;
+  if (uniques && typeof uniques === 'object') {
+    if (Array.isArray(uniques.items)) return uniques.items;
+    if (uniques.items && typeof uniques.items === 'object') return Object.values(uniques.items);
+    if (uniques.by_key && typeof uniques.by_key === 'object') return Object.values(uniques.by_key);
+  }
+  return [];
+}
+
+function getUniqueRecord(name) {
+  return getUniqueSourceCollection().find((item) => item?.name === name || item?.base_item?.display_name === name || item?.source?.label === name) || null;
+}
+
+function getUniqueTooltipPayload(name) {
+  const found = getUniqueRecord(name);
+  const base = found?.base || found?.base_item?.display_name || found?.slot || '';
+  const lines = [base, ...(Array.isArray(found?.explicit_mods) ? found.explicit_mods : found?.lines || found?.explicit || [])]
+    .map(stripBracketMarkup)
+    .filter(Boolean)
+    .slice(0, 7);
+  return {
+    title: name,
+    lines
+  };
 }
 
 function getAscendancyArtPath(ascendancy) {
@@ -68,8 +89,14 @@ function getAscendancyArtPath(ascendancy) {
   return `/images/ascendancies/${String(ascendancy).toLowerCase().replace(/\s+/g, '-')}.webp`;
 }
 
-function createNamedItem(name, slotKey, description) {
-  return { name, slotKey, description: description || '' };
+function createNamedItem(name, slotKey, description, opts = {}) {
+  return {
+    name,
+    slotKey,
+    description: description || '',
+    tipTitle: opts.tipTitle || name || '',
+    tipLines: Array.isArray(opts.tipLines) ? opts.tipLines.filter(Boolean) : (description ? [description] : [])
+  };
 }
 
 function dedupeNames(items) {
@@ -80,6 +107,22 @@ function dedupeNames(items) {
     seen.add(key);
     return true;
   });
+}
+
+function readSavedList(storageKey) {
+  try { return JSON.parse(localStorage.getItem(storageKey) || '[]'); } catch { return []; }
+}
+
+function isSavedBuild() {
+  const snap = window.App?.state?.currentRoll || window.CURRENT_ROLL;
+  const code = window.RandomancerEncodeSnapshot?.(snap);
+  return !!(code && readSavedList(BUILD_SAVE_STORAGE_KEY).some((entry) => entry.code === code));
+}
+
+function isSavedChallenge() {
+  const contract = window.CURRENT_CHALLENGE_CONTRACT;
+  const code = window.RandomancerEncodeChallengeContract?.(contract);
+  return !!(code && readSavedList(CHALLENGE_SAVE_STORAGE_KEY).some((entry) => entry.code === code));
 }
 
 function deriveBuildCardModel(snap) {
@@ -114,7 +157,6 @@ function deriveBuildCardModel(snap) {
     type: CARD_TYPE_BUILD,
     title: snap.buildName || [snap.className, snap.ascendancy].filter(Boolean).join(' '),
     subtitle: snap.flavor || '',
-    ascendancy: snap.ascendancy || '',
     artPath: getAscendancyArtPath(snap.ascendancy),
     frontRows: [
       { label: 'Ascendancy', values: snap.ascendancy ? [createNamedItem(snap.ascendancy)] : [] },
@@ -126,7 +168,13 @@ function deriveBuildCardModel(snap) {
     backSections: [
       { label: 'Supports', values: supports },
       { label: 'Persistent Buff', values: persistentBuffName ? [createNamedItem(persistentBuffName, 'PERSISTENT_BUFF', getGemDescription(snap.recommendedPersistentBuff))] : [] },
-      { label: 'Uniques', values: uniqueNames.map((name) => createNamedItem(name, 'UNIQUE', getUniqueDescription(name))) },
+      {
+        label: 'Uniques',
+        values: uniqueNames.map((name) => {
+          const tooltip = getUniqueTooltipPayload(name);
+          return createNamedItem(name, 'UNIQUE', tooltip.lines.join(' '), { tipTitle: tooltip.title, tipLines: tooltip.lines });
+        })
+      },
       { label: 'Passives', values: passives }
     ]
   };
@@ -224,11 +272,15 @@ function positionTooltip(target) {
 
 function showCardTooltipFor(target, pinned = false) {
   const title = target?.dataset?.tipTitle || target?.textContent?.trim();
-  const body = target?.dataset?.tipBody || '';
-  if (!title || !body) return;
+  let lines = [];
+  try {
+    lines = JSON.parse(target?.dataset?.tipLines || '[]');
+  } catch {}
+  if (!lines.length && target?.dataset?.tipBody) lines = [target.dataset.tipBody];
+  if (!title || !lines.length) return;
   tooltipTarget = target;
   tooltipPinned = pinned;
-  renderTooltipPayload({ title, lines: [body] });
+  renderTooltipPayload({ title, lines });
   requestAnimationFrame(() => positionTooltip(target));
 }
 
@@ -244,11 +296,11 @@ function hideCardTooltip() {
 function renderInteractiveName(item, variant = 'front') {
   const classes = ['rc-name'];
   if (variant === 'back') classes.push('rc-name--back');
-  if (item?.description && SKILL_TOOLTIP_KEYS.has(item.slotKey)) classes.push('has-tip');
+  if (item?.tipLines?.length && SKILL_TOOLTIP_KEYS.has(item.slotKey)) classes.push('has-tip');
   const attrs = [`class="${classes.join(' ')}"`];
   if (classes.includes('has-tip')) {
-    attrs.push(`data-tip-title="${escapeHtml(item.name)}"`);
-    attrs.push(`data-tip-body="${escapeHtml(item.description)}"`);
+    attrs.push(`data-tip-title="${escapeHtml(item.tipTitle || item.name)}"`);
+    attrs.push(`data-tip-lines="${escapeHtml(JSON.stringify(item.tipLines || []))}"`);
     attrs.push('tabindex="0"');
   }
   return `<span ${attrs.join(' ')}>${escapeHtml(item?.name || '')}</span>`;
@@ -258,23 +310,33 @@ function renderDelimitedNames(values, variant = 'front') {
   return values.map((item, index) => `${index ? '<span class="rc-sep">, </span>' : ''}${renderInteractiveName(item, variant)}`).join('');
 }
 
-function renderBuildCard(model, face = 'front') {
+function renderActionButton({ action, label, icon, active = false }) {
+  return `<button type="button" class="icon-btn card-action-btn${active ? ' is-active' : ''}" data-card-action="${escapeHtml(action)}" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><span aria-hidden="true">${icon}</span></button>`;
+}
+
+function renderCardHeader(actionsHtml, title, subtitle) {
+  return `
+    <div class="rc-card__actions">${actionsHtml}</div>
+    <header class="rc-card__hero">
+      <h2 class="rc-card__title">${escapeHtml(title || 'Card')}</h2>
+      ${subtitle ? `<p class="rc-card__subtitle">${escapeHtml(subtitle)}</p>` : ''}
+    </header>
+  `;
+}
+
+function renderBuildCard(model, face = 'front', actionsHtml = '') {
   const isBack = face === 'back';
   const style = model.artPath ? ` style="--card-art:url('${escapeHtml(model.artPath)}')"` : '';
   if (!isBack) {
     return `
       <article class="rc-card rc-card--build rc-card--front"${style}>
-        <div class="rc-card__hero">
-          <div class="rc-card__type">${escapeHtml(model.ascendancy || 'Build')}</div>
-          <h2 class="rc-card__title">${escapeHtml(model.title || 'Build Card')}</h2>
-          ${model.subtitle ? `<p class="rc-card__subtitle">${escapeHtml(model.subtitle)}</p>` : ''}
-        </div>
-        <div class="rc-card__rows">
+        ${renderCardHeader(actionsHtml, model.title, model.subtitle)}
+        <div class="rc-card__body rc-card__body--front">
           ${model.frontRows.filter((row) => row.values?.length).map((row) => `
-            <div class="rc-row">
-              <div class="rc-row__label">${escapeHtml(row.label)}</div>
-              <div class="rc-row__value">${renderDelimitedNames(row.values, 'front')}</div>
-            </div>
+            <section class="rc-print-row">
+              <div class="rc-print-row__label">${escapeHtml(row.label)}</div>
+              <div class="rc-print-row__value">${renderDelimitedNames(row.values, 'front')}</div>
+            </section>
           `).join('')}
         </div>
       </article>
@@ -283,15 +345,12 @@ function renderBuildCard(model, face = 'front') {
 
   return `
     <article class="rc-card rc-card--build rc-card--back"${style}>
-      <header class="rc-card__backhead">
-        <div class="rc-card__type">${escapeHtml(model.title || 'Build Card')}</div>
-        ${model.subtitle ? `<p class="rc-card__subline">${escapeHtml(model.subtitle)}</p>` : ''}
-      </header>
-      <div class="rc-card__dossier">
+      ${renderCardHeader(actionsHtml, model.title, model.subtitle)}
+      <div class="rc-card__body rc-card__body--back">
         ${model.backSections.filter((section) => section.values?.length).map((section) => `
-          <section class="rc-card__region">
-            <div class="rc-card__region-label">${escapeHtml(section.label)}</div>
-            <div class="rc-card__region-values">${renderDelimitedNames(section.values, 'back')}</div>
+          <section class="rc-print-block">
+            <div class="rc-print-block__label">${escapeHtml(section.label)}</div>
+            <div class="rc-print-block__value">${renderDelimitedNames(section.values, 'back')}</div>
           </section>
         `).join('')}
       </div>
@@ -307,26 +366,22 @@ function renderChallengeClause(clause) {
   });
   return `
     <div class="rc-contract__clause">
-      <div class="rc-contract__label">${escapeHtml(clause.label)}</div>
+      <div class="rc-print-block__label">${escapeHtml(clause.label)}</div>
       <div class="rc-contract__line">${line}</div>
     </div>
   `;
 }
 
-function renderChallengeCard(model) {
+function renderChallengeCard(model, actionsHtml = '') {
   return `
     <article class="rc-card rc-card--challenge">
-      <div class="rc-card__hero rc-card__hero--challenge">
-        <div class="rc-card__type">Challenge Contract</div>
-        <h2 class="rc-card__title">${escapeHtml(model.title || 'Challenge Contract')}</h2>
-        ${model.subtitle ? `<p class="rc-card__subtitle">${escapeHtml(model.subtitle)}</p>` : ''}
+      ${renderCardHeader(actionsHtml, model.title, model.subtitle)}
+      <div class="rc-card__body rc-card__body--challenge">
+        ${model.anchor ? `<section class="rc-print-row"><div class="rc-print-row__label">Anchor</div><div class="rc-print-row__value">${escapeHtml(model.anchor)}</div></section>` : ''}
+        ${model.twist ? `<section class="rc-print-row"><div class="rc-print-row__label">Twist</div><div class="rc-print-row__value">${escapeHtml(model.twist)}</div></section>` : ''}
+        ${model.severity ? `<section class="rc-print-row"><div class="rc-print-row__label">Severity</div><div class="rc-print-row__value">${escapeHtml(model.severity)}</div></section>` : ''}
+        ${model.clauses?.length ? `<div class="rc-contract">${model.clauses.map(renderChallengeClause).join('')}</div>` : ''}
       </div>
-      <div class="rc-card__rows rc-card__rows--challenge">
-        ${model.anchor ? `<div class="rc-row"><div class="rc-row__label">Anchor</div><div class="rc-row__value">${escapeHtml(model.anchor)}</div></div>` : ''}
-        ${model.twist ? `<div class="rc-row"><div class="rc-row__label">Twist</div><div class="rc-row__value">${escapeHtml(model.twist)}</div></div>` : ''}
-        ${model.severity ? `<div class="rc-row"><div class="rc-row__label">Severity</div><div class="rc-row__value">${escapeHtml(model.severity)}</div></div>` : ''}
-      </div>
-      ${model.clauses?.length ? `<div class="rc-card__contract">${model.clauses.map(renderChallengeClause).join('')}</div>` : ''}
     </article>
   `;
 }
@@ -407,21 +462,14 @@ function attachTooltipHandlers(root) {
   });
 }
 
-function renderActionButton({ action, label, icon, hidden = false }) {
-  if (hidden) return '';
-  return `<button type="button" class="icon-btn card-action-btn" data-card-action="${escapeHtml(action)}" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><span aria-hidden="true">${icon}</span></button>`;
-}
-
-function setOverlayContent({ type, html, actionsHtml, error = '', face = '' }) {
+function setOverlayContent({ type, html, error = '', face = '' }) {
   const overlay = getCardOverlay();
   if (!overlay) return;
   overlay.dataset.cardType = type || '';
   overlay.dataset.cardFace = face || '';
   const body = overlay.querySelector('#card-overlay-body');
-  const actions = overlay.querySelector('#card-overlay-actions');
   const errorEl = overlay.querySelector('#card-overlay-error');
   if (body) body.innerHTML = html || '';
-  if (actions) actions.innerHTML = actionsHtml || '';
   if (errorEl) {
     errorEl.hidden = !error;
     errorEl.textContent = error || '';
@@ -432,30 +480,32 @@ function setOverlayContent({ type, html, actionsHtml, error = '', face = '' }) {
 function renderBuildCardOverlay(face = 'front') {
   const model = deriveBuildCardModel(window.App?.state?.currentRoll || window.CURRENT_ROLL);
   if (!model) {
-    setOverlayContent({ type: CARD_TYPE_BUILD, error: 'Build card could not be loaded.', html: '', actionsHtml: '' });
+    setOverlayContent({ type: CARD_TYPE_BUILD, error: 'Build card could not be loaded.', html: '' });
     return false;
   }
   const actions = [
     renderActionButton({ action: 'copy-link', label: 'Copy Link', icon: '⧉' }),
-    renderActionButton({ action: 'save', label: 'Save', icon: '★' }),
+    renderActionButton({ action: 'save', label: isSavedBuild() ? 'Saved' : 'Save', icon: isSavedBuild() ? '★' : '☆', active: isSavedBuild() }),
     renderActionButton({ action: 'poe', label: 'Poe.ninja', icon: '🥷' }),
-    renderActionButton({ action: 'flip', label: face === 'front' ? 'Flip to back' : 'Flip to front', icon: '↺' })
+    renderActionButton({ action: 'flip', label: face === 'front' ? 'Flip to back' : 'Flip to front', icon: '↺' }),
+    renderActionButton({ action: 'close', label: 'Close', icon: '×' })
   ].join('');
-  setOverlayContent({ type: CARD_TYPE_BUILD, html: renderBuildCard(model, face), actionsHtml: actions, face });
+  setOverlayContent({ type: CARD_TYPE_BUILD, html: renderBuildCard(model, face, actions), face });
   return true;
 }
 
 function renderChallengeCardOverlay() {
   const model = deriveChallengeCardModel(window.CURRENT_CHALLENGE_CONTRACT);
   if (!model) {
-    setOverlayContent({ type: CARD_TYPE_CHALLENGE, error: 'Challenge card could not be loaded.', html: '', actionsHtml: '' });
+    setOverlayContent({ type: CARD_TYPE_CHALLENGE, error: 'Challenge card could not be loaded.', html: '' });
     return false;
   }
   const actions = [
     renderActionButton({ action: 'copy-link', label: 'Copy Link', icon: '⧉' }),
-    renderActionButton({ action: 'save', label: 'Save', icon: '★' })
+    renderActionButton({ action: 'save', label: isSavedChallenge() ? 'Saved' : 'Save', icon: isSavedChallenge() ? '★' : '☆', active: isSavedChallenge() }),
+    renderActionButton({ action: 'close', label: 'Close', icon: '×' })
   ].join('');
-  setOverlayContent({ type: CARD_TYPE_CHALLENGE, html: renderChallengeCard(model), actionsHtml: actions, face: '' });
+  setOverlayContent({ type: CARD_TYPE_CHALLENGE, html: renderChallengeCard(model, actions), face: '' });
   return true;
 }
 
@@ -470,7 +520,7 @@ function openCardOverlay(type, options = {}) {
   lastOpenFocus = document.activeElement;
   if (!options.skipUrl) syncUrlForOverlay(cardType, true);
   try { localStorage.setItem(CARD_STATE_KEY, cardType); } catch {}
-  overlay.querySelector('#card-overlay-close')?.focus();
+  overlay.querySelector('[data-card-action="close"]')?.focus();
   return okay;
 }
 
@@ -497,7 +547,6 @@ function bindCardOverlayUI() {
   const overlay = getCardOverlay();
   if (!overlay || overlay.dataset.bound === '1') return;
   overlay.dataset.bound = '1';
-  overlay.querySelector('#card-overlay-close')?.addEventListener('click', () => closeCardOverlay());
   overlay.addEventListener('click', (evt) => {
     if (evt.target?.dataset?.close) closeCardOverlay();
     const action = evt.target.closest('[data-card-action]')?.dataset.cardAction;
@@ -520,6 +569,10 @@ function bindCardOverlayUI() {
     }
     if (action === 'flip') {
       renderBuildCardOverlay(overlay.dataset.cardFace === 'back' ? 'front' : 'back');
+      return;
+    }
+    if (action === 'close') {
+      closeCardOverlay();
     }
   });
   document.addEventListener('pointerdown', (evt) => {
