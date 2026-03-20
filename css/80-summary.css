@@ -19,20 +19,32 @@
 }
 
 .card-overlay{
+  overflow-y:auto;
+  min-height:100vh;
+  padding:14px 0;
   background: rgba(4,4,6,0.34);
   backdrop-filter: blur(3px);
 }
 .card-overlay .rm-info-backdrop{
+  position:fixed;
+  inset:0;
   background: radial-gradient(circle at center, rgba(0,0,0,0.12), rgba(0,0,0,0.6));
 }
 .card-overlay .rm-info-dialog{
-  width:min(600px, calc(100% - 20px));
-  max-height: calc(100vh - 16px);
-  overflow: visible;
-  padding: 0;
-  background: transparent;
-  border: 0;
-  box-shadow: none;
+  position:relative;
+  inset:auto;
+  transform:none;
+  width:min(580px, calc(100% - 20px));
+  max-height:none;
+  overflow:visible;
+  margin:0 auto;
+  padding:0;
+  background:transparent;
+  border:0;
+  box-shadow:none;
+}
+.card-overlay-open{
+  overflow:hidden;
 }
 .card-dialog__sr{
   position:absolute;
@@ -47,7 +59,7 @@
 }
 .card-overlay__body,
 .card-overlay__error{
-  width:min(540px, calc(100% - 6px));
+  width:min(calc(100vw - 18px), 560px);
   margin:0 auto;
 }
 .card-overlay__body{ padding: 0 0 .6rem; }
@@ -86,7 +98,9 @@
   overflow:hidden;
   border-radius:32px;
   padding:1.15rem 1.2rem 1.1rem;
-  min-height: min(82vh, 780px);
+  width:100%;
+  aspect-ratio: 806 / 1375;
+  min-height:0;
   color: var(--ink);
   border:2px solid rgba(212,170,80,0.28);
   background:
@@ -112,17 +126,17 @@
     repeating-linear-gradient(115deg, rgba(255,244,218,0.028) 0 2px, rgba(28,21,18,0.03) 2px 4px, transparent 4px 9px),
     url('/images/card-texture-front.png') center/cover no-repeat;
   background-blend-mode: screen, soft-light, multiply, soft-light, normal;
-  opacity:.42;
-  mix-blend-mode:overlay;
-  filter: contrast(1.34) brightness(.88) saturate(.92);
+  opacity:.64;
+  mix-blend-mode:soft-light;
+  filter: contrast(1.46) brightness(.9) saturate(1);
 }
 .rc-card--build.rc-card--front::before{
   background:
-    radial-gradient(circle at 50% 18%, rgba(255,235,187,0.16), transparent 28%),
-    linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.76)),
+    radial-gradient(circle at 50% 18%, rgba(255,235,187,0.12), transparent 28%),
+    linear-gradient(180deg, rgba(0,0,0,0.14), rgba(0,0,0,0.7)),
     var(--card-art) center/cover no-repeat;
-  filter: blur(2px) saturate(.76) brightness(.5);
-  transform: scale(1.08);
+  filter: blur(3.2px) saturate(.58) brightness(.36);
+  transform: scale(1.1);
 }
 .rc-card--build.rc-card--back{
   background:
@@ -148,11 +162,23 @@
 }
 .rc-card--challenge::before{
   background:
-    radial-gradient(circle at 50% 18%, rgba(255,235,187,0.16), transparent 28%),
-    linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.76)),
+    radial-gradient(circle at 50% 18%, rgba(255,235,187,0.12), transparent 28%),
+    linear-gradient(180deg, rgba(0,0,0,0.14), rgba(0,0,0,0.62)),
     url('/images/challenge-background.png') center/cover no-repeat;
-  filter: blur(2px) saturate(.76) brightness(.5);
+  filter: blur(2px) saturate(.78) brightness(.58);
   transform: scale(1.08);
+}
+.rc-card--challenge::after{
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0) 24%),
+    radial-gradient(circle at 18% 22%, rgba(255,246,214,0.08) 0, rgba(255,246,214,0.02) 12%, transparent 38%),
+    radial-gradient(circle at 78% 74%, rgba(34,24,18,0.16) 0, rgba(34,24,18,0.05) 18%, transparent 46%),
+    repeating-linear-gradient(115deg, rgba(255,244,218,0.02) 0 2px, rgba(28,21,18,0.024) 2px 4px, transparent 4px 9px),
+    url('/images/card-texture-front.png') center/cover no-repeat;
+  background-blend-mode: screen, soft-light, multiply, soft-light, normal;
+  opacity:.18;
+  mix-blend-mode:screen;
+  filter: contrast(1.04) brightness(.94) saturate(.88);
 }
 .rc-card > *{ position:relative; z-index:1; }
 
@@ -293,12 +319,68 @@
 .rc-tooltip__fade{ display:none; }
 .rc-tooltip__hint{ margin-top:.5rem; color:var(--muted); font-size:.75rem; }
 
+.rc-tooltip__grid{
+  display:grid;
+  gap:.75rem;
+}
+.rc-tooltip__skilllist{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.35rem;
+}
+.rc-tip-skill{
+  appearance:none;
+  border:1px solid rgba(212,170,80,0.28);
+  border-radius:999px;
+  padding:.26rem .72rem;
+  background:rgba(34,26,20,0.92);
+  color:#efe3c7;
+  font: inherit;
+  line-height:1.2;
+  letter-spacing:.01em;
+  cursor:pointer;
+  transition:background .16s ease, border-color .16s ease, color .16s ease, box-shadow .16s ease;
+}
+.rc-tip-skill:hover,
+.rc-tip-skill:focus-visible{
+  outline:none;
+  background:rgba(63,40,26,0.96);
+  border-color:rgba(255,222,160,0.6);
+  color:#fff1cb;
+  box-shadow:0 0 0 1px rgba(255,225,159,0.14);
+}
+.rc-tip-skill.is-selected{
+  background:rgba(96,48,40,0.9);
+  border-color:rgba(214,89,95,0.58);
+  color:#ffe4d6;
+}
+.rc-tooltip__detail{
+  display:grid;
+  gap:.35rem;
+}
+.rc-tooltip__detail-title{
+  color:var(--gold);
+  font-weight:700;
+}
+.rc-tooltip__detail-body{
+  color:var(--silver);
+  line-height:1.45;
+}
+
 @media (max-width: 720px){
+  .card-overlay{
+    padding:12px 0;
+  }
   .card-overlay .rm-info-dialog{ width:min(460px, calc(100% - 22px)); }
   .card-overlay__body,
-  .card-overlay__error{ width:min(410px, calc(100% - 26px)); }
-  .rc-card{ min-height:0; padding:1rem .9rem .95rem; border-radius:26px; }
+  .card-overlay__error{ width:min(calc(100vw - 20px), 410px); }
+  .rc-card{ padding:1rem .9rem .95rem; border-radius:26px; }
   .rc-card__actions{ top:.92rem; right:.82rem; }
   .rc-card__hero{ padding:2.8rem 2.4rem 1.1rem; }
   .rc-card__title{ font-size: clamp(1.36rem, 5.6vw, 1.86rem); }
+}
+
+
+.rc-card__body--challenge{
+  padding:.1rem .45rem 1.4rem;
 }
