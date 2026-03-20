@@ -524,3 +524,21 @@
   .rc-tooltip,
   .rc-tooltip.is-open{ transform: translate(-50%, 0) scale(1); }
 }
+
+.card-share-status{
+  margin: .35rem 1rem 0;
+  padding: .45rem .65rem;
+  border: 1px solid rgba(212, 184, 120, 0.28);
+  border-radius: 10px;
+  background: rgba(17, 15, 12, 0.78);
+  color: rgba(244, 231, 204, 0.92);
+  font-size: .84rem;
+  line-height: 1.35;
+  word-break: break-word;
+}
+.card-share-status.is-success{ border-color: rgba(114, 181, 116, 0.4); color: rgba(198, 239, 199, 0.95); }
+.card-share-status.is-error{ border-color: rgba(181, 95, 95, 0.4); color: rgba(255, 204, 204, 0.95); }
+.card-share-status.is-info{ border-color: rgba(212, 184, 120, 0.3); }
+.card-action-btn[disabled]{ opacity: .55; cursor: wait; }
+.card-action-btn.is-busy span{ display:inline-block; animation: rm-share-pulse 1s ease-in-out infinite; }
+@keyframes rm-share-pulse { 0%,100% { transform: scale(1); opacity: .72; } 50% { transform: scale(1.08); opacity: 1; } }

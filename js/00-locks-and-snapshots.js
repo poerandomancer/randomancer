@@ -7,6 +7,8 @@ import {
   setSkillsTabsAvailability,
   SUPPORT,
 } from './01-meta-and-domready.js';
+import { fetchPublicCardBySlug } from './publicCardApi.js';
+import { hydrateSharedBuildCard, hydrateSharedChallengeCard, validatePublicCardRecord } from './publicCardHydration.js';
 import {
   closeCardOverlay,
   getSummaryTextFromSnapshot,
@@ -864,6 +866,34 @@ function renderSnapshotToDom(snap){
   async function autoLoadFromQuery(){
     const q = getQueryParams();
     const requestedCard = q.get('card');
+
+    if (requestedCard && /^[bc]-[a-z0-9]{8}$/i.test(requestedCard)) {
+      window.RandomancerShowToast?.('Loading shared card…', 1800);
+      try {
+        const shared = validatePublicCardRecord(await fetchPublicCardBySlug(requestedCard));
+        if (shared.card_kind === 'challenge') {
+          if (typeof window.RandomancerSetMode === 'function') window.RandomancerSetMode('challenge');
+          const contract = hydrateSharedChallengeCard(shared.payload);
+          if (typeof window.RandomancerRenderChallengeContract === 'function') {
+            window.RandomancerRenderChallengeContract(contract);
+          }
+          openCardOverlay('challenge', { skipUrl: true });
+          return;
+        }
+
+        if (typeof window.RandomancerSetMode === 'function') window.RandomancerSetMode('standard');
+        const snapshot = hydrateSharedBuildCard(shared.payload);
+        if (typeof window.RandomancerRenderBuildSnapshot === 'function') {
+          window.RandomancerRenderBuildSnapshot(snapshot);
+        }
+        openCardOverlay('build', { skipUrl: true });
+        return;
+      } catch (error) {
+        console.warn('[public-card] shared restore failed', error);
+        window.RandomancerShowToast?.('Shared card could not be restored.');
+      }
+    }
+
     const challengeCode = q.get('challenge') || q.get('challengeCode');
     if (challengeCode) {
       const ok = await applyChallengeCode(challengeCode);
@@ -933,8 +963,10 @@ function renderSnapshotToDom(snap){
   window.RandomancerGetCurrentBuildSnapshot = () => cloneJsonSafe(currentSnap());
   window.RandomancerRenderBuildSnapshot = (snap) => {
     if (!snap || typeof snap !== 'object') return false;
-    if (window.App?.mergeCurrentRoll) window.App.mergeCurrentRoll({ ...snap });
-    renderSnapshotToDom(snap);
+    const safeSnap = cloneJsonSafe(snap) || { ...snap };
+    if (window.App?.mergeCurrentRoll) window.App.mergeCurrentRoll({ ...safeSnap });
+    window.CURRENT_ROLL = cloneJsonSafe(safeSnap) || { ...safeSnap };
+    renderSnapshotToDom(safeSnap);
     return true;
   };
   window.RandomancerClearBuildResults = clearBuildResultsToEmpty;
