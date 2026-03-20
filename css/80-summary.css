@@ -31,7 +31,7 @@
   position:relative;
   inset:auto;
   transform:none;
-  width:min(600px, calc(100% - 20px));
+  width:min(640px, calc(100% - 20px));
   max-height:none;
   overflow:visible;
   margin:0 auto;
@@ -56,7 +56,7 @@
 }
 .card-overlay__body,
 .card-overlay__error{
-  width:min(calc(100vw - 18px), 806px);
+  width:min(calc(100vw - 18px), 620px);
   margin:0 auto;
 }
 .card-overlay__body{ padding: 0 0 .6rem; }
@@ -123,16 +123,16 @@
     repeating-linear-gradient(115deg, rgba(255,244,218,0.028) 0 2px, rgba(28,21,18,0.03) 2px 4px, transparent 4px 9px),
     url('/images/card-texture-front.png') center/cover no-repeat;
   background-blend-mode: screen, soft-light, multiply, soft-light, normal;
-  opacity:.58;
+  opacity:.64;
   mix-blend-mode:soft-light;
-  filter: contrast(1.42) brightness(.9) saturate(.98);
+  filter: contrast(1.46) brightness(.9) saturate(1);
 }
 .rc-card--build.rc-card--front::before{
   background:
     radial-gradient(circle at 50% 18%, rgba(255,235,187,0.12), transparent 28%),
     linear-gradient(180deg, rgba(0,0,0,0.14), rgba(0,0,0,0.7)),
     var(--card-art) center/cover no-repeat;
-  filter: blur(3px) saturate(.62) brightness(.4);
+  filter: blur(3.2px) saturate(.58) brightness(.36);
   transform: scale(1.1);
 }
 .rc-card--build.rc-card--back{
@@ -162,7 +162,7 @@
     radial-gradient(circle at 50% 18%, rgba(255,235,187,0.12), transparent 28%),
     linear-gradient(180deg, rgba(0,0,0,0.14), rgba(0,0,0,0.62)),
     url('/images/challenge-background.png') center/cover no-repeat;
-  filter: blur(2px) saturate(.7) brightness(.52);
+  filter: blur(2px) saturate(.78) brightness(.58);
   transform: scale(1.08);
 }
 .rc-card--challenge::after{
@@ -173,9 +173,9 @@
     repeating-linear-gradient(115deg, rgba(255,244,218,0.02) 0 2px, rgba(28,21,18,0.024) 2px 4px, transparent 4px 9px),
     url('/images/card-texture-front.png') center/cover no-repeat;
   background-blend-mode: screen, soft-light, multiply, soft-light, normal;
-  opacity:.26;
+  opacity:.18;
   mix-blend-mode:screen;
-  filter: contrast(1.08) brightness(.92) saturate(.9);
+  filter: contrast(1.04) brightness(.94) saturate(.88);
 }
 .rc-card > *{ position:relative; z-index:1; }
 
@@ -320,7 +320,7 @@
   .card-overlay{
     padding:12px 0;
   }
-  .card-overlay .rm-info-dialog{ width:min(460px, calc(100% - 22px)); }
+  .card-overlay .rm-info-dialog{ width:min(500px, calc(100% - 22px)); }
   .card-overlay__body,
   .card-overlay__error{ width:min(calc(100vw - 20px), 410px); }
   .rc-card{ padding:1rem .9rem .95rem; border-radius:26px; }
