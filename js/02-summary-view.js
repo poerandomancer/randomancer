@@ -212,6 +212,12 @@ function deriveBuildCardModel(snap) {
   };
 }
 
+function describeChallengeSlot(slotKey, value) {
+  if (slotKey === 'ACTIVE_SKILL') return getGemDescription(value);
+  if (slotKey === 'KEYSTONE') return getPassiveDescription(value);
+  return '';
+}
+
 function deriveChallengeCardModel(contract) {
   if (!contract) return null;
   return {
@@ -219,7 +225,11 @@ function deriveChallengeCardModel(contract) {
     title: contract.title || 'Challenge Contract',
     subtitle: contract.subtitle || '',
     clauses: (contract.tasks || []).map((task) => ({
-      label: task.shortLabel || task.role || 'Clause'
+      label: task.shortLabel || task.role || 'Clause',
+      line: task.line || '',
+      slotEntries: Object.entries(task.slots || {})
+        .filter(([, value]) => value)
+        .map(([slotKey, value]) => createNamedItem(String(value), slotKey, describeChallengeSlot(slotKey, value)))
     }))
   };
 }
@@ -376,9 +386,15 @@ function renderBuildCard(model, face = 'front', actionsHtml = '') {
 }
 
 function renderChallengeClause(clause) {
+  let line = escapeHtml(clause.line || '');
+  clause.slotEntries.forEach((entry) => {
+    if (!entry?.name) return;
+    line = line.replace(escapeHtml(entry.name), renderInteractiveName(entry, 'challenge'));
+  });
   return `
-    <div class="rc-contract__clause rc-contract__clause--label-only">
+    <div class="rc-contract__clause">
       <div class="rc-print-block__label">${escapeHtml(clause.label)}</div>
+      <div class="rc-contract__line">${line}</div>
     </div>
   `;
 }
@@ -388,7 +404,7 @@ function renderChallengeCard(model, actionsHtml = '') {
     <article class="rc-card rc-card--challenge">
       ${renderCardHeader(actionsHtml, model.title, model.subtitle)}
       <div class="rc-card__body rc-card__body--challenge">
-        ${model.clauses?.length ? `<div class="rc-contract rc-contract--challenge-labels">${model.clauses.map(renderChallengeClause).join('')}</div>` : ''}
+        ${model.clauses?.length ? `<div class="rc-contract">${model.clauses.map(renderChallengeClause).join('')}</div>` : ''}
       </div>
     </article>
   `;

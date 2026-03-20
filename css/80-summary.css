@@ -19,6 +19,8 @@
 }
 
 .card-overlay{
+  overflow-y:auto;
+  padding:14px 0;
   background: rgba(4,4,6,0.34);
   backdrop-filter: blur(3px);
 }
@@ -26,13 +28,20 @@
   background: radial-gradient(circle at center, rgba(0,0,0,0.12), rgba(0,0,0,0.6));
 }
 .card-overlay .rm-info-dialog{
+  position:relative;
+  inset:auto;
+  transform:none;
   width:min(600px, calc(100% - 20px));
-  max-height: calc(100vh - 16px);
-  overflow: visible;
-  padding: 0;
-  background: transparent;
-  border: 0;
-  box-shadow: none;
+  max-height:none;
+  overflow:visible;
+  margin:0 auto;
+  padding:0;
+  background:transparent;
+  border:0;
+  box-shadow:none;
+}
+.card-overlay-open{
+  overflow:hidden;
 }
 .card-dialog__sr{
   position:absolute;
@@ -47,7 +56,7 @@
 }
 .card-overlay__body,
 .card-overlay__error{
-  width:min(calc((100vh - 28px) * (806 / 1375)), calc(100vw - 18px), 806px);
+  width:min(calc(100vw - 18px), 806px);
   margin:0 auto;
 }
 .card-overlay__body{ padding: 0 0 .6rem; }
@@ -114,17 +123,17 @@
     repeating-linear-gradient(115deg, rgba(255,244,218,0.028) 0 2px, rgba(28,21,18,0.03) 2px 4px, transparent 4px 9px),
     url('/images/card-texture-front.png') center/cover no-repeat;
   background-blend-mode: screen, soft-light, multiply, soft-light, normal;
-  opacity:.42;
-  mix-blend-mode:overlay;
-  filter: contrast(1.34) brightness(.88) saturate(.92);
+  opacity:.58;
+  mix-blend-mode:soft-light;
+  filter: contrast(1.42) brightness(.9) saturate(.98);
 }
 .rc-card--build.rc-card--front::before{
   background:
-    radial-gradient(circle at 50% 18%, rgba(255,235,187,0.16), transparent 28%),
-    linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.76)),
+    radial-gradient(circle at 50% 18%, rgba(255,235,187,0.12), transparent 28%),
+    linear-gradient(180deg, rgba(0,0,0,0.14), rgba(0,0,0,0.7)),
     var(--card-art) center/cover no-repeat;
-  filter: blur(2px) saturate(.76) brightness(.5);
-  transform: scale(1.08);
+  filter: blur(3px) saturate(.62) brightness(.4);
+  transform: scale(1.1);
 }
 .rc-card--build.rc-card--back{
   background:
@@ -150,25 +159,23 @@
 }
 .rc-card--challenge::before{
   background:
-    radial-gradient(circle at 50% 18%, rgba(255,235,187,0.16), transparent 28%),
-    linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.76)),
-    url('/images/card-texture-front.png') center/cover no-repeat,
+    radial-gradient(circle at 50% 18%, rgba(255,235,187,0.12), transparent 28%),
+    linear-gradient(180deg, rgba(0,0,0,0.14), rgba(0,0,0,0.62)),
     url('/images/challenge-background.png') center/cover no-repeat;
-  background-blend-mode: screen, multiply, normal, normal;
-  filter: blur(2px) saturate(.76) brightness(.5);
+  filter: blur(2px) saturate(.7) brightness(.52);
   transform: scale(1.08);
 }
 .rc-card--challenge::after{
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0) 24%),
-    radial-gradient(circle at 18% 22%, rgba(255,246,214,0.10) 0, rgba(255,246,214,0.02) 12%, transparent 38%),
-    radial-gradient(circle at 78% 74%, rgba(34,24,18,0.18) 0, rgba(34,24,18,0.06) 18%, transparent 46%),
-    repeating-linear-gradient(115deg, rgba(255,244,218,0.028) 0 2px, rgba(28,21,18,0.03) 2px 4px, transparent 4px 9px),
+    linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0) 24%),
+    radial-gradient(circle at 18% 22%, rgba(255,246,214,0.08) 0, rgba(255,246,214,0.02) 12%, transparent 38%),
+    radial-gradient(circle at 78% 74%, rgba(34,24,18,0.16) 0, rgba(34,24,18,0.05) 18%, transparent 46%),
+    repeating-linear-gradient(115deg, rgba(255,244,218,0.02) 0 2px, rgba(28,21,18,0.024) 2px 4px, transparent 4px 9px),
     url('/images/card-texture-front.png') center/cover no-repeat;
   background-blend-mode: screen, soft-light, multiply, soft-light, normal;
-  opacity:.42;
-  mix-blend-mode:overlay;
-  filter: contrast(1.34) brightness(.88) saturate(.92);
+  opacity:.26;
+  mix-blend-mode:screen;
+  filter: contrast(1.08) brightness(.92) saturate(.9);
 }
 .rc-card > *{ position:relative; z-index:1; }
 
@@ -310,9 +317,12 @@
 .rc-tooltip__hint{ margin-top:.5rem; color:var(--muted); font-size:.75rem; }
 
 @media (max-width: 720px){
+  .card-overlay{
+    padding:12px 0;
+  }
   .card-overlay .rm-info-dialog{ width:min(460px, calc(100% - 22px)); }
   .card-overlay__body,
-  .card-overlay__error{ width:min(calc((100vh - 24px) * (806 / 1375)), calc(100vw - 20px), 410px); }
+  .card-overlay__error{ width:min(calc(100vw - 20px), 410px); }
   .rc-card{ padding:1rem .9rem .95rem; border-radius:26px; }
   .rc-card__actions{ top:.92rem; right:.82rem; }
   .rc-card__hero{ padding:2.8rem 2.4rem 1.1rem; }
@@ -321,28 +331,5 @@
 
 
 .rc-card__body--challenge{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  min-height:calc(100% - 12.5rem);
-  padding:0 1rem 1.5rem;
-}
-.rc-contract--challenge-labels{
-  width:100%;
-  align-content:center;
-  gap:1rem;
-}
-.rc-contract__clause--label-only{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  min-height:4.4rem;
-  padding:.85rem 0;
-}
-.rc-contract__clause--label-only .rc-print-block__label{
-  margin:0;
-  font-family:'Cinzel', serif;
-  font-size:clamp(1.15rem, 2.5vw, 1.65rem);
-  letter-spacing:.08em;
-  color:#f2ede4;
+  padding:.1rem .45rem 1.4rem;
 }
