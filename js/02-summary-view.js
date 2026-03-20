@@ -19,6 +19,13 @@ let hoverPanel = false;
 let lastOpenFocus = null;
 let uniqueSourceCache = null;
 let uniqueSourcePromise = null;
+let cardTextureMetricsPromise = null;
+
+const CARD_TEXTURE_SOURCES = {
+  buildFront: '/images/card-texture-front.png',
+  buildBack: '/images/card-texture-back.png',
+  challenge: '/images/card-texture-front.png'
+};
 
 function escapeHtml(str) {
   return String(str == null ? '' : str)
@@ -146,6 +153,55 @@ function getUniqueTooltipPayload(name) {
 function getAscendancyArtPath(ascendancy) {
   if (!ascendancy) return '';
   return `/images/ascendancies/${String(ascendancy).toLowerCase().replace(/\s+/g, '-')}.webp`;
+}
+
+function applyCardTextureMetrics(key, width, height) {
+  if (!width || !height || !document?.documentElement) return;
+  const rootStyle = document.documentElement.style;
+  const ratioVarMap = {
+    buildFront: '--rc-build-front-ratio',
+    buildBack: '--rc-build-back-ratio',
+    challenge: '--rc-challenge-ratio'
+  };
+  const widthVarMap = {
+    buildFront: '--rc-build-front-width',
+    buildBack: '--rc-build-back-width',
+    challenge: '--rc-challenge-width'
+  };
+  const ratioVar = ratioVarMap[key];
+  const widthVar = widthVarMap[key];
+  if (!ratioVar || !widthVar) return;
+  rootStyle.setProperty(ratioVar, `${width} / ${height}`);
+  rootStyle.setProperty(widthVar, `${width}px`);
+  rootStyle.setProperty('--rc-overlay-max-width', `${Math.max(width, 560)}px`);
+}
+
+function loadCardTextureMetrics() {
+  const entries = Object.entries(CARD_TEXTURE_SOURCES);
+  return Promise.all(entries.map(([key, src]) => new Promise((resolve) => {
+    const img = new Image();
+    img.decoding = 'async';
+    img.onload = () => {
+      applyCardTextureMetrics(key, img.naturalWidth, img.naturalHeight);
+      resolve();
+    };
+    img.onerror = () => resolve();
+    img.src = src;
+    if (img.complete && img.naturalWidth) {
+      applyCardTextureMetrics(key, img.naturalWidth, img.naturalHeight);
+      resolve();
+    }
+  })));
+}
+
+function ensureCardTextureMetrics() {
+  if (!document?.documentElement) return Promise.resolve();
+  if (!cardTextureMetricsPromise) {
+    cardTextureMetricsPromise = loadCardTextureMetrics()
+      .then(() => { refreshOpenCardOverlay(); })
+      .catch(() => {});
+  }
+  return cardTextureMetricsPromise;
 }
 
 function createNamedItem(name, slotKey, description, opts = {}) {
@@ -690,6 +746,7 @@ function buildSummaryLinesFromSnapshot(snap) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  ensureCardTextureMetrics();
   bindCardOverlayUI();
 });
 
