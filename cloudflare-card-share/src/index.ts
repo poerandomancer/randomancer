@@ -40,12 +40,6 @@ type PublicCardRow = {
 
 const MAX_PAYLOAD_BYTES = 32 * 1024;
 const SHARE_ORIGIN = "https://cards.therandomancer.com";
-const DEV_ALLOWED_ORIGINS = new Set([
-  "http://localhost:3000",
-  "http://localhost:5173",
-  "http://127.0.0.1:3000",
-  "http://127.0.0.1:5173",
-]);
 const CARD_KIND_PREFIX: Record<CardKind, string> = {
   build: "b",
   challenge: "c",
@@ -508,8 +502,7 @@ function escapeHtml(value: string): string {
 }
 
 function corsResponse(request: Request): Response {
-  const origin = request.headers.get("origin");
-  const headers = buildCorsHeaders(origin);
+  const headers = buildCorsHeaders(request);
   if (!headers) {
     return new Response(null, { status: 204 });
   }
@@ -518,8 +511,7 @@ function corsResponse(request: Request): Response {
 }
 
 function withCors(request: Request, response: Response): Response {
-  const origin = request.headers.get("origin");
-  const headers = buildCorsHeaders(origin);
+  const headers = buildCorsHeaders(request);
   if (!headers) {
     return response;
   }
@@ -536,19 +528,35 @@ function withCors(request: Request, response: Response): Response {
   });
 }
 
-function buildCorsHeaders(origin: string | null): Headers | null {
-  if (!origin) {
+function isAllowedOrigin(origin: string | null): boolean {
+  if (!origin) return false;
+  if (origin === "https://therandomancer.com") return true;
+
+  try {
+    const url = new URL(origin);
+    return (
+      (url.protocol === "http:" || url.protocol === "https:") &&
+      (url.hostname === "localhost" || url.hostname === "127.0.0.1")
+    );
+  } catch {
+    return false;
+  }
+}
+
+function buildCorsHeaders(request: Request): Headers | null {
+  const origin = request.headers.get("origin");
+  if (!isAllowedOrigin(origin)) {
     return null;
   }
 
-  if (origin !== "https://therandomancer.com" && !DEV_ALLOWED_ORIGINS.has(origin)) {
-    return null;
-  }
+  const requestedHeaders =
+    request.headers.get("access-control-request-headers") ||
+    "content-type, x-randomancer-app-version";
 
   return new Headers({
-    "access-control-allow-origin": origin,
+    "access-control-allow-origin": origin!,
     "access-control-allow-methods": "GET,POST,OPTIONS",
-    "access-control-allow-headers": "content-type",
+    "access-control-allow-headers": requestedHeaders,
     "access-control-max-age": "86400",
     vary: "Origin",
   });
