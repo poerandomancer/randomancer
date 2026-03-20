@@ -2397,8 +2397,8 @@
       "icon": "Art/2DArt/SkillIcons/passives/Shaman/ShamanEvenMoreAdaptation.dds",
       "lines": [
         "5% of Physical Damage taken as",
-        "Fire Damage 5% of Physical",
-        "Damage taken as Cold",
+        "Cold Damage 5% of Physical",
+        "Damage taken as Fire",
         "Damage 5% of Physical"
       ],
       "tags": [
@@ -2429,8 +2429,8 @@
       ],
       "scrapedLines": [
         "5% of Physical Damage taken as",
-        "Fire Damage 5% of Physical",
-        "Damage taken as Cold",
+        "Cold Damage 5% of Physical",
+        "Damage taken as Fire",
         "Damage 5% of Physical"
       ],
       "scrapedTags": [
@@ -2599,7 +2599,7 @@
       "ascendancy": "Disciple of Varashta",
       "icon": "Art/2DArt/SkillIcons/passives/DiscipleoftheDjinn/SummonFireDjinn.dds",
       "lines": [
-        "\"You have forsaken your duty to my akhara. Yes... we do not abide weakness. But we also do not abide madness in the fervour of battle! Your slain dekhara will have their justice. You must pay.\""
+        "Ascendancy enable fire djinn passive"
       ],
       "tags": [
         "fire"
@@ -2618,16 +2618,17 @@
         "Ascendancy enable fire djinn passive"
       ],
       "scrapedLines": [
+        "ascendancy enable fire djinn passive",
         "\"You have forsaken your duty to my akhara. Yes... we do not abide weakness. But we also do not abide madness in the fervour of battle! Your slain dekhara will have their justice. You must pay.\""
       ],
       "scrapedTags": [],
       "derivedTags": [
         "fire"
       ],
-      "descriptionSource": "scraped",
+      "descriptionSource": "datamined",
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
-      "scrapeRejectedReason": null,
+      "scrapeRejectedReason": "contains_metadata_lines",
       "tagSources": [
         "derived"
       ]
@@ -5558,9 +5559,9 @@
       "ascendancy": "Acolyte of Chayula",
       "icon": "Art/2DArt/SkillIcons/passives/AcolyteofChayula/AcolyteOfChayulaManaLeechInstant.dds",
       "lines": [
-        "Take no Damage from Volatility",
-        "Gain 1 Volatility on inflicting an",
-        "Elemental Ailment"
+        "Volatility on inflicting an",
+        "Elemental Ailment",
+        "Take no Damage from Volatility"
       ],
       "tags": [
         "ailment"
@@ -5587,9 +5588,9 @@
         "Immune to volatility damage"
       ],
       "scrapedLines": [
-        "Take no Damage from Volatility",
-        "Gain 1 Volatility on inflicting an",
-        "Elemental Ailment"
+        "Volatility on inflicting an",
+        "Elemental Ailment",
+        "Take no Damage from Volatility"
       ],
       "scrapedTags": [],
       "derivedTags": [

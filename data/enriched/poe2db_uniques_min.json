@@ -3,8 +3,8 @@
     "schema": "poe2db_uniques_min_v4",
     "locale": "us",
     "listing_url": "https://poe2db.tw/us/Unique_item",
-    "count": 399,
-    "generated_epoch": 1773946502
+    "count": 400,
+    "generated_epoch": 1774017232
   },
   "by_key": {
     "Brynhand's Mark||Wooden Club": "/us/Brynhands_Mark",
@@ -408,6 +408,14 @@
     "Unforeseen Consequences||Abyss Precursor Tablet": "/us/Unforeseen_Consequences"
   },
   "items": {
+    "/us/Endgame": {
+      "source": {
+        "id": "/us/Endgame",
+        "url": "https://poe2db.tw/us/Endgame",
+        "label": "Endgame"
+      },
+      "error": "404 Client Error: Not Found for url: https://poe2db.tw/us/Endgame"
+    },
     "/us/Brynhands_Mark": {
       "key": "Brynhand's Mark||Wooden Club",
       "name": "Brynhand's Mark",
@@ -581,7 +589,7 @@
       "tags": [
         "attack",
         "critical_damage_bonus",
-        "critically_hit",
+        "critical_hit",
         "endurance_charge",
         "physical"
       ],
@@ -616,7 +624,7 @@
       "granted_skills": [],
       "tags": [
         "accuracy",
-        "hitting",
+        "hit",
         "lightning"
       ],
       "source": {
@@ -722,8 +730,8 @@
       ],
       "granted_skills": [],
       "tags": [
-        "critical_hits",
-        "crushes",
+        "critical_hit",
+        "crush",
         "heavy_stun",
         "physical",
         "stun"
@@ -903,7 +911,6 @@
       "tags": [
         "attribute",
         "critical_hit",
-        "critical_hits",
         "physical_damage"
       ],
       "source": {
@@ -983,7 +990,7 @@
       "granted_skills": [],
       "tags": [
         "accuracy",
-        "crushes",
+        "crush",
         "heavy_stun",
         "stun"
       ],
@@ -1546,7 +1553,7 @@
       "granted_skills": [],
       "tags": [
         "accuracy",
-        "dazes",
+        "daze",
         "heavy_stun",
         "hit",
         "physical",
@@ -2705,7 +2712,7 @@
         }
       ],
       "tags": [
-        "allies",
+        "ally",
         "elemental_damage",
         "gain",
         "presence",
@@ -2751,7 +2758,7 @@
         }
       ],
       "tags": [
-        "allies",
+        "ally",
         "attack",
         "fire",
         "light_radius",
@@ -2799,7 +2806,7 @@
         }
       ],
       "tags": [
-        "allies",
+        "ally",
         "attack",
         "cold",
         "intelligence",
@@ -2847,7 +2854,7 @@
         }
       ],
       "tags": [
-        "allies",
+        "ally",
         "attack",
         "dexterity",
         "light_radius",
@@ -2895,7 +2902,7 @@
         }
       ],
       "tags": [
-        "allies",
+        "ally",
         "attack",
         "attribute",
         "light_radius",
@@ -2934,7 +2941,7 @@
       "granted_skills": [],
       "tags": [
         "druidic_prowess",
-        "hindered",
+        "hinder",
         "intelligence",
         "physical"
       ],
@@ -3334,10 +3341,10 @@
       "tags": [
         "armour",
         "bleed",
-        "debuffs",
+        "debuff",
         "hit",
         "physical",
-        "slowing",
+        "slow",
         "thorns"
       ],
       "source": {
@@ -3542,7 +3549,7 @@
       "granted_skills": [],
       "tags": [
         "armour",
-        "critical_hits",
+        "critical_hit",
         "maximum_elemental_resistances",
         "stun_threshold"
       ],
@@ -3607,7 +3614,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "critically_hit",
+        "critical_hit",
         "evasion",
         "hit",
         "rage"
@@ -3944,7 +3951,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "companions",
+        "companion",
         "evasion",
         "poison",
         "spirit"
@@ -4267,7 +4274,7 @@
         "chaos_resistance",
         "energy_shield",
         "intelligence",
-        "recharges",
+        "recharge",
         "strength"
       ],
       "source": {
@@ -4755,7 +4762,7 @@
         "armour",
         "chaos_resistance",
         "evasion",
-        "reserved"
+        "reserve"
       ],
       "source": {
         "id": "/us/Widows_Reign",
@@ -5226,7 +5233,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "aggravated",
+        "aggravate",
         "dexterity",
         "energy_shield"
       ],
@@ -5732,7 +5739,7 @@
       "tags": [
         "armour",
         "presence",
-        "reserved",
+        "reserve",
         "stun_threshold"
       ],
       "source": {
@@ -6216,7 +6223,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "blinded",
+        "blind",
         "critical_weakness",
         "dexterity",
         "energy_shield",
@@ -6549,7 +6556,6 @@
         "armour",
         "attack",
         "critical_hit",
-        "critically_hit",
         "evasion"
       ],
       "source": {
@@ -6978,7 +6984,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "allies",
+        "ally",
         "dexterity",
         "presence"
       ],
@@ -7014,7 +7020,6 @@
       "granted_skills": [],
       "tags": [
         "critical_hit",
-        "critical_hits",
         "dexterity",
         "energy_shield",
         "intelligence"
@@ -7276,7 +7281,7 @@
       "tags": [
         "armour",
         "critical_damage_bonus",
-        "critical_hits",
+        "critical_hit",
         "physical",
         "thorns"
       ],
@@ -7313,7 +7318,6 @@
       "tags": [
         "armour",
         "critical_hit",
-        "critical_hits",
         "intelligence"
       ],
       "source": {
@@ -7813,7 +7817,6 @@
         "energy_shield",
         "hit",
         "penetrate",
-        "penetrates",
         "rarity_of_items"
       ],
       "source": {
@@ -8175,7 +8178,7 @@
       "tags": [
         "armour",
         "attribute",
-        "debuffs",
+        "debuff",
         "energy_shield",
         "immobilise",
         "lightning_resistance",
@@ -8682,7 +8685,7 @@
       "tags": [
         "dexterity",
         "evasion",
-        "pinning"
+        "pin"
       ],
       "source": {
         "id": "/us/Bushwhack",
@@ -8750,7 +8753,7 @@
       "tags": [
         "dexterity",
         "energy_shield",
-        "slows"
+        "slow"
       ],
       "source": {
         "id": "/us/Wanderlust",
@@ -9895,8 +9898,8 @@
       ],
       "tags": [
         "elemental",
-        "parried",
-        "parried_debuff"
+        "parried_debuff",
+        "parry"
       ],
       "source": {
         "id": "/us/Nocturne",
@@ -10061,7 +10064,7 @@
         "critical_weakness",
         "elemental",
         "evasion",
-        "parrying"
+        "parry"
       ],
       "source": {
         "id": "/us/Silverthorne",
@@ -10247,7 +10250,7 @@
       "granted_skills": [],
       "tags": [
         "chaos_resistance",
-        "critical_hits",
+        "critical_hit",
         "critical_weakness",
         "energy_shield",
         "intelligence",
@@ -11524,7 +11527,6 @@
         "evasion_rating",
         "hit",
         "pierce",
-        "pierced",
         "projectile"
       ],
       "source": {
@@ -11702,7 +11704,6 @@
       "granted_skills": [],
       "tags": [
         "critical_hit",
-        "critical_hits",
         "stun_threshold"
       ],
       "source": {
@@ -11771,7 +11772,7 @@
       "tags": [
         "attribute",
         "elemental",
-        "leeched",
+        "leech",
         "strength"
       ],
       "source": {
@@ -11882,7 +11883,6 @@
       ],
       "tags": [
         "critical_hit",
-        "critical_hits",
         "dexterity",
         "ignore",
         "lightning_resistance"
@@ -11993,7 +11993,7 @@
         "cold_resistance",
         "hit",
         "intelligence",
-        "penetrates"
+        "penetrate"
       ],
       "source": {
         "id": "/us/The_Pandemonius",
@@ -12203,7 +12203,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "allies",
+        "ally",
         "attack",
         "attribute",
         "critical_damage_bonus",
@@ -12281,7 +12281,7 @@
       "tags": [
         "accuracy",
         "attribute",
-        "blinded"
+        "blind"
       ],
       "source": {
         "id": "/us/Hinekoras_Sight",
@@ -12316,7 +12316,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "critical_hits",
+        "critical_hit",
         "elemental_resistances",
         "light_radius",
         "spirit"
@@ -12790,7 +12790,7 @@
         "chill",
         "cold_resistance",
         "hit",
-        "shattered",
+        "shatter",
         "strength"
       ],
       "source": {
@@ -12899,7 +12899,7 @@
       "granted_skills": [],
       "tags": [
         "cold_resistance",
-        "hitting",
+        "hit",
         "lightning_resistance"
       ],
       "source": {
@@ -13226,7 +13226,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "allies",
+        "ally",
         "presence"
       ],
       "source": {
@@ -13528,7 +13528,7 @@
         "light_radius",
         "presence",
         "spell",
-        "triggered"
+        "trigger"
       ],
       "source": {
         "id": "/us/Grip_of_Kulemak",
@@ -14470,7 +14470,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "hitting",
+        "hit",
         "shock"
       ],
       "source": {
@@ -14924,7 +14924,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "irradiated",
+        "irradiate",
         "precursor_tower_maps"
       ],
       "source": {
@@ -14956,7 +14956,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "irradiated",
+        "irradiate",
         "irradiation"
       ],
       "source": {
@@ -14989,7 +14989,7 @@
       "granted_skills": [],
       "tags": [
         "azmeri_spirits",
-        "empowers",
+        "empower",
         "map_boss",
         "map_bosses"
       ],
@@ -15023,7 +15023,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "empowers",
+        "empower",
         "map_boss",
         "map_bosses",
         "modifier"

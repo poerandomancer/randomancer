@@ -1,12 +1,12 @@
 {
   "schema_version": "update_pipeline.v3",
-  "run_id": "2026-03-19T18-49-44+00-00",
+  "run_id": "2026-03-20T14-28-31+00-00",
   "profile": "full-patch",
   "poe_version": "0.4.x",
   "status": "passed_with_warnings",
-  "started_at": "2026-03-19T18:49:44+00:00",
-  "finished_at": "2026-03-19T18:55:03+00:00",
-  "duration_ms": 319000,
+  "started_at": "2026-03-20T14:28:31+00:00",
+  "finished_at": "2026-03-20T14:33:54+00:00",
+  "duration_ms": 323000,
   "environment": {
     "python_version": "3.9.6",
     "cwd": "/Users/ttrombadore/git/randomancer",
@@ -26,7 +26,7 @@
   "git": {
     "available": true,
     "branch": "update-pipeline",
-    "commit": "92e137ec592fe0fe3c09d2a75962e37aea57307d",
+    "commit": "b3e1f59aac1007a66af846e5174153380b371e97",
     "dirty": true
   },
   "steps": [
@@ -52,7 +52,7 @@
     {
       "name": "enrich_skills",
       "status": "passed",
-      "duration_ms": 288,
+      "duration_ms": 275,
       "returncode": 0,
       "command": [
         "/Library/Developer/CommandLineTools/usr/bin/python3",
@@ -69,13 +69,13 @@
       "artifact_summary": {
         "skills_enriched": {
           "exists": true,
-          "bytes": 2716793,
-          "sha256": "c4d7bc7282351d4ac35a30b26fdf3ebae09cf3afa2e785bbab6e0df4f1e6508d",
-          "semantic_sha256": "86259fc2788395988c1b21d8c6e1d22d48d5ecdb49027d25468e86e16743d934",
+          "bytes": 2714432,
+          "sha256": "1b6105304a927ff95ecd5abd16e17a0fc68571de1753d3a4030a3c82ad640d16",
+          "semantic_sha256": "4a6b60a9f35684b003431eb02c1c98ff8d6bfd41798c8f8b9a90177785a949fa",
           "rows": 1103,
           "active_count": 509,
           "support_count": 594,
-          "distinct_tag_count": 633,
+          "distinct_tag_count": 621,
           "distinct_effect_tag_count": 19,
           "row_identity_set_sha256": "2b1072bd85c9546b60f5a02bac760139bd9809d900dadf83db0b3c1c52cd3020"
         }
@@ -84,7 +84,7 @@
     {
       "name": "enrich_passives",
       "status": "passed",
-      "duration_ms": 60464,
+      "duration_ms": 61036,
       "returncode": 0,
       "command": [
         "/Library/Developer/CommandLineTools/usr/bin/python3",
@@ -106,9 +106,9 @@
       "artifact_summary": {
         "passives_enriched": {
           "exists": true,
-          "bytes": 1502094,
-          "sha256": "d446ae1b5b6bd752f2a953379b4940e4f490016391182a976646873045a5afc4",
-          "semantic_sha256": "8293521a147dcd4106e79b1d74c800f8dfb52864e93ba3656d87e8f11f44cd14",
+          "bytes": 1501992,
+          "sha256": "45f6c90358fc95275a2e54e69f85c4df71c247778b4231aad035959224895cbc",
+          "semantic_sha256": "12774a0a08d080062c13d1a82572c4100fed49c0924d78c4e7623af39fc2596d",
           "nodes": 1340,
           "keystone_count": 37,
           "ascendancy_count": 196,
@@ -120,20 +120,20 @@
         },
         "passive_scrape_report": {
           "exists": true,
-          "bytes": 5729,
-          "sha256": "333bedda15ab6d52b3ad4b0175987e96108b4d7799acc4d58247236c58e3cc2a",
-          "semantic_sha256": "848ec9afe5ccd2cedb72d13195a58c9925c0ecb82afdfaaeb16fbfb8f0bf539d",
+          "bytes": 5942,
+          "sha256": "1e0e8c7a403b3174f1fbe34cfd3e53a1d7be460433c602e12badbd5c1241620d",
+          "semantic_sha256": "dae30c85dae39352975c1b27b737b4ec7269bea31aed2c17300049a3c7bd47eb",
           "totalKeystones": 37,
           "keystonesScrapeMatched": 37,
           "keystonesUnmatched": 0,
           "totalAscendancyNodes": 196,
           "ascendancyScrapeMatched": 194,
           "ascendancyUnmatched": 2,
-          "nodesUsingScrapedLines": 218,
-          "nodesUsingDataminedFallback": 1122,
+          "nodesUsingScrapedLines": 217,
+          "nodesUsingDataminedFallback": 1123,
           "nodesWithTagsEnhancedByScraping": 75,
-          "nodesUsingSanitizedScrapedLines": 218,
-          "scrapeMatchesRejectedForBadLines": 13,
+          "nodesUsingSanitizedScrapedLines": 217,
+          "scrapeMatchesRejectedForBadLines": 14,
           "ascendancyBlankLinesAfterMerge": 1,
           "statlessAscendancyNodesUsingSkillFallback": 3,
           "scrapedFragmentRejections": 1,
@@ -145,7 +145,7 @@
     {
       "name": "scrape_poe2db_uniques_min",
       "status": "passed",
-      "duration_ms": 257482,
+      "duration_ms": 260439,
       "returncode": 0,
       "command": [
         "/Library/Developer/CommandLineTools/usr/bin/python3",
@@ -168,21 +168,21 @@
       "artifact_summary": {
         "poe2db_uniques_min": {
           "exists": true,
-          "bytes": 441968,
-          "sha256": "9d3d61c8b9b0642567e9d96951d32972974d756aecf2c73e1b4842c3f0b36f83",
-          "semantic_sha256": "51bb8d02cb27b9a2de32647af33beebaab2e31f8c9d081711d120637d9a8d63c",
-          "items": 399,
+          "bytes": 441938,
+          "sha256": "d5bf588226e421d1f8feb5ffb4480c53fa39cc1c75f2bbe663ea812aaf044b76",
+          "semantic_sha256": "3bef9a1c21630c9f64d68aa8a20b1ccd222a5ecdb17d79ebc8bc1adf575c81b3",
+          "items": 400,
           "slot_count": 25,
-          "distinct_tag_count": 232,
+          "distinct_tag_count": 223,
           "items_with_granted_skills": 72,
-          "row_identity_set_sha256": "8cbe43079bfc7e922736968f513942c2b0c9dc9a3885a352b8326f7f97b07c76"
+          "row_identity_set_sha256": "6dea391e5a3a58c1b829fdb769975f2a14dbbdff4208460d745c138d5e310f47"
         }
       }
     },
     {
       "name": "generate_keystone_tooltips",
       "status": "passed",
-      "duration_ms": 601,
+      "duration_ms": 622,
       "returncode": 0,
       "command": [
         "/Library/Developer/CommandLineTools/usr/bin/python3",
@@ -219,7 +219,7 @@
     {
       "name": "validate_tag_normalization",
       "status": "passed",
-      "duration_ms": 86,
+      "duration_ms": 92,
       "returncode": 0,
       "command": [
         "/Library/Developer/CommandLineTools/usr/bin/python3",
@@ -229,14 +229,14 @@
       "outputs": [],
       "warnings": [],
       "errors": [],
-      "stdout_tail": "[validate_tag_normalization] Running checks (mode=default)...\n[validate_tag_normalization] PASS",
+      "stdout_tail": "[validate_tag_normalization] Running checks (mode=default)...\n[validate_tag_normalization] WARN: Family-local aliases likely redundant with shared/global normalization: 1\n[validate_tag_normalization] WARN:   - family=__library_overlay__ alias=companions global=companion local=companion redundant=True\n[validate_tag_normalization] PASS",
       "stderr_tail": "",
       "artifact_summary": {}
     },
     {
       "name": "audit_tag_vocab",
       "status": "passed",
-      "duration_ms": 87,
+      "duration_ms": 84,
       "returncode": 0,
       "command": [
         "/Library/Developer/CommandLineTools/usr/bin/python3",
@@ -250,16 +250,16 @@
       ],
       "warnings": [],
       "errors": [],
-      "stdout_tail": "  - intelligence: 45\n  - strength: 43\n  - dexterity: 42\n  - physical: 40\n  - attack: 38\n  - elemental: 32\n\n## skill_families_queries\ndistinct raw tags: 37\ndistinct canonical tags: 36\ncollisions (raw -> same canonical), top 10:\n  - bleed: bleed, bleeding\ntop canonical tags:\n  - spell: 9\n  - attack: 5\n  - fire: 4\n  - cold: 4\n  - lightning: 4\n  - shapeshift: 4\n  - chaos: 2\n  - plant: 2\n  - bleed: 2\n  - physical: 1\n\nWrote JSON report to /Users/ttrombadore/git/randomancer/data/enriched/tag_vocab_audit.json",
+      "stdout_tail": "  - intelligence: 45\n  - strength: 43\n  - dexterity: 42\n  - physical: 40\n  - critical_hit: 38\n  - attack: 38\n\n## skill_families_queries\ndistinct raw tags: 37\ndistinct canonical tags: 36\ncollisions (raw -> same canonical), top 10:\n  - bleed: bleed, bleeding\ntop canonical tags:\n  - spell: 9\n  - attack: 5\n  - fire: 4\n  - cold: 4\n  - lightning: 4\n  - shapeshift: 4\n  - chaos: 2\n  - plant: 2\n  - bleed: 2\n  - physical: 1\n\nWrote JSON report to /Users/ttrombadore/git/randomancer/data/enriched/tag_vocab_audit.json",
       "stderr_tail": "",
       "artifact_summary": {
         "tag_vocab_audit": {
           "exists": true,
-          "bytes": 4617,
-          "sha256": "08a90710bd8c035287d7a67cfeaf097890fd5ad1e8ae011f828e36e0402ae059",
-          "semantic_sha256": "1592d7dfe5ad78da39305ab55f61a0cfecd57b3b8898c2b6fcd3325cc9552172",
-          "total_distinct_raw_count": 947,
-          "total_distinct_canonical_count": 946,
+          "bytes": 4620,
+          "sha256": "812cd4ddd26be13a373b123f687e56d0375e8b81152961a35efc925271a985df",
+          "semantic_sha256": "0692d077d50650b8c868a74a614ea514a911954ce5414b8e3c9d2b064d3206dd",
+          "total_distinct_raw_count": 926,
+          "total_distinct_canonical_count": 925,
           "total_rejected_count": 0,
           "total_collision_count": 1
         }
@@ -277,88 +277,67 @@
   "diff": {
     "skills_enriched": {
       "sha256": {
-        "before": "7dc1401af4dc7ad6ad4639eccbf35d7f3ee0d247e9ea5842a3428a2d78d8e901",
-        "after": "c4d7bc7282351d4ac35a30b26fdf3ebae09cf3afa2e785bbab6e0df4f1e6508d"
-      }
-    },
-    "passives_enriched": {
-      "bytes": {
-        "before": 1505360,
-        "after": 1502094,
-        "delta": -3266
-      },
-      "semantic_sha256": {
-        "before": "581713f64c9c703de9a8f4adb17517de9233a92ed56332e520786b2f73a70d9a",
-        "after": "8293521a147dcd4106e79b1d74c800f8dfb52864e93ba3656d87e8f11f44cd14"
-      },
-      "sha256": {
-        "before": "06eb40abb5b7eae3abc3896ea772b6d4bfa3ea83981db3fcf6f300aec49894d7",
-        "after": "d446ae1b5b6bd752f2a953379b4940e4f490016391182a976646873045a5afc4"
+        "before": "fe4470cc7af74c4dd71bcc61c244201eb970426b10c5bc0cd9e6eca53d8c9b03",
+        "after": "1b6105304a927ff95ecd5abd16e17a0fc68571de1753d3a4030a3c82ad640d16"
       }
     },
     "poe2db_uniques_min": {
-      "semantic_sha256": {
-        "before": "7191fa62c36a246fc06774088a021a1f44206eed0665795ba60513a0e66a08a3",
-        "after": "51bb8d02cb27b9a2de32647af33beebaab2e31f8c9d081711d120637d9a8d63c"
-      },
-      "sha256": {
-        "before": "90b3d7f9fe9b8bbf7fc394b78c7ddca2b3e66c533989c0a6b012d3f3ff172c0a",
-        "after": "9d3d61c8b9b0642567e9d96951d32972974d756aecf2c73e1b4842c3f0b36f83"
-      }
-    },
-    "passive_scrape_report": {
       "bytes": {
-        "before": 4534,
-        "after": 5729,
-        "delta": 1195
+        "before": 395571,
+        "after": 441938,
+        "delta": 46367
       },
-      "nodesUsingDataminedFallback": {
-        "before": 1118,
-        "after": 1122,
-        "delta": 4
+      "distinct_tag_count": {
+        "before": 213,
+        "after": 223,
+        "delta": 10
       },
-      "nodesUsingSanitizedScrapedLines": {
-        "before": 222,
-        "after": 218,
-        "delta": -4
+      "items": {
+        "before": 401,
+        "after": 400,
+        "delta": -1
       },
-      "nodesUsingScrapedLines": {
-        "before": 222,
-        "after": 218,
-        "delta": -4
+      "items_with_granted_skills": {
+        "before": 70,
+        "after": 72,
+        "delta": 2
       },
-      "nodesWithTagsEnhancedByScraping": {
-        "before": 78,
-        "after": 75,
-        "delta": -3
-      },
-      "scrapeMatchesRejectedForBadLines": {
-        "before": 9,
-        "after": 13,
-        "delta": 4
+      "row_identity_set_sha256": {
+        "before": "0439108058cb3cd832f62594a969335d1b997d733b9b2f72072ee8c2702cf956",
+        "after": "6dea391e5a3a58c1b829fdb769975f2a14dbbdff4208460d745c138d5e310f47"
       },
       "semantic_sha256": {
-        "before": "ac1ab1ee076dba7d2ede404b3b31d5f402a1789abf65207799fe2a1813eb9412",
-        "after": "848ec9afe5ccd2cedb72d13195a58c9925c0ecb82afdfaaeb16fbfb8f0bf539d"
+        "before": "a6da681591134d3ee4a6d238420b33821e155ba69781ad97acea76a111d11b90",
+        "after": "3bef9a1c21630c9f64d68aa8a20b1ccd222a5ecdb17d79ebc8bc1adf575c81b3"
       },
       "sha256": {
-        "before": "7f0a59ec6a2309cd5795c2090443cca28fcb9b99dab5215ec933090fda26010b",
-        "after": "333bedda15ab6d52b3ad4b0175987e96108b4d7799acc4d58247236c58e3cc2a"
+        "before": "d465874c4ce545ebd57bf9db7cfc54ba7bb9e3e0eccd9d49145a667a37ff33bc",
+        "after": "d5bf588226e421d1f8feb5ffb4480c53fa39cc1c75f2bbe663ea812aaf044b76"
+      },
+      "slot_count": {
+        "before": 24,
+        "after": 25,
+        "delta": 1
       }
     },
     "tag_vocab_audit": {
-      "bytes": {
-        "before": 4604,
-        "after": 4617,
-        "delta": 13
-      },
       "semantic_sha256": {
-        "before": "01be500a195a1f39d9e9b38ae214d8b8663d6a90ac10d37c42673f9fd5ad6853",
-        "after": "1592d7dfe5ad78da39305ab55f61a0cfecd57b3b8898c2b6fcd3325cc9552172"
+        "before": "b036cc21de294aa6b0b42891fe5f321d1511e83625face3d3d34b5300f95e23c",
+        "after": "0692d077d50650b8c868a74a614ea514a911954ce5414b8e3c9d2b064d3206dd"
       },
       "sha256": {
-        "before": "1a564be65fb2597c02beec429305a5989bf881ade94e4d595964da8b9509fe35",
-        "after": "08a90710bd8c035287d7a67cfeaf097890fd5ad1e8ae011f828e36e0402ae059"
+        "before": "8ef4ffb297dfebbb91d4dd320e430d27a7723d73102a346e83af713ae2bf2e11",
+        "after": "812cd4ddd26be13a373b123f687e56d0375e8b81152961a35efc925271a985df"
+      },
+      "total_distinct_canonical_count": {
+        "before": 915,
+        "after": 925,
+        "delta": 10
+      },
+      "total_distinct_raw_count": {
+        "before": 916,
+        "after": 926,
+        "delta": 10
       }
     }
   },
@@ -370,33 +349,29 @@
       "semantic_hash_changed": false,
       "classification": "byte_changed_semantically_same"
     },
-    "passives_enriched": {
-      "before_exists": true,
-      "after_exists": true,
-      "raw_hash_changed": true,
-      "semantic_hash_changed": true,
-      "classification": "semantic_changed"
-    },
     "poe2db_uniques_min": {
       "before_exists": true,
       "after_exists": true,
       "raw_hash_changed": true,
       "semantic_hash_changed": true,
-      "classification": "semantic_changed"
-    },
-    "passive_scrape_report": {
-      "before_exists": true,
-      "after_exists": true,
-      "raw_hash_changed": true,
-      "semantic_hash_changed": true,
-      "classification": "semantic_changed"
+      "classification": "semantic_changed",
+      "changed_count_fields": [
+        "items",
+        "distinct_tag_count",
+        "slot_count",
+        "items_with_granted_skills"
+      ]
     },
     "tag_vocab_audit": {
       "before_exists": true,
       "after_exists": true,
       "raw_hash_changed": true,
       "semantic_hash_changed": true,
-      "classification": "semantic_changed"
+      "classification": "semantic_changed",
+      "changed_count_fields": [
+        "total_distinct_raw_count",
+        "total_distinct_canonical_count"
+      ]
     }
   },
   "warnings": [
@@ -404,7 +379,7 @@
   ],
   "errors": [],
   "report_files": {
-    "timestamped": "data/reports/update_runs/update_report_20260319_185503.json",
+    "timestamped": "data/reports/update_runs/update_report_20260320_143354.json",
     "stable": "data/reports/update_runs/latest.json"
   }
 }

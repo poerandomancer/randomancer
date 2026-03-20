@@ -5,11 +5,11 @@
   "totalAscendancyNodes": 196,
   "ascendancyScrapeMatched": 194,
   "ascendancyUnmatched": 2,
-  "nodesUsingScrapedLines": 218,
-  "nodesUsingDataminedFallback": 1122,
+  "nodesUsingScrapedLines": 217,
+  "nodesUsingDataminedFallback": 1123,
   "nodesWithTagsEnhancedByScraping": 75,
-  "nodesUsingSanitizedScrapedLines": 218,
-  "scrapeMatchesRejectedForBadLines": 13,
+  "nodesUsingSanitizedScrapedLines": 217,
+  "scrapeMatchesRejectedForBadLines": 14,
   "badScrapeLineSamples": [
     {
       "name": "Iron Reflexes",
@@ -156,6 +156,23 @@
       ]
     },
     {
+      "name": "Barya of Ruzhan",
+      "type": "ascendancy",
+      "reason": "contains_metadata_lines",
+      "rawSample": [
+        "Ascendancy:",
+        "Disciple of Varashta",
+        "Character:",
+        "Sorceress",
+        "Grants Skill:",
+        "Ruzhan, the Blazing Sword"
+      ],
+      "sanitizedSample": [
+        "ascendancy enable fire djinn passive",
+        "\"You have forsaken your duty to my akhara. Yes... we do not abide weakness. But we also do not abide madness in the fervour of battle! Your slain dekhara will have their justice. You must pay.\""
+      ]
+    },
+    {
       "name": "Ruzhan's Trap",
       "type": "ascendancy",
       "reason": "contains_metadata_lines",
@@ -205,23 +222,6 @@
       "sanitizedSample": [
         "Grants Skill: Unbound Avatar",
         "gain unbound ailment stacks"
-      ]
-    },
-    {
-      "name": "Sap of Nightmares",
-      "type": "ascendancy",
-      "reason": "no_meaningful_ascendancy_lines",
-      "rawSample": [
-        "Ascendancy:",
-        "Acolyte of Chayula",
-        "Character:",
-        "Monk",
-        "Leech",
-        "recovers based on"
-      ],
-      "sanitizedSample": [
-        "Damage as well as",
-        "Physical Damage"
       ]
     }
   ],
