@@ -17,8 +17,59 @@ let tooltipHideTimer = null;
 let hoverTrigger = false;
 let hoverPanel = false;
 let lastOpenFocus = null;
+let closeOverlayTimer = null;
+let flipCleanupTimer = null;
 let uniqueSourceCache = null;
 let uniqueSourcePromise = null;
+
+
+function prefersReducedMotion() {
+  return window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+}
+
+function clearOverlayTimers() {
+  if (closeOverlayTimer) {
+    clearTimeout(closeOverlayTimer);
+    closeOverlayTimer = null;
+  }
+  if (flipCleanupTimer) {
+    clearTimeout(flipCleanupTimer);
+    flipCleanupTimer = null;
+  }
+}
+
+function getOverlayMotionMs(overlay, name, fallback) {
+  if (!overlay) return fallback;
+  const raw = getComputedStyle(overlay).getPropertyValue(name).trim();
+  const value = Number.parseFloat(raw);
+  if (!Number.isFinite(value)) return fallback;
+  return raw.endsWith('ms') || !raw ? value : value * 1000;
+}
+
+function finalizeOverlayClose(overlay, skipUrl) {
+  clearOverlayTimers();
+  overlay.hidden = true;
+  overlay.classList.remove('is-open', 'is-closing');
+  document.body.classList.remove('card-overlay-open');
+  hideCardTooltip();
+  if (!skipUrl) syncUrlForOverlay(overlay.dataset.cardType || '', false);
+  try { localStorage.removeItem(CARD_STATE_KEY); } catch {}
+  lastOpenFocus?.focus?.();
+}
+
+function triggerBuildCardFlip() {
+  const overlay = getCardOverlay();
+  const stage = overlay?.querySelector('.card-stage--build');
+  if (!stage || prefersReducedMotion()) return;
+  if (flipCleanupTimer) clearTimeout(flipCleanupTimer);
+  stage.classList.remove('is-flipping');
+  void stage.offsetWidth;
+  stage.classList.add('is-flipping');
+  flipCleanupTimer = setTimeout(() => {
+    stage.classList.remove('is-flipping');
+    flipCleanupTimer = null;
+  }, getOverlayMotionMs(overlay, '--card-flip-duration', 280) + 40);
+}
 
 function escapeHtml(str) {
   return String(str == null ? '' : str)
@@ -338,7 +389,7 @@ function positionTooltip(target) {
   top = Math.max(pad, Math.min(window.innerHeight - tipRect.height - pad, top));
   el.style.left = `${Math.round(x)}px`;
   el.style.top = `${Math.round(top)}px`;
-  el.style.transform = 'translate(-50%, 0)';
+  el.style.transform = '';
 }
 
 function showCardTooltipFor(target, pinned = false) {
@@ -395,11 +446,12 @@ function renderCardHeader(actionsHtml, title, subtitle) {
   `;
 }
 
-function renderBuildCard(model, face = 'front', actionsHtml = '') {
+function renderBuildCard(model, face = 'front', actionsHtml = '', stageClass = '') {
   const isBack = face === 'back';
   const style = model.artPath ? ` style="--card-art:url('${escapeHtml(model.artPath)}')"` : '';
   if (!isBack) {
     return `
+      <div class="card-stage card-stage--build ${stageClass}">
       <article class="rc-card rc-card--build rc-card--front"${style}>
         ${renderCardHeader(actionsHtml, model.title, model.subtitle)}
         <div class="rc-card__body rc-card__body--front">
@@ -411,10 +463,12 @@ function renderBuildCard(model, face = 'front', actionsHtml = '') {
           `).join('')}
         </div>
       </article>
+      </div>
     `;
   }
 
   return `
+    <div class="card-stage card-stage--build ${stageClass}">
     <article class="rc-card rc-card--build rc-card--back"${style}>
       ${renderCardHeader(actionsHtml, model.title, model.subtitle)}
       <div class="rc-card__body rc-card__body--back">
@@ -426,6 +480,7 @@ function renderBuildCard(model, face = 'front', actionsHtml = '') {
         `).join('')}
       </div>
     </article>
+    </div>
   `;
 }
 
@@ -445,12 +500,14 @@ function renderChallengeClause(clause) {
 
 function renderChallengeCard(model, actionsHtml = '') {
   return `
+    <div class="card-stage">
     <article class="rc-card rc-card--challenge">
       ${renderCardHeader(actionsHtml, model.title, model.subtitle)}
       <div class="rc-card__body rc-card__body--challenge">
         ${model.clauses?.length ? `<div class="rc-contract">${model.clauses.map(renderChallengeClause).join('')}</div>` : ''}
       </div>
     </article>
+    </div>
   `;
 }
 
@@ -545,7 +602,7 @@ function setOverlayContent({ type, html, error = '', face = '' }) {
   if (body) attachTooltipHandlers(body);
 }
 
-function renderBuildCardOverlay(face = 'front') {
+function renderBuildCardOverlay(face = 'front', options = {}) {
   const model = deriveBuildCardModel(window.App?.state?.currentRoll || window.CURRENT_ROLL);
   if (!model) {
     setOverlayContent({ type: CARD_TYPE_BUILD, error: 'Build card could not be loaded.', html: '' });
@@ -561,7 +618,7 @@ function renderBuildCardOverlay(face = 'front') {
     renderActionButton({ action: 'flip', label: face === 'front' ? 'Flip to back' : 'Flip to front', icon: '↺' }),
     renderActionButton({ action: 'close', label: 'Close', icon: '×' })
   ].join('');
-  setOverlayContent({ type: CARD_TYPE_BUILD, html: renderBuildCard(model, face, actions), face });
+  setOverlayContent({ type: CARD_TYPE_BUILD, html: renderBuildCard(model, face, actions, options.stageClass || ''), face });
   return true;
 }
 
@@ -583,10 +640,12 @@ function renderChallengeCardOverlay() {
 function openCardOverlay(type, options = {}) {
   const overlay = getCardOverlay();
   if (!overlay) return false;
+  clearOverlayTimers();
+  overlay.hidden = false;
+  overlay.classList.remove('is-closing');
   const cardType = type === CARD_TYPE_CHALLENGE ? CARD_TYPE_CHALLENGE : CARD_TYPE_BUILD;
   const okay = cardType === CARD_TYPE_CHALLENGE ? renderChallengeCardOverlay() : renderBuildCardOverlay(options.face || 'front');
-  overlay.hidden = false;
-  overlay.classList.add('is-open');
+  requestAnimationFrame(() => overlay.classList.add('is-open'));
   document.body.classList.add('card-overlay-open');
   lastOpenFocus = document.activeElement;
   if (!options.skipUrl) syncUrlForOverlay(cardType, true);
@@ -597,14 +656,16 @@ function openCardOverlay(type, options = {}) {
 
 function closeCardOverlay({ skipUrl = false } = {}) {
   const overlay = getCardOverlay();
-  if (!overlay) return;
-  overlay.hidden = true;
-  overlay.classList.remove('is-open');
-  document.body.classList.remove('card-overlay-open');
+  if (!overlay || overlay.hidden) return;
+  clearOverlayTimers();
   hideCardTooltip();
-  if (!skipUrl) syncUrlForOverlay(overlay.dataset.cardType || '', false);
-  try { localStorage.removeItem(CARD_STATE_KEY); } catch {}
-  lastOpenFocus?.focus?.();
+  if (prefersReducedMotion()) {
+    finalizeOverlayClose(overlay, skipUrl);
+    return;
+  }
+  overlay.classList.remove('is-open');
+  overlay.classList.add('is-closing');
+  closeOverlayTimer = setTimeout(() => finalizeOverlayClose(overlay, skipUrl), Math.max(120, getOverlayMotionMs(overlay, '--card-overlay-duration', 220) - 40));
 }
 
 function refreshOpenCardOverlay() {
@@ -639,7 +700,8 @@ function bindCardOverlayUI() {
       return;
     }
     if (action === 'flip') {
-      renderBuildCardOverlay(overlay.dataset.cardFace === 'back' ? 'front' : 'back');
+      renderBuildCardOverlay(overlay.dataset.cardFace === 'back' ? 'front' : 'back', { stageClass: prefersReducedMotion() ? '' : 'is-flipping' });
+      requestAnimationFrame(triggerBuildCardFlip);
       return;
     }
     if (action === 'close') {

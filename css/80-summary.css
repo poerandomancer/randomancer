@@ -19,6 +19,10 @@
 }
 
 .card-overlay{
+  --card-overlay-duration: 220ms;
+  --card-overlay-ease: cubic-bezier(.2,.78,.18,1);
+  --card-flip-duration: 280ms;
+  --card-flip-ease: cubic-bezier(.24,.72,.22,1);
   overflow-y:auto;
   min-height:100vh;
   padding:14px 0;
@@ -29,11 +33,15 @@
   position:fixed;
   inset:0;
   background: radial-gradient(circle at center, rgba(0,0,0,0.12), rgba(0,0,0,0.6));
+  opacity:0;
+  transition: opacity var(--card-overlay-duration) var(--card-overlay-ease);
 }
 .card-overlay .rm-info-dialog{
   position:relative;
   inset:auto;
-  transform:none;
+  transform: translateY(18px) scale(.982);
+  transform-origin:50% 42%;
+  opacity:0;
   width:min(500px, calc(100% - 28px));
   max-height:none;
   overflow:visible;
@@ -42,6 +50,20 @@
   background:transparent;
   border:0;
   box-shadow:none;
+  transition:
+    transform var(--card-overlay-duration) var(--card-overlay-ease),
+    opacity var(--card-overlay-duration) var(--card-overlay-ease);
+  will-change: transform, opacity;
+}
+.card-overlay.is-open .rm-info-backdrop,
+.card-overlay.is-closing .rm-info-backdrop{ opacity:1; }
+.card-overlay.is-open .rm-info-dialog{
+  transform: translateY(0) scale(1);
+  opacity:1;
+}
+.card-overlay.is-closing .rm-info-dialog{
+  transform: translateY(12px) scale(.985);
+  opacity:0;
 }
 .card-overlay-open{
   overflow:hidden;
@@ -81,6 +103,18 @@
   color: var(--gold);
   font-size: 15px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.24);
+  transition:
+    transform 140ms ease,
+    opacity 140ms ease,
+    color 140ms ease,
+    border-color 140ms ease,
+    background-color 140ms ease,
+    box-shadow 140ms ease;
+  will-change: transform, opacity;
+}
+.card-action-btn > span{
+  display:block;
+  transition: transform 140ms ease, opacity 120ms ease, text-shadow 140ms ease;
 }
 .card-action-btn:hover,
 .card-action-btn:focus-visible,
@@ -88,13 +122,87 @@
   background: rgba(18,16,14,0.8);
   border-color: rgba(255,222,160,0.55);
 }
+.card-action-btn:hover,
+.card-action-btn:focus-visible{
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 12px 26px rgba(0,0,0,0.28), 0 0 0 1px rgba(255,225,159,0.06);
+}
+.card-action-btn:active{
+  transform: translateY(0) scale(.96);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.24);
+}
 .card-action-btn.is-active{
   color:#ffe19f;
   box-shadow: 0 8px 24px rgba(0,0,0,0.24), 0 0 0 1px rgba(255,225,159,0.18);
 }
+.card-action-btn[data-card-action="save"] > span{
+  transform: scale(.96);
+}
+.card-action-btn[data-card-action="save"].is-active > span{
+  transform: scale(1.06);
+  text-shadow: 0 0 10px rgba(255,221,151,0.34), 0 0 20px rgba(255,221,151,0.12);
+}
 
+
+.card-stage{
+  position:relative;
+  width:100%;
+  perspective: 1400px;
+  perspective-origin: 50% 42%;
+}
+.card-stage::after{
+  content:"";
+  position:absolute;
+  inset:auto 9% 2.2% 9%;
+  height:10%;
+  border-radius:999px;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.34), rgba(0,0,0,0));
+  opacity:.42;
+  filter: blur(12px);
+  transform: translateY(0) scale(.9);
+  transition: transform var(--card-overlay-duration) var(--card-overlay-ease), opacity var(--card-overlay-duration) var(--card-overlay-ease);
+  pointer-events:none;
+}
+.card-overlay.is-open .card-stage::after{
+  transform: translateY(0) scale(1);
+  opacity:.56;
+}
+.card-overlay.is-closing .card-stage::after{
+  transform: translateY(6px) scale(.94);
+  opacity:.2;
+}
+.card-stage--build{
+  transform-style: preserve-3d;
+}
+.card-stage--build.is-flipping .rc-card{
+  animation: rc-card-flip var(--card-flip-duration) var(--card-flip-ease);
+}
+.card-stage--build.is-flipping::before{
+  content:"";
+  position:absolute;
+  inset: 0;
+  border-radius:28px;
+  background: linear-gradient(90deg, rgba(10,10,12,0.02), rgba(10,10,12,0.16), rgba(10,10,12,0.02));
+  opacity:0;
+  pointer-events:none;
+  animation: rc-card-flip-shade var(--card-flip-duration) var(--card-flip-ease);
+  z-index:4;
+}
+@keyframes rc-card-flip{
+  0%{ transform: rotateY(0deg) translateZ(0); }
+  49%{ transform: rotateY(89deg) translateZ(4px); }
+  50%{ transform: rotateY(-89deg) translateZ(4px); }
+  100%{ transform: rotateY(0deg) translateZ(0); }
+}
+@keyframes rc-card-flip-shade{
+  0%,100%{ opacity:0; }
+  45%,55%{ opacity:.2; }
+}
 .rc-card{
   position:relative;
+  transform-origin:50% 50%;
+  backface-visibility:hidden;
+  will-change: transform, opacity;
   overflow:hidden;
   border-radius:28px;
   padding:1rem 1.05rem 1rem;
@@ -311,9 +419,11 @@
   backdrop-filter: blur(6px);
   opacity:0;
   pointer-events:none;
-  transition:opacity .16s ease;
+  transform: translate(-50%, 6px) scale(.985);
+  transition: opacity .14s ease, transform .14s ease;
+  will-change: transform, opacity;
 }
-.rc-tooltip.is-open{ opacity:1; pointer-events:auto; }
+.rc-tooltip.is-open{ opacity:1; pointer-events:auto; transform: translate(-50%, 0) scale(1); }
 .rc-tooltip__title{ font-weight:700; color:var(--gold); margin-bottom:.45rem; }
 .rc-tooltip__lines{ position:relative; display:grid; gap:.35rem; color:var(--silver); line-height:1.45; }
 .rc-tooltip__fade{ display:none; }
@@ -384,4 +494,33 @@
 
 .rc-card__body--challenge{
   padding:.1rem .45rem 1.4rem;
+}
+
+
+@media (prefers-reduced-motion: reduce){
+  .card-overlay{ --card-overlay-duration: 120ms; --card-flip-duration: 1ms; }
+  .card-overlay .rm-info-backdrop,
+  .card-overlay .rm-info-dialog,
+  .card-stage::after,
+  .card-action-btn,
+  .card-action-btn > span,
+  .rc-tooltip{
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+  .card-overlay .rm-info-dialog{ transform: none; }
+  .card-overlay.is-closing .rm-info-dialog{ transform: none; }
+  .card-stage{ perspective:none; }
+  .card-stage--build.is-flipping .rc-card,
+  .card-stage--build.is-flipping::before{ animation:none; }
+  .card-action-btn:hover,
+  .card-action-btn:focus-visible,
+  .card-action-btn:active,
+  .card-action-btn[data-card-action="save"].is-active > span{
+    transform:none;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.24);
+    text-shadow:none;
+  }
+  .rc-tooltip,
+  .rc-tooltip.is-open{ transform: translate(-50%, 0) scale(1); }
 }
