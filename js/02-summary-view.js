@@ -5,8 +5,8 @@ const CARD_PARAM = 'card';
 const CARD_TYPE_BUILD = 'build';
 const CARD_TYPE_CHALLENGE = 'challenge';
 const CARD_STATE_KEY = 'rm_card_overlay';
-
 const SKILL_TOOLTIP_KEYS = new Set(['ACTIVE_SKILL', 'SUPPORT', 'PERSISTENT_BUFF', 'UNIQUE', 'PASSIVE']);
+
 let tooltipEl = null;
 let tooltipTarget = null;
 let tooltipPinned = false;
@@ -39,92 +39,109 @@ function getGemDict() {
 function getGemDisplayName(entry) {
   if (!entry) return '';
   const key = entry.id || entry.name || entry;
-  if (!key) return '';
-  const gem = lookupGem(getGemDict(), key);
-  return gem?.name || entry.name || key;
+  const gem = key ? lookupGem(getGemDict(), key) : null;
+  return gem?.name || entry?.name || key || '';
 }
 
 function getGemDescription(entry) {
   const key = entry?.id || entry?.name || entry;
-  if (!key) return '';
-  const gem = lookupGem(getGemDict(), key);
+  const gem = key ? lookupGem(getGemDict(), key) : null;
   return stripBracketMarkup(gem?.description || gem?.support_text || gem?.grants || '');
 }
 
 function getPassiveDescription(name) {
-  const nodes = window.DATA?.passivesEnriched?.nodes || [];
-  const node = nodes.find((item) => item?.name === name) || null;
-  const lines = Array.isArray(node?.lines) ? node.lines.map(stripBracketMarkup).filter(Boolean) : [];
-  return lines.join(' ');
+  const node = (window.DATA?.passivesEnriched?.nodes || []).find((item) => item?.name === name) || null;
+  return (Array.isArray(node?.lines) ? node.lines : []).map(stripBracketMarkup).filter(Boolean).join(' ');
 }
 
 function getUniqueDescription(name) {
   const uniques = window.DATA?.uniques || window.DATA?.poe2dbUniques || window.DATA?.poe2db_uniques_min || [];
-  const found = Array.isArray(uniques) ? uniques.find((item) => item?.name === name || item?.base_item?.display_name === name) : null;
+  const found = Array.isArray(uniques)
+    ? uniques.find((item) => item?.name === name || item?.base_item?.display_name === name)
+    : null;
   const lines = Array.isArray(found?.lines) ? found.lines : Array.isArray(found?.explicit) ? found.explicit : [];
   return lines.map(stripBracketMarkup).filter(Boolean).join(' ');
+}
+
+function getAscendancyArtPath(ascendancy) {
+  if (!ascendancy) return '';
+  return `/images/ascendancies/${String(ascendancy).toLowerCase().replace(/\s+/g, '-')}.webp`;
 }
 
 function createNamedItem(name, slotKey, description) {
   return { name, slotKey, description: description || '' };
 }
 
+function dedupeNames(items) {
+  const seen = new Set();
+  return items.filter((item) => {
+    const key = item?.name || '';
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
 function deriveBuildCardModel(snap) {
   if (!snap) return null;
-  const skills = (snap.recommendedSkills || []).map((entry) => createNamedItem(getGemDisplayName(entry), 'ACTIVE_SKILL', getGemDescription(entry))).filter((item) => item.name).slice(0, 2);
-  const weaponLines = [
-    formatWeaponLine(snap.weapon, snap.offhand),
-    snap.weapon2 || snap.offhand2 ? `Set II — ${formatWeaponLine(snap.weapon2, snap.offhand2)}` : ''
-  ].filter(Boolean);
-  const combat = [...(snap.ailmentList || []), ...(snap.tacticList || [])].filter(Boolean);
-  const supports = [...(snap.synergySupports || []), ...(snap.synergySupports2 || [])]
-    .map((entry) => createNamedItem(getGemDisplayName(entry), 'SUPPORT', getGemDescription(entry)))
-    .filter((item) => item.name);
-  const buffName = snap.recommendedPersistentBuff ? getGemDisplayName(snap.recommendedPersistentBuff) : '';
-  const persistentBuff = buffName ? createNamedItem(buffName, 'PERSISTENT_BUFF', getGemDescription(snap.recommendedPersistentBuff)) : null;
-  const uniqueNames = Array.isArray(snap.recommendedUniques) ? snap.recommendedUniques.map((item) => typeof item === 'string' ? item : item?.name).filter(Boolean) : [];
+  const primaryWeapons = formatWeaponLine(snap.weapon, snap.offhand);
+  const secondaryWeapons = snap.weapon2 || snap.offhand2 ? formatWeaponLine(snap.weapon2, snap.offhand2) : '';
+  const skills = (snap.recommendedSkills || [])
+    .map((entry) => createNamedItem(getGemDisplayName(entry), 'ACTIVE_SKILL', getGemDescription(entry)))
+    .filter((item) => item.name)
+    .slice(0, 2);
+  const supports = dedupeNames(
+    [...(snap.synergySupports || []), ...(snap.synergySupports2 || [])]
+      .map((entry) => createNamedItem(getGemDisplayName(entry), 'SUPPORT', getGemDescription(entry)))
+      .filter((item) => item.name)
+  );
+  const persistentBuffName = snap.recommendedPersistentBuff ? getGemDisplayName(snap.recommendedPersistentBuff) : '';
+  const uniqueNames = Array.isArray(snap.recommendedUniques)
+    ? snap.recommendedUniques.map((item) => typeof item === 'string' ? item : item?.name).filter(Boolean)
+    : [];
   const passivesRaw = snap.passives || {};
-  const passiveNames = [
-    ...(passivesRaw.ascendancyNodes || []),
-    ...(passivesRaw.keystones || []),
-    ...(passivesRaw.notables || [])
-  ]
-    .map((item) => item?.name)
-    .filter(Boolean)
-    .filter((name, idx, arr) => arr.indexOf(name) === idx);
+  const passives = dedupeNames(
+    [
+      ...(passivesRaw.ascendancyNodes || []),
+      ...(passivesRaw.keystones || []),
+      ...(passivesRaw.notables || [])
+    ]
+      .map((item) => createNamedItem(item?.name, 'PASSIVE', getPassiveDescription(item?.name)))
+      .filter((item) => item.name)
+  );
 
   return {
     type: CARD_TYPE_BUILD,
     title: snap.buildName || [snap.className, snap.ascendancy].filter(Boolean).join(' '),
     subtitle: snap.flavor || '',
-    shareCode: window.RandomancerEncodeSnapshot?.(snap) || '',
-    frontSections: [
+    ascendancy: snap.ascendancy || '',
+    artPath: getAscendancyArtPath(snap.ascendancy),
+    frontRows: [
       { label: 'Ascendancy', values: snap.ascendancy ? [createNamedItem(snap.ascendancy)] : [] },
-      { label: 'Weapons', values: weaponLines.map((name) => createNamedItem(name)) },
-      { label: 'Combat', values: combat.map((name) => createNamedItem(name)) },
+      { label: 'Weapons', values: [primaryWeapons, secondaryWeapons ? `Set II — ${secondaryWeapons}` : ''].filter(Boolean).map((name) => createNamedItem(name)) },
+      { label: 'Combat', values: [...(snap.ailmentList || []), ...(snap.tacticList || [])].filter(Boolean).map((name) => createNamedItem(name)) },
       { label: 'Defense', values: snap.defStrat ? [createNamedItem(snap.defStrat)] : [] },
       { label: 'Skills', values: skills }
     ],
     backSections: [
       { label: 'Supports', values: supports },
-      { label: 'Persistent Buff', values: persistentBuff ? [persistentBuff] : [] },
+      { label: 'Persistent Buff', values: persistentBuffName ? [createNamedItem(persistentBuffName, 'PERSISTENT_BUFF', getGemDescription(snap.recommendedPersistentBuff))] : [] },
       { label: 'Uniques', values: uniqueNames.map((name) => createNamedItem(name, 'UNIQUE', getUniqueDescription(name))) },
-      { label: 'Passives', values: passiveNames.map((name) => createNamedItem(name, 'PASSIVE', getPassiveDescription(name))) }
+      { label: 'Passives', values: passives }
     ]
   };
+}
+
+function describeChallengeSlot(slotKey, value) {
+  if (slotKey === 'ACTIVE_SKILL') return getGemDescription(value);
+  if (slotKey === 'KEYSTONE') return getPassiveDescription(value);
+  return '';
 }
 
 function deriveChallengeCardModel(contract) {
   if (!contract) return null;
   const anchor = (contract.tasks || []).find((task) => task?.role === 'anchor') || null;
   const twist = (contract.tasks || []).find((task) => task?.role === 'twist') || null;
-  const clauses = (contract.tasks || []).map((task) => ({
-    label: task.shortLabel || task.role || 'Clause',
-    line: task.line || '',
-    slotEntries: Object.entries(task.slots || {})
-      .filter(([, value]) => value)
-      .map(([slotKey, value]) => createNamedItem(String(value), slotKey, slotKey === 'ACTIVE_SKILL' ? getGemDescription(value) : getPassiveDescription(value)))
-  }));
   return {
     type: CARD_TYPE_CHALLENGE,
     title: contract.title || 'Challenge Contract',
@@ -132,8 +149,13 @@ function deriveChallengeCardModel(contract) {
     severity: contract.severity || '',
     anchor: anchor?.line || '',
     twist: twist?.line || '',
-    clauses,
-    shareCode: window.RandomancerEncodeChallengeContract?.(contract) || ''
+    clauses: (contract.tasks || []).map((task) => ({
+      label: task.shortLabel || task.role || 'Clause',
+      line: task.line || '',
+      slotEntries: Object.entries(task.slots || {})
+        .filter(([, value]) => value)
+        .map(([slotKey, value]) => createNamedItem(String(value), slotKey, describeChallengeSlot(slotKey, value)))
+    }))
   };
 }
 
@@ -219,37 +241,57 @@ function hideCardTooltip() {
   clearTooltipHideTimer();
 }
 
-function renderNamedChip(item, dense = false) {
-  const attrs = [];
-  if (item?.description && SKILL_TOOLTIP_KEYS.has(item.slotKey)) {
-    attrs.push('class="card-chip has-tip"');
+function renderInteractiveName(item, variant = 'front') {
+  const classes = ['rc-name'];
+  if (variant === 'back') classes.push('rc-name--back');
+  if (item?.description && SKILL_TOOLTIP_KEYS.has(item.slotKey)) classes.push('has-tip');
+  const attrs = [`class="${classes.join(' ')}"`];
+  if (classes.includes('has-tip')) {
     attrs.push(`data-tip-title="${escapeHtml(item.name)}"`);
     attrs.push(`data-tip-body="${escapeHtml(item.description)}"`);
     attrs.push('tabindex="0"');
-  } else {
-    attrs.push('class="card-chip"');
   }
-  if (dense) attrs.push('data-dense="1"');
   return `<span ${attrs.join(' ')}>${escapeHtml(item?.name || '')}</span>`;
+}
+
+function renderDelimitedNames(values, variant = 'front') {
+  return values.map((item, index) => `${index ? '<span class="rc-sep">, </span>' : ''}${renderInteractiveName(item, variant)}`).join('');
 }
 
 function renderBuildCard(model, face = 'front') {
   const isBack = face === 'back';
-  const sections = isBack ? model.backSections : model.frontSections;
-  return `
-    <article class="rc-card rc-card--build${isBack ? ' is-back' : ' is-front'}">
-      <header class="rc-card__header">
-        <div class="rc-card__eyebrow">${isBack ? 'Build Card — Back' : 'Build Card'}</div>
-        <h2 class="rc-card__title">${escapeHtml(model.title || 'Build Card')}</h2>
-        ${model.subtitle ? `<p class="rc-card__subtitle">${escapeHtml(model.subtitle)}</p>` : ''}
-      </header>
-      <div class="rc-card__sections">
-        ${sections.filter((section) => section.values?.length).map((section) => `
-          <section class="rc-card__section">
-            <div class="rc-card__section-label">${escapeHtml(section.label)}</div>
-            <div class="rc-card__chiplist${isBack ? ' rc-card__chiplist--dense' : ''}">
-              ${section.values.map((item) => renderNamedChip(item, isBack)).join('')}
+  const style = model.artPath ? ` style="--card-art:url('${escapeHtml(model.artPath)}')"` : '';
+  if (!isBack) {
+    return `
+      <article class="rc-card rc-card--build rc-card--front"${style}>
+        <div class="rc-card__hero">
+          <div class="rc-card__type">${escapeHtml(model.ascendancy || 'Build')}</div>
+          <h2 class="rc-card__title">${escapeHtml(model.title || 'Build Card')}</h2>
+          ${model.subtitle ? `<p class="rc-card__subtitle">${escapeHtml(model.subtitle)}</p>` : ''}
+        </div>
+        <div class="rc-card__rows">
+          ${model.frontRows.filter((row) => row.values?.length).map((row) => `
+            <div class="rc-row">
+              <div class="rc-row__label">${escapeHtml(row.label)}</div>
+              <div class="rc-row__value">${renderDelimitedNames(row.values, 'front')}</div>
             </div>
+          `).join('')}
+        </div>
+      </article>
+    `;
+  }
+
+  return `
+    <article class="rc-card rc-card--build rc-card--back"${style}>
+      <header class="rc-card__backhead">
+        <div class="rc-card__type">${escapeHtml(model.title || 'Build Card')}</div>
+        ${model.subtitle ? `<p class="rc-card__subline">${escapeHtml(model.subtitle)}</p>` : ''}
+      </header>
+      <div class="rc-card__dossier">
+        ${model.backSections.filter((section) => section.values?.length).map((section) => `
+          <section class="rc-card__region">
+            <div class="rc-card__region-label">${escapeHtml(section.label)}</div>
+            <div class="rc-card__region-values">${renderDelimitedNames(section.values, 'back')}</div>
           </section>
         `).join('')}
       </div>
@@ -261,8 +303,7 @@ function renderChallengeClause(clause) {
   let line = escapeHtml(clause.line || '');
   clause.slotEntries.forEach((entry) => {
     if (!entry?.name) return;
-    const replacement = renderNamedChip(entry);
-    line = line.replace(escapeHtml(entry.name), replacement);
+    line = line.replace(escapeHtml(entry.name), renderInteractiveName(entry, 'challenge'));
   });
   return `
     <div class="rc-contract__clause">
@@ -275,17 +316,17 @@ function renderChallengeClause(clause) {
 function renderChallengeCard(model) {
   return `
     <article class="rc-card rc-card--challenge">
-      <header class="rc-card__header">
-        <div class="rc-card__eyebrow">Challenge Card</div>
+      <div class="rc-card__hero rc-card__hero--challenge">
+        <div class="rc-card__type">Challenge Contract</div>
         <h2 class="rc-card__title">${escapeHtml(model.title || 'Challenge Contract')}</h2>
         ${model.subtitle ? `<p class="rc-card__subtitle">${escapeHtml(model.subtitle)}</p>` : ''}
-      </header>
-      <div class="rc-card__sections rc-card__sections--contract">
-        ${model.anchor ? `<section class="rc-card__section"><div class="rc-card__section-label">Anchor</div><div class="rc-contract__line">${escapeHtml(model.anchor)}</div></section>` : ''}
-        ${model.twist ? `<section class="rc-card__section"><div class="rc-card__section-label">Twist</div><div class="rc-contract__line">${escapeHtml(model.twist)}</div></section>` : ''}
-        ${model.severity ? `<section class="rc-card__section"><div class="rc-card__section-label">Severity</div><div class="rc-contract__line">${escapeHtml(model.severity)}</div></section>` : ''}
-        ${model.clauses?.length ? `<section class="rc-card__section"><div class="rc-card__section-label">Contract</div><div class="rc-contract__clauses">${model.clauses.map(renderChallengeClause).join('')}</div></section>` : ''}
       </div>
+      <div class="rc-card__rows rc-card__rows--challenge">
+        ${model.anchor ? `<div class="rc-row"><div class="rc-row__label">Anchor</div><div class="rc-row__value">${escapeHtml(model.anchor)}</div></div>` : ''}
+        ${model.twist ? `<div class="rc-row"><div class="rc-row__label">Twist</div><div class="rc-row__value">${escapeHtml(model.twist)}</div></div>` : ''}
+        ${model.severity ? `<div class="rc-row"><div class="rc-row__label">Severity</div><div class="rc-row__value">${escapeHtml(model.severity)}</div></div>` : ''}
+      </div>
+      ${model.clauses?.length ? `<div class="rc-card__contract">${model.clauses.map(renderChallengeClause).join('')}</div>` : ''}
     </article>
   `;
 }
@@ -318,8 +359,7 @@ function getShareUrl(type) {
 
 async function copyCurrentCardLink(type) {
   const text = getShareUrl(type);
-  if (!text) return false;
-  return window.RandomancerCopyTextToClipboard ? window.RandomancerCopyTextToClipboard(text) : false;
+  return text && window.RandomancerCopyTextToClipboard ? window.RandomancerCopyTextToClipboard(text) : false;
 }
 
 function syncUrlForOverlay(type, open) {
@@ -367,17 +407,21 @@ function attachTooltipHandlers(root) {
   });
 }
 
-function setOverlayContent({ type, html, actionsHtml, faceControlsHtml = '', error = '' }) {
+function renderActionButton({ action, label, icon, hidden = false }) {
+  if (hidden) return '';
+  return `<button type="button" class="icon-btn card-action-btn" data-card-action="${escapeHtml(action)}" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><span aria-hidden="true">${icon}</span></button>`;
+}
+
+function setOverlayContent({ type, html, actionsHtml, error = '', face = '' }) {
   const overlay = getCardOverlay();
   if (!overlay) return;
   overlay.dataset.cardType = type || '';
+  overlay.dataset.cardFace = face || '';
   const body = overlay.querySelector('#card-overlay-body');
   const actions = overlay.querySelector('#card-overlay-actions');
-  const controls = overlay.querySelector('#card-overlay-face-controls');
   const errorEl = overlay.querySelector('#card-overlay-error');
   if (body) body.innerHTML = html || '';
   if (actions) actions.innerHTML = actionsHtml || '';
-  if (controls) controls.innerHTML = faceControlsHtml || '';
   if (errorEl) {
     errorEl.hidden = !error;
     errorEl.textContent = error || '';
@@ -391,16 +435,13 @@ function renderBuildCardOverlay(face = 'front') {
     setOverlayContent({ type: CARD_TYPE_BUILD, error: 'Build card could not be loaded.', html: '', actionsHtml: '' });
     return false;
   }
-  const actions = `
-    <button type="button" class="copy-menu-item" data-card-action="copy-link"><span class="copy-menu-label">Copy Link</span></button>
-    <button type="button" class="copy-menu-item" data-card-action="save"><span class="copy-menu-label">Save</span></button>
-    <button type="button" class="copy-menu-item" data-card-action="poe"><span class="copy-menu-label">Poe.ninja</span></button>
-  `;
-  const controls = `
-    <button type="button" class="rc-face-toggle${face === 'front' ? ' is-active' : ''}" data-card-face="front">Front</button>
-    <button type="button" class="rc-face-toggle${face === 'back' ? ' is-active' : ''}" data-card-face="back">Back</button>
-  `;
-  setOverlayContent({ type: CARD_TYPE_BUILD, html: renderBuildCard(model, face), actionsHtml: actions, faceControlsHtml: controls });
+  const actions = [
+    renderActionButton({ action: 'copy-link', label: 'Copy Link', icon: '⧉' }),
+    renderActionButton({ action: 'save', label: 'Save', icon: '★' }),
+    renderActionButton({ action: 'poe', label: 'Poe.ninja', icon: '🥷' }),
+    renderActionButton({ action: 'flip', label: face === 'front' ? 'Flip to back' : 'Flip to front', icon: '↺' })
+  ].join('');
+  setOverlayContent({ type: CARD_TYPE_BUILD, html: renderBuildCard(model, face), actionsHtml: actions, face });
   return true;
 }
 
@@ -410,11 +451,11 @@ function renderChallengeCardOverlay() {
     setOverlayContent({ type: CARD_TYPE_CHALLENGE, error: 'Challenge card could not be loaded.', html: '', actionsHtml: '' });
     return false;
   }
-  const actions = `
-    <button type="button" class="copy-menu-item" data-card-action="copy-link"><span class="copy-menu-label">Copy Link</span></button>
-    <button type="button" class="copy-menu-item" data-card-action="save"><span class="copy-menu-label">Save</span></button>
-  `;
-  setOverlayContent({ type: CARD_TYPE_CHALLENGE, html: renderChallengeCard(model), actionsHtml: actions });
+  const actions = [
+    renderActionButton({ action: 'copy-link', label: 'Copy Link', icon: '⧉' }),
+    renderActionButton({ action: 'save', label: 'Save', icon: '★' })
+  ].join('');
+  setOverlayContent({ type: CARD_TYPE_CHALLENGE, html: renderChallengeCard(model), actionsHtml: actions, face: '' });
   return true;
 }
 
@@ -449,7 +490,7 @@ function refreshOpenCardOverlay() {
   const overlay = getCardOverlay();
   if (!overlay || overlay.hidden) return;
   if (overlay.dataset.cardType === CARD_TYPE_CHALLENGE) renderChallengeCardOverlay();
-  else renderBuildCardOverlay(overlay.querySelector('[data-card-face].is-active')?.dataset.cardFace || 'front');
+  else renderBuildCardOverlay(overlay.dataset.cardFace || 'front');
 }
 
 function bindCardOverlayUI() {
@@ -462,20 +503,24 @@ function bindCardOverlayUI() {
     const action = evt.target.closest('[data-card-action]')?.dataset.cardAction;
     if (action === 'copy-link') {
       copyCurrentCardLink(overlay.dataset.cardType).then((ok) => window.RandomancerShowToast?.(ok ? 'Card link copied to clipboard!' : 'Could not copy card link.'));
+      return;
     }
     if (action === 'save') {
       if (overlay.dataset.cardType === CARD_TYPE_CHALLENGE) window.RandomancerSaveCurrentChallenge?.();
       else window.RandomancerSaveCurrentBuild?.();
       refreshOpenCardOverlay();
       window.RandomancerShowToast?.('Saved locally.');
+      return;
     }
     if (action === 'poe') {
       const snap = window.App?.state?.currentRoll || window.CURRENT_ROLL;
       const url = window.RandomancerBuildPoeNinjaUrl?.(snap);
       if (url) window.open(url, '_blank', 'noopener,noreferrer');
+      return;
     }
-    const face = evt.target.closest('[data-card-face]')?.dataset.cardFace;
-    if (face) renderBuildCardOverlay(face);
+    if (action === 'flip') {
+      renderBuildCardOverlay(overlay.dataset.cardFace === 'back' ? 'front' : 'back');
+    }
   });
   document.addEventListener('pointerdown', (evt) => {
     if (!tooltipPinned) return;
@@ -490,7 +535,6 @@ function bindCardOverlayUI() {
   window.addEventListener('scroll', () => { if (tooltipTarget) requestAnimationFrame(() => positionTooltip(tooltipTarget)); }, true);
 }
 
-
 function scheduleSummaryRefresh() {
   refreshOpenCardOverlay();
 }
@@ -502,7 +546,7 @@ function installSummaryAutoRefresh() {
 function getSummaryTextFromSnapshot(snap) {
   const model = deriveBuildCardModel(snap);
   if (!model) return '';
-  return [...model.frontSections, ...model.backSections]
+  return [...model.frontRows, ...model.backSections]
     .filter((section) => section.values?.length)
     .map((section) => `${section.label.toUpperCase()}: ${section.values.map((item) => item.name).join(' · ')}`)
     .join('\n');
