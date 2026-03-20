@@ -107,11 +107,15 @@
 }
 .rc-card::after{
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0) 24%),
+    linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0) 24%),
+    radial-gradient(circle at 18% 22%, rgba(255,246,214,0.10) 0, rgba(255,246,214,0.02) 12%, transparent 38%),
+    radial-gradient(circle at 78% 74%, rgba(34,24,18,0.18) 0, rgba(34,24,18,0.06) 18%, transparent 46%),
+    repeating-linear-gradient(115deg, rgba(255,244,218,0.028) 0 2px, rgba(28,21,18,0.03) 2px 4px, transparent 4px 9px),
     url('/images/worn-card-texture.jpeg') center/cover no-repeat;
-  opacity:.22;
-  mix-blend-mode:soft-light;
-  filter: contrast(1.22) brightness(.92);
+  background-blend-mode: screen, soft-light, multiply, soft-light, normal;
+  opacity:.42;
+  mix-blend-mode:overlay;
+  filter: contrast(1.34) brightness(.88) saturate(.92);
 }
 .rc-card--build::before{
   background:
