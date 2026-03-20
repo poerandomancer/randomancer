@@ -8,12 +8,11 @@ import {
   SUPPORT,
 } from './01-meta-and-domready.js';
 import {
+  closeCardOverlay,
   getSummaryTextFromSnapshot,
-  getViewMode,
   installSummaryAutoRefresh,
-  renderSummaryFromSnapshot,
-  setViewMode,
-  toggleViewMode
+  openCardOverlay,
+  renderSummaryFromSnapshot
 } from './02-summary-view.js';
 import { buildGemDictionary, lookupGem } from './05-tags-and-scorer.js';
 import { buildBuildContext } from './06-cohesion.js';
@@ -529,12 +528,12 @@ function renderSnapshotToDom(snap){
 	  const saved = !!(activeCode && list.some(e => e.code === activeCode));
 	
 	  if (ico) ico.textContent = saved ? '★' : '☆';
-	  if (label) label.textContent = saved ? 'Build Saved' : 'Save Build';
+	  if (label) label.textContent = saved ? 'Saved' : 'Save';
 	
 	  btn.classList.toggle('is-saved', saved);
 	  btn.dataset.saved = saved ? '1' : '0';
-	  btn.setAttribute('aria-label', saved ? 'Build Saved' : 'Save Build');
-	  btn.setAttribute('title', saved ? 'Build Saved' : 'Save Build');
+	  btn.setAttribute('aria-label', saved ? 'Saved' : 'Save');
+	  btn.setAttribute('title', saved ? 'Saved' : 'Save');
 	}
 
 
@@ -664,7 +663,7 @@ function renderSnapshotToDom(snap){
     const saved = !!(activeCode && list.some(e => e.code === activeCode));
 
     if (ico) ico.textContent = saved ? '★' : '☆';
-    if (label) label.textContent = saved ? 'Challenge Saved' : 'Save Challenge';
+    if (label) label.textContent = saved ? 'Saved' : 'Save';
     btn.classList.toggle('is-saved', saved);
   }
   
@@ -743,195 +742,14 @@ function renderSnapshotToDom(snap){
 
 
   function bindUI(){
-  // === Build Actions dropdown (kebab) ===
-	const actionsWrap = document.getElementById('build-actions-wrap');
-	const actionsBtn = document.getElementById('build-actions-btn');
-	const actionsMenu = document.getElementById('build-actions-menu');
-	
-	const actionSave = document.getElementById('build-actions-save');
-	const actionCopySummary = document.getElementById('build-actions-copy-summary');
-	const actionCopyLink = document.getElementById('build-actions-copy-link');
-	const actionPoe = document.getElementById('build-actions-poe-ninja');
-	const challengeActionsWrap = document.getElementById('challenge-actions-wrap');
-	const challengeActionsBtn = document.getElementById('challenge-actions-btn');
-	const challengeActionsMenu = document.getElementById('challenge-actions-menu');
-	const challengeActionSave = document.getElementById('challenge-actions-save');
-	const challengeActionCopySummary = document.getElementById('challenge-actions-copy-summary');
-	const challengeActionCopyLink = document.getElementById('challenge-actions-copy-link');
-	
-	const closeActionsMenu = () => {
-	  if (!actionsMenu || !actionsBtn) return;
-	  actionsMenu.hidden = true;
-	  actionsBtn.setAttribute('aria-expanded', 'false');
-	};
-	
-	const openActionsMenu = () => {
-	  if (!actionsMenu || !actionsBtn) return;
-	  actionsMenu.hidden = false;
-	  actionsBtn.setAttribute('aria-expanded', 'true');
-	};
-	
-	const toggleActionsMenu = () => {
-	  if (!actionsMenu || !actionsBtn) return;
-	  if (actionsMenu.hidden) openActionsMenu();
-	  else closeActionsMenu();
-	};
-
-	const closeChallengeActionsMenu = () => {
-	  if (!challengeActionsMenu || !challengeActionsBtn) return;
-	  challengeActionsMenu.hidden = true;
-	  challengeActionsBtn.setAttribute('aria-expanded', 'false');
-	};
-
-	const toggleChallengeActionsMenu = () => {
-	  if (!challengeActionsMenu || !challengeActionsBtn) return;
-	  if (challengeActionsMenu.hidden) {
-	    challengeActionsMenu.hidden = false;
-	    challengeActionsBtn.setAttribute('aria-expanded', 'true');
-	  } else {
-	    closeChallengeActionsMenu();
-	  }
-	};
-	
-	const safeCopy = (text) => {
-	  if (!text) return;
-	  try {
-		if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text);
-	  } catch {}
-	};
-	
-	const buildShareUrlFromSnap = (snap) => {
-	  const code = encodeSnapshot(snap);
-	  if (!code) return '';
-	  const url = new URL(location.href);
-	  url.searchParams.set('build', code);
-	  return url.toString();
-	};
-
-	const challengeShareUrl = (contract) => {
-	  const code = encodeChallengeContract(contract);
-	  if (!code) return '';
-	  const url = new URL(location.href);
-	  url.searchParams.set('challenge', code);
-	  return url.toString();
-	};
-	
-	actionsBtn?.addEventListener('click', (e) => {
-	  e.preventDefault();
-	  e.stopPropagation();
-	  toggleActionsMenu();
-	});
-
-	challengeActionsBtn?.addEventListener('click', (e) => {
-	  e.preventDefault();
-	  e.stopPropagation();
-	  toggleChallengeActionsMenu();
-	});
-	
-	// Save Build (toggles saved/unsaved) — no immediate UI mutation beyond save logic
-	actionSave?.addEventListener('click', () => {
-	  saveCurrentBuild();
-// 	  closeActionsMenu();
-	});
-	
-	// Copy Summary
-	actionCopySummary?.addEventListener('click', async () => {
-	  const snap = currentSnap();
-	  const summary = getSummaryTextFromSnapshot(snap);
-	
-	  const ok = await copyTextToClipboard(summary);
-	  showToast(ok ? 'Build Summary copied to clipboard!' : 'Could not copy Build Summary.');
-	
-	  const code = encodeSnapshot(snap);
-	  updateCodeUI(code);
-	  // intentionally do NOT close the menu
-	});
-	
-	// Copy Build Link
-	actionCopyLink?.addEventListener('click', async () => {
-	  const snap = currentSnap();
-	  const url = buildShareUrlFromSnap(snap);
-	
-	  const ok = await copyTextToClipboard(url);
-	  showToast(ok ? 'Build Link copied to clipboard!' : 'Could not copy Build Link.');
-	
-	  const code = encodeSnapshot(snap);
-	  updateCodeUI(code);
-	  // intentionally do NOT close the menu
-	});
-	
-	// poe.ninja
-	if (actionPoe) {
-	  actionPoe.title = `Similar builds on poe.ninja (${SUPPORT.league.name})`;
-	  actionPoe.setAttribute('aria-label', 'Open matching builds on poe.ninja');
-	
-	  actionPoe.addEventListener('click', (e) => {
-		e.preventDefault();
-		e.stopPropagation();
-	
-		const snap = currentSnap();
-		if (!snap) return;
-	
-		const url = buildPoeNinjaUrlFromSnapshot(snap);
-		if (!url) return;
-	
-		window.open(url, "_blank", "noopener,noreferrer");
-		closeActionsMenu();
-	  });
-	}
-
-	challengeActionSave?.addEventListener('click', () => {
-	  saveCurrentChallenge();
-	});
-
-	challengeActionCopySummary?.addEventListener('click', async () => {
-	  const contract = currentChallenge();
-	  const ok = await copyTextToClipboard(challengeSummaryText(contract));
-	  showToast(ok ? 'Challenge Summary copied to clipboard!' : 'Could not copy Challenge Summary.');
-	  syncChallengeSaveButtonState();
-	});
-
-	challengeActionCopyLink?.addEventListener('click', async () => {
-	  const contract = currentChallenge();
-	  const url = challengeShareUrl(contract);
-	  const ok = await copyTextToClipboard(url);
-	  showToast(ok ? 'Challenge URL copied to clipboard!' : 'Could not copy Challenge URL.');
-	  syncChallengeSaveButtonState();
-	});
-	
-	document.addEventListener('click', (e) => {
-	  if (!actionsMenu || actionsMenu.hidden) return;
-	  const t = e.target;
-	  if (actionsWrap && t instanceof Node && actionsWrap.contains(t)) return;
-	  closeActionsMenu();
-	});
-
-	document.addEventListener('click', (e) => {
-	  if (!challengeActionsMenu || challengeActionsMenu.hidden) return;
-	  const t = e.target;
-	  if (challengeActionsWrap && t instanceof Node && challengeActionsWrap.contains(t)) return;
-	  closeChallengeActionsMenu();
-	});
-	
-	document.addEventListener('keydown', (e) => {
-	  if (e.key === 'Escape') {
-	    closeActionsMenu();
-	    closeChallengeActionsMenu();
-	  }
-	});
-
+    const buildViewCardBtn = document.getElementById('build-view-card');
+    const challengeViewCardBtn = document.getElementById('challenge-view-card');
     const savedListFab = savedFab;
-	const viewBtn = document.getElementById('view-toggle');
 
-    // Initialize persisted view mode (default: detailed)
-    setViewMode(getViewMode());
-
-    // Keep summary view synced during rolls (some flows update state/DOM at different times)
     installSummaryAutoRefresh();
 
-    viewBtn?.addEventListener('click', () => {
-      toggleViewMode();
-    });
+    buildViewCardBtn?.addEventListener('click', () => openCardOverlay('build'));
+    challengeViewCardBtn?.addEventListener('click', () => openCardOverlay('challenge'));
 
     savedListFab?.addEventListener('click', openSavedOverlay);
     savedCloseBtn?.addEventListener('click', closeSavedOverlay);
@@ -947,15 +765,17 @@ function renderSnapshotToDom(snap){
     document.addEventListener('randomancer:mode-change', () => {
       updateSavedLabels();
       if (savedOverlay && !savedOverlay.hidden) renderSavedList();
+      closeCardOverlay({ skipUrl: true });
     });
 
     document.addEventListener('randomancer:challenge-rendered', () => {
       syncChallengeSaveButtonState();
+      renderSummaryFromSnapshot();
     });
 
     updateSavedLabels();
   }
-  
+
   let __toastTimer = null;
 
 	function showToast(msg, ms = 1600){
@@ -1024,7 +844,7 @@ function renderSnapshotToDom(snap){
     }
     const ids = [
       'class','ascendancy','weapons','weapons-set2','defense','defstrat','ailments','tactics','build-name','build-subtext',
-      'summary-line-1','summary-line-2','summary-line-3','summary-line-4','summary-line-5','balance-bar','balance-text'
+      'balance-bar','balance-text'
     ];
     ids.forEach(id => {
       const el = document.getElementById(id);
@@ -1037,21 +857,26 @@ function renderSnapshotToDom(snap){
     });
     const ws2 = document.getElementById('weapons-set2');
     if (ws2) ws2.hidden = true;
-    const summary = document.getElementById('summary-panel');
-    if (summary) summary.hidden = true;
     if (window.App?.state) window.App.state.currentRoll = null;
     window.CURRENT_ROLL = null;
   }
 
-  function autoLoadFromQuery(){
+  async function autoLoadFromQuery(){
     const q = getQueryParams();
+    const requestedCard = q.get('card');
     const challengeCode = q.get('challenge') || q.get('challengeCode');
     if (challengeCode) {
-      applyChallengeCode(challengeCode);
+      const ok = await applyChallengeCode(challengeCode);
+      if (requestedCard === 'challenge') openCardOverlay('challenge', { skipUrl: true });
+      else if (!ok && requestedCard === 'challenge') openCardOverlay('challenge', { skipUrl: true });
       return;
     }
     const code = q.get('build') || q.get('buildCode');
-    if (code) applyBuildCode(code);
+    if (code) {
+      const ok = await applyBuildCode(code);
+      if (requestedCard === 'build') openCardOverlay('build', { skipUrl: true });
+      else if (!ok && requestedCard === 'build') openCardOverlay('build', { skipUrl: true });
+    }
   }
 
   function subscribeToRolls(){
@@ -1095,6 +920,14 @@ function renderSnapshotToDom(snap){
     autoLoadFromQuery();
   });
 
+
+  window.RandomancerEncodeChallengeContract = encodeChallengeContract;
+  window.RandomancerApplyChallengeCode = applyChallengeCode;
+  window.RandomancerSaveCurrentBuild = saveCurrentBuild;
+  window.RandomancerSaveCurrentChallenge = saveCurrentChallenge;
+  window.RandomancerShowToast = showToast;
+  window.RandomancerCopyTextToClipboard = copyTextToClipboard;
+  window.RandomancerBuildPoeNinjaUrl = buildPoeNinjaUrlFromSnapshot;
   window.RandomancerEncodeSnapshot = encodeSnapshot;
   window.RandomancerApplyBuildCode = applyBuildCode;
   window.RandomancerGetCurrentBuildSnapshot = () => cloneJsonSafe(currentSnap());
