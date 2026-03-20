@@ -44,6 +44,40 @@
   box-shadow: 0 0 8px rgba(200,168,107,0.28);
 }
 
+/* Summary/build card worn-surface overlay.
+   Keep the highlight treatment on the base panel layer and let the texture
+   live on its own pseudo-element so it can stay perceptible over build art
+   without muddying the text. */
+.rc-card{
+  isolation:isolate;
+}
+
+.rc-card::before{
+  background:
+    linear-gradient(180deg, rgba(255,244,214,0.045) 0%, rgba(0,0,0,0) 24%),
+    linear-gradient(135deg, rgba(0,0,0,0) 8%, rgba(0,0,0,0.78) 100%);
+}
+
+.rc-card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  border-radius:inherit;
+  background:
+    radial-gradient(115% 82% at 50% 0%, rgba(255,232,185,0.06), rgba(255,232,185,0) 42%),
+    url("/images/passive-bg.png") center/cover no-repeat;
+  opacity:.18;
+  mix-blend-mode:soft-light;
+  filter: contrast(1.24) brightness(0.78);
+}
+
+.rc-card > *{
+  position:relative;
+  z-index:1;
+}
+
 /* === Copy dropdown (Option C) === */
 .copy-menu{ position:relative; display:inline-block; }
 .copy-menu-pop{
@@ -477,5 +511,4 @@ body.challenge-mode .task-val.has-tip:focus-visible{
   border-color: rgba(159,47,55,0.88);
   box-shadow: 0 0 0 1px rgba(159,47,55,0.45), 0 0 12px rgba(159,47,55,0.34);
 }
-
 
