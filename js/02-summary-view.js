@@ -16,6 +16,8 @@ let tooltipHideTimer = null;
 let hoverTrigger = false;
 let hoverPanel = false;
 let lastOpenFocus = null;
+let uniqueSourceCache = null;
+let uniqueSourcePromise = null;
 
 function escapeHtml(str) {
   return String(str == null ? '' : str)
@@ -57,14 +59,44 @@ function getPassiveDescription(name) {
 }
 
 function getUniqueSourceCollection() {
+  if (Array.isArray(uniqueSourceCache) && uniqueSourceCache.length) return uniqueSourceCache;
   const uniques = window.DATA?.uniques || window.DATA?.poe2dbUniques || window.DATA?.poe2db_uniques_min || [];
-  if (Array.isArray(uniques)) return uniques;
-  if (uniques && typeof uniques === 'object') {
-    if (Array.isArray(uniques.items)) return uniques.items;
-    if (uniques.items && typeof uniques.items === 'object') return Object.values(uniques.items);
-    if (uniques.by_key && typeof uniques.by_key === 'object') return Object.values(uniques.by_key);
+  if (Array.isArray(uniques) && uniques.length) {
+    uniqueSourceCache = uniques;
+    return uniqueSourceCache;
   }
-  return [];
+  if (uniques && typeof uniques === 'object') {
+    if (Array.isArray(uniques.items) && uniques.items.length) {
+      uniqueSourceCache = uniques.items;
+      return uniqueSourceCache;
+    }
+    if (uniques.items && typeof uniques.items === 'object') {
+      uniqueSourceCache = Object.values(uniques.items);
+      return uniqueSourceCache;
+    }
+    if (uniques.by_key && typeof uniques.by_key === 'object') {
+      uniqueSourceCache = Object.values(uniques.by_key);
+      return uniqueSourceCache;
+    }
+  }
+  return Array.isArray(uniqueSourceCache) ? uniqueSourceCache : [];
+}
+
+async function ensureUniqueSourceCollection() {
+  const existing = getUniqueSourceCollection();
+  if (existing.length) return existing;
+  if (!uniqueSourcePromise) {
+    uniqueSourcePromise = fetch('data/enriched/poe2db_uniques_min.json', { cache: 'force-cache' })
+      .then((res) => res.ok ? res.json() : null)
+      .then((payload) => {
+        const items = payload?.items && typeof payload.items === 'object' ? Object.values(payload.items) : [];
+        uniqueSourceCache = Array.isArray(items) ? items.filter(Boolean) : [];
+        return uniqueSourceCache;
+      })
+      .catch(() => [])
+      .finally(() => { uniqueSourcePromise = null; });
+  }
+  return uniqueSourcePromise;
 }
 
 function getUniqueRecord(name) {
@@ -482,6 +514,9 @@ function renderBuildCardOverlay(face = 'front') {
   if (!model) {
     setOverlayContent({ type: CARD_TYPE_BUILD, error: 'Build card could not be loaded.', html: '' });
     return false;
+  }
+  if (!getUniqueSourceCollection().length && model.backSections.some((section) => section.label === 'Uniques' && section.values?.length)) {
+    ensureUniqueSourceCollection().then(() => refreshOpenCardOverlay()).catch(() => {});
   }
   const actions = [
     renderActionButton({ action: 'copy-link', label: 'Copy Link', icon: '⧉' }),

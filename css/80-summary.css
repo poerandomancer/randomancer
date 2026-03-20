@@ -26,8 +26,8 @@
   background: radial-gradient(circle at center, rgba(0,0,0,0.12), rgba(0,0,0,0.6));
 }
 .card-overlay .rm-info-dialog{
-  width:min(680px, calc(100% - 24px));
-  max-height: calc(100vh - 20px);
+  width:min(600px, calc(100% - 20px));
+  max-height: calc(100vh - 16px);
   overflow: visible;
   padding: 0;
   background: transparent;
@@ -47,7 +47,7 @@
 }
 .card-overlay__body,
 .card-overlay__error{
-  width:min(620px, calc(100% - 8px));
+  width:min(540px, calc(100% - 6px));
   margin:0 auto;
 }
 .card-overlay__body{ padding: 0 0 .6rem; }
@@ -64,8 +64,8 @@
   width:34px;
   height:34px;
   border-radius:999px;
-  border:1px solid rgba(212,170,80,0.2);
-  background: rgba(8,8,10,0.42);
+  border:1px solid rgba(212,170,80,0.24);
+  background: rgba(8,8,10,0.46);
   color: var(--gold);
   font-size: 15px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.24);
@@ -73,29 +73,30 @@
 .card-action-btn:hover,
 .card-action-btn:focus-visible,
 .card-action-btn.is-active{
-  background: rgba(18,16,14,0.76);
-  border-color: rgba(255,222,160,0.5);
+  background: rgba(18,16,14,0.8);
+  border-color: rgba(255,222,160,0.55);
 }
 .card-action-btn.is-active{
   color:#ffe19f;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.24), 0 0 0 1px rgba(255,225,159,0.16);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.24), 0 0 0 1px rgba(255,225,159,0.18);
 }
 
 .rc-card{
   position:relative;
   overflow:hidden;
-  border-radius:30px;
-  padding:1rem 1.1rem 1rem;
-  min-height: min(76vh, 760px);
+  border-radius:32px;
+  padding:1.15rem 1.2rem 1.1rem;
+  min-height: min(82vh, 780px);
   color: var(--ink);
-  border:1px solid rgba(212,170,80,0.24);
+  border:2px solid rgba(212,170,80,0.28);
   background:
     linear-gradient(180deg, rgba(255,244,218,0.05), rgba(255,244,218,0.01) 24%, rgba(7,6,8,0.28) 100%),
+    url('/images/worn-card-texture.jpeg') center/cover no-repeat,
     linear-gradient(160deg, rgba(35,25,23,0.98), rgba(15,12,14,0.99));
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.06),
-    inset 0 0 0 1px rgba(255,255,255,0.02),
-    0 26px 60px rgba(0,0,0,0.34);
+    inset 0 0 0 1px rgba(255,245,218,0.07),
+    inset 0 1px 0 rgba(255,255,255,0.05),
+    0 28px 64px rgba(0,0,0,0.34);
 }
 .rc-card::before,
 .rc-card::after{
@@ -104,73 +105,80 @@
   inset:0;
   pointer-events:none;
 }
+.rc-card::after{
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0) 24%),
+    url('/images/worn-card-texture.jpeg') center/cover no-repeat;
+  opacity:.09;
+  mix-blend-mode:screen;
+}
 .rc-card--build::before{
   background:
-    radial-gradient(circle at 50% 18%, rgba(255,235,187,0.14), transparent 30%),
-    linear-gradient(180deg, rgba(0,0,0,0.22), rgba(0,0,0,0.74)),
+    radial-gradient(circle at 50% 18%, rgba(255,235,187,0.16), transparent 28%),
+    linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.76)),
     var(--card-art) center/cover no-repeat;
-  filter: blur(2px) saturate(.78) brightness(.52);
-  transform: scale(1.06);
-}
-.rc-card--build::after{
-  background:
-    radial-gradient(circle at top, rgba(0,0,0,0.05), transparent 34%),
-    radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.44) 100%),
-    linear-gradient(180deg, rgba(9,7,8,0.08), rgba(9,7,8,0.48));
-}
-.rc-card--challenge{
-  background:
-    radial-gradient(circle at top, rgba(159,47,55,0.16), transparent 32%),
-    linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01) 20%, rgba(7,6,8,0.28) 100%),
-    linear-gradient(160deg, rgba(27,18,20,0.99), rgba(12,10,12,0.99));
+  filter: blur(2px) saturate(.76) brightness(.5);
+  transform: scale(1.08);
 }
 .rc-card--challenge::before{
   background:
-    radial-gradient(circle at 20% 0%, rgba(159,47,55,0.22), transparent 34%),
+    radial-gradient(circle at top, rgba(159,47,55,0.18), transparent 30%),
     radial-gradient(circle at 100% 100%, rgba(127,135,146,0.12), transparent 36%);
 }
 .rc-card > *{ position:relative; z-index:1; }
 
 .rc-card__actions{
   position:absolute;
-  top:.78rem;
-  right:.78rem;
+  top:1rem;
+  right:1rem;
   display:flex;
   gap:.42rem;
   z-index:3;
 }
 .rc-card__hero{
-  padding: 1.4rem 2.6rem .95rem .9rem;
+  padding: 2.45rem 2.8rem 1.35rem;
   text-align:center;
+}
+.rc-card__hero::after{
+  content:"";
+  display:block;
+  width:84px;
+  height:1px;
+  margin:.9rem auto 0;
+  background: linear-gradient(90deg, transparent, rgba(244,223,174,0.7), transparent);
 }
 .rc-card__title{
   margin:0;
   font-family:'Cinzel', serif;
-  font-size: clamp(1.65rem, 4vw, 2.55rem);
-  line-height:1.08;
+  font-size: clamp(1.42rem, 3.3vw, 2.08rem);
+  font-weight:600;
+  line-height:1.16;
+  letter-spacing:.035em;
   color:#f5dfae;
-  text-shadow: 0 3px 24px rgba(0,0,0,0.38);
+  text-shadow: 0 2px 20px rgba(0,0,0,0.36);
 }
 .rc-card__subtitle{
-  margin:.55rem auto 0;
-  max-width:35rem;
-  color: rgba(236,227,214,0.9);
-  line-height:1.45;
+  margin:.8rem auto 0;
+  max-width:29rem;
+  color: rgba(236,227,214,0.88);
+  line-height:1.55;
+  font-size:.98rem;
 }
 
 .rc-card__body,
 .rc-contract{
   display:grid;
-  gap:.55rem;
+  gap:.72rem;
 }
 .rc-card__body{
-  padding:.15rem .2rem 0;
+  padding:.1rem .45rem 0;
+  text-align:center;
 }
 .rc-print-row,
 .rc-print-block,
 .rc-contract__clause{
-  padding:.45rem 0 .58rem;
-  border-top:1px solid rgba(212,170,80,0.13);
+  padding:.58rem 0 .68rem;
+  border-top:1px solid rgba(212,170,80,0.14);
 }
 .rc-card__body > :first-child,
 .rc-contract > :first-child{
@@ -179,17 +187,19 @@
 }
 .rc-print-row__label,
 .rc-print-block__label{
-  color: rgba(244,223,174,0.76);
+  color: rgba(244,223,174,0.78);
   text-transform:uppercase;
-  letter-spacing:.14em;
-  font-size:.7rem;
-  margin-bottom:.16rem;
+  letter-spacing:.16em;
+  font-size:.68rem;
+  margin-bottom:.28rem;
 }
 .rc-print-row__value,
 .rc-print-block__value,
 .rc-contract__line{
-  line-height:1.58;
+  line-height:1.62;
   color:#f2ede4;
+  max-width:30rem;
+  margin:0 auto;
 }
 .rc-print-block__value{ margin-top:.15rem; }
 
@@ -211,7 +221,7 @@
 .rc-name--back{
   color:#efe7d6;
 }
-.rc-sep{ color: rgba(242,237,228,0.56); }
+.rc-sep{ color: rgba(242,237,228,0.54); }
 
 .challenge-contract-lines.summary-panel{ margin-top:.55rem; margin-bottom:0; }
 #challenge-contract-lines .summary-row{ margin:0; }
@@ -255,10 +265,11 @@
 .rc-tooltip__hint{ margin-top:.5rem; color:var(--muted); font-size:.75rem; }
 
 @media (max-width: 720px){
-  .card-overlay .rm-info-dialog{ width:min(100%, calc(100% - 10px)); }
+  .card-overlay .rm-info-dialog{ width:min(100%, calc(100% - 8px)); }
   .card-overlay__body,
-  .card-overlay__error{ width: calc(100% - 4px); }
-  .rc-card{ min-height:0; padding:1rem .9rem .9rem; border-radius:24px; }
-  .rc-card__actions{ top:.72rem; right:.72rem; }
-  .rc-card__hero{ padding:1.35rem 2.6rem .82rem .35rem; }
+  .card-overlay__error{ width: calc(100% - 2px); }
+  .rc-card{ min-height:0; padding:1rem .9rem .95rem; border-radius:26px; }
+  .rc-card__actions{ top:.92rem; right:.82rem; }
+  .rc-card__hero{ padding:2.8rem 2.6rem 1.1rem; }
+  .rc-card__title{ font-size: clamp(1.36rem, 5.6vw, 1.86rem); }
 }
