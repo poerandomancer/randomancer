@@ -107,10 +107,11 @@
 }
 .rc-card::after{
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0) 24%),
+    linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0) 24%),
     url('/images/worn-card-texture.jpeg') center/cover no-repeat;
-  opacity:.09;
-  mix-blend-mode:screen;
+  opacity:.22;
+  mix-blend-mode:soft-light;
+  filter: contrast(1.22) brightness(.92);
 }
 .rc-card--build::before{
   background:
@@ -265,11 +266,11 @@
 .rc-tooltip__hint{ margin-top:.5rem; color:var(--muted); font-size:.75rem; }
 
 @media (max-width: 720px){
-  .card-overlay .rm-info-dialog{ width:min(100%, calc(100% - 8px)); }
+  .card-overlay .rm-info-dialog{ width:min(460px, calc(100% - 22px)); }
   .card-overlay__body,
-  .card-overlay__error{ width: calc(100% - 2px); }
+  .card-overlay__error{ width:min(410px, calc(100% - 26px)); }
   .rc-card{ min-height:0; padding:1rem .9rem .95rem; border-radius:26px; }
   .rc-card__actions{ top:.92rem; right:.82rem; }
-  .rc-card__hero{ padding:2.8rem 2.6rem 1.1rem; }
+  .rc-card__hero{ padding:2.8rem 2.4rem 1.1rem; }
   .rc-card__title{ font-size: clamp(1.36rem, 5.6vw, 1.86rem); }
 }
