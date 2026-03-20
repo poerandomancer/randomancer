@@ -1,4 +1,6 @@
-import { formatWeaponLine } from './01-meta-and-domready.js';
+import { APP_VERSION, formatWeaponLine } from './01-meta-and-domready.js';
+import { sharePublicCard } from './publicCardApi.js';
+import { buildPublicBuildCardRequest, buildPublicChallengeCardRequest } from './publicCardBuilders.js';
 import { buildGemDictionary, lookupGem } from './05-tags-and-scorer.js';
 import { getFamilySkillNames, resolveSkillFamily } from './17-skill-family-utils.js';
 
@@ -21,6 +23,7 @@ let closeOverlayTimer = null;
 let flipCleanupTimer = null;
 let uniqueSourceCache = null;
 let uniqueSourcePromise = null;
+let shareStatusTimer = null;
 
 
 function prefersReducedMotion() {
@@ -432,8 +435,8 @@ function renderDelimitedNames(values, variant = 'front') {
   return values.map((item, index) => `${index ? '<span class="rc-sep">, </span>' : ''}${renderInteractiveName(item, variant)}`).join('');
 }
 
-function renderActionButton({ action, label, icon, active = false }) {
-  return `<button type="button" class="icon-btn card-action-btn${active ? ' is-active' : ''}" data-card-action="${escapeHtml(action)}" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><span aria-hidden="true">${icon}</span></button>`;
+function renderActionButton({ action, label, icon, active = false, disabled = false, busy = false }) {
+  return `<button type="button" class="icon-btn card-action-btn${active ? ' is-active' : ''}${busy ? ' is-busy' : ''}" data-card-action="${escapeHtml(action)}" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}" ${disabled ? 'disabled' : ''} ${busy ? 'aria-busy="true"' : ''}><span aria-hidden="true">${icon}</span></button>`;
 }
 
 function renderCardHeader(actionsHtml, title, subtitle) {
@@ -446,6 +449,99 @@ function renderCardHeader(actionsHtml, title, subtitle) {
   `;
 }
 
+function getShareUiState(type) {
+  const overlay = getCardOverlay();
+  if (!overlay) return { loading: false, message: '', tone: '' };
+  const cardType = type || overlay.dataset.cardType || '';
+  return {
+    loading: overlay.dataset.shareLoading === '1' && overlay.dataset.shareType === cardType,
+    message: overlay.dataset.shareMessage || '',
+    tone: overlay.dataset.shareTone || ''
+  };
+}
+
+function clearShareUiState(options = {}) {
+  const overlay = getCardOverlay();
+  if (!overlay) return;
+  overlay.dataset.shareLoading = '0';
+  overlay.dataset.shareType = '';
+  overlay.dataset.shareMessage = '';
+  overlay.dataset.shareTone = '';
+  if (!options.preserveTimer && shareStatusTimer) {
+    clearTimeout(shareStatusTimer);
+    shareStatusTimer = null;
+  }
+}
+
+function setShareUiState(type, next = {}) {
+  const overlay = getCardOverlay();
+  if (!overlay) return;
+  if (shareStatusTimer) {
+    clearTimeout(shareStatusTimer);
+    shareStatusTimer = null;
+  }
+  overlay.dataset.shareType = type || overlay.dataset.cardType || '';
+  overlay.dataset.shareLoading = next.loading ? '1' : '0';
+  overlay.dataset.shareMessage = next.message || '';
+  overlay.dataset.shareTone = next.tone || '';
+  if (next.timeoutMs) {
+    shareStatusTimer = setTimeout(() => {
+      clearShareUiState({ preserveTimer: true });
+      refreshOpenCardOverlay();
+    }, next.timeoutMs);
+  }
+}
+
+function renderShareStatus(type) {
+  const state = getShareUiState(type);
+  if (!state.message) return '';
+  return `<div class="card-share-status${state.tone ? ` is-${escapeHtml(state.tone)}` : ''}" role="status" aria-live="polite">${escapeHtml(state.message)}</div>`;
+}
+
+async function shareCurrentCard(type) {
+  const overlay = getCardOverlay();
+  const cardType = type === CARD_TYPE_CHALLENGE ? CARD_TYPE_CHALLENGE : CARD_TYPE_BUILD;
+  if (!overlay) return false;
+  if (getShareUiState(cardType).loading) return false;
+
+  const body = cardType === CARD_TYPE_CHALLENGE
+    ? buildPublicChallengeCardRequest(window.CURRENT_CHALLENGE_CONTRACT)
+    : buildPublicBuildCardRequest(window.App?.state?.currentRoll || window.CURRENT_ROLL);
+
+  const missingPayload = cardType === CARD_TYPE_CHALLENGE ? !body?.payload?.contract?.tasks?.length : !body?.payload?.snapshot?.ascendancy;
+  if (missingPayload) {
+    setShareUiState(cardType, { message: 'Open a card before sharing it.', tone: 'error', timeoutMs: 3200 });
+    refreshOpenCardOverlay();
+    return false;
+  }
+
+  setShareUiState(cardType, { loading: true, message: 'Creating public share link…', tone: 'info' });
+  refreshOpenCardOverlay();
+
+  try {
+    const result = await sharePublicCard(body);
+    const shareUrl = result?.share_url || '';
+    if (!shareUrl) throw new Error('Share service did not return a share URL.');
+    const copied = await window.RandomancerCopyTextToClipboard?.(shareUrl);
+    setShareUiState(cardType, {
+      loading: false,
+      message: copied ? `Shared URL copied: ${shareUrl}` : `Shared URL ready: ${shareUrl}`,
+      tone: copied ? 'success' : 'info',
+      timeoutMs: copied ? 3200 : 5200
+    });
+    refreshOpenCardOverlay();
+    if (copied) window.RandomancerShowToast?.('Shared card link copied to clipboard!');
+    else window.RandomancerShowToast?.('Shared card link ready.');
+    return true;
+  } catch (error) {
+    console.error('[public-card] share failed', error, { appVersion: APP_VERSION, cardType });
+    setShareUiState(cardType, { loading: false, message: error?.message || 'Could not share this card right now.', tone: 'error', timeoutMs: 4200 });
+    refreshOpenCardOverlay();
+    window.RandomancerShowToast?.('Could not share card.');
+    return false;
+  }
+}
+
 function renderBuildCard(model, face = 'front', actionsHtml = '', stageClass = '') {
   const isBack = face === 'back';
   const style = model.artPath ? ` style="--card-art:url('${escapeHtml(model.artPath)}')"` : '';
@@ -454,6 +550,7 @@ function renderBuildCard(model, face = 'front', actionsHtml = '', stageClass = '
       <div class="card-stage card-stage--build ${stageClass}">
       <article class="rc-card rc-card--build rc-card--front"${style}>
         ${renderCardHeader(actionsHtml, model.title, model.subtitle)}
+      ${renderShareStatus(CARD_TYPE_BUILD)}
         <div class="rc-card__body rc-card__body--front">
           ${model.frontRows.filter((row) => row.values?.length).map((row) => `
             <section class="rc-print-row">
@@ -471,6 +568,7 @@ function renderBuildCard(model, face = 'front', actionsHtml = '', stageClass = '
     <div class="card-stage card-stage--build ${stageClass}">
     <article class="rc-card rc-card--build rc-card--back"${style}>
       ${renderCardHeader(actionsHtml, model.title, model.subtitle)}
+      ${renderShareStatus(CARD_TYPE_BUILD)}
       <div class="rc-card__body rc-card__body--back">
         ${model.backSections.filter((section) => section.values?.length).map((section) => `
           <section class="rc-print-block">
@@ -503,6 +601,7 @@ function renderChallengeCard(model, actionsHtml = '') {
     <div class="card-stage">
     <article class="rc-card rc-card--challenge">
       ${renderCardHeader(actionsHtml, model.title, model.subtitle)}
+      ${renderShareStatus(CARD_TYPE_CHALLENGE)}
       <div class="rc-card__body rc-card__body--challenge">
         ${model.clauses?.length ? `<div class="rc-contract">${model.clauses.map(renderChallengeClause).join('')}</div>` : ''}
       </div>
@@ -611,8 +710,9 @@ function renderBuildCardOverlay(face = 'front', options = {}) {
   if (!getUniqueSourceCollection().length && model.backSections.some((section) => section.label === 'Uniques' && section.values?.length)) {
     ensureUniqueSourceCollection().then(() => refreshOpenCardOverlay()).catch(() => {});
   }
+  const shareState = getShareUiState(CARD_TYPE_BUILD);
   const actions = [
-    renderActionButton({ action: 'copy-link', label: 'Copy Link', icon: '⧉' }),
+    renderActionButton({ action: 'share-card', label: shareState.loading ? 'Sharing card' : 'Share Card', icon: shareState.loading ? '…' : '↗', disabled: shareState.loading, busy: shareState.loading }),
     renderActionButton({ action: 'save', label: isSavedBuild() ? 'Saved' : 'Save', icon: isSavedBuild() ? '★' : '☆', active: isSavedBuild() }),
     renderActionButton({ action: 'poe', label: 'Poe.ninja', icon: '🥷' }),
     renderActionButton({ action: 'flip', label: face === 'front' ? 'Flip to back' : 'Flip to front', icon: '↺' }),
@@ -628,8 +728,9 @@ function renderChallengeCardOverlay() {
     setOverlayContent({ type: CARD_TYPE_CHALLENGE, error: 'Challenge card could not be loaded.', html: '' });
     return false;
   }
+  const shareState = getShareUiState(CARD_TYPE_CHALLENGE);
   const actions = [
-    renderActionButton({ action: 'copy-link', label: 'Copy Link', icon: '⧉' }),
+    renderActionButton({ action: 'share-card', label: shareState.loading ? 'Sharing card' : 'Share Card', icon: shareState.loading ? '…' : '↗', disabled: shareState.loading, busy: shareState.loading }),
     renderActionButton({ action: 'save', label: isSavedChallenge() ? 'Saved' : 'Save', icon: isSavedChallenge() ? '★' : '☆', active: isSavedChallenge() }),
     renderActionButton({ action: 'close', label: 'Close', icon: '×' })
   ].join('');
@@ -657,6 +758,7 @@ function openCardOverlay(type, options = {}) {
 function closeCardOverlay({ skipUrl = false } = {}) {
   const overlay = getCardOverlay();
   if (!overlay || overlay.hidden) return;
+  clearShareUiState();
   clearOverlayTimers();
   hideCardTooltip();
   if (prefersReducedMotion()) {
@@ -682,6 +784,10 @@ function bindCardOverlayUI() {
   overlay.addEventListener('click', (evt) => {
     if (evt.target?.dataset?.close) closeCardOverlay();
     const action = evt.target.closest('[data-card-action]')?.dataset.cardAction;
+    if (action === 'share-card') {
+      shareCurrentCard(overlay.dataset.cardType);
+      return;
+    }
     if (action === 'copy-link') {
       copyCurrentCardLink(overlay.dataset.cardType).then((ok) => window.RandomancerShowToast?.(ok ? 'Card link copied to clipboard!' : 'Could not copy card link.'));
       return;
@@ -758,6 +864,7 @@ document.addEventListener('DOMContentLoaded', () => {
 export {
   CARD_TYPE_BUILD,
   CARD_TYPE_CHALLENGE,
+  shareCurrentCard,
   deriveBuildCardModel,
   deriveChallengeCardModel,
   openCardOverlay,
