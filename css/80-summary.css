@@ -34,7 +34,7 @@
   position:relative;
   inset:auto;
   transform:none;
-  width:min(580px, calc(100% - 20px));
+  width:min(500px, calc(100% - 28px));
   max-height:none;
   overflow:visible;
   margin:0 auto;
@@ -59,7 +59,7 @@
 }
 .card-overlay__body,
 .card-overlay__error{
-  width:min(calc(100vw - 18px), 560px);
+  width:min(calc(100vw - 30px), 480px);
   margin:0 auto;
 }
 .card-overlay__body{ padding: 0 0 .6rem; }
@@ -96,8 +96,8 @@
 .rc-card{
   position:relative;
   overflow:hidden;
-  border-radius:32px;
-  padding:1.15rem 1.2rem 1.1rem;
+  border-radius:28px;
+  padding:1rem 1.05rem 1rem;
   width:100%;
   aspect-ratio: 806 / 1375;
   min-height:0;
@@ -191,7 +191,7 @@
   z-index:3;
 }
 .rc-card__hero{
-  padding: 2.45rem 2.8rem 1.35rem;
+  padding: 2.15rem 2.2rem 1.1rem;
   text-align:center;
 }
 .rc-card__hero::after{
@@ -205,7 +205,7 @@
 .rc-card__title{
   margin:0;
   font-family:'Cinzel', serif;
-  font-size: clamp(1.42rem, 3.3vw, 2.08rem);
+  font-size: clamp(1.28rem, 2.9vw, 1.82rem);
   font-weight:600;
   line-height:1.16;
   letter-spacing:.035em;
@@ -213,11 +213,11 @@
   text-shadow: 0 2px 20px rgba(0,0,0,0.36);
 }
 .rc-card__subtitle{
-  margin:.8rem auto 0;
-  max-width:29rem;
+  margin:.7rem auto 0;
+  max-width:25rem;
   color: rgba(236,227,214,0.88);
-  line-height:1.55;
-  font-size:.98rem;
+  line-height:1.5;
+  font-size:.92rem;
 }
 
 .rc-card__body,
@@ -369,15 +369,16 @@
 
 @media (max-width: 720px){
   .card-overlay{
-    padding:12px 0;
+    padding:16px 0;
   }
-  .card-overlay .rm-info-dialog{ width:min(460px, calc(100% - 22px)); }
+  .card-overlay .rm-info-dialog{ width:min(400px, calc(100% - 30px)); }
   .card-overlay__body,
-  .card-overlay__error{ width:min(calc(100vw - 20px), 410px); }
-  .rc-card{ padding:1rem .9rem .95rem; border-radius:26px; }
-  .rc-card__actions{ top:.92rem; right:.82rem; }
-  .rc-card__hero{ padding:2.8rem 2.4rem 1.1rem; }
-  .rc-card__title{ font-size: clamp(1.36rem, 5.6vw, 1.86rem); }
+  .card-overlay__error{ width:min(calc(100vw - 32px), 360px); }
+  .rc-card{ padding:.9rem .82rem .88rem; border-radius:24px; }
+  .rc-card__actions{ top:.84rem; right:.76rem; }
+  .rc-card__hero{ padding:2.2rem 1.7rem .92rem; }
+  .rc-card__title{ font-size: clamp(1.18rem, 5vw, 1.58rem); }
+  .rc-card__subtitle{ font-size:.86rem; max-width:21rem; }
 }
 
 
