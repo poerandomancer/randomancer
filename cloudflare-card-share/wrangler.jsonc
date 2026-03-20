@@ -3,6 +3,9 @@
   "main": "src/index.ts",
   "compatibility_date": "2026-03-20",
   "workers_dev": false,
+  "assets": {
+    "directory": "./public"
+  },
   "routes": [
     {
       "pattern": "cards.therandomancer.com",
@@ -11,14 +14,14 @@
   ],
   "vars": {
     "APP_BASE_URL": "https://therandomancer.com",
-    "BUILD_OG_IMAGE_URL": "https://cards.therandomancer.com/static/build-share-og.png",
-    "CHALLENGE_OG_IMAGE_URL": "https://cards.therandomancer.com/static/challenge-share-og.png"
+    "BUILD_OG_IMAGE_URL": "https://cards.therandomancer.com/build-share-og.png",
+    "CHALLENGE_OG_IMAGE_URL": "https://cards.therandomancer.com/challenge-share-og.png"
   },
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "randomancer-card-share-db",
-      "database_id": "REPLACE_WITH_D1_DATABASE_ID"
+      "database_name": "randomancer-card-db",
+      "database_id": "7f682e06-2abc-4f09-9c13-a35bdc85a082"
     }
   ]
 }
