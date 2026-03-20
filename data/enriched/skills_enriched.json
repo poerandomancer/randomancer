@@ -2446,14 +2446,12 @@
       "hitdamage",
       "hit",
       "crit",
-      "critical_hits",
       "critical_hit"
     ],
     "bracket_tags": [
       "hitdamage",
       "hit",
       "crit",
-      "critical_hits",
       "critical_hit"
     ],
     "links": {
@@ -4320,13 +4318,11 @@
       "areaspell",
       "usablewhilemoving",
       "elemental",
-      "slow",
-      "slowing"
+      "slow"
     ],
     "bracket_tags": [
       "curse",
-      "slow",
-      "slowing"
+      "slow"
     ],
     "links": {
       "base_item_rid": 485,
@@ -6152,7 +6148,7 @@
       "ongoingskill",
       "affectspresence",
       "attackinplace",
-      "allies",
+      "ally",
       "presence",
       "total",
       "energyshield",
@@ -6160,7 +6156,7 @@
     ],
     "bracket_tags": [
       "aura",
-      "allies",
+      "ally",
       "presence",
       "total",
       "energyshield",
@@ -6631,7 +6627,6 @@
       "areaspell",
       "cooldown",
       "inbuilttrigger",
-      "triggered",
       "noattackorcasttime",
       "chain"
     ],
@@ -8006,8 +8001,8 @@
         "usablewhilemoving"
       ],
       "damage_types": [
-        "fire",
         "lightning",
+        "fire",
         "cold"
       ],
       "delivery": [
@@ -8300,15 +8295,13 @@
       "elemental",
       "channelling",
       "remote",
-      "trigger",
-      "triggered"
+      "trigger"
     ],
     "bracket_tags": [
       "spell",
       "channelling",
       "remote",
-      "trigger",
-      "triggered"
+      "trigger"
     ],
     "links": {
       "base_item_rid": 3485,
@@ -8701,14 +8694,14 @@
       "attackinplace",
       "resistances",
       "fire_resistance",
-      "allies",
+      "ally",
       "presence"
     ],
     "bracket_tags": [
       "aura",
       "resistances",
       "fire_resistance",
-      "allies",
+      "ally",
       "presence"
     ],
     "links": {
@@ -8819,14 +8812,14 @@
       "attackinplace",
       "resistances",
       "cold_resistance",
-      "allies",
+      "ally",
       "presence"
     ],
     "bracket_tags": [
       "aura",
       "resistances",
       "cold_resistance",
-      "allies",
+      "ally",
       "presence"
     ],
     "links": {
@@ -8937,14 +8930,14 @@
       "attackinplace",
       "resistances",
       "lightning_resistance",
-      "allies",
+      "ally",
       "presence"
     ],
     "bracket_tags": [
       "aura",
       "resistances",
       "lightning_resistance",
-      "allies",
+      "ally",
       "presence"
     ],
     "links": {
@@ -9053,14 +9046,14 @@
       "attackinplace",
       "resistances",
       "chaos_resistance",
-      "allies",
+      "ally",
       "presence"
     ],
     "bracket_tags": [
       "aura",
       "resistances",
       "chaos_resistance",
-      "allies",
+      "ally",
       "presence"
     ],
     "links": {
@@ -10950,9 +10943,9 @@
         "spear"
       ],
       "damage_types": [
+        "lightning",
         "fire",
-        "physical",
-        "lightning"
+        "physical"
       ],
       "delivery": [
         "attack",
@@ -11765,13 +11758,11 @@
       "usablewhilemoving",
       "occult",
       "debuff",
-      "debuffs",
       "minion"
     ],
     "bracket_tags": [
       "debuff",
       "chaos",
-      "debuffs",
       "minion"
     ],
     "links": {
@@ -12094,14 +12085,14 @@
       "hitdamage",
       "hit",
       "crit",
-      "critical_hits"
+      "critical_hit"
     ],
     "bracket_tags": [
       "spell",
       "hitdamage",
       "hit",
       "crit",
-      "critical_hits"
+      "critical_hit"
     ],
     "links": {
       "base_item_rid": 3531,
@@ -16904,13 +16895,11 @@
       "bow",
       "meta",
       "trigger",
-      "triggered",
       "minion"
     ],
     "bracket_tags": [
       "meta",
       "trigger",
-      "triggered",
       "minion"
     ],
     "links": {
@@ -16978,13 +16967,11 @@
       "bow",
       "meta",
       "trigger",
-      "triggered",
       "minion"
     ],
     "bracket_tags": [
       "meta",
       "trigger",
-      "triggered",
       "minion"
     ],
     "links": {
@@ -17052,13 +17039,11 @@
       "bow",
       "meta",
       "trigger",
-      "triggered",
       "minion"
     ],
     "bracket_tags": [
       "meta",
       "trigger",
-      "triggered",
       "minion"
     ],
     "links": {
@@ -17183,7 +17168,7 @@
       "hitdamage",
       "hit",
       "empowered",
-      "empowers",
+      "empower",
       "slam",
       "slams",
       "aftershock",
@@ -17201,7 +17186,7 @@
       "hitdamage",
       "hit",
       "empowered",
-      "empowers",
+      "empower",
       "slam",
       "slams",
       "aftershock",
@@ -17465,12 +17450,12 @@
       "limit",
       "gainsstages",
       "buff",
-      "allies"
+      "ally"
     ],
     "bracket_tags": [
       "spell",
       "buff",
-      "allies"
+      "ally"
     ],
     "links": {
       "base_item_rid": 545,
@@ -17610,7 +17595,7 @@
       "elemental",
       "ignite",
       "projectile",
-      "allies",
+      "ally",
       "consume",
       "consumes",
       "lightning",
@@ -17621,7 +17606,7 @@
       "fire",
       "ignite",
       "projectile",
-      "allies",
+      "ally",
       "consume",
       "consumes",
       "lightning",
@@ -18087,15 +18072,13 @@
       "usablewhilemoving",
       "criticalweakness",
       "critical_weakness",
-      "trigger",
-      "triggered"
+      "trigger"
     ],
     "bracket_tags": [
       "physical",
       "criticalweakness",
       "critical_weakness",
-      "trigger",
-      "triggered"
+      "trigger"
     ],
     "links": {
       "base_item_rid": 549,
@@ -19913,7 +19896,7 @@
       "parrieddebuff",
       "parried_debuff",
       "hitdamage",
-      "hitting",
+      "hit",
       "charge",
       "frenzy_charge",
       "strikes",
@@ -19927,7 +19910,7 @@
       "parrieddebuff",
       "parried_debuff",
       "hitdamage",
-      "hitting",
+      "hit",
       "charge",
       "frenzy_charge",
       "strike",
@@ -20221,7 +20204,6 @@
       "interactswithelementalground",
       "whirlwind",
       "slow",
-      "slowing",
       "blind",
       "blinding",
       "knockback"
@@ -20229,7 +20211,6 @@
     "bracket_tags": [
       "whirlwind",
       "slow",
-      "slowing",
       "blind",
       "blinding",
       "knockback"
@@ -26112,7 +26093,7 @@
       "crossbow",
       "ballista",
       "pinned",
-      "pinning",
+      "pin",
       "maim",
       "maiming"
     ],
@@ -26120,7 +26101,7 @@
       "ballista",
       "totem",
       "pinned",
-      "pinning",
+      "pin",
       "maim",
       "maiming"
     ],
@@ -26235,11 +26216,11 @@
       "empowersotherskill",
       "elemental",
       "empowered",
-      "empowers"
+      "empower"
     ],
     "bracket_tags": [
       "empowered",
-      "empowers",
+      "empower",
       "spell"
     ],
     "links": {
@@ -26348,20 +26329,20 @@
       "empowersotherskill",
       "dnt_unused",
       "empowered",
-      "empowers",
+      "empower",
       "chilledground",
       "chilled_ground",
-      "blinded"
+      "blind"
     ],
     "bracket_tags": [
       "dnt_unused",
       "empowered",
-      "empowers",
+      "empower",
       "spell",
       "cold",
       "chilledground",
       "chilled_ground",
-      "blinded"
+      "blind"
     ],
     "links": {
       "base_item_rid": 3124,
@@ -26921,12 +26902,10 @@
       "createscompanion",
       "createsminion",
       "attackinplace",
-      "primal",
-      "companions"
+      "primal"
     ],
     "bracket_tags": [
-      "companion",
-      "companions"
+      "companion"
     ],
     "links": {
       "base_item_rid": 3132,
@@ -27043,7 +27022,6 @@
       "createscompanion",
       "createsminion",
       "attackinplace",
-      "companions",
       "hinder",
       "hindering",
       "maim",
@@ -27052,7 +27030,6 @@
     ],
     "bracket_tags": [
       "companion",
-      "companions",
       "hinder",
       "hindering",
       "maim",
@@ -28726,7 +28703,6 @@
       "cooldown",
       "primal",
       "werewolf",
-      "triggered",
       "rarity",
       "hitdamage",
       "hit"
@@ -28735,7 +28711,6 @@
       "shapeshift",
       "werewolf",
       "trigger",
-      "triggered",
       "rarity",
       "hitdamage",
       "hit",
@@ -31230,8 +31205,8 @@
         "triggers"
       ],
       "damage_types": [
-        "fire",
         "lightning",
+        "fire",
         "cold"
       ],
       "delivery": [],
@@ -31607,13 +31582,13 @@
       "occult",
       "energy",
       "crit",
-      "critically_hit",
+      "critical_hit",
       "spell"
     ],
     "bracket_tags": [
       "energy",
       "crit",
-      "critically_hit",
+      "critical_hit",
       "spell"
     ],
     "links": {
@@ -39534,11 +39509,11 @@
       "totemable",
       "occult",
       "pinned",
-      "pinning"
+      "pin"
     ],
     "bracket_tags": [
       "pinned",
-      "pinning"
+      "pin"
     ],
     "links": {
       "base_item_rid": 3261,
@@ -39767,15 +39742,13 @@
       "hitdamage",
       "hit",
       "crit",
-      "critically_hit",
-      "critical_hits"
+      "critical_hit"
     ],
     "bracket_tags": [
       "hitdamage",
       "hit",
       "crit",
-      "critically_hit",
-      "critical_hits"
+      "critical_hit"
     ],
     "links": {
       "base_item_rid": 3263,
@@ -41244,7 +41217,7 @@
       "consume",
       "freeze",
       "hitdamage",
-      "hitting",
+      "hit",
       "consuming"
     ],
     "bracket_tags": [
@@ -41255,7 +41228,7 @@
       "consume",
       "freeze",
       "hitdamage",
-      "hitting",
+      "hit",
       "consuming"
     ],
     "links": {
@@ -41840,7 +41813,6 @@
       "canbecomearrowrain",
       "hitdamage",
       "hit",
-      "hitting",
       "electrocute",
       "electrocution",
       "electrocuted"
@@ -41848,7 +41820,6 @@
     "bracket_tags": [
       "hitdamage",
       "hit",
-      "hitting",
       "lightning",
       "electrocute",
       "electrocution",
@@ -41946,8 +41917,8 @@
         "usablewhilemoving"
       ],
       "damage_types": [
-        "fire",
         "lightning",
+        "fire",
         "cold"
       ],
       "delivery": [
@@ -42682,15 +42653,13 @@
       "attackinplace",
       "dnt_unused",
       "bleed",
-      "hit",
-      "hitting"
+      "hit"
     ],
     "bracket_tags": [
       "dnt_unused",
       "bleed",
       "remnant",
-      "hit",
-      "hitting"
+      "hit"
     ],
     "links": {
       "base_item_rid": 3281,
@@ -43126,12 +43095,10 @@
       "limit",
       "togglespawnedobjecttargetable_defaultoff",
       "slow",
-      "slowing",
       "poison"
     ],
     "bracket_tags": [
       "slow",
-      "slowing",
       "chaos",
       "poison"
     ],
@@ -43847,8 +43814,8 @@
       ],
       "skill_types": [],
       "damage_types": [
-        "fire",
-        "lightning"
+        "lightning",
+        "fire"
       ],
       "delivery": [],
       "role": [
@@ -44746,8 +44713,8 @@
       ],
       "skill_types": [],
       "damage_types": [
-        "fire",
         "lightning",
+        "fire",
         "cold"
       ],
       "delivery": [
@@ -45072,7 +45039,7 @@
       "blind",
       "blinding",
       "hitdamage",
-      "hitting",
+      "hit",
       "whirlwind",
       "elementalground",
       "elemental_ground_surfaces"
@@ -45082,7 +45049,7 @@
       "blind",
       "blinding",
       "hitdamage",
-      "hitting",
+      "hit",
       "whirlwind",
       "elementalground",
       "elemental_ground_surfaces"
@@ -45544,8 +45511,8 @@
         "spear"
       ],
       "damage_types": [
-        "fire",
         "lightning",
+        "fire",
         "cold"
       ],
       "delivery": [
@@ -46842,13 +46809,13 @@
       "hitdamage",
       "hit",
       "crit",
-      "critically_hit"
+      "critical_hit"
     ],
     "bracket_tags": [
       "hitdamage",
       "hit",
       "crit",
-      "critically_hit"
+      "critical_hit"
     ],
     "links": {
       "base_item_rid": 3489,
@@ -47222,14 +47189,12 @@
       "usablewhilemoving",
       "limit",
       "occult",
-      "debuff",
-      "debuffs"
+      "debuff"
     ],
     "bracket_tags": [
       "totem",
       "chaos",
-      "debuff",
-      "debuffs"
+      "debuff"
     ],
     "links": {
       "base_item_rid": 3582,
@@ -53573,7 +53538,7 @@
       "crossbow",
       "load_your_crossbow",
       "hitdamage",
-      "hitting",
+      "hit",
       "lightningailment",
       "lightning_ailment"
     ],
@@ -53581,7 +53546,7 @@
       "ammunition",
       "load_your_crossbow",
       "hitdamage",
-      "hitting",
+      "hit",
       "lightningailment",
       "lightning_ailment"
     ],
@@ -56872,13 +56837,13 @@
       "generatesremnants",
       "attackinplace",
       "hitdamage",
-      "hitting",
+      "hit",
       "overflow"
     ],
     "bracket_tags": [
       "remnant",
       "hitdamage",
-      "hitting",
+      "hit",
       "overflow"
     ],
     "links": {
@@ -57761,8 +57726,8 @@
         "triggered"
       ],
       "damage_types": [
-        "fire",
         "lightning",
+        "fire",
         "cold"
       ],
       "delivery": [
@@ -57808,7 +57773,6 @@
       "triggerable",
       "damage",
       "areaspell",
-      "triggered",
       "inbuilttrigger",
       "cooldown",
       "elementaldamage",
@@ -57824,8 +57788,7 @@
       "elemental_damage",
       "hitdamage",
       "hit",
-      "trigger",
-      "triggered"
+      "trigger"
     ],
     "links": {
       "base_item_rid": 3654,
@@ -57901,8 +57864,8 @@
         "lightning"
       ],
       "damage_types": [
-        "fire",
         "lightning",
+        "fire",
         "cold"
       ],
       "delivery": [],
@@ -58181,13 +58144,13 @@
       "minionsareundamagable",
       "commandableminion",
       "reserveinallsets",
-      "allies",
+      "ally",
       "spell"
     ],
     "bracket_tags": [
       "minion",
       "command",
-      "allies",
+      "ally",
       "spell"
     ],
     "links": {
@@ -59414,7 +59377,7 @@
       "damage",
       "cooldown",
       "hitdamage",
-      "hitting",
+      "hit",
       "primedstun",
       "primed_for_stun",
       "primedelectrocution",
@@ -59427,7 +59390,7 @@
     "bracket_tags": [
       "nova",
       "hitdamage",
-      "hitting",
+      "hit",
       "primedstun",
       "primed_for_stun",
       "primedelectrocution",
@@ -60000,8 +59963,8 @@
         "spell"
       ],
       "damage_types": [
-        "fire",
         "lightning",
+        "fire",
         "cold"
       ],
       "delivery": [
@@ -60254,7 +60217,6 @@
       "triggerable",
       "inbuilttrigger",
       "createsminion",
-      "triggered",
       "attackinplace",
       "totem"
     ],
@@ -61156,7 +61118,6 @@
       "ongoingskill",
       "cooldown",
       "triggerable",
-      "triggered",
       "inbuilttrigger",
       "attackinplace",
       "dnt_unused"
@@ -62634,9 +62595,9 @@
       "martialweapon",
       "martial_weapon",
       "empowered",
-      "empowers",
+      "empower",
       "hitdamage",
-      "hitting"
+      "hit"
     ],
     "bracket_tags": [
       "channelling",
@@ -62645,10 +62606,10 @@
       "martialweapon",
       "martial_weapon",
       "empowered",
-      "empowers",
+      "empower",
       "attack",
       "hitdamage",
-      "hitting"
+      "hit"
     ],
     "links": {
       "base_item_rid": 4055,
@@ -65733,15 +65694,13 @@
       "elemental",
       "ailments",
       "ailment",
-      "debuff",
-      "debuffs"
+      "debuff"
     ],
     "bracket_tags": [
       "spell",
       "ailments",
       "ailment",
-      "debuff",
-      "debuffs"
+      "debuff"
     ],
     "links": {
       "base_item_rid": 3545,
@@ -65812,15 +65771,13 @@
       "elemental",
       "ailments",
       "ailment",
-      "debuff",
-      "debuffs"
+      "debuff"
     ],
     "bracket_tags": [
       "spell",
       "ailments",
       "ailment",
-      "debuff",
-      "debuffs"
+      "debuff"
     ],
     "links": {
       "base_item_rid": 3546,
@@ -65899,7 +65856,6 @@
       "ailments",
       "ailment",
       "debuff",
-      "debuffs",
       "freeze",
       "hitdamage",
       "hit",
@@ -65911,7 +65867,6 @@
       "ailment",
       "chaos",
       "debuff",
-      "debuffs",
       "freeze",
       "hitdamage",
       "hit",
@@ -66147,15 +66102,13 @@
       "conditional",
       "bow",
       "combo",
-      "trigger",
-      "triggered"
+      "trigger"
     ],
     "bracket_tags": [
       "melee",
       "attack",
       "combo",
-      "trigger",
-      "triggered"
+      "trigger"
     ],
     "links": {
       "base_item_rid": 3462,
@@ -66232,15 +66185,13 @@
       "conditional",
       "bow",
       "combo",
-      "trigger",
-      "triggered"
+      "trigger"
     ],
     "bracket_tags": [
       "melee",
       "attack",
       "combo",
-      "trigger",
-      "triggered"
+      "trigger"
     ],
     "links": {
       "base_item_rid": 3463,
@@ -66378,12 +66329,10 @@
       "support",
       "spell",
       "bow",
-      "slow",
-      "slows"
+      "slow"
     ],
     "bracket_tags": [
-      "slow",
-      "slows"
+      "slow"
     ],
     "links": {
       "base_item_rid": 3465,
@@ -67232,7 +67181,6 @@
       "limit",
       "targetsdestructiblecorpses",
       "triggerable",
-      "triggered",
       "inbuilttrigger",
       "corpse",
       "poison",
@@ -67404,7 +67352,6 @@
       "hit",
       "aggravate",
       "bleed",
-      "hitting",
       "heavy_stun",
       "heavily_stunned"
     ],
@@ -67413,7 +67360,6 @@
       "hit",
       "aggravate",
       "bleed",
-      "hitting",
       "heavy_stun",
       "heavily_stunned"
     ],
@@ -68484,9 +68430,9 @@
       ],
       "skill_types": [],
       "damage_types": [
+        "lightning",
         "fire",
         "physical",
-        "lightning",
         "chaos",
         "cold"
       ],
@@ -69104,8 +69050,8 @@
         "triggered"
       ],
       "damage_types": [
-        "fire",
         "lightning",
+        "fire",
         "cold"
       ],
       "delivery": [
@@ -69151,7 +69097,6 @@
       "damage",
       "triggerable",
       "cooldown",
-      "triggered",
       "inbuilttrigger",
       "chains",
       "attackinplace",
@@ -69428,7 +69373,7 @@
       "attack",
       "attacking",
       "glory",
-      "allies",
+      "ally",
       "accuracy"
     ],
     "bracket_tags": [
@@ -69437,7 +69382,7 @@
       "glory",
       "banner",
       "aura",
-      "allies",
+      "ally",
       "accuracy"
     ],
     "links": {
@@ -69559,7 +69504,7 @@
       "attack",
       "attacking",
       "glory",
-      "allies",
+      "ally",
       "armour",
       "evasion"
     ],
@@ -69569,7 +69514,7 @@
       "glory",
       "banner",
       "aura",
-      "allies",
+      "ally",
       "armour",
       "evasion"
     ],
@@ -69695,7 +69640,7 @@
       "attack",
       "attacking",
       "glory",
-      "allies",
+      "ally",
       "ailmentthreshold",
       "elemental_ailment_threshold",
       "maximumresistances",
@@ -69708,7 +69653,7 @@
       "glory",
       "banner",
       "aura",
-      "allies",
+      "ally",
       "ailmentthreshold",
       "elemental_ailment_threshold",
       "maximumresistances",
@@ -70358,8 +70303,8 @@
         "triggers"
       ],
       "damage_types": [
-        "fire",
         "lightning",
+        "fire",
         "cold"
       ],
       "delivery": [],
@@ -70613,8 +70558,8 @@
         "persistent"
       ],
       "damage_types": [
-        "fire",
         "lightning",
+        "fire",
         "cold"
       ],
       "delivery": [],
@@ -70864,13 +70809,13 @@
       "elemental",
       "lifeleech",
       "leech_life",
-      "allies"
+      "ally"
     ],
     "bracket_tags": [
       "totem",
       "lifeleech",
       "leech_life",
-      "allies"
+      "ally"
     ],
     "links": {
       "base_item_rid": 3717,
@@ -70941,13 +70886,13 @@
       "elemental",
       "manaleech",
       "leech_mana",
-      "allies"
+      "ally"
     ],
     "bracket_tags": [
       "totem",
       "manaleech",
       "leech_mana",
-      "allies"
+      "ally"
     ],
     "links": {
       "base_item_rid": 3718,
@@ -71013,13 +70958,13 @@
       "totem",
       "rageleech",
       "leech_rage",
-      "allies"
+      "ally"
     ],
     "bracket_tags": [
       "totem",
       "rageleech",
       "leech_rage",
-      "allies"
+      "ally"
     ],
     "links": {
       "base_item_rid": 3719,
@@ -72116,9 +72061,9 @@
         "physical"
       ],
       "damage_types": [
+        "lightning",
         "fire",
         "physical",
-        "lightning",
         "cold"
       ],
       "delivery": [],
@@ -73439,12 +73384,12 @@
       "attackinplace",
       "bow",
       "flask",
-      "allies",
+      "ally",
       "presence"
     ],
     "bracket_tags": [
       "flask",
-      "allies",
+      "ally",
       "presence"
     ],
     "links": {
@@ -74181,7 +74126,6 @@
       "trigger",
       "duration",
       "triggerable",
-      "triggered",
       "inbuilttrigger",
       "dot",
       "createsgroundeffect",
@@ -74278,7 +74222,6 @@
       "area",
       "trigger",
       "triggerable",
-      "triggered",
       "inbuilttrigger",
       "attackinplace",
       "dnt_unused",
@@ -77734,8 +77677,7 @@
       "sacrifice",
       "persistent",
       "minion",
-      "trigger",
-      "triggered"
+      "trigger"
     ],
     "bracket_tags": [
       "spell",
@@ -77745,8 +77687,7 @@
       "chaos",
       "persistent",
       "minion",
-      "trigger",
-      "triggered"
+      "trigger"
     ],
     "links": {
       "base_item_rid": 3836,
@@ -78198,13 +78139,13 @@
       "charge",
       "power_charge",
       "crit",
-      "critically_hit"
+      "critical_hit"
     ],
     "bracket_tags": [
       "charge",
       "power_charge",
       "crit",
-      "critically_hit"
+      "critical_hit"
     ],
     "links": {
       "base_item_rid": 3842,
@@ -78339,11 +78280,11 @@
       "support",
       "occult",
       "crit",
-      "critically_hit"
+      "critical_hit"
     ],
     "bracket_tags": [
       "crit",
-      "critically_hit"
+      "critical_hit"
     ],
     "links": {
       "base_item_rid": 3844,
@@ -79203,12 +79144,10 @@
     "tags": [
       "support",
       "trigger",
-      "occult",
-      "triggered"
+      "occult"
     ],
     "bracket_tags": [
-      "trigger",
-      "triggered"
+      "trigger"
     ],
     "links": {
       "base_item_rid": 3856,
@@ -79274,12 +79213,10 @@
       "support",
       "lineage",
       "trigger",
-      "triggered",
       "projectile"
     ],
     "bracket_tags": [
       "trigger",
-      "triggered",
       "projectile"
     ],
     "links": {
@@ -81133,14 +81070,12 @@
       "occult",
       "corpse",
       "trigger",
-      "triggered",
       "reservation"
     ],
     "bracket_tags": [
       "corpse",
       "chaos",
       "trigger",
-      "triggered",
       "reservation"
     ],
     "links": {
@@ -81214,14 +81149,12 @@
       "occult",
       "corpse",
       "trigger",
-      "triggered",
       "reservation"
     ],
     "bracket_tags": [
       "corpse",
       "chaos",
       "trigger",
-      "triggered",
       "reservation"
     ],
     "links": {
@@ -81745,14 +81678,14 @@
       "chaining",
       "chain",
       "hitdamage",
-      "hitting",
+      "hit",
       "shock"
     ],
     "bracket_tags": [
       "projectile",
       "chain",
       "hitdamage",
-      "hitting",
+      "hit",
       "shock"
     ],
     "links": {
@@ -82609,14 +82542,14 @@
       "minion",
       "persistent",
       "occult",
-      "allies",
+      "ally",
       "allied",
       "ailments"
     ],
     "bracket_tags": [
       "persistent",
       "minion",
-      "allies",
+      "ally",
       "allied",
       "ailments"
     ],
@@ -83268,13 +83201,13 @@
       "remnant",
       "flail",
       "remnants",
-      "allies",
+      "ally",
       "presence"
     ],
     "bracket_tags": [
       "remnant",
       "remnants",
-      "allies",
+      "ally",
       "presence"
     ],
     "links": {
@@ -84106,14 +84039,14 @@
       "attack",
       "spear",
       "crit",
-      "critical_hits",
+      "critical_hit",
       "critically_hitting",
       "daze"
     ],
     "bracket_tags": [
       "attack",
       "crit",
-      "critical_hits",
+      "critical_hit",
       "critically_hitting",
       "daze"
     ],
@@ -84969,19 +84902,15 @@
       "hitdamage",
       "hit",
       "crit",
-      "critically_hit",
-      "blind",
-      "blinded",
-      "critical_hits"
+      "critical_hit",
+      "blind"
     ],
     "bracket_tags": [
       "hitdamage",
       "hit",
       "crit",
-      "critically_hit",
-      "blind",
-      "blinded",
-      "critical_hits"
+      "critical_hit",
+      "blind"
     ],
     "links": {
       "base_item_rid": 3931,
@@ -85056,7 +84985,6 @@
       "skillspeed",
       "skill_speed",
       "trigger",
-      "triggered",
       "minion"
     ],
     "bracket_tags": [
@@ -85066,7 +84994,6 @@
       "skillspeed",
       "skill_speed",
       "trigger",
-      "triggered",
       "minion"
     ],
     "links": {
@@ -85857,14 +85784,12 @@
       "hitdamage",
       "hit",
       "trigger",
-      "triggered",
       "condition"
     ],
     "bracket_tags": [
       "hitdamage",
       "hit",
       "trigger",
-      "triggered",
       "conditional",
       "condition"
     ],
@@ -86354,7 +86279,7 @@
       "attacking",
       "hobble",
       "crit",
-      "critically_hit",
+      "critical_hit",
       "channelling"
     ],
     "bracket_tags": [
@@ -86363,7 +86288,7 @@
       "attacking",
       "hobble",
       "crit",
-      "critically_hit",
+      "critical_hit",
       "channelling"
     ],
     "links": {
@@ -86613,13 +86538,13 @@
       "shockedground",
       "shocked_ground",
       "crit",
-      "critically_hit"
+      "critical_hit"
     ],
     "bracket_tags": [
       "shockedground",
       "shocked_ground",
       "crit",
-      "critically_hit"
+      "critical_hit"
     ],
     "links": {
       "base_item_rid": 3951,
@@ -89356,13 +89281,13 @@
       "physical",
       "bleed",
       "hitdamage",
-      "hitting"
+      "hit"
     ],
     "bracket_tags": [
       "attack",
       "bleed",
       "hitdamage",
-      "hitting"
+      "hit"
     ],
     "links": {
       "base_item_rid": 3986,
@@ -89758,15 +89683,13 @@
       "quarterstaff",
       "volatility",
       "condition",
-      "trigger",
-      "triggered"
+      "trigger"
     ],
     "bracket_tags": [
       "volatility",
       "conditional",
       "condition",
-      "trigger",
-      "triggered"
+      "trigger"
     ],
     "links": {
       "base_item_rid": 3991,
@@ -89908,13 +89831,11 @@
       "minion",
       "occult",
       "companion",
-      "companions",
       "hitdamage",
       "hit_damage"
     ],
     "bracket_tags": [
       "companion",
-      "companions",
       "minion",
       "hitdamage",
       "hit_damage"
@@ -89986,14 +89907,12 @@
       "lineage",
       "minion",
       "companion",
-      "companions",
       "hitdamage",
       "hit_damage",
       "recoup"
     ],
     "bracket_tags": [
       "companion",
-      "companions",
       "minion",
       "hitdamage",
       "hit_damage",
@@ -91082,7 +91001,7 @@
       "armour_break",
       "break_armour",
       "parrieddebuff",
-      "parried"
+      "parry"
     ],
     "bracket_tags": [
       "hitdamage",
@@ -91090,7 +91009,7 @@
       "armour_break",
       "break_armour",
       "parrieddebuff",
-      "parried"
+      "parry"
     ],
     "links": {
       "base_item_rid": 4009,
@@ -92004,7 +91923,6 @@
       "usablewhilemoving",
       "areaspell",
       "triggerable",
-      "triggered",
       "inbuilttrigger",
       "consume",
       "consumes",
@@ -92153,7 +92071,6 @@
       "mineable",
       "multicastable",
       "triggerable",
-      "triggered",
       "inbuilttrigger",
       "unleashable",
       "invokable",
@@ -92591,7 +92508,6 @@
       "cascadable",
       "usablewhilemoving",
       "cooldown",
-      "triggered",
       "inbuilttrigger",
       "shock"
     ],
@@ -93388,7 +93304,6 @@
       "interactswithelementalground",
       "whirlwind",
       "slow",
-      "slowing",
       "blind",
       "blinding",
       "knockback",
@@ -93399,7 +93314,6 @@
       "spear",
       "whirlwind",
       "slow",
-      "slowing",
       "blind",
       "blinding",
       "knockback",
@@ -93833,7 +93747,7 @@
       "createsgroundeffect",
       "attackinplace",
       "parrieddebuff",
-      "parried",
+      "parry",
       "consume",
       "consumes",
       "debuff",
@@ -93842,7 +93756,7 @@
     ],
     "bracket_tags": [
       "parrieddebuff",
-      "parried",
+      "parry",
       "consume",
       "consumes",
       "debuff",
@@ -95029,8 +94943,8 @@
         "spear"
       ],
       "damage_types": [
-        "fire",
         "lightning",
+        "fire",
         "cold"
       ],
       "delivery": [
@@ -95100,7 +95014,7 @@
       "freeze",
       "shock",
       "ignite",
-      "allies",
+      "ally",
       "corpse",
       "elementalailments",
       "ailment",
@@ -95113,7 +95027,7 @@
       "freeze",
       "shock",
       "ignite",
-      "allies",
+      "ally",
       "corpse",
       "elementalailments",
       "ailment",
@@ -95431,8 +95345,8 @@
         "persistent"
       ],
       "damage_types": [
-        "fire",
         "lightning",
+        "fire",
         "cold"
       ],
       "delivery": [],
@@ -95686,8 +95600,8 @@
         "triggered"
       ],
       "damage_types": [
-        "fire",
         "lightning",
+        "fire",
         "cold"
       ],
       "delivery": [
@@ -95724,7 +95638,6 @@
       "lightning",
       "cold",
       "fire",
-      "triggered",
       "inbuilttrigger",
       "triggerable",
       "noattackorcasttime",
@@ -95842,7 +95755,6 @@
       "area",
       "trigger",
       "chaos",
-      "triggered",
       "inbuilttrigger",
       "triggerable",
       "noattackorcasttime",
@@ -96291,7 +96203,6 @@
       "trigger",
       "cold",
       "fire",
-      "triggered",
       "inbuilttrigger",
       "triggerable",
       "noattackorcasttime",
@@ -96576,7 +96487,6 @@
       "trigger",
       "physical",
       "chaos",
-      "triggered",
       "inbuilttrigger",
       "triggerable",
       "nonweaponattack",
@@ -97190,12 +97100,10 @@
       "trappable",
       "nature",
       "primal",
-      "slow",
-      "slowing"
+      "slow"
     ],
     "bracket_tags": [
-      "slow",
-      "slowing"
+      "slow"
     ],
     "links": {
       "base_item_rid": 4066,
@@ -97294,7 +97202,6 @@
       "projectile",
       "trigger",
       "cold",
-      "triggered",
       "inbuilttrigger",
       "triggerable",
       "rangedattack",
@@ -97748,7 +97655,6 @@
       "werewolf",
       "hitdamage",
       "hit",
-      "hitting",
       "mark",
       "marked",
       "markactivate",
@@ -97761,7 +97667,6 @@
       "werewolf",
       "hitdamage",
       "hit",
-      "hitting",
       "mark",
       "marked",
       "markactivate",
@@ -97993,8 +97898,8 @@
         "spell"
       ],
       "damage_types": [
-        "fire",
         "lightning",
+        "fire",
         "cold"
       ],
       "delivery": [
@@ -99049,7 +98954,6 @@
       "duration",
       "damage",
       "triggerable",
-      "triggered",
       "inbuilttrigger",
       "attackinplace"
     ],
@@ -99370,12 +99274,12 @@
       "hitdamage",
       "hit",
       "empowered",
-      "empowers",
+      "empower",
       "slam",
       "slams",
       "chilledground",
       "chilled_ground",
-      "allies",
+      "ally",
       "charge",
       "endurance_charge"
     ],
@@ -99388,13 +99292,13 @@
       "hitdamage",
       "hit",
       "empowered",
-      "empowers",
+      "empower",
       "cold",
       "slam",
       "slams",
       "chilledground",
       "chilled_ground",
-      "allies",
+      "ally",
       "charge",
       "endurance_charge"
     ],
@@ -100305,7 +100209,7 @@
       "charge",
       "endurance_charge",
       "hitdamage",
-      "hitting"
+      "hit"
     ],
     "bracket_tags": [
       "perfecttiming",
@@ -100313,7 +100217,7 @@
       "charge",
       "endurance_charge",
       "hitdamage",
-      "hitting"
+      "hit"
     ],
     "links": {
       "base_item_rid": 4093,
@@ -102320,15 +102224,13 @@
       "area",
       "channelling",
       "remote",
-      "trigger",
-      "triggered"
+      "trigger"
     ],
     "bracket_tags": [
       "spell",
       "channelling",
       "remote",
-      "trigger",
-      "triggered"
+      "trigger"
     ],
     "links": {
       "base_item_rid": 4120,
@@ -102401,7 +102303,6 @@
       "forkscrit",
       "bifurcate_critical_hit_chance",
       "trigger",
-      "triggered",
       "minion"
     ],
     "bracket_tags": [
@@ -102413,7 +102314,6 @@
       "forkscrit",
       "bifurcate_critical_hit_chance",
       "trigger",
-      "triggered",
       "minion"
     ],
     "links": {
@@ -103292,16 +103192,14 @@
       "storm",
       "storms",
       "limit",
-      "trigger",
-      "triggered"
+      "trigger"
     ],
     "bracket_tags": [
       "spell",
       "storm",
       "storms",
       "limit",
-      "trigger",
-      "triggered"
+      "trigger"
     ],
     "links": {
       "base_item_rid": 4133,
@@ -104190,7 +104088,6 @@
       "persistent",
       "trigger",
       "triggerable",
-      "triggered",
       "inbuilttrigger",
       "modifiesnextskill",
       "instant",
@@ -105468,16 +105365,14 @@
       "skillconsumesignite",
       "consume",
       "consuming",
-      "ignite",
-      "triggered"
+      "ignite"
     ],
     "bracket_tags": [
       "fire",
       "consume",
       "consuming",
       "ignite",
-      "trigger",
-      "triggered"
+      "trigger"
     ],
     "links": {
       "base_item_rid": 4205,
@@ -105830,8 +105725,8 @@
         "totemcastsalone"
       ],
       "damage_types": [
-        "fire",
         "lightning",
+        "fire",
         "cold"
       ],
       "delivery": [],
@@ -106118,7 +106013,6 @@
       "rare",
       "monstercategory",
       "undead",
-      "hindered",
       "reviving"
     ],
     "bracket_tags": [
@@ -106127,7 +106021,6 @@
       "rare",
       "monstercategory",
       "undead",
-      "hindered",
       "reviving",
       "companion"
     ],
@@ -106355,7 +106248,6 @@
       "spell",
       "trigger",
       "triggerable",
-      "triggered",
       "inbuilttrigger",
       "attackinplace",
       "charge",
@@ -106367,8 +106259,7 @@
       "power_charge",
       "spell",
       "channelling",
-      "trigger",
-      "triggered"
+      "trigger"
     ],
     "links": {
       "base_item_rid": 4217,
@@ -107180,8 +107071,8 @@
         "usablewhilemoving"
       ],
       "damage_types": [
-        "fire",
         "lightning",
+        "fire",
         "cold"
       ],
       "delivery": [
@@ -107230,7 +107121,7 @@
       "hasusagecondition",
       "glory",
       "hitdamage",
-      "hitting",
+      "hit",
       "elementaldamage",
       "elemental",
       "triggering"
@@ -107238,7 +107129,7 @@
     "bracket_tags": [
       "glory",
       "hitdamage",
-      "hitting",
+      "hit",
       "elementaldamage",
       "elemental",
       "trigger",
@@ -107670,13 +107561,13 @@
       "spear",
       "exposure",
       "hitdamage",
-      "hitting"
+      "hit"
     ],
     "bracket_tags": [
       "warcry",
       "exposure",
       "hitdamage",
-      "hitting"
+      "hit"
     ],
     "links": {
       "base_item_rid": 4241,
@@ -108296,14 +108187,14 @@
       "limit",
       "presence",
       "hitdamage",
-      "hitting",
+      "hit",
       "spell",
       "projectile"
     ],
     "bracket_tags": [
       "presence",
       "hitdamage",
-      "hitting",
+      "hit",
       "spell",
       "projectile"
     ],
@@ -108677,15 +108568,13 @@
       "plant",
       "primal",
       "hitdamage",
-      "hit",
-      "hitting"
+      "hit"
     ],
     "bracket_tags": [
       "plant",
       "hitdamage",
       "hit",
-      "trigger",
-      "hitting"
+      "trigger"
     ],
     "links": {
       "base_item_rid": 4251,
@@ -108848,15 +108737,13 @@
       "storm",
       "primal",
       "storms",
-      "trigger",
-      "triggered"
+      "trigger"
     ],
     "bracket_tags": [
       "spell",
       "storm",
       "storms",
-      "trigger",
-      "triggered"
+      "trigger"
     ],
     "links": {
       "base_item_rid": 4253,
@@ -109648,13 +109535,13 @@
       "hitdamage",
       "hit",
       "crit",
-      "critical_hits"
+      "critical_hit"
     ],
     "bracket_tags": [
       "hitdamage",
       "hit",
       "crit",
-      "critical_hits",
+      "critical_hit",
       "attack",
       "fire"
     ],
@@ -109879,8 +109766,8 @@
       ],
       "skill_types": [],
       "damage_types": [
-        "fire",
         "lightning",
+        "fire",
         "cold"
       ],
       "delivery": [

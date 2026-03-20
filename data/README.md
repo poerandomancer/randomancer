@@ -75,10 +75,3 @@ In other words, this mode helps you interpret rerun drift. It does not change ge
 - The report includes both raw SHA-256 hashes and semantic SHA-256 hashes for tracked artifacts.
 
 Important caveat: semantic stability is intentionally conservative. It is designed to tell you when a raw byte hash changed **without obvious content drift**. It should not be treated as a formal proof that two files are identical in every meaningful way. Its job is to help separate likely ordering noise from likely real content changes.
-
-
-## v4 hardening
-
-- `generate_keystone_tooltips` is invoked with `--allow-fallback`.
-- The pipeline now fails that step if `data/enriched/keystone_tooltips.json` is written but contains zero entries.
-- Python 3.9 compatibility: removed `dataclass(slots=True)` usage in the wrapper modules.

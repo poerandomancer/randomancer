@@ -126,46 +126,53 @@ def extract_keystone_lines_from_listing(
     """
     Parses the PoE2DB Keystone listing page (Keystone Passive section),
     using local keystone_names to identify headers.
+    Anchors to the actual content headings, not the nav/index copy.
     """
-    # Locate the start of the Keystone Passive section.
+    # Prefer the real content heading over the nav/index copy.
     start_idx = None
     for i, ln in enumerate(lines):
-        if re.search(r"^Keystone Passive\b", ln, flags=re.I):
+        if re.search(r"^#+\s*Keystone Passive\b", ln, flags=re.I):
             start_idx = i
             break
+
+    # Fallback for cases where heading markup is flattened away.
+    if start_idx is None:
+        hits = [i for i, ln in enumerate(lines) if re.search(r"^Keystone Passive\b", ln, flags=re.I)]
+        if hits:
+            start_idx = hits[-1]
 
     if start_idx is None:
         raise RuntimeError("Could not find 'Keystone Passive' section in page text. PoE2DB markup may have changed.")
 
-    # Stop at the Timeless section (we intentionally ignore it)
+    # Stop at the real Timeless heading, not the nav/index copy.
     stop_idx = None
     for i in range(start_idx + 1, len(lines)):
-        if re.search(r"^Timeless Jewel Keystone\b", lines[i], flags=re.I):
+        if re.search(r"^#+\s*Timeless Jewel Keystone\b", lines[i], flags=re.I):
             stop_idx = i
             break
+
+    # Fallback if heading markup is flattened.
+    if stop_idx is None:
+        for i in range(start_idx + 1, len(lines)):
+            if re.search(r"^Timeless Jewel Keystone\b", lines[i], flags=re.I):
+                stop_idx = i
+                break
 
     if stop_idx is None:
         stop_idx = len(lines)
 
-    # Parse blocks: <NAME> then stat lines until next <NAME>
     out: Dict[str, List[str]] = {}
     current_name: Optional[str] = None
     current_lines: List[str] = []
 
-    noise = {
-        "reset",
-        "keystone",
-        "read more",
-    }
+    noise = {"reset", "keystone", "read more"}
 
     def commit():
         nonlocal current_name, current_lines
         if not current_name:
             return
         clean = [ln.strip() for ln in current_lines if ln and ln.strip()]
-        # Remove accidental header echoes
         clean = [ln for ln in clean if ln.lower() not in noise]
-        # De-dupe while preserving order
         seen = set()
         dedup = []
         for ln in clean:
@@ -183,14 +190,12 @@ def extract_keystone_lines_from_listing(
             continue
 
         if ln in keystone_names:
-            # New keystone
             commit()
             current_name = ln
             current_lines = []
             continue
 
         if current_name:
-            # Filter out junk lines that sometimes appear in the listing
             if ln.startswith("Image") or ln.startswith("*"):
                 continue
             if re.search(r"^PoE DB\b", ln, flags=re.I):
@@ -199,7 +204,6 @@ def extract_keystone_lines_from_listing(
 
     commit()
     return out
-
 
 def poe2db_slug(name: str) -> str:
     """

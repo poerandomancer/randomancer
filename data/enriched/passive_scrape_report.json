@@ -5,21 +5,71 @@
   "totalAscendancyNodes": 196,
   "ascendancyScrapeMatched": 194,
   "ascendancyUnmatched": 2,
-  "nodesUsingScrapedLines": 220,
-  "nodesUsingDataminedFallback": 1120,
-  "nodesWithTagsEnhancedByScraping": 77,
-  "nodesUsingSanitizedScrapedLines": 220,
-  "scrapeMatchesRejectedForBadLines": 11,
+  "nodesUsingScrapedLines": 217,
+  "nodesUsingDataminedFallback": 1123,
+  "nodesWithTagsEnhancedByScraping": 75,
+  "nodesUsingSanitizedScrapedLines": 217,
+  "scrapeMatchesRejectedForBadLines": 14,
   "badScrapeLineSamples": [
     {
-      "name": "Conduit",
+      "name": "Iron Reflexes",
       "type": "keystone",
-      "reason": "single_incomplete_line",
+      "reason": "mostly_single_word_lines",
       "rawSample": [
-        "If you would gain a Charge, Allies in your Presence gain that Charge instead"
+        "Converts",
+        "all",
+        "Evasion Rating",
+        "to",
+        "Armour"
       ],
       "sanitizedSample": [
-        "If you would gain a Charge, Allies in your Presence gain that Charge instead"
+        "Converts",
+        "all",
+        "Evasion Rating",
+        "to",
+        "Armour"
+      ]
+    },
+    {
+      "name": "Glancing Blows",
+      "type": "keystone",
+      "reason": "mostly_single_word_lines",
+      "rawSample": [
+        "Chance to",
+        "Evade",
+        "is",
+        "Unlucky",
+        "Deflect",
+        "Lucky"
+      ],
+      "sanitizedSample": [
+        "Chance to",
+        "Evade",
+        "is",
+        "Unlucky",
+        "Deflect",
+        "Lucky"
+      ]
+    },
+    {
+      "name": "Elemental Equilibrium",
+      "type": "keystone",
+      "reason": "mostly_single_word_lines",
+      "rawSample": [
+        "Create",
+        "Lightning",
+        "Infusion",
+        "Remnants",
+        "instead of",
+        "Fire"
+      ],
+      "sanitizedSample": [
+        "Create",
+        "Lightning",
+        "Infusion",
+        "Remnants",
+        "instead of",
+        "Fire"
       ]
     },
     {
@@ -27,18 +77,20 @@
       "type": "keystone",
       "reason": "contains_metadata_lines",
       "rawSample": [
-        "Can Attack as though using a Quarterstaff while both of your hand slots are empty",
-        "Unarmed Attacks that would use your Quarterstaff's damage gain:",
-        "• Physical damage based on their Skill Level",
-        "• 1% more Attack Speed per 75 Item Evasion Rating on Equipped Armour Items",
-        "• +0.1% to Critical Hit Chance per 10 Item Energy Shield on Equipped Armour Items"
+        "Can",
+        "Attack",
+        "as though using a",
+        "Quarterstaff",
+        "while both of your hand slots are empty",
+        "Unarmed"
       ],
       "sanitizedSample": [
-        "Can Attack as though using a Quarterstaff while both of your hand slots are empty",
-        "Unarmed Attacks that would use your Quarterstaff's damage gain:",
-        "• Physical damage based on their Skill Level",
-        "• 1% more Attack Speed per 75 Item Evasion Rating on Equipped Armour Items",
-        "• +0.1% to Critical Hit Chance per 10 Item Energy Shield on Equipped Armour Items"
+        "Can",
+        "Attack",
+        "as though using a",
+        "Quarterstaff",
+        "while both of your hand slots are empty",
+        "Unarmed"
       ]
     },
     {
@@ -104,6 +156,23 @@
       ]
     },
     {
+      "name": "Barya of Ruzhan",
+      "type": "ascendancy",
+      "reason": "contains_metadata_lines",
+      "rawSample": [
+        "Ascendancy:",
+        "Disciple of Varashta",
+        "Character:",
+        "Sorceress",
+        "Grants Skill:",
+        "Ruzhan, the Blazing Sword"
+      ],
+      "sanitizedSample": [
+        "ascendancy enable fire djinn passive",
+        "\"You have forsaken your duty to my akhara. Yes... we do not abide weakness. But we also do not abide madness in the fervour of battle! Your slain dekhara will have their justice. You must pay.\""
+      ]
+    },
+    {
       "name": "Ruzhan's Trap",
       "type": "ascendancy",
       "reason": "contains_metadata_lines",
@@ -153,41 +222,6 @@
       "sanitizedSample": [
         "Grants Skill: Unbound Avatar",
         "gain unbound ailment stacks"
-      ]
-    },
-    {
-      "name": "Sap of Nightmares",
-      "type": "ascendancy",
-      "reason": "no_meaningful_ascendancy_lines",
-      "rawSample": [
-        "Ascendancy:",
-        "Acolyte of Chayula",
-        "Character:",
-        "Monk",
-        "Leech",
-        "recovers based on"
-      ],
-      "sanitizedSample": [
-        "Damage as well as",
-        "Physical Damage"
-      ]
-    },
-    {
-      "name": "Brew Concoction",
-      "type": "ascendancy",
-      "reason": "contains_metadata_lines",
-      "rawSample": [
-        "Ascendancy:",
-        "Pathfinder",
-        "Character:",
-        "Ranger",
-        "Explosive Concoction",
-        "Ascendancy:"
-      ],
-      "sanitizedSample": [
-        "Explosive Concoction Ascendancy: Pathfinder",
-        "Explosive Concoction Shattering Concoction",
-        "Grants Skill: Shattering Concoction"
       ]
     }
   ],

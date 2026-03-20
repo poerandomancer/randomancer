@@ -8,8 +8,11 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/totemmax.dds",
       "lines": [
-        "Unlimited number of Summoned Totems",
-        "Totems reserve 75 Spirit each"
+        "Unlimited number of Summoned",
+        "Totems",
+        "Totems reserve 75",
+        "Spirit",
+        "each"
       ],
       "tags": [],
       "flavour": "A wooden construct, mute and blind.\r\nBut fear the wrath of shackled mind.",
@@ -26,8 +29,11 @@
         "Keystone ancestral bond"
       ],
       "scrapedLines": [
-        "Unlimited number of Summoned Totems",
-        "Totems reserve 75 Spirit each"
+        "Unlimited number of Summoned",
+        "Totems",
+        "Totems reserve 75",
+        "Spirit",
+        "each"
       ],
       "scrapedTags": [],
       "derivedTags": [],
@@ -88,9 +94,21 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/FireSpellsBecomeChaosSpellsKeystone.dds",
       "lines": [
-        "Fire Spells Convert 100% of Fire Damage to Chaos Damage",
-        "Chaos Damage from Fire Spells Contributes to Flammability and Ignite Magnitudes",
-        "Ignite inflicted with Fire Spells deals Chaos Damage instead of Fire Damage"
+        "Fire",
+        "Spells",
+        "Convert",
+        "100% of Fire Damage to",
+        "Chaos Damage",
+        "from",
+        "Contributes",
+        "to",
+        "Flammability",
+        "and",
+        "Ignite",
+        "Magnitudes",
+        "inflicted with",
+        "deals",
+        "instead of Fire Damage"
       ],
       "tags": [
         "chaos",
@@ -110,9 +128,21 @@
         "Keystone fire spells become chaos spells"
       ],
       "scrapedLines": [
-        "Fire Spells Convert 100% of Fire Damage to Chaos Damage",
-        "Chaos Damage from Fire Spells Contributes to Flammability and Ignite Magnitudes",
-        "Ignite inflicted with Fire Spells deals Chaos Damage instead of Fire Damage"
+        "Fire",
+        "Spells",
+        "Convert",
+        "100% of Fire Damage to",
+        "Chaos Damage",
+        "from",
+        "Contributes",
+        "to",
+        "Flammability",
+        "and",
+        "Ignite",
+        "Magnitudes",
+        "inflicted with",
+        "deals",
+        "instead of Fire Damage"
       ],
       "scrapedTags": [
         "fire",
@@ -140,7 +170,9 @@
       "icon": "Art/2DArt/SkillIcons/passives/KeystoneBloodMagic.dds",
       "lines": [
         "You have no Mana",
-        "Skill Mana Costs Converted to Life Costs"
+        "Skill Mana Costs",
+        "Converted",
+        "to Life Costs"
       ],
       "tags": [
         "life",
@@ -161,7 +193,9 @@
       ],
       "scrapedLines": [
         "You have no Mana",
-        "Skill Mana Costs Converted to Life Costs"
+        "Skill Mana Costs",
+        "Converted",
+        "to Life Costs"
       ],
       "scrapedTags": [
         "mana",
@@ -185,7 +219,9 @@
       "icon": "Art/2DArt/SkillIcons/passives/BulwarkKeystone.dds",
       "lines": [
         "Dodge Roll cannot Avoid Damage",
-        "Take 30% less Damage from Hits while Dodge Rolling"
+        "Take 30% less",
+        "Damage from Hits",
+        "while Dodge Rolling"
       ],
       "tags": [],
       "flavour": "In battle, certainty is worth a little pain.",
@@ -203,7 +239,9 @@
       ],
       "scrapedLines": [
         "Dodge Roll cannot Avoid Damage",
-        "Take 30% less Damage from Hits while Dodge Rolling"
+        "Take 30% less",
+        "Damage from Hits",
+        "while Dodge Rolling"
       ],
       "scrapedTags": [],
       "derivedTags": [],
@@ -222,7 +260,10 @@
       "icon": "Art/2DArt/SkillIcons/passives/KeystoneChaosInoculation.dds",
       "lines": [
         "Maximum Life is 1",
-        "Immune to Chaos Damage and Bleeding"
+        "Immune to",
+        "Chaos",
+        "Damage and",
+        "Bleeding"
       ],
       "tags": [
         "chaos",
@@ -243,7 +284,10 @@
       ],
       "scrapedLines": [
         "Maximum Life is 1",
-        "Immune to Chaos Damage and Bleeding"
+        "Immune to",
+        "Chaos",
+        "Damage and",
+        "Bleeding"
       ],
       "scrapedTags": [
         "life",
@@ -310,7 +354,14 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/KeystoneConduit.dds",
       "lines": [
-        "Keystone conduit"
+        "If you would gain a",
+        "Charge",
+        ",",
+        "Allies",
+        "in your",
+        "Presence",
+        "gain that",
+        "instead"
       ],
       "tags": [],
       "flavour": "To me, brave companions! Feel my radiance flow through you!",
@@ -327,14 +378,21 @@
         "Keystone conduit"
       ],
       "scrapedLines": [
-        "If you would gain a Charge, Allies in your Presence gain that Charge instead"
+        "If you would gain a",
+        "Charge",
+        ",",
+        "Allies",
+        "in your",
+        "Presence",
+        "gain that",
+        "instead"
       ],
       "scrapedTags": [],
       "derivedTags": [],
-      "descriptionSource": "datamined",
+      "descriptionSource": "scraped",
       "scrapeMatched": true,
       "scrapeMatchedBy": "legacy",
-      "scrapeRejectedReason": "single_incomplete_line",
+      "scrapeRejectedReason": null,
       "tagSources": []
     },
     {
@@ -384,9 +442,15 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/CrimsonAssaultKeystone.dds",
       "lines": [
-        "Bleeding you inflict is Aggravated",
-        "Base Bleeding Duration is 1 second",
-        "50% more Magnitude of Bleeding you inflict"
+        "Bleeding",
+        "you inflict is",
+        "Aggravated",
+        "Base",
+        "Duration is 1 second",
+        "50% more",
+        "Magnitude",
+        "of",
+        "you inflict"
       ],
       "tags": [],
       "flavour": "Each nick and cut brings death one step closer.",
@@ -403,9 +467,15 @@
         "Keystone crimson assault"
       ],
       "scrapedLines": [
-        "Bleeding you inflict is Aggravated",
-        "Base Bleeding Duration is 1 second",
-        "50% more Magnitude of Bleeding you inflict"
+        "Bleeding",
+        "you inflict is",
+        "Aggravated",
+        "Base",
+        "Duration is 1 second",
+        "50% more",
+        "Magnitude",
+        "of",
+        "you inflict"
       ],
       "scrapedTags": [],
       "derivedTags": [],
@@ -423,7 +493,11 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/DancewithDeathKeystone.dds",
       "lines": [
-        "25% more Skill Speed while Off Hand is empty and you have a One-Handed Martial Weapon equipped in your Main Hand"
+        "25% more Skill Speed while Off Hand is empty and you have",
+        "a",
+        "One-Handed",
+        "Martial Weapon",
+        "equipped in your Main Hand"
       ],
       "tags": [],
       "flavour": "You circle the black scorpion with enmity, daring it time and again.",
@@ -440,7 +514,11 @@
         "Keystone dance with death"
       ],
       "scrapedLines": [
-        "25% more Skill Speed while Off Hand is empty and you have a One-Handed Martial Weapon equipped in your Main Hand"
+        "25% more Skill Speed while Off Hand is empty and you have",
+        "a",
+        "One-Handed",
+        "Martial Weapon",
+        "equipped in your Main Hand"
       ],
       "scrapedTags": [],
       "derivedTags": [],
@@ -505,7 +583,10 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/KeystoneEldritchBattery.dds",
       "lines": [
-        "Converts all Energy Shield to Mana",
+        "Converts",
+        "all",
+        "Energy Shield",
+        "to Mana",
         "Doubles Mana Costs"
       ],
       "tags": [
@@ -526,7 +607,10 @@
         "Keystone eldritch battery"
       ],
       "scrapedLines": [
-        "Converts all Energy Shield to Mana",
+        "Converts",
+        "all",
+        "Energy Shield",
+        "to Mana",
         "Doubles Mana Costs"
       ],
       "scrapedTags": [
@@ -550,15 +634,9 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/KeystoneElementalEquilibrium.dds",
       "lines": [
-        "Create Lightning Infusion Remnants instead of Fire",
-        "Create Cold Infusion Remnants instead of Lightning",
-        "Create Fire Infusion Remnants instead of Cold"
+        "+1 Keystone elemental equilibrium"
       ],
-      "tags": [
-        "cold",
-        "fire",
-        "lightning"
-      ],
+      "tags": [],
       "flavour": "Balance is good in all things, but especially in the realm of magic.",
       "rawStats": [
         {
@@ -573,23 +651,21 @@
         "+1 Keystone elemental equilibrium"
       ],
       "scrapedLines": [
-        "Create Lightning Infusion Remnants instead of Fire",
-        "Create Cold Infusion Remnants instead of Lightning",
-        "Create Fire Infusion Remnants instead of Cold"
+        "Create",
+        "Lightning",
+        "Infusion",
+        "Remnants",
+        "instead of",
+        "Fire",
+        "Cold"
       ],
-      "scrapedTags": [
-        "fire",
-        "cold",
-        "lightning"
-      ],
+      "scrapedTags": [],
       "derivedTags": [],
-      "descriptionSource": "scraped",
+      "descriptionSource": "datamined",
       "scrapeMatched": true,
       "scrapeMatchedBy": "legacy",
-      "scrapeRejectedReason": null,
-      "tagSources": [
-        "scraped"
-      ]
+      "scrapeRejectedReason": "mostly_single_word_lines",
+      "tagSources": []
     },
     {
       "id": "passive_keystone_eternal_youth",
@@ -599,8 +675,12 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/EternalYouth.dds",
       "lines": [
-        "Life Recharges instead of Energy Shield",
-        "50% less Life Recovery from Flasks"
+        "Life",
+        "Recharges",
+        "instead of",
+        "Energy Shield",
+        "50% less Life Recovery from",
+        "Flasks"
       ],
       "tags": [
         "energy_shield",
@@ -620,8 +700,12 @@
         "Keystone eternal youth"
       ],
       "scrapedLines": [
-        "Life Recharges instead of Energy Shield",
-        "50% less Life Recovery from Flasks"
+        "Life",
+        "Recharges",
+        "instead of",
+        "Energy Shield",
+        "50% less Life Recovery from",
+        "Flasks"
       ],
       "scrapedTags": [
         "energy_shield",
@@ -644,9 +728,21 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/GiantBloodKeystone.dds",
       "lines": [
-        "You can wield Two-Handed Axes, Maces and Swords in one hand",
-        "Triple Attribute requirements of Martial Weapons",
-        "Inherent Life granted by Strength is halved"
+        "You can wield",
+        "Two-Handed",
+        "Axes",
+        ",",
+        "Maces",
+        "and",
+        "Swords",
+        "in one hand",
+        "Triple",
+        "Attribute",
+        "requirements of",
+        "Martial Weapons",
+        "Inherent Life granted by",
+        "Strength",
+        "is halved"
       ],
       "tags": [
         "life"
@@ -665,9 +761,21 @@
         "Keystone giants blood"
       ],
       "scrapedLines": [
-        "You can wield Two-Handed Axes, Maces and Swords in one hand",
-        "Triple Attribute requirements of Martial Weapons",
-        "Inherent Life granted by Strength is halved"
+        "You can wield",
+        "Two-Handed",
+        "Axes",
+        ",",
+        "Maces",
+        "and",
+        "Swords",
+        "in one hand",
+        "Triple",
+        "Attribute",
+        "requirements of",
+        "Martial Weapons",
+        "Inherent Life granted by",
+        "Strength",
+        "is halved"
       ],
       "scrapedTags": [
         "life"
@@ -689,8 +797,7 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/GlancingBlows.dds",
       "lines": [
-        "Chance to Evade is Unlucky",
-        "Chance to Deflect is Lucky"
+        "Keystone glancing blows"
       ],
       "tags": [],
       "flavour": "Utter trust in your defence unleashes ultimate potential.",
@@ -707,15 +814,19 @@
         "Keystone glancing blows"
       ],
       "scrapedLines": [
-        "Chance to Evade is Unlucky",
-        "Chance to Deflect is Lucky"
+        "Chance to",
+        "Evade",
+        "is",
+        "Unlucky",
+        "Deflect",
+        "Lucky"
       ],
       "scrapedTags": [],
       "derivedTags": [],
-      "descriptionSource": "scraped",
+      "descriptionSource": "datamined",
       "scrapeMatched": true,
       "scrapeMatchedBy": "legacy",
-      "scrapeRejectedReason": null,
+      "scrapeRejectedReason": "mostly_single_word_lines",
       "tagSources": []
     },
     {
@@ -780,11 +891,27 @@
         "Keystone hollow palm technique"
       ],
       "scrapedLines": [
-        "Can Attack as though using a Quarterstaff while both of your hand slots are empty",
-        "Unarmed Attacks that would use your Quarterstaff's damage gain:",
-        "• Physical damage based on their Skill Level",
-        "• 1% more Attack Speed per 75 Item Evasion Rating on Equipped Armour Items",
-        "• +0.1% to Critical Hit Chance per 10 Item Energy Shield on Equipped Armour Items"
+        "Can",
+        "Attack",
+        "as though using a",
+        "Quarterstaff",
+        "while both of your hand slots are empty",
+        "Unarmed",
+        "Attacks",
+        "that would use your",
+        "'s damage gain:",
+        "•",
+        "Physical",
+        "damage based on their Skill Level",
+        "• 1% more",
+        "Speed per 75",
+        "Item Evasion Rating",
+        "on",
+        "Equipped Armour Items",
+        "• +0.1% to",
+        "Critical Hit Chance",
+        "per 10",
+        "Item Energy Shield"
       ],
       "scrapedTags": [],
       "derivedTags": [],
@@ -802,12 +929,9 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/KeystoneIronReflexes.dds",
       "lines": [
-        "Converts all Evasion Rating to Armour"
+        "Keystone iron reflexes"
       ],
-      "tags": [
-        "armour",
-        "evasion"
-      ],
+      "tags": [],
       "flavour": "Why should I dodge blows that I do not fear?",
       "rawStats": [
         {
@@ -822,20 +946,19 @@
         "Keystone iron reflexes"
       ],
       "scrapedLines": [
-        "Converts all Evasion Rating to Armour"
+        "Converts",
+        "all",
+        "Evasion Rating",
+        "to",
+        "Armour"
       ],
-      "scrapedTags": [
-        "armour",
-        "evasion"
-      ],
+      "scrapedTags": [],
       "derivedTags": [],
-      "descriptionSource": "scraped",
+      "descriptionSource": "datamined",
       "scrapeMatched": true,
       "scrapeMatchedBy": "legacy",
-      "scrapeRejectedReason": null,
-      "tagSources": [
-        "scraped"
-      ]
+      "scrapeRejectedReason": "mostly_single_word_lines",
+      "tagSources": []
     },
     {
       "id": "passive_keystone_lord_of_the_wilds",
@@ -845,9 +968,18 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/DruidAnimism.dds",
       "lines": [
-        "You can equip a non-Unique Sceptre while wielding a Talisman",
-        "50% less Spirit",
-        "Non-Minion Skills have 50% less Reservation Efficiency"
+        "You can equip a non-",
+        "Unique",
+        "Sceptre",
+        "while wielding a",
+        "Talisman",
+        "50% less",
+        "Spirit",
+        "Non-",
+        "Minion",
+        "Skills have 50% less",
+        "Reservation",
+        "Efficiency"
       ],
       "tags": [
         "minion"
@@ -866,9 +998,18 @@
         "Keystone lord of the wilds"
       ],
       "scrapedLines": [
-        "You can equip a non-Unique Sceptre while wielding a Talisman",
-        "50% less Spirit",
-        "Non-Minion Skills have 50% less Reservation Efficiency"
+        "You can equip a non-",
+        "Unique",
+        "Sceptre",
+        "while wielding a",
+        "Talisman",
+        "50% less",
+        "Spirit",
+        "Non-",
+        "Minion",
+        "Skills have 50% less",
+        "Reservation",
+        "Efficiency"
       ],
       "scrapedTags": [
         "minion"
@@ -890,7 +1031,9 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/heroicspirit.dds",
       "lines": [
-        "All Damage is taken from Mana before Life",
+        "All",
+        "Damage",
+        "is taken from Mana before Life",
         "50% less Mana Recovery Rate"
       ],
       "tags": [
@@ -911,7 +1054,9 @@
         "Keystone mana shield"
       ],
       "scrapedLines": [
-        "All Damage is taken from Mana before Life",
+        "All",
+        "Damage",
+        "is taken from Mana before Life",
         "50% less Mana Recovery Rate"
       ],
       "scrapedTags": [
@@ -938,7 +1083,11 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/NecromanticTalismanKeystone.dds",
       "lines": [
-        "All bonuses from Equipped Amulet apply to your Minions instead of you"
+        "All bonuses from",
+        "Equipped",
+        "Amulet apply to your",
+        "Minions",
+        "instead of you"
       ],
       "tags": [],
       "flavour": "I give you everything, my pets. Do not disappoint me.",
@@ -955,7 +1104,11 @@
         "Minions get amulet stats instead of you"
       ],
       "scrapedLines": [
-        "All bonuses from Equipped Amulet apply to your Minions instead of you"
+        "All bonuses from",
+        "Equipped",
+        "Amulet apply to your",
+        "Minions",
+        "instead of you"
       ],
       "scrapedTags": [],
       "derivedTags": [],
@@ -973,8 +1126,10 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/OasisKeystone2.dds",
       "lines": [
-        "Cannot use Charms",
-        "30% more Recovery from Flasks"
+        "Cannot use",
+        "Charms",
+        "30% more Recovery from",
+        "Flasks"
       ],
       "tags": [],
       "flavour": "The fewer there are, the less you have to share.",
@@ -991,8 +1146,10 @@
         "Keystone oasis"
       ],
       "scrapedLines": [
-        "Cannot use Charms",
-        "30% more Recovery from Flasks"
+        "Cannot use",
+        "Charms",
+        "30% more Recovery from",
+        "Flasks"
       ],
       "scrapedTags": [],
       "derivedTags": [],
@@ -1010,8 +1167,11 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/KeystonePainAttunement.dds",
       "lines": [
-        "30% less Critical Damage Bonus when on Full Life",
-        "30% more Critical Damage Bonus when on Low Life"
+        "30% less",
+        "Critical Damage Bonus",
+        "when on Full Life",
+        "30% more Critical Damage Bonus when on",
+        "Low Life"
       ],
       "tags": [
         "crit",
@@ -1032,8 +1192,11 @@
         "Keystone pain attunement"
       ],
       "scrapedLines": [
-        "30% less Critical Damage Bonus when on Full Life",
-        "30% more Critical Damage Bonus when on Low Life"
+        "30% less",
+        "Critical Damage Bonus",
+        "when on Full Life",
+        "30% more Critical Damage Bonus when on",
+        "Low Life"
       ],
       "scrapedTags": [
         "life",
@@ -1057,9 +1220,14 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/DruidRageKeystone.dds",
       "lines": [
-        "100% more Maximum Rage",
-        "Regenerate 1 Rage per second per 4 Rage spent Recently",
-        "No Rage effect"
+        "100% more Maximum",
+        "Rage",
+        "Regenerate 1",
+        "per second per 4",
+        "spent",
+        "Recently",
+        "No",
+        "effect"
       ],
       "tags": [
         "life_regeneration",
@@ -1079,9 +1247,14 @@
         "Keystone druidic rage"
       ],
       "scrapedLines": [
-        "100% more Maximum Rage",
-        "Regenerate 1 Rage per second per 4 Rage spent Recently",
-        "No Rage effect"
+        "100% more Maximum",
+        "Rage",
+        "Regenerate 1",
+        "per second per 4",
+        "spent",
+        "Recently",
+        "No",
+        "effect"
       ],
       "scrapedTags": [],
       "derivedTags": [
@@ -1104,8 +1277,10 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/KeystoneResoluteTechnique.dds",
       "lines": [
-        "Accuracy Rating is Doubled",
-        "Never deal Critical Hits"
+        "Accuracy",
+        "Rating is Doubled",
+        "Never deal",
+        "Critical Hits"
       ],
       "tags": [
         "crit",
@@ -1125,8 +1300,10 @@
         "Resolute technique"
       ],
       "scrapedLines": [
-        "Accuracy Rating is Doubled",
-        "Never deal Critical Hits"
+        "Accuracy",
+        "Rating is Doubled",
+        "Never deal",
+        "Critical Hits"
       ],
       "scrapedTags": [
         "critical_hit"
@@ -1149,9 +1326,11 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/ResonanceKeystone.dds",
       "lines": [
-        "Gain Power Charges instead of Frenzy Charges",
-        "Gain Frenzy Charges instead of Endurance Charges",
-        "Gain Endurance Charges instead of Power Charges"
+        "Gain",
+        "Power Charges",
+        "instead of",
+        "Frenzy Charges",
+        "Endurance Charges"
       ],
       "tags": [],
       "flavour": "The notes may change, but the song remains the same.",
@@ -1168,9 +1347,11 @@
         "Keystone charge cycle"
       ],
       "scrapedLines": [
-        "Gain Power Charges instead of Frenzy Charges",
-        "Gain Frenzy Charges instead of Endurance Charges",
-        "Gain Endurance Charges instead of Power Charges"
+        "Gain",
+        "Power Charges",
+        "instead of",
+        "Frenzy Charges",
+        "Endurance Charges"
       ],
       "scrapedTags": [],
       "derivedTags": [],
@@ -1188,9 +1369,17 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/SorceressInvocationSpellsKeystone.dds",
       "lines": [
-        "Invocation Skills instead Trigger Spells every 2 seconds",
-        "Invocation Skills cannot gain Energy while Triggering Spells",
-        "Invoked Spells consume 50% less Energy"
+        "Invocation",
+        "Skills instead",
+        "Trigger",
+        "Spells",
+        "every 2 seconds",
+        "Skills cannot gain",
+        "Energy",
+        "while",
+        "Triggering",
+        "Invoked",
+        "Spells consume 50% less"
       ],
       "tags": [],
       "flavour": "A properly disciplined mind gives rise to structured thought.",
@@ -1207,9 +1396,17 @@
         "Keystone auto invocation"
       ],
       "scrapedLines": [
-        "Invocation Skills instead Trigger Spells every 2 seconds",
-        "Invocation Skills cannot gain Energy while Triggering Spells",
-        "Invoked Spells consume 50% less Energy"
+        "Invocation",
+        "Skills instead",
+        "Trigger",
+        "Spells",
+        "every 2 seconds",
+        "Skills cannot gain",
+        "Energy",
+        "while",
+        "Triggering",
+        "Invoked",
+        "Spells consume 50% less"
       ],
       "scrapedTags": [],
       "derivedTags": [],
@@ -1227,10 +1424,20 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/DruidAlternateEnergyShield.dds",
       "lines": [
-        "5% of Physical Damage prevented Recouped as Energy Shield per enemy Power",
-        "Energy Shield does not Recharge",
-        "You cannot Recover Energy Shield from Regeneration",
-        "You cannot Recover Energy Shield to above Armour"
+        "5% of",
+        "Physical",
+        "Damage prevented",
+        "Recouped",
+        "as",
+        "Energy Shield",
+        "per enemy",
+        "Power",
+        "does not",
+        "Recharge",
+        "You cannot Recover",
+        "from Regeneration",
+        "to above",
+        "Armour"
       ],
       "tags": [
         "armour",
@@ -1252,10 +1459,20 @@
         "Keystone alternate es recovery"
       ],
       "scrapedLines": [
-        "5% of Physical Damage prevented Recouped as Energy Shield per enemy Power",
-        "Energy Shield does not Recharge",
-        "You cannot Recover Energy Shield from Regeneration",
-        "You cannot Recover Energy Shield to above Armour"
+        "5% of",
+        "Physical",
+        "Damage prevented",
+        "Recouped",
+        "as",
+        "Energy Shield",
+        "per enemy",
+        "Power",
+        "does not",
+        "Recharge",
+        "You cannot Recover",
+        "from Regeneration",
+        "to above",
+        "Armour"
       ],
       "scrapedTags": [
         "armour",
@@ -1280,9 +1497,17 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/MultipleBeastCompanionsKeystone.dds",
       "lines": [
-        "You can have two Companions of different types",
-        "You have 30% less Defences",
-        "Companions have +1 to each Defence for every 2 of that Defence you have"
+        "Mastery:",
+        "Heist",
+        "You can have two",
+        "Companions",
+        "of different types",
+        "You have 30% less",
+        "Defences",
+        "have +1 to each",
+        "Defence",
+        "for every 2 of that",
+        "you have"
       ],
       "tags": [],
       "flavour": "Bonds forged in battle surpass ties of blood.",
@@ -1299,9 +1524,17 @@
         "Keystone 2 companions"
       ],
       "scrapedLines": [
-        "You can have two Companions of different types",
-        "You have 30% less Defences",
-        "Companions have +1 to each Defence for every 2 of that Defence you have"
+        "Mastery:",
+        "Heist",
+        "You can have two",
+        "Companions",
+        "of different types",
+        "You have 30% less",
+        "Defences",
+        "have +1 to each",
+        "Defence",
+        "for every 2 of that",
+        "you have"
       ],
       "scrapedTags": [],
       "derivedTags": [],
@@ -1358,7 +1591,8 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/KeystoneUnwaveringStance.dds",
       "lines": [
-        "Cannot be Light Stunned",
+        "Cannot be",
+        "Light Stunned",
         "Cannot Dodge Roll or Sprint"
       ],
       "tags": [],
@@ -1376,7 +1610,8 @@
         "Keystone unwavering stance"
       ],
       "scrapedLines": [
-        "Cannot be Light Stunned",
+        "Cannot be",
+        "Light Stunned",
         "Cannot Dodge Roll or Sprint"
       ],
       "scrapedTags": [],
@@ -1395,8 +1630,10 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/vaalpact.dds",
       "lines": [
-        "Life Leech is Instant",
-        "Cannot use Life Flasks"
+        "Life Leech",
+        "is Instant",
+        "Cannot use Life",
+        "Flasks"
       ],
       "tags": [
         "leech",
@@ -1416,8 +1653,10 @@
         "Keystone vaal pact"
       ],
       "scrapedLines": [
-        "Life Leech is Instant",
-        "Cannot use Life Flasks"
+        "Life Leech",
+        "is Instant",
+        "Cannot use Life",
+        "Flasks"
       ],
       "scrapedTags": [
         "life"
@@ -1440,8 +1679,10 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/KeystoneWhispersOfDoom.dds",
       "lines": [
-        "You can apply an additional Curse",
-        "Double Activation Delay of Curses"
+        "You can apply an additional",
+        "Curse",
+        "Double Activation Delay of",
+        "Curses"
       ],
       "tags": [],
       "flavour": "Your grandchildren will awaken screaming in memory of what I utter today.",
@@ -1458,8 +1699,10 @@
         "Keystone hex master"
       ],
       "scrapedLines": [
-        "You can apply an additional Curse",
-        "Double Activation Delay of Curses"
+        "You can apply an additional",
+        "Curse",
+        "Double Activation Delay of",
+        "Curses"
       ],
       "scrapedTags": [],
       "derivedTags": [],
@@ -1477,7 +1720,11 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/DruidWildsurgeIncantation.dds",
       "lines": [
-        "Storm and Plant Spells:",
+        "Storm",
+        "and",
+        "Plant",
+        "Spells",
+        ":",
         "• deal 50% more damage",
         "• cost 50% less",
         "• have 75% less duration"
@@ -1497,7 +1744,11 @@
         "Keystone wildsurge incantation"
       ],
       "scrapedLines": [
-        "Storm and Plant Spells:",
+        "Storm",
+        "and",
+        "Plant",
+        "Spells",
+        ":",
         "• deal 50% more damage",
         "• cost 50% less",
         "• have 75% less duration"
@@ -1518,8 +1769,9 @@
       "ascendancy": null,
       "icon": "Art/2DArt/SkillIcons/passives/liferegentoenergyshield.dds",
       "lines": [
-        "Excess Life Recovery from Regeneration is applied to Energy Shield",
-        "Energy Shield does not Recharge"
+        "Excess Life Recovery from Regeneration is applied to",
+        "Energy Shield",
+        "does not Recharge"
       ],
       "tags": [
         "energy_shield",
@@ -1540,8 +1792,9 @@
         "Keystone zealots oath"
       ],
       "scrapedLines": [
-        "Excess Life Recovery from Regeneration is applied to Energy Shield",
-        "Energy Shield does not Recharge"
+        "Excess Life Recovery from Regeneration is applied to",
+        "Energy Shield",
+        "does not Recharge"
       ],
       "scrapedTags": [
         "energy_shield",
@@ -2144,8 +2397,8 @@
       "icon": "Art/2DArt/SkillIcons/passives/Shaman/ShamanEvenMoreAdaptation.dds",
       "lines": [
         "5% of Physical Damage taken as",
-        "Fire Damage 5% of Physical",
-        "Damage taken as Cold",
+        "Cold Damage 5% of Physical",
+        "Damage taken as Fire",
         "Damage 5% of Physical"
       ],
       "tags": [
@@ -2176,8 +2429,8 @@
       ],
       "scrapedLines": [
         "5% of Physical Damage taken as",
-        "Fire Damage 5% of Physical",
-        "Damage taken as Cold",
+        "Cold Damage 5% of Physical",
+        "Damage taken as Fire",
         "Damage 5% of Physical"
       ],
       "scrapedTags": [
@@ -2346,7 +2599,7 @@
       "ascendancy": "Disciple of Varashta",
       "icon": "Art/2DArt/SkillIcons/passives/DiscipleoftheDjinn/SummonFireDjinn.dds",
       "lines": [
-        "\"You have forsaken your duty to my akhara. Yes... we do not abide weakness. But we also do not abide madness in the fervour of battle! Your slain dekhara will have their justice. You must pay.\""
+        "Ascendancy enable fire djinn passive"
       ],
       "tags": [
         "fire"
@@ -2365,16 +2618,17 @@
         "Ascendancy enable fire djinn passive"
       ],
       "scrapedLines": [
+        "ascendancy enable fire djinn passive",
         "\"You have forsaken your duty to my akhara. Yes... we do not abide weakness. But we also do not abide madness in the fervour of battle! Your slain dekhara will have their justice. You must pay.\""
       ],
       "scrapedTags": [],
       "derivedTags": [
         "fire"
       ],
-      "descriptionSource": "scraped",
+      "descriptionSource": "datamined",
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
-      "scrapeRejectedReason": null,
+      "scrapeRejectedReason": "contains_metadata_lines",
       "tagSources": [
         "derived"
       ]
@@ -5305,9 +5559,9 @@
       "ascendancy": "Acolyte of Chayula",
       "icon": "Art/2DArt/SkillIcons/passives/AcolyteofChayula/AcolyteOfChayulaManaLeechInstant.dds",
       "lines": [
-        "Take no Damage from Volatility",
-        "Gain 1 Volatility on inflicting an",
-        "Elemental Ailment"
+        "Volatility on inflicting an",
+        "Elemental Ailment",
+        "Take no Damage from Volatility"
       ],
       "tags": [
         "ailment"
@@ -5334,9 +5588,9 @@
         "Immune to volatility damage"
       ],
       "scrapedLines": [
-        "Take no Damage from Volatility",
-        "Gain 1 Volatility on inflicting an",
-        "Elemental Ailment"
+        "Volatility on inflicting an",
+        "Elemental Ailment",
+        "Take no Damage from Volatility"
       ],
       "scrapedTags": [],
       "derivedTags": [
