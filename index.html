@@ -359,26 +359,33 @@
       </section>
 
       <section id="challenge-panel" class="panel is-hidden" aria-label="Challenge Contract">
-        <div class="panel-actions">
-          <button id="challenge-view-card" class="view-card-btn" type="button">View Card</button>
-        </div>
         <div id="challenge-contract-output" class="challenge-contract-output" aria-live="polite">
-          <div class="build-title-block">
+          <button id="challenge-open-card" class="build-title-block build-title-block--card-launch" type="button" aria-label="Open challenge card">
+            <span class="build-card-launch__label">Challenge Card</span>
             <h3 id="challenge-contract-title" class="build-name"></h3>
             <p id="challenge-contract-subtitle" class="build-subtext"></p>
+            <span class="build-card-launch__hint">Open card</span>
+          </button>
+          <div class="summary-utility-bar" aria-label="Challenge actions">
+            <button id="challenge-actions-save" class="summary-utility-btn" type="button"><span class="summary-utility-btn__icon" aria-hidden="true">☆</span><span class="summary-utility-btn__label">Save</span></button>
+            <button id="challenge-actions-share" class="summary-utility-btn" type="button"><span class="summary-utility-btn__icon" aria-hidden="true">↗</span><span class="summary-utility-btn__label">Share</span></button>
           </div>
           <div id="challenge-contract-lines" class="summary-panel challenge-contract-lines"></div>
         </div>
       </section>
 
       <section id="build-panel" class="panel">
-        <div class="panel-actions">
-          <button id="build-view-card" class="view-card-btn" type="button">View Card</button>
-        </div>
-        <div class="build-title-block">
+        <button id="build-open-card" class="build-title-block build-title-block--card-launch" type="button" aria-label="Open build card">
+			<span class="build-card-launch__label">Build Card</span>
 			<div id="build-name" class="build-name"></div>
 			<div id="build-subtext" class="build-subtext"></div>
-		</div>
+			<span class="build-card-launch__hint">Open card</span>
+		</button>
+        <div class="summary-utility-bar" aria-label="Build actions">
+          <button id="build-actions-save" class="summary-utility-btn" type="button"><span class="summary-utility-btn__icon" aria-hidden="true">☆</span><span class="summary-utility-btn__label">Save</span></button>
+          <button id="build-actions-share" class="summary-utility-btn" type="button"><span class="summary-utility-btn__icon" aria-hidden="true">↗</span><span class="summary-utility-btn__label">Share</span></button>
+          <button id="build-actions-tools" class="summary-utility-btn summary-utility-btn--icon-only" type="button" aria-label="Open build tools" title="Tools"><span class="summary-utility-btn__icon" aria-hidden="true">⋯</span><span class="summary-utility-btn__label">Tools</span></button>
+        </div>
 
           <div class="sect">
           <div class="sect-head section-header">

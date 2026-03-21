@@ -13,6 +13,8 @@ import {
   closeCardOverlay,
   getSummaryTextFromSnapshot,
   installSummaryAutoRefresh,
+  openSharePanel,
+  openToolsPanel,
   openCardOverlay,
   renderSummaryFromSnapshot
 } from './02-summary-view.js';
@@ -744,14 +746,30 @@ function renderSnapshotToDom(snap){
 
 
   function bindUI(){
-    const buildViewCardBtn = document.getElementById('build-view-card');
-    const challengeViewCardBtn = document.getElementById('challenge-view-card');
+    const buildViewCardBtn = document.getElementById('build-open-card');
+    const challengeViewCardBtn = document.getElementById('challenge-open-card');
+    const buildSaveBtn = document.getElementById('build-actions-save');
+    const challengeSaveBtn = document.getElementById('challenge-actions-save');
+    const buildShareBtn = document.getElementById('build-actions-share');
+    const challengeShareBtn = document.getElementById('challenge-actions-share');
+    const buildToolsBtn = document.getElementById('build-actions-tools');
     const savedListFab = savedFab;
 
     installSummaryAutoRefresh();
 
     buildViewCardBtn?.addEventListener('click', () => openCardOverlay('build'));
     challengeViewCardBtn?.addEventListener('click', () => openCardOverlay('challenge'));
+    buildSaveBtn?.addEventListener('click', () => {
+      saveCurrentBuild();
+      window.RandomancerShowToast?.('Saved locally.');
+    });
+    challengeSaveBtn?.addEventListener('click', () => {
+      saveCurrentChallenge();
+      window.RandomancerShowToast?.('Saved locally.');
+    });
+    buildShareBtn?.addEventListener('click', (evt) => openSharePanel('build', evt.currentTarget));
+    challengeShareBtn?.addEventListener('click', (evt) => openSharePanel('challenge', evt.currentTarget));
+    buildToolsBtn?.addEventListener('click', (evt) => openToolsPanel('build', evt.currentTarget));
 
     savedListFab?.addEventListener('click', openSavedOverlay);
     savedCloseBtn?.addEventListener('click', closeSavedOverlay);
