@@ -1,27 +1,33 @@
 /* === Universal Card View refinement pass === */
-.build-title-block--card-launch{
+.panel-actions--build{
+  top:14px;
+  right:14px;
+  gap:10px;
+}
+.build-panel-action{
+  width:34px;
+  height:34px;
+}
+.build-card-launch-link{
   appearance:none;
-  border:1px solid transparent;
-  background: transparent;
+  margin-top:.7rem;
+  padding:0;
+  border:0;
+  background:transparent;
+  color:var(--gold);
   cursor:pointer;
-  transition: border-color 160ms ease, background-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
-}
-.build-title-block--card-launch:hover,
-.build-title-block--card-launch:focus-visible{
-  outline:none;
-  border-color: rgba(212,170,80,0.22);
-  background: linear-gradient(180deg, rgba(255,244,218,0.03), rgba(255,244,218,0.01));
-  box-shadow: 0 16px 30px rgba(0,0,0,0.12);
-  transform: translateY(-1px);
-}
-.build-card-launch__label,
-.build-card-launch__hint{
-  font-size:.74rem;
-  letter-spacing:.12em;
+  font:inherit;
+  font-size:.9rem;
+  letter-spacing:.08em;
   text-transform:uppercase;
-  color: var(--muted);
+  transition: color 140ms ease, text-shadow 140ms ease, opacity 140ms ease;
 }
-.build-card-launch__hint{ margin-top:.45rem; color:var(--gold); }
+.build-card-launch-link:hover,
+.build-card-launch-link:focus-visible{
+  outline:none;
+  color:#ffe2a4;
+  text-shadow: 0 0 12px rgba(255,225,159,0.18);
+}
 
 .summary-utility-bar{
   display:flex;
@@ -78,16 +84,6 @@
   color:var(--gold);
   margin-bottom:.45rem;
 }
-.summary-floating-panel__item{
-  width:100%;
-  text-align:left;
-  border:1px solid rgba(212,170,80,0.16);
-  background: rgba(255,255,255,0.02);
-  color:var(--ink);
-  border-radius:12px;
-  padding:.7rem .8rem;
-}
-.card-share-popover,
 .summary-floating-panel__section{
   display:grid;
   gap:.65rem;
@@ -120,11 +116,19 @@
   flex-wrap:wrap;
   gap:.5rem;
 }
-.card-share-popover__loading{
-  padding:.75rem .8rem;
+.card-share-popover__loading,
+.card-share-popover__url{
+  padding:.8rem .85rem;
   border-radius:12px;
   background: rgba(255,255,255,0.03);
+  border:1px solid rgba(212,170,80,0.16);
+}
+.card-share-popover__loading{
   color:var(--muted);
+}
+.card-share-popover__url{
+  color:var(--ink);
+  word-break:break-word;
 }
 .card-share-status{
   padding:.7rem .8rem;
@@ -346,28 +350,29 @@
     0 28px 64px rgba(0,0,0,0.34),
     0 0 0 2px rgba(255,225,159,0.28);
 }
-.card-flip-cue{
+.card-flip-indicator{
   position:absolute;
   right:14px;
-  bottom:14px;
+  bottom:16px;
   z-index:4;
+  width:28px;
+  height:28px;
   display:grid;
-  gap:.1rem;
-  padding:.45rem .6rem;
-  border-radius:14px;
-  border:1px solid rgba(212,170,80,0.2);
-  background: rgba(10,10,12,0.42);
+  place-items:center;
+  border-radius:999px;
+  border:1px solid rgba(212,170,80,0.14);
+  background: rgba(10,10,12,0.2);
   color:var(--gold);
-  pointer-events:auto;
+  opacity:.52;
+  pointer-events:none;
+  transition: opacity 160ms ease, transform 160ms ease, border-color 160ms ease, background-color 160ms ease;
 }
-.card-flip-cue__face{
-  font-size:.74rem;
-  text-transform:uppercase;
-  letter-spacing:.12em;
-}
-.card-flip-cue__hint{
-  font-size:.82rem;
-  color:var(--muted);
+.rc-card[data-card-flip-surface="1"]:hover .card-flip-indicator,
+.rc-card[data-card-flip-surface="1"]:focus-visible .card-flip-indicator{
+  opacity:.9;
+  transform: translateY(-1px);
+  border-color: rgba(255,222,160,0.32);
+  background: rgba(10,10,12,0.34);
 }
 .rc-card::before,
 .rc-card::after{

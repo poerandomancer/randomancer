@@ -360,12 +360,11 @@
 
       <section id="challenge-panel" class="panel is-hidden" aria-label="Challenge Contract">
         <div id="challenge-contract-output" class="challenge-contract-output" aria-live="polite">
-          <button id="challenge-open-card" class="build-title-block build-title-block--card-launch" type="button" aria-label="Open challenge card">
-            <span class="build-card-launch__label">Challenge Card</span>
+          <div class="build-title-block">
             <h3 id="challenge-contract-title" class="build-name"></h3>
             <p id="challenge-contract-subtitle" class="build-subtext"></p>
-            <span class="build-card-launch__hint">Open card</span>
-          </button>
+            <button id="challenge-open-card" class="build-card-launch-link" type="button">View Challenge Card</button>
+          </div>
           <div class="summary-utility-bar" aria-label="Challenge actions">
             <button id="challenge-actions-save" class="summary-utility-btn" type="button"><span class="summary-utility-btn__icon" aria-hidden="true">☆</span><span class="summary-utility-btn__label">Save</span></button>
             <button id="challenge-actions-share" class="summary-utility-btn" type="button"><span class="summary-utility-btn__icon" aria-hidden="true">↗</span><span class="summary-utility-btn__label">Share</span></button>
@@ -375,17 +374,15 @@
       </section>
 
       <section id="build-panel" class="panel">
-        <button id="build-open-card" class="build-title-block build-title-block--card-launch" type="button" aria-label="Open build card">
-			<span class="build-card-launch__label">Build Card</span>
+        <div class="panel-actions panel-actions--build" aria-label="Build utilities">
+          <button id="build-actions-save" class="icon-btn card-action-btn build-panel-action" type="button" aria-label="Save" title="Save"><span aria-hidden="true">☆</span></button>
+          <button id="build-actions-poe" class="icon-btn card-action-btn build-panel-action" type="button" aria-label="Open in poe.ninja" title="Open in poe.ninja"><span aria-hidden="true">🥷</span></button>
+        </div>
+        <div class="build-title-block">
 			<div id="build-name" class="build-name"></div>
 			<div id="build-subtext" class="build-subtext"></div>
-			<span class="build-card-launch__hint">Open card</span>
-		</button>
-        <div class="summary-utility-bar" aria-label="Build actions">
-          <button id="build-actions-save" class="summary-utility-btn" type="button"><span class="summary-utility-btn__icon" aria-hidden="true">☆</span><span class="summary-utility-btn__label">Save</span></button>
-          <button id="build-actions-share" class="summary-utility-btn" type="button"><span class="summary-utility-btn__icon" aria-hidden="true">↗</span><span class="summary-utility-btn__label">Share</span></button>
-          <button id="build-actions-tools" class="summary-utility-btn summary-utility-btn--icon-only" type="button" aria-label="Open build tools" title="Tools"><span class="summary-utility-btn__icon" aria-hidden="true">⋯</span><span class="summary-utility-btn__label">Tools</span></button>
-        </div>
+          <button id="build-open-card" class="build-card-launch-link" type="button">Share Build Card</button>
+		</div>
 
           <div class="sect">
           <div class="sect-head section-header">

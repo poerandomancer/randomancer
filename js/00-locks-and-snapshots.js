@@ -14,7 +14,6 @@ import {
   getSummaryTextFromSnapshot,
   installSummaryAutoRefresh,
   openSharePanel,
-  openToolsPanel,
   openCardOverlay,
   renderSummaryFromSnapshot
 } from './02-summary-view.js';
@@ -524,8 +523,8 @@ function renderSnapshotToDom(snap){
 	  const btn = document.getElementById('build-actions-save');
 	  if (!btn) return;
 	
-	  const ico = btn.querySelector('.copy-menu-ico');
-	  const label = btn.querySelector('.copy-menu-label');
+	  const ico = btn.querySelector('.copy-menu-ico, .summary-utility-btn__icon, span');
+	  const label = btn.querySelector('.copy-menu-label, .summary-utility-btn__label');
 	
 	  const list = loadSaved();
 	  const activeCode = code || (() => { const snap = currentSnap(); return encodeSnapshot(snap); })();
@@ -660,8 +659,8 @@ function renderSnapshotToDom(snap){
     const btn = document.getElementById('challenge-actions-save');
     if (!btn) return;
 
-    const ico = btn.querySelector('.copy-menu-ico');
-    const label = btn.querySelector('.copy-menu-label');
+    const ico = btn.querySelector('.copy-menu-ico, .summary-utility-btn__icon, span');
+    const label = btn.querySelector('.copy-menu-label, .summary-utility-btn__label');
     const list = loadSavedChallenges();
     const activeCode = code || (() => { const c = currentChallenge(); return encodeChallengeContract(c); })();
     const saved = !!(activeCode && list.some(e => e.code === activeCode));
@@ -749,10 +748,9 @@ function renderSnapshotToDom(snap){
     const buildViewCardBtn = document.getElementById('build-open-card');
     const challengeViewCardBtn = document.getElementById('challenge-open-card');
     const buildSaveBtn = document.getElementById('build-actions-save');
+    const buildPoeBtn = document.getElementById('build-actions-poe');
     const challengeSaveBtn = document.getElementById('challenge-actions-save');
-    const buildShareBtn = document.getElementById('build-actions-share');
     const challengeShareBtn = document.getElementById('challenge-actions-share');
-    const buildToolsBtn = document.getElementById('build-actions-tools');
     const savedListFab = savedFab;
 
     installSummaryAutoRefresh();
@@ -763,13 +761,16 @@ function renderSnapshotToDom(snap){
       saveCurrentBuild();
       window.RandomancerShowToast?.('Saved locally.');
     });
+    buildPoeBtn?.addEventListener('click', () => {
+      const snap = window.App?.state?.currentRoll || window.CURRENT_ROLL;
+      const url = window.RandomancerBuildPoeNinjaUrl?.(snap);
+      if (url) window.open(url, '_blank', 'noopener,noreferrer');
+    });
     challengeSaveBtn?.addEventListener('click', () => {
       saveCurrentChallenge();
       window.RandomancerShowToast?.('Saved locally.');
     });
-    buildShareBtn?.addEventListener('click', (evt) => openSharePanel('build', evt.currentTarget));
     challengeShareBtn?.addEventListener('click', (evt) => openSharePanel('challenge', evt.currentTarget));
-    buildToolsBtn?.addEventListener('click', (evt) => openToolsPanel('build', evt.currentTarget));
 
     savedListFab?.addEventListener('click', openSavedOverlay);
     savedCloseBtn?.addEventListener('click', closeSavedOverlay);
