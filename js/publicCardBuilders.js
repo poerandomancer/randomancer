@@ -46,17 +46,29 @@ function limit(list, max = 3) {
   return compactArray(list).slice(0, max);
 }
 
+function getAscendancyArtPath(ascendancy) {
+  if (!ascendancy) return '';
+  return `/images/ascendancies/${String(ascendancy).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}.webp`;
+}
+
+function buildFrontFaceGroups(snapshot, weaponLabel) {
+  const snap = snapshot || {};
+  const groups = [
+    { label: 'Ascendancy', values: compactArray([snap.ascendancy || snap.className]).slice(0, 1) },
+    { label: 'Weapons', values: compactArray([weaponLabel]).slice(0, 2) },
+    { label: 'Combat', values: compactArray([...(snap.ailmentList || []), ...(snap.tacticList || [])]).slice(0, 3) },
+    { label: 'Defense', values: compactArray([snap.defStrat || snap.defense]).slice(0, 2) },
+    { label: 'Skills', values: compactArray(snap.recommendedSkills, (entry) => entry?.name || entry?.id || entry).slice(0, 2) },
+  ];
+  return groups.filter((group) => group.values.length);
+}
+
 function buildPublicBuildCardRequest(snapshot) {
   const snap = snapshot || {};
   const weaponLabel = formatWeaponLine(snap.weapon, snap.offhand);
   const title = snap.buildName || [snap.className, snap.ascendancy].filter(Boolean).join(' ') || 'Randomancer Build Card';
   const combat = [...compactArray(snap.ailmentList), ...compactArray(snap.tacticList)].slice(0, 3);
-  const primarySkills = compactArray(snap.recommendedSkills, (entry) => entry?.name || entry?.id || entry).slice(0, 3);
-  const uniqueHighlights = compactArray(snap.recommendedUniques, (entry) => typeof entry === 'string' ? entry : entry?.name).slice(0, 3);
-  const cohesionLabels = compactArray([
-    snap.defStrat,
-    ...(snap.passives?.keystones || []).map((node) => node?.name).filter(Boolean).slice(0, 2),
-  ]).slice(0, 3);
+  const frontFaceGroups = buildFrontFaceGroups(snap, weaponLabel);
   const descriptionBits = [snap.ascendancy || snap.className || '', weaponLabel, ...combat].filter(Boolean);
   const metaTitle = `Randomancer Build Card — ${title}`;
   const metaDescription = descriptionBits.join(' • ').slice(0, 155) || `A shared Randomancer build featuring ${title}.`;
@@ -92,16 +104,14 @@ function buildPublicBuildCardRequest(snapshot) {
       }
     },
     card_data: {
+      cardTypeLabel: 'Randomancer Build Card',
       title,
       subtitle: snap.flavor || '',
       ascendancy: snap.ascendancy || '',
+      ascendancyArtPath: getAscendancyArtPath(snap.ascendancy),
       className: snap.className || '',
       weaponLabel,
-      primarySkills,
-      mechanicTags: limit(combat, 3),
-      uniqueHighlights,
-      cohesionLabels,
-      footerText: 'Randomancer • Shared build artifact',
+      frontFaceGroups
     },
     meta: {
       title: metaTitle,

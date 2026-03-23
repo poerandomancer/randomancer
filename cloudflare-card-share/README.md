@@ -96,6 +96,6 @@ What to verify manually:
 
 1. The share page HTML source already contains the OG/Twitter tags.
 2. The page redirects to `https://therandomancer.com/?card=<slug>` (or your local `APP_BASE_URL`) for humans.
-3. The PNG preview reflects the persisted artifact title, subtitle, and summary chips instead of the generic fallback.
+3. Fresh build shares render a front-face-oriented preview using ascendancy art when available, plus title, subtitle, and grouped card content instead of the old summary slab.
 4. Unknown slugs return a branded not-found page and a fallback image.
 5. Existing legacy `/:slug` links redirect to the new canonical `/s/{kind}/{slug}` URL when the slug still exists.
