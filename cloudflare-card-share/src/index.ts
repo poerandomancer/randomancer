@@ -3,6 +3,9 @@ export interface Env {
   BUILD_OG_IMAGE_URL?: string;
   CHALLENGE_OG_IMAGE_URL?: string;
   DB: D1Database;
+  ASSETS?: {
+    fetch: typeof fetch;
+  };
 }
 
 type CardKind = "build" | "challenge";
@@ -49,6 +52,27 @@ type PublicCardRow = {
 };
 
 type BuildCardData = {
+  title: string;
+  subtitle?: string;
+  cardTypeLabel?: string;
+  ascendancy?: string;
+  ascendancyArtPath?: string;
+  className?: string;
+  weaponLabel?: string;
+  frontFaceGroups?: Array<{
+    label: string;
+    values: string[];
+  }>;
+  legacySummary?: {
+    primarySkills?: string[];
+    mechanicTags?: string[];
+    uniqueHighlights?: string[];
+    cohesionLabels?: string[];
+  };
+  footerText?: string;
+};
+
+type LegacyBuildCardData = {
   title: string;
   subtitle?: string;
   ascendancy?: string;
@@ -308,7 +332,7 @@ async function handleOgImage(kind: CardKind, slug: string, env: Env): Promise<Re
 
   try {
     const cardData = parseCardData(row.card_data_json, kind, row);
-    const png = renderCardPreviewPng(kind, cardData, slug);
+    const png = await renderCardPreviewPng(kind, cardData, slug, env);
     return new Response(toResponseBody(png), {
       status: 200,
       headers: {
@@ -396,57 +420,107 @@ function parseCardData(serialized: string, kind: CardKind, row: PublicCardRow): 
   if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return fallbackCardDataFromLegacyRow(kind, row);
   const title = coerceString((parsed as Record<string, unknown>).title);
   if (!title) return fallbackCardDataFromLegacyRow(kind, row);
-  return parsed as BuildCardData | ChallengeCardData;
+  if (kind === "build") return normalizeBuildCardData(parsed as Record<string, unknown>, row);
+  return parsed as ChallengeCardData;
 }
 
 function fallbackCardDataFromLegacyRow(kind: CardKind, row: PublicCardRow): BuildCardData | ChallengeCardData {
   return kind === "build"
-    ? { title: row.meta_title || row.preview_title || "Randomancer Build Card", subtitle: row.meta_description || row.preview_description || "", footerText: "Randomancer build share" }
+    ? {
+        title: row.meta_title || row.preview_title || "Randomancer Build Card",
+        subtitle: row.meta_description || row.preview_description || "",
+        cardTypeLabel: "Randomancer Build Card",
+        footerText: "Randomancer build share",
+      }
     : { title: row.meta_title || row.preview_title || "Randomancer Challenge Card", subtitle: row.meta_description || row.preview_description || "", footerText: "Randomancer challenge share" };
 }
 
-function renderCardPreviewPng(kind: CardKind, cardData: BuildCardData | ChallengeCardData, slug: string): Uint8Array {
+function normalizeBuildCardData(parsed: Record<string, unknown>, row: PublicCardRow): BuildCardData {
+  const directGroups = Array.isArray(parsed.frontFaceGroups)
+    ? parsed.frontFaceGroups
+        .map((entry) => {
+          if (!entry || typeof entry !== "object" || Array.isArray(entry)) return null;
+          const record = entry as Record<string, unknown>;
+          const label = coerceString(record.label);
+          const values = Array.isArray(record.values) ? record.values.map(coerceString).filter(Boolean).slice(0, 4) : [];
+          return label && values.length ? { label, values } : null;
+        })
+        .filter((entry): entry is { label: string; values: string[] } => !!entry)
+    : [];
+
+  const legacy = parsed as LegacyBuildCardData;
+  const ascendancy = coerceString(parsed.ascendancy) || coerceString(parsed.className);
+  return {
+    title: coerceString(parsed.title) || row.meta_title || "Randomancer Build Card",
+    subtitle: coerceString(parsed.subtitle),
+    cardTypeLabel: coerceString(parsed.cardTypeLabel) || "Randomancer Build Card",
+    ascendancy,
+    ascendancyArtPath: coerceString(parsed.ascendancyArtPath) || inferAscendancyArtPath(ascendancy),
+    className: coerceString(parsed.className),
+    weaponLabel: coerceString(parsed.weaponLabel),
+    frontFaceGroups: directGroups.length ? directGroups : buildLegacyFrontFaceGroups(legacy),
+    legacySummary: {
+      primarySkills: compactLegacyList(legacy.primarySkills),
+      mechanicTags: compactLegacyList(legacy.mechanicTags),
+      uniqueHighlights: compactLegacyList(legacy.uniqueHighlights),
+      cohesionLabels: compactLegacyList(legacy.cohesionLabels),
+    },
+    footerText: coerceString(parsed.footerText) || "Randomancer • Shared build artifact",
+  };
+}
+
+function buildLegacyFrontFaceGroups(cardData: LegacyBuildCardData): Array<{ label: string; values: string[] }> {
+  const groups = [
+    { label: "Ascendancy", values: compactLegacyList([cardData.ascendancy || cardData.className || ""]).slice(0, 1) },
+    { label: "Weapons", values: compactLegacyList([cardData.weaponLabel || ""]).slice(0, 2) },
+    { label: "Combat", values: compactLegacyList(cardData.mechanicTags).slice(0, 3) },
+    { label: "Skills", values: compactLegacyList(cardData.primarySkills).slice(0, 3) },
+    { label: "Themes", values: compactLegacyList(cardData.cohesionLabels).slice(0, 3) },
+  ];
+  return groups.filter((group) => group.values.length);
+}
+
+function compactLegacyList(values?: string[]): string[] {
+  return Array.isArray(values) ? values.map(coerceString).filter(Boolean) : [];
+}
+
+function inferAscendancyArtPath(ascendancy: string): string {
+  const slug = slugifyDisplayText(ascendancy);
+  return slug ? `/images/ascendancies/${slug}.webp` : "";
+}
+
+async function renderCardPreviewPng(kind: CardKind, cardData: BuildCardData | ChallengeCardData, slug: string, env: Env): Promise<Uint8Array> {
+  if (kind === "build") return renderBuildPreviewPng(cardData as BuildCardData, slug, env);
+
   const canvas = createCanvas(1200, 630, [10, 8, 10, 255]);
-  const accent = kind === "build" ? [243, 171, 83, 255] as PngColor : [139, 109, 255, 255] as PngColor;
-  const accentSoft = kind === "build" ? [108, 64, 24, 255] as PngColor : [62, 44, 126, 255] as PngColor;
+  const accent = [139, 109, 255, 255] as PngColor;
+  const accentSoft = [62, 44, 126, 255] as PngColor;
   drawBackground(canvas, kind, accentSoft);
   fillRoundedRect(canvas, 28, 26, 1144, 578, 26, [18, 16, 18, 220]);
   strokeRoundedRect(canvas, 28, 26, 1144, 578, 26, [255, 255, 255, 22]);
   fillRoundedRect(canvas, 54, 54, 62, 62, 18, [255, 255, 255, 22]);
-  drawSimpleGlyphIcon(canvas, kind === "build" ? "B" : "C", 75, 69, 5, accent);
+  drawSimpleGlyphIcon(canvas, "C", 75, 69, 5, accent);
 
-  drawTextBlock(canvas, kind === "build" ? "RANDOMANCER BUILD" : "RANDOMANCER CHALLENGE", 136, 64, 3, accent, 900, 1);
+  drawTextBlock(canvas, "RANDOMANCER CHALLENGE", 136, 64, 3, accent, 900, 1);
   drawTextBlock(canvas, sanitizePreviewText(cardData.title), 56, 154, 6, [246, 239, 226, 255], 760, 1);
 
   const subtitle = sanitizePreviewText(cardData.subtitle || buildSubtitle(kind, cardData));
   if (subtitle) drawTextBlock(canvas, subtitle, 56, 236, 3, [214, 205, 190, 255], 760, 2);
 
-  const chips = kind === "build"
-    ? [
-        sanitizePreviewText((cardData as BuildCardData).ascendancy || (cardData as BuildCardData).className || ""),
-        sanitizePreviewText((cardData as BuildCardData).weaponLabel || ""),
-        ...((cardData as BuildCardData).mechanicTags || []).map(sanitizePreviewText),
-      ].filter(Boolean).slice(0, 4)
-    : [
-        sanitizePreviewText((cardData as ChallengeCardData).severity || ""),
-        sanitizePreviewText((cardData as ChallengeCardData).category || ""),
-        ...((cardData as ChallengeCardData).tagChips || []).map(sanitizePreviewText),
-      ].filter(Boolean).slice(0, 4);
+  const chips = [
+    sanitizePreviewText((cardData as ChallengeCardData).severity || ""),
+    sanitizePreviewText((cardData as ChallengeCardData).category || ""),
+    ...((cardData as ChallengeCardData).tagChips || []).map(sanitizePreviewText),
+  ].filter(Boolean).slice(0, 4);
   drawChips(canvas, chips, 56, 326, accent);
 
   fillRoundedRect(canvas, 860, 72, 284, 316, 22, [255, 255, 255, 16]);
   strokeRoundedRect(canvas, 860, 72, 284, 316, 22, [255, 255, 255, 20]);
   drawTextBlock(canvas, "SNAPSHOT", 888, 98, 2, [198, 189, 176, 255], 220, 1);
-  const detailLines = kind === "build"
-    ? [
-        joinLabelValue("SKILLS", (cardData as BuildCardData).primarySkills),
-        joinLabelValue("UNIQUES", (cardData as BuildCardData).uniqueHighlights),
-        joinLabelValue("THEMES", (cardData as BuildCardData).cohesionLabels),
-      ]
-    : [
-        joinLabelValue("ANCHOR", [(cardData as ChallengeCardData).anchorTask || ""]),
-        joinLabelValue("TWIST", [(cardData as ChallengeCardData).twistTask || ""]),
-      ];
+  const detailLines = [
+    joinLabelValue("ANCHOR", [(cardData as ChallengeCardData).anchorTask || ""]),
+    joinLabelValue("TWIST", [(cardData as ChallengeCardData).twistTask || ""]),
+  ];
   let y = 136;
   for (const line of detailLines.filter(Boolean)) {
     y = drawTextBlock(canvas, sanitizePreviewText(line), 888, y, 2, [240, 232, 220, 255], 220, 3) + 18;
@@ -454,8 +528,86 @@ function renderCardPreviewPng(kind: CardKind, cardData: BuildCardData | Challeng
 
   const footer = sanitizePreviewText(cardData.footerText || "therandomancer.com");
   drawTextBlock(canvas, footer, 56, 566, 2, [210, 201, 187, 255], 500, 1);
-  drawTextBlock(canvas, sanitizePreviewText(`${kind === "build" ? "S/BUILD" : "S/CHALLENGE"}/${slug}`), 760, 566, 2, accent, 380, 1);
+  drawTextBlock(canvas, sanitizePreviewText(`S/CHALLENGE/${slug}`), 760, 566, 2, accent, 380, 1);
   return encodePng(canvas);
+}
+
+async function renderBuildPreviewPng(cardData: BuildCardData, slug: string, env: Env): Promise<Uint8Array> {
+  const canvas = createCanvas(1200, 630, [8, 7, 9, 255]);
+  const accent = [232, 174, 94, 255] as PngColor;
+  const accentSoft = [111, 69, 31, 255] as PngColor;
+  const artLoaded = await drawBuildBackground(canvas, cardData, env, accentSoft);
+
+  fillRoundedRect(canvas, 26, 24, 1148, 582, 28, [8, 8, 10, 172]);
+  strokeRoundedRect(canvas, 26, 24, 1148, 582, 28, [255, 246, 224, 28]);
+  fillRoundedRect(canvas, 48, 42, 320, 36, 18, [16, 15, 18, 164]);
+  strokeRoundedRect(canvas, 48, 42, 320, 36, 18, [255, 227, 180, 24]);
+  drawTextBlock(canvas, sanitizePreviewText(cardData.cardTypeLabel || "Randomancer Build Card"), 64, 54, 2, accent, 286, 1);
+
+  const identityLine = compactTextList([cardData.ascendancy, cardData.weaponLabel]).join(" • ");
+  if (identityLine) drawTextBlock(canvas, sanitizePreviewText(identityLine), 64, 96, 2, [222, 211, 194, 255], 560, 2);
+
+  drawTextBlock(canvas, sanitizePreviewText(cardData.title), 62, 138, 5, [247, 239, 225, 255], 620, 3);
+  if (cardData.subtitle) drawTextBlock(canvas, sanitizePreviewText(cardData.subtitle), 64, 272, 3, [221, 211, 198, 255], 610, 3);
+
+  const groups = (cardData.frontFaceGroups || []).slice(0, 5);
+  let groupY = 352;
+  for (const group of groups) {
+    fillRoundedRect(canvas, 56, groupY - 10, 500, 68, 18, [14, 13, 16, 170]);
+    strokeRoundedRect(canvas, 56, groupY - 10, 500, 68, 18, [255, 227, 180, 20]);
+    drawTextBlock(canvas, sanitizePreviewText(group.label), 74, groupY + 4, 2, accent, 140, 1);
+    drawTextBlock(canvas, sanitizePreviewText(group.values.slice(0, 3).join(" • ")), 74, groupY + 28, 2, [243, 236, 227, 255], 454, 2);
+    groupY += 82;
+    if (groupY > 570) break;
+  }
+
+  drawBuildIdentityPanel(canvas, cardData, artLoaded, accent);
+
+  drawTextBlock(canvas, sanitizePreviewText(cardData.footerText || "Randomancer • Shared build artifact"), 56, 584, 2, [205, 196, 182, 255], 540, 1);
+  drawTextBlock(canvas, sanitizePreviewText(`S/BUILD/${slug}`), 870, 584, 2, accent, 250, 1);
+  return encodePng(canvas);
+}
+
+function drawBuildIdentityPanel(canvas: TinyPngCanvas, cardData: BuildCardData, artLoaded: boolean, accent: PngColor): void {
+  fillRoundedRect(canvas, 724, 128, 420, 402, 26, [10, 10, 13, 120]);
+  strokeRoundedRect(canvas, 724, 128, 420, 402, 26, [255, 237, 198, 22]);
+  drawTextBlock(canvas, "FRONT FACE", 748, 152, 2, accent, 160, 1);
+  drawTextBlock(canvas, sanitizePreviewText(compactTextList([cardData.ascendancy, artLoaded ? "Ascendancy art" : "Branded fallback"]).join(" • ")), 748, 182, 2, [220, 210, 193, 255], 366, 2);
+  drawTextBlock(canvas, sanitizePreviewText(cardData.ascendancy || cardData.className || "Randomancer"), 748, 234, 4, [245, 235, 216, 255], 360, 3);
+
+  const summaryRows = [
+    { label: "WEAPON", value: cardData.weaponLabel || "UNKNOWN ARSENAL" },
+    { label: "LEAD", value: cardData.frontFaceGroups?.[0]?.values?.[0] || cardData.ascendancy || "RANDOMANCER BUILD" },
+    { label: "TONE", value: cardData.subtitle || "SHARED BUILD ARTIFACT" },
+  ];
+  let y = 352;
+  for (const row of summaryRows) {
+    drawTextBlock(canvas, row.label, 748, y, 2, accent, 90, 1);
+    drawTextBlock(canvas, sanitizePreviewText(row.value), 846, y, 2, [238, 232, 223, 255], 256, 2);
+    y += 56;
+  }
+}
+
+async function drawBuildBackground(canvas: TinyPngCanvas, cardData: BuildCardData, env: Env, accentSoft: PngColor): Promise<boolean> {
+  drawBackground(canvas, "build", accentSoft);
+  const artPath = cardData.ascendancyArtPath || inferAscendancyArtPath(cardData.ascendancy || "");
+  if (artPath && env.ASSETS?.fetch) {
+    try {
+      const art = await loadAssetImage(env, artPath);
+      if (art) {
+        drawCoverImage(canvas, art, { destX: 548, destY: 0, destWidth: 652, destHeight: 630, alignX: 0.5, alignY: 0.28 });
+        applyHorizontalFade(canvas, 0, 0, 900, 630, [0, 0, 0, 126], [0, 0, 0, 0]);
+        applyVerticalFade(canvas, 548, 0, 652, 630, [0, 0, 0, 0], [0, 0, 0, 108]);
+        fillRect(canvas, 0, 0, canvas.width, canvas.height, [0, 0, 0, 50]);
+        return true;
+      }
+    } catch (error) {
+      console.warn("[randomancer-card-share] build art lookup failed", { artPath, error: formatError(error) });
+    }
+  }
+
+  if (cardData.ascendancy) drawTextBlock(canvas, sanitizePreviewText(cardData.ascendancy), 618, 258, 8, [180, 130, 72, 46], 520, 3);
+  return false;
 }
 
 function buildSubtitle(kind: CardKind, cardData: BuildCardData | ChallengeCardData): string {
@@ -562,6 +714,418 @@ function drawTextLine(canvas: TinyPngCanvas, text: string, x: number, y: number,
     }
     cursor += scale * 6;
   }
+}
+
+function compactTextList(values: Array<string | undefined>): string[] {
+  return values.map((value) => coerceString(value)).filter(Boolean);
+}
+
+function slugifyDisplayText(value: string): string {
+  return coerceString(value).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+}
+
+type DecodedAssetImage = {
+  width: number;
+  height: number;
+  pixels: Uint8Array;
+};
+
+async function loadAssetImage(env: Env, pathname: string): Promise<DecodedAssetImage | null> {
+  if (!env.ASSETS?.fetch) return null;
+  const request = new Request(`https://assets.randomancer${pathname}`);
+  const response = await env.ASSETS.fetch(request);
+  if (!response.ok) return null;
+  const contentType = response.headers.get("content-type") || "";
+  const bytes = new Uint8Array(await response.arrayBuffer());
+  if (contentType.includes("image/png")) return decodePng(bytes);
+  if (contentType.includes("image/webp")) return decodeWebP(bytes);
+  return null;
+}
+
+function drawCoverImage(canvas: TinyPngCanvas, image: DecodedAssetImage, placement: { destX: number; destY: number; destWidth: number; destHeight: number; alignX: number; alignY: number; }): void {
+  const scale = Math.max(placement.destWidth / image.width, placement.destHeight / image.height);
+  const sampleWidth = Math.max(1, Math.round(placement.destWidth / scale));
+  const sampleHeight = Math.max(1, Math.round(placement.destHeight / scale));
+  const maxOffsetX = Math.max(0, image.width - sampleWidth);
+  const maxOffsetY = Math.max(0, image.height - sampleHeight);
+  const sourceX = Math.round(maxOffsetX * placement.alignX);
+  const sourceY = Math.round(maxOffsetY * placement.alignY);
+  for (let y = 0; y < placement.destHeight; y += 1) {
+    const srcY = Math.min(image.height - 1, sourceY + Math.floor((y / placement.destHeight) * sampleHeight));
+    for (let x = 0; x < placement.destWidth; x += 1) {
+      const srcX = Math.min(image.width - 1, sourceX + Math.floor((x / placement.destWidth) * sampleWidth));
+      const idx = (srcY * image.width + srcX) * 4;
+      blendPixel(canvas, placement.destX + x, placement.destY + y, [image.pixels[idx], image.pixels[idx + 1], image.pixels[idx + 2], image.pixels[idx + 3]]);
+    }
+  }
+}
+
+function applyHorizontalFade(canvas: TinyPngCanvas, x: number, y: number, width: number, height: number, start: PngColor, end: PngColor): void {
+  for (let yy = y; yy < y + height; yy += 1) {
+    for (let xx = x; xx < x + width; xx += 1) {
+      const ratio = width <= 1 ? 0 : (xx - x) / (width - 1);
+      blendPixel(canvas, xx, yy, mixColor(start, end, ratio));
+    }
+  }
+}
+
+function applyVerticalFade(canvas: TinyPngCanvas, x: number, y: number, width: number, height: number, start: PngColor, end: PngColor): void {
+  for (let yy = y; yy < y + height; yy += 1) {
+    const ratio = height <= 1 ? 0 : (yy - y) / (height - 1);
+    for (let xx = x; xx < x + width; xx += 1) blendPixel(canvas, xx, yy, mixColor(start, end, ratio));
+  }
+}
+
+function mixColor(start: PngColor, end: PngColor, ratio: number): PngColor {
+  const clamped = Math.max(0, Math.min(1, ratio));
+  return [
+    Math.round(start[0] + (end[0] - start[0]) * clamped),
+    Math.round(start[1] + (end[1] - start[1]) * clamped),
+    Math.round(start[2] + (end[2] - start[2]) * clamped),
+    Math.round(start[3] + (end[3] - start[3]) * clamped),
+  ];
+}
+
+function blendPixel(canvas: TinyPngCanvas, x: number, y: number, color: PngColor): void {
+  if (x < 0 || y < 0 || x >= canvas.width || y >= canvas.height) return;
+  const index = (y * canvas.width + x) * 4;
+  const alpha = color[3] / 255;
+  const inv = 1 - alpha;
+  canvas.pixels[index] = Math.round(color[0] * alpha + canvas.pixels[index] * inv);
+  canvas.pixels[index + 1] = Math.round(color[1] * alpha + canvas.pixels[index + 1] * inv);
+  canvas.pixels[index + 2] = Math.round(color[2] * alpha + canvas.pixels[index + 2] * inv);
+  canvas.pixels[index + 3] = Math.min(255, Math.round(color[3] + canvas.pixels[index + 3] * inv));
+}
+
+function decodePng(bytes: Uint8Array): DecodedAssetImage | null {
+  const signature = [137, 80, 78, 71, 13, 10, 26, 10];
+  if (bytes.length < 8 || signature.some((value, index) => bytes[index] !== value)) return null;
+  let offset = 8;
+  let width = 0;
+  let height = 0;
+  let bitDepth = 8;
+  let colorType = 6;
+  const idatParts: Uint8Array[] = [];
+  while (offset + 8 <= bytes.length) {
+    const length = readU32(bytes, offset);
+    const type = bytesToAscii(bytes.subarray(offset + 4, offset + 8));
+    const dataStart = offset + 8;
+    const dataEnd = dataStart + length;
+    if (dataEnd + 4 > bytes.length) return null;
+    const data = bytes.subarray(dataStart, dataEnd);
+    if (type === "IHDR") {
+      width = readU32(data, 0);
+      height = readU32(data, 4);
+      bitDepth = data[8];
+      colorType = data[9];
+    } else if (type === "IDAT") {
+      idatParts.push(data);
+    } else if (type === "IEND") {
+      break;
+    }
+    offset = dataEnd + 4;
+  }
+  if (!width || !height || bitDepth !== 8 || ![2, 6].includes(colorType)) return null;
+  const inflated = inflateZlibNoCompression(concatBytes(idatParts));
+  if (!inflated) return null;
+  const bytesPerPixel = colorType === 6 ? 4 : 3;
+  const stride = width * bytesPerPixel;
+  const pixels = new Uint8Array(width * height * 4);
+  let src = 0;
+  const prev = new Uint8Array(stride);
+  const row = new Uint8Array(stride);
+  for (let y = 0; y < height; y += 1) {
+    const filter = inflated[src++];
+    row.set(inflated.subarray(src, src + stride));
+    src += stride;
+    applyPngFilter(row, prev, filter, bytesPerPixel);
+    for (let x = 0; x < width; x += 1) {
+      const source = x * bytesPerPixel;
+      const dest = (y * width + x) * 4;
+      pixels[dest] = row[source];
+      pixels[dest + 1] = row[source + 1];
+      pixels[dest + 2] = row[source + 2];
+      pixels[dest + 3] = bytesPerPixel === 4 ? row[source + 3] : 255;
+    }
+    prev.set(row);
+  }
+  return { width, height, pixels };
+}
+
+function applyPngFilter(row: Uint8Array, prev: Uint8Array, filter: number, bytesPerPixel: number): void {
+  if (filter === 0) return;
+  for (let i = 0; i < row.length; i += 1) {
+    const left = i >= bytesPerPixel ? row[i - bytesPerPixel] : 0;
+    const up = prev[i] || 0;
+    const upLeft = i >= bytesPerPixel ? prev[i - bytesPerPixel] || 0 : 0;
+    if (filter === 1) row[i] = (row[i] + left) & 0xff;
+    else if (filter === 2) row[i] = (row[i] + up) & 0xff;
+    else if (filter === 3) row[i] = (row[i] + Math.floor((left + up) / 2)) & 0xff;
+    else if (filter === 4) row[i] = (row[i] + paethPredictor(left, up, upLeft)) & 0xff;
+  }
+}
+
+function paethPredictor(a: number, b: number, c: number): number {
+  const p = a + b - c;
+  const pa = Math.abs(p - a);
+  const pb = Math.abs(p - b);
+  const pc = Math.abs(p - c);
+  if (pa <= pb && pa <= pc) return a;
+  if (pb <= pc) return b;
+  return c;
+}
+
+function inflateZlibNoCompression(bytes: Uint8Array): Uint8Array | null {
+  if (bytes.length < 6) return null;
+  let offset = 2;
+  const chunks: Uint8Array[] = [];
+  while (offset < bytes.length - 4) {
+    const header = bytes[offset++];
+    const btype = (header >> 1) & 0x03;
+    const isFinal = header & 0x01;
+    if (btype !== 0) return null;
+    const length = bytes[offset] | (bytes[offset + 1] << 8);
+    const nlen = bytes[offset + 2] | (bytes[offset + 3] << 8);
+    offset += 4;
+    if (((length ^ 0xffff) & 0xffff) !== nlen) return null;
+    chunks.push(bytes.subarray(offset, offset + length));
+    offset += length;
+    if (isFinal) break;
+  }
+  return concatBytes(chunks);
+}
+
+function decodeWebP(bytes: Uint8Array): DecodedAssetImage | null {
+  const riff = bytesToAscii(bytes.subarray(0, 4));
+  const webp = bytesToAscii(bytes.subarray(8, 12));
+  if (riff !== "RIFF" || webp !== "WEBP") return null;
+  let offset = 12;
+  while (offset + 8 <= bytes.length) {
+    const tag = bytesToAscii(bytes.subarray(offset, offset + 4));
+    const size = readU32LE(bytes, offset + 4);
+    const dataStart = offset + 8;
+    const dataEnd = dataStart + size + (size % 2);
+    if (tag === "VP8L") return decodeWebPLossless(bytes.subarray(dataStart, dataStart + size));
+    if (tag === "VP8 ") return null;
+    offset = dataEnd;
+  }
+  return null;
+}
+
+function decodeWebPLossless(chunk: Uint8Array): DecodedAssetImage | null {
+  if (chunk.length < 5 || chunk[0] !== 0x2f) return null;
+  const bits = new BitReader(chunk.subarray(1));
+  const width = bits.readBits(14) + 1;
+  const height = bits.readBits(14) + 1;
+  bits.readBits(1);
+  bits.readBits(3);
+  const colorCacheBits = bits.readBits(1) ? bits.readBits(4) : 0;
+  const cacheSize = colorCacheBits ? 1 << colorCacheBits : 0;
+  const colorCache = cacheSize ? new Uint32Array(cacheSize) : null;
+  const pixels = new Uint8Array(width * height * 4);
+  const huffmanInfo = readHuffmanGroup(bits, false);
+  let x = 0;
+  let y = 0;
+  let prevGreen = 0;
+  while (y < height) {
+    const symbol = decodeHuffman(bits, huffmanInfo.main);
+    let color = 0;
+    if (symbol < 256) {
+      const green = (symbol + prevGreen) & 0xff;
+      const red = (decodeHuffman(bits, huffmanInfo.red) + green) & 0xff;
+      const blue = (decodeHuffman(bits, huffmanInfo.blue) + green) & 0xff;
+      const alpha = (decodeHuffman(bits, huffmanInfo.alpha) + green) & 0xff;
+      color = (alpha << 24) | (red << 16) | (green << 8) | blue;
+      prevGreen = green;
+    } else if (symbol >= 256 && symbol < 280) {
+      const length = decodeLz77Length(symbol, bits);
+      const distSymbol = decodeHuffman(bits, huffmanInfo.distance);
+      const distance = decodeLz77Distance(distSymbol, bits);
+      for (let i = 0; i < length; i += 1) {
+        const target = y * width + x;
+        const source = target - distance;
+        if (source < 0) return null;
+        copyPackedColor(pixels, target, readPackedColor(pixels, source));
+        x += 1;
+        if (x >= width) { x = 0; y += 1; if (y >= height) break; }
+      }
+      continue;
+    } else if (symbol === 280 && colorCache) {
+      const index = bits.readBits(colorCacheBits);
+      color = colorCache[index];
+    } else {
+      return null;
+    }
+
+    copyPackedColor(pixels, y * width + x, color);
+    if (colorCache) colorCache[hashColor(color, colorCacheBits)] = color;
+    x += 1;
+    if (x >= width) { x = 0; y += 1; }
+  }
+  return { width, height, pixels };
+}
+
+class BitReader {
+  private readonly data: Uint8Array;
+  private offset = 0;
+  private bit = 0;
+
+  constructor(data: Uint8Array) {
+    this.data = data;
+  }
+
+  readBits(count: number): number {
+    let value = 0;
+    for (let i = 0; i < count; i += 1) {
+      if (this.offset >= this.data.length) return value;
+      const current = (this.data[this.offset] >> this.bit) & 1;
+      value |= current << i;
+      this.bit += 1;
+      if (this.bit === 8) { this.bit = 0; this.offset += 1; }
+    }
+    return value >>> 0;
+  }
+}
+
+type HuffmanTree = {
+  table: Map<number, number>;
+  maxLength: number;
+};
+
+type HuffmanGroup = {
+  main: HuffmanTree;
+  red: HuffmanTree;
+  blue: HuffmanTree;
+  alpha: HuffmanTree;
+  distance: HuffmanTree;
+};
+
+function readHuffmanGroup(bits: BitReader, hasMetaPrefix: boolean): HuffmanGroup {
+  if (hasMetaPrefix) bits.readBits(1);
+  return {
+    main: readHuffmanTree(bits, 280),
+    red: readHuffmanTree(bits, 256),
+    blue: readHuffmanTree(bits, 256),
+    alpha: readHuffmanTree(bits, 256),
+    distance: readHuffmanTree(bits, 40),
+  };
+}
+
+function readHuffmanTree(bits: BitReader, alphabetSize: number): HuffmanTree {
+  const simple = bits.readBits(1);
+  if (simple) {
+    const count = bits.readBits(1) + 1;
+    const firstCode = bits.readBits(1);
+    const symbols = [bits.readBits(1 + 7)];
+    if (count >= 2) symbols.push(bits.readBits(8));
+    const lengths = new Array(alphabetSize).fill(0);
+    lengths[symbols[0]] = 1;
+    if (count === 2) lengths[symbols[1]] = 1;
+    else lengths[firstCode ? 1 : 0] = 1;
+    return buildHuffmanTree(lengths);
+  }
+
+  const codeLengthCodeOrder = [17,18,0,1,2,3,4,5,16,6,7,8,9,10,11,12,13,14,15];
+  const numCodeLengths = bits.readBits(4) + 4;
+  const codeLengthCodeLengths = new Array(19).fill(0);
+  for (let i = 0; i < numCodeLengths; i += 1) codeLengthCodeLengths[codeLengthCodeOrder[i]] = bits.readBits(3);
+  const codeLengthTree = buildHuffmanTree(codeLengthCodeLengths);
+  const lengths: number[] = [];
+  while (lengths.length < alphabetSize) {
+    const symbol = decodeHuffman(bits, codeLengthTree);
+    if (symbol < 16) lengths.push(symbol);
+    else if (symbol === 16) {
+      const repeat = bits.readBits(2) + 3;
+      const last = lengths[lengths.length - 1] || 0;
+      for (let i = 0; i < repeat; i += 1) lengths.push(last);
+    } else {
+      const repeat = bits.readBits(symbol === 17 ? 3 : 7) + (symbol === 17 ? 3 : 11);
+      for (let i = 0; i < repeat; i += 1) lengths.push(0);
+    }
+  }
+  return buildHuffmanTree(lengths.slice(0, alphabetSize));
+}
+
+function buildHuffmanTree(lengths: number[]): HuffmanTree {
+  const maxLength = Math.max(...lengths, 0);
+  const blCount = new Array(maxLength + 1).fill(0);
+  lengths.forEach((length) => { if (length) blCount[length] += 1; });
+  const nextCode = new Array(maxLength + 1).fill(0);
+  let code = 0;
+  for (let bits = 1; bits <= maxLength; bits += 1) {
+    code = (code + blCount[bits - 1]) << 1;
+    nextCode[bits] = code;
+  }
+  const table = new Map<number, number>();
+  lengths.forEach((length, symbol) => {
+    if (!length) return;
+    const assigned = nextCode[length]++;
+    table.set((length << 16) | reverseBits(assigned, length), symbol);
+  });
+  return { table, maxLength };
+}
+
+function decodeHuffman(bits: BitReader, tree: HuffmanTree): number {
+  let code = 0;
+  for (let length = 1; length <= tree.maxLength; length += 1) {
+    code |= bits.readBits(1) << (length - 1);
+    const key = (length << 16) | code;
+    if (tree.table.has(key)) return tree.table.get(key) as number;
+  }
+  return 0;
+}
+
+function reverseBits(value: number, length: number): number {
+  let result = 0;
+  for (let i = 0; i < length; i += 1) {
+    result = (result << 1) | (value & 1);
+    value >>>= 1;
+  }
+  return result;
+}
+
+function decodeLz77Length(symbol: number, bits: BitReader): number {
+  const index = symbol - 256;
+  const bases = [1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,257,385,513,769,1025,1537,2049,3073];
+  const extra = [0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10];
+  if (index >= bases.length) return 1;
+  return bases[index] + bits.readBits(extra[index]);
+}
+
+function decodeLz77Distance(symbol: number, bits: BitReader): number {
+  const bases = [1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,257,385,513,769,1025,1537,2049,3073,4097,6145,8193,12289,16385,24577,32769,49153,65537,98305,131073,196609,262145,393217,524289,786433];
+  const extra = [0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13,14,14,15,15,16,16,17,17,18,18];
+  if (symbol >= bases.length) return 1;
+  return bases[symbol] + bits.readBits(extra[symbol]);
+}
+
+function hashColor(color: number, bits: number): number {
+  return ((color * 0x1e35a7bd) >>> (32 - bits)) & ((1 << bits) - 1);
+}
+
+function readPackedColor(pixels: Uint8Array, index: number): number {
+  const base = index * 4;
+  return ((pixels[base + 3] << 24) | (pixels[base] << 16) | (pixels[base + 1] << 8) | pixels[base + 2]) >>> 0;
+}
+
+function copyPackedColor(pixels: Uint8Array, index: number, color: number): void {
+  const base = index * 4;
+  pixels[base] = (color >>> 16) & 0xff;
+  pixels[base + 1] = (color >>> 8) & 0xff;
+  pixels[base + 2] = color & 0xff;
+  pixels[base + 3] = (color >>> 24) & 0xff;
+}
+
+function readU32(bytes: Uint8Array, offset: number): number {
+  return (((bytes[offset] << 24) >>> 0) | (bytes[offset + 1] << 16) | (bytes[offset + 2] << 8) | bytes[offset + 3]) >>> 0;
+}
+
+function readU32LE(bytes: Uint8Array, offset: number): number {
+  return ((bytes[offset]) | (bytes[offset + 1] << 8) | (bytes[offset + 2] << 16) | ((bytes[offset + 3] << 24) >>> 0)) >>> 0;
+}
+
+function bytesToAscii(bytes: Uint8Array): string {
+  return String.fromCharCode(...bytes);
 }
 
 function createCanvas(width: number, height: number, color: PngColor): TinyPngCanvas {
@@ -860,7 +1424,8 @@ async function fallbackImageResponse(kind: CardKind, env: Env, status: number): 
   } catch (error) {
     console.error("[randomancer-card-share] fallback image fetch failed", { kind, fallbackUrl, error: formatError(error) });
   }
-  return new Response(toResponseBody(renderCardPreviewPng(kind, { title: kind === "build" ? "RANDOMANCER BUILD CARD" : "RANDOMANCER CHALLENGE CARD", footerText: "Randomancer fallback" }, "fallback")), { status, headers: { "content-type": "image/png", "cache-control": LONG_CACHE } });
+  const fallbackPng = await renderCardPreviewPng(kind, { title: kind === "build" ? "RANDOMANCER BUILD CARD" : "RANDOMANCER CHALLENGE CARD", footerText: "Randomancer fallback" }, "fallback", env);
+  return new Response(toResponseBody(fallbackPng), { status, headers: { "content-type": "image/png", "cache-control": LONG_CACHE } });
 }
 
 
