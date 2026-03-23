@@ -551,14 +551,14 @@ function renderBuildCard(model, face = 'front', actionsHtml = '', stageClass = '
   const isBack = face === 'back';
   const style = model.artPath ? ` style="--card-art:url('${escapeHtml(model.artPath)}')"` : '';
   const flipLabel = isBack ? 'Back of build card. Click to flip to front.' : 'Front of build card. Click to flip to back.';
-  const flipCue = `<span class="card-flip-indicator" aria-hidden="true">⟳</span>`;
+  const flipCue = `<button type="button" class="card-flip-indicator" data-card-action="flip" aria-label="${escapeHtml(flipLabel)}" title="Flip card">↺</button>`;
+  const flipFooter = `<footer class="rc-card__fineprint">Flip over card for more details.</footer>`;
   if (!isBack) {
     return `
       <div class="card-stage card-stage--build ${stageClass}">
       <article class="rc-card rc-card--build rc-card--front" data-card-flip-surface="1" tabindex="0" role="button" aria-label="${escapeHtml(flipLabel)}"${style}>
         ${renderCardHeader(actionsHtml, model.title, model.subtitle)}
         ${renderShareStatus(CARD_TYPE_BUILD)}
-        ${flipCue}
         <div class="rc-card__body rc-card__body--front">
           ${model.frontRows.filter((row) => row.values?.length).map((row) => `
             <section class="rc-print-row">
@@ -567,7 +567,9 @@ function renderBuildCard(model, face = 'front', actionsHtml = '', stageClass = '
             </section>
           `).join('')}
         </div>
+        ${flipFooter}
       </article>
+      ${flipCue}
       </div>
     `;
   }
@@ -577,7 +579,6 @@ function renderBuildCard(model, face = 'front', actionsHtml = '', stageClass = '
     <article class="rc-card rc-card--build rc-card--back" data-card-flip-surface="1" tabindex="0" role="button" aria-label="${escapeHtml(flipLabel)}"${style}>
       ${renderCardHeader(actionsHtml, model.title, model.subtitle)}
       ${renderShareStatus(CARD_TYPE_BUILD)}
-      ${flipCue}
       <div class="rc-card__body rc-card__body--back">
         ${model.backSections.filter((section) => section.values?.length).map((section) => `
           <section class="rc-print-block">
@@ -586,7 +587,9 @@ function renderBuildCard(model, face = 'front', actionsHtml = '', stageClass = '
           </section>
         `).join('')}
       </div>
+      ${flipFooter}
     </article>
+    ${flipCue}
     </div>
   `;
 }
