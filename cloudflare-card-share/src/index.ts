@@ -752,24 +752,64 @@ type LoadedAssetImage = {
   decodeStatus: string;
 };
 
+type AssetFetchResult = {
+  response: Response;
+  source: string;
+};
+
 async function loadAssetImage(env: Env, pathname: string, assetOrigin: string): Promise<LoadedAssetImage> {
-  const request = new Request(new URL(pathname, assetOrigin).toString());
-  const response = env.ASSETS?.fetch ? await env.ASSETS.fetch(request) : await fetch(request);
-  const contentType = response.headers.get("content-type") || "";
-  const bytes = response.ok ? new Uint8Array(await response.arrayBuffer()) : new Uint8Array();
-  if (!response.ok) return { image: null, fetchStatus: String(response.status), contentType, byteLength: 0, decodeStatus: "skipped" };
+  const requestUrl = new URL(pathname, assetOrigin).toString();
+  const initial = await fetchAssetRequest(env, requestUrl);
+  const contentType = initial.response.headers.get("content-type") || "";
+  const bytes = initial.response.ok ? new Uint8Array(await initial.response.arrayBuffer()) : new Uint8Array();
+  if (!initial.response.ok) return { image: null, fetchStatus: `${initial.source}:${initial.response.status}`, contentType, byteLength: 0, decodeStatus: "fetch-failed" };
 
   const decodedByRuntime = await decodeWithImageDecoder(bytes, contentType);
-  if (decodedByRuntime) return { image: decodedByRuntime, fetchStatus: String(response.status), contentType, byteLength: bytes.byteLength, decodeStatus: "image-decoder" };
+  if (decodedByRuntime) return { image: decodedByRuntime, fetchStatus: `${initial.source}:${initial.response.status}`, contentType, byteLength: bytes.byteLength, decodeStatus: "image-decoder" };
   if (contentType.includes("image/png")) {
-    const decoded = decodePng(bytes);
-    return { image: decoded, fetchStatus: String(response.status), contentType, byteLength: bytes.byteLength, decodeStatus: decoded ? "png-decoder" : "png-decode-failed" };
+    const decoded = await decodePng(bytes);
+    return { image: decoded, fetchStatus: `${initial.source}:${initial.response.status}`, contentType, byteLength: bytes.byteLength, decodeStatus: decoded ? "png-decoder" : "png-decode-failed" };
   }
   if (contentType.includes("image/webp")) {
     const decoded = decodeWebP(bytes);
-    return { image: decoded, fetchStatus: String(response.status), contentType, byteLength: bytes.byteLength, decodeStatus: decoded ? "webp-decoder" : "webp-decode-failed" };
+    if (decoded) return { image: decoded, fetchStatus: `${initial.source}:${initial.response.status}`, contentType, byteLength: bytes.byteLength, decodeStatus: `webp-decoder:${detectWebPChunkTag(bytes)}` };
+
+    const transcoded = await fetchTranscodedPng(requestUrl);
+    const transcodedType = transcoded.response.headers.get("content-type") || "";
+    const transcodedBytes = transcoded.response.ok ? new Uint8Array(await transcoded.response.arrayBuffer()) : new Uint8Array();
+    if (transcoded.response.ok && transcodedType.includes("image/png")) {
+      const pngDecoded = await decodePng(transcodedBytes);
+      return {
+        image: pngDecoded,
+        fetchStatus: `${initial.source}:${initial.response.status}|${transcoded.source}:${transcoded.response.status}`,
+        contentType: `${contentType} -> ${transcodedType}`,
+        byteLength: transcodedBytes.byteLength,
+        decodeStatus: pngDecoded ? `webp-${detectWebPChunkTag(bytes)}-via-png` : "png-decode-failed-after-webp",
+      };
+    }
+
+    return {
+      image: null,
+      fetchStatus: `${initial.source}:${initial.response.status}|${transcoded.source}:${transcoded.response.status}`,
+      contentType: transcodedType ? `${contentType} -> ${transcodedType}` : contentType,
+      byteLength: bytes.byteLength,
+      decodeStatus: `webp-${detectWebPChunkTag(bytes)}-decode-failed`,
+    };
   }
-  return { image: null, fetchStatus: String(response.status), contentType, byteLength: bytes.byteLength, decodeStatus: "unsupported-content-type" };
+  return { image: null, fetchStatus: `${initial.source}:${initial.response.status}`, contentType, byteLength: bytes.byteLength, decodeStatus: "unsupported-content-type" };
+}
+
+async function fetchAssetRequest(env: Env, requestUrl: string): Promise<AssetFetchResult> {
+  const request = new Request(requestUrl);
+  if (env.ASSETS?.fetch) return { response: await env.ASSETS.fetch(request), source: "assets-binding" };
+  return { response: await fetch(request), source: "direct-fetch" };
+}
+
+async function fetchTranscodedPng(requestUrl: string): Promise<AssetFetchResult> {
+  const sourceUrl = new URL(requestUrl);
+  const proxyPath = `/cdn-cgi/image/format=png${sourceUrl.pathname}`;
+  const proxyUrl = new URL(proxyPath, sourceUrl.origin);
+  return { response: await fetch(proxyUrl.toString()), source: "cdn-cgi-image" };
 }
 
 async function decodeWithImageDecoder(bytes: Uint8Array, contentType: string): Promise<DecodedAssetImage | null> {
@@ -844,7 +884,7 @@ function blendPixel(canvas: TinyPngCanvas, x: number, y: number, color: PngColor
   canvas.pixels[index + 3] = Math.min(255, Math.round(color[3] + canvas.pixels[index + 3] * inv));
 }
 
-function decodePng(bytes: Uint8Array): DecodedAssetImage | null {
+async function decodePng(bytes: Uint8Array): Promise<DecodedAssetImage | null> {
   const signature = [137, 80, 78, 71, 13, 10, 26, 10];
   if (bytes.length < 8 || signature.some((value, index) => bytes[index] !== value)) return null;
   let offset = 8;
@@ -873,7 +913,7 @@ function decodePng(bytes: Uint8Array): DecodedAssetImage | null {
     offset = dataEnd + 4;
   }
   if (!width || !height || bitDepth !== 8 || ![2, 6].includes(colorType)) return null;
-  const inflated = inflateZlibNoCompression(concatBytes(idatParts));
+  const inflated = await inflateZlib(concatBytes(idatParts));
   if (!inflated) return null;
   const bytesPerPixel = colorType === 6 ? 4 : 3;
   const stride = width * bytesPerPixel;
@@ -922,6 +962,24 @@ function paethPredictor(a: number, b: number, c: number): number {
   return c;
 }
 
+async function inflateZlib(bytes: Uint8Array): Promise<Uint8Array | null> {
+  const streamed = await inflateZlibStream(bytes);
+  if (streamed) return streamed;
+  return inflateZlibNoCompression(bytes);
+}
+
+async function inflateZlibStream(bytes: Uint8Array): Promise<Uint8Array | null> {
+  if (typeof DecompressionStream === "undefined") return null;
+  try {
+    const blobPart = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
+    const stream = new Blob([blobPart]).stream().pipeThrough(new DecompressionStream("deflate"));
+    const arrayBuffer = await new Response(stream).arrayBuffer();
+    return new Uint8Array(arrayBuffer);
+  } catch {
+    return null;
+  }
+}
+
 function inflateZlibNoCompression(bytes: Uint8Array): Uint8Array | null {
   if (bytes.length < 6) return null;
   let offset = 2;
@@ -943,6 +1001,8 @@ function inflateZlibNoCompression(bytes: Uint8Array): Uint8Array | null {
 }
 
 function decodeWebP(bytes: Uint8Array): DecodedAssetImage | null {
+  // This decoder intentionally supports only lossless VP8L payloads.
+  // Ascendancy art can arrive as lossy VP8 assets, so callers should fall back to a PNG transcode path when VP8L decode is unavailable.
   const riff = bytesToAscii(bytes.subarray(0, 4));
   const webp = bytesToAscii(bytes.subarray(8, 12));
   if (riff !== "RIFF" || webp !== "WEBP") return null;
@@ -957,6 +1017,18 @@ function decodeWebP(bytes: Uint8Array): DecodedAssetImage | null {
     offset = dataEnd;
   }
   return null;
+}
+
+function detectWebPChunkTag(bytes: Uint8Array): string {
+  if (bytesToAscii(bytes.subarray(0, 4)) !== "RIFF" || bytesToAscii(bytes.subarray(8, 12)) !== "WEBP") return "unknown";
+  let offset = 12;
+  while (offset + 8 <= bytes.length) {
+    const tag = bytesToAscii(bytes.subarray(offset, offset + 4));
+    const size = readU32LE(bytes, offset + 4);
+    if (["VP8 ", "VP8L", "VP8X"].includes(tag)) return tag.trim();
+    offset += 8 + size + (size % 2);
+  }
+  return "unknown";
 }
 
 function decodeWebPLossless(chunk: Uint8Array): DecodedAssetImage | null {
