@@ -23,11 +23,14 @@ let closeOverlayTimer = null;
 let flipCleanupTimer = null;
 let uniqueSourceCache = null;
 let uniqueSourcePromise = null;
-let shareStatusTimer = null;
 let floatingPanelState = {
   type: '',
   cardType: '',
   anchor: null
+};
+const shareUiState = {
+  [CARD_TYPE_BUILD]: { status: 'idle', url: null, errorMessage: null, feedbackMessage: '', feedbackTone: '', key: '' },
+  [CARD_TYPE_CHALLENGE]: { status: 'idle', url: null, errorMessage: null, feedbackMessage: '', feedbackTone: '', key: '' }
 };
 
 
@@ -455,53 +458,45 @@ function renderCardHeader(actionsHtml, title, subtitle) {
   `;
 }
 
-function getShareUiState(type) {
-  const overlay = getCardOverlay();
-  if (!overlay) return { loading: false, message: '', tone: '', url: '', open: false };
-  const cardType = type || overlay.dataset.cardType || '';
+function getShareStateKey(type) {
+  if (type === CARD_TYPE_CHALLENGE) {
+    return window.RandomancerEncodeChallengeContract?.(window.CURRENT_CHALLENGE_CONTRACT) || '';
+  }
+  return window.RandomancerEncodeSnapshot?.(window.App?.state?.currentRoll || window.CURRENT_ROLL) || '';
+}
+
+function createEmptyShareState(type) {
   return {
-    loading: overlay.dataset.shareLoading === '1' && overlay.dataset.shareType === cardType,
-    message: overlay.dataset.shareMessage || '',
-    tone: overlay.dataset.shareTone || '',
-    url: overlay.dataset.shareUrl || '',
-    open: overlay.dataset.shareOpen === '1' && overlay.dataset.shareType === cardType
+    status: 'idle',
+    url: null,
+    errorMessage: null,
+    feedbackMessage: '',
+    feedbackTone: '',
+    key: getShareStateKey(type)
   };
 }
 
-function clearShareUiState(options = {}) {
-  const overlay = getCardOverlay();
-  if (!overlay) return;
-  overlay.dataset.shareLoading = '0';
-  overlay.dataset.shareType = '';
-  overlay.dataset.shareMessage = '';
-  overlay.dataset.shareTone = '';
-  overlay.dataset.shareUrl = '';
-  overlay.dataset.shareOpen = '0';
-  if (!options.preserveTimer && shareStatusTimer) {
-    clearTimeout(shareStatusTimer);
-    shareStatusTimer = null;
-  }
+function getShareUiState(type) {
+  const cardType = type || getCardOverlay()?.dataset.cardType || CARD_TYPE_BUILD;
+  const expectedKey = getShareStateKey(cardType);
+  const current = shareUiState[cardType] || createEmptyShareState(cardType);
+  if (current.key !== expectedKey) shareUiState[cardType] = createEmptyShareState(cardType);
+  return shareUiState[cardType];
+}
+
+function resetShareUiState(type) {
+  const cardType = type || getCardOverlay()?.dataset.cardType || CARD_TYPE_BUILD;
+  shareUiState[cardType] = createEmptyShareState(cardType);
 }
 
 function setShareUiState(type, next = {}) {
-  const overlay = getCardOverlay();
-  if (!overlay) return;
-  if (shareStatusTimer) {
-    clearTimeout(shareStatusTimer);
-    shareStatusTimer = null;
-  }
-  overlay.dataset.shareType = type || overlay.dataset.cardType || '';
-  overlay.dataset.shareLoading = next.loading ? '1' : '0';
-  overlay.dataset.shareMessage = next.message || '';
-  overlay.dataset.shareTone = next.tone || '';
-  overlay.dataset.shareUrl = next.url || overlay.dataset.shareUrl || '';
-  overlay.dataset.shareOpen = next.open ? '1' : '0';
-  if (next.timeoutMs) {
-    shareStatusTimer = setTimeout(() => {
-      clearShareUiState({ preserveTimer: true });
-      refreshOpenCardOverlay();
-    }, next.timeoutMs);
-  }
+  const cardType = type || getCardOverlay()?.dataset.cardType || CARD_TYPE_BUILD;
+  const current = getShareUiState(cardType);
+  shareUiState[cardType] = {
+    ...current,
+    ...next,
+    key: next.key || current.key || getShareStateKey(cardType)
+  };
 }
 
 function renderShareStatus(type) {
@@ -512,7 +507,8 @@ async function shareCurrentCard(type, options = {}) {
   const overlay = getCardOverlay();
   const cardType = type === CARD_TYPE_CHALLENGE ? CARD_TYPE_CHALLENGE : CARD_TYPE_BUILD;
   if (!overlay) return false;
-  if (getShareUiState(cardType).loading) return false;
+  const currentState = getShareUiState(cardType);
+  if (currentState.status === 'loading') return false;
 
   const body = cardType === CARD_TYPE_CHALLENGE
     ? buildPublicChallengeCardRequest(window.CURRENT_CHALLENGE_CONTRACT)
@@ -520,27 +516,33 @@ async function shareCurrentCard(type, options = {}) {
 
   const missingPayload = cardType === CARD_TYPE_CHALLENGE ? !body?.payload?.contract?.tasks?.length : !body?.payload?.snapshot?.ascendancy;
   if (missingPayload) {
-    setShareUiState(cardType, { message: 'Open a card before sharing it.', tone: 'error', open: true });
+    setShareUiState(cardType, { status: 'error', url: null, errorMessage: 'Open a card before sharing it.', feedbackMessage: '', feedbackTone: '' });
     return false;
   }
 
-  setShareUiState(cardType, { loading: true, message: 'Creating public share link…', tone: 'info', open: true });
+  setShareUiState(cardType, { status: 'loading', errorMessage: null, feedbackMessage: '', feedbackTone: '' });
 
   try {
     const result = await sharePublicCard(body);
     const shareUrl = result?.share_url || '';
     if (!shareUrl) throw new Error('Share service did not return a share URL.');
     setShareUiState(cardType, {
-      loading: false,
+      status: 'ready',
       url: shareUrl,
-      message: options.silent ? '' : 'Shared link ready.',
-      tone: 'success',
-      open: true
+      errorMessage: null,
+      feedbackMessage: options.silent ? '' : 'Shared link ready.',
+      feedbackTone: 'success'
     });
     return true;
   } catch (error) {
     console.error('[public-card] share failed', error, { appVersion: APP_VERSION, cardType });
-    setShareUiState(cardType, { loading: false, message: error?.message || 'Could not share this card right now.', tone: 'error', open: true });
+    setShareUiState(cardType, {
+      status: 'error',
+      url: null,
+      errorMessage: error?.message || 'Could not share this card right now.',
+      feedbackMessage: '',
+      feedbackTone: ''
+    });
     return false;
   }
 }
@@ -701,7 +703,7 @@ function renderBuildCardOverlay(face = 'front', options = {}) {
   }
   const shareState = getShareUiState(CARD_TYPE_BUILD);
   const actions = [
-    renderActionButton({ action: 'share-card', label: shareState.loading ? 'Sharing card' : 'Share', icon: shareState.loading ? '…' : '↗', disabled: shareState.loading, busy: shareState.loading }),
+    renderActionButton({ action: 'share-card', label: shareState.status === 'loading' ? 'Sharing card' : 'Share', icon: shareState.status === 'loading' ? '…' : '↗', disabled: shareState.status === 'loading', busy: shareState.status === 'loading' }),
     renderActionButton({ action: 'save', label: isSavedBuild() ? 'Saved' : 'Save', icon: isSavedBuild() ? '★' : '☆', active: isSavedBuild() })
   ].join('');
   setOverlayContent({ type: CARD_TYPE_BUILD, html: renderBuildCard(model, face, actions, options.stageClass || ''), face });
@@ -716,7 +718,7 @@ function renderChallengeCardOverlay() {
   }
   const shareState = getShareUiState(CARD_TYPE_CHALLENGE);
   const actions = [
-    renderActionButton({ action: 'share-card', label: shareState.loading ? 'Sharing card' : 'Share', icon: shareState.loading ? '…' : '↗', disabled: shareState.loading, busy: shareState.loading }),
+    renderActionButton({ action: 'share-card', label: shareState.status === 'loading' ? 'Sharing card' : 'Share', icon: shareState.status === 'loading' ? '…' : '↗', disabled: shareState.status === 'loading', busy: shareState.status === 'loading' }),
     renderActionButton({ action: 'save', label: isSavedChallenge() ? 'Saved' : 'Save', icon: isSavedChallenge() ? '★' : '☆', active: isSavedChallenge() })
   ].join('');
   setOverlayContent({ type: CARD_TYPE_CHALLENGE, html: renderChallengeCard(model, actions), face: '' });
@@ -743,7 +745,6 @@ function openCardOverlay(type, options = {}) {
 function closeCardOverlay({ skipUrl = false } = {}) {
   const overlay = getCardOverlay();
   if (!overlay || overlay.hidden) return;
-  clearShareUiState();
   clearOverlayTimers();
   hideCardTooltip();
   if (prefersReducedMotion()) {
@@ -793,25 +794,31 @@ function closeFloatingPanel() {
 
 function renderSharePanel(cardType) {
   const state = getShareUiState(cardType);
-  const shareBody = state.loading
+  const shareBody = state.status === 'loading'
     ? `<div class="card-share-popover__loading" role="status" aria-live="polite">Creating public share link…</div>`
-    : state.url
+    : state.status === 'ready' && state.url
       ? `<div class="card-share-popover__url">${escapeHtml(state.url)}</div>`
-      : `<div class="card-share-status is-error" role="status" aria-live="polite">Could not generate a share link right now.</div>`;
-  const shareActions = state.loading || !state.url ? '' : `
+      : state.status === 'error'
+        ? `<div class="card-share-status is-error" role="status" aria-live="polite">${escapeHtml(state.errorMessage || 'Could not generate a share link right now.')}</div>`
+        : `<div class="card-share-popover__loading" role="status" aria-live="polite">Preparing share link…</div>`;
+  const shareActions = state.status !== 'ready' || !state.url ? '' : `
     <div class="card-share-popover__actions">
-      <button type="button" class="summary-utility-btn" data-panel-action="copy-link" ${state.url ? '' : 'disabled'}>Copy link</button>
-      <button type="button" class="summary-utility-btn" data-panel-action="open-link" ${state.url ? '' : 'disabled'}>Open link</button>
-      ${navigator.share ? `<button type="button" class="summary-utility-btn" data-panel-action="native-share" ${state.url ? '' : 'disabled'}>Share…</button>` : ''}
+      <button type="button" class="summary-utility-btn" data-panel-action="copy-link">Copy link</button>
+      <button type="button" class="summary-utility-btn" data-panel-action="open-link">Open link</button>
+      ${navigator.share ? `<button type="button" class="summary-utility-btn" data-panel-action="native-share">Share…</button>` : ''}
     </div>
   `;
+  const retryAction = state.status === 'error'
+    ? `<div class="card-share-popover__actions"><button type="button" class="summary-utility-btn" data-panel-action="retry-share">Retry</button></div>`
+    : '';
   return `
     <div class="summary-floating-panel__section">
       <div class="summary-floating-panel__title">Share</div>
       <p class="card-share-popover__helper">Shared links open this exact card in Randomancer.</p>
       ${shareBody}
       ${shareActions}
-      ${state.message ? `<div class="card-share-status${state.tone ? ` is-${escapeHtml(state.tone)}` : ''}" role="status" aria-live="polite">${escapeHtml(state.message)}</div>` : ''}
+      ${retryAction}
+      ${state.feedbackMessage ? `<div class="card-share-status${state.feedbackTone ? ` is-${escapeHtml(state.feedbackTone)}` : ''}" role="status" aria-live="polite">${escapeHtml(state.feedbackMessage)}</div>` : ''}
     </div>
   `;
 }
@@ -823,8 +830,7 @@ async function openSharePanel(cardType, anchor) {
   panel.hidden = false;
   positionFloatingPanel(anchor);
   const state = getShareUiState(cardType);
-  if (!state.url && !state.loading) {
-    setShareUiState(cardType, { ...state, open: true, message: 'Creating public share link…', tone: 'info', loading: true });
+  if (state.status === 'idle') {
     panel.innerHTML = renderSharePanel(cardType);
     positionFloatingPanel(anchor);
     await shareCurrentCard(cardType, { silent: true });
@@ -894,13 +900,18 @@ function bindCardOverlayUI() {
   ensureFloatingPanel().addEventListener('click', (evt) => {
     const action = evt.target.closest('[data-panel-action]')?.dataset.panelAction;
     if (!action) return;
+    if (action === 'retry-share') {
+      resetShareUiState(floatingPanelState.cardType);
+      ensureFloatingPanel().innerHTML = renderSharePanel(floatingPanelState.cardType);
+      positionFloatingPanel(floatingPanelState.anchor);
+      openSharePanel(floatingPanelState.cardType, floatingPanelState.anchor);
+      return;
+    }
     if (action === 'copy-link') {
       copyCurrentCardLink(floatingPanelState.cardType).then((ok) => {
         setShareUiState(floatingPanelState.cardType, {
-          ...getShareUiState(floatingPanelState.cardType),
-          message: ok ? 'Link copied to clipboard.' : 'Clipboard copy failed. You can still copy the URL manually.',
-          tone: ok ? 'success' : 'error',
-          open: true
+          feedbackMessage: ok ? 'Link copied to clipboard.' : 'Clipboard copy failed. You can still copy the URL manually.',
+          feedbackTone: ok ? 'success' : 'error'
         });
         ensureFloatingPanel().innerHTML = renderSharePanel(floatingPanelState.cardType);
         positionFloatingPanel(floatingPanelState.anchor);
