@@ -191,7 +191,7 @@ export default {
         if (shareMatch) return handleSharePage(shareMatch.kind, shareMatch.slug, env);
 
         const ogMatch = matchOgPath(url.pathname);
-        if (ogMatch) return handleOgImage(ogMatch.kind, ogMatch.slug, env);
+        if (ogMatch) return handleOgImage(ogMatch.kind, ogMatch.slug, env, url.origin);
 
         const legacySlug = normalizeLegacySlugPath(url.pathname);
         if (legacySlug) {
@@ -316,7 +316,7 @@ async function handleSharePage(kind: CardKind, slug: string, env: Env): Promise<
   }), 200, { "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=600" });
 }
 
-async function handleOgImage(kind: CardKind, slug: string, env: Env): Promise<Response> {
+async function handleOgImage(kind: CardKind, slug: string, env: Env, assetOrigin: string): Promise<Response> {
   const row = await getCardBySlug(env.DB, slug);
   if (!row || row.card_kind !== kind) {
     console.warn("[randomancer-card-share] og slug miss", { kind, slug });
@@ -325,12 +325,13 @@ async function handleOgImage(kind: CardKind, slug: string, env: Env): Promise<Re
 
   try {
     const cardData = parseCardData(row.card_data_json, kind, row);
-    const png = await renderCardPreviewPng(kind, cardData, slug, env);
-    return new Response(toResponseBody(png), {
+    const rendered = await renderCardPreviewPng(kind, cardData, slug, env, assetOrigin);
+    return new Response(toResponseBody(rendered.png), {
       status: 200,
       headers: {
         "content-type": "image/png",
         "cache-control": LONG_CACHE,
+        ...(rendered.debugHeaders || {}),
       },
     });
   } catch (error) {
@@ -473,8 +474,8 @@ function inferAscendancyArtPath(ascendancy: string): string {
   return slug ? `/images/ascendancies/${slug}.webp` : "";
 }
 
-async function renderCardPreviewPng(kind: CardKind, cardData: BuildCardData | ChallengeCardData, slug: string, env: Env): Promise<Uint8Array> {
-  if (kind === "build") return renderBuildPreviewPng(cardData as BuildCardData, slug, env);
+async function renderCardPreviewPng(kind: CardKind, cardData: BuildCardData | ChallengeCardData, slug: string, env: Env, assetOrigin = SHARE_ORIGIN): Promise<RenderedPreview> {
+  if (kind === "build") return renderBuildPreviewPng(cardData as BuildCardData, slug, env, assetOrigin);
 
   const canvas = createCanvas(1200, 630, [10, 8, 10, 255]);
   const accent = [139, 109, 255, 255] as PngColor;
@@ -513,57 +514,100 @@ async function renderCardPreviewPng(kind: CardKind, cardData: BuildCardData | Ch
   const footer = sanitizePreviewText((cardData as ChallengeCardData).footerText || "therandomancer.com");
   drawTextBlock(canvas, footer, 56, 566, 2, [210, 201, 187, 255], 500, 1);
   drawTextBlock(canvas, sanitizePreviewText(`S/CHALLENGE/${slug}`), 760, 566, 2, accent, 380, 1);
-  return encodePng(canvas);
+  return { png: encodePng(canvas) };
 }
 
-async function renderBuildPreviewPng(cardData: BuildCardData, slug: string, env: Env): Promise<Uint8Array> {
+async function renderBuildPreviewPng(cardData: BuildCardData, slug: string, env: Env, assetOrigin: string): Promise<RenderedPreview> {
   const canvas = createCanvas(1200, 630, [8, 7, 9, 255]);
   const accent = [232, 174, 94, 255] as PngColor;
   const accentSoft = [111, 69, 31, 255] as PngColor;
-  await drawBuildBackground(canvas, cardData, env, accentSoft);
+  const artDebug = await drawBuildBackground(canvas, cardData, env, accentSoft, assetOrigin);
 
-  fillRoundedRect(canvas, 28, 24, 1144, 582, 30, [7, 7, 10, 178]);
+  fillRoundedRect(canvas, 28, 24, 1144, 582, 30, [7, 7, 10, 152]);
   strokeRoundedRect(canvas, 28, 24, 1144, 582, 30, [255, 243, 217, 28]);
   fillRoundedRect(canvas, 54, 44, 318, 38, 19, [17, 16, 20, 182]);
   strokeRoundedRect(canvas, 54, 44, 318, 38, 19, [255, 226, 180, 26]);
   drawTextBlock(canvas, sanitizePreviewText(cardData.cardTypeLabel || "Randomancer Build Card"), 72, 56, 2, accent, 280, 1);
 
-  drawTextBlock(canvas, sanitizePreviewText(cardData.title), 60, 118, 5, [247, 239, 225, 255], 640, 3);
-  if (cardData.subtitle) drawTextBlock(canvas, sanitizePreviewText(cardData.subtitle), 64, 252, 3, [224, 213, 197, 255], 620, 3);
+  const titleBottom = drawTextBlock(canvas, sanitizePreviewText(cardData.title), 60, 104, 5, [247, 239, 225, 255], 640, 2);
+  const subtitleTop = titleBottom + 18;
+  if (cardData.subtitle) drawTextBlock(canvas, sanitizePreviewText(cardData.subtitle), 64, subtitleTop, 3, [224, 213, 197, 255], 620, 2);
 
-  const groups = (cardData.frontFaceGroups || []).slice(0, 5);
-  let groupY = 352;
-  for (const group of groups) {
-    fillRoundedRect(canvas, 58, groupY - 10, 612, 66, 18, [12, 12, 16, 172]);
-    strokeRoundedRect(canvas, 58, groupY - 10, 612, 66, 18, [255, 227, 180, 20]);
-    drawTextBlock(canvas, sanitizePreviewText(group.label), 78, groupY + 2, 2, accent, 150, 1);
-    drawTextBlock(canvas, sanitizePreviewText(group.values.join(" • ")), 78, groupY + 26, 2, [242, 236, 228, 255], 564, 2);
-    groupY += 78;
-    if (groupY > 584) break;
+  const groups = normalizeBuildPreviewGroups(cardData.frontFaceGroups || []);
+  const rowTop = 248;
+  const rowHeight = 62;
+  for (let index = 0; index < groups.length; index += 1) {
+    const group = groups[index];
+    const groupY = rowTop + index * rowHeight;
+    fillRoundedRect(canvas, 58, groupY, 612, 52, 18, [12, 12, 16, 168]);
+    strokeRoundedRect(canvas, 58, groupY, 612, 52, 18, [255, 227, 180, 20]);
+    drawTextBlock(canvas, sanitizePreviewText(group.label), 78, groupY + 10, 2, accent, 150, 1);
+    drawTextBlock(canvas, sanitizePreviewText(group.values.join(" • ")), 236, groupY + 10, 2, [242, 236, 228, 255], 408, 2);
   }
 
-  return encodePng(canvas);
+  return {
+    png: encodePng(canvas),
+    debugHeaders: {
+      "X-Randomancer-Art-Path": artDebug.path || "none",
+      "X-Randomancer-Art-Status": `${artDebug.fetchStatus};${artDebug.decodeStatus};fallback=${artDebug.usedFallback ? "yes" : "no"}`,
+      "X-Randomancer-Groups-Rendered": String(groups.length),
+    },
+  };
 }
 
-async function drawBuildBackground(canvas: TinyPngCanvas, cardData: BuildCardData, env: Env, accentSoft: PngColor): Promise<boolean> {
+function normalizeBuildPreviewGroups(frontFaceGroups: Array<{ label: string; values: string[] }>): Array<{ label: string; values: string[] }> {
+  const expectedLabels = ["Ascendancy", "Weapons", "Combat", "Defense", "Skills"] as const;
+  const limits: Record<(typeof expectedLabels)[number], number> = {
+    Ascendancy: 1,
+    Weapons: 2,
+    Combat: 3,
+    Defense: 2,
+    Skills: 2,
+  };
+  return expectedLabels.map((label) => {
+    const matched = frontFaceGroups.find((group) => group.label.toLowerCase() === label.toLowerCase());
+    return { label, values: matched?.values?.filter(Boolean).slice(0, limits[label]) || ["-"] };
+  });
+}
+
+async function drawBuildBackground(canvas: TinyPngCanvas, cardData: BuildCardData, env: Env, accentSoft: PngColor, assetOrigin: string): Promise<BuildArtDebugInfo> {
   drawBackground(canvas, "build", accentSoft);
   const artPath = cardData.ascendancyArtPath || inferAscendancyArtPath(cardData.ascendancy || "");
-  if (artPath && env.ASSETS?.fetch) {
+  const debug: BuildArtDebugInfo = {
+    path: artPath,
+    fetchStatus: artPath ? "not-requested" : "missing-path",
+    contentType: "",
+    byteLength: 0,
+    decodeStatus: artPath ? "not-attempted" : "missing-path",
+    usedFallback: true,
+  };
+  if (artPath) {
     try {
-      const art = await loadAssetImage(env, artPath);
-      if (art) {
-        drawCoverImage(canvas, art, { destX: 470, destY: 0, destWidth: 730, destHeight: 630, alignX: 0.52, alignY: 0.24 });
+      const artResult = await loadAssetImage(env, artPath, assetOrigin);
+      debug.fetchStatus = artResult.fetchStatus;
+      debug.contentType = artResult.contentType;
+      debug.byteLength = artResult.byteLength;
+      debug.decodeStatus = artResult.decodeStatus;
+      if (artResult.image) {
+        drawCoverImage(canvas, artResult.image, { destX: 470, destY: 0, destWidth: 730, destHeight: 630, alignX: 0.52, alignY: 0.24 });
         applyHorizontalFade(canvas, 0, 0, 760, 630, [0, 0, 0, 156], [0, 0, 0, 8]);
         applyVerticalFade(canvas, 430, 0, 770, 630, [0, 0, 0, 8], [0, 0, 0, 116]);
         fillRect(canvas, 0, 0, canvas.width, canvas.height, [0, 0, 0, 42]);
-        return true;
+        debug.usedFallback = false;
       }
+      console.log("[randomancer-card-share] build art diagnostic", debug);
+      return debug;
     } catch (error) {
+      debug.fetchStatus = "error";
+      debug.decodeStatus = JSON.stringify(formatError(error));
       console.warn("[randomancer-card-share] build art lookup failed", { artPath, error: formatError(error) });
+      console.log("[randomancer-card-share] build art diagnostic", debug);
+      return debug;
     }
   }
 
-  return false;
+  console.log("[randomancer-card-share] build art diagnostic", debug);
+  return debug;
 }
 
 function buildSubtitle(kind: CardKind, cardData: BuildCardData | ChallengeCardData): string {
@@ -686,19 +730,46 @@ type DecodedAssetImage = {
   pixels: Uint8Array;
 };
 
-async function loadAssetImage(env: Env, pathname: string): Promise<DecodedAssetImage | null> {
-  if (!env.ASSETS?.fetch) return null;
-  const request = new Request(`https://assets.randomancer${pathname}`);
-  const response = await env.ASSETS.fetch(request);
-  if (!response.ok) return null;
+type BuildArtDebugInfo = {
+  path: string;
+  fetchStatus: string;
+  contentType: string;
+  byteLength: number;
+  decodeStatus: string;
+  usedFallback: boolean;
+};
+
+type RenderedPreview = {
+  png: Uint8Array;
+  debugHeaders?: Record<string, string>;
+};
+
+type LoadedAssetImage = {
+  image: DecodedAssetImage | null;
+  fetchStatus: string;
+  contentType: string;
+  byteLength: number;
+  decodeStatus: string;
+};
+
+async function loadAssetImage(env: Env, pathname: string, assetOrigin: string): Promise<LoadedAssetImage> {
+  const request = new Request(new URL(pathname, assetOrigin).toString());
+  const response = env.ASSETS?.fetch ? await env.ASSETS.fetch(request) : await fetch(request);
   const contentType = response.headers.get("content-type") || "";
-  const bytes = new Uint8Array(await response.arrayBuffer());
+  const bytes = response.ok ? new Uint8Array(await response.arrayBuffer()) : new Uint8Array();
+  if (!response.ok) return { image: null, fetchStatus: String(response.status), contentType, byteLength: 0, decodeStatus: "skipped" };
 
   const decodedByRuntime = await decodeWithImageDecoder(bytes, contentType);
-  if (decodedByRuntime) return decodedByRuntime;
-  if (contentType.includes("image/png")) return decodePng(bytes);
-  if (contentType.includes("image/webp")) return decodeWebP(bytes);
-  return null;
+  if (decodedByRuntime) return { image: decodedByRuntime, fetchStatus: String(response.status), contentType, byteLength: bytes.byteLength, decodeStatus: "image-decoder" };
+  if (contentType.includes("image/png")) {
+    const decoded = decodePng(bytes);
+    return { image: decoded, fetchStatus: String(response.status), contentType, byteLength: bytes.byteLength, decodeStatus: decoded ? "png-decoder" : "png-decode-failed" };
+  }
+  if (contentType.includes("image/webp")) {
+    const decoded = decodeWebP(bytes);
+    return { image: decoded, fetchStatus: String(response.status), contentType, byteLength: bytes.byteLength, decodeStatus: decoded ? "webp-decoder" : "webp-decode-failed" };
+  }
+  return { image: null, fetchStatus: String(response.status), contentType, byteLength: bytes.byteLength, decodeStatus: "unsupported-content-type" };
 }
 
 async function decodeWithImageDecoder(bytes: Uint8Array, contentType: string): Promise<DecodedAssetImage | null> {
@@ -1401,7 +1472,7 @@ async function fallbackImageResponse(kind: CardKind, env: Env, status: number): 
     console.error("[randomancer-card-share] fallback image fetch failed", { kind, fallbackUrl, error: formatError(error) });
   }
   const fallbackPng = await renderCardPreviewPng(kind, { title: kind === "build" ? "RANDOMANCER BUILD CARD" : "RANDOMANCER CHALLENGE CARD", footerText: "Randomancer fallback" }, "fallback", env);
-  return new Response(toResponseBody(fallbackPng), { status, headers: { "content-type": "image/png", "cache-control": LONG_CACHE } });
+  return new Response(toResponseBody(fallbackPng.png), { status, headers: { "content-type": "image/png", "cache-control": LONG_CACHE } });
 }
 
 
