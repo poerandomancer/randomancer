@@ -63,13 +63,6 @@ type BuildCardData = {
     label: string;
     values: string[];
   }>;
-  legacySummary?: {
-    primarySkills?: string[];
-    mechanicTags?: string[];
-    uniqueHighlights?: string[];
-    cohesionLabels?: string[];
-  };
-  footerText?: string;
 };
 
 type LegacyBuildCardData = {
@@ -430,7 +423,6 @@ function fallbackCardDataFromLegacyRow(kind: CardKind, row: PublicCardRow): Buil
         title: row.meta_title || row.preview_title || "Randomancer Build Card",
         subtitle: row.meta_description || row.preview_description || "",
         cardTypeLabel: "Randomancer Build Card",
-        footerText: "Randomancer build share",
       }
     : { title: row.meta_title || row.preview_title || "Randomancer Challenge Card", subtitle: row.meta_description || row.preview_description || "", footerText: "Randomancer challenge share" };
 }
@@ -459,23 +451,15 @@ function normalizeBuildCardData(parsed: Record<string, unknown>, row: PublicCard
     className: coerceString(parsed.className),
     weaponLabel: coerceString(parsed.weaponLabel),
     frontFaceGroups: directGroups.length ? directGroups : buildLegacyFrontFaceGroups(legacy),
-    legacySummary: {
-      primarySkills: compactLegacyList(legacy.primarySkills),
-      mechanicTags: compactLegacyList(legacy.mechanicTags),
-      uniqueHighlights: compactLegacyList(legacy.uniqueHighlights),
-      cohesionLabels: compactLegacyList(legacy.cohesionLabels),
-    },
-    footerText: coerceString(parsed.footerText) || "Randomancer • Shared build artifact",
   };
 }
 
 function buildLegacyFrontFaceGroups(cardData: LegacyBuildCardData): Array<{ label: string; values: string[] }> {
   const groups = [
     { label: "Ascendancy", values: compactLegacyList([cardData.ascendancy || cardData.className || ""]).slice(0, 1) },
-    { label: "Weapons", values: compactLegacyList([cardData.weaponLabel || ""]).slice(0, 2) },
+    { label: "Weapons", values: compactLegacyList([cardData.weaponLabel || ""]).slice(0, 1) },
     { label: "Combat", values: compactLegacyList(cardData.mechanicTags).slice(0, 3) },
-    { label: "Skills", values: compactLegacyList(cardData.primarySkills).slice(0, 3) },
-    { label: "Themes", values: compactLegacyList(cardData.cohesionLabels).slice(0, 3) },
+    { label: "Skills", values: compactLegacyList(cardData.primarySkills).slice(0, 2) },
   ];
   return groups.filter((group) => group.values.length);
 }
@@ -526,7 +510,7 @@ async function renderCardPreviewPng(kind: CardKind, cardData: BuildCardData | Ch
     y = drawTextBlock(canvas, sanitizePreviewText(line), 888, y, 2, [240, 232, 220, 255], 220, 3) + 18;
   }
 
-  const footer = sanitizePreviewText(cardData.footerText || "therandomancer.com");
+  const footer = sanitizePreviewText((cardData as ChallengeCardData).footerText || "therandomancer.com");
   drawTextBlock(canvas, footer, 56, 566, 2, [210, 201, 187, 255], 500, 1);
   drawTextBlock(canvas, sanitizePreviewText(`S/CHALLENGE/${slug}`), 760, 566, 2, accent, 380, 1);
   return encodePng(canvas);
@@ -536,56 +520,29 @@ async function renderBuildPreviewPng(cardData: BuildCardData, slug: string, env:
   const canvas = createCanvas(1200, 630, [8, 7, 9, 255]);
   const accent = [232, 174, 94, 255] as PngColor;
   const accentSoft = [111, 69, 31, 255] as PngColor;
-  const artLoaded = await drawBuildBackground(canvas, cardData, env, accentSoft);
+  await drawBuildBackground(canvas, cardData, env, accentSoft);
 
-  fillRoundedRect(canvas, 26, 24, 1148, 582, 28, [8, 8, 10, 172]);
-  strokeRoundedRect(canvas, 26, 24, 1148, 582, 28, [255, 246, 224, 28]);
-  fillRoundedRect(canvas, 48, 42, 320, 36, 18, [16, 15, 18, 164]);
-  strokeRoundedRect(canvas, 48, 42, 320, 36, 18, [255, 227, 180, 24]);
-  drawTextBlock(canvas, sanitizePreviewText(cardData.cardTypeLabel || "Randomancer Build Card"), 64, 54, 2, accent, 286, 1);
+  fillRoundedRect(canvas, 28, 24, 1144, 582, 30, [7, 7, 10, 178]);
+  strokeRoundedRect(canvas, 28, 24, 1144, 582, 30, [255, 243, 217, 28]);
+  fillRoundedRect(canvas, 54, 44, 318, 38, 19, [17, 16, 20, 182]);
+  strokeRoundedRect(canvas, 54, 44, 318, 38, 19, [255, 226, 180, 26]);
+  drawTextBlock(canvas, sanitizePreviewText(cardData.cardTypeLabel || "Randomancer Build Card"), 72, 56, 2, accent, 280, 1);
 
-  const identityLine = compactTextList([cardData.ascendancy, cardData.weaponLabel]).join(" • ");
-  if (identityLine) drawTextBlock(canvas, sanitizePreviewText(identityLine), 64, 96, 2, [222, 211, 194, 255], 560, 2);
-
-  drawTextBlock(canvas, sanitizePreviewText(cardData.title), 62, 138, 5, [247, 239, 225, 255], 620, 3);
-  if (cardData.subtitle) drawTextBlock(canvas, sanitizePreviewText(cardData.subtitle), 64, 272, 3, [221, 211, 198, 255], 610, 3);
+  drawTextBlock(canvas, sanitizePreviewText(cardData.title), 60, 118, 5, [247, 239, 225, 255], 640, 3);
+  if (cardData.subtitle) drawTextBlock(canvas, sanitizePreviewText(cardData.subtitle), 64, 252, 3, [224, 213, 197, 255], 620, 3);
 
   const groups = (cardData.frontFaceGroups || []).slice(0, 5);
   let groupY = 352;
   for (const group of groups) {
-    fillRoundedRect(canvas, 56, groupY - 10, 500, 68, 18, [14, 13, 16, 170]);
-    strokeRoundedRect(canvas, 56, groupY - 10, 500, 68, 18, [255, 227, 180, 20]);
-    drawTextBlock(canvas, sanitizePreviewText(group.label), 74, groupY + 4, 2, accent, 140, 1);
-    drawTextBlock(canvas, sanitizePreviewText(group.values.slice(0, 3).join(" • ")), 74, groupY + 28, 2, [243, 236, 227, 255], 454, 2);
-    groupY += 82;
-    if (groupY > 570) break;
+    fillRoundedRect(canvas, 58, groupY - 10, 612, 66, 18, [12, 12, 16, 172]);
+    strokeRoundedRect(canvas, 58, groupY - 10, 612, 66, 18, [255, 227, 180, 20]);
+    drawTextBlock(canvas, sanitizePreviewText(group.label), 78, groupY + 2, 2, accent, 150, 1);
+    drawTextBlock(canvas, sanitizePreviewText(group.values.join(" • ")), 78, groupY + 26, 2, [242, 236, 228, 255], 564, 2);
+    groupY += 78;
+    if (groupY > 584) break;
   }
 
-  drawBuildIdentityPanel(canvas, cardData, artLoaded, accent);
-
-  drawTextBlock(canvas, sanitizePreviewText(cardData.footerText || "Randomancer • Shared build artifact"), 56, 584, 2, [205, 196, 182, 255], 540, 1);
-  drawTextBlock(canvas, sanitizePreviewText(`S/BUILD/${slug}`), 870, 584, 2, accent, 250, 1);
   return encodePng(canvas);
-}
-
-function drawBuildIdentityPanel(canvas: TinyPngCanvas, cardData: BuildCardData, artLoaded: boolean, accent: PngColor): void {
-  fillRoundedRect(canvas, 724, 128, 420, 402, 26, [10, 10, 13, 120]);
-  strokeRoundedRect(canvas, 724, 128, 420, 402, 26, [255, 237, 198, 22]);
-  drawTextBlock(canvas, "FRONT FACE", 748, 152, 2, accent, 160, 1);
-  drawTextBlock(canvas, sanitizePreviewText(compactTextList([cardData.ascendancy, artLoaded ? "Ascendancy art" : "Branded fallback"]).join(" • ")), 748, 182, 2, [220, 210, 193, 255], 366, 2);
-  drawTextBlock(canvas, sanitizePreviewText(cardData.ascendancy || cardData.className || "Randomancer"), 748, 234, 4, [245, 235, 216, 255], 360, 3);
-
-  const summaryRows = [
-    { label: "WEAPON", value: cardData.weaponLabel || "UNKNOWN ARSENAL" },
-    { label: "LEAD", value: cardData.frontFaceGroups?.[0]?.values?.[0] || cardData.ascendancy || "RANDOMANCER BUILD" },
-    { label: "TONE", value: cardData.subtitle || "SHARED BUILD ARTIFACT" },
-  ];
-  let y = 352;
-  for (const row of summaryRows) {
-    drawTextBlock(canvas, row.label, 748, y, 2, accent, 90, 1);
-    drawTextBlock(canvas, sanitizePreviewText(row.value), 846, y, 2, [238, 232, 223, 255], 256, 2);
-    y += 56;
-  }
 }
 
 async function drawBuildBackground(canvas: TinyPngCanvas, cardData: BuildCardData, env: Env, accentSoft: PngColor): Promise<boolean> {
@@ -595,10 +552,10 @@ async function drawBuildBackground(canvas: TinyPngCanvas, cardData: BuildCardDat
     try {
       const art = await loadAssetImage(env, artPath);
       if (art) {
-        drawCoverImage(canvas, art, { destX: 548, destY: 0, destWidth: 652, destHeight: 630, alignX: 0.5, alignY: 0.28 });
-        applyHorizontalFade(canvas, 0, 0, 900, 630, [0, 0, 0, 126], [0, 0, 0, 0]);
-        applyVerticalFade(canvas, 548, 0, 652, 630, [0, 0, 0, 0], [0, 0, 0, 108]);
-        fillRect(canvas, 0, 0, canvas.width, canvas.height, [0, 0, 0, 50]);
+        drawCoverImage(canvas, art, { destX: 470, destY: 0, destWidth: 730, destHeight: 630, alignX: 0.52, alignY: 0.24 });
+        applyHorizontalFade(canvas, 0, 0, 760, 630, [0, 0, 0, 156], [0, 0, 0, 8]);
+        applyVerticalFade(canvas, 430, 0, 770, 630, [0, 0, 0, 8], [0, 0, 0, 116]);
+        fillRect(canvas, 0, 0, canvas.width, canvas.height, [0, 0, 0, 42]);
         return true;
       }
     } catch (error) {
@@ -606,7 +563,6 @@ async function drawBuildBackground(canvas: TinyPngCanvas, cardData: BuildCardDat
     }
   }
 
-  if (cardData.ascendancy) drawTextBlock(canvas, sanitizePreviewText(cardData.ascendancy), 618, 258, 8, [180, 130, 72, 46], 520, 3);
   return false;
 }
 
@@ -737,9 +693,29 @@ async function loadAssetImage(env: Env, pathname: string): Promise<DecodedAssetI
   if (!response.ok) return null;
   const contentType = response.headers.get("content-type") || "";
   const bytes = new Uint8Array(await response.arrayBuffer());
+
+  const decodedByRuntime = await decodeWithImageDecoder(bytes, contentType);
+  if (decodedByRuntime) return decodedByRuntime;
   if (contentType.includes("image/png")) return decodePng(bytes);
   if (contentType.includes("image/webp")) return decodeWebP(bytes);
   return null;
+}
+
+async function decodeWithImageDecoder(bytes: Uint8Array, contentType: string): Promise<DecodedAssetImage | null> {
+  if (typeof ImageDecoder === "undefined") return null;
+  try {
+    const decoder = new ImageDecoder({ data: bytes, type: contentType });
+    const { image } = await decoder.decode();
+    const width = image.displayWidth || image.codedWidth;
+    const height = image.displayHeight || image.codedHeight;
+    const pixels = new Uint8Array(width * height * 4);
+    await image.copyTo(pixels, { layout: [{ offset: 0, stride: width * 4 }] });
+    image.close();
+    decoder.close();
+    return { width, height, pixels };
+  } catch {
+    return null;
+  }
 }
 
 function drawCoverImage(canvas: TinyPngCanvas, image: DecodedAssetImage, placement: { destX: number; destY: number; destWidth: number; destHeight: number; alignX: number; alignY: number; }): void {

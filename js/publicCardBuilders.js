@@ -58,7 +58,7 @@ function buildFrontFaceGroups(snapshot, weaponLabel) {
     { label: 'Weapons', values: compactArray([weaponLabel]).slice(0, 2) },
     { label: 'Combat', values: compactArray([...(snap.ailmentList || []), ...(snap.tacticList || [])]).slice(0, 3) },
     { label: 'Defense', values: compactArray([snap.defStrat || snap.defense]).slice(0, 2) },
-    { label: 'Skills', values: compactArray(snap.recommendedSkills, (entry) => entry?.name || entry?.id || entry).slice(0, 3) },
+    { label: 'Skills', values: compactArray(snap.recommendedSkills, (entry) => entry?.name || entry?.id || entry).slice(0, 2) },
   ];
   return groups.filter((group) => group.values.length);
 }
@@ -111,11 +111,7 @@ function buildPublicBuildCardRequest(snapshot) {
       ascendancyArtPath: getAscendancyArtPath(snap.ascendancy),
       className: snap.className || '',
       weaponLabel,
-      frontFaceGroups,
-      legacySummary: {
-        mechanicTags: limit(combat, 3),
-      },
-      footerText: 'Randomancer • Shared build artifact',
+      frontFaceGroups
     },
     meta: {
       title: metaTitle,
