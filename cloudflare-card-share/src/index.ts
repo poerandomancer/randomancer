@@ -1,3 +1,5 @@
+import { inferAscendancyArtPath, normalizeBuildPreviewGroups, renderBuildPreviewSvg, type BuildCardData } from "./buildOgRenderer";
+
 export interface Env {
   APP_BASE_URL?: string;
   BUILD_OG_IMAGE_URL?: string;
@@ -49,20 +51,6 @@ type PublicCardRow = {
   preview_image_url: string | null;
   created_at: string;
   updated_at: string;
-};
-
-type BuildCardData = {
-  title: string;
-  subtitle?: string;
-  cardTypeLabel?: string;
-  ascendancy?: string;
-  ascendancyArtPath?: string;
-  className?: string;
-  weaponLabel?: string;
-  frontFaceGroups?: Array<{
-    label: string;
-    values: string[];
-  }>;
 };
 
 type LegacyBuildCardData = {
@@ -180,6 +168,7 @@ export default {
             "GET /s/build/:slug",
             "GET /s/challenge/:slug",
             "GET /og/build/:slug.png",
+            "GET /og/build/:slug.svg",
             "GET /og/challenge/:slug.png",
             "GET /:slug (legacy redirect)",
           ],
@@ -189,6 +178,9 @@ export default {
       if (request.method === "GET") {
         const shareMatch = matchSharePath(url.pathname);
         if (shareMatch) return handleSharePage(shareMatch.kind, shareMatch.slug, env);
+
+        const ogSvgMatch = matchOgSvgPath(url.pathname);
+        if (ogSvgMatch) return handleOgSvgImage(ogSvgMatch.kind, ogSvgMatch.slug, env, url.origin);
 
         const ogMatch = matchOgPath(url.pathname);
         if (ogMatch) return handleOgImage(ogMatch.kind, ogMatch.slug, env, url.origin);
@@ -325,6 +317,10 @@ async function handleOgImage(kind: CardKind, slug: string, env: Env, assetOrigin
 
   try {
     const cardData = parseCardData(row.card_data_json, kind, row);
+    if (kind === "build") {
+      return renderBuildOgPngFromSvg(cardData as BuildCardData, slug, env, assetOrigin);
+    }
+
     const rendered = await renderCardPreviewPng(kind, cardData, slug, env, assetOrigin);
     return new Response(toResponseBody(rendered.png), {
       status: 200,
@@ -338,6 +334,54 @@ async function handleOgImage(kind: CardKind, slug: string, env: Env, assetOrigin
     console.error("[randomancer-card-share] og render failed", { kind, slug, error: formatError(error) });
     return fallbackImageResponse(kind, env, 200);
   }
+}
+
+async function handleOgSvgImage(kind: CardKind, slug: string, env: Env, assetOrigin: string): Promise<Response> {
+  if (kind !== "build") return json({ ok: false, error: "Not found" }, 404);
+
+  const row = await getCardBySlug(env.DB, slug);
+  if (!row || row.card_kind !== kind) {
+    console.warn("[randomancer-card-share] og svg slug miss", { kind, slug });
+    return json({ ok: false, error: "Not found" }, 404);
+  }
+
+  const cardData = parseCardData(row.card_data_json, kind, row) as BuildCardData;
+  const rendered = await renderBuildPreviewSvg(cardData, slug, env, assetOrigin);
+  return new Response(rendered.svg, {
+    status: 200,
+    headers: {
+      "content-type": "image/svg+xml; charset=utf-8",
+      "cache-control": LONG_CACHE,
+      ...(rendered.debugHeaders || {}),
+    },
+  });
+}
+
+async function renderBuildOgPngFromSvg(cardData: BuildCardData, slug: string, env: Env, assetOrigin: string): Promise<Response> {
+  const svgUrl = new URL(`/og/build/${slug}.svg`, assetOrigin);
+  const transformed = await fetch(new Request(svgUrl.toString()), {
+    cf: {
+      image: {
+        format: "png",
+        width: 1200,
+        height: 630,
+      },
+    },
+  });
+
+  if (!transformed.ok) {
+    throw new Error(`SVG transform failed with status ${transformed.status}`);
+  }
+
+  const svgMeta = await renderBuildPreviewSvg(cardData, slug, env, assetOrigin);
+  return new Response(transformed.body, {
+    status: 200,
+    headers: {
+      "content-type": "image/png",
+      "cache-control": LONG_CACHE,
+      ...svgMeta.debugHeaders,
+    },
+  });
 }
 
 function renderShareNotFound(kind: CardKind, slug: string): Response {
@@ -469,14 +513,8 @@ function compactLegacyList(values?: string[]): string[] {
   return Array.isArray(values) ? values.map(coerceString).filter(Boolean) : [];
 }
 
-function inferAscendancyArtPath(ascendancy: string): string {
-  const slug = slugifyDisplayText(ascendancy);
-  return slug ? `/images/ascendancies/${slug}.webp` : "";
-}
 
 async function renderCardPreviewPng(kind: CardKind, cardData: BuildCardData | ChallengeCardData, slug: string, env: Env, assetOrigin = SHARE_ORIGIN): Promise<RenderedPreview> {
-  if (kind === "build") return renderBuildPreviewPng(cardData as BuildCardData, slug, env, assetOrigin);
-
   const canvas = createCanvas(1200, 630, [10, 8, 10, 255]);
   const accent = [139, 109, 255, 255] as PngColor;
   const accentSoft = [62, 44, 126, 255] as PngColor;
@@ -553,21 +591,6 @@ async function renderBuildPreviewPng(cardData: BuildCardData, slug: string, env:
       "X-Randomancer-Groups-Rendered": String(groups.length),
     },
   };
-}
-
-function normalizeBuildPreviewGroups(frontFaceGroups: Array<{ label: string; values: string[] }>): Array<{ label: string; values: string[] }> {
-  const expectedLabels = ["Ascendancy", "Weapons", "Combat", "Defense", "Skills"] as const;
-  const limits: Record<(typeof expectedLabels)[number], number> = {
-    Ascendancy: 1,
-    Weapons: 2,
-    Combat: 3,
-    Defense: 2,
-    Skills: 2,
-  };
-  return expectedLabels.map((label) => {
-    const matched = frontFaceGroups.find((group) => group.label.toLowerCase() === label.toLowerCase());
-    return { label, values: matched?.values?.filter(Boolean).slice(0, limits[label]) || ["-"] };
-  });
 }
 
 async function drawBuildBackground(canvas: TinyPngCanvas, cardData: BuildCardData, env: Env, accentSoft: PngColor, assetOrigin: string): Promise<BuildArtDebugInfo> {
@@ -1514,6 +1537,7 @@ function buildAppUrl(slug: string, env: Env): string { const url = new URL(env.A
 function normalizeLegacySlugPath(pathname: string): string | null { const slug = pathname.replace(/^\/+/, "").replace(/\/+$/, ""); return /^[bc]-[a-z0-9]{8}$/.test(slug) ? slug : null; }
 function matchSharePath(pathname: string): ParsedSharePageRoute | null { const match = pathname.match(/^\/s\/(build|challenge)\/([bc]-[a-z0-9]{8})$/); return match ? { kind: match[1] as CardKind, slug: match[2] } : null; }
 function matchOgPath(pathname: string): ParsedSharePageRoute | null { const match = pathname.match(/^\/og\/(build|challenge)\/([bc]-[a-z0-9]{8})\.png$/); return match ? { kind: match[1] as CardKind, slug: match[2] } : null; }
+function matchOgSvgPath(pathname: string): ParsedSharePageRoute | null { const match = pathname.match(/^\/og\/(build)\/([bc]-[a-z0-9]{8})\.svg$/); return match ? { kind: match[1] as CardKind, slug: match[2] } : null; }
 function matchCardApiPath(pathname: string): string | null { return pathname.match(/^\/api\/cards\/([bc]-[a-z0-9]{8})$/)?.[1] ?? null; }
 function isApiRequest(pathname: string): boolean { return pathname === "/api/cards/share" || pathname.startsWith("/api/cards/"); }
 function json(data: unknown, status = 200, headers?: HeadersInit): Response { return new Response(JSON.stringify(data, null, 2), { status, headers: { "content-type": "application/json; charset=utf-8", ...headers } }); }

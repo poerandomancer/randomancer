@@ -40,9 +40,10 @@ For human visitors the page immediately hands off into the SPA using `?card=:slu
 ### OG images
 
 - `GET /og/build/:slug.png`
+- `GET /og/build/:slug.svg` (debug-friendly build renderer output)
 - `GET /og/challenge/:slug.png`
 
-These routes render PNG previews from persisted `card_data_json`. If render or lookup fails, the worker falls back to the branded static image URL instead of returning a broken image.
+Build previews now render from an SVG card composition with embedded local font assets and embedded ascendancy art, then Cloudflare image transforms rasterize that SVG to the public PNG route. Challenge previews still use the existing deterministic bitmap renderer. If render or lookup fails, the worker falls back to the branded static image URL instead of returning a broken image.
 
 ## Data model
 
@@ -88,6 +89,7 @@ Manual validation checklist:
 curl -i http://127.0.0.1:8787/s/build/<slug>
 curl -i http://127.0.0.1:8787/s/challenge/<slug>
 curl -o /tmp/build-preview.png http://127.0.0.1:8787/og/build/<slug>.png
+curl -o /tmp/build-preview.svg http://127.0.0.1:8787/og/build/<slug>.svg
 curl -o /tmp/challenge-preview.png http://127.0.0.1:8787/og/challenge/<slug>.png
 curl -i http://127.0.0.1:8787/api/cards/<slug>
 ```
@@ -99,3 +101,11 @@ What to verify manually:
 3. Fresh build shares render a front-face-oriented preview using ascendancy art when available, plus title, subtitle, and grouped card content instead of the old summary slab.
 4. Unknown slugs return a branded not-found page and a fallback image.
 5. Existing legacy `/:slug` links redirect to the new canonical `/s/{kind}/{slug}` URL when the slug still exists.
+
+## Build renderer notes
+
+- Build OG previews no longer use the in-file bitmap `FONT` table for primary text.
+- The new renderer lives in `src/buildOgRenderer.ts` and produces a branded SVG card that is rasterized to PNG by the Worker route.
+- Font data is committed as base64 text assets under `public/fonts/*.base64.txt`, so the build preview stays deterministic without relying on external font CDNs or committed binary files.
+- Ascendancy art is embedded directly into the SVG as a first-class background layer. Missing art falls back to a dark branded glow treatment instead of failing the whole render.
+- Keeping `/og/build/:slug.svg` available makes it much easier to inspect layout, typography, and asset issues during iteration.
