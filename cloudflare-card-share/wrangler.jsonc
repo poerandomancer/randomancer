@@ -8,6 +8,14 @@
   },
   "routes": [
     {
+      "pattern": "therandomancer.com/s/*",
+      "zone_name": "therandomancer.com"
+    },
+    {
+      "pattern": "therandomancer.com/og/*",
+      "zone_name": "therandomancer.com"
+    },
+    {
       "pattern": "cards.therandomancer.com",
       "custom_domain": true
     }
