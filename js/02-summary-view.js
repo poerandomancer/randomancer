@@ -13,9 +13,9 @@ const CHALLENGE_SAVE_STORAGE_KEY = 'randomancer_saved_challenges_v1';
 const SKILL_TOOLTIP_KEYS = new Set(['ACTIVE_SKILL', 'SUPPORT', 'PERSISTENT_BUFF', 'UNIQUE', 'PASSIVE', 'KEYSTONE', 'SKILL_FAMILY', 'SKILL_FAMILY_2']);
 const REACTION_TYPES = [
   { id: 'fire', label: 'Fire', icon: '🔥' },
-  { id: 'cursed', label: 'Cursed', icon: '☠' },
+  { id: 'cursed', label: 'Cursed', icon: '💀' },
   { id: 'big_brain', label: 'Big Brain', icon: '🧠' },
-  { id: 'chaotic', label: 'Chaotic', icon: '✦' }
+  { id: 'chaotic', label: 'Chaotic', icon: '🎲' }
 ];
 
 let tooltipEl = null;
