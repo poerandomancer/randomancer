@@ -522,9 +522,7 @@ function getShareUiState(type) {
   const cardType = type || getCardOverlay()?.dataset.cardType || CARD_TYPE_BUILD;
   const expectedKey = getShareStateKey(cardType);
   const current = shareUiState[cardType] || createEmptyShareState(cardType);
-  if (current.key !== expectedKey && !getSlugFromShareUrl(current.url)) {
-    shareUiState[cardType] = createEmptyShareState(cardType);
-  }
+  if (current.key !== expectedKey) shareUiState[cardType] = createEmptyShareState(cardType);
   return shareUiState[cardType];
 }
 
@@ -557,7 +555,7 @@ function getReactionUiState(type, options = {}) {
   const current = reactionUiState[cardType] || createEmptyReactionState(cardType);
   const keyChanged = current.key !== expectedKey;
   const slugChanged = sharedSlug !== (current.slug || '');
-  if (slugChanged || (keyChanged && !sharedSlug)) {
+  if (keyChanged || slugChanged) {
     reactionUiState[cardType] = createEmptyReactionState(cardType, { slug: sharedSlug, status: sharedSlug ? 'loading' : 'idle' });
   }
   return reactionUiState[cardType];
