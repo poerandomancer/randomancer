@@ -624,7 +624,7 @@ function renderReactionRail(type) {
           aria-checked="${selected ? 'true' : 'false'}"
           aria-disabled="${isShared ? 'false' : 'true'}"
           aria-label="${isShared ? `React ${reaction.label}` : `${reaction.label} — ${disabledReason}`}"
-          title="${isShared ? `React ${reaction.label}` : disabledReason}"
+          title="${isShared ? reaction.label : disabledReason}"
         ><span aria-hidden="true">${reaction.icon}</span></button>
       </div>
     `;
@@ -633,7 +633,6 @@ function renderReactionRail(type) {
   return `
     <div class="${classes}" role="radiogroup" aria-label="Card reactions">
       ${rows}
-      ${isShared ? '' : '<span class="visually-hidden">Share to enable reactions</span>'}
     </div>
   `;
 }
@@ -1025,6 +1024,13 @@ function positionFloatingPanel(anchor) {
   panel.style.top = `${Math.min(window.innerHeight - panel.offsetHeight - 12, rect.bottom + 10)}px`;
 }
 
+function getOverlayShareAnchor(cardType) {
+  const overlay = getCardOverlay();
+  if (!overlay || overlay.hidden) return null;
+  if ((overlay.dataset.cardType || '') !== (cardType || '')) return null;
+  return overlay.querySelector('[data-card-action="share-card"]');
+}
+
 function closeFloatingPanel() {
   const panel = ensureFloatingPanel();
   panel.hidden = true;
@@ -1075,8 +1081,9 @@ async function openSharePanel(cardType, anchor) {
     positionFloatingPanel(anchor);
     await shareCurrentCard(cardType, { silent: true });
     if (floatingPanelState.type === 'share' && floatingPanelState.cardType === cardType) {
+      floatingPanelState.anchor = getOverlayShareAnchor(cardType) || floatingPanelState.anchor;
       panel.innerHTML = renderSharePanel(cardType);
-      positionFloatingPanel(anchor);
+      positionFloatingPanel(floatingPanelState.anchor);
     }
   }
 }
