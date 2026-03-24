@@ -615,10 +615,10 @@ async function drawBuildBackground(canvas: TinyPngCanvas, cardData: BuildCardDat
 
         fillRoundedRect(canvas, cardX, cardY, cardWidth, cardHeight, cardRadius, [0, 0, 0, 18]);
 
-        applyHorizontalFade(canvas, cardX, cardY, 430, cardHeight, [6, 8, 12, 170], [6, 8, 12, 22]);
-        applyHorizontalFade(canvas, cardX + cardWidth - 300, cardY, 300, cardHeight, [0, 0, 0, 18], [0, 0, 0, 112]);
-        applyVerticalFade(canvas, cardX, cardY, cardWidth, 120, [0, 0, 0, 82], [0, 0, 0, 8]);
-        applyVerticalFade(canvas, cardX, cardY + cardHeight - 170, cardWidth, 170, [0, 0, 0, 6], [0, 0, 0, 108]);
+        applyHorizontalFade(canvas, cardX, cardY, 340, cardHeight, [6, 8, 12, 170], [6, 8, 12, 22]);
+        applyHorizontalFade(canvas, cardX + cardWidth - 220, cardY, 220, cardHeight, [0, 0, 0, 18], [0, 0, 0, 112]);
+        applyVerticalFade(canvas, cardX, cardY, cardWidth, 80, [0, 0, 0, 82], [0, 0, 0, 8]);
+        applyVerticalFade(canvas, cardX, cardY + cardHeight - 120, cardWidth, 120, [0, 0, 0, 6], [0, 0, 0, 108]);
 
         debug.usedFallback = false;
       } else {
@@ -883,7 +883,7 @@ async function fetchTranscodedImage(requestUrl: string): Promise<AssetFetchResul
     cf: {
       image: {
         format: "baseline-jpeg",
-        width: 900,
+        width: 820,
         quality: 60,
         anim: false,
         metadata: "none",
