@@ -100,6 +100,8 @@ type ChallengeCardData = {
 };
 
 type ParsedSharePageRoute = { kind: CardKind; slug: string };
+type ReactionType = "fire" | "cursed" | "big_brain" | "chaotic";
+type CardReactionCounts = Record<ReactionType, number>;
 type PngColor = [number, number, number, number];
 
 type TinyPngCanvas = {
@@ -118,6 +120,7 @@ const CARD_KIND_PREFIX: Record<CardKind, string> = {
   challenge: "c",
 };
 const LONG_CACHE = "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800, immutable";
+const REACTION_TYPES: ReactionType[] = ["fire", "cursed", "big_brain", "chaotic"];
 const FONT: Record<string, string[]> = {
   A: ["01110", "10001", "10001", "11111", "10001", "10001", "10001"],
   B: ["11110", "10001", "10001", "11110", "10001", "10001", "11110"],
@@ -175,6 +178,9 @@ export default {
       if (isApiRequest(url.pathname)) {
         if (request.method === "OPTIONS") return corsResponse(request);
         if (request.method === "POST" && url.pathname === "/api/cards/share") return withCors(request, await handleShare(request, env));
+        const reactionMatch = matchCardReactionApiPath(url.pathname);
+        if (reactionMatch && request.method === "GET") return withCors(request, await handleGetReactions(request, reactionMatch, env));
+        if (reactionMatch && request.method === "POST") return withCors(request, await handlePostReactions(request, reactionMatch, env));
         const slugMatch = matchCardApiPath(url.pathname);
         if (request.method === "GET" && slugMatch) return withCors(request, await handleGetCard(slugMatch, env));
         return withCors(request, json({ ok: false, error: "Not found" }, 404));
@@ -187,6 +193,8 @@ export default {
           routes: [
             "POST /api/cards/share",
             "GET /api/cards/:slug",
+            "GET /api/cards/:slug/reactions",
+            "POST /api/cards/:slug/reactions",
             "GET /s/build/:slug",
             "GET /s/challenge/:slug",
             "GET /og/build/:slug.png",
@@ -304,6 +312,73 @@ async function handleGetCard(slug: string, env: Env): Promise<Response> {
   const row = await getCardBySlug(env.DB, slug);
   if (!row) return json({ ok: false, error: "Card not found" }, 404);
   return json(formatCardResponse(row), 200, { "cache-control": "no-store" });
+}
+
+async function handleGetReactions(request: Request, slug: string, env: Env): Promise<Response> {
+  const row = await getCardBySlug(env.DB, slug);
+  if (!row) return json({ ok: false, error: "Card not found" }, 404);
+
+  const reactorKey = getReactorKeyFromHeader(request);
+  const reactorHash = reactorKey ? await sha256Hex(reactorKey) : null;
+  const counts = await getReactionCounts(env.DB, slug);
+  const viewerReaction = reactorHash ? await getViewerReaction(env.DB, slug, reactorHash) : null;
+
+  return json({
+    ok: true,
+    slug,
+    counts,
+    viewer_reaction: viewerReaction,
+  }, 200, { "cache-control": "no-store" });
+}
+
+async function handlePostReactions(request: Request, slug: string, env: Env): Promise<Response> {
+  const row = await getCardBySlug(env.DB, slug);
+  if (!row) return json({ ok: false, error: "Card not found" }, 404);
+
+  const reactorKey = getReactorKeyFromHeader(request);
+  if (!reactorKey) return json({ ok: false, error: "Missing X-Randomancer-Reactor-Key header" }, 400);
+  const reactorHash = await sha256Hex(reactorKey);
+
+  let body: unknown;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ ok: false, error: "Invalid JSON body" }, 400);
+  }
+
+  const parsedReaction = parseReactionType((body as Record<string, unknown>)?.reaction_type);
+  if (!parsedReaction) return json({ ok: false, error: "Invalid reaction type" }, 400);
+
+  const existing = await getViewerReaction(env.DB, slug, reactorHash);
+  const nowIso = new Date().toISOString();
+
+  if (!existing) {
+    await env.DB.prepare(
+      `INSERT INTO card_reactions (public_card_slug, reactor_hash, reaction_type, created_at, updated_at)
+       VALUES (?1, ?2, ?3, ?4, ?5)`,
+    ).bind(slug, reactorHash, parsedReaction, nowIso, nowIso).run();
+  } else if (existing === parsedReaction) {
+    await env.DB.prepare(
+      `DELETE FROM card_reactions
+       WHERE public_card_slug = ?1 AND reactor_hash = ?2`,
+    ).bind(slug, reactorHash).run();
+  } else {
+    await env.DB.prepare(
+      `UPDATE card_reactions
+       SET reaction_type = ?3,
+           updated_at = ?4
+       WHERE public_card_slug = ?1 AND reactor_hash = ?2`,
+    ).bind(slug, reactorHash, parsedReaction, nowIso).run();
+  }
+
+  const counts = await getReactionCounts(env.DB, slug);
+  const viewerReaction = await getViewerReaction(env.DB, slug, reactorHash);
+  return json({
+    ok: true,
+    slug,
+    counts,
+    viewer_reaction: viewerReaction,
+  }, 200, { "cache-control": "no-store" });
 }
 
 async function handleSharePage(kind: CardKind, slug: string, env: Env): Promise<Response> {
@@ -1697,6 +1772,52 @@ async function getCardBySlug(db: D1Database, slug: string): Promise<PublicCardRo
   ).bind(slug).first<PublicCardRow>()) ?? null;
 }
 
+function createZeroReactionCounts(): CardReactionCounts {
+  return { fire: 0, cursed: 0, big_brain: 0, chaotic: 0 };
+}
+
+function parseReactionType(value: unknown): ReactionType | null {
+  if (typeof value !== "string") return null;
+  const normalized = value.trim().toLowerCase();
+  return REACTION_TYPES.find((reaction) => reaction === normalized) ?? null;
+}
+
+function getReactorKeyFromHeader(request: Request): string | null {
+  const raw = request.headers.get("x-randomancer-reactor-key");
+  const trimmed = raw?.trim() ?? "";
+  return trimmed.length > 0 ? trimmed : null;
+}
+
+async function getViewerReaction(db: D1Database, slug: string, reactorHash: string): Promise<ReactionType | null> {
+  const row = await db.prepare(
+    `SELECT reaction_type
+     FROM card_reactions
+     WHERE public_card_slug = ?1
+       AND reactor_hash = ?2
+     LIMIT 1`,
+  ).bind(slug, reactorHash).first<{ reaction_type: string }>();
+  return parseReactionType(row?.reaction_type ?? null);
+}
+
+async function getReactionCounts(db: D1Database, slug: string): Promise<CardReactionCounts> {
+  const counts = createZeroReactionCounts();
+  const row = await db.prepare(
+    `SELECT
+       SUM(CASE WHEN reaction_type = 'fire' THEN 1 ELSE 0 END) AS fire,
+       SUM(CASE WHEN reaction_type = 'cursed' THEN 1 ELSE 0 END) AS cursed,
+       SUM(CASE WHEN reaction_type = 'big_brain' THEN 1 ELSE 0 END) AS big_brain,
+       SUM(CASE WHEN reaction_type = 'chaotic' THEN 1 ELSE 0 END) AS chaotic
+     FROM card_reactions
+     WHERE public_card_slug = ?1`,
+  ).bind(slug).first<Record<ReactionType, number | null>>();
+  if (!row) return counts;
+  REACTION_TYPES.forEach((reaction) => {
+    const value = Number(row[reaction]);
+    counts[reaction] = Number.isFinite(value) && value >= 0 ? value : 0;
+  });
+  return counts;
+}
+
 async function createUniqueSlug(db: D1Database, cardKind: CardKind): Promise<string> {
   for (let attempt = 0; attempt < 8; attempt += 1) {
     const slug = `${CARD_KIND_PREFIX[cardKind]}-${randomSuffix(8)}`;
@@ -1754,6 +1875,7 @@ function buildAppUrl(slug: string, env: Env): string { const url = new URL(env.A
 function normalizeLegacySlugPath(pathname: string): string | null { const slug = pathname.replace(/^\/+/, "").replace(/\/+$/, ""); return /^[bc]-[a-z0-9]{8}$/.test(slug) ? slug : null; }
 function matchSharePath(pathname: string): ParsedSharePageRoute | null { const match = pathname.match(/^\/s\/(build|challenge)\/([bc]-[a-z0-9]{8})$/); return match ? { kind: match[1] as CardKind, slug: match[2] } : null; }
 function matchOgPath(pathname: string): ParsedSharePageRoute | null { const match = pathname.match(/^\/og\/(build|challenge)\/([bc]-[a-z0-9]{8})\.png$/); return match ? { kind: match[1] as CardKind, slug: match[2] } : null; }
+function matchCardReactionApiPath(pathname: string): string | null { return pathname.match(/^\/api\/cards\/([bc]-[a-z0-9]{8})\/reactions$/)?.[1] ?? null; }
 function matchCardApiPath(pathname: string): string | null { return pathname.match(/^\/api\/cards\/([bc]-[a-z0-9]{8})$/)?.[1] ?? null; }
 function isApiRequest(pathname: string): boolean { return pathname === "/api/cards/share" || pathname.startsWith("/api/cards/"); }
 function json(data: unknown, status = 200, headers?: HeadersInit): Response { return new Response(JSON.stringify(data, null, 2), { status, headers: { "content-type": "application/json; charset=utf-8", ...headers } }); }
@@ -1761,7 +1883,7 @@ function html(markup: string, status = 200, headers?: HeadersInit): Response { r
 function escapeHtml(value: string): string { return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;"); }
 function corsResponse(request: Request): Response { const headers = buildCorsHeaders(request); return new Response(null, { status: 204, headers: headers ?? undefined }); }
 function withCors(request: Request, response: Response): Response { const headers = buildCorsHeaders(request); if (!headers) return response; const merged = new Headers(response.headers); headers.forEach((value, key) => merged.set(key, value)); return new Response(response.body, { status: response.status, statusText: response.statusText, headers: merged }); }
-function buildCorsHeaders(request: Request): Headers | null { const origin = request.headers.get("origin"); if (!origin) return null; const headers = new Headers(); headers.set("access-control-allow-origin", origin); headers.set("vary", "origin"); headers.set("access-control-allow-methods", "GET,POST,OPTIONS"); headers.set("access-control-allow-headers", "content-type,x-randomancer-app-version"); headers.set("access-control-max-age", "86400"); return headers; }
+function buildCorsHeaders(request: Request): Headers | null { const origin = request.headers.get("origin"); if (!origin) return null; const headers = new Headers(); headers.set("access-control-allow-origin", origin); headers.set("vary", "origin"); headers.set("access-control-allow-methods", "GET,POST,OPTIONS"); headers.set("access-control-allow-headers", "content-type,x-randomancer-app-version,x-randomancer-reactor-key"); headers.set("access-control-max-age", "86400"); return headers; }
 function isCardKind(value: unknown): value is CardKind { return value === "build" || value === "challenge"; }
 function isRecord(value: unknown): value is Record<string, any> { return !!value && typeof value === "object" && !Array.isArray(value); }
 function isNonEmptyString(value: unknown): value is string { return typeof value === "string" && value.trim().length > 0; }
