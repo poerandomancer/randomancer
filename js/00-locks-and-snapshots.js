@@ -13,7 +13,6 @@ import {
   closeCardOverlay,
   getSummaryTextFromSnapshot,
   installSummaryAutoRefresh,
-  openSharePanel,
   openCardOverlay,
   renderSummaryFromSnapshot
 } from './02-summary-view.js';
@@ -668,6 +667,9 @@ function renderSnapshotToDom(snap){
     if (ico) ico.textContent = saved ? '★' : '☆';
     if (label) label.textContent = saved ? 'Saved' : 'Save';
     btn.classList.toggle('is-saved', saved);
+    btn.dataset.saved = saved ? '1' : '0';
+    btn.setAttribute('aria-label', saved ? 'Saved' : 'Save');
+    btn.setAttribute('title', saved ? 'Saved' : 'Save');
   }
   
   function normalizeHandedWeaponLabel(label) {
@@ -750,7 +752,6 @@ function renderSnapshotToDom(snap){
     const buildSaveBtn = document.getElementById('build-actions-save');
     const buildPoeBtn = document.getElementById('build-actions-poe');
     const challengeSaveBtn = document.getElementById('challenge-actions-save');
-    const challengeShareBtn = document.getElementById('challenge-actions-share');
     const savedListFab = savedFab;
 
     installSummaryAutoRefresh();
@@ -770,7 +771,6 @@ function renderSnapshotToDom(snap){
       saveCurrentChallenge();
       window.RandomancerShowToast?.('Saved locally.');
     });
-    challengeShareBtn?.addEventListener('click', (evt) => openSharePanel('challenge', evt.currentTarget));
 
     savedListFab?.addEventListener('click', openSavedOverlay);
     savedCloseBtn?.addEventListener('click', closeSavedOverlay);

@@ -359,15 +359,14 @@
       </section>
 
       <section id="challenge-panel" class="panel is-hidden" aria-label="Challenge Contract">
+        <div class="panel-actions panel-actions--build" aria-label="Challenge utilities">
+          <button id="challenge-actions-save" class="icon-btn card-action-btn build-panel-action" type="button" aria-label="Save" title="Save"><span aria-hidden="true">☆</span></button>
+        </div>
         <div id="challenge-contract-output" class="challenge-contract-output" aria-live="polite">
           <div class="build-title-block">
             <h3 id="challenge-contract-title" class="build-name"></h3>
             <p id="challenge-contract-subtitle" class="build-subtext"></p>
             <button id="challenge-open-card" class="build-card-launch-link" type="button">View Challenge Card</button>
-          </div>
-          <div class="summary-utility-bar" aria-label="Challenge actions">
-            <button id="challenge-actions-save" class="summary-utility-btn" type="button"><span class="summary-utility-btn__icon" aria-hidden="true">☆</span><span class="summary-utility-btn__label">Save</span></button>
-            <button id="challenge-actions-share" class="summary-utility-btn" type="button"><span class="summary-utility-btn__icon" aria-hidden="true">↗</span><span class="summary-utility-btn__label">Share</span></button>
           </div>
           <div id="challenge-contract-lines" class="summary-panel challenge-contract-lines"></div>
         </div>
@@ -375,8 +374,8 @@
 
       <section id="build-panel" class="panel">
         <div class="panel-actions panel-actions--build" aria-label="Build utilities">
-          <button id="build-actions-save" class="icon-btn card-action-btn build-panel-action" type="button" aria-label="Save" title="Save"><span aria-hidden="true">☆</span></button>
           <button id="build-actions-poe" class="icon-btn card-action-btn build-panel-action" type="button" aria-label="Open in poe.ninja" title="Open in poe.ninja"><span aria-hidden="true">🥷</span></button>
+          <button id="build-actions-save" class="icon-btn card-action-btn build-panel-action" type="button" aria-label="Save" title="Save"><span aria-hidden="true">☆</span></button>
         </div>
         <div class="build-title-block">
 			<div id="build-name" class="build-name"></div>
