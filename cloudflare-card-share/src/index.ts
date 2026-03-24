@@ -546,7 +546,7 @@ async function renderBuildPreviewPng(cardData: BuildCardData, slug: string, env:
     fillRoundedRect(canvas, 58, groupY, 612, 52, 18, [10, 12, 18, 116]);
     strokeRoundedRect(canvas, 58, groupY, 612, 52, 18, [255, 227, 180, 36]);
     drawTextBlock(canvas, sanitizePreviewText(group.label), 78, groupY + 10, 2, accent, 150, 1);
-    drawTextBlock(canvas, sanitizePreviewText(group.values.join(" • ")), 236, groupY + 10, 2, [242, 236, 228, 255], 408, 2);
+    drawTextBlock(canvas, sanitizePreviewText(group.values.join(" / ")), 236, groupY + 10, 2, [242, 236, 228, 255], 408, 2);
   }
 
   return {
@@ -575,7 +575,14 @@ function normalizeBuildPreviewGroups(frontFaceGroups: Array<{ label: string; val
 }
 
 async function drawBuildBackground(canvas: TinyPngCanvas, cardData: BuildCardData, env: Env, accentSoft: PngColor, assetOrigin: string): Promise<BuildArtDebugInfo> {
-  drawBackground(canvas, "build", accentSoft);
+  const cardX = 28;
+  const cardY = 24;
+  const cardWidth = 1144;
+  const cardHeight = 582;
+  const cardRadius = 30;
+
+  fillRect(canvas, 0, 0, canvas.width, canvas.height, [0, 0, 0, 255]);
+
   const artPath = cardData.ascendancyArtPath || inferAscendancyArtPath(cardData.ascendancy || "");
   const debug: BuildArtDebugInfo = {
     path: artPath,
@@ -593,18 +600,29 @@ async function drawBuildBackground(canvas: TinyPngCanvas, cardData: BuildCardDat
       debug.byteLength = artResult.byteLength;
       debug.decodeStatus = artResult.decodeStatus;
       if (artResult.image) {
-        drawCoverImage(canvas, artResult.image, {
-          destX: 0,
-          destY: 0,
-          destWidth: 1200,
-          destHeight: 630,
-          alignX: 0.54,
+        drawCoverImageRounded(canvas, artResult.image, {
+          destX: cardX,
+          destY: cardY,
+          destWidth: cardWidth,
+          destHeight: cardHeight,
+          radius: cardRadius,
+          // Lower alignX moves the subject art to the RIGHT on the final card.
+          alignX: 0.20,
           alignY: 0.22,
+          zoom: 1.14,
+          panX: -24,
         });
-        fillRect(canvas, 0, 0, canvas.width, canvas.height, [0, 0, 0, 18]);
-        applyHorizontalFade(canvas, 0, 0, 820, 630, [6, 8, 12, 136], [6, 8, 12, 18]);
-        applyVerticalFade(canvas, 0, 0, 1200, 630, [0, 0, 0, 8], [0, 0, 0, 46]);
+
+        fillRoundedRect(canvas, cardX, cardY, cardWidth, cardHeight, cardRadius, [0, 0, 0, 18]);
+
+        applyHorizontalFade(canvas, cardX, cardY, 430, cardHeight, [6, 8, 12, 170], [6, 8, 12, 22]);
+        applyHorizontalFade(canvas, cardX + cardWidth - 300, cardY, 300, cardHeight, [0, 0, 0, 18], [0, 0, 0, 112]);
+        applyVerticalFade(canvas, cardX, cardY, cardWidth, 120, [0, 0, 0, 82], [0, 0, 0, 8]);
+        applyVerticalFade(canvas, cardX, cardY + cardHeight - 170, cardWidth, 170, [0, 0, 0, 6], [0, 0, 0, 108]);
+
         debug.usedFallback = false;
+      } else {
+        drawBackground(canvas, "build", accentSoft);
       }
       console.log("[randomancer-card-share] build art diagnostic", debug);
       return debug;
@@ -612,11 +630,13 @@ async function drawBuildBackground(canvas: TinyPngCanvas, cardData: BuildCardDat
       debug.fetchStatus = "error";
       debug.decodeStatus = JSON.stringify(formatError(error));
       console.warn("[randomancer-card-share] build art lookup failed", { artPath, error: formatError(error) });
+      drawBackground(canvas, "build", accentSoft);
       console.log("[randomancer-card-share] build art diagnostic", debug);
       return debug;
     }
   }
 
+  drawBackground(canvas, "build", accentSoft);
   console.log("[randomancer-card-share] build art diagnostic", debug);
   return debug;
 }
@@ -864,8 +884,6 @@ async function fetchTranscodedImage(requestUrl: string): Promise<AssetFetchResul
       image: {
         format: "baseline-jpeg",
         width: 900,
-        height: 630,
-        fit: "cover",
         quality: 60,
         anim: false,
         metadata: "none",
@@ -946,14 +964,37 @@ function drawCoverImage(canvas: TinyPngCanvas, image: DecodedAssetImage, placeme
   const sampleHeight = Math.max(1, Math.round(placement.destHeight / scale));
   const maxOffsetX = Math.max(0, image.width - sampleWidth);
   const maxOffsetY = Math.max(0, image.height - sampleHeight);
-  const sourceX = Math.round(maxOffsetX * placement.alignX);
-  const sourceY = Math.round(maxOffsetY * placement.alignY);
+  const sourceX = clampInt(Math.round(maxOffsetX * placement.alignX + (placement.panX ?? 0)), 0, maxOffsetX);
+  const sourceY = clampInt(Math.round(maxOffsetY * placement.alignY + (placement.panY ?? 0)), 0, maxOffsetY);
   for (let y = 0; y < placement.destHeight; y += 1) {
     const srcY = Math.min(image.height - 1, sourceY + Math.floor((y / placement.destHeight) * sampleHeight));
     for (let x = 0; x < placement.destWidth; x += 1) {
       const srcX = Math.min(image.width - 1, sourceX + Math.floor((x / placement.destWidth) * sampleWidth));
       const idx = (srcY * image.width + srcX) * 4;
       blendPixel(canvas, placement.destX + x, placement.destY + y, [image.pixels[idx], image.pixels[idx + 1], image.pixels[idx + 2], image.pixels[idx + 3]]);
+    }
+  }
+}
+
+function drawCoverImageRounded(canvas: TinyPngCanvas, image: DecodedAssetImage, placement: { destX: number; destY: number; destWidth: number; destHeight: number; radius: number; alignX: number; alignY: number; zoom?: number; panX?: number; panY?: number; }): void {
+  const zoom = placement.zoom ?? 1;
+	const scale = Math.max(placement.destWidth / image.width, placement.destHeight / image.height) * zoom;
+  const sampleWidth = Math.max(1, Math.round(placement.destWidth / scale));
+  const sampleHeight = Math.max(1, Math.round(placement.destHeight / scale));
+  const maxOffsetX = Math.max(0, image.width - sampleWidth);
+  const maxOffsetY = Math.max(0, image.height - sampleHeight);
+  const sourceX = clampInt(Math.round(maxOffsetX * placement.alignX + (placement.panX ?? 0)), 0, maxOffsetX);
+  const sourceY = clampInt(Math.round(maxOffsetY * placement.alignY + (placement.panY ?? 0)), 0, maxOffsetY);
+
+  for (let y = 0; y < placement.destHeight; y += 1) {
+    const destY = placement.destY + y;
+    const srcY = Math.min(image.height - 1, sourceY + Math.floor((y / placement.destHeight) * sampleHeight));
+    for (let x = 0; x < placement.destWidth; x += 1) {
+      const destX = placement.destX + x;
+      if (!insideRoundedRect(destX, destY, placement.destX, placement.destY, placement.destWidth, placement.destHeight, placement.radius)) continue;
+      const srcX = Math.min(image.width - 1, sourceX + Math.floor((x / placement.destWidth) * sampleWidth));
+      const idx = (srcY * image.width + srcX) * 4;
+      blendPixel(canvas, destX, destY, [image.pixels[idx], image.pixels[idx + 1], image.pixels[idx + 2], image.pixels[idx + 3]]);
     }
   }
 }
@@ -1400,6 +1441,10 @@ function strokeRoundedRect(canvas: TinyPngCanvas, x: number, y: number, width: n
       if (!insideInner) paintPixel(canvas, xx, yy, color);
     }
   }
+}
+
+function clampInt(value: number, min: number, max: number): number {
+  return Math.max(min, Math.min(max, value));
 }
 
 function insideRoundedRect(px: number, py: number, x: number, y: number, width: number, height: number, radius: number): boolean {
