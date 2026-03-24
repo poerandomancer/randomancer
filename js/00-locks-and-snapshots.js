@@ -62,6 +62,7 @@ import {
       v: snap.snapshotVersion || 1,
       c: snap.className || '',
       a: snap.ascendancy || '',
+      ai: snap.ascendancyId ?? null,
       w: snap.weapon || '',
       o: snap.offhand || '',
       w2: snap.weapon2 || '',
@@ -122,6 +123,7 @@ import {
         snapshotVersion: raw.v || 1,
         className: raw.c || '',
         ascendancy: raw.a || '',
+        ascendancyId: raw.ai ?? null,
         weapon: raw.w || '',
         offhand: raw.o || '',
         weapon2: raw.w2 || '',
@@ -488,10 +490,11 @@ function renderSnapshotToDom(snap){
     }
   }
 
-  // Merge into global roll state so the rest of the app sees the right info
+  // Replace global roll state so restored snapshots do not leak prior roll fields.
   const rollPayload = { ...snap };
-
-  if (window.App?.mergeCurrentRoll) {
+  if (window.App?.replaceCurrentRoll) {
+    window.App.replaceCurrentRoll(rollPayload);
+  } else if (window.App?.mergeCurrentRoll) {
     window.App.mergeCurrentRoll(rollPayload);
   }
 
@@ -885,9 +888,13 @@ function renderSnapshotToDom(snap){
 
   async function autoLoadFromQuery(){
     const q = getQueryParams();
-    const requestedCard = q.get('card');
+    const slugPattern = /^[bc]-[a-z0-9]{8}$/i;
+    const cardParam = q.get('card');
+    const requestedSharedCard = q.get('sharedCard');
+    const requestedCard = requestedSharedCard || (slugPattern.test(cardParam || '') ? cardParam : '');
+    const requestedOverlay = slugPattern.test(cardParam || '') ? '' : cardParam;
 
-    if (requestedCard && /^[bc]-[a-z0-9]{8}$/i.test(requestedCard)) {
+    if (requestedCard && slugPattern.test(requestedCard)) {
       window.RandomancerShowToast?.('Loading shared card…', 1800);
       try {
         const shared = validatePublicCardRecord(await fetchPublicCardBySlug(requestedCard));
@@ -919,15 +926,15 @@ function renderSnapshotToDom(snap){
     const challengeCode = q.get('challenge') || q.get('challengeCode');
     if (challengeCode) {
       const ok = await applyChallengeCode(challengeCode);
-      if (requestedCard === 'challenge') openCardOverlay('challenge', { skipUrl: true });
-      else if (!ok && requestedCard === 'challenge') openCardOverlay('challenge', { skipUrl: true });
+      if (requestedOverlay === 'challenge') openCardOverlay('challenge', { skipUrl: true });
+      else if (!ok && requestedOverlay === 'challenge') openCardOverlay('challenge', { skipUrl: true });
       return;
     }
     const code = q.get('build') || q.get('buildCode');
     if (code) {
       const ok = await applyBuildCode(code);
-      if (requestedCard === 'build') openCardOverlay('build', { skipUrl: true });
-      else if (!ok && requestedCard === 'build') openCardOverlay('build', { skipUrl: true });
+      if (requestedOverlay === 'build') openCardOverlay('build', { skipUrl: true });
+      else if (!ok && requestedOverlay === 'build') openCardOverlay('build', { skipUrl: true });
     }
   }
 
@@ -986,9 +993,11 @@ function renderSnapshotToDom(snap){
   window.RandomancerRenderBuildSnapshot = (snap) => {
     if (!snap || typeof snap !== 'object') return false;
     const safeSnap = cloneJsonSafe(snap) || { ...snap };
-    if (window.App?.mergeCurrentRoll) window.App.mergeCurrentRoll({ ...safeSnap });
-    window.CURRENT_ROLL = cloneJsonSafe(safeSnap) || { ...safeSnap };
-    renderSnapshotToDom(safeSnap);
+    let canonical = safeSnap;
+    if (window.App?.replaceCurrentRoll) canonical = window.App.replaceCurrentRoll(safeSnap) || safeSnap;
+    else if (window.App?.mergeCurrentRoll) canonical = window.App.mergeCurrentRoll({ ...safeSnap }) || safeSnap;
+    window.CURRENT_ROLL = cloneJsonSafe(canonical) || { ...canonical };
+    renderSnapshotToDom(canonical);
     return true;
   };
   window.RandomancerClearBuildResults = clearBuildResultsToEmpty;

@@ -5,6 +5,60 @@ import { ensureDataPreload } from './08-data-load.js';
 
 // ===== App API =====
 const App = window.App = (() => {
+  function cloneJsonSafe(value){
+    if (value == null) return value;
+    try {
+      if (typeof structuredClone === 'function') return structuredClone(value);
+    } catch {}
+    try { return JSON.parse(JSON.stringify(value)); } catch { return value; }
+  }
+
+  function canonicalizeRollSnapshot(input = {}) {
+    const src = (input && typeof input === 'object') ? input : {};
+    const attrs = (src.attributes && typeof src.attributes === 'object') ? src.attributes : {};
+    const rollAttrs = (src.rollAttr && typeof src.rollAttr === 'object') ? src.rollAttr : {};
+    return {
+      className: src.className || '',
+      ascendancy: src.ascendancy || '',
+      ascendancyId: src.ascendancyId ?? null,
+      defense: src.defense || '',
+      defStrat: src.defStrat || '',
+      defStratObj: src.defStratObj ?? null,
+      weapon: src.weapon || '',
+      offhand: src.offhand || '',
+      weapon2: src.weapon2 || '',
+      offhand2: src.offhand2 || '',
+      tactics: src.tactics || '',
+      ailments: src.ailments || '',
+      ailmentList: Array.isArray(src.ailmentList) ? src.ailmentList : [],
+      tacticList: Array.isArray(src.tacticList) ? src.tacticList : [],
+      tacticSet: Array.isArray(src.tacticSet) ? src.tacticSet : [],
+      ailmentSet: Array.isArray(src.ailmentSet) ? src.ailmentSet : [],
+      buildName: src.buildName || '',
+      flavor: src.flavor || '',
+      attributes: {
+        strength: Number(attrs.strength) || 0,
+        dexterity: Number(attrs.dexterity) || 0,
+        intelligence: Number(attrs.intelligence) || 0
+      },
+      rollAttr: {
+        strength: Number(rollAttrs.strength) || 0,
+        dexterity: Number(rollAttrs.dexterity) || 0,
+        intelligence: Number(rollAttrs.intelligence) || 0
+      },
+      defenseObj: src.defenseObj ?? null,
+      recommendedSkills: Array.isArray(src.recommendedSkills) ? src.recommendedSkills : [],
+      recommendedSkills2: Array.isArray(src.recommendedSkills2) ? src.recommendedSkills2 : [],
+      synergySupports: Array.isArray(src.synergySupports) ? src.synergySupports : [],
+      synergySupports2: Array.isArray(src.synergySupports2) ? src.synergySupports2 : [],
+      recommendedPersistentBuff: src.recommendedPersistentBuff ?? null,
+      recommendedUniques: Array.isArray(src.recommendedUniques) ? src.recommendedUniques : [],
+      passives: src.passives && typeof src.passives === 'object' ? src.passives : null,
+      tagProfile: src.tagProfile ?? null,
+      snapshotVersion: Number(src.snapshotVersion) || 1
+    };
+  }
+
   const state = {
     DATA:   null,
     GEMS:   null,
@@ -17,35 +71,7 @@ const App = window.App = (() => {
 
 
     // canonical current roll snapshot
-    currentRoll: {
-      className: '',
-      ascendancy: '',
-      ascendancyId: null,
-      defense:   '',
-      defStrat:  '',
-      defStratObj: null,
-      weapon:    '',
-      offhand:   '',
-      weapon2:   '',
-      offhand2:  '',
-      tactics:   '',
-      ailments:  '',
-      ailmentList: [],
-      tacticList: [],
-      tacticSet: [],
-      ailmentSet: [],
-      buildName: '',
-      flavor:    '',
-      attributes: { strength: 0, dexterity: 0, intelligence: 0 },
-      rollAttr: { strength: 0, dexterity: 0, intelligence: 0 },
-      defenseObj: null,
-      recommendedSkills: [],
-      recommendedSkills2: [],
-      recommendedPersistentBuff: null,
-      recommendedUniques: [],
-      tagProfile: null,
-      snapshotVersion: 1
-    },
+    currentRoll: canonicalizeRollSnapshot(),
 
     bindFates: {
       ascendancy: { oaths: [], abominations: [] },
@@ -199,6 +225,19 @@ const App = window.App = (() => {
 	  }
 	}
 
+  function replaceCurrentRoll(nextSnapshot){
+    try {
+      const safe = cloneJsonSafe(nextSnapshot);
+      state.currentRoll = canonicalizeRollSnapshot(safe || {});
+      if (typeof window !== 'undefined') {
+        window.__LAST_ROLL_META = cloneJsonSafe(state.currentRoll) || { ...state.currentRoll };
+      }
+      return state.currentRoll;
+    } catch (e) {
+      return state.currentRoll;
+    }
+  }
+
 
   function captureCurrentRollFromDOM(){
     try{
@@ -235,6 +274,7 @@ const App = window.App = (() => {
     roll,
     captureCurrentRollFromDOM,
     mergeCurrentRoll,
+    replaceCurrentRoll,
     getBindFates,
     setBindFatesCategory,
     getChallengeFates,

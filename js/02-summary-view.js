@@ -5,9 +5,11 @@ import { buildGemDictionary, lookupGem } from './05-tags-and-scorer.js';
 import { getFamilySkillNames, resolveSkillFamily } from './17-skill-family-utils.js';
 
 const CARD_PARAM = 'card';
+const SHARED_CARD_PARAM = 'sharedCard';
 const CARD_TYPE_BUILD = 'build';
 const CARD_TYPE_CHALLENGE = 'challenge';
 const CARD_STATE_KEY = 'rm_card_overlay';
+const SHARED_LINK_CACHE_KEY = 'rm_shared_card_links_v1';
 const BUILD_SAVE_STORAGE_KEY = 'randomancer_saved_builds_v1';
 const CHALLENGE_SAVE_STORAGE_KEY = 'randomancer_saved_challenges_v1';
 const SKILL_TOOLTIP_KEYS = new Set(['ACTIVE_SKILL', 'SUPPORT', 'PERSISTENT_BUFF', 'UNIQUE', 'PASSIVE', 'KEYSTONE', 'SKILL_FAMILY', 'SKILL_FAMILY_2']);
@@ -42,6 +44,41 @@ const reactionUiState = {
   [CARD_TYPE_BUILD]: { status: 'idle', slug: '', counts: { fire: 0, cursed: 0, big_brain: 0, chaotic: 0 }, viewerReaction: null, busy: false, key: '' },
   [CARD_TYPE_CHALLENGE]: { status: 'idle', slug: '', counts: { fire: 0, cursed: 0, big_brain: 0, chaotic: 0 }, viewerReaction: null, busy: false, key: '' }
 };
+
+function readSharedLinkCache() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(SHARED_LINK_CACHE_KEY) || '{}');
+    return {
+      [CARD_TYPE_BUILD]: raw?.[CARD_TYPE_BUILD] && typeof raw[CARD_TYPE_BUILD] === 'object' ? raw[CARD_TYPE_BUILD] : {},
+      [CARD_TYPE_CHALLENGE]: raw?.[CARD_TYPE_CHALLENGE] && typeof raw[CARD_TYPE_CHALLENGE] === 'object' ? raw[CARD_TYPE_CHALLENGE] : {}
+    };
+  } catch {
+    return { [CARD_TYPE_BUILD]: {}, [CARD_TYPE_CHALLENGE]: {} };
+  }
+}
+
+function writeSharedLinkCache(cache) {
+  try {
+    localStorage.setItem(SHARED_LINK_CACHE_KEY, JSON.stringify({
+      [CARD_TYPE_BUILD]: cache?.[CARD_TYPE_BUILD] || {},
+      [CARD_TYPE_CHALLENGE]: cache?.[CARD_TYPE_CHALLENGE] || {}
+    }));
+  } catch {}
+}
+
+function getCachedShareUrl(cardType, key) {
+  if (!key) return '';
+  const cache = readSharedLinkCache();
+  return String(cache?.[cardType]?.[key] || '');
+}
+
+function setCachedShareUrl(cardType, key, url) {
+  if (!key || !url) return;
+  const cache = readSharedLinkCache();
+  cache[cardType] = cache[cardType] && typeof cache[cardType] === 'object' ? cache[cardType] : {};
+  cache[cardType][key] = String(url);
+  writeSharedLinkCache(cache);
+}
 
 
 function prefersReducedMotion() {
@@ -521,7 +558,12 @@ function getShareUiState(type) {
   const cardType = type || getCardOverlay()?.dataset.cardType || CARD_TYPE_BUILD;
   const expectedKey = getShareStateKey(cardType);
   const current = shareUiState[cardType] || createEmptyShareState(cardType);
-  if (current.key !== expectedKey) shareUiState[cardType] = createEmptyShareState(cardType);
+  if (current.key !== expectedKey) {
+    const cachedUrl = getCachedShareUrl(cardType, expectedKey);
+    shareUiState[cardType] = cachedUrl
+      ? { ...createEmptyShareState(cardType), key: expectedKey, status: 'ready', url: cachedUrl }
+      : createEmptyShareState(cardType);
+  }
   return shareUiState[cardType];
 }
 
@@ -538,6 +580,9 @@ function setShareUiState(type, next = {}) {
     ...next,
     key: next.key || current.key || getShareStateKey(cardType)
   };
+  if (shareUiState[cardType].status === 'ready' && shareUiState[cardType].url) {
+    setCachedShareUrl(cardType, shareUiState[cardType].key, shareUiState[cardType].url);
+  }
 }
 
 function getSlugFromShareUrl(url) {
@@ -554,8 +599,8 @@ function getReactionUiState(type, options = {}) {
   const current = reactionUiState[cardType] || createEmptyReactionState(cardType);
   const keyChanged = current.key !== expectedKey;
   const slugChanged = sharedSlug !== (current.slug || '');
-  if (keyChanged || slugChanged) {
-    reactionUiState[cardType] = createEmptyReactionState(cardType, { slug: sharedSlug, status: sharedSlug ? 'loading' : 'idle' });
+  if (slugChanged || (keyChanged && !sharedSlug)) {
+    reactionUiState[cardType] = createEmptyReactionState(cardType, { slug: sharedSlug, status: 'idle' });
   }
   return reactionUiState[cardType];
 }
@@ -673,9 +718,11 @@ function setSharedCardSlug(type, slug) {
     feedbackTone: ''
   });
   if (!safeSlug) {
+    syncUrlForSharedCardSlug('');
     setReactionUiState(cardType, createEmptyReactionState(cardType));
     return;
   }
+  syncUrlForSharedCardSlug(safeSlug);
   fetchReactionsForCard(cardType, safeSlug);
 }
 
@@ -863,6 +910,17 @@ function syncUrlForOverlay(type, open) {
   const url = new URL(location.href);
   if (open) url.searchParams.set(CARD_PARAM, type);
   else url.searchParams.delete(CARD_PARAM);
+  history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
+}
+
+function syncUrlForSharedCardSlug(slug) {
+  const safeSlug = String(slug || '').trim().toLowerCase();
+  const url = new URL(location.href);
+  if (safeSlug) url.searchParams.set(SHARED_CARD_PARAM, safeSlug);
+  else url.searchParams.delete(SHARED_CARD_PARAM);
+  if (safeSlug && url.searchParams.get(CARD_PARAM) === safeSlug) {
+    url.searchParams.delete(CARD_PARAM);
+  }
   history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
 }
 

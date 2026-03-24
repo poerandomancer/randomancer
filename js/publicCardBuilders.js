@@ -46,6 +46,39 @@ function limit(list, max = 3) {
   return compactArray(list).slice(0, max);
 }
 
+function normalizeBuildSnapshotForShare(snapshot) {
+  const snap = snapshot && typeof snapshot === 'object' ? snapshot : {};
+  const attributes = snap.attributes && typeof snap.attributes === 'object' ? snap.attributes : {};
+  return {
+    snapshotVersion: Number(snap.snapshotVersion) || 1,
+    className: snap.className || '',
+    ascendancy: snap.ascendancy || '',
+    ascendancyId: snap.ascendancyId ?? null,
+    defense: snap.defense || '',
+    defStrat: snap.defStrat || '',
+    weapon: snap.weapon || '',
+    offhand: snap.offhand || '',
+    weapon2: snap.weapon2 || '',
+    offhand2: snap.offhand2 || '',
+    ailmentList: compactArray(snap.ailmentList),
+    tacticList: compactArray(snap.tacticList),
+    buildName: snap.buildName || '',
+    flavor: snap.flavor || '',
+    attributes: {
+      strength: Number(attributes.strength) || 0,
+      dexterity: Number(attributes.dexterity) || 0,
+      intelligence: Number(attributes.intelligence) || 0
+    },
+    recommendedSkills: compactArray(snap.recommendedSkills, pickGemRef),
+    recommendedSkills2: compactArray(snap.recommendedSkills2, pickGemRef),
+    synergySupports: compactArray(snap.synergySupports, (entry) => typeof entry === 'string' ? entry : (entry?.id || entry?.name || null)),
+    synergySupports2: compactArray(snap.synergySupports2, (entry) => typeof entry === 'string' ? entry : (entry?.id || entry?.name || null)),
+    recommendedPersistentBuff: pickGemRef(snap.recommendedPersistentBuff),
+    recommendedUniques: compactArray(snap.recommendedUniques, (entry) => typeof entry === 'string' ? entry : (entry?.name || null)),
+    passives: pickPassives(snap.passives),
+  };
+}
+
 function getAscendancyArtPath(ascendancy) {
   if (!ascendancy) return '';
   return `/images/ascendancies/${String(ascendancy).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}.webp`;
@@ -64,7 +97,7 @@ function buildFrontFaceGroups(snapshot, weaponLabel) {
 }
 
 function buildPublicBuildCardRequest(snapshot) {
-  const snap = snapshot || {};
+  const snap = normalizeBuildSnapshotForShare(snapshot);
   const weaponLabel = formatWeaponLine(snap.weapon, snap.offhand);
   const title = snap.buildName || [snap.className, snap.ascendancy].filter(Boolean).join(' ') || 'Randomancer Build Card';
   const combat = [...compactArray(snap.ailmentList), ...compactArray(snap.tacticList)].slice(0, 3);
@@ -89,18 +122,18 @@ function buildPublicBuildCardRequest(snapshot) {
         offhand: snap.offhand || '',
         weapon2: snap.weapon2 || '',
         offhand2: snap.offhand2 || '',
-        ailments: compactArray(snap.ailmentList),
-        tactics: compactArray(snap.tacticList),
+        ailments: snap.ailmentList,
+        tactics: snap.tacticList,
         buildName: snap.buildName || '',
         flavor: snap.flavor || '',
-        attributes: snap.attributes || { strength: 0, dexterity: 0, intelligence: 0 },
-        recommendedSkills: compactArray(snap.recommendedSkills, pickGemRef),
-        recommendedSkills2: compactArray(snap.recommendedSkills2, pickGemRef),
-        synergySupports: compactArray(snap.synergySupports, (entry) => typeof entry === 'string' ? entry : (entry?.id || entry?.name || null)),
-        synergySupports2: compactArray(snap.synergySupports2, (entry) => typeof entry === 'string' ? entry : (entry?.id || entry?.name || null)),
-        recommendedPersistentBuff: pickGemRef(snap.recommendedPersistentBuff),
-        recommendedUniques: compactArray(snap.recommendedUniques, (entry) => typeof entry === 'string' ? entry : (entry?.name || null)),
-        passives: pickPassives(snap.passives),
+        attributes: snap.attributes,
+        recommendedSkills: snap.recommendedSkills,
+        recommendedSkills2: snap.recommendedSkills2,
+        synergySupports: snap.synergySupports,
+        synergySupports2: snap.synergySupports2,
+        recommendedPersistentBuff: snap.recommendedPersistentBuff,
+        recommendedUniques: snap.recommendedUniques,
+        passives: snap.passives,
       }
     },
     card_data: {

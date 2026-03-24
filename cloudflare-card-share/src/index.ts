@@ -1871,7 +1871,7 @@ function shareResponse(slug: string, kind: CardKind, created: boolean, env: Env)
 }
 function buildCanonicalShareUrl(kind: CardKind, slug: string): string { return `${SHARE_ORIGIN}/s/${kind}/${slug}`; }
 function buildOgImageUrl(kind: CardKind, slug: string): string { return `${SHARE_ORIGIN}/og/${kind}/${slug}.png`; }
-function buildAppUrl(slug: string, env: Env): string { const url = new URL(env.APP_BASE_URL && env.APP_BASE_URL.length > 0 ? env.APP_BASE_URL : SHARE_ORIGIN); url.searchParams.set("card", slug); return url.toString(); }
+function buildAppUrl(slug: string, env: Env): string { const url = new URL(env.APP_BASE_URL && env.APP_BASE_URL.length > 0 ? env.APP_BASE_URL : SHARE_ORIGIN); url.searchParams.set("sharedCard", slug); return url.toString(); }
 function normalizeLegacySlugPath(pathname: string): string | null { const slug = pathname.replace(/^\/+/, "").replace(/\/+$/, ""); return /^[bc]-[a-z0-9]{8}$/.test(slug) ? slug : null; }
 function matchSharePath(pathname: string): ParsedSharePageRoute | null { const match = pathname.match(/^\/s\/(build|challenge)\/([bc]-[a-z0-9]{8})$/); return match ? { kind: match[1] as CardKind, slug: match[2] } : null; }
 function matchOgPath(pathname: string): ParsedSharePageRoute | null { const match = pathname.match(/^\/og\/(build|challenge)\/([bc]-[a-z0-9]{8})\.png$/); return match ? { kind: match[1] as CardKind, slug: match[2] } : null; }
