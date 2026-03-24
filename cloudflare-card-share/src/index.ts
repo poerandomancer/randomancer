@@ -1,3 +1,5 @@
+import jpeg from "jpeg-js";
+
 export interface Env {
   APP_BASE_URL?: string;
   BUILD_OG_IMAGE_URL?: string;
@@ -523,10 +525,12 @@ async function renderBuildPreviewPng(cardData: BuildCardData, slug: string, env:
   const accentSoft = [111, 69, 31, 255] as PngColor;
   const artDebug = await drawBuildBackground(canvas, cardData, env, accentSoft, assetOrigin);
 
-  fillRoundedRect(canvas, 28, 24, 1144, 582, 30, [7, 7, 10, 152]);
-  strokeRoundedRect(canvas, 28, 24, 1144, 582, 30, [255, 243, 217, 28]);
-  fillRoundedRect(canvas, 54, 44, 318, 38, 19, [17, 16, 20, 182]);
-  strokeRoundedRect(canvas, 54, 44, 318, 38, 19, [255, 226, 180, 26]);
+  fillRoundedRect(canvas, 28, 24, 1144, 582, 30, [8, 10, 14, 36]);
+  fillRoundedRect(canvas, 42, 36, 698, 556, 28, [8, 10, 14, 92]);
+  strokeRoundedRect(canvas, 28, 24, 1144, 582, 30, [255, 243, 217, 52]);
+  strokeRoundedRect(canvas, 42, 36, 698, 556, 28, [255, 243, 217, 18]);
+  fillRoundedRect(canvas, 54, 44, 318, 38, 19, [17, 16, 20, 148]);
+  strokeRoundedRect(canvas, 54, 44, 318, 38, 19, [255, 226, 180, 40]);
   drawTextBlock(canvas, sanitizePreviewText(cardData.cardTypeLabel || "Randomancer Build Card"), 72, 56, 2, accent, 280, 1);
 
   const titleBottom = drawTextBlock(canvas, sanitizePreviewText(cardData.title), 60, 104, 5, [247, 239, 225, 255], 640, 2);
@@ -539,8 +543,8 @@ async function renderBuildPreviewPng(cardData: BuildCardData, slug: string, env:
   for (let index = 0; index < groups.length; index += 1) {
     const group = groups[index];
     const groupY = rowTop + index * rowHeight;
-    fillRoundedRect(canvas, 58, groupY, 612, 52, 18, [12, 12, 16, 168]);
-    strokeRoundedRect(canvas, 58, groupY, 612, 52, 18, [255, 227, 180, 20]);
+    fillRoundedRect(canvas, 58, groupY, 612, 52, 18, [10, 12, 18, 116]);
+    strokeRoundedRect(canvas, 58, groupY, 612, 52, 18, [255, 227, 180, 36]);
     drawTextBlock(canvas, sanitizePreviewText(group.label), 78, groupY + 10, 2, accent, 150, 1);
     drawTextBlock(canvas, sanitizePreviewText(group.values.join(" • ")), 236, groupY + 10, 2, [242, 236, 228, 255], 408, 2);
   }
@@ -589,10 +593,17 @@ async function drawBuildBackground(canvas: TinyPngCanvas, cardData: BuildCardDat
       debug.byteLength = artResult.byteLength;
       debug.decodeStatus = artResult.decodeStatus;
       if (artResult.image) {
-        drawCoverImage(canvas, artResult.image, { destX: 470, destY: 0, destWidth: 730, destHeight: 630, alignX: 0.52, alignY: 0.24 });
-        applyHorizontalFade(canvas, 0, 0, 760, 630, [0, 0, 0, 156], [0, 0, 0, 8]);
-        applyVerticalFade(canvas, 430, 0, 770, 630, [0, 0, 0, 8], [0, 0, 0, 116]);
-        fillRect(canvas, 0, 0, canvas.width, canvas.height, [0, 0, 0, 42]);
+        drawCoverImage(canvas, artResult.image, {
+          destX: 0,
+          destY: 0,
+          destWidth: 1200,
+          destHeight: 630,
+          alignX: 0.54,
+          alignY: 0.22,
+        });
+        fillRect(canvas, 0, 0, canvas.width, canvas.height, [0, 0, 0, 18]);
+        applyHorizontalFade(canvas, 0, 0, 820, 630, [6, 8, 12, 136], [6, 8, 12, 18]);
+        applyVerticalFade(canvas, 0, 0, 1200, 630, [0, 0, 0, 8], [0, 0, 0, 46]);
         debug.usedFallback = false;
       }
       console.log("[randomancer-card-share] build art diagnostic", debug);
@@ -771,31 +782,73 @@ async function loadAssetImage(env: Env, pathname: string, assetOrigin: string): 
     return { image: decoded, fetchStatus: `${initial.source}:${initial.response.status}`, contentType, byteLength: bytes.byteLength, decodeStatus: decoded ? "png-decoder" : "png-decode-failed" };
   }
   if (contentType.includes("image/webp")) {
-    const decoded = decodeWebP(bytes);
-    if (decoded) return { image: decoded, fetchStatus: `${initial.source}:${initial.response.status}`, contentType, byteLength: bytes.byteLength, decodeStatus: `webp-decoder:${detectWebPChunkTag(bytes)}` };
-
-    const transcoded = await fetchTranscodedPng(requestUrl);
-    const transcodedType = transcoded.response.headers.get("content-type") || "";
-    const transcodedBytes = transcoded.response.ok ? new Uint8Array(await transcoded.response.arrayBuffer()) : new Uint8Array();
-    if (transcoded.response.ok && transcodedType.includes("image/png")) {
-      const pngDecoded = await decodePng(transcodedBytes);
-      return {
-        image: pngDecoded,
-        fetchStatus: `${initial.source}:${initial.response.status}|${transcoded.source}:${transcoded.response.status}`,
-        contentType: `${contentType} -> ${transcodedType}`,
-        byteLength: transcodedBytes.byteLength,
-        decodeStatus: pngDecoded ? `webp-${detectWebPChunkTag(bytes)}-via-png` : "png-decode-failed-after-webp",
-      };
-    }
-
-    return {
-      image: null,
-      fetchStatus: `${initial.source}:${initial.response.status}|${transcoded.source}:${transcoded.response.status}`,
-      contentType: transcodedType ? `${contentType} -> ${transcodedType}` : contentType,
-      byteLength: bytes.byteLength,
-      decodeStatus: `webp-${detectWebPChunkTag(bytes)}-decode-failed`,
-    };
-  }
+		const chunkTag = detectWebPChunkTag(bytes);
+	
+		// Keep native/runtime decode first in case the platform supports it later.
+		const decoded = decodeWebP(bytes);
+		if (decoded) {
+			return {
+				image: decoded,
+				fetchStatus: `${initial.source}:${initial.response.status}`,
+				contentType,
+				byteLength: bytes.byteLength,
+				decodeStatus: `webp-decoder:${chunkTag}`,
+			};
+		}
+	
+		// Ask Cloudflare image transformations to transcode the asset to a runtime-decodable format.
+		const transcoded = await fetchTranscodedImage(requestUrl);
+		const transcodedType = transcoded.response.headers.get("content-type") || "";
+		const transcodedBytes = transcoded.response.ok
+			? new Uint8Array(await transcoded.response.arrayBuffer())
+			: new Uint8Array();
+		
+		if (transcoded.response.ok) {
+			if (transcodedType.includes("image/jpeg")) {
+				const jpegDecoded = decodeJpeg(transcodedBytes);
+				if (jpegDecoded) {
+					return {
+						image: jpegDecoded,
+						fetchStatus: `${initial.source}:${initial.response.status}|${transcoded.source}:${transcoded.response.status}`,
+						contentType: `${contentType} -> ${transcodedType}`,
+						byteLength: transcodedBytes.byteLength,
+						decodeStatus: `webp-${chunkTag}-via-jpeg-js`,
+					};
+				}
+			}
+		
+			const runtimeDecoded = await decodeWithImageDecoder(transcodedBytes, transcodedType);
+			if (runtimeDecoded) {
+				return {
+					image: runtimeDecoded,
+					fetchStatus: `${initial.source}:${initial.response.status}|${transcoded.source}:${transcoded.response.status}`,
+					contentType: `${contentType} -> ${transcodedType}`,
+					byteLength: transcodedBytes.byteLength,
+					decodeStatus: `webp-${chunkTag}-via-runtime-${transcodedType}`,
+				};
+			}
+		
+			if (transcodedType.includes("image/png")) {
+				const pngDecoded = await decodePng(transcodedBytes);
+				if (pngDecoded) {
+					return {
+						image: pngDecoded,
+						fetchStatus: `${initial.source}:${initial.response.status}|${transcoded.source}:${transcoded.response.status}`,
+						contentType: `${contentType} -> ${transcodedType}`,
+						byteLength: transcodedBytes.byteLength,
+						decodeStatus: `webp-${chunkTag}-via-png`,
+					};
+				}
+			}
+		}
+		return {
+			image: null,
+			fetchStatus: `${initial.source}:${initial.response.status}|${transcoded.source}:${transcoded.response.status}`,
+			contentType: transcodedType ? `${contentType} -> ${transcodedType}` : contentType,
+			byteLength: transcodedBytes.byteLength || bytes.byteLength,
+			decodeStatus: `webp-${chunkTag}-decode-failed-after-transform`,
+		};
+	}
   return { image: null, fetchStatus: `${initial.source}:${initial.response.status}`, contentType, byteLength: bytes.byteLength, decodeStatus: "unsupported-content-type" };
 }
 
@@ -805,15 +858,69 @@ async function fetchAssetRequest(env: Env, requestUrl: string): Promise<AssetFet
   return { response: await fetch(request), source: "direct-fetch" };
 }
 
-async function fetchTranscodedPng(requestUrl: string): Promise<AssetFetchResult> {
-  const sourceUrl = new URL(requestUrl);
-  const proxyPath = `/cdn-cgi/image/format=png${sourceUrl.pathname}`;
-  const proxyUrl = new URL(proxyPath, sourceUrl.origin);
-  return { response: await fetch(proxyUrl.toString()), source: "cdn-cgi-image" };
+async function fetchTranscodedImage(requestUrl: string): Promise<AssetFetchResult> {
+  const response = await fetch(requestUrl, {
+    cf: {
+      image: {
+        format: "baseline-jpeg",
+        width: 900,
+        height: 630,
+        fit: "cover",
+        quality: 60,
+        anim: false,
+        metadata: "none",
+      },
+    },
+  } as RequestInit & {
+    cf: {
+      image: {
+        format: string;
+        anim: boolean;
+        metadata: string;
+      };
+    };
+  });
+
+  const cfResized = response.headers.get("Cf-Resized") || "none";
+  return {
+    response,
+    source: `cf-image-fetch:${cfResized}`,
+  };
+}
+
+function decodeJpeg(bytes: Uint8Array): DecodedAssetImage | null {
+  try {
+    const decoded = jpeg.decode(bytes, {
+      useTArray: true,
+      formatAsRGBA: true,
+    });
+
+    if (!decoded?.width || !decoded?.height || !decoded?.data) return null;
+
+    const pixels =
+      decoded.data instanceof Uint8Array
+        ? decoded.data
+        : new Uint8Array(
+            decoded.data.buffer,
+            decoded.data.byteOffset,
+            decoded.data.byteLength,
+          );
+
+    return {
+      width: decoded.width,
+      height: decoded.height,
+      pixels,
+    };
+  } catch {
+    return null;
+  }
 }
 
 async function decodeWithImageDecoder(bytes: Uint8Array, contentType: string): Promise<DecodedAssetImage | null> {
-  if (typeof ImageDecoder === "undefined") return null;
+  if (typeof ImageDecoder === "undefined") {
+    console.log("[randomancer-card-share] ImageDecoder unavailable", { contentType });
+    return null;
+  }
   try {
     const decoder = new ImageDecoder({ data: bytes, type: contentType });
     const { image } = await decoder.decode();
@@ -824,7 +931,11 @@ async function decodeWithImageDecoder(bytes: Uint8Array, contentType: string): P
     image.close();
     decoder.close();
     return { width, height, pixels };
-  } catch {
+  } catch (error) {
+    console.warn("[randomancer-card-share] ImageDecoder failed", {
+      contentType,
+      error: formatError(error),
+    });
     return null;
   }
 }
@@ -1262,16 +1373,21 @@ function setPixel(canvas: TinyPngCanvas, x: number, y: number, color: PngColor):
   canvas.pixels[index + 3] = color[3];
 }
 
+function paintPixel(canvas: TinyPngCanvas, x: number, y: number, color: PngColor): void {
+  if (color[3] >= 255) setPixel(canvas, x, y, color);
+  else blendPixel(canvas, x, y, color);
+}
+
 function fillRect(canvas: TinyPngCanvas, x: number, y: number, width: number, height: number, color: PngColor): void {
   for (let yy = Math.max(0, y); yy < Math.min(canvas.height, y + height); yy += 1) {
-    for (let xx = Math.max(0, x); xx < Math.min(canvas.width, x + width); xx += 1) setPixel(canvas, xx, yy, color);
+    for (let xx = Math.max(0, x); xx < Math.min(canvas.width, x + width); xx += 1) paintPixel(canvas, xx, yy, color);
   }
 }
 
 function fillRoundedRect(canvas: TinyPngCanvas, x: number, y: number, width: number, height: number, radius: number, color: PngColor): void {
   for (let yy = y; yy < y + height; yy += 1) {
     for (let xx = x; xx < x + width; xx += 1) {
-      if (insideRoundedRect(xx, yy, x, y, width, height, radius)) setPixel(canvas, xx, yy, color);
+      if (insideRoundedRect(xx, yy, x, y, width, height, radius)) paintPixel(canvas, xx, yy, color);
     }
   }
 }
@@ -1281,7 +1397,7 @@ function strokeRoundedRect(canvas: TinyPngCanvas, x: number, y: number, width: n
     for (let xx = x; xx < x + width; xx += 1) {
       if (!insideRoundedRect(xx, yy, x, y, width, height, radius)) continue;
       const insideInner = insideRoundedRect(xx, yy, x + 1, y + 1, width - 2, height - 2, Math.max(0, radius - 1));
-      if (!insideInner) setPixel(canvas, xx, yy, color);
+      if (!insideInner) paintPixel(canvas, xx, yy, color);
     }
   }
 }
