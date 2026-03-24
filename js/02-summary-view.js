@@ -599,8 +599,8 @@ function getReactionUiState(type, options = {}) {
   const current = reactionUiState[cardType] || createEmptyReactionState(cardType);
   const keyChanged = current.key !== expectedKey;
   const slugChanged = sharedSlug !== (current.slug || '');
-  if (keyChanged || slugChanged) {
-    reactionUiState[cardType] = createEmptyReactionState(cardType, { slug: sharedSlug, status: sharedSlug ? 'loading' : 'idle' });
+  if (slugChanged || (keyChanged && !sharedSlug)) {
+    reactionUiState[cardType] = createEmptyReactionState(cardType, { slug: sharedSlug, status: 'idle' });
   }
   return reactionUiState[cardType];
 }
