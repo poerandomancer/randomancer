@@ -87,6 +87,14 @@ type ChallengeCardData = {
   category?: string;
   anchorTask?: string;
   twistTask?: string;
+  anchorLabel?: string;
+  twistLabel?: string;
+  anchorShortLabel?: string;
+  twistShortLabel?: string;
+  anchorShortName?: string;
+  twistShortName?: string;
+  anchorName?: string;
+  twistName?: string;
   tagChips?: string[];
   footerText?: string;
 };
@@ -478,45 +486,122 @@ function inferAscendancyArtPath(ascendancy: string): string {
 
 async function renderCardPreviewPng(kind: CardKind, cardData: BuildCardData | ChallengeCardData, slug: string, env: Env, assetOrigin = SHARE_ORIGIN): Promise<RenderedPreview> {
   if (kind === "build") return renderBuildPreviewPng(cardData as BuildCardData, slug, env, assetOrigin);
+  return renderChallengePreviewPng(cardData as ChallengeCardData, slug, env, assetOrigin);
+}
 
-  const canvas = createCanvas(1200, 630, [10, 8, 10, 255]);
-  const accent = [139, 109, 255, 255] as PngColor;
-  const accentSoft = [62, 44, 126, 255] as PngColor;
-  drawBackground(canvas, kind, accentSoft);
-  fillRoundedRect(canvas, 28, 26, 1144, 578, 26, [18, 16, 18, 220]);
-  strokeRoundedRect(canvas, 28, 26, 1144, 578, 26, [255, 255, 255, 22]);
-  fillRoundedRect(canvas, 54, 54, 62, 62, 18, [255, 255, 255, 22]);
-  drawSimpleGlyphIcon(canvas, "C", 75, 69, 5, accent);
+async function renderChallengePreviewPng(cardData: ChallengeCardData, slug: string, env: Env, assetOrigin: string): Promise<RenderedPreview> {
+  const canvas = createCanvas(1200, 630, [8, 6, 7, 255]);
+  const accent = [154, 78, 62, 255] as PngColor;
+  const accentSoft = [86, 34, 24, 255] as PngColor;
+  const artDebug = await drawChallengeBackground(canvas, env, accentSoft, assetOrigin);
 
-  drawTextBlock(canvas, "RANDOMANCER CHALLENGE", 136, 64, 3, accent, 900, 1);
-  drawTextBlock(canvas, sanitizePreviewText(cardData.title), 56, 154, 6, [246, 239, 226, 255], 760, 1);
+  fillRoundedRect(canvas, 28, 24, 1144, 582, 30, [8, 8, 10, 148]);
+  strokeRoundedRect(canvas, 28, 24, 1144, 582, 30, [192, 116, 92, 28]);
+  fillRoundedRect(canvas, 54, 44, 360, 38, 19, [17, 16, 20, 182]);
+  strokeRoundedRect(canvas, 54, 44, 360, 38, 19, [192, 116, 92, 26]);
+  fillRoundedRect(canvas, 58, 50, 44, 26, 10, [30, 28, 36, 140]);
+  drawSimpleGlyphIcon(canvas, "C", 72, 56, 3, accent);
+  drawTextBlock(canvas, "RANDOMANCER CHALLENGE", 136, 56, 2, accent, 300, 1);
 
-  const subtitle = sanitizePreviewText(cardData.subtitle || buildSubtitle(kind, cardData));
-  if (subtitle) drawTextBlock(canvas, subtitle, 56, 236, 3, [214, 205, 190, 255], 760, 2);
+  drawTextBlock(canvas, sanitizePreviewText(cardData.title), 60, 104, 5, [247, 239, 225, 255], 760, 2);
 
-  const chips = [
-    sanitizePreviewText((cardData as ChallengeCardData).severity || ""),
-    sanitizePreviewText((cardData as ChallengeCardData).category || ""),
-    ...((cardData as ChallengeCardData).tagChips || []).map(sanitizePreviewText),
-  ].filter(Boolean).slice(0, 4);
-  drawChips(canvas, chips, 56, 326, accent);
-
-  fillRoundedRect(canvas, 860, 72, 284, 316, 22, [255, 255, 255, 16]);
-  strokeRoundedRect(canvas, 860, 72, 284, 316, 22, [255, 255, 255, 20]);
-  drawTextBlock(canvas, "SNAPSHOT", 888, 98, 2, [198, 189, 176, 255], 220, 1);
-  const detailLines = [
-    joinLabelValue("ANCHOR", [(cardData as ChallengeCardData).anchorTask || ""]),
-    joinLabelValue("TWIST", [(cardData as ChallengeCardData).twistTask || ""]),
-  ];
-  let y = 136;
-  for (const line of detailLines.filter(Boolean)) {
-    y = drawTextBlock(canvas, sanitizePreviewText(line), 888, y, 2, [240, 232, 220, 255], 220, 3) + 18;
+  const rows = normalizeChallengePreviewRows(cardData);
+  let rowY = 246;
+  for (const row of rows) {
+    const lines = wrapText(sanitizePreviewText(row.value), 2, 748, 6);
+    const lineCount = Math.max(1, lines.length);
+    const rowHeight = Math.max(52, 22 + lineCount * 18);
+    fillRoundedRect(canvas, 58, rowY, 880, rowHeight, 18, [12, 12, 16, 168]);
+    strokeRoundedRect(canvas, 58, rowY, 880, rowHeight, 18, [192, 116, 92, 20]);
+    drawTextBlock(canvas, sanitizePreviewText(row.label), 78, rowY + 10, 2, accent, 220, 1);
+    drawTextBlock(canvas, sanitizePreviewText(row.value), 328, rowY + 10, 2, [242, 236, 228, 255], 590, 6);
+    rowY += rowHeight + 16;
   }
 
-  const footer = sanitizePreviewText((cardData as ChallengeCardData).footerText || "therandomancer.com");
+  const footer = sanitizePreviewText((cardData as ChallengeCardData).footerText || "Randomancer shared challenge artifact");
   drawTextBlock(canvas, footer, 56, 566, 2, [210, 201, 187, 255], 500, 1);
   drawTextBlock(canvas, sanitizePreviewText(`S/CHALLENGE/${slug}`), 760, 566, 2, accent, 380, 1);
-  return { png: encodePng(canvas) };
+
+  return {
+    png: encodePng(canvas),
+    debugHeaders: {
+      "X-Randomancer-Art-Path": artDebug.path || "none",
+      "X-Randomancer-Art-Status": `${artDebug.fetchStatus};${artDebug.decodeStatus};fallback=${artDebug.usedFallback ? "yes" : "no"}`,
+      "X-Randomancer-Challenge-Rows": String(rows.length),
+    },
+  };
+}
+
+function normalizeChallengePreviewRows(cardData: ChallengeCardData): Array<{ label: string; value: string }> {
+  const rows = [
+    { label: "Severity", value: coerceString(cardData.severity) || "-" },
+    { label: pickChallengeTaskLabel(cardData, "anchor"), value: coerceString(cardData.anchorTask) || "-" },
+    { label: pickChallengeTaskLabel(cardData, "twist"), value: coerceString(cardData.twistTask) || "-" },
+  ];
+  return rows.filter((row) => row.label && row.value);
+}
+
+function pickChallengeTaskLabel(cardData: ChallengeCardData, kind: "anchor" | "twist"): string {
+  const record = cardData as Record<string, unknown>;
+  const candidates = kind === "anchor"
+    ? ["anchorShortLabel", "anchorLabel", "anchorShortName", "anchorName"]
+    : ["twistShortLabel", "twistLabel", "twistShortName", "twistName"];
+  for (const key of candidates) {
+    const value = coerceString(record[key]);
+    if (value) return value;
+  }
+  return kind === "anchor" ? "Anchor" : "Twist";
+}
+
+async function drawChallengeBackground(canvas: TinyPngCanvas, env: Env, accentSoft: PngColor, assetOrigin: string): Promise<BuildArtDebugInfo> {
+  drawBackground(canvas, "challenge", accentSoft);
+  const artPath = "/images/challenge-background.png";
+  const debug: BuildArtDebugInfo = {
+    path: artPath,
+    fetchStatus: "not-requested",
+    contentType: "",
+    byteLength: 0,
+    decodeStatus: "not-attempted",
+    usedFallback: true,
+  };
+
+  try {
+    const artResult = await loadAssetImage(env, artPath, assetOrigin);
+    debug.fetchStatus = artResult.fetchStatus;
+    debug.contentType = artResult.contentType;
+    debug.byteLength = artResult.byteLength;
+    debug.decodeStatus = artResult.decodeStatus;
+    if (artResult.image) {
+      const cardX = 28;
+      const cardY = 24;
+      const cardWidth = 1144;
+      const cardHeight = 582;
+      const cardRadius = 30;
+      drawCoverImageRounded(canvas, artResult.image, {
+        destX: cardX,
+        destY: cardY,
+        destWidth: cardWidth,
+        destHeight: cardHeight,
+        radius: cardRadius,
+        alignX: 0.5,
+        alignY: 0.5,
+        zoom: 1.04,
+      });
+      fillRoundedRect(canvas, cardX, cardY, cardWidth, cardHeight, cardRadius, [6, 4, 4, 34]);
+      applyHorizontalFade(canvas, cardX, cardY, 360, cardHeight, [8, 6, 6, 162], [8, 6, 6, 18]);
+      applyHorizontalFade(canvas, cardX + cardWidth - 240, cardY, 240, cardHeight, [0, 0, 0, 12], [0, 0, 0, 88]);
+      applyVerticalFade(canvas, cardX, cardY, cardWidth, 104, [0, 0, 0, 72], [0, 0, 0, 8]);
+      applyVerticalFade(canvas, cardX, cardY + cardHeight - 132, cardWidth, 132, [0, 0, 0, 6], [0, 0, 0, 96]);
+      debug.usedFallback = false;
+    }
+  } catch (error) {
+    debug.fetchStatus = "error";
+    debug.decodeStatus = JSON.stringify(formatError(error));
+    console.warn("[randomancer-card-share] challenge art lookup failed", { artPath, error: formatError(error) });
+  }
+
+  console.log("[randomancer-card-share] challenge art diagnostic", debug);
+  return debug;
 }
 
 async function renderBuildPreviewPng(cardData: BuildCardData, slug: string, env: Env, assetOrigin: string): Promise<RenderedPreview> {
@@ -606,19 +691,17 @@ async function drawBuildBackground(canvas: TinyPngCanvas, cardData: BuildCardDat
           destWidth: cardWidth,
           destHeight: cardHeight,
           radius: cardRadius,
-          // Lower alignX moves the subject art to the RIGHT on the final card.
-          alignX: 0.20,
+          alignX: 0.85,
           alignY: 0.22,
-          zoom: 1.14,
-          panX: -24,
+          zoom: 1.08,
         });
 
         fillRoundedRect(canvas, cardX, cardY, cardWidth, cardHeight, cardRadius, [0, 0, 0, 18]);
 
-        applyHorizontalFade(canvas, cardX, cardY, 340, cardHeight, [6, 8, 12, 170], [6, 8, 12, 22]);
-        applyHorizontalFade(canvas, cardX + cardWidth - 220, cardY, 220, cardHeight, [0, 0, 0, 18], [0, 0, 0, 112]);
-        applyVerticalFade(canvas, cardX, cardY, cardWidth, 80, [0, 0, 0, 82], [0, 0, 0, 8]);
-        applyVerticalFade(canvas, cardX, cardY + cardHeight - 120, cardWidth, 120, [0, 0, 0, 6], [0, 0, 0, 108]);
+        applyHorizontalFade(canvas, cardX, cardY, 430, cardHeight, [6, 8, 12, 170], [6, 8, 12, 22]);
+        applyHorizontalFade(canvas, cardX + cardWidth - 300, cardY, 300, cardHeight, [0, 0, 0, 18], [0, 0, 0, 112]);
+        applyVerticalFade(canvas, cardX, cardY, cardWidth, 120, [0, 0, 0, 82], [0, 0, 0, 8]);
+        applyVerticalFade(canvas, cardX, cardY + cardHeight - 170, cardWidth, 170, [0, 0, 0, 6], [0, 0, 0, 108]);
 
         debug.usedFallback = false;
       } else {
@@ -883,7 +966,7 @@ async function fetchTranscodedImage(requestUrl: string): Promise<AssetFetchResul
     cf: {
       image: {
         format: "baseline-jpeg",
-        width: 820,
+        width: 900,
         quality: 60,
         anim: false,
         metadata: "none",
@@ -964,8 +1047,8 @@ function drawCoverImage(canvas: TinyPngCanvas, image: DecodedAssetImage, placeme
   const sampleHeight = Math.max(1, Math.round(placement.destHeight / scale));
   const maxOffsetX = Math.max(0, image.width - sampleWidth);
   const maxOffsetY = Math.max(0, image.height - sampleHeight);
-  const sourceX = clampInt(Math.round(maxOffsetX * placement.alignX + (placement.panX ?? 0)), 0, maxOffsetX);
-  const sourceY = clampInt(Math.round(maxOffsetY * placement.alignY + (placement.panY ?? 0)), 0, maxOffsetY);
+  const sourceX = Math.round(maxOffsetX * placement.alignX);
+  const sourceY = Math.round(maxOffsetY * placement.alignY);
   for (let y = 0; y < placement.destHeight; y += 1) {
     const srcY = Math.min(image.height - 1, sourceY + Math.floor((y / placement.destHeight) * sampleHeight));
     for (let x = 0; x < placement.destWidth; x += 1) {
@@ -976,15 +1059,15 @@ function drawCoverImage(canvas: TinyPngCanvas, image: DecodedAssetImage, placeme
   }
 }
 
-function drawCoverImageRounded(canvas: TinyPngCanvas, image: DecodedAssetImage, placement: { destX: number; destY: number; destWidth: number; destHeight: number; radius: number; alignX: number; alignY: number; zoom?: number; panX?: number; panY?: number; }): void {
+function drawCoverImageRounded(canvas: TinyPngCanvas, image: DecodedAssetImage, placement: { destX: number; destY: number; destWidth: number; destHeight: number; radius: number; alignX: number; alignY: number; zoom?: number; }): void {
   const zoom = placement.zoom ?? 1;
 	const scale = Math.max(placement.destWidth / image.width, placement.destHeight / image.height) * zoom;
   const sampleWidth = Math.max(1, Math.round(placement.destWidth / scale));
   const sampleHeight = Math.max(1, Math.round(placement.destHeight / scale));
   const maxOffsetX = Math.max(0, image.width - sampleWidth);
   const maxOffsetY = Math.max(0, image.height - sampleHeight);
-  const sourceX = clampInt(Math.round(maxOffsetX * placement.alignX + (placement.panX ?? 0)), 0, maxOffsetX);
-  const sourceY = clampInt(Math.round(maxOffsetY * placement.alignY + (placement.panY ?? 0)), 0, maxOffsetY);
+  const sourceX = Math.round(maxOffsetX * placement.alignX);
+  const sourceY = Math.round(maxOffsetY * placement.alignY);
 
   for (let y = 0; y < placement.destHeight; y += 1) {
     const destY = placement.destY + y;
@@ -1441,10 +1524,6 @@ function strokeRoundedRect(canvas: TinyPngCanvas, x: number, y: number, width: n
       if (!insideInner) paintPixel(canvas, xx, yy, color);
     }
   }
-}
-
-function clampInt(value: number, min: number, max: number): number {
-  return Math.max(min, Math.min(max, value));
 }
 
 function insideRoundedRect(px: number, py: number, x: number, y: number, width: number, height: number, radius: number): boolean {
