@@ -352,13 +352,6 @@
         </div>
       </section>
 
-      <div id="build-roll-banner" class="build-roll-banner" aria-live="polite">
-        <div class="build-panel-tabs view-mode-tabs">
-				<div class="skills-tab is-active" data-view="detailed">Detailed</div>
-				<div class="skills-tab" data-view="summary">Summary</div>
-			</div>
-      </div>
-
       <section id="empty-state" class="panel empty-state" aria-label="Welcome">
         <h3 class="empty-title">The Fates Await...</h3>
         <p class="empty-text">
@@ -366,81 +359,29 @@
       </section>
 
       <section id="challenge-panel" class="panel is-hidden" aria-label="Challenge Contract">
-        <div class="panel-actions">
-          <div class="copy-menu" id="challenge-actions-wrap">
-            <button id="challenge-actions-btn" class="icon-btn" type="button" aria-label="Challenge actions" title="Challenge actions" aria-haspopup="menu" aria-expanded="false">
-              <span class="kebab-glyph" aria-hidden="true">⋯</span>
-            </button>
-
-            <div id="challenge-actions-menu" class="copy-menu-pop" role="menu" hidden>
-              <button id="challenge-actions-save" class="copy-menu-item" type="button" role="menuitem">
-                <span class="copy-menu-ico" aria-hidden="true">☆</span>
-                <span class="copy-menu-label">Save Challenge</span>
-              </button>
-
-              <button id="challenge-actions-copy-summary" class="copy-menu-item" type="button" role="menuitem">
-                <span class="copy-menu-ico" aria-hidden="true">⧉</span>
-                <span class="copy-menu-label">Copy Challenge Summary</span>
-              </button>
-
-              <button id="challenge-actions-copy-link" class="copy-menu-item" type="button" role="menuitem">
-                <span class="copy-menu-ico" aria-hidden="true">⧉</span>
-                <span class="copy-menu-label">Copy Challenge URL</span>
-              </button>
-            </div>
-          </div>
+        <div class="panel-actions panel-actions--build" aria-label="Challenge utilities">
+          <button id="challenge-actions-save" class="icon-btn card-action-btn build-panel-action" type="button" aria-label="Save" title="Save"><span aria-hidden="true">☆</span></button>
         </div>
         <div id="challenge-contract-output" class="challenge-contract-output" aria-live="polite">
           <div class="build-title-block">
             <h3 id="challenge-contract-title" class="build-name"></h3>
             <p id="challenge-contract-subtitle" class="build-subtext"></p>
+            <button id="challenge-open-card" class="build-card-launch-link" type="button">Share Challenge Card</button>
           </div>
           <div id="challenge-contract-lines" class="summary-panel challenge-contract-lines"></div>
         </div>
       </section>
 
       <section id="build-panel" class="panel">
-        <div class="panel-actions">
-			  <div class="copy-menu" id="build-actions-wrap">
-			  <button id="build-actions-btn" class="icon-btn" type="button" aria-label="Build actions" title="Build actions" aria-haspopup="menu" aria-expanded="false">
-				  <span class="kebab-glyph" aria-hidden="true">⋯</span>
-				</button>
-
-			
-			  <div id="build-actions-menu" class="copy-menu-pop" role="menu" hidden>
-				<button id="build-actions-save" class="copy-menu-item" type="button" role="menuitem">
-				  <span class="copy-menu-ico" aria-hidden="true">☆</span>
-				  <span class="copy-menu-label">Save Build</span>
-				</button>
-			
-				<button id="build-actions-copy-summary" class="copy-menu-item" type="button" role="menuitem">
-				  <span class="copy-menu-ico" aria-hidden="true">⧉</span>
-				  <span class="copy-menu-label">Copy Summary</span>
-				</button>
-			
-				<button id="build-actions-copy-link" class="copy-menu-item" type="button" role="menuitem">
-				  <span class="copy-menu-ico" aria-hidden="true">⧉</span>
-				  <span class="copy-menu-label">Copy Build Link</span>
-				</button>
-			
-				<button id="build-actions-poe-ninja" class="copy-menu-item" type="button" role="menuitem">
-				  <span class="copy-menu-ico" aria-hidden="true">🥷</span>
-				  <span class="copy-menu-label">Similar Builds on poe.ninja</span>
-				</button>
-			  </div>
-			</div>
+        <div class="panel-actions panel-actions--build" aria-label="Build utilities">
+          <button id="build-actions-poe" class="icon-btn card-action-btn build-panel-action" type="button" aria-label="Open in poe.ninja" title="Open in poe.ninja"><span aria-hidden="true">🥷</span></button>
+          <button id="build-actions-save" class="icon-btn card-action-btn build-panel-action" type="button" aria-label="Save" title="Save"><span aria-hidden="true">☆</span></button>
         </div>
         <div class="build-title-block">
 			<div id="build-name" class="build-name"></div>
 			<div id="build-subtext" class="build-subtext"></div>
+          <button id="build-open-card" class="build-card-launch-link" type="button">Share Build Card</button>
 		</div>
-        <div id="summary-panel" class="summary-panel" hidden aria-label="Build Summary">
-          <div id="summary-line-1" class="summary-row summary-row--primary"></div>
-          <div id="summary-line-2" class="summary-row"></div>
-          <div id="summary-line-3" class="summary-row"></div>
-          <div id="summary-line-4" class="summary-row"></div>
-          <div id="summary-line-5" class="summary-row"></div>
-        </div>
 
           <div class="sect">
           <div class="sect-head section-header">
@@ -607,6 +548,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <div id="modeTransition" class="mode-transition" aria-hidden="true">
   <div id="modeTransitionLabel" class="mode-transition__label"></div>
+</div>
+
+<div id="card-overlay" class="rm-info-overlay card-overlay" hidden>
+  <div class="rm-info-backdrop" data-close="1"></div>
+  <div class="rm-info-dialog card-dialog" role="dialog" aria-modal="true" aria-labelledby="card-overlay-title">
+    <div id="card-overlay-title" class="card-dialog__sr">Card View</div>
+    <div id="card-overlay-error" class="card-overlay__error" hidden></div>
+    <div id="card-overlay-body" class="card-overlay__body"></div>
+  </div>
 </div>
 
 <div id="rm-toast" class="rm-toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>

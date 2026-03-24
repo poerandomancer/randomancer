@@ -181,7 +181,7 @@ function runSmokeCheck(){
   const requiredNodes = {
     rollButton: '#roll',
     cohesionSlider: '#cohesionRange',
-    summaryToggle: '#view-toggle',
+    buildViewCard: '#build-view-card',
     bindFatesModal: '#bind-fates-modal',
     savedOverlay: '#saved-overlay',
     infoOverlay: '#rm-info-overlay'
