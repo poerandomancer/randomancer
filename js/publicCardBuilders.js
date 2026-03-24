@@ -139,9 +139,13 @@ function buildPublicChallengeCardRequest(contract) {
     };
   });
   const title = safe.title || 'Challenge Contract';
-  const anchorTask = tasks[0]?.line || '';
-  const twistTask = tasks[1]?.line || '';
-  const tagChips = compactArray([safe.severity, tasks[0]?.shortLabel, tasks[1]?.shortLabel]).slice(0, 3);
+  const anchor = tasks.find((task) => task.role === 'anchor') || tasks[0] || null;
+  const twist = tasks.find((task) => task.role === 'twist') || tasks[1] || null;
+  const anchorShortLabel = anchor?.shortLabel || anchor?.label || anchor?.shortName || anchor?.name || 'Anchor';
+  const twistShortLabel = twist?.shortLabel || twist?.label || twist?.shortName || twist?.name || 'Twist';
+  const anchorTask = anchor?.line || '';
+  const twistTask = twist?.line || '';
+  const tagChips = compactArray([safe.severity, anchor?.shortLabel, twist?.shortLabel]).slice(0, 3);
   const description = [anchorTask, twistTask].filter(Boolean).join(' • ').slice(0, 155) || (safe.subtitle || 'Randomancer challenge contract');
   const metaTitle = `Randomancer Challenge Card — ${title}`;
 
@@ -166,7 +170,9 @@ function buildPublicChallengeCardRequest(contract) {
       title,
       subtitle: safe.subtitle || '',
       severity: safe.severity || 'cruel',
-      category: tasks[1]?.shortLabel || tasks[0]?.shortLabel || '',
+      category: twist?.shortLabel || anchor?.shortLabel || '',
+      anchorShortLabel,
+      twistShortLabel,
       anchorTask,
       twistTask,
       tagChips,
