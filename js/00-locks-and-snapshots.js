@@ -14,6 +14,7 @@ import {
   getSummaryTextFromSnapshot,
   installSummaryAutoRefresh,
   openCardOverlay,
+  setSharedCardSlug,
   renderSummaryFromSnapshot
 } from './02-summary-view.js';
 import { buildGemDictionary, lookupGem } from './05-tags-and-scorer.js';
@@ -896,6 +897,7 @@ function renderSnapshotToDom(snap){
           if (typeof window.RandomancerRenderChallengeContract === 'function') {
             window.RandomancerRenderChallengeContract(contract);
           }
+          setSharedCardSlug('challenge', shared.slug);
           openCardOverlay('challenge', { skipUrl: true });
           return;
         }
@@ -905,6 +907,7 @@ function renderSnapshotToDom(snap){
         if (typeof window.RandomancerRenderBuildSnapshot === 'function') {
           window.RandomancerRenderBuildSnapshot(snapshot);
         }
+        setSharedCardSlug('build', shared.slug);
         openCardOverlay('build', { skipUrl: true });
         return;
       } catch (error) {
