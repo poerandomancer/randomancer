@@ -5,6 +5,7 @@ import { buildGemDictionary, lookupGem } from './05-tags-and-scorer.js';
 import { getFamilySkillNames, resolveSkillFamily } from './17-skill-family-utils.js';
 
 const CARD_PARAM = 'card';
+const SHARED_CARD_PARAM = 'sharedCard';
 const CARD_TYPE_BUILD = 'build';
 const CARD_TYPE_CHALLENGE = 'challenge';
 const CARD_STATE_KEY = 'rm_card_overlay';
@@ -521,7 +522,9 @@ function getShareUiState(type) {
   const cardType = type || getCardOverlay()?.dataset.cardType || CARD_TYPE_BUILD;
   const expectedKey = getShareStateKey(cardType);
   const current = shareUiState[cardType] || createEmptyShareState(cardType);
-  if (current.key !== expectedKey) shareUiState[cardType] = createEmptyShareState(cardType);
+  if (current.key !== expectedKey && !getSlugFromShareUrl(current.url)) {
+    shareUiState[cardType] = createEmptyShareState(cardType);
+  }
   return shareUiState[cardType];
 }
 
@@ -554,7 +557,7 @@ function getReactionUiState(type, options = {}) {
   const current = reactionUiState[cardType] || createEmptyReactionState(cardType);
   const keyChanged = current.key !== expectedKey;
   const slugChanged = sharedSlug !== (current.slug || '');
-  if (keyChanged || slugChanged) {
+  if (slugChanged || (keyChanged && !sharedSlug)) {
     reactionUiState[cardType] = createEmptyReactionState(cardType, { slug: sharedSlug, status: sharedSlug ? 'loading' : 'idle' });
   }
   return reactionUiState[cardType];
@@ -673,9 +676,11 @@ function setSharedCardSlug(type, slug) {
     feedbackTone: ''
   });
   if (!safeSlug) {
+    syncUrlForSharedCardSlug('');
     setReactionUiState(cardType, createEmptyReactionState(cardType));
     return;
   }
+  syncUrlForSharedCardSlug(safeSlug);
   fetchReactionsForCard(cardType, safeSlug);
 }
 
@@ -863,6 +868,17 @@ function syncUrlForOverlay(type, open) {
   const url = new URL(location.href);
   if (open) url.searchParams.set(CARD_PARAM, type);
   else url.searchParams.delete(CARD_PARAM);
+  history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
+}
+
+function syncUrlForSharedCardSlug(slug) {
+  const safeSlug = String(slug || '').trim().toLowerCase();
+  const url = new URL(location.href);
+  if (safeSlug) url.searchParams.set(SHARED_CARD_PARAM, safeSlug);
+  else url.searchParams.delete(SHARED_CARD_PARAM);
+  if (safeSlug && url.searchParams.get(CARD_PARAM) === safeSlug) {
+    url.searchParams.delete(CARD_PARAM);
+  }
   history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
 }
 
