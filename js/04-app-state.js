@@ -5,6 +5,50 @@ import { ensureDataPreload } from './08-data-load.js';
 
 // ===== App API =====
 const App = window.App = (() => {
+  function cloneJsonSafe(value){
+    if (value == null) return value;
+    try {
+      if (typeof structuredClone === 'function') return structuredClone(value);
+    } catch {}
+    try { return JSON.parse(JSON.stringify(value)); } catch { return value; }
+  }
+
+  function createCanonicalRollSnapshot(input){
+    const src = (input && typeof input === 'object') ? input : {};
+    return {
+      className: src.className || '',
+      ascendancy: src.ascendancy || '',
+      ascendancyId: src.ascendancyId ?? null,
+      defense: src.defense || '',
+      defStrat: src.defStrat || '',
+      defStratObj: src.defStratObj || null,
+      weapon: src.weapon || '',
+      offhand: src.offhand || '',
+      weapon2: src.weapon2 || '',
+      offhand2: src.offhand2 || '',
+      tactics: src.tactics || '',
+      ailments: src.ailments || '',
+      ailmentList: Array.isArray(src.ailmentList) ? src.ailmentList : [],
+      tacticList: Array.isArray(src.tacticList) ? src.tacticList : [],
+      tacticSet: Array.isArray(src.tacticSet) ? src.tacticSet : [],
+      ailmentSet: Array.isArray(src.ailmentSet) ? src.ailmentSet : [],
+      buildName: src.buildName || '',
+      flavor: src.flavor || '',
+      attributes: src.attributes || { strength: 0, dexterity: 0, intelligence: 0 },
+      rollAttr: src.rollAttr || { strength: 0, dexterity: 0, intelligence: 0 },
+      defenseObj: src.defenseObj || null,
+      recommendedSkills: Array.isArray(src.recommendedSkills) ? src.recommendedSkills : [],
+      recommendedSkills2: Array.isArray(src.recommendedSkills2) ? src.recommendedSkills2 : [],
+      recommendedPersistentBuff: src.recommendedPersistentBuff || null,
+      recommendedUniques: Array.isArray(src.recommendedUniques) ? src.recommendedUniques : [],
+      synergySupports: Array.isArray(src.synergySupports) ? src.synergySupports : [],
+      synergySupports2: Array.isArray(src.synergySupports2) ? src.synergySupports2 : [],
+      passives: src.passives || null,
+      tagProfile: src.tagProfile || null,
+      snapshotVersion: Number(src.snapshotVersion) || 1
+    };
+  }
+
   const state = {
     DATA:   null,
     GEMS:   null,
@@ -199,6 +243,15 @@ const App = window.App = (() => {
 	  }
 	}
 
+  function replaceCurrentRoll(nextSnapshot){
+    const canonical = createCanonicalRollSnapshot(cloneJsonSafe(nextSnapshot) || {});
+    state.currentRoll = canonical;
+    if (typeof window !== 'undefined') {
+      window.__LAST_ROLL_META = cloneJsonSafe(canonical);
+    }
+    return state.currentRoll;
+  }
+
 
   function captureCurrentRollFromDOM(){
     try{
@@ -235,6 +288,7 @@ const App = window.App = (() => {
     roll,
     captureCurrentRollFromDOM,
     mergeCurrentRoll,
+    replaceCurrentRoll,
     getBindFates,
     setBindFatesCategory,
     getChallengeFates,

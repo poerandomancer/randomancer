@@ -5,6 +5,7 @@ import { buildGemDictionary, lookupGem } from './05-tags-and-scorer.js';
 import { getFamilySkillNames, resolveSkillFamily } from './17-skill-family-utils.js';
 
 const CARD_PARAM = 'card';
+const SHARED_CARD_PARAM = 'sharedCard';
 const CARD_TYPE_BUILD = 'build';
 const CARD_TYPE_CHALLENGE = 'challenge';
 const CARD_STATE_KEY = 'rm_card_overlay';
@@ -42,6 +43,32 @@ const reactionUiState = {
   [CARD_TYPE_BUILD]: { status: 'idle', slug: '', counts: { fire: 0, cursed: 0, big_brain: 0, chaotic: 0 }, viewerReaction: null, busy: false, key: '' },
   [CARD_TYPE_CHALLENGE]: { status: 'idle', slug: '', counts: { fire: 0, cursed: 0, big_brain: 0, chaotic: 0 }, viewerReaction: null, busy: false, key: '' }
 };
+
+function isPublicCardSlug(value) {
+  return /^[bc]-[a-z0-9]{8}$/i.test(String(value || '').trim());
+}
+
+function slugMatchesCardType(slug, cardType) {
+  const safeSlug = String(slug || '').trim().toLowerCase();
+  if (!safeSlug) return false;
+  if (cardType === CARD_TYPE_CHALLENGE) return safeSlug.startsWith('c-');
+  return safeSlug.startsWith('b-');
+}
+
+function getLocationSharedSlug() {
+  const params = new URLSearchParams(window.location.search || '');
+  const explicit = params.get(SHARED_CARD_PARAM);
+  if (isPublicCardSlug(explicit)) return String(explicit).trim().toLowerCase();
+  const legacy = params.get(CARD_PARAM);
+  if (isPublicCardSlug(legacy)) return String(legacy).trim().toLowerCase();
+  return '';
+}
+
+function buildShareUrlFor(type, slug) {
+  const safeSlug = String(slug || '').trim().toLowerCase();
+  if (!safeSlug) return null;
+  return `https://therandomancer.com/s/${type === CARD_TYPE_CHALLENGE ? 'challenge' : 'build'}/${safeSlug}`;
+}
 
 
 function prefersReducedMotion() {
@@ -521,7 +548,23 @@ function getShareUiState(type) {
   const cardType = type || getCardOverlay()?.dataset.cardType || CARD_TYPE_BUILD;
   const expectedKey = getShareStateKey(cardType);
   const current = shareUiState[cardType] || createEmptyShareState(cardType);
-  if (current.key !== expectedKey) shareUiState[cardType] = createEmptyShareState(cardType);
+  const locationSlug = getLocationSharedSlug();
+  if (current.key !== expectedKey) {
+    shareUiState[cardType] = createEmptyShareState(cardType);
+  }
+  if (locationSlug && slugMatchesCardType(locationSlug, cardType)) {
+    const nextUrl = buildShareUrlFor(cardType, locationSlug);
+    if (getSlugFromShareUrl(shareUiState[cardType]?.url) !== locationSlug) {
+      shareUiState[cardType] = {
+        ...shareUiState[cardType],
+        status: 'ready',
+        url: nextUrl,
+        errorMessage: null,
+        feedbackMessage: '',
+        feedbackTone: ''
+      };
+    }
+  }
   return shareUiState[cardType];
 }
 
@@ -664,7 +707,15 @@ async function fetchReactionsForCard(type, slug, options = {}) {
 function setSharedCardSlug(type, slug) {
   const cardType = type === CARD_TYPE_CHALLENGE ? CARD_TYPE_CHALLENGE : CARD_TYPE_BUILD;
   const safeSlug = String(slug || '').trim().toLowerCase();
-  const shareUrl = safeSlug ? `https://therandomancer.com/s/${cardType === CARD_TYPE_CHALLENGE ? 'challenge' : 'build'}/${safeSlug}` : null;
+  const shareUrl = buildShareUrlFor(cardType, safeSlug);
+  if (safeSlug) {
+    const url = new URL(location.href);
+    url.searchParams.set(SHARED_CARD_PARAM, safeSlug);
+    if (url.searchParams.get(CARD_PARAM) !== CARD_TYPE_BUILD && url.searchParams.get(CARD_PARAM) !== CARD_TYPE_CHALLENGE) {
+      url.searchParams.set(CARD_PARAM, cardType);
+    }
+    history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
+  }
   setShareUiState(cardType, {
     status: safeSlug ? 'ready' : 'idle',
     url: shareUrl,
@@ -747,6 +798,15 @@ async function shareCurrentCard(type, options = {}) {
     const result = await sharePublicCard(body);
     const shareUrl = result?.share_url || '';
     if (!shareUrl) throw new Error('Share service did not return a share URL.');
+    const sharedSlug = getSlugFromShareUrl(shareUrl);
+    if (sharedSlug) {
+      const url = new URL(location.href);
+      url.searchParams.set(SHARED_CARD_PARAM, sharedSlug);
+      if (url.searchParams.get(CARD_PARAM) !== CARD_TYPE_BUILD && url.searchParams.get(CARD_PARAM) !== CARD_TYPE_CHALLENGE) {
+        url.searchParams.set(CARD_PARAM, cardType);
+      }
+      history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
+    }
     setShareUiState(cardType, {
       status: 'ready',
       url: shareUrl,
@@ -754,7 +814,6 @@ async function shareCurrentCard(type, options = {}) {
       feedbackMessage: options.silent ? '' : 'Shared link ready.',
       feedbackTone: 'success'
     });
-    const sharedSlug = getSlugFromShareUrl(shareUrl);
     if (sharedSlug) await fetchReactionsForCard(cardType, sharedSlug, { skipRender: true });
     refreshOpenCardOverlay();
     return true;
@@ -861,8 +920,15 @@ async function copyCurrentCardLink(type) {
 
 function syncUrlForOverlay(type, open) {
   const url = new URL(location.href);
-  if (open) url.searchParams.set(CARD_PARAM, type);
-  else url.searchParams.delete(CARD_PARAM);
+  const legacy = url.searchParams.get(CARD_PARAM);
+  if (!url.searchParams.get(SHARED_CARD_PARAM) && isPublicCardSlug(legacy)) {
+    url.searchParams.set(SHARED_CARD_PARAM, String(legacy).toLowerCase());
+  }
+  if (open) {
+    url.searchParams.set(CARD_PARAM, type);
+  } else if (legacy === CARD_TYPE_BUILD || legacy === CARD_TYPE_CHALLENGE) {
+    url.searchParams.delete(CARD_PARAM);
+  }
   history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
 }
 

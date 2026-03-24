@@ -62,6 +62,7 @@ import {
       v: snap.snapshotVersion || 1,
       c: snap.className || '',
       a: snap.ascendancy || '',
+      ai: snap.ascendancyId ?? null,
       w: snap.weapon || '',
       o: snap.offhand || '',
       w2: snap.weapon2 || '',
@@ -122,6 +123,7 @@ import {
         snapshotVersion: raw.v || 1,
         className: raw.c || '',
         ascendancy: raw.a || '',
+        ascendancyId: raw.ai ?? null,
         weapon: raw.w || '',
         offhand: raw.o || '',
         weapon2: raw.w2 || '',
@@ -462,6 +464,16 @@ function renderSnapshotToDom(snap){
 
   }
 
+  function canonicalizeSharedCardQuery(slug, kind) {
+    const safeSlug = String(slug || '').trim().toLowerCase();
+    if (!/^[bc]-[a-z0-9]{8}$/i.test(safeSlug)) return;
+    const safeKind = kind === 'challenge' ? 'challenge' : 'build';
+    const url = new URL(location.href);
+    url.searchParams.set('sharedCard', safeSlug);
+    url.searchParams.set('card', safeKind);
+    history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
+  }
+
   async function applyBuildCode(code){
   const snap = decodeSnapshot(code);
   if (!snap) return false;
@@ -491,9 +503,8 @@ function renderSnapshotToDom(snap){
   // Merge into global roll state so the rest of the app sees the right info
   const rollPayload = { ...snap };
 
-  if (window.App?.mergeCurrentRoll) {
-    window.App.mergeCurrentRoll(rollPayload);
-  }
+  if (window.App?.replaceCurrentRoll) window.App.replaceCurrentRoll(rollPayload);
+  else if (window.App?.mergeCurrentRoll) window.App.mergeCurrentRoll(rollPayload);
 
   renderSnapshotToDom(rollPayload);
   updateCodeUI(code);
@@ -885,12 +896,16 @@ function renderSnapshotToDom(snap){
 
   async function autoLoadFromQuery(){
     const q = getQueryParams();
-    const requestedCard = q.get('card');
+    const requestedCardRaw = q.get('card');
+    const requestedCard = requestedCardRaw === 'build' || requestedCardRaw === 'challenge' ? requestedCardRaw : '';
+    const explicitShared = (q.get('sharedCard') || '').trim();
+    const legacyShared = /^[bc]-[a-z0-9]{8}$/i.test(requestedCardRaw || '') ? String(requestedCardRaw).trim() : '';
+    const requestedSharedSlug = (explicitShared || legacyShared || '').toLowerCase();
 
-    if (requestedCard && /^[bc]-[a-z0-9]{8}$/i.test(requestedCard)) {
+    if (requestedSharedSlug && /^[bc]-[a-z0-9]{8}$/i.test(requestedSharedSlug)) {
       window.RandomancerShowToast?.('Loading shared card…', 1800);
       try {
-        const shared = validatePublicCardRecord(await fetchPublicCardBySlug(requestedCard));
+        const shared = validatePublicCardRecord(await fetchPublicCardBySlug(requestedSharedSlug));
         if (shared.card_kind === 'challenge') {
           if (typeof window.RandomancerSetMode === 'function') window.RandomancerSetMode('challenge');
           const contract = hydrateSharedChallengeCard(shared.payload);
@@ -898,6 +913,7 @@ function renderSnapshotToDom(snap){
             window.RandomancerRenderChallengeContract(contract);
           }
           setSharedCardSlug('challenge', shared.slug);
+          canonicalizeSharedCardQuery(shared.slug, 'challenge');
           openCardOverlay('challenge', { skipUrl: true });
           return;
         }
@@ -908,6 +924,7 @@ function renderSnapshotToDom(snap){
           window.RandomancerRenderBuildSnapshot(snapshot);
         }
         setSharedCardSlug('build', shared.slug);
+        canonicalizeSharedCardQuery(shared.slug, 'build');
         openCardOverlay('build', { skipUrl: true });
         return;
       } catch (error) {
@@ -986,7 +1003,8 @@ function renderSnapshotToDom(snap){
   window.RandomancerRenderBuildSnapshot = (snap) => {
     if (!snap || typeof snap !== 'object') return false;
     const safeSnap = cloneJsonSafe(snap) || { ...snap };
-    if (window.App?.mergeCurrentRoll) window.App.mergeCurrentRoll({ ...safeSnap });
+    if (window.App?.replaceCurrentRoll) window.App.replaceCurrentRoll(safeSnap);
+    else if (window.App?.mergeCurrentRoll) window.App.mergeCurrentRoll({ ...safeSnap });
     window.CURRENT_ROLL = cloneJsonSafe(safeSnap) || { ...safeSnap };
     renderSnapshotToDom(safeSnap);
     return true;
