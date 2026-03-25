@@ -886,6 +886,33 @@ function renderSnapshotToDom(snap){
     window.CURRENT_ROLL = null;
   }
 
+  async function openSharedCardBySlug(slug){
+    const safeSlug = String(slug || '').trim().toLowerCase();
+    const slugPattern = /^[bc]-[a-z0-9]{8}$/i;
+    if (!slugPattern.test(safeSlug)) throw new Error('Shared card slug was invalid.');
+
+    const shared = validatePublicCardRecord(await fetchPublicCardBySlug(safeSlug));
+    if (shared.card_kind === 'challenge') {
+      if (typeof window.RandomancerSetMode === 'function') window.RandomancerSetMode('challenge');
+      const contract = hydrateSharedChallengeCard(shared.payload);
+      if (typeof window.RandomancerRenderChallengeContract === 'function') {
+        window.RandomancerRenderChallengeContract(contract);
+      }
+      setSharedCardSlug('challenge', shared.slug);
+      openCardOverlay('challenge', { skipUrl: true });
+      return shared;
+    }
+
+    if (typeof window.RandomancerSetMode === 'function') window.RandomancerSetMode('standard');
+    const snapshot = hydrateSharedBuildCard(shared.payload);
+    if (typeof window.RandomancerRenderBuildSnapshot === 'function') {
+      window.RandomancerRenderBuildSnapshot(snapshot);
+    }
+    setSharedCardSlug('build', shared.slug);
+    openCardOverlay('build', { skipUrl: true });
+    return shared;
+  }
+
   async function autoLoadFromQuery(){
     const q = getQueryParams();
     const slugPattern = /^[bc]-[a-z0-9]{8}$/i;
@@ -897,25 +924,7 @@ function renderSnapshotToDom(snap){
     if (requestedCard && slugPattern.test(requestedCard)) {
       window.RandomancerShowToast?.('Loading shared card…', 1800);
       try {
-        const shared = validatePublicCardRecord(await fetchPublicCardBySlug(requestedCard));
-        if (shared.card_kind === 'challenge') {
-          if (typeof window.RandomancerSetMode === 'function') window.RandomancerSetMode('challenge');
-          const contract = hydrateSharedChallengeCard(shared.payload);
-          if (typeof window.RandomancerRenderChallengeContract === 'function') {
-            window.RandomancerRenderChallengeContract(contract);
-          }
-          setSharedCardSlug('challenge', shared.slug);
-          openCardOverlay('challenge', { skipUrl: true });
-          return;
-        }
-
-        if (typeof window.RandomancerSetMode === 'function') window.RandomancerSetMode('standard');
-        const snapshot = hydrateSharedBuildCard(shared.payload);
-        if (typeof window.RandomancerRenderBuildSnapshot === 'function') {
-          window.RandomancerRenderBuildSnapshot(snapshot);
-        }
-        setSharedCardSlug('build', shared.slug);
-        openCardOverlay('build', { skipUrl: true });
+        await openSharedCardBySlug(requestedCard);
         return;
       } catch (error) {
         console.warn('[public-card] shared restore failed', error);
@@ -1001,6 +1010,7 @@ function renderSnapshotToDom(snap){
     return true;
   };
   window.RandomancerClearBuildResults = clearBuildResultsToEmpty;
+  window.RandomancerOpenSharedCardBySlug = (slug) => openSharedCardBySlug(slug);
   window.RandomancerUpdateBuildCodeUI = () => {
     const snap = currentSnap();
     const code = encodeSnapshot(snap);

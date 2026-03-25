@@ -49,3 +49,5 @@ import './js/15-challenge-engine.js';
 import './js/16-challenge-mode.js';
 
 import './js/18-codex-mode.js';
+
+import './js/20-trending-cards.js';

@@ -1,5 +1,6 @@
 import { APP_VERSION, formatWeaponLine } from './01-meta-and-domready.js';
 import { sharePublicCard, fetchCardReactions, toggleCardReaction } from './publicCardApi.js';
+import { PUBLIC_CARD_REACTIONS } from './publicCardReactions.js';
 import { buildPublicBuildCardRequest, buildPublicChallengeCardRequest } from './publicCardBuilders.js';
 import { buildGemDictionary, lookupGem } from './05-tags-and-scorer.js';
 import { getFamilySkillNames, resolveSkillFamily } from './17-skill-family-utils.js';
@@ -13,12 +14,7 @@ const SHARED_LINK_CACHE_KEY = 'rm_shared_card_links_v1';
 const BUILD_SAVE_STORAGE_KEY = 'randomancer_saved_builds_v1';
 const CHALLENGE_SAVE_STORAGE_KEY = 'randomancer_saved_challenges_v1';
 const SKILL_TOOLTIP_KEYS = new Set(['ACTIVE_SKILL', 'SUPPORT', 'PERSISTENT_BUFF', 'UNIQUE', 'PASSIVE', 'KEYSTONE', 'SKILL_FAMILY', 'SKILL_FAMILY_2']);
-const REACTION_TYPES = [
-  { id: 'fire', label: 'Fire', icon: '🔥' },
-  { id: 'cursed', label: 'Cursed', icon: '💀' },
-  { id: 'big_brain', label: 'Big Brain', icon: '🧠' },
-  { id: 'chaotic', label: 'Chaotic', icon: '🎲' }
-];
+const REACTION_TYPES = PUBLIC_CARD_REACTIONS;
 
 let tooltipEl = null;
 let tooltipTarget = null;
