@@ -44,6 +44,28 @@ async function sharePublicCard(body) {
   return readJson(res);
 }
 
+
+async function fetchTrendingCards(params = {}) {
+  const query = new URLSearchParams();
+  const windowValue = String(params.window || '').trim().toLowerCase();
+  const typeValue = String(params.type || '').trim().toLowerCase();
+  const reactionValue = String(params.reaction || '').trim().toLowerCase();
+  const limitValue = Number(params.limit);
+  if (windowValue) query.set('window', windowValue);
+  if (typeValue) query.set('type', typeValue);
+  if (reactionValue) query.set('reaction', reactionValue);
+  if (Number.isFinite(limitValue) && limitValue > 0) query.set('limit', String(Math.floor(limitValue)));
+  const suffix = query.toString() ? `?${query.toString()}` : '';
+  const res = await fetch(`${getPublicCardBaseUrl()}/api/cards/trending${suffix}`, {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      'x-randomancer-app-version': APP_VERSION,
+    },
+  });
+  return readJson(res);
+}
+
 async function fetchPublicCardBySlug(slug) {
   const safeSlug = String(slug || '').trim();
   if (!safeSlug) throw new Error('Missing card slug.');
@@ -117,6 +139,7 @@ export {
   getPublicCardBaseUrl,
   sharePublicCard,
   fetchPublicCardBySlug,
+  fetchTrendingCards,
   getOrCreateReactorKey,
   fetchCardReactions,
   toggleCardReaction,
