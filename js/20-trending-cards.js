@@ -131,11 +131,11 @@ function renderPanel() {
   const panel = ensureTrendingPanel();
   panel.classList.toggle('is-mobile', isMobileLayout());
   panel.innerHTML = `
-    ${isMobileLayout() ? '<button type="button" class="trending-cards-panel__backdrop" data-trending-close="1" aria-label="Close"></button>' : ''}
+    ${isMobileLayout() ? '<button type="button" class="trending-cards-panel__backdrop" data-trending-close="1" aria-label="Close" onclick="window.RandomancerCloseTrendingCards && window.RandomancerCloseTrendingCards(); return false;"></button>' : ''}
     <section class="trending-cards-panel__dialog" role="dialog" aria-modal="true" aria-labelledby="trending-cards-title">
       <header class="trending-cards-panel__head">
         <h3 id="trending-cards-title">Trending Cards</h3>
-        <button type="button" class="trending-cards-panel__close" data-trending-close="1" aria-label="Close">×</button>
+        <button type="button" class="trending-cards-panel__close" data-trending-close="1" aria-label="Close" onclick="window.RandomancerCloseTrendingCards && window.RandomancerCloseTrendingCards(); return false;">×</button>
       </header>
       <div class="trending-cards-panel__filters">${renderFilters()}</div>
       <div class="trending-cards-panel__body">${renderRows()}</div>
@@ -205,6 +205,7 @@ function bindTrendingUi() {
   const button = document.getElementById('trending-fab');
   if (!button || button.dataset.bound === '1') return;
   button.dataset.bound = '1';
+  window.RandomancerCloseTrendingCards = () => closeTrendingPanel();
   button.addEventListener('click', (event) => {
     event.preventDefault();
     if (TRENDING_STATE.open) closeTrendingPanel();
