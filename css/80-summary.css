@@ -802,7 +802,7 @@
 .card-action-btn.is-busy span{ display:inline-block; animation: rm-share-pulse 1s ease-in-out infinite; }
 @keyframes rm-share-pulse { 0%,100% { transform: scale(1); opacity: .72; } 50% { transform: scale(1.08); opacity: 1; } }
 
-.trending-cards-panel[hidden]{ display:none; }
+.trending-cards-panel[hidden]{ display:none !important; }
 .trending-cards-panel{
   position: fixed;
   z-index: 170;
