@@ -141,6 +141,18 @@ function renderPanel() {
       <div class="trending-cards-panel__body">${renderRows()}</div>
     </section>
   `;
+  panel.querySelectorAll('[data-trending-close="1"]').forEach((el) => {
+    el.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      closeTrendingPanel();
+    });
+    el.addEventListener('touchend', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      closeTrendingPanel();
+    }, { passive: false });
+  });
   panel.hidden = !TRENDING_STATE.open;
   if (TRENDING_STATE.open) positionPanel(document.getElementById('trending-fab'));
 }
@@ -216,11 +228,6 @@ function bindTrendingUi() {
   ensureTrendingPanel().addEventListener('click', (event) => {
     const target = event.target;
     if (!(target instanceof Element)) return;
-    const closeBtn = target.closest('[data-trending-close="1"]');
-    if (closeBtn) {
-      closeTrendingPanel();
-      return;
-    }
     const row = target.closest('[data-trending-slug]');
     if (row) handleOpenSharedCard(row.dataset.trendingSlug);
   });

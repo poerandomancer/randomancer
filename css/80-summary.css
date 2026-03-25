@@ -808,6 +808,8 @@
   z-index: 170;
 }
 .trending-cards-panel__dialog{
+  position: relative;
+  z-index: 1;
   width: min(420px, calc(100vw - 24px));
   border-radius: 12px;
   border: 1px solid rgba(202,164,95,.35);
@@ -886,6 +888,7 @@
 .trending-cards-panel__backdrop{
   position:absolute;
   inset:0;
+  z-index:0;
   border:0;
   background: rgba(0,0,0,.5);
 }
