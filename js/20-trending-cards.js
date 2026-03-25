@@ -201,9 +201,11 @@ function bindTrendingUi() {
   document.addEventListener('pointerdown', (event) => {
     const panel = ensureTrendingPanel();
     if (!TRENDING_STATE.open || panel.hidden) return;
-    if (isMobileLayout()) return;
     const target = event.target;
-    if (panel.contains(target) || button.contains(target)) return;
+    if (!(target instanceof Element)) return;
+    if (button.contains(target)) return;
+    const dialog = panel.querySelector('.trending-cards-panel__dialog');
+    if (dialog?.contains(target)) return;
     closeTrendingPanel();
   });
 
@@ -212,12 +214,14 @@ function bindTrendingUi() {
   });
 
   ensureTrendingPanel().addEventListener('click', (event) => {
-    const closeBtn = event.target.closest('[data-trending-close="1"]');
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    const closeBtn = target.closest('[data-trending-close="1"]');
     if (closeBtn) {
       closeTrendingPanel();
       return;
     }
-    const row = event.target.closest('[data-trending-slug]');
+    const row = target.closest('[data-trending-slug]');
     if (row) handleOpenSharedCard(row.dataset.trendingSlug);
   });
 
