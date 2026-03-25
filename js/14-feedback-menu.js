@@ -53,7 +53,8 @@
       const action = item.dataset.action;
       closeMenu();
 
-      if (action === 'saved') document.getElementById('saved-fab')?.click();
+      if (action === 'trending') document.getElementById('trending-fab')?.click();
+      else if (action === 'saved') document.getElementById('saved-fab')?.click();
       else if (action === 'info') document.getElementById('info-fab')?.click();
       else if (action === 'feedback') openFeedback();
     });
