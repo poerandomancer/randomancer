@@ -13,7 +13,7 @@ const CARD_STATE_KEY = 'rm_card_overlay';
 const SHARED_LINK_CACHE_KEY = 'rm_shared_card_links_v1';
 const BUILD_SAVE_STORAGE_KEY = 'randomancer_saved_builds_v1';
 const CHALLENGE_SAVE_STORAGE_KEY = 'randomancer_saved_challenges_v1';
-const SKILL_TOOLTIP_KEYS = new Set(['ACTIVE_SKILL', 'SUPPORT', 'PERSISTENT_BUFF', 'UNIQUE', 'PASSIVE', 'KEYSTONE', 'SKILL_FAMILY', 'SKILL_FAMILY_2']);
+const SKILL_TOOLTIP_KEYS = new Set(['ACTIVE_SKILL', 'SKILL', 'SUPPORT', 'PERSISTENT_BUFF', 'UNIQUE', 'PASSIVE', 'KEYSTONE', 'SKILL_FAMILY', 'SKILL_FAMILY_2']);
 const REACTION_TYPES = PUBLIC_CARD_REACTIONS;
 
 let tooltipEl = null;
@@ -346,6 +346,22 @@ function deriveBuildCardModel(snap) {
 }
 
 function getChallengeTooltipPayload(slotKey, value) {
+  if (slotKey === 'SKILL') {
+    const strictPool = window.DATA?.challengePools?.strictUniqueGrantedSkills || [];
+    const strict = strictPool.find((row) => row?.skillName === value);
+    if (strict?.skillDescription) return { title: value, lines: [strict.skillDescription] };
+    const description = getGemDescription(value);
+    return description ? { title: value, lines: [description] } : null;
+  }
+  if (slotKey === 'UNIQUE') {
+    const strictPool = window.DATA?.challengePools?.strictUniqueGrantedSkills || [];
+    const strict = strictPool.find((row) => row?.uniqueName === value);
+    if (strict) {
+      const lines = [strict.uniqueSummary || ''];
+      if (strict.requiredLevel) lines.push(`Required Level: ${strict.requiredLevel}`);
+      return { title: value, lines: lines.filter(Boolean) };
+    }
+  }
   if (slotKey === 'ACTIVE_SKILL') {
     const description = getGemDescription(value);
     return description ? { title: value, lines: [description] } : null;

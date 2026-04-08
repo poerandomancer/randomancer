@@ -441,6 +441,22 @@ async function buildPickerContext() {
   })();
   // ----- Skill Families (tag-based libraries; used for Challenge Mode pickers/tooltips)
   const skillFamily = unique(toArray(core.skillFamilyOptions || []));
+  const challengePools = core.challengePools && typeof core.challengePools === 'object' ? core.challengePools : {};
+  const strictUniqueGrantedSkill = toArray(challengePools.strictUniqueGrantedSkills)
+    .filter(row => row && row.uniqueName && row.skillName)
+    .map(row => ({
+      id: row.id || `${row.uniqueName}::${row.skillName}`,
+      uniqueName: row.uniqueName,
+      skillName: row.skillName,
+      requiredLevel: row.requiredLevel ?? null,
+      skillDescription: row.skillDescription || '',
+      uniqueSummary: row.uniqueSummary || '',
+      slot: row.slot || null,
+      category: row.category || null
+    }));
+  const craftingType = toArray(challengePools.craftingTypes)
+    .filter(row => row && row.label)
+    .map(row => row.label);
 
 
 
@@ -524,6 +540,8 @@ async function buildPickerContext() {
     skillArchetype: unique(skillArchetype),
     activeSkill: unique(activeSkill),
     skillFamily: unique(skillFamily),
+    strictUniqueGrantedSkill,
+    craftingType: unique(craftingType),
     keystone: unique(keystones),
     
 		// Skill family resolver context (for dynamic wording)
@@ -666,7 +684,16 @@ function hasConflict(candidate, selected, severity) {
 
 function applyEffects(state, task, slotValues) {
   const effects = task.effects || {};
-  const resolveValue = (raw) => (typeof raw === 'string' ? fillTemplate(raw, slotValues) : raw);
+  const resolveValue = (raw) => {
+    if (typeof raw === 'string') return fillTemplate(raw, slotValues);
+    if (Array.isArray(raw)) return raw.map(resolveValue);
+    if (raw && typeof raw === 'object') {
+      const out = {};
+      Object.entries(raw).forEach(([k, v]) => { out[k] = resolveValue(v); });
+      return out;
+    }
+    return raw;
+  };
 
   for (const [k, rawValue] of Object.entries(effects.locks || {})) {
     state.locks[k] = resolveValue(rawValue);
@@ -789,6 +816,20 @@ function pickSlotValue(slotKey, slotConfig, slots, defs, context) {
   let options = toArray(context[pickerName]);
   const severity = context.__severity || 'cruel';
 
+  if (pickerName === 'strictUniqueGrantedSkill') {
+    const current = slots.__strictUniqueGrantedEntry;
+    if (current) {
+      if (slotKey === 'SKILL') return current.skillName || null;
+      if (slotKey === 'UNIQUE') return current.uniqueName || null;
+    }
+    const entry = randomPick(options);
+    if (!entry) return null;
+    slots.__strictUniqueGrantedEntry = entry;
+    if (slotKey === 'SKILL') return entry.skillName || null;
+    if (slotKey === 'UNIQUE') return entry.uniqueName || null;
+    return null;
+  }
+
   // Picker-specific, severity-aware behavior
   if (pickerName === 'weaponLoadout') {
     // Occasionally require two weapon sets (Cruel/Diabolical only)
@@ -907,6 +948,7 @@ function buildContractTitle({ picks, severity }) {
 
   if (getFirstSlot('KEYSTONE')) return `The ${getFirstSlot('KEYSTONE')} Decree`;
   if (getFirstSlot('ACTIVE_SKILL')) return `The ${getFirstSlot('ACTIVE_SKILL')} Edict`;
+  if (getFirstSlot('SKILL')) return `The ${getFirstSlot('SKILL')} Edict`;
   if (getFirstSlot('SKILL_FAMILY')) return `The ${getFirstSlot('SKILL_FAMILY')} Covenant`;
   if (ids.includes('G1_unarmed')) return 'The Empty Hand Oath';
   if (ids.includes('F3_ironman_normals_only_pickup')) return 'The Ironman Covenant';
