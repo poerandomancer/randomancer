@@ -3,8 +3,8 @@
     "schema": "poe2db_uniques_min_v4",
     "locale": "us",
     "listing_url": "https://poe2db.tw/us/Unique_item",
-    "count": 399,
-    "generated_epoch": 1773274467
+    "count": 400,
+    "generated_epoch": 1774017232
   },
   "by_key": {
     "Brynhand's Mark||Wooden Club": "/us/Brynhands_Mark",
@@ -408,6 +408,14 @@
     "Unforeseen Consequences||Abyss Precursor Tablet": "/us/Unforeseen_Consequences"
   },
   "items": {
+    "/us/Endgame": {
+      "source": {
+        "id": "/us/Endgame",
+        "url": "https://poe2db.tw/us/Endgame",
+        "label": "Endgame"
+      },
+      "error": "404 Client Error: Not Found for url: https://poe2db.tw/us/Endgame"
+    },
     "/us/Brynhands_Mark": {
       "key": "Brynhand's Mark||Wooden Club",
       "name": "Brynhand's Mark",
@@ -723,7 +731,7 @@
       "granted_skills": [],
       "tags": [
         "critical_hit",
-        "crushes",
+        "crush",
         "heavy_stun",
         "physical",
         "stun"
@@ -982,7 +990,7 @@
       "granted_skills": [],
       "tags": [
         "accuracy",
-        "crushes",
+        "crush",
         "heavy_stun",
         "stun"
       ],
@@ -1545,7 +1553,7 @@
       "granted_skills": [],
       "tags": [
         "accuracy",
-        "dazes",
+        "daze",
         "heavy_stun",
         "hit",
         "physical",
@@ -2542,8 +2550,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "attack",
-        "crossbow"
+        "attack"
       ],
       "source": {
         "id": "/us/Rampart_Raptor",
@@ -2934,7 +2941,7 @@
       "granted_skills": [],
       "tags": [
         "druidic_prowess",
-        "hindered",
+        "hinder",
         "intelligence",
         "physical"
       ],
@@ -3128,7 +3135,6 @@
         }
       ],
       "tags": [
-        "crossbow",
         "leech",
         "physical"
       ],
@@ -3335,10 +3341,10 @@
       "tags": [
         "armour",
         "bleed",
-        "debuffs",
+        "debuff",
         "hit",
         "physical",
-        "slowing",
+        "slow",
         "thorns"
       ],
       "source": {
@@ -3945,7 +3951,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "companions",
+        "companion",
         "evasion",
         "poison",
         "spirit"
@@ -4268,7 +4274,7 @@
         "chaos_resistance",
         "energy_shield",
         "intelligence",
-        "recharges",
+        "recharge",
         "strength"
       ],
       "source": {
@@ -4643,7 +4649,6 @@
       "tags": [
         "armour",
         "evasion",
-        "flask",
         "physical",
         "stun_threshold",
         "thorns"
@@ -4757,7 +4762,7 @@
         "armour",
         "chaos_resistance",
         "evasion",
-        "reserved"
+        "reserve"
       ],
       "source": {
         "id": "/us/Widows_Reign",
@@ -5001,8 +5006,7 @@
         "armour",
         "chaos_resistance",
         "energy_shield",
-        "fire_resistance",
-        "flask"
+        "fire_resistance"
       ],
       "source": {
         "id": "/us/Husk_of_Dreams",
@@ -5229,7 +5233,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "aggravated",
+        "aggravate",
         "dexterity",
         "energy_shield"
       ],
@@ -5735,7 +5739,7 @@
       "tags": [
         "armour",
         "presence",
-        "reserved",
+        "reserve",
         "stun_threshold"
       ],
       "source": {
@@ -6219,7 +6223,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "blinded",
+        "blind",
         "critical_weakness",
         "dexterity",
         "energy_shield",
@@ -7419,7 +7423,7 @@
         "critical_damage_bonus",
         "critical_hit",
         "physical",
-        "weapon"
+        "weapons"
       ],
       "source": {
         "id": "/us/Northpaw",
@@ -7813,7 +7817,6 @@
         "energy_shield",
         "hit",
         "penetrate",
-        "penetrates",
         "rarity_of_items"
       ],
       "source": {
@@ -8175,7 +8178,7 @@
       "tags": [
         "armour",
         "attribute",
-        "debuffs",
+        "debuff",
         "energy_shield",
         "immobilise",
         "lightning_resistance",
@@ -8248,8 +8251,7 @@
       "granted_skills": [],
       "tags": [
         "critical_damage_bonus",
-        "energy_shield",
-        "flask"
+        "energy_shield"
       ],
       "source": {
         "id": "/us/Killjoy",
@@ -8683,7 +8685,7 @@
       "tags": [
         "dexterity",
         "evasion",
-        "pinning"
+        "pin"
       ],
       "source": {
         "id": "/us/Bushwhack",
@@ -8751,7 +8753,7 @@
       "tags": [
         "dexterity",
         "energy_shield",
-        "slows"
+        "slow"
       ],
       "source": {
         "id": "/us/Wanderlust",
@@ -9896,8 +9898,8 @@
       ],
       "tags": [
         "elemental",
-        "parried",
-        "parried_debuff"
+        "parried_debuff",
+        "parry"
       ],
       "source": {
         "id": "/us/Nocturne",
@@ -10062,7 +10064,7 @@
         "critical_weakness",
         "elemental",
         "evasion",
-        "parrying"
+        "parry"
       ],
       "source": {
         "id": "/us/Silverthorne",
@@ -11525,7 +11527,6 @@
         "evasion_rating",
         "hit",
         "pierce",
-        "pierced",
         "projectile"
       ],
       "source": {
@@ -11735,7 +11736,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "flask",
         "strength"
       ],
       "source": {
@@ -11993,7 +11993,7 @@
         "cold_resistance",
         "hit",
         "intelligence",
-        "penetrates"
+        "penetrate"
       ],
       "source": {
         "id": "/us/The_Pandemonius",
@@ -12027,7 +12027,6 @@
       "granted_skills": [],
       "tags": [
         "block",
-        "focus",
         "intelligence"
       ],
       "source": {
@@ -12282,7 +12281,7 @@
       "tags": [
         "accuracy",
         "attribute",
-        "blinded"
+        "blind"
       ],
       "source": {
         "id": "/us/Hinekoras_Sight",
@@ -12647,9 +12646,7 @@
         "blissfully unaware of their flight from the sirens."
       ],
       "granted_skills": [],
-      "tags": [
-        "flask"
-      ],
+      "tags": [],
       "source": {
         "id": "/us/Glowswarm",
         "url": "https://poe2db.tw/us/Glowswarm",
@@ -12793,7 +12790,7 @@
         "chill",
         "cold_resistance",
         "hit",
-        "shattered",
+        "shatter",
         "strength"
       ],
       "source": {
@@ -13531,7 +13528,7 @@
         "light_radius",
         "presence",
         "spell",
-        "triggered"
+        "trigger"
       ],
       "source": {
         "id": "/us/Grip_of_Kulemak",
@@ -13567,7 +13564,6 @@
       "granted_skills": [],
       "tags": [
         "cold_resistance",
-        "flask",
         "strength"
       ],
       "source": {
@@ -13603,7 +13599,6 @@
       "granted_skills": [],
       "tags": [
         "elemental",
-        "flask",
         "recoup"
       ],
       "source": {
@@ -13638,9 +13633,7 @@
         "there exists a flow..."
       ],
       "granted_skills": [],
-      "tags": [
-        "flask"
-      ],
+      "tags": [],
       "source": {
         "id": "/us/Keelhaul",
         "url": "https://poe2db.tw/us/Keelhaul",
@@ -13676,7 +13669,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "flask",
         "intelligence",
         "minion"
       ],
@@ -13713,7 +13705,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "flask",
         "low_life",
         "low_mana"
       ],
@@ -13749,7 +13740,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "flask",
         "lightning_resistance",
         "shock"
       ],
@@ -13788,7 +13778,6 @@
       "granted_skills": [],
       "tags": [
         "chaos_resistance",
-        "flask",
         "lose",
         "overflow"
       ],
@@ -13932,7 +13921,6 @@
       "granted_skills": [],
       "tags": [
         "dexterity",
-        "flask",
         "low_life",
         "strength"
       ],
@@ -14011,7 +13999,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "flask",
         "stun_threshold"
       ],
       "source": {
@@ -14125,9 +14112,7 @@
         "the Maji more than they ever expected."
       ],
       "granted_skills": [],
-      "tags": [
-        "flask"
-      ],
+      "tags": [],
       "source": {
         "id": "/us/Ingenuity",
         "url": "https://poe2db.tw/us/Ingenuity",
@@ -14161,7 +14146,6 @@
       "granted_skills": [],
       "tags": [
         "energy_shield",
-        "flask",
         "intelligence"
       ],
       "source": {
@@ -14196,9 +14180,7 @@
         "No conqueror, no conquered, only searing Light."
       ],
       "granted_skills": [],
-      "tags": [
-        "flask"
-      ],
+      "tags": [],
       "source": {
         "id": "/us/Darkness_Enthroned",
         "url": "https://poe2db.tw/us/Darkness_Enthroned",
@@ -14422,7 +14404,6 @@
       ],
       "granted_skills": [],
       "tags": [
-        "flask",
         "poison"
       ],
       "source": {
@@ -14943,7 +14924,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "irradiated",
+        "irradiate",
         "precursor_tower_maps"
       ],
       "source": {
@@ -14975,7 +14956,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "irradiated",
+        "irradiate",
         "irradiation"
       ],
       "source": {
@@ -15008,7 +14989,7 @@
       "granted_skills": [],
       "tags": [
         "azmeri_spirits",
-        "empowers",
+        "empower",
         "map_boss",
         "map_bosses"
       ],
@@ -15042,7 +15023,7 @@
       ],
       "granted_skills": [],
       "tags": [
-        "empowers",
+        "empower",
         "map_boss",
         "map_bosses",
         "modifier"

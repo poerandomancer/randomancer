@@ -1,0 +1,18 @@
+{
+  "strictUniqueGrantedSkills": [
+    { "uniqueName": "Double Vision", "skillName": "Gemini Surge", "requiredLevel": 20, "category": "weapon" },
+    { "uniqueName": "Hysseg's Claw", "skillName": "Cackling Companions", "requiredLevel": 22, "category": "weapon" },
+    { "uniqueName": "Fairgraves' Curse", "skillName": "Phantasmal Arrow", "requiredLevel": 52, "category": "weapon" },
+    { "uniqueName": "Adonia's Ego", "skillName": "Pinnacle of Power", "requiredLevel": 65, "category": "weapon" },
+    { "uniqueName": "Spire of Ire", "skillName": "Chaotic Surge", "requiredLevel": 65, "category": "weapon" },
+    { "uniqueName": "Atziri's Contempt", "skillName": "Shattering Spite", "requiredLevel": 72, "category": "weapon" },
+    { "uniqueName": "The Last Lament", "skillName": "Compose Requiem", "requiredLevel": 78, "category": "weapon" },
+    { "uniqueName": "The Whispering Ice", "skillName": "Icestorm", "requiredLevel": 78, "category": "weapon" },
+    { "uniqueName": "The Unborn Lich", "skillName": "His Foul Emergence", "requiredLevel": 84, "category": "weapon" },
+    { "uniqueName": "Hinekora's Sight", "skillName": "Future-Past", "requiredLevel": 46, "category": "nonweapon" },
+    { "uniqueName": "Lightning Coil", "skillName": "Valako's Charge", "requiredLevel": 52, "category": "nonweapon" },
+    { "uniqueName": "Murkshaft", "skillName": "Bursting Fen Toad", "requiredLevel": 58, "category": "nonweapon" },
+    { "uniqueName": "Shankgonne", "skillName": "Black Powder Blitz", "requiredLevel": 58, "category": "nonweapon" },
+    { "uniqueName": "The Covenant", "skillName": "Life Remnants", "requiredLevel": 58, "category": "nonweapon" }
+  ]
+}

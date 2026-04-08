@@ -39,10 +39,20 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 from urllib.parse import urljoin
 
+from lib.tag_normalization import canonicalize_tag, is_noise_tag
+
 import requests
 from bs4 import BeautifulSoup  # pip install beautifulsoup4
 
 POE2DB_HOST = "https://poe2db.tw"
+HERE = Path(__file__).resolve().parent
+REPO_ROOT = HERE.parents[1]
+
+
+def resolve_repo_path(path_str: str) -> Path:
+    path = Path(path_str)
+    return path if path.is_absolute() else REPO_ROOT / path
+
 LISTING_PATH = "Unique_item"
 
 # Embedded JSON starts like {"realm":"poe2", ...}
@@ -86,94 +96,26 @@ def strip_square_brackets_chars(s: str) -> str:
     """Remove literal '[' and ']' characters (defensive cleanup)."""
     return (s or "").replace("[", "").replace("]", "")
 
-TAG_VARIANTS = {
-    # existing / obvious single-word tense-plural cleanup
-    "minions": "minion",
-    "charges": "charge",
-    "bleeding": "bleed",
-    "bled": "bleed",
-    "shocked": "shock",
-    "shocks": "shock",
-    "shocking": "shock",
-    "ignited": "ignite",
-    "ignites": "ignite",
-    "igniting": "ignite",
-    "poisoned": "poison",
-    "poisons": "poison",
-    "poisoning": "poison",
-    "recouped": "recoup",
-    "recouping": "recoup",
-
-    # high-value generic plurals / inflections
-    "attacks": "attack",
-    "hits": "hit",
-    "hitting": "hit",
-    "blocked": "block",
-    "blocking": "block",
-    "spells": "spell",
-    "projectiles": "projectile",
-    "leeches": "leech",
-    "leeched": "leech",
-    "chilled": "chill",
-    "frozen": "freeze",
-    "stunned": "stun",
-
-    # phrase-level variants that are clearly the same mechanic
-    "critical_hits": "critical_hit",
-    "critically_hit": "critical_hit",
-
-    # charge families
-    "power_charges": "power_charge",
-    "frenzy_charges": "frenzy_charge",
-
-    # stun families
-    "heavy_stuns": "heavy_stun",
-    "heavy_stunned": "heavy_stun",
-    "light_stunned": "light_stun",
-
-    # common nouns that are showing up in plural form
-    "curses": "curse",
-    "warcries": "warcry",
-    "totems": "totem",
-    "weapons": "weapon",
-    "allies": "ally",
-    "corpses": "corpse",
-    "attributes": "attribute",
-    "flasks": "flask",
-    "charms": "charm",
-    
-    # semantic variants
-    "breaks_armour": "armour_break",
-    "fully_armour_broken": "armour_break",
-
-    "leeched_as_life": "life_leech",
-    "leeching_life": "life_leech",
-
-    # optional, depending on how broad you want Build Mode matching to be
+SCRAPER_TAG_ALIAS_EXTRA = {
     "aggravating_any_bleeding": "bleed",
     "aggravates_all_ignites": "ignite",
 }
 
+
 def normalize_tag(tag: Any) -> Optional[str]:
-    raw = str(tag or "").lower()
-    raw = strip_square_brackets_chars(raw)
-
-    if raw.startswith("grants:") or raw.startswith("grants "):
+    base = canonicalize_tag(tag)
+    if not base:
+        return None
+    if base == "shrine" or base.endswith("_shrine"):
         return None
 
-    raw = raw.replace("'", "")
-    raw = raw.replace("-", "_")
-    raw = raw.replace(" ", "_")
-    raw = re.sub(r"[^a-z0-9_]+", "_", raw)
-    raw = re.sub(r"_+", "_", raw).strip("_")
-
-    if not raw:
+    mapped = SCRAPER_TAG_ALIAS_EXTRA.get(base, base)
+    canonical = canonicalize_tag(mapped)
+    if not canonical:
         return None
-
-    if raw == "shrine" or raw.endswith("_shrine"):
+    if is_noise_tag(canonical):
         return None
-
-    return TAG_VARIANTS.get(raw, raw)
+    return canonical
 
 def safe_int(x: Any) -> Optional[int]:
     try:
@@ -509,7 +451,7 @@ def main() -> int:
     ap.add_argument("--verbose", action="store_true")
     args = ap.parse_args()
 
-    out_path = Path(args.out)
+    out_path = resolve_repo_path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     existing = {}
@@ -596,14 +538,12 @@ def main() -> int:
             granted_skills = normalize_granted_skills(item_json.get("grantedSkills"))
 
 						# Tags: bracket-derived only
-            normalized_tags: List[str] = []
-            seen_tags = set()
-            for t in sorted(bracket_tags):
-                nt = normalize_tag(t)
-                if not nt or nt in seen_tags:
-                    continue
-                seen_tags.add(nt)
-                normalized_tags.append(nt)
+            normalized_tags = sorted({
+                nt
+                for t in bracket_tags
+                for nt in [normalize_tag(t)]
+                if nt
+            })
 
             key = f"{strip_square_brackets_chars(name)}||{strip_square_brackets_chars(base)}" if base else strip_square_brackets_chars(name)
 

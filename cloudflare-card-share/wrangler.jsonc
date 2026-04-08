@@ -1,0 +1,35 @@
+{
+  "name": "randomancer-card-share",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-03-20",
+  "workers_dev": false,
+  "assets": {
+    "directory": "./public"
+  },
+  "routes": [
+    {
+      "pattern": "therandomancer.com/s/*",
+      "zone_name": "therandomancer.com"
+    },
+    {
+      "pattern": "therandomancer.com/og/*",
+      "zone_name": "therandomancer.com"
+    },
+    {
+      "pattern": "cards.therandomancer.com",
+      "custom_domain": true
+    }
+  ],
+  "vars": {
+    "APP_BASE_URL": "https://therandomancer.com",
+    "BUILD_OG_IMAGE_URL": "https://cards.therandomancer.com/build-share-og.png",
+    "CHALLENGE_OG_IMAGE_URL": "https://cards.therandomancer.com/challenge-share-og.png"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "randomancer-card-db",
+      "database_id": "7f682e06-2abc-4f09-9c13-a35bdc85a082"
+    }
+  ]
+}

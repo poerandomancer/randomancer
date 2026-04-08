@@ -102,6 +102,8 @@ let __RC_TIP_PINNED = false;
 let __RC_TIP_TARGET = null;
 let __RC_GEM_BY_NAME = null;
 let __RC_PASSIVE_BY_NAME = null;
+let __RC_STRICT_UNIQUE_BY_SKILL = null;
+let __RC_STRICT_UNIQUE_BY_NAME = null;
 let __RC_TIP_BOUND = false;
 let __RC_TIP_FAMILY_SELECTED = null;
 let __RC_TIP_FAMILY_PINNED = false;
@@ -211,6 +213,27 @@ function passiveIndexByName() {
   return map;
 }
 
+function strictUniquePoolIndexes() {
+  if (__RC_STRICT_UNIQUE_BY_SKILL && __RC_STRICT_UNIQUE_BY_NAME) {
+    return {
+      bySkill: __RC_STRICT_UNIQUE_BY_SKILL,
+      byUnique: __RC_STRICT_UNIQUE_BY_NAME
+    };
+  }
+  const bySkill = Object.create(null);
+  const byUnique = Object.create(null);
+  const rows = window.DATA?.challengePools?.strictUniqueGrantedSkills || [];
+  rows.forEach((row) => {
+    const skill = String(row?.skillName || '').trim();
+    const unique = String(row?.uniqueName || '').trim();
+    if (skill && !bySkill[skill]) bySkill[skill] = row;
+    if (unique && !byUnique[unique]) byUnique[unique] = row;
+  });
+  __RC_STRICT_UNIQUE_BY_SKILL = bySkill;
+  __RC_STRICT_UNIQUE_BY_NAME = byUnique;
+  return { bySkill, byUnique };
+}
+
 function getTooltipPayload(slotKey, value) {
   if (!slotKey || !value) return null;
 
@@ -224,15 +247,28 @@ function getTooltipPayload(slotKey, value) {
     return { title: value, lines: [desc] };
   }
 
-  if (slotKey === 'KEYSTONE') {
-    const lib = window.DATA?.keystoneTooltips || {};
-    const entry = lib[value] || lib[value?.replace(/[’]/g, "'")];
-    let lines = Array.isArray(entry?.lines) ? entry.lines.slice() : null;
-
-    if (!lines || !lines.length) {
-      const node = passiveIndexByName()[value];
-      lines = Array.isArray(node?.lines) ? node.lines.slice() : [];
+  if (slotKey === 'SKILL') {
+    const strict = strictUniquePoolIndexes().bySkill?.[value];
+    if (strict?.skillDescription) {
+      return { title: value, lines: [stripBracketMarkup(strict.skillDescription)] };
     }
+    const gem = gemIndexByName()[value];
+    const desc = stripBracketMarkup(gem?.description || gem?.support_text || '');
+    return desc ? { title: value, lines: [desc] } : null;
+  }
+
+  if (slotKey === 'UNIQUE') {
+    const strict = strictUniquePoolIndexes().byUnique?.[value];
+    if (strict?.uniqueSummary) {
+      const lines = [stripBracketMarkup(strict.uniqueSummary)];
+      if (strict?.requiredLevel) lines.push(`Required Level: ${strict.requiredLevel}`);
+      return { title: value, lines };
+    }
+  }
+
+  if (slotKey === 'KEYSTONE') {
+    const node = passiveIndexByName()[value];
+    let lines = Array.isArray(node?.lines) ? node.lines.slice() : [];
 
     lines = (lines || [])
       .map(l => String(l))
@@ -891,6 +927,8 @@ function renderChallengeContract(contract) {
 						const slotKey = seg.k;
 						const wantsTip =
 							slotKey === 'ACTIVE_SKILL' ||
+							slotKey === 'SKILL' ||
+							slotKey === 'UNIQUE' ||
 							slotKey === 'KEYSTONE' ||
 							slotKey === 'SKILL_FAMILY' ||
 							slotKey === 'SKILL_FAMILY_2';

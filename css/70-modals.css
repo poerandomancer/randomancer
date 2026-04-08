@@ -20,7 +20,16 @@
   transition: transform .12s ease, box-shadow .12s ease, background .12s ease, opacity .12s ease;
 }
 /* Header floating action buttons (top-right) */
-.saved-fab{ right: calc(max(16px, env(safe-area-inset-right)) + 80px); }
+.saved-fab{ right: calc(max(16px, env(safe-area-inset-right)) + 168px); }
+.trending-fab{
+  right: calc(max(16px, env(safe-area-inset-right)) + 80px);
+  width: auto;
+  min-width: 82px;
+  padding: 0 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  letter-spacing: .02em;
+}
 .feedback-fab{ right: calc(max(16px, env(safe-area-inset-right)) + 40px); }
 .header-menu-fab{
   display:none;
@@ -104,6 +113,7 @@
 /* On mobile, collapse the 3 header icons into a single menu button */
 @media (max-width: 640px){
   #saved-fab,
+  #trending-fab,
   #feedback-fab,
   #info-fab{ display:none; }
 

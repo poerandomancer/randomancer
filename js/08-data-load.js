@@ -73,6 +73,11 @@ async function loadData() {
     }
     console.log(`[Skill Enrichment] ${gems.length} enriched skill entries (precomputed).`);
 
+    const challengePoolsRaw = await tryLoad('data/enriched/challenge_generated_pools.json');
+    const challengePools = (challengePoolsRaw && typeof challengePoolsRaw === 'object' && !Array.isArray(challengePoolsRaw))
+      ? challengePoolsRaw
+      : {};
+
     // Skill Families (Challenge Mode)
     const skillFamilyLibRaw = await tryLoad('data/skill_families.json');
     const skillFamilyLib = (skillFamilyLibRaw && typeof skillFamilyLibRaw === 'object' && !Array.isArray(skillFamilyLibRaw))
@@ -122,18 +127,11 @@ async function loadData() {
       };
     });
 
-    // Optional keystone tooltip overrides (human-readable effect lines)
-    const keystoneTooltipsRaw = await tryLoad('data/enriched/keystone_tooltips.json');
-    const keystoneTooltips = (keystoneTooltipsRaw && typeof keystoneTooltipsRaw === 'object' && !Array.isArray(keystoneTooltipsRaw))
-      ? keystoneTooltipsRaw
-      : {};
-
     window.DATA = {
       ...core,
       gems,
       passivesEnriched,
       passiveIndex,
-      keystoneTooltips,
       skillFamilyLib,
       skillFamilyIndex,
       skillFamilyByName,
@@ -142,7 +140,8 @@ async function loadData() {
       skillFamilyCounts,
       skillFamilyOptions,
       ascendancyCatalog,
-      ascendancyByName
+      ascendancyByName,
+      challengePools
     };
     console.log("[Global DATA initialized]", window.DATA);
 

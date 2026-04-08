@@ -1,3 +1,5 @@
+import { normalizeTagList, toMatchKey } from './js/tag-normalization.js';
+
 // Passive recommendation engine for Randomancer.
 // Pure functions for scoring and selecting passive nodes based on build context and cohesion mode.
 
@@ -46,7 +48,7 @@
 
 const clamp01 = (value) => Math.min(1, Math.max(0, value));
 
-const normalizeTags = (list) => (Array.isArray(list) ? list.map((t) => String(t).toLowerCase()) : []);
+const normalizeTags = (list) => normalizeTagList(list, { matchKey: true });
 
 const computeTagOverlap = (nodeTags, buildTags) => {
   if (!Array.isArray(nodeTags) || nodeTags.length === 0) return 0;
@@ -91,6 +93,10 @@ const ATTRIBUTE_HINTS = {
     'mana',
   ]),
 };
+
+Object.keys(ATTRIBUTE_HINTS).forEach((key) => {
+  ATTRIBUTE_HINTS[key] = new Set(Array.from(ATTRIBUTE_HINTS[key]).map((t) => toMatchKey(t)).filter(Boolean));
+});
 
 const computeAttributeAffinity = (nodeTags, attributes) => {
   if (!Array.isArray(nodeTags) || nodeTags.length === 0) return 0;
