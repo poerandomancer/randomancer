@@ -366,7 +366,7 @@
     "weights": {
       "mild": 5,
       "cruel": 5,
-      "diabolical": 4
+      "diabolical": 0
     },
     "template": "Choose {CLASS}. Rely on {SKILL}, granted by {UNIQUE}.",
     "shortLabel": "Relic Reliance",
@@ -404,8 +404,8 @@
     "minSeverity": "cruel",
     "weights": {
       "mild": 0,
-      "cruel": 5,
-      "diabolical": 5
+      "cruel": 0,
+      "diabolical": 4
     },
     "template": "Choose {ASCENDANCY}. Rely on {SKILL}, granted by {UNIQUE}.",
     "shortLabel": "Relic Reliance",
