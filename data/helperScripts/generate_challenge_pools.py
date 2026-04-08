@@ -98,10 +98,8 @@ def summarize_unique(unique: dict[str, Any], skill_name: str) -> str:
 
 def generate_pools(skills: list[dict[str, Any]], uniques_payload: dict[str, Any], overrides: dict[str, Any]) -> dict[str, Any]:
     active_skills = [s for s in skills if s.get('type') == 'active' and not is_placeholder_skill(s)]
-    supports = [s for s in skills if s.get('type') == 'support']
 
     by_skill_name = {display_name(s).lower(): s for s in skills if display_name(s)}
-    by_skill_id = {str(s.get('id') or ''): s for s in skills if s.get('id')}
     unique_by_name = build_unique_index(uniques_payload)
 
     strict_rows = []
@@ -166,54 +164,14 @@ def generate_pools(skills: list[dict[str, Any]], uniques_payload: dict[str, Any]
 
     crafting_types = sorted(craft_counts.values(), key=lambda r: (-int(r['skillCount']), r['label']))
 
-    support_lookup = {}
-    for support in supports:
-        sid = str(support.get('id') or '').strip()
-        if not sid:
-            continue
-        support_lookup[sid] = {
-            'id': sid,
-            'name': display_name(support),
-            'description': strip_markup(support.get('support_text') or support.get('description') or ''),
-        }
-
-    rec_map = {}
-    for skill in active_skills:
-        skill_id = str(skill.get('id') or '').strip()
-        if not skill_id:
-            continue
-        resolved = []
-        for support_id in (skill.get('recommended_supports') or []):
-            sid = str(support_id or '').strip()
-            if not sid:
-                continue
-            meta = support_lookup.get(sid)
-            if meta:
-                resolved.append(meta)
-            else:
-                fallback = by_skill_id.get(sid)
-                resolved.append({
-                    'id': sid,
-                    'name': display_name(fallback) if fallback else sid,
-                    'description': strip_markup((fallback or {}).get('support_text') or (fallback or {}).get('description') or ''),
-                })
-
-        rec_map[skill_id] = {
-            'skillId': skill_id,
-            'skillName': display_name(skill),
-            'supports': resolved,
-        }
-
     return {
         'meta': {
             'generator': 'data/helperScripts/generate_challenge_pools.py',
             'strictUniqueCount': len(strict_rows),
             'craftingTypeCount': len(crafting_types),
-            'recommendedSupportsSkillCount': len(rec_map),
         },
         'strictUniqueGrantedSkills': strict_rows,
         'craftingTypes': crafting_types,
-        'recommendedSupportsBySkill': rec_map,
     }
 
 
