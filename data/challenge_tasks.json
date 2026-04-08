@@ -445,7 +445,7 @@
       "cruel": 5,
       "diabolical": 4
     },
-    "template": "Use at least one {CRAFTINGTYPE} skill and at least one different {CRAFTINGTYPE_2} skill.",
+    "template": "Use at least one {CRAFTINGTYPE} skill and at least one {CRAFTINGTYPE_2} skill.",
     "shortLabel": "Split Discipline",
     "slots": {
       "CRAFTINGTYPE": {
