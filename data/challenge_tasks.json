@@ -352,6 +352,126 @@
     }
   },
   {
+    "id": "A13_class_plus_unique_granted_skill",
+    "role": "anchor",
+    "directive": "mandate",
+    "strength": "hard",
+    "domainTags": [
+      "identity_archetype",
+      "unique_item_identity",
+      "skill_architecture",
+      "build_shape"
+    ],
+    "minSeverity": "mild",
+    "weights": {
+      "mild": 5,
+      "cruel": 5,
+      "diabolical": 4
+    },
+    "template": "Choose {CLASS}. Rely on {SKILL}, granted by {UNIQUE}.",
+    "shortLabel": "Relic Reliance",
+    "slots": {
+      "CLASS": {
+        "picker": "class"
+      },
+      "SKILL": {
+        "picker": "strictUniqueGrantedSkill"
+      },
+      "UNIQUE": {
+        "picker": "strictUniqueGrantedSkill"
+      }
+    },
+    "effects": {
+      "locks": {
+        "class": "{CLASS}",
+        "mainDamageMode": "uniqueGrantedSkill",
+        "mainSkill": "{SKILL}",
+        "requiredUnique": "{UNIQUE}"
+      }
+    }
+  },
+  {
+    "id": "A14_ascendancy_plus_unique_granted_skill",
+    "role": "anchor",
+    "directive": "mandate",
+    "strength": "hard",
+    "domainTags": [
+      "identity_archetype",
+      "unique_item_identity",
+      "skill_architecture",
+      "build_shape"
+    ],
+    "minSeverity": "cruel",
+    "weights": {
+      "mild": 0,
+      "cruel": 5,
+      "diabolical": 5
+    },
+    "template": "Choose {ASCENDANCY}. Rely on {SKILL}, granted by {UNIQUE}.",
+    "shortLabel": "Relic Reliance",
+    "slots": {
+      "ASCENDANCY": {
+        "picker": "ascendancy"
+      },
+      "SKILL": {
+        "picker": "strictUniqueGrantedSkill"
+      },
+      "UNIQUE": {
+        "picker": "strictUniqueGrantedSkill"
+      }
+    },
+    "effects": {
+      "locks": {
+        "ascendancy": "{ASCENDANCY}",
+        "mainDamageMode": "uniqueGrantedSkill",
+        "mainSkill": "{SKILL}",
+        "requiredUnique": "{UNIQUE}"
+      }
+    }
+  },
+  {
+    "id": "A15_split_discipline",
+    "role": "anchor",
+    "directive": "mandate",
+    "strength": "hard",
+    "domainTags": [
+      "skill_architecture",
+      "crafting_type",
+      "build_shape"
+    ],
+    "minSeverity": "mild",
+    "weights": {
+      "mild": 5,
+      "cruel": 5,
+      "diabolical": 4
+    },
+    "template": "Use at least one {CRAFTINGTYPE} skill and at least one different {CRAFTINGTYPE_2} skill.",
+    "shortLabel": "Split Discipline",
+    "slots": {
+      "CRAFTINGTYPE": {
+        "picker": "craftingType"
+      },
+      "CRAFTINGTYPE_2": {
+        "picker": "craftingType",
+        "filters": {
+          "notEqualTo": "CRAFTINGTYPE"
+        }
+      }
+    },
+    "effects": {
+      "limits": {
+        "requiredCraftingTypes": [
+          "{CRAFTINGTYPE}",
+          "{CRAFTINGTYPE_2}"
+        ],
+        "distinctCraftingTypeSkills": true
+      },
+      "locks": {
+        "mainDamageMode": "splitCraftingTypes"
+      }
+    }
+  },
+  {
     "id": "E1_no_charms",
     "role": "twist",
     "directive": "constraint",
@@ -652,6 +772,35 @@
       },
       "locks": {
         "supportPolicy": "total_3"
+      }
+    },
+    "conflictTags": [
+      "support_policy"
+    ],
+    "categories": [
+      "Skills"
+    ]
+  },
+  {
+    "id": "P3_recommended_supports_only",
+    "role": "twist",
+    "directive": "constraint",
+    "strength": "hard",
+    "domainTags": [
+      "skill_architecture",
+      "itemization_constraint"
+    ],
+    "minSeverity": "cruel",
+    "weights": {
+      "mild": 0,
+      "cruel": 5,
+      "diabolical": 6
+    },
+    "template": "Only socket Support Gems that appear in each skill's recommended support list.",
+    "shortLabel": "Guided Weave",
+    "effects": {
+      "locks": {
+        "supportPolicy": "recommended_only"
       }
     },
     "conflictTags": [
