@@ -91,18 +91,21 @@ function prefersReducedMotion() {
 const HEADER_MODES = {
   BUILD: 'build',
   CHALLENGE: 'challenge',
-  CODEX: 'codex'
+  CODEX: 'codex',
+  LEGACY: 'legacy'
 };
 
 const headerCollapsedByMode = {
   [HEADER_MODES.BUILD]: false,
   [HEADER_MODES.CHALLENGE]: false,
-  [HEADER_MODES.CODEX]: false
+  [HEADER_MODES.CODEX]: false,
+  [HEADER_MODES.LEGACY]: false
 };
 
 function resolveHeaderMode(mode) {
   if (mode === HEADER_MODES.CHALLENGE) return HEADER_MODES.CHALLENGE;
   if (mode === HEADER_MODES.CODEX) return HEADER_MODES.CODEX;
+  if (mode === HEADER_MODES.LEGACY) return HEADER_MODES.LEGACY;
   return HEADER_MODES.BUILD;
 }
 
