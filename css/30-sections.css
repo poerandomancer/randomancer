@@ -146,7 +146,7 @@ body.challenge-mode .label{
 
 .legacy-panel{
   margin-top: 14px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family: SFMono-Regular, ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
   border-color: rgba(var(--legacy-green-rgb), 0.38);
   background: rgba(8, 12, 10, 0.92);
 }
@@ -163,8 +163,8 @@ body.challenge-mode .label{
 }
 
 .legacy-line{
-  font-size:.96rem;
-  letter-spacing:.02em;
+  font-size:.9rem;
+  letter-spacing:.01em;
 }
 
 .legacy-k{
@@ -183,6 +183,7 @@ body.challenge-mode .label{
   margin-top: .5rem;
   padding-top: .5rem;
   border-top: 1px solid rgba(var(--legacy-green-rgb), 0.25);
-  color: #d7dfd8;
-  line-height: 1.4;
+  color: #9daaa1;
+  font-size: .82rem;
+  line-height: 1.45;
 }

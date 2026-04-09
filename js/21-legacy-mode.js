@@ -141,9 +141,7 @@ function renderResult(result) {
 function updateControls() {
   const basisBtn = document.getElementById('legacy-basis-btn');
   const formatBtn = document.getElementById('legacy-format-btn');
-  const formatLabel = document.getElementById('legacy-format-label');
-  const damageToggle = document.getElementById('legacy-damage-toggle');
-  const damageText = document.getElementById('legacy-damage-text');
+  const damageBtn = document.getElementById('legacy-damage-btn');
 
   if (basisBtn) {
     basisBtn.dataset.basis = state.basis;
@@ -156,22 +154,29 @@ function updateControls() {
 
   if (formatBtn) {
     formatBtn.dataset.formatIndex = String(state.formatIndex);
-    formatBtn.setAttribute('aria-label', FORMAT_STATES[state.formatIndex]);
-    formatBtn.querySelectorAll('.rm-dotstep__dot').forEach((dot) => {
-      const dotIndex = Number(dot.dataset.dot || 0) - 1;
-      dot.classList.toggle('is-on', dotIndex <= state.formatIndex);
+    formatBtn.setAttribute('aria-label', `Legacy prompt type: ${FORMAT_STATES[state.formatIndex]}`);
+    formatBtn.querySelectorAll('[data-choice]').forEach((el) => {
+      const on = (state.formatIndex === 0 && el.dataset.choice === 'weapons')
+        || (state.formatIndex === 1 && el.dataset.choice === 'skills');
+      el.classList.toggle('is-on', on);
     });
   }
 
-  if (formatLabel) formatLabel.textContent = FORMAT_STATES[state.formatIndex];
-  if (damageToggle) damageToggle.checked = state.damageOn;
-  if (damageText) damageText.textContent = state.damageOn ? 'On' : 'Off';
+  if (damageBtn) {
+    damageBtn.dataset.on = state.damageOn ? 'true' : 'false';
+    damageBtn.setAttribute('aria-label', `Damage Type: ${state.damageOn ? 'On' : 'Off'}`);
+    damageBtn.querySelectorAll('[data-choice]').forEach((el) => {
+      const on = (state.damageOn && el.dataset.choice === 'on')
+        || (!state.damageOn && el.dataset.choice === 'off');
+      el.classList.toggle('is-on', on);
+    });
+  }
 }
 
 function bindControls() {
   const basisBtn = document.getElementById('legacy-basis-btn');
   const formatBtn = document.getElementById('legacy-format-btn');
-  const damageToggle = document.getElementById('legacy-damage-toggle');
+  const damageBtn = document.getElementById('legacy-damage-btn');
 
   basisBtn?.addEventListener('click', () => {
     state.basis = state.basis === 'class' ? 'ascendancy' : 'class';
@@ -185,8 +190,8 @@ function bindControls() {
     updateControls();
   });
 
-  damageToggle?.addEventListener('change', () => {
-    state.damageOn = !!damageToggle.checked;
+  damageBtn?.addEventListener('click', () => {
+    state.damageOn = !state.damageOn;
     persistSettings();
     updateControls();
   });
