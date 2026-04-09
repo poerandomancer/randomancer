@@ -143,3 +143,38 @@ body[data-mode="challenge"] .label,
 body.challenge-mode .label{
   color:#8e96a2;
 }
+
+.legacy-panel{
+  margin-top: 14px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  border-color: rgba(var(--legacy-green-rgb), 0.38);
+  background: rgba(8, 12, 10, 0.92);
+}
+
+.legacy-panel::before{
+  background: linear-gradient(180deg, rgba(35,55,40,0.12), rgba(0,0,0,0.65));
+}
+
+.legacy-output{
+  display:flex;
+  flex-direction:column;
+  gap:.55rem;
+  color:#dde5de;
+}
+
+.legacy-line{
+  font-size:.96rem;
+  letter-spacing:.02em;
+}
+
+.legacy-k{
+  color: rgba(var(--legacy-green-rgb), 0.95);
+}
+
+.legacy-v{
+  color: #ecf3ed;
+}
+
+.legacy-v--muted{
+  color:#a7b0aa;
+}

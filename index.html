@@ -247,6 +247,7 @@
             <button class="mode-segment is-active" type="button" role="tab" aria-selected="true" data-mode-target="standard">Build</button>
             <button class="mode-segment" type="button" role="tab" aria-selected="false" data-mode-target="challenge">Challenge</button>
             <button class="mode-segment" type="button" role="tab" aria-selected="false" data-mode-target="codex">Codex</button>
+            <button class="mode-segment" type="button" role="tab" aria-selected="false" data-mode-target="legacy">Legacy</button>
           </div>
         </div>
       </div>
@@ -312,6 +313,30 @@
 
       </div>
 
+
+
+      <div id="legacy-controls" class="control-item weapon-set2-control legacy-controls is-hidden" aria-label="Legacy Mode controls">
+        <button id="legacy-basis-btn" class="legacy-chip-toggle" type="button" aria-label="Legacy basis: Class" data-basis="class">
+          <span class="legacy-chip-toggle__choice is-on" data-choice="class">Class</span>
+          <span class="legacy-chip-toggle__choice" data-choice="ascendancy">Ascendancy</span>
+        </button>
+        <button id="legacy-format-btn" class="rm-dotstep mechanics-like-btn legacy-format-btn" type="button" aria-label="Weapons x1" data-format-index="0">
+          <span id="legacy-format-label" class="rm-dotstep__label toggle-text">Weapons x1</span>
+          <span class="rm-dotstep__dots" aria-hidden="true">
+            <span class="rm-dotstep__dot" data-dot="1"></span>
+            <span class="rm-dotstep__dot" data-dot="2"></span>
+            <span class="rm-dotstep__dot" data-dot="3"></span>
+            <span class="rm-dotstep__dot" data-dot="4"></span>
+          </span>
+        </button>
+        <label class="toggle-label legacy-damage-row">
+          <span class="toggle-text">Damage Type</span>
+          <input type="checkbox" id="legacy-damage-toggle" aria-label="Damage Type">
+          <span class="toggle-ui"></span>
+          <span id="legacy-damage-text" class="toggle-text">Off</span>
+        </label>
+      </div>
+
       <div id="challenge-controls" class="control-item weapon-set2-control challenge-controls is-hidden" aria-label="Challenge Mode controls">
         <button id="challenge-task-count-btn" class="rm-dotstep mechanics-like-btn" type="button" aria-label="Tasks: 2">
           <span class="rm-dotstep__label toggle-text">Tasks</span>
@@ -361,6 +386,14 @@
         <h3 class="empty-title">The Fates Await...</h3>
         <p class="empty-text">
         </p>
+      </section>
+
+
+
+      <section id="legacy-panel" class="panel legacy-panel is-hidden" aria-label="Legacy Seed Output">
+        <div id="legacy-output" class="legacy-output" aria-live="polite">
+          <div class="legacy-line"><span class="legacy-k">Status:</span> <span class="legacy-v legacy-v--muted">Awaiting legacy roll.</span></div>
+        </div>
       </section>
 
       <section id="challenge-panel" class="panel is-hidden" aria-label="Challenge Contract">

@@ -173,6 +173,60 @@ body.challenge-mode .challenge-empty-flavor{
   max-width:min(900px, 92vw);
 }
 
+.legacy-controls{
+  margin: 0.15rem auto 0.85rem;
+  justify-content: space-between;
+}
+
+.legacy-chip-toggle{
+  display:inline-flex;
+  align-items:center;
+  gap:.4rem;
+  padding:4px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.2);
+  background:rgba(16,18,18,0.76);
+  color:var(--ink);
+}
+
+.legacy-chip-toggle__choice{
+  border-radius:999px;
+  padding:.2rem .6rem;
+  color:#aeb7b0;
+}
+
+.legacy-chip-toggle__choice.is-on{
+  color:#e4efe4;
+  background:rgba(114,170,122,0.22);
+  box-shadow: inset 0 0 0 1px rgba(114,170,122,0.4);
+}
+
+.legacy-format-btn .rm-dotstep__dots{
+  min-width:84px;
+  justify-content:center;
+}
+
+.legacy-damage-row{
+  display:inline-flex;
+  align-items:center;
+  gap:.5rem;
+}
+
+body[data-mode="legacy"] .legacy-controls :is(.legacy-chip-toggle, .legacy-format-btn .rm-dotstep__dots, .legacy-damage-row .toggle-ui){
+  border-color: rgba(var(--legacy-green-rgb), 0.35);
+  background: linear-gradient(90deg, rgba(35,43,38,0.72), rgba(21,26,23,0.72));
+}
+
+body[data-mode="legacy"] .legacy-controls .rm-dotstep__dot.is-on{
+  background: rgba(var(--legacy-green-rgb), 0.95);
+  box-shadow: 0 0 8px rgba(var(--legacy-green-rgb), 0.3);
+}
+
+body[data-mode="legacy"] :is(.legacy-chip-toggle, .legacy-format-btn, .legacy-damage-row):focus-visible{
+  outline:1px solid rgba(var(--legacy-green-rgb), .85);
+  outline-offset:2px;
+}
+
 @media (max-width: 520px){
   .controls-rail{ width:calc(100% - 20px); }
   .mode-switch-row{ margin-bottom:.45rem; }
@@ -290,11 +344,11 @@ body.challenge-mode .challenge-empty-flavor{
   --mode-accent: var(--gold);
   --mode-accent-rgb: 200, 168, 107;
   --seg-index: 0;
-  --seg-count: 3;
+  --seg-count: 4;
 
   position: relative;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   align-items: stretch;
 
   height: 30px;
@@ -318,6 +372,12 @@ body[data-mode="codex"] .mode-segmented{
   --mode-accent: var(--codex-ember);
   --mode-accent-rgb: var(--codex-ember-rgb, 196, 90, 42);
   --seg-index: 2;
+}
+
+body[data-mode="legacy"] .mode-segmented{
+  --mode-accent: var(--legacy-green);
+  --mode-accent-rgb: var(--legacy-green-rgb, 126, 188, 132);
+  --seg-index: 3;
 }
 
 /* Soft, subtle fading gradient "thumb" (not a solid pill) */
