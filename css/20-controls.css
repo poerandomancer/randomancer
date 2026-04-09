@@ -175,8 +175,16 @@ body.challenge-mode .challenge-empty-flavor{
 
 .legacy-controls{
   margin: 0.15rem auto 0.85rem;
-  justify-content: space-between;
-  gap: 12px;
+  padding: 0 10px;
+  display: block;
+}
+
+.legacy-controls-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:nowrap;
 }
 
 .legacy-switch{
@@ -190,6 +198,7 @@ body.challenge-mode .challenge-empty-flavor{
   font: inherit;
   letter-spacing: .01em;
   cursor:pointer;
+  flex: 0 0 auto;
 }
 
 .legacy-switch__label{
@@ -202,6 +211,7 @@ body.challenge-mode .challenge-empty-flavor{
   align-items:center;
   gap:4px;
   padding:3px;
+  min-height: 30px;
   border-radius:999px;
   border:1px solid rgba(var(--legacy-green-rgb), 0.32);
   background: linear-gradient(90deg, rgba(20,24,22,0.86), rgba(12,16,14,0.86));
@@ -212,7 +222,8 @@ body.challenge-mode .challenge-empty-flavor{
 
 .legacy-switch__choice{
   border-radius:999px;
-  padding:.2rem .62rem;
+  min-height: 22px;
+  padding:.2rem .7rem;
   color:#9ca8a0;
   font-size:.92rem;
   line-height:1.2;
@@ -228,7 +239,14 @@ body.challenge-mode .challenge-empty-flavor{
 }
 
 .legacy-switch--labeled{
-  margin-left:auto;
+  margin-left:0;
+  min-width: 206px;
+  justify-content:space-between;
+}
+
+.legacy-switch--binary .legacy-switch__track{
+  min-width: 168px;
+  justify-content:space-between;
 }
 
 body[data-mode="legacy"] :is(.legacy-switch):focus-visible{
@@ -238,12 +256,14 @@ body[data-mode="legacy"] :is(.legacy-switch):focus-visible{
 }
 
 @media (max-width: 580px){
-  .legacy-controls{
+  .legacy-controls-row{
     gap:10px;
     flex-wrap:wrap;
   }
+  .legacy-switch--binary .legacy-switch__track{
+    min-width: 154px;
+  }
   .legacy-switch--labeled{
-    margin-left:0;
     width:100%;
     justify-content:space-between;
   }
