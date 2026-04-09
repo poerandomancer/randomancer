@@ -317,22 +317,27 @@
 
       <div id="legacy-controls" class="control-item weapon-set2-control legacy-controls is-hidden" aria-label="Legacy Mode controls">
         <div class="legacy-controls-stack">
-          <button id="legacy-basis-btn" class="legacy-toggle-group legacy-control-row" type="button" aria-label="Legacy basis: Class" data-basis="class" data-state="left">
-            <span class="legacy-toggle-group__option is-active" data-choice="class">Class</span>
-            <span class="legacy-toggle" aria-hidden="true"><span class="legacy-toggle__thumb"></span></span>
-            <span class="legacy-toggle-group__option" data-choice="ascendancy">Ascendancy</span>
-          </button>
-          <button id="legacy-format-btn" class="legacy-toggle-group legacy-control-row" type="button" aria-label="Legacy prompt type: Weapons" data-format-index="0" data-state="left">
-            <span class="legacy-toggle-group__option is-active" data-choice="weapons">Weapons</span>
-            <span class="legacy-toggle" aria-hidden="true"><span class="legacy-toggle__thumb"></span></span>
-            <span class="legacy-toggle-group__option" data-choice="skills">Skills</span>
-          </button>
-          <button id="legacy-damage-btn" class="legacy-toggle-group legacy-toggle-group--damage legacy-control-row" type="button" aria-label="Damage Type: Off" data-on="false" data-state="left">
-            <span class="legacy-toggle-group__label">Damage Type</span>
-            <span class="legacy-toggle-group__option is-active" data-choice="off">Off</span>
-            <span class="legacy-toggle" aria-hidden="true"><span class="legacy-toggle__thumb"></span></span>
-            <span class="legacy-toggle-group__option" data-choice="on">On</span>
-          </button>
+          <div id="legacy-basis-row" class="legacy-selector-row" role="group" aria-label="Identity selector">
+            <span class="legacy-selector-label">Identity:</span>
+            <div class="legacy-selector-options">
+              <button type="button" class="legacy-selector-option" data-choice="class">Class</button>
+              <button type="button" class="legacy-selector-option" data-choice="ascendancy">Ascendancy</button>
+            </div>
+          </div>
+          <div id="legacy-format-row" class="legacy-selector-row" role="group" aria-label="Offense selector">
+            <span class="legacy-selector-label">Offense:</span>
+            <div class="legacy-selector-options">
+              <button type="button" class="legacy-selector-option" data-choice="weapons">Weapons</button>
+              <button type="button" class="legacy-selector-option" data-choice="skills">Skills</button>
+            </div>
+          </div>
+          <div id="legacy-damage-row" class="legacy-selector-row" role="group" aria-label="Damage Type selector">
+            <span class="legacy-selector-label">Damage Type:</span>
+            <div class="legacy-selector-options">
+              <button type="button" class="legacy-selector-option" data-choice="off">Off</button>
+              <button type="button" class="legacy-selector-option" data-choice="on">On</button>
+            </div>
+          </div>
         </div>
       </div>
 

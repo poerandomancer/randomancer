@@ -8,7 +8,7 @@ const FORMAT_STATES = ['Weapons', 'Skills'];
 const DAMAGE_TYPES = ['Physical', 'Fire', 'Cold', 'Lightning', 'Chaos'];
 
 const state = {
-  basis: 'class',
+  basis: 'ascendancy',
   formatIndex: 0,
   damageOn: false,
   lastResult: null
@@ -139,64 +139,68 @@ function renderResult(result) {
 }
 
 function updateControls() {
-  const basisBtn = document.getElementById('legacy-basis-btn');
-  const formatBtn = document.getElementById('legacy-format-btn');
-  const damageBtn = document.getElementById('legacy-damage-btn');
+  const basisRow = document.getElementById('legacy-basis-row');
+  const formatRow = document.getElementById('legacy-format-row');
+  const damageRow = document.getElementById('legacy-damage-row');
 
-  if (basisBtn) {
-    basisBtn.dataset.basis = state.basis;
-    basisBtn.dataset.state = state.basis === 'ascendancy' ? 'right' : 'left';
-    basisBtn.setAttribute('aria-label', `Legacy basis: ${state.basis === 'ascendancy' ? 'Ascendancy' : 'Class'}`);
-    basisBtn.querySelectorAll('[data-choice]').forEach((el) => {
+  if (basisRow) {
+    basisRow.querySelectorAll('[data-choice]').forEach((el) => {
       const on = el.dataset.choice === state.basis;
-      el.classList.toggle('is-active', on);
+      el.classList.toggle('is-selected', on);
+      el.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
   }
 
-  if (formatBtn) {
-    formatBtn.dataset.formatIndex = String(state.formatIndex);
-    formatBtn.dataset.state = state.formatIndex === 1 ? 'right' : 'left';
-    formatBtn.setAttribute('aria-label', `Legacy prompt type: ${FORMAT_STATES[state.formatIndex]}`);
-    formatBtn.querySelectorAll('[data-choice]').forEach((el) => {
+  if (formatRow) {
+    formatRow.querySelectorAll('[data-choice]').forEach((el) => {
       const on = (state.formatIndex === 0 && el.dataset.choice === 'weapons')
         || (state.formatIndex === 1 && el.dataset.choice === 'skills');
-      el.classList.toggle('is-active', on);
+      el.classList.toggle('is-selected', on);
+      el.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
   }
 
-  if (damageBtn) {
-    damageBtn.dataset.on = state.damageOn ? 'true' : 'false';
-    damageBtn.dataset.state = state.damageOn ? 'right' : 'left';
-    damageBtn.setAttribute('aria-label', `Damage Type: ${state.damageOn ? 'On' : 'Off'}`);
-    damageBtn.querySelectorAll('[data-choice]').forEach((el) => {
+  if (damageRow) {
+    damageRow.querySelectorAll('[data-choice]').forEach((el) => {
       const on = (state.damageOn && el.dataset.choice === 'on')
         || (!state.damageOn && el.dataset.choice === 'off');
-      el.classList.toggle('is-active', on);
+      el.classList.toggle('is-selected', on);
+      el.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
   }
 }
 
 function bindControls() {
-  const basisBtn = document.getElementById('legacy-basis-btn');
-  const formatBtn = document.getElementById('legacy-format-btn');
-  const damageBtn = document.getElementById('legacy-damage-btn');
+  const basisRow = document.getElementById('legacy-basis-row');
+  const formatRow = document.getElementById('legacy-format-row');
+  const damageRow = document.getElementById('legacy-damage-row');
 
-  basisBtn?.addEventListener('click', () => {
-    state.basis = state.basis === 'class' ? 'ascendancy' : 'class';
-    persistSettings();
-    updateControls();
+  basisRow?.querySelectorAll('[data-choice]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const next = btn.dataset.choice;
+      if (next !== 'class' && next !== 'ascendancy') return;
+      state.basis = next;
+      persistSettings();
+      updateControls();
+    });
   });
 
-  formatBtn?.addEventListener('click', () => {
-    state.formatIndex = (state.formatIndex + 1) % FORMAT_STATES.length;
-    persistSettings();
-    updateControls();
+  formatRow?.querySelectorAll('[data-choice]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const next = btn.dataset.choice;
+      state.formatIndex = next === 'skills' ? 1 : 0;
+      persistSettings();
+      updateControls();
+    });
   });
 
-  damageBtn?.addEventListener('click', () => {
-    state.damageOn = !state.damageOn;
-    persistSettings();
-    updateControls();
+  damageRow?.querySelectorAll('[data-choice]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const next = btn.dataset.choice;
+      state.damageOn = next === 'on';
+      persistSettings();
+      updateControls();
+    });
   });
 
   updateControls();
