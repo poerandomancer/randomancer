@@ -4,7 +4,7 @@ const LEGACY_BASIS_KEY = 'randomancer_legacy_basis';
 const LEGACY_FORMAT_KEY = 'randomancer_legacy_format';
 const LEGACY_DAMAGE_KEY = 'randomancer_legacy_damage';
 
-const FORMAT_STATES = ['Weapons x1', 'Weapons x2', 'Skills x1', 'Skills x2'];
+const FORMAT_STATES = ['Weapons', 'Skills'];
 const DAMAGE_TYPES = ['Physical', 'Fire', 'Cold', 'Lightning', 'Chaos'];
 
 const state = {
@@ -132,8 +132,9 @@ function renderResult(result) {
   lines.push(`<div class="legacy-line"><span class="legacy-k">${result.identityLabel}:</span> <span class="legacy-v">${result.identityValue}</span></div>`);
   lines.push(`<div class="legacy-line"><span class="legacy-k">${result.formatLabel}:</span> <span class="legacy-v">${result.formatValues.join(', ')}</span></div>`);
   if (result.damageType) {
-    lines.push(`<div class="legacy-line"><span class="legacy-k">Damage:</span> <span class="legacy-v">${result.damageType}</span></div>`);
+    lines.push(`<div class="legacy-line"><span class="legacy-k">Damage Type:</span> <span class="legacy-v">${result.damageType}</span></div>`);
   }
+  lines.push(`<div class="legacy-contract">${result.contractLine}</div>`);
   out.innerHTML = lines.join('');
 }
 
@@ -203,18 +204,33 @@ async function handleLegacyRoll({ statusEl } = {}) {
   const identityValue = pickOne(identityPool) || 'Unknown';
 
   const format = FORMAT_STATES[state.formatIndex];
-  const wantsWeapons = format.startsWith('Weapons');
-  const quantity = format.endsWith('x2') ? 2 : 1;
+  const wantsWeapons = format === 'Weapons';
+  const quantity = wantsWeapons ? 1 : 2;
   const formatLabel = wantsWeapons ? 'Weapons' : 'Skills';
   const formatPool = wantsWeapons ? pools.weapons : pools.skills;
   const formatValues = pickDistinct(formatPool, quantity);
+  const damageType = state.damageOn ? pickOne(DAMAGE_TYPES) : null;
+
+  let contractLine = '';
+  if (wantsWeapons) {
+    const weapon = formatValues[0] || 'Unknown Weapon';
+    contractLine = damageType
+      ? `Your ${identityValue} must equip only ${weapon} and rely on ${damageType} damage.`
+      : `Your ${identityValue} must equip only ${weapon}.`;
+  } else {
+    const [theme1 = 'Unknown', theme2 = 'Unknown'] = formatValues;
+    contractLine = damageType
+      ? `Your ${identityValue} must include both ${theme1} and ${theme2} skills, and rely on ${damageType} damage.`
+      : `Your ${identityValue} must include both ${theme1} and ${theme2} skills.`;
+  }
 
   const result = {
     identityLabel,
     identityValue,
     formatLabel,
     formatValues,
-    damageType: state.damageOn ? pickOne(DAMAGE_TYPES) : null
+    damageType,
+    contractLine
   };
 
   state.lastResult = result;

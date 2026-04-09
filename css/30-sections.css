@@ -178,3 +178,11 @@ body.challenge-mode .label{
 .legacy-v--muted{
   color:#a7b0aa;
 }
+
+.legacy-contract{
+  margin-top: .5rem;
+  padding-top: .5rem;
+  border-top: 1px solid rgba(var(--legacy-green-rgb), 0.25);
+  color: #d7dfd8;
+  line-height: 1.4;
+}
