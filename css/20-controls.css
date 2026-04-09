@@ -182,7 +182,7 @@ body.challenge-mode .challenge-empty-flavor{
 }
 
 body[data-mode="legacy"] main > .controls-rail{
-  width: min(860px, calc(100% - 2.5rem));
+  width: 100%;
 }
 
 .legacy-controls-stack{
