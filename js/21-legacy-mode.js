@@ -145,30 +145,33 @@ function updateControls() {
 
   if (basisBtn) {
     basisBtn.dataset.basis = state.basis;
+    basisBtn.dataset.state = state.basis === 'ascendancy' ? 'right' : 'left';
     basisBtn.setAttribute('aria-label', `Legacy basis: ${state.basis === 'ascendancy' ? 'Ascendancy' : 'Class'}`);
     basisBtn.querySelectorAll('[data-choice]').forEach((el) => {
       const on = el.dataset.choice === state.basis;
-      el.classList.toggle('is-on', on);
+      el.classList.toggle('is-active', on);
     });
   }
 
   if (formatBtn) {
     formatBtn.dataset.formatIndex = String(state.formatIndex);
+    formatBtn.dataset.state = state.formatIndex === 1 ? 'right' : 'left';
     formatBtn.setAttribute('aria-label', `Legacy prompt type: ${FORMAT_STATES[state.formatIndex]}`);
     formatBtn.querySelectorAll('[data-choice]').forEach((el) => {
       const on = (state.formatIndex === 0 && el.dataset.choice === 'weapons')
         || (state.formatIndex === 1 && el.dataset.choice === 'skills');
-      el.classList.toggle('is-on', on);
+      el.classList.toggle('is-active', on);
     });
   }
 
   if (damageBtn) {
     damageBtn.dataset.on = state.damageOn ? 'true' : 'false';
+    damageBtn.dataset.state = state.damageOn ? 'right' : 'left';
     damageBtn.setAttribute('aria-label', `Damage Type: ${state.damageOn ? 'On' : 'Off'}`);
     damageBtn.querySelectorAll('[data-choice]').forEach((el) => {
       const on = (state.damageOn && el.dataset.choice === 'on')
         || (!state.damageOn && el.dataset.choice === 'off');
-      el.classList.toggle('is-on', on);
+      el.classList.toggle('is-active', on);
     });
   }
 }

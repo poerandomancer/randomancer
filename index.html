@@ -317,24 +317,21 @@
 
       <div id="legacy-controls" class="control-item weapon-set2-control legacy-controls is-hidden" aria-label="Legacy Mode controls">
         <div class="legacy-controls-row">
-          <button id="legacy-basis-btn" class="legacy-switch legacy-switch--binary" type="button" aria-label="Legacy basis: Class" data-basis="class">
-            <span class="legacy-switch__track">
-              <span class="legacy-switch__choice is-on" data-choice="class">Class</span>
-              <span class="legacy-switch__choice" data-choice="ascendancy">Ascendancy</span>
-            </span>
+          <button id="legacy-basis-btn" class="legacy-toggle-group" type="button" aria-label="Legacy basis: Class" data-basis="class" data-state="left">
+            <span class="legacy-toggle-group__option is-active" data-choice="class">Class</span>
+            <span class="legacy-toggle" aria-hidden="true"><span class="legacy-toggle__thumb"></span></span>
+            <span class="legacy-toggle-group__option" data-choice="ascendancy">Ascendancy</span>
           </button>
-          <button id="legacy-format-btn" class="legacy-switch legacy-switch--binary" type="button" aria-label="Legacy prompt type: Weapons" data-format-index="0">
-            <span class="legacy-switch__track">
-              <span class="legacy-switch__choice is-on" data-choice="weapons">Weapons</span>
-              <span class="legacy-switch__choice" data-choice="skills">Skills</span>
-            </span>
+          <button id="legacy-format-btn" class="legacy-toggle-group" type="button" aria-label="Legacy prompt type: Weapons" data-format-index="0" data-state="left">
+            <span class="legacy-toggle-group__option is-active" data-choice="weapons">Weapons</span>
+            <span class="legacy-toggle" aria-hidden="true"><span class="legacy-toggle__thumb"></span></span>
+            <span class="legacy-toggle-group__option" data-choice="skills">Skills</span>
           </button>
-          <button id="legacy-damage-btn" class="legacy-switch legacy-switch--labeled" type="button" aria-label="Damage Type: Off" data-on="false">
-            <span class="legacy-switch__label">Damage Type</span>
-            <span class="legacy-switch__track">
-              <span class="legacy-switch__choice is-on" data-choice="off">Off</span>
-              <span class="legacy-switch__choice" data-choice="on">On</span>
-            </span>
+          <button id="legacy-damage-btn" class="legacy-toggle-group legacy-toggle-group--damage" type="button" aria-label="Damage Type: Off" data-on="false" data-state="left">
+            <span class="legacy-toggle-group__label">Damage Type</span>
+            <span class="legacy-toggle-group__option is-active" data-choice="off">Off</span>
+            <span class="legacy-toggle" aria-hidden="true"><span class="legacy-toggle__thumb"></span></span>
+            <span class="legacy-toggle-group__option" data-choice="on">On</span>
           </button>
         </div>
       </div>
