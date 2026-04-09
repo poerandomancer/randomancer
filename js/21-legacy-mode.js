@@ -144,28 +144,28 @@ function updateControls() {
   const damageRow = document.getElementById('legacy-damage-row');
 
   if (basisRow) {
+    basisRow.setAttribute('aria-label', `Identity selector: ${state.basis === 'ascendancy' ? 'Ascendancy' : 'Class'}`);
     basisRow.querySelectorAll('[data-choice]').forEach((el) => {
       const on = el.dataset.choice === state.basis;
       el.classList.toggle('is-selected', on);
-      el.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
   }
 
   if (formatRow) {
+    formatRow.setAttribute('aria-label', `Offense selector: ${state.formatIndex === 1 ? 'Skills' : 'Weapons'}`);
     formatRow.querySelectorAll('[data-choice]').forEach((el) => {
       const on = (state.formatIndex === 0 && el.dataset.choice === 'weapons')
         || (state.formatIndex === 1 && el.dataset.choice === 'skills');
       el.classList.toggle('is-selected', on);
-      el.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
   }
 
   if (damageRow) {
+    damageRow.setAttribute('aria-label', `Damage Type selector: ${state.damageOn ? 'On' : 'Off'}`);
     damageRow.querySelectorAll('[data-choice]').forEach((el) => {
       const on = (state.damageOn && el.dataset.choice === 'on')
         || (!state.damageOn && el.dataset.choice === 'off');
       el.classList.toggle('is-selected', on);
-      el.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
   }
 }
@@ -175,32 +175,33 @@ function bindControls() {
   const formatRow = document.getElementById('legacy-format-row');
   const damageRow = document.getElementById('legacy-damage-row');
 
-  basisRow?.querySelectorAll('[data-choice]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const next = btn.dataset.choice;
-      if (next !== 'class' && next !== 'ascendancy') return;
-      state.basis = next;
+  function bindToggleRow(rowEl, toggleFn) {
+    if (!rowEl || typeof toggleFn !== 'function') return;
+
+    const applyToggle = () => {
+      toggleFn();
       persistSettings();
       updateControls();
+    };
+
+    rowEl.addEventListener('click', () => applyToggle());
+    rowEl.addEventListener('keydown', (evt) => {
+      if (evt.key !== 'Enter' && evt.key !== ' ') return;
+      evt.preventDefault();
+      applyToggle();
     });
+  }
+
+  bindToggleRow(basisRow, () => {
+    state.basis = state.basis === 'ascendancy' ? 'class' : 'ascendancy';
   });
 
-  formatRow?.querySelectorAll('[data-choice]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const next = btn.dataset.choice;
-      state.formatIndex = next === 'skills' ? 1 : 0;
-      persistSettings();
-      updateControls();
-    });
+  bindToggleRow(formatRow, () => {
+    state.formatIndex = state.formatIndex === 1 ? 0 : 1;
   });
 
-  damageRow?.querySelectorAll('[data-choice]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const next = btn.dataset.choice;
-      state.damageOn = next === 'on';
-      persistSettings();
-      updateControls();
-    });
+  bindToggleRow(damageRow, () => {
+    state.damageOn = !state.damageOn;
   });
 
   updateControls();
