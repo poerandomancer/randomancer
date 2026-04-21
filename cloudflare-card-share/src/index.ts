@@ -223,7 +223,7 @@ export default {
         if (shareMatch) return handleSharePage(shareMatch.kind, shareMatch.slug, env);
 
         const ogMatch = matchOgPath(url.pathname);
-        if (ogMatch) return handleOgImage(ogMatch.kind, ogMatch.slug, env, url.origin);
+        if (ogMatch) return handleOgImage(ogMatch.kind, ogMatch.slug, env);
 
         const legacySlug = normalizeLegacySlugPath(url.pathname);
         if (legacySlug) {
@@ -442,7 +442,7 @@ async function handleSharePage(kind: CardKind, slug: string, env: Env): Promise<
   }), 200, { "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=600" });
 }
 
-async function handleOgImage(kind: CardKind, slug: string, env: Env, assetOrigin: string): Promise<Response> {
+async function handleOgImage(kind: CardKind, slug: string, env: Env): Promise<Response> {
   const row = await getCardBySlug(env.DB, slug);
   if (!row || row.card_kind !== kind) {
     console.warn("[randomancer-card-share] og slug miss", { kind, slug });
@@ -451,7 +451,7 @@ async function handleOgImage(kind: CardKind, slug: string, env: Env, assetOrigin
 
   try {
     const cardData = parseCardData(row.card_data_json, kind, row);
-    const rendered = await renderCardPreviewPng(kind, cardData, slug, env, assetOrigin);
+    const rendered = await renderCardPreviewPng(kind, cardData, slug, env, getArtAssetOrigin(env));
     return new Response(toResponseBody(rendered.png), {
       status: 200,
       headers: {
@@ -845,6 +845,17 @@ function buildSubtitle(kind: CardKind, cardData: BuildCardData | ChallengeCardDa
     return [(cardData as BuildCardData).className, (cardData as BuildCardData).weaponLabel].filter(Boolean).join(" - ");
   }
   return [(cardData as ChallengeCardData).anchorTask, (cardData as ChallengeCardData).twistTask].filter(Boolean).join(" - ");
+}
+
+function getArtAssetOrigin(env: Env): string {
+  const fallback = SHARE_ORIGIN;
+  const configured = coerceString(env.APP_BASE_URL);
+  if (!configured) return fallback;
+  try {
+    return new URL(configured).origin;
+  } catch {
+    return fallback;
+  }
 }
 
 function sanitizePreviewText(value: string): string {
