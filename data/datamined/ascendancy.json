@@ -17,9 +17,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 1,
@@ -39,9 +39,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 2,
@@ -61,9 +61,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 3,
@@ -83,9 +83,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 4,
@@ -105,9 +105,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 5,
@@ -127,9 +127,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 6,
@@ -149,9 +149,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 7,
@@ -171,9 +171,9 @@
     "Disabled": true,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 8,
@@ -193,9 +193,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 9,
@@ -215,31 +215,31 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 10,
     "Id": "Huntress2",
     "ClassNo": 2,
     "Character": 8,
-    "CoordinateRect": "0,-650,1000,500",
-    "RGBFlavourTextColour": "124,179,118",
-    "Name": "[DNT-UNUSED] Harpooner",
-    "FlavourText": "",
+    "CoordinateRect": "0,-550,1000,500",
+    "RGBFlavourTextColour": "238,146,102",
+    "Name": "Spirit Walker",
+    "FlavourText": "You were chosen by the Sacred Wisps to enact the Spirit's will.",
     "OGGFile": "",
-    "PassiveTreeImage": "Art/2DArt/BaseClassIllustrations/AmazonAscendancy.dds",
+    "PassiveTreeImage": "Art/2DArt/BaseClassIllustrations/WildspeakerAscendancy.dds",
     "TreeRegionVector": 1332,
     "TreeRegionAngle": 120,
     "BackgroundImage": 1,
     "Unknown13": 135,
-    "Disabled": true,
+    "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 11,
@@ -259,9 +259,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 12,
@@ -281,9 +281,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 13,
@@ -303,9 +303,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 14,
@@ -325,9 +325,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 5,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 15,
@@ -347,9 +347,9 @@
     "Disabled": false,
     "BaseAscendancy": 14,
     "UIArt": 6,
-    "Unknown17": 1136,
-    "Unknown18": 1137,
-    "Unknown19": 1138
+    "SelectSound": 1143,
+    "ConfirmDownSound": 1144,
+    "ConfirmUpSound": 1145
   },
   {
     "_rid": 16,
@@ -369,9 +369,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 17,
@@ -391,9 +391,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 18,
@@ -413,9 +413,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 19,
@@ -435,9 +435,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 20,
@@ -457,9 +457,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 21,
@@ -479,9 +479,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 22,
@@ -501,9 +501,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 23,
@@ -523,9 +523,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 24,
@@ -545,9 +545,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 25,
@@ -567,9 +567,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 26,
@@ -589,9 +589,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 27,
@@ -611,9 +611,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 28,
@@ -633,9 +633,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 29,
@@ -655,9 +655,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 30,
@@ -677,9 +677,9 @@
     "Disabled": true,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 31,
@@ -699,9 +699,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 32,
@@ -721,9 +721,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 33,
@@ -743,31 +743,31 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 34,
     "Id": "Monk1",
     "ClassNo": 1,
     "Character": 10,
-    "CoordinateRect": "0,400,1000,500",
-    "RGBFlavourTextColour": "114,129,141",
-    "Name": "[DNT-UNUSED] Kite Fisher",
-    "FlavourText": "",
+    "CoordinateRect": "0,600,1000,700",
+    "RGBFlavourTextColour": "115,181,245",
+    "Name": "Martial Artist",
+    "FlavourText": "They made you a human weapon... but that strength has set you free.",
     "OGGFile": "",
-    "PassiveTreeImage": "Art/2DArt/BaseClassIllustrations/AcolyteofChayulaAscendancy.dds",
+    "PassiveTreeImage": "Art/2DArt/BaseClassIllustrations/MartialArtistIllustration.dds",
     "TreeRegionVector": 1332,
     "TreeRegionAngle": 60,
     "BackgroundImage": 1,
     "Unknown13": 135,
-    "Disabled": true,
+    "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 35,
@@ -787,9 +787,9 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   },
   {
     "_rid": 36,
@@ -809,8 +809,8 @@
     "Disabled": false,
     "BaseAscendancy": null,
     "UIArt": 3,
-    "Unknown17": null,
-    "Unknown18": null,
-    "Unknown19": null
+    "SelectSound": null,
+    "ConfirmDownSound": null,
+    "ConfirmUpSound": null
   }
 ]

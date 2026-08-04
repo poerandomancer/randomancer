@@ -188,15 +188,6 @@
   },
   {
     "_rid": 20,
-    "Id": "PalmQuaterstaff",
-    "WieldableClasses": [
-      16,
-      0
-    ],
-    "String": null
-  },
-  {
-    "_rid": 21,
     "Id": "Any Staff",
     "WieldableClasses": [
       7,
@@ -205,7 +196,7 @@
     "String": null
   },
   {
-    "_rid": 22,
+    "_rid": 21,
     "Id": "Wand",
     "WieldableClasses": [
       2
@@ -213,7 +204,7 @@
     "String": null
   },
   {
-    "_rid": 23,
+    "_rid": 22,
     "Id": "Bow",
     "WieldableClasses": [
       6
@@ -221,7 +212,7 @@
     "String": null
   },
   {
-    "_rid": 24,
+    "_rid": 23,
     "Id": "WandBow",
     "WieldableClasses": [
       2,
@@ -230,7 +221,7 @@
     "String": null
   },
   {
-    "_rid": 25,
+    "_rid": 24,
     "Id": "Spear",
     "WieldableClasses": [
       17
@@ -238,7 +229,7 @@
     "String": null
   },
   {
-    "_rid": 26,
+    "_rid": 25,
     "Id": "SpearBow",
     "WieldableClasses": [
       17,
@@ -247,7 +238,7 @@
     "String": null
   },
   {
-    "_rid": 27,
+    "_rid": 26,
     "Id": "SpearBowCrossbow",
     "WieldableClasses": [
       17,
@@ -257,7 +248,7 @@
     "String": null
   },
   {
-    "_rid": 28,
+    "_rid": 27,
     "Id": "Flail",
     "WieldableClasses": [
       20
@@ -265,7 +256,7 @@
     "String": null
   },
   {
-    "_rid": 29,
+    "_rid": 28,
     "Id": "FlailShield",
     "WieldableClasses": [
       20,
@@ -274,7 +265,7 @@
     "String": null
   },
   {
-    "_rid": 30,
+    "_rid": 29,
     "Id": "Crossbow",
     "WieldableClasses": [
       18
@@ -282,15 +273,15 @@
     "String": null
   },
   {
-    "_rid": 31,
+    "_rid": 30,
     "Id": "Shield",
     "WieldableClasses": [
       12
     ],
-    "String": 8583
+    "String": 8607
   },
   {
-    "_rid": 32,
+    "_rid": 31,
     "Id": "Buckler",
     "WieldableClasses": [
       21
@@ -298,13 +289,22 @@
     "String": null
   },
   {
-    "_rid": 33,
+    "_rid": 32,
     "Id": "Any Shield",
     "WieldableClasses": [
       12,
       21
     ],
-    "String": null
+    "String": 9536
+  },
+  {
+    "_rid": 33,
+    "Id": "Any Shield or ThrownShield",
+    "WieldableClasses": [
+      12,
+      27
+    ],
+    "String": 9536
   },
   {
     "_rid": 34,
@@ -323,7 +323,7 @@
       20,
       26
     ],
-    "String": 8503
+    "String": 8523
   },
   {
     "_rid": 35,
@@ -358,7 +358,7 @@
       20,
       26
     ],
-    "String": 8730
+    "String": 8754
   },
   {
     "_rid": 37,
@@ -394,7 +394,7 @@
       18,
       26
     ],
-    "String": 7378
+    "String": 7384
   },
   {
     "_rid": 39,
@@ -416,7 +416,7 @@
       0,
       26
     ],
-    "String": 8163
+    "String": 8181
   },
   {
     "_rid": 40,
@@ -513,7 +513,7 @@
     "WieldableClasses": [
       7
     ],
-    "String": 9143
+    "String": 9170
   },
   {
     "_rid": 48,
@@ -531,6 +531,35 @@
       17,
       20
     ],
-    "String": 9156
+    "String": 9183
+  },
+  {
+    "_rid": 49,
+    "Id": "Non-Talisman Martial Weapon",
+    "WieldableClasses": [
+      3,
+      8,
+      4,
+      9,
+      5,
+      10,
+      16,
+      14,
+      1,
+      17,
+      6,
+      20,
+      18
+    ],
+    "String": 9535
+  },
+  {
+    "_rid": 50,
+    "Id": "Round Shields or Thrown Shield",
+    "WieldableClasses": [
+      12,
+      27
+    ],
+    "String": null
   }
 ]

@@ -31,13 +31,13 @@ const Dom = (() => {
 })();
 
 // App metadata
-const APP_VERSION = '0.8.4.5';
+const APP_VERSION = '0.8.5';
 
 const SUPPORT = Object.freeze({
-  poe2Patch: "0.4.0",
+  poe2Patch: "0.5.x",
   league: {
-    name: "Fate of the Vaal",
-    poeNinjaSlug: "vaal",
+    name: "Runes of Aldur",
+    poeNinjaSlug: "runesofaldur",
   },
 });
 

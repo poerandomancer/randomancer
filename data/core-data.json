@@ -34,7 +34,8 @@
     "Huntress": {
       "ascendancies": [
         "Amazon",
-        "Ritualist"
+        "Ritualist",
+        "Spirit Walker"
       ],
       "attributes": {
         "dexterity": 1.0
@@ -64,7 +65,8 @@
     "Monk": {
       "ascendancies": [
         "Invoker",
-        "Acolyte of Chayula"
+        "Acolyte of Chayula",
+        "Martial Artist"
       ],
       "attributes": {
         "dexterity": 0.5,

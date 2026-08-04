@@ -3,40 +3,40 @@
     "_rid": 0,
     "Id": "fire",
     "Name": "[Fire]",
-    "LocalLevelStat": 9548,
-    "LocalQualityStat": 10018,
-    "GlobalSpellLevelStat": 10075
+    "LocalLevelStat": 9522,
+    "LocalQualityStat": 9992,
+    "GlobalSpellLevelStat": 10050
   },
   {
     "_rid": 1,
     "Id": "cold",
     "Name": "[Cold]",
-    "LocalLevelStat": 9549,
-    "LocalQualityStat": 10019,
-    "GlobalSpellLevelStat": 9924
+    "LocalLevelStat": 9523,
+    "LocalQualityStat": 9993,
+    "GlobalSpellLevelStat": 9897
   },
   {
     "_rid": 2,
     "Id": "lightning",
     "Name": "[Lightning]",
-    "LocalLevelStat": 9550,
-    "LocalQualityStat": 10020,
-    "GlobalSpellLevelStat": 9927
+    "LocalLevelStat": 9524,
+    "LocalQualityStat": 9994,
+    "GlobalSpellLevelStat": 9900
   },
   {
     "_rid": 3,
     "Id": "chaos",
     "Name": "[Chaos]",
-    "LocalLevelStat": 9551,
-    "LocalQualityStat": 10021,
-    "GlobalSpellLevelStat": 14143
+    "LocalLevelStat": 9525,
+    "LocalQualityStat": 9995,
+    "GlobalSpellLevelStat": 14062
   },
   {
     "_rid": 4,
     "Id": "spell",
     "Name": "[Spell]",
     "LocalLevelStat": null,
-    "LocalQualityStat": 9547,
+    "LocalQualityStat": 9521,
     "GlobalSpellLevelStat": null
   },
   {
@@ -44,7 +44,7 @@
     "Id": "projectile",
     "Name": "[Projectile]",
     "LocalLevelStat": null,
-    "LocalQualityStat": 18733,
+    "LocalQualityStat": 18622,
     "GlobalSpellLevelStat": null
   },
   {
@@ -52,7 +52,7 @@
     "Id": "bow",
     "Name": "[Bow]",
     "LocalLevelStat": null,
-    "LocalQualityStat": 17751,
+    "LocalQualityStat": 17640,
     "GlobalSpellLevelStat": null
   },
   {
@@ -60,7 +60,7 @@
     "Id": "melee",
     "Name": "[Melee]",
     "LocalLevelStat": null,
-    "LocalQualityStat": 17750,
+    "LocalQualityStat": 17639,
     "GlobalSpellLevelStat": null
   },
   {
@@ -68,15 +68,15 @@
     "Id": "minion",
     "Name": "[Minion]",
     "LocalLevelStat": null,
-    "LocalQualityStat": 9553,
-    "GlobalSpellLevelStat": 14144
+    "LocalQualityStat": 9527,
+    "GlobalSpellLevelStat": 14063
   },
   {
     "_rid": 9,
     "Id": "strength",
     "Name": "",
     "LocalLevelStat": null,
-    "LocalQualityStat": 10023,
+    "LocalQualityStat": 9997,
     "GlobalSpellLevelStat": null
   },
   {
@@ -84,7 +84,7 @@
     "Id": "dexterity",
     "Name": "",
     "LocalLevelStat": null,
-    "LocalQualityStat": 10024,
+    "LocalQualityStat": 9998,
     "GlobalSpellLevelStat": null
   },
   {
@@ -92,7 +92,7 @@
     "Id": "intelligence",
     "Name": "",
     "LocalLevelStat": null,
-    "LocalQualityStat": 10025,
+    "LocalQualityStat": 9999,
     "GlobalSpellLevelStat": null
   },
   {
@@ -101,14 +101,14 @@
     "Name": "[Aura]",
     "LocalLevelStat": null,
     "LocalQualityStat": null,
-    "GlobalSpellLevelStat": 9923
+    "GlobalSpellLevelStat": 9896
   },
   {
     "_rid": 13,
     "Id": "attack",
     "Name": "[Attack]",
     "LocalLevelStat": null,
-    "LocalQualityStat": 22961,
+    "LocalQualityStat": 22850,
     "GlobalSpellLevelStat": null
   },
   {
@@ -140,8 +140,8 @@
     "Id": "curse",
     "Name": "[Curse]",
     "LocalLevelStat": null,
-    "LocalQualityStat": 16470,
-    "GlobalSpellLevelStat": 9926
+    "LocalQualityStat": 16361,
+    "GlobalSpellLevelStat": 9899
   },
   {
     "_rid": 18,
@@ -156,7 +156,7 @@
     "Id": "totem",
     "Name": "[Totem]",
     "LocalLevelStat": null,
-    "LocalQualityStat": 10027,
+    "LocalQualityStat": 10001,
     "GlobalSpellLevelStat": null
   },
   {
@@ -164,7 +164,7 @@
     "Id": "trap",
     "Name": "Trap",
     "LocalLevelStat": null,
-    "LocalQualityStat": 17749,
+    "LocalQualityStat": 17638,
     "GlobalSpellLevelStat": null
   },
   {
@@ -188,7 +188,7 @@
     "Id": "vaal",
     "Name": "Vaal",
     "LocalLevelStat": null,
-    "LocalQualityStat": 10026,
+    "LocalQualityStat": 10000,
     "GlobalSpellLevelStat": null
   },
   {
@@ -243,9 +243,9 @@
     "_rid": 30,
     "Id": "physical",
     "Name": "[Physical]",
-    "LocalLevelStat": 9552,
-    "LocalQualityStat": 10022,
-    "GlobalSpellLevelStat": 14142
+    "LocalLevelStat": 9526,
+    "LocalQualityStat": 9996,
+    "GlobalSpellLevelStat": 14061
   },
   {
     "_rid": 31,
@@ -261,7 +261,7 @@
     "Name": "[Strike]",
     "LocalLevelStat": null,
     "LocalQualityStat": null,
-    "GlobalSpellLevelStat": 14141
+    "GlobalSpellLevelStat": 14060
   },
   {
     "_rid": 33,
@@ -292,7 +292,7 @@
     "Id": "mark",
     "Name": "[Mark]",
     "LocalLevelStat": null,
-    "LocalQualityStat": null,
+    "LocalQualityStat": 26761,
     "GlobalSpellLevelStat": null
   },
   {
@@ -316,7 +316,7 @@
     "Id": "link",
     "Name": "Link",
     "LocalLevelStat": null,
-    "LocalQualityStat": 16873,
+    "LocalQualityStat": 16763,
     "GlobalSpellLevelStat": null
   },
   {
@@ -340,7 +340,7 @@
     "Id": "crossbow",
     "Name": "[Crossbow]",
     "LocalLevelStat": null,
-    "LocalQualityStat": 17752,
+    "LocalQualityStat": 17641,
     "GlobalSpellLevelStat": null
   },
   {
@@ -481,8 +481,8 @@
   },
   {
     "_rid": 60,
-    "Id": "barrageable",
-    "Name": "[Repeat|Barrageable]",
+    "Id": "repeatable",
+    "Name": "[Repeat|Repeatable]",
     "LocalLevelStat": null,
     "LocalQualityStat": null,
     "GlobalSpellLevelStat": null

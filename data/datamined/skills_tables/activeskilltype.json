@@ -2,17 +2,17 @@
   {
     "_rid": 0,
     "Id": "Attack",
-    "FlagStat": 2851
+    "FlagStat": 2849
   },
   {
     "_rid": 1,
     "Id": "Spell",
-    "FlagStat": 421
+    "FlagStat": 425
   },
   {
     "_rid": 2,
     "Id": "Projectile",
-    "FlagStat": 5986
+    "FlagStat": 5974
   },
   {
     "_rid": 3,
@@ -22,12 +22,12 @@
   {
     "_rid": 4,
     "Id": "Buff",
-    "FlagStat": 19079
+    "FlagStat": 18967
   },
   {
     "_rid": 5,
     "Id": "Minion",
-    "FlagStat": 5866
+    "FlagStat": 5854
   },
   {
     "_rid": 6,
@@ -37,7 +37,7 @@
   {
     "_rid": 7,
     "Id": "Area",
-    "FlagStat": 9152
+    "FlagStat": 9131
   },
   {
     "_rid": 8,
@@ -47,7 +47,7 @@
   {
     "_rid": 9,
     "Id": "RequiresShield",
-    "FlagStat": 7991
+    "FlagStat": 7974
   },
   {
     "_rid": 10,
@@ -92,17 +92,17 @@
   {
     "_rid": 18,
     "Id": "Chains",
-    "FlagStat": 14318
+    "FlagStat": 14237
   },
   {
     "_rid": 19,
     "Id": "Melee",
-    "FlagStat": 6263
+    "FlagStat": 6251
   },
   {
     "_rid": 20,
     "Id": "MeleeSingleTarget",
-    "FlagStat": 10012
+    "FlagStat": 9986
   },
   {
     "_rid": 21,
@@ -122,7 +122,7 @@
   {
     "_rid": 24,
     "Id": "SummonsTotem",
-    "FlagStat": 10002
+    "FlagStat": 9976
   },
   {
     "_rid": 25,
@@ -132,27 +132,27 @@
   {
     "_rid": 26,
     "Id": "Physical",
-    "FlagStat": 8716
+    "FlagStat": 8701
   },
   {
     "_rid": 27,
     "Id": "Fire",
-    "FlagStat": 2697
+    "FlagStat": 2693
   },
   {
     "_rid": 28,
     "Id": "Cold",
-    "FlagStat": 2698
+    "FlagStat": 2694
   },
   {
     "_rid": 29,
     "Id": "Lightning",
-    "FlagStat": 2699
+    "FlagStat": 2695
   },
   {
     "_rid": 30,
     "Id": "Triggerable",
-    "FlagStat": 8706
+    "FlagStat": 8691
   },
   {
     "_rid": 31,
@@ -167,7 +167,7 @@
   {
     "_rid": 33,
     "Id": "Movement",
-    "FlagStat": 3026
+    "FlagStat": 3024
   },
   {
     "_rid": 34,
@@ -187,12 +187,12 @@
   {
     "_rid": 37,
     "Id": "Vaal",
-    "FlagStat": 2844
+    "FlagStat": 2840
   },
   {
     "_rid": 38,
     "Id": "Aura",
-    "FlagStat": 2866
+    "FlagStat": 2864
   },
   {
     "_rid": 39,
@@ -207,7 +207,7 @@
   {
     "_rid": 41,
     "Id": "Chaos",
-    "FlagStat": 2751
+    "FlagStat": 2747
   },
   {
     "_rid": 42,
@@ -237,7 +237,7 @@
   {
     "_rid": 47,
     "Id": "Channel",
-    "FlagStat": 5976
+    "FlagStat": 5964
   },
   {
     "_rid": 48,
@@ -257,7 +257,7 @@
   {
     "_rid": 51,
     "Id": "Herald",
-    "FlagStat": 10233
+    "FlagStat": 10208
   },
   {
     "_rid": 52,
@@ -307,22 +307,22 @@
   {
     "_rid": 61,
     "Id": "ProjectileNumber",
-    "FlagStat": 5986
+    "FlagStat": 5974
   },
   {
     "_rid": 62,
     "Id": "Warcry",
-    "FlagStat": 3278
+    "FlagStat": 3275
   },
   {
     "_rid": 63,
     "Id": "Instant",
-    "FlagStat": 7673
+    "FlagStat": 7656
   },
   {
     "_rid": 64,
     "Id": "Brand",
-    "FlagStat": 8086
+    "FlagStat": 8069
   },
   {
     "_rid": 65,
@@ -342,7 +342,7 @@
   {
     "_rid": 68,
     "Id": "AppliesCurse",
-    "FlagStat": 2429
+    "FlagStat": 2427
   },
   {
     "_rid": 69,
@@ -382,17 +382,17 @@
   {
     "_rid": 76,
     "Id": "CreatesMinion",
-    "FlagStat": 16061
+    "FlagStat": 15952
   },
   {
     "_rid": 77,
     "Id": "Guard",
-    "FlagStat": 9160
+    "FlagStat": 9139
   },
   {
     "_rid": 78,
     "Id": "Travel",
-    "FlagStat": 9161
+    "FlagStat": 9140
   },
   {
     "_rid": 79,
@@ -422,7 +422,7 @@
   {
     "_rid": 84,
     "Id": "Nova",
-    "FlagStat": 10028
+    "FlagStat": 10002
   },
   {
     "_rid": 85,
@@ -437,17 +437,17 @@
   {
     "_rid": 87,
     "Id": "AuraNotOnCaster",
-    "FlagStat": 10264
+    "FlagStat": 10239
   },
   {
     "_rid": 88,
     "Id": "Banner",
-    "FlagStat": 10265
+    "FlagStat": 10240
   },
   {
     "_rid": 89,
     "Id": "Rain",
-    "FlagStat": 10299
+    "FlagStat": 10274
   },
   {
     "_rid": 90,
@@ -462,12 +462,12 @@
   {
     "_rid": 92,
     "Id": "Slam",
-    "FlagStat": 11094
+    "FlagStat": 11070
   },
   {
     "_rid": 93,
     "Id": "Stance",
-    "FlagStat": 11222
+    "FlagStat": 11198
   },
   {
     "_rid": 94,
@@ -482,27 +482,27 @@
   {
     "_rid": 96,
     "Id": "Steel",
-    "FlagStat": 11642
+    "FlagStat": 11616
   },
   {
     "_rid": 97,
     "Id": "Hex",
-    "FlagStat": 11776
+    "FlagStat": 11743
   },
   {
     "_rid": 98,
     "Id": "Mark",
-    "FlagStat": 12235
+    "FlagStat": 12193
   },
   {
     "_rid": 99,
     "Id": "Aegis",
-    "FlagStat": 14686
+    "FlagStat": 14605
   },
   {
     "_rid": 100,
     "Id": "Orb",
-    "FlagStat": 23260
+    "FlagStat": 23138
   },
   {
     "_rid": 101,
@@ -512,7 +512,7 @@
   {
     "_rid": 102,
     "Id": "RandomElement",
-    "FlagStat": 13433
+    "FlagStat": 13392
   },
   {
     "_rid": 103,
@@ -537,12 +537,12 @@
   {
     "_rid": 107,
     "Id": "Link",
-    "FlagStat": 14290
+    "FlagStat": 14209
   },
   {
     "_rid": 108,
     "Id": "Blessing",
-    "FlagStat": 14687
+    "FlagStat": 14606
   },
   {
     "_rid": 109,
@@ -572,17 +572,17 @@
   {
     "_rid": 114,
     "Id": "SkillGrantedBySupport",
-    "FlagStat": 22422
+    "FlagStat": 22310
   },
   {
     "_rid": 115,
     "Id": "CrossbowSkill",
-    "FlagStat": 18112
+    "FlagStat": 18000
   },
   {
     "_rid": 116,
     "Id": "CrossbowAmmoSkill",
-    "FlagStat": 13469
+    "FlagStat": 13428
   },
   {
     "_rid": 117,
@@ -602,42 +602,42 @@
   {
     "_rid": 120,
     "Id": "UsableWhileShapeshifted",
-    "FlagStat": 17965
+    "FlagStat": 17853
   },
   {
     "_rid": 121,
     "Id": "Meta",
-    "FlagStat": 23912
+    "FlagStat": 23797
   },
   {
     "_rid": 122,
     "Id": "Bear",
-    "FlagStat": 18032
+    "FlagStat": 17920
   },
   {
     "_rid": 123,
     "Id": "Wolf",
-    "FlagStat": 19187
+    "FlagStat": 19071
   },
   {
     "_rid": 124,
     "Id": "Invokable",
-    "FlagStat": 18048
+    "FlagStat": 17936
   },
   {
     "_rid": 125,
     "Id": "CreatesSkeletonMinion",
-    "FlagStat": 18261
+    "FlagStat": 18149
   },
   {
     "_rid": 126,
     "Id": "CreatesUndeadMinion",
-    "FlagStat": 18262
+    "FlagStat": 18150
   },
   {
     "_rid": 127,
     "Id": "CreatesDemonMinion",
-    "FlagStat": 18263
+    "FlagStat": 18151
   },
   {
     "_rid": 128,
@@ -652,7 +652,7 @@
   {
     "_rid": 130,
     "Id": "ConsumesCharges",
-    "FlagStat": 19905
+    "FlagStat": 19791
   },
   {
     "_rid": 131,
@@ -666,138 +666,138 @@
   },
   {
     "_rid": 133,
-    "Id": "ConsumesFullyBrokenArmour",
+    "Id": "SupportedByBreachlordsAmalgam",
     "FlagStat": null
   },
   {
     "_rid": 134,
-    "Id": "SkillConsumesFreeze",
+    "Id": "ConsumesFullyBrokenArmour",
     "FlagStat": null
   },
   {
     "_rid": 135,
-    "Id": "SkillConsumesIgnite",
+    "Id": "SkillConsumesFreeze",
     "FlagStat": null
   },
   {
     "_rid": 136,
-    "Id": "SkillConsumesShock",
+    "Id": "SkillConsumesIgnite",
     "FlagStat": null
   },
   {
     "_rid": 137,
-    "Id": "Wall",
+    "Id": "SkillConsumesShock",
     "FlagStat": null
   },
   {
     "_rid": 138,
-    "Id": "Persistent",
-    "FlagStat": 19080
+    "Id": "Wall",
+    "FlagStat": null
   },
   {
     "_rid": 139,
+    "Id": "Persistent",
+    "FlagStat": 18968
+  },
+  {
+    "_rid": 140,
     "Id": "UsableWhileMoving",
     "FlagStat": null
   },
   {
-    "_rid": 140,
+    "_rid": 141,
     "Id": "CanBecomeArrowRain",
     "FlagStat": null
   },
   {
-    "_rid": 141,
+    "_rid": 142,
     "Id": "MultipleReservation",
     "FlagStat": null
   },
   {
-    "_rid": 142,
+    "_rid": 143,
     "Id": "SupportedByElementalDischarge",
     "FlagStat": null
   },
   {
-    "_rid": 143,
+    "_rid": 144,
     "Id": "Limit",
     "FlagStat": null
   },
   {
-    "_rid": 144,
+    "_rid": 145,
     "Id": "Singlular",
     "FlagStat": null
   },
   {
-    "_rid": 145,
+    "_rid": 146,
     "Id": "GeneratesCharges",
     "FlagStat": null
   },
   {
-    "_rid": 146,
-    "Id": "EmpowersOtherSkill",
-    "FlagStat": null
-  },
-  {
     "_rid": 147,
-    "Id": "PerformsFinalStrike",
-    "FlagStat": null
+    "Id": "EmpowersOtherSkill",
+    "FlagStat": 26429
   },
   {
     "_rid": 148,
-    "Id": "PerfectTiming",
-    "FlagStat": 24041
+    "Id": "PerformsFinalStrike",
+    "FlagStat": 26315
   },
   {
     "_rid": 149,
+    "Id": "PerfectTiming",
+    "FlagStat": 23927
+  },
+  {
+    "_rid": 150,
     "Id": "CanHaveMultipleOngoingSkillInstances",
     "FlagStat": null
   },
   {
-    "_rid": 150,
+    "_rid": 151,
     "Id": "Sustained",
     "FlagStat": null
   },
   {
-    "_rid": 151,
+    "_rid": 152,
     "Id": "ComboStacking",
-    "FlagStat": 20443
+    "FlagStat": 20328
   },
   {
-    "_rid": 152,
+    "_rid": 153,
     "Id": "SupportedByComboFinisher",
     "FlagStat": null
   },
   {
-    "_rid": 153,
+    "_rid": 154,
     "Id": "Offering",
-    "FlagStat": 19612
+    "FlagStat": 19496
   },
   {
-    "_rid": 154,
+    "_rid": 155,
     "Id": "Retaliation",
     "FlagStat": null
   },
   {
-    "_rid": 155,
-    "Id": "Shapeshift",
-    "FlagStat": 24328
-  },
-  {
     "_rid": 156,
-    "Id": "Invocation",
-    "FlagStat": 23913
+    "Id": "Shapeshift",
+    "FlagStat": 24221
   },
   {
     "_rid": 157,
-    "Id": "Grenade",
-    "FlagStat": 19870
+    "Id": "Invocation",
+    "FlagStat": 23798
   },
   {
     "_rid": 158,
-    "Id": "NoDualWield",
-    "FlagStat": null
+    "Id": "Grenade",
+    "FlagStat": 19756
   },
   {
     "_rid": 159,
-    "Id": "QuarterstaffSkill",
-    "FlagStat": 19770
+    "Id": "NoDualWield",
+    "FlagStat": null
   },
   {
     "_rid": 160,
@@ -817,17 +817,17 @@
   {
     "_rid": 163,
     "Id": "CreatesFissure",
-    "FlagStat": 24844
+    "FlagStat": 24737
   },
   {
     "_rid": 164,
     "Id": "SummonsAttackTotem",
-    "FlagStat": 20323
+    "FlagStat": 20205
   },
   {
     "_rid": 165,
     "Id": "NonWeaponAttack",
-    "FlagStat": null
+    "FlagStat": 26329
   },
   {
     "_rid": 166,
@@ -907,7 +907,7 @@
   {
     "_rid": 181,
     "Id": "GeneratesRemnants",
-    "FlagStat": null
+    "FlagStat": 24865
   },
   {
     "_rid": 182,
@@ -917,7 +917,7 @@
   {
     "_rid": 183,
     "Id": "Bow",
-    "FlagStat": 7628
+    "FlagStat": 7611
   },
   {
     "_rid": 184,
@@ -932,7 +932,7 @@
   {
     "_rid": 186,
     "Id": "HasSeals",
-    "FlagStat": null
+    "FlagStat": 24738
   },
   {
     "_rid": 187,
@@ -952,7 +952,7 @@
   {
     "_rid": 190,
     "Id": "Spear",
-    "FlagStat": 18113
+    "FlagStat": 18001
   },
   {
     "_rid": 191,
@@ -982,7 +982,7 @@
   {
     "_rid": 196,
     "Id": "UsableWhileMounted",
-    "FlagStat": 21388
+    "FlagStat": 21268
   },
   {
     "_rid": 197,
@@ -1037,7 +1037,7 @@
   {
     "_rid": 207,
     "Id": "Palm",
-    "FlagStat": 22431
+    "FlagStat": 22318
   },
   {
     "_rid": 208,
@@ -1072,7 +1072,7 @@
   {
     "_rid": 214,
     "Id": "GeneratesInfusion",
-    "FlagStat": 21715
+    "FlagStat": 21595
   },
   {
     "_rid": 215,
@@ -1092,7 +1092,7 @@
   {
     "_rid": 218,
     "Id": "CreatesCompanion",
-    "FlagStat": 22125
+    "FlagStat": 22014
   },
   {
     "_rid": 219,
@@ -1162,12 +1162,12 @@
   {
     "_rid": 232,
     "Id": "ReserveInAllSets",
-    "FlagStat": 23077
+    "FlagStat": 22955
   },
   {
     "_rid": 233,
     "Id": "Unleashable",
-    "FlagStat": 24845
+    "FlagStat": null
   },
   {
     "_rid": 234,
@@ -1202,96 +1202,251 @@
   {
     "_rid": 240,
     "Id": "Detonator",
-    "FlagStat": 23773
+    "FlagStat": 23658
   },
   {
     "_rid": 241,
-    "Id": "SupportedByOverabundanceThree",
-    "FlagStat": null
+    "Id": "UnlimitedTotems",
+    "FlagStat": 23711
   },
   {
     "_rid": 242,
-    "Id": "UnlimitedTotems",
-    "FlagStat": 23826
-  },
-  {
-    "_rid": 243,
     "Id": "SupportedByHaemoCrystals",
     "FlagStat": null
   },
   {
-    "_rid": 244,
+    "_rid": 243,
     "Id": "SupportedByFlamePillar",
     "FlagStat": null
   },
   {
-    "_rid": 245,
+    "_rid": 244,
     "Id": "CanCreateStoneElementals",
     "FlagStat": null
   },
   {
-    "_rid": 246,
+    "_rid": 245,
     "Id": "RemnantCannotBeShared",
     "FlagStat": null
   },
   {
-    "_rid": 247,
+    "_rid": 246,
     "Id": "GamepadDoNotForceSkillAtLocation",
     "FlagStat": null
   },
   {
-    "_rid": 248,
+    "_rid": 247,
     "Id": "GamepadDeflectable",
     "FlagStat": null
   },
   {
-    "_rid": 249,
+    "_rid": 248,
     "Id": "GamepadForceAllowInteraction",
     "FlagStat": null
   },
   {
-    "_rid": 250,
+    "_rid": 249,
     "Id": "Wyvern",
-    "FlagStat": 20877
+    "FlagStat": 20763
+  },
+  {
+    "_rid": 250,
+    "Id": "Plant",
+    "FlagStat": 24586
   },
   {
     "_rid": 251,
-    "Id": "Plant",
-    "FlagStat": 24696
+    "Id": "Wind",
+    "FlagStat": 26421
   },
   {
     "_rid": 252,
-    "Id": "Wind",
-    "FlagStat": null
-  },
-  {
-    "_rid": 253,
     "Id": "SupportedByHayoxi",
     "FlagStat": null
   },
   {
-    "_rid": 254,
+    "_rid": 253,
     "Id": "Storm",
-    "FlagStat": 24524
+    "FlagStat": 24411
+  },
+  {
+    "_rid": 254,
+    "Id": "DisableUpdateActionLocationAfterRelease",
+    "FlagStat": 24432
   },
   {
     "_rid": 255,
-    "Id": "DisableUpdateActionLocationAfterRelease",
-    "FlagStat": 24545
-  },
-  {
-    "_rid": 256,
     "Id": "InteractsWithElementalGround",
     "FlagStat": null
   },
   {
-    "_rid": 257,
+    "_rid": 256,
     "Id": "SupportedByNovaProjectiles",
     "FlagStat": null
   },
   {
+    "_rid": 257,
+    "Id": "UsedByProxy",
+    "FlagStat": null
+  },
+  {
     "_rid": 258,
-    "Id": "Proxy",
+    "Id": "SupportedByEchoingCry",
+    "FlagStat": null
+  },
+  {
+    "_rid": 259,
+    "Id": "SpecialAncestralBoost",
+    "FlagStat": null
+  },
+  {
+    "_rid": 260,
+    "Id": "Runic",
+    "FlagStat": null
+  },
+  {
+    "_rid": 261,
+    "Id": "ActiveBlock",
+    "FlagStat": 26103
+  },
+  {
+    "_rid": 262,
+    "Id": "SupportedByVruunsInevitablity",
+    "FlagStat": null
+  },
+  {
+    "_rid": 263,
+    "Id": "SupportedByTulsAvalanche",
+    "FlagStat": null
+  },
+  {
+    "_rid": 264,
+    "Id": "IndeterminateEmpowermentAmount",
+    "FlagStat": null
+  },
+  {
+    "_rid": 265,
+    "Id": "GamepadDoNotChannelSkillAtLocation",
+    "FlagStat": null
+  },
+  {
+    "_rid": 266,
+    "Id": "AffectedByCooldownRate",
+    "FlagStat": null
+  },
+  {
+    "_rid": 267,
+    "Id": "UsedByClone",
+    "FlagStat": null
+  },
+  {
+    "_rid": 268,
+    "Id": "SupportedByAncestralWarriorTotem",
+    "FlagStat": null
+  },
+  {
+    "_rid": 269,
+    "Id": "SupportedBySpellTotem",
+    "FlagStat": null
+  },
+  {
+    "_rid": 270,
+    "Id": "SupportedByBallistaTotem",
+    "FlagStat": null
+  },
+  {
+    "_rid": 271,
+    "Id": "SupportedByMortarTotem",
+    "FlagStat": null
+  },
+  {
+    "_rid": 272,
+    "Id": "SupportedByFeralInvocation",
+    "FlagStat": null
+  },
+  {
+    "_rid": 273,
+    "Id": "SupportedByMirageArcher",
+    "FlagStat": null
+  },
+  {
+    "_rid": 274,
+    "Id": "SupportedByMirageDeadeye",
+    "FlagStat": null
+  },
+  {
+    "_rid": 275,
+    "Id": "SupportedByHollowForm",
+    "FlagStat": null
+  },
+  {
+    "_rid": 276,
+    "Id": "SupportedByAnimusSplinters",
+    "FlagStat": null
+  },
+  {
+    "_rid": 277,
+    "Id": "HasNoCost",
+    "FlagStat": null
+  },
+  {
+    "_rid": 278,
+    "Id": "SupportedByBattershout",
+    "FlagStat": null
+  },
+  {
+    "_rid": 279,
+    "Id": "SupportedByRuneforgedBlades",
+    "FlagStat": null
+  },
+  {
+    "_rid": 280,
+    "Id": "SupportedByExploitWeakness",
+    "FlagStat": null
+  },
+  {
+    "_rid": 281,
+    "Id": "SupportedByDrainedAilment",
+    "FlagStat": null
+  },
+  {
+    "_rid": 282,
+    "Id": "SkillConsumesDazed",
+    "FlagStat": null
+  },
+  {
+    "_rid": 283,
+    "Id": "SupportedByDazzle",
+    "FlagStat": null
+  },
+  {
+    "_rid": 284,
+    "Id": "SupportedByFrostfire",
+    "FlagStat": null
+  },
+  {
+    "_rid": 285,
+    "Id": "SupportedByBitingFrost",
+    "FlagStat": null
+  },
+  {
+    "_rid": 286,
+    "Id": "SupportedByJaggedGround",
+    "FlagStat": null
+  },
+  {
+    "_rid": 287,
+    "Id": "SupportedByAbidingHex",
+    "FlagStat": null
+  },
+  {
+    "_rid": 288,
+    "Id": "SupportedByFrenziedRiposte",
+    "FlagStat": null
+  },
+  {
+    "_rid": 289,
+    "Id": "SupportedByCreepingChill",
     "FlagStat": null
   }
 ]
