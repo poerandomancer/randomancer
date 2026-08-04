@@ -13,6 +13,7 @@
     { "uniqueName": "Lightning Coil", "skillName": "Valako's Charge", "requiredLevel": 52, "category": "nonweapon" },
     { "uniqueName": "Murkshaft", "skillName": "Bursting Fen Toad", "requiredLevel": 58, "category": "nonweapon" },
     { "uniqueName": "Shankgonne", "skillName": "Black Powder Blitz", "requiredLevel": 58, "category": "nonweapon" },
-    { "uniqueName": "The Covenant", "skillName": "Life Remnants", "requiredLevel": 58, "category": "nonweapon" }
+    { "uniqueName": "The Covenant", "skillName": "Life Remnants", "requiredLevel": 58, "category": "nonweapon" },
+    { "uniqueName": "Nightfall", "skillName": "Soaring Midnight", "requiredLevel": 70, "category": "nonweapon" }
   ]
 }

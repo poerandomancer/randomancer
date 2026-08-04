@@ -429,6 +429,9 @@ function buildIndex() {
   function isBrowsableSkill(gem) {
     const hay = `${gem?.name || ''} ${gem?.id || ''} ${gem?.base_item?.display_name || ''} ${gem?.description || ''} ${gem?.support_text || ''}`.toLowerCase();
     if (!hay.trim()) return false;
+    const sourceTags = Array.isArray(gem?.source_tags) ? gem.source_tags : [];
+    if (sourceTags.some((tag) => canonicalizeTag(tag) === 'derived_template')) return false;
+    if (/\{\d+\}/.test(hay)) return false;
     if (hay.includes('dnt')) return false;
     if (hay.includes('unused')) return false;
     if (hay.includes('playtest')) return false;

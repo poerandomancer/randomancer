@@ -12,6 +12,7 @@ ARTIFACT_PATHS: dict[str, Path] = {
     "poe2db_uniques_min": Path("data/enriched/poe2db_uniques_min.json"),
     "keystone_tooltips": Path("data/enriched/keystone_tooltips.json"),
     "passive_scrape_report": Path("data/enriched/passive_scrape_report.json"),
+    "challenge_generated_pools": Path("data/enriched/challenge_generated_pools.json"),
     "tag_vocab_audit": Path("data/enriched/tag_vocab_audit.json"),
 }
 
@@ -151,6 +152,26 @@ def summarize_artifact_key(repo_root: Path, key: str) -> dict[str, Any]:
             summary["network_error_count"] = len(network_errors)
         return summary
 
+    if key == "challenge_generated_pools":
+        payload = data if isinstance(data, dict) else {}
+        strict_rows = payload.get("strictUniqueGrantedSkills", [])
+        crafting_types = payload.get("craftingTypes", [])
+        strict_list = strict_rows if isinstance(strict_rows, list) else []
+        crafting_list = crafting_types if isinstance(crafting_types, list) else []
+        summary.update(
+            {
+                "strict_unique_count": len(strict_list),
+                "crafting_type_count": len(crafting_list),
+                "strict_unique_identity_set_sha256": _hash_json(
+                    sorted(_stable_row_identity(row) for row in strict_list)
+                ),
+                "crafting_type_identity_set_sha256": _hash_json(
+                    sorted(_stable_row_identity(row) for row in crafting_list)
+                ),
+            }
+        )
+        return summary
+
     if key == "tag_vocab_audit":
         summary_in = data.get("summary", {}) if isinstance(data, dict) else {}
         summary.update(
@@ -245,6 +266,8 @@ def analyze_semantic_stability(before: dict[str, Any], after: dict[str, Any]) ->
                 "total_distinct_canonical_count",
                 "total_rejected_count",
                 "total_collision_count",
+                "strict_unique_count",
+                "crafting_type_count",
             )
             if old.get(field) != new.get(field)
         ]
@@ -301,7 +324,7 @@ def _semantic_sha256_for_artifact(key: str, data: Any) -> str:
         for passthrough_key in sorted(k for k in payload.keys() if k != "items"):
             normalized[passthrough_key] = _normalize_value(payload[passthrough_key])
         return _hash_json(normalized)
-    if key in {"keystone_tooltips", "passive_scrape_report", "tag_vocab_audit"}:
+    if key in {"keystone_tooltips", "passive_scrape_report", "challenge_generated_pools", "tag_vocab_audit"}:
         return _hash_json(_normalize_value(data))
     return _hash_json(_normalize_value(data))
 

@@ -83,6 +83,15 @@ def check_sanity_cases() -> None:
         ("Bleeding", "bleed"),
         ("chance to block", "chance_to_block"),
         ("block chance", "chance_to_block"),
+        ("ancientblooms", "ancient_blooms"),
+        ("faeriefire", "faerie_fire"),
+        ("helbrymscomposure", "helbryms_composure"),
+        ("itemarmour", "item_armour"),
+        ("meleesplash", "melee_splash"),
+        ("overflowingchalice", "overflowing_chalice"),
+        ("temporaryminion", "temporary_minion"),
+        ("unarmedattack", "unarmed_attack"),
+        ("verisiuminfusion", "verisium_infusion"),
     ]
     for raw, expected in checks:
         got = canonicalize_tag(raw)

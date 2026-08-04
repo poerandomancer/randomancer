@@ -359,7 +359,9 @@ async function buildPickerContext() {
 
   const isDevPlaceholderGem = (g) => {
     const s = String(g?.name || g?.base_item?.display_name || g?.id || '');
-    return /(\bDNT\b|\bUNUSED\b|\bPLAYTEST\b|play\s*test|placeholder|coming\s*soon)/i.test(s);
+    const sourceTags = Array.isArray(g?.source_tags) ? g.source_tags : [];
+    return sourceTags.some((tag) => normalizeTag(tag) === 'derived_template') ||
+      /(\bDNT\b|\bUNUSED\b|\bPLAYTEST\b|play\s*test|placeholder|coming\s*soon|\{\d+\})/i.test(s);
   }
 
   const hasExplicitCraftingType = (g) => {

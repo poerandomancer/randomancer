@@ -206,7 +206,7 @@ def build_steps(ctx: PipelineContext) -> list[PipelineStep]:
                 "data/enriched/challenge_generated_pools.json",
             ],
             outputs=[ctx.repo_root / "data/enriched/challenge_generated_pools.json"],
-            summary_artifact_keys=[],
+            summary_artifact_keys=["challenge_generated_pools"],
             required=True,
             description="Rebuild challenge mode generated pools from enriched skills + uniques data.",
         ),

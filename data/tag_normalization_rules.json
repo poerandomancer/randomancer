@@ -89,7 +89,16 @@
 		"reserved": "reserve",
 		"triggered": "trigger",
 		"irradiated": "irradiate",
-		"shattered": "shatter"
+		"shattered": "shatter",
+		"ancientblooms": "ancient_blooms",
+		"faeriefire": "faerie_fire",
+		"helbrymscomposure": "helbryms_composure",
+		"itemarmour": "item_armour",
+		"meleesplash": "melee_splash",
+		"overflowingchalice": "overflowing_chalice",
+		"temporaryminion": "temporary_minion",
+		"unarmedattack": "unarmed_attack",
+		"verisiuminfusion": "verisium_infusion"
   },
   "expansions": {
     "critical_weakness": [

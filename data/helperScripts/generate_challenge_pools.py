@@ -25,11 +25,14 @@ def normalize_id(label: str) -> str:
 
 
 def is_placeholder_skill(skill: dict[str, Any]) -> bool:
+    source_tags = {str(tag).strip().lower() for tag in (skill.get('source_tags') or [])}
+    if 'derived_template' in source_tags:
+        return True
     text = ' '.join(
         str(skill.get(k, '') or '')
         for k in ('name', 'description', 'support_text', 'id')
     )
-    return bool(re.search(r'\b(dnt|unused|placeholder|coming\s*soon|\?\?\?)\b', text, re.I))
+    return bool(re.search(r'\b(dnt|unused|placeholder|coming\s*soon|\?\?\?)\b|\{\d+\}', text, re.I))
 
 
 def display_name(skill: dict[str, Any]) -> str:

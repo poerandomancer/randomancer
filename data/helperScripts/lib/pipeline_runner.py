@@ -327,6 +327,9 @@ def _analyze_diff_warnings(report: dict[str, Any]) -> list[str]:
                 warnings.append(f"Tag collision count increased: {before} -> {after}.")
             if artifact == "passive_scrape_report" and field == "ascendancyUnmatched" and isinstance(delta, (int, float)) and delta > 0:
                 warnings.append(f"Ascendancy unmatched scrape count increased: {before} -> {after}.")
+            if artifact == "challenge_generated_pools" and field in {"strict_unique_count", "crafting_type_count"}:
+                if isinstance(delta, (int, float)) and delta < 0:
+                    warnings.append(f"Challenge pool {field} dropped: {before} -> {after}.")
             if artifact in {"skills_enriched", "passives_enriched", "poe2db_uniques_min", "keystone_tooltips"}:
                 if isinstance(before, (int, float)) and isinstance(after, (int, float)) and before > 0 and after < before:
                     pct = ((before - after) / before) * 100.0

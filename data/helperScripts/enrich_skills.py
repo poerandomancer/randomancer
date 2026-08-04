@@ -420,7 +420,7 @@ def derive_taxonomy(gem_tags: List[str], skill_types: List[str]) -> Dict[str, An
         role.append("buff")
     if "curse" in tset or "mark" in tset:
         role.append("debuff")
-    if "guard" in tset or "defensive" in tset:
+    if "guard" in tset or "defensive" in tset or "activeblock" in tset:
         role.append("defense")
     if not role:
         role.append("damage")
@@ -666,6 +666,15 @@ def enrich_from_tables(table_dir: Path, out_path: Path) -> Tuple[List[Dict[str, 
         # merged tags for scoring / matching
         base_id = str(base.get("Id") or "")
         source_tags = ["kalguuran"] if base_id in KALGUURAN_BASE_ITEM_IDS else []
+        base_skill_gem_rid = sg.get("BaseSkillGem")
+        base_skill_gem_id: Optional[str] = None
+        if isinstance(base_skill_gem_rid, int):
+            source_tags.append("derived_template")
+            base_skill_gem_row = skillgem_by_rid.get(base_skill_gem_rid)
+            linked_base_rid = base_skill_gem_row.get("BaseItemType") if base_skill_gem_row else None
+            linked_base = base_by_rid.get(linked_base_rid) if isinstance(linked_base_rid, int) else None
+            if linked_base and linked_base.get("Id"):
+                base_skill_gem_id = str(linked_base["Id"])
 
         merged_tags = uniq_canonical([
             *gem_tag_ids,
@@ -725,6 +734,10 @@ def enrich_from_tables(table_dir: Path, out_path: Path) -> Tuple[List[Dict[str, 
 
         if active_skill_objs:
             entry["active_skills"] = active_skill_objs
+
+        if isinstance(base_skill_gem_rid, int):
+            entry["links"]["base_skill_gem_rid"] = base_skill_gem_rid
+            entry["links"]["base_skill_gem_id"] = base_skill_gem_id
 
         out.append(entry)
         stats["total"] += 1

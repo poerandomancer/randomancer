@@ -36,6 +36,10 @@ export function isEligibleSkillForFamilies(skill) {
 
   const blob = `${skill.id || ""} ${skill.name || ""}`.toLowerCase();
   if (blob.includes("dnt") || blob.includes("unused") || blob.includes("playtest")) return false;
+  if (/\{\d+\}/.test(blob)) return false;
+
+  const sourceTags = Array.isArray(skill.source_tags) ? skill.source_tags : [];
+  if (sourceTags.some(tag => normalizeTag(tag, {}) === "derivedtemplate")) return false;
 
   const sid = String(skill.id || "").toLowerCase();
   if (sid.includes("default") || sid.includes("unique") || sid.includes("playtest")) return false;

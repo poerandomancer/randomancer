@@ -486,7 +486,9 @@ function renderPassiveRecommendations(currentRoll, dataWrap) {
 
 function isDevPlaceholderGem(g){
   const s = (g?.name || g?.base_item?.display_name || g?.id || '').toString();
-  return /(\bDNT\b|\bUNUSED\b|Coming\s*Soon)/i.test(s);
+  const sourceTags = Array.isArray(g?.source_tags) ? g.source_tags : [];
+  return sourceTags.some((tag) => normalizeTag(tag) === 'derived_template') ||
+    /(\bDNT\b|\bUNUSED\b|Coming\s*Soon|\{\d+\})/i.test(s);
 }
 
 function isKalguuranGem(g){
