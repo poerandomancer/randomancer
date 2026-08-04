@@ -78,6 +78,7 @@ _EFFECT_PATTERNS = [
     (re.compile(r'slam', re.I), ['slam']),
     (re.compile(r'shockwave', re.I), ['shockwave']),
     (re.compile(r'aftershock', re.I), ['aftershock']),
+    (re.compile(r'runic_ward|(?:^|_)ward(?:_|$)', re.I), ['ward', 'runic_ward']),
 ]
 
 _NEGATIVE_MARKERS = ('cannot', 'prevent', 'disable', 'suppresses', 'suppressed')
@@ -183,7 +184,44 @@ def idx_by_rid(rows: List[Mapping[str, Any]]) -> Dict[int, Mapping[str, Any]]:
 # --------------------------- Weapon requirement mapping ---------------------------
 
 
-OFFHAND_TAGS = {"shield", "buckler", "quiver", "focus"}
+OFFHAND_TAGS = {"shield", "thrown_shield", "buckler", "quiver", "focus"}
+
+
+# These paths are the stable BaseItemType IDs for the 23 Kalguuran skills and
+# seven Kalguuran supports introduced in 0.5. They remain in enriched data and
+# the Codex, while the frontend uses this source tag to keep them out of Build.
+KALGUURAN_BASE_ITEM_IDS = frozenset({
+    "Metadata/Items/Gems/SkillGemAnimusExchange",
+    "Metadata/Items/Gems/SkillGemAnimusSplinters",
+    "Metadata/Items/Gems/SkillGemBitterDead",
+    "Metadata/Items/Gems/SkillGemConductiveRunes",
+    "Metadata/Items/Gems/SkillGemDetonateLiving",
+    "Metadata/Items/Gems/SkillGemEternalMarch",
+    "Metadata/Items/Gems/SkillGemExplosiveTransmutation",
+    "Metadata/Items/Gems/SkillGemFragmentsOfThePast",
+    "Metadata/Items/Gems/SkillGemFrostflameNova",
+    "Metadata/Items/Gems/SkillGemGrimPillars",
+    "Metadata/Items/Gems/SkillGemHollowShell",
+    "Metadata/Items/Gems/SkillGemLeylines",
+    "Metadata/Items/Gems/SkillGemPoweredByVerisium",
+    "Metadata/Items/Gems/SkillGemRainOfBlades",
+    "Metadata/Items/Gems/SkillGemRefutation",
+    "Metadata/Items/Gems/SkillGemRemnantsOfKalguur",
+    "Metadata/Items/Gems/SkillGemRepulsion",
+    "Metadata/Items/Gems/SkillGemRunicReprieve",
+    "Metadata/Items/Gems/SkillGemSkyfall",
+    "Metadata/Items/Gems/SkillGemTriskelionCascade",
+    "Metadata/Items/Gems/SkillGemVerisiumManifestation",
+    "Metadata/Items/Gems/SkillGemVoltaicBarrier",
+    "Metadata/Items/Gems/SkillGemWardboundMinions",
+    "Metadata/Items/Gems/SupportGemConcussiveRunes",
+    "Metadata/Items/Gems/SupportGemFistOfKalguur",
+    "Metadata/Items/Gems/SupportGemHealingRunes",
+    "Metadata/Items/Gems/SupportGemRuneforgedBlades",
+    "Metadata/Items/Gems/SupportGemRunicExtraction",
+    "Metadata/Items/Gems/SupportGemRunicInfusion",
+    "Metadata/Items/Gems/SupportGemScouringFlame",
+})
 
 
 def _tag_from_requirement_name(req_id: str) -> Optional[str]:
@@ -233,6 +271,7 @@ def derive_wieldable_class_tag_map(weaponreq_rows: List[Mapping[str, Any]]) -> D
       - Any Staff = [staff, quarterstaff]
       - Any Blunt Weapon includes sceptre (in PoE2) alongside maces/staves.
       - Any Thrown Axe -> treat as axe
+      - Thrown Shield is an in-flight shield state, not a main-hand weapon
 
     Unknown classes are mapped to a stable synthetic tag ("wclass{rid}") so
     hard gating errs on the side of exclusion rather than false allowance.
@@ -283,7 +322,20 @@ def derive_wieldable_class_tag_map(weaponreq_rows: List[Mapping[str, Any]]) -> D
             if c not in mapping:
                 mapping[c] = "axe"
 
-    # 5) Fill unknowns with stable synthetic tags
+    # 5) The Nightfall-granted skill requirements combine the ordinary shield
+    # class with a distinct in-flight ThrownShield class. Keep both on the
+    # off-hand side so the resulting gate is shield OR thrown_shield.
+    thrown_shield_rows = [
+        r for r in weaponreq_rows
+        if "thrownshield" in re.sub(r"[^a-z]", "", str(r.get("Id") or "").lower())
+    ]
+    for row in thrown_shield_rows:
+        classes = [c for c in (row.get("WieldableClasses") or []) if isinstance(c, int)]
+        for c in classes:
+            if c not in mapping:
+                mapping[c] = "thrown_shield"
+
+    # 6) Fill unknowns with stable synthetic tags
     all_classes: Set[int] = set()
     for r in weaponreq_rows:
         for c in (r.get("WieldableClasses") or []):
@@ -612,19 +664,22 @@ def enrich_from_tables(table_dir: Path, out_path: Path) -> Tuple[List[Dict[str, 
         bracket_tags = extract_bracket_tags(desc)
 
         # merged tags for scoring / matching
+        base_id = str(base.get("Id") or "")
+        source_tags = ["kalguuran"] if base_id in KALGUURAN_BASE_ITEM_IDS else []
+
         merged_tags = uniq_canonical([
             *gem_tag_ids,
             *skill_types,
             *schools,
             *affin,
             *bracket_tags,
+            *source_tags,
         ])
 
         taxonomy = derive_taxonomy(gem_tag_ids, skill_types)
         effect_tags = uniq_canonical(derive_effect_tags_from_granted_effects(granted_effect_rids, granted_by_rid, statsets_by_rid, stat_id_by_rid))
 
         # build output gem
-        base_id = str(base.get("Id") or "")
         base_name = str(base.get("Name") or "")
 
         entry: Dict[str, Any] = {
@@ -653,6 +708,7 @@ def enrich_from_tables(table_dir: Path, out_path: Path) -> Tuple[List[Dict[str, 
             },
             "taxonomy": taxonomy,
             "effect_tags": effect_tags,
+            "source_tags": source_tags,
             "weapon_requirements": weapon_req_obj,
             "recommended_supports": rec_supp,
             "tags": merged_tags,

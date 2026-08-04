@@ -601,6 +601,18 @@
         "dexterity": 0.33,
         "intelligence": 0.33
       }
+    },
+    {
+      "name": "Runic Ward",
+      "tags": [
+        "ward",
+        "runic_ward"
+      ],
+      "attributes": {
+        "strength": 0.33,
+        "dexterity": 0.33,
+        "intelligence": 0.33
+      }
     }
   ],
   "Config": {

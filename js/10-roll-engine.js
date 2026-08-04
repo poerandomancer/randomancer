@@ -306,6 +306,7 @@ const NAME_DESCRIPTORS = {
   // Huntress
   "Amazon": ["Bronze-Crowned","Lionhearted","Spear-Blessed","Sunforged","Steel-Sister","Storm-Stride"],
   "Ritualist": ["Circle-Drawn","Bone-Scribed","Masked","Ritebound","Blood-Binding","Totem-Kissed"],
+  "Spirit Walker": ["Spiritbound","Wild-Crowned","Beast-Blessed","Idol-Bearing","Primal","Mórrigan-Guided"],
 
   // Witch
   "Blood Mage": ["Sanguine","Veinbound","Crimson","Hemocrafted","Bloodletter","Thrice-Bled"],
@@ -321,6 +322,7 @@ const NAME_DESCRIPTORS = {
   // Monk
   "Invoker": ["Tranquil","Spirit-Forged","Palm-Scribed","Mantra-Bound","Quiet Thunder","Inner-Flamed"],
   "Acolyte of Chayula": ["Shadow-Devout","Void-Kissed","Nightbound","Spiral-Eyed","Breach-Touched","Umbral"],
+  "Martial Artist": ["Hollow-Focused","Stonefisted","Meridian-Bound","Formless","Rune-Coursed","Mountain-Trained"],
 
   // Druid
   "Shaman": ["Spirit-Talked","Ancestor-Blessed","Totem-Bound","Wild-Voiced","Storm-Calling","Groveborn"],
@@ -345,6 +347,7 @@ const NAME_TITLES = {
   // Huntress
   "Amazon": ["War-Maiden","Spearqueen","Sunlancer","Shield-Sister","Amazon"],
   "Ritualist": ["Ritecaller","Circleweaver","Bloodbinder","Hex-Dancer","Ritualist"],
+  "Spirit Walker": ["Wildkeeper","Idolbearer","Beastwarden","Primal Guide","Spirit Walker"],
 
   // Witch
   "Blood Mage": ["Hemomancer","Crimson Saint","Veincaller","Red Magus","Blood Savant"],
@@ -360,6 +363,7 @@ const NAME_TITLES = {
   // Monk
   "Invoker": ["Ascetic","Kata-Sage","Temple Adept","Chi Warden","Invoker"],
   "Acolyte of Chayula": ["Void Disciple","Breach Monk","Dark Acolyte","Chayula's Hand","Acolyte"],
+  "Martial Artist": ["Grandmaster","Stonefist","Hollow Adept","Meridian Sage","Martial Artist"],
 
   // Druid
   "Shaman": ["Spiritcaller","Totem-Sage","Ancestor Seer","Wildspeaker","Shaman"],
@@ -536,6 +540,7 @@ const FLAVOR_ASC = {
   "Pathfinder":["Every trail has teeth.","The wild is a map of scars."],
   "Amazon":["Steel-sister of the sun.","Spearpoint prophecy."],
   "Ritualist":["Circles close. Blood binds.","Rites carved in night."],
+  "Spirit Walker":["The old spirits walk beside her.","Wild souls answer the call."],
   "Blood Mage":["Crimson is currency.","Life traded for power."],
   "Lich":["Death is a door left open.","A crown of bone and silence."],
   "Infernalist":["Flame speaks first.","Ash writes the epilogue."],
@@ -545,6 +550,7 @@ const FLAVOR_ASC = {
   "Disciple of Varashta":["Wards within wards.","Oaths etched in starlight."],
   "Invoker":["Breath, stance, strike.","A mantra with teeth."],
   "Acolyte of Chayula":["The Breach watches.","Shadow is devotion."],
+  "Martial Artist":["Empty form. Perfect strike.","Every meridian remembers the blow."],
   "Shaman":["Ancestors at your shoulder.","Spirits carry the strike."],
   "Oracle":["Omens do not lie.","The future already blinked."]
 };
@@ -585,6 +591,44 @@ function resolveCoreData(dataWrap){
   return window.DATA || {};
 }
 
+function weaponLoadouts(data, weapons){
+  const offhands = Array.isArray(data?.Weapons?.['Off-Hand']) ? data.Weapons['Off-Hand'] : [];
+  const out = [];
+  (weapons || []).filter(Boolean).forEach((weapon) => {
+    const allowedNames = validOffhands[weapon.name];
+    if (!Array.isArray(allowedNames)) {
+      out.push({ weapon, offhand: null });
+      return;
+    }
+    offhands
+      .filter((offhand) => allowedNames.includes(offhand?.name))
+      .forEach((offhand) => out.push({ weapon, offhand }));
+  });
+  return out;
+}
+
+function isStrategyCompatible(strategy, defense, loadout){
+  return applyHardRestrictions(strategy, {
+    defense: defense?.name || '',
+    weapon: loadout?.weapon?.name || '',
+    offhand: loadout?.offhand?.name || ''
+  });
+}
+
+function loadoutHasStrategyOption(loadout, defenses, strategies){
+  return (defenses || []).some((defense) =>
+    (strategies || []).some((strategy) => isStrategyCompatible(strategy, defense, loadout))
+  );
+}
+
+function uniqueByName(items){
+  const out = new Map();
+  (items || []).filter(Boolean).forEach((item) => {
+    if (item?.name && !out.has(item.name)) out.set(item.name, item);
+  });
+  return Array.from(out.values());
+}
+
 function rollSecondaryWeaponSet(dataWrap){
   const data = resolveCoreData(dataWrap);
   const current = window.App?.state?.currentRoll || window.CURRENT_ROLL || {};
@@ -599,6 +643,9 @@ function rollSecondaryWeaponSet(dataWrap){
   const wOaths = new Set(weaponCfg.oaths || []);
   const wAboms = new Set(weaponCfg.abominations || []);
   const cOaths = new Set(combatCfg.oaths || []);
+  const currentStrategyName = current.defStratObj?.name || current.defStrat?.name || current.defStrat || '';
+  const currentStrategy = (data.DefensiveStrategies || []).find((strategy) => strategy?.name === currentStrategyName) || null;
+  const currentDefense = current.defenseObj || (data.Defense || []).find((defense) => defense?.name === current.defense) || null;
 
   const minionsOath = cOaths.has('Minions');
   const sceptreAbomination = wAboms.has('Sceptre');
@@ -612,7 +659,7 @@ function rollSecondaryWeaponSet(dataWrap){
   let filteredWeaponPool = weaponPool.filter((w) => !wAboms.has(w.name) && w.name !== current.weapon);
   if (wOaths.size > 0) {
     const fromOath = filteredWeaponPool.filter((w) => wOaths.has(w.name));
-    if (fromOath.length > 0) filteredWeaponPool = fromOath;
+    filteredWeaponPool = fromOath;
   }
 
   if (minionsOath) {
@@ -624,17 +671,25 @@ function rollSecondaryWeaponSet(dataWrap){
     filteredWeaponPool = [sceptreOption];
   }
 
-  if (!filteredWeaponPool.length) {
+  let compatibleLoadouts = weaponLoadouts(data, filteredWeaponPool);
+  if (currentStrategy && currentDefense) {
+    compatibleLoadouts = compatibleLoadouts.filter((loadout) =>
+      isStrategyCompatible(currentStrategy, currentDefense, loadout)
+    );
+  }
+
+  if (!compatibleLoadouts.length) {
     console.warn('[secondary weapons] No valid weapons available for secondary set.');
     return null;
   }
 
-  const weapon = pickByCohesion(filteredWeaponPool, base, th);
-  let offhand = null;
-  if (weapon && Object.keys(validOffhands).includes(weapon.name)) {
-    const offPool = (data.Weapons['Off-Hand'] || []).filter((o) => validOffhands[weapon.name].includes(o.name));
-    offhand = pickByCohesion(offPool, base, th);
-  }
+  const weapon = pickByCohesion(uniqueByName(compatibleLoadouts.map((loadout) => loadout.weapon)), base, th);
+  const offPool = uniqueByName(
+    compatibleLoadouts
+      .filter((loadout) => loadout.weapon?.name === weapon?.name)
+      .map((loadout) => loadout.offhand)
+  );
+  const offhand = offPool.length ? pickByCohesion(offPool, base, th) : null;
 
   return { weapon, offhand, wOaths };
 }
@@ -789,9 +844,9 @@ function rollBuild(dataWrap){
   const cAboms = new Set(combatCfg.abominations || []);
 
 	// --- Archetype ---
-	// (hierarchical active-anchor: ascendancy > weapon > mechanics)
+	// (hierarchical active-anchor: ascendancy > weapon > Defensive Strategy > mechanics)
 	// - If ascendancy oaths exist, we keep the current behavior (random within allowed).
-	// - Otherwise, we pick ONE active weapon (if any) or 1–2 active mechanics (if any),
+	// - Otherwise, we pick one active weapon, Defensive Strategy, or 1–2 mechanics,
 	//   use that as an attribute anchor to choose the class/asc-candidate via pickByCohesion,
 	//   then revert to class attributes as the driver for the rest of the roll.
 	
@@ -803,6 +858,20 @@ function rollBuild(dataWrap){
 	const weaponCfg = bind.weapon || { oaths: [], abominations: [] };
 	const wOaths = new Set(weaponCfg.oaths || []);
 	const wAboms = new Set(weaponCfg.abominations || []);
+
+	const defensiveStrategyCfg = bind.defensiveStrategy || { oaths: [], abominations: [] };
+	const dsOaths = new Set(defensiveStrategyCfg.oaths || []);
+	const dsAboms = new Set(defensiveStrategyCfg.abominations || []);
+	let allowedDefensiveStrategies = (data.DefensiveStrategies || []).filter((strategy) =>
+	  strategy && !dsAboms.has(strategy.name)
+	);
+	if (dsOaths.size > 0) {
+	  allowedDefensiveStrategies = allowedDefensiveStrategies.filter((strategy) => dsOaths.has(strategy.name));
+	}
+	if (!allowedDefensiveStrategies.length) {
+	  showBindFatesError('No valid Defensive Strategies with your current Oaths & Abominations.');
+	  return;
+	}
 	
 	// Keep existing hard conflict check (Minions requires Sceptre; Sceptre cannot be an abomination).
 	const minionsOath = cOaths.has('Minions');
@@ -815,6 +884,7 @@ function rollBuild(dataWrap){
 	// ---- Active anchor picks (used to select class/asc candidate, and as roll driver if present) ----
 	let anchorAttrs = null;                 // {strength,dexterity,intelligence} ratio-ish
 	let activeWeaponOathName = null;        // string name of the active weapon oath (weapon tier)
+	let activeDefensiveStrategyOathName = null;
 	let activeMechanicOathNames = null;     // [name, name?] for mechanics-tier-only
 	
 	// Tier 2: weapon anchor (only when NO ascendancy oaths)
@@ -826,8 +896,14 @@ function rollBuild(dataWrap){
 		anchorAttrs = picked?.attributes || null;
 	  }
 	}
-	// Tier 3: mechanics anchor (only when NO ascendancy oaths AND NO weapon oaths)
-	else if (ascOaths.size === 0 && wOaths.size === 0 && cOaths.size > 0) {
+	// Tier 3: Defensive Strategy anchor (only when no higher-tier Oath exists).
+	else if (ascOaths.size === 0 && wOaths.size === 0 && dsOaths.size > 0) {
+	  const picked = allowedDefensiveStrategies[Math.floor(Math.random() * allowedDefensiveStrategies.length)];
+	  activeDefensiveStrategyOathName = picked?.name || null;
+	  anchorAttrs = picked?.attributes || null;
+	}
+	// Tier 4: mechanics anchor (only when no higher-tier Oath exists).
+	else if (ascOaths.size === 0 && wOaths.size === 0 && dsOaths.size === 0 && cOaths.size > 0) {
 	  const ail = (data.Ailments || []).filter(a => a && !cAboms.has(a.name));
 	  const tac = (data.Tactics || []).filter(t => t && !cAboms.has(t.name));
 	  const oathMechRefs = [...ail, ...tac].filter(m => cOaths.has(m.name));
@@ -898,8 +974,7 @@ function rollBuild(dataWrap){
 	let filteredWeaponPool = weaponPool.filter((w) => !wAboms.has(w.name));
 	
 	if (wOaths.size > 0) {
-	  const fromOath = filteredWeaponPool.filter((w) => wOaths.has(w.name));
-	  if (fromOath.length > 0) filteredWeaponPool = fromOath;
+	  filteredWeaponPool = filteredWeaponPool.filter((w) => wOaths.has(w.name));
 	}
 	
 	if (minionsOath) {
@@ -921,21 +996,34 @@ function rollBuild(dataWrap){
 	  const forced = filteredWeaponPool.find(w => w?.name === activeWeaponOathName);
 	  if (forced) filteredWeaponPool = [forced];
 	}
-	
-	const weapon = pickByCohesion(filteredWeaponPool, base, th);
-	
-	let offhand = null;
-	if (weapon && Object.keys(validOffhands).includes(weapon.name)) {
-	  const offPool = (data.Weapons['Off-Hand'] || []).filter((o) => validOffhands[weapon.name].includes(o.name));
-	  offhand = pickByCohesion(offPool, base, th);
+
+	let strategyPool = allowedDefensiveStrategies;
+	if (activeDefensiveStrategyOathName) {
+	  strategyPool = strategyPool.filter((strategy) => strategy?.name === activeDefensiveStrategyOathName);
+	}
+	const defensePool = Array.isArray(data.Defense) ? data.Defense : [];
+	const validLoadouts = weaponLoadouts(data, filteredWeaponPool).filter((loadout) =>
+	  loadoutHasStrategyOption(loadout, defensePool, strategyPool)
+	);
+	if (!validLoadouts.length) {
+	  showBindFatesError('No valid Weapon, Defense, and Defensive Strategy combination matches your current Oaths & Abominations.');
+	  return;
 	}
 
+	const validWeapons = uniqueByName(validLoadouts.map((loadout) => loadout.weapon));
+	const weapon = pickByCohesion(validWeapons, base, th);
+	const weaponLoadoutPool = validLoadouts.filter((loadout) => loadout.weapon?.name === weapon?.name);
+	const offhandPool = uniqueByName(weaponLoadoutPool.map((loadout) => loadout.offhand));
+	const offhand = offhandPool.length ? pickByCohesion(offhandPool, base, th) : null;
+	const selectedLoadout = { weapon, offhand };
 
-  // --- Survivability ---
-  const pickedDefense = pickByCohesion(data.Defense, base, th);
-
-  const dsPool = data.DefensiveStrategies.filter(ds => applyHardRestrictions(ds, { defense: pickedDefense?.name || '', weapon: weapon?.name || '', offhand: offhand?.name || '' }));
-  const pickedDefStrat = pickByCohesion(dsPool, base, th);
+	// --- Survivability ---
+	const validDefenses = defensePool.filter((defense) =>
+	  strategyPool.some((strategy) => isStrategyCompatible(strategy, defense, selectedLoadout))
+	);
+	const pickedDefense = pickByCohesion(validDefenses, base, th);
+	const dsPool = strategyPool.filter((strategy) => isStrategyCompatible(strategy, pickedDefense, selectedLoadout));
+	const pickedDefStrat = pickByCohesion(dsPool, base, th);
 
   function filterTacticsByStrictRules(allTactics, weapon, offhand){
   const w = String(weapon?.name||'').toLowerCase();
@@ -1188,7 +1276,11 @@ function rollBuild(dataWrap){
   );
   resetSecondaryWeaponSetUI();
   document.getElementById('defense')?.replaceChildren(document.createTextNode(pickedDefense?.name || ''));
-  document.getElementById('defstrat')?.replaceChildren(document.createTextNode(pickedDefStrat?.name || ''));
+  renderOathAwareText(
+    document.getElementById('defstrat'),
+    pickedDefStrat?.name || '',
+    dsOaths
+  );
 
   renderOathAwareText(
     document.getElementById('ailments'),
@@ -1531,6 +1623,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 export {
+  rollSecondaryWeaponSet,
   rollBuild,
   updateAscArt
 };

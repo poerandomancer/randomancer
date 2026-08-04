@@ -121,6 +121,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const sectionEls = {
     ascendancy: modal?.querySelector('[data-category="ascendancy"]'),
     weapon: modal?.querySelector('[data-category="weapon"]'),
+    defensiveStrategy: modal?.querySelector('[data-category="defensiveStrategy"]'),
     combat: modal?.querySelector('[data-category="combat"]')
   };
   const dividerEls = Array.from(modal?.querySelectorAll('.bind-fates-divider') || []);
@@ -128,6 +129,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const standardSections = {
     ascendancy: { listEl: document.getElementById('bind-fates-list-ascendancy'), heading: 'Ascendancy', hint: 'Swear Oaths to favored ascendancies, or name Abominations that fate will never grant.' },
     weapon: { listEl: document.getElementById('bind-fates-list-weapon'), heading: 'Weapon', hint: 'Bind yourself to chosen arms, or curse weapons you will never wield.' },
+    defensiveStrategy: { listEl: document.getElementById('bind-fates-list-defensive-strategy'), heading: 'Defensive Strategy', hint: 'Favor the protections you will rely on, or bar strategies you want fate to avoid.' },
     combat: { listEl: document.getElementById('bind-fates-list-combat'), heading: 'Combat Mechanics', hint: 'Favor certain ailments or tactics, or name those that are forbidden.' }
   };
 
@@ -219,6 +221,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
       const one = Array.isArray(data.Weapons?.['One-Handed']) ? data.Weapons['One-Handed'] : [];
       return [...two, ...one].map((w) => w.name);
     }
+    if (category === 'defensiveStrategy') {
+      return (data.DefensiveStrategies || []).map((strategy) => strategy?.name).filter(Boolean);
+    }
     if (category === 'combat') {
       const ail = (data.Ailments || []).map((a) => ({ name: a.name, kind: 'ailment' }));
       const tac = (data.Tactics || []).map((t) => ({ name: t.name, kind: 'tactic' }));
@@ -246,10 +251,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const isChallenge = mode === 'challenge';
     const asc = sectionEls.ascendancy;
     const weapon = sectionEls.weapon;
+    const defensiveStrategy = sectionEls.defensiveStrategy;
     const combat = sectionEls.combat;
 
+    if (defensiveStrategy) defensiveStrategy.hidden = isChallenge;
     if (combat) combat.hidden = isChallenge;
     if (dividerEls[1]) dividerEls[1].hidden = isChallenge;
+    if (dividerEls[2]) dividerEls[2].hidden = isChallenge;
 
     const setMeta = (sectionEl, heading, hint) => {
       const meta = getSectionMeta(sectionEl);
@@ -265,9 +273,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
     } else {
       setMeta(asc, standardSections.ascendancy.heading, standardSections.ascendancy.hint);
       setMeta(weapon, standardSections.weapon.heading, standardSections.weapon.hint);
+      setMeta(defensiveStrategy, standardSections.defensiveStrategy.heading, standardSections.defensiveStrategy.hint);
       setMeta(combat, standardSections.combat.heading, standardSections.combat.hint);
       setSectionWarning(asc, false);
       setSectionWarning(weapon, false);
+      setSectionWarning(defensiveStrategy, false);
       setSectionWarning(combat, false);
     }
   };
@@ -294,7 +304,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const hydrateFatesFromStorage = () => {
     const bind = readJsonStorage(BIND_FATES_STORAGE_KEY);
     if (bind && window.App?.setBindFatesCategory) {
-      ['ascendancy', 'weapon', 'combat'].forEach((k) => window.App.setBindFatesCategory(k, bind[k] || {}));
+      ['ascendancy', 'weapon', 'defensiveStrategy', 'combat'].forEach((k) => window.App.setBindFatesCategory(k, bind[k] || {}));
     }
     const challenge = readJsonStorage(CHALLENGE_FATES_STORAGE_KEY);
     if (challenge && window.App?.setChallengeFates) {
@@ -370,6 +380,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
       writeJsonStorage(BIND_FATES_STORAGE_KEY, {
         ascendancy: { oaths: [], abominations: [] },
         weapon: { oaths: [], abominations: [] },
+        defensiveStrategy: { oaths: [], abominations: [] },
         combat: { oaths: [], abominations: [] }
       });
     }

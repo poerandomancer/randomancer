@@ -36,6 +36,7 @@ TEXT_TAG_RULES = [
     (re.compile(r"\blife\s+regen(eration)?\b|\bregenerat(e|es|ed|ing|ion)\b", re.I), "life_regeneration"),
     (re.compile(r"\bleech(ed|ing|es)?\b", re.I), "leech"),
     (re.compile(r"\bcrit(ical|s|ically| chance)?\b|\bcritical\s+strike\b", re.I), "crit"),
+    (re.compile(r"\brunic\s+ward\b", re.I), "runic_ward"),
 ]
 
 SCRAPE_TAG_RULES = [
@@ -56,6 +57,7 @@ SCRAPE_TAG_RULES = [
     (re.compile(r"\blightning\b", re.I), "lightning"),
     (re.compile(r"\bchaos\b", re.I), "chaos"),
     (re.compile(r"\bphysical\b", re.I), "physical"),
+    (re.compile(r"\brunic\s+ward\b", re.I), "runic_ward"),
 ]
 
 HERE = Path(__file__).resolve().parent
@@ -279,7 +281,11 @@ def build_ascendancy_map_from_file(entries, allowed_names=None):
 
 
 
-def classify_node(node, ascendancy_names_by_id):
+def classify_node(node, ascendancy_names_by_id, *, require_character_tree=True):
+    # The 0.5 export combines the character tree with Atlas/Masters and
+    # Genesis-tree records. Only SkillType 0 belongs in build recommendations.
+    if require_character_tree and node.get("SkillType") != 0:
+        return None
     asc = node.get("Ascendancy", None)
     name = node.get("Name", "")
     if is_junk_name(name):
@@ -374,6 +380,9 @@ def derive_tags(raw_stats, lines=None):
             add("armour")
         if "block" in stat_id:
             add("block")
+        if re.search(r"(?:^|_)ward(?:_|$)", stat_id):
+            add("ward")
+            add("runic_ward")
         if "mana" in stat_id:
             add("mana")
         if "rage" in stat_id:
@@ -1240,7 +1249,19 @@ def main():
         "overviewPageFallbackMatches": int(scrape_notes.get("overviewPageFallbackMatches", 0)),
         "unmatchedNames": [],
         "networkErrors": network_errors,
+        "excludedNonCharacterNodes": 0,
+        "excludedNonCharacterNodesBySkillType": {},
     }
+
+    excluded_by_skill_type = Counter()
+    for node in passive_skills:
+        skill_type = node.get("SkillType")
+        if skill_type == 0:
+            continue
+        if classify_node(node, ascendancy_names_by_id, require_character_tree=False):
+            excluded_by_skill_type[str(skill_type)] += 1
+    report["excludedNonCharacterNodes"] = sum(excluded_by_skill_type.values())
+    report["excludedNonCharacterNodesBySkillType"] = dict(sorted(excluded_by_skill_type.items()))
 
     enriched_nodes = []
     for node in passive_skills:

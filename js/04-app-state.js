@@ -76,6 +76,7 @@ const App = window.App = (() => {
     bindFates: {
       ascendancy: { oaths: [], abominations: [] },
       weapon:     { oaths: [], abominations: [] },
+      defensiveStrategy: { oaths: [], abominations: [] },
       combat:     { oaths: [], abominations: [] }
     },
 
@@ -289,6 +290,7 @@ function getBindFatesFromApp(){
   return (App && App.state && App.state.bindFates) || {
     ascendancy: { oaths: [], abominations: [] },
     weapon:     { oaths: [], abominations: [] },
+    defensiveStrategy: { oaths: [], abominations: [] },
     combat:     { oaths: [], abominations: [] }
   };
 }

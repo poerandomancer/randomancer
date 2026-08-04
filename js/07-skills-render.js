@@ -489,6 +489,25 @@ function isDevPlaceholderGem(g){
   return /(\bDNT\b|\bUNUSED\b|Coming\s*Soon)/i.test(s);
 }
 
+function isKalguuranGem(g){
+  const tags = []
+    .concat(Array.isArray(g?.source_tags) ? g.source_tags : [])
+    .concat(Array.isArray(g?.tags) ? g.tags : []);
+  return tags.some((tag) => normalizeTag(tag) === 'kalguuran');
+}
+
+function isExcludedBuildSupport(g){
+  return isDevPlaceholderGem(g) || isKalguuranGem(g);
+}
+
+function filterRecommendedSupportIds(supportEntries, gemDict){
+  return (supportEntries || []).filter((entry) => {
+    const gem = lookupGem(gemDict, entry);
+    if (gem) return !isExcludedBuildSupport(gem);
+    return !isDevPlaceholderGem({ id: String(entry || '') });
+  });
+}
+
 
 function weaponContext(weapon, offhand){
   const wName = String(weapon?.name || '');
@@ -663,7 +682,7 @@ function isGemWeaponCompatible(g, ctx){
 // ---------- support gems renderer ----------
 function renderSupportCards(supportEntries, gemDict){
   const items=[];
-  (supportEntries||[]).forEach(n=>{
+  filterRecommendedSupportIds(supportEntries, gemDict).forEach(n=>{
     const g = lookupGem(gemDict, n);
     const title = g ? (g?.base_item?.display_name || g?.support_name || g?.name || String(n)) : String(n);
     const desc  = g ? (g?.support_text || g?.description || (g?.granted_effect && g?.granted_effect.description) || '') : '';
@@ -745,6 +764,7 @@ function selectSynergySupports(picks, ctx, gemDict, maxCount=4){
 	if (gemDict && typeof gemDict.values === 'function') {
 	  for (const g of gemDict.values()) {
 		if (!g || g.type !== 'support') continue;
+		if (isExcludedBuildSupport(g)) continue;
 		const id = (g.id != null) ? String(g.id) : null;
 		if (!id) continue;
 		if (excluded.has(id)) continue;     // <-- the inversion
@@ -1039,6 +1059,7 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx, opts = {}){
 	  g.type === 'active' &&
 	  hasCraftingTypes(g) &&
 	  !isDevPlaceholderGem(g) &&
+	  !isKalguuranGem(g) &&
 	  !hasSpirit(g)
 	);
 
@@ -1236,7 +1257,7 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx, opts = {}){
       skills: picks.map(g => ({
         id: g.id || g.base_item?.id || g.name || '',
         name: g.name || '',
-        recommended_supports: Array.isArray(g.recommended_supports) ? g.recommended_supports.slice(0, 6) : []
+        recommended_supports: filterRecommendedSupportIds(g.recommended_supports, gemDict).slice(0, 6)
       })),
       synergySupports: Array.isArray(synergySupports) ? synergySupports.slice(0, 4) : [],
       persistentBuff: (includePersistentBuff && persistent) ? {
