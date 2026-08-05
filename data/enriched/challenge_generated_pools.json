@@ -1,7 +1,7 @@
 {
   "meta": {
     "generator": "data/helperScripts/generate_challenge_pools.py",
-    "strictUniqueCount": 14,
+    "strictUniqueCount": 15,
     "craftingTypeCount": 8
   },
   "strictUniqueGrantedSkills": [
@@ -14,7 +14,7 @@
       "slot": "Crossbow",
       "skillId": "Metadata/Items/Gem/SkillGemGeminiSurge",
       "skillDescription": "Grants your weapon Surges. Non-Melee Projectile Attacks with that weapon Consume Surges to cause the Projectiles fired to explode at the end of their flight.",
-      "uniqueSummary": "Dyad Crossbow (Crossbow) — Adds 16 to 35 Physical Damage; +5% to Critical Chance — Gemini Surge",
+      "uniqueSummary": "Dyad Crossbow (Crossbow) — Adds 20 to 33 Physical Damage; +5% to Critical Chance — Gemini Surge",
       "uniqueSourceKey": "Double Vision||Dyad Crossbow",
       "uniqueSourceUrl": "https://poe2db.tw/us/Double_Vision",
       "icon": null
@@ -28,7 +28,7 @@
       "slot": "Talisman",
       "skillId": "Metadata/Items/Gems/SkillGemHyenaCackle",
       "skillDescription": "Activate to summon a cackle of Hyena Companions. The cackle is treated as a single Companion for effects that count or limit Companions, regardless of the number of Hyenas in the cackle. Hyenas whoop when they first appear, Hindering nearby enemies, and have a chance to Maim enemies they Hit.",
-      "uniqueSummary": "Familial Talisman (Talisman) — 91% increased Physical Damage; 5% increased Movement Speed — Cackling Companions",
+      "uniqueSummary": "Familial Talisman (Talisman) — 75% increased Physical Damage; 5% increased Movement Speed — Cackling Companions",
       "uniqueSourceKey": "Hysseg's Claw||Familial Talisman",
       "uniqueSourceUrl": "https://poe2db.tw/us/Hyssegs_Claw",
       "icon": null
@@ -42,7 +42,7 @@
       "slot": "Bow",
       "skillId": "Metadata/Items/Gem/SkillGemPhantasmalArrow",
       "skillDescription": "Fires an arrow that embeds where it lands for a short duration. At the end of the duration, the arrow explodes in spectral flame, turning it to ashes and damaging enemies, with a high chance to Ignite. Igniting any enemy with the Explosion also applies Ignite to enemies within range.",
-      "uniqueSummary": "Artillery Bow (Bow) — Adds 79 to 138 Fire Damage; 46% increased Flammability BuffMagnitude — Phantasmal Arrow",
+      "uniqueSummary": "Artillery Bow (Bow) — Adds 91 to 126 Fire Damage; 47% increased Flammability BuffMagnitude — Phantasmal Arrow",
       "uniqueSourceKey": "Fairgraves' Curse||Artillery Bow",
       "uniqueSourceUrl": "https://poe2db.tw/us/Fairgraves_Curse",
       "icon": null
@@ -53,10 +53,10 @@
       "skillName": "Pinnacle of Power",
       "requiredLevel": 65,
       "category": "weapon",
-      "slot": "Wand",
+      "slot": "Ezomyte Wand",
       "skillId": "Metadata/Items/Gem/SkillGemPinnacleOfPower",
       "skillDescription": "Consume all Power Charges to master the elements, gaining Elemental Damage and the ability to apply Elemental Ailments with other damage types. Can only be used while you have maximum Power Charges.",
-      "uniqueSummary": "Siphoning Wand (Wand) — +111 to maximum Mana; +3 to Level of all Spell Skills — Pinnacle of Power",
+      "uniqueSummary": "Siphoning Wand (Ezomyte Wand) — +137 to maximum Mana; +3 to Level of all Spell Skills — Pinnacle of Power",
       "uniqueSourceKey": "Adonia's Ego||Siphoning Wand",
       "uniqueSourceUrl": "https://poe2db.tw/us/Adonias_Ego",
       "icon": null
@@ -70,7 +70,7 @@
       "slot": "Spear",
       "skillId": "Metadata/Items/Gem/SkillGemChaoticInfusion",
       "skillDescription": "Grants your weapon Surges. Non-Melee Projectile Attacks with that weapon Consume Surges to cause the Projectiles fired to explode at the end of their flight.",
-      "uniqueSummary": "Helix Spear (Spear) — 19% increased Attack Speed; LifeLeech 15.42% of Physical Damage as Life — Chaotic Surge",
+      "uniqueSummary": "Helix Spear (Spear) — 16% increased Attack Speed; LifeLeech 14.74% of Physical Damage as Life — Chaotic Surge",
       "uniqueSourceKey": "Spire of Ire||Helix Spear",
       "uniqueSourceUrl": "https://poe2db.tw/us/Spire_of_Ire",
       "icon": null
@@ -81,10 +81,10 @@
       "skillName": "Shattering Spite",
       "requiredLevel": 72,
       "category": "weapon",
-      "slot": "Spear",
+      "slot": "Vaal Spear",
       "skillId": "Metadata/Items/Gems/SkillGemShatteringSpite",
       "skillDescription": "Stamp your spear, destroying all Bloodstone Lances on each enemy in your Presence to cause a damaging explosion around that enemy. Each explosion gains new benefits when reaching higher thresholds of Bloodstone Lances removed from an enemy, causing them to deal more damage, have increased area of effect, and Leech Life from enemies caught in the blast.",
-      "uniqueSummary": "Pronged Spear (Spear) — 107% increased Physical Damage; Adds 97 to 126 Fire Damage — Shattering Spite",
+      "uniqueSummary": "Pronged Spear (Vaal Spear) — 106% increased Physical Damage; Adds 94 to 144 Fire Damage — Shattering Spite",
       "uniqueSourceKey": "Atziri's Contempt||Pronged Spear",
       "uniqueSourceUrl": "https://poe2db.tw/us/Atziris_Contempt",
       "icon": null
@@ -98,7 +98,7 @@
       "slot": "Crossbow",
       "skillId": null,
       "skillDescription": "Compose Requiem (description unavailable in current enrichment data).",
-      "uniqueSummary": "Desolate Crossbow (Crossbow) — 296% increased Physical Damage; 13% increased Attack Speed — Compose Requiem",
+      "uniqueSummary": "Desolate Crossbow (Crossbow) — 277% increased Physical Damage; 16% increased Attack Speed — Compose Requiem",
       "uniqueSourceKey": "The Last Lament||Desolate Crossbow",
       "uniqueSourceUrl": "https://poe2db.tw/us/The_Last_Lament",
       "icon": null
@@ -112,7 +112,7 @@
       "slot": "Staff",
       "skillId": "Metadata/Items/Gem/SkillGemIcestorm",
       "skillDescription": "Conjure a hail of icy bolts over the targeted area. Chill and Freeze on enemies in front of you are Consumed to fuel the Icestorm by creating improved bolts.",
-      "uniqueSummary": "Permafrost Staff (Staff) — +7 to Level of all Cold Spell Skills; 20% reduced Cast Speed — Icestorm",
+      "uniqueSummary": "Permafrost Staff (Staff) — +7 to Level of all Cold Spell Skills; 16% reduced Cast Speed — Icestorm",
       "uniqueSourceKey": "The Whispering Ice||Permafrost Staff",
       "uniqueSourceUrl": "https://poe2db.tw/us/The_Whispering_Ice",
       "icon": null
@@ -126,7 +126,7 @@
       "slot": "Staff",
       "skillId": "Metadata/Items/Gems/SkillGemHisFoulEmergence",
       "skillDescription": "Conjure a horrific skull rising from the lightless depths to bite your enemies dealing high damage at target location and leaving Withering Ground in its wake. Targeting close to you will cause you to jump back as you cast.",
-      "uniqueSummary": "Ravenous Staff (Staff) — 80% increased Abyssalify magnitudes — His Foul Emergence",
+      "uniqueSummary": "Ravenous Staff (Staff) — 72% increased Abyssalify magnitudes; +99 to Spirit — Feast of Flesh",
       "uniqueSourceKey": "The Unborn Lich||Ravenous Staff",
       "uniqueSourceUrl": "https://poe2db.tw/us/The_Unborn_Lich",
       "icon": null
@@ -140,7 +140,7 @@
       "slot": "Amulet",
       "skillId": "Metadata/Items/Gems/SkillGemFuturePast",
       "skillDescription": "Hinekora observes your Future-Past granting you the opportunity to subvert a lesser fate. After a period of Hindsight, she will grant you her Foresight, which prevents you from avoiding Hits while Dodge Rolling. When you are Hit while Dodge Rolling, Hinekora restores you to full Life immediately before taking damage from the Hit, and grants you Sight Beyond Sight, which prevents you from dying.",
-      "uniqueSummary": "Stellar Amulet (Amulet) — +504 to Accuracy Rating; +486 to Evasion Rating — Future-Past",
+      "uniqueSummary": "Stellar Amulet (Amulet) — +485 to Accuracy Rating; +384 to Evasion Rating — Future-Past",
       "uniqueSourceKey": "Hinekora's Sight||Stellar Amulet",
       "uniqueSourceUrl": "https://poe2db.tw/us/Hinekoras_Sight",
       "icon": null
@@ -154,7 +154,7 @@
       "slot": "Body Armour",
       "skillId": "Metadata/Items/Gems/SkillGemValakosCharge",
       "skillDescription": "While active, taking Lightning damage builds up charge on you. Reaching full charge expends all charge to Trigger this skill, creating a Chaining lightning bolt that arcs to nearby enemies.",
-      "uniqueSummary": "Ancestral Mail (Body Armour) — 95% increased Armour and Evasion; +100 to maximum Life — Valako's Charge",
+      "uniqueSummary": "Ancestral Mail (Body Armour) — 97% increased Armour and Evasion; +89 to maximum Life — Valako's Charge",
       "uniqueSourceKey": "Lightning Coil||Ancestral Mail",
       "uniqueSourceUrl": "https://poe2db.tw/us/Lightning_Coil",
       "icon": null
@@ -167,8 +167,8 @@
       "category": "nonweapon",
       "slot": "Quiver",
       "skillId": "Metadata/Items/Gem/SkillGemExplodingPoisonToad",
-      "skillDescription": "A Poisonous Toad leaps towards enemies and explodes, dealing damage in an area and inflicting Poison.",
-      "uniqueSummary": "Toxic Quiver (Quiver) — Adds 10 to 15 Physical Damage to Attack; Gain 10 Mana per enemy killed — Bursting Fen Toad",
+      "skillDescription": "This skill creates a toad that jumps around briefly, then explodes the toad, dealing Attack damage in an area and inflicting Poison. Damage you deal with skill is not based on your Weapon",
+      "uniqueSummary": "Toxic Quiver (Quiver) — Adds 8 to 17 Physical Damage to Attack; Gain 11 Mana per enemy killed — Bursting Fen Toad",
       "uniqueSourceKey": "Murkshaft||Toxic Quiver",
       "uniqueSourceUrl": "https://poe2db.tw/us/Murkshaft",
       "icon": null
@@ -182,7 +182,7 @@
       "slot": "Boots",
       "skillId": "Metadata/Items/Gem/SkillGemBlackPowderBlitz",
       "skillDescription": "Replaces your dodge roll with an explosive-assisted leap, firing off a round from your prosthetic cannon leg that Blinds and Ignites enemies in the area you escape from. The explosion will cause any Grenades in its area of effect to also explode.",
-      "uniqueSummary": "Covered Sabatons (Boots) — 82% increased Armour and Evasion; 12% increased ItemRarity found — Black Powder Blitz",
+      "uniqueSummary": "Covered Sabatons (Boots) — 81% increased Armour and Evasion; 13% increased ItemRarity found — Black Powder Blitz",
       "uniqueSourceKey": "Shankgonne||Covered Sabatons",
       "uniqueSourceUrl": "https://poe2db.tw/us/Shankgonne",
       "icon": null
@@ -193,12 +193,26 @@
       "skillName": "Life Remnants",
       "requiredLevel": 58,
       "category": "nonweapon",
-      "slot": "Body Armour",
+      "slot": "Vaal Body Armour",
       "skillId": "Metadata/Items/Gem/SkillGemAscendancyLifeRemnants",
       "skillDescription": "Drink the blood of your enemies to restore your Life. While active, enemies you kill have a chance to spawn a Life Remnant, and Hitting a target spawns a Life Remnant every few seconds. Picking up a Life Remnant grants you Life which can Overflow maximum Life.",
-      "uniqueSummary": "Altar Robe (Body Armour) — 139% increased EnergyShield; +124 to maximum Life — Life Remnants",
-      "uniqueSourceKey": "The Covenant||Altar Robe",
+      "uniqueSummary": "Runemastered Altar Robe (Vaal Body Armour) — Regenerate 1.98% of maximum Life per second; 25% increased Life Cost Efficiency — Life Remnants",
+      "uniqueSourceKey": "The Covenant||Runemastered Altar Robe",
       "uniqueSourceUrl": "https://poe2db.tw/us/The_Covenant",
+      "icon": null
+    },
+    {
+      "id": "nightfall__soaring_midnight",
+      "uniqueName": "Nightfall",
+      "skillName": "Soaring Midnight",
+      "requiredLevel": 70,
+      "category": "nonweapon",
+      "slot": "Shield",
+      "skillId": "Metadata/Items/Gems/SkillGemGlacialClash",
+      "skillDescription": "Hurl your Shield as a Projectile which Returns to you at the end of its flight. While the Shield is in flight, this skill is replaced with Embrace the Fall. This skill's cooldown is skipped if you catch the Shield as it Returns, or destroy an Ice Crystal with the Embrace the Fall.",
+      "uniqueSummary": "Glacial Fortress (Shield) — +150 Strength Requirement; 12% increased Block chance — Soaring Midnight",
+      "uniqueSourceKey": "Nightfall||Glacial Fortress",
+      "uniqueSourceUrl": "https://poe2db.tw/us/Nightfall",
       "icon": null
     }
   ],

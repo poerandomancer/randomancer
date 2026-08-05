@@ -1,15 +1,15 @@
 {
-  "totalKeystones": 37,
-  "keystonesScrapeMatched": 37,
+  "totalKeystones": 34,
+  "keystonesScrapeMatched": 34,
   "keystonesUnmatched": 0,
-  "totalAscendancyNodes": 196,
-  "ascendancyScrapeMatched": 194,
+  "totalAscendancyNodes": 215,
+  "ascendancyScrapeMatched": 213,
   "ascendancyUnmatched": 2,
-  "nodesUsingScrapedLines": 217,
-  "nodesUsingDataminedFallback": 1123,
-  "nodesWithTagsEnhancedByScraping": 75,
-  "nodesUsingSanitizedScrapedLines": 217,
-  "scrapeMatchesRejectedForBadLines": 14,
+  "nodesUsingScrapedLines": 232,
+  "nodesUsingDataminedFallback": 1097,
+  "nodesWithTagsEnhancedByScraping": 82,
+  "nodesUsingSanitizedScrapedLines": 232,
+  "scrapeMatchesRejectedForBadLines": 15,
   "badScrapeLineSamples": [
     {
       "name": "Iron Reflexes",
@@ -94,6 +94,20 @@
       ]
     },
     {
+      "name": "Hulking Form",
+      "type": "ascendancy",
+      "reason": "no_meaningful_ascendancy_lines",
+      "rawSample": [
+        "% more Damage against",
+        "Heavy Stunned",
+        "Enemies"
+      ],
+      "sanitizedSample": [
+        "% more Damage against",
+        "Heavy Stunned Enemies"
+      ]
+    },
+    {
       "name": "Spiked Plates",
       "type": "ascendancy",
       "reason": "no_meaningful_ascendancy_lines",
@@ -169,7 +183,8 @@
       ],
       "sanitizedSample": [
         "ascendancy enable fire djinn passive",
-        "\"You have forsaken your duty to my akhara. Yes... we do not abide weakness. But we also do not abide madness in the fervour of battle! Your slain dekhara will have their justice. You must pay.\""
+        "\"You have forsaken your duty to my",
+        "{dekhara} will have their justice. You must pay.\""
       ]
     },
     {
@@ -186,9 +201,7 @@
       ],
       "sanitizedSample": [
         "Command AoE Projectile Fire",
-        "Cost: (4—47) Mana",
-        "Chance: 7.00% Projectile Speed:",
-        "Ruzhan to hurl his greatsword, spreading hazardous runes on the ground where it lands. If an enemy steps on a rune, it erupts in a fiery tornado that deals"
+        "20) Cost: (4 47) Mana"
       ]
     },
     {
@@ -201,37 +214,28 @@
         ",",
         "Fire",
         "Level:",
-        "(1—20)"
+        "(1"
       ],
       "sanitizedSample": [
         "Command AoE Fire Level:",
-        "(1—20) Cost: (6—68) Mana",
+        "68) Mana Requires: Level (1",
         "Ruzhan to teleport to the target location. Upon arrival, the Djinn deals",
         "damage to enemies around him then slams his blazing sword into the ground, creating a wave of lava that also deals"
-      ]
-    },
-    {
-      "name": "Sunder my Enemies...",
-      "type": "ascendancy",
-      "reason": "mostly_incomplete_fragments",
-      "rawSample": [
-        "Grants Skill:",
-        "Unbound Avatar",
-        "gain unbound ailment stacks"
-      ],
-      "sanitizedSample": [
-        "Grants Skill: Unbound Avatar",
-        "gain unbound ailment stacks"
       ]
     }
   ],
   "ascendancyBlankLinesAfterMerge": 1,
   "statlessAscendancyNodesUsingSkillFallback": 3,
   "scrapedFragmentRejections": 1,
-  "overviewPageFallbackMatches": 102,
+  "overviewPageFallbackMatches": 117,
   "unmatchedNames": [
     "Contagious Contamination",
     "Tale Woman's Attunement"
   ],
-  "networkErrors": []
+  "networkErrors": [],
+  "excludedNonCharacterNodes": 562,
+  "excludedNonCharacterNodesBySkillType": {
+    "1": 465,
+    "2": 97
+  }
 }

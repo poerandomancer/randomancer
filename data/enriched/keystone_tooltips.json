@@ -1,9 +1,15 @@
 {
   "Ancestral Bond": {
     "lines": [
-      "Unlimited number of Summoned",
+      "Your",
+      "Totem",
+      "Limit",
+      "is doubled",
+      "No",
+      "Charge",
+      "requirement for placing",
       "Totems",
-      "Totems reserve 75",
+      "reserve 75",
       "Spirit",
       "each"
     ]
@@ -94,11 +100,11 @@
   },
   "Eldritch Battery": {
     "lines": [
-      "Converts",
-      "all",
+      "Convert",
+      "100% of maximum",
       "Energy Shield",
-      "to Mana",
-      "Doubles Mana Costs"
+      "to maximum Mana",
+      "Mana Costs are Doubled"
     ]
   },
   "Elemental Equilibrium": {
@@ -164,16 +170,17 @@
       "as though using a",
       "Quarterstaff",
       "while both of your hand slots are empty",
+      "Unarmed Attacks",
+      "that would use an",
+      "Equipped",
+      "'s damage have:",
+      "• Base",
       "Unarmed",
-      "Attacks",
-      "that would use your",
-      "'s damage gain:",
-      "•",
       "Physical",
-      "damage based on their Skill Level",
+      "damage replaced with damage based on their Skill Level",
       "• 1% more",
       "Speed per 75",
-      "Item Evasion Rating",
+      "Item Evasion",
       "on",
       "Equipped Armour Items",
       "• +0.1% to",
@@ -310,12 +317,14 @@
       "You can have two",
       "Companions",
       "of different types",
-      "You have 30% less",
-      "Defences",
-      "have +1 to each",
-      "Defence",
-      "for every 2 of that",
-      "you have"
+      "30% more",
+      "Reservation",
+      "Efficiency",
+      "of",
+      "Companion",
+      "Skills",
+      "20% less",
+      "of non-"
     ]
   },
   "Unwavering Stance": {
@@ -327,10 +336,16 @@
   },
   "Vaal Pact": {
     "lines": [
+      "50% more amount of",
+      "Life Leeched",
+      "Leech Life",
+      "67% less quickly",
+      "Cannot Recover Life other than from",
+      "Leech",
       "Life Leech",
-      "is Instant",
-      "Cannot use Life",
-      "Flasks"
+      "effects are not removed when",
+      "Unreserved",
+      "Life is Filled"
     ]
   },
   "Whispers of Doom": {

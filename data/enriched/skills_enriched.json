@@ -8086,8 +8086,8 @@
       ],
       "damage_types": [
         "fire",
-        "lightning",
-        "cold"
+        "cold",
+        "lightning"
       ],
       "delivery": [
         "spell",
@@ -11042,8 +11042,8 @@
       ],
       "damage_types": [
         "fire",
-        "lightning",
-        "physical"
+        "physical",
+        "lightning"
       ],
       "delivery": [
         "attack",
@@ -11178,8 +11178,8 @@
         "travel"
       ],
       "damage_types": [
-        "lightning",
-        "physical"
+        "physical",
+        "lightning"
       ],
       "delivery": [
         "attack",
@@ -13033,9 +13033,9 @@
         "physical"
       ],
       "damage_types": [
+        "chaos",
         "fire",
-        "physical",
-        "chaos"
+        "physical"
       ],
       "delivery": [
         "minion"
@@ -13449,9 +13449,9 @@
         "physical"
       ],
       "damage_types": [
+        "chaos",
         "fire",
-        "physical",
-        "chaos"
+        "physical"
       ],
       "delivery": [
         "minion"
@@ -14208,8 +14208,8 @@
         "physical"
       ],
       "damage_types": [
-        "physical",
-        "chaos"
+        "chaos",
+        "physical"
       ],
       "delivery": [
         "minion"
@@ -14344,8 +14344,8 @@
         "physical"
       ],
       "damage_types": [
-        "physical",
-        "chaos"
+        "chaos",
+        "physical"
       ],
       "delivery": [
         "area",
@@ -16724,8 +16724,8 @@
         "persistent"
       ],
       "damage_types": [
-        "physical",
-        "chaos"
+        "chaos",
+        "physical"
       ],
       "delivery": [
         "area"
@@ -25904,8 +25904,8 @@
         "spell"
       ],
       "damage_types": [
-        "physical",
-        "chaos"
+        "chaos",
+        "physical"
       ],
       "delivery": [
         "spell",
@@ -27560,8 +27560,8 @@
         "physical"
       ],
       "damage_types": [
-        "physical",
-        "chaos"
+        "chaos",
+        "physical"
       ],
       "delivery": [
         "attack",
@@ -32375,8 +32375,8 @@
       ],
       "damage_types": [
         "fire",
-        "lightning",
-        "cold"
+        "cold",
+        "lightning"
       ],
       "delivery": [],
       "role": [
@@ -38935,8 +38935,8 @@
         "usablewhilemoving"
       ],
       "damage_types": [
-        "fire",
-        "chaos"
+        "chaos",
+        "fire"
       ],
       "delivery": [
         "attack",
@@ -41156,8 +41156,8 @@
       ],
       "skill_types": [],
       "damage_types": [
-        "physical",
-        "chaos"
+        "chaos",
+        "physical"
       ],
       "delivery": [],
       "role": [
@@ -42630,8 +42630,8 @@
         "usablewhilemoving"
       ],
       "damage_types": [
-        "fire",
-        "chaos"
+        "chaos",
+        "fire"
       ],
       "delivery": [
         "attack",
@@ -43246,8 +43246,8 @@
       ],
       "damage_types": [
         "fire",
-        "lightning",
-        "cold"
+        "cold",
+        "lightning"
       ],
       "delivery": [
         "spell",
@@ -44647,8 +44647,8 @@
       ],
       "skill_types": [],
       "damage_types": [
-        "physical",
-        "chaos"
+        "chaos",
+        "physical"
       ],
       "delivery": [
         "area"
@@ -44746,8 +44746,8 @@
         "usablewhilemoving"
       ],
       "damage_types": [
-        "fire",
-        "chaos"
+        "chaos",
+        "fire"
       ],
       "delivery": [
         "spell",
@@ -46077,8 +46077,8 @@
       "skill_types": [],
       "damage_types": [
         "fire",
-        "lightning",
-        "cold"
+        "cold",
+        "lightning"
       ],
       "delivery": [
         "spell",
@@ -46890,8 +46890,8 @@
       ],
       "damage_types": [
         "fire",
-        "lightning",
-        "cold"
+        "cold",
+        "lightning"
       ],
       "delivery": [
         "attack",
@@ -59532,8 +59532,8 @@
       ],
       "damage_types": [
         "fire",
-        "lightning",
-        "cold"
+        "cold",
+        "lightning"
       ],
       "delivery": [
         "spell",
@@ -59671,8 +59671,8 @@
       ],
       "damage_types": [
         "fire",
-        "lightning",
-        "cold"
+        "cold",
+        "lightning"
       ],
       "delivery": [],
       "role": [
@@ -61792,8 +61792,8 @@
       ],
       "damage_types": [
         "fire",
-        "lightning",
-        "cold"
+        "cold",
+        "lightning"
       ],
       "delivery": [
         "spell"
@@ -69140,8 +69140,8 @@
         "usablewhilemoving"
       ],
       "damage_types": [
-        "fire",
-        "chaos"
+        "chaos",
+        "fire"
       ],
       "delivery": [
         "spell",
@@ -70452,11 +70452,11 @@
       ],
       "skill_types": [],
       "damage_types": [
+        "chaos",
         "fire",
-        "lightning",
         "cold",
         "physical",
-        "chaos"
+        "lightning"
       ],
       "delivery": [
         "spell",
@@ -71076,8 +71076,8 @@
       ],
       "damage_types": [
         "fire",
-        "lightning",
-        "cold"
+        "cold",
+        "lightning"
       ],
       "delivery": [
         "spell",
@@ -72334,8 +72334,8 @@
       ],
       "damage_types": [
         "fire",
-        "lightning",
-        "cold"
+        "cold",
+        "lightning"
       ],
       "delivery": [],
       "role": [
@@ -72591,8 +72591,8 @@
       ],
       "damage_types": [
         "fire",
-        "lightning",
-        "cold"
+        "cold",
+        "lightning"
       ],
       "delivery": [],
       "role": [
@@ -74114,9 +74114,9 @@
       ],
       "damage_types": [
         "fire",
-        "lightning",
         "cold",
-        "physical"
+        "physical",
+        "lightning"
       ],
       "delivery": [],
       "role": [
@@ -76992,8 +76992,8 @@
         "physical"
       ],
       "damage_types": [
-        "physical",
-        "chaos"
+        "chaos",
+        "physical"
       ],
       "delivery": [
         "minion"
@@ -87514,8 +87514,8 @@
       ],
       "skill_types": [],
       "damage_types": [
-        "physical",
-        "chaos"
+        "chaos",
+        "physical"
       ],
       "delivery": [],
       "role": [
@@ -91955,8 +91955,8 @@
       ],
       "skill_types": [],
       "damage_types": [
-        "physical",
-        "chaos"
+        "chaos",
+        "physical"
       ],
       "delivery": [],
       "role": [
@@ -92541,8 +92541,8 @@
       ],
       "skill_types": [],
       "damage_types": [
-        "physical",
-        "chaos"
+        "chaos",
+        "physical"
       ],
       "delivery": [],
       "role": [
@@ -93691,8 +93691,8 @@
       ],
       "skill_types": [],
       "damage_types": [
-        "physical",
-        "chaos"
+        "chaos",
+        "physical"
       ],
       "delivery": [],
       "role": [
@@ -94420,8 +94420,8 @@
         "usablewhilemoving"
       ],
       "damage_types": [
-        "lightning",
-        "cold"
+        "cold",
+        "lightning"
       ],
       "delivery": [
         "spell",
@@ -97393,8 +97393,8 @@
       ],
       "damage_types": [
         "fire",
-        "lightning",
-        "cold"
+        "cold",
+        "lightning"
       ],
       "delivery": [
         "attack",
@@ -97803,8 +97803,8 @@
       ],
       "damage_types": [
         "fire",
-        "lightning",
-        "cold"
+        "cold",
+        "lightning"
       ],
       "delivery": [],
       "role": [
@@ -98060,8 +98060,8 @@
       ],
       "damage_types": [
         "fire",
-        "lightning",
-        "cold"
+        "cold",
+        "lightning"
       ],
       "delivery": [
         "attack",
@@ -98906,8 +98906,8 @@
         "useglobalstats"
       ],
       "damage_types": [
-        "physical",
-        "chaos"
+        "chaos",
+        "physical"
       ],
       "delivery": [
         "attack",
@@ -100376,8 +100376,8 @@
       ],
       "damage_types": [
         "fire",
-        "lightning",
-        "cold"
+        "cold",
+        "lightning"
       ],
       "delivery": [
         "spell"
@@ -103600,8 +103600,8 @@
       ],
       "skill_types": [],
       "damage_types": [
-        "fire",
-        "chaos"
+        "chaos",
+        "fire"
       ],
       "delivery": [],
       "role": [
@@ -103684,8 +103684,8 @@
       ],
       "skill_types": [],
       "damage_types": [
-        "lightning",
-        "chaos"
+        "chaos",
+        "lightning"
       ],
       "delivery": [],
       "role": [
@@ -103768,8 +103768,8 @@
       ],
       "skill_types": [],
       "damage_types": [
-        "cold",
-        "chaos"
+        "chaos",
+        "cold"
       ],
       "delivery": [],
       "role": [
@@ -103855,8 +103855,8 @@
       ],
       "skill_types": [],
       "damage_types": [
-        "physical",
-        "chaos"
+        "chaos",
+        "physical"
       ],
       "delivery": [],
       "role": [
@@ -106926,8 +106926,8 @@
         "plant"
       ],
       "damage_types": [
-        "physical",
-        "chaos"
+        "chaos",
+        "physical"
       ],
       "delivery": [
         "attack",
@@ -107962,8 +107962,8 @@
         "unleashable"
       ],
       "damage_types": [
-        "physical",
-        "chaos"
+        "chaos",
+        "physical"
       ],
       "delivery": [
         "spell",
@@ -108236,8 +108236,8 @@
       ],
       "damage_types": [
         "fire",
-        "lightning",
-        "cold"
+        "cold",
+        "lightning"
       ],
       "delivery": [],
       "role": [
@@ -109734,8 +109734,8 @@
       ],
       "damage_types": [
         "fire",
-        "lightning",
-        "cold"
+        "cold",
+        "lightning"
       ],
       "delivery": [
         "spell",
@@ -111213,8 +111213,8 @@
       ],
       "skill_types": [],
       "damage_types": [
-        "physical",
-        "chaos"
+        "chaos",
+        "physical"
       ],
       "delivery": [
         "attack",
@@ -112474,8 +112474,8 @@
       "skill_types": [],
       "damage_types": [
         "fire",
-        "lightning",
-        "cold"
+        "cold",
+        "lightning"
       ],
       "delivery": [
         "spell",
@@ -112912,8 +112912,8 @@
         "usablewhilemoving"
       ],
       "damage_types": [
-        "physical",
-        "chaos"
+        "chaos",
+        "physical"
       ],
       "delivery": [
         "attack",
@@ -113342,9 +113342,9 @@
       ],
       "damage_types": [
         "fire",
-        "lightning",
         "cold",
-        "physical"
+        "physical",
+        "lightning"
       ],
       "delivery": [
         "minion"
@@ -113479,8 +113479,8 @@
         "spear"
       ],
       "damage_types": [
-        "lightning",
-        "physical"
+        "physical",
+        "lightning"
       ],
       "delivery": [
         "attack",
@@ -115022,8 +115022,8 @@
       ],
       "skill_types": [],
       "damage_types": [
-        "lightning",
-        "cold"
+        "cold",
+        "lightning"
       ],
       "delivery": [],
       "role": [
@@ -115113,8 +115113,8 @@
       ],
       "skill_types": [],
       "damage_types": [
-        "lightning",
-        "cold"
+        "cold",
+        "lightning"
       ],
       "delivery": [
         "projectile"
@@ -120254,11 +120254,11 @@
         "persistent"
       ],
       "damage_types": [
+        "chaos",
         "fire",
-        "lightning",
         "cold",
         "physical",
-        "chaos"
+        "lightning"
       ],
       "delivery": [
         "spell",
