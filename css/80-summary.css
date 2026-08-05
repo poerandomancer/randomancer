@@ -8,6 +8,25 @@
   width:34px;
   height:34px;
 }
+#build-panel{
+  /* Reserve equal space on both sides so the centered title clears the actions. */
+  --build-action-rail:166px;
+}
+#build-panel > .build-title-block{
+  width:min(720px, calc(100% - var(--build-action-rail)));
+}
+#build-panel > .build-title-block .build-name{
+  width:100%;
+  max-width:100%;
+  text-wrap:balance;
+  overflow-wrap:break-word;
+}
+@media (max-width:600px){
+  #build-panel > .build-title-block{
+    width:100%;
+    padding-top:2rem;
+  }
+}
 .build-card-launch-link{
   appearance:none;
   margin-top:.7rem;
