@@ -1,5 +1,6 @@
 import { ensureDataPreload } from './08-data-load.js';
 import { ensureMarketBadgeDelegation, hydrateMarketBadges, renderMarketBadgeMarkup } from './features/market-price.js';
+import { normalizeUniqueSlotLabel } from './19-uniques-adapter.js';
 import { canonicalizeTag, displayTag, isNoiseTag } from './tag-normalization.js';
 
 const state = {
@@ -513,7 +514,8 @@ function buildIndex() {
   uniques.forEach((u) => {
     const name = u?.name;
     if (!name) return;
-    const slot = u?.slot || 'Unknown';
+    const sourceSlot = String(u?.slot || '').trim();
+    const slot = normalizeUniqueSlotLabel(sourceSlot) || 'Unknown';
     const base = u?.base || '';
     const implicitMods = Array.isArray(u?.implicit_mods) ? u.implicit_mods.filter(Boolean) : [];
     const explicitMods = Array.isArray(u?.explicit_mods) ? u.explicit_mods.filter(Boolean) : [];
@@ -532,6 +534,7 @@ function buildIndex() {
       tags,
       extraFields: {
         slot,
+        sourceSlot,
         base,
         requirements: u?.requirements || {},
         implicitMods,
