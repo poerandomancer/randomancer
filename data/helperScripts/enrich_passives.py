@@ -380,8 +380,7 @@ def derive_tags(raw_stats, lines=None):
             add("armour")
         if "block" in stat_id:
             add("block")
-        if re.search(r"(?:^|_)ward(?:_|$)", stat_id):
-            add("ward")
+        if "runic_ward" in stat_id:
             add("runic_ward")
         if "mana" in stat_id:
             add("mana")

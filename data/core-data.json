@@ -605,7 +605,6 @@
     {
       "name": "Runic Ward",
       "tags": [
-        "ward",
         "runic_ward"
       ],
       "attributes": {

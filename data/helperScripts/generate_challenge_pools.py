@@ -64,6 +64,18 @@ def build_unique_index(uniques_payload: dict[str, Any]) -> dict[str, dict[str, A
     return out
 
 
+def granted_skill_names(unique: dict[str, Any]) -> list[str]:
+    names = []
+    for granted in (unique.get('granted_skills') or []):
+        if isinstance(granted, dict):
+            name = str(granted.get('name') or '').strip()
+        else:
+            name = str(granted or '').strip()
+        if name:
+            names.append(name)
+    return names
+
+
 def summarize_unique(unique: dict[str, Any], skill_name: str) -> str:
     base = str(unique.get('base') or '').strip()
     slot = str(unique.get('slot') or '').strip()
@@ -114,6 +126,18 @@ def generate_pools(skills: list[dict[str, Any]], uniques_payload: dict[str, Any]
 
         unique = unique_by_name.get(unique_name.lower(), {})
         skill = by_skill_name.get(skill_name.lower(), {})
+
+        if not unique:
+            raise ValueError(f'Challenge override unique not found: {unique_name}')
+
+        granted_names = granted_skill_names(unique)
+        granted_keys = {normalize_id(name) for name in granted_names}
+        if normalize_id(skill_name) not in granted_keys:
+            available = ', '.join(granted_names) or 'none'
+            raise ValueError(
+                f'Challenge override is stale: {unique_name} does not grant {skill_name} '
+                f'(current granted skills: {available})'
+            )
 
         required_level = int(row.get('requiredLevel') or unique.get('required_level') or 0)
         slot = unique.get('slot')

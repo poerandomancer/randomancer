@@ -118,15 +118,15 @@
       "icon": null
     },
     {
-      "id": "the_unborn_lich__his_foul_emergence",
+      "id": "the_unborn_lich__his_winnowing_flame",
       "uniqueName": "The Unborn Lich",
-      "skillName": "His Foul Emergence",
+      "skillName": "His Winnowing Flame",
       "requiredLevel": 84,
       "category": "weapon",
       "slot": "Staff",
-      "skillId": "Metadata/Items/Gems/SkillGemHisFoulEmergence",
-      "skillDescription": "Conjure a horrific skull rising from the lightless depths to bite your enemies dealing high damage at target location and leaving Withering Ground in its wake. Targeting close to you will cause you to jump back as you cast.",
-      "uniqueSummary": "Ravenous Staff (Staff) — 72% increased Abyssalify magnitudes; +99 to Spirit — Feast of Flesh",
+      "skillId": "Metadata/Items/Gems/SkillGemHisWinnowingFlame",
+      "skillDescription": "Conjure an abyssal scythe that sweeps across the targeted area, dealing Fire damage to enemies and Consuming Ignite to create pillars of flame. Cannot be Triggered.",
+      "uniqueSummary": "Ravenous Staff (Staff) — 72% increased Abyssalify magnitudes; +99 to Spirit — His Winnowing Flame",
       "uniqueSourceKey": "The Unborn Lich||Ravenous Staff",
       "uniqueSourceUrl": "https://poe2db.tw/us/The_Unborn_Lich",
       "icon": null

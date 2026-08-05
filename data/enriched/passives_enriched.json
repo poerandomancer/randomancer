@@ -3099,9 +3099,7 @@
       ],
       "tags": [
         "chaos",
-        "physical",
-        "runic_ward",
-        "ward"
+        "physical"
       ],
       "flavour": "",
       "rawStats": [
@@ -3125,9 +3123,7 @@
         "physical"
       ],
       "derivedTags": [
-        "physical",
-        "runic_ward",
-        "ward"
+        "physical"
       ],
       "descriptionSource": "scraped",
       "scrapeMatched": true,

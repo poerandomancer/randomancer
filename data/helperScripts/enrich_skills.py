@@ -78,7 +78,7 @@ _EFFECT_PATTERNS = [
     (re.compile(r'slam', re.I), ['slam']),
     (re.compile(r'shockwave', re.I), ['shockwave']),
     (re.compile(r'aftershock', re.I), ['aftershock']),
-    (re.compile(r'runic_ward|(?:^|_)ward(?:_|$)', re.I), ['ward', 'runic_ward']),
+    (re.compile(r'runic_ward', re.I), ['runic_ward']),
 ]
 
 _NEGATIVE_MARKERS = ('cannot', 'prevent', 'disable', 'suppresses', 'suppressed')

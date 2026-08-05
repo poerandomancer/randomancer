@@ -34,10 +34,16 @@ const SLOT_MAP = new Map([
   ['soulcore', 'soulcore']
 ]);
 
+const FACTION_SLOT_PREFIX_RE = /^(?:ezomyte|kalguuran|vaal)\s+/;
+
 
 function normalizeUniqueSlot(slotLabel) {
   const key = String(slotLabel || '').trim().toLowerCase();
-  return SLOT_MAP.get(key) || null;
+  const direct = SLOT_MAP.get(key);
+  if (direct) return direct;
+
+  const unqualified = key.replace(FACTION_SLOT_PREFIX_RE, '');
+  return SLOT_MAP.get(unqualified) || null;
 }
 
 function normalizeUniqueTagsForBuild(tags) {

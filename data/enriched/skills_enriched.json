@@ -114533,10 +114533,7 @@
         "buff"
       ]
     },
-    "effect_tags": [
-      "ward",
-      "runic_ward"
-    ],
+    "effect_tags": [],
     "source_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
@@ -115937,9 +115934,7 @@
     },
     "effect_tags": [
       "freeze",
-      "chill",
-      "ward",
-      "runic_ward"
+      "chill"
     ],
     "source_tags": [],
     "weapon_requirements": {
@@ -116909,10 +116904,7 @@
         "damage"
       ]
     },
-    "effect_tags": [
-      "ward",
-      "runic_ward"
-    ],
+    "effect_tags": [],
     "source_tags": [
       "kalguuran"
     ],
@@ -117209,10 +117201,7 @@
         "buff"
       ]
     },
-    "effect_tags": [
-      "ward",
-      "runic_ward"
-    ],
+    "effect_tags": [],
     "source_tags": [
       "kalguuran"
     ],
@@ -117841,8 +117830,6 @@
       ]
     },
     "effect_tags": [
-      "ward",
-      "runic_ward",
       "minion"
     ],
     "source_tags": [
@@ -118110,10 +118097,7 @@
         "damage"
       ]
     },
-    "effect_tags": [
-      "ward",
-      "runic_ward"
-    ],
+    "effect_tags": [],
     "source_tags": [
       "kalguuran"
     ],
@@ -118724,10 +118708,7 @@
         "buff"
       ]
     },
-    "effect_tags": [
-      "ward",
-      "runic_ward"
-    ],
+    "effect_tags": [],
     "source_tags": [
       "kalguuran"
     ],
@@ -118968,10 +118949,7 @@
         "damage"
       ]
     },
-    "effect_tags": [
-      "ward",
-      "runic_ward"
-    ],
+    "effect_tags": [],
     "source_tags": [
       "kalguuran"
     ],
@@ -119512,9 +119490,7 @@
       ]
     },
     "effect_tags": [
-      "minion",
-      "ward",
-      "runic_ward"
+      "minion"
     ],
     "source_tags": [
       "kalguuran"
@@ -119617,9 +119593,7 @@
       ]
     },
     "effect_tags": [
-      "ignite",
-      "ward",
-      "runic_ward"
+      "ignite"
     ],
     "source_tags": [
       "kalguuran"
@@ -119706,10 +119680,7 @@
         "defense"
       ]
     },
-    "effect_tags": [
-      "ward",
-      "runic_ward"
-    ],
+    "effect_tags": [],
     "source_tags": [
       "kalguuran"
     ],
@@ -119833,9 +119804,7 @@
     "effect_tags": [
       "shock",
       "aftershock",
-      "slam",
-      "ward",
-      "runic_ward"
+      "slam"
     ],
     "source_tags": [
       "kalguuran"
@@ -120098,10 +120067,7 @@
         "buff"
       ]
     },
-    "effect_tags": [
-      "ward",
-      "runic_ward"
-    ],
+    "effect_tags": [],
     "source_tags": [
       "kalguuran"
     ],
@@ -120175,10 +120141,7 @@
         "damage"
       ]
     },
-    "effect_tags": [
-      "ward",
-      "runic_ward"
-    ],
+    "effect_tags": [],
     "source_tags": [],
     "weapon_requirements": {
       "is_unrestricted": true
@@ -120557,9 +120520,7 @@
     },
     "effect_tags": [
       "freeze",
-      "chill",
-      "ward",
-      "runic_ward"
+      "chill"
     ],
     "source_tags": [],
     "weapon_requirements": {
