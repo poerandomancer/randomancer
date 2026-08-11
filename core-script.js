@@ -21,6 +21,7 @@
  * 16) 17-skill-family-utils: skill family library resolver + tag-query helpers.
  * 17) 15-challenge-engine: challenge contract generation + compatibility rules.
  * 18) 16-challenge-mode: mode toggle, challenge roll routing, contract rendering.
+ * 19) 22-recommendation-contract: simplified Build recommendation boundary.
  *
  * Public window exports (must remain available):
  * window.App, window.rollBuild, window.scheduleSummaryRefresh, window.RandomancerEncodeSnapshot,
@@ -49,5 +50,6 @@ import './js/15-challenge-engine.js';
 import './js/16-challenge-mode.js';
 import './js/18-codex-mode.js';
 import './js/21-legacy-mode.js';
+import './js/22-recommendation-contract.js';
 
 import './js/20-trending-cards.js';
