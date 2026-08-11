@@ -28,6 +28,10 @@ body[data-mode="build"] #rc-reveal-fog{
 
 .primary-build-card-stage{
   --primary-card-stage-space:680px;
+  --card-overlay-duration:220ms;
+  --card-overlay-ease:cubic-bezier(.2,.78,.18,1);
+  --card-flip-duration:280ms;
+  --card-flip-ease:cubic-bezier(.24,.72,.22,1);
   position:relative;
   min-height:var(--primary-card-stage-space);
   margin-top:12px;
