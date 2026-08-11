@@ -10,8 +10,8 @@ const SNAPSHOT_EVENT = 'randomancer:build-snapshot-change';
 
 let pendingDraw = false;
 let pendingDrawTimer = 0;
-let lastRenderedSnapshot = null;
 let bridgeInstalled = false;
+let headerResizeObserver = null;
 
 function isBuildMode() {
   const mode = document.body?.dataset?.mode;
@@ -95,7 +95,6 @@ function renderDeck() {
     if (!quote.textContent.trim()) quote.textContent = pickIntroLine();
     quote.hidden = false;
   }
-  lastRenderedSnapshot = null;
   requestAnimationFrame(updateStageMetrics);
 }
 
@@ -160,7 +159,6 @@ function renderCurrentBuild({ animate = false } = {}) {
     clearDealClass(mount);
   }
 
-  lastRenderedSnapshot = snapshot;
   requestAnimationFrame(updateStageMetrics);
 }
 
@@ -235,6 +233,14 @@ function updateStageMetrics() {
   stage.style.setProperty('--primary-card-stage-space', `${Math.round(available)}px`);
 }
 
+function installHeaderObserver() {
+  if (headerResizeObserver || typeof ResizeObserver !== 'function') return;
+  const header = document.getElementById('app-header');
+  if (!header) return;
+  headerResizeObserver = new ResizeObserver(() => updateStageMetrics());
+  headerResizeObserver.observe(header);
+}
+
 function syncMode() {
   const stage = createStage();
   if (!stage) return;
@@ -251,6 +257,7 @@ function syncMode() {
 function install() {
   createStage();
   installSnapshotBridge();
+  installHeaderObserver();
 
   // Run before the existing roll button's bubble handlers so the first core
   // snapshot update knows this was an intentional draw/reroll.
@@ -263,7 +270,16 @@ function install() {
       renderDeck();
       return;
     }
-    renderCurrentBuild({ animate: consumeDrawAnimation(event.detail?.source || '') });
+
+    const source = event.detail?.source || '';
+    renderCurrentBuild({ animate: consumeDrawAnimation(source) });
+
+    // Build-code/saved-build restoration updates the hidden legacy save button
+    // immediately after replaceCurrentRoll(). Refresh one frame later so the
+    // card star mirrors that canonical saved state as well.
+    if (source === 'replace') {
+      requestAnimationFrame(() => renderCurrentBuild({ animate: false }));
+    }
   });
 
   document.addEventListener('randomancer:mode-change', () => {
