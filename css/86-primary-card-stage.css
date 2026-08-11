@@ -1,0 +1,241 @@
+/* Primary in-page Build Card stage. Build mode only; other modes retain their existing panels. */
+
+#primary-build-card-stage{
+  display:none;
+}
+
+body[data-mode="build"] #primary-build-card-stage{
+  display:block;
+}
+
+/* The legacy Build result DOM remains alive for generation, save state, and
+   compatibility, but it is no longer the visible Build-mode presentation. */
+body[data-mode="build"] #empty-state,
+body[data-mode="build"] #build-panel,
+body[data-mode="build"] #skills-panel,
+body[data-mode="build"] #uniques-panel,
+body[data-mode="build"] #passives-panel{
+  display:none !important;
+}
+
+/* The selected ascendancy now belongs to the card itself rather than being
+   repeated as a viewport background. The old element stays available to legacy
+   code and non-Build modes. */
+body[data-mode="build"] #asc-art,
+body[data-mode="build"] #rc-reveal-fog{
+  display:none !important;
+}
+
+.primary-build-card-stage{
+  --primary-card-stage-space:680px;
+  position:relative;
+  min-height:var(--primary-card-stage-space);
+  margin-top:12px;
+}
+
+.primary-build-card-stage__inner{
+  min-height:inherit;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:1rem;
+  padding:18px 0 30px;
+}
+
+.primary-build-card-stage__quote{
+  max-width:38rem;
+  margin:0 auto .2rem;
+  padding:0 1rem;
+  color:rgba(236,227,214,.68);
+  font-family:'Cormorant Infant','Cormorant Garamond',serif;
+  font-size:clamp(1.02rem,2vw,1.28rem);
+  font-style:italic;
+  line-height:1.45;
+  text-align:center;
+  text-shadow:0 2px 14px rgba(0,0,0,.28);
+}
+
+.primary-build-card-stage[data-card-state="result"] .primary-build-card-stage__quote{
+  display:none;
+}
+
+.primary-build-card-stage__mount,
+.primary-card-deck{
+  width:min(
+    88vw,
+    430px,
+    max(300px, calc(var(--primary-card-stage-space) * .56))
+  );
+  max-width:100%;
+}
+
+.primary-build-card-stage__mount{
+  position:relative;
+  isolation:isolate;
+}
+
+/* Two very quiet card backs remain beneath a drawn card so the result still
+   reads as having been dealt from a deck rather than appearing as a modal. */
+.primary-build-card-stage[data-card-state="result"] .primary-build-card-stage__mount::before,
+.primary-build-card-stage[data-card-state="result"] .primary-build-card-stage__mount::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-2;
+  border-radius:28px;
+  border:1px solid rgba(212,170,80,.14);
+  background:
+    linear-gradient(160deg,rgba(20,17,18,.98),rgba(7,7,9,.99)),
+    url('/images/card-texture-back.png') center/cover no-repeat;
+  box-shadow:0 18px 45px rgba(0,0,0,.22);
+  pointer-events:none;
+}
+.primary-build-card-stage[data-card-state="result"] .primary-build-card-stage__mount::before{
+  transform:translate(-5px,6px) rotate(-.8deg) scale(.992);
+  opacity:.64;
+}
+.primary-build-card-stage[data-card-state="result"] .primary-build-card-stage__mount::after{
+  z-index:-1;
+  transform:translate(5px,3px) rotate(.55deg) scale(.996);
+  opacity:.78;
+}
+
+.primary-build-card-stage__mount > .card-stage{
+  z-index:1;
+}
+
+.primary-build-card-stage .card-stage::after{
+  inset:auto 7% 1.2% 7%;
+  opacity:.5;
+}
+
+/* Initial face-down deck. */
+.primary-card-deck{
+  position:relative;
+  aspect-ratio:806 / 1375;
+  perspective:1200px;
+}
+
+.primary-card-deck__card{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  border-radius:28px;
+  border:2px solid rgba(212,170,80,.24);
+  background:
+    radial-gradient(circle at 50% 38%,rgba(255,231,174,.055),transparent 31%),
+    linear-gradient(160deg,rgba(18,15,17,.99),rgba(5,5,7,.995)),
+    url('/images/card-texture-back.png') center/cover no-repeat;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,245,218,.045),
+    0 24px 58px rgba(0,0,0,.32);
+}
+.primary-card-deck__card::before{
+  content:"";
+  position:absolute;
+  inset:6%;
+  border:1px solid rgba(212,170,80,.17);
+  border-radius:22px;
+  box-shadow:inset 0 0 28px rgba(212,170,80,.025);
+}
+.primary-card-deck__card--third{
+  transform:translate(-7px,8px) rotate(-1.1deg) scale(.988);
+  opacity:.56;
+}
+.primary-card-deck__card--second{
+  transform:translate(7px,4px) rotate(.8deg) scale(.994);
+  opacity:.76;
+}
+.primary-card-deck__card--top{
+  display:grid;
+  place-items:center;
+  color:rgba(244,223,174,.6);
+}
+.primary-card-deck__mark{
+  display:grid;
+  place-items:center;
+  width:4.6rem;
+  height:4.6rem;
+  border:1px solid rgba(212,170,80,.28);
+  border-radius:50%;
+  font-family:'Cinzel','Cormorant Garamond',serif;
+  font-size:2.1rem;
+  letter-spacing:.04em;
+  color:rgba(244,223,174,.7);
+  box-shadow:
+    0 0 0 9px rgba(212,170,80,.018),
+    0 0 36px rgba(212,170,80,.055);
+  text-shadow:0 0 18px rgba(244,223,174,.12);
+}
+.primary-card-deck__ornament{
+  position:absolute;
+  top:10%;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:.88rem;
+  opacity:.5;
+}
+.primary-card-deck__ornament--bottom{
+  top:auto;
+  bottom:10%;
+  transform:translateX(-50%) rotate(180deg);
+}
+
+/* A short deal motion is enough to imply the draw without turning rerolls into
+   a long animation that users have to wait through. */
+.primary-build-card-stage__mount.is-dealing > .card-stage{
+  animation:rc-primary-card-deal 620ms cubic-bezier(.2,.76,.2,1) both;
+}
+@keyframes rc-primary-card-deal{
+  0%{
+    opacity:.18;
+    transform:translate3d(18px,-13px,0) rotate(1.5deg) scale(.975);
+  }
+  58%{
+    opacity:1;
+    transform:translate3d(-2px,2px,0) rotate(-.2deg) scale(1.006);
+  }
+  100%{
+    opacity:1;
+    transform:translate3d(0,0,0) rotate(0) scale(1);
+  }
+}
+
+/* In-page cards no longer inherit modal sizing assumptions. */
+.primary-build-card-stage .rc-card{
+  width:100%;
+}
+.primary-build-card-stage .card-flip-indicator{
+  right:-18px;
+}
+
+@media (max-width:600px){
+  .primary-build-card-stage{
+    margin-top:6px;
+  }
+  .primary-build-card-stage__inner{
+    padding:12px 0 24px;
+  }
+  .primary-build-card-stage__mount,
+  .primary-card-deck{
+    width:min(88vw,340px,max(286px,calc(var(--primary-card-stage-space) * .55)));
+  }
+  .primary-build-card-stage .card-flip-indicator{
+    right:-11px;
+    font-size:30px;
+  }
+}
+
+@media (max-height:720px) and (min-width:601px){
+  .primary-build-card-stage__inner{
+    justify-content:flex-start;
+    padding-top:12px;
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .primary-build-card-stage__mount.is-dealing > .card-stage{
+    animation:none;
+  }
+}
