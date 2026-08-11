@@ -5,7 +5,7 @@
  * Module Map + Public API
  * 1) 01-meta-and-domready: selectors, DOM helpers, onDomReady, shared helpers, smoke check.
  * 2) 00-locks-and-snapshots: snapshots/build codes/saved builds.
- * 3) 02-summary-view: summary mode toggle + render + auto-refresh.
+ * 3) 02-summary-view: legacy card overlay + public share behavior.
  * 4) 03-config-and-schema: Schema/Config/RulesEngine scaffolding.
  * 5) 04-app-state: window.App, bootstrap, cohesion state helpers.
  * 6) 05-tags-and-scorer: tag normalization + scorer glue + dictionary builders.
@@ -22,12 +22,13 @@
  * 17) 15-challenge-engine: challenge contract generation + compatibility rules.
  * 18) 16-challenge-mode: mode toggle, challenge roll routing, contract rendering.
  * 19) 22-recommendation-contract: simplified Build recommendation boundary.
+ * 20) 23-build-card-foundation: reusable Build Card model/render/flip/tooltip layer.
  *
  * Public window exports (must remain available):
  * window.App, window.rollBuild, window.scheduleSummaryRefresh, window.RandomancerEncodeSnapshot,
  * window.RandomancerApplyBuildCode, window.RandomancerUpdateBuildCodeUI,
  * window.RandomancerRefreshUniques, window.RandomancerRenderUniquesFromNames,
- * window.RandomancerInfo, window.getOrBuildIDF,
+ * window.RandomancerInfo, window.getOrBuildIDF, window.RandomancerBuildCard,
  */
 
 import './js/01-meta-and-domready.js';
@@ -51,5 +52,6 @@ import './js/16-challenge-mode.js';
 import './js/18-codex-mode.js';
 import './js/21-legacy-mode.js';
 import './js/22-recommendation-contract.js';
+import './js/23-build-card-foundation.js';
 
 import './js/20-trending-cards.js';
