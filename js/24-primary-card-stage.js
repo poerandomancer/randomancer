@@ -8,15 +8,20 @@ import {
 const STAGE_ID = 'primary-build-card-stage';
 const MOUNT_ID = 'primary-build-card-mount';
 const SNAPSHOT_EVENT = 'randomancer:build-snapshot-change';
-const DRAW_LIFT_MS = 180;
+const INITIAL_LIFT_MS = 190;
+const NORMALIZE_FLIP_MS = 300;
+const REROLL_ADVANCE_MS = 390;
+const REROLL_REVEAL_MS = 380;
+const SAME_IDENTITY_FALLBACK_MS = 1200;
+const ROLL_TIMEOUT_MS = 5000;
 
-let pendingDraw = false;
-let pendingDrawTimer = 0;
-let drawRevealTimer = 0;
-let drawStartedAt = 0;
 let bridgeInstalled = false;
 let headerResizeObserver = null;
 let uniqueHydrationKey = '';
+let pendingRoll = null;
+let pendingRollTimer = 0;
+let revealTimer = 0;
+let transitionCleanupTimer = 0;
 
 function isBuildMode() {
   const mode = document.body?.dataset?.mode;
@@ -41,6 +46,24 @@ function hasUsableBuild(snapshot) {
   );
 }
 
+function getBuildIdentity(snapshot) {
+  if (!hasUsableBuild(snapshot)) return '';
+  const s = snapshot || {};
+  return JSON.stringify([
+    s.buildName || '',
+    s.className || '',
+    s.ascendancy || '',
+    s.weapon || '',
+    s.offhand || '',
+    s.weapon2 || '',
+    s.offhand2 || '',
+    Array.isArray(s.ailmentList) ? s.ailmentList : [],
+    Array.isArray(s.tacticList) ? s.tacticList : [],
+    s.defense || '',
+    s.defStrat || ''
+  ]);
+}
+
 function pickIntroLine() {
   const lines = Array.isArray(window.RandomancerIntroLines)
     ? window.RandomancerIntroLines.filter(Boolean)
@@ -63,7 +86,10 @@ function createStage() {
   stage.innerHTML = `
     <div class="primary-build-card-stage__inner">
       <p class="primary-build-card-stage__quote" data-primary-card-quote></p>
-      <div id="${MOUNT_ID}" class="primary-build-card-stage__mount" aria-live="polite"></div>
+      <div class="primary-build-card-stage__slot">
+        <div id="${MOUNT_ID}" class="primary-build-card-stage__mount" aria-live="polite"></div>
+        <div class="primary-build-card-stage__transition-back" data-primary-transition-back aria-hidden="true"></div>
+      </div>
     </div>
   `;
   resultsStage.prepend(stage);
@@ -84,8 +110,8 @@ function renderDeck() {
   const mount = getMount();
   if (!stage || !mount) return;
 
+  clearTransitionClasses();
   stage.dataset.cardState = 'empty';
-  stage.classList.remove('is-drawing');
   mount.dataset.cardFace = '';
   mount.classList.remove('is-dealing');
   mount.innerHTML = `
@@ -148,36 +174,35 @@ function hydrateUniqueTooltips(snapshot) {
   uniqueHydrationKey = key;
 
   ensureBuildCardUniqueData().then((items) => {
-    if (!items?.length || !isBuildMode()) return;
+    if (!items?.length || !isBuildMode() || pendingRoll) return;
     const current = getCurrentSnapshot();
     if (getUniqueDataKey(current) !== key) return;
     renderCurrentBuild({ animate: false });
   }).catch(() => {});
 }
 
-function renderCurrentBuild({ animate = false } = {}) {
+function renderCurrentBuild({ animate = false, forceFront = false, snapshot = null } = {}) {
   const stage = createStage();
   const mount = getMount();
   if (!stage || !mount || !isBuildMode()) return;
 
-  const snapshot = getCurrentSnapshot();
-  if (!hasUsableBuild(snapshot)) {
+  const current = snapshot || getCurrentSnapshot();
+  if (!hasUsableBuild(current)) {
     renderDeck();
     return;
   }
 
   const hadResult = stage.dataset.cardState === 'result';
-  const face = mount.dataset.cardFace === BUILD_CARD_FACES.BACK
-    ? BUILD_CARD_FACES.BACK
-    : BUILD_CARD_FACES.FRONT;
+  const face = forceFront
+    ? BUILD_CARD_FACES.FRONT
+    : (mount.dataset.cardFace === BUILD_CARD_FACES.BACK ? BUILD_CARD_FACES.BACK : BUILD_CARD_FACES.FRONT);
 
-  stage.classList.remove('is-drawing');
   stage.dataset.cardState = 'result';
   const quote = getStageQuote();
   if (quote) quote.hidden = true;
 
   mount.classList.remove('is-dealing');
-  mountBuildCardSnapshot(mount, snapshot, {
+  mountBuildCardSnapshot(mount, current, {
     face,
     animate: false,
     actionsHtml: renderCardActions(),
@@ -190,7 +215,7 @@ function renderCurrentBuild({ animate = false } = {}) {
     clearDealClass(mount);
   }
 
-  hydrateUniqueTooltips(snapshot);
+  hydrateUniqueTooltips(current);
   requestAnimationFrame(updateStageMetrics);
 }
 
@@ -235,63 +260,160 @@ function installSnapshotBridge() {
   return true;
 }
 
-function clearPendingDraw() {
-  pendingDraw = false;
-  drawStartedAt = 0;
-  createStage()?.classList.remove('is-drawing');
-  if (pendingDrawTimer) {
-    window.clearTimeout(pendingDrawTimer);
-    pendingDrawTimer = 0;
+function clearTransitionClasses() {
+  const stage = createStage();
+  stage?.classList.remove(
+    'is-drawing',
+    'is-normalizing-roll',
+    'is-rerolling',
+    'is-revealing-next'
+  );
+}
+
+function clearPendingRoll() {
+  pendingRoll = null;
+  clearTransitionClasses();
+  if (pendingRollTimer) {
+    window.clearTimeout(pendingRollTimer);
+    pendingRollTimer = 0;
   }
-  if (drawRevealTimer) {
-    window.clearTimeout(drawRevealTimer);
-    drawRevealTimer = 0;
+  if (revealTimer) {
+    window.clearTimeout(revealTimer);
+    revealTimer = 0;
   }
+  if (transitionCleanupTimer) {
+    window.clearTimeout(transitionCleanupTimer);
+    transitionCleanupTimer = 0;
+  }
+}
+
+function startRerollAdvance() {
+  const stage = createStage();
+  if (!pendingRoll || !stage || !pendingRoll.hadResult) return;
+  stage.classList.remove('is-normalizing-roll');
+  stage.classList.add('is-rerolling');
+  pendingRoll.advanceStartedAt = performance.now();
+  maybeRevealPendingRoll();
 }
 
 function armDrawAnimation() {
   if (!isBuildMode()) return;
-  pendingDraw = true;
-  drawStartedAt = performance.now();
+
+  if (pendingRoll) clearPendingRoll();
+  hideBuildCardTooltip();
 
   const stage = createStage();
-  if (stage && !prefersReducedMotion()) {
-    stage.classList.remove('is-drawing');
-    void stage.offsetWidth;
-    stage.classList.add('is-drawing');
+  const mount = getMount();
+  const snapshot = getCurrentSnapshot();
+  const hadResult = stage?.dataset?.cardState === 'result' && hasUsableBuild(snapshot);
+  const wasBack = hadResult && mount?.dataset?.cardFace === BUILD_CARD_FACES.BACK;
+  const now = performance.now();
+
+  pendingRoll = {
+    startedAt: now,
+    startIdentity: getBuildIdentity(snapshot),
+    latestSnapshot: null,
+    latestSource: '',
+    hadResult,
+    wasBack,
+    advanceStartedAt: 0
+  };
+
+  if (prefersReducedMotion()) {
+    pendingRoll.advanceStartedAt = now;
+  } else if (!hadResult) {
+    stage?.classList.add('is-drawing');
+  } else if (wasBack && mount) {
+    stage?.classList.add('is-normalizing-roll');
+    mountBuildCardSnapshot(mount, snapshot, {
+      face: BUILD_CARD_FACES.FRONT,
+      animate: true,
+      actionsHtml: renderCardActions(),
+      onAction: handleCardAction
+    });
+    window.setTimeout(startRerollAdvance, NORMALIZE_FLIP_MS);
+  } else {
+    startRerollAdvance();
   }
 
-  if (pendingDrawTimer) window.clearTimeout(pendingDrawTimer);
-  pendingDrawTimer = window.setTimeout(() => {
-    clearPendingDraw();
-  }, 5000);
+  pendingRollTimer = window.setTimeout(() => {
+    if (!pendingRoll) return;
+    const fallback = pendingRoll.latestSnapshot || getCurrentSnapshot();
+    if (hasUsableBuild(fallback)) {
+      revealPendingRoll(fallback);
+    } else {
+      clearPendingRoll();
+    }
+  }, ROLL_TIMEOUT_MS);
 }
 
-function consumeDrawAnimation(source) {
-  const stage = createStage();
-  const firstResult = stage?.dataset?.cardState !== 'result';
-  const shouldAnimate = pendingDraw || firstResult || source === 'replace';
-  pendingDraw = false;
-  drawStartedAt = 0;
-  stage?.classList.remove('is-drawing');
-  if (pendingDrawTimer) {
-    window.clearTimeout(pendingDrawTimer);
-    pendingDrawTimer = 0;
-  }
-  return shouldAnimate;
+function pendingRollHasFreshSnapshot() {
+  if (!pendingRoll || !hasUsableBuild(pendingRoll.latestSnapshot)) return false;
+  const latestIdentity = getBuildIdentity(pendingRoll.latestSnapshot);
+  if (latestIdentity && latestIdentity !== pendingRoll.startIdentity) return true;
+  return (performance.now() - pendingRoll.startedAt) >= SAME_IDENTITY_FALLBACK_MS;
 }
 
-function scheduleDrawReveal(source) {
-  if (!pendingDraw) return false;
-  if (drawRevealTimer) return true;
+function minimumRevealAt() {
+  if (!pendingRoll) return 0;
+  if (prefersReducedMotion()) return pendingRoll.startedAt;
+  if (!pendingRoll.hadResult) return pendingRoll.startedAt + INITIAL_LIFT_MS;
+  const advanceAt = pendingRoll.advanceStartedAt || (pendingRoll.startedAt + (pendingRoll.wasBack ? NORMALIZE_FLIP_MS : 0));
+  return advanceAt + REROLL_ADVANCE_MS;
+}
 
-  const elapsed = drawStartedAt ? performance.now() - drawStartedAt : DRAW_LIFT_MS;
-  const delay = prefersReducedMotion() ? 0 : Math.max(0, DRAW_LIFT_MS - elapsed);
-  drawRevealTimer = window.setTimeout(() => {
-    drawRevealTimer = 0;
-    renderCurrentBuild({ animate: consumeDrawAnimation(source) });
+function maybeRevealPendingRoll() {
+  if (!pendingRoll || !pendingRollHasFreshSnapshot()) return;
+  if (pendingRoll.hadResult && !prefersReducedMotion() && !pendingRoll.advanceStartedAt) return;
+
+  const delay = Math.max(0, minimumRevealAt() - performance.now());
+  if (revealTimer) window.clearTimeout(revealTimer);
+  revealTimer = window.setTimeout(() => {
+    revealTimer = 0;
+    if (!pendingRoll || !pendingRollHasFreshSnapshot()) return;
+    revealPendingRoll(pendingRoll.latestSnapshot);
   }, delay);
-  return true;
+}
+
+function revealPendingRoll(snapshot) {
+  const stage = createStage();
+  const mount = getMount();
+  if (!stage || !mount || !hasUsableBuild(snapshot)) {
+    clearPendingRoll();
+    return;
+  }
+
+  const wasReroll = !!pendingRoll?.hadResult;
+  const reduced = prefersReducedMotion();
+
+  if (pendingRollTimer) {
+    window.clearTimeout(pendingRollTimer);
+    pendingRollTimer = 0;
+  }
+  if (revealTimer) {
+    window.clearTimeout(revealTimer);
+    revealTimer = 0;
+  }
+
+  pendingRoll = null;
+  stage.classList.remove('is-drawing', 'is-normalizing-roll');
+
+  if (reduced || !wasReroll) {
+    stage.classList.remove('is-rerolling', 'is-revealing-next');
+    renderCurrentBuild({ animate: !reduced, forceFront: true, snapshot });
+    return;
+  }
+
+  // The outgoing card has already moved aside and the separate card-back layer
+  // is now centered. Mount the new Build face edge-on beneath it, then flip the
+  // back away while the generated card rotates into view.
+  stage.classList.add('is-revealing-next');
+  renderCurrentBuild({ animate: false, forceFront: true, snapshot });
+
+  transitionCleanupTimer = window.setTimeout(() => {
+    transitionCleanupTimer = 0;
+    stage.classList.remove('is-rerolling', 'is-revealing-next');
+  }, REROLL_REVEAL_MS + 60);
 }
 
 function updateStageMetrics() {
@@ -328,32 +450,42 @@ function install() {
   installSnapshotBridge();
   installHeaderObserver();
 
-  // Capture before the existing roll handler so the visible deck/card starts
-  // moving immediately, before the generated snapshot is ready.
+  // Capture before the existing roll handler so the currently displayed card
+  // starts its transition before generation mutates the canonical snapshot.
   document.getElementById('roll')?.addEventListener('click', armDrawAnimation, true);
 
   document.addEventListener(SNAPSHOT_EVENT, (event) => {
     if (!isBuildMode()) return;
     const snapshot = event.detail?.snapshot || getCurrentSnapshot();
+    const source = event.detail?.source || '';
+
+    if (pendingRoll) {
+      if (hasUsableBuild(snapshot)) {
+        pendingRoll.latestSnapshot = snapshot;
+        pendingRoll.latestSource = source;
+        maybeRevealPendingRoll();
+      }
+      return;
+    }
+
     if (!hasUsableBuild(snapshot)) {
       renderDeck();
       return;
     }
 
-    const source = event.detail?.source || '';
-    if (scheduleDrawReveal(source)) return;
-    renderCurrentBuild({ animate: consumeDrawAnimation(source) });
+    const forceFront = source === 'replace';
+    renderCurrentBuild({ animate: forceFront, forceFront, snapshot });
 
     // Build-code/saved-build restoration updates the hidden legacy save button
     // immediately after replaceCurrentRoll(). Refresh one frame later so the
     // card star mirrors that canonical saved state as well.
     if (source === 'replace') {
-      requestAnimationFrame(() => renderCurrentBuild({ animate: false }));
+      requestAnimationFrame(() => renderCurrentBuild({ animate: false, forceFront: true }));
     }
   });
 
   document.addEventListener('randomancer:mode-change', () => {
-    clearPendingDraw();
+    clearPendingRoll();
     requestAnimationFrame(syncMode);
   });
 
