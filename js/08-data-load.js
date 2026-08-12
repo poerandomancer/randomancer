@@ -58,6 +58,18 @@ async function loadData() {
   try {
     const core = await loadJSON('data/core-data.json');
 
+    // Canonical Build Offense vocabulary. Keep it separate on disk from the
+    // legacy Ailments/Tactics pools while exposing a convenient runtime view.
+    const offenseInventoryRaw = await tryLoad('data/offense-inventory.json');
+    const offenseInventory = (
+      offenseInventoryRaw &&
+      typeof offenseInventoryRaw === 'object' &&
+      !Array.isArray(offenseInventoryRaw) &&
+      Array.isArray(offenseInventoryRaw.elements)
+    ) ? offenseInventoryRaw : { version: null, categories: [], elements: [] };
+    core.OffenseInventory = offenseInventory;
+    core.Offense = offenseInventory.elements;
+
     // Pre-enriched passives (unchanged)
     const passivesEnriched = await tryLoad('data/enriched/passives_enriched.json');
     if (!passivesEnriched || !passivesEnriched.nodes) {
@@ -145,10 +157,10 @@ async function loadData() {
     };
     console.log("[Global DATA initialized]", window.DATA);
 
-    return { core, gems, passivesEnriched, passiveIndex };
+    return { core, gems, passivesEnriched, passiveIndex, offenseInventory };
   } catch (err) {
     console.error("[loadData] Failed to load core data:", err);
-    return { core: {}, gems: [] };
+    return { core: {}, gems: [], offenseInventory: { version: null, categories: [], elements: [] } };
   }
 }
 
