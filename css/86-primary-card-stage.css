@@ -28,6 +28,7 @@ body[data-mode="build"] #rc-reveal-fog{
 
 .primary-build-card-stage{
   --primary-card-stage-space:680px;
+  --primary-card-width:500px;
   --card-overlay-duration:220ms;
   --card-overlay-ease:cubic-bezier(.2,.78,.18,1);
   --card-flip-duration:280ms;
@@ -64,13 +65,12 @@ body[data-mode="build"] #rc-reveal-fog{
   display:none;
 }
 
+/* Keep the card at a readable physical size. The stage may extend below the
+   viewport on short screens; preserving legibility is preferable to shrinking
+   the build until its content clips or becomes difficult to read. */
 .primary-build-card-stage__mount,
 .primary-card-deck{
-  width:min(
-    88vw,
-    430px,
-    max(300px, calc(var(--primary-card-stage-space) * .56))
-  );
+  width:min(var(--primary-card-width), calc(100vw - 48px));
   max-width:100%;
 }
 
@@ -89,9 +89,7 @@ body[data-mode="build"] #rc-reveal-fog{
   z-index:-2;
   border-radius:28px;
   border:1px solid rgba(212,170,80,.14);
-  background:
-    linear-gradient(160deg,rgba(20,17,18,.98),rgba(7,7,9,.99)),
-    url('/images/card-texture-back.png') center/cover no-repeat;
+  background:url('/images/card-texture-back.png') center/cover no-repeat;
   box-shadow:0 18px 45px rgba(0,0,0,.22);
   pointer-events:none;
 }
@@ -114,7 +112,8 @@ body[data-mode="build"] #rc-reveal-fog{
   opacity:.5;
 }
 
-/* Initial face-down deck. */
+/* Initial face-down deck: use the same card-back artwork as the drawn card's
+   reverse face so the undrawn stack reads as one coherent deck. */
 .primary-card-deck{
   position:relative;
   aspect-ratio:806 / 1375;
@@ -127,21 +126,13 @@ body[data-mode="build"] #rc-reveal-fog{
   overflow:hidden;
   border-radius:28px;
   border:2px solid rgba(212,170,80,.24);
-  background:
-    radial-gradient(circle at 50% 38%,rgba(255,231,174,.055),transparent 31%),
-    linear-gradient(160deg,rgba(18,15,17,.99),rgba(5,5,7,.995)),
-    url('/images/card-texture-back.png') center/cover no-repeat;
+  background:url('/images/card-texture-back.png') center/cover no-repeat;
   box-shadow:
     inset 0 0 0 1px rgba(255,245,218,.045),
     0 24px 58px rgba(0,0,0,.32);
 }
 .primary-card-deck__card::before{
-  content:"";
-  position:absolute;
-  inset:6%;
-  border:1px solid rgba(212,170,80,.17);
-  border-radius:22px;
-  box-shadow:inset 0 0 28px rgba(212,170,80,.025);
+  content:none;
 }
 .primary-card-deck__card--third{
   transform:translate(-7px,8px) rotate(-1.1deg) scale(.988);
@@ -152,38 +143,11 @@ body[data-mode="build"] #rc-reveal-fog{
   opacity:.76;
 }
 .primary-card-deck__card--top{
-  display:grid;
-  place-items:center;
-  color:rgba(244,223,174,.6);
+  display:block;
 }
-.primary-card-deck__mark{
-  display:grid;
-  place-items:center;
-  width:4.6rem;
-  height:4.6rem;
-  border:1px solid rgba(212,170,80,.28);
-  border-radius:50%;
-  font-family:'Cinzel','Cormorant Garamond',serif;
-  font-size:2.1rem;
-  letter-spacing:.04em;
-  color:rgba(244,223,174,.7);
-  box-shadow:
-    0 0 0 9px rgba(212,170,80,.018),
-    0 0 36px rgba(212,170,80,.055);
-  text-shadow:0 0 18px rgba(244,223,174,.12);
-}
+.primary-card-deck__mark,
 .primary-card-deck__ornament{
-  position:absolute;
-  top:10%;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:.88rem;
-  opacity:.5;
-}
-.primary-card-deck__ornament--bottom{
-  top:auto;
-  bottom:10%;
-  transform:translateX(-50%) rotate(180deg);
+  display:none;
 }
 
 /* A short deal motion is enough to imply the draw without turning rerolls into
@@ -216,6 +180,7 @@ body[data-mode="build"] #rc-reveal-fog{
 
 @media (max-width:600px){
   .primary-build-card-stage{
+    --primary-card-width:390px;
     margin-top:6px;
   }
   .primary-build-card-stage__inner{
@@ -223,7 +188,7 @@ body[data-mode="build"] #rc-reveal-fog{
   }
   .primary-build-card-stage__mount,
   .primary-card-deck{
-    width:min(88vw,340px,max(286px,calc(var(--primary-card-stage-space) * .55)));
+    width:min(var(--primary-card-width), calc(100vw - 28px));
   }
   .primary-build-card-stage .card-flip-indicator{
     right:-11px;
