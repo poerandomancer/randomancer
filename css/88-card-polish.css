@@ -1,0 +1,14 @@
+/* Final card-first polish overrides. Keep these scoped to the primary Build stage
+   so legacy/public card proportions and mobile sizing remain unchanged. */
+
+@media (min-width:601px){
+  .primary-build-card-stage{
+    --primary-card-width:470px;
+    --primary-card-aspect:5 / 8;
+  }
+
+  .primary-build-card-stage .rc-card,
+  .primary-build-card-stage .primary-card-deck{
+    aspect-ratio:var(--primary-card-aspect);
+  }
+}
