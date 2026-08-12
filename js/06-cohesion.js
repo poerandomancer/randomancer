@@ -84,7 +84,6 @@ function pickByCohesion(list, base, th){
   return pool[Math.floor(Math.random() * pool.length)].x;
 }
 
-
 function normalizeAttributesForSynergy(attrs){
   const S = Number(attrs?.strength) || 0;
   const D = Number(attrs?.dexterity) || 0;
@@ -162,7 +161,7 @@ function buildBuildContextFromSnapshot(snap){
   const addTag = (t, sink = tagSet) => { const k = normTagPlus(t); if (k) sink.add(k); };
   const addTags = (arr, sink) => (arr || []).forEach(t => addTag(t, sink));
 
-  // Prefer existing tag profile if present
+  // Prefer existing tag profile if present.
   if (snap.tagProfile && snap.tagProfile.profile instanceof Map) {
     snap.tagProfile.profile.forEach((_, k) => addTag(k));
   }
@@ -171,8 +170,13 @@ function buildBuildContextFromSnapshot(snap){
     addTags(Array.from(snap.tagProfile.cats.ailments || []));
   }
 
+  // Canonical Offense is first-class. Legacy Ailment/Tactic tags remain as a
+  // compatibility fallback until the recommendation engine is rewritten.
+  addTags(snap.offenseTags || []);
+  addTags((snap.offenseSet || []).flatMap(entry => entry?.tags || []));
   addTags((snap.tacticSet || []).flatMap(t => t?.tags || []));
   addTags((snap.ailmentSet || []).flatMap(a => a?.tags || []));
+
   const defPseudo = defensePseudoTags(snap.defense?.name);
   addTags(defPseudo);
   addTags(defPseudo, defenseSet);
@@ -185,13 +189,12 @@ function buildBuildContextFromSnapshot(snap){
     if (defenseKeywords.some(k => lower.includes(k))) defenseSet.add(t);
   });
 
-	const t =
-	  (Number.isFinite(snap.cohesionThreshold) ? Number(snap.cohesionThreshold) :
-	   (Number.isFinite(window.App?.state?.cohesionThreshold) ? Number(window.App.state.cohesionThreshold) :
-		cohesionThreshold));
-	
-	const cohesionMode = cohesionTierFromThreshold(t);
+  const t =
+    (Number.isFinite(snap.cohesionThreshold) ? Number(snap.cohesionThreshold) :
+     (Number.isFinite(window.App?.state?.cohesionThreshold) ? Number(window.App.state.cohesionThreshold) :
+      cohesionThreshold));
 
+  const cohesionMode = cohesionTierFromThreshold(t);
 
   return {
     ascendancyId: Number.isFinite(ascendancyId) ? ascendancyId : null,
@@ -207,7 +210,6 @@ const validOffhands={"One-handed Mace":["One-handed Mace","Shield","Buckler","Fo
 function applyHardRestrictions(item,ctx){
   if(!item) return false;
   if(item.name==='Block' && !['Shield','Buckler'].includes(ctx.offhand)) return false;
-  if(item.name==='Minions' && ctx.weapon!=='Sceptre') return false;
   if(item.name==='Deflection' && !ctx.defense.includes('Evasion')) return false;
   return true;
 }
@@ -225,6 +227,5 @@ export {
   validOffhands,
   applyHardRestrictions
 };
-
 
 // ---------- overlay + ascendancy art ----------
