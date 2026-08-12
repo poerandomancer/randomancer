@@ -11,11 +11,13 @@ const OFFENSE_COUNT_KEY = 'randomancer_offense_count';
 const LEGACY_COUNT_KEY = 'randomancer_mechanics_count';
 const DEFAULT_OFFENSE_COUNT = 2;
 const ARCHETYPE_WEIGHT = 3;
+const CARD_LABEL_SETTLE_MS = 850;
 
 let coreRef = null;
 let savedLegacyPools = null;
 let poolsProjected = false;
 let snapshotUpgradeInProgress = false;
+let cardLabelTimer = 0;
 
 function getMode(){
   return window.RandomancerGetMode?.() || 'standard';
@@ -289,6 +291,15 @@ function patchCardOffenseLabel(){
   });
 }
 
+function scheduleCardOffenseLabelPatch(){
+  requestAnimationFrame(patchCardOffenseLabel);
+  if (cardLabelTimer) clearTimeout(cardLabelTimer);
+  cardLabelTimer = window.setTimeout(() => {
+    cardLabelTimer = 0;
+    patchCardOffenseLabel();
+  }, CARD_LABEL_SETTLE_MS);
+}
+
 function installLifecycleHooks(){
   if (window.__randomancerOffenseLifecycleInstalled) return;
   window.__randomancerOffenseLifecycleInstalled = true;
@@ -307,7 +318,7 @@ function installLifecycleHooks(){
       restoreLegacyPools();
     }
     previousAfter?.(...args);
-    requestAnimationFrame(patchCardOffenseLabel);
+    scheduleCardOffenseLabelPatch();
   };
 
   window.addEventListener('error', restoreLegacyPools);
@@ -318,7 +329,7 @@ function installPresentationHooks(){
   document.addEventListener('randomancer:build-snapshot-change', (event) => {
     const snapshot = event.detail?.snapshot || window.App?.state?.currentRoll || null;
     upgradeLegacySnapshot(snapshot);
-    requestAnimationFrame(patchCardOffenseLabel);
+    scheduleCardOffenseLabelPatch();
   });
 
   document.addEventListener('randomancer:mode-change', () => {
