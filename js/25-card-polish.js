@@ -51,7 +51,7 @@ function buildCompactSnapshotPayload(snapshot) {
   put('o2', snap.offhand2 || '');
   put('al', Array.isArray(snap.ailmentList) ? snap.ailmentList.filter(Boolean) : []);
   put('tl', Array.isArray(snap.tacticList) ? snap.tacticList.filter(Boolean) : []);
-  put('d', snap.defense || '');
+  put('d', typeof snap.defense === 'string' ? snap.defense : (snap.defense?.name || ''));
   put('ds', typeof snap.defStrat === 'string' ? snap.defStrat : (snap.defStrat?.name || ''));
   put('b', snap.buildName || '');
   put('f', snap.flavor || '');
@@ -96,19 +96,24 @@ function encodeCompactBuildSnapshot(snapshot) {
   return safeBtoa(JSON.stringify(payload));
 }
 
+function encodeBuildQueryValue(code) {
+  // Standard Base64 stays compatible with the existing atob decoder. '+' is
+  // the only character that must be escaped for query-string parsing; '/' and
+  // trailing '=' padding can remain literal inside the value.
+  return String(code || '').replace(/\+/g, '%2B');
+}
+
 function buildCompactBuildLink(snapshot) {
   const code = encodeCompactBuildSnapshot(snapshot);
   if (!code) return '';
 
   try {
     const url = new URL(window.location.href);
-    url.search = '';
-    url.hash = '';
-    url.searchParams.set('build', code);
-    return url.toString();
+    const base = `${url.origin}${url.pathname}`;
+    return `${base}?build=${encodeBuildQueryValue(code)}`;
   } catch {
     const base = `${window.location.origin || ''}${window.location.pathname || '/'}`;
-    return `${base}?build=${encodeURIComponent(code)}`;
+    return `${base}?build=${encodeBuildQueryValue(code)}`;
   }
 }
 
