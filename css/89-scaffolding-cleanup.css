@@ -1,19 +1,22 @@
 /* Final transition cleanup for the primary Build Card stage.
    Rerolls already use a separate card-back reveal surface. Give the first draw
-   the same visual grammar: lifted facedown card -> edge flip -> generated front. */
+   that same explicit object: lifted facedown card -> edge flip -> generated front. */
 
-.primary-build-card-stage__mount.is-dealing::after{
-  z-index:8 !important;
-  opacity:1;
-  transform-origin:50% 50%;
-  backface-visibility:hidden;
-  animation:rc-primary-initial-back-reveal 620ms cubic-bezier(.24,.72,.22,1) both !important;
+.primary-build-card-stage.is-revealing-first .primary-build-card-stage__slot{
+  pointer-events:none;
 }
 
-.primary-build-card-stage__mount.is-dealing > .card-stage{
+.primary-build-card-stage.is-revealing-first .primary-build-card-stage__transition-back{
+  z-index:8;
+  backface-visibility:hidden;
+  transform-origin:50% 50%;
+  animation:rc-primary-initial-back-reveal 620ms cubic-bezier(.24,.72,.22,1) both;
+}
+
+.primary-build-card-stage.is-revealing-first .primary-build-card-stage__mount > .card-stage{
   transform-origin:50% 50%;
   transform-style:preserve-3d;
-  animation:rc-primary-initial-front-reveal 620ms cubic-bezier(.24,.72,.22,1) both !important;
+  animation:rc-primary-initial-front-reveal 620ms cubic-bezier(.24,.72,.22,1) both;
 }
 
 @keyframes rc-primary-initial-back-reveal{
@@ -49,13 +52,13 @@
   }
   100%{
     opacity:1;
-    transform:translate3d(0,0,0) rotateY(0deg) rotateZ(0deg) scale(1);
+    transform:translate3d(0,0,0) rotateY(0deg) rotateZ(0) scale(1);
   }
 }
 
 @media (prefers-reduced-motion:reduce){
-  .primary-build-card-stage__mount.is-dealing::after,
-  .primary-build-card-stage__mount.is-dealing > .card-stage{
-    animation:none !important;
+  .primary-build-card-stage.is-revealing-first .primary-build-card-stage__transition-back,
+  .primary-build-card-stage.is-revealing-first .primary-build-card-stage__mount > .card-stage{
+    animation:none;
   }
 }
