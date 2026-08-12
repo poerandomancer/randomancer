@@ -2,6 +2,7 @@ import { ensureDataPreload } from './08-data-load.js';
 import {
   buildOffenseSnapshotFields,
   isArchetype,
+  migrateLegacyMechanicsToOffense,
   resolveOffenseElements,
   resolveOffenseEntry
 } from './26-offense-roll.js';
@@ -14,6 +15,7 @@ const ARCHETYPE_WEIGHT = 3;
 let coreRef = null;
 let savedLegacyPools = null;
 let poolsProjected = false;
+let snapshotUpgradeInProgress = false;
 
 function getMode(){
   return window.RandomancerGetMode?.() || 'standard';
@@ -111,12 +113,15 @@ function restoreLegacyPools(){
   poolsProjected = false;
 }
 
-function collectRolledOffense(){
-  const current = window.CURRENT_ROLL || window.App?.state?.currentRoll || {};
+function collectRolledOffense(explicitSnapshot){
+  const current = explicitSnapshot || window.App?.state?.currentRoll || window.CURRENT_ROLL || {};
   const raw = [
     ...(Array.isArray(current.offenseSet) ? current.offenseSet : []),
     ...(Array.isArray(current.ailmentSet) ? current.ailmentSet : []),
-    ...(Array.isArray(current.tacticSet) ? current.tacticSet : [])
+    ...(Array.isArray(current.tacticSet) ? current.tacticSet : []),
+    ...(Array.isArray(current.offenseList) ? current.offenseList : []),
+    ...(Array.isArray(current.ailmentList) ? current.ailmentList : []),
+    ...(Array.isArray(current.tacticList) ? current.tacticList : [])
   ];
 
   const picks = [];
@@ -133,15 +138,42 @@ function collectRolledOffense(){
   return picks;
 }
 
-function canonicalizeCurrentRoll(){
-  const picks = collectRolledOffense();
-  if (!picks.length) return;
+function applyOffenseFields(picks){
   const fields = buildOffenseSnapshotFields(picks);
-
   if (window.CURRENT_ROLL && typeof window.CURRENT_ROLL === 'object') {
     Object.assign(window.CURRENT_ROLL, fields);
   }
   window.App?.mergeCurrentRoll?.(fields);
+  return fields;
+}
+
+function canonicalizeCurrentRoll(){
+  const snapshot = window.App?.state?.currentRoll || window.CURRENT_ROLL || {};
+  const picks = collectRolledOffense(snapshot);
+  if (!picks.length) return null;
+  return applyOffenseFields(picks);
+}
+
+function upgradeLegacySnapshot(snapshot){
+  if (snapshotUpgradeInProgress || getMode() !== 'standard') return false;
+  if (!snapshot || typeof snapshot !== 'object') return false;
+  if (Array.isArray(snapshot.offenseList)) return false;
+  if (!resolveOffenseElements(window.DATA || {}).length) return false;
+
+  const hasLegacyMechanics = Array.isArray(snapshot.ailmentList)
+    || Array.isArray(snapshot.tacticList)
+    || Array.isArray(snapshot.ailmentSet)
+    || Array.isArray(snapshot.tacticSet);
+  if (!hasLegacyMechanics) return false;
+
+  const picks = migrateLegacyMechanicsToOffense(window.DATA || {}, snapshot);
+  snapshotUpgradeInProgress = true;
+  try {
+    applyOffenseFields(picks);
+  } finally {
+    snapshotUpgradeInProgress = false;
+  }
+  return true;
 }
 
 function loadOffenseCount(){
@@ -157,6 +189,9 @@ function installOffenseCountControl(){
   const button = document.getElementById('mechanics-count-btn');
   if (!button || button.dataset.offenseCountBound === '1') return;
   button.dataset.offenseCountBound = '1';
+
+  const label = button.querySelector('.rm-dotstep__label');
+  if (label) label.textContent = 'Offense';
 
   const dots = Array.from(button.querySelectorAll('.rm-dotstep__dot'));
   if (dots[2]) dots[2].hidden = true;
@@ -255,6 +290,9 @@ function patchCardOffenseLabel(){
 }
 
 function installLifecycleHooks(){
+  if (window.__randomancerOffenseLifecycleInstalled) return;
+  window.__randomancerOffenseLifecycleInstalled = true;
+
   const previousPrepare = window.RandomancerPrepareBuildRoll;
   window.RandomancerPrepareBuildRoll = (...args) => {
     previousPrepare?.(...args);
@@ -271,15 +309,21 @@ function installLifecycleHooks(){
     previousAfter?.(...args);
     requestAnimationFrame(patchCardOffenseLabel);
   };
+
+  window.addEventListener('error', restoreLegacyPools);
+  window.addEventListener('unhandledrejection', restoreLegacyPools);
 }
 
 function installPresentationHooks(){
-  document.addEventListener('randomancer:build-snapshot-change', () => {
+  document.addEventListener('randomancer:build-snapshot-change', (event) => {
+    const snapshot = event.detail?.snapshot || window.App?.state?.currentRoll || null;
+    upgradeLegacySnapshot(snapshot);
     requestAnimationFrame(patchCardOffenseLabel);
   });
 
   document.addEventListener('randomancer:mode-change', () => {
     setTimeout(() => {
+      if (getMode() !== 'standard') restoreLegacyPools();
       patchStandardLede();
       renderOffenseBindFates();
     }, 0);
@@ -301,6 +345,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const data = await ensureDataPreload();
     coreRef = data?.core || null;
     canonicalizeCombatFates();
+    upgradeLegacySnapshot(window.App?.state?.currentRoll || null);
     renderOffenseBindFates();
   } catch (error) {
     console.error('[Offense] failed to initialize canonical Offense runtime', error);
@@ -311,5 +356,6 @@ export {
   canonicalizeCurrentRoll,
   projectOffenseIntoLegacyPools,
   restoreLegacyPools,
-  renderOffenseBindFates
+  renderOffenseBindFates,
+  upgradeLegacySnapshot
 };
