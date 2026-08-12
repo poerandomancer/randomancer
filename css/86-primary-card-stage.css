@@ -77,6 +77,8 @@ body[data-mode="build"] #rc-reveal-fog{
 .primary-build-card-stage__mount{
   position:relative;
   isolation:isolate;
+  perspective:1400px;
+  perspective-origin:50% 42%;
 }
 
 /* Two very quiet card backs remain beneath a drawn card so the result still
@@ -144,29 +146,64 @@ body[data-mode="build"] #rc-reveal-fog{
 }
 .primary-card-deck__card--top{
   display:block;
+  z-index:3;
 }
 .primary-card-deck__mark,
 .primary-card-deck__ornament{
   display:none;
 }
 
-/* A short deal motion is enough to imply the draw without turning rerolls into
-   a long animation that users have to wait through. */
+/* Draw phase: the face-down card visibly leaves the deck before the generated
+   face replaces it. On rerolls, the upper card-back underneath the current
+   result becomes the next card being drawn. */
+.primary-build-card-stage.is-drawing[data-card-state="empty"] .primary-card-deck__card--top{
+  animation:rc-primary-deck-lift 220ms cubic-bezier(.2,.76,.2,1) both;
+}
+.primary-build-card-stage.is-drawing[data-card-state="result"] .primary-build-card-stage__mount::after{
+  z-index:6;
+  opacity:1;
+  animation:rc-primary-next-card-lift 220ms cubic-bezier(.2,.76,.2,1) both;
+}
+
+@keyframes rc-primary-deck-lift{
+  0%{
+    transform:translate3d(0,0,0) rotate(0) scale(1);
+    box-shadow:inset 0 0 0 1px rgba(255,245,218,.045),0 24px 58px rgba(0,0,0,.32);
+  }
+  100%{
+    transform:translate3d(12px,-18px,0) rotate(1.2deg) scale(1.012);
+    box-shadow:inset 0 0 0 1px rgba(255,245,218,.055),0 34px 72px rgba(0,0,0,.4);
+  }
+}
+
+@keyframes rc-primary-next-card-lift{
+  0%{
+    transform:translate(5px,3px) rotate(.55deg) scale(.996);
+  }
+  100%{
+    transform:translate3d(13px,-18px,0) rotate(1.3deg) scale(1.01);
+  }
+}
+
+/* Reveal phase: rotate the newly dealt result in from its edge. This is short
+   enough for repeated rolls but visually distinct from an instant DOM swap. */
 .primary-build-card-stage__mount.is-dealing > .card-stage{
+  transform-origin:50% 50%;
+  transform-style:preserve-3d;
   animation:rc-primary-card-deal 620ms cubic-bezier(.2,.76,.2,1) both;
 }
 @keyframes rc-primary-card-deal{
   0%{
-    opacity:.18;
-    transform:translate3d(18px,-13px,0) rotate(1.5deg) scale(.975);
+    opacity:.2;
+    transform:translate3d(13px,-18px,0) rotateY(82deg) rotateZ(1.2deg) scale(.985);
   }
-  58%{
+  46%{
     opacity:1;
-    transform:translate3d(-2px,2px,0) rotate(-.2deg) scale(1.006);
+    transform:translate3d(-2px,1px,0) rotateY(-5deg) rotateZ(-.2deg) scale(1.006);
   }
   100%{
     opacity:1;
-    transform:translate3d(0,0,0) rotate(0) scale(1);
+    transform:translate3d(0,0,0) rotateY(0) rotateZ(0) scale(1);
   }
 }
 
@@ -204,6 +241,8 @@ body[data-mode="build"] #rc-reveal-fog{
 }
 
 @media (prefers-reduced-motion:reduce){
+  .primary-build-card-stage.is-drawing[data-card-state="empty"] .primary-card-deck__card--top,
+  .primary-build-card-stage.is-drawing[data-card-state="result"] .primary-build-card-stage__mount::after,
   .primary-build-card-stage__mount.is-dealing > .card-stage{
     animation:none;
   }
