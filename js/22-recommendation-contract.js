@@ -1,10 +1,9 @@
 /*
  * Build-card refactor: recommendation contract boundary.
  *
- * This pass deliberately leaves the existing scorers in place and narrows the
- * canonical/output contract around them. The card refactor can therefore build
- * against a stable, much smaller recommendation shape before the matching
- * algorithms themselves receive a deeper review.
+ * The primary card is now the authoritative Build presentation, so this module
+ * only normalizes canonical recommendation state. The temporary legacy-panel
+ * MutationObserver/presentation guard has been removed.
  */
 
 const MAX_SKILLS_PER_WEAPON_SET = 1;
@@ -169,74 +168,8 @@ function installCanonicalContract() {
   return true;
 }
 
-function setTextIfDifferent(el, value) {
-  if (el && el.textContent !== value) el.textContent = value;
-}
-
-function trimChildren(root, selector, max) {
-  if (!root) return;
-  const nodes = Array.from(root.querySelectorAll(selector));
-  nodes.slice(max).forEach((node) => node.remove());
-}
-
-function enforceLegacyRecommendationPresentation() {
-  // These panels are transitional. Keep them coherent with the new contract
-  // until the primary in-page Build Card replaces them in the next passes.
-  document.querySelectorAll('#persistent-buff-section').forEach((el) => el.remove());
-  document.querySelectorAll('#synergy-supports-section, #synergy-supports-section-2').forEach((el) => el.remove());
-
-  ['skills-grid', 'skills-grid-2'].forEach((id) => {
-    const grid = document.getElementById(id);
-    if (!grid) return;
-    trimChildren(grid, ':scope > .skill-card', MAX_SKILLS_PER_WEAPON_SET);
-    grid.querySelectorAll('.supports-label, .supports').forEach((el) => el.remove());
-  });
-
-  const skillsPanel = document.getElementById('skills-panel');
-  if (skillsPanel) {
-    setTextIfDifferent(skillsPanel.querySelector('.section-title'), 'Skill Ideas');
-    setTextIfDifferent(skillsPanel.querySelector('.sub'), 'One compatible active skill per weapon set.');
-  }
-
-  const uniquesPanel = document.getElementById('uniques-panel');
-  if (uniquesPanel) {
-    trimChildren(uniquesPanel, '#uniques-grid > .unique-card', MAX_UNIQUES);
-    setTextIfDifferent(uniquesPanel.querySelector('.section-title'), 'Unique Ideas');
-    setTextIfDifferent(uniquesPanel.querySelector('.sub'), 'Up to three unique items that fit the rolled build.');
-  }
-
-  const passivesPanel = document.getElementById('passives-panel');
-  if (passivesPanel) {
-    passivesPanel.querySelectorAll('.passive-node--keystone').forEach((el) => el.remove());
-    trimChildren(passivesPanel, '.passive-node--ascendancy', MAX_ASCENDANCY_NODES);
-    trimChildren(passivesPanel, '.passive-node--notable', MAX_NOTABLES);
-    setTextIfDifferent(passivesPanel.querySelector('.panel-title'), 'Passive Ideas');
-    setTextIfDifferent(passivesPanel.querySelector('.panel-subtitle'), 'Ascendancy nodes and notables worth investigating for this build.');
-  }
-}
-
-let presentationFrame = 0;
-function schedulePresentationEnforcement() {
-  if (presentationFrame) return;
-  presentationFrame = requestAnimationFrame(() => {
-    presentationFrame = 0;
-    enforceLegacyRecommendationPresentation();
-  });
-}
-
-function installPresentationGuard() {
-  const root = document.getElementById('results-stage');
-  if (!root || root.dataset.recommendationContractObserved === '1') return;
-  root.dataset.recommendationContractObserved = '1';
-
-  const observer = new MutationObserver(() => schedulePresentationEnforcement());
-  observer.observe(root, { childList: true, subtree: true, characterData: true });
-  schedulePresentationEnforcement();
-}
-
 function install() {
   installCanonicalContract();
-  installPresentationGuard();
 
   // App is normally ready before this module executes, but keep a small retry
   // for unusual bootstrap timing and local development hot reloads.

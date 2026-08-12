@@ -9,7 +9,7 @@ const STAGE_ID = 'primary-build-card-stage';
 const MOUNT_ID = 'primary-build-card-mount';
 const SNAPSHOT_EVENT = 'randomancer:build-snapshot-change';
 const INITIAL_LIFT_MS = 190;
-const NORMALIZE_FLIP_MS = 300;
+const INITIAL_REVEAL_MS = 620;
 const REROLL_ADVANCE_MS = 390;
 const REROLL_REVEAL_MS = 380;
 const SAME_IDENTITY_FALLBACK_MS = 1200;
@@ -219,7 +219,7 @@ function hydrateUniqueTooltips(snapshot) {
   }).catch(() => {});
 }
 
-function renderCurrentBuild({ animate = false, forceFront = false, snapshot = null } = {}) {
+function renderCurrentBuild({ animate = false, forceFront = false, snapshot = null, suppressDeal = false } = {}) {
   const stage = createStage();
   const mount = getMount();
   if (!stage || !mount || !isBuildMode()) return;
@@ -247,7 +247,7 @@ function renderCurrentBuild({ animate = false, forceFront = false, snapshot = nu
     onAction: handleCardAction
   });
 
-  if (animate || !hadResult) {
+  if (!suppressDeal && (animate || !hadResult)) {
     void mount.offsetWidth;
     mount.classList.add('is-dealing');
     clearDealClass(mount);
@@ -302,8 +302,8 @@ function clearTransitionClasses() {
   const stage = createStage();
   stage?.classList.remove(
     'is-drawing',
-    'is-normalizing-roll',
     'is-rerolling',
+    'is-revealing-first',
     'is-revealing-next'
   );
 }
@@ -328,7 +328,6 @@ function clearPendingRoll() {
 function startRerollAdvance() {
   const stage = createStage();
   if (!pendingRoll || !stage || !pendingRoll.hadResult) return;
-  stage.classList.remove('is-normalizing-roll');
   stage.classList.add('is-rerolling');
   pendingRoll.advanceStartedAt = performance.now();
   maybeRevealPendingRoll();
@@ -341,10 +340,8 @@ function armDrawAnimation() {
   hideBuildCardTooltip();
 
   const stage = createStage();
-  const mount = getMount();
   const snapshot = getCurrentSnapshot();
   const hadResult = stage?.dataset?.cardState === 'result' && hasUsableBuild(snapshot);
-  const wasBack = hadResult && mount?.dataset?.cardFace === BUILD_CARD_FACES.BACK;
   const now = performance.now();
 
   pendingRoll = {
@@ -353,7 +350,6 @@ function armDrawAnimation() {
     latestSnapshot: null,
     latestSource: '',
     hadResult,
-    wasBack,
     advanceStartedAt: 0
   };
 
@@ -361,16 +357,9 @@ function armDrawAnimation() {
     pendingRoll.advanceStartedAt = now;
   } else if (!hadResult) {
     stage?.classList.add('is-drawing');
-  } else if (wasBack && mount) {
-    stage?.classList.add('is-normalizing-roll');
-    mountBuildCardSnapshot(mount, snapshot, {
-      face: BUILD_CARD_FACES.FRONT,
-      animate: true,
-      actionsHtml: renderCardActions(),
-      onAction: handleCardAction
-    });
-    window.setTimeout(startRerollAdvance, NORMALIZE_FLIP_MS);
   } else {
+    // Preserve whichever face the user is actually viewing. The outgoing card
+    // simply tilts/recedes as-is; only the incoming card performs a reveal flip.
     startRerollAdvance();
   }
 
@@ -396,7 +385,7 @@ function minimumRevealAt() {
   if (!pendingRoll) return 0;
   if (prefersReducedMotion()) return pendingRoll.startedAt;
   if (!pendingRoll.hadResult) return pendingRoll.startedAt + INITIAL_LIFT_MS;
-  const advanceAt = pendingRoll.advanceStartedAt || (pendingRoll.startedAt + (pendingRoll.wasBack ? NORMALIZE_FLIP_MS : 0));
+  const advanceAt = pendingRoll.advanceStartedAt || pendingRoll.startedAt;
   return advanceAt + REROLL_ADVANCE_MS;
 }
 
@@ -434,11 +423,26 @@ function revealPendingRoll(snapshot) {
   }
 
   pendingRoll = null;
-  stage.classList.remove('is-drawing', 'is-normalizing-roll');
+  stage.classList.remove('is-drawing');
 
-  if (reduced || !wasReroll) {
+  if (reduced) {
+    stage.classList.remove('is-rerolling', 'is-revealing-first', 'is-revealing-next');
+    renderCurrentBuild({ animate: false, forceFront: true, snapshot });
+    return;
+  }
+
+  if (!wasReroll) {
+    // The top deck card has already lifted. Replace the deck with the generated
+    // Build face without invoking the old deal animation, and use the explicit
+    // transition-back sibling as the facedown reveal surface.
     stage.classList.remove('is-rerolling', 'is-revealing-next');
-    renderCurrentBuild({ animate: !reduced, forceFront: true, snapshot });
+    stage.classList.add('is-revealing-first');
+    renderCurrentBuild({ animate: false, forceFront: true, snapshot, suppressDeal: true });
+
+    transitionCleanupTimer = window.setTimeout(() => {
+      transitionCleanupTimer = 0;
+      stage.classList.remove('is-revealing-first');
+    }, INITIAL_REVEAL_MS + 60);
     return;
   }
 
