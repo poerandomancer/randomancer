@@ -1,0 +1,34 @@
+/* Final card-first polish overrides. Keep these scoped to the primary Build stage
+   so legacy/public card proportions and mobile sizing remain unchanged. */
+
+@media (min-width:601px){
+  .primary-build-card-stage{
+    --primary-card-width:470px;
+    --primary-card-aspect:5 / 8;
+  }
+
+  .primary-build-card-stage .rc-card,
+  .primary-build-card-stage .primary-card-deck{
+    aspect-ratio:var(--primary-card-aspect);
+  }
+
+  /* The source card textures were authored for the older, taller card ratio.
+     Stretch them to the new 5:8 surface for this pass so the ornamental top and
+     bottom edges remain visible instead of being cropped by background-cover. */
+  .primary-build-card-stage .rc-card::after,
+  .primary-build-card-stage[data-card-state="result"] .primary-build-card-stage__mount::before,
+  .primary-build-card-stage[data-card-state="result"] .primary-build-card-stage__mount::after,
+  .primary-build-card-stage .primary-card-deck__card,
+  .primary-build-card-stage .primary-build-card-stage__transition-back{
+    background-size:100% 100%;
+  }
+}
+
+.rc-tooltip__line--synergy{
+  margin:.18rem 0 .36rem;
+  color:rgba(225,190,116,.94);
+  font-style:italic;
+  font-size:.92em;
+  letter-spacing:.01em;
+  text-shadow:0 0 10px rgba(212,170,80,.12);
+}

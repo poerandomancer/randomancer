@@ -289,7 +289,12 @@ function showBuildCardTooltip(target, pinned = false) {
   const title = target?.dataset?.tipTitle || target?.textContent?.trim();
   if (!title || !lines.length) return;
   const tooltip = ensureTooltip();
-  tooltip.innerHTML = `<div class="rc-tooltip__title">${escapeHtml(title)}</div><div class="rc-tooltip__lines">${lines.map((line) => `<div>${escapeHtml(line)}</div>`).join('')}</div><div class="rc-tooltip__hint">Tap to pin</div>`;
+  const renderedLines = lines.map((line) => {
+    const text = String(line || '');
+    const synergyClass = /^Synergies:/i.test(text) ? ' rc-tooltip__line--synergy' : '';
+    return `<div class="rc-tooltip__line${synergyClass}">${escapeHtml(text)}</div>`;
+  }).join('');
+  tooltip.innerHTML = `<div class="rc-tooltip__title">${escapeHtml(title)}</div><div class="rc-tooltip__lines">${renderedLines}</div><div class="rc-tooltip__hint">Tap to pin</div>`;
   tooltipTarget = target;
   tooltipPinned = pinned;
   tooltip.classList.add('is-open');
