@@ -24,6 +24,7 @@
  * 19) 22-recommendation-contract: simplified Build recommendation boundary.
  * 20) 23-build-card-foundation: reusable Build Card model/render/flip/tooltip layer.
  * 21) 24-primary-card-stage: persistent in-page Build deck/card presentation.
+ * 22) 25-card-polish: compact copied links + primary-card tooltip polish.
  *
  * Public window exports (must remain available):
  * window.App, window.rollBuild, window.scheduleSummaryRefresh, window.RandomancerEncodeSnapshot,
@@ -55,5 +56,6 @@ import './js/21-legacy-mode.js';
 import './js/22-recommendation-contract.js';
 import './js/23-build-card-foundation.js';
 import './js/24-primary-card-stage.js';
+import './js/25-card-polish.js';
 
 import './js/20-trending-cards.js';
