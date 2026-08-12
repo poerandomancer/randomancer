@@ -134,11 +134,41 @@ function isSavedBuild() {
   return document.getElementById('build-actions-save')?.dataset?.saved === '1';
 }
 
+function buildStatelessBuildLink(snapshot) {
+  const code = window.RandomancerEncodeSnapshot?.(snapshot);
+  if (!code) return '';
+
+  try {
+    const url = new URL(window.location.href);
+    url.search = '';
+    url.hash = '';
+    url.searchParams.set('build', code);
+    return url.toString();
+  } catch {
+    const base = `${window.location.origin || ''}${window.location.pathname || '/'}`;
+    return `${base}?build=${encodeURIComponent(code)}`;
+  }
+}
+
+async function copyCurrentBuildLink() {
+  const snapshot = getCurrentSnapshot();
+  const url = buildStatelessBuildLink(snapshot);
+  if (!url) {
+    window.RandomancerShowToast?.('Build link could not be created.');
+    return false;
+  }
+
+  const copied = await window.RandomancerCopyTextToClipboard?.(url);
+  window.RandomancerShowToast?.(copied ? 'Build link copied.' : 'Could not copy build link.');
+  return !!copied;
+}
+
 function renderCardActions() {
   const saved = isSavedBuild();
   return `
     <button type="button" class="icon-btn card-action-btn" data-card-action="poe-ninja" aria-label="Open in poe.ninja" title="Open in poe.ninja"><span aria-hidden="true">🥷</span></button>
     <button type="button" class="icon-btn card-action-btn${saved ? ' is-active' : ''}" data-card-action="save" aria-label="${saved ? 'Saved' : 'Save'}" title="${saved ? 'Saved' : 'Save'}" ${saved ? 'data-saved="1"' : ''}><span aria-hidden="true">${saved ? '★' : '☆'}</span></button>
+    <button type="button" class="icon-btn card-action-btn" data-card-action="copy-link" aria-label="Copy Build Link" title="Copy Build Link"><span aria-hidden="true">🔗</span></button>
   `;
 }
 
@@ -150,7 +180,15 @@ function handleCardAction(action) {
   if (action === 'save') {
     document.getElementById('build-actions-save')?.click();
     requestAnimationFrame(() => renderCurrentBuild({ animate: false }));
+    return;
   }
+  if (action === 'copy-link') {
+    copyCurrentBuildLink();
+  }
+}
+
+function retireLegacyBuildShareLauncher() {
+  document.getElementById('build-open-card')?.remove();
 }
 
 function clearDealClass(mount) {
@@ -449,6 +487,7 @@ function install() {
   createStage();
   installSnapshotBridge();
   installHeaderObserver();
+  retireLegacyBuildShareLauncher();
 
   // Capture before the existing roll handler so the currently displayed card
   // starts its transition before generation mutates the canonical snapshot.
@@ -513,6 +552,8 @@ if (document.readyState === 'loading') {
 export {
   STAGE_ID,
   SNAPSHOT_EVENT,
+  buildStatelessBuildLink,
+  copyCurrentBuildLink,
   renderCurrentBuild,
   renderDeck,
   updateStageMetrics
