@@ -1,5 +1,6 @@
 import {
   BUILD_CARD_FACES,
+  ensureBuildCardUniqueData,
   hideBuildCardTooltip,
   mountBuildCardSnapshot
 } from './23-build-card-foundation.js';
@@ -7,15 +8,23 @@ import {
 const STAGE_ID = 'primary-build-card-stage';
 const MOUNT_ID = 'primary-build-card-mount';
 const SNAPSHOT_EVENT = 'randomancer:build-snapshot-change';
+const DRAW_LIFT_MS = 180;
 
 let pendingDraw = false;
 let pendingDrawTimer = 0;
+let drawRevealTimer = 0;
+let drawStartedAt = 0;
 let bridgeInstalled = false;
 let headerResizeObserver = null;
+let uniqueHydrationKey = '';
 
 function isBuildMode() {
   const mode = document.body?.dataset?.mode;
   return !mode || mode === 'build';
+}
+
+function prefersReducedMotion() {
+  return window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
 }
 
 function getCurrentSnapshot() {
@@ -76,17 +85,14 @@ function renderDeck() {
   if (!stage || !mount) return;
 
   stage.dataset.cardState = 'empty';
+  stage.classList.remove('is-drawing');
   mount.dataset.cardFace = '';
   mount.classList.remove('is-dealing');
   mount.innerHTML = `
     <div class="primary-card-deck" aria-label="Face-down Randomancer card deck">
       <div class="primary-card-deck__card primary-card-deck__card--third" aria-hidden="true"></div>
       <div class="primary-card-deck__card primary-card-deck__card--second" aria-hidden="true"></div>
-      <div class="primary-card-deck__card primary-card-deck__card--top">
-        <span class="primary-card-deck__ornament" aria-hidden="true">✦</span>
-        <span class="primary-card-deck__mark" aria-hidden="true">R</span>
-        <span class="primary-card-deck__ornament primary-card-deck__ornament--bottom" aria-hidden="true">✦</span>
-      </div>
+      <div class="primary-card-deck__card primary-card-deck__card--top"></div>
     </div>
   `;
 
@@ -125,6 +131,30 @@ function clearDealClass(mount) {
   window.setTimeout(() => mount?.classList.remove('is-dealing'), 720);
 }
 
+function getUniqueDataKey(snapshot) {
+  const names = Array.isArray(snapshot?.recommendedUniques)
+    ? snapshot.recommendedUniques
+        .map((entry) => typeof entry === 'string' ? entry : entry?.name)
+        .filter(Boolean)
+        .slice(0, 3)
+    : [];
+  if (!names.length) return '';
+  return [snapshot?.buildName || '', snapshot?.ascendancy || '', ...names].join('|');
+}
+
+function hydrateUniqueTooltips(snapshot) {
+  const key = getUniqueDataKey(snapshot);
+  if (!key || key === uniqueHydrationKey) return;
+  uniqueHydrationKey = key;
+
+  ensureBuildCardUniqueData().then((items) => {
+    if (!items?.length || !isBuildMode()) return;
+    const current = getCurrentSnapshot();
+    if (getUniqueDataKey(current) !== key) return;
+    renderCurrentBuild({ animate: false });
+  }).catch(() => {});
+}
+
 function renderCurrentBuild({ animate = false } = {}) {
   const stage = createStage();
   const mount = getMount();
@@ -141,6 +171,7 @@ function renderCurrentBuild({ animate = false } = {}) {
     ? BUILD_CARD_FACES.BACK
     : BUILD_CARD_FACES.FRONT;
 
+  stage.classList.remove('is-drawing');
   stage.dataset.cardState = 'result';
   const quote = getStageQuote();
   if (quote) quote.hidden = true;
@@ -159,6 +190,7 @@ function renderCurrentBuild({ animate = false } = {}) {
     clearDealClass(mount);
   }
 
+  hydrateUniqueTooltips(snapshot);
   requestAnimationFrame(updateStageMetrics);
 }
 
@@ -203,13 +235,35 @@ function installSnapshotBridge() {
   return true;
 }
 
+function clearPendingDraw() {
+  pendingDraw = false;
+  drawStartedAt = 0;
+  createStage()?.classList.remove('is-drawing');
+  if (pendingDrawTimer) {
+    window.clearTimeout(pendingDrawTimer);
+    pendingDrawTimer = 0;
+  }
+  if (drawRevealTimer) {
+    window.clearTimeout(drawRevealTimer);
+    drawRevealTimer = 0;
+  }
+}
+
 function armDrawAnimation() {
   if (!isBuildMode()) return;
   pendingDraw = true;
+  drawStartedAt = performance.now();
+
+  const stage = createStage();
+  if (stage && !prefersReducedMotion()) {
+    stage.classList.remove('is-drawing');
+    void stage.offsetWidth;
+    stage.classList.add('is-drawing');
+  }
+
   if (pendingDrawTimer) window.clearTimeout(pendingDrawTimer);
   pendingDrawTimer = window.setTimeout(() => {
-    pendingDraw = false;
-    pendingDrawTimer = 0;
+    clearPendingDraw();
   }, 5000);
 }
 
@@ -218,11 +272,26 @@ function consumeDrawAnimation(source) {
   const firstResult = stage?.dataset?.cardState !== 'result';
   const shouldAnimate = pendingDraw || firstResult || source === 'replace';
   pendingDraw = false;
+  drawStartedAt = 0;
+  stage?.classList.remove('is-drawing');
   if (pendingDrawTimer) {
     window.clearTimeout(pendingDrawTimer);
     pendingDrawTimer = 0;
   }
   return shouldAnimate;
+}
+
+function scheduleDrawReveal(source) {
+  if (!pendingDraw) return false;
+  if (drawRevealTimer) return true;
+
+  const elapsed = drawStartedAt ? performance.now() - drawStartedAt : DRAW_LIFT_MS;
+  const delay = prefersReducedMotion() ? 0 : Math.max(0, DRAW_LIFT_MS - elapsed);
+  drawRevealTimer = window.setTimeout(() => {
+    drawRevealTimer = 0;
+    renderCurrentBuild({ animate: consumeDrawAnimation(source) });
+  }, delay);
+  return true;
 }
 
 function updateStageMetrics() {
@@ -259,8 +328,8 @@ function install() {
   installSnapshotBridge();
   installHeaderObserver();
 
-  // Run before the existing roll button's bubble handlers so the first core
-  // snapshot update knows this was an intentional draw/reroll.
+  // Capture before the existing roll handler so the visible deck/card starts
+  // moving immediately, before the generated snapshot is ready.
   document.getElementById('roll')?.addEventListener('click', armDrawAnimation, true);
 
   document.addEventListener(SNAPSHOT_EVENT, (event) => {
@@ -272,6 +341,7 @@ function install() {
     }
 
     const source = event.detail?.source || '';
+    if (scheduleDrawReveal(source)) return;
     renderCurrentBuild({ animate: consumeDrawAnimation(source) });
 
     // Build-code/saved-build restoration updates the hidden legacy save button
@@ -283,7 +353,7 @@ function install() {
   });
 
   document.addEventListener('randomancer:mode-change', () => {
-    pendingDraw = false;
+    clearPendingDraw();
     requestAnimationFrame(syncMode);
   });
 
