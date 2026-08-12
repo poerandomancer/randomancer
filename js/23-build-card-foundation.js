@@ -9,6 +9,8 @@ const mountedCards = new WeakMap();
 let tooltipEl = null;
 let tooltipTarget = null;
 let tooltipPinned = false;
+let uniqueSourceCache = null;
+let uniqueSourcePromise = null;
 
 function escapeHtml(value) {
   return String(value == null ? '' : value)
@@ -65,14 +67,41 @@ function getPassiveDescription(entry) {
   return (Array.isArray(lines) ? lines : []).map(stripMarkup).filter(Boolean).join(' ');
 }
 
-function getUniqueDescription(name) {
+function normalizeUniqueSource(source) {
+  if (Array.isArray(source)) return source.filter(Boolean);
+  if (Array.isArray(source?.items)) return source.items.filter(Boolean);
+  if (source?.items && typeof source.items === 'object') return Object.values(source.items).filter(Boolean);
+  if (source?.by_key && typeof source.by_key === 'object') return Object.values(source.by_key).filter(Boolean);
+  return [];
+}
+
+function getUniqueSourceCollection() {
+  if (Array.isArray(uniqueSourceCache) && uniqueSourceCache.length) return uniqueSourceCache;
   const source = window.DATA?.uniques || window.DATA?.poe2dbUniques || window.DATA?.poe2db_uniques_min || [];
-  let items = [];
-  if (Array.isArray(source)) items = source;
-  else if (Array.isArray(source?.items)) items = source.items;
-  else if (source?.items && typeof source.items === 'object') items = Object.values(source.items);
-  else if (source?.by_key && typeof source.by_key === 'object') items = Object.values(source.by_key);
-  const found = items.find((item) => item?.name === name || item?.base_item?.display_name === name);
+  const items = normalizeUniqueSource(source);
+  if (items.length) uniqueSourceCache = items;
+  return items.length ? items : (Array.isArray(uniqueSourceCache) ? uniqueSourceCache : []);
+}
+
+async function ensureBuildCardUniqueData() {
+  const existing = getUniqueSourceCollection();
+  if (existing.length) return existing;
+  if (!uniqueSourcePromise) {
+    uniqueSourcePromise = fetch('data/enriched/poe2db_uniques_min.json', { cache: 'force-cache' })
+      .then((response) => response.ok ? response.json() : null)
+      .then((payload) => {
+        uniqueSourceCache = normalizeUniqueSource(payload);
+        return uniqueSourceCache;
+      })
+      .catch(() => [])
+      .finally(() => { uniqueSourcePromise = null; });
+  }
+  return uniqueSourcePromise;
+}
+
+function getUniqueDescription(name) {
+  const items = getUniqueSourceCollection();
+  const found = items.find((entry) => entry?.name === name || entry?.base_item?.display_name === name || entry?.source?.label === name);
   const base = found?.base || found?.base_item?.display_name || found?.slot || '';
   const mods = Array.isArray(found?.explicit_mods) ? found.explicit_mods : (found?.lines || found?.explicit || []);
   return [base, ...(Array.isArray(mods) ? mods : [])].map(stripMarkup).filter(Boolean).slice(0, 7);
@@ -363,6 +392,7 @@ if (typeof window !== 'undefined') {
     render: renderBuildCard,
     mount: mountBuildCard,
     mountSnapshot: mountBuildCardSnapshot,
+    ensureUniqueData: ensureBuildCardUniqueData,
     summaryText: getBuildCardSummaryText
   });
   document.addEventListener('pointerdown', (event) => {
@@ -380,6 +410,7 @@ export {
   renderBuildCard,
   mountBuildCard,
   mountBuildCardSnapshot,
+  ensureBuildCardUniqueData,
   bindInteractions as bindBuildCardInteractions,
   hideBuildCardTooltip,
   getBuildCardSummaryText
