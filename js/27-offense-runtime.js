@@ -11,13 +11,14 @@ const OFFENSE_COUNT_KEY = 'randomancer_offense_count';
 const LEGACY_COUNT_KEY = 'randomancer_mechanics_count';
 const DEFAULT_OFFENSE_COUNT = 2;
 const ARCHETYPE_WEIGHT = 3;
-const CARD_LABEL_SETTLE_MS = 850;
+const PRIMARY_CARD_STAGE_ID = 'primary-build-card-stage';
 
 let coreRef = null;
 let savedLegacyPools = null;
 let poolsProjected = false;
 let snapshotUpgradeInProgress = false;
-let cardLabelTimer = 0;
+let cardLabelObserver = null;
+let cardLabelObserverRetry = 0;
 
 function getMode(){
   return window.RandomancerGetMode?.() || 'standard';
@@ -117,13 +118,19 @@ function restoreLegacyPools(){
 
 function collectRolledOffense(explicitSnapshot){
   const current = explicitSnapshot || window.App?.state?.currentRoll || window.CURRENT_ROLL || {};
+
+  // During the transitional roll, the legacy engine writes the freshly generated
+  // mechanics into ailment*/tactic* while the previous canonical offense* fields
+  // can still be present on App.state.currentRoll until normalization completes.
+  // Fresh legacy fields therefore take precedence here; canonical fields remain
+  // the fallback for already-normalized or directly loaded snapshots.
   const raw = [
-    ...(Array.isArray(current.offenseSet) ? current.offenseSet : []),
     ...(Array.isArray(current.ailmentSet) ? current.ailmentSet : []),
     ...(Array.isArray(current.tacticSet) ? current.tacticSet : []),
-    ...(Array.isArray(current.offenseList) ? current.offenseList : []),
     ...(Array.isArray(current.ailmentList) ? current.ailmentList : []),
-    ...(Array.isArray(current.tacticList) ? current.tacticList : [])
+    ...(Array.isArray(current.tacticList) ? current.tacticList : []),
+    ...(Array.isArray(current.offenseSet) ? current.offenseSet : []),
+    ...(Array.isArray(current.offenseList) ? current.offenseList : [])
   ];
 
   const picks = [];
@@ -291,13 +298,22 @@ function patchCardOffenseLabel(){
   });
 }
 
-function scheduleCardOffenseLabelPatch(){
-  requestAnimationFrame(patchCardOffenseLabel);
-  if (cardLabelTimer) clearTimeout(cardLabelTimer);
-  cardLabelTimer = window.setTimeout(() => {
-    cardLabelTimer = 0;
-    patchCardOffenseLabel();
-  }, CARD_LABEL_SETTLE_MS);
+function installCardLabelObserver(){
+  if (cardLabelObserver) return;
+  const stage = document.getElementById(PRIMARY_CARD_STAGE_ID);
+  if (!stage) {
+    if (!cardLabelObserverRetry) {
+      cardLabelObserverRetry = window.setTimeout(() => {
+        cardLabelObserverRetry = 0;
+        installCardLabelObserver();
+      }, 50);
+    }
+    return;
+  }
+
+  cardLabelObserver = new MutationObserver(() => patchCardOffenseLabel());
+  cardLabelObserver.observe(stage, { childList: true, subtree: true });
+  patchCardOffenseLabel();
 }
 
 function installLifecycleHooks(){
@@ -318,7 +334,7 @@ function installLifecycleHooks(){
       restoreLegacyPools();
     }
     previousAfter?.(...args);
-    scheduleCardOffenseLabelPatch();
+    patchCardOffenseLabel();
   };
 
   window.addEventListener('error', restoreLegacyPools);
@@ -329,7 +345,7 @@ function installPresentationHooks(){
   document.addEventListener('randomancer:build-snapshot-change', (event) => {
     const snapshot = event.detail?.snapshot || window.App?.state?.currentRoll || null;
     upgradeLegacySnapshot(snapshot);
-    scheduleCardOffenseLabelPatch();
+    patchCardOffenseLabel();
   });
 
   document.addEventListener('randomancer:mode-change', () => {
@@ -350,6 +366,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   installOffenseCountControl();
   installLifecycleHooks();
   installPresentationHooks();
+  installCardLabelObserver();
   patchStandardLede();
 
   try {
