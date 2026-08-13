@@ -25,7 +25,12 @@ Each element provides:
 - `category`: one of the supported category values above.
 - `tags`: normalized matching vocabulary for recommendation/scoring consumers.
 - `attributes`: STR/DEX/INT cohesion affinity used by the roll system.
+- `cohesionNeutral`: optional boolean for mechanics that should receive a baseline selection share independent of STR/DEX/INT cohesion. Neutral entries do not contribute an attribute vector.
 - `relations`: lightweight descriptive affinities between Offense elements.
+
+### Cohesion-neutral semantics
+
+`Critical Hits` is currently the only cohesion-neutral Offense element. A neutral entry keeps its raw share of the current candidate pool regardless of cohesion threshold; it does not count as a passing attribute match that prevents the normal threshold-relaxation behavior for other candidates. This models broad applicability without making a three-stat vector artificially favor hybrid builds or making the neutral result dominate strict pools.
 
 ### Relationship semantics
 
