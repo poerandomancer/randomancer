@@ -18,19 +18,25 @@ Core principles:
 
 - **Bind the Fates**: modal control to **Oath** (prefer) or **Abominate** (ban) options for the **next roll**.
 
-- **Weapon Set II**: a toggle that, when enabled, rolls an **alternate weapon setup** and a second recommended-skills tab.
+Standard Build mode no longer exposes Weapon Set II or Offense-count controls. Each Build roll uses one weapon set, and Fate independently chooses whether the build receives one or two canonical Offense elements.
 
-- **Combat Mechanics (1–3)**: controls how many mechanics (ailments + tactics) the build leans into.
+- **Offense (1–2, Fate-selected)** defines the core offensive premise.
+  - Offense is sourced from `data/offense-inventory.json`.
+  - Categories are Damage Type, Ailment, Scaling, and Archetype.
+  - A build may roll at most one Archetype (`Minions/Companions`, `Totems`, or `Thorns`).
+  - Cohesion, rather than pairwise compatibility gates, is the primary governor of conventional versus unusual Offense combinations.
 
-Important: these controls are **“next roll” controls** — build snapshots/build codes represent the **build outcome**, not control settings.
+Important: user controls are **“next roll” controls** — build snapshots/build codes represent the **build outcome**, not control settings.
 
 ---
 
 ## Build Snapshot / Build Code
 
 Build codes are **snapshot-style**:
-- They encode the rolled build (class/ascendancy, weapons, defenses, ailments/tactics, skills/supports, passives, uniques, etc.).
-- They **do not** encode user control states (cohesion slider, mechanics count, weapon-set toggle, bind-fates settings).
+- They encode the rolled build (class/ascendancy, weapons, defenses, Offense, recommendations, etc.).
+- Canonical Offense state uses `offense`, `offenseList`, `offenseSet`, and `offenseTags`.
+- Legacy `ailment*` / `tactic*` snapshot fields remain temporarily populated as a compatibility boundary for the current recommendation engine and older build codes.
+- They **do not** encode user control states such as cohesion or Bind-the-Fates settings.
 - Loading a build code should render the build without modifying current control settings.
 
 ---
@@ -45,9 +51,12 @@ Build codes are **snapshot-style**:
 
 **JavaScript**
 - `core-script.js` imports modules under `/js/` and establishes the app runtime.
+- `js/26-offense-roll.js` owns the canonical Offense selection/snapshot helpers.
+- `js/27-offense-runtime.js` is the transitional adapter that lets the legacy recommendation stack consume canonical Offense until that stack is replaced.
 
 **Data**
-- `data/core-data.json` — core build components and rules.
+- `data/core-data.json` — core build components and legacy rules.
+- `data/offense-inventory.json` — canonical Build Offense vocabulary.
 - `data/enriched/*.json` — enriched skills/passives/uniques used by the runtime.
 - `data/datamined/*` — reference sources used for enrichment and future updates.
 

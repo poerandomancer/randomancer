@@ -55,20 +55,33 @@ function attributeCohesion(a,b){ const k=['strength','dexterity','intelligence']
 function pickByCohesion(list, base, th){
   if (!list || !list.length) return null;
 
-  // Madness: ignore attributes completely
+  // Madness: ignore attributes completely.
   if (th === 0) {
     return list[Math.floor(Math.random() * list.length)];
   }
 
-  // Clamp to [0,1] just in case
+  // A cohesion-neutral candidate should neither be screened out by attributes
+  // nor become disproportionately common when a strict threshold leaves only a
+  // tiny eligible pool. Give neutral entries exactly their raw share of the
+  // current candidate list, then apply cohesion normally to the remainder.
+  const neutral = list.filter(x => x?.cohesionNeutral === true);
+  const attributed = list.filter(x => x?.cohesionNeutral !== true);
+  if (neutral.length && Math.random() < neutral.length / list.length) {
+    return neutral[Math.floor(Math.random() * neutral.length)];
+  }
+  if (!attributed.length) {
+    return neutral[Math.floor(Math.random() * neutral.length)] || null;
+  }
+
+  // Clamp to [0,1] just in case.
   let currentTh = (typeof th === 'number') ? Math.max(0, Math.min(1, th)) : 0;
 
-  const scored = list.map(x => ({
+  const scored = attributed.map(x => ({
     x,
     score: attributeCohesion(base, x.attributes || {})
   }));
 
-  // First attempt using the requested threshold
+  // First attempt using the requested threshold.
   let filtered = scored.filter(s => s.score >= currentTh);
 
   // If nothing passes, gradually relax the threshold in 0.10 steps
@@ -83,7 +96,6 @@ function pickByCohesion(list, base, th){
 
   return pool[Math.floor(Math.random() * pool.length)].x;
 }
-
 
 function normalizeAttributesForSynergy(attrs){
   const S = Number(attrs?.strength) || 0;
@@ -162,7 +174,7 @@ function buildBuildContextFromSnapshot(snap){
   const addTag = (t, sink = tagSet) => { const k = normTagPlus(t); if (k) sink.add(k); };
   const addTags = (arr, sink) => (arr || []).forEach(t => addTag(t, sink));
 
-  // Prefer existing tag profile if present
+  // Prefer existing tag profile if present.
   if (snap.tagProfile && snap.tagProfile.profile instanceof Map) {
     snap.tagProfile.profile.forEach((_, k) => addTag(k));
   }
@@ -171,8 +183,13 @@ function buildBuildContextFromSnapshot(snap){
     addTags(Array.from(snap.tagProfile.cats.ailments || []));
   }
 
+  // Canonical Offense is first-class. Legacy Ailment/Tactic tags remain as a
+  // compatibility fallback until the recommendation engine is rewritten.
+  addTags(snap.offenseTags || []);
+  addTags((snap.offenseSet || []).flatMap(entry => entry?.tags || []));
   addTags((snap.tacticSet || []).flatMap(t => t?.tags || []));
   addTags((snap.ailmentSet || []).flatMap(a => a?.tags || []));
+
   const defPseudo = defensePseudoTags(snap.defense?.name);
   addTags(defPseudo);
   addTags(defPseudo, defenseSet);
@@ -185,13 +202,12 @@ function buildBuildContextFromSnapshot(snap){
     if (defenseKeywords.some(k => lower.includes(k))) defenseSet.add(t);
   });
 
-	const t =
-	  (Number.isFinite(snap.cohesionThreshold) ? Number(snap.cohesionThreshold) :
-	   (Number.isFinite(window.App?.state?.cohesionThreshold) ? Number(window.App.state.cohesionThreshold) :
-		cohesionThreshold));
-	
-	const cohesionMode = cohesionTierFromThreshold(t);
+  const t =
+    (Number.isFinite(snap.cohesionThreshold) ? Number(snap.cohesionThreshold) :
+     (Number.isFinite(window.App?.state?.cohesionThreshold) ? Number(window.App.state.cohesionThreshold) :
+      cohesionThreshold));
 
+  const cohesionMode = cohesionTierFromThreshold(t);
 
   return {
     ascendancyId: Number.isFinite(ascendancyId) ? ascendancyId : null,
@@ -207,7 +223,6 @@ const validOffhands={"One-handed Mace":["One-handed Mace","Shield","Buckler","Fo
 function applyHardRestrictions(item,ctx){
   if(!item) return false;
   if(item.name==='Block' && !['Shield','Buckler'].includes(ctx.offhand)) return false;
-  if(item.name==='Minions' && ctx.weapon!=='Sceptre') return false;
   if(item.name==='Deflection' && !ctx.defense.includes('Evasion')) return false;
   return true;
 }
@@ -225,6 +240,5 @@ export {
   validOffhands,
   applyHardRestrictions
 };
-
 
 // ---------- overlay + ascendancy art ----------
