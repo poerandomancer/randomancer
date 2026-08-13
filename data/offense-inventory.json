@@ -44,6 +44,7 @@
       "name": "Chaos Damage",
       "category": "Damage Type",
       "tags": ["chaos", "chaos damage", "damage"],
+      "cohesionNeutral": true,
       "attributes": {"strength": 0.3, "dexterity": 0.3, "intelligence": 0.4},
       "relations": {"reinforcing": ["poison"]}
     },
