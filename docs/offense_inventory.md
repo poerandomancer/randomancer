@@ -46,7 +46,7 @@ Archetype: Minions/Companions, Totems, Thorns.
 
 ## Roll contract
 
-Standard Build rolls select one or two distinct Offense elements. The player-facing count control is capped at 1–2, and a build may contain at most one `Archetype`.
+Standard Build rolls select either one or two distinct Offense elements. The Fate chooses that count independently on every roll; there is no player-facing Offense-count control. V1 uses equal 1-vs-2 weighting. A build may contain at most one `Archetype`.
 
 No pairwise Damage Type/Ailment compatibility matrix is applied. Weapon-to-Offense hard gates are also intentionally not introduced here; cohesion remains the primary governor of conventional versus unusual combinations.
 
