@@ -18,15 +18,15 @@ Core principles:
 
 - **Bind the Fates**: modal control to **Oath** (prefer) or **Abominate** (ban) options for the **next roll**.
 
-- **Weapon Set II**: a toggle that, when enabled, rolls an **alternate weapon setup** and a second recommended-skills tab.
+Standard Build mode no longer exposes Weapon Set II or Offense-count controls. Each Build roll uses one weapon set, and Fate independently chooses whether the build receives one or two canonical Offense elements.
 
-- **Offense (1–2)**: controls how many canonical Offense elements define the core build premise.
+- **Offense (1–2, Fate-selected)** defines the core offensive premise.
   - Offense is sourced from `data/offense-inventory.json`.
   - Categories are Damage Type, Ailment, Scaling, and Archetype.
   - A build may roll at most one Archetype (`Minions/Companions`, `Totems`, or `Thorns`).
   - Cohesion, rather than pairwise compatibility gates, is the primary governor of conventional versus unusual Offense combinations.
 
-Important: these controls are **“next roll” controls** — build snapshots/build codes represent the **build outcome**, not control settings.
+Important: user controls are **“next roll” controls** — build snapshots/build codes represent the **build outcome**, not control settings.
 
 ---
 
@@ -36,7 +36,7 @@ Build codes are **snapshot-style**:
 - They encode the rolled build (class/ascendancy, weapons, defenses, Offense, recommendations, etc.).
 - Canonical Offense state uses `offense`, `offenseList`, `offenseSet`, and `offenseTags`.
 - Legacy `ailment*` / `tactic*` snapshot fields remain temporarily populated as a compatibility boundary for the current recommendation engine and older build codes.
-- They **do not** encode user control states (cohesion slider, Offense count, weapon-set toggle, bind-fates settings).
+- They **do not** encode user control states such as cohesion or Bind-the-Fates settings.
 - Loading a build code should render the build without modifying current control settings.
 
 ---
