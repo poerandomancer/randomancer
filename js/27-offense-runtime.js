@@ -3,13 +3,11 @@ import {
   buildOffenseSnapshotFields,
   isArchetype,
   migrateLegacyMechanicsToOffense,
+  randomOffenseCount,
   resolveOffenseElements,
   resolveOffenseEntry
 } from './26-offense-roll.js';
 
-const OFFENSE_COUNT_KEY = 'randomancer_offense_count';
-const LEGACY_COUNT_KEY = 'randomancer_mechanics_count';
-const DEFAULT_OFFENSE_COUNT = 2;
 const ARCHETYPE_WEIGHT = 3;
 const PRIMARY_CARD_STAGE_ID = 'primary-build-card-stage';
 
@@ -19,6 +17,7 @@ let poolsProjected = false;
 let snapshotUpgradeInProgress = false;
 let cardLabelObserver = null;
 let cardLabelObserverRetry = 0;
+let currentOffenseCount = 1;
 
 function getMode(){
   return window.RandomancerGetMode?.() || 'standard';
@@ -185,56 +184,28 @@ function upgradeLegacySnapshot(snapshot){
   return true;
 }
 
-function loadOffenseCount(){
-  let raw = null;
-  try { raw = Number(localStorage.getItem(OFFENSE_COUNT_KEY)); } catch {}
-  if (raw !== 1 && raw !== 2) {
-    try { raw = Number(localStorage.getItem(LEGACY_COUNT_KEY)); } catch {}
-  }
-  return raw === 1 ? 1 : DEFAULT_OFFENSE_COUNT;
-}
+function retireStandardBuildControls(){
+  const weaponSet2Toggle = document.getElementById('weapon-set2-toggle');
+  if (weaponSet2Toggle) weaponSet2Toggle.checked = false;
 
-function installOffenseCountControl(){
-  const button = document.getElementById('mechanics-count-btn');
-  if (!button || button.dataset.offenseCountBound === '1') return;
-  button.dataset.offenseCountBound = '1';
+  const mechanicsButton = document.getElementById('mechanics-count-btn');
+  const retiredGroup = weaponSet2Toggle?.closest('.control-item.weapon-set2-control')
+    || mechanicsButton?.closest('.control-item.weapon-set2-control');
+  retiredGroup?.remove();
 
-  const label = button.querySelector('.rm-dotstep__label');
-  if (label) label.textContent = 'Offense';
+  // Remove obsolete persisted count state so an older session cannot silently
+  // dictate future Offense rolls after the control itself has been retired.
+  try {
+    localStorage.removeItem('randomancer_offense_count');
+    localStorage.removeItem('randomancer_mechanics_count');
+  } catch {}
 
-  const dots = Array.from(button.querySelectorAll('.rm-dotstep__dot'));
-  if (dots[2]) dots[2].hidden = true;
-  let count = loadOffenseCount();
-
-  const paint = () => {
-    dots.forEach((dot, index) => dot.classList.toggle('is-on', index < count && index < 2));
-    button.setAttribute('aria-label', `Offense elements: ${count}`);
-    button.title = `Offense: roll ${count} element${count === 1 ? '' : 's'}`;
-  };
-
-  const setCount = (value) => {
-    count = Number(value) === 1 ? 1 : 2;
-    try {
-      localStorage.setItem(OFFENSE_COUNT_KEY, String(count));
-      localStorage.setItem(LEGACY_COUNT_KEY, String(count));
-    } catch {}
-    paint();
-    return count;
-  };
-
-  window.getOffenseCount = () => count;
-  window.setOffenseCount = setCount;
-  // Compatibility boundary: the legacy roll engine still asks this question.
-  window.getCombatMechanicsCount = () => count;
-  window.setCombatMechanicsCount = setCount;
-
-  button.addEventListener('click', (event) => {
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    setCount(count === 1 ? 2 : 1);
-  }, true);
-
-  paint();
+  // The legacy roll engine still asks for a mechanics count. During this
+  // migration, expose the Fate-selected Offense count through that seam.
+  window.getOffenseCount = () => currentOffenseCount;
+  window.getCombatMechanicsCount = () => currentOffenseCount;
+  try { delete window.setOffenseCount; } catch {}
+  try { delete window.setCombatMechanicsCount; } catch {}
 }
 
 function cycleBindOption(button){
@@ -284,12 +255,21 @@ function patchStandardLede(){
   if (getMode() !== 'standard') return;
   const lede = document.getElementById('app-lede');
   if (!lede) return;
-  const html = lede.innerHTML;
-  if (!/Combat Mechanics/i.test(html)) return;
-  lede.innerHTML = html.replace(
-    /choose <strong>Combat Mechanics<\/strong>: 1-3 for ailment\/tactic depth\./i,
-    'choose <strong>Offense</strong>: 1–2 core offensive elements.'
+
+  let html = lede.innerHTML;
+  html = html.replace(
+    /Toggle <strong>Weapon Set II<\/strong> for an additional weapon set, and choose <strong>Combat Mechanics<\/strong>: 1-3 for ailment\/tactic depth\./i,
+    'Each roll chooses one weapon set and one or two core <strong>Offense</strong> elements.'
   );
+  html = html.replace(
+    /Toggle <strong>Weapon Set II<\/strong> for an additional weapon set, and choose <strong>Offense<\/strong>: 1[–-]2 core offensive elements\./i,
+    'Each roll chooses one weapon set and one or two core <strong>Offense</strong> elements.'
+  );
+  html = html.replace(
+    /choose <strong>Combat Mechanics<\/strong>: 1-3 for ailment\/tactic depth\./i,
+    'let fate choose one or two core <strong>Offense</strong> elements.'
+  );
+  lede.innerHTML = html;
 }
 
 function patchCardOffenseLabel(){
@@ -323,6 +303,7 @@ function installLifecycleHooks(){
   const previousPrepare = window.RandomancerPrepareBuildRoll;
   window.RandomancerPrepareBuildRoll = (...args) => {
     previousPrepare?.(...args);
+    currentOffenseCount = randomOffenseCount();
     projectOffenseIntoLegacyPools();
   };
 
@@ -363,7 +344,7 @@ function installPresentationHooks(){
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-  installOffenseCountControl();
+  retireStandardBuildControls();
   installLifecycleHooks();
   installPresentationHooks();
   installCardLabelObserver();
