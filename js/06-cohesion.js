@@ -1,8 +1,16 @@
 import { defensePseudoTags, deriveWeaponHints, normTagPlus } from './05-tags-and-scorer.js';
+import {
+  COHESION_WEIGHT_STRENGTH,
+  attributeOverlap,
+  normalizeAffinity,
+  cohesionSelectionWeight,
+  pickByWeightedCohesion
+} from './06a-cohesion-selection.js';
+import { validOffhands, applyHardRestrictions } from './06b-build-compatibility.js';
 
 // ---------- cohesion + selection ----------
-// Cohesion is a continuous threshold [0,1]. No named modes, no UI hints.
-// We do keep an internal tier mapping ONLY for subsystems that still want a coarse tier (e.g. passives).
+// Cohesion remains a continuous [0,1] control, but now scales selection
+// probability instead of acting as a hard eligibility threshold.
 const COHESION_TIER_ANCHORS = [
   { name: 'strict',   v: 1.0 },
   { name: 'cohesive', v: 2/3 },
@@ -10,7 +18,8 @@ const COHESION_TIER_ANCHORS = [
   { name: 'madness',  v: 0.0 }
 ];
 
-// App default (matches your current UI default)
+// App default (matches the current UI default). The legacy variable/function
+// names remain for compatibility even though this is no longer a threshold.
 let cohesionThreshold = 3/4;
 
 function setCohesionThreshold(threshold){
@@ -40,70 +49,23 @@ function sliderValueToThreshold(v){
   if (!Number.isFinite(raw)) return cohesionThreshold;
   const clamped = Math.max(0, Math.min(100, raw));
   const t = 1 - clamped / 100;
-  // snap to 0.01 steps so the number matches the UI feel
   return Math.round(t * 100) / 100;
 }
 
 function thresholdToSliderValue(t){
   const raw = Number(t);
-  if (!Number.isFinite(raw)) return 25; // default near cohesive
+  if (!Number.isFinite(raw)) return 25;
   const clamped = Math.max(0, Math.min(1, raw));
   return Math.round((1 - clamped) * 100);
 }
 
-function attributeCohesion(a,b){ const k=['strength','dexterity','intelligence']; const dot=k.reduce((s,x)=>s+(a[x]||0)*(b[x]||0),0); const ma=Math.sqrt(k.reduce((s,x)=>s+(a[x]||0)**2,0)); const mb=Math.sqrt(k.reduce((s,x)=>s+(b[x]||0)**2,0)); return dot/(ma*mb||1); }
 function pickByCohesion(list, base, th){
-  if (!list || !list.length) return null;
-
-  // Madness: ignore attributes completely.
-  if (th === 0) {
-    return list[Math.floor(Math.random() * list.length)];
-  }
-
-  // A cohesion-neutral candidate should neither be screened out by attributes
-  // nor become disproportionately common when a strict threshold leaves only a
-  // tiny eligible pool. Give neutral entries exactly their raw share of the
-  // current candidate list, then apply cohesion normally to the remainder.
-  const neutral = list.filter(x => x?.cohesionNeutral === true);
-  const attributed = list.filter(x => x?.cohesionNeutral !== true);
-  if (neutral.length && Math.random() < neutral.length / list.length) {
-    return neutral[Math.floor(Math.random() * neutral.length)];
-  }
-  if (!attributed.length) {
-    return neutral[Math.floor(Math.random() * neutral.length)] || null;
-  }
-
-  // Clamp to [0,1] just in case.
-  let currentTh = (typeof th === 'number') ? Math.max(0, Math.min(1, th)) : 0;
-
-  const scored = attributed.map(x => ({
-    x,
-    score: attributeCohesion(base, x.attributes || {})
-  }));
-
-  // First attempt using the requested threshold.
-  let filtered = scored.filter(s => s.score >= currentTh);
-
-  // If nothing passes, gradually relax the threshold in 0.10 steps
-  // until we find something, or we bottom out at 0.
-  while (!filtered.length && currentTh > 0) {
-    currentTh = Math.max(0, currentTh - 0.10);
-    filtered = scored.filter(s => s.score >= currentTh);
-  }
-
-  // If we somehow still have nothing (e.g. every score was 0), fall back to everyone.
-  const pool = filtered.length ? filtered : scored;
-
-  return pool[Math.floor(Math.random() * pool.length)].x;
+  const t = Number.isFinite(Number(th)) ? Number(th) : cohesionThreshold;
+  return pickByWeightedCohesion(list, base, t);
 }
 
 function normalizeAttributesForSynergy(attrs){
-  const S = Number(attrs?.strength) || 0;
-  const D = Number(attrs?.dexterity) || 0;
-  const I = Number(attrs?.intelligence) || 0;
-  const total = S + D + I;
-  if (!total) return { strength: 0, dexterity: 0, intelligence: 0 };
-  return { strength: S / total, dexterity: D / total, intelligence: I / total };
+  return normalizeAffinity(attrs);
 }
 
 function lookupAscendancyIdByName(name) {
@@ -136,18 +98,15 @@ function lookupAscendancyIdByName(name) {
 
 function buildBuildContext(explicitSnapshot){
   try {
-    // 1) Explicit snapshot
     if (explicitSnapshot && typeof explicitSnapshot === 'object') {
       return buildBuildContextFromSnapshot(explicitSnapshot);
     }
 
-    // 2) App-level state snapshot
     if (window.App && window.App.state && window.App.state.currentRoll) {
       const built = buildBuildContextFromSnapshot(window.App.state.currentRoll);
       if (built) return built;
     }
 
-    // 3) Fallback to global CURRENT_ROLL
     if (window.CURRENT_ROLL && typeof window.CURRENT_ROLL === 'object') {
       return buildBuildContextFromSnapshot(window.CURRENT_ROLL);
     }
@@ -174,7 +133,6 @@ function buildBuildContextFromSnapshot(snap){
   const addTag = (t, sink = tagSet) => { const k = normTagPlus(t); if (k) sink.add(k); };
   const addTags = (arr, sink) => (arr || []).forEach(t => addTag(t, sink));
 
-  // Prefer existing tag profile if present.
   if (snap.tagProfile && snap.tagProfile.profile instanceof Map) {
     snap.tagProfile.profile.forEach((_, k) => addTag(k));
   }
@@ -183,8 +141,6 @@ function buildBuildContextFromSnapshot(snap){
     addTags(Array.from(snap.tagProfile.cats.ailments || []));
   }
 
-  // Canonical Offense is first-class. Legacy Ailment/Tactic tags remain as a
-  // compatibility fallback until the recommendation engine is rewritten.
   addTags(snap.offenseTags || []);
   addTags((snap.offenseSet || []).flatMap(entry => entry?.tags || []));
   addTags((snap.tacticSet || []).flatMap(t => t?.tags || []));
@@ -219,19 +175,14 @@ function buildBuildContextFromSnapshot(snap){
   };
 }
 
-const validOffhands={"One-handed Mace":["One-handed Mace","Shield","Buckler","Focus","Sceptre"],"Spear":["Shield","Buckler","Focus","Sceptre"],"Wand":["Shield","Buckler","Focus","Sceptre"],"Sceptre":["Shield","Buckler","Focus","Wand"]};
-function applyHardRestrictions(item,ctx){
-  if(!item) return false;
-  if(item.name==='Block' && !['Shield','Buckler'].includes(ctx.offhand)) return false;
-  if(item.name==='Deflection' && !ctx.defense.includes('Evasion')) return false;
-  return true;
-}
-
 export {
+  COHESION_WEIGHT_STRENGTH,
   cohesionThreshold,
   setCohesionThreshold,
   sliderValueToThreshold,
   thresholdToSliderValue,
+  attributeOverlap,
+  cohesionSelectionWeight,
   pickByCohesion,
   normalizeAttributesForSynergy,
   lookupAscendancyIdByName,
