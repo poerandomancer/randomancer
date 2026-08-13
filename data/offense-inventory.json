@@ -44,7 +44,7 @@
       "name": "Chaos Damage",
       "category": "Damage Type",
       "tags": ["chaos", "chaos damage", "damage"],
-      "attributes": {"strength": 0.25, "dexterity": 0.25, "intelligence": 0.5},
+      "attributes": {"strength": 0.3, "dexterity": 0.3, "intelligence": 0.4},
       "relations": {"reinforcing": ["poison"]}
     },
     {
@@ -111,7 +111,8 @@
       "aliases": ["Critical Hit", "Crit"],
       "category": "Scaling",
       "tags": ["crit", "critical", "critical hit", "critical hits", "critical damage"],
-      "attributes": {"strength": 0.333, "dexterity": 0.333, "intelligence": 0.333},
+      "cohesionNeutral": true,
+      "attributes": {},
       "relations": {}
     },
     {
