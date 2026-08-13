@@ -24,13 +24,15 @@ Each element provides:
 - `aliases`: optional compatibility/search labels.
 - `category`: one of the supported category values above.
 - `tags`: normalized matching vocabulary for recommendation/scoring consumers.
-- `attributes`: STR/DEX/INT cohesion affinity used by the roll system.
-- `cohesionNeutral`: optional boolean for mechanics that should receive a baseline selection share independent of STR/DEX/INT cohesion. Neutral entries do not contribute an attribute vector.
+- `attributes`: STR/DEX/INT affinity used for cohesion selection and/or downstream build context.
+- `cohesionNeutral`: optional boolean for mechanics that should receive a baseline selection share independent of STR/DEX/INT cohesion.
 - `relations`: lightweight descriptive affinities between Offense elements.
 
 ### Cohesion-neutral semantics
 
-`Critical Hits` is currently the only cohesion-neutral Offense element. A neutral entry keeps its raw share of the current candidate pool regardless of cohesion threshold; it does not count as a passing attribute match that prevents the normal threshold-relaxation behavior for other candidates. This models broad applicability without making a three-stat vector artificially favor hybrid builds or making the neutral result dominate strict pools.
+`Critical Hits` and `Chaos Damage` are currently cohesion-neutral Offense elements. A neutral entry keeps its raw share of the current candidate pool regardless of cohesion threshold; it does not count as a passing attribute match that prevents the normal threshold-relaxation behavior for other candidates. This models broad applicability without making a three-stat vector artificially favor hybrid builds or making a neutral result dominate strict pools.
+
+A cohesion-neutral element may still retain an `attributes` vector for downstream build balance/context. `Chaos Damage`, for example, keeps a mild `0.3 STR / 0.3 DEX / 0.4 INT` lean while its selection frequency remains cohesion-neutral. `Critical Hits` has no attribute contribution.
 
 ### Relationship semantics
 
