@@ -66,12 +66,9 @@ function formatWeaponLine(weapon, offhand){
   const w = (weapon || '').trim();
   const o = (offhand || '').trim();
 
-  // Bow builds always imply a Quiver (even if offhand is not explicitly set in data)
-  if (w && /^bow$/i.test(w)) {
-    const q = 'Quiver';
-    if (!o || /quiver/i.test(o) === false) return `${w} & ${q}`;
-    return `${w} & ${o}`;
-  }
+  // Primary equipment-family rolls should display Bow as Bow; Quiver remains
+  // an optional configuration detail rather than part of the rolled identity.
+  if (w && /^bow$/i.test(w) && !o) return w;
 
   if (w && o) return `${w} & ${o}`;
   return w || o || '';
