@@ -55,20 +55,33 @@ function attributeCohesion(a,b){ const k=['strength','dexterity','intelligence']
 function pickByCohesion(list, base, th){
   if (!list || !list.length) return null;
 
-  // Madness: ignore attributes completely
+  // Madness: ignore attributes completely.
   if (th === 0) {
     return list[Math.floor(Math.random() * list.length)];
   }
 
-  // Clamp to [0,1] just in case
+  // A cohesion-neutral candidate should neither be screened out by attributes
+  // nor become disproportionately common when a strict threshold leaves only a
+  // tiny eligible pool. Give neutral entries exactly their raw share of the
+  // current candidate list, then apply cohesion normally to the remainder.
+  const neutral = list.filter(x => x?.cohesionNeutral === true);
+  const attributed = list.filter(x => x?.cohesionNeutral !== true);
+  if (neutral.length && Math.random() < neutral.length / list.length) {
+    return neutral[Math.floor(Math.random() * neutral.length)];
+  }
+  if (!attributed.length) {
+    return neutral[Math.floor(Math.random() * neutral.length)] || null;
+  }
+
+  // Clamp to [0,1] just in case.
   let currentTh = (typeof th === 'number') ? Math.max(0, Math.min(1, th)) : 0;
 
-  const scored = list.map(x => ({
+  const scored = attributed.map(x => ({
     x,
     score: attributeCohesion(base, x.attributes || {})
   }));
 
-  // First attempt using the requested threshold
+  // First attempt using the requested threshold.
   let filtered = scored.filter(s => s.score >= currentTh);
 
   // If nothing passes, gradually relax the threshold in 0.10 steps
