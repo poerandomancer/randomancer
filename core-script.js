@@ -9,25 +9,28 @@
  * 4) 03-config-and-schema: Schema/Config/RulesEngine scaffolding.
  * 5) 04-app-state: window.App, bootstrap, cohesion state helpers.
  * 6) 05-tags-and-scorer: tag normalization + scorer glue + dictionary builders.
- * 7) 06-cohesion: continuous threshold + relax safety net.
- * 8) 07-skills-render: passives + skills render helpers.
- * 9) 08-data-load: JSON loaders + preload pipeline.
- * 10) 09-bind-fates-ui: bind fates modal + cohesion slider wiring.
- * 11) 10-roll-engine: legacy-compatible standard Build roll engine.
- * 12) 11-pre-gate-and-sync: pre-gate + state→DOM sync + IDF cache.
- * 13) 12-uniques-engine: uniques synergy engine.
- * 14) 13-info-lightbox: info overlay controller.
- * 15) 14-feedback-menu: feedback + mobile header menu.
- * 16) 17-skill-family-utils: skill family library resolver + tag-query helpers.
- * 17) 15-challenge-engine: challenge contract generation + compatibility rules.
- * 18) 16-challenge-mode: mode toggle, challenge roll routing, contract rendering.
- * 19) 22-recommendation-contract: simplified Build recommendation boundary.
- * 20) 23-build-card-foundation: reusable Build Card model/render/flip/tooltip layer.
- * 21) 24-primary-card-stage: persistent in-page Build deck/card presentation.
- * 22) 25-card-polish: compact copied links + primary-card tooltip polish.
- * 23) 26-offense-roll: canonical Offense selection + snapshot compatibility helpers.
- * 24) 27-offense-runtime: standard-roll migration adapter + Offense UI wiring.
- * 25) 28-primary-equipment-runtime: primary family roll adapter + Bind Fates/poe.ninja presentation bridge.
+ * 7) 06-cohesion: shared cohesion state/context facade.
+ * 8) 06a-cohesion-selection: normalized overlap + weighted probabilistic picker.
+ * 9) 06b-build-compatibility: narrow PoE2 compatibility rules kept outside affinity scoring.
+ * 10) 07-skills-render: passives + skills render helpers.
+ * 11) 08-data-load: JSON loaders + preload pipeline.
+ * 12) 09-bind-fates-ui: bind fates modal + cohesion slider wiring.
+ * 13) 10-roll-engine: legacy-compatible standard Build roll engine.
+ * 14) 11-pre-gate-and-sync: pre-gate + state→DOM sync + IDF cache.
+ * 15) 12-uniques-engine: uniques synergy engine.
+ * 16) 13-info-lightbox: info overlay controller.
+ * 17) 14-feedback-menu: feedback + mobile header menu.
+ * 18) 17-skill-family-utils: skill family library resolver + tag-query helpers.
+ * 19) 15-challenge-engine: challenge contract generation + compatibility rules.
+ * 20) 16-challenge-mode: mode toggle, challenge roll routing, contract rendering.
+ * 21) 22-recommendation-contract: simplified Build recommendation boundary.
+ * 22) 23-build-card-foundation: reusable Build Card model/render/flip/tooltip layer.
+ * 23) 24-primary-card-stage: persistent in-page Build deck/card presentation.
+ * 24) 25-card-polish: compact copied links + primary-card tooltip polish.
+ * 25) 26-offense-roll: canonical Offense selection + snapshot compatibility helpers.
+ * 26) 27-offense-runtime: standard-roll migration adapter + Offense UI wiring.
+ * 27) 28-primary-equipment-runtime: primary family roll adapter + Bind Fates/poe.ninja presentation bridge.
+ * 28) 29-selection-frequency-runtime: explicit base-frequency adapter for primary families.
  *
  * Public window exports (must remain available):
  * window.App, window.rollBuild, window.scheduleSummaryRefresh, window.RandomancerEncodeSnapshot,
@@ -63,5 +66,6 @@ import './js/25-card-polish.js';
 import './js/26-offense-roll.js';
 import './js/27-offense-runtime.js';
 import './js/28-primary-equipment-runtime.js';
+import './js/29-selection-frequency-runtime.js';
 
 import './js/20-trending-cards.js';
