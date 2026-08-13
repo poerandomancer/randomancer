@@ -118,19 +118,23 @@ function restoreLegacyPools(){
 function collectRolledOffense(explicitSnapshot){
   const current = explicitSnapshot || window.App?.state?.currentRoll || window.CURRENT_ROLL || {};
 
-  // During the transitional roll, the legacy engine writes the freshly generated
-  // mechanics into ailment*/tactic* while the previous canonical offense* fields
-  // can still be present on App.state.currentRoll until normalization completes.
-  // Fresh legacy fields therefore take precedence here; canonical fields remain
-  // the fallback for already-normalized or directly loaded snapshots.
-  const raw = [
+  // During a fresh roll, the legacy engine writes the new result into
+  // ailment*/tactic*. The previous canonical offense* fields can still remain on
+  // App.state.currentRoll until normalization completes. Treat those sources as
+  // mutually exclusive: fresh legacy fields win, and canonical fields are only
+  // a fallback for already-normalized/directly-loaded snapshots. Mixing them can
+  // resurrect a stale second Offense element after a one-element roll.
+  const legacyRaw = [
     ...(Array.isArray(current.ailmentSet) ? current.ailmentSet : []),
     ...(Array.isArray(current.tacticSet) ? current.tacticSet : []),
     ...(Array.isArray(current.ailmentList) ? current.ailmentList : []),
-    ...(Array.isArray(current.tacticList) ? current.tacticList : []),
+    ...(Array.isArray(current.tacticList) ? current.tacticList : [])
+  ];
+  const canonicalRaw = [
     ...(Array.isArray(current.offenseSet) ? current.offenseSet : []),
     ...(Array.isArray(current.offenseList) ? current.offenseList : [])
   ];
+  const raw = legacyRaw.length ? legacyRaw : canonicalRaw;
 
   const picks = [];
   const seen = new Set();
