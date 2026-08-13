@@ -1,12 +1,17 @@
 import { cohesionThreshold, pickByCohesion } from './06-cohesion.js';
 
 const OFFENSE_CATEGORY_ARCHETYPE = 'Archetype';
-const DEFAULT_OFFENSE_COUNT = 2;
+const MIN_OFFENSE_COUNT = 1;
 const MAX_OFFENSE_COUNT = 2;
+
+function randomOffenseCount() {
+  return Math.random() < 0.5 ? MIN_OFFENSE_COUNT : MAX_OFFENSE_COUNT;
+}
 
 function normalizeOffenseCount(value) {
   const n = Number(value);
-  return n === 1 ? 1 : DEFAULT_OFFENSE_COUNT;
+  if (n === MIN_OFFENSE_COUNT || n === MAX_OFFENSE_COUNT) return n;
+  return randomOffenseCount();
 }
 
 function resolveOffenseElements(data) {
@@ -169,8 +174,9 @@ function migrateLegacyMechanicsToOffense(data, snapshot) {
 
 export {
   OFFENSE_CATEGORY_ARCHETYPE,
-  DEFAULT_OFFENSE_COUNT,
+  MIN_OFFENSE_COUNT,
   MAX_OFFENSE_COUNT,
+  randomOffenseCount,
   normalizeOffenseCount,
   resolveOffenseElements,
   resolveOffenseEntry,
