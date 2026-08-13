@@ -13,7 +13,7 @@
  * 8) 07-skills-render: passives + skills render helpers.
  * 9) 08-data-load: JSON loaders + preload pipeline.
  * 10) 09-bind-fates-ui: bind fates modal + cohesion slider wiring.
- * 11) 10-roll-engine: rollBuild + WS2 toggle plumbing.
+ * 11) 10-roll-engine: legacy-compatible standard Build roll engine.
  * 12) 11-pre-gate-and-sync: pre-gate + state→DOM sync + IDF cache.
  * 13) 12-uniques-engine: uniques synergy engine.
  * 14) 13-info-lightbox: info overlay controller.
@@ -27,6 +27,7 @@
  * 22) 25-card-polish: compact copied links + primary-card tooltip polish.
  * 23) 26-offense-roll: canonical Offense selection + snapshot compatibility helpers.
  * 24) 27-offense-runtime: standard-roll migration adapter + Offense UI wiring.
+ * 25) 28-primary-equipment-runtime: primary family roll adapter + Bind Fates/poe.ninja presentation bridge.
  *
  * Public window exports (must remain available):
  * window.App, window.rollBuild, window.scheduleSummaryRefresh, window.RandomancerEncodeSnapshot,
@@ -61,5 +62,6 @@ import './js/24-primary-card-stage.js';
 import './js/25-card-polish.js';
 import './js/26-offense-roll.js';
 import './js/27-offense-runtime.js';
+import './js/28-primary-equipment-runtime.js';
 
 import './js/20-trending-cards.js';
