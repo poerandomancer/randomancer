@@ -1,4 +1,4 @@
-.PHONY: normalize-tags-check normalize-tags-strict normalize-tags-audit recommendation-data recommendation-data-check
+.PHONY: normalize-tags-check normalize-tags-strict normalize-tags-audit recommendation-data recommendation-data-check recommendation-selector-check
 
 normalize-tags-check:
 	python data/helperScripts/generate_tag_rules_js.py
@@ -17,3 +17,6 @@ recommendation-data:
 
 recommendation-data-check:
 	python data/helperScripts/validate_recommendation_catalog_v3.py
+
+recommendation-selector-check:
+	node --test tests/recommendation-v3-selector.test.mjs

@@ -23,7 +23,24 @@ Scraping and datamining provide evidence. They do not decide whether incidental 
 - `data/config/recommendation_fact_overrides_v3.json` is the curated exception boundary.
 - `data/config/recommendation_semantic_fixtures_v3.json` contains parser and catalog regression fixtures.
 
-The v3 catalog is not yet a runtime recommendation selector. It is the data boundary that the later package solver will consume.
+The catalog is the data boundary consumed by the feature-flagged package-solver migration. The first runtime slice selects only the primary-skill role; later slices will assign the remaining roles and obligations.
+
+## Runtime migration slice
+
+Append `?recommendationV3=1` to opt into the experimental selector. The normal application path does not fetch the 8 MB catalog and continues using the existing recommendation selectors.
+
+The first slice:
+
+- converts canonical Offense plus primary equipment into explicit obligations
+- considers active skills with a `primary_damage` candidate role
+- enforces equipment and ascendancy compatibility before ranking
+- uses only exact or strong typed facts as fulfillment evidence
+- treats `prevents` as a hard conflict for the matching Offense
+- ignores Cohesion entirely
+- writes the selected skill through the existing canonical recommendation contract
+- records complementary defense, recovery, and package dependencies as unresolved instead of filling them with weak candidates
+
+The primary Build Card is authoritative during this migration. Legacy recommendation rendering may still compute its former result, but the v3 runtime adapter replaces the canonical primary-skill idea after Offense normalization.
 
 ## Entity contract
 

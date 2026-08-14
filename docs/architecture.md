@@ -18,6 +18,8 @@
 13. **`js/12-uniques-engine.js`** — uniques synergy engine + render helpers.
 14. **`js/13-info-lightbox.js`** — info overlay controller.
 15. **`js/14-feedback-menu.js`** — feedback + mobile header menu.
+16. **`js/30-recommendation-v3-selector.js`** — pure Fate-obligation builder and typed-fact primary-skill selector.
+17. **`js/31-recommendation-v3-runtime.js`** — feature-flagged adapter that applies v3 package output to the canonical Build snapshot.
 
 **CSS (split layers, aggregated by `styles.css`)**
 - `css/00-base.css`
@@ -57,12 +59,12 @@ Runtime-loaded:
 - `data/enriched/skills_enriched.json`
 - `data/enriched/poe2db_uniques_min.json`
 
-Generated recommendation migration data (not yet runtime-loaded):
+Generated recommendation migration data (conditionally runtime-loaded):
 - `data/enriched/recommendation_catalog_v3.json`
 - `data/enriched/recommendation_catalog_v3_report.json`
 - `data/recommendation_ontology_v3.json`
 
-The v3 catalog joins datamined mechanics with scrape-backed unique and ascendancy evidence. It is additive until the solution-oriented Build Ideas package solver replaces the current independent selectors.
+The v3 catalog joins datamined mechanics with scrape-backed unique and ascendancy evidence. It remains outside the default startup payload. With `?recommendationV3=1`, the first migration slice loads it and replaces only the primary-skill idea with a deterministic, equipment-legal selection backed by hard typed facts. All other recommendation families retain their current selectors while the package solver expands.
 
 Reference / datamined (not necessarily used directly at runtime):
 - `data/datamined/*`

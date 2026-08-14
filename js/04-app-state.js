@@ -54,6 +54,9 @@ const App = window.App = (() => {
       recommendedPersistentBuff: src.recommendedPersistentBuff ?? null,
       recommendedUniques: Array.isArray(src.recommendedUniques) ? src.recommendedUniques : [],
       passives: src.passives && typeof src.passives === 'object' ? src.passives : null,
+      recommendationV3: src.recommendationV3 && typeof src.recommendationV3 === 'object'
+        ? src.recommendationV3
+        : null,
       tagProfile: src.tagProfile ?? null,
       snapshotVersion: Number(src.snapshotVersion) || 1
     };

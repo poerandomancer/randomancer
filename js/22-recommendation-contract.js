@@ -57,6 +57,10 @@ function normalizePassiveIdeas(passives) {
   };
 }
 
+function normalizeRecommendationV3(value) {
+  return value && typeof value === 'object' && !Array.isArray(value) ? value : null;
+}
+
 function normalizeRecommendationContract(snapshot) {
   if (!snapshot || typeof snapshot !== 'object') return snapshot;
   return {
@@ -67,7 +71,8 @@ function normalizeRecommendationContract(snapshot) {
     synergySupports2: [],
     recommendedPersistentBuff: null,
     recommendedUniques: normalizeUniqueIdeas(snapshot.recommendedUniques),
-    passives: normalizePassiveIdeas(snapshot.passives)
+    passives: normalizePassiveIdeas(snapshot.passives),
+    recommendationV3: normalizeRecommendationV3(snapshot.recommendationV3)
   };
 }
 
@@ -95,6 +100,7 @@ function normalizeMergePartial(partial) {
     next.recommendedPersistentBuff = null;
     next.recommendedUniques = [];
     next.passives = null;
+    next.recommendationV3 = null;
   }
 
   if (Object.prototype.hasOwnProperty.call(partial, 'recommendedSkills')) {
@@ -108,6 +114,9 @@ function normalizeMergePartial(partial) {
   }
   if (Object.prototype.hasOwnProperty.call(partial, 'passives')) {
     next.passives = normalizePassiveIdeas(partial.passives);
+  }
+  if (Object.prototype.hasOwnProperty.call(partial, 'recommendationV3')) {
+    next.recommendationV3 = normalizeRecommendationV3(partial.recommendationV3);
   }
 
   // Deprecated recommendation families stay empty even if an older generator
@@ -130,6 +139,7 @@ function syncLegacyRecommendationContext(snapshot) {
   legacy.recommendedPersistentBuff = null;
   legacy.recommendedUniques = snapshot.recommendedUniques || [];
   legacy.passives = snapshot.passives || null;
+  legacy.recommendationV3 = snapshot.recommendationV3 || null;
 }
 
 function installCanonicalContract() {

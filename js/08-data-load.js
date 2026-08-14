@@ -1,5 +1,9 @@
 import { buildPassiveIndex } from './07-skills-render.js';
 import { buildSkillFamilyIndex, resolveSkillFamily } from './17-skill-family-utils.js';
+import {
+  isRecommendationV3Enabled,
+  validateRecommendationCatalogV3
+} from './30-recommendation-v3-selector.js';
 
 // ---------- async data loader ----------
 async function loadJSON(path) {
@@ -56,6 +60,13 @@ function ensureDataPreload(){
 // ---------- data initialization ----------
 async function loadData() {
   try {
+    // The generated catalog is intentionally excluded from the normal startup
+    // payload. The first selector migration slice opts in explicitly with
+    // ?recommendationV3=1 (or a true window.RandomancerRecommendationV3Enabled
+    // override) and begins this larger fetch in parallel with core data.
+    const recommendationCatalogPromise = isRecommendationV3Enabled(window)
+      ? tryLoad('data/enriched/recommendation_catalog_v3.json')
+      : Promise.resolve(null);
     const core = await loadJSON('data/core-data.json');
 
     // Canonical Build Offense vocabulary. Keep it separate on disk from the
@@ -139,6 +150,15 @@ async function loadData() {
       };
     });
 
+    const recommendationCatalogRaw = await recommendationCatalogPromise;
+    const recommendationCatalogValidation = validateRecommendationCatalogV3(recommendationCatalogRaw);
+    const recommendationCatalogV3 = recommendationCatalogValidation.ok
+      ? recommendationCatalogRaw
+      : null;
+    if (isRecommendationV3Enabled(window) && !recommendationCatalogValidation.ok) {
+      console.warn(`[Recommendation v3] Catalog unavailable: ${recommendationCatalogValidation.reason}`);
+    }
+
     window.DATA = {
       ...core,
       gems,
@@ -153,11 +173,12 @@ async function loadData() {
       skillFamilyOptions,
       ascendancyCatalog,
       ascendancyByName,
-      challengePools
+      challengePools,
+      recommendationCatalogV3
     };
     console.log("[Global DATA initialized]", window.DATA);
 
-    return { core, gems, passivesEnriched, passiveIndex, offenseInventory };
+    return { core, gems, passivesEnriched, passiveIndex, offenseInventory, recommendationCatalogV3 };
   } catch (err) {
     console.error("[loadData] Failed to load core data:", err);
     return { core: {}, gems: [], offenseInventory: { version: null, categories: [], elements: [] } };
