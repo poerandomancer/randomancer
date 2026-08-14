@@ -6,9 +6,21 @@ import {
 } from './30-recommendation-v3-selector.js';
 
 let installed = false;
+let lastPrimaryEntityId = null;
+let fallbackSeedCounter = 0;
 
 function currentSnapshot() {
   return window.App?.state?.currentRoll || window.CURRENT_ROLL || null;
+}
+
+function createSelectionSeed() {
+  if (window.crypto?.getRandomValues) {
+    const values = new Uint32Array(2);
+    window.crypto.getRandomValues(values);
+    return Array.from(values, (value) => value.toString(16).padStart(8, '0')).join('');
+  }
+  fallbackSeedCounter += 1;
+  return `${Date.now().toString(36)}-${fallbackSeedCounter.toString(36)}`;
 }
 
 function runRecommendationV3(snapshot = currentSnapshot()) {
@@ -21,9 +33,15 @@ function runRecommendationV3(snapshot = currentSnapshot()) {
     return null;
   }
 
+  const existingSeed = snapshot?.recommendationV3?.selectionSeed;
+  const isExistingSelection = existingSeed !== undefined && existingSeed !== null;
+  const selectionSeed = isExistingSelection ? existingSeed : createSelectionSeed();
   const result = selectRecommendationPackageV3(catalog, snapshot, {
-    offenseInventory: window.DATA?.OffenseInventory || {}
+    offenseInventory: window.DATA?.OffenseInventory || {},
+    selectionSeed,
+    previousPrimaryEntityId: isExistingSelection ? null : lastPrimaryEntityId
   });
+  if (result.primarySkill?.entityId) lastPrimaryEntityId = result.primarySkill.entityId;
   const partial = adaptRecommendationPackageV3ToSnapshot(result);
 
   if (window.CURRENT_ROLL && typeof window.CURRENT_ROLL === 'object') {

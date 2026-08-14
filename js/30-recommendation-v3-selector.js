@@ -1,6 +1,7 @@
 const RECOMMENDATION_CATALOG_V3_SCHEMA = 'recommendation-catalog-v3.0.0';
 const RECOMMENDATION_PACKAGE_V3_SCHEMA = 'recommendation-package-v3.0.0';
 const RECOMMENDATION_V3_QUERY_PARAM = 'recommendationV3';
+const PRIMARY_QUALITY_BAND = 12;
 
 const HARD_CONFIDENCE = new Set(['exact', 'strong']);
 const DIRECT_USE_BLOCKED_TYPES = new Set([
@@ -27,6 +28,38 @@ const STATEFUL_SETUP_MECHANICS = new Set([
   'runic_ward',
   'shock'
 ]);
+const CASTER_WEAPON_FAMILIES = new Set(['sceptre', 'staff', 'wand']);
+const MARTIAL_WEAPON_FAMILIES = new Set([
+  'axe',
+  'bow',
+  'claw',
+  'crossbow',
+  'dagger',
+  'flail',
+  'mace',
+  'quarterstaff',
+  'spear',
+  'sword',
+  'talisman',
+  'unarmed'
+]);
+const WEAPON_FAMILY_ORDER = [
+  'quarterstaff',
+  'crossbow',
+  'sceptre',
+  'talisman',
+  'unarmed',
+  'staff',
+  'wand',
+  'spear',
+  'flail',
+  'dagger',
+  'claw',
+  'sword',
+  'mace',
+  'axe',
+  'bow'
+];
 
 const OFFENSE_MECHANICS = Object.freeze({
   physical: ['physical'],
@@ -237,6 +270,19 @@ function weaponTags(value) {
   return tags;
 }
 
+function primaryWeaponFamily(snapshot = {}) {
+  const tags = weaponTags(snapshot.weapon);
+  return WEAPON_FAMILY_ORDER.find((family) => tags.has(family)) || '';
+}
+
+function weaponDeliveryProfileV3(snapshot = {}) {
+  const family = primaryWeaponFamily(snapshot);
+  const kind = CASTER_WEAPON_FAMILIES.has(family)
+    ? 'caster'
+    : (MARTIAL_WEAPON_FAMILIES.has(family) ? 'martial' : 'unknown');
+  return { family, kind };
+}
+
 function intersects(values, tags) {
   return asArray(values).some((value) => tags.has(normalizeToken(value)));
 }
@@ -285,6 +331,76 @@ function isEquipmentCompatibleV3(entity, snapshot = {}) {
   return evaluateCompatibilityV3(entity, snapshot).ok;
 }
 
+function explicitWeaponDeliveryEvidence(entity, snapshot = {}) {
+  const family = primaryWeaponFamily(snapshot);
+  if (!family) return null;
+
+  const types = new Set(asArray(entity?.source_evidence?.active_skill_types).map(normalizeToken));
+  if (types.has(family)) return { source: 'active_skill_type', value: family };
+
+  const equipment = entity?.compatibility?.equipment || {};
+  if (equipment.is_unrestricted === true) return null;
+  const requirements = [
+    ...asArray(equipment.mainhand_tags_any_of),
+    ...asArray(equipment.allowed_weapon_tags_any_of)
+  ].map(normalizeToken);
+  if (requirements.includes(family)) return { source: 'equipment_requirement', value: family };
+  return null;
+}
+
+function evaluateDeliveryCompatibilityV3(entity, snapshot = {}) {
+  const weapon = weaponDeliveryProfileV3(snapshot);
+  if (weapon.kind === 'unknown') {
+    return { ok: true, reason: '', weapon, evidence: null };
+  }
+
+  const types = new Set(asArray(entity?.source_evidence?.active_skill_types).map(normalizeToken));
+  const isAttack = types.has('attack');
+  const isSpell = types.has('spell');
+  const isSummoning = types.has('createsminion')
+    || types.has('createscompanion')
+    || types.has('minion')
+    || asArray(entity?.facts).some((fact) =>
+      ['creates', 'provides'].includes(fact?.relation)
+      && ['minion', 'companion'].includes(normalizeToken(fact?.mechanic))
+      && HARD_CONFIDENCE.has(fact?.confidence)
+    );
+  const explicit = explicitWeaponDeliveryEvidence(entity, snapshot);
+
+  if (weapon.kind === 'martial') {
+    if (explicit) return { ok: true, reason: '', weapon, evidence: explicit };
+    return {
+      ok: false,
+      reason: `does not have typed ${weapon.family} delivery evidence`,
+      weapon,
+      evidence: null
+    };
+  }
+
+  if (isSpell || isSummoning || explicit) {
+    return {
+      ok: true,
+      reason: '',
+      weapon,
+      evidence: explicit || { source: isSpell ? 'spell' : 'summoning', value: isSpell ? 'spell' : 'minion' }
+    };
+  }
+  if (isAttack) {
+    return {
+      ok: false,
+      reason: `attack does not have typed ${weapon.family} delivery evidence`,
+      weapon,
+      evidence: null
+    };
+  }
+  return {
+    ok: false,
+    reason: 'candidate is neither a spell, summoning skill, nor an explicitly compatible weapon skill',
+    weapon,
+    evidence: null
+  };
+}
+
 function isDirectlyUsableActive(entity) {
   if (!entity || entity.content_type !== 'active_skill') return false;
   if (!asArray(entity.candidate_roles).includes('primary_damage')) return false;
@@ -292,6 +408,17 @@ function isDirectlyUsableActive(entity) {
 
   const types = new Set(asArray(entity?.source_evidence?.active_skill_types).map(normalizeToken));
   for (const blocked of DIRECT_USE_BLOCKED_TYPES) if (types.has(blocked)) return false;
+  const createsDamageProxy = asArray(entity.facts).some((fact) =>
+    fact?.relation === 'creates'
+    && ['companion', 'minion', 'totem'].includes(normalizeToken(fact?.mechanic))
+    && HARD_CONFIDENCE.has(fact?.confidence)
+  );
+  const hasDamageDelivery = types.has('attack')
+    || types.has('damage')
+    || types.has('damageovertime')
+    || types.has('degenonlyspelldamage')
+    || createsDamageProxy;
+  if (!hasDamageDelivery) return false;
   const hardPreventsDamage = asArray(entity.facts).some((fact) =>
     fact?.relation === 'prevents'
     && normalizeToken(fact?.mechanic) === 'damage'
@@ -353,6 +480,8 @@ function evaluatePrimaryCandidate(entity, offenseObligations, snapshot) {
   if (!isDirectlyUsableActive(entity)) return null;
   const compatibility = evaluateCompatibilityV3(entity, snapshot);
   if (!compatibility.ok) return null;
+  const delivery = evaluateDeliveryCompatibilityV3(entity, snapshot);
+  if (!delivery.ok) return null;
 
   const facts = asArray(entity.facts);
   if (offenseObligations.some((obligation) => facts.some((fact) => factPreventsObligation(fact, obligation)))) {
@@ -391,9 +520,56 @@ function evaluatePrimaryCandidate(entity, offenseObligations, snapshot) {
     fulfilled,
     dependencies,
     setupCosts,
+    delivery,
     score: fulfilled.length * 100 + exactProofs * 10 + evidenceScore - packageCostPenalty,
     exactProofs
   };
+}
+
+function stableHash32(value) {
+  let hash = 2166136261;
+  for (const character of String(value ?? '')) {
+    hash ^= character.charCodeAt(0);
+    hash = Math.imul(hash, 16777619);
+  }
+  hash += hash << 13;
+  hash ^= hash >>> 7;
+  hash += hash << 3;
+  hash ^= hash >>> 17;
+  hash += hash << 5;
+  return hash >>> 0;
+}
+
+function choosePrimaryCandidate(ranked, options = {}) {
+  const top = ranked[0] || null;
+  if (!top) return { winner: null, shortlist: [] };
+
+  const requestedBand = Number(options.qualityBand);
+  const qualityBand = Number.isFinite(requestedBand) && requestedBand >= 0
+    ? requestedBand
+    : PRIMARY_QUALITY_BAND;
+  const shortlist = ranked.filter((candidate) => top.score - candidate.score <= qualityBand);
+  let pool = shortlist;
+  const previousEntityId = String(options.previousPrimaryEntityId || '');
+  if (previousEntityId && shortlist.length > 1) {
+    const alternatives = shortlist.filter((candidate) => candidate.entity.id !== previousEntityId);
+    if (alternatives.length) pool = alternatives;
+  }
+
+  if (options.selectionSeed === undefined || options.selectionSeed === null) {
+    return { winner: pool[0], shortlist };
+  }
+
+  const weights = pool.map((candidate) =>
+    Math.max(1, qualityBand + 1 - (top.score - candidate.score))
+  );
+  const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
+  let target = (stableHash32(`${options.selectionSeed}:primary_skill`) / 0x100000000) * totalWeight;
+  for (let index = 0; index < pool.length; index += 1) {
+    target -= weights[index];
+    if (target < 0) return { winner: pool[index], shortlist };
+  }
+  return { winner: pool[pool.length - 1], shortlist };
 }
 
 function unresolvedEntry(obligation, reason) {
@@ -424,7 +600,7 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     entity?.content_type === 'active_skill'
     && asArray(entity?.candidate_roles).includes('primary_damage')
   );
-  const ranked = primaryCandidates
+  const rankedWithDuplicateNames = primaryCandidates
     .map((entity) => evaluatePrimaryCandidate(entity, offenseObligations, snapshot))
     .filter(Boolean)
     .sort((a, b) =>
@@ -433,8 +609,14 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
       || String(a.entity.name || '').localeCompare(String(b.entity.name || ''))
       || String(a.entity.id || '').localeCompare(String(b.entity.id || ''))
     );
-
-  const winner = ranked[0] || null;
+  const seenNames = new Set();
+  const ranked = rankedWithDuplicateNames.filter((candidate) => {
+    const name = normalizeToken(candidate.entity.name);
+    if (!name || seenNames.has(name)) return false;
+    seenNames.add(name);
+    return true;
+  });
+  const { winner, shortlist } = choosePrimaryCandidate(ranked, options);
   const fulfilledIds = new Set(asArray(winner?.fulfilled).map((entry) => entry.obligationId));
   const unresolved = [];
 
@@ -463,11 +645,13 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     fulfilledObligations: winner.fulfilled,
     dependencies: winner.dependencies,
     setupCosts: winner.setupCosts,
+    delivery: winner.delivery,
     score: winner.score
   } : null;
 
   return {
     schemaVersion: RECOMMENDATION_PACKAGE_V3_SCHEMA,
+    selectionSeed: options.selectionSeed ?? null,
     status: primarySkill ? (unresolved.length ? 'partial' : 'complete') : 'unresolved',
     context: model.context,
     obligations: model.obligations,
@@ -476,7 +660,11 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     unresolved,
     diagnostics: {
       totalPrimaryCandidates: primaryCandidates.length,
-      rankedCandidates: ranked.length
+      rankedCandidates: ranked.length,
+      shortlistedCandidates: shortlist.length,
+      qualityBand: Number.isFinite(Number(options.qualityBand)) && Number(options.qualityBand) >= 0
+        ? Number(options.qualityBand)
+        : PRIMARY_QUALITY_BAND
     }
   };
 }
@@ -501,11 +689,14 @@ export {
   RECOMMENDATION_CATALOG_V3_SCHEMA,
   RECOMMENDATION_PACKAGE_V3_SCHEMA,
   RECOMMENDATION_V3_QUERY_PARAM,
+  PRIMARY_QUALITY_BAND,
   adaptRecommendationPackageV3ToSnapshot,
   buildRecommendationObligationsV3,
   evaluateCompatibilityV3,
+  evaluateDeliveryCompatibilityV3,
   isEquipmentCompatibleV3,
   isRecommendationV3Enabled,
   selectRecommendationPackageV3,
-  validateRecommendationCatalogV3
+  validateRecommendationCatalogV3,
+  weaponDeliveryProfileV3
 };

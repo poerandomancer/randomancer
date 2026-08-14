@@ -11,6 +11,7 @@ const selector = await import(`data:text/javascript;base64,${Buffer.from(selecto
 const {
   adaptRecommendationPackageV3ToSnapshot,
   buildRecommendationObligationsV3,
+  evaluateDeliveryCompatibilityV3,
   isEquipmentCompatibleV3,
   isRecommendationV3Enabled,
   selectRecommendationPackageV3,
@@ -21,14 +22,16 @@ function offenseInventory() {
   return {
     elements: [
       { id: 'poison', name: 'Poison', category: 'Ailment', aliases: [] },
+      { id: 'physical', name: 'Physical Damage', category: 'Damage Type', aliases: [] },
       { id: 'fire', name: 'Fire Damage', category: 'Damage Type', aliases: [] },
+      { id: 'chaos', name: 'Chaos Damage', category: 'Damage Type', aliases: [] },
       { id: 'critical_hits', name: 'Critical Hits', category: 'Scaling', aliases: ['Crit'] },
       { id: 'minions_companions', name: 'Minions/Companions', category: 'Archetype', aliases: ['Minions'] }
     ]
   };
 }
 
-function entity({ id, name, facts, equipment = { is_unrestricted: true }, types = [] }) {
+function entity({ id, name, facts, equipment = { is_unrestricted: true }, types = ['Spell', 'Damage'] }) {
   return {
     id: `skill:${id}`,
     source_id: id,
@@ -98,35 +101,34 @@ test('equipment compatibility distinguishes bow/crossbow and staff/quarterstaff'
 
 test('selector uses hard typed evidence, rejects prevention, and ignores cohesion', () => {
   const poisonFact = { relation: 'inflicts', subject: 'skill', mechanic: 'poison', confidence: 'exact' };
+  const weaponEquipment = (family) => ({
+    is_unrestricted: false,
+    mainhand_tags_any_of: [family],
+    offhand_tags_any_of: [],
+    allowed_weapon_tags_any_of: [family],
+    display: `Requires ${family}`
+  });
   const fixtures = catalog([
     entity({
       id: 'bow-poison',
       name: 'Bow Poison',
       facts: [poisonFact],
-      equipment: {
-        is_unrestricted: false,
-        mainhand_tags_any_of: ['bow'],
-        offhand_tags_any_of: [],
-        allowed_weapon_tags_any_of: ['bow'],
-        display: 'Requires Bow'
-      }
+      equipment: weaponEquipment('bow'),
+      types: ['Attack', 'Bow']
     }),
     entity({
       id: 'crossbow-poison',
       name: 'Crossbow Poison',
       facts: [poisonFact],
-      equipment: {
-        is_unrestricted: false,
-        mainhand_tags_any_of: ['crossbow'],
-        offhand_tags_any_of: [],
-        allowed_weapon_tags_any_of: ['crossbow'],
-        display: 'Requires Crossbow'
-      }
+      equipment: weaponEquipment('crossbow'),
+      types: ['Attack', 'Crossbow']
     }),
     entity({
       id: 'poison-modifier',
       name: 'Poison Modifier',
-      facts: [{ relation: 'modifies', subject: 'skill', mechanic: 'poison', confidence: 'strong' }]
+      facts: [{ relation: 'modifies', subject: 'skill', mechanic: 'poison', confidence: 'strong' }],
+      equipment: weaponEquipment('bow'),
+      types: ['Attack', 'Bow']
     }),
     entity({
       id: 'poison-preventer',
@@ -134,7 +136,9 @@ test('selector uses hard typed evidence, rejects prevention, and ignores cohesio
       facts: [
         poisonFact,
         { relation: 'prevents', subject: 'skill', mechanic: 'poison', confidence: 'exact' }
-      ]
+      ],
+      equipment: weaponEquipment('bow'),
+      types: ['Attack', 'Bow']
     })
   ]);
   const snapshot = { weapon: 'Bow', offhand: 'Quiver', offenseList: ['Poison'] };
@@ -156,6 +160,105 @@ test('selector uses hard typed evidence, rejects prevention, and ignores cohesio
   assert.equal(strict.status, 'partial');
   assert.ok(strict.unresolved.some((entry) => entry.obligationId === 'survivability:secondary_defense'));
   assert.ok(strict.unresolved.some((entry) => entry.obligationId === 'survivability:recovery'));
+});
+
+test('weapon delivery rejects generic spells for martial rolls', () => {
+  const bowEquipment = {
+    is_unrestricted: false,
+    mainhand_tags_any_of: ['bow'],
+    offhand_tags_any_of: [],
+    allowed_weapon_tags_any_of: ['bow'],
+    display: 'Requires Bow'
+  };
+  const fixtures = catalog([
+    entity({
+      id: 'chaos-bolt',
+      name: 'Chaos Bolt',
+      facts: [{ relation: 'has_property', subject: 'skill', mechanic: 'chaos', confidence: 'exact' }],
+      types: ['Spell', 'Chaos']
+    }),
+    entity({
+      id: 'bow-chaos',
+      name: 'Bow Chaos',
+      facts: [{ relation: 'has_property', subject: 'skill', mechanic: 'chaos', confidence: 'exact' }],
+      equipment: bowEquipment,
+      types: ['Attack', 'Bow', 'Chaos']
+    }),
+    entity({
+      id: 'unearth',
+      name: 'Unearth',
+      facts: [
+        { relation: 'creates', subject: 'skill', mechanic: 'minion', confidence: 'exact' },
+        { relation: 'has_property', subject: 'skill', mechanic: 'physical', confidence: 'exact' }
+      ],
+      types: ['Spell', 'CreatesMinion', 'Physical']
+    })
+  ]);
+
+  const bow = selectRecommendationPackageV3(fixtures, {
+    weapon: 'Bow',
+    offenseList: ['Chaos Damage']
+  }, { offenseInventory: offenseInventory() });
+  const spear = selectRecommendationPackageV3(fixtures, {
+    weapon: 'Spear',
+    offenseList: ['Minions/Companions']
+  }, { offenseInventory: offenseInventory() });
+  const sceptre = selectRecommendationPackageV3(fixtures, {
+    weapon: 'Sceptre',
+    offenseList: ['Physical Damage']
+  }, {
+    offenseInventory: {
+      elements: [{ id: 'physical', name: 'Physical Damage', category: 'Damage Type', aliases: [] }]
+    }
+  });
+
+  assert.equal(bow.primarySkill?.name, 'Bow Chaos');
+  assert.equal(spear.primarySkill, null);
+  assert.equal(sceptre.primarySkill?.name, 'Unearth');
+  assert.equal(evaluateDeliveryCompatibilityV3(fixtures.entities[0], { weapon: 'Bow' }).ok, false);
+  assert.equal(evaluateDeliveryCompatibilityV3(fixtures.entities[2], { weapon: 'Spear' }).ok, false);
+  assert.equal(evaluateDeliveryCompatibilityV3(fixtures.entities[2], { weapon: 'Sceptre' }).ok, true);
+});
+
+test('seeded quality-band selection varies legally and is reproducible', () => {
+  const fixtures = catalog(['Arc One', 'Arc Two', 'Arc Three'].map((name, index) => entity({
+    id: `arc-${index + 1}`,
+    name,
+    facts: [{ relation: 'has_property', subject: 'skill', mechanic: 'lightning', confidence: 'exact' }],
+    types: ['Spell', 'Damage', 'Lightning']
+  })));
+  const offense = {
+    elements: [{ id: 'lightning', name: 'Lightning Damage', category: 'Damage Type', aliases: [] }]
+  };
+  const snapshot = { weapon: 'Wand', offenseList: ['Lightning Damage'] };
+  const selections = new Set();
+
+  for (let index = 0; index < 32; index += 1) {
+    const result = selectRecommendationPackageV3(fixtures, snapshot, {
+      offenseInventory: offense,
+      selectionSeed: `roll-${index}`
+    });
+    selections.add(result.primarySkill?.entityId);
+  }
+  const first = selectRecommendationPackageV3(fixtures, snapshot, {
+    offenseInventory: offense,
+    selectionSeed: 'persistent-roll'
+  });
+  const repeated = selectRecommendationPackageV3(fixtures, snapshot, {
+    offenseInventory: offense,
+    selectionSeed: 'persistent-roll'
+  });
+  const nextRoll = selectRecommendationPackageV3(fixtures, snapshot, {
+    offenseInventory: offense,
+    selectionSeed: 'persistent-roll',
+    previousPrimaryEntityId: first.primarySkill?.entityId
+  });
+
+  assert.ok(selections.size > 1);
+  assert.equal(repeated.primarySkill?.entityId, first.primarySkill?.entityId);
+  assert.equal(repeated.selectionSeed, 'persistent-roll');
+  assert.notEqual(nextRoll.primarySkill?.entityId, first.primarySkill?.entityId);
+  assert.equal(first.diagnostics.shortlistedCandidates, 3);
 });
 
 test('scaling obligations may be fulfilled by a hard modifies fact', () => {
@@ -224,6 +327,10 @@ test('committed catalog produces a legal primary skill for representative rolls'
       realCatalog.entities.find((entry) => entry.id === result.primarySkill.entityId),
       snapshot
     ), true);
+    assert.equal(evaluateDeliveryCompatibilityV3(
+      realCatalog.entities.find((entry) => entry.id === result.primarySkill.entityId),
+      snapshot
+    ).ok, true);
     assert.ok(result.primarySkill.fulfilledObligations.length > 0);
     assert.doesNotMatch(result.primarySkill.name, /^\s*\[?DNT/i);
   }
@@ -249,8 +356,50 @@ test('committed catalog remains deterministic and equipment-legal across the rol
       if (!first.primarySkill) continue;
       const selected = realCatalog.entities.find((entry) => entry.id === first.primarySkill.entityId);
       assert.equal(isEquipmentCompatibleV3(selected, snapshot), true, `${weapon} / ${offense.name}`);
+      assert.equal(evaluateDeliveryCompatibilityV3(selected, snapshot).ok, true, `${weapon} / ${offense.name}`);
       assert.ok(first.primarySkill.fulfilledObligations.length > 0, `${weapon} / ${offense.name}`);
       assert.doesNotMatch(first.primarySkill.name, /^\s*\[?DNT/i, `${weapon} / ${offense.name}`);
     }
+  }
+});
+
+test('committed catalog never selects Chaos Bolt for Bow or Unearth for Spear', async () => {
+  const [realCatalog, realOffense] = await Promise.all([
+    readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
+    readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
+  ]);
+  const bow = selectRecommendationPackageV3(realCatalog, {
+    weapon: 'Bow',
+    offhand: 'Quiver',
+    offenseList: ['Chaos Damage', 'Bleed']
+  }, { offenseInventory: realOffense, selectionSeed: 'screenshot-bow' });
+  const spear = selectRecommendationPackageV3(realCatalog, {
+    weapon: 'Spear',
+    offenseList: ['Minions/Companions']
+  }, { offenseInventory: realOffense, selectionSeed: 'screenshot-spear' });
+
+  assert.notEqual(bow.primarySkill?.name, 'Chaos Bolt');
+  assert.notEqual(spear.primarySkill?.name, 'Unearth');
+  if (bow.primarySkill) {
+    const selected = realCatalog.entities.find((entry) => entry.id === bow.primarySkill.entityId);
+    assert.equal(evaluateDeliveryCompatibilityV3(selected, { weapon: 'Bow' }).ok, true);
+  }
+  if (spear.primarySkill) {
+    const selected = realCatalog.entities.find((entry) => entry.id === spear.primarySkill.entityId);
+    assert.equal(evaluateDeliveryCompatibilityV3(selected, { weapon: 'Spear' }).ok, true);
+  }
+});
+
+test('committed catalog does not promote a non-damaging setup spell to primary damage', async () => {
+  const [realCatalog, realOffense] = await Promise.all([
+    readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
+    readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
+  ]);
+  for (let index = 0; index < 32; index += 1) {
+    const result = selectRecommendationPackageV3(realCatalog, {
+      weapon: 'Wand',
+      offenseList: ['Chaos Damage']
+    }, { offenseInventory: realOffense, selectionSeed: `chaos-audit-${index}` });
+    assert.notEqual(result.primarySkill?.name, 'Wither');
   }
 });

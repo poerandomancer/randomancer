@@ -33,12 +33,15 @@ The first slice:
 
 - converts canonical Offense plus primary equipment into explicit obligations
 - considers active skills with a `primary_damage` candidate role
-- enforces equipment and ascendancy compatibility before ranking
+- enforces equipment, ascendancy, and weapon-delivery compatibility before ranking
 - uses only exact or strong typed facts as fulfillment evidence
 - treats `prevents` as a hard conflict for the matching Offense
 - ignores Cohesion entirely
+- samples from a narrow high-quality shortlist using a persisted per-roll seed, while suppressing an immediate repeat when an equivalent alternative exists
 - writes the selected skill through the existing canonical recommendation contract
 - records complementary defense, recovery, and package dependencies as unresolved instead of filling them with weak candidates
+
+Weapon delivery is intentionally stricter than technical equip legality. Generic spells are eligible for Wand, Sceptre, and caster Staff rolls. Martial rolls require structured evidence that the skill belongs to the selected weapon family, either through its active skill types or its equipment requirement. A spell may cross that boundary only when the catalog explicitly proves the martial-weapon relationship. If no legal candidate remains, the selector reports the obligation as unresolved.
 
 The primary Build Card is authoritative during this migration. Legacy recommendation rendering may still compute its former result, but the v3 runtime adapter replaces the canonical primary-skill idea after Offense normalization.
 

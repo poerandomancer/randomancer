@@ -62,7 +62,9 @@ See `docs/cohesion_selection.md` for the canonical selection contract.
 - Primary Defense remains a core Fate component. Secondary defensive layers and recovery are solution obligations owned by the recommendation engine.
 - Recommendations are selected as a coherent package, not independent content-type buckets or fixed quotas.
 - Tags are candidate-retrieval hints only. Typed semantic facts and directed ontology relationships determine fulfillment, prerequisites, and conflicts.
-- `data/enriched/recommendation_catalog_v3.json` is the additive semantic migration boundary for the package solver. The first feature-flagged runtime slice consumes it only for a deterministic, equipment-legal primary-skill recommendation; the remaining live selectors stay unchanged.
+- Primary-skill delivery must match the selected weapon family. Generic spells are caster-weapon candidates, not permissive fallbacks for martial weapons; weapon-specific exceptions require typed skill-type or equipment evidence.
+- Recommendation variation may sample only within a high-quality, fully legal shortlist. Persist the per-roll selection seed, suppress immediate repeats when equivalent alternatives exist, and never use Cohesion to vary recommendation quality.
+- `data/enriched/recommendation_catalog_v3.json` is the additive semantic migration boundary for the package solver. The first feature-flagged runtime slice consumes it only for a seed-reproducible, equipment-legal primary-skill recommendation; the remaining live selectors stay unchanged.
 - Enable the migration slice explicitly with `?recommendationV3=1`. Do not make the large catalog part of the default startup payload until rollout evidence supports that change.
 - Scraped ascendancy descriptions and unique modifiers are intentional augmentation sources where datamined descriptions are incomplete or server-provided.
 
