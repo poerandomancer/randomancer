@@ -18,7 +18,11 @@ Core principles:
 
 ## Cohesion
 
-Cohesion is a continuous `[0..1]` preference strength, not an eligibility threshold.
+Cohesion is a continuous `[0..1]` preference strength.
+
+### General affinity domains
+
+Weapon, Offense, and other ordinary affinity-driven pools use soft probabilistic selection:
 
 - Normalize STR/DEX/INT affinity vectors as distributions.
 - Affinity overlap is `sum(min(base_i, candidate_i))`, in the range 0–1.
@@ -26,14 +30,26 @@ Cohesion is a continuous `[0..1]` preference strength, not an eligibility thresh
 - `baseWeight` is intrinsic frequency and is independent from affinity.
 - At Madness (`0`), affinity is ignored and only explicit base weights affect frequency.
 - `cohesionNeutral` candidates retain their raw base-weight share independent of cohesion.
-- Do not reintroduce hard affinity thresholds or threshold-relaxation fallback behavior.
+- Do not reintroduce general hard affinity thresholds or threshold-relaxation fallback behavior for these domains.
+
+### Primary Defense exception
+
+Primary Defense uses a topology-aware policy because its six outcomes map directly to the six class/passive-tree directions and off-axis defense is unusually punitive in real builds.
+
+- Ring order: Armour -> Armour & Evasion -> Evasion -> Evasion & Energy Shield -> Energy Shield -> Armour & Energy Shield -> Armour.
+- `cohesion > .75`: home Defense only.
+- `.50 < cohesion <= .75`: home + adjacent defenses.
+- `0 < cohesion <= .50`: home + adjacent + distance-two defenses.
+- Madness (`0`): the full ring, including the direct opposite.
+- Within the legal ring radius, use soft distance weighting so closer defenses remain more common.
+- If explicit user Fates or hard game compatibility remove every in-radius option, use only the nearest remaining legal ring distance rather than failing the roll.
 
 See `docs/cohesion_selection.md` for the canonical selection contract.
 
 ## Key runtime boundaries
 
-- `js/06a-cohesion-selection.js` — normalized overlap and weighted probabilistic selection.
-- `js/06-cohesion.js` — shared cohesion state/context facade.
+- `js/06a-cohesion-selection.js` — shared normalized overlap, weighted probability, and ring-topology selection helpers.
+- `js/06-cohesion.js` — shared cohesion state/context facade and Primary Defense policy routing.
 - `js/06b-build-compatibility.js` — narrow game compatibility rules, separate from affinity scoring.
 - `js/26-offense-roll.js` — canonical Offense helpers.
 - `js/27-offense-runtime.js` — transitional Offense compatibility bridge.
@@ -42,8 +58,9 @@ See `docs/cohesion_selection.md` for the canonical selection contract.
 
 ## Major-refactor follow-up docket
 
-- Continue affinity calibration/load testing across primary equipment, Offense, and later Defense. Adjust affinity vectors or global strength only from observed distribution evidence.
-- Run the planned Defense viability audit + load test.
+- Continue affinity calibration/load testing across primary equipment and Offense. Adjust affinity vectors or global strength only from observed distribution evidence.
+- Continue Primary Defense load testing and tune ring bands/falloff from real roll distributions if needed.
+- Revisit whether secondary defensive layers should move entirely into solution-oriented Build Ideas.
 - Replace the current recommendation compatibility layer with variable, solution-oriented Build Ideas.
 
 ## Working style
@@ -52,3 +69,4 @@ See `docs/cohesion_selection.md` for the canonical selection contract.
 - Prefer targeted patches over rewrites.
 - Keep the roll pipeline robust to missing data.
 - Preserve narrow compatibility readers where old saved/shared data still needs them.
+- Treat `release` as read-only during the current overhaul. Branch from and merge back into `build-card-refactor`; the production merge to `release` is user-controlled.
