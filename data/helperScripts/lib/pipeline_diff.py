@@ -14,6 +14,8 @@ ARTIFACT_PATHS: dict[str, Path] = {
     "passive_scrape_report": Path("data/enriched/passive_scrape_report.json"),
     "challenge_generated_pools": Path("data/enriched/challenge_generated_pools.json"),
     "tag_vocab_audit": Path("data/enriched/tag_vocab_audit.json"),
+    "recommendation_catalog_v3": Path("data/enriched/recommendation_catalog_v3.json"),
+    "recommendation_catalog_v3_report": Path("data/enriched/recommendation_catalog_v3_report.json"),
 }
 
 
@@ -184,6 +186,40 @@ def summarize_artifact_key(repo_root: Path, key: str) -> dict[str, Any]:
         )
         return summary
 
+    if key == "recommendation_catalog_v3":
+        payload = data if isinstance(data, dict) else {}
+        meta = payload.get("_meta", {}) if isinstance(payload.get("_meta"), dict) else {}
+        entities = payload.get("entities", []) if isinstance(payload.get("entities"), list) else []
+        identities = [_stable_row_identity(entity) for entity in entities]
+        summary.update(
+            {
+                "entity_count": len(entities),
+                "fact_count": sum(len(entity.get("facts") or []) for entity in entities),
+                "content_type_counts": meta.get("content_type_counts", {}),
+                "fact_relation_counts": meta.get("fact_relation_counts", {}),
+                "candidate_role_counts": meta.get("candidate_role_counts", {}),
+                "row_identity_set_sha256": _hash_json(sorted(identities)),
+            }
+        )
+        return summary
+
+    if key == "recommendation_catalog_v3_report":
+        payload = data if isinstance(data, dict) else {}
+        report_summary = payload.get("summary", {}) if isinstance(payload.get("summary"), dict) else {}
+        summary.update(
+            {
+                "entity_count": report_summary.get("entity_count"),
+                "fact_count": report_summary.get("fact_count"),
+                "entities_with_facts": report_summary.get("entities_with_facts"),
+                "entities_without_facts": report_summary.get("entities_without_facts"),
+                "support_entities_with_allowed_types": report_summary.get("support_entities_with_allowed_types"),
+                "support_entities_with_excluded_types": report_summary.get("support_entities_with_excluded_types"),
+                "passives_with_more_than_two_source_stats": report_summary.get("passives_with_more_than_two_source_stats"),
+                "passives_with_granted_skill_links": report_summary.get("passives_with_granted_skill_links"),
+            }
+        )
+        return summary
+
     return summary
 
 
@@ -268,6 +304,14 @@ def analyze_semantic_stability(before: dict[str, Any], after: dict[str, Any]) ->
                 "total_collision_count",
                 "strict_unique_count",
                 "crafting_type_count",
+                "entity_count",
+                "fact_count",
+                "entities_with_facts",
+                "entities_without_facts",
+                "support_entities_with_allowed_types",
+                "support_entities_with_excluded_types",
+                "passives_with_more_than_two_source_stats",
+                "passives_with_granted_skill_links",
             )
             if old.get(field) != new.get(field)
         ]
@@ -324,8 +368,22 @@ def _semantic_sha256_for_artifact(key: str, data: Any) -> str:
         for passthrough_key in sorted(k for k in payload.keys() if k != "items"):
             normalized[passthrough_key] = _normalize_value(payload[passthrough_key])
         return _hash_json(normalized)
-    if key in {"keystone_tooltips", "passive_scrape_report", "challenge_generated_pools", "tag_vocab_audit"}:
+    if key in {
+        "keystone_tooltips",
+        "passive_scrape_report",
+        "challenge_generated_pools",
+        "tag_vocab_audit",
+        "recommendation_catalog_v3_report",
+    }:
         return _hash_json(_normalize_value(data))
+    if key == "recommendation_catalog_v3":
+        payload = data if isinstance(data, dict) else {}
+        normalized = {
+            "_meta": _normalize_value(payload.get("_meta", {})),
+            "fate_vocabulary": _normalize_value(payload.get("fate_vocabulary", {})),
+            "entities": _normalize_record_list(payload.get("entities") if isinstance(payload.get("entities"), list) else []),
+        }
+        return _hash_json(normalized)
     return _hash_json(_normalize_value(data))
 
 

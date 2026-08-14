@@ -56,11 +56,20 @@ See `docs/cohesion_selection.md` for the canonical selection contract.
 - `js/28-primary-equipment-runtime.js` — transitional primary-family adapter and external-search bridge.
 - `js/29-selection-frequency-runtime.js` — explicit base-frequency adapter for special primary families.
 
+## Recommendation overhaul contract
+
+- Cohesion affects only randomized core Fate selection. It must not relax, diversify, or add variance to recommendation quality.
+- Primary Defense remains a core Fate component. Secondary defensive layers and recovery are solution obligations owned by the recommendation engine.
+- Recommendations are selected as a coherent package, not independent content-type buckets or fixed quotas.
+- Tags are candidate-retrieval hints only. Typed semantic facts and directed ontology relationships determine fulfillment, prerequisites, and conflicts.
+- `data/enriched/recommendation_catalog_v3.json` is the additive semantic migration boundary for the future package solver. The current selectors do not consume it yet.
+- Scraped ascendancy descriptions and unique modifiers are intentional augmentation sources where datamined descriptions are incomplete or server-provided.
+
 ## Major-refactor follow-up docket
 
 - Continue affinity calibration/load testing across primary equipment and Offense. Adjust affinity vectors or global strength only from observed distribution evidence.
 - Continue Primary Defense load testing and tune ring bands/falloff from real roll distributions if needed.
-- Revisit whether secondary defensive layers should move entirely into solution-oriented Build Ideas.
+- Replace the core secondary defensive-strategy roll with solution-oriented defensive and recovery Build Ideas after the v3 catalog is ready for runtime use.
 - Replace the current recommendation compatibility layer with variable, solution-oriented Build Ideas.
 
 ## Working style

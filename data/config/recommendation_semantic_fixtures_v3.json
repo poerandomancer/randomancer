@@ -1,0 +1,350 @@
+{
+  "schema_version": "recommendation-semantic-fixtures-v3.0.0",
+  "fixtures": [
+    {
+      "id": "unique_cannot_use_warcry",
+      "source_kind": "unique_mod",
+      "subject": "player",
+      "value": "Cannot use Warcry",
+      "expected_facts": [
+        {
+          "relation": "prevents",
+          "mechanic": "warcry"
+        }
+      ]
+    },
+    {
+      "id": "unique_no_elemental_damage",
+      "source_kind": "unique_mod",
+      "subject": "item",
+      "value": "Deal no Elemental Damage",
+      "expected_facts": [
+        {
+          "relation": "prevents",
+          "mechanic": "elemental_damage"
+        }
+      ]
+    },
+    {
+      "id": "passive_avatar_conversion",
+      "source_kind": "scraped_passive_line",
+      "subject": "passive",
+      "value": "75% of Damage Converted to Fire Damage",
+      "expected_facts": [
+        {
+          "relation": "converts",
+          "from": "damage",
+          "to": "fire"
+        }
+      ]
+    },
+    {
+      "id": "passive_non_fire_prohibition",
+      "source_kind": "scraped_passive_line",
+      "subject": "passive",
+      "value": "Deal no Non-Fire Damage",
+      "expected_facts": [
+        {
+          "relation": "prevents",
+          "mechanic": "non_fire_damage"
+        }
+      ]
+    },
+    {
+      "id": "unique_poison_application",
+      "source_kind": "unique_mod",
+      "subject": "item",
+      "value": "Always Poison on HitDamage with this weapon",
+      "expected_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "poison"
+        },
+        {
+          "relation": "requires",
+          "mechanic": "hit"
+        }
+      ]
+    },
+    {
+      "id": "support_bleed_prevention",
+      "source_kind": "stat_id",
+      "subject": "supported_skill",
+      "value": "cannot_cause_bleeding",
+      "expected_facts": [
+        {
+          "relation": "prevents",
+          "mechanic": "bleed"
+        }
+      ]
+    },
+    {
+      "id": "support_elemental_ailment_prevention",
+      "source_kind": "stat_id",
+      "subject": "supported_skill",
+      "value": "cannot_inflict_elemental_ailments",
+      "expected_facts": [
+        {
+          "relation": "prevents",
+          "mechanic": "elemental_ailments"
+        }
+      ]
+    },
+    {
+      "id": "stat_leech_conversion",
+      "source_kind": "stat_id",
+      "subject": "player",
+      "value": "convert_all_life_leech_to_energy_shield_leech",
+      "expected_facts": [
+        {
+          "relation": "converts",
+          "from": "life_leech",
+          "to": "energy_shield_leech"
+        }
+      ]
+    },
+    {
+      "id": "skill_consumes_freeze",
+      "source_kind": "active_skill_type",
+      "subject": "skill",
+      "value": "SkillConsumesFreeze",
+      "expected_facts": [
+        {
+          "relation": "consumes",
+          "mechanic": "freeze"
+        }
+      ]
+    },
+    {
+      "id": "stat_life_regeneration",
+      "source_kind": "stat_id",
+      "subject": "player",
+      "value": "life_regeneration_rate_per_minute_%",
+      "expected_facts": [
+        {
+          "relation": "modifies",
+          "mechanic": "life_regeneration"
+        }
+      ]
+    },
+    {
+      "id": "incoming_stun_immunity_target",
+      "source_kind": "unique_mod",
+      "subject": "player",
+      "value": "Cannot be LightStun by Deflect HitDamage",
+      "expected_facts": [
+        {
+          "relation": "prevents",
+          "mechanic": "stun",
+          "scope": "incoming"
+        }
+      ],
+      "forbidden_facts": [
+        {
+          "relation": "prevents",
+          "mechanic": "deflection"
+        },
+        {
+          "relation": "prevents",
+          "mechanic": "damage"
+        }
+      ]
+    },
+    {
+      "id": "mitigation_word_is_not_prohibition",
+      "source_kind": "unique_mod",
+      "subject": "item",
+      "value": "50% of Physical Damage prevented Recoup as Life",
+      "expected_facts": [
+        {
+          "relation": "provides",
+          "mechanic": "recoup"
+        }
+      ],
+      "forbidden_facts": [
+        {
+          "relation": "prevents",
+          "mechanic": "damage"
+        },
+        {
+          "relation": "prevents",
+          "mechanic": "life"
+        }
+      ]
+    },
+    {
+      "id": "removed_penalty_is_not_prohibition",
+      "source_kind": "unique_mod",
+      "subject": "item",
+      "value": "No Movement Speed Penalty while Shield is Raised",
+      "expected_facts": [],
+      "forbidden_facts": [
+        {
+          "relation": "prevents",
+          "mechanic": "movement_speed"
+        }
+      ]
+    },
+    {
+      "id": "incoming_damage_conversion_direction",
+      "source_kind": "stat_id",
+      "subject": "passive",
+      "value": "physical_hit_and_dot_damage_%_taken_as_chaos",
+      "expected_facts": [
+        {
+          "relation": "converts",
+          "from": "physical",
+          "to": "chaos",
+          "scope": "incoming"
+        }
+      ]
+    },
+    {
+      "id": "enemy_resistance_prohibition",
+      "source_kind": "unique_mod",
+      "subject": "enemy",
+      "value": "Enemies in your Presence have no ElementalDamage Resistances",
+      "expected_facts": [
+        {
+          "relation": "prevents",
+          "mechanic": "elemental_resistance"
+        }
+      ],
+      "forbidden_facts": [
+        {
+          "relation": "prevents",
+          "mechanic": "elemental_damage"
+        }
+      ]
+    },
+    {
+      "id": "chaos_does_not_imply_poison",
+      "source_kind": "unique_mod",
+      "subject": "item",
+      "value": "Adds 20 to 30 Chaos Damage",
+      "expected_facts": [],
+      "forbidden_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "poison"
+        },
+        {
+          "relation": "fulfills",
+          "mechanic": "poison"
+        }
+      ]
+    },
+    {
+      "id": "bloodlust_text_does_not_apply_bleed",
+      "source_kind": "skill_description",
+      "subject": "supported_skill",
+      "value": "Supports Melee Attacks, causing them to deal more damage against Bleeding enemies, but preventing them from inflicting Bleeding.",
+      "expected_facts": [
+        {
+          "relation": "prevents",
+          "mechanic": "bleed"
+        }
+      ],
+      "forbidden_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "bleed"
+        }
+      ]
+    },
+    {
+      "id": "runic_ward_recovery",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "Sacrifice a portion of your Life to recover [Ward|Runic Ward].",
+      "expected_facts": [
+        {
+          "relation": "provides",
+          "mechanic": "runic_ward"
+        }
+      ],
+      "forbidden_facts": [
+        {
+          "relation": "consumes",
+          "mechanic": "runic_ward"
+        }
+      ]
+    },
+    {
+      "id": "runic_ward_spend",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "Spend [Ward|Runic Ward] to create damaging runes.",
+      "expected_facts": [
+        {
+          "relation": "consumes",
+          "mechanic": "runic_ward"
+        }
+      ],
+      "forbidden_facts": [
+        {
+          "relation": "provides",
+          "mechanic": "runic_ward"
+        },
+        {
+          "relation": "modifies",
+          "mechanic": "runic_ward"
+        }
+      ]
+    },
+    {
+      "id": "runic_ward_cost_stat",
+      "source_kind": "stat_id",
+      "subject": "supported_skill",
+      "value": "base_skill_ward_cost_as_%_of_life_and_mana_cost",
+      "expected_facts": [
+        {
+          "relation": "consumes",
+          "mechanic": "runic_ward"
+        },
+        {
+          "relation": "requires",
+          "mechanic": "runic_ward"
+        }
+      ],
+      "forbidden_facts": [
+        {
+          "relation": "modifies",
+          "mechanic": "runic_ward"
+        }
+      ]
+    }
+  ],
+  "catalog_assertions": [
+    {
+      "entity_name": "The Empty Roar",
+      "relation": "prevents",
+      "mechanic": "warcry"
+    },
+    {
+      "entity_name": "Bloodlust",
+      "relation": "prevents",
+      "mechanic": "bleed"
+    },
+    {
+      "entity_name": "Avatar of Fire",
+      "relation": "converts",
+      "to": "fire"
+    },
+    {
+      "entity_name": "Avatar of Fire",
+      "relation": "prevents",
+      "mechanic": "non_fire_damage"
+    },
+    {
+      "entity_name": "Animus Exchange",
+      "relation": "provides",
+      "mechanic": "runic_ward"
+    },
+    {
+      "entity_name": "Runic Infusion",
+      "relation": "consumes",
+      "mechanic": "runic_ward"
+    }
+  ]
+}

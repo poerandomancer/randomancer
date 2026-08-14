@@ -1,0 +1,859 @@
+{
+  "schema_version": "recommendation-catalog-v3-report.0.0",
+  "catalog_schema_version": "recommendation-catalog-v3.0.0",
+  "summary": {
+    "schema_version": "recommendation-catalog-v3.0.0",
+    "ontology_version": "recommendation-ontology-v3.0.0",
+    "entity_count": 2964,
+    "content_type_counts": {
+      "active_skill": 558,
+      "ascendancy_passive": 215,
+      "keystone": 34,
+      "passive": 1080,
+      "support_gem": 633,
+      "unique": 444
+    },
+    "fact_count": 4944,
+    "fact_relation_counts": {
+      "consumes": 422,
+      "converts": 112,
+      "creates": 64,
+      "exclusive_to": 215,
+      "generates": 60,
+      "has_property": 541,
+      "inflicts": 112,
+      "modifies": 2239,
+      "occupies": 444,
+      "prevents": 374,
+      "provides": 282,
+      "replaces": 27,
+      "requires": 52
+    },
+    "candidate_role_counts": {
+      "defense": 420,
+      "enabler": 1153,
+      "payoff": 188,
+      "primary_damage": 344,
+      "recovery": 250,
+      "setup_control": 158,
+      "utility": 206
+    },
+    "source_versions": {
+      "core_data": "unversioned",
+      "offense_inventory": "OFFENSE_V1",
+      "uniques": "poe2db_uniques_min_v4"
+    },
+    "entities_with_facts": 2086,
+    "entities_without_facts": 878,
+    "support_entities_with_allowed_types": 603,
+    "support_entities_with_excluded_types": 237,
+    "passives_with_more_than_two_source_stats": 181,
+    "passives_with_granted_skill_links": 50
+  },
+  "coverage": {
+    "passive_descriptions": {
+      "evidence_count": 2495,
+      "fact_count": 294,
+      "unparsed_count": 659,
+      "recognized_unstructured_count": 1569,
+      "structured_count": 267,
+      "structured_rate": 0.107,
+      "samples": {
+        "recognized_unstructured": [
+          {
+            "entity_id": "passive:passive_keystone_ancestral_bond",
+            "kind": "scraped_passive_line",
+            "value": "Totems"
+          },
+          {
+            "entity_id": "passive:passive_keystone_ancestral_bond",
+            "kind": "scraped_passive_line",
+            "value": "Totems reserve 75"
+          },
+          {
+            "entity_id": "passive:passive_keystone_ancestral_bond",
+            "kind": "scraped_passive_line",
+            "value": "Spirit"
+          },
+          {
+            "entity_id": "passive:passive_keystone_fire_spells_to_chaos",
+            "kind": "scraped_passive_line",
+            "value": "Fire"
+          },
+          {
+            "entity_id": "passive:passive_keystone_fire_spells_to_chaos",
+            "kind": "scraped_passive_line",
+            "value": "Spells"
+          },
+          {
+            "entity_id": "passive:passive_keystone_fire_spells_to_chaos",
+            "kind": "scraped_passive_line",
+            "value": "100% of Fire Damage to"
+          },
+          {
+            "entity_id": "passive:passive_keystone_fire_spells_to_chaos",
+            "kind": "scraped_passive_line",
+            "value": "Chaos Damage"
+          },
+          {
+            "entity_id": "passive:passive_keystone_fire_spells_to_chaos",
+            "kind": "scraped_passive_line",
+            "value": "Ignite"
+          },
+          {
+            "entity_id": "passive:passive_keystone_fire_spells_to_chaos",
+            "kind": "scraped_passive_line",
+            "value": "instead of Fire Damage"
+          },
+          {
+            "entity_id": "passive:passive_keystone_blood_magic",
+            "kind": "scraped_passive_line",
+            "value": "Skill Mana Costs"
+          },
+          {
+            "entity_id": "passive:passive_keystone_blood_magic",
+            "kind": "scraped_passive_line",
+            "value": "to Life Costs"
+          },
+          {
+            "entity_id": "passive:passive_keystone_bulwark",
+            "kind": "scraped_passive_line",
+            "value": "Dodge Roll cannot Avoid Damage"
+          }
+        ],
+        "unparsed": [
+          {
+            "entity_id": "passive:passive_keystone_ancestral_bond",
+            "kind": "scraped_passive_line",
+            "value": "Unlimited number of Summoned"
+          },
+          {
+            "entity_id": "passive:passive_keystone_ancestral_bond",
+            "kind": "scraped_passive_line",
+            "value": "each"
+          },
+          {
+            "entity_id": "passive:passive_keystone_fire_spells_to_chaos",
+            "kind": "scraped_passive_line",
+            "value": "Convert"
+          },
+          {
+            "entity_id": "passive:passive_keystone_fire_spells_to_chaos",
+            "kind": "scraped_passive_line",
+            "value": "from"
+          },
+          {
+            "entity_id": "passive:passive_keystone_fire_spells_to_chaos",
+            "kind": "scraped_passive_line",
+            "value": "Contributes"
+          },
+          {
+            "entity_id": "passive:passive_keystone_fire_spells_to_chaos",
+            "kind": "scraped_passive_line",
+            "value": "to"
+          },
+          {
+            "entity_id": "passive:passive_keystone_fire_spells_to_chaos",
+            "kind": "scraped_passive_line",
+            "value": "Flammability"
+          },
+          {
+            "entity_id": "passive:passive_keystone_fire_spells_to_chaos",
+            "kind": "scraped_passive_line",
+            "value": "and"
+          },
+          {
+            "entity_id": "passive:passive_keystone_fire_spells_to_chaos",
+            "kind": "scraped_passive_line",
+            "value": "Magnitudes"
+          },
+          {
+            "entity_id": "passive:passive_keystone_fire_spells_to_chaos",
+            "kind": "scraped_passive_line",
+            "value": "inflicted with"
+          },
+          {
+            "entity_id": "passive:passive_keystone_fire_spells_to_chaos",
+            "kind": "scraped_passive_line",
+            "value": "deals"
+          },
+          {
+            "entity_id": "passive:passive_keystone_blood_magic",
+            "kind": "scraped_passive_line",
+            "value": "Converted"
+          }
+        ]
+      }
+    },
+    "passive_stats": {
+      "evidence_count": 2294,
+      "fact_count": 1416,
+      "unparsed_count": 458,
+      "structured_count": 1069,
+      "recognized_unstructured_count": 767,
+      "structured_rate": 0.466,
+      "samples": {
+        "recognized_unstructured": [
+          {
+            "entity_id": "passive:passive_keystone_mind_over_matter",
+            "kind": "stat_id",
+            "value": "keystone_mana_shield"
+          },
+          {
+            "entity_id": "passive:passive_keystone_acrobatics",
+            "kind": "stat_id",
+            "value": "keystone_druidic_rage"
+          },
+          {
+            "entity_id": "passive:passive_keystone_resonance",
+            "kind": "stat_id",
+            "value": "keystone_charge_cycle"
+          },
+          {
+            "entity_id": "passive:AscendancyMonk2Notable5",
+            "kind": "stat_id",
+            "value": "gain_unbound_ailment_stacks"
+          },
+          {
+            "entity_id": "passive:AscendancyMercenary1Notable1",
+            "kind": "stat_id",
+            "value": "tactician_spirit_reservation_+%_final_for_permanent_buffs"
+          },
+          {
+            "entity_id": "passive:AscendancyWarrior2Notable1",
+            "kind": "stat_id",
+            "value": "armour_break_damage_%_dealt_as_armour_break"
+          },
+          {
+            "entity_id": "passive:AscendancyHuntress3Notable7",
+            "kind": "stat_id",
+            "value": "head_hunt_without_a_corpse"
+          },
+          {
+            "entity_id": "passive:AscendancyRanger1Notable5_",
+            "kind": "stat_id",
+            "value": "chance_to_gain_1_more_frenzy_charge_%"
+          },
+          {
+            "entity_id": "passive:AscendancyHuntress1Notable7",
+            "kind": "stat_id",
+            "value": "life_mana_flasks_restore_mana_life"
+          },
+          {
+            "entity_id": "passive:AscendancyWitch1Notable1",
+            "kind": "stat_id",
+            "value": "ascendancy_beidats_gaze_mana_+_per_X_maximum_life"
+          },
+          {
+            "entity_id": "passive:AscendancyWitch1Notable1",
+            "kind": "stat_id",
+            "value": "life_reserved_by_stat_only_for_midnight_bargain_and_infernalist_%"
+          },
+          {
+            "entity_id": "passive:AscendancyWitch1Notable2",
+            "kind": "stat_id",
+            "value": "life_reserved_by_stat_only_for_midnight_bargain_and_infernalist_%"
+          }
+        ],
+        "unparsed": [
+          {
+            "entity_id": "passive:passive_keystone_ancestral_bond",
+            "kind": "stat_id",
+            "value": "keystone_ancestral_bond"
+          },
+          {
+            "entity_id": "passive:passive_keystone_blood_magic",
+            "kind": "stat_id",
+            "value": "keystone_blood_magic"
+          },
+          {
+            "entity_id": "passive:passive_keystone_bulwark",
+            "kind": "stat_id",
+            "value": "keystone_bulwark"
+          },
+          {
+            "entity_id": "passive:passive_keystone_ignore_shapeshift_restrictions",
+            "kind": "stat_id",
+            "value": "ignore_talisman_inherent_form_restriction"
+          },
+          {
+            "entity_id": "passive:passive_keystone_conduit",
+            "kind": "stat_id",
+            "value": "keystone_conduit"
+          },
+          {
+            "entity_id": "passive:passive_keystone_crimson_dance_",
+            "kind": "stat_id",
+            "value": "keystone_crimson_assault"
+          },
+          {
+            "entity_id": "passive:passive_keystone_dance_with_death",
+            "kind": "stat_id",
+            "value": "keystone_dance_with_death"
+          },
+          {
+            "entity_id": "passive:passive_keystone_eldritch_battery__",
+            "kind": "stat_id",
+            "value": "keystone_eldritch_battery"
+          },
+          {
+            "entity_id": "passive:passive_keystone_elemental_equilibrium",
+            "kind": "stat_id",
+            "value": "keystone_elemental_equilibrium"
+          },
+          {
+            "entity_id": "passive:passive_keystone_eternal_youth",
+            "kind": "stat_id",
+            "value": "keystone_eternal_youth"
+          },
+          {
+            "entity_id": "passive:passive_keystone_giants_blood",
+            "kind": "stat_id",
+            "value": "keystone_giants_blood"
+          },
+          {
+            "entity_id": "passive:passive_keystone_glancing_blows_",
+            "kind": "stat_id",
+            "value": "keystone_glancing_blows"
+          }
+        ]
+      }
+    },
+    "skill_descriptions": {
+      "evidence_count": 1115,
+      "fact_count": 406,
+      "structured_count": 262,
+      "unparsed_count": 131,
+      "recognized_unstructured_count": 722,
+      "structured_rate": 0.235,
+      "samples": {
+        "recognized_unstructured": [
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemDetonateDead",
+            "kind": "skill_description",
+            "value": "Cause a [Corpse] to violently explode, damaging surrounding enemies."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SupportGemFireInfusion",
+            "kind": "skill_description",
+            "value": "Supports any skill that deals damage, causing them to [Gain] [Fire] Damage but deal less [Cold] and [Lightning] Damage."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SupportGemMartialTempo",
+            "kind": "skill_description",
+            "value": "Supports [Attack|Attacks], causing them to [Attack] faster."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SupportGemMartialTempoTwo",
+            "kind": "skill_description",
+            "value": "Supports [Attack|Attacks], causing them to [Attack] faster."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SupportGemMartialTempoThree",
+            "kind": "skill_description",
+            "value": "Supports [Attack|Attacks], causing them to [Attack] faster at the cost of Damage."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SupportGemScattershot",
+            "kind": "skill_description",
+            "value": "Supports [Projectile|Projectile] skills, making them fire extra [Projectile|Projectiles]. Also lowers [Attack] and Cast speed of supported skills, as well as lessening their damage."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SupportGemScattershotTwo",
+            "kind": "skill_description",
+            "value": "Supports [Projectile|Projectile] skills, making them fire extra [Projectile|Projectiles]. Also lowers [Attack] and Cast speed of supported skills, as well as lessening their damage."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SupportGemNovaProjectiles",
+            "kind": "skill_description",
+            "value": "Supports [Projectile|Projectile] Skills, making them fire [Projectile|Projectiles] in a circle. Does not Support Skills which rain down [Projectile|Projectiles] from above."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SupportGemAcceleration",
+            "kind": "skill_description",
+            "value": "Supports [Projectile|Projectile] skills, making those [Projectile|Projectiles] travel faster."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SupportGemAccelerationTwo",
+            "kind": "skill_description",
+            "value": "Supports [Projectile|Projectile] skills, making those [Projectile|Projectiles] travel faster, and granting them a chance to [Pierce] Enemies."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SupportGemAccelerationThree",
+            "kind": "skill_description",
+            "value": "Supports [Projectile|Projectile] skills, making those [Projectile|Projectiles] travel faster, and causing increases and reductions to [Projectile] speed to also apply to Damage."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SupportGemColdInfusion",
+            "kind": "skill_description",
+            "value": "Supports any skill that deals damage, causing them to [Gain] [Cold] Damage but deal less [Fire] and [Lightning] Damage."
+          }
+        ],
+        "unparsed": [
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemLeapSlam",
+            "kind": "skill_description",
+            "value": "Jump into the air, damaging and [Knockback|Knocking Back] enemies with your mace where you land. Enemies you would land on are\npushed out of the way."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SupportGemSpiralProjectiles",
+            "kind": "skill_description",
+            "value": "[DNT-UNUSED] Spiral Proj"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SupportGemMagnifiedEffect",
+            "kind": "skill_description",
+            "value": "Supports any skill with an area of effect, making it larger."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SupportGemMagnifiedEffectTwo",
+            "kind": "skill_description",
+            "value": "Supports any skill with an area of effect, making it larger."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemFlameblast",
+            "kind": "skill_description",
+            "value": "[Channelling|Channel] to build destructive energy around you. Releasing the energy causes a devastating explosion that is larger and more intense the longer you [Channelling|Channelled] for."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemWither",
+            "kind": "skill_description",
+            "value": "Channel a debilitating hex that [Withered|Withers] enemies in the area."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SupportGemBehead",
+            "kind": "skill_description",
+            "value": "Supports [Strike] skills, causing them to steal a [MonsterModifiers|Modifier] from [Rarity|Rare] monsters they kill."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SupportGemBeheadTwo",
+            "kind": "skill_description",
+            "value": "Supports [Strike] skills, causing them to steal two [MonsterModifiers|Modifiers] from [Rarity|Rare] monsters they kill."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemWhirlingAssault",
+            "kind": "skill_description",
+            "value": "Advance while hitting enemies around you with a series of spinning [Strike|Strikes]."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemEvasiveStrike",
+            "kind": "skill_description",
+            "value": "[DNT-UNUSED] Leap back before dashing forward, taking out enemies in a path."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemSpinningFlail",
+            "kind": "skill_description",
+            "value": "[DNT-UNUSED] Advance forward, striking enemies around you with whirling swings of your flail."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemSwordLunge",
+            "kind": "skill_description",
+            "value": "[DNT-UNUSED] Sword Lunge"
+          }
+        ]
+      }
+    },
+    "skill_stats": {
+      "evidence_count": 6000,
+      "fact_count": 1776,
+      "unparsed_count": 2317,
+      "structured_count": 1279,
+      "recognized_unstructured_count": 2404,
+      "structured_rate": 0.2132,
+      "samples": {
+        "recognized_unstructured": [
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "stat_id",
+            "value": "base_skill_show_average_damage_instead_of_dps"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "stat_id",
+            "value": "is_area_damage"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "stat_id",
+            "value": "movement_speed_+%_final_while_performing_action"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "stat_id",
+            "value": "movement_speed_acceleration_+%_per_second_while_performing_action"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "stat_id",
+            "value": "movement_speed_while_performing_action_locked_duration_%"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemLeapSlam",
+            "kind": "stat_id",
+            "value": "active_skill_damage_+%_final_while_dual_wielding"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemLeapSlam",
+            "kind": "stat_id",
+            "value": "base_skill_show_average_damage_instead_of_dps"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemLeapSlam",
+            "kind": "stat_id",
+            "value": "is_area_damage"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemLeapSlam",
+            "kind": "stat_id",
+            "value": "melee_conditional_step_distance"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemLeapSlam",
+            "kind": "stat_id",
+            "value": "moving_melee_conditional_step_distance"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemLeapSlam",
+            "kind": "stat_id",
+            "value": "skill_added_attack_time_by_distance_ms"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemLeapSlam",
+            "kind": "stat_id",
+            "value": "total_attack_time_+_ms"
+          }
+        ],
+        "unparsed": [
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "stat_id",
+            "value": "active_skill_base_area_of_effect_radius"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "stat_id",
+            "value": "active_skill_base_area_of_effect_radius"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "stat_id",
+            "value": "base_skill_effect_duration"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "stat_id",
+            "value": "can_perform_skill_while_moving"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "stat_id",
+            "value": "display_statset_hide_usage_stats"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "stat_id",
+            "value": "generic_knockback_+%_final_at_max_distance"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "stat_id",
+            "value": "generic_knockback_+%_final_at_min_distance"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "stat_id",
+            "value": "generic_knockback_distance_limit"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "stat_id",
+            "value": "global_knockback"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "stat_id",
+            "value": "ice_nova_number_of_frost_bolts_to_cast_on"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemLeapSlam",
+            "kind": "stat_id",
+            "value": "active_skill_base_area_of_effect_radius"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemLeapSlam",
+            "kind": "stat_id",
+            "value": "leap_slam_always_knockback_within_range"
+          }
+        ]
+      }
+    },
+    "skill_types": {
+      "evidence_count": 4892,
+      "fact_count": 844,
+      "unparsed_count": 2805,
+      "recognized_unstructured_count": 1243,
+      "structured_count": 844,
+      "structured_rate": 0.1725,
+      "samples": {
+        "recognized_unstructured": [
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "active_skill_type",
+            "value": "AreaSpell"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "active_skill_type",
+            "value": "Damage"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "active_skill_type",
+            "value": "Spell"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemLeapSlam",
+            "kind": "active_skill_type",
+            "value": "Attack"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemLeapSlam",
+            "kind": "active_skill_type",
+            "value": "Melee"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemMoltenCrash",
+            "kind": "active_skill_type",
+            "value": "Attack"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemMoltenCrash",
+            "kind": "active_skill_type",
+            "value": "Melee"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemShieldCharge",
+            "kind": "active_skill_type",
+            "value": "Attack"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemShieldCharge",
+            "kind": "active_skill_type",
+            "value": "Melee"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemShieldCharge",
+            "kind": "active_skill_type",
+            "value": "NonWeaponAttack"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemDetonateDead",
+            "kind": "active_skill_type",
+            "value": "AreaSpell"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemDetonateDead",
+            "kind": "active_skill_type",
+            "value": "Damage"
+          }
+        ],
+        "unparsed": [
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "active_skill_type",
+            "value": "Area"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "active_skill_type",
+            "value": "Cascadable"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "active_skill_type",
+            "value": "CreatesGroundEffect"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "active_skill_type",
+            "value": "Duration"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "active_skill_type",
+            "value": "Invokable"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "active_skill_type",
+            "value": "Mineable"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "active_skill_type",
+            "value": "Multicastable"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "active_skill_type",
+            "value": "Nova"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "active_skill_type",
+            "value": "Trappable"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "active_skill_type",
+            "value": "Triggerable"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "active_skill_type",
+            "value": "Unleashable"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "active_skill_type",
+            "value": "UsableWhileMoving"
+          }
+        ]
+      }
+    },
+    "unique_modifiers": {
+      "evidence_count": 2141,
+      "fact_count": 340,
+      "recognized_unstructured_count": 1262,
+      "unparsed_count": 575,
+      "structured_count": 304,
+      "structured_rate": 0.142,
+      "samples": {
+        "recognized_unstructured": [
+          {
+            "entity_id": "unique:Brynhand's Mark||Wooden Club",
+            "kind": "unique_mod",
+            "value": "Adds 11 to 18 Physical Damage"
+          },
+          {
+            "entity_id": "unique:Brynhand's Mark||Wooden Club",
+            "kind": "unique_mod",
+            "value": "20% reduced Attack Speed"
+          },
+          {
+            "entity_id": "unique:Brynhand's Mark||Wooden Club",
+            "kind": "unique_mod",
+            "value": "Causes Double Stun Buildup"
+          },
+          {
+            "entity_id": "unique:Frostbreath||Slim Mace",
+            "kind": "unique_mod",
+            "value": "Adds 10 to 18 Physical Damage"
+          },
+          {
+            "entity_id": "unique:Frostbreath||Slim Mace",
+            "kind": "unique_mod",
+            "value": "Adds 9 to 17 Cold Damage"
+          },
+          {
+            "entity_id": "unique:Frostbreath||Slim Mace",
+            "kind": "unique_mod",
+            "value": "DamageTypes from HitDamage with this Weapon Contributes to Freeze Buildup"
+          },
+          {
+            "entity_id": "unique:Frostbreath||Slim Mace",
+            "kind": "unique_mod",
+            "value": "CullingStrike against Frozen Enemies"
+          },
+          {
+            "entity_id": "unique:Trenchtimbre||Spiked Club",
+            "kind": "unique_mod",
+            "value": "Adds 15 to 24 Physical Damage"
+          },
+          {
+            "entity_id": "unique:Trenchtimbre||Spiked Club",
+            "kind": "unique_mod",
+            "value": "27% increased Attack Speed"
+          },
+          {
+            "entity_id": "unique:Trenchtimbre||Spiked Club",
+            "kind": "unique_mod",
+            "value": "+1 to Level of all Minion Skills"
+          },
+          {
+            "entity_id": "unique:Trenchtimbre||Spiked Club",
+            "kind": "unique_mod",
+            "value": "Increases and Reductions to Minion Attack Speed also affect you"
+          },
+          {
+            "entity_id": "unique:Sculpted Suffering||Warpick",
+            "kind": "unique_mod",
+            "value": "+10% to CriticalDamageBonus"
+          }
+        ],
+        "unparsed": [
+          {
+            "entity_id": "unique:Brynhand's Mark||Wooden Club",
+            "kind": "unique_mod",
+            "value": "+31 to Accuracy Rating"
+          },
+          {
+            "entity_id": "unique:Brynhand's Mark||Wooden Club",
+            "kind": "unique_mod",
+            "value": "+18 to Strength"
+          },
+          {
+            "entity_id": "unique:Frostbreath||Slim Mace",
+            "kind": "unique_mod",
+            "value": "+5% to Critical Chance"
+          },
+          {
+            "entity_id": "unique:Brutus' Lead Sprinkler||Morning Star",
+            "kind": "unique_mod",
+            "value": "+23 to Strength"
+          },
+          {
+            "entity_id": "unique:Olrovasara||Torment Club",
+            "kind": "unique_mod",
+            "value": "+368 to Accuracy Rating"
+          },
+          {
+            "entity_id": "unique:Serle's Grit||Kalguuran Forgehammer",
+            "kind": "unique_mod",
+            "value": "Has 3 Sockets"
+          },
+          {
+            "entity_id": "unique:Serle's Grit||Kalguuran Forgehammer",
+            "kind": "unique_mod",
+            "value": "Maximum Quality is 40%"
+          },
+          {
+            "entity_id": "unique:Serle's Grit||Kalguuran Forgehammer",
+            "kind": "unique_mod",
+            "value": "+28 to Strength"
+          },
+          {
+            "entity_id": "unique:Hoghunt||Felled Greatclub",
+            "kind": "unique_mod",
+            "value": "+15% to Critical Chance"
+          },
+          {
+            "entity_id": "unique:Hoghunt||Felled Greatclub",
+            "kind": "unique_mod",
+            "value": "+10 to Strength"
+          },
+          {
+            "entity_id": "unique:Hrimnor's Hymn||Oak Greathammer",
+            "kind": "unique_mod",
+            "value": "+12 to Strength"
+          },
+          {
+            "entity_id": "unique:Hrimnor's Hymn||Oak Greathammer",
+            "kind": "unique_mod",
+            "value": "Slam Skills you use yourself cause an additional Aftershock"
+          }
+        ]
+      }
+    }
+  }
+}

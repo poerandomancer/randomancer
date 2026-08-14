@@ -57,6 +57,13 @@ Runtime-loaded:
 - `data/enriched/skills_enriched.json`
 - `data/enriched/poe2db_uniques_min.json`
 
+Generated recommendation migration data (not yet runtime-loaded):
+- `data/enriched/recommendation_catalog_v3.json`
+- `data/enriched/recommendation_catalog_v3_report.json`
+- `data/recommendation_ontology_v3.json`
+
+The v3 catalog joins datamined mechanics with scrape-backed unique and ascendancy evidence. It is additive until the solution-oriented Build Ideas package solver replaces the current independent selectors.
+
 Reference / datamined (not necessarily used directly at runtime):
 - `data/datamined/*`
 

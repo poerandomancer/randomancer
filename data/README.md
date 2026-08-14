@@ -32,6 +32,7 @@ That keeps the boundary you called out intact:
 - `passives-only`
 - `uniques-only`
 - `keystones-only`
+- `recommendations-only`
 
 ## Examples
 
@@ -41,7 +42,19 @@ python data/helperScripts/update_app_data.py --profile fast-local --fail-fast
 python data/helperScripts/update_app_data.py --profile full-patch --poe-version 0.4.x --resume --fail-fast
 python data/helperScripts/update_app_data.py --profile tags-only --strict
 python data/helperScripts/update_app_data.py --profile skills-only --semantic-stability-check
+python data/helperScripts/update_app_data.py --profile recommendations-only --fail-fast
 ```
+
+## Recommendation enrichment v3
+
+The additive recommendation v3 stage builds a unified qualitative mechanics catalog without changing the current runtime recommendation selectors:
+
+- `data/enriched/recommendation_catalog_v3.json`
+- `data/enriched/recommendation_catalog_v3_report.json`
+
+It joins current enriched entities back to structured datamined relationships, retains scrape-backed unique and ascendancy evidence, emits typed positive and negative facts, and reports evidence that remains ambiguous or unparsed. Its schema and migration boundary are documented in `docs/recommendation_enrichment_v3.md`.
+
+The generator is local-only. It consumes the currently committed enriched scrape outputs; it does not make network requests itself.
 
 ## Semantic stability mode
 

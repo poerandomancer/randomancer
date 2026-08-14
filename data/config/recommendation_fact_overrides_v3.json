@@ -1,0 +1,5 @@
+{
+  "schema_version": "recommendation-fact-overrides-v3.0.0",
+  "description": "Curated additions and suppressions for facts that cannot be interpreted safely from source data. Entity keys use the stable IDs emitted by recommendation_catalog_v3.json.",
+  "entities": {}
+}
