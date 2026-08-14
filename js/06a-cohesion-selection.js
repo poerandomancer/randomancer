@@ -1,4 +1,4 @@
-// Shared probabilistic affinity selection for Randomancer build components.
+// Shared cohesion selection helpers for Randomancer build components.
 
 const COHESION_WEIGHT_STRENGTH = 4.0;
 
@@ -85,6 +85,72 @@ function pickByWeightedCohesion(list, base, cohesion){
   return weightedRandom(attributed, (item) => cohesionSelectionWeight(item, base, t));
 }
 
+function circularRingDistance(a, b, ringSize){
+  const size = Math.max(1, Math.floor(Number(ringSize) || 0));
+  const left = Math.max(0, Math.min(size - 1, Math.floor(Number(a) || 0)));
+  const right = Math.max(0, Math.min(size - 1, Math.floor(Number(b) || 0)));
+  const direct = Math.abs(left - right);
+  return Math.min(direct, size - direct);
+}
+
+function cohesionRingRadius(cohesion, ringSize = 6){
+  const t = clampCohesion(cohesion);
+  const maxDistance = Math.floor(Math.max(1, Number(ringSize) || 1) / 2);
+
+  // Primary structural rings use deliberate eligibility bands:
+  // > .75: home only; .75 -> .50: adjacent; <= .50: distance two;
+  // exact Madness unlocks the direct opposite as well.
+  if (t === 0) return maxDistance;
+  if (t <= 0.5) return Math.min(2, maxDistance);
+  if (t <= 0.75) return Math.min(1, maxDistance);
+  return 0;
+}
+
+function cohesionRingSelectionWeight(item, distance, cohesion, ringSize = 6){
+  const baseWeight = baseSelectionWeight(item);
+  if (!(baseWeight > 0)) return 0;
+  const t = clampCohesion(cohesion);
+  const maxDistance = Math.max(1, Math.floor(Math.max(1, Number(ringSize) || 1) / 2));
+  const d = Math.max(0, Math.min(maxDistance, Number(distance) || 0));
+  const closeness = 1 - (d / maxDistance);
+  return baseWeight * Math.exp(COHESION_WEIGHT_STRENGTH * t * closeness);
+}
+
+function pickByRingCohesion(list, ringNames, homeIndex, cohesion){
+  if (!Array.isArray(list) || !list.length) return null;
+  if (!Array.isArray(ringNames) || ringNames.length < 2) return null;
+  if (!Number.isInteger(homeIndex) || homeIndex < 0 || homeIndex >= ringNames.length) return null;
+
+  const indexByName = new Map(ringNames.map((name, index) => [String(name), index]));
+  const candidates = list.map((item) => {
+    const index = indexByName.get(String(item?.name || ''));
+    if (!Number.isInteger(index)) return null;
+    return {
+      item,
+      distance: circularRingDistance(homeIndex, index, ringNames.length)
+    };
+  }).filter(Boolean);
+  if (!candidates.length) return null;
+
+  const t = clampCohesion(cohesion);
+  const radius = cohesionRingRadius(t, ringNames.length);
+  let eligible = candidates.filter((entry) => entry.distance <= radius);
+
+  // Hard game compatibility and explicit user Fates are applied before this
+  // selector. If they remove the entire in-radius pool, honor those constraints
+  // by using only the nearest remaining legal ring distance rather than failing.
+  if (!eligible.length) {
+    const nearest = Math.min(...candidates.map((entry) => entry.distance));
+    eligible = candidates.filter((entry) => entry.distance === nearest);
+  }
+
+  const picked = weightedRandom(
+    eligible,
+    (entry) => cohesionRingSelectionWeight(entry.item, entry.distance, t, ringNames.length)
+  );
+  return picked?.item || null;
+}
+
 export {
   COHESION_WEIGHT_STRENGTH,
   clampCohesion,
@@ -92,5 +158,9 @@ export {
   attributeOverlap,
   baseSelectionWeight,
   cohesionSelectionWeight,
-  pickByWeightedCohesion
+  pickByWeightedCohesion,
+  circularRingDistance,
+  cohesionRingRadius,
+  cohesionRingSelectionWeight,
+  pickByRingCohesion
 };
