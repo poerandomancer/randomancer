@@ -13,29 +13,29 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 4944,
+    "fact_count": 4888,
     "fact_relation_counts": {
-      "consumes": 422,
+      "consumes": 351,
       "converts": 112,
       "creates": 64,
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 541,
-      "inflicts": 112,
+      "inflicts": 117,
       "modifies": 2239,
       "occupies": 444,
       "prevents": 374,
-      "provides": 282,
+      "provides": 292,
       "replaces": 27,
       "requires": 52
     },
     "candidate_role_counts": {
       "defense": 420,
-      "enabler": 1153,
-      "payoff": 188,
+      "enabler": 1157,
+      "payoff": 181,
       "primary_damage": 344,
       "recovery": 250,
-      "setup_control": 158,
+      "setup_control": 167,
       "utility": 206
     },
     "source_versions": {
@@ -43,8 +43,8 @@
       "offense_inventory": "OFFENSE_V1",
       "uniques": "poe2db_uniques_min_v4"
     },
-    "entities_with_facts": 2086,
-    "entities_without_facts": 878,
+    "entities_with_facts": 2085,
+    "entities_without_facts": 879,
     "support_entities_with_allowed_types": 603,
     "support_entities_with_excluded_types": 237,
     "passives_with_more_than_two_source_stats": 181,
@@ -53,11 +53,11 @@
   "coverage": {
     "passive_descriptions": {
       "evidence_count": 2495,
-      "fact_count": 294,
+      "fact_count": 295,
       "unparsed_count": 659,
-      "recognized_unstructured_count": 1569,
-      "structured_count": 267,
-      "structured_rate": 0.107,
+      "recognized_unstructured_count": 1567,
+      "structured_count": 269,
+      "structured_rate": 0.1078,
       "samples": {
         "recognized_unstructured": [
           {
@@ -321,11 +321,11 @@
     },
     "skill_descriptions": {
       "evidence_count": 1115,
-      "fact_count": 406,
-      "structured_count": 262,
+      "fact_count": 339,
+      "structured_count": 261,
       "unparsed_count": 131,
-      "recognized_unstructured_count": 722,
-      "structured_rate": 0.235,
+      "recognized_unstructured_count": 723,
+      "structured_rate": 0.2341,
       "samples": {
         "recognized_unstructured": [
           {
@@ -723,11 +723,11 @@
     },
     "unique_modifiers": {
       "evidence_count": 2141,
-      "fact_count": 340,
-      "recognized_unstructured_count": 1262,
+      "fact_count": 345,
+      "recognized_unstructured_count": 1255,
       "unparsed_count": 575,
-      "structured_count": 304,
-      "structured_rate": 0.142,
+      "structured_count": 311,
+      "structured_rate": 0.1453,
       "samples": {
         "recognized_unstructured": [
           {
@@ -758,11 +758,6 @@
           {
             "entity_id": "unique:Frostbreath||Slim Mace",
             "kind": "unique_mod",
-            "value": "DamageTypes from HitDamage with this Weapon Contributes to Freeze Buildup"
-          },
-          {
-            "entity_id": "unique:Frostbreath||Slim Mace",
-            "kind": "unique_mod",
             "value": "CullingStrike against Frozen Enemies"
           },
           {
@@ -789,6 +784,11 @@
             "entity_id": "unique:Sculpted Suffering||Warpick",
             "kind": "unique_mod",
             "value": "+10% to CriticalDamageBonus"
+          },
+          {
+            "entity_id": "unique:Sculpted Suffering||Warpick",
+            "kind": "unique_mod",
+            "value": "Adds 25 to 25 Physical Damage"
           }
         ],
         "unparsed": [

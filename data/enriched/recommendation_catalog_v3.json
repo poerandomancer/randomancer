@@ -11,29 +11,29 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 4944,
+    "fact_count": 4888,
     "fact_relation_counts": {
-      "consumes": 422,
+      "consumes": 351,
       "converts": 112,
       "creates": 64,
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 541,
-      "inflicts": 112,
+      "inflicts": 117,
       "modifies": 2239,
       "occupies": 444,
       "prevents": 374,
-      "provides": 282,
+      "provides": 292,
       "replaces": 27,
       "requires": 52
     },
     "candidate_role_counts": {
       "defense": 420,
-      "enabler": 1153,
-      "payoff": 188,
+      "enabler": 1157,
+      "payoff": 181,
       "primary_damage": 344,
       "recovery": 250,
-      "setup_control": 158,
+      "setup_control": 167,
       "utility": 206
     },
     "source_versions": {
@@ -543,18 +543,6 @@
         {
           "relation": "consumes",
           "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Consume charges from your Mana [Flask] to throw a flask that explodes, dealing [Physical] [Attack] damage in an area. The thrown flask [Consume|Consumes] [Poison] on [HitDamage|Hit] to cause an acidic burst. This damage is not based on your unarmed damage, so this is not considered an [UnarmedAttack|Unarmed Attack]"
-            }
-          ],
-          "mechanic": "physical"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
           "confidence": "exact",
           "evidence": [
             {
@@ -866,6 +854,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         },
         {
@@ -992,6 +981,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -1244,6 +1234,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -1575,6 +1566,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -1738,30 +1730,6 @@
             }
           ],
           "mechanic": "endurance_charge"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Consume 3 [Charges|Endurance Charges] to Raise a [Totem|Totem] that conjures spirit warriors. Each warrior uses a socketed [Mace] Skill once, then disappears. Cannot use [Channelling] Skills or Skills with Cooldowns."
-            }
-          ],
-          "mechanic": "spirit"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Consume 3 [Charges|Endurance Charges] to Raise a [Totem|Totem] that conjures spirit warriors. Each warrior uses a socketed [Mace] Skill once, then disappears. Cannot use [Channelling] Skills or Skills with Cooldowns."
-            }
-          ],
-          "mechanic": "totem"
         },
         {
           "relation": "creates",
@@ -2033,6 +2001,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         },
         {
@@ -2213,6 +2182,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         },
         {
@@ -2349,6 +2319,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -2849,6 +2820,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -2990,6 +2962,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -3328,6 +3301,7 @@
       "name": "Arctic Howl",
       "candidate_roles": [
         "primary_damage",
+        "setup_control",
         "payoff",
         "utility"
       ],
@@ -3414,6 +3388,19 @@
             }
           ],
           "mechanic": "warcry"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "[Shapeshift] into a [Werewolf] and let out an icy howl that damages enemies and [Freeze|Freezes] [PrimedFreeze|Primed] enemies. If an enemy is [Frozen] or a [Frozen] enemy is [HitDamage|Hit], this Skill [Empowered|Empowers] your attacks with added [Cold] damage, causes [Empowered] [Slam|Slams] to create [ChilledGround|Chilled Ground], and grants your [Allies] added [Cold] damage. This Skill's cooldown can be bypassed by expending an [Charges|Endurance Charge]."
+            }
+          ],
+          "mechanic": "chill",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -3869,6 +3856,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -4084,6 +4072,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -4298,6 +4287,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -4812,6 +4802,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -5604,6 +5595,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -5753,6 +5745,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -6007,6 +6000,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -6210,6 +6204,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -6283,6 +6278,7 @@
       "name": "Bitter Dead",
       "candidate_roles": [
         "primary_damage",
+        "setup_control",
         "payoff"
       ],
       "retrieval_terms": [
@@ -6342,6 +6338,19 @@
             }
           ],
           "mechanic": "totem"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Spend [Ward] and target an area, transforming [Corpse|Corpses] into bitter cores that seek out enemies and [Chill] enemies near them. The cores explode at the end of their duration, creating runes which deal additional [Cold] damage over time."
+            }
+          ],
+          "mechanic": "chill",
+          "scope": "outgoing"
         }
       ],
       "compatibility": {
@@ -6561,6 +6570,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -6679,6 +6689,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -6801,18 +6812,6 @@
               "value": "Consume charges from your Mana [Flask] to throw a flask that explodes, dealing [Physical] [Attack] damage in an area and [Aggravate|Aggravating Bleeding] on Enemies hit. This damage is not based on your unarmed damage, so this is not considered an [UnarmedAttack|Unarmed Attack]"
             }
           ],
-          "mechanic": "bleed"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Consume charges from your Mana [Flask] to throw a flask that explodes, dealing [Physical] [Attack] damage in an area and [Aggravate|Aggravating Bleeding] on Enemies hit. This damage is not based on your unarmed damage, so this is not considered an [UnarmedAttack|Unarmed Attack]"
-            }
-          ],
           "mechanic": "charge"
         },
         {
@@ -6826,18 +6825,6 @@
             }
           ],
           "mechanic": "mana"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Consume charges from your Mana [Flask] to throw a flask that explodes, dealing [Physical] [Attack] damage in an area and [Aggravate|Aggravating Bleeding] on Enemies hit. This damage is not based on your unarmed damage, so this is not considered an [UnarmedAttack|Unarmed Attack]"
-            }
-          ],
-          "mechanic": "physical"
         },
         {
           "relation": "has_property",
@@ -7106,6 +7093,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -7208,6 +7196,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -7725,10 +7714,7 @@
       "content_type": "active_skill",
       "source_id": "Metadata/Items/Gem/SkillGemBloodhoundsMark",
       "name": "Bloodhound's Mark",
-      "candidate_roles": [
-        "setup_control",
-        "payoff"
-      ],
+      "candidate_roles": [],
       "retrieval_terms": [
         "mark",
         "dexterity",
@@ -7758,30 +7744,6 @@
         "marked"
       ],
       "facts": [
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "[Mark] a target, making them suffer [HeavyStun|Heavy Stun] build up from [BloodLoss|Blood Loss]. The [Mark] will [MarkActivate|Activate], [Consume|Consuming] itself to [Trigger] Blood Explosion, when they are [HeavyStun|Heavy Stunned], or when they are killed if they suffered enough [BloodLoss|Blood Loss]. The [Mark]'s duration does not expire while the [Mark|Marked] target is suffering [BloodLoss|Blood Loss]."
-            }
-          ],
-          "mechanic": "mark"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "[Mark] a target, making them suffer [HeavyStun|Heavy Stun] build up from [BloodLoss|Blood Loss]. The [Mark] will [MarkActivate|Activate], [Consume|Consuming] itself to [Trigger] Blood Explosion, when they are [HeavyStun|Heavy Stunned], or when they are killed if they suffered enough [BloodLoss|Blood Loss]. The [Mark]'s duration does not expire while the [Mark|Marked] target is suffering [BloodLoss|Blood Loss]."
-            }
-          ],
-          "mechanic": "stun"
-        },
         {
           "relation": "has_property",
           "subject": "skill",
@@ -7829,6 +7791,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -10099,6 +10062,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -10243,6 +10207,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -10401,6 +10366,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -10536,6 +10502,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -10679,6 +10646,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -10894,6 +10862,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -11077,6 +11046,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -11230,6 +11200,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -11360,6 +11331,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -11496,6 +11468,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -11667,6 +11640,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -11831,6 +11805,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -12403,8 +12378,7 @@
       "source_id": "Metadata/Items/Gem/SkillGemChaoticInfusion",
       "name": "Chaotic Surge",
       "candidate_roles": [
-        "primary_damage",
-        "payoff"
+        "primary_damage"
       ],
       "retrieval_terms": [
         "attack",
@@ -12422,18 +12396,6 @@
         "projectile"
       ],
       "facts": [
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Grants your weapon [Surge|Surges]. Non-[Melee] [Projectile] [Attack|Attacks] with that weapon Consume [Surge|Surges] to cause the [Projectile|Projectiles] fired to explode at the end of their flight."
-            }
-          ],
-          "mechanic": "projectile"
-        },
         {
           "relation": "converts",
           "subject": "skill",
@@ -12693,6 +12655,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -12797,18 +12760,6 @@
             }
           ],
           "mechanic": "charge"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Consume all [Charges|Power Charges] to charge your [Quarterstaff|Quarterstaff] with electricity, adding [Lightning|Lightning] damage and a [Lightning|Lightning] shockwave to your [Quarterstaff|Quarterstaff] [Attack|Attacks]. Reusing this skill while the [Buff] is active adds to the [Buff]'s duration and damage."
-            }
-          ],
-          "mechanic": "lightning"
         },
         {
           "relation": "consumes",
@@ -13935,6 +13886,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -16833,6 +16785,20 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
+          "scope": "outgoing"
+        },
+        {
+          "relation": "provides",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Spend [Ward|Runic Ward] to create a number of [Hazard|Hazardous] Runes in a cone in front of you, which arm after a time. After arming, these Runes will activate when enemies step on them, exploding to deal [Attack] damage that is not based on your [MartialWeapon|Weapon]'s damage and apply [Electrocute|Electrocution] buildup."
+            }
+          ],
+          "mechanic": "electrocute",
           "scope": "outgoing"
         }
       ],
@@ -17150,6 +17116,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -17676,6 +17643,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -17800,6 +17768,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -18953,6 +18922,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -19794,30 +19764,6 @@
           "mechanic": "corpse"
         },
         {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Consume a [Corpse] to create a cloud of flammable [Poison|Poisonous] gas. Any [Burning|Burning] effects or Detonator skills will explode the gas cloud, creating a fiery explosion."
-            }
-          ],
-          "mechanic": "ignite"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Consume a [Corpse] to create a cloud of flammable [Poison|Poisonous] gas. Any [Burning|Burning] effects or Detonator skills will explode the gas cloud, creating a fiery explosion."
-            }
-          ],
-          "mechanic": "poison"
-        },
-        {
           "relation": "has_property",
           "subject": "skill",
           "confidence": "exact",
@@ -20100,30 +20046,6 @@
             }
           ],
           "mechanic": "corpse"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Consume a [Corpse] to create a cloud of flammable [Poison|Poisonous] gas. Any [Burning|Burning] effects or Detonator skills will explode the gas cloud, creating a fiery explosion."
-            }
-          ],
-          "mechanic": "ignite"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Consume a [Corpse] to create a cloud of flammable [Poison|Poisonous] gas. Any [Burning|Burning] effects or Detonator skills will explode the gas cloud, creating a fiery explosion."
-            }
-          ],
-          "mechanic": "poison"
         },
         {
           "relation": "has_property",
@@ -20448,6 +20370,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -20543,6 +20466,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -20884,6 +20808,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -22184,6 +22109,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -22302,18 +22228,6 @@
         {
           "relation": "consumes",
           "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Jump back as you rupture the earth in front of you with spearpoints, damaging enemies. [Consume|Consumes] the [ParriedDebuff|Parried Debuff] on [HitDamage|Hitting] enemies to release a shockwave and grant you a [Charges|Frenzy Charge]. This skill can be used while using other skills, and causes [Strike|Strikes] and [Projectile|Projectiles] to miss you while jumping. This skill cannot be [AncestralBoost|Ancestrally Boosted]."
-            }
-          ],
-          "mechanic": "frenzy_charge"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
           "confidence": "exact",
           "evidence": [
             {
@@ -22322,18 +22236,6 @@
             }
           ],
           "mechanic": "parry"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Jump back as you rupture the earth in front of you with spearpoints, damaging enemies. [Consume|Consumes] the [ParriedDebuff|Parried Debuff] on [HitDamage|Hitting] enemies to release a shockwave and grant you a [Charges|Frenzy Charge]. This skill can be used while using other skills, and causes [Strike|Strikes] and [Projectile|Projectiles] to miss you while jumping. This skill cannot be [AncestralBoost|Ancestrally Boosted]."
-            }
-          ],
-          "mechanic": "projectile"
         },
         {
           "relation": "generates",
@@ -22595,6 +22497,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -23413,6 +23316,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -23824,6 +23728,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -24552,42 +24457,6 @@
         {
           "relation": "consumes",
           "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Plunge your [Spear] into the ground to emit a pulse that [Consume|Consumes] [Freeze], [Shock] and [Ignite] on a number of nearby enemies, [Allies] and [Corpse|Corpses]. The pulse itself deals no damage, but each [ElementalAilments|Ailment] [Consume|Consumed] causes an explosion of the corresponding elemental damage type."
-            }
-          ],
-          "mechanic": "corpse"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Plunge your [Spear] into the ground to emit a pulse that [Consume|Consumes] [Freeze], [Shock] and [Ignite] on a number of nearby enemies, [Allies] and [Corpse|Corpses]. The pulse itself deals no damage, but each [ElementalAilments|Ailment] [Consume|Consumed] causes an explosion of the corresponding elemental damage type."
-            }
-          ],
-          "mechanic": "elemental_ailments"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Plunge your [Spear] into the ground to emit a pulse that [Consume|Consumes] [Freeze], [Shock] and [Ignite] on a number of nearby enemies, [Allies] and [Corpse|Corpses]. The pulse itself deals no damage, but each [ElementalAilments|Ailment] [Consume|Consumed] causes an explosion of the corresponding elemental damage type."
-            }
-          ],
-          "mechanic": "elemental_damage"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
           "confidence": "exact",
           "evidence": [
             {
@@ -24778,6 +24647,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         },
         {
@@ -25041,8 +24911,7 @@
       "source_id": "Metadata/Items/Gem/SkillGemAscendancyInfuseWeapon",
       "name": "Elemental Surge",
       "candidate_roles": [
-        "primary_damage",
-        "payoff"
+        "primary_damage"
       ],
       "retrieval_terms": [
         "attack",
@@ -25062,18 +24931,6 @@
         "projectile"
       ],
       "facts": [
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Grants your weapon [Surge|Surges]. Non-[Melee] [Projectile] [Attack|Attacks] with that weapon Consume [Surge|Surges] to cause the [Projectile|Projectiles] fired to explode at the end of their flight."
-            }
-          ],
-          "mechanic": "projectile"
-        },
         {
           "relation": "converts",
           "subject": "skill",
@@ -25495,6 +25352,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -26221,6 +26079,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -26359,27 +26218,11 @@
         {
           "relation": "consumes",
           "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Consume all stacks of [Jade] to grant [Guard] based off your maximum Life for each [Jade] consumed. You cannot gain [Jade] stacks while you have [Guard]."
-            }
-          ],
-          "mechanic": "guard"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
           "confidence": "exact",
           "evidence": [
             {
               "kind": "stat_id",
               "value": "maximum_life_%_damage_absorbed_per_jade_consumed"
-            },
-            {
-              "kind": "skill_description",
-              "value": "Consume all stacks of [Jade] to grant [Guard] based off your maximum Life for each [Jade] consumed. You cannot gain [Jade] stacks while you have [Guard]."
             }
           ],
           "mechanic": "life"
@@ -26419,6 +26262,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         },
         {
@@ -26506,7 +26350,8 @@
       "source_id": "Metadata/Items/Gems/SkillGemEnervatingNova",
       "name": "Enervating Nova",
       "candidate_roles": [
-        "primary_damage"
+        "primary_damage",
+        "setup_control"
       ],
       "retrieval_terms": [
         "intelligence",
@@ -26556,6 +26401,19 @@
             }
           ],
           "mechanic": "totem"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Unleash a [Nova] of [Lightning] damage to [Electrocute] enemies. Enemies close to you take no damage while enemies at the edge of the ring take significantly more damage. Enemies [HitDamage|Hit] can be [Electrocute|Electrocuted] by all [Lightning] damage for a short duration."
+            }
+          ],
+          "mechanic": "electrocute",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -26791,6 +26649,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -27190,7 +27049,8 @@
       "source_id": "Metadata/Items/Gems/SkillGemEscapeShot",
       "name": "Escape Shot",
       "candidate_roles": [
-        "primary_damage"
+        "primary_damage",
+        "setup_control"
       ],
       "retrieval_terms": [
         "dexterity",
@@ -27240,6 +27100,19 @@
             }
           ],
           "mechanic": "cold"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Leap backwards, firing an icy arrow which can [Chill] or [Freeze] enemies around the location from which you escaped. This arrow will create [IceFragment|Ice Fragments] on impact."
+            }
+          ],
+          "mechanic": "freeze",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -27772,6 +27645,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -27871,6 +27745,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -27981,30 +27856,6 @@
             }
           ],
           "mechanic": "charge"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Consume charges from your Mana [Flask] to throw a flask that explodes, dealing [Fire] [Attack] damage in an area. Additional smaller flasks are thrown at nearby [Ignite|Ignited] Enemies. This damage is not based on your unarmed damage, so this is not considered an [UnarmedAttack|Unarmed Attack]"
-            }
-          ],
-          "mechanic": "fire"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Consume charges from your Mana [Flask] to throw a flask that explodes, dealing [Fire] [Attack] damage in an area. Additional smaller flasks are thrown at nearby [Ignite|Ignited] Enemies. This damage is not based on your unarmed damage, so this is not considered an [UnarmedAttack|Unarmed Attack]"
-            }
-          ],
-          "mechanic": "ignite"
         },
         {
           "relation": "consumes",
@@ -28646,6 +28497,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -28851,18 +28703,6 @@
             }
           ],
           "mechanic": "frenzy_charge"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Hurl a single payload [Spear] that pierces through enemies and lodges in terrain where it lands. The [Spear] will explode at the end of its [DetonationTime|Detonation Time] or if [Detonator|Detonated]. Consumes a [Charges|Frenzy Charge] if you have one to explode immediately, dealing more damage in a cross-shaped area and creating [IgnitedGround|Ignited Ground]."
-            }
-          ],
-          "mechanic": "ignite"
         },
         {
           "relation": "converts",
@@ -29270,6 +29110,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -29356,8 +29197,7 @@
       "source_id": "Metadata/Items/Gems/SkillGemExsanguinate",
       "name": "Exsanguinate",
       "candidate_roles": [
-        "primary_damage",
-        "setup_control"
+        "primary_damage"
       ],
       "retrieval_terms": [
         "intelligence",
@@ -29417,19 +29257,6 @@
             }
           ],
           "mechanic": "totem"
-        },
-        {
-          "relation": "inflicts",
-          "subject": "skill",
-          "confidence": "exact",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Expel your own blood as [Chain|Chaining] blood tendrils in a cone in front of you. Enemies [HitDamage|Hit] by the tendrils take [Physical] damage and are inflicted with [Bleeding]."
-            }
-          ],
-          "mechanic": "bleed",
-          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -29825,30 +29652,6 @@
         {
           "relation": "consumes",
           "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Suffuse your [Quarterstaff|Quarterstaff] with electrical energy, then [Slam] the ground to deal damage in a large cone in front of you. Consumes your [Charges|Power Charges] to fire [Lightning|Lightning] [Projectile|Projectiles] forwards from the impact."
-            }
-          ],
-          "mechanic": "fire"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Suffuse your [Quarterstaff|Quarterstaff] with electrical energy, then [Slam] the ground to deal damage in a large cone in front of you. Consumes your [Charges|Power Charges] to fire [Lightning|Lightning] [Projectile|Projectiles] forwards from the impact."
-            }
-          ],
-          "mechanic": "lightning"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
           "confidence": "exact",
           "evidence": [
             {
@@ -29861,18 +29664,6 @@
             }
           ],
           "mechanic": "power_charge"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Suffuse your [Quarterstaff|Quarterstaff] with electrical energy, then [Slam] the ground to deal damage in a large cone in front of you. Consumes your [Charges|Power Charges] to fire [Lightning|Lightning] [Projectile|Projectiles] forwards from the impact."
-            }
-          ],
-          "mechanic": "projectile"
         },
         {
           "relation": "converts",
@@ -30189,6 +29980,7 @@
       "name": "Fangs of Frost",
       "candidate_roles": [
         "primary_damage",
+        "setup_control",
         "payoff"
       ],
       "retrieval_terms": [
@@ -30212,18 +30004,6 @@
         "chilled_ground"
       ],
       "facts": [
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Perform an icy stab that exploits enemies who are already off balance. Hitting a [ParriedDebuff|Parried] target [Consume|Consumes] the [Debuff] to cause an explosion of frost and leave [ChilledGround|Chilled Ground]."
-            }
-          ],
-          "mechanic": "chill"
-        },
         {
           "relation": "consumes",
           "subject": "skill",
@@ -30261,6 +30041,19 @@
             }
           ],
           "mechanic": "cold"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Perform an icy stab that exploits enemies who are already off balance. Hitting a [ParriedDebuff|Parried] target [Consume|Consumes] the [Debuff] to cause an explosion of frost and leave [ChilledGround|Chilled Ground]."
+            }
+          ],
+          "mechanic": "chill",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -30505,30 +30298,6 @@
             }
           ],
           "mechanic": "corpse"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "[Consume] [Corpse|Corpses] near you to recover Life and Mana over a short time per [Corpse] [Consume|Consumed]."
-            }
-          ],
-          "mechanic": "life_recovery"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "[Consume] [Corpse|Corpses] near you to recover Life and Mana over a short time per [Corpse] [Consume|Consumed]."
-            }
-          ],
-          "mechanic": "mana"
         },
         {
           "relation": "provides",
@@ -31088,6 +30857,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -32383,18 +32153,6 @@
         {
           "relation": "consumes",
           "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "[Shapeshift] into a [Wyvern] and take to the skies, immolating enemies with a jet of fire. [Channelling] ends after a short amount of time but can be prolonged by spending [Rage]. Consumes a [Charges|Power Charge] if possible to [Empowered|Empower] the Skill, [Gain|Gaining] extra [Lightning] damage and spending [Rage] more slowly."
-            }
-          ],
-          "mechanic": "lightning"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
           "confidence": "exact",
           "evidence": [
             {
@@ -32416,10 +32174,6 @@
             {
               "kind": "active_skill_type",
               "value": "ConsumesRage"
-            },
-            {
-              "kind": "skill_description",
-              "value": "[Shapeshift] into a [Wyvern] and take to the skies, immolating enemies with a jet of fire. [Channelling] ends after a short amount of time but can be prolonged by spending [Rage]. Consumes a [Charges|Power Charge] if possible to [Empowered|Empower] the Skill, [Gain|Gaining] extra [Lightning] damage and spending [Rage] more slowly."
             }
           ],
           "mechanic": "rage"
@@ -33355,6 +33109,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -34577,6 +34332,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -35073,6 +34829,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -37064,6 +36821,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -37332,6 +37090,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -37584,31 +37343,7 @@
               "value": "Consume charges from your Mana [Flask] to throw a flask that explodes, dealing [Lightning] [Attack] damage in an area with high chance to [Shock]. This damage is not based on your unarmed damage, so this is not considered an [UnarmedAttack|Unarmed Attack]"
             }
           ],
-          "mechanic": "lightning"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Consume charges from your Mana [Flask] to throw a flask that explodes, dealing [Lightning] [Attack] damage in an area with high chance to [Shock]. This damage is not based on your unarmed damage, so this is not considered an [UnarmedAttack|Unarmed Attack]"
-            }
-          ],
           "mechanic": "mana"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Consume charges from your Mana [Flask] to throw a flask that explodes, dealing [Lightning] [Attack] damage in an area with high chance to [Shock]. This damage is not based on your unarmed damage, so this is not considered an [UnarmedAttack|Unarmed Attack]"
-            }
-          ],
-          "mechanic": "shock"
         },
         {
           "relation": "has_property",
@@ -38514,6 +38249,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -38665,6 +38401,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         },
         {
@@ -38917,6 +38654,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -39454,7 +39192,8 @@
       "source_id": "Metadata/Items/Gem/SkillGemGasGrenade",
       "name": "Gas Grenade",
       "candidate_roles": [
-        "primary_damage"
+        "primary_damage",
+        "setup_control"
       ],
       "retrieval_terms": [
         "strength",
@@ -39518,6 +39257,19 @@
             }
           ],
           "mechanic": "fire"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Fire a bouncing [Grenade] that causes a burst of [Poison|Poison] gas when its fuse expires, damaging enemies and leaving behind a growing [Poison|Poison] cloud. [Burning] effects or [Detonator|Detonator] skills will cause the cloud to explode in a fiery blast."
+            }
+          ],
+          "mechanic": "poison",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -39896,6 +39648,7 @@
       "name": "Gathering Storm",
       "candidate_roles": [
         "primary_damage",
+        "setup_control",
         "utility"
       ],
       "retrieval_terms": [
@@ -39946,6 +39699,19 @@
             }
           ],
           "mechanic": "lightning"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Flip backward and [Channelling|Channel] to charge your [Quarterstaff] with [Lightning]. Releasing dashes towards the target location, damaging enemies along the way. Releasing with [PerfectTiming|Perfect Timing] performs a [Lightning]-assisted dash that releases shockwaves from enemies you dash through. [PerfectTiming|Perfectly Timed] dash also explodes Tempest Bells on hit creating a shockwave that deals more damage and has a larger area, leaving [ShockedGround|Shocked Ground] in its wake. This skill cannot be [AncestralBoost|Ancestrally Boosted]."
+            }
+          ],
+          "mechanic": "shock",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -40329,6 +40095,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -40475,8 +40242,7 @@
       "source_id": "Metadata/Items/Gem/SkillGemGeminiSurge",
       "name": "Gemini Surge",
       "candidate_roles": [
-        "primary_damage",
-        "payoff"
+        "primary_damage"
       ],
       "retrieval_terms": [
         "attack",
@@ -40494,18 +40260,6 @@
         "projectile"
       ],
       "facts": [
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Grants your weapon [Surge|Surges]. Non-[Melee] [Projectile] [Attack|Attacks] with that weapon Consume [Surge|Surges] to cause the [Projectile|Projectiles] fired to explode at the end of their flight."
-            }
-          ],
-          "mechanic": "projectile"
-        },
         {
           "relation": "converts",
           "subject": "skill",
@@ -40817,18 +40571,6 @@
           "mechanic": "energy_shield"
         },
         {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "While active, causes you to periodically gain Ghost Shrouds. If you are [HitDamage|Hit] while you have a Ghost Shroud, it is immediately consumed to recover [EnergyShield|Energy Shield] based on your [Evasion]."
-            }
-          ],
-          "mechanic": "evasion"
-        },
-        {
           "relation": "modifies",
           "subject": "skill",
           "confidence": "strong",
@@ -40876,6 +40618,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -41012,6 +40755,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -41514,6 +41258,7 @@
       "name": "Glacial Lance",
       "candidate_roles": [
         "primary_damage",
+        "setup_control",
         "payoff"
       ],
       "retrieval_terms": [
@@ -41572,18 +41317,6 @@
           "mechanic": "frenzy_charge"
         },
         {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Throw a single [Pierce|Piercing] lance that leaves icy fragments in its wake. The fragments [Chill] nearby enemies. Consumes a [Charges|Frenzy Charge] if possible to cause the glacial fragments created by the first [Projectile] to explode outwards after a short duration, peppering enemies with shrapnel."
-            }
-          ],
-          "mechanic": "projectile"
-        },
-        {
           "relation": "converts",
           "subject": "skill",
           "confidence": "exact",
@@ -41608,6 +41341,19 @@
             }
           ],
           "mechanic": "cold"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Throw a single [Pierce|Piercing] lance that leaves icy fragments in its wake. The fragments [Chill] nearby enemies. Consumes a [Charges|Frenzy Charge] if possible to cause the glacial fragments created by the first [Projectile] to explode outwards after a short duration, peppering enemies with shrapnel."
+            }
+          ],
+          "mechanic": "chill",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -42269,18 +42015,6 @@
           "mechanic": "life"
         },
         {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "While active, your [Reviving] [Minion|Minions] store a percentage of their maximum Life in a collectible Grim [Remnant] on death. Using Grim Resurrection Consumes the Life you've collected to [Reviving|Revive] up to that much total Life of dead [Minion|Minions]."
-            }
-          ],
-          "mechanic": "minion"
-        },
-        {
           "relation": "generates",
           "subject": "skill",
           "confidence": "exact",
@@ -42327,6 +42061,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -42716,6 +42451,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -43653,6 +43389,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -43895,6 +43632,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -44159,6 +43897,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -44458,6 +44197,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         },
         {
@@ -44750,6 +44490,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         },
         {
@@ -45005,6 +44746,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -45210,6 +44952,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         },
         {
@@ -45471,6 +45214,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         },
         {
@@ -45735,6 +45479,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -46139,6 +45884,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -46275,6 +46021,7 @@
       "name": "His Dark Horizon",
       "candidate_roles": [
         "primary_damage",
+        "setup_control",
         "utility"
       ],
       "retrieval_terms": [
@@ -46312,6 +46059,19 @@
           "mechanic": "cold"
         },
         {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "[DNT-UNUSED] Create a storm of deathly energies that [Empowered|Empowers] your Mana-costing [Spell|Spells] with [Cold] damage while you remain inside it. Maintaining the storm constantly drains your Mana, and spending more causes it to drain faster. As the storm persists it creates slowly expanding [ChilledGround|Chilled Ground]. Enemies that enter the eye of the storm are [Blinded]. When you leave the storm, or run out of Mana, the storm ends and unleashes a death-wave, damaging enemies on the [ChilledGround|Chilled Ground]."
+            }
+          ],
+          "mechanic": "chill",
+          "scope": "outgoing"
+        },
+        {
           "relation": "prevents",
           "subject": "skill",
           "confidence": "exact",
@@ -46322,6 +46082,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -46748,6 +46509,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -47591,6 +47353,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -47897,6 +47660,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -48338,6 +48102,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -48701,6 +48466,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -49056,6 +48822,7 @@
       "name": "Ice Nova",
       "candidate_roles": [
         "primary_damage",
+        "setup_control",
         "payoff"
       ],
       "retrieval_terms": [
@@ -49149,6 +48916,19 @@
             }
           ],
           "mechanic": "totem"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Conjure a wave of ice in all directions, [Knockback|Knocking Back] enemies based on how close they are to you. Casting Ice Nova targeting near a Frostbolt [Projectile] will cause it to originate from the Frostbolt instead of you. [Consume|Consumes] a [Cold] [ElementalInfusion|Infusion] if possible to leave a patch of [ChilledGround|Chilled Ground]."
+            }
+          ],
+          "mechanic": "chill",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -49405,6 +49185,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -50789,6 +50570,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -50899,6 +50681,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -52028,6 +51811,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -52153,6 +51937,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -52323,6 +52108,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -52485,18 +52271,6 @@
           "mechanic": "corpse"
         },
         {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Harness Kelari's power to passively [Consume] [Corpse|Corpses] in your [Presence], causing Corpse Beetle [Minion|Minions] to burst forth. The Beetles passively follow you until [Command|Commanded]. On your [Command], they rush the target and explode."
-            }
-          ],
-          "mechanic": "minion"
-        },
-        {
           "relation": "creates",
           "subject": "skill",
           "confidence": "exact",
@@ -52531,6 +52305,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -53709,6 +53484,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -53865,6 +53641,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         },
         {
@@ -55723,6 +55500,19 @@
             }
           ],
           "mechanic": "totem"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Target an enemy to either teleport inside the target's body if they are under the [CullingStrike|Cull] threshold, causing it to violently explode, or to apply a [Debuff] to them, which will cause the same effect if that enemy falls under the [CullingStrike|Cull] threshold during its duration. Can also be used on Ball Lightning [Projectile|Projectiles]. On teleport, the target is destroyed, and the explosion deals [Lightning|Lightning] damage to surrounding enemies. If targeting an enemy, the explosion also creates [ShockedGround|Shocked Ground]. Creates a [Lightning] [ElementalInfusion|Infusion] on successful use. Highlights enemies that can be [CullingStrike|Culled]."
+            }
+          ],
+          "mechanic": "shock",
+          "scope": "outgoing"
         }
       ],
       "compatibility": {
@@ -55934,6 +55724,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -57023,6 +56814,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -57411,6 +57203,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -57704,6 +57497,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -57843,6 +57637,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -58278,6 +58073,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -58637,6 +58433,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -60838,6 +60635,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -61005,6 +60803,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -61171,6 +60970,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -61534,18 +61334,6 @@
             }
           ],
           "mechanic": "power_charge"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "[Shapeshift] into a [Wyvern] and spit [Oil] at enemies, creating [OilGround|Oil Ground] where the [Projectile|Projectiles] land. Consumes [Charges|Power Charges] if possible to instead [Channelling|Channel] a sustained barrage of electrified [Oil] that does not create [OilGround|Oil Ground]. [Projectile|Projectiles] are fired in sequence, allowing multiple [Projectile|Projectiles] to [HitDamage|Hit] the same target."
-            }
-          ],
-          "mechanic": "projectile"
         },
         {
           "relation": "converts",
@@ -62651,6 +62439,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -63523,6 +63312,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -64024,30 +63814,6 @@
         {
           "relation": "consumes",
           "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Consume all [Charges|Power Charges] to master the elements, gaining [ElementalDamage|Elemental Damage] and the ability to apply [ElementalAilments|Elemental Ailments] with other damage types. Can only be used while you have maximum [Charges|Power Charges]."
-            }
-          ],
-          "mechanic": "elemental_ailments"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Consume all [Charges|Power Charges] to master the elements, gaining [ElementalDamage|Elemental Damage] and the ability to apply [ElementalAilments|Elemental Ailments] with other damage types. Can only be used while you have maximum [Charges|Power Charges]."
-            }
-          ],
-          "mechanic": "elemental_damage"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
           "confidence": "exact",
           "evidence": [
             {
@@ -64108,6 +63874,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -64215,6 +63982,7 @@
       "source_id": "Metadata/Items/Gems/SkillGemPlagueBearer",
       "name": "Plague Bearer",
       "candidate_roles": [
+        "setup_control",
         "utility"
       ],
       "retrieval_terms": [
@@ -64232,6 +64000,19 @@
         "poison"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "While active, stores a portion of the [Poison] Damage you deal. Using this Skill unleashes the stored [Poison|Poison] to damage and [Poison] enemies around you."
+            }
+          ],
+          "mechanic": "poison",
+          "scope": "outgoing"
+        },
         {
           "relation": "modifies",
           "subject": "skill",
@@ -64255,6 +64036,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -64367,6 +64149,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -65655,6 +65438,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -65815,6 +65599,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -66685,6 +66470,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -66808,6 +66594,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -66931,6 +66718,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -67461,6 +67249,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -67623,18 +67412,6 @@
             }
           ],
           "mechanic": "charge"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Fire a hail of arrows into the air, causing them to rain from above. [Consume|Consumes] a [Charges|Frenzy Charge] to fire more arrows."
-            }
-          ],
-          "mechanic": "fire"
         },
         {
           "relation": "consumes",
@@ -67908,6 +67685,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -69500,6 +69278,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -69641,6 +69420,7 @@
       "name": "Ravenous Swarm",
       "candidate_roles": [
         "primary_damage",
+        "setup_control",
         "utility"
       ],
       "retrieval_terms": [
@@ -69709,6 +69489,19 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "While active and enemies are present, swarms of insects emerge from your body to pursue nearby enemies. The swarms are untargetable [Minion|Minions] that [Attack] and [Poison] enemies."
+            }
+          ],
+          "mechanic": "poison",
+          "scope": "outgoing"
         }
       ],
       "compatibility": {
@@ -70035,6 +69828,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -70190,6 +69984,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         },
         {
@@ -70447,6 +70242,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         },
         {
@@ -70663,18 +70459,6 @@
             }
           ],
           "mechanic": "charge"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "[Shapeshift] into a [Wyvern] and perform a wide slash with your wingtip claws. Consumes a [Charges|Power Charge] if possible to grant you a [Buff] that gives you extra [Lightning] damage. While you have the [Buff], Rend covers a much larger area but is slower."
-            }
-          ],
-          "mechanic": "lightning"
         },
         {
           "relation": "consumes",
@@ -70926,6 +70710,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -71095,6 +70880,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -71718,7 +71504,6 @@
       "name": "Righteous Descent",
       "candidate_roles": [
         "primary_damage",
-        "payoff",
         "recovery",
         "utility"
       ],
@@ -71740,30 +71525,6 @@
         "empowered"
       ],
       "facts": [
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Leap into the air carried by divine wings, damaging enemies with your spear where you land. If there is a [DivineFragment|Fragment of Divinity] near you or the targeted location, this attack will [Consume] it when you leap to become [Empowered], dealing more damage and granting life and mana recovery. This skill does not use up its Cooldown when empowered."
-            }
-          ],
-          "mechanic": "life"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Leap into the air carried by divine wings, damaging enemies with your spear where you land. If there is a [DivineFragment|Fragment of Divinity] near you or the targeted location, this attack will [Consume] it when you leap to become [Empowered], dealing more damage and granting life and mana recovery. This skill does not use up its Cooldown when empowered."
-            }
-          ],
-          "mechanic": "mana_recovery"
-        },
         {
           "relation": "converts",
           "subject": "skill",
@@ -72271,6 +72032,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -72755,6 +72517,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -73016,6 +72779,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         },
         {
@@ -73443,6 +73207,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -73603,6 +73368,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -73766,6 +73532,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -74122,6 +73889,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -74232,19 +74000,6 @@
           "mechanic": "remnant"
         },
         {
-          "relation": "inflicts",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Conjure hateful energy to fuel your Rage and Life. While active, [Bleeding] enemies you kill have a chance to spawn a Hateful [Remnant], and [HitDamage|Hitting] a [Bleeding] target spawns a Hateful [Remnant] every few seconds. Picking up a Hateful [Remnant] grants you Rage and recovers Life based on your current Rage."
-            }
-          ],
-          "mechanic": "bleed",
-          "scope": "outgoing"
-        },
-        {
           "relation": "modifies",
           "subject": "skill",
           "confidence": "strong",
@@ -74280,6 +74035,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -74534,6 +74290,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -75035,6 +74792,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -75156,18 +74914,6 @@
             }
           ],
           "mechanic": "charge"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Consume charges from your Mana [Flask] to throw a flask that explodes, dealing [Cold] [Attack] damage in an area and inflicting [Exposure]. This damage is not based on your unarmed damage, so this is not considered an [UnarmedAttack|Unarmed Attack]"
-            }
-          ],
-          "mechanic": "cold"
         },
         {
           "relation": "consumes",
@@ -76492,6 +76238,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -76670,18 +76417,6 @@
         "electrocution"
       ],
       "facts": [
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Fire a [Lightning]-charged arrow that homes in on enemies afflicted by [LightningAilment|Lightning Ailments]. Hitting such an enemy will cause your arrow to release a damaging shockwave and [Chain] towards nearby targets, with those [Chain|Chaining] [HitDamage|Hits] also releasing a shockwave. After the final [Chain], the arrow lodges into the ground as a Lightning Rod. [Consume|Consumes] [Shock] from enemies it [HitDamage|Hits], but not [Electrocute|Electrocution]."
-            }
-          ],
-          "mechanic": "electrocute"
-        },
         {
           "relation": "consumes",
           "subject": "skill",
@@ -77815,6 +77550,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -78028,6 +77764,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -78446,32 +78183,6 @@
           "scope": "outgoing"
         },
         {
-          "relation": "inflicts",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "While active, has a chance to create an [ElementalInfusion|Infusion] [Remnant] when you [Freeze], [Shock] or [Ignite] a target."
-            }
-          ],
-          "mechanic": "ignite",
-          "scope": "outgoing"
-        },
-        {
-          "relation": "inflicts",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "While active, has a chance to create an [ElementalInfusion|Infusion] [Remnant] when you [Freeze], [Shock] or [Ignite] a target."
-            }
-          ],
-          "mechanic": "shock",
-          "scope": "outgoing"
-        },
-        {
           "relation": "modifies",
           "subject": "skill",
           "confidence": "strong",
@@ -78518,6 +78229,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -78646,30 +78358,6 @@
         "ancestrally_boosted"
       ],
       "facts": [
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Dash to a target and [Strike|Strike] them with your [Quarterstaff|Quarterstaff]. If the target is [Shock|Shocked], [Consume] their [Shock|Shock] to release a [Lightning|Lightning] shockwave around the target and grant you a [Charges|Power Charge]. This skill cannot be [AncestralBoost|Ancestrally Boosted]."
-            }
-          ],
-          "mechanic": "lightning"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Dash to a target and [Strike|Strike] them with your [Quarterstaff|Quarterstaff]. If the target is [Shock|Shocked], [Consume] their [Shock|Shock] to release a [Lightning|Lightning] shockwave around the target and grant you a [Charges|Power Charge]. This skill cannot be [AncestralBoost|Ancestrally Boosted]."
-            }
-          ],
-          "mechanic": "power_charge"
-        },
         {
           "relation": "consumes",
           "subject": "skill",
@@ -80805,18 +80493,6 @@
         {
           "relation": "consumes",
           "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Build [Glory] by spending [Ward|Runic Ward]. When you have maximum [Glory], you may call down a mass of Verisium from the sky, dealing high damage at the targeted location and summoning a [TemporaryMinion|Temporary Minion]. Targeting close to you will cause you to jump back as you cast. [Consume|Consumes] a [VerisiumInfusion|Verisium Infusion], if possible, to increase the number of [TemporaryMinion|Minions] summoned ."
-            }
-          ],
-          "mechanic": "minion"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
           "confidence": "exact",
           "evidence": [
             {
@@ -81380,23 +81056,15 @@
         {
           "relation": "consumes",
           "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "[Consume] the elemental energy from a [Frozen], [Shock|Shocked] or [Ignite|Ignited] enemy, creating an elemental blast that leaves behind an [ElementalInfusion|Infusion] [Remnant]. The blast will spread to other enemies affected by the same [ElementalAilments|Ailment], but those blasts cannot spread further. Can also be cast on a Frostbolt to create a larger cold blast."
-            }
-          ],
-          "mechanic": "elemental_infusion"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
           "confidence": "exact",
           "evidence": [
             {
               "kind": "active_skill_type",
               "value": "SkillConsumesFreeze"
+            },
+            {
+              "kind": "skill_description",
+              "value": "[Consume] the elemental energy from a [Frozen], [Shock|Shocked] or [Ignite|Ignited] enemy, creating an elemental blast that leaves behind an [ElementalInfusion|Infusion] [Remnant]. The blast will spread to other enemies affected by the same [ElementalAilments|Ailment], but those blasts cannot spread further. Can also be cast on a Frostbolt to create a larger cold blast."
             }
           ],
           "mechanic": "freeze"
@@ -81409,6 +81077,10 @@
             {
               "kind": "active_skill_type",
               "value": "SkillConsumesIgnite"
+            },
+            {
+              "kind": "skill_description",
+              "value": "[Consume] the elemental energy from a [Frozen], [Shock|Shocked] or [Ignite|Ignited] enemy, creating an elemental blast that leaves behind an [ElementalInfusion|Infusion] [Remnant]. The blast will spread to other enemies affected by the same [ElementalAilments|Ailment], but those blasts cannot spread further. Can also be cast on a Frostbolt to create a larger cold blast."
             }
           ],
           "mechanic": "ignite"
@@ -81421,6 +81093,10 @@
             {
               "kind": "active_skill_type",
               "value": "SkillConsumesShock"
+            },
+            {
+              "kind": "skill_description",
+              "value": "[Consume] the elemental energy from a [Frozen], [Shock|Shocked] or [Ignite|Ignited] enemy, creating an elemental blast that leaves behind an [ElementalInfusion|Infusion] [Remnant]. The blast will spread to other enemies affected by the same [ElementalAilments|Ailment], but those blasts cannot spread further. Can also be cast on a Frostbolt to create a larger cold blast."
             }
           ],
           "mechanic": "shock"
@@ -82155,8 +81831,7 @@
       "source_id": "Metadata/Items/Gems/SkillGemSnipersMark",
       "name": "Sniper's Mark",
       "candidate_roles": [
-        "setup_control",
-        "payoff"
+        "setup_control"
       ],
       "retrieval_terms": [
         "dexterity",
@@ -82183,18 +81858,6 @@
         "frenzy_charge"
       ],
       "facts": [
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "[Mark] a target. The next [Critical|Critical Hit] the target receives [MarkActivate|Activates] the [Mark], [Consume|Consuming] it to deal extra damage and grant you a [Charges|Frenzy Charge]."
-            }
-          ],
-          "mechanic": "frenzy_charge"
-        },
         {
           "relation": "generates",
           "subject": "skill",
@@ -82230,6 +81893,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -82961,6 +82625,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -85158,6 +84823,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -85636,10 +85302,6 @@
             {
               "kind": "stat_id",
               "value": "spell_totem_totem_duration_+%_final_per_endurance_charge_consumed"
-            },
-            {
-              "kind": "skill_description",
-              "value": "Consume any combination of 3 [Charges|Power and/or Endurance Charges] to raise a [Totem] that uses socketed [Spell|Spells]. Cannot use Skills with Cooldowns."
             }
           ],
           "mechanic": "totem"
@@ -85944,6 +85606,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -87738,6 +87401,7 @@
       "name": "Storm Lance",
       "candidate_roles": [
         "primary_damage",
+        "setup_control",
         "payoff"
       ],
       "retrieval_terms": [
@@ -87784,18 +87448,6 @@
         {
           "relation": "consumes",
           "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Throw an electrified [Spear] that lodges in the ground and periodically zaps nearby enemies with [Lightning] bolts. If the [Spear] is [Detonator|Detonated] by another Skill, it immediately unleashes a volley of bolts and expires. Consumes a [Charges|Frenzy Charge] if possible to fire bolts more frequently for a shorter duration, automatically Detonate at the end of its duration, and create [ShockedGround|Shocked Ground] on Detonation."
-            }
-          ],
-          "mechanic": "fire"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
           "confidence": "exact",
           "evidence": [
             {
@@ -87808,18 +87460,6 @@
             }
           ],
           "mechanic": "frenzy_charge"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Throw an electrified [Spear] that lodges in the ground and periodically zaps nearby enemies with [Lightning] bolts. If the [Spear] is [Detonator|Detonated] by another Skill, it immediately unleashes a volley of bolts and expires. Consumes a [Charges|Frenzy Charge] if possible to fire bolts more frequently for a shorter duration, automatically Detonate at the end of its duration, and create [ShockedGround|Shocked Ground] on Detonation."
-            }
-          ],
-          "mechanic": "shock"
         },
         {
           "relation": "converts",
@@ -87846,6 +87486,19 @@
             }
           ],
           "mechanic": "lightning"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Throw an electrified [Spear] that lodges in the ground and periodically zaps nearby enemies with [Lightning] bolts. If the [Spear] is [Detonator|Detonated] by another Skill, it immediately unleashes a volley of bolts and expires. Consumes a [Charges|Frenzy Charge] if possible to fire bolts more frequently for a shorter duration, automatically Detonate at the end of its duration, and create [ShockedGround|Shocked Ground] on Detonation."
+            }
+          ],
+          "mechanic": "shock",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -88479,6 +88132,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -90406,6 +90060,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -90572,6 +90227,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -90774,6 +90430,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         },
         {
@@ -91404,6 +91061,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -91716,6 +91374,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -92205,6 +91864,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -92599,19 +92259,6 @@
             }
           ],
           "mechanic": "totem"
-        },
-        {
-          "relation": "inflicts",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Conjure a thunderstorm which causes lightning strikes and torrential rain in an area. Enemies in the area are Drenched, causing them to become [Shock|Shocked] or [Frozen] more easily. [Plant|Plants] in the area become [Plant|Overgrown]."
-            }
-          ],
-          "mechanic": "freeze",
-          "scope": "outgoing"
         },
         {
           "relation": "inflicts",
@@ -93104,6 +92751,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -93856,6 +93504,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         },
         {
@@ -94518,6 +94167,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -94808,6 +94458,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -95284,6 +94935,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -96639,6 +96291,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -97128,6 +96781,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -97253,7 +96907,8 @@
       "source_id": "Metadata/Items/Gem/SkillGemAscendancyVividStampede",
       "name": "Vivid Stampede",
       "candidate_roles": [
-        "primary_damage"
+        "primary_damage",
+        "setup_control"
       ],
       "retrieval_terms": [
         "attack",
@@ -97297,6 +96952,19 @@
             }
           ],
           "mechanic": "lightning"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Call upon Spirits of the Stag, sending them leaping forward. Each Stag releases a damaging shockwave each time it lands, and any Stags that travel the maximum possible distance also leave behind [ShockedGround|Shocked Ground]."
+            }
+          ],
+          "mechanic": "shock",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -97564,6 +97232,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -97744,18 +97413,6 @@
             }
           ],
           "mechanic": "corpse"
-        },
-        {
-          "relation": "consumes",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Consume a [Corpse] to create a volatile core that seeks out enemies and [Ignite|Ignites] enemies near it. The core explodes at the end of its duration."
-            }
-          ],
-          "mechanic": "ignite"
         },
         {
           "relation": "has_property",
@@ -98961,6 +98618,19 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "provides",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Fire a bouncing [Grenade] that discharges an [Electrocute|Electrocuting] [Lightning] blast when its fuse expires, causing all [Lightning] [HitDamage|Hits] against enemies to contribute to [Electrocute|Electrocution] buildup for a duration."
+            }
+          ],
+          "mechanic": "electrocute",
+          "scope": "outgoing"
         }
       ],
       "compatibility": {
@@ -99298,6 +98968,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -99536,6 +99207,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -99716,6 +99388,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -99954,6 +99627,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -101855,6 +101529,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -103124,6 +102799,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -104593,6 +104269,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -105071,7 +104748,8 @@
       "source_id": "Metadata/Items/Gem/SkillGemTriggeredGasCloud",
       "name": "[DNT-UNUSED] Gas Cloud",
       "candidate_roles": [
-        "primary_damage"
+        "primary_damage",
+        "setup_control"
       ],
       "retrieval_terms": [
         "area",
@@ -105099,6 +104777,19 @@
             }
           ],
           "mechanic": "damage_over_time"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "[DNT-UNUSED] Creates a [Poison|Poison] cloud. [Burning] effects or [Detonator|Detonator] skills will cause the cloud to explode in a fiery blast. (Wording copied from Toxic Grenade.)"
+            }
+          ],
+          "mechanic": "poison",
+          "scope": "outgoing"
         }
       ],
       "compatibility": {
@@ -108716,6 +108407,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -109270,6 +108962,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -109455,6 +109148,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -109640,6 +109334,7 @@
             }
           ],
           "mechanic": "damage",
+          "condition": "base_effect_only",
           "scope": "outgoing"
         }
       ],
@@ -114467,18 +114162,6 @@
           "condition": "charge_is_consumed"
         },
         {
-          "relation": "consumes",
-          "subject": "passive",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "scraped_passive_description",
-              "value": "Grants Skill: Elemental Surge When you Consume a Charge Trigger Elemental Surge to gain 3 Lightning Surges"
-            }
-          ],
-          "mechanic": "lightning"
-        },
-        {
           "relation": "exclusive_to",
           "subject": "passive",
           "confidence": "exact",
@@ -116595,6 +116278,7 @@
       "source_id": "AscendancyMonk2Notable4",
       "name": "I am the Blizzard...",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -116613,6 +116297,23 @@
             }
           ],
           "mechanic": "invoker"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "scraped_passive_line",
+              "value": "Enemies create Chilled Ground"
+            },
+            {
+              "kind": "scraped_passive_description",
+              "value": "Gain 10% of Damage as Extra Cold Damage On Freezing Enemies create Chilled Ground"
+            }
+          ],
+          "mechanic": "chill",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -118570,18 +118271,6 @@
         "mana"
       ],
       "facts": [
-        {
-          "relation": "consumes",
-          "subject": "passive",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "scraped_passive_description",
-              "value": "Can instead consume 25% of maximum Mana to trigger Charms with insufficient charges"
-            }
-          ],
-          "mechanic": "charge"
-        },
         {
           "relation": "consumes",
           "subject": "passive",
@@ -163115,18 +162804,6 @@
         {
           "relation": "consumes",
           "subject": "passive",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "passive_line",
-              "value": "+1% Consume rage when reverting to recover x  maximum life per rage"
-            }
-          ],
-          "mechanic": "life"
-        },
-        {
-          "relation": "consumes",
-          "subject": "passive",
           "confidence": "exact",
           "evidence": [
             {
@@ -183989,12 +183666,26 @@
       "source_id": "lightning37",
       "name": "Spreading Shocks",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
         "shock"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "passive_line",
+              "value": "+50% Shock enemies in 150cm radius on shock chance"
+            }
+          ],
+          "mechanic": "shock",
+          "scope": "outgoing"
+        },
         {
           "relation": "modifies",
           "subject": "passive",
@@ -195945,10 +195636,6 @@
             {
               "kind": "stat_id",
               "value": "support_consume_power_charge_to_gain_curse_duration_+%_final"
-            },
-            {
-              "kind": "skill_description",
-              "value": "Supports [Curse] Skills you cast yourself. Supported Skills will consume [Charges|Power Charges] on use, gaining significant [Curse] duration if they do. Cannot Support Skills which consume [Charges|Power Charges]."
             }
           ],
           "mechanic": "curse"
@@ -196547,7 +196234,6 @@
       "source_id": "Metadata/Items/Gem/SupportGemAdmixture",
       "name": "Admixture",
       "candidate_roles": [
-        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -196561,32 +196247,6 @@
         "poison"
       ],
       "facts": [
-        {
-          "relation": "inflicts",
-          "subject": "supported_skill",
-          "confidence": "exact",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports Skills which can cause Damaging [HitDamage|Hits]. [Bleeding] inflicted by those [HitDamage|Hits] is more effective against [Poison|Poisoned] Enemies, and [Poison] inflicted by Supported Skills is more effective against [Bleeding] Enemies."
-            }
-          ],
-          "mechanic": "bleed",
-          "scope": "outgoing"
-        },
-        {
-          "relation": "inflicts",
-          "subject": "supported_skill",
-          "confidence": "exact",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports Skills which can cause Damaging [HitDamage|Hits]. [Bleeding] inflicted by those [HitDamage|Hits] is more effective against [Poison|Poisoned] Enemies, and [Poison] inflicted by Supported Skills is more effective against [Bleeding] Enemies."
-            }
-          ],
-          "mechanic": "poison",
-          "scope": "outgoing"
-        },
         {
           "relation": "modifies",
           "subject": "supported_skill",
@@ -200736,18 +200396,6 @@
           "mechanic": "armour_break"
         },
         {
-          "relation": "consumes",
-          "subject": "supported_skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports [Warcry] Skills. Supported Skills [Consume] [ArmourBreak|Fully Broken Armour] to trigger [Physical] Damage explosions on Enemies within their range but cannot themselves [ArmourBreak|Break Armour]."
-            }
-          ],
-          "mechanic": "physical"
-        },
-        {
           "relation": "prevents",
           "subject": "supported_skill",
           "confidence": "exact",
@@ -201369,7 +201017,6 @@
       "source_id": "Metadata/Items/Gems/SupportGemBitingFrost",
       "name": "Biting Frost I",
       "candidate_roles": [
-        "setup_control",
         "payoff",
         "enabler"
       ],
@@ -201414,19 +201061,6 @@
             }
           ],
           "mechanic": "freeze"
-        },
-        {
-          "relation": "inflicts",
-          "subject": "supported_skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports any skill that [HitDamage|Hits] enemies, causing them to deal more damage to [Frozen] enemies but consume their [Freeze]. Cannot support skills that [Consume|Consume] [Freeze|Freeze]."
-            }
-          ],
-          "mechanic": "freeze",
-          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -201560,7 +201194,6 @@
       "source_id": "Metadata/Items/Gems/SupportGemBitingFrostTwo",
       "name": "Biting Frost II",
       "candidate_roles": [
-        "setup_control",
         "payoff",
         "enabler"
       ],
@@ -201625,32 +201258,6 @@
             }
           ],
           "mechanic": "freeze"
-        },
-        {
-          "relation": "inflicts",
-          "subject": "supported_skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports any skill that [HitDamage|Hits] enemies, causing them to deal more damage to [Frozen] enemies but consume their [Freeze], leaving them [Chill|Chilled]. Cannot support skills that [Consume|Consume] [Freeze|Freeze]."
-            }
-          ],
-          "mechanic": "chill",
-          "scope": "outgoing"
-        },
-        {
-          "relation": "inflicts",
-          "subject": "supported_skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports any skill that [HitDamage|Hits] enemies, causing them to deal more damage to [Frozen] enemies but consume their [Freeze], leaving them [Chill|Chilled]. Cannot support skills that [Consume|Consume] [Freeze|Freeze]."
-            }
-          ],
-          "mechanic": "freeze",
-          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -210382,6 +209989,7 @@
       "source_id": "Metadata/Items/Gems/SupportGemCreepingChill",
       "name": "Creeping Chill",
       "candidate_roles": [
+        "setup_control",
         "payoff",
         "enabler"
       ],
@@ -210426,10 +210034,6 @@
             {
               "kind": "stat_id",
               "value": "support_creeping_chill_consume_X_power_charges_to_trigger_on_ice_crystals"
-            },
-            {
-              "kind": "skill_description",
-              "value": "Supports any Skill that creates [IceCrystals|Ice Crystals], causing that Skill to [Consume] a [Charges|Power Charge] if possible to create [ChilledGround|Chilled Ground] around the [IceCrystals|Crystal]."
             }
           ],
           "mechanic": "chill"
@@ -210461,6 +210065,19 @@
             }
           ],
           "mechanic": "power_charge"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports any Skill that creates [IceCrystals|Ice Crystals], causing that Skill to [Consume] a [Charges|Power Charge] if possible to create [ChilledGround|Chilled Ground] around the [IceCrystals|Crystal]."
+            }
+          ],
+          "mechanic": "chill",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -214310,18 +213927,6 @@
         },
         {
           "relation": "consumes",
-          "subject": "supported_skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports [Spell|Spells] that deal non-[Ailments|Ailment] damage over time, causing them to consume [Ailments] on enemies it applies damage over time [Debuff|Debuffs] to in order to deal substantially more damage over time."
-            }
-          ],
-          "mechanic": "damage_over_time"
-        },
-        {
-          "relation": "consumes",
           "subject": "skill",
           "confidence": "exact",
           "evidence": [
@@ -215662,18 +215267,6 @@
             }
           ],
           "mechanic": "ignite"
-        },
-        {
-          "relation": "consumes",
-          "subject": "supported_skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports any [Spell] that [HitDamage|Hits] enemies, causing it to [Consume|Consume] [ElementalAilments|Elemental Ailments] on hit to trigger an Elemental Discharge. Cannot support the skills of [Minion|Minions] or skills which already [Consume|Consume] [ElementalAilments|Elemental Ailments]."
-            }
-          ],
-          "mechanic": "minion"
         },
         {
           "relation": "consumes",
@@ -222075,7 +221668,6 @@
       "source_id": "Metadata/Items/Gem/SupportGemFreezefork",
       "name": "Freezefork",
       "candidate_roles": [
-        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -222090,19 +221682,6 @@
         "supportedbyfreezefork"
       ],
       "facts": [
-        {
-          "relation": "inflicts",
-          "subject": "supported_skill",
-          "confidence": "exact",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports Skills which can fire [Projectile|Projectiles]. [Projectile|Projectiles] from Supported Skills always [Fork] when the initial [Projectile] [HitDamage|Hits] [Frozen] Enemies, but Supported Skills cannot build up [Freeze] themselves."
-            }
-          ],
-          "mechanic": "freeze",
-          "scope": "outgoing"
-        },
         {
           "relation": "modifies",
           "subject": "supported_skill",
@@ -222229,10 +221808,6 @@
             {
               "kind": "stat_id",
               "value": "consume_parry_debuff_on_hit_to_gain_X_frenzy_charges"
-            },
-            {
-              "kind": "skill_description",
-              "value": "Supports [Attack|Attacks] you use or [Trigger] yourself, causing them to [Consume] the Parried [Debuff] on [HitDamage|Hit] to grant you a [Charges|Frenzy Charge]. Cannot support Skills which already [Consume] the Parried [Debuff]."
             }
           ],
           "mechanic": "frenzy_charge"
@@ -222470,6 +222045,7 @@
       "source_id": "Metadata/Items/Gems/SupportGemFrostNexus",
       "name": "Frost Nexus",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -222486,6 +222062,19 @@
         "createsgroundeffect"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports any skill that [HitDamage|Hits] enemies, causing it to create patches of [ChilledGround|Chilled Ground] around [Frozen|Frozen] enemies."
+            }
+          ],
+          "mechanic": "chill",
+          "scope": "outgoing"
+        },
         {
           "relation": "modifies",
           "subject": "supported_skill",
@@ -223439,18 +223028,6 @@
         "flask"
       ],
       "facts": [
-        {
-          "relation": "consumes",
-          "subject": "supported_skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports skills that consume [Corpse|Corpses]. Consuming [Corpse|Corpses] with supported skills grants [Flask] charges."
-            }
-          ],
-          "mechanic": "charge"
-        },
         {
           "relation": "consumes",
           "subject": "supported_skill",
@@ -226722,15 +226299,11 @@
         {
           "relation": "inflicts",
           "subject": "supported_skill",
-          "confidence": "exact",
+          "confidence": "strong",
           "evidence": [
             {
               "kind": "stat_id",
               "value": "support_ignition_chance_to_ignite_+%_final"
-            },
-            {
-              "kind": "skill_description",
-              "value": "Supports any skill that [HitDamage|Hits] enemies, making it more likely to [Ignite] and causing inflicted [Ignite|Ignites] to deal their damage more quickly."
             }
           ],
           "mechanic": "ignite",
@@ -232213,31 +231786,7 @@
               "value": "Supports any [Spell] that [HitDamage|Hits] enemies, causing it to trigger a Mana Flare on [Critical|Critical Hit]. The Mana Flare consumes your Mana to deal [Fire] damage. Cannot support the skills of [Minion|Minions]."
             }
           ],
-          "mechanic": "fire"
-        },
-        {
-          "relation": "consumes",
-          "subject": "supported_skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports any [Spell] that [HitDamage|Hits] enemies, causing it to trigger a Mana Flare on [Critical|Critical Hit]. The Mana Flare consumes your Mana to deal [Fire] damage. Cannot support the skills of [Minion|Minions]."
-            }
-          ],
           "mechanic": "mana"
-        },
-        {
-          "relation": "consumes",
-          "subject": "supported_skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports any [Spell] that [HitDamage|Hits] enemies, causing it to trigger a Mana Flare on [Critical|Critical Hit]. The Mana Flare consumes your Mana to deal [Fire] damage. Cannot support the skills of [Minion|Minions]."
-            }
-          ],
-          "mechanic": "minion"
         },
         {
           "relation": "modifies",
@@ -234565,7 +234114,6 @@
       "source_id": "Metadata/Items/Gem/SupportGemMorrigansInsight",
       "name": "Mórrigan's Insight",
       "candidate_roles": [
-        "setup_control",
         "payoff",
         "enabler"
       ],
@@ -234612,19 +234160,6 @@
             }
           ],
           "mechanic": "freeze"
-        },
-        {
-          "relation": "inflicts",
-          "subject": "supported_skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports any skill that [HitDamage|Hits] enemies, causing them to deal more damage and trigger Nature's Exchange when consuming [Freeze] on enemies. Cannot support skills that [Consume|Consume] [Freeze|Freeze]."
-            }
-          ],
-          "mechanic": "freeze",
-          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -235424,7 +234959,6 @@
       "source_id": "Metadata/Items/Gems/SupportGemOlrothsHubris",
       "name": "Olroth's Hubris",
       "candidate_roles": [
-        "setup_control",
         "payoff",
         "enabler"
       ],
@@ -235470,19 +235004,6 @@
           "mechanic": "runic_ward"
         },
         {
-          "relation": "inflicts",
-          "subject": "supported_skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports [Attack|Attacks] you use or [Trigger] yourself, causing them to cost [Ward|Runic Ward] to use but deal additional [Physical] and [Cold] damage based on their [Ward|Runic Ward] cost, in addition to causing [Physical] damage to [Contributes|Contribute] to [Freeze] buildup. Cannot Support [Channelling] Skills, [Sustained] Skills, or Skills without a cost."
-            }
-          ],
-          "mechanic": "freeze",
-          "scope": "outgoing"
-        },
-        {
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
@@ -235521,6 +235042,19 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "provides",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports [Attack|Attacks] you use or [Trigger] yourself, causing them to cost [Ward|Runic Ward] to use but deal additional [Physical] and [Cold] damage based on their [Ward|Runic Ward] cost, in addition to causing [Physical] damage to [Contributes|Contribute] to [Freeze] buildup. Cannot Support [Channelling] Skills, [Sustained] Skills, or Skills without a cost."
+            }
+          ],
+          "mechanic": "freeze",
+          "scope": "outgoing"
         },
         {
           "relation": "requires",
@@ -238393,10 +237927,6 @@
             {
               "kind": "stat_id",
               "value": "skill_consume_power_charge_to_gain_critical_strike_chance_+%_final"
-            },
-            {
-              "kind": "skill_description",
-              "value": "Supports Skills that you use yourself. Supported Skills will consume a [Charges|Power Charge] on use if possible, and will be much more likely to [Critical|Critically Hit] if they do. Supported Skills cannot generate [Charges|Power Charges]. Cannot Support Skills which consume [Charges|Power Charges]."
             }
           ],
           "mechanic": "critical_hits"
@@ -239064,18 +238594,6 @@
         {
           "relation": "consumes",
           "subject": "supported_skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports Skills you use yourself. Supported Skills consume a [Corpse] on use, dealing more [Chaos] Damage if they do."
-            }
-          ],
-          "mechanic": "chaos"
-        },
-        {
-          "relation": "consumes",
-          "subject": "supported_skill",
           "confidence": "exact",
           "evidence": [
             {
@@ -239221,10 +238739,6 @@
             {
               "kind": "stat_id",
               "value": "support_chaos_damage_+%_final_per_corpse_consumed_on_use"
-            },
-            {
-              "kind": "skill_description",
-              "value": "Supports Skills you use yourself. Supported Skills consume many [Corpse|Corpses] on use, dealing more [Chaos] Damage per [Corpse] consumed."
             }
           ],
           "mechanic": "chaos"
@@ -241250,10 +240764,6 @@
             {
               "kind": "stat_id",
               "value": "consume_endurance_charges_on_use_to_recover_%_maximum_life_per_charge"
-            },
-            {
-              "kind": "skill_description",
-              "value": "Supports Melee [Attack|Attacks] you use yourself. Supported Skills [Consume] all [Charges|Endurance Charge] on use, causing you to restore a percentage of your maximum Life for each [Charges|Charge] [Consume|Consumed]. Cannot Support Skills which consume [Charges|Endurance Charges]."
             }
           ],
           "mechanic": "life"
@@ -242676,7 +242186,6 @@
       "source_id": "Metadata/Items/Gem/SupportGemGrudge",
       "name": "Relentless Rage",
       "candidate_roles": [
-        "payoff",
         "enabler"
       ],
       "retrieval_terms": [
@@ -242684,20 +242193,7 @@
         "rage",
         "buff"
       ],
-      "facts": [
-        {
-          "relation": "consumes",
-          "subject": "supported_skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports Skills you use yourself. On spending [Rage] with any skill you will gain a [Buff]. Using Supported Skills consumes this [Buff] to grant you [Rage]."
-            }
-          ],
-          "mechanic": "rage"
-        }
-      ],
+      "facts": [],
       "compatibility": {
         "equipment": {
           "is_unrestricted": true
@@ -244526,30 +244022,6 @@
               "value": "Supports [Attack|Attacks] you use yourself, causing them to [Consume] [ArmourBreak|Fully Broken Armour] on enemies to fire a nova of runic [Projectile|Projectiles] at the cost of [Ward|Runic Ward]. The [Projectile|Projectiles] cannot [HitDamage|Hit] the enemy from which they originated. Cannot support skills that [Consume|Consume] [ArmourBreak|Broken Armour]."
             }
           ],
-          "mechanic": "fire"
-        },
-        {
-          "relation": "consumes",
-          "subject": "supported_skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports [Attack|Attacks] you use yourself, causing them to [Consume] [ArmourBreak|Fully Broken Armour] on enemies to fire a nova of runic [Projectile|Projectiles] at the cost of [Ward|Runic Ward]. The [Projectile|Projectiles] cannot [HitDamage|Hit] the enemy from which they originated. Cannot support skills that [Consume|Consume] [ArmourBreak|Broken Armour]."
-            }
-          ],
-          "mechanic": "projectile"
-        },
-        {
-          "relation": "consumes",
-          "subject": "supported_skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports [Attack|Attacks] you use yourself, causing them to [Consume] [ArmourBreak|Fully Broken Armour] on enemies to fire a nova of runic [Projectile|Projectiles] at the cost of [Ward|Runic Ward]. The [Projectile|Projectiles] cannot [HitDamage|Hit] the enemy from which they originated. Cannot support skills that [Consume|Consume] [ArmourBreak|Broken Armour]."
-            }
-          ],
           "mechanic": "runic_ward"
         },
         {
@@ -245588,7 +245060,6 @@
       "source_id": "Metadata/Items/Gems/SupportGemScouringFlame",
       "name": "Scouring Flame",
       "candidate_roles": [
-        "setup_control",
         "payoff",
         "enabler"
       ],
@@ -245618,19 +245089,6 @@
             }
           ],
           "mechanic": "runic_ward"
-        },
-        {
-          "relation": "inflicts",
-          "subject": "supported_skill",
-          "confidence": "exact",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports any skill that [HitDamage|Hits] enemies, causing inflicted [Ignite|Ignites] to deal more damage but the skill to gain a [Ward|Runic Ward] cost."
-            }
-          ],
-          "mechanic": "ignite",
-          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -245743,7 +245201,6 @@
       "source_id": "Metadata/Items/Gems/SupportGemSearingFlame",
       "name": "Searing Flame I",
       "candidate_roles": [
-        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -245755,19 +245212,6 @@
         "ignite"
       ],
       "facts": [
-        {
-          "relation": "inflicts",
-          "subject": "supported_skill",
-          "confidence": "exact",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports any skill that [HitDamage|Hits] enemies, causing inflicted [Ignite|Ignites] to deal more damage but its [HitDamage|Hits] to deal less damage."
-            }
-          ],
-          "mechanic": "ignite",
-          "scope": "outgoing"
-        },
         {
           "relation": "modifies",
           "subject": "supported_skill",
@@ -245858,7 +245302,6 @@
       "source_id": "Metadata/Items/Gems/SupportGemSearingFlameTwo",
       "name": "Searing Flame II",
       "candidate_roles": [
-        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -245870,19 +245313,6 @@
         "ignite"
       ],
       "facts": [
-        {
-          "relation": "inflicts",
-          "subject": "supported_skill",
-          "confidence": "exact",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports any skill that [HitDamage|Hits] enemies, causing inflicted [Ignite|Ignites] to deal more damage but its [HitDamage|Hits] to deal less damage."
-            }
-          ],
-          "mechanic": "ignite",
-          "scope": "outgoing"
-        },
         {
           "relation": "modifies",
           "subject": "supported_skill",
@@ -252281,6 +251711,19 @@
             }
           ],
           "mechanic": "freeze"
+        },
+        {
+          "relation": "provides",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports Skills that can cause [HitDamage|Damaging Hits], granting extra [Chaos] damage and causing [Chaos] damage to [Contributes|Contribute] to [Freeze|Freeze Buildup]."
+            }
+          ],
+          "mechanic": "freeze",
+          "scope": "outgoing"
         }
       ],
       "compatibility": {
@@ -252378,10 +251821,6 @@
             {
               "kind": "stat_id",
               "value": "skill_consume_frenzy_charge_to_armour_break_for_%_of_physical_damage"
-            },
-            {
-              "kind": "skill_description",
-              "value": "Supports Skills you use yourself which can cause Damaging [HitDamage|Hits]. Supported Skills consume a [Charges|Frenzy Charge] on use to powerfully [ArmourBreak|Break Armour]."
             }
           ],
           "mechanic": "armour_break"
@@ -253226,18 +252665,6 @@
             }
           ],
           "mechanic": "armour"
-        },
-        {
-          "relation": "consumes",
-          "subject": "supported_skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports [Attack] Skills. Supported Skills [Consume] [Maim] on hit, [ArmourBreak|Breaking] a percentage of the [Maim|Maimed] target's [Armour] in doing so. Supported Skills cannot themselves inflict [Maim]."
-            }
-          ],
-          "mechanic": "armour_break"
         },
         {
           "relation": "consumes",
@@ -260848,7 +260275,10 @@
       "content_type": "unique",
       "source_id": "Beira's Anguish||Dousing Charm",
       "name": "Beira's Anguish",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "setup_control",
+        "enabler"
+      ],
       "retrieval_terms": [
         "charge",
         "ignite",
@@ -260856,6 +260286,19 @@
         "ezomyte_charm"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "item",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Creates IgnitedGround for 4 seconds when used, Ignite enemies as though dealing Fire damage equal to 500% of your maximum Life"
+            }
+          ],
+          "mechanic": "ignite",
+          "scope": "outgoing"
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -261178,7 +260621,9 @@
       "content_type": "unique",
       "source_id": "Beyond Reach||Visceral Quiver",
       "name": "Beyond Reach",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "attack",
         "chaos",
@@ -261200,6 +260645,32 @@
             }
           ],
           "mechanic": "quiver"
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Chaos Damage from HitDamage also Contributes to Electrocute Buildup"
+            }
+          ],
+          "mechanic": "electrocute",
+          "scope": "outgoing"
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Chaos Damage from HitDamage also Contributes to Freeze Buildup"
+            }
+          ],
+          "mechanic": "freeze",
+          "scope": "outgoing"
         }
       ],
       "compatibility": {
@@ -267780,6 +267251,10 @@
             {
               "kind": "unique_mod",
               "value": "24% increased chance to Shock"
+            },
+            {
+              "kind": "unique_mod",
+              "value": "Trigger Spark Skill on killing a Shock Enemy"
             }
           ],
           "mechanic": "shock",
@@ -269910,7 +269385,9 @@
       "content_type": "unique",
       "source_id": "Frostbreath||Slim Mace",
       "name": "Frostbreath",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "all_damage",
         "cold",
@@ -269934,6 +269411,19 @@
             }
           ],
           "mechanic": "mace"
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "DamageTypes from HitDamage with this Weapon Contributes to Freeze Buildup"
+            }
+          ],
+          "mechanic": "freeze",
+          "scope": "outgoing"
         }
       ],
       "compatibility": {
@@ -273615,6 +273105,19 @@
         {
           "relation": "provides",
           "subject": "item",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Modifiers to Stun Buildup apply to Freeze Buildup instead for Parry"
+            }
+          ],
+          "mechanic": "freeze",
+          "scope": "outgoing"
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
           "confidence": "exact",
           "evidence": [
             {
@@ -274049,7 +273552,9 @@
       "content_type": "unique",
       "source_id": "Kitoko's Current||Jewelled Gloves",
       "name": "Kitoko's Current",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "dexterity",
         "electrocution",
@@ -274069,6 +273574,19 @@
             }
           ],
           "mechanic": "gloves"
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Lightning damage from HitDamage Contributes to Electrocute Buildup"
+            }
+          ],
+          "mechanic": "electrocute",
+          "scope": "outgoing"
         }
       ],
       "compatibility": {
@@ -285868,18 +285386,6 @@
           "mechanic": "corpse"
         },
         {
-          "relation": "consumes",
-          "subject": "item",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "unique_mod",
-              "value": "Every 3 seconds, Consume a nearby Corpse to Recover 20% of maximum Life"
-            }
-          ],
-          "mechanic": "life"
-        },
-        {
           "relation": "occupies",
           "subject": "item",
           "confidence": "exact",
@@ -286957,30 +286463,6 @@
             }
           ],
           "mechanic": "life_flask"
-        },
-        {
-          "relation": "consumes",
-          "subject": "item",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "unique_mod",
-              "value": "Bow Attack consume 10% of your maximum Life Flask Charges if possible to deal added Physical damage equal to 8% of Flask's Life Recovery amount"
-            }
-          ],
-          "mechanic": "life_recovery"
-        },
-        {
-          "relation": "consumes",
-          "subject": "item",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "unique_mod",
-              "value": "Bow Attack consume 10% of your maximum Life Flask Charges if possible to deal added Physical damage equal to 8% of Flask's Life Recovery amount"
-            }
-          ],
-          "mechanic": "physical"
         },
         {
           "relation": "occupies",
@@ -288222,6 +287704,19 @@
             }
           ],
           "mechanic": "helmet"
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Lightning Damage from HitDamage Contributes to Freeze Buildup instead of Shock Chance"
+            }
+          ],
+          "mechanic": "freeze",
+          "scope": "outgoing"
         },
         {
           "relation": "replaces",

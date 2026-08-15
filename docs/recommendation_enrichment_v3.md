@@ -113,6 +113,9 @@ The generator is intentionally conservative:
 
 - structured datamined constraints are exact
 - explicit, deterministic text/stat interpretations are exact or strong
+- explicit ailment application and ailment-ground/cloud creation become `inflicts`; text that only enables ailment buildup becomes `provides`
+- consume parsing is clause-local, so a later effect such as Chilled Ground is not mislabeled as the consumed resource
+- `base_deal_no_damage` is scoped to `base_effect_only`; it does not disqualify a composite skill whose triggered or secondary effect deals damage
 - broad mechanical mentions are inferred and cannot establish hard fulfillment
 - unparsed evidence is retained in the coverage report
 

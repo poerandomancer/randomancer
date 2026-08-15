@@ -253,6 +253,114 @@
       ]
     },
     {
+      "id": "skill_chilled_ground_application",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "Hitting a [ParriedDebuff|Parried] target [Consume|Consumes] the [Debuff] to cause an explosion of frost and leave [ChilledGround|Chilled Ground].",
+      "expected_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "chill"
+        }
+      ],
+      "forbidden_facts": [
+        {
+          "relation": "consumes",
+          "mechanic": "chill"
+        }
+      ]
+    },
+    {
+      "id": "skill_direct_chill_application",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "The fragments [Chill] nearby enemies.",
+      "expected_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "chill"
+        }
+      ]
+    },
+    {
+      "id": "skill_poison_cloud_application",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "Fire a bouncing grenade that causes a burst of [Poison|Poison] gas and leaves behind a growing [Poison|Poison] cloud.",
+      "expected_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "poison"
+        }
+      ]
+    },
+    {
+      "id": "skill_electrocute_buildup_enabler",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "Causes all Lightning Hits against enemies to contribute to [Electrocute|Electrocution] buildup for a duration.",
+      "expected_facts": [
+        {
+          "relation": "provides",
+          "mechanic": "electrocute"
+        }
+      ],
+      "forbidden_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "electrocute"
+        }
+      ]
+    },
+    {
+      "id": "base_effect_no_damage_is_scoped",
+      "source_kind": "stat_id",
+      "subject": "skill",
+      "value": "base_deal_no_damage",
+      "expected_facts": [
+        {
+          "relation": "prevents",
+          "mechanic": "damage",
+          "condition": "base_effect_only"
+        }
+      ]
+    },
+    {
+      "id": "cold_damage_does_not_prove_chill",
+      "source_kind": "active_skill_type",
+      "subject": "skill",
+      "value": "Cold",
+      "expected_facts": [
+        {
+          "relation": "has_property",
+          "mechanic": "cold"
+        }
+      ],
+      "forbidden_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "chill"
+        },
+        {
+          "relation": "provides",
+          "mechanic": "chill"
+        }
+      ]
+    },
+    {
+      "id": "conditional_ailment_reference_is_not_application",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "While active, gains Energy when you [Shock|Shock] enemies and triggers socketed spells on reaching maximum Energy.",
+      "expected_facts": [],
+      "forbidden_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "shock"
+        }
+      ]
+    },
+    {
       "id": "runic_ward_recovery",
       "source_kind": "skill_description",
       "subject": "skill",
@@ -345,6 +453,72 @@
       "entity_name": "Runic Infusion",
       "relation": "consumes",
       "mechanic": "runic_ward"
+    },
+    {
+      "entity_name": "Fangs of Frost",
+      "relation": "inflicts",
+      "mechanic": "chill"
+    },
+    {
+      "entity_name": "Glacial Lance",
+      "relation": "inflicts",
+      "mechanic": "chill"
+    },
+    {
+      "entity_name": "Gas Grenade",
+      "relation": "inflicts",
+      "mechanic": "poison"
+    },
+    {
+      "entity_name": "Voltaic Grenade",
+      "relation": "provides",
+      "mechanic": "electrocute"
+    },
+    {
+      "entity_name": "Spearfield",
+      "relation": "prevents",
+      "mechanic": "damage",
+      "condition": "base_effect_only"
+    },
+    {
+      "entity_name": "Galvanic Shards",
+      "relation": "prevents",
+      "mechanic": "damage",
+      "condition": "base_effect_only"
+    }
+  ],
+  "catalog_forbidden_assertions": [
+    {
+      "entity_name": "Fangs of Frost",
+      "relation": "consumes",
+      "mechanic": "chill"
+    },
+    {
+      "entity_name": "Voltaic Grenade",
+      "relation": "inflicts",
+      "mechanic": "electrocute"
+    },
+    {
+      "entity_name": "Spearfield",
+      "relation": "prevents",
+      "mechanic": "damage",
+      "condition": null
+    },
+    {
+      "entity_name": "Galvanic Shards",
+      "relation": "prevents",
+      "mechanic": "damage",
+      "condition": null
+    },
+    {
+      "entity_name": "Cast on Freeze",
+      "relation": "inflicts",
+      "mechanic": "freeze"
+    },
+    {
+      "entity_name": "Cast on Shock",
+      "relation": "inflicts",
+      "mechanic": "shock"
     }
   ]
 }

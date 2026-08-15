@@ -629,6 +629,12 @@ def parse_stat_id(value: Any, subject: str = "player") -> list[dict[str, Any]]:
             condition = _condition_from_normalized(normalized)
             if normalized.startswith("cannot_damage_"):
                 condition = f"target_is_{normalized.split('cannot_damage_', 1)[1]}"
+            elif normalized == "base_deal_no_damage":
+                # Many active gems delegate damage to a spawned hazard,
+                # ammunition effect, or linked subskill. This stat describes
+                # only the parent effect and must not prohibit the entity from
+                # serving as a primary damage recommendation.
+                condition = "base_effect_only"
             facts.append(
                 make_fact(
                     "prevents",
@@ -745,6 +751,129 @@ def parse_stat_id(value: Any, subject: str = "player") -> list[dict[str, Any]]:
     return merge_facts(facts)
 
 
+AILMENT_TEXT_TERMS: dict[str, str] = {
+    "ignite": r"ignite|ignites|igniting",
+    "bleed": r"bleed|bleeds|bleeding",
+    "poison": r"poison|poisons|poisoning",
+    "chill": r"chill|chills|chilling",
+    "freeze": r"freeze|freezes|freezing",
+    "shock": r"shock|shocks|shocking",
+    "electrocute": r"electrocute|electrocutes|electrocuting|electrocution",
+}
+
+
+def _consume_mechanics_from_text(normalized: str) -> list[str]:
+    consumed: list[str] = []
+    marker = re.compile(r"(?:^|_)(?:consume|consumes|consuming|consumed)(?:_|$)")
+    boundary = re.compile(
+        r"_(?:to|on|but|when|while|if|after|before|causing|causes|cause|grant|grants|trigger|triggers|reload|reloads)(?:_|$)"
+    )
+    for match in marker.finditer(normalized):
+        tail = normalized[match.end():]
+        local = boundary.split(tail, maxsplit=1)[0]
+        local = "_".join(local.split("_")[:18])
+        consumed.extend(mechanics_in(local))
+    return list(dict.fromkeys(consumed))
+
+
+def _has_direct_ailment_application(normalized: str, mechanic: str) -> bool:
+    application = re.compile(
+        rf"(?:^|_){mechanic}(?:_(?:all|nearby))?_(?:enemy|enemies|target|targets)(?:_|$)"
+    )
+    contextual_reference = re.compile(
+        r"(?:when_you|if_you|whenever_you|skills?_which|skills?_that_can|"
+        r"can|cannot|unable_to|against|all|blind)$"
+    )
+    for match in application.finditer(normalized):
+        prefix = normalized[:match.start()].rstrip("_")
+        nearby_context = bool(
+            re.search(r"(?:when|if|whenever)_you(?:_[a-z0-9]+){0,8}$", prefix)
+            or re.search(r"skills?(?:_[a-z0-9]+){0,4}_(?:which|that_can)(?:_[a-z0-9]+){0,4}$", prefix)
+        )
+        if not nearby_context and not contextual_reference.search(prefix):
+            return True
+    return False
+
+
+def _text_ailment_facts(
+    text: str,
+    normalized: str,
+    *,
+    source_kind: str,
+    subject: str,
+) -> list[dict[str, Any]]:
+    facts: list[dict[str, Any]] = []
+    for mechanic, terms in AILMENT_TEXT_TERMS.items():
+        buildup = bool(
+            re.search(
+                rf"(?:apply|applies|applying|contribute|contributes|contributing)"
+                rf"(?:_[a-z0-9]+){{0,5}}_(?:{terms})(?:_[a-z0-9]+){{0,2}}_buildup(?:_|$)",
+                normalized,
+            )
+        )
+        if buildup:
+            facts.append(
+                make_fact(
+                    "provides",
+                    subject=subject,
+                    source_kind=source_kind,
+                    source_value=text,
+                    mechanic=mechanic,
+                    confidence="strong",
+                    scope="outgoing",
+                )
+            )
+
+        explicit_application = bool(
+            re.search(
+                rf"(?:always|chance_to|chance_to_cause|inflict|inflicts|inflicting|causing_them_to)"
+                rf"(?:_[a-z0-9]+){{0,8}}_(?:{terms})(?:_|$)",
+                normalized,
+            )
+            or _has_direct_ailment_application(normalized, mechanic)
+        )
+
+        delivered_environment = False
+        if mechanic == "chill":
+            delivered_environment = bool(
+                re.search(
+                    r"(?:leave|leaves|leaving|create|creates|creating)"
+                    r"(?:_[a-z0-9]+){0,8}_chilled_ground(?:_|$)",
+                    normalized,
+                )
+            )
+        elif mechanic == "shock":
+            delivered_environment = bool(
+                re.search(
+                    r"(?:leave|leaves|leaving|create|creates|creating)"
+                    r"(?:_[a-z0-9]+){0,8}_shocked_ground(?:_|$)",
+                    normalized,
+                )
+            )
+        elif mechanic == "poison":
+            delivered_environment = bool(
+                re.search(
+                    r"(?:cause|causes|causing|create|creates|creating|leave|leaves|leaving|release|releases)"
+                    r"(?:_[a-z0-9]+){0,10}_poison(?:_poison)?_(?:gas|cloud)(?:_|$)",
+                    normalized,
+                )
+            )
+
+        if explicit_application or delivered_environment:
+            facts.append(
+                make_fact(
+                    "inflicts",
+                    subject=subject,
+                    source_kind=source_kind,
+                    source_value=text,
+                    mechanic=mechanic,
+                    confidence="exact" if "always" in normalized or "inflict" in normalized else "strong",
+                    scope="outgoing",
+                )
+            )
+    return facts
+
+
 def parse_text(value: Any, source_kind: str, subject: str) -> list[dict[str, Any]]:
     text = str(value or "").strip()
     normalized = normalized_phrase(text)
@@ -775,8 +904,7 @@ def parse_text(value: Any, source_kind: str, subject: str) -> list[dict[str, Any
             )
 
     if "consume" in normalized:
-        consume_tail = normalized.split("consume", 1)[1]
-        consumed = mechanics_in(consume_tail)
+        consumed = _consume_mechanics_from_text(normalized)
         if "elemental_infusion" in consumed:
             consumed = ["elemental_infusion"]
         for mechanic in consumed:
@@ -792,20 +920,15 @@ def parse_text(value: Any, source_kind: str, subject: str) -> list[dict[str, Any
                     )
                 )
 
-    if not is_prohibition and re.search(r"(?:always|chance_to|chance_to_cause|inflict|inflicts|causing_them_to).*?(ignite|bleed|bleeding|poison|chill|freeze|shock|electrocute)", normalized):
-        for mechanic in mechanics_in(text):
-            if mechanic in {"ignite", "bleed", "poison", "chill", "freeze", "shock", "electrocute"}:
-                facts.append(
-                    make_fact(
-                        "inflicts",
-                        subject=subject,
-                        source_kind=source_kind,
-                        source_value=text,
-                        mechanic=mechanic,
-                        confidence="exact" if "always" in normalized or "inflict" in normalized else "strong",
-                        scope="outgoing",
-                    )
-                )
+    if not is_prohibition:
+        facts.extend(
+            _text_ailment_facts(
+                text,
+                normalized,
+                source_kind=source_kind,
+                subject=subject,
+            )
+        )
 
     if re.search(r"(?:^|_)on_hit(?:_|$)", normalized) and ("always" in normalized or "chance" in normalized):
         facts.append(

@@ -186,7 +186,7 @@ function allowedRelationsForOffense(category) {
     case 'damage_type':
       return ['fulfills', 'has_property', 'converts', 'provides'];
     case 'ailment':
-      return ['fulfills', 'inflicts'];
+      return ['fulfills', 'inflicts', 'provides'];
     case 'scaling':
       return ['fulfills', 'modifies', 'provides', 'has_property'];
     case 'archetype':
@@ -423,6 +423,7 @@ function isDirectlyUsableActive(entity) {
     fact?.relation === 'prevents'
     && normalizeToken(fact?.mechanic) === 'damage'
     && HARD_CONFIDENCE.has(fact?.confidence)
+    && fact?.condition !== 'base_effect_only'
   );
   return !hardPreventsDamage;
 }

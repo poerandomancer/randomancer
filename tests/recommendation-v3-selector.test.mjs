@@ -293,6 +293,51 @@ test('only explicit requires facts become unresolved dependencies', () => {
   assert.ok(!result.unresolved.some((entry) => entry.obligationId === 'dependency:infusion'));
 });
 
+test('a no-damage base effect does not disqualify the damaging composite skill', () => {
+  const spearEquipment = {
+    is_unrestricted: false,
+    mainhand_tags_any_of: ['spear'],
+    offhand_tags_any_of: [],
+    allowed_weapon_tags_any_of: ['spear'],
+    display: 'Requires Spear'
+  };
+  const fixtures = catalog([
+    entity({
+      id: 'scoped-no-damage',
+      name: 'Scoped No Damage',
+      facts: [
+        { relation: 'has_property', subject: 'skill', mechanic: 'physical', confidence: 'exact' },
+        {
+          relation: 'prevents',
+          subject: 'skill',
+          mechanic: 'damage',
+          condition: 'base_effect_only',
+          confidence: 'exact'
+        }
+      ],
+      equipment: spearEquipment,
+      types: ['Attack', 'Damage', 'Spear']
+    }),
+    entity({
+      id: 'unscoped-no-damage',
+      name: 'Unscoped No Damage',
+      facts: [
+        { relation: 'has_property', subject: 'skill', mechanic: 'physical', confidence: 'exact' },
+        { relation: 'prevents', subject: 'skill', mechanic: 'damage', confidence: 'exact' }
+      ],
+      equipment: spearEquipment,
+      types: ['Attack', 'Damage', 'Spear']
+    })
+  ]);
+  const result = selectRecommendationPackageV3(fixtures, {
+    weapon: 'Spear',
+    offenseList: ['Physical Damage']
+  }, { offenseInventory: offenseInventory() });
+
+  assert.equal(result.primarySkill?.name, 'Scoped No Damage');
+  assert.equal(result.diagnostics.rankedCandidates, 1);
+});
+
 test('runtime adapter preserves package diagnostics while using the current skill field', () => {
   const packageResult = {
     schemaVersion: 'recommendation-package-v3.0.0',
@@ -388,6 +433,40 @@ test('committed catalog never selects Chaos Bolt for Bow or Unearth for Spear', 
     const selected = realCatalog.entities.find((entry) => entry.id === spear.primarySkill.entityId);
     assert.equal(evaluateDeliveryCompatibilityV3(selected, { weapon: 'Spear' }).ok, true);
   }
+});
+
+test('committed catalog keeps the reported spear and crossbow options in the selectable band', async () => {
+  const [realCatalog, realOffense] = await Promise.all([
+    readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
+    readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
+  ]);
+  const selectedNames = (snapshot) => {
+    const names = new Set();
+    let diagnostics = null;
+    for (let index = 0; index < 64; index += 1) {
+      const result = selectRecommendationPackageV3(realCatalog, snapshot, {
+        offenseInventory: realOffense,
+        selectionSeed: `reported-roll-${index}`
+      });
+      if (result.primarySkill?.name) names.add(result.primarySkill.name);
+      diagnostics = result.diagnostics;
+    }
+    return { names, diagnostics };
+  };
+
+  const spear = selectedNames({ weapon: 'Spear', offenseList: ['Chill'] });
+  assert.deepEqual([...spear.names].sort(), ['Fangs of Frost', 'Glacial Lance']);
+  assert.equal(spear.diagnostics.rankedCandidates, 2);
+  assert.equal(spear.diagnostics.shortlistedCandidates, 2);
+
+  const crossbow = selectedNames({
+    weapon: 'Crossbow',
+    offenseList: ['Poison', 'Electrocute']
+  });
+  assert.ok(crossbow.names.has('Gas Grenade'));
+  assert.ok(crossbow.names.has('Voltaic Grenade'));
+  assert.equal(crossbow.diagnostics.rankedCandidates, 3);
+  assert.equal(crossbow.diagnostics.shortlistedCandidates, 3);
 });
 
 test('committed catalog does not promote a non-damaging setup spell to primary damage', async () => {
