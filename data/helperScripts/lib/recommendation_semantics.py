@@ -943,6 +943,22 @@ def parse_text(value: Any, source_kind: str, subject: str) -> list[dict[str, Any
                     )
                 )
 
+    stored_damage_requirement = re.search(
+        r"(?:store|stores|stored|storing)(?:_[a-z0-9]+){0,10}_(ignite|bleed|poison)_damage_(?:you_)?(?:deal|dealt)",
+        normalized,
+    )
+    if stored_damage_requirement:
+        facts.append(
+            make_fact(
+                "requires",
+                subject=subject,
+                source_kind=source_kind,
+                source_value=text,
+                mechanic=stored_damage_requirement.group(1),
+                confidence="strong",
+            )
+        )
+
     if not is_prohibition:
         facts.extend(
             _text_ailment_facts(

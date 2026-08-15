@@ -13,7 +13,7 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5019,
+    "fact_count": 5020,
     "fact_relation_counts": {
       "consumes": 351,
       "converts": 112,
@@ -27,7 +27,7 @@
       "prevents": 374,
       "provides": 292,
       "replaces": 27,
-      "requires": 52
+      "requires": 53
     },
     "candidate_role_counts": {
       "defense": 420,
@@ -321,7 +321,7 @@
     },
     "skill_descriptions": {
       "evidence_count": 1115,
-      "fact_count": 339,
+      "fact_count": 340,
       "structured_count": 261,
       "unparsed_count": 131,
       "recognized_unstructured_count": 723,

@@ -64,6 +64,7 @@ function skillRolePrefix(entry, index, weaponSet) {
   const role = entry?.recommendationV3?.assignedRole;
   const roleLabel = {
     primary_damage: 'Primary',
+    secondary_damage: 'Secondary',
     setup_control: 'Setup',
     payoff: 'Payoff',
     enabler: 'Enabler'

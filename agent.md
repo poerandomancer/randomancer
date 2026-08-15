@@ -67,10 +67,12 @@ See `docs/cohesion_selection.md` for the canonical selection contract.
 - Treat `Totemable` as compatibility, never totem identity. Totem fulfillment requires explicit creation or provision evidence.
 - Exclude recommendation entities tagged with seasonal source `kalguuran` until the content is deliberately re-enabled; retain those entities in enrichment and Codex data.
 - If v3 cannot select a legal primary, preserve the existing canonical recommendation and attach unresolved diagnostics instead of replacing it with an empty list.
-- The first package expansion may add at most one active setup/enabler companion. It must resolve a typed missing Offense application or explicit primary dependency, remain equipment-legal and nonseasonal, and never be added as thematic filler.
-- Preserve package order and role metadata in the canonical skill list: primary damage first, supporting setup/enabler second.
+- Build the viable active-skill pool before selection from weapon/access legality, permanent-content eligibility, direct Offense evidence, native carriers, and typed setup/payoff relationships.
+- Jointly score singleton and two-skill packages. Strongly prefer two skills when the second adds hard Offense coverage or a typed cross-skill relationship, but never add an unrelated skill to satisfy a quota.
+- Prefer coherent setup/payoff and enabler relationships over comparable parallel skills. Parallel skills remain legal when they add real coverage, including separate rolled Offenses.
+- Preserve package order and contextual role metadata in the canonical skill list: primary damage first, then Secondary, Setup, Payoff, Enabler, or Utility as appropriate.
 - Recommendation variation may sample only within a high-quality, fully legal shortlist. Persist the per-roll selection seed, suppress immediate repeats when equivalent alternatives exist, and never use Cohesion to vary recommendation quality.
-- `data/enriched/recommendation_catalog_v3.json` is the additive semantic migration boundary for the package solver. The feature-flagged runtime slice consumes it for a seed-reproducible, equipment-legal primary plus at most one evidence-backed setup/enabler companion; the remaining live selectors stay unchanged.
+- `data/enriched/recommendation_catalog_v3.json` is the additive semantic migration boundary for the package solver. The feature-flagged runtime slice consumes it for a seed-reproducible, equipment-legal one- or two-skill package; the remaining live selectors stay unchanged.
 - Enable the migration slice explicitly with `?recommendationV3=1`. Do not make the large catalog part of the default startup payload until rollout evidence supports that change.
 - Scraped ascendancy descriptions and unique modifiers are intentional augmentation sources where datamined descriptions are incomplete or server-provided.
 

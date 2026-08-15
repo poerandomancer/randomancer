@@ -23,7 +23,7 @@ Scraping and datamining provide evidence. They do not decide whether incidental 
 - `data/config/recommendation_fact_overrides_v3.json` is the curated exception boundary.
 - `data/config/recommendation_semantic_fixtures_v3.json` contains parser and catalog regression fixtures.
 
-The catalog is the data boundary consumed by the feature-flagged package-solver migration. The current runtime slice selects a primary skill and, only when typed evidence identifies a concrete missing Offense application or primary dependency, at most one supporting setup/enabler skill. Later slices will assign broader utility and survivability roles.
+The catalog is the data boundary consumed by the feature-flagged package-solver migration. The current runtime slice builds and scores complete one- or two-skill packages. Support-gem selection and broader survivability assignment remain later slices.
 
 ## Runtime migration slice
 
@@ -32,24 +32,28 @@ Append `?recommendationV3=1` to opt into the experimental selector. The normal a
 The first slice:
 
 - converts canonical Offense plus primary equipment into explicit obligations
-- considers active skills with a `primary_damage` candidate role
-- enforces equipment, ascendancy, and weapon-delivery compatibility before ranking
+- builds an access-legal, nonseasonal active-skill pool from direct Offense evidence, native damage carriers, and a narrow closure over typed setup costs and prerequisites
+- requires at least one package member with a legal `primary_damage` role and weapon delivery; unrestricted setup, payoff, and enabler skills still need equipment and ascendancy access
 - uses only exact or strong typed facts as fulfillment evidence
 - distinguishes direct fulfillment from native damage carriers: a Lightning skill can carry Shock or Electrocute, for example, but the corresponding ailment remains unresolved until another package piece explicitly applies it
 - treats `prevents` as a hard conflict for the matching Offense
 - excludes source-tagged Kalguuran gems from recommendation eligibility while retaining them in the catalog and Codex
 - ignores Cohesion entirely
-- samples from a narrow high-quality shortlist using a persisted per-roll seed, while suppressing an immediate repeat when an equivalent alternative exists
-- selects at most one legal, nonseasonal setup/enabler companion when it explicitly resolves a primary carrier gap, another missing Offense, or a typed primary dependency
-- never adds a second skill merely for thematic overlap or variety
-- writes the ordered primary-plus-companion package through the existing canonical recommendation contract
+- enumerates legal singleton and ordered two-skill packages before choosing either skill
+- scores package-wide direct coverage, carrier coverage, directed setup/payoff edges, prerequisite resolution, complementary roles, and unresolved costs
+- strongly prefers two skills when the second contributes typed Offense coverage or a real cross-skill relationship, but lets a singleton win instead of adding unrelated filler
+- permits parallel damage skills when they add real Offense coverage, while ranking explicit setup/payoff and enabler relationships above comparable parallel packages
+- samples complete packages from a narrow high-quality shortlist using a persisted per-roll seed, while suppressing an immediate primary repeat when an equivalent package exists
+- writes the ordered primary-plus-supporting package through the existing canonical recommendation contract
 - records complementary defense, recovery, and package dependencies as unresolved instead of filling them with weak candidates
 
 Weapon delivery is intentionally stricter than technical equip legality. Generic spells are eligible for Wand, Sceptre, and caster Staff rolls. Martial rolls require structured evidence that the skill belongs to the selected weapon family, either through its active skill types or its equipment requirement. A spell may cross that boundary only when the catalog explicitly proves the martial-weapon relationship. If no direct fulfiller exists, a legal native damage carrier may be selected without claiming fulfillment. If no legal carrier exists either, the selector reports the obligation as unresolved.
 
-That delivery rule identifies the primary damage skill. A supporting setup skill is instead checked for explicit equipment and ascendancy access, so an otherwise unrestricted curse, mark, or spell can accompany a martial primary. The companion still needs hard evidence that it resolves a package target; unrestricted access alone never earns a slot. With two Offenses, the companion prefers representing the component the primary does not cover at all before doubling down on an ailment for which the primary already supplies a native damage carrier.
+That delivery rule identifies the primary damage position in every candidate package. A supporting skill is instead checked for explicit equipment and ascendancy access, so an otherwise unrestricted curse, mark, or spell can accompany a martial primary. Unrestricted access alone never earns a slot: the supporting skill must add hard Offense evidence or participate in a typed supply-to-require/consume relationship. Damage-type `has_property` and native-carrier evidence only count from a supporting skill when that skill is itself legal damage delivery; this prevents a passive aura or curse from masquerading as a second damage skill.
 
-The primary Build Card is authoritative during this migration. Legacy recommendation rendering may still compute its former result, but the v3 runtime adapter replaces the canonical skill ideas after Offense normalization only when v3 has selected a primary. The card preserves package order and labels the roles as Primary and Setup/Enabler. An unresolved v3 result records diagnostics without erasing the existing recommendation.
+The solver evaluates both relationship directions. A setup can supply a state or resource consumed by the primary, while the primary can establish a state consumed by a payoff. Generic `charge` evidence is deliberately too broad to bridge specific Power, Frenzy, or Endurance Charge costs. Package-wide direct Offense fulfillment outranks a superficially synergistic package that still leaves a rolled Offense unapplied.
+
+The primary Build Card is authoritative during this migration. Legacy recommendation rendering may still compute its former result, but the v3 runtime adapter replaces the canonical skill ideas after Offense normalization only when v3 has selected a primary. The card preserves package order and labels contextual roles as Primary, Secondary, Setup, Payoff, or Enabler. An unresolved v3 result records diagnostics without erasing the existing recommendation.
 
 ## Entity contract
 
@@ -104,6 +108,7 @@ Roles are possible uses, not permanent labels. A skill that applies Shock can be
 Supported roles are:
 
 - primary damage
+- secondary damage (assigned contextually when the second skill is parallel damage rather than setup or payoff)
 - setup/control
 - payoff
 - enabler
@@ -125,6 +130,7 @@ The generator is intentionally conservative:
 - explicit, deterministic text/stat interpretations are exact or strong
 - explicit ailment application and ailment-ground/cloud creation become `inflicts`; text that only enables ailment buildup becomes `provides`
 - consume parsing is clause-local, so a later effect such as Chilled Ground is not mislabeled as the consumed resource
+- descriptions that store Ignite, Bleed, or Poison damage dealt record that ailment as an input requirement instead of presenting the storage skill as self-sufficient
 - `base_deal_no_damage` is scoped to `base_effect_only`; it does not disqualify a composite skill whose triggered or secondary effect deals damage
 - broad mechanical mentions are inferred and cannot establish hard fulfillment
 - unparsed evidence is retained in the coverage report

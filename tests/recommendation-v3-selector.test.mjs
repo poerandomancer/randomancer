@@ -24,8 +24,11 @@ function offenseInventory() {
     elements: [
       { id: 'poison', name: 'Poison', category: 'Ailment', aliases: [] },
       { id: 'shock', name: 'Shock', category: 'Ailment', aliases: [] },
+      { id: 'ignite', name: 'Ignite', category: 'Ailment', aliases: [] },
       { id: 'physical', name: 'Physical Damage', category: 'Damage Type', aliases: [] },
       { id: 'fire', name: 'Fire Damage', category: 'Damage Type', aliases: [] },
+      { id: 'cold', name: 'Cold Damage', category: 'Damage Type', aliases: [] },
+      { id: 'lightning', name: 'Lightning Damage', category: 'Damage Type', aliases: [] },
       { id: 'chaos', name: 'Chaos Damage', category: 'Damage Type', aliases: [] },
       { id: 'critical_hits', name: 'Critical Hits', category: 'Scaling', aliases: ['Crit'] },
       { id: 'minions_companions', name: 'Minions/Companions', category: 'Archetype', aliases: ['Minions'] }
@@ -268,6 +271,9 @@ test('seeded quality-band selection varies legally and is reproducible', () => {
 
   assert.ok(selections.size > 1);
   assert.equal(repeated.primarySkill?.entityId, first.primarySkill?.entityId);
+  assert.deepEqual(repeated.pieces, first.pieces);
+  assert.equal(first.pieces.length, 2);
+  assert.equal(first.supportingSkill?.assignedRole, 'secondary_damage');
   assert.equal(repeated.selectionSeed, 'persistent-roll');
   assert.notEqual(nextRoll.primarySkill?.entityId, first.primarySkill?.entityId);
   assert.equal(first.diagnostics.shortlistedCandidates, 3);
@@ -299,7 +305,7 @@ test('native damage can carry an ailment without falsely fulfilling its applicat
   assert.deepEqual(result.primarySkill?.fulfilledObligations, []);
   assert.deepEqual(result.primarySkill?.carrierObligations.map((entry) => entry.obligationId), ['offense:shock']);
   assert.ok(result.unresolved.some((entry) =>
-    entry.obligationId === 'offense:shock' && entry.reason.includes('another package piece')
+    entry.obligationId === 'offense:shock' && entry.reason.includes('explicit Shock application')
   ));
 });
 
@@ -446,6 +452,145 @@ test('a companion enabler can satisfy an explicit primary dependency', () => {
   assert.ok(!result.unresolved.some((entry) => entry.obligationId === 'dependency:power_charge'));
 });
 
+test('package-first scoring may choose a weaker standalone primary for a stronger setup-payoff pair', () => {
+  const result = selectRecommendationPackageV3(catalog([
+    entity({
+      id: 'steady-flame',
+      name: 'Steady Flame',
+      facts: [{ relation: 'has_property', subject: 'skill', mechanic: 'fire', confidence: 'exact' }]
+    }),
+    entity({
+      id: 'ignition-payoff',
+      name: 'Ignition Payoff',
+      roles: ['primary_damage', 'payoff'],
+      facts: [
+        { relation: 'has_property', subject: 'skill', mechanic: 'fire', confidence: 'strong' },
+        { relation: 'consumes', subject: 'skill', mechanic: 'ignite', confidence: 'exact' }
+      ]
+    }),
+    entity({
+      id: 'ignite-primer',
+      name: 'Ignite Primer',
+      roles: ['setup_control'],
+      facts: [{ relation: 'inflicts', subject: 'skill', mechanic: 'ignite', confidence: 'exact' }]
+    })
+  ]), { weapon: 'Wand', offenseList: ['Fire Damage'] }, { offenseInventory: offenseInventory() });
+
+  assert.deepEqual(result.pieces.map((entry) => entry.name), ['Ignition Payoff', 'Ignite Primer']);
+  assert.equal(result.supportingSkill?.assignedRole, 'setup_control');
+  assert.ok(result.synergyEdges.some((edge) =>
+    edge.mechanic === 'ignite' && edge.demandRelation === 'consumes'
+  ));
+});
+
+test('package-first scoring recognizes primary-to-payoff setup direction', () => {
+  const result = selectRecommendationPackageV3(catalog([
+    entity({
+      id: 'shock-primer',
+      name: 'Shock Primer',
+      roles: ['primary_damage', 'setup_control'],
+      facts: [
+        { relation: 'has_property', subject: 'skill', mechanic: 'lightning', confidence: 'exact' },
+        { relation: 'inflicts', subject: 'skill', mechanic: 'shock', confidence: 'exact' }
+      ]
+    }),
+    entity({
+      id: 'shock-payoff',
+      name: 'Shock Payoff',
+      roles: ['payoff'],
+      facts: [{ relation: 'consumes', subject: 'skill', mechanic: 'shock', confidence: 'exact' }]
+    })
+  ]), { weapon: 'Wand', offenseList: ['Shock'] }, { offenseInventory: offenseInventory() });
+
+  assert.deepEqual(result.pieces.map((entry) => entry.name), ['Shock Primer', 'Shock Payoff']);
+  assert.equal(result.supportingSkill?.assignedRole, 'payoff');
+  assert.ok(result.synergyEdges.some((edge) =>
+    edge.fromEntityId.endsWith('shock-primer') && edge.toEntityId.endsWith('shock-payoff')
+  ));
+});
+
+test('parallel skills may form a two-Offense package when both add real coverage', () => {
+  const result = selectRecommendationPackageV3(catalog([
+    entity({
+      id: 'fire-strike',
+      name: 'Fire Strike',
+      facts: [{ relation: 'has_property', subject: 'skill', mechanic: 'fire', confidence: 'exact' }]
+    }),
+    entity({
+      id: 'frost-strike',
+      name: 'Frost Strike',
+      facts: [{ relation: 'has_property', subject: 'skill', mechanic: 'cold', confidence: 'exact' }]
+    })
+  ]), { weapon: 'Wand', offenseList: ['Fire Damage', 'Cold Damage'] }, {
+    offenseInventory: offenseInventory()
+  });
+
+  assert.deepEqual(new Set(result.pieces.map((entry) => entry.name)), new Set(['Fire Strike', 'Frost Strike']));
+  assert.equal(result.supportingSkill?.assignedRole, 'secondary_damage');
+  assert.deepEqual(
+    new Set(result.pieces.flatMap((entry) => entry.fulfilledObligations.map((proof) => proof.obligationId))),
+    new Set(['offense:fire', 'offense:cold'])
+  );
+});
+
+test('a synergistic two-Offense pair outranks a merely parallel alternative', () => {
+  const result = selectRecommendationPackageV3(catalog([
+    entity({
+      id: 'flame-primer',
+      name: 'Flame Primer',
+      roles: ['primary_damage', 'setup_control'],
+      facts: [
+        { relation: 'has_property', subject: 'skill', mechanic: 'fire', confidence: 'exact' },
+        { relation: 'inflicts', subject: 'skill', mechanic: 'ignite', confidence: 'exact' }
+      ]
+    }),
+    entity({
+      id: 'frost-payoff',
+      name: 'Frost Payoff',
+      roles: ['primary_damage', 'payoff'],
+      facts: [
+        { relation: 'has_property', subject: 'skill', mechanic: 'cold', confidence: 'exact' },
+        { relation: 'consumes', subject: 'skill', mechanic: 'ignite', confidence: 'exact' }
+      ]
+    }),
+    entity({
+      id: 'plain-frost',
+      name: 'Plain Frost',
+      facts: [{ relation: 'has_property', subject: 'skill', mechanic: 'cold', confidence: 'exact' }]
+    })
+  ]), { weapon: 'Wand', offenseList: ['Fire Damage', 'Cold Damage'] }, {
+    offenseInventory: offenseInventory()
+  });
+
+  assert.deepEqual(result.pieces.map((entry) => entry.name), ['Flame Primer', 'Frost Payoff']);
+  assert.equal(result.supportingSkill?.assignedRole, 'payoff');
+  assert.ok(result.synergyEdges.some((edge) => edge.mechanic === 'ignite'));
+});
+
+test('generic charge evidence cannot bridge a specific charge setup cost', () => {
+  const result = selectRecommendationPackageV3(catalog([
+    entity({
+      id: 'frenzy-payoff',
+      name: 'Frenzy Payoff',
+      facts: [
+        { relation: 'has_property', subject: 'skill', mechanic: 'cold', confidence: 'exact' },
+        { relation: 'consumes', subject: 'skill', mechanic: 'charge', confidence: 'exact' },
+        { relation: 'consumes', subject: 'skill', mechanic: 'frenzy_charge', confidence: 'exact' }
+      ]
+    }),
+    entity({
+      id: 'generic-charge-maker',
+      name: 'Generic Charge Maker',
+      roles: ['enabler'],
+      facts: [{ relation: 'generates', subject: 'skill', mechanic: 'charge', confidence: 'exact' }]
+    })
+  ]), { weapon: 'Wand', offenseList: ['Cold Damage'] }, { offenseInventory: offenseInventory() });
+
+  assert.equal(result.supportingSkill, null);
+  assert.deepEqual(result.primarySkill?.setupCosts, ['frenzy_charge']);
+  assert.deepEqual(result.synergyEdges, []);
+});
+
 test('a no-damage base effect does not disqualify the damaging composite skill', () => {
   const spearEquipment = {
     is_unrestricted: false,
@@ -554,15 +699,15 @@ test('recommendation contract and Build Card preserve two role-labeled skill ide
       weapon: 'Crossbow',
       recommendedSkills: [
         { name: 'Primary', recommendationV3: { assignedRole: 'primary_damage' } },
-        { name: 'Setup', recommendationV3: { assignedRole: 'setup_control' } },
+        { name: 'Secondary', recommendationV3: { assignedRole: 'secondary_damage' } },
         { name: 'Filler' }
       ]
     });
     const skillSection = deriveBuildCardModel(snapshot).backSections.find((entry) => entry.label === 'Skill Ideas');
 
-    assert.deepEqual(snapshot.recommendedSkills.map((entry) => entry.name), ['Primary', 'Setup']);
-    assert.deepEqual(skillSection.values.map((entry) => entry.name), ['Primary', 'Setup']);
-    assert.deepEqual(skillSection.values.map((entry) => entry.prefix), ['Primary', 'Setup']);
+    assert.deepEqual(snapshot.recommendedSkills.map((entry) => entry.name), ['Primary', 'Secondary']);
+    assert.deepEqual(skillSection.values.map((entry) => entry.name), ['Primary', 'Secondary']);
+    assert.deepEqual(skillSection.values.map((entry) => entry.prefix), ['Primary', 'Secondary']);
   } finally {
     globalThis.window = previousWindow;
     globalThis.document = previousDocument;
@@ -761,8 +906,9 @@ test('reported empty and false-totem rolls select specific legal primary skills'
       result.primarySkill?.fulfilledObligations.map((entry) => entry.obligationId),
       ['offense:totems']
     );
-    assert.equal(result.supportingSkill, null);
-    assert.equal(result.pieces.length, 1);
+    assert.equal(result.supportingSkill?.name, 'Dark Effigy');
+    assert.equal(result.supportingSkill?.assignedRole, 'secondary_damage');
+    assert.equal(result.pieces.length, 2);
   }
 });
 

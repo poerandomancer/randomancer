@@ -3,6 +3,7 @@ const RECOMMENDATION_PACKAGE_V3_SCHEMA = 'recommendation-package-v3.0.0';
 const RECOMMENDATION_V3_QUERY_PARAM = 'recommendationV3';
 const PRIMARY_QUALITY_BAND = 12;
 const COMPANION_QUALITY_BAND = 8;
+const PACKAGE_QUALITY_BAND = 12;
 const RECOMMENDATION_EXCLUDED_SOURCE_TAGS = new Set(['kalguuran']);
 
 const HARD_CONFIDENCE = new Set(['exact', 'strong']);
@@ -93,7 +94,7 @@ const AILMENT_CARRIER_MECHANICS = Object.freeze({
 });
 const DAMAGE_TYPE_MECHANICS = new Set(['physical', 'fire', 'cold', 'lightning', 'chaos']);
 const CARRIER_RELATIONS = new Set(['fulfills', 'has_property', 'converts']);
-const COMPANION_CANDIDATE_ROLES = new Set(['setup_control', 'payoff', 'enabler', 'utility']);
+const PACKAGE_CANDIDATE_ROLES = new Set(['primary_damage', 'setup_control', 'payoff', 'enabler', 'utility']);
 const SUPPLY_RELATIONS = new Set(['fulfills', 'inflicts', 'creates', 'provides', 'generates']);
 
 const RELATION_WEIGHT = Object.freeze({
@@ -520,19 +521,43 @@ function candidateDependencies(entity) {
 }
 
 function candidateSetupCosts(entity) {
-  return unique(asArray(entity?.facts)
+  const mechanics = unique(asArray(entity?.facts)
     .filter((fact) => fact?.relation === 'consumes' && HARD_CONFIDENCE.has(fact?.confidence))
     .map((fact) => normalizeToken(fact?.mechanic))
     .filter((mechanic) => STATEFUL_SETUP_MECHANICS.has(mechanic)));
+  return mechanics.includes('charge') && mechanics.some((mechanic) => /^(?:endurance|frenzy|power)_charge$/.test(mechanic))
+    ? mechanics.filter((mechanic) => mechanic !== 'charge')
+    : mechanics;
 }
 
-function evaluatePrimaryCandidate(entity, offenseObligations, snapshot) {
-  if (!isDirectlyUsableActive(entity)) return null;
+function stableHash32(value) {
+  let hash = 2166136261;
+  for (const character of String(value ?? '')) {
+    hash ^= character.charCodeAt(0);
+    hash = Math.imul(hash, 16777619);
+  }
+  hash += hash << 13;
+  hash ^= hash >>> 7;
+  hash += hash << 3;
+  hash ^= hash >>> 17;
+  hash += hash << 5;
+  return hash >>> 0;
+}
+
+function isUsablePackageActive(entity) {
+  if (!entity || entity.content_type !== 'active_skill') return false;
+  if (!isSelectableSkillName(entity.name) || !isRecommendationContentAllowedV3(entity)) return false;
+  const roles = new Set(asArray(entity.candidate_roles));
+  if (!Array.from(PACKAGE_CANDIDATE_ROLES).some((role) => roles.has(role))) return false;
+
+  const types = new Set(asArray(entity?.source_evidence?.active_skill_types).map(normalizeToken));
+  return !types.has('inbuilttrigger') && !types.has('triggered');
+}
+
+function analyzePackageCandidate(entity, offenseObligations, snapshot) {
+  if (!isUsablePackageActive(entity)) return null;
   const compatibility = evaluateCompatibilityV3(entity, snapshot);
   if (!compatibility.ok) return null;
-  const delivery = evaluateDeliveryCompatibilityV3(entity, snapshot);
-  if (!delivery.ok) return null;
-
   const facts = asArray(entity.facts);
   if (offenseObligations.some((obligation) => facts.some((fact) => factPreventsObligation(fact, obligation)))) {
     return null;
@@ -543,7 +568,6 @@ function evaluatePrimaryCandidate(entity, offenseObligations, snapshot) {
   let evidenceScore = 0;
   let exactProofs = 0;
   let exactCarrierProofs = 0;
-
   for (const obligation of offenseObligations) {
     const proofs = facts.filter((fact) => factMatchesObligation(fact, obligation));
     if (proofs.length) {
@@ -563,225 +587,434 @@ function evaluatePrimaryCandidate(entity, offenseObligations, snapshot) {
     const carrierProofs = facts.filter((fact) => factMatchesCarrier(fact, obligation));
     if (!carrierProofs.length) continue;
     carrierProofs.sort((a, b) => proofScore(b) - proofScore(a));
-    const carrierProof = carrierProofs[0];
-    evidenceScore += proofScore(carrierProof);
-    if (carrierProof.confidence === 'exact') exactCarrierProofs += 1;
+    const proof = carrierProofs[0];
+    evidenceScore += proofScore(proof);
+    if (proof.confidence === 'exact') exactCarrierProofs += 1;
     carriers.push({
       obligationId: obligation.id,
-      relation: carrierProof.relation,
-      confidence: carrierProof.confidence,
-      mechanic: factMechanics(carrierProof)[0] || ''
+      relation: proof.relation,
+      confidence: proof.confidence,
+      mechanic: factMechanics(proof)[0] || ''
     });
   }
 
-  if (!fulfilled.length && !carriers.length) return null;
+  const hardFacts = facts.filter((fact) => HARD_CONFIDENCE.has(fact?.confidence));
+  const supplies = [];
+  for (const fact of hardFacts) {
+    if (SUPPLY_RELATIONS.has(fact?.relation)) {
+      for (const mechanic of factMechanics(fact)) {
+        if (mechanic) supplies.push({ mechanic, relation: fact.relation, confidence: fact.confidence });
+      }
+    }
+  }
+
   const dependencies = candidateDependencies(entity);
   const setupCosts = candidateSetupCosts(entity);
-  const roles = new Set(asArray(entity.candidate_roles));
-  const packageCostPenalty = dependencies.length * 30
-    + setupCosts.length * 5
-    + (roles.has('payoff') ? 12 : 0)
-    + (roles.has('setup_control') ? 5 : 0);
+  const demandConfidence = (relation, mechanic) => hardFacts.some((fact) =>
+    fact?.relation === relation
+    && normalizeToken(fact?.mechanic) === mechanic
+    && fact?.confidence === 'exact'
+  ) ? 'exact' : 'strong';
+  const demands = [
+    ...dependencies.map((mechanic) => ({
+      mechanic,
+      relation: 'requires',
+      confidence: demandConfidence('requires', mechanic)
+    })),
+    ...setupCosts.map((mechanic) => ({
+      mechanic,
+      relation: 'consumes',
+      confidence: demandConfidence('consumes', mechanic)
+    }))
+  ];
+  const delivery = isDirectlyUsableActive(entity)
+    ? evaluateDeliveryCompatibilityV3(entity, snapshot)
+    : { ok: false, reason: 'not a directly usable primary damage skill', evidence: null };
+  const touchedMechanics = unique(hardFacts.flatMap((fact) => [
+    ...factMechanics(fact),
+    normalizeToken(fact?.from),
+    normalizeToken(fact?.to)
+  ]));
+
   return {
     entity,
     fulfilled,
     carriers,
     dependencies,
     setupCosts,
+    supplies,
+    demands,
+    hardFacts,
+    touchedMechanics,
     delivery,
-    score: fulfilled.length * 100
+    primaryEligible: delivery.ok,
+    evidenceScore,
+    exactProofs,
+    exactCarrierProofs,
+    individualScore: fulfilled.length * 100
       + carriers.length * 35
       + exactProofs * 10
       + exactCarrierProofs * 3
       + evidenceScore
-      - packageCostPenalty,
-    exactProofs,
-    exactCarrierProofs
   };
 }
 
-function buildCompanionTargets(primaryCandidate, offenseObligations) {
-  if (!primaryCandidate) return [];
-  const fulfilled = new Set(asArray(primaryCandidate.fulfilled).map((entry) => entry.obligationId));
-  const carried = new Set(asArray(primaryCandidate.carriers).map((entry) => entry.obligationId));
-  const targets = [];
+function buildViableSkillPool(catalog, offenseObligations, snapshot) {
+  const analyses = asArray(catalog?.entities)
+    .map((entity) => analyzePackageCandidate(entity, offenseObligations, snapshot))
+    .filter(Boolean);
+  const seedMechanics = new Set(offenseObligations.flatMap((obligation) => [
+    ...asArray(obligation.mechanics),
+    ...asArray(obligation.carrierMechanics)
+  ]).map(normalizeToken));
+  const included = new Set();
 
-  for (const obligation of offenseObligations) {
-    if (fulfilled.has(obligation.id)) continue;
-    targets.push({
-      id: obligation.id,
-      kind: 'offense',
-      label: obligation.label,
-      obligation,
-      // Prefer covering a Fate component that the primary does not represent
-      // at all. A carried ailment already has a typed damage bridge, even
-      // though explicit application remains unresolved.
-      weight: carried.has(obligation.id) ? 100 : 120
-    });
+  // Begin with skills tied to a rolled Offense, then make a narrow closure over
+  // their explicit prerequisites and stateful setup costs. This retrieves
+  // applicators, consumers, payoffs, and resource enablers without treating a
+  // broad text/tag match as proof that the package works.
+  for (let pass = 0; pass < 3; pass += 1) {
+    let changed = false;
+    for (const candidate of analyses) {
+      const offenseRelevant = candidate.fulfilled.length > 0 || candidate.carriers.length > 0;
+      const related = candidate.touchedMechanics.some((mechanic) => seedMechanics.has(mechanic))
+        || candidate.supplies.some((entry) => seedMechanics.has(entry.mechanic))
+        || candidate.demands.some((entry) => seedMechanics.has(entry.mechanic));
+      if (!offenseRelevant && !related) continue;
+      if (!included.has(candidate.entity.id)) {
+        included.add(candidate.entity.id);
+        changed = true;
+      }
+      for (const mechanic of [...candidate.dependencies, ...candidate.setupCosts]) {
+        if (!seedMechanics.has(mechanic)) {
+          seedMechanics.add(mechanic);
+          changed = true;
+        }
+      }
+    }
+    if (!changed) break;
   }
 
-  for (const mechanic of asArray(primaryCandidate.dependencies)) {
-    targets.push({
-      id: `dependency:${mechanic}`,
-      kind: 'dependency',
-      label: `Provide ${mechanic.replace(/_/g, ' ')}`,
-      mechanic,
-      weight: 110
-    });
+  const ranked = analyses
+    .filter((candidate) => included.has(candidate.entity.id))
+    .sort((a, b) =>
+      Number(b.primaryEligible) - Number(a.primaryEligible)
+      || b.individualScore - a.individualScore
+      || String(a.entity.name || '').localeCompare(String(b.entity.name || ''))
+      || String(a.entity.id || '').localeCompare(String(b.entity.id || ''))
+    );
+  const names = new Set();
+  return ranked.filter((candidate) => {
+    const name = normalizeToken(candidate.entity.name);
+    if (!name || names.has(name)) return false;
+    names.add(name);
+    return true;
+  });
+}
+
+function findDirectedSynergyEdges(supplier, consumer) {
+  if (!supplier || !consumer) return [];
+  const edges = [];
+  const seen = new Set();
+  for (const supply of supplier.supplies) {
+    for (const demand of consumer.demands) {
+      if (!supply.mechanic || supply.mechanic !== demand.mechanic) continue;
+      // `charge` is a lossy parser umbrella and must not connect Power,
+      // Frenzy, and Endurance Charge mechanics across different skills.
+      if (supply.mechanic === 'charge') continue;
+      const key = `${supplier.entity.id}:${consumer.entity.id}:${supply.mechanic}:${demand.relation}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      edges.push({
+        fromEntityId: supplier.entity.id,
+        toEntityId: consumer.entity.id,
+        mechanic: supply.mechanic,
+        supplyRelation: supply.relation,
+        demandRelation: demand.relation,
+        confidence: supply.confidence === 'exact' && demand.confidence === 'exact' ? 'exact' : 'strong'
+      });
+    }
   }
+  return edges;
+}
 
-  for (const mechanic of asArray(primaryCandidate.setupCosts)) {
-    if (targets.some((target) => target.mechanic === mechanic)) continue;
-    targets.push({
-      id: `setup:${mechanic}`,
-      kind: 'setup',
-      label: `Create ${mechanic.replace(/_/g, ' ')} setup`,
-      mechanic,
-      weight: 90
-    });
+function bestProofByObligation(candidates, field) {
+  const best = new Map();
+  for (const candidate of candidates) {
+    for (const proof of asArray(candidate?.[field])) {
+      const existing = best.get(proof.obligationId);
+      if (!existing || proofScore(proof) > proofScore(existing)) best.set(proof.obligationId, proof);
+    }
   }
-  return targets;
+  return Array.from(best.values());
 }
 
-function factMatchesSupplyTarget(fact, target) {
-  if (!fact || !target || !HARD_CONFIDENCE.has(fact.confidence)) return false;
-  if (target.kind === 'offense') return factMatchesObligation(fact, target.obligation);
-  if (!SUPPLY_RELATIONS.has(fact.relation)) return false;
-  return factMechanics(fact).includes(normalizeToken(target.mechanic));
+function adjacentOffenseFacts(candidate, offenseObligations) {
+  if (!candidate) return [];
+  const mechanics = new Set(offenseObligations.flatMap((obligation) => [
+    ...asArray(obligation.mechanics),
+    ...asArray(obligation.carrierMechanics)
+  ]).map(normalizeToken));
+  return candidate.hardFacts.filter((fact) =>
+    ['modifies', 'provides', 'converts'].includes(fact?.relation)
+    && factMechanics(fact).some((mechanic) => mechanics.has(mechanic))
+    && !offenseObligations.some((obligation) =>
+      factMatchesObligation(fact, obligation) || factMatchesCarrier(fact, obligation)
+    )
+  );
 }
 
-function isUsableCompanionActive(entity) {
-  if (!entity || entity.content_type !== 'active_skill') return false;
-  if (!isSelectableSkillName(entity.name) || !isRecommendationContentAllowedV3(entity)) return false;
-  const roles = new Set(asArray(entity.candidate_roles));
-  if (!Array.from(COMPANION_CANDIDATE_ROLES).some((role) => roles.has(role))) return false;
-
-  const types = new Set(asArray(entity?.source_evidence?.active_skill_types).map(normalizeToken));
-  return !types.has('inbuilttrigger') && !types.has('triggered');
+function resolvedDemandKeys(candidates, synergyEdges) {
+  const selectedIds = new Set(candidates.map((candidate) => candidate.entity.id));
+  return new Set(synergyEdges
+    .filter((edge) => selectedIds.has(edge.fromEntityId) && selectedIds.has(edge.toEntityId))
+    .map((edge) => `${edge.toEntityId}:${edge.demandRelation}:${edge.mechanic}`));
 }
 
-function evaluateCompanionCandidate(entity, primaryCandidate, targets, offenseObligations, snapshot) {
-  if (!primaryCandidate || !targets.length || !isUsableCompanionActive(entity)) return null;
-  if (entity.id === primaryCandidate.entity.id) return null;
-  if (normalizeToken(entity.name) === normalizeToken(primaryCandidate.entity.name)) return null;
+function supportingProofIsUsable(candidate, proof, offenseObligations, isCarrier = false) {
+  if (!candidate || !proof) return false;
+  if (isCarrier) return candidate.primaryEligible;
+  const obligation = offenseObligations.find((entry) => entry.id === proof.obligationId);
+  return normalizeToken(obligation?.category) !== 'damage_type'
+    || !['has_property', 'converts'].includes(proof.relation)
+    || candidate.primaryEligible;
+}
 
-  const compatibility = evaluateCompatibilityV3(entity, snapshot);
-  if (!compatibility.ok) return null;
-  const facts = asArray(entity.facts);
-  if (offenseObligations.some((obligation) => facts.some((fact) => factPreventsObligation(fact, obligation)))) {
+function assignSupportingRole(primary, supporting, synergyEdges, offenseObligations) {
+  const roles = new Set(asArray(supporting?.entity?.candidate_roles));
+  const suppliedToPrimary = synergyEdges.filter((edge) =>
+    edge.fromEntityId === supporting.entity.id && edge.toEntityId === primary.entity.id
+  );
+  const paidOffFromPrimary = synergyEdges.filter((edge) =>
+    edge.fromEntityId === primary.entity.id && edge.toEntityId === supporting.entity.id
+  );
+  if (paidOffFromPrimary.some((edge) => edge.demandRelation === 'consumes') || (paidOffFromPrimary.length && roles.has('payoff'))) {
+    return 'payoff';
+  }
+  if (suppliedToPrimary.some((edge) => edge.demandRelation === 'requires') && roles.has('enabler')) {
+    return 'enabler';
+  }
+  const resolvesPrimaryCarrier = supporting.fulfilled.some((proof) =>
+    primary.carriers.some((carrier) => carrier.obligationId === proof.obligationId)
+  );
+  if (resolvesPrimaryCarrier && roles.has('setup_control')) return 'setup_control';
+  if (!synergyEdges.length && roles.has('primary_damage')
+    && (supporting.fulfilled.length || supporting.carriers.length)) {
+    return 'secondary_damage';
+  }
+  if (suppliedToPrimary.length || adjacentOffenseFacts(supporting, offenseObligations).length || roles.has('setup_control')) {
+    return 'setup_control';
+  }
+  if (roles.has('enabler')) return 'enabler';
+  if (roles.has('payoff')) return 'payoff';
+  if (roles.has('primary_damage')) return 'secondary_damage';
+  return 'utility';
+}
+
+function evaluateSkillPackage(primary, supporting, offenseObligations) {
+  if (!primary?.primaryEligible || (!primary.fulfilled.length && !primary.carriers.length)) return null;
+  if (supporting && (
+    supporting.entity.id === primary.entity.id
+    || normalizeToken(supporting.entity.name) === normalizeToken(primary.entity.name)
+  )) return null;
+
+  const candidates = [primary, supporting].filter(Boolean);
+  const supportingFulfilled = supporting
+    ? supporting.fulfilled.filter((proof) => supportingProofIsUsable(supporting, proof, offenseObligations))
+    : [];
+  const supportingCarriers = supporting
+    ? supporting.carriers.filter((proof) => supportingProofIsUsable(supporting, proof, offenseObligations, true))
+    : [];
+  const supportingView = supporting ? {
+    ...supporting,
+    fulfilled: supportingFulfilled,
+    carriers: supportingCarriers
+  } : null;
+  const synergyEdges = supporting ? [
+    ...findDirectedSynergyEdges(primary, supporting),
+    ...findDirectedSynergyEdges(supporting, primary)
+  ] : [];
+  const supportingAdjacentFacts = adjacentOffenseFacts(supporting, offenseObligations);
+  const primaryRepresentedBeforePair = new Set([
+    ...primary.fulfilled.map((entry) => entry.obligationId),
+    ...primary.carriers.map((entry) => entry.obligationId)
+  ]);
+  const supportingAddsCarrierCoverage = supportingCarriers.some((proof) =>
+    !primaryRepresentedBeforePair.has(proof.obligationId)
+  );
+  if (supporting && !supportingFulfilled.length && !supportingCarriers.length
+    && !synergyEdges.length) {
+    return null;
+  }
+  if (supporting && !supportingFulfilled.length && !supportingAddsCarrierCoverage && !synergyEdges.length) {
     return null;
   }
 
-  const suppliedTargets = [];
-  let evidenceScore = 0;
-  let exactProofs = 0;
-  for (const target of targets) {
-    const proofs = facts.filter((fact) => factMatchesSupplyTarget(fact, target));
-    if (!proofs.length) continue;
-    proofs.sort((a, b) => proofScore(b) - proofScore(a));
-    const proof = proofs[0];
-    evidenceScore += target.weight + proofScore(proof);
-    if (proof.confidence === 'exact') exactProofs += 1;
-    suppliedTargets.push({
-      targetId: target.id,
-      targetKind: target.kind,
-      obligationId: target.kind === 'offense' ? target.id : null,
-      relation: proof.relation,
-      confidence: proof.confidence,
-      mechanic: factMechanics(proof)[0] || ''
-    });
-  }
-  if (!suppliedTargets.length) return null;
+  const coverageCandidates = [primary, supportingView].filter(Boolean);
+  const fulfilled = bestProofByObligation(coverageCandidates, 'fulfilled');
+  const carriers = bestProofByObligation(coverageCandidates, 'carriers')
+    .filter((proof) => !fulfilled.some((entry) => entry.obligationId === proof.obligationId));
+  const fulfilledIds = new Set(fulfilled.map((entry) => entry.obligationId));
+  const representedIds = new Set([...fulfilledIds, ...carriers.map((entry) => entry.obligationId)]);
+  const primaryRepresentedIds = new Set([
+    ...primary.fulfilled.map((entry) => entry.obligationId),
+    ...primary.carriers.map((entry) => entry.obligationId)
+  ]);
+  const supportingRepresentedIds = new Set(supporting ? [
+    ...supportingFulfilled.map((entry) => entry.obligationId),
+    ...supportingCarriers.map((entry) => entry.obligationId)
+  ] : []);
+  const resolvedKeys = resolvedDemandKeys(candidates, synergyEdges);
+  const unresolvedDependencies = candidates.flatMap((candidate) => candidate.dependencies
+    .filter((mechanic) => !resolvedKeys.has(`${candidate.entity.id}:requires:${mechanic}`))
+    .map((mechanic) => ({ entityId: candidate.entity.id, mechanic }))
+  );
+  const unresolvedSetupCosts = candidates.flatMap((candidate) => candidate.setupCosts
+    .filter((mechanic) => !resolvedKeys.has(`${candidate.entity.id}:consumes:${mechanic}`))
+    .map((mechanic) => ({ entityId: candidate.entity.id, mechanic }))
+  );
+  const newRepresentedBySupporting = supporting
+    ? Array.from(supportingRepresentedIds).filter((id) => !primaryRepresentedIds.has(id)).length
+    : 0;
+  const newDirectBySupporting = supporting
+    ? supportingFulfilled.filter((entry) => !primary.fulfilled.some((proof) => proof.obligationId === entry.obligationId)).length
+    : 0;
+  const complementaryCoverage = supporting && offenseObligations.length > 1
+    && Array.from(primaryRepresentedIds).some((id) => !supportingRepresentedIds.has(id))
+    && Array.from(supportingRepresentedIds).some((id) => !primaryRepresentedIds.has(id));
+  const redundantParallel = supporting && !synergyEdges.length
+    && newRepresentedBySupporting === 0;
+  const exactProofs = primary.exactProofs
+    + supportingFulfilled.filter((proof) => proof.confidence === 'exact').length;
+  const exactCarrierProofs = primary.exactCarrierProofs
+    + supportingCarriers.filter((proof) => proof.confidence === 'exact').length;
+  const evidenceScore = primary.evidenceScore
+    + supportingFulfilled.reduce((sum, proof) => sum + proofScore(proof), 0)
+    + supportingCarriers.reduce((sum, proof) => sum + proofScore(proof), 0);
+  const supportingRole = supporting
+    ? assignSupportingRole(primary, supportingView, synergyEdges, offenseObligations)
+    : null;
+  const complementaryRole = supporting && supportingRole !== 'secondary_damage';
+  const directCoverageComplete = offenseObligations.length > 0 && fulfilledIds.size === offenseObligations.length;
 
-  const dependencies = candidateDependencies(entity);
-  const setupCosts = candidateSetupCosts(entity);
-  const roles = new Set(asArray(entity.candidate_roles));
-  const assignedRole = suppliedTargets.some((entry) => entry.targetKind === 'offense')
-    ? 'setup_control'
-    : (roles.has('enabler') ? 'enabler' : 'setup_control');
-  const roleBonus = roles.has(assignedRole) ? 8 : 0;
-  const packageCostPenalty = dependencies.length * 25 + setupCosts.length * 5;
+  // Direct rolled-Offense coverage is deliberately dominant. Synergy and the
+  // two-skill preference decide among packages with comparable coverage; they
+  // cannot rescue an attractive combo that leaves a satisfiable Fate unmet.
+  const score = fulfilledIds.size * 500
+    + carriers.length * 110
+    + (directCoverageComplete ? 80 : 0)
+    + exactProofs * 10
+    + exactCarrierProofs * 4
+    + evidenceScore * 2
+    + primary.fulfilled.length * 45
+    + (supporting ? 70 : 0)
+    + synergyEdges.filter((edge) => edge.demandRelation === 'requires').length * 135
+    + synergyEdges.filter((edge) => edge.demandRelation === 'consumes').length * 115
+    + newRepresentedBySupporting * 55
+    + newDirectBySupporting * 35
+    + (complementaryCoverage ? 35 : 0)
+    + (complementaryRole ? 25 : 0)
+    - (redundantParallel ? 45 : 0)
+    - unresolvedDependencies.length * 90
+    - unresolvedSetupCosts.length * 20;
 
   return {
-    entity,
-    assignedRole,
-    suppliedTargets,
-    dependencies,
-    setupCosts,
-    score: suppliedTargets.length * 75 + evidenceScore + exactProofs * 5 + roleBonus - packageCostPenalty,
-    exactProofs
+    id: supporting ? `${primary.entity.id}+${supporting.entity.id}` : primary.entity.id,
+    primary,
+    supporting,
+    supportingFulfilled,
+    supportingCarriers,
+    supportingRole,
+    fulfilled,
+    carriers,
+    synergyEdges,
+    supportingAdjacentFacts,
+    unresolvedDependencies,
+    unresolvedSetupCosts,
+    score,
+    exactProofs,
+    exactCarrierProofs,
+    representedCount: representedIds.size
   };
 }
 
-function stableHash32(value) {
-  let hash = 2166136261;
-  for (const character of String(value ?? '')) {
-    hash ^= character.charCodeAt(0);
-    hash = Math.imul(hash, 16777619);
+function buildRankedSkillPackages(pool, offenseObligations) {
+  const primaries = pool.filter((candidate) =>
+    candidate.primaryEligible && (candidate.fulfilled.length || candidate.carriers.length)
+  );
+  const packages = [];
+  for (const primary of primaries) {
+    const single = evaluateSkillPackage(primary, null, offenseObligations);
+    if (single) packages.push(single);
+    for (const supporting of pool) {
+      const pair = evaluateSkillPackage(primary, supporting, offenseObligations);
+      if (pair) packages.push(pair);
+    }
   }
-  hash += hash << 13;
-  hash ^= hash >>> 7;
-  hash += hash << 3;
-  hash ^= hash >>> 17;
-  hash += hash << 5;
-  return hash >>> 0;
+  return packages.sort((a, b) =>
+    b.score - a.score
+    || b.fulfilled.length - a.fulfilled.length
+    || b.synergyEdges.length - a.synergyEdges.length
+    || Number(Boolean(b.supporting)) - Number(Boolean(a.supporting))
+    || b.exactProofs - a.exactProofs
+    || String(a.primary.entity.name || '').localeCompare(String(b.primary.entity.name || ''))
+    || String(a.supporting?.entity?.name || '').localeCompare(String(b.supporting?.entity?.name || ''))
+    || String(a.id).localeCompare(String(b.id))
+  );
 }
 
-function choosePrimaryCandidate(ranked, options = {}) {
-  const top = ranked[0] || null;
-  if (!top) return { winner: null, shortlist: [] };
+function suppliedTargetsForSupporting(packageCandidate) {
+  const supporting = packageCandidate?.supporting;
+  if (!supporting) return [];
+  const offenseTargets = packageCandidate.supportingFulfilled.map((proof) => ({
+    targetId: proof.obligationId,
+    targetKind: 'offense',
+    obligationId: proof.obligationId,
+    relation: proof.relation,
+    confidence: proof.confidence,
+    mechanic: proof.mechanic
+  }));
+  const mechanicTargets = packageCandidate.synergyEdges
+    .filter((edge) => edge.fromEntityId === supporting.entity.id)
+    .map((edge) => ({
+      targetId: `${edge.demandRelation === 'requires' ? 'dependency' : 'setup'}:${edge.mechanic}`,
+      targetKind: edge.demandRelation === 'requires' ? 'dependency' : 'setup',
+      obligationId: null,
+      relation: edge.supplyRelation,
+      confidence: edge.confidence,
+      mechanic: edge.mechanic
+    }));
+  return [...offenseTargets, ...mechanicTargets];
+}
 
-  const requestedBand = Number(options.qualityBand);
+function choosePackageCandidate(ranked, options = {}) {
+  const top = ranked[0] || null;
+  if (!top) return { winner: null, shortlist: [], qualityBand: PACKAGE_QUALITY_BAND };
+  const requestedBand = Number(options.packageQualityBand ?? options.qualityBand);
   const qualityBand = Number.isFinite(requestedBand) && requestedBand >= 0
     ? requestedBand
-    : PRIMARY_QUALITY_BAND;
+    : PACKAGE_QUALITY_BAND;
   const shortlist = ranked.filter((candidate) => top.score - candidate.score <= qualityBand);
   let pool = shortlist;
   const previousEntityId = String(options.previousPrimaryEntityId || '');
   if (previousEntityId && shortlist.length > 1) {
-    const alternatives = shortlist.filter((candidate) => candidate.entity.id !== previousEntityId);
+    const alternatives = shortlist.filter((candidate) => candidate.primary.entity.id !== previousEntityId);
     if (alternatives.length) pool = alternatives;
   }
 
   if (options.selectionSeed === undefined || options.selectionSeed === null) {
-    return { winner: pool[0], shortlist };
+    return { winner: pool[0], shortlist, qualityBand };
   }
-
   const weights = pool.map((candidate) =>
     Math.max(1, qualityBand + 1 - (top.score - candidate.score))
   );
   const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
-  let target = (stableHash32(`${options.selectionSeed}:primary_skill`) / 0x100000000) * totalWeight;
+  let target = (stableHash32(`${options.selectionSeed}:skill_package`) / 0x100000000) * totalWeight;
   for (let index = 0; index < pool.length; index += 1) {
     target -= weights[index];
-    if (target < 0) return { winner: pool[index], shortlist };
+    if (target < 0) return { winner: pool[index], shortlist, qualityBand };
   }
-  return { winner: pool[pool.length - 1], shortlist };
-}
-
-function chooseCompanionCandidate(ranked, primaryCandidate, options = {}) {
-  const top = ranked[0] || null;
-  if (!top) return { winner: null, shortlist: [] };
-  const requestedBand = Number(options.companionQualityBand);
-  const qualityBand = Number.isFinite(requestedBand) && requestedBand >= 0
-    ? requestedBand
-    : COMPANION_QUALITY_BAND;
-  const shortlist = ranked.filter((candidate) => top.score - candidate.score <= qualityBand);
-  if (options.selectionSeed === undefined || options.selectionSeed === null) {
-    return { winner: shortlist[0], shortlist };
-  }
-
-  const weights = shortlist.map((candidate) =>
-    Math.max(1, qualityBand + 1 - (top.score - candidate.score))
-  );
-  const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
-  const namespace = `companion_skill:${primaryCandidate?.entity?.id || 'none'}`;
-  let target = (stableHash32(`${options.selectionSeed}:${namespace}`) / 0x100000000) * totalWeight;
-  for (let index = 0; index < shortlist.length; index += 1) {
-    target -= weights[index];
-    if (target < 0) return { winner: shortlist[index], shortlist };
-  }
-  return { winner: shortlist[shortlist.length - 1], shortlist };
+  return { winner: pool[pool.length - 1], shortlist, qualityBand };
 }
 
 function unresolvedEntry(obligation, reason) {
@@ -799,10 +1032,17 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
       schemaVersion: RECOMMENDATION_PACKAGE_V3_SCHEMA,
       status: 'unavailable',
       primarySkill: null,
+      supportingSkill: null,
       pieces: [],
       obligations: [],
       unresolved: [{ obligationId: 'catalog', label: 'Recommendation catalog', reason: validation.reason }],
-      diagnostics: { totalPrimaryCandidates: 0, rankedCandidates: 0 }
+      diagnostics: {
+        viablePoolSize: 0,
+        rankedPackages: 0,
+        shortlistedPackages: 0,
+        totalPrimaryCandidates: 0,
+        rankedCandidates: 0
+      }
     };
   }
 
@@ -812,119 +1052,73 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     entity?.content_type === 'active_skill'
     && asArray(entity?.candidate_roles).includes('primary_damage')
   );
-  const primaryCandidates = allPrimaryCandidates.filter(isRecommendationContentAllowedV3);
-  const rankedWithDuplicateNames = primaryCandidates
-    .map((entity) => evaluatePrimaryCandidate(entity, offenseObligations, snapshot))
-    .filter(Boolean)
-    .sort((a, b) =>
-      b.score - a.score
-      || b.exactProofs - a.exactProofs
-      || String(a.entity.name || '').localeCompare(String(b.entity.name || ''))
-      || String(a.entity.id || '').localeCompare(String(b.entity.id || ''))
-    );
-  const seenNames = new Set();
-  const ranked = rankedWithDuplicateNames.filter((candidate) => {
-    const name = normalizeToken(candidate.entity.name);
-    if (!name || seenNames.has(name)) return false;
-    seenNames.add(name);
-    return true;
-  });
-  const { winner, shortlist } = choosePrimaryCandidate(ranked, options);
-  const companionTargets = buildCompanionTargets(winner, offenseObligations);
-  const allCompanionCandidates = catalog.entities.filter((entity) =>
-    entity?.content_type === 'active_skill'
-    && isRecommendationContentAllowedV3(entity)
+  const contentEligiblePrimaries = allPrimaryCandidates.filter(isRecommendationContentAllowedV3);
+  const viablePool = buildViableSkillPool(catalog, offenseObligations, snapshot);
+  const primaryPool = viablePool.filter((candidate) =>
+    candidate.primaryEligible && (candidate.fulfilled.length || candidate.carriers.length)
   );
-  const rankedCompanionsWithDuplicateNames = allCompanionCandidates
-    .map((entity) => evaluateCompanionCandidate(entity, winner, companionTargets, offenseObligations, snapshot))
-    .filter(Boolean)
-    .sort((a, b) =>
-      b.score - a.score
-      || b.exactProofs - a.exactProofs
-      || String(a.entity.name || '').localeCompare(String(b.entity.name || ''))
-      || String(a.entity.id || '').localeCompare(String(b.entity.id || ''))
-    );
-  const companionNames = new Set();
-  const rankedCompanions = rankedCompanionsWithDuplicateNames.filter((candidate) => {
-    const name = normalizeToken(candidate.entity.name);
-    if (!name || companionNames.has(name)) return false;
-    companionNames.add(name);
-    return true;
-  });
-  const { winner: companionWinner, shortlist: companionShortlist } = chooseCompanionCandidate(
-    rankedCompanions,
-    winner,
-    options
-  );
-  const companionFulfilled = asArray(companionWinner?.suppliedTargets)
-    .filter((entry) => entry.targetKind === 'offense')
-    .map((entry) => ({
-      obligationId: entry.obligationId,
-      relation: entry.relation,
-      confidence: entry.confidence,
-      mechanic: entry.mechanic
-    }));
-  const fulfilledIds = new Set([
-    ...asArray(winner?.fulfilled).map((entry) => entry.obligationId),
-    ...companionFulfilled.map((entry) => entry.obligationId)
-  ]);
-  const carrierIds = new Set(asArray(winner?.carriers).map((entry) => entry.obligationId));
-  const suppliedTargetIds = new Set(asArray(companionWinner?.suppliedTargets).map((entry) => entry.targetId));
+  const rankedPackages = buildRankedSkillPackages(viablePool, offenseObligations);
+  const { winner, shortlist, qualityBand } = choosePackageCandidate(rankedPackages, options);
+  const selectedCandidates = [winner?.primary, winner?.supporting].filter(Boolean);
+  const fulfilledIds = new Set(asArray(winner?.fulfilled).map((entry) => entry.obligationId));
+  const carrierProofs = asArray(winner?.carriers);
+  const carrierIds = new Set(carrierProofs.map((entry) => entry.obligationId));
   const unresolved = [];
 
   for (const obligation of offenseObligations) {
-    if (!fulfilledIds.has(obligation.id)) {
-      const reason = carrierIds.has(obligation.id)
-        ? `The selected primary skill is a viable ${winner.carriers.find((entry) => entry.obligationId === obligation.id)?.mechanic || 'damage'} carrier, but another package piece must provide explicit ${obligation.label} application.`
-        : 'No selected package skill provides hard semantic evidence for this Offense.';
-      unresolved.push(unresolvedEntry(obligation, reason));
-    }
+    if (fulfilledIds.has(obligation.id)) continue;
+    const carrier = carrierProofs.find((entry) => entry.obligationId === obligation.id);
+    const reason = carrierIds.has(obligation.id)
+      ? `The selected package has a viable ${carrier?.mechanic || 'damage'} carrier, but still lacks explicit ${obligation.label} application.`
+      : 'No selected package skill provides hard semantic evidence for this Offense.';
+    unresolved.push(unresolvedEntry(obligation, reason));
   }
   for (const obligation of model.obligations.filter((entry) => entry.kind === 'survivability')) {
     unresolved.push(unresolvedEntry(obligation, 'Not assigned by the current skill-package slice.'));
   }
-  for (const dependency of asArray(winner?.dependencies)) {
-    if (suppliedTargetIds.has(`dependency:${dependency}`)) continue;
+  for (const unresolvedDependency of asArray(winner?.unresolvedDependencies)) {
+    const candidate = selectedCandidates.find((entry) => entry.entity.id === unresolvedDependency.entityId);
+    const isPrimary = candidate?.entity.id === winner?.primary?.entity.id;
     unresolved.push({
-      obligationId: `dependency:${dependency}`,
-      label: `Provide ${dependency.replace(/_/g, ' ')}`,
-      reason: `The selected primary skill requires ${dependency.replace(/_/g, ' ')} from another package piece.`
-    });
-  }
-  for (const dependency of asArray(companionWinner?.dependencies)) {
-    unresolved.push({
-      obligationId: `companion_dependency:${dependency}`,
-      label: `Provide ${dependency.replace(/_/g, ' ')}`,
-      reason: `The selected ${companionWinner.assignedRole.replace(/_/g, ' ')} skill requires ${dependency.replace(/_/g, ' ')} from another package piece.`
+      obligationId: `${isPrimary ? 'dependency' : 'supporting_dependency'}:${unresolvedDependency.mechanic}`,
+      label: `Provide ${unresolvedDependency.mechanic.replace(/_/g, ' ')}`,
+      reason: `The selected ${isPrimary ? 'primary' : (winner?.supportingRole || 'supporting').replace(/_/g, ' ')} skill requires ${unresolvedDependency.mechanic.replace(/_/g, ' ')} from another package piece.`
     });
   }
 
-  const primarySkill = winner ? {
-    entityId: winner.entity.id,
-    sourceId: winner.entity.source_id,
-    name: winner.entity.name,
-    contentType: winner.entity.content_type,
+  const primary = winner?.primary || null;
+  const supporting = winner?.supporting || null;
+  const supportingTargets = suppliedTargetsForSupporting(winner);
+  const primarySkill = primary ? {
+    entityId: primary.entity.id,
+    sourceId: primary.entity.source_id,
+    name: primary.entity.name,
+    contentType: primary.entity.content_type,
     assignedRole: 'primary_damage',
-    fulfilledObligations: winner.fulfilled,
-    carrierObligations: winner.carriers,
-    dependencies: winner.dependencies,
-    setupCosts: winner.setupCosts,
-    delivery: winner.delivery,
-    score: winner.score
+    fulfilledObligations: primary.fulfilled,
+    carrierObligations: primary.carriers,
+    dependencies: primary.dependencies,
+    setupCosts: primary.setupCosts,
+    delivery: primary.delivery,
+    score: primary.individualScore,
+    packageScore: winner.score
   } : null;
-  const supportingSkill = companionWinner ? {
-    entityId: companionWinner.entity.id,
-    sourceId: companionWinner.entity.source_id,
-    name: companionWinner.entity.name,
-    contentType: companionWinner.entity.content_type,
-    assignedRole: companionWinner.assignedRole,
-    fulfilledObligations: companionFulfilled,
-    suppliedTargets: companionWinner.suppliedTargets,
-    dependencies: companionWinner.dependencies,
-    setupCosts: companionWinner.setupCosts,
-    score: companionWinner.score
+  const supportingSkill = supporting ? {
+    entityId: supporting.entity.id,
+    sourceId: supporting.entity.source_id,
+    name: supporting.entity.name,
+    contentType: supporting.entity.content_type,
+    assignedRole: winner.supportingRole,
+    fulfilledObligations: winner.supportingFulfilled,
+    carrierObligations: winner.supportingCarriers,
+    suppliedTargets: supportingTargets,
+    dependencies: supporting.dependencies,
+    setupCosts: supporting.setupCosts,
+    score: supporting.individualScore,
+    packageScore: winner.score
   } : null;
   const pieces = [primarySkill, supportingSkill].filter(Boolean);
+  const shortlistedPrimaryIds = new Set(shortlist.map((candidate) => candidate.primary.entity.id));
 
   return {
     schemaVersion: RECOMMENDATION_PACKAGE_V3_SCHEMA,
@@ -935,22 +1129,26 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     primarySkill,
     supportingSkill,
     pieces,
+    packageScore: winner?.score ?? null,
+    synergyEdges: asArray(winner?.synergyEdges),
     unresolved,
     diagnostics: {
-      totalPrimaryCandidates: primaryCandidates.length,
-      excludedContentCandidates: allPrimaryCandidates.length - primaryCandidates.length,
-      rankedCandidates: ranked.length,
-      shortlistedCandidates: shortlist.length,
-      companionTargets: companionTargets.length,
-      rankedCompanionCandidates: rankedCompanions.length,
-      shortlistedCompanionCandidates: companionShortlist.length,
-      qualityBand: Number.isFinite(Number(options.qualityBand)) && Number(options.qualityBand) >= 0
-        ? Number(options.qualityBand)
-        : PRIMARY_QUALITY_BAND,
-      companionQualityBand: Number.isFinite(Number(options.companionQualityBand))
-        && Number(options.companionQualityBand) >= 0
-        ? Number(options.companionQualityBand)
-        : COMPANION_QUALITY_BAND
+      viablePoolSize: viablePool.length,
+      primaryPoolSize: primaryPool.length,
+      singlePackages: rankedPackages.filter((candidate) => !candidate.supporting).length,
+      pairPackages: rankedPackages.filter((candidate) => candidate.supporting).length,
+      rankedPackages: rankedPackages.length,
+      shortlistedPackages: shortlist.length,
+      totalPrimaryCandidates: contentEligiblePrimaries.length,
+      excludedContentCandidates: allPrimaryCandidates.length - contentEligiblePrimaries.length,
+      // Retained as compatibility diagnostics for existing audits. These now
+      // describe primary-capable candidates inside the package-first pool.
+      rankedCandidates: primaryPool.length,
+      shortlistedCandidates: shortlistedPrimaryIds.size,
+      rankedCompanionCandidates: Math.max(0, viablePool.length - 1),
+      shortlistedCompanionCandidates: shortlist.filter((candidate) => candidate.supporting).length,
+      qualityBand,
+      companionQualityBand: COMPANION_QUALITY_BAND
     }
   };
 }
@@ -984,6 +1182,7 @@ export {
   RECOMMENDATION_V3_QUERY_PARAM,
   PRIMARY_QUALITY_BAND,
   COMPANION_QUALITY_BAND,
+  PACKAGE_QUALITY_BAND,
   adaptRecommendationPackageV3ToSnapshot,
   buildRecommendationObligationsV3,
   evaluateCompatibilityV3,

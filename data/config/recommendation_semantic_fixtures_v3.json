@@ -468,6 +468,18 @@
           "mechanic": "runic_ward"
         }
       ]
+    },
+    {
+      "id": "stored_poison_damage_requires_poison_input",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "While active, stores a portion of the [Poison] Damage you deal.",
+      "expected_facts": [
+        {
+          "relation": "requires",
+          "mechanic": "poison"
+        }
+      ]
     }
   ],
   "catalog_assertions": [
@@ -520,6 +532,11 @@
       "entity_name": "Voltaic Grenade",
       "relation": "provides",
       "mechanic": "electrocute"
+    },
+    {
+      "entity_name": "Plague Bearer",
+      "relation": "requires",
+      "mechanic": "poison"
     },
     {
       "entity_name": "Spearfield",
