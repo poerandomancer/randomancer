@@ -38,6 +38,7 @@ function runRecommendationV3(snapshot = currentSnapshot()) {
   const selectionSeed = isExistingSelection ? existingSeed : createSelectionSeed();
   const result = selectRecommendationPackageV3(catalog, snapshot, {
     offenseInventory: window.DATA?.OffenseInventory || {},
+    criticalProfiles: window.DATA?.recommendationCriticalProfilesV3 || {},
     selectionSeed,
     previousPrimaryEntityId: isExistingSelection ? null : lastPrimaryEntityId
   });

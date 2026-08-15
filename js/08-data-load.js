@@ -67,6 +67,9 @@ async function loadData() {
     const recommendationCatalogPromise = isRecommendationV3Enabled(window)
       ? tryLoad('data/enriched/recommendation_catalog_v3.json')
       : Promise.resolve(null);
+    const recommendationCriticalProfilesPromise = isRecommendationV3Enabled(window)
+      ? tryLoad('data/config/recommendation_critical_profiles_v3.json')
+      : Promise.resolve(null);
     const core = await loadJSON('data/core-data.json');
 
     // Canonical Build Offense vocabulary. Keep it separate on disk from the
@@ -151,6 +154,7 @@ async function loadData() {
     });
 
     const recommendationCatalogRaw = await recommendationCatalogPromise;
+    const recommendationCriticalProfilesRaw = await recommendationCriticalProfilesPromise;
     const recommendationCatalogValidation = validateRecommendationCatalogV3(recommendationCatalogRaw);
     const recommendationCatalogV3 = recommendationCatalogValidation.ok
       ? recommendationCatalogRaw
@@ -174,11 +178,20 @@ async function loadData() {
       ascendancyCatalog,
       ascendancyByName,
       challengePools,
-      recommendationCatalogV3
+      recommendationCatalogV3,
+      recommendationCriticalProfilesV3: recommendationCriticalProfilesRaw || {}
     };
     console.log("[Global DATA initialized]", window.DATA);
 
-    return { core, gems, passivesEnriched, passiveIndex, offenseInventory, recommendationCatalogV3 };
+    return {
+      core,
+      gems,
+      passivesEnriched,
+      passiveIndex,
+      offenseInventory,
+      recommendationCatalogV3,
+      recommendationCriticalProfilesV3: recommendationCriticalProfilesRaw || {}
+    };
   } catch (err) {
     console.error("[loadData] Failed to load core data:", err);
     return { core: {}, gems: [], offenseInventory: { version: null, categories: [], elements: [] } };

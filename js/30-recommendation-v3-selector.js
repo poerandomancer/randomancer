@@ -79,8 +79,7 @@ const OFFENSE_MECHANICS = Object.freeze({
   electrocute: ['electrocute'],
   critical_hits: ['critical_hits'],
   minions_companions: ['minion', 'companion'],
-  totems: ['totem'],
-  thorns: ['thorns']
+  totems: ['totem']
 });
 
 const AILMENT_CARRIER_MECHANICS = Object.freeze({
@@ -579,6 +578,76 @@ function candidateSetupCosts(entity) {
     : mechanics;
 }
 
+function criticalProfileForEntity(entity, criticalProfiles = {}) {
+  const profiles = criticalProfiles?.profiles || criticalProfiles;
+  if (!profiles || typeof profiles !== 'object' || Array.isArray(profiles)) return null;
+  const profile = profiles[entity?.source_id] || profiles[entity?.id];
+  const baseCritChance = Number(profile?.base_crit_chance);
+  if (!Number.isFinite(baseCritChance) || baseCritChance <= 0) return null;
+  return {
+    source: 'skill',
+    baseCritChance,
+    sourceUrl: String(profile?.source_url || '')
+  };
+}
+
+function criticalEvidenceForEntity(entity, offenseObligations, criticalProfiles = {}) {
+  if (!offenseObligations.some((obligation) => obligation.id === 'offense:critical_hits')) {
+    return { facts: [], affinity: { source: 'none', baseCritChance: null, score: 0 } };
+  }
+
+  const profile = criticalProfileForEntity(entity, criticalProfiles);
+  const types = new Set(asArray(entity?.source_evidence?.active_skill_types).map(normalizeToken));
+  const explicitInteraction = asArray(entity?.facts).some((fact) =>
+    ['fulfills', 'modifies', 'provides', 'has_property'].includes(fact?.relation)
+    && normalizeToken(fact?.mechanic) === 'critical_hits'
+    && HARD_CONFIDENCE.has(fact?.confidence)
+  );
+
+  if (profile) {
+    const baseScore = Math.max(0, Math.min(30, Math.round((profile.baseCritChance - 5) * 3)));
+    return {
+      facts: [{
+        relation: 'has_property',
+        subject: 'skill',
+        mechanic: 'critical_hits',
+        confidence: 'exact',
+        evidence_source: 'base_critical_hit_chance'
+      }],
+      affinity: {
+        ...profile,
+        score: baseScore + (explicitInteraction ? 8 : 0)
+      }
+    };
+  }
+
+  // Ordinary weapon attacks inherit their base critical chance from the
+  // equipped weapon. Keep that useful but deliberately neutral: unlike an
+  // intrinsic skill value, it must not be treated as a high-base-crit skill.
+  if (types.has('attack') && !types.has('nonweaponattack')) {
+    return {
+      facts: [{
+        relation: 'has_property',
+        subject: 'skill',
+        mechanic: 'critical_hits',
+        confidence: 'strong',
+        evidence_source: 'weapon_critical_hit_chance'
+      }],
+      affinity: { source: 'weapon', baseCritChance: null, sourceUrl: '', score: 10 }
+    };
+  }
+
+  return {
+    facts: [],
+    affinity: {
+      source: explicitInteraction ? 'explicit_interaction' : 'none',
+      baseCritChance: null,
+      sourceUrl: '',
+      score: explicitInteraction ? 8 : 0
+    }
+  };
+}
+
 function stableHash32(value) {
   let hash = 2166136261;
   for (const character of String(value ?? '')) {
@@ -603,13 +672,14 @@ function isUsablePackageActive(entity) {
   return !types.has('inbuilttrigger') && !types.has('triggered');
 }
 
-function analyzePackageCandidate(entity, offenseObligations, snapshot) {
+function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalProfiles = {}) {
   if (!isUsablePackageActive(entity)) return null;
   const compatibility = evaluateCompatibilityV3(entity, snapshot);
   if (!compatibility.ok) return null;
   const pieceDelivery = evaluatePackagePieceDeliveryV3(entity, snapshot);
   if (!pieceDelivery.ok) return null;
-  const facts = asArray(entity.facts);
+  const criticalEvidence = criticalEvidenceForEntity(entity, offenseObligations, criticalProfiles);
+  const facts = [...asArray(entity.facts), ...criticalEvidence.facts];
   if (offenseObligations.some((obligation) => facts.some((fact) => factPreventsObligation(fact, obligation)))) {
     return null;
   }
@@ -705,6 +775,7 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot) {
     touchedMechanics,
     delivery,
     primaryEligible: delivery.ok,
+    criticalAffinity: criticalEvidence.affinity,
     evidenceScore,
     exactProofs,
     exactCarrierProofs,
@@ -713,12 +784,13 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot) {
       + exactProofs * 10
       + exactCarrierProofs * 3
       + evidenceScore
+      + criticalEvidence.affinity.score
   };
 }
 
-function buildViableSkillPool(catalog, offenseObligations, snapshot) {
+function buildViableSkillPool(catalog, offenseObligations, snapshot, criticalProfiles = {}) {
   const analyses = asArray(catalog?.entities)
-    .map((entity) => analyzePackageCandidate(entity, offenseObligations, snapshot))
+    .map((entity) => analyzePackageCandidate(entity, offenseObligations, snapshot, criticalProfiles))
     .filter(Boolean);
   const seedMechanics = new Set(offenseObligations.flatMap((obligation) => [
     ...asArray(obligation.mechanics),
@@ -1003,6 +1075,8 @@ function evaluateSkillPackage(primary, supporting, offenseObligations) {
     : null;
   const complementaryRole = supporting && supportingRole !== 'secondary_damage';
   const directCoverageComplete = offenseObligations.length > 0 && fulfilledIds.size === offenseObligations.length;
+  const criticalAffinityScore = primary.criticalAffinity.score
+    + (supporting ? Math.round(supporting.criticalAffinity.score * 0.5) : 0);
 
   // Direct rolled-Offense coverage is deliberately dominant. Synergy and the
   // two-skill preference decide among packages with comparable coverage; they
@@ -1013,6 +1087,7 @@ function evaluateSkillPackage(primary, supporting, offenseObligations) {
     + exactProofs * 10
     + exactCarrierProofs * 4
     + evidenceScore * 2
+    + criticalAffinityScore
     + primary.fulfilled.length * 45
     + (supporting ? 70 : 0)
     + synergyEdges.filter((edge) => edge.demandRelation === 'requires').length * 135
@@ -1160,7 +1235,12 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     && asArray(entity?.candidate_roles).includes('primary_damage')
   );
   const contentEligiblePrimaries = allPrimaryCandidates.filter(isRecommendationContentAllowedV3);
-  const viablePool = buildViableSkillPool(catalog, offenseObligations, snapshot);
+  const viablePool = buildViableSkillPool(
+    catalog,
+    offenseObligations,
+    snapshot,
+    options.criticalProfiles || {}
+  );
   const primaryPool = viablePool.filter((candidate) =>
     candidate.primaryEligible && (candidate.fulfilled.length || candidate.carriers.length)
   );
@@ -1207,6 +1287,7 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     dependencies: primary.dependencies,
     setupCosts: primary.setupCosts,
     delivery: primary.delivery,
+    criticalAffinity: primary.criticalAffinity,
     score: primary.individualScore,
     packageScore: winner.score
   } : null;
@@ -1221,6 +1302,7 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     suppliedTargets: supportingTargets,
     dependencies: supporting.dependencies,
     setupCosts: supporting.setupCosts,
+    criticalAffinity: supporting.criticalAffinity,
     score: supporting.individualScore,
     packageScore: winner.score
   } : null;

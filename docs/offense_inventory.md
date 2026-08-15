@@ -13,7 +13,9 @@ The supported category values are:
 - `Scaling`
 - `Archetype`
 
-`Archetype` currently contains `Minions/Companions`, `Totems`, and `Thorns`.
+`Archetype` currently contains `Minions/Companions` and `Totems`. `Thorns`
+remains available to passive and gearing semantics, but is not a rollable
+Offense obligation.
 
 ## Element shape
 
@@ -49,7 +51,7 @@ Ailment: Ignite, Bleed, Poison, Chill, Freeze, Shock, Electrocute.
 
 Scaling: Critical Hits.
 
-Archetype: Minions/Companions, Totems, Thorns.
+Archetype: Minions/Companions, Totems.
 
 ## Roll contract
 

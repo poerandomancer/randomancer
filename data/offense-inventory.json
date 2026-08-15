@@ -132,14 +132,6 @@
       "tags": ["totem", "totems", "proxy"],
       "attributes": {"strength": 0.5, "intelligence": 0.5},
       "relations": {}
-    },
-    {
-      "id": "thorns",
-      "name": "Thorns",
-      "category": "Archetype",
-      "tags": ["thorns", "thorns damage", "reactive", "retaliation"],
-      "attributes": {"strength": 1.0},
-      "relations": {"reinforcing": ["physical"], "secondary": ["bleed"]}
     }
   ]
 }

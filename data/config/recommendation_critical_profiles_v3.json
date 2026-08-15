@@ -1,0 +1,435 @@
+{
+  "_meta": {
+    "schema_version": "recommendation-critical-profiles-v3.0.0",
+    "profile_count": 74,
+    "minimum_base_crit_chance": 5.0,
+    "median_base_crit_chance": 9.0,
+    "maximum_base_crit_chance": 15.0
+  },
+  "failures": {
+    "Abyssal Apparition": "no_skill_crit_header",
+    "Abyssal Pact": "no_skill_crit_header",
+    "Barrage": "no_skill_crit_header",
+    "Blink": "no_skill_crit_header",
+    "Charged Staff": "no_skill_crit_header",
+    "Conductivity": "no_skill_crit_header",
+    "Consecrate": "no_skill_crit_header",
+    "Contagion": "no_skill_crit_header",
+    "Crackling Palm": "no_skill_crit_header",
+    "Despair": "no_skill_crit_header",
+    "Elemental Storm": "no_skill_crit_header",
+    "Elemental Weakness": "no_skill_crit_header",
+    "Encase in Jade": "no_skill_crit_header",
+    "Enfeeble": "no_skill_crit_header",
+    "Feast of Flesh": "no_skill_crit_header",
+    "Gelid Palm": "no_skill_crit_header",
+    "Herald of Blood": "no_skill_crit_header",
+    "Herald of the Royal Queen": "no_skill_crit_header",
+    "His Dark Horizon": "no_skill_crit_header",
+    "Hypothermia": "no_skill_crit_header",
+    "Ice-Tipped Arrows": "no_skill_crit_header",
+    "Inevitable Agony": "no_skill_crit_header",
+    "Mana Drain": "no_skill_crit_header",
+    "Mana Tempest": "no_skill_crit_header",
+    "Meditate": "no_skill_crit_header",
+    "Moment of Vulnerability": "no_skill_crit_header",
+    "Pinnacle of Power": "no_skill_crit_header",
+    "Profane Ritual": "no_skill_crit_header",
+    "Punch": "no_skill_crit_header",
+    "Rite of Restoration": "no_skill_crit_header",
+    "Shroud": "no_skill_crit_header",
+    "Sigil of Power": "no_skill_crit_header",
+    "Sorcery Ward": "no_skill_crit_header",
+    "Temporal Chains": "no_skill_crit_header",
+    "Temporal Rift": "no_skill_crit_header",
+    "Time Freeze": "no_skill_crit_header",
+    "Time Snap": "no_skill_crit_header",
+    "Tornado": "no_skill_crit_header",
+    "Unleash": "no_skill_crit_header",
+    "Vulnerability": "no_skill_crit_header",
+    "Wither": "no_skill_crit_header"
+  },
+  "generated_at": "2026-08-16",
+  "method": "PoE2DB skill-header Critical Hit Chance (v3 selector overlay)",
+  "patch": "0.8.5",
+  "profiles": {
+    "Metadata/Items/Gem/SkillGemAbyssalLivingBomb": {
+      "base_crit_chance": 13.0,
+      "name": "Untether",
+      "source_url": "https://poe2db.tw/us/Untether"
+    },
+    "Metadata/Items/Gem/SkillGemAscendancyBleedingConcoction": {
+      "base_crit_chance": 5.0,
+      "name": "Bleeding Concoction",
+      "source_url": "https://poe2db.tw/us/Bleeding_Concoction"
+    },
+    "Metadata/Items/Gem/SkillGemAscendancyElementalExpression": {
+      "base_crit_chance": 7.0,
+      "name": "Elemental Expression",
+      "source_url": "https://poe2db.tw/us/Elemental_Expression"
+    },
+    "Metadata/Items/Gem/SkillGemAscendancyExplosiveConcoction": {
+      "base_crit_chance": 5.0,
+      "name": "Explosive Concoction",
+      "source_url": "https://poe2db.tw/us/Explosive_Concoction"
+    },
+    "Metadata/Items/Gem/SkillGemAscendancyFulminatingConcoction": {
+      "base_crit_chance": 8.0,
+      "name": "Fulminating Concoction",
+      "source_url": "https://poe2db.tw/us/Fulminating_Concoction"
+    },
+    "Metadata/Items/Gem/SkillGemAscendancyPoisonousConcoction": {
+      "base_crit_chance": 5.0,
+      "name": "Acidic Concoction",
+      "source_url": "https://poe2db.tw/us/Acidic_Concoction"
+    },
+    "Metadata/Items/Gem/SkillGemAscendancyQueensProcession": {
+      "base_crit_chance": 6.0,
+      "name": "Queen's Procession",
+      "source_url": "https://poe2db.tw/us/Queen's_Procession"
+    },
+    "Metadata/Items/Gem/SkillGemAscendancyShatteringConcoction": {
+      "base_crit_chance": 11.0,
+      "name": "Shattering Concoction",
+      "source_url": "https://poe2db.tw/us/Shattering_Concoction"
+    },
+    "Metadata/Items/Gem/SkillGemBoneBlast": {
+      "base_crit_chance": 14.0,
+      "name": "Bone Blast",
+      "source_url": "https://poe2db.tw/us/Bone_Blast"
+    },
+    "Metadata/Items/Gem/SkillGemBoneCage": {
+      "base_crit_chance": 15.0,
+      "name": "Bone Cage",
+      "source_url": "https://poe2db.tw/us/Bone_Cage"
+    },
+    "Metadata/Items/Gem/SkillGemBonestorm": {
+      "base_crit_chance": 15.0,
+      "name": "Bonestorm",
+      "source_url": "https://poe2db.tw/us/Bonestorm"
+    },
+    "Metadata/Items/Gem/SkillGemColdSnap": {
+      "base_crit_chance": 13.0,
+      "name": "Snap",
+      "source_url": "https://poe2db.tw/us/Snap"
+    },
+    "Metadata/Items/Gem/SkillGemEntangle": {
+      "base_crit_chance": 10.0,
+      "name": "Entangle",
+      "source_url": "https://poe2db.tw/us/Entangle"
+    },
+    "Metadata/Items/Gem/SkillGemExplodingPoisonToad": {
+      "base_crit_chance": 5.0,
+      "name": "Bursting Fen Toad",
+      "source_url": "https://poe2db.tw/us/Bursting_Fen_Toad"
+    },
+    "Metadata/Items/Gem/SkillGemFireball": {
+      "base_crit_chance": 7.0,
+      "name": "Fireball",
+      "source_url": "https://poe2db.tw/us/Fireball"
+    },
+    "Metadata/Items/Gem/SkillGemFrostDarts": {
+      "base_crit_chance": 13.0,
+      "name": "Frost Darts",
+      "source_url": "https://poe2db.tw/us/Frost_Darts"
+    },
+    "Metadata/Items/Gem/SkillGemHeartOfIce": {
+      "base_crit_chance": 11.0,
+      "name": "Heart of Ice",
+      "source_url": "https://poe2db.tw/us/Heart_of_Ice"
+    },
+    "Metadata/Items/Gem/SkillGemIcestorm": {
+      "base_crit_chance": 11.0,
+      "name": "Icestorm",
+      "source_url": "https://poe2db.tw/us/Icestorm"
+    },
+    "Metadata/Items/Gem/SkillGemLivingBombPlayer": {
+      "base_crit_chance": 7.0,
+      "name": "Living Bomb",
+      "source_url": "https://poe2db.tw/us/Living_Bomb"
+    },
+    "Metadata/Items/Gem/SkillGemPlaytestSpell": {
+      "base_crit_chance": 5.0,
+      "name": "Playtest Spell",
+      "source_url": "https://poe2db.tw/us/Playtest_Spell"
+    },
+    "Metadata/Items/Gem/SkillGemResonatingShield": {
+      "base_crit_chance": 5.0,
+      "name": "Resonating Shield",
+      "source_url": "https://poe2db.tw/us/Resonating_Shield"
+    },
+    "Metadata/Items/Gem/SkillGemShieldBlock": {
+      "base_crit_chance": 5.0,
+      "name": "Raise Shield",
+      "source_url": "https://poe2db.tw/us/Raise_Shield"
+    },
+    "Metadata/Items/Gem/SkillGemShieldWall": {
+      "base_crit_chance": 5.0,
+      "name": "Shield Wall",
+      "source_url": "https://poe2db.tw/us/Shield_Wall"
+    },
+    "Metadata/Items/Gem/SkillGemSolarOrb": {
+      "base_crit_chance": 7.0,
+      "name": "Solar Orb",
+      "source_url": "https://poe2db.tw/us/Solar_Orb"
+    },
+    "Metadata/Items/Gem/SkillGemThrashingVines": {
+      "base_crit_chance": 10.0,
+      "name": "Thrashing Vines",
+      "source_url": "https://poe2db.tw/us/Thrashing_Vines"
+    },
+    "Metadata/Items/Gem/SkillGemUnearth": {
+      "base_crit_chance": 15.0,
+      "name": "Unearth",
+      "source_url": "https://poe2db.tw/us/Unearth"
+    },
+    "Metadata/Items/Gems/SkillGemArc": {
+      "base_crit_chance": 9.0,
+      "name": "Arc",
+      "source_url": "https://poe2db.tw/us/Arc"
+    },
+    "Metadata/Items/Gems/SkillGemArcticArmour": {
+      "base_crit_chance": 11.0,
+      "name": "Arctic Armour",
+      "source_url": "https://poe2db.tw/us/Arctic_Armour"
+    },
+    "Metadata/Items/Gems/SkillGemAscendancyApocalypse": {
+      "base_crit_chance": 12.0,
+      "name": "Apocalypse",
+      "source_url": "https://poe2db.tw/us/Apocalypse"
+    },
+    "Metadata/Items/Gems/SkillGemBallLightning": {
+      "base_crit_chance": 9.0,
+      "name": "Ball Lightning",
+      "source_url": "https://poe2db.tw/us/Ball_Lightning"
+    },
+    "Metadata/Items/Gems/SkillGemBriarpatch": {
+      "base_crit_chance": 10.0,
+      "name": "Briarpatch",
+      "source_url": "https://poe2db.tw/us/Briarpatch"
+    },
+    "Metadata/Items/Gems/SkillGemChaosbolt": {
+      "base_crit_chance": 7.0,
+      "name": "Chaos Bolt",
+      "source_url": "https://poe2db.tw/us/Chaos_Bolt"
+    },
+    "Metadata/Items/Gems/SkillGemCoilingBolts": {
+      "base_crit_chance": 7.0,
+      "name": "Coiling Bolts",
+      "source_url": "https://poe2db.tw/us/Coiling_Bolts"
+    },
+    "Metadata/Items/Gems/SkillGemComet": {
+      "base_crit_chance": 13.0,
+      "name": "Comet",
+      "source_url": "https://poe2db.tw/us/Comet"
+    },
+    "Metadata/Items/Gems/SkillGemCorpseCloud": {
+      "base_crit_chance": 8.0,
+      "name": "Decompose",
+      "source_url": "https://poe2db.tw/us/Decompose"
+    },
+    "Metadata/Items/Gems/SkillGemDarkPact": {
+      "base_crit_chance": 7.0,
+      "name": "Dark Pact",
+      "source_url": "https://poe2db.tw/us/Dark_Pact"
+    },
+    "Metadata/Items/Gems/SkillGemDetonateDead": {
+      "base_crit_chance": 8.0,
+      "name": "Detonate Dead",
+      "source_url": "https://poe2db.tw/us/Detonate_Dead"
+    },
+    "Metadata/Items/Gems/SkillGemEmberFusillade": {
+      "base_crit_chance": 7.0,
+      "name": "Ember Fusillade",
+      "source_url": "https://poe2db.tw/us/Ember_Fusillade"
+    },
+    "Metadata/Items/Gems/SkillGemEnervatingNova": {
+      "base_crit_chance": 11.0,
+      "name": "Enervating Nova",
+      "source_url": "https://poe2db.tw/us/Enervating_Nova"
+    },
+    "Metadata/Items/Gems/SkillGemEssenceDrain": {
+      "base_crit_chance": 7.0,
+      "name": "Essence Drain",
+      "source_url": "https://poe2db.tw/us/Essence_Drain"
+    },
+    "Metadata/Items/Gems/SkillGemExsanguinate": {
+      "base_crit_chance": 8.0,
+      "name": "Exsanguinate",
+      "source_url": "https://poe2db.tw/us/Exsanguinate"
+    },
+    "Metadata/Items/Gems/SkillGemEyeOfWinter": {
+      "base_crit_chance": 12.0,
+      "name": "Eye of Winter",
+      "source_url": "https://poe2db.tw/us/Eye_of_Winter"
+    },
+    "Metadata/Items/Gems/SkillGemFirebolt": {
+      "base_crit_chance": 8.0,
+      "name": "Firebolt",
+      "source_url": "https://poe2db.tw/us/Firebolt"
+    },
+    "Metadata/Items/Gems/SkillGemFirestorm": {
+      "base_crit_chance": 7.0,
+      "name": "Firestorm",
+      "source_url": "https://poe2db.tw/us/Firestorm"
+    },
+    "Metadata/Items/Gems/SkillGemFlameWall": {
+      "base_crit_chance": 5.0,
+      "name": "Flame Wall",
+      "source_url": "https://poe2db.tw/us/Flame_Wall"
+    },
+    "Metadata/Items/Gems/SkillGemFlameblast": {
+      "base_crit_chance": 8.0,
+      "name": "Flameblast",
+      "source_url": "https://poe2db.tw/us/Flameblast"
+    },
+    "Metadata/Items/Gems/SkillGemFlammability": {
+      "base_crit_chance": 8.0,
+      "name": "Flammability",
+      "source_url": "https://poe2db.tw/us/Flammability"
+    },
+    "Metadata/Items/Gems/SkillGemFreezingShards": {
+      "base_crit_chance": 11.0,
+      "name": "Freezing Shards",
+      "source_url": "https://poe2db.tw/us/Freezing_Shards"
+    },
+    "Metadata/Items/Gems/SkillGemFrostBomb": {
+      "base_crit_chance": 13.0,
+      "name": "Frost Bomb",
+      "source_url": "https://poe2db.tw/us/Frost_Bomb"
+    },
+    "Metadata/Items/Gems/SkillGemFrostWall": {
+      "base_crit_chance": 11.0,
+      "name": "Frost Wall",
+      "source_url": "https://poe2db.tw/us/Frost_Wall"
+    },
+    "Metadata/Items/Gems/SkillGemFrostbolt": {
+      "base_crit_chance": 12.0,
+      "name": "Frostbolt",
+      "source_url": "https://poe2db.tw/us/Frostbolt"
+    },
+    "Metadata/Items/Gems/SkillGemGalvanicField": {
+      "base_crit_chance": 9.0,
+      "name": "Galvanic Field",
+      "source_url": "https://poe2db.tw/us/Galvanic_Field"
+    },
+    "Metadata/Items/Gems/SkillGemGlacialClash": {
+      "base_crit_chance": 10.0,
+      "name": "Soaring Midnight",
+      "source_url": "https://poe2db.tw/us/Soaring_Midnight"
+    },
+    "Metadata/Items/Gems/SkillGemHexblast": {
+      "base_crit_chance": 7.0,
+      "name": "Hexblast",
+      "source_url": "https://poe2db.tw/us/Hexblast"
+    },
+    "Metadata/Items/Gems/SkillGemHisFoulEmergence": {
+      "base_crit_chance": 15.0,
+      "name": "His Foul Emergence",
+      "source_url": "https://poe2db.tw/us/His_Foul_Emergence"
+    },
+    "Metadata/Items/Gems/SkillGemHisWinnowingFlame": {
+      "base_crit_chance": 7.0,
+      "name": "His Winnowing Flame",
+      "source_url": "https://poe2db.tw/us/His_Winnowing_Flame"
+    },
+    "Metadata/Items/Gems/SkillGemIceNova": {
+      "base_crit_chance": 12.0,
+      "name": "Ice Nova",
+      "source_url": "https://poe2db.tw/us/Ice_Nova"
+    },
+    "Metadata/Items/Gems/SkillGemIncinerate": {
+      "base_crit_chance": 6.0,
+      "name": "Incinerate",
+      "source_url": "https://poe2db.tw/us/Incinerate"
+    },
+    "Metadata/Items/Gems/SkillGemLightningBolt": {
+      "base_crit_chance": 10.0,
+      "name": "Lightning Bolt",
+      "source_url": "https://poe2db.tw/us/Lightning_Bolt"
+    },
+    "Metadata/Items/Gems/SkillGemLightningConduit": {
+      "base_crit_chance": 10.0,
+      "name": "Lightning Conduit",
+      "source_url": "https://poe2db.tw/us/Lightning_Conduit"
+    },
+    "Metadata/Items/Gems/SkillGemLightningWarp": {
+      "base_crit_chance": 11.0,
+      "name": "Lightning Warp",
+      "source_url": "https://poe2db.tw/us/Lightning_Warp"
+    },
+    "Metadata/Items/Gems/SkillGemOrbOfStorms": {
+      "base_crit_chance": 10.0,
+      "name": "Orb of Storms",
+      "source_url": "https://poe2db.tw/us/Orb_of_Storms"
+    },
+    "Metadata/Items/Gems/SkillGemPowerSiphon": {
+      "base_crit_chance": 15.0,
+      "name": "Power Siphon",
+      "source_url": "https://poe2db.tw/us/Power_Siphon"
+    },
+    "Metadata/Items/Gems/SkillGemReap": {
+      "base_crit_chance": 14.0,
+      "name": "Reap",
+      "source_url": "https://poe2db.tw/us/Reap"
+    },
+    "Metadata/Items/Gems/SkillGemScatteringCalamity": {
+      "base_crit_chance": 11.0,
+      "name": "His Scattering Calamity",
+      "source_url": "https://poe2db.tw/us/His_Scattering_Calamity"
+    },
+    "Metadata/Items/Gems/SkillGemShieldCharge": {
+      "base_crit_chance": 5.0,
+      "name": "Shield Charge",
+      "source_url": "https://poe2db.tw/us/Shield_Charge"
+    },
+    "Metadata/Items/Gems/SkillGemSoulrend": {
+      "base_crit_chance": 13.0,
+      "name": "Soulrend",
+      "source_url": "https://poe2db.tw/us/Soulrend"
+    },
+    "Metadata/Items/Gems/SkillGemSpark": {
+      "base_crit_chance": 9.0,
+      "name": "Spark",
+      "source_url": "https://poe2db.tw/us/Spark"
+    },
+    "Metadata/Items/Gems/SkillGemTheStarsAnswer": {
+      "base_crit_chance": 8.0,
+      "name": "The Stars Answer",
+      "source_url": "https://poe2db.tw/us/The_Stars_Answer"
+    },
+    "Metadata/Items/Gems/SkillGemThunderstorm": {
+      "base_crit_chance": 9.0,
+      "name": "Thunderstorm",
+      "source_url": "https://poe2db.tw/us/Thunderstorm"
+    },
+    "Metadata/Items/Gems/SkillGemValakosCharge": {
+      "base_crit_chance": 9.0,
+      "name": "Valako's Charge",
+      "source_url": "https://poe2db.tw/us/Valako's_Charge"
+    },
+    "Metadata/Items/Gems/SkillGemVileDisruption": {
+      "base_crit_chance": 15.0,
+      "name": "His Vile Intrusion",
+      "source_url": "https://poe2db.tw/us/His_Vile_Intrusion"
+    },
+    "Metadata/Items/Gems/SkillGemVolatileDead": {
+      "base_crit_chance": 7.0,
+      "name": "Volatile Dead",
+      "source_url": "https://poe2db.tw/us/Volatile_Dead"
+    },
+    "Metadata/Items/Gems/SkillGemVolcano": {
+      "base_crit_chance": 8.0,
+      "name": "Volcano",
+      "source_url": "https://poe2db.tw/us/Volcano"
+    }
+  },
+  "schema_version": 1,
+  "source": "https://poe2db.tw/us/Skill_Gems",
+  "summary": {
+    "candidates": 115,
+    "profiles": 74,
+    "request_failures": 0,
+    "without_skill_crit_header": 41
+  }
+}

@@ -95,6 +95,16 @@ test('canonical Offense fields win over the legacy compatibility fields', () => 
   assert.equal(result.context.primaryDefense, 'Evasion');
 });
 
+test('canonical Offense inventory no longer exposes Thorns as a roll option', async () => {
+  const realOffense = await readFile(
+    new URL('../data/offense-inventory.json', import.meta.url),
+    'utf8'
+  ).then(JSON.parse);
+
+  assert.equal(realOffense.elements.some((entry) => entry.id === 'thorns'), false);
+  assert.equal(realOffense.elements.some((entry) => entry.name === 'Thorns'), false);
+});
+
 test('equipment compatibility distinguishes bow/crossbow and staff/quarterstaff', () => {
   const requires = (tag) => ({
     compatibility: {
@@ -347,6 +357,43 @@ test('scaling obligations may be fulfilled by a hard modifies fact', () => {
 
   assert.equal(result.primarySkill?.name, 'Critical Skill');
   assert.equal(result.primarySkill?.fulfilledObligations[0]?.obligationId, 'offense:critical_hits');
+});
+
+test('critical-hit rolls prefer higher intrinsic base crit when coverage is otherwise equal', () => {
+  const result = selectRecommendationPackageV3(catalog([
+    entity({ id: 'low-crit', name: 'Low Crit Spell', facts: [] }),
+    entity({ id: 'high-crit', name: 'High Crit Spell', facts: [] })
+  ]), { weapon: 'Wand', offenseList: ['Critical Hits'] }, {
+    offenseInventory: offenseInventory(),
+    criticalProfiles: {
+      profiles: {
+        'low-crit': { base_crit_chance: 5, source_url: 'https://example.test/low' },
+        'high-crit': { base_crit_chance: 15, source_url: 'https://example.test/high' }
+      }
+    }
+  });
+
+  assert.equal(result.primarySkill?.name, 'High Crit Spell');
+  assert.equal(result.primarySkill?.criticalAffinity.source, 'skill');
+  assert.equal(result.primarySkill?.criticalAffinity.baseCritChance, 15);
+  assert.equal(result.primarySkill?.fulfilledObligations[0]?.obligationId, 'offense:critical_hits');
+});
+
+test('weapon attacks remain neutral critical-hit candidates without invented skill crit values', () => {
+  const result = selectRecommendationPackageV3(catalog([
+    entity({
+      id: 'bow-attack',
+      name: 'Bow Attack',
+      facts: [],
+      types: ['Attack', 'Damage', 'Bow']
+    })
+  ]), { weapon: 'Bow', offenseList: ['Critical Hits'] }, {
+    offenseInventory: offenseInventory()
+  });
+
+  assert.equal(result.primarySkill?.name, 'Bow Attack');
+  assert.equal(result.primarySkill?.criticalAffinity.source, 'weapon');
+  assert.equal(result.primarySkill?.criticalAffinity.baseCritChance, null);
 });
 
 test('native damage can carry an ailment without falsely fulfilling its application', () => {
@@ -972,10 +1019,46 @@ test('committed catalog produces a legal primary skill for representative rolls'
   }
 });
 
-test('committed catalog remains deterministic and equipment-legal across the roll matrix', async () => {
-  const [realCatalog, realOffense] = await Promise.all([
+test('committed critical profiles are complete, catalog-backed, and cover every weapon family', async () => {
+  const [realCatalog, realOffense, criticalProfiles] = await Promise.all([
     readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
-    readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
+    readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse),
+    readFile(new URL('../data/config/recommendation_critical_profiles_v3.json', import.meta.url), 'utf8').then(JSON.parse)
+  ]);
+  const profileEntries = Object.entries(criticalProfiles.profiles || {});
+  const catalogSourceIds = new Set(realCatalog.entities.map((entry) => entry.source_id));
+  assert.equal(profileEntries.length, criticalProfiles._meta.profile_count);
+  assert.equal(profileEntries.length, criticalProfiles.summary.profiles);
+  assert.ok(profileEntries.every(([sourceId, profile]) =>
+    catalogSourceIds.has(sourceId)
+    && Number.isFinite(profile.base_crit_chance)
+    && profile.base_crit_chance > 0
+  ));
+
+  const weapons = [
+    'Two-handed Mace', 'Two-handed Axe', 'Two-handed Sword', 'Bow', 'Crossbow',
+    'Quarterstaff', 'Staff', 'One-handed Mace', 'One-handed Axe', 'One-handed Sword',
+    'Claw', 'Dagger', 'Flail', 'Spear', 'Wand', 'Sceptre', 'Talisman', 'Unarmed'
+  ];
+  for (const weapon of weapons) {
+    const snapshot = { weapon, offenseList: ['Critical Hits'] };
+    const result = selectRecommendationPackageV3(realCatalog, snapshot, {
+      offenseInventory: realOffense,
+      criticalProfiles,
+      selectionSeed: `critical-coverage-${weapon}`
+    });
+    assert.ok(result.primarySkill, weapon);
+    assert.ok(['skill', 'weapon', 'explicit_interaction'].includes(result.primarySkill.criticalAffinity.source), weapon);
+    const selected = realCatalog.entities.find((entry) => entry.id === result.primarySkill.entityId);
+    assert.equal(evaluateDeliveryCompatibilityV3(selected, snapshot).ok, true, weapon);
+  }
+});
+
+test('committed catalog remains deterministic and equipment-legal across the roll matrix', async () => {
+  const [realCatalog, realOffense, criticalProfiles] = await Promise.all([
+    readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
+    readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse),
+    readFile(new URL('../data/config/recommendation_critical_profiles_v3.json', import.meta.url), 'utf8').then(JSON.parse)
   ]);
   const weapons = [
     'Two-handed Mace', 'Two-handed Axe', 'Two-handed Sword', 'Bow', 'Crossbow',
@@ -986,8 +1069,14 @@ test('committed catalog remains deterministic and equipment-legal across the rol
   for (const weapon of weapons) {
     for (const offense of realOffense.elements) {
       const snapshot = { weapon, offenseList: [offense.name] };
-      const first = selectRecommendationPackageV3(realCatalog, snapshot, { offenseInventory: realOffense });
-      const second = selectRecommendationPackageV3(realCatalog, snapshot, { offenseInventory: realOffense });
+      const first = selectRecommendationPackageV3(realCatalog, snapshot, {
+        offenseInventory: realOffense,
+        criticalProfiles
+      });
+      const second = selectRecommendationPackageV3(realCatalog, snapshot, {
+        offenseInventory: realOffense,
+        criticalProfiles
+      });
       assert.equal(second.primarySkill?.entityId, first.primarySkill?.entityId, `${weapon} / ${offense.name}`);
       if (!first.primarySkill) continue;
       const selected = realCatalog.entities.find((entry) => entry.id === first.primarySkill.entityId);
