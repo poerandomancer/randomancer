@@ -235,6 +235,63 @@ test('weapon delivery rejects generic spells for martial rolls', () => {
   assert.equal(evaluateDeliveryCompatibilityV3(fixtures.entities[2], { weapon: 'Sceptre' }).ok, true);
 });
 
+test('martial packages reject unrestricted spells as supporting skills', () => {
+  const crossbowEquipment = {
+    is_unrestricted: false,
+    mainhand_tags_any_of: ['crossbow'],
+    offhand_tags_any_of: [],
+    allowed_weapon_tags_any_of: ['crossbow'],
+    display: 'Requires Crossbow'
+  };
+  const fixtures = catalog([
+    entity({
+      id: 'crossbow-lightning',
+      name: 'Crossbow Lightning',
+      facts: [{ relation: 'has_property', subject: 'skill', mechanic: 'lightning', confidence: 'exact' }],
+      equipment: crossbowEquipment,
+      types: ['Attack', 'Crossbow', 'Lightning']
+    }),
+    entity({
+      id: 'generic-electrocute-nova',
+      name: 'Generic Electrocute Nova',
+      roles: ['primary_damage', 'setup_control'],
+      facts: [{ relation: 'inflicts', subject: 'skill', mechanic: 'electrocute', confidence: 'strong' }],
+      types: ['AreaSpell', 'Damage', 'Lightning', 'Spell']
+    }),
+    entity({
+      id: 'weapon-bound-primer',
+      name: 'Weapon-bound Primer',
+      roles: ['setup_control'],
+      facts: [{ relation: 'inflicts', subject: 'skill', mechanic: 'electrocute', confidence: 'strong' }],
+      equipment: crossbowEquipment,
+      types: ['Buff', 'Crossbow', 'Spell']
+    })
+  ]);
+  const martial = selectRecommendationPackageV3(fixtures, {
+    weapon: 'Crossbow',
+    offenseList: ['Electrocute']
+  }, {
+    offenseInventory: {
+      elements: [{ id: 'electrocute', name: 'Electrocute', category: 'Ailment', aliases: [] }]
+    }
+  });
+  const caster = selectRecommendationPackageV3(fixtures, {
+    weapon: 'Wand',
+    offenseList: ['Electrocute']
+  }, {
+    offenseInventory: {
+      elements: [{ id: 'electrocute', name: 'Electrocute', category: 'Ailment', aliases: [] }]
+    }
+  });
+
+  assert.deepEqual(martial.pieces.map((entry) => entry.name), [
+    'Crossbow Lightning',
+    'Weapon-bound Primer'
+  ]);
+  assert.ok(!martial.pieces.some((entry) => entry.name === 'Generic Electrocute Nova'));
+  assert.equal(caster.primarySkill?.name, 'Generic Electrocute Nova');
+});
+
 test('seeded quality-band selection varies legally and is reproducible', () => {
   const fixtures = catalog(['Arc One', 'Arc Two', 'Arc Three'].map((name, index) => entity({
     id: `arc-${index + 1}`,
@@ -947,6 +1004,14 @@ test('committed catalog remains deterministic and equipment-legal across the rol
         const pieceEntity = realCatalog.entities.find((entry) => entry.id === piece.entityId);
         assert.equal(isEquipmentCompatibleV3(pieceEntity, snapshot), true, `${weapon} / ${offense.name}`);
         assert.equal(isRecommendationContentAllowedV3(pieceEntity), true, `${weapon} / ${offense.name}`);
+        const types = new Set(pieceEntity.source_evidence?.active_skill_types || []);
+        if (types.has('Spell') && !['Staff', 'Wand', 'Sceptre'].includes(weapon)) {
+          assert.equal(
+            evaluateDeliveryCompatibilityV3(pieceEntity, snapshot).ok,
+            true,
+            `${weapon} / ${offense.name} selected unrestricted spell ${piece.name}`
+          );
+        }
       }
     }
   }
@@ -1070,7 +1135,8 @@ test('reported empty and false-totem rolls select specific legal primary skills'
     {
       label: 'Crossbow / Shock',
       snapshot: { weapon: 'Crossbow', offenseList: ['Shock'] },
-      carrierIds: ['offense:shock']
+      carrierIds: ['offense:shock'],
+      expectSupporting: false
     },
     {
       label: 'Quarterstaff / Electrocute + Chill',
@@ -1094,12 +1160,22 @@ test('reported empty and false-totem rolls select specific legal primary skills'
         result.primarySkill.carrierObligations.some((entry) => fixture.carrierIds.includes(entry.obligationId)),
         fixture.label
       );
+      assert.ok(!result.pieces.some((entry) => entry.name === 'Enervating Nova'), fixture.label);
+      if (fixture.expectSupporting === false) {
+        assert.equal(result.supportingSkill, null, fixture.label);
+        continue;
+      }
       assert.ok(result.supportingSkill, fixture.label);
-      assert.ok(result.supportingSkill.fulfilledObligations.length > 0, fixture.label);
+      assert.ok(
+        result.supportingSkill.fulfilledObligations.length
+          + result.supportingSkill.carrierObligations.length > 0,
+        fixture.label
+      );
       if (fixture.expectComplementaryCoverage) {
         const represented = new Set([
           ...result.primarySkill.carrierObligations.map((entry) => entry.obligationId),
-          ...result.supportingSkill.fulfilledObligations.map((entry) => entry.obligationId)
+          ...result.supportingSkill.fulfilledObligations.map((entry) => entry.obligationId),
+          ...result.supportingSkill.carrierObligations.map((entry) => entry.obligationId)
         ]);
         assert.deepEqual([...represented].sort(), fixture.carrierIds.slice().sort(), fixture.label);
       }

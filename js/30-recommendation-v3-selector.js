@@ -436,6 +436,24 @@ function evaluateDeliveryCompatibilityV3(entity, snapshot = {}) {
   };
 }
 
+function evaluatePackagePieceDeliveryV3(entity, snapshot = {}) {
+  const weapon = weaponDeliveryProfileV3(snapshot);
+  if (weapon.kind !== 'martial') return { ok: true, reason: '', weapon };
+
+  const types = new Set(asArray(entity?.source_evidence?.active_skill_types).map(normalizeToken));
+  const isSpell = types.has('spell') || types.has('areaspell');
+  if (!isSpell) return { ok: true, reason: '', weapon };
+
+  const explicit = explicitWeaponDeliveryEvidence(entity, snapshot);
+  if (explicit) return { ok: true, reason: '', weapon, evidence: explicit };
+  return {
+    ok: false,
+    reason: `spell requires caster delivery for ${weapon.family || 'this weapon'}`,
+    weapon,
+    evidence: null
+  };
+}
+
 function isDirectlyUsableActive(entity) {
   if (!entity || entity.content_type !== 'active_skill') return false;
   if (!asArray(entity.candidate_roles).includes('primary_damage')) return false;
@@ -589,6 +607,8 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot) {
   if (!isUsablePackageActive(entity)) return null;
   const compatibility = evaluateCompatibilityV3(entity, snapshot);
   if (!compatibility.ok) return null;
+  const pieceDelivery = evaluatePackagePieceDeliveryV3(entity, snapshot);
+  if (!pieceDelivery.ok) return null;
   const facts = asArray(entity.facts);
   if (offenseObligations.some((obligation) => facts.some((fact) => factPreventsObligation(fact, obligation)))) {
     return null;
