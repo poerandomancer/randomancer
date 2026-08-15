@@ -13,14 +13,14 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 4888,
+    "fact_count": 5019,
     "fact_relation_counts": {
       "consumes": 351,
       "converts": 112,
       "creates": 64,
       "exclusive_to": 215,
       "generates": 60,
-      "has_property": 541,
+      "has_property": 672,
       "inflicts": 117,
       "modifies": 2239,
       "occupies": 444,
@@ -33,7 +33,7 @@
       "defense": 420,
       "enabler": 1157,
       "payoff": 181,
-      "primary_damage": 344,
+      "primary_damage": 345,
       "recovery": 250,
       "setup_control": 167,
       "utility": 206
@@ -43,8 +43,8 @@
       "offense_inventory": "OFFENSE_V1",
       "uniques": "poe2db_uniques_min_v4"
     },
-    "entities_with_facts": 2085,
-    "entities_without_facts": 879,
+    "entities_with_facts": 2097,
+    "entities_without_facts": 867,
     "support_entities_with_allowed_types": 603,
     "support_entities_with_excluded_types": 237,
     "passives_with_more_than_two_source_stats": 181,
@@ -587,13 +587,20 @@
         ]
       }
     },
+    "skill_taxonomy_damage_types": {
+      "evidence_count": 572,
+      "fact_count": 572,
+      "structured_count": 572,
+      "structured_rate": 1.0,
+      "samples": {}
+    },
     "skill_types": {
       "evidence_count": 4892,
-      "fact_count": 844,
-      "unparsed_count": 2805,
+      "fact_count": 728,
+      "unparsed_count": 2921,
       "recognized_unstructured_count": 1243,
-      "structured_count": 844,
-      "structured_rate": 0.1725,
+      "structured_count": 728,
+      "structured_rate": 0.1488,
       "samples": {
         "recognized_unstructured": [
           {
@@ -701,6 +708,11 @@
           {
             "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
             "kind": "active_skill_type",
+            "value": "Totemable"
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "active_skill_type",
             "value": "Trappable"
           },
           {
@@ -712,11 +724,6 @@
             "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
             "kind": "active_skill_type",
             "value": "Unleashable"
-          },
-          {
-            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
-            "kind": "active_skill_type",
-            "value": "UsableWhileMoving"
           }
         ]
       }

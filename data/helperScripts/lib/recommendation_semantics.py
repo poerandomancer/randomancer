@@ -240,9 +240,10 @@ ACTIVE_SKILL_TYPE_FACTS: dict[str, list[tuple[str, str]]] = {
     "damageovertime": [("has_property", "damage_over_time")],
     "minion": [("has_property", "minion")],
     "companion": [("has_property", "companion")],
-    "totemable": [("has_property", "totem")],
     "warcry": [("has_property", "warcry")],
 }
+
+TAXONOMY_DAMAGE_TYPES = {"physical", "fire", "cold", "lightning", "chaos"}
 
 
 def normalized_phrase(value: Any) -> str:
@@ -555,6 +556,28 @@ def parse_active_skill_type(value: Any, subject: str = "skill") -> list[dict[str
             )
         )
     return facts
+
+
+def parse_taxonomy_damage_type(value: Any, subject: str = "skill") -> list[dict[str, Any]]:
+    """Parse the enriched skill taxonomy's canonical damage-type field.
+
+    This field is stronger than a retrieval tag: enrichment derives it from
+    structured gem taxonomy. It proves the skill's damage carrier, but it does
+    not prove that the skill applies the corresponding ailment.
+    """
+    mechanic = normalized_phrase(value)
+    if mechanic not in TAXONOMY_DAMAGE_TYPES:
+        return []
+    return [
+        make_fact(
+            "has_property",
+            subject=subject,
+            source_kind="taxonomy_damage_type",
+            source_value=value,
+            mechanic=mechanic,
+            confidence="exact",
+        )
+    ]
 
 
 def parse_stat_id(value: Any, subject: str = "player") -> list[dict[str, Any]]:
@@ -1058,6 +1081,8 @@ def parse_text(value: Any, source_kind: str, subject: str) -> list[dict[str, Any
 def parse_evidence(source_kind: str, value: Any, subject: str) -> list[dict[str, Any]]:
     if source_kind == "active_skill_type":
         return parse_active_skill_type(value, subject=subject)
+    if source_kind == "taxonomy_damage_type":
+        return parse_taxonomy_damage_type(value, subject=subject)
     if source_kind == "stat_id":
         return parse_stat_id(value, subject=subject)
     return parse_text(value, source_kind=source_kind, subject=subject)

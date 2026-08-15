@@ -63,6 +63,10 @@ See `docs/cohesion_selection.md` for the canonical selection contract.
 - Recommendations are selected as a coherent package, not independent content-type buckets or fixed quotas.
 - Tags are candidate-retrieval hints only. Typed semantic facts and directed ontology relationships determine fulfillment, prerequisites, and conflicts.
 - Primary-skill delivery must match the selected weapon family. Generic spells are caster-weapon candidates, not permissive fallbacks for martial weapons; weapon-specific exceptions require typed skill-type or equipment evidence.
+- Native damage may qualify a skill as an ailment carrier, but it must not mark ailment application fulfilled. Keep the ailment unresolved until another package piece supplies explicit typed application evidence.
+- Treat `Totemable` as compatibility, never totem identity. Totem fulfillment requires explicit creation or provision evidence.
+- Exclude recommendation entities tagged with seasonal source `kalguuran` until the content is deliberately re-enabled; retain those entities in enrichment and Codex data.
+- If v3 cannot select a legal primary, preserve the existing canonical recommendation and attach unresolved diagnostics instead of replacing it with an empty list.
 - Recommendation variation may sample only within a high-quality, fully legal shortlist. Persist the per-roll selection seed, suppress immediate repeats when equivalent alternatives exist, and never use Cohesion to vary recommendation quality.
 - `data/enriched/recommendation_catalog_v3.json` is the additive semantic migration boundary for the package solver. The first feature-flagged runtime slice consumes it only for a seed-reproducible, equipment-legal primary-skill recommendation; the remaining live selectors stay unchanged.
 - Enable the migration slice explicitly with `?recommendationV3=1`. Do not make the large catalog part of the default startup payload until rollout evidence supports that change.

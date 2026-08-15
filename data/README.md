@@ -52,7 +52,7 @@ The additive recommendation v3 stage builds a unified qualitative mechanics cata
 - `data/enriched/recommendation_catalog_v3.json`
 - `data/enriched/recommendation_catalog_v3_report.json`
 
-It joins current enriched entities back to structured datamined relationships, retains scrape-backed unique and ascendancy evidence, emits typed positive and negative facts, and reports evidence that remains ambiguous or unparsed. Its schema and migration boundary are documented in `docs/recommendation_enrichment_v3.md`.
+It joins current enriched entities back to structured datamined relationships, retains scrape-backed unique and ascendancy evidence, emits typed positive and negative facts, and reports evidence that remains ambiguous or unparsed. Canonical taxonomy damage types are retained as carrier evidence without implying ailment application; seasonal Kalguuran entities remain in the catalog but are excluded by the runtime selector. Its schema and migration boundary are documented in `docs/recommendation_enrichment_v3.md`.
 
 The generator is local-only. It consumes the currently committed enriched scrape outputs; it does not make network requests itself.
 

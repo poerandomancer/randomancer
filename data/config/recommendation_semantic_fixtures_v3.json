@@ -348,6 +348,53 @@
       ]
     },
     {
+      "id": "taxonomy_lightning_is_a_carrier_not_shock_application",
+      "source_kind": "taxonomy_damage_type",
+      "subject": "skill",
+      "value": "lightning",
+      "expected_facts": [
+        {
+          "relation": "has_property",
+          "mechanic": "lightning"
+        }
+      ],
+      "forbidden_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "shock"
+        }
+      ]
+    },
+    {
+      "id": "totemable_is_compatibility_not_totem_identity",
+      "source_kind": "active_skill_type",
+      "subject": "skill",
+      "value": "Totemable",
+      "expected_facts": [],
+      "forbidden_facts": [
+        {
+          "relation": "has_property",
+          "mechanic": "totem"
+        },
+        {
+          "relation": "creates",
+          "mechanic": "totem"
+        }
+      ]
+    },
+    {
+      "id": "summons_totem_is_totem_identity",
+      "source_kind": "active_skill_type",
+      "subject": "skill",
+      "value": "SummonsTotem",
+      "expected_facts": [
+        {
+          "relation": "creates",
+          "mechanic": "totem"
+        }
+      ]
+    },
+    {
       "id": "conditional_ailment_reference_is_not_application",
       "source_kind": "skill_description",
       "subject": "skill",
@@ -485,6 +532,11 @@
       "relation": "prevents",
       "mechanic": "damage",
       "condition": "base_effect_only"
+    },
+    {
+      "entity_name": "Galvanic Shards",
+      "relation": "has_property",
+      "mechanic": "lightning"
     }
   ],
   "catalog_forbidden_assertions": [
@@ -519,6 +571,11 @@
       "entity_name": "Cast on Shock",
       "relation": "inflicts",
       "mechanic": "shock"
+    },
+    {
+      "entity_name": "Rolling Slam",
+      "relation": "has_property",
+      "mechanic": "totem"
     }
   ]
 }

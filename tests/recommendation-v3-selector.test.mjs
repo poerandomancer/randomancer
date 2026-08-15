@@ -13,6 +13,7 @@ const {
   buildRecommendationObligationsV3,
   evaluateDeliveryCompatibilityV3,
   isEquipmentCompatibleV3,
+  isRecommendationContentAllowedV3,
   isRecommendationV3Enabled,
   selectRecommendationPackageV3,
   validateRecommendationCatalogV3
@@ -22,6 +23,7 @@ function offenseInventory() {
   return {
     elements: [
       { id: 'poison', name: 'Poison', category: 'Ailment', aliases: [] },
+      { id: 'shock', name: 'Shock', category: 'Ailment', aliases: [] },
       { id: 'physical', name: 'Physical Damage', category: 'Damage Type', aliases: [] },
       { id: 'fire', name: 'Fire Damage', category: 'Damage Type', aliases: [] },
       { id: 'chaos', name: 'Chaos Damage', category: 'Damage Type', aliases: [] },
@@ -31,7 +33,14 @@ function offenseInventory() {
   };
 }
 
-function entity({ id, name, facts, equipment = { is_unrestricted: true }, types = ['Spell', 'Damage'] }) {
+function entity({
+  id,
+  name,
+  facts,
+  equipment = { is_unrestricted: true },
+  types = ['Spell', 'Damage'],
+  sourceTags = []
+}) {
   return {
     id: `skill:${id}`,
     source_id: id,
@@ -41,7 +50,8 @@ function entity({ id, name, facts, equipment = { is_unrestricted: true }, types 
     retrieval_terms: [],
     facts,
     compatibility: { equipment },
-    source_evidence: { active_skill_types: types }
+    source_evidence: { active_skill_types: types },
+    provenance: { source_tags: sourceTags }
   };
 }
 
@@ -274,6 +284,46 @@ test('scaling obligations may be fulfilled by a hard modifies fact', () => {
   assert.equal(result.primarySkill?.fulfilledObligations[0]?.obligationId, 'offense:critical_hits');
 });
 
+test('native damage can carry an ailment without falsely fulfilling its application', () => {
+  const result = selectRecommendationPackageV3(catalog([
+    entity({
+      id: 'lightning-carrier',
+      name: 'Lightning Carrier',
+      facts: [{ relation: 'has_property', subject: 'skill', mechanic: 'lightning', confidence: 'exact' }]
+    })
+  ]), { weapon: 'Wand', offenseList: ['Shock'] }, { offenseInventory: offenseInventory() });
+
+  assert.equal(result.primarySkill?.name, 'Lightning Carrier');
+  assert.deepEqual(result.primarySkill?.fulfilledObligations, []);
+  assert.deepEqual(result.primarySkill?.carrierObligations.map((entry) => entry.obligationId), ['offense:shock']);
+  assert.ok(result.unresolved.some((entry) =>
+    entry.obligationId === 'offense:shock' && entry.reason.includes('another package piece')
+  ));
+});
+
+test('Kalguuran source-tagged skills are not eligible recommendation content', () => {
+  const seasonal = entity({
+    id: 'seasonal-fire',
+    name: 'Seasonal Fire',
+    facts: [{ relation: 'has_property', subject: 'skill', mechanic: 'fire', confidence: 'exact' }],
+    sourceTags: ['kalguuran']
+  });
+  const permanent = entity({
+    id: 'permanent-fire',
+    name: 'Permanent Fire',
+    facts: [{ relation: 'has_property', subject: 'skill', mechanic: 'fire', confidence: 'exact' }]
+  });
+  const result = selectRecommendationPackageV3(catalog([seasonal, permanent]), {
+    weapon: 'Wand',
+    offenseList: ['Fire Damage']
+  }, { offenseInventory: offenseInventory(), selectionSeed: 'seasonal-filter' });
+
+  assert.equal(isRecommendationContentAllowedV3(seasonal), false);
+  assert.equal(isRecommendationContentAllowedV3(permanent), true);
+  assert.equal(result.primarySkill?.name, 'Permanent Fire');
+  assert.equal(result.diagnostics.excludedSourceTaggedCandidates, 1);
+});
+
 test('only explicit requires facts become unresolved dependencies', () => {
   const result = selectRecommendationPackageV3(catalog([
     entity({
@@ -354,6 +404,17 @@ test('runtime adapter preserves package diagnostics while using the current skil
   assert.equal(adapted.recommendationV3, packageResult);
 });
 
+test('runtime adapter does not erase the existing recommendation when v3 has no primary', () => {
+  const adapted = adaptRecommendationPackageV3ToSnapshot({
+    schemaVersion: 'recommendation-package-v3.0.0',
+    status: 'unresolved',
+    primarySkill: null
+  });
+
+  assert.equal(Object.hasOwn(adapted, 'recommendedSkills'), false);
+  assert.equal(adapted.recommendationV3.status, 'unresolved');
+});
+
 test('committed catalog produces a legal primary skill for representative rolls', async () => {
   const [realCatalog, realOffense] = await Promise.all([
     readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
@@ -389,7 +450,7 @@ test('committed catalog remains deterministic and equipment-legal across the rol
   const weapons = [
     'Two-handed Mace', 'Two-handed Axe', 'Two-handed Sword', 'Bow', 'Crossbow',
     'Quarterstaff', 'Staff', 'One-handed Mace', 'One-handed Axe', 'One-handed Sword',
-    'Claw', 'Dagger', 'Flail', 'Spear', 'Wand', 'Sceptre'
+    'Claw', 'Dagger', 'Flail', 'Spear', 'Wand', 'Sceptre', 'Talisman', 'Unarmed'
   ];
 
   for (const weapon of weapons) {
@@ -402,8 +463,12 @@ test('committed catalog remains deterministic and equipment-legal across the rol
       const selected = realCatalog.entities.find((entry) => entry.id === first.primarySkill.entityId);
       assert.equal(isEquipmentCompatibleV3(selected, snapshot), true, `${weapon} / ${offense.name}`);
       assert.equal(evaluateDeliveryCompatibilityV3(selected, snapshot).ok, true, `${weapon} / ${offense.name}`);
-      assert.ok(first.primarySkill.fulfilledObligations.length > 0, `${weapon} / ${offense.name}`);
-      assert.doesNotMatch(first.primarySkill.name, /^\s*\[?DNT/i, `${weapon} / ${offense.name}`);
+      assert.ok(
+        first.primarySkill.fulfilledObligations.length + first.primarySkill.carrierObligations.length > 0,
+        `${weapon} / ${offense.name}`
+      );
+      assert.doesNotMatch(first.primarySkill.name, /^\s*(?:\[?DNT|playtest\b|prototype\b)/i, `${weapon} / ${offense.name}`);
+      assert.equal(isRecommendationContentAllowedV3(selected), true, `${weapon} / ${offense.name}`);
     }
   }
 });
@@ -456,7 +521,7 @@ test('committed catalog keeps the reported spear and crossbow options in the sel
 
   const spear = selectedNames({ weapon: 'Spear', offenseList: ['Chill'] });
   assert.deepEqual([...spear.names].sort(), ['Fangs of Frost', 'Glacial Lance']);
-  assert.equal(spear.diagnostics.rankedCandidates, 2);
+  assert.ok(spear.diagnostics.rankedCandidates >= 2);
   assert.equal(spear.diagnostics.shortlistedCandidates, 2);
 
   const crossbow = selectedNames({
@@ -465,8 +530,56 @@ test('committed catalog keeps the reported spear and crossbow options in the sel
   });
   assert.ok(crossbow.names.has('Gas Grenade'));
   assert.ok(crossbow.names.has('Voltaic Grenade'));
-  assert.equal(crossbow.diagnostics.rankedCandidates, 3);
+  assert.ok(crossbow.diagnostics.rankedCandidates >= 3);
   assert.equal(crossbow.diagnostics.shortlistedCandidates, 3);
+});
+
+test('reported empty and false-totem rolls select specific legal primary skills', async () => {
+  const [realCatalog, realOffense] = await Promise.all([
+    readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
+    readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
+  ]);
+  const cases = [
+    {
+      label: 'Crossbow / Shock',
+      snapshot: { weapon: 'Crossbow', offenseList: ['Shock'] },
+      carrierIds: ['offense:shock']
+    },
+    {
+      label: 'Quarterstaff / Electrocute + Chill',
+      snapshot: { weapon: 'Quarterstaff', offenseList: ['Electrocute', 'Chill'] },
+      carrierIds: ['offense:electrocute', 'offense:chill']
+    }
+  ];
+
+  for (const fixture of cases) {
+    for (let index = 0; index < 64; index += 1) {
+      const result = selectRecommendationPackageV3(realCatalog, fixture.snapshot, {
+        offenseInventory: realOffense,
+        selectionSeed: `reported-empty-${index}`
+      });
+      assert.ok(result.primarySkill, fixture.label);
+      const selected = realCatalog.entities.find((entry) => entry.id === result.primarySkill.entityId);
+      assert.equal(evaluateDeliveryCompatibilityV3(selected, fixture.snapshot).ok, true, fixture.label);
+      assert.equal(isRecommendationContentAllowedV3(selected), true, fixture.label);
+      assert.ok(
+        result.primarySkill.carrierObligations.some((entry) => fixture.carrierIds.includes(entry.obligationId)),
+        fixture.label
+      );
+    }
+  }
+
+  for (let index = 0; index < 64; index += 1) {
+    const result = selectRecommendationPackageV3(realCatalog, {
+      weapon: 'Mace',
+      offenseList: ['Totems']
+    }, { offenseInventory: realOffense, selectionSeed: `reported-totem-${index}` });
+    assert.equal(result.primarySkill?.name, 'Shockwave Totem');
+    assert.deepEqual(
+      result.primarySkill?.fulfilledObligations.map((entry) => entry.obligationId),
+      ['offense:totems']
+    );
+  }
 });
 
 test('committed catalog does not promote a non-damaging setup spell to primary damage', async () => {

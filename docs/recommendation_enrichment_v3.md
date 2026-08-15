@@ -35,15 +35,17 @@ The first slice:
 - considers active skills with a `primary_damage` candidate role
 - enforces equipment, ascendancy, and weapon-delivery compatibility before ranking
 - uses only exact or strong typed facts as fulfillment evidence
+- distinguishes direct fulfillment from native damage carriers: a Lightning skill can carry Shock or Electrocute, for example, but the corresponding ailment remains unresolved until another package piece explicitly applies it
 - treats `prevents` as a hard conflict for the matching Offense
+- excludes source-tagged Kalguuran gems from recommendation eligibility while retaining them in the catalog and Codex
 - ignores Cohesion entirely
 - samples from a narrow high-quality shortlist using a persisted per-roll seed, while suppressing an immediate repeat when an equivalent alternative exists
 - writes the selected skill through the existing canonical recommendation contract
 - records complementary defense, recovery, and package dependencies as unresolved instead of filling them with weak candidates
 
-Weapon delivery is intentionally stricter than technical equip legality. Generic spells are eligible for Wand, Sceptre, and caster Staff rolls. Martial rolls require structured evidence that the skill belongs to the selected weapon family, either through its active skill types or its equipment requirement. A spell may cross that boundary only when the catalog explicitly proves the martial-weapon relationship. If no legal candidate remains, the selector reports the obligation as unresolved.
+Weapon delivery is intentionally stricter than technical equip legality. Generic spells are eligible for Wand, Sceptre, and caster Staff rolls. Martial rolls require structured evidence that the skill belongs to the selected weapon family, either through its active skill types or its equipment requirement. A spell may cross that boundary only when the catalog explicitly proves the martial-weapon relationship. If no direct fulfiller exists, a legal native damage carrier may be selected without claiming fulfillment. If no legal carrier exists either, the selector reports the obligation as unresolved.
 
-The primary Build Card is authoritative during this migration. Legacy recommendation rendering may still compute its former result, but the v3 runtime adapter replaces the canonical primary-skill idea after Offense normalization.
+The primary Build Card is authoritative during this migration. Legacy recommendation rendering may still compute its former result, but the v3 runtime adapter replaces the canonical primary-skill idea after Offense normalization only when v3 has selected a primary. An unresolved v3 result records diagnostics without erasing the existing recommendation.
 
 ## Entity contract
 
@@ -86,6 +88,10 @@ Compatibility is represented separately from affinity and candidate ranking:
 - equipment-slot occupation
 
 These are legality and package-cost facts. They are never relaxed by a low-cohesion Fate.
+
+`Totemable` is compatibility evidence only: it means a skill can be used by a totem-supporting system. It does not prove that the skill creates or is a totem. Only explicit structured evidence such as `SummonsTotem` or `SummonsAttackTotem` establishes that identity.
+
+Seasonal availability is also a legality boundary. The current selector excludes entities whose provenance contains the `kalguuran` source tag. The data stays enriched so the exclusion can be removed cleanly if that content becomes appropriate for a future league.
 
 ## Contextual roles
 

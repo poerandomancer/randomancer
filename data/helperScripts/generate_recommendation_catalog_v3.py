@@ -299,6 +299,7 @@ def build_skill_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[st
 
         granted_effects, stats = granted_effect_source(ctx, links.get("granted_effect_rids") or [])
         type_names = active_skill_types(ctx, links.get("active_skill_rids") or [], granted_effects)
+        taxonomy_damage_types = unique_sorted((skill.get("taxonomy") or {}).get("damage_types") or [])
         facts: list[dict[str, Any]] = []
 
         for type_name in type_names:
@@ -310,6 +311,18 @@ def build_skill_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[st
                     source_kind="active_skill_type",
                     value=type_name,
                     subject="skill",
+                )
+            )
+
+        for damage_type in taxonomy_damage_types:
+            facts.extend(
+                record_and_parse(
+                    coverage,
+                    group="skill_taxonomy_damage_types",
+                    entity_id=entity_id,
+                    source_kind="taxonomy_damage_type",
+                    value=damage_type,
+                    subject=subject,
                 )
             )
 
@@ -397,6 +410,7 @@ def build_skill_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[st
                 "source_evidence": {
                     "description": description,
                     "active_skill_types": type_names,
+                    "taxonomy_damage_types": taxonomy_damage_types,
                     "stats": stats,
                     "granted_effects": granted_effects,
                 },

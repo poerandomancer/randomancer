@@ -2,6 +2,7 @@ const RECOMMENDATION_CATALOG_V3_SCHEMA = 'recommendation-catalog-v3.0.0';
 const RECOMMENDATION_PACKAGE_V3_SCHEMA = 'recommendation-package-v3.0.0';
 const RECOMMENDATION_V3_QUERY_PARAM = 'recommendationV3';
 const PRIMARY_QUALITY_BAND = 12;
+const RECOMMENDATION_EXCLUDED_SOURCE_TAGS = new Set(['kalguuran']);
 
 const HARD_CONFIDENCE = new Set(['exact', 'strong']);
 const DIRECT_USE_BLOCKED_TYPES = new Set([
@@ -79,6 +80,18 @@ const OFFENSE_MECHANICS = Object.freeze({
   totems: ['totem'],
   thorns: ['thorns']
 });
+
+const AILMENT_CARRIER_MECHANICS = Object.freeze({
+  ignite: ['fire'],
+  bleed: ['physical'],
+  poison: ['chaos', 'physical'],
+  chill: ['cold'],
+  freeze: ['cold'],
+  shock: ['lightning'],
+  electrocute: ['lightning']
+});
+const DAMAGE_TYPE_MECHANICS = new Set(['physical', 'fire', 'cold', 'lightning', 'chaos']);
+const CARRIER_RELATIONS = new Set(['fulfills', 'has_property', 'converts']);
 
 const RELATION_WEIGHT = Object.freeze({
   fulfills: 9,
@@ -196,6 +209,15 @@ function allowedRelationsForOffense(category) {
   }
 }
 
+function carrierMechanicsForOffense(entry, offenseId) {
+  if (normalizeToken(entry?.category) !== 'ailment') return [];
+  const related = [
+    ...asArray(entry?.relations?.reinforcing),
+    ...asArray(entry?.relations?.secondary)
+  ].map(normalizeToken).filter((mechanic) => DAMAGE_TYPE_MECHANICS.has(mechanic));
+  return unique([...(AILMENT_CARRIER_MECHANICS[offenseId] || []), ...related]);
+}
+
 function buildRecommendationObligationsV3(snapshot = {}, offenseInventory = {}) {
   const offense = resolveOffenseEntries(snapshot, offenseInventory);
   const obligations = offense.map((entry) => {
@@ -206,7 +228,8 @@ function buildRecommendationObligationsV3(snapshot = {}, offenseInventory = {}) 
       category: entry.category || 'Unknown',
       label: entry.name || entry.id,
       mechanics: OFFENSE_MECHANICS[offenseId] || [offenseId],
-      allowedRelations: allowedRelationsForOffense(entry.category)
+      allowedRelations: allowedRelationsForOffense(entry.category),
+      carrierMechanics: carrierMechanicsForOffense(entry, offenseId)
     };
   });
 
@@ -404,7 +427,7 @@ function evaluateDeliveryCompatibilityV3(entity, snapshot = {}) {
 function isDirectlyUsableActive(entity) {
   if (!entity || entity.content_type !== 'active_skill') return false;
   if (!asArray(entity.candidate_roles).includes('primary_damage')) return false;
-  if (/^\s*\[?DNT(?:-UNUSED)?\]?/i.test(String(entity.name || ''))) return false;
+  if (/^\s*(?:\[?DNT(?:-UNUSED)?\]?|playtest\b|prototype\b)/i.test(String(entity.name || ''))) return false;
 
   const types = new Set(asArray(entity?.source_evidence?.active_skill_types).map(normalizeToken));
   for (const blocked of DIRECT_USE_BLOCKED_TYPES) if (types.has(blocked)) return false;
@@ -428,6 +451,11 @@ function isDirectlyUsableActive(entity) {
   return !hardPreventsDamage;
 }
 
+function isRecommendationContentAllowedV3(entity) {
+  const sourceTags = new Set(asArray(entity?.provenance?.source_tags).map(normalizeToken));
+  return !Array.from(RECOMMENDATION_EXCLUDED_SOURCE_TAGS).some((tag) => sourceTags.has(tag));
+}
+
 function factMechanics(fact) {
   if (fact?.relation === 'converts') return unique([normalizeToken(fact?.to)]);
   return unique([normalizeToken(fact?.mechanic)]);
@@ -439,6 +467,13 @@ function factMatchesObligation(fact, obligation) {
   if (!asArray(obligation.allowedRelations).includes(fact.relation)) return false;
   const allowedMechanics = new Set(asArray(obligation.mechanics).map(normalizeToken));
   return factMechanics(fact).some((mechanic) => allowedMechanics.has(mechanic));
+}
+
+function factMatchesCarrier(fact, obligation) {
+  if (!fact || obligation?.kind !== 'offense') return false;
+  if (!HARD_CONFIDENCE.has(fact.confidence) || !CARRIER_RELATIONS.has(fact.relation)) return false;
+  const carriers = new Set(asArray(obligation.carrierMechanics).map(normalizeToken));
+  return carriers.size > 0 && factMechanics(fact).some((mechanic) => carriers.has(mechanic));
 }
 
 function factPreventsObligation(fact, obligation) {
@@ -490,25 +525,42 @@ function evaluatePrimaryCandidate(entity, offenseObligations, snapshot) {
   }
 
   const fulfilled = [];
+  const carriers = [];
   let evidenceScore = 0;
   let exactProofs = 0;
+  let exactCarrierProofs = 0;
 
   for (const obligation of offenseObligations) {
     const proofs = facts.filter((fact) => factMatchesObligation(fact, obligation));
-    if (!proofs.length) continue;
-    proofs.sort((a, b) => proofScore(b) - proofScore(a));
-    const proof = proofs[0];
-    evidenceScore += proofScore(proof);
-    if (proof.confidence === 'exact') exactProofs += 1;
-    fulfilled.push({
+    if (proofs.length) {
+      proofs.sort((a, b) => proofScore(b) - proofScore(a));
+      const proof = proofs[0];
+      evidenceScore += proofScore(proof);
+      if (proof.confidence === 'exact') exactProofs += 1;
+      fulfilled.push({
+        obligationId: obligation.id,
+        relation: proof.relation,
+        confidence: proof.confidence,
+        mechanic: factMechanics(proof)[0] || ''
+      });
+      continue;
+    }
+
+    const carrierProofs = facts.filter((fact) => factMatchesCarrier(fact, obligation));
+    if (!carrierProofs.length) continue;
+    carrierProofs.sort((a, b) => proofScore(b) - proofScore(a));
+    const carrierProof = carrierProofs[0];
+    evidenceScore += proofScore(carrierProof);
+    if (carrierProof.confidence === 'exact') exactCarrierProofs += 1;
+    carriers.push({
       obligationId: obligation.id,
-      relation: proof.relation,
-      confidence: proof.confidence,
-      mechanic: factMechanics(proof)[0] || ''
+      relation: carrierProof.relation,
+      confidence: carrierProof.confidence,
+      mechanic: factMechanics(carrierProof)[0] || ''
     });
   }
 
-  if (!fulfilled.length) return null;
+  if (!fulfilled.length && !carriers.length) return null;
   const dependencies = candidateDependencies(entity);
   const setupCosts = candidateSetupCosts(entity);
   const roles = new Set(asArray(entity.candidate_roles));
@@ -519,11 +571,18 @@ function evaluatePrimaryCandidate(entity, offenseObligations, snapshot) {
   return {
     entity,
     fulfilled,
+    carriers,
     dependencies,
     setupCosts,
     delivery,
-    score: fulfilled.length * 100 + exactProofs * 10 + evidenceScore - packageCostPenalty,
-    exactProofs
+    score: fulfilled.length * 100
+      + carriers.length * 35
+      + exactProofs * 10
+      + exactCarrierProofs * 3
+      + evidenceScore
+      - packageCostPenalty,
+    exactProofs,
+    exactCarrierProofs
   };
 }
 
@@ -597,10 +656,11 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
 
   const model = buildRecommendationObligationsV3(snapshot, options.offenseInventory || {});
   const offenseObligations = model.obligations.filter((entry) => entry.kind === 'offense');
-  const primaryCandidates = catalog.entities.filter((entity) =>
+  const allPrimaryCandidates = catalog.entities.filter((entity) =>
     entity?.content_type === 'active_skill'
     && asArray(entity?.candidate_roles).includes('primary_damage')
   );
+  const primaryCandidates = allPrimaryCandidates.filter(isRecommendationContentAllowedV3);
   const rankedWithDuplicateNames = primaryCandidates
     .map((entity) => evaluatePrimaryCandidate(entity, offenseObligations, snapshot))
     .filter(Boolean)
@@ -619,11 +679,15 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
   });
   const { winner, shortlist } = choosePrimaryCandidate(ranked, options);
   const fulfilledIds = new Set(asArray(winner?.fulfilled).map((entry) => entry.obligationId));
+  const carrierIds = new Set(asArray(winner?.carriers).map((entry) => entry.obligationId));
   const unresolved = [];
 
   for (const obligation of offenseObligations) {
     if (!fulfilledIds.has(obligation.id)) {
-      unresolved.push(unresolvedEntry(obligation, 'No selected primary skill provides hard semantic evidence for this Offense.'));
+      const reason = carrierIds.has(obligation.id)
+        ? `The selected primary skill is a viable ${winner.carriers.find((entry) => entry.obligationId === obligation.id)?.mechanic || 'damage'} carrier, but another package piece must provide explicit ${obligation.label} application.`
+        : 'No selected primary skill provides hard semantic evidence for this Offense.';
+      unresolved.push(unresolvedEntry(obligation, reason));
     }
   }
   for (const obligation of model.obligations.filter((entry) => entry.kind === 'survivability')) {
@@ -644,6 +708,7 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     contentType: winner.entity.content_type,
     assignedRole: 'primary_damage',
     fulfilledObligations: winner.fulfilled,
+    carrierObligations: winner.carriers,
     dependencies: winner.dependencies,
     setupCosts: winner.setupCosts,
     delivery: winner.delivery,
@@ -661,6 +726,7 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     unresolved,
     diagnostics: {
       totalPrimaryCandidates: primaryCandidates.length,
+      excludedSourceTaggedCandidates: allPrimaryCandidates.length - primaryCandidates.length,
       rankedCandidates: ranked.length,
       shortlistedCandidates: shortlist.length,
       qualityBand: Number.isFinite(Number(options.qualityBand)) && Number(options.qualityBand) >= 0
@@ -672,18 +738,22 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
 
 function adaptRecommendationPackageV3ToSnapshot(packageResult) {
   const skill = packageResult?.primarySkill;
-  return {
-    recommendedSkills: skill ? [{
+  const adapted = {
+    recommendationV3: packageResult || null
+  };
+  if (skill) {
+    adapted.recommendedSkills = [{
       id: skill.sourceId || skill.entityId,
       name: skill.name,
       recommendationV3: {
         entityId: skill.entityId,
         assignedRole: skill.assignedRole,
-        fulfilledObligations: skill.fulfilledObligations
+        fulfilledObligations: skill.fulfilledObligations,
+        carrierObligations: skill.carrierObligations
       }
-    }] : [],
-    recommendationV3: packageResult || null
-  };
+    }];
+  }
+  return adapted;
 }
 
 export {
@@ -696,6 +766,7 @@ export {
   evaluateCompatibilityV3,
   evaluateDeliveryCompatibilityV3,
   isEquipmentCompatibleV3,
+  isRecommendationContentAllowedV3,
   isRecommendationV3Enabled,
   selectRecommendationPackageV3,
   validateRecommendationCatalogV3,
