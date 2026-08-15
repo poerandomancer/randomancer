@@ -6,7 +6,7 @@
  * MutationObserver/presentation guard has been removed.
  */
 
-const MAX_SKILLS_PER_WEAPON_SET = 1;
+const MAX_SKILLS_PER_WEAPON_SET = 2;
 const MAX_UNIQUES = 3;
 const MAX_ASCENDANCY_NODES = 2;
 const MAX_NOTABLES = 3;

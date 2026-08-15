@@ -39,18 +39,20 @@ function entity({
   facts,
   equipment = { is_unrestricted: true },
   types = ['Spell', 'Damage'],
-  sourceTags = []
+  sourceTags = [],
+  roles = ['primary_damage'],
+  description = ''
 }) {
   return {
     id: `skill:${id}`,
     source_id: id,
     content_type: 'active_skill',
     name,
-    candidate_roles: ['primary_damage'],
+    candidate_roles: roles,
     retrieval_terms: [],
     facts,
     compatibility: { equipment },
-    source_evidence: { active_skill_types: types },
+    source_evidence: { active_skill_types: types, description },
     provenance: { source_tags: sourceTags }
   };
 }
@@ -301,6 +303,53 @@ test('native damage can carry an ailment without falsely fulfilling its applicat
   ));
 });
 
+test('a companion skill resolves an explicit ailment gap without replacing the primary carrier', () => {
+  const result = selectRecommendationPackageV3(catalog([
+    entity({
+      id: 'lightning-carrier',
+      name: 'Lightning Carrier',
+      facts: [{ relation: 'has_property', subject: 'skill', mechanic: 'lightning', confidence: 'exact' }]
+    }),
+    entity({
+      id: 'shock-setup',
+      name: 'Shock Setup',
+      roles: ['setup_control'],
+      types: ['Spell'],
+      facts: [{ relation: 'inflicts', subject: 'skill', mechanic: 'shock', confidence: 'strong' }]
+    })
+  ]), { weapon: 'Wand', offenseList: ['Shock'] }, {
+    offenseInventory: offenseInventory(),
+    selectionSeed: 'companion-gap'
+  });
+
+  assert.equal(result.primarySkill?.name, 'Lightning Carrier');
+  assert.equal(result.supportingSkill?.name, 'Shock Setup');
+  assert.equal(result.supportingSkill?.assignedRole, 'setup_control');
+  assert.deepEqual(result.pieces.map((entry) => entry.name), ['Lightning Carrier', 'Shock Setup']);
+  assert.ok(!result.unresolved.some((entry) => entry.obligationId === 'offense:shock'));
+});
+
+test('the package selector does not add an unrelated filler skill', () => {
+  const result = selectRecommendationPackageV3(catalog([
+    entity({
+      id: 'fire-primary',
+      name: 'Fire Primary',
+      facts: [{ relation: 'has_property', subject: 'skill', mechanic: 'fire', confidence: 'exact' }]
+    }),
+    entity({
+      id: 'curse-setup',
+      name: 'Curse Setup',
+      roles: ['setup_control'],
+      types: ['Spell'],
+      facts: [{ relation: 'inflicts', subject: 'skill', mechanic: 'curse', confidence: 'strong' }]
+    })
+  ]), { weapon: 'Wand', offenseList: ['Fire Damage'] }, { offenseInventory: offenseInventory() });
+
+  assert.equal(result.primarySkill?.name, 'Fire Primary');
+  assert.equal(result.supportingSkill, null);
+  assert.equal(result.pieces.length, 1);
+});
+
 test('Kalguuran source-tagged skills are not eligible recommendation content', () => {
   const seasonal = entity({
     id: 'seasonal-fire',
@@ -321,7 +370,34 @@ test('Kalguuran source-tagged skills are not eligible recommendation content', (
   assert.equal(isRecommendationContentAllowedV3(seasonal), false);
   assert.equal(isRecommendationContentAllowedV3(permanent), true);
   assert.equal(result.primarySkill?.name, 'Permanent Fire');
-  assert.equal(result.diagnostics.excludedSourceTaggedCandidates, 1);
+  assert.equal(result.diagnostics.excludedContentCandidates, 1);
+});
+
+test('Kalguuran and description-only DNT skills are excluded from companion selection', () => {
+  const primary = entity({
+    id: 'lightning-carrier',
+    name: 'Lightning Carrier',
+    facts: [{ relation: 'has_property', subject: 'skill', mechanic: 'lightning', confidence: 'exact' }]
+  });
+  const setup = (id, name, options = {}) => entity({
+    id,
+    name,
+    roles: ['setup_control'],
+    types: ['Spell'],
+    facts: [{ relation: 'inflicts', subject: 'skill', mechanic: 'shock', confidence: 'strong' }],
+    ...options
+  });
+  const result = selectRecommendationPackageV3(catalog([
+    primary,
+    setup('seasonal-setup', 'Seasonal Setup', { sourceTags: ['kalguuran'] }),
+    setup('hidden-dnt', 'Polished Name', { description: '[DNT-UNUSED] Internal skill.' }),
+    setup('permanent-setup', 'Permanent Setup')
+  ]), { weapon: 'Wand', offenseList: ['Shock'] }, {
+    offenseInventory: offenseInventory(),
+    selectionSeed: 'companion-content-filter'
+  });
+
+  assert.equal(result.supportingSkill?.name, 'Permanent Setup');
 });
 
 test('only explicit requires facts become unresolved dependencies', () => {
@@ -341,6 +417,33 @@ test('only explicit requires facts become unresolved dependencies', () => {
   assert.deepEqual(result.primarySkill?.setupCosts, ['infusion']);
   assert.ok(result.unresolved.some((entry) => entry.obligationId === 'dependency:power_charge'));
   assert.ok(!result.unresolved.some((entry) => entry.obligationId === 'dependency:infusion'));
+});
+
+test('a companion enabler can satisfy an explicit primary dependency', () => {
+  const result = selectRecommendationPackageV3(catalog([
+    entity({
+      id: 'fire-payoff',
+      name: 'Fire Payoff',
+      facts: [
+        { relation: 'has_property', subject: 'skill', mechanic: 'fire', confidence: 'exact' },
+        { relation: 'requires', subject: 'skill', mechanic: 'power_charge', confidence: 'strong' }
+      ]
+    }),
+    entity({
+      id: 'charge-enabler',
+      name: 'Charge Enabler',
+      roles: ['enabler', 'setup_control'],
+      types: ['Spell'],
+      facts: [{ relation: 'generates', subject: 'skill', mechanic: 'power_charge', confidence: 'exact' }]
+    })
+  ]), { weapon: 'Wand', offenseList: ['Fire Damage'] }, {
+    offenseInventory: offenseInventory(),
+    selectionSeed: 'dependency-package'
+  });
+
+  assert.equal(result.supportingSkill?.name, 'Charge Enabler');
+  assert.equal(result.supportingSkill?.assignedRole, 'enabler');
+  assert.ok(!result.unresolved.some((entry) => entry.obligationId === 'dependency:power_charge'));
 });
 
 test('a no-damage base effect does not disqualify the damaging composite skill', () => {
@@ -402,6 +505,69 @@ test('runtime adapter preserves package diagnostics while using the current skil
   const adapted = adaptRecommendationPackageV3ToSnapshot(packageResult);
   assert.equal(adapted.recommendedSkills[0].name, 'Test Skill');
   assert.equal(adapted.recommendationV3, packageResult);
+});
+
+test('runtime adapter writes both primary and supporting skills in package order', () => {
+  const packageResult = {
+    schemaVersion: 'recommendation-package-v3.0.0',
+    primarySkill: { entityId: 'skill:primary', sourceId: 'primary', name: 'Primary', assignedRole: 'primary_damage' },
+    supportingSkill: { entityId: 'skill:setup', sourceId: 'setup', name: 'Setup', assignedRole: 'setup_control' },
+    pieces: [
+      { entityId: 'skill:primary', sourceId: 'primary', name: 'Primary', assignedRole: 'primary_damage' },
+      { entityId: 'skill:setup', sourceId: 'setup', name: 'Setup', assignedRole: 'setup_control' }
+    ]
+  };
+  const adapted = adaptRecommendationPackageV3ToSnapshot(packageResult);
+
+  assert.deepEqual(adapted.recommendedSkills.map((entry) => entry.name), ['Primary', 'Setup']);
+  assert.deepEqual(
+    adapted.recommendedSkills.map((entry) => entry.recommendationV3.assignedRole),
+    ['primary_damage', 'setup_control']
+  );
+});
+
+test('recommendation contract and Build Card preserve two role-labeled skill ideas', async () => {
+  const previousWindow = globalThis.window;
+  const previousDocument = globalThis.document;
+  const previousLocalStorage = globalThis.localStorage;
+  globalThis.window = {
+    RANDOMANCER: {},
+    DATA: { gems: [] },
+    addEventListener() {},
+    matchMedia() { return { matches: false }; }
+  };
+  globalThis.document = {
+    readyState: 'loading',
+    addEventListener() {},
+    querySelector() { return null; },
+    body: { appendChild() {} }
+  };
+  globalThis.localStorage = { getItem() { return null; }, setItem() {} };
+
+  try {
+    const [{ normalizeRecommendationContract }, { deriveBuildCardModel }] = await Promise.all([
+      import(new URL('../js/22-recommendation-contract.js', import.meta.url)),
+      import(new URL('../js/23-build-card-foundation.js', import.meta.url))
+    ]);
+    const snapshot = normalizeRecommendationContract({
+      buildName: 'Package Test',
+      weapon: 'Crossbow',
+      recommendedSkills: [
+        { name: 'Primary', recommendationV3: { assignedRole: 'primary_damage' } },
+        { name: 'Setup', recommendationV3: { assignedRole: 'setup_control' } },
+        { name: 'Filler' }
+      ]
+    });
+    const skillSection = deriveBuildCardModel(snapshot).backSections.find((entry) => entry.label === 'Skill Ideas');
+
+    assert.deepEqual(snapshot.recommendedSkills.map((entry) => entry.name), ['Primary', 'Setup']);
+    assert.deepEqual(skillSection.values.map((entry) => entry.name), ['Primary', 'Setup']);
+    assert.deepEqual(skillSection.values.map((entry) => entry.prefix), ['Primary', 'Setup']);
+  } finally {
+    globalThis.window = previousWindow;
+    globalThis.document = previousDocument;
+    globalThis.localStorage = previousLocalStorage;
+  }
 });
 
 test('runtime adapter does not erase the existing recommendation when v3 has no primary', () => {
@@ -469,6 +635,12 @@ test('committed catalog remains deterministic and equipment-legal across the rol
       );
       assert.doesNotMatch(first.primarySkill.name, /^\s*(?:\[?DNT|playtest\b|prototype\b)/i, `${weapon} / ${offense.name}`);
       assert.equal(isRecommendationContentAllowedV3(selected), true, `${weapon} / ${offense.name}`);
+      assert.equal(new Set(first.pieces.map((entry) => entry.name)).size, first.pieces.length, `${weapon} / ${offense.name}`);
+      for (const piece of first.pieces) {
+        const pieceEntity = realCatalog.entities.find((entry) => entry.id === piece.entityId);
+        assert.equal(isEquipmentCompatibleV3(pieceEntity, snapshot), true, `${weapon} / ${offense.name}`);
+        assert.equal(isRecommendationContentAllowedV3(pieceEntity), true, `${weapon} / ${offense.name}`);
+      }
     }
   }
 });
@@ -548,7 +720,8 @@ test('reported empty and false-totem rolls select specific legal primary skills'
     {
       label: 'Quarterstaff / Electrocute + Chill',
       snapshot: { weapon: 'Quarterstaff', offenseList: ['Electrocute', 'Chill'] },
-      carrierIds: ['offense:electrocute', 'offense:chill']
+      carrierIds: ['offense:electrocute', 'offense:chill'],
+      expectComplementaryCoverage: true
     }
   ];
 
@@ -566,6 +739,15 @@ test('reported empty and false-totem rolls select specific legal primary skills'
         result.primarySkill.carrierObligations.some((entry) => fixture.carrierIds.includes(entry.obligationId)),
         fixture.label
       );
+      assert.ok(result.supportingSkill, fixture.label);
+      assert.ok(result.supportingSkill.fulfilledObligations.length > 0, fixture.label);
+      if (fixture.expectComplementaryCoverage) {
+        const represented = new Set([
+          ...result.primarySkill.carrierObligations.map((entry) => entry.obligationId),
+          ...result.supportingSkill.fulfilledObligations.map((entry) => entry.obligationId)
+        ]);
+        assert.deepEqual([...represented].sort(), fixture.carrierIds.slice().sort(), fixture.label);
+      }
     }
   }
 
@@ -579,6 +761,8 @@ test('reported empty and false-totem rolls select specific legal primary skills'
       result.primarySkill?.fulfilledObligations.map((entry) => entry.obligationId),
       ['offense:totems']
     );
+    assert.equal(result.supportingSkill, null);
+    assert.equal(result.pieces.length, 1);
   }
 });
 

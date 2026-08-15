@@ -2,6 +2,7 @@ const RECOMMENDATION_CATALOG_V3_SCHEMA = 'recommendation-catalog-v3.0.0';
 const RECOMMENDATION_PACKAGE_V3_SCHEMA = 'recommendation-package-v3.0.0';
 const RECOMMENDATION_V3_QUERY_PARAM = 'recommendationV3';
 const PRIMARY_QUALITY_BAND = 12;
+const COMPANION_QUALITY_BAND = 8;
 const RECOMMENDATION_EXCLUDED_SOURCE_TAGS = new Set(['kalguuran']);
 
 const HARD_CONFIDENCE = new Set(['exact', 'strong']);
@@ -92,6 +93,8 @@ const AILMENT_CARRIER_MECHANICS = Object.freeze({
 });
 const DAMAGE_TYPE_MECHANICS = new Set(['physical', 'fire', 'cold', 'lightning', 'chaos']);
 const CARRIER_RELATIONS = new Set(['fulfills', 'has_property', 'converts']);
+const COMPANION_CANDIDATE_ROLES = new Set(['setup_control', 'payoff', 'enabler', 'utility']);
+const SUPPLY_RELATIONS = new Set(['fulfills', 'inflicts', 'creates', 'provides', 'generates']);
 
 const RELATION_WEIGHT = Object.freeze({
   fulfills: 9,
@@ -427,7 +430,7 @@ function evaluateDeliveryCompatibilityV3(entity, snapshot = {}) {
 function isDirectlyUsableActive(entity) {
   if (!entity || entity.content_type !== 'active_skill') return false;
   if (!asArray(entity.candidate_roles).includes('primary_damage')) return false;
-  if (/^\s*(?:\[?DNT(?:-UNUSED)?\]?|playtest\b|prototype\b)/i.test(String(entity.name || ''))) return false;
+  if (!isSelectableSkillName(entity.name)) return false;
 
   const types = new Set(asArray(entity?.source_evidence?.active_skill_types).map(normalizeToken));
   for (const blocked of DIRECT_USE_BLOCKED_TYPES) if (types.has(blocked)) return false;
@@ -453,7 +456,18 @@ function isDirectlyUsableActive(entity) {
 
 function isRecommendationContentAllowedV3(entity) {
   const sourceTags = new Set(asArray(entity?.provenance?.source_tags).map(normalizeToken));
-  return !Array.from(RECOMMENDATION_EXCLUDED_SOURCE_TAGS).some((tag) => sourceTags.has(tag));
+  if (Array.from(RECOMMENDATION_EXCLUDED_SOURCE_TAGS).some((tag) => sourceTags.has(tag))) return false;
+  if (sourceTags.has('derived_template')) return false;
+  const retrievalTerms = new Set(asArray(entity?.retrieval_terms).map(normalizeToken));
+  if (retrievalTerms.has('dnt') || retrievalTerms.has('dnt_unused') || retrievalTerms.has('coming_soon')) return false;
+  const description = String(entity?.source_evidence?.description || '');
+  return !/^\s*\[?(?:DNT(?:-UNUSED)?|UNUSED|Coming\s+Soon)\]?/i.test(description);
+}
+
+function isSelectableSkillName(name) {
+  const value = String(name || '');
+  return Boolean(value.trim())
+    && !/^\s*(?:\[?DNT(?:-UNUSED)?\]?|playtest\b|prototype\b)/i.test(value);
 }
 
 function factMechanics(fact) {
@@ -586,6 +600,119 @@ function evaluatePrimaryCandidate(entity, offenseObligations, snapshot) {
   };
 }
 
+function buildCompanionTargets(primaryCandidate, offenseObligations) {
+  if (!primaryCandidate) return [];
+  const fulfilled = new Set(asArray(primaryCandidate.fulfilled).map((entry) => entry.obligationId));
+  const carried = new Set(asArray(primaryCandidate.carriers).map((entry) => entry.obligationId));
+  const targets = [];
+
+  for (const obligation of offenseObligations) {
+    if (fulfilled.has(obligation.id)) continue;
+    targets.push({
+      id: obligation.id,
+      kind: 'offense',
+      label: obligation.label,
+      obligation,
+      // Prefer covering a Fate component that the primary does not represent
+      // at all. A carried ailment already has a typed damage bridge, even
+      // though explicit application remains unresolved.
+      weight: carried.has(obligation.id) ? 100 : 120
+    });
+  }
+
+  for (const mechanic of asArray(primaryCandidate.dependencies)) {
+    targets.push({
+      id: `dependency:${mechanic}`,
+      kind: 'dependency',
+      label: `Provide ${mechanic.replace(/_/g, ' ')}`,
+      mechanic,
+      weight: 110
+    });
+  }
+
+  for (const mechanic of asArray(primaryCandidate.setupCosts)) {
+    if (targets.some((target) => target.mechanic === mechanic)) continue;
+    targets.push({
+      id: `setup:${mechanic}`,
+      kind: 'setup',
+      label: `Create ${mechanic.replace(/_/g, ' ')} setup`,
+      mechanic,
+      weight: 90
+    });
+  }
+  return targets;
+}
+
+function factMatchesSupplyTarget(fact, target) {
+  if (!fact || !target || !HARD_CONFIDENCE.has(fact.confidence)) return false;
+  if (target.kind === 'offense') return factMatchesObligation(fact, target.obligation);
+  if (!SUPPLY_RELATIONS.has(fact.relation)) return false;
+  return factMechanics(fact).includes(normalizeToken(target.mechanic));
+}
+
+function isUsableCompanionActive(entity) {
+  if (!entity || entity.content_type !== 'active_skill') return false;
+  if (!isSelectableSkillName(entity.name) || !isRecommendationContentAllowedV3(entity)) return false;
+  const roles = new Set(asArray(entity.candidate_roles));
+  if (!Array.from(COMPANION_CANDIDATE_ROLES).some((role) => roles.has(role))) return false;
+
+  const types = new Set(asArray(entity?.source_evidence?.active_skill_types).map(normalizeToken));
+  return !types.has('inbuilttrigger') && !types.has('triggered');
+}
+
+function evaluateCompanionCandidate(entity, primaryCandidate, targets, offenseObligations, snapshot) {
+  if (!primaryCandidate || !targets.length || !isUsableCompanionActive(entity)) return null;
+  if (entity.id === primaryCandidate.entity.id) return null;
+  if (normalizeToken(entity.name) === normalizeToken(primaryCandidate.entity.name)) return null;
+
+  const compatibility = evaluateCompatibilityV3(entity, snapshot);
+  if (!compatibility.ok) return null;
+  const facts = asArray(entity.facts);
+  if (offenseObligations.some((obligation) => facts.some((fact) => factPreventsObligation(fact, obligation)))) {
+    return null;
+  }
+
+  const suppliedTargets = [];
+  let evidenceScore = 0;
+  let exactProofs = 0;
+  for (const target of targets) {
+    const proofs = facts.filter((fact) => factMatchesSupplyTarget(fact, target));
+    if (!proofs.length) continue;
+    proofs.sort((a, b) => proofScore(b) - proofScore(a));
+    const proof = proofs[0];
+    evidenceScore += target.weight + proofScore(proof);
+    if (proof.confidence === 'exact') exactProofs += 1;
+    suppliedTargets.push({
+      targetId: target.id,
+      targetKind: target.kind,
+      obligationId: target.kind === 'offense' ? target.id : null,
+      relation: proof.relation,
+      confidence: proof.confidence,
+      mechanic: factMechanics(proof)[0] || ''
+    });
+  }
+  if (!suppliedTargets.length) return null;
+
+  const dependencies = candidateDependencies(entity);
+  const setupCosts = candidateSetupCosts(entity);
+  const roles = new Set(asArray(entity.candidate_roles));
+  const assignedRole = suppliedTargets.some((entry) => entry.targetKind === 'offense')
+    ? 'setup_control'
+    : (roles.has('enabler') ? 'enabler' : 'setup_control');
+  const roleBonus = roles.has(assignedRole) ? 8 : 0;
+  const packageCostPenalty = dependencies.length * 25 + setupCosts.length * 5;
+
+  return {
+    entity,
+    assignedRole,
+    suppliedTargets,
+    dependencies,
+    setupCosts,
+    score: suppliedTargets.length * 75 + evidenceScore + exactProofs * 5 + roleBonus - packageCostPenalty,
+    exactProofs
+  };
+}
+
 function stableHash32(value) {
   let hash = 2166136261;
   for (const character of String(value ?? '')) {
@@ -630,6 +757,31 @@ function choosePrimaryCandidate(ranked, options = {}) {
     if (target < 0) return { winner: pool[index], shortlist };
   }
   return { winner: pool[pool.length - 1], shortlist };
+}
+
+function chooseCompanionCandidate(ranked, primaryCandidate, options = {}) {
+  const top = ranked[0] || null;
+  if (!top) return { winner: null, shortlist: [] };
+  const requestedBand = Number(options.companionQualityBand);
+  const qualityBand = Number.isFinite(requestedBand) && requestedBand >= 0
+    ? requestedBand
+    : COMPANION_QUALITY_BAND;
+  const shortlist = ranked.filter((candidate) => top.score - candidate.score <= qualityBand);
+  if (options.selectionSeed === undefined || options.selectionSeed === null) {
+    return { winner: shortlist[0], shortlist };
+  }
+
+  const weights = shortlist.map((candidate) =>
+    Math.max(1, qualityBand + 1 - (top.score - candidate.score))
+  );
+  const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
+  const namespace = `companion_skill:${primaryCandidate?.entity?.id || 'none'}`;
+  let target = (stableHash32(`${options.selectionSeed}:${namespace}`) / 0x100000000) * totalWeight;
+  for (let index = 0; index < shortlist.length; index += 1) {
+    target -= weights[index];
+    if (target < 0) return { winner: shortlist[index], shortlist };
+  }
+  return { winner: shortlist[shortlist.length - 1], shortlist };
 }
 
 function unresolvedEntry(obligation, reason) {
@@ -678,26 +830,72 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     return true;
   });
   const { winner, shortlist } = choosePrimaryCandidate(ranked, options);
-  const fulfilledIds = new Set(asArray(winner?.fulfilled).map((entry) => entry.obligationId));
+  const companionTargets = buildCompanionTargets(winner, offenseObligations);
+  const allCompanionCandidates = catalog.entities.filter((entity) =>
+    entity?.content_type === 'active_skill'
+    && isRecommendationContentAllowedV3(entity)
+  );
+  const rankedCompanionsWithDuplicateNames = allCompanionCandidates
+    .map((entity) => evaluateCompanionCandidate(entity, winner, companionTargets, offenseObligations, snapshot))
+    .filter(Boolean)
+    .sort((a, b) =>
+      b.score - a.score
+      || b.exactProofs - a.exactProofs
+      || String(a.entity.name || '').localeCompare(String(b.entity.name || ''))
+      || String(a.entity.id || '').localeCompare(String(b.entity.id || ''))
+    );
+  const companionNames = new Set();
+  const rankedCompanions = rankedCompanionsWithDuplicateNames.filter((candidate) => {
+    const name = normalizeToken(candidate.entity.name);
+    if (!name || companionNames.has(name)) return false;
+    companionNames.add(name);
+    return true;
+  });
+  const { winner: companionWinner, shortlist: companionShortlist } = chooseCompanionCandidate(
+    rankedCompanions,
+    winner,
+    options
+  );
+  const companionFulfilled = asArray(companionWinner?.suppliedTargets)
+    .filter((entry) => entry.targetKind === 'offense')
+    .map((entry) => ({
+      obligationId: entry.obligationId,
+      relation: entry.relation,
+      confidence: entry.confidence,
+      mechanic: entry.mechanic
+    }));
+  const fulfilledIds = new Set([
+    ...asArray(winner?.fulfilled).map((entry) => entry.obligationId),
+    ...companionFulfilled.map((entry) => entry.obligationId)
+  ]);
   const carrierIds = new Set(asArray(winner?.carriers).map((entry) => entry.obligationId));
+  const suppliedTargetIds = new Set(asArray(companionWinner?.suppliedTargets).map((entry) => entry.targetId));
   const unresolved = [];
 
   for (const obligation of offenseObligations) {
     if (!fulfilledIds.has(obligation.id)) {
       const reason = carrierIds.has(obligation.id)
         ? `The selected primary skill is a viable ${winner.carriers.find((entry) => entry.obligationId === obligation.id)?.mechanic || 'damage'} carrier, but another package piece must provide explicit ${obligation.label} application.`
-        : 'No selected primary skill provides hard semantic evidence for this Offense.';
+        : 'No selected package skill provides hard semantic evidence for this Offense.';
       unresolved.push(unresolvedEntry(obligation, reason));
     }
   }
   for (const obligation of model.obligations.filter((entry) => entry.kind === 'survivability')) {
-    unresolved.push(unresolvedEntry(obligation, 'Not assigned by the primary-skill migration slice.'));
+    unresolved.push(unresolvedEntry(obligation, 'Not assigned by the current skill-package slice.'));
   }
   for (const dependency of asArray(winner?.dependencies)) {
+    if (suppliedTargetIds.has(`dependency:${dependency}`)) continue;
     unresolved.push({
       obligationId: `dependency:${dependency}`,
       label: `Provide ${dependency.replace(/_/g, ' ')}`,
       reason: `The selected primary skill requires ${dependency.replace(/_/g, ' ')} from another package piece.`
+    });
+  }
+  for (const dependency of asArray(companionWinner?.dependencies)) {
+    unresolved.push({
+      obligationId: `companion_dependency:${dependency}`,
+      label: `Provide ${dependency.replace(/_/g, ' ')}`,
+      reason: `The selected ${companionWinner.assignedRole.replace(/_/g, ' ')} skill requires ${dependency.replace(/_/g, ' ')} from another package piece.`
     });
   }
 
@@ -714,6 +912,19 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     delivery: winner.delivery,
     score: winner.score
   } : null;
+  const supportingSkill = companionWinner ? {
+    entityId: companionWinner.entity.id,
+    sourceId: companionWinner.entity.source_id,
+    name: companionWinner.entity.name,
+    contentType: companionWinner.entity.content_type,
+    assignedRole: companionWinner.assignedRole,
+    fulfilledObligations: companionFulfilled,
+    suppliedTargets: companionWinner.suppliedTargets,
+    dependencies: companionWinner.dependencies,
+    setupCosts: companionWinner.setupCosts,
+    score: companionWinner.score
+  } : null;
+  const pieces = [primarySkill, supportingSkill].filter(Boolean);
 
   return {
     schemaVersion: RECOMMENDATION_PACKAGE_V3_SCHEMA,
@@ -722,36 +933,47 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     context: model.context,
     obligations: model.obligations,
     primarySkill,
-    pieces: primarySkill ? [primarySkill] : [],
+    supportingSkill,
+    pieces,
     unresolved,
     diagnostics: {
       totalPrimaryCandidates: primaryCandidates.length,
-      excludedSourceTaggedCandidates: allPrimaryCandidates.length - primaryCandidates.length,
+      excludedContentCandidates: allPrimaryCandidates.length - primaryCandidates.length,
       rankedCandidates: ranked.length,
       shortlistedCandidates: shortlist.length,
+      companionTargets: companionTargets.length,
+      rankedCompanionCandidates: rankedCompanions.length,
+      shortlistedCompanionCandidates: companionShortlist.length,
       qualityBand: Number.isFinite(Number(options.qualityBand)) && Number(options.qualityBand) >= 0
         ? Number(options.qualityBand)
-        : PRIMARY_QUALITY_BAND
+        : PRIMARY_QUALITY_BAND,
+      companionQualityBand: Number.isFinite(Number(options.companionQualityBand))
+        && Number(options.companionQualityBand) >= 0
+        ? Number(options.companionQualityBand)
+        : COMPANION_QUALITY_BAND
     }
   };
 }
 
 function adaptRecommendationPackageV3ToSnapshot(packageResult) {
-  const skill = packageResult?.primarySkill;
+  const skills = asArray(packageResult?.pieces).length
+    ? asArray(packageResult.pieces)
+    : [packageResult?.primarySkill].filter(Boolean);
   const adapted = {
     recommendationV3: packageResult || null
   };
-  if (skill) {
-    adapted.recommendedSkills = [{
+  if (skills.length) {
+    adapted.recommendedSkills = skills.slice(0, 2).map((skill) => ({
       id: skill.sourceId || skill.entityId,
       name: skill.name,
       recommendationV3: {
         entityId: skill.entityId,
         assignedRole: skill.assignedRole,
         fulfilledObligations: skill.fulfilledObligations,
-        carrierObligations: skill.carrierObligations
+        carrierObligations: skill.carrierObligations,
+        suppliedTargets: skill.suppliedTargets
       }
-    }];
+    }));
   }
   return adapted;
 }
@@ -761,6 +983,7 @@ export {
   RECOMMENDATION_PACKAGE_V3_SCHEMA,
   RECOMMENDATION_V3_QUERY_PARAM,
   PRIMARY_QUALITY_BAND,
+  COMPANION_QUALITY_BAND,
   adaptRecommendationPackageV3ToSnapshot,
   buildRecommendationObligationsV3,
   evaluateCompatibilityV3,

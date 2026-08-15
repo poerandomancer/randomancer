@@ -65,8 +65,8 @@ function buildCompactSnapshotPayload(snapshot) {
     });
   }
 
-  const skills1 = (snap.recommendedSkills || []).map(compactSkillEntry).filter(Boolean).slice(0, 1);
-  const skills2 = (snap.recommendedSkills2 || []).map(compactSkillEntry).filter(Boolean).slice(0, 1);
+  const skills1 = (snap.recommendedSkills || []).map(compactSkillEntry).filter(Boolean).slice(0, 2);
+  const skills2 = (snap.recommendedSkills2 || []).map(compactSkillEntry).filter(Boolean).slice(0, 2);
   put('rs', skills1);
   put('rs2', skills2);
 

@@ -23,7 +23,7 @@ Scraping and datamining provide evidence. They do not decide whether incidental 
 - `data/config/recommendation_fact_overrides_v3.json` is the curated exception boundary.
 - `data/config/recommendation_semantic_fixtures_v3.json` contains parser and catalog regression fixtures.
 
-The catalog is the data boundary consumed by the feature-flagged package-solver migration. The first runtime slice selects only the primary-skill role; later slices will assign the remaining roles and obligations.
+The catalog is the data boundary consumed by the feature-flagged package-solver migration. The current runtime slice selects a primary skill and, only when typed evidence identifies a concrete missing Offense application or primary dependency, at most one supporting setup/enabler skill. Later slices will assign broader utility and survivability roles.
 
 ## Runtime migration slice
 
@@ -40,12 +40,16 @@ The first slice:
 - excludes source-tagged Kalguuran gems from recommendation eligibility while retaining them in the catalog and Codex
 - ignores Cohesion entirely
 - samples from a narrow high-quality shortlist using a persisted per-roll seed, while suppressing an immediate repeat when an equivalent alternative exists
-- writes the selected skill through the existing canonical recommendation contract
+- selects at most one legal, nonseasonal setup/enabler companion when it explicitly resolves a primary carrier gap, another missing Offense, or a typed primary dependency
+- never adds a second skill merely for thematic overlap or variety
+- writes the ordered primary-plus-companion package through the existing canonical recommendation contract
 - records complementary defense, recovery, and package dependencies as unresolved instead of filling them with weak candidates
 
 Weapon delivery is intentionally stricter than technical equip legality. Generic spells are eligible for Wand, Sceptre, and caster Staff rolls. Martial rolls require structured evidence that the skill belongs to the selected weapon family, either through its active skill types or its equipment requirement. A spell may cross that boundary only when the catalog explicitly proves the martial-weapon relationship. If no direct fulfiller exists, a legal native damage carrier may be selected without claiming fulfillment. If no legal carrier exists either, the selector reports the obligation as unresolved.
 
-The primary Build Card is authoritative during this migration. Legacy recommendation rendering may still compute its former result, but the v3 runtime adapter replaces the canonical primary-skill idea after Offense normalization only when v3 has selected a primary. An unresolved v3 result records diagnostics without erasing the existing recommendation.
+That delivery rule identifies the primary damage skill. A supporting setup skill is instead checked for explicit equipment and ascendancy access, so an otherwise unrestricted curse, mark, or spell can accompany a martial primary. The companion still needs hard evidence that it resolves a package target; unrestricted access alone never earns a slot. With two Offenses, the companion prefers representing the component the primary does not cover at all before doubling down on an ailment for which the primary already supplies a native damage carrier.
+
+The primary Build Card is authoritative during this migration. Legacy recommendation rendering may still compute its former result, but the v3 runtime adapter replaces the canonical skill ideas after Offense normalization only when v3 has selected a primary. The card preserves package order and labels the roles as Primary and Setup/Enabler. An unresolved v3 result records diagnostics without erasing the existing recommendation.
 
 ## Entity contract
 
