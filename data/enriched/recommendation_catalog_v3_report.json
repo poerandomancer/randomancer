@@ -13,21 +13,21 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5020,
+    "fact_count": 5050,
     "fact_relation_counts": {
-      "consumes": 351,
+      "consumes": 353,
       "converts": 112,
       "creates": 64,
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 672,
-      "inflicts": 117,
+      "inflicts": 132,
       "modifies": 2239,
       "occupies": 444,
-      "prevents": 374,
-      "provides": 292,
+      "prevents": 375,
+      "provides": 302,
       "replaces": 27,
-      "requires": 53
+      "requires": 55
     },
     "candidate_role_counts": {
       "defense": 420,
@@ -35,7 +35,7 @@
       "payoff": 181,
       "primary_damage": 345,
       "recovery": 250,
-      "setup_control": 167,
+      "setup_control": 182,
       "utility": 206
     },
     "source_versions": {
@@ -43,8 +43,8 @@
       "offense_inventory": "OFFENSE_V1",
       "uniques": "poe2db_uniques_min_v4"
     },
-    "entities_with_facts": 2097,
-    "entities_without_facts": 867,
+    "entities_with_facts": 2098,
+    "entities_without_facts": 866,
     "support_entities_with_allowed_types": 603,
     "support_entities_with_excluded_types": 237,
     "passives_with_more_than_two_source_stats": 181,
@@ -53,11 +53,11 @@
   "coverage": {
     "passive_descriptions": {
       "evidence_count": 2495,
-      "fact_count": 295,
-      "unparsed_count": 659,
-      "recognized_unstructured_count": 1567,
-      "structured_count": 269,
-      "structured_rate": 0.1078,
+      "fact_count": 296,
+      "unparsed_count": 657,
+      "recognized_unstructured_count": 1568,
+      "structured_count": 270,
+      "structured_rate": 0.1082,
       "samples": {
         "recognized_unstructured": [
           {
@@ -188,9 +188,9 @@
     "passive_stats": {
       "evidence_count": 2294,
       "fact_count": 1416,
-      "unparsed_count": 458,
+      "unparsed_count": 456,
       "structured_count": 1069,
-      "recognized_unstructured_count": 767,
+      "recognized_unstructured_count": 769,
       "structured_rate": 0.466,
       "samples": {
         "recognized_unstructured": [
@@ -321,11 +321,11 @@
     },
     "skill_descriptions": {
       "evidence_count": 1115,
-      "fact_count": 340,
-      "structured_count": 261,
-      "unparsed_count": 131,
-      "recognized_unstructured_count": 723,
-      "structured_rate": 0.2341,
+      "fact_count": 360,
+      "structured_count": 276,
+      "unparsed_count": 127,
+      "recognized_unstructured_count": 712,
+      "structured_rate": 0.2475,
       "samples": {
         "recognized_unstructured": [
           {
@@ -455,11 +455,11 @@
     },
     "skill_stats": {
       "evidence_count": 6000,
-      "fact_count": 1776,
-      "unparsed_count": 2317,
-      "structured_count": 1279,
-      "recognized_unstructured_count": 2404,
-      "structured_rate": 0.2132,
+      "fact_count": 1777,
+      "unparsed_count": 2287,
+      "structured_count": 1280,
+      "recognized_unstructured_count": 2433,
+      "structured_rate": 0.2133,
       "samples": {
         "recognized_unstructured": [
           {
@@ -596,11 +596,11 @@
     },
     "skill_types": {
       "evidence_count": 4892,
-      "fact_count": 728,
-      "unparsed_count": 2921,
-      "recognized_unstructured_count": 1243,
-      "structured_count": 728,
-      "structured_rate": 0.1488,
+      "fact_count": 737,
+      "unparsed_count": 2900,
+      "recognized_unstructured_count": 1255,
+      "structured_count": 737,
+      "structured_rate": 0.1507,
       "samples": {
         "recognized_unstructured": [
           {

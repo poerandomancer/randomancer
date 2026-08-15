@@ -145,6 +145,7 @@ MECHANIC_ALIASES: list[tuple[str, tuple[str, ...]]] = [
     ("elemental_infusion", ("elemental infusion", "elementalinfusion", "elemental_infusion")),
     ("infusion", ("infusions", "infusion")),
     ("remnant", ("remnants", "remnant")),
+    ("detonation", ("detonation", "detonator", "detonate", "detonates", "detonating", "explode", "explodes")),
     ("spirit", ("spirit",)),
     ("mana", ("mana",)),
     ("life", ("life",)),
@@ -232,6 +233,7 @@ ACTIVE_SKILL_TYPE_FACTS: dict[str, list[tuple[str, str]]] = {
     "appliescurse": [("inflicts", "curse")],
     "appliesmaim": [("inflicts", "maim")],
     "causesburning": [("inflicts", "ignite")],
+    "detonator": [("provides", "detonation")],
     "physical": [("has_property", "physical")],
     "fire": [("has_property", "fire")],
     "cold": [("has_property", "cold")],
@@ -968,6 +970,66 @@ def parse_text(value: Any, source_kind: str, subject: str) -> list[dict[str, Any
                 subject=subject,
             )
         )
+
+        armour_break_application = re.search(
+            r"(?:^|_)armour_break_(?:break|breaks|breaking)(?:_[a-z0-9]+){0,5}_armour(?:_|$)"
+            r"|(?:^|_)(?:break|breaks|breaking)_(?:enemy|enemies|target|targets|their)_armour(?:_|$)",
+            normalized,
+        )
+        armour_break_prefix = ""
+        if armour_break_application:
+            armour_break_prefix = "_".join(
+                normalized[:armour_break_application.start()].rstrip("_").split("_")[-10:]
+            )
+        armour_break_is_context_only = bool(
+            re.search(r"(?:cannot|prevent|prevents|preventing)(?:_[a-z0-9]+){0,6}$", armour_break_prefix)
+            or re.search(r"(?:when|if|after)_(?:they|you|an?_enemy|the_enemy|the_target)(?:_[a-z0-9]+){0,5}$", armour_break_prefix)
+        )
+        if armour_break_application and not armour_break_is_context_only:
+            facts.append(
+                make_fact(
+                    "inflicts",
+                    subject=subject,
+                    source_kind=source_kind,
+                    source_value=text,
+                    mechanic="armour_break",
+                    confidence="strong",
+                    scope="outgoing",
+                )
+            )
+
+        if re.search(
+            r"(?:cause|causes|causing)(?:_[a-z0-9]+){0,5}_grenade(?:_grenades)?"
+            r"(?:_[a-z0-9]+){0,12}_(?:explode|explodes|detonate|detonates)(?:_|$)",
+            normalized,
+        ):
+            facts.append(
+                make_fact(
+                    "provides",
+                    subject=subject,
+                    source_kind=source_kind,
+                    source_value=text,
+                    mechanic="detonation",
+                    confidence="strong",
+                )
+            )
+
+        if re.search(
+            r"detonator_skills?(?:_[a-z0-9]+){0,8}_cause(?:_[a-z0-9]+){0,5}_cloud"
+            r"(?:_[a-z0-9]+){0,5}_(?:explode|detonate)(?:_|$)",
+            normalized,
+        ):
+            facts.append(
+                make_fact(
+                    "requires",
+                    subject=subject,
+                    source_kind=source_kind,
+                    source_value=text,
+                    mechanic="detonation",
+                    confidence="strong",
+                    condition="fire_payoff",
+                )
+            )
 
     if re.search(r"(?:^|_)on_hit(?:_|$)", normalized) and ("always" in normalized or "chance" in normalized):
         facts.append(

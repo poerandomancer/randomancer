@@ -93,6 +93,14 @@ const AILMENT_CARRIER_MECHANICS = Object.freeze({
   electrocute: ['lightning']
 });
 const DAMAGE_TYPE_MECHANICS = new Set(['physical', 'fire', 'cold', 'lightning', 'chaos']);
+const AILMENT_MECHANICS = new Set(['ignite', 'bleed', 'poison', 'chill', 'freeze', 'shock', 'electrocute']);
+const DAMAGE_TYPE_AFFINITIES = Object.freeze({
+  physical: ['armour_break'],
+  fire: ['ignite', 'detonation'],
+  cold: ['chill', 'freeze'],
+  lightning: ['shock', 'electrocute'],
+  chaos: ['poison']
+});
 const CARRIER_RELATIONS = new Set(['fulfills', 'has_property', 'converts']);
 const PACKAGE_CANDIDATE_ROLES = new Set(['primary_damage', 'setup_control', 'payoff', 'enabler', 'utility']);
 const SUPPLY_RELATIONS = new Set(['fulfills', 'inflicts', 'creates', 'provides', 'generates']);
@@ -491,6 +499,27 @@ function factMatchesCarrier(fact, obligation) {
   return carriers.size > 0 && factMechanics(fact).some((mechanic) => carriers.has(mechanic));
 }
 
+function factIsUsableForCandidate(entity, fact, obligation) {
+  if (!['has_property', 'converts'].includes(fact?.relation)) return true;
+  const facts = asArray(entity?.facts);
+  const delegatesBaseDamage = facts.some((entry) =>
+    entry?.relation === 'prevents'
+    && normalizeToken(entry?.mechanic) === 'damage'
+    && entry?.condition === 'base_effect_only'
+    && HARD_CONFIDENCE.has(entry?.confidence)
+  );
+  if (!delegatesBaseDamage) return true;
+
+  const affinity = offenseAffinityMechanics([obligation]);
+  const offThemeAilment = facts.some((entry) =>
+    entry?.relation === 'inflicts'
+    && HARD_CONFIDENCE.has(entry?.confidence)
+    && AILMENT_MECHANICS.has(normalizeToken(entry?.mechanic))
+    && !affinity.has(normalizeToken(entry?.mechanic))
+  );
+  return !offThemeAilment;
+}
+
 function factPreventsObligation(fact, obligation) {
   if (fact?.relation !== 'prevents' || !HARD_CONFIDENCE.has(fact?.confidence)) return false;
   const allowedMechanics = new Set(asArray(obligation?.mechanics).map(normalizeToken));
@@ -501,7 +530,7 @@ function proofScore(fact) {
   return (RELATION_WEIGHT[fact?.relation] || 0) + (fact?.confidence === 'exact' ? 2 : 1);
 }
 
-function candidateDependencies(entity) {
+function candidateDependencies(entity, offenseObligations = []) {
   const ownProvision = new Set();
   for (const fact of asArray(entity?.facts)) {
     if (!HARD_CONFIDENCE.has(fact?.confidence)) continue;
@@ -511,10 +540,12 @@ function candidateDependencies(entity) {
   }
 
   const dependencies = [];
+  const offenseAffinity = offenseAffinityMechanics(offenseObligations);
   for (const fact of asArray(entity?.facts)) {
     if (!HARD_CONFIDENCE.has(fact?.confidence)) continue;
     const mechanic = normalizeToken(fact?.mechanic);
     if (fact?.relation !== 'requires' || !mechanic || ownProvision.has(mechanic)) continue;
+    if (fact?.condition === 'fire_payoff' && !offenseAffinity.has('fire')) continue;
     dependencies.push(mechanic);
   }
   return unique(dependencies);
@@ -569,7 +600,10 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot) {
   let exactProofs = 0;
   let exactCarrierProofs = 0;
   for (const obligation of offenseObligations) {
-    const proofs = facts.filter((fact) => factMatchesObligation(fact, obligation));
+    const proofs = facts.filter((fact) =>
+      factMatchesObligation(fact, obligation)
+      && factIsUsableForCandidate(entity, fact, obligation)
+    );
     if (proofs.length) {
       proofs.sort((a, b) => proofScore(b) - proofScore(a));
       const proof = proofs[0];
@@ -584,7 +618,10 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot) {
       continue;
     }
 
-    const carrierProofs = facts.filter((fact) => factMatchesCarrier(fact, obligation));
+    const carrierProofs = facts.filter((fact) =>
+      factMatchesCarrier(fact, obligation)
+      && factIsUsableForCandidate(entity, fact, obligation)
+    );
     if (!carrierProofs.length) continue;
     carrierProofs.sort((a, b) => proofScore(b) - proofScore(a));
     const proof = carrierProofs[0];
@@ -608,7 +645,7 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot) {
     }
   }
 
-  const dependencies = candidateDependencies(entity);
+  const dependencies = candidateDependencies(entity, offenseObligations);
   const setupCosts = candidateSetupCosts(entity);
   const demandConfidence = (relation, mechanic) => hardFacts.some((fact) =>
     fact?.relation === relation
@@ -764,6 +801,46 @@ function adjacentOffenseFacts(candidate, offenseObligations) {
   );
 }
 
+function offenseAffinityMechanics(offenseObligations) {
+  return new Set(offenseObligations.flatMap((obligation) => {
+    const mechanics = [
+      ...asArray(obligation.mechanics),
+      ...asArray(obligation.carrierMechanics)
+    ].map(normalizeToken);
+    return unique([
+      ...mechanics,
+      ...mechanics.flatMap((mechanic) => DAMAGE_TYPE_AFFINITIES[mechanic] || [])
+    ]);
+  }));
+}
+
+function offenseAnchoredSynergyEdges(
+  primary,
+  supporting,
+  rawEdges,
+  offenseObligations,
+  supportingFulfilled,
+  supportingCarriers
+) {
+  const affinity = offenseAffinityMechanics(offenseObligations);
+  const supportingIsOffenseRelevant = supportingFulfilled.length > 0 || supportingCarriers.length > 0;
+  const primaryHasAlignedDemand = primary.demands.some((demand) => affinity.has(demand.mechanic));
+
+  return rawEdges.filter((edge) => {
+    if (affinity.has(edge.mechanic)) return true;
+    if (supportingIsOffenseRelevant) return true;
+
+    // A resource enabler can still support an Offense-relevant primary when
+    // that resource is its only explicit route. It must not, however, promote
+    // an off-theme payoff or satisfy the wrong branch of an elemental payoff
+    // that has a rolled-Offense setup available (for example Ignite for a
+    // Cold Snap package that can instead consume Freeze).
+    return edge.fromEntityId === supporting.entity.id
+      && edge.toEntityId === primary.entity.id
+      && !primaryHasAlignedDemand;
+  });
+}
+
 function resolvedDemandKeys(candidates, synergyEdges) {
   const selectedIds = new Set(candidates.map((candidate) => candidate.entity.id));
   return new Set(synergyEdges
@@ -830,10 +907,20 @@ function evaluateSkillPackage(primary, supporting, offenseObligations) {
     fulfilled: supportingFulfilled,
     carriers: supportingCarriers
   } : null;
-  const synergyEdges = supporting ? [
+  const rawSynergyEdges = supporting ? [
     ...findDirectedSynergyEdges(primary, supporting),
     ...findDirectedSynergyEdges(supporting, primary)
   ] : [];
+  const synergyEdges = supporting
+    ? offenseAnchoredSynergyEdges(
+      primary,
+      supporting,
+      rawSynergyEdges,
+      offenseObligations,
+      supportingFulfilled,
+      supportingCarriers
+    )
+    : [];
   const supportingAdjacentFacts = adjacentOffenseFacts(supporting, offenseObligations);
   const primaryRepresentedBeforePair = new Set([
     ...primary.fulfilled.map((entry) => entry.obligationId),

@@ -480,6 +480,80 @@
           "mechanic": "poison"
         }
       ]
+    },
+    {
+      "id": "skill_breaks_enemy_armour",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "Fire bolts rapidly to [ArmourBreak|Break enemy Armour].",
+      "expected_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "armour_break"
+        }
+      ]
+    },
+    {
+      "id": "preventing_armour_break_is_not_application",
+      "source_kind": "skill_description",
+      "subject": "supported_skill",
+      "value": "Deals more damage but prevents them from [ArmourBreak|Breaking Armour] themselves.",
+      "expected_facts": [],
+      "forbidden_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "armour_break"
+        }
+      ]
+    },
+    {
+      "id": "conditional_armour_break_reference_is_not_application",
+      "source_kind": "skill_description",
+      "subject": "supported_skill",
+      "value": "Supported Attacks [Daze] enemies when they fully [ArmourBreak|Break Armour].",
+      "expected_facts": [],
+      "forbidden_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "armour_break"
+        }
+      ]
+    },
+    {
+      "id": "detonator_skill_type_provides_detonation",
+      "source_kind": "active_skill_type",
+      "subject": "skill",
+      "value": "Detonator",
+      "expected_facts": [
+        {
+          "relation": "provides",
+          "mechanic": "detonation"
+        }
+      ]
+    },
+    {
+      "id": "skill_detonates_grenades",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "The explosion will cause any [Grenade|Grenades] in its area to also explode.",
+      "expected_facts": [
+        {
+          "relation": "provides",
+          "mechanic": "detonation"
+        }
+      ]
+    },
+    {
+      "id": "gas_cloud_fire_payoff_requires_detonation",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "[Burning] effects or [Detonator|Detonator] skills will cause the cloud to explode in a fiery blast.",
+      "expected_facts": [
+        {
+          "relation": "requires",
+          "mechanic": "detonation"
+        }
+      ]
     }
   ],
   "catalog_assertions": [
@@ -539,6 +613,21 @@
       "mechanic": "poison"
     },
     {
+      "entity_name": "Armour Piercing Rounds",
+      "relation": "inflicts",
+      "mechanic": "armour_break"
+    },
+    {
+      "entity_name": "Explosive Shot",
+      "relation": "provides",
+      "mechanic": "detonation"
+    },
+    {
+      "entity_name": "Gas Grenade",
+      "relation": "requires",
+      "mechanic": "detonation"
+    },
+    {
       "entity_name": "Spearfield",
       "relation": "prevents",
       "mechanic": "damage",
@@ -593,6 +682,21 @@
       "entity_name": "Rolling Slam",
       "relation": "has_property",
       "mechanic": "totem"
+    },
+    {
+      "entity_name": "Battershout",
+      "relation": "inflicts",
+      "mechanic": "armour_break"
+    },
+    {
+      "entity_name": "Break Posture",
+      "relation": "inflicts",
+      "mechanic": "armour_break"
+    },
+    {
+      "entity_name": "Exploit Weakness",
+      "relation": "inflicts",
+      "mechanic": "armour_break"
     }
   ]
 }

@@ -11,21 +11,21 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5020,
+    "fact_count": 5050,
     "fact_relation_counts": {
-      "consumes": 351,
+      "consumes": 353,
       "converts": 112,
       "creates": 64,
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 672,
-      "inflicts": 117,
+      "inflicts": 132,
       "modifies": 2239,
       "occupies": 444,
-      "prevents": 374,
-      "provides": 292,
+      "prevents": 375,
+      "provides": 302,
       "replaces": 27,
-      "requires": 53
+      "requires": 55
     },
     "candidate_role_counts": {
       "defense": 420,
@@ -33,7 +33,7 @@
       "payoff": 181,
       "primary_damage": 345,
       "recovery": 250,
-      "setup_control": 167,
+      "setup_control": 182,
       "utility": 206
     },
     "source_versions": {
@@ -3924,7 +3924,8 @@
       "source_id": "Metadata/Items/Gem/SkillGemArmourPiercingRounds",
       "name": "Armour Piercing Rounds",
       "candidate_roles": [
-        "primary_damage"
+        "primary_damage",
+        "setup_control"
       ],
       "retrieval_terms": [
         "strength",
@@ -3953,6 +3954,19 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "[Ammunition|Load your Crossbow] with a clip of bolts that can be fired rapidly and [ArmourBreak|Break enemy Armour]. Using this Skill again reloads the clip."
+            }
+          ],
+          "mechanic": "armour_break",
+          "scope": "outgoing"
         },
         {
           "relation": "prevents",
@@ -6737,6 +6751,22 @@
           "mechanic": "damage",
           "condition": "base_effect_only",
           "scope": "outgoing"
+        },
+        {
+          "relation": "provides",
+          "subject": "skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "active_skill_type",
+              "value": "Detonator"
+            },
+            {
+              "kind": "skill_description",
+              "value": "Replaces your dodge roll with an explosive-assisted leap, firing off a round from your prosthetic cannon leg that [Blind|Blinds] and [Ignite|Ignites] enemies in the area you escape from. The explosion will cause any [Grenade|Grenades] in its area of effect to also explode."
+            }
+          ],
+          "mechanic": "detonation"
         }
       ],
       "compatibility": {
@@ -7687,6 +7717,18 @@
             }
           ],
           "mechanic": "bleed"
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "stat_id",
+              "value": "blood_hunt_X_blood_loss_consumed_to_explode"
+            }
+          ],
+          "mechanic": "detonation"
         },
         {
           "relation": "has_property",
@@ -21275,6 +21317,18 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "provides",
+          "subject": "skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "active_skill_type",
+              "value": "Detonator"
+            }
+          ],
+          "mechanic": "detonation"
         }
       ],
       "compatibility": {
@@ -21898,6 +21952,18 @@
             }
           ],
           "mechanic": "fire"
+        },
+        {
+          "relation": "provides",
+          "subject": "skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "active_skill_type",
+              "value": "Detonator"
+            }
+          ],
+          "mechanic": "detonation"
         }
       ],
       "compatibility": {
@@ -28609,6 +28675,18 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "provides",
+          "subject": "skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "active_skill_type",
+              "value": "Detonator"
+            }
+          ],
+          "mechanic": "detonation"
         }
       ],
       "compatibility": {
@@ -28914,6 +28992,18 @@
           "mechanic": "damage",
           "condition": "base_effect_only",
           "scope": "outgoing"
+        },
+        {
+          "relation": "provides",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "[Ammunition|Load your Crossbow] with flaming bolts that explode on impact. The explosion will cause any [Grenade|Grenades] in its area of effect to also explode."
+            }
+          ],
+          "mechanic": "detonation"
         }
       ],
       "compatibility": {
@@ -29187,6 +29277,18 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "provides",
+          "subject": "skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "active_skill_type",
+              "value": "Detonator"
+            }
+          ],
+          "mechanic": "detonation"
         }
       ],
       "compatibility": {
@@ -31124,6 +31226,7 @@
       "source_id": "Metadata/Items/Gems/SkillGemFerociousRoar",
       "name": "Ferocious Roar",
       "candidate_roles": [
+        "setup_control",
         "utility"
       ],
       "retrieval_terms": [
@@ -31158,6 +31261,19 @@
             }
           ],
           "mechanic": "warcry"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "[Shapeshift] into a [Bear] and roar in defiance, immediately gaining [Rage] if there are enemies nearby and [Empowered|Empowering] subsequent [Attack|Attacks] to [ArmourBreak|Break Armour]. Alternatively, socketing a human-form [Warcry] into this Skill triggers that [Warcry] instead, and augments its damage and area. This Skill's cooldown can be bypassed by expending an [Charges|Endurance Charge]."
+            }
+          ],
+          "mechanic": "armour_break",
+          "scope": "outgoing"
         }
       ],
       "compatibility": {
@@ -32768,6 +32884,18 @@
           ],
           "mechanic": "rage",
           "scope": "self"
+        },
+        {
+          "relation": "provides",
+          "subject": "skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "active_skill_type",
+              "value": "Detonator"
+            }
+          ],
+          "mechanic": "detonation"
         }
       ],
       "compatibility": {
@@ -39849,6 +39977,19 @@
             }
           ],
           "mechanic": "poison"
+        },
+        {
+          "relation": "requires",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Fire a bouncing [Grenade] that causes a burst of [Poison|Poison] gas when its fuse expires, damaging enemies and leaving behind a growing [Poison|Poison] cloud. [Burning] effects or [Detonator|Detonator] skills will cause the cloud to explode in a fiery blast."
+            }
+          ],
+          "mechanic": "detonation",
+          "condition": "fire_payoff"
         }
       ],
       "compatibility": {
@@ -41499,6 +41640,18 @@
         "chill"
       ],
       "facts": [
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Sweep your [Quarterstaff|Quarterstaff] upwards, releasing an icy fissure which deals damage in a series of bursts culminating in a large spike. [Frozen|Frozen] enemies hit by the final spike are dealt heavy damage but the [Freeze] is [Consume|Consumed]. [IceCrystals|Ice Crystals] hit by the final spike explode."
+            }
+          ],
+          "mechanic": "detonation"
+        },
         {
           "relation": "consumes",
           "subject": "skill",
@@ -73333,6 +73486,18 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "provides",
+          "subject": "skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "active_skill_type",
+              "value": "Detonator"
+            }
+          ],
+          "mechanic": "detonation"
         }
       ],
       "compatibility": {
@@ -80014,6 +80179,18 @@
             }
           ],
           "mechanic": "minion"
+        },
+        {
+          "relation": "provides",
+          "subject": "skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "active_skill_type",
+              "value": "Detonator"
+            }
+          ],
+          "mechanic": "detonation"
         }
       ],
       "compatibility": {
@@ -82135,7 +82312,8 @@
       "source_id": "Metadata/Items/Gems/SkillGemSmashToSmithereens",
       "name": "Smash to Smithereens",
       "candidate_roles": [
-        "primary_damage"
+        "primary_damage",
+        "setup_control"
       ],
       "retrieval_terms": [
         "attack",
@@ -82181,6 +82359,19 @@
             }
           ],
           "mechanic": "fire"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Blows strong enough to [HeavyStun|Heavy Stun] an enemy reverberate in an area around the enemy and heavily [ArmourBreak|Break Armour]."
+            }
+          ],
+          "mechanic": "armour_break",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -93515,6 +93706,18 @@
             }
           ],
           "mechanic": "shock"
+        },
+        {
+          "relation": "provides",
+          "subject": "skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "active_skill_type",
+              "value": "Detonator"
+            }
+          ],
+          "mechanic": "detonation"
         }
       ],
       "compatibility": {
@@ -106365,6 +106568,19 @@
           ],
           "mechanic": "poison",
           "scope": "outgoing"
+        },
+        {
+          "relation": "requires",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "[DNT-UNUSED] Creates a [Poison|Poison] cloud. [Burning] effects or [Detonator|Detonator] skills will cause the cloud to explode in a fiery blast. (Wording copied from Toxic Grenade.)"
+            }
+          ],
+          "mechanic": "detonation",
+          "condition": "fire_payoff"
         }
       ],
       "compatibility": {
@@ -118223,6 +118439,7 @@
       "source_id": "AscendancyWarrior2Notable2",
       "name": "Imploding Impacts",
       "candidate_roles": [
+        "setup_control",
         "defense"
       ],
       "retrieval_terms": [
@@ -118241,6 +118458,23 @@
             }
           ],
           "mechanic": "warbringer"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "scraped_passive_line",
+              "value": "you inflict increases all Damage Taken from Hits instead You can Break Enemy Armour to below 0"
+            },
+            {
+              "kind": "scraped_passive_description",
+              "value": "Fully Broken Armour you inflict increases all Damage Taken from Hits instead You can Break Enemy Armour to below 0"
+            }
+          ],
+          "mechanic": "armour_break",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -200561,6 +200795,7 @@
       "source_id": "Metadata/Items/Gems/SupportGemSplinter",
       "name": "Armour Break I",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -200585,6 +200820,19 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports Skills that [HitDamage|Hit] Enemies, causing those [HitDamage|Hits] to [ArmourBreak|Break Armour] based on a portion of [Physical|Physical Damage] dealt."
+            }
+          ],
+          "mechanic": "armour_break",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -200667,6 +200915,7 @@
       "source_id": "Metadata/Items/Gems/SupportGemSplinterTwo",
       "name": "Armour Break II",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -200694,6 +200943,19 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports Skills that [HitDamage|Hit] Enemies, causing those [HitDamage|Hits] to [ArmourBreak|Break Armour] based on a portion of [Physical|Physical Damage] dealt. On [ArmourBreak|Fully Breaking Armour] with Supported Skills, you have a chance to gain an [Charges|Endurance Charge]."
+            }
+          ],
+          "mechanic": "armour_break",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -200784,6 +201046,7 @@
       "source_id": "Metadata/Items/Gems/SupportGemSplinterThree",
       "name": "Armour Break III",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -200811,6 +201074,19 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports Skills that [HitDamage|Hit] Enemies, causing those [HitDamage|Hits] to [ArmourBreak|Break Armour] based on a portion of [Physical|Physical Damage] dealt. On [ArmourBreak|Fully Breaking Armour] with Supported Skills, you have a chance to gain an [Charges|Endurance Charge]."
+            }
+          ],
+          "mechanic": "armour_break",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -205227,6 +205503,7 @@
       "source_id": "Metadata/Items/Gem/SupportGemBreachlordsRift",
       "name": "Breachlord's Rift",
       "candidate_roles": [
+        "setup_control",
         "enabler",
         "defense"
       ],
@@ -205269,6 +205546,19 @@
             }
           ],
           "mechanic": "lightning"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports any skill that [HitDamage|Hits] enemies, causing it to [ArmourBreak|Break Armour] of enemies it [Freeze|Freezes] or [Electrocute|Electrocutes]."
+            }
+          ],
+          "mechanic": "armour_break",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -205746,6 +206036,7 @@
       "source_id": "Metadata/Items/Gems/SupportGemBrittleArmour",
       "name": "Brittle Armour",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -205798,6 +206089,19 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports Skills which can [HitDamage|Hit] enemies. [HitDamage|Hits] with Supported Skills which [Freeze] enemies cause [Physical] damage against them to [ArmourBreak|Break their Armour] while they remain [Freeze|Frozen]."
+            }
+          ],
+          "mechanic": "armour_break",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -211715,6 +212019,7 @@
       "source_id": "Metadata/Items/Gems/SupportGemCorrosion",
       "name": "Corrosion",
       "candidate_roles": [
+        "setup_control",
         "payoff",
         "enabler"
       ],
@@ -211768,6 +212073,19 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports any skill that [HitDamage|Hits] enemies, causing [Poison] it applies to also [ArmourBreak|Break] enemy [Armour|Armour]. Cannot support skills that [Consume] [ArmourBreak|Fully Broken] [Armour]."
+            }
+          ],
+          "mechanic": "armour_break",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -219430,6 +219748,20 @@
             }
           ],
           "mechanic": "lightning"
+        },
+        {
+          "relation": "prevents",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports any Skill which can deal damage. [Lightning] damage from Supported Skills can inflict [Electrocute], but Supported Skills cannot inflict [Shock]. Enemies slain while [Electrocute|Electrocuted] by Supported Skills explode, dealing a percentage of their maximum Life as [Lightning] damage."
+            }
+          ],
+          "mechanic": "detonation",
+          "condition": "electrocute_electrocuted_by_supported_skills_explode_dealing_a_percentage_of_their_maximum_life_as_lightning_damage",
+          "scope": "outgoing"
         },
         {
           "relation": "prevents",
@@ -239245,6 +239577,7 @@
       "source_id": "Metadata/Items/Gem/SupportGemOutmaneuver",
       "name": "Outmaneuver",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -239269,6 +239602,19 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports Skills you use yourself which can cause Damaging [HitDamage|Hits]. Supported Skills [ArmourBreak|Break Armour] against [ParriedDebuff|Parried] Enemies."
+            }
+          ],
+          "mechanic": "armour_break",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -246774,6 +247120,7 @@
       "source_id": "Metadata/Items/Gems/SupportGemRendingApex",
       "name": "Rending Apex",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -246788,7 +247135,21 @@
         "armour_break",
         "break_armour"
       ],
-      "facts": [],
+      "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports [Strike|Strikes] that perform a [FinalStrike|Final Strike] at the end of a combination of attacks, causing the [FinalStrike|Final Strike] to [ArmourBreak|Break Armour] based on a portion of [Attack] damage dealt."
+            }
+          ],
+          "mechanic": "armour_break",
+          "scope": "outgoing"
+        }
+      ],
       "compatibility": {
         "equipment": {
           "is_unrestricted": true
@@ -253969,6 +254330,7 @@
       "source_id": "Metadata/Items/Gem/SupportGemStyrnsFerocity",
       "name": "Styrn's Ferocity",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -254009,6 +254371,19 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports Shield Skills that [HitDamage|Hit] enemies, causing those Hits to [Crushed|Crush] their targets, additionally causing any [Physical|Physical Damage] [HitDamage|Hits] against those targets while [Crushed] to [ArmourBreak|Break their Armour]."
+            }
+          ],
+          "mechanic": "armour_break",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -256567,6 +256942,7 @@
       "source_id": "Metadata/Items/Gem/SupportGemTumult",
       "name": "Tumult",
       "candidate_roles": [
+        "setup_control",
         "payoff",
         "enabler"
       ],
@@ -256659,6 +257035,19 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports Skills you use yourself which can cause Damaging [HitDamage|Hits]. Supported Skills consume a [Charges|Frenzy Charge] on use to powerfully [ArmourBreak|Break Armour]."
+            }
+          ],
+          "mechanic": "armour_break",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -258882,6 +259271,7 @@
       "source_id": "Metadata/Items/Gem/SupportGemUulNetolsEmbrace",
       "name": "Uul-Netol's Embrace",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -258918,6 +259308,19 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports Skills that can cause [HitDamage|Damaging Hits], granting extra [Chaos] damage and causing [Chaos] damage to [ArmourBreak|Break Armour]."
+            }
+          ],
+          "mechanic": "armour_break",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",

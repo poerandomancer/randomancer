@@ -567,6 +567,142 @@ test('a synergistic two-Offense pair outranks a merely parallel alternative', ()
   assert.ok(result.synergyEdges.some((edge) => edge.mechanic === 'ignite'));
 });
 
+test('an off-theme dependency loop cannot outrank an Offense-aligned physical package', () => {
+  const result = selectRecommendationPackageV3(catalog([
+    entity({
+      id: 'armour-piercer',
+      name: 'Armour Piercer',
+      roles: ['primary_damage', 'setup_control'],
+      facts: [
+        { relation: 'has_property', subject: 'skill', mechanic: 'physical', confidence: 'exact' },
+        { relation: 'inflicts', subject: 'skill', mechanic: 'armour_break', confidence: 'strong' }
+      ]
+    }),
+    entity({
+      id: 'riven-payoff',
+      name: 'Riven Payoff',
+      roles: ['primary_damage', 'payoff'],
+      facts: [
+        { relation: 'has_property', subject: 'skill', mechanic: 'physical', confidence: 'exact' },
+        { relation: 'consumes', subject: 'skill', mechanic: 'armour_break', confidence: 'exact' }
+      ]
+    }),
+    entity({
+      id: 'toxic-physical',
+      name: 'Toxic Physical',
+      roles: ['primary_damage', 'setup_control'],
+      facts: [
+        { relation: 'has_property', subject: 'skill', mechanic: 'physical', confidence: 'exact' },
+        { relation: 'inflicts', subject: 'skill', mechanic: 'poison', confidence: 'strong' }
+      ]
+    }),
+    entity({
+      id: 'plague-payoff',
+      name: 'Plague Payoff',
+      roles: ['setup_control'],
+      types: ['Spell'],
+      facts: [
+        { relation: 'has_property', subject: 'skill', mechanic: 'physical', confidence: 'exact' },
+        { relation: 'requires', subject: 'skill', mechanic: 'poison', confidence: 'strong' }
+      ]
+    })
+  ]), { weapon: 'Wand', offenseList: ['Physical Damage'] }, {
+    offenseInventory: offenseInventory()
+  });
+
+  assert.deepEqual(
+    new Set(result.pieces.map((entry) => entry.name)),
+    new Set(['Armour Piercer', 'Riven Payoff'])
+  );
+  assert.ok(result.synergyEdges.some((edge) => edge.mechanic === 'armour_break'));
+  assert.ok(!result.pieces.some((entry) => entry.name === 'Plague Payoff'));
+});
+
+test('an elemental payoff uses the branch aligned with the rolled Offense', () => {
+  const result = selectRecommendationPackageV3(catalog([
+    entity({
+      id: 'elemental-snap',
+      name: 'Elemental Snap',
+      roles: ['primary_damage', 'payoff'],
+      facts: [
+        { relation: 'has_property', subject: 'skill', mechanic: 'cold', confidence: 'exact' },
+        { relation: 'consumes', subject: 'skill', mechanic: 'freeze', confidence: 'exact' },
+        { relation: 'consumes', subject: 'skill', mechanic: 'ignite', confidence: 'exact' }
+      ]
+    }),
+    entity({
+      id: 'frost-primer',
+      name: 'Frost Primer',
+      roles: ['primary_damage', 'setup_control'],
+      facts: [
+        { relation: 'has_property', subject: 'skill', mechanic: 'cold', confidence: 'exact' },
+        { relation: 'inflicts', subject: 'skill', mechanic: 'freeze', confidence: 'exact' }
+      ]
+    }),
+    entity({
+      id: 'flame-wall',
+      name: 'Flame Wall',
+      roles: ['primary_damage', 'setup_control'],
+      facts: [
+        { relation: 'has_property', subject: 'skill', mechanic: 'fire', confidence: 'exact' },
+        { relation: 'inflicts', subject: 'skill', mechanic: 'ignite', confidence: 'exact' }
+      ]
+    })
+  ]), { weapon: 'Wand', offenseList: ['Cold Damage'] }, {
+    offenseInventory: offenseInventory()
+  });
+
+  assert.deepEqual(
+    new Set(result.pieces.map((entry) => entry.name)),
+    new Set(['Elemental Snap', 'Frost Primer'])
+  );
+  assert.ok(result.synergyEdges.some((edge) => edge.mechanic === 'freeze'));
+  assert.ok(!result.pieces.some((entry) => entry.name === 'Flame Wall'));
+});
+
+test('a conditional gas payoff prefers a rolled-Fire detonator over more Poison', () => {
+  const result = selectRecommendationPackageV3(catalog([
+    entity({
+      id: 'gas-cloud',
+      name: 'Gas Cloud',
+      roles: ['primary_damage', 'setup_control'],
+      facts: [
+        { relation: 'inflicts', subject: 'skill', mechanic: 'poison', confidence: 'strong' },
+        { relation: 'has_property', subject: 'skill', mechanic: 'fire', confidence: 'exact' },
+        { relation: 'requires', subject: 'skill', mechanic: 'detonation', confidence: 'strong' }
+      ]
+    }),
+    entity({
+      id: 'explosive-payoff',
+      name: 'Explosive Payoff',
+      roles: ['primary_damage', 'payoff'],
+      facts: [
+        { relation: 'has_property', subject: 'skill', mechanic: 'fire', confidence: 'exact' },
+        { relation: 'provides', subject: 'skill', mechanic: 'detonation', confidence: 'strong' }
+      ]
+    }),
+    entity({
+      id: 'plague-bearer',
+      name: 'Plague Bearer',
+      roles: ['setup_control'],
+      types: ['Spell'],
+      facts: [
+        { relation: 'inflicts', subject: 'skill', mechanic: 'poison', confidence: 'strong' },
+        { relation: 'requires', subject: 'skill', mechanic: 'poison', confidence: 'strong' }
+      ]
+    })
+  ]), { weapon: 'Wand', offenseList: ['Poison', 'Fire Damage'] }, {
+    offenseInventory: offenseInventory()
+  });
+
+  assert.deepEqual(
+    new Set(result.pieces.map((entry) => entry.name)),
+    new Set(['Gas Cloud', 'Explosive Payoff'])
+  );
+  assert.ok(result.synergyEdges.some((edge) => edge.mechanic === 'detonation'));
+  assert.ok(!result.pieces.some((entry) => entry.name === 'Plague Bearer'));
+});
+
 test('generic charge evidence cannot bridge a specific charge setup cost', () => {
   const result = selectRecommendationPackageV3(catalog([
     entity({
@@ -634,6 +770,32 @@ test('a no-damage base effect does not disqualify the damaging composite skill',
 
   assert.equal(result.primarySkill?.name, 'Scoped No Damage');
   assert.equal(result.diagnostics.rankedCandidates, 1);
+});
+
+test('a delegated off-theme ailment cannot borrow a damage tag as rolled-Offense coverage', () => {
+  const result = selectRecommendationPackageV3(catalog([
+    entity({
+      id: 'toxic-domain',
+      name: 'Toxic Domain',
+      roles: ['primary_damage', 'setup_control'],
+      facts: [
+        { relation: 'has_property', subject: 'skill', mechanic: 'physical', confidence: 'exact' },
+        { relation: 'inflicts', subject: 'skill', mechanic: 'poison', confidence: 'strong' },
+        {
+          relation: 'prevents',
+          subject: 'skill',
+          mechanic: 'damage',
+          condition: 'base_effect_only',
+          confidence: 'exact'
+        }
+      ]
+    })
+  ]), { weapon: 'Wand', offenseList: ['Physical Damage'] }, {
+    offenseInventory: offenseInventory()
+  });
+
+  assert.equal(result.primarySkill, null);
+  assert.equal(result.supportingSkill, null);
 });
 
 test('runtime adapter preserves package diagnostics while using the current skill field', () => {
@@ -814,6 +976,54 @@ test('committed catalog never selects Chaos Bolt for Bow or Unearth for Spear', 
   if (spear.primarySkill) {
     const selected = realCatalog.entities.find((entry) => entry.id === spear.primarySkill.entityId);
     assert.equal(evaluateDeliveryCompatibilityV3(selected, { weapon: 'Spear' }).ok, true);
+  }
+});
+
+test('committed catalog keeps the reported package failures Offense-aligned', async () => {
+  const [realCatalog, realOffense] = await Promise.all([
+    readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
+    readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
+  ]);
+
+  for (let index = 0; index < 64; index += 1) {
+    const physical = selectRecommendationPackageV3(realCatalog, {
+      weapon: 'Crossbow',
+      offenseList: ['Physical Damage']
+    }, { offenseInventory: realOffense, selectionSeed: `reported-physical-${index}` });
+    assert.deepEqual(
+      new Set(physical.pieces.map((entry) => entry.name)),
+      new Set(['Armour Piercing Rounds', 'High Velocity Rounds'])
+    );
+    assert.ok(physical.synergyEdges.some((edge) => edge.mechanic === 'armour_break'));
+
+    const maceShock = selectRecommendationPackageV3(realCatalog, {
+      weapon: 'Mace',
+      offenseList: ['Shock']
+    }, { offenseInventory: realOffense, selectionSeed: `reported-mace-shock-${index}` });
+    assert.equal(maceShock.primarySkill, null);
+    assert.equal(maceShock.supportingSkill, null);
+
+    const cold = selectRecommendationPackageV3(realCatalog, {
+      weapon: 'Sceptre',
+      offenseList: ['Cold Damage']
+    }, { offenseInventory: realOffense, selectionSeed: `reported-cold-${index}` });
+    assert.ok(cold.primarySkill);
+    assert.ok(!cold.pieces.some((entry) => entry.name === 'Flame Wall'));
+    assert.ok(cold.pieces.some((entry) =>
+      entry.fulfilledObligations.some((proof) => proof.obligationId === 'offense:cold')
+    ));
+
+    const poisonFire = selectRecommendationPackageV3(realCatalog, {
+      weapon: 'Crossbow',
+      offenseList: ['Poison', 'Fire Damage']
+    }, { offenseInventory: realOffense, selectionSeed: `reported-poison-fire-${index}` });
+    assert.equal(poisonFire.pieces.length, 2);
+    assert.ok(poisonFire.pieces.some((entry) => entry.name === 'Gas Grenade'));
+    assert.ok(['Explosive Grenade', 'Explosive Shot'].some((name) =>
+      poisonFire.pieces.some((entry) => entry.name === name)
+    ));
+    assert.ok(!poisonFire.pieces.some((entry) => entry.name === 'Plague Bearer'));
+    assert.ok(poisonFire.synergyEdges.some((edge) => edge.mechanic === 'detonation'));
   }
 });
 
