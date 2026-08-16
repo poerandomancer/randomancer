@@ -105,6 +105,17 @@ test('canonical Offense inventory no longer exposes Thorns as a roll option', as
   assert.equal(realOffense.elements.some((entry) => entry.name === 'Thorns'), false);
 });
 
+test('standard weapon adapters do not synthesize Unarmed as a randomized family', async () => {
+  const [familyRuntime, frequencyRuntime] = await Promise.all([
+    readFile(new URL('../js/28-primary-equipment-runtime.js', import.meta.url), 'utf8'),
+    readFile(new URL('../js/29-selection-frequency-runtime.js', import.meta.url), 'utf8')
+  ]);
+
+  assert.doesNotMatch(familyRuntime, /byName\.set\(['"]Unarmed['"]/);
+  assert.doesNotMatch(frequencyRuntime, /makeUnarmedCandidate|pool\.push\(unarmed\)/);
+  assert.match(frequencyRuntime, /pool\[index\]\?\.name === ['"]Unarmed['"]/);
+});
+
 test('equipment compatibility distinguishes bow/crossbow and staff/quarterstaff', () => {
   const requires = (tag) => ({
     compatibility: {
@@ -1038,7 +1049,7 @@ test('committed critical profiles are complete, catalog-backed, and cover every 
   const weapons = [
     'Two-handed Mace', 'Two-handed Axe', 'Two-handed Sword', 'Bow', 'Crossbow',
     'Quarterstaff', 'Staff', 'One-handed Mace', 'One-handed Axe', 'One-handed Sword',
-    'Claw', 'Dagger', 'Flail', 'Spear', 'Wand', 'Sceptre', 'Talisman', 'Unarmed'
+    'Claw', 'Dagger', 'Flail', 'Spear', 'Wand', 'Sceptre', 'Talisman'
   ];
   for (const weapon of weapons) {
     const snapshot = { weapon, offenseList: ['Critical Hits'] };
@@ -1063,7 +1074,7 @@ test('committed catalog remains deterministic and equipment-legal across the rol
   const weapons = [
     'Two-handed Mace', 'Two-handed Axe', 'Two-handed Sword', 'Bow', 'Crossbow',
     'Quarterstaff', 'Staff', 'One-handed Mace', 'One-handed Axe', 'One-handed Sword',
-    'Claw', 'Dagger', 'Flail', 'Spear', 'Wand', 'Sceptre', 'Talisman', 'Unarmed'
+    'Claw', 'Dagger', 'Flail', 'Spear', 'Wand', 'Sceptre', 'Talisman'
   ];
 
   for (const weapon of weapons) {
