@@ -31,7 +31,8 @@ function offenseInventory() {
       { id: 'lightning', name: 'Lightning Damage', category: 'Damage Type', aliases: [] },
       { id: 'chaos', name: 'Chaos Damage', category: 'Damage Type', aliases: [] },
       { id: 'critical_hits', name: 'Critical Hits', category: 'Scaling', aliases: ['Crit'] },
-      { id: 'minions_companions', name: 'Minions/Companions', category: 'Archetype', aliases: ['Minions'] }
+      { id: 'minions_companions', name: 'Minions/Companions', category: 'Archetype', aliases: ['Minions'] },
+      { id: 'totems', name: 'Totems', category: 'Archetype', aliases: [] }
     ]
   };
 }
@@ -44,17 +45,19 @@ function entity({
   types = ['Spell', 'Damage'],
   sourceTags = [],
   roles = ['primary_damage'],
-  description = ''
+  description = '',
+  contentType = 'active_skill',
+  compatibility = null
 }) {
   return {
     id: `skill:${id}`,
     source_id: id,
-    content_type: 'active_skill',
+    content_type: contentType,
     name,
     candidate_roles: roles,
     retrieval_terms: [],
     facts,
-    compatibility: { equipment },
+    compatibility: compatibility || { equipment },
     source_evidence: { active_skill_types: types, description },
     provenance: { source_tags: sourceTags }
   };
@@ -350,8 +353,8 @@ test('seeded quality-band selection varies legally and is reproducible', () => {
   assert.ok(selections.size > 1);
   assert.equal(repeated.primarySkill?.entityId, first.primarySkill?.entityId);
   assert.deepEqual(repeated.pieces, first.pieces);
-  assert.equal(first.pieces.length, 2);
-  assert.equal(first.supportingSkill?.assignedRole, 'secondary_damage');
+  assert.equal(first.pieces.length, 1);
+  assert.equal(first.supportingSkill, null);
   assert.equal(repeated.selectionSeed, 'persistent-roll');
   assert.notEqual(nextRoll.primarySkill?.entityId, first.primarySkill?.entityId);
   assert.equal(first.diagnostics.shortlistedCandidates, 3);
@@ -421,6 +424,114 @@ test('native damage can carry an ailment without falsely fulfilling its applicat
   assert.deepEqual(result.primarySkill?.carrierObligations.map((entry) => entry.obligationId), ['offense:shock']);
   assert.ok(result.unresolved.some((entry) =>
     entry.obligationId === 'offense:shock' && entry.reason.includes('explicit Shock application')
+  ));
+});
+
+test('persistent Companion creators remain directly selectable when their weapon delivery is explicit', () => {
+  const result = selectRecommendationPackageV3(catalog([
+    entity({
+      id: 'rhoa-mount',
+      name: 'Rhoa Mount',
+      facts: [{ relation: 'creates', subject: 'skill', mechanic: 'companion', confidence: 'exact' }],
+      equipment: {
+        is_unrestricted: false,
+        mainhand_tags_any_of: ['bow', 'spear'],
+        offhand_tags_any_of: [],
+        allowed_weapon_tags_any_of: ['bow', 'spear']
+      },
+      types: ['Persistent', 'HasReservation', 'CreatesCompanion', 'Companion']
+    })
+  ]), { weapon: 'Bow', offenseList: ['Minions/Companions'] }, {
+    offenseInventory: offenseInventory()
+  });
+
+  assert.equal(result.primarySkill?.name, 'Rhoa Mount');
+  assert.deepEqual(result.primarySkill?.fulfilledObligations.map((proof) => proof.obligationId), [
+    'offense:minions_companions'
+  ]);
+});
+
+test('a provider support marks an active as support-completable without becoming a selected skill', () => {
+  const maceEquipment = {
+    is_unrestricted: false,
+    mainhand_tags_any_of: ['mace'],
+    offhand_tags_any_of: [],
+    allowed_weapon_tags_any_of: ['mace']
+  };
+  const result = selectRecommendationPackageV3(catalog([
+    entity({
+      id: 'earthshatter',
+      name: 'Earthshatter',
+      facts: [{ relation: 'has_property', subject: 'skill', mechanic: 'physical', confidence: 'exact' }],
+      equipment: maceEquipment,
+      types: ['Attack', 'Damage', 'Mace', 'CanCreateStoneElementals']
+    }),
+    entity({
+      id: 'skittering-stone',
+      name: 'Skittering Stone I',
+      contentType: 'support_gem',
+      roles: ['enabler'],
+      facts: [{ relation: 'creates', subject: 'supported_skill', mechanic: 'minion', confidence: 'exact' }],
+      types: [],
+      compatibility: {
+        equipment: { is_unrestricted: true },
+        target_skill: {
+          allowed_skill_types_any_of: ['CanCreateStoneElementals'],
+          excluded_skill_types: []
+        }
+      }
+    })
+  ]), { weapon: 'Mace', offenseList: ['Minions/Companions'] }, {
+    offenseInventory: offenseInventory()
+  });
+
+  assert.equal(result.primarySkill?.name, 'Earthshatter');
+  assert.equal(result.supportingSkill, null);
+  assert.equal(result.primarySkill?.carrierObligations[0]?.completionType, 'support');
+  assert.equal(result.primarySkill?.carrierObligations[0]?.providerName, 'Skittering Stone I');
+  assert.ok(result.unresolved.some((entry) =>
+    entry.obligationId === 'offense:minions_companions'
+      && entry.reason.includes('support selection is deferred')
+  ));
+});
+
+test('Totem meta skills require and pair with a typed socketed payload', () => {
+  const casterEquipment = {
+    is_unrestricted: false,
+    mainhand_tags_any_of: ['staff', 'wand', 'sceptre'],
+    offhand_tags_any_of: [],
+    allowed_weapon_tags_any_of: ['staff', 'wand', 'sceptre']
+  };
+  const result = selectRecommendationPackageV3(catalog([
+    entity({
+      id: 'spell-totem',
+      name: 'Spell Totem',
+      roles: ['primary_damage', 'payoff'],
+      facts: [{ relation: 'creates', subject: 'skill', mechanic: 'totem', confidence: 'exact' }],
+      types: ['Meta', 'SummonsTotem'],
+      compatibility: {
+        equipment: casterEquipment,
+        meta_payload: {
+          mechanic: 'socketed_spell',
+          allowed_skill_types_any_of: ['Spell'],
+          excluded_skill_types: ['Cooldown']
+        }
+      }
+    }),
+    entity({
+      id: 'fireball',
+      name: 'Fireball',
+      facts: [{ relation: 'has_property', subject: 'skill', mechanic: 'fire', confidence: 'exact' }],
+      types: ['Spell', 'Damage', 'Fire']
+    })
+  ]), { weapon: 'Wand', offenseList: ['Totems'] }, {
+    offenseInventory: offenseInventory()
+  });
+
+  assert.deepEqual(result.pieces.map((piece) => piece.name), ['Spell Totem', 'Fireball']);
+  assert.equal(result.supportingSkill?.assignedRole, 'secondary_damage');
+  assert.ok(result.synergyEdges.some((edge) =>
+    edge.metaPayload && edge.mechanic === 'socketed_spell'
   ));
 });
 
@@ -1117,6 +1228,144 @@ test('committed catalog remains deterministic and equipment-legal across the rol
   }
 });
 
+test('the real 9 by 15 active matrix has a locked semantic coverage breakdown', async () => {
+  const [realCatalog, realOffense] = await Promise.all([
+    readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
+    readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
+  ]);
+  const weapons = [
+    'Mace', 'Quarterstaff', 'Bow', 'Crossbow', 'Talisman', 'Spear', 'Staff', 'Wand', 'Sceptre'
+  ];
+  const counts = {
+    direct: 0,
+    meta_or_nested: 0,
+    support_completable: 0,
+    carrier_only: 0,
+    unsupported: 0
+  };
+
+  assert.equal(realOffense.elements.length, 15);
+  for (const weapon of weapons) {
+    for (const offense of realOffense.elements) {
+      const snapshot = { weapon, offenseList: [offense.name] };
+      const result = selectRecommendationPackageV3(realCatalog, snapshot, { offenseInventory: realOffense });
+      const primary = result.primarySkill;
+      if (!primary) {
+        counts.unsupported += 1;
+        continue;
+      }
+      const selected = realCatalog.entities.find((entry) => entry.id === primary.entityId);
+      assert.equal(isEquipmentCompatibleV3(selected, snapshot), true, `${weapon} / ${offense.name}`);
+      assert.equal(evaluateDeliveryCompatibilityV3(selected, snapshot).ok, true, `${weapon} / ${offense.name}`);
+
+      const obligationId = `offense:${offense.id}`;
+      const fulfilled = primary.fulfilledObligations.some((proof) => proof.obligationId === obligationId);
+      const carrier = primary.carrierObligations.find((proof) => proof.obligationId === obligationId);
+      const isMetaOrNested = Boolean(selected.compatibility?.meta_payload)
+        || selected.facts.some((fact) =>
+          ['predators_mark_activation', 'after_beast_capture'].includes(fact.condition)
+        );
+      if (fulfilled) counts[isMetaOrNested ? 'meta_or_nested' : 'direct'] += 1;
+      else if (carrier?.completionType === 'support') counts.support_completable += 1;
+      else if (carrier) counts.carrier_only += 1;
+      else counts.unsupported += 1;
+    }
+  }
+
+  assert.equal(Object.values(counts).reduce((sum, value) => sum + value, 0), 135);
+  assert.deepEqual(counts, {
+    direct: 92,
+    meta_or_nested: 3,
+    support_completable: 1,
+    carrier_only: 26,
+    unsupported: 13
+  });
+});
+
+test('committed catalog selects the corrected Companion and nested Minion actives', async () => {
+  const [realCatalog, realOffense] = await Promise.all([
+    readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
+    readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
+  ]);
+  const selectedNames = (weapon) => {
+    const names = new Set();
+    for (let index = 0; index < 64; index += 1) {
+      const result = selectRecommendationPackageV3(realCatalog, {
+        weapon,
+        offenseList: ['Minions/Companions']
+      }, { offenseInventory: realOffense, selectionSeed: `m-${index}` });
+      if (result.primarySkill?.name) names.add(result.primarySkill.name);
+    }
+    return names;
+  };
+
+  assert.deepEqual([...selectedNames('Bow')], ['Rhoa Mount']);
+  assert.ok(selectedNames('Spear').has('Tame Beast'));
+  assert.ok(selectedNames('Spear').has('Rhoa Mount'));
+  assert.ok(selectedNames('Talisman').has('Pounce'));
+
+  const pounce = realCatalog.entities.find((entry) => entry.name === 'Pounce');
+  const tameBeast = realCatalog.entities.find((entry) => entry.name === 'Tame Beast');
+  assert.ok(pounce.facts.some((fact) =>
+    fact.relation === 'creates'
+      && fact.mechanic === 'minion'
+      && fact.condition === 'predators_mark_activation'
+  ));
+  assert.ok(tameBeast.facts.some((fact) =>
+    fact.relation === 'creates' && fact.mechanic === 'companion'
+  ));
+});
+
+test('committed caster Totem rolls emit Spell Totem with a legal socketed Spell', async () => {
+  const [realCatalog, realOffense] = await Promise.all([
+    readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
+    readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
+  ]);
+
+  for (const weapon of ['Staff', 'Wand', 'Sceptre']) {
+    const result = selectRecommendationPackageV3(realCatalog, {
+      weapon,
+      offenseList: ['Totems']
+    }, { offenseInventory: realOffense });
+    assert.equal(result.primarySkill?.name, 'Spell Totem', weapon);
+    assert.ok(result.supportingSkill, weapon);
+    const payload = realCatalog.entities.find((entry) => entry.id === result.supportingSkill.entityId);
+    assert.ok(payload.source_evidence.active_skill_types.includes('Spell'), weapon);
+    assert.ok(!payload.source_evidence.active_skill_types.includes('Cooldown'), weapon);
+    assert.ok(result.synergyEdges.some((edge) => edge.metaPayload), weapon);
+  }
+
+  const ancestral = realCatalog.entities.find((entry) => entry.name === 'Ancestral Warrior Totem');
+  const mortar = realCatalog.entities.find((entry) => entry.name === 'Mortar Cannon');
+  assert.equal(ancestral.compatibility.meta_payload.mechanic, 'socketed_mace_skill');
+  assert.equal(mortar.compatibility.meta_payload.mechanic, 'socketed_grenade');
+  assert.ok(ancestral.candidate_roles.includes('primary_damage'));
+  assert.ok(mortar.candidate_roles.includes('primary_damage'));
+});
+
+test('committed provider supports retain typed Minion creation and target constraints', async () => {
+  const realCatalog = await readFile(
+    new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url),
+    'utf8'
+  ).then(JSON.parse);
+  const living = realCatalog.entities.find((entry) => entry.name === 'Living Lightning');
+  const skittering = realCatalog.entities.find((entry) => entry.name === 'Skittering Stone I');
+
+  assert.ok(living.facts.some((fact) =>
+    fact.relation === 'creates' && fact.mechanic === 'minion'
+  ));
+  assert.ok(living.facts.some((fact) =>
+    fact.relation === 'requires' && fact.mechanic === 'lightning'
+  ));
+  assert.deepEqual(living.compatibility.target_skill.allowed_skill_types_any_of, ['Attack', 'Damage']);
+  assert.ok(skittering.facts.some((fact) =>
+    fact.relation === 'creates' && fact.mechanic === 'minion'
+  ));
+  assert.deepEqual(skittering.compatibility.target_skill.allowed_skill_types_any_of, [
+    'CanCreateStoneElementals'
+  ]);
+});
+
 test('committed catalog never selects Chaos Bolt for Bow or Unearth for Spear', async () => {
   const [realCatalog, realOffense] = await Promise.all([
     readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
@@ -1192,7 +1441,7 @@ test('committed catalog keeps the reported package failures Offense-aligned', as
   }
 });
 
-test('committed catalog keeps the reported spear and crossbow options in the selectable band', async () => {
+test('committed catalog keeps legal spear and crossbow options after the tighter companion gate', async () => {
   const [realCatalog, realOffense] = await Promise.all([
     readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
     readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
@@ -1212,9 +1461,9 @@ test('committed catalog keeps the reported spear and crossbow options in the sel
   };
 
   const spear = selectedNames({ weapon: 'Spear', offenseList: ['Chill'] });
-  assert.deepEqual([...spear.names].sort(), ['Fangs of Frost', 'Glacial Lance']);
+  assert.deepEqual([...spear.names], ['Fangs of Frost']);
   assert.ok(spear.diagnostics.rankedCandidates >= 2);
-  assert.equal(spear.diagnostics.shortlistedCandidates, 2);
+  assert.equal(spear.diagnostics.shortlistedCandidates, 1);
 
   const crossbow = selectedNames({
     weapon: 'Crossbow',
@@ -1292,9 +1541,8 @@ test('reported empty and false-totem rolls select specific legal primary skills'
       result.primarySkill?.fulfilledObligations.map((entry) => entry.obligationId),
       ['offense:totems']
     );
-    assert.equal(result.supportingSkill?.name, 'Dark Effigy');
-    assert.equal(result.supportingSkill?.assignedRole, 'secondary_damage');
-    assert.equal(result.pieces.length, 2);
+    assert.equal(result.supportingSkill, null);
+    assert.equal(result.pieces.length, 1);
   }
 });
 

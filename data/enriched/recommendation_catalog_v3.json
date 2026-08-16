@@ -11,11 +11,11 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5050,
+    "fact_count": 5059,
     "fact_relation_counts": {
       "consumes": 353,
       "converts": 112,
-      "creates": 64,
+      "creates": 71,
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 672,
@@ -25,13 +25,13 @@
       "prevents": 375,
       "provides": 302,
       "replaces": 27,
-      "requires": 55
+      "requires": 57
     },
     "candidate_role_counts": {
       "defense": 420,
       "enabler": 1157,
       "payoff": 181,
-      "primary_damage": 345,
+      "primary_damage": 349,
       "recovery": 250,
       "setup_control": 182,
       "utility": 206
@@ -118,11 +118,6 @@
       {
         "id": "totems",
         "name": "Totems",
-        "category": "Archetype"
-      },
-      {
-        "id": "thorns",
-        "name": "Thorns",
         "category": "Archetype"
       }
     ],
@@ -1691,6 +1686,7 @@
       "source_id": "Metadata/Items/Gems/SkillGemAncestralWarriorTotem",
       "name": "Ancestral Warrior Totem",
       "candidate_roles": [
+        "primary_damage",
         "payoff"
       ],
       "retrieval_terms": [
@@ -1830,6 +1826,16 @@
           ],
           "is_unrestricted": false,
           "weapon_requirement_rid": 1
+        },
+        "meta_payload": {
+          "mechanic": "socketed_mace_skill",
+          "allowed_skill_types_any_of": [
+            "Attack"
+          ],
+          "excluded_skill_types": [
+            "Channel",
+            "Cooldown"
+          ]
         }
       },
       "links": {
@@ -61332,7 +61338,9 @@
       "content_type": "active_skill",
       "source_id": "Metadata/Items/Gem/SkillGemMortarCannon",
       "name": "Mortar Cannon",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "primary_damage"
+      ],
       "retrieval_terms": [
         "totem",
         "strength",
@@ -61426,6 +61434,13 @@
           ],
           "is_unrestricted": false,
           "weapon_requirement_rid": 29
+        },
+        "meta_payload": {
+          "mechanic": "socketed_grenade",
+          "allowed_skill_types_any_of": [
+            "Grenade"
+          ],
+          "excluded_skill_types": []
         }
       },
       "links": {
@@ -66136,7 +66151,21 @@
         "shock",
         "shockwave"
       ],
-      "facts": [],
+      "facts": [
+        {
+          "relation": "creates",
+          "subject": "skill",
+          "mechanic": "minion",
+          "condition": "predators_mark_activation",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "nested_active_skill",
+              "value": "Predator's Mark -> Summon Wolf"
+            }
+          ]
+        }
+      ],
       "compatibility": {
         "equipment": {
           "requirement_id": "Talisman",
@@ -72645,7 +72674,17 @@
       ],
       "compatibility": {
         "equipment": {
-          "is_unrestricted": true
+          "is_unrestricted": false,
+          "mainhand_tags_any_of": [
+            "bow",
+            "spear"
+          ],
+          "offhand_tags_any_of": [],
+          "allowed_weapon_tags_any_of": [
+            "bow",
+            "spear"
+          ],
+          "display": "Requires Bow or Spear"
         }
       },
       "links": {
@@ -86761,6 +86800,7 @@
       "source_id": "Metadata/Items/Gems/SkillGemSpellTotem",
       "name": "Spell Totem",
       "candidate_roles": [
+        "primary_damage",
         "payoff"
       ],
       "retrieval_terms": [
@@ -86941,7 +86981,28 @@
       ],
       "compatibility": {
         "equipment": {
-          "is_unrestricted": true
+          "is_unrestricted": false,
+          "mainhand_tags_any_of": [
+            "staff",
+            "wand",
+            "sceptre"
+          ],
+          "offhand_tags_any_of": [],
+          "allowed_weapon_tags_any_of": [
+            "staff",
+            "wand",
+            "sceptre"
+          ],
+          "display": "Caster weapon recommendation"
+        },
+        "meta_payload": {
+          "mechanic": "socketed_spell",
+          "allowed_skill_types_any_of": [
+            "Spell"
+          ],
+          "excluded_skill_types": [
+            "Cooldown"
+          ]
         }
       },
       "links": {
@@ -91629,7 +91690,9 @@
       "content_type": "active_skill",
       "source_id": "Metadata/Items/Gem/SkillGemTameBeast",
       "name": "Tame Beast",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "primary_damage"
+      ],
       "retrieval_terms": [
         "dexterity",
         "minion",
@@ -91646,6 +91709,32 @@
         "reviving"
       ],
       "facts": [
+        {
+          "relation": "creates",
+          "subject": "skill",
+          "mechanic": "companion",
+          "condition": "after_beast_capture",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "curated_override",
+              "value": "Tame Beast transforms after a rare Beast capture and then summons that Beast as a reviving Companion."
+            }
+          ]
+        },
+        {
+          "relation": "creates",
+          "subject": "skill",
+          "mechanic": "minion",
+          "condition": "after_beast_capture",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "curated_override",
+              "value": "Tame Beast transforms after a rare Beast capture and then summons that Beast as a reviving Companion."
+            }
+          ]
+        },
         {
           "relation": "has_property",
           "subject": "skill",
@@ -91687,7 +91776,15 @@
       ],
       "compatibility": {
         "equipment": {
-          "is_unrestricted": true
+          "is_unrestricted": false,
+          "mainhand_tags_any_of": [
+            "spear"
+          ],
+          "offhand_tags_any_of": [],
+          "allowed_weapon_tags_any_of": [
+            "spear"
+          ],
+          "display": "Spear affinity"
         }
       },
       "links": {
@@ -234674,6 +234771,18 @@
       ],
       "facts": [
         {
+          "relation": "creates",
+          "subject": "supported_skill",
+          "mechanic": "minion",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "curated_override",
+              "value": "Living Lightning creates temporary Minions when the supported skill deals Lightning damage."
+            }
+          ]
+        },
+        {
           "relation": "has_property",
           "subject": "supported_skill",
           "confidence": "exact",
@@ -234696,6 +234805,18 @@
             }
           ],
           "mechanic": "lightning"
+        },
+        {
+          "relation": "requires",
+          "subject": "supported_skill",
+          "mechanic": "lightning",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "curated_override",
+              "value": "Living Lightning creates temporary Minions when the supported skill deals Lightning damage."
+            }
+          ]
         }
       ],
       "compatibility": {
@@ -234780,6 +234901,18 @@
       ],
       "facts": [
         {
+          "relation": "creates",
+          "subject": "supported_skill",
+          "mechanic": "minion",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "curated_override",
+              "value": "Living Lightning II creates temporary Minions when the supported skill deals Lightning damage."
+            }
+          ]
+        },
+        {
           "relation": "has_property",
           "subject": "supported_skill",
           "confidence": "exact",
@@ -234802,6 +234935,18 @@
             }
           ],
           "mechanic": "lightning"
+        },
+        {
+          "relation": "requires",
+          "subject": "supported_skill",
+          "mechanic": "lightning",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "curated_override",
+              "value": "Living Lightning II creates temporary Minions when the supported skill deals Lightning damage."
+            }
+          ]
         }
       ],
       "compatibility": {
@@ -251667,6 +251812,18 @@
       ],
       "facts": [
         {
+          "relation": "creates",
+          "subject": "supported_skill",
+          "mechanic": "minion",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "curated_override",
+              "value": "Skittering Stone I releases stone Minions from shatterable earthen objects created by the supported skill."
+            }
+          ]
+        },
+        {
           "relation": "has_property",
           "subject": "supported_skill",
           "confidence": "exact",
@@ -251770,6 +251927,18 @@
         "mace"
       ],
       "facts": [
+        {
+          "relation": "creates",
+          "subject": "supported_skill",
+          "mechanic": "minion",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "curated_override",
+              "value": "Skittering Stone II releases stone Minions from shatterable earthen objects created by the supported skill."
+            }
+          ]
+        },
         {
           "relation": "has_property",
           "subject": "supported_skill",

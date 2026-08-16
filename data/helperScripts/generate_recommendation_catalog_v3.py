@@ -285,6 +285,10 @@ def apply_entity_overrides(ctx: SourceContext, entity_id: str, facts: list[dict[
     return merge_facts([*kept, *additions])
 
 
+def entity_override(ctx: SourceContext, entity_id: str) -> dict[str, Any]:
+    return (ctx.overrides.get("entities") or {}).get(entity_id) or {}
+
+
 def build_skill_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[str, Any]]:
     entities = []
     for skill in ctx.skills:
@@ -387,6 +391,17 @@ def build_skill_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[st
         }
         if target_compatibility:
             compatibility["target_skill"] = target_compatibility
+        override = entity_override(ctx, entity_id)
+        compatibility.update(override.get("compatibility") or {})
+
+        roles = candidate_roles(
+            content_type=content_type,
+            facts=facts,
+            active_skill_types=type_names,
+        )
+        for role in reversed(override.get("add_candidate_roles") or []):
+            if role not in roles:
+                roles.insert(0, role)
 
         entities.append(
             {
@@ -394,11 +409,7 @@ def build_skill_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[st
                 "content_type": content_type,
                 "source_id": source_id,
                 "name": skill.get("name"),
-                "candidate_roles": candidate_roles(
-                    content_type=content_type,
-                    facts=facts,
-                    active_skill_types=type_names,
-                ),
+                "candidate_roles": roles,
                 "retrieval_terms": tags,
                 "facts": facts,
                 "compatibility": compatibility,

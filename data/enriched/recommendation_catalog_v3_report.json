@@ -13,11 +13,11 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5050,
+    "fact_count": 5059,
     "fact_relation_counts": {
       "consumes": 353,
       "converts": 112,
-      "creates": 64,
+      "creates": 71,
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 672,
@@ -27,13 +27,13 @@
       "prevents": 375,
       "provides": 302,
       "replaces": 27,
-      "requires": 55
+      "requires": 57
     },
     "candidate_role_counts": {
       "defense": 420,
       "enabler": 1157,
       "payoff": 181,
-      "primary_damage": 345,
+      "primary_damage": 349,
       "recovery": 250,
       "setup_control": 182,
       "utility": 206
@@ -43,8 +43,8 @@
       "offense_inventory": "OFFENSE_V1",
       "uniques": "poe2db_uniques_min_v4"
     },
-    "entities_with_facts": 2098,
-    "entities_without_facts": 866,
+    "entities_with_facts": 2099,
+    "entities_without_facts": 865,
     "support_entities_with_allowed_types": 603,
     "support_entities_with_excluded_types": 237,
     "passives_with_more_than_two_source_stats": 181,

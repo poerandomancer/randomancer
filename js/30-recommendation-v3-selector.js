@@ -7,12 +7,11 @@ const PACKAGE_QUALITY_BAND = 12;
 const RECOMMENDATION_EXCLUDED_SOURCE_TAGS = new Set(['kalguuran']);
 
 const HARD_CONFIDENCE = new Set(['exact', 'strong']);
-const DIRECT_USE_BLOCKED_TYPES = new Set([
-  'hasreservation',
+const DIRECT_USE_ALWAYS_BLOCKED_TYPES = new Set([
   'inbuilttrigger',
-  'persistent',
   'triggered'
 ]);
+const DIRECT_USE_PROXY_ALLOWED_TYPES = new Set(['hasreservation', 'persistent']);
 const STATEFUL_SETUP_MECHANICS = new Set([
   'armour_break',
   'bleed',
@@ -112,7 +111,8 @@ const RELATION_WEIGHT = Object.freeze({
   converts: 7,
   has_property: 6,
   generates: 6,
-  modifies: 4
+  modifies: 4,
+  support_completes: 8
 });
 
 function asArray(value) {
@@ -214,7 +214,7 @@ function allowedRelationsForOffense(category) {
     case 'scaling':
       return ['fulfills', 'modifies', 'provides', 'has_property'];
     case 'archetype':
-      return ['fulfills', 'creates', 'has_property', 'provides'];
+      return ['fulfills', 'creates', 'provides'];
     default:
       return ['fulfills', 'inflicts', 'creates', 'provides', 'has_property'];
   }
@@ -382,6 +382,18 @@ function explicitWeaponDeliveryEvidence(entity, snapshot = {}) {
   return null;
 }
 
+function activeSkillTypes(entity) {
+  return new Set(asArray(entity?.source_evidence?.active_skill_types).map(normalizeToken));
+}
+
+function targetSkillTypesMatch(rule, entity) {
+  const types = activeSkillTypes(entity);
+  const allowed = asArray(rule?.allowed_skill_types_any_of).map(normalizeToken);
+  const excluded = asArray(rule?.excluded_skill_types).map(normalizeToken);
+  if (excluded.some((type) => types.has(type))) return false;
+  return !allowed.length || allowed.some((type) => types.has(type));
+}
+
 function evaluateDeliveryCompatibilityV3(entity, snapshot = {}) {
   const weapon = weaponDeliveryProfileV3(snapshot);
   if (weapon.kind === 'unknown') {
@@ -458,13 +470,16 @@ function isDirectlyUsableActive(entity) {
   if (!asArray(entity.candidate_roles).includes('primary_damage')) return false;
   if (!isSelectableSkillName(entity.name)) return false;
 
-  const types = new Set(asArray(entity?.source_evidence?.active_skill_types).map(normalizeToken));
-  for (const blocked of DIRECT_USE_BLOCKED_TYPES) if (types.has(blocked)) return false;
+  const types = activeSkillTypes(entity);
   const createsDamageProxy = asArray(entity.facts).some((fact) =>
     fact?.relation === 'creates'
     && ['companion', 'minion', 'totem'].includes(normalizeToken(fact?.mechanic))
     && HARD_CONFIDENCE.has(fact?.confidence)
   );
+  for (const blocked of DIRECT_USE_ALWAYS_BLOCKED_TYPES) if (types.has(blocked)) return false;
+  if (!createsDamageProxy && Array.from(DIRECT_USE_PROXY_ALLOWED_TYPES).some((type) => types.has(type))) {
+    return false;
+  }
   const hasDamageDelivery = types.has('attack')
     || types.has('damage')
     || types.has('damageovertime')
@@ -514,6 +529,63 @@ function factMatchesCarrier(fact, obligation) {
   if (!HARD_CONFIDENCE.has(fact.confidence) || !CARRIER_RELATIONS.has(fact.relation)) return false;
   const carriers = new Set(asArray(obligation.carrierMechanics).map(normalizeToken));
   return carriers.size > 0 && factMechanics(fact).some((mechanic) => carriers.has(mechanic));
+}
+
+function supportCompletionProviders(catalog) {
+  return asArray(catalog?.entities)
+    .filter((entity) => entity?.content_type === 'support_gem')
+    .filter((entity) => asArray(entity.facts).some((fact) =>
+      fact?.relation === 'creates'
+      && ['minion', 'companion'].includes(normalizeToken(fact?.mechanic))
+      && HARD_CONFIDENCE.has(fact?.confidence)
+    ))
+    .sort((a, b) =>
+      String(a.name || '').localeCompare(String(b.name || ''))
+      || String(a.id || '').localeCompare(String(b.id || ''))
+    );
+}
+
+function supportRequirementIsMet(provider, entity, mechanic) {
+  return asArray(entity?.facts).some((fact) =>
+    HARD_CONFIDENCE.has(fact?.confidence)
+    && !['prevents', 'requires', 'consumes', 'modifies'].includes(fact?.relation)
+    && factMechanics(fact).includes(mechanic)
+  );
+}
+
+function supportCompletionProof(entity, obligation, providers) {
+  const obligationMechanics = new Set(asArray(obligation?.mechanics).map(normalizeToken));
+  if (!obligationMechanics.has('minion') && !obligationMechanics.has('companion')) return null;
+
+  for (const provider of providers) {
+    if (!targetSkillTypesMatch(provider?.compatibility?.target_skill, entity)) continue;
+    const requirements = asArray(provider.facts).filter((fact) =>
+      fact?.relation === 'requires'
+      && normalizeToken(fact?.subject) === 'supported_skill'
+      && HARD_CONFIDENCE.has(fact?.confidence)
+    );
+    if (requirements.some((fact) => !supportRequirementIsMet(provider, entity, normalizeToken(fact.mechanic)))) {
+      continue;
+    }
+    const proof = asArray(provider.facts).find((fact) =>
+      fact?.relation === 'creates'
+      && obligationMechanics.has(normalizeToken(fact?.mechanic))
+      && HARD_CONFIDENCE.has(fact?.confidence)
+    );
+    if (!proof) continue;
+    return {
+      obligationId: obligation.id,
+      relation: 'support_completes',
+      confidence: proof.confidence,
+      mechanic: normalizeToken(proof.mechanic),
+      completionType: 'support',
+      providerEntityId: provider.id,
+      providerSourceId: provider.source_id,
+      providerName: provider.name,
+      prerequisiteMechanics: requirements.map((fact) => normalizeToken(fact.mechanic))
+    };
+  }
+  return null;
 }
 
 function factIsUsableForCandidate(entity, fact, obligation) {
@@ -672,7 +744,7 @@ function isUsablePackageActive(entity) {
   return !types.has('inbuilttrigger') && !types.has('triggered');
 }
 
-function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalProfiles = {}) {
+function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalProfiles = {}, supportProviders = []) {
   if (!isUsablePackageActive(entity)) return null;
   const compatibility = evaluateCompatibilityV3(entity, snapshot);
   if (!compatibility.ok) return null;
@@ -712,7 +784,14 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalP
       factMatchesCarrier(fact, obligation)
       && factIsUsableForCandidate(entity, fact, obligation)
     );
-    if (!carrierProofs.length) continue;
+    if (!carrierProofs.length) {
+      const completion = supportCompletionProof(entity, obligation, supportProviders);
+      if (!completion) continue;
+      evidenceScore += proofScore(completion);
+      if (completion.confidence === 'exact') exactCarrierProofs += 1;
+      carriers.push(completion);
+      continue;
+    }
     carrierProofs.sort((a, b) => proofScore(b) - proofScore(a));
     const proof = carrierProofs[0];
     evidenceScore += proofScore(proof);
@@ -789,8 +868,9 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalP
 }
 
 function buildViableSkillPool(catalog, offenseObligations, snapshot, criticalProfiles = {}) {
+  const providers = supportCompletionProviders(catalog);
   const analyses = asArray(catalog?.entities)
-    .map((entity) => analyzePackageCandidate(entity, offenseObligations, snapshot, criticalProfiles))
+    .map((entity) => analyzePackageCandidate(entity, offenseObligations, snapshot, criticalProfiles, providers))
     .filter(Boolean);
   const seedMechanics = new Set(offenseObligations.flatMap((obligation) => [
     ...asArray(obligation.mechanics),
@@ -822,6 +902,16 @@ function buildViableSkillPool(catalog, offenseObligations, snapshot, criticalPro
       }
     }
     if (!changed) break;
+  }
+
+  // Meta skills are not complete actives by themselves. Once an Offense-aligned
+  // meta primary is in the pool, add only directly usable actives that satisfy
+  // its typed socketed-skill contract.
+  for (const primary of analyses.filter((candidate) => included.has(candidate.entity.id))) {
+    if (!primary.entity?.compatibility?.meta_payload) continue;
+    for (const payload of analyses) {
+      if (metaPayloadMatches(primary, payload)) included.add(payload.entity.id);
+    }
   }
 
   const ranked = analyses
@@ -865,6 +955,25 @@ function findDirectedSynergyEdges(supplier, consumer) {
     }
   }
   return edges;
+}
+
+function metaPayloadMatches(primary, supporting) {
+  const rule = primary?.entity?.compatibility?.meta_payload;
+  if (!rule || !supporting?.primaryEligible || supporting?.entity?.compatibility?.meta_payload) return false;
+  return targetSkillTypesMatch(rule, supporting.entity);
+}
+
+function metaPayloadEdge(primary, supporting) {
+  if (!metaPayloadMatches(primary, supporting)) return null;
+  return {
+    fromEntityId: supporting.entity.id,
+    toEntityId: primary.entity.id,
+    mechanic: normalizeToken(primary.entity.compatibility.meta_payload.mechanic) || 'socketed_skill',
+    supplyRelation: 'provides',
+    demandRelation: 'requires',
+    confidence: 'exact',
+    metaPayload: true
+  };
 }
 
 function bestProofByObligation(candidates, field) {
@@ -944,6 +1053,7 @@ function supportingProofIsUsable(candidate, proof, offenseObligations, isCarrier
   if (!candidate || !proof) return false;
   if (isCarrier) return candidate.primaryEligible;
   const obligation = offenseObligations.find((entry) => entry.id === proof.obligationId);
+  if (normalizeToken(obligation?.category) === 'archetype') return candidate.primaryEligible;
   return normalizeToken(obligation?.category) !== 'damage_type'
     || !['has_property', 'converts'].includes(proof.relation)
     || candidate.primaryEligible;
@@ -957,6 +1067,7 @@ function assignSupportingRole(primary, supporting, synergyEdges, offenseObligati
   const paidOffFromPrimary = synergyEdges.filter((edge) =>
     edge.fromEntityId === primary.entity.id && edge.toEntityId === supporting.entity.id
   );
+  if (suppliedToPrimary.some((edge) => edge.metaPayload)) return 'secondary_damage';
   if (paidOffFromPrimary.some((edge) => edge.demandRelation === 'consumes') || (paidOffFromPrimary.length && roles.has('payoff'))) {
     return 'payoff';
   }
@@ -982,10 +1093,14 @@ function assignSupportingRole(primary, supporting, synergyEdges, offenseObligati
 
 function evaluateSkillPackage(primary, supporting, offenseObligations) {
   if (!primary?.primaryEligible || (!primary.fulfilled.length && !primary.carriers.length)) return null;
+  const primaryMetaPayload = primary.entity?.compatibility?.meta_payload || null;
+  if (primaryMetaPayload && !supporting) return null;
   if (supporting && (
     supporting.entity.id === primary.entity.id
     || normalizeToken(supporting.entity.name) === normalizeToken(primary.entity.name)
   )) return null;
+  const payloadEdge = supporting ? metaPayloadEdge(primary, supporting) : null;
+  if (primaryMetaPayload && !payloadEdge) return null;
 
   const candidates = [primary, supporting].filter(Boolean);
   const supportingFulfilled = supporting
@@ -1004,14 +1119,17 @@ function evaluateSkillPackage(primary, supporting, offenseObligations) {
     ...findDirectedSynergyEdges(supporting, primary)
   ] : [];
   const synergyEdges = supporting
-    ? offenseAnchoredSynergyEdges(
+    ? [
+      ...offenseAnchoredSynergyEdges(
       primary,
       supporting,
       rawSynergyEdges,
       offenseObligations,
       supportingFulfilled,
       supportingCarriers
-    )
+      ),
+      ...[payloadEdge].filter(Boolean)
+    ]
     : [];
   const supportingAdjacentFacts = adjacentOffenseFacts(supporting, offenseObligations);
   const primaryRepresentedBeforePair = new Set([
@@ -1021,6 +1139,11 @@ function evaluateSkillPackage(primary, supporting, offenseObligations) {
   const supportingAddsCarrierCoverage = supportingCarriers.some((proof) =>
     !primaryRepresentedBeforePair.has(proof.obligationId)
   );
+  const supportingDisplacesCarrierPrimary = supporting?.primaryEligible
+    && supportingFulfilled.some((proof) =>
+      primary.carriers.some((carrier) => carrier.obligationId === proof.obligationId)
+    );
+  if (supportingDisplacesCarrierPrimary) return null;
   if (supporting && !supportingFulfilled.length && !supportingCarriers.length
     && !synergyEdges.length) {
     return null;
@@ -1058,11 +1181,15 @@ function evaluateSkillPackage(primary, supporting, offenseObligations) {
   const newDirectBySupporting = supporting
     ? supportingFulfilled.filter((entry) => !primary.fulfilled.some((proof) => proof.obligationId === entry.obligationId)).length
     : 0;
+  if (supporting && !synergyEdges.length
+    && newRepresentedBySupporting === 0
+    && newDirectBySupporting === 0) return null;
   const complementaryCoverage = supporting && offenseObligations.length > 1
     && Array.from(primaryRepresentedIds).some((id) => !supportingRepresentedIds.has(id))
     && Array.from(supportingRepresentedIds).some((id) => !primaryRepresentedIds.has(id));
   const redundantParallel = supporting && !synergyEdges.length
     && newRepresentedBySupporting === 0;
+  const metaPayloadPair = Boolean(payloadEdge);
   const exactProofs = primary.exactProofs
     + supportingFulfilled.filter((proof) => proof.confidence === 'exact').length;
   const exactCarrierProofs = primary.exactCarrierProofs
@@ -1089,14 +1216,15 @@ function evaluateSkillPackage(primary, supporting, offenseObligations) {
     + evidenceScore * 2
     + criticalAffinityScore
     + primary.fulfilled.length * 45
-    + (supporting ? 70 : 0)
-    + synergyEdges.filter((edge) => edge.demandRelation === 'requires').length * 135
+    + (supporting && !metaPayloadPair ? 70 : 0)
+    + synergyEdges.filter((edge) => edge.demandRelation === 'requires' && !edge.metaPayload).length * 135
     + synergyEdges.filter((edge) => edge.demandRelation === 'consumes').length * 115
     + newRepresentedBySupporting * 55
     + newDirectBySupporting * 35
     + (complementaryCoverage ? 35 : 0)
     + (complementaryRole ? 25 : 0)
     - (redundantParallel ? 45 : 0)
+    - (metaPayloadPair ? 15 : 0)
     - unresolvedDependencies.length * 90
     - unresolvedSetupCosts.length * 20;
 
@@ -1255,8 +1383,10 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
   for (const obligation of offenseObligations) {
     if (fulfilledIds.has(obligation.id)) continue;
     const carrier = carrierProofs.find((entry) => entry.obligationId === obligation.id);
-    const reason = carrierIds.has(obligation.id)
-      ? `The selected package has a viable ${carrier?.mechanic || 'damage'} carrier, but still lacks explicit ${obligation.label} application.`
+    const reason = carrier?.completionType === 'support'
+      ? `${carrier.providerName} can complete this ${obligation.label} package, but support selection is deferred to the support pass.`
+      : carrierIds.has(obligation.id)
+        ? `The selected package has a viable ${carrier?.mechanic || 'damage'} carrier, but still lacks explicit ${obligation.label} application.`
       : 'No selected package skill provides hard semantic evidence for this Offense.';
     unresolved.push(unresolvedEntry(obligation, reason));
   }
