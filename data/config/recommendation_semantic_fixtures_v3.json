@@ -554,9 +554,52 @@
           "mechanic": "detonation"
         }
       ]
+    },
+    {
+      "id": "conditional_ailment_trigger_is_not_application",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "While active, has a chance to create an Infusion Remnant when you Freeze, Shock or Ignite a target.",
+      "expected_facts": [],
+      "forbidden_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "freeze"
+        },
+        {
+          "relation": "inflicts",
+          "mechanic": "shock"
+        },
+        {
+          "relation": "inflicts",
+          "mechanic": "ignite"
+        }
+      ]
     }
   ],
   "catalog_assertions": [
+    {
+      "entity_name": "Siphon Elements",
+      "relation": "generates",
+      "mechanic": "infusion",
+      "condition": "after_elemental_ailment_application",
+      "requires_any_mechanics": [
+        "freeze",
+        "shock",
+        "ignite"
+      ]
+    },
+    {
+      "entity_name": "Siphon Elements",
+      "relation": "generates",
+      "mechanic": "remnant",
+      "condition": "after_elemental_ailment_application",
+      "requires_any_mechanics": [
+        "freeze",
+        "shock",
+        "ignite"
+      ]
+    },
     {
       "entity_name": "The Empty Roar",
       "relation": "prevents",
@@ -646,6 +689,23 @@
     }
   ],
   "catalog_forbidden_assertions": [
+    {
+      "entity_name": "Siphon Elements",
+      "relation": "inflicts",
+      "mechanic": "freeze"
+    },
+    {
+      "entity_name": "Siphon Elements",
+      "relation": "generates",
+      "mechanic": "infusion",
+      "condition": null
+    },
+    {
+      "entity_name": "Siphon Elements",
+      "relation": "generates",
+      "mechanic": "remnant",
+      "condition": null
+    },
     {
       "entity_name": "Fangs of Frost",
       "relation": "consumes",

@@ -678,6 +678,59 @@ test('a companion enabler can satisfy an explicit primary dependency', () => {
   assert.ok(!result.unresolved.some((entry) => entry.obligationId === 'dependency:power_charge'));
 });
 
+test('a conditional resource enabler requires its paired payoff to supply a trigger', () => {
+  const siphon = entity({
+    id: 'siphon-elements',
+    name: 'Siphon Elements',
+    roles: ['setup_control', 'utility'],
+    types: ['Buff', 'HasReservation', 'Persistent'],
+    facts: [{
+      relation: 'generates',
+      subject: 'skill',
+      mechanic: 'infusion',
+      condition: 'after_elemental_ailment_application',
+      requires_any_mechanics: ['freeze', 'shock', 'ignite'],
+      confidence: 'exact'
+    }]
+  });
+  const payoff = (id, name, triggerFacts = []) => entity({
+    id,
+    name,
+    roles: ['primary_damage', 'payoff'],
+    facts: [
+      { relation: 'has_property', subject: 'skill', mechanic: 'fire', confidence: 'exact' },
+      { relation: 'consumes', subject: 'skill', mechanic: 'infusion', confidence: 'exact' },
+      ...triggerFacts
+    ]
+  });
+
+  const withoutTrigger = selectRecommendationPackageV3(catalog([
+    payoff('plain-payoff', 'Plain Infusion Payoff'),
+    siphon
+  ]), { weapon: 'Wand', offenseList: ['Fire Damage'] }, {
+    offenseInventory: offenseInventory()
+  });
+  const withTrigger = selectRecommendationPackageV3(catalog([
+    payoff('ignite-payoff', 'Igniting Infusion Payoff', [
+      { relation: 'inflicts', subject: 'skill', mechanic: 'ignite', confidence: 'exact' }
+    ]),
+    siphon
+  ]), { weapon: 'Wand', offenseList: ['Fire Damage'] }, {
+    offenseInventory: offenseInventory()
+  });
+
+  assert.deepEqual(withoutTrigger.pieces.map((piece) => piece.name), ['Plain Infusion Payoff']);
+  assert.deepEqual(withTrigger.pieces.map((piece) => piece.name), [
+    'Igniting Infusion Payoff',
+    'Siphon Elements'
+  ]);
+  assert.ok(withTrigger.synergyEdges.some((edge) =>
+    edge.mechanic === 'infusion'
+      && edge.condition === 'after_elemental_ailment_application'
+      && edge.requiresAnyMechanics.includes('ignite')
+  ));
+});
+
 test('package-first scoring may choose a weaker standalone primary for a stronger setup-payoff pair', () => {
   const result = selectRecommendationPackageV3(catalog([
     entity({
@@ -1364,6 +1417,42 @@ test('committed provider supports retain typed Minion creation and target constr
   assert.deepEqual(skittering.compatibility.target_skill.allowed_skill_types_any_of, [
     'CanCreateStoneElementals'
   ]);
+});
+
+test('committed Siphon Elements data and historical false pairings stay corrected', async () => {
+  const [realCatalog, realOffense] = await Promise.all([
+    readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
+    readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
+  ]);
+  const siphon = realCatalog.entities.find((entry) => entry.name === 'Siphon Elements');
+  const conditionalOutputs = siphon.facts.filter((fact) =>
+    fact.relation === 'generates' && ['infusion', 'remnant'].includes(fact.mechanic)
+  );
+
+  assert.ok(!siphon.facts.some((fact) =>
+    fact.relation === 'inflicts' && ['freeze', 'shock', 'ignite'].includes(fact.mechanic)
+  ));
+  assert.equal(conditionalOutputs.length, 2);
+  assert.ok(conditionalOutputs.every((fact) =>
+    fact.condition === 'after_elemental_ailment_application'
+      && ['freeze', 'shock', 'ignite'].every((mechanic) =>
+        fact.requires_any_mechanics.includes(mechanic)
+      )
+  ));
+
+  const historicalFalsePairings = [
+    { weapon: 'Quarterstaff', offenseList: ['Cold Damage'] },
+    { weapon: 'Staff', offenseList: ['Physical Damage'] },
+    { weapon: 'Wand', offenseList: ['Freeze'] },
+    { weapon: 'Sceptre', offenseList: ['Minions/Companions'] },
+    { weapon: 'Mace', offenseList: ['Physical Damage', 'Freeze'] }
+  ];
+  for (const snapshot of historicalFalsePairings) {
+    const result = selectRecommendationPackageV3(realCatalog, snapshot, {
+      offenseInventory: realOffense
+    });
+    assert.ok(!result.pieces.some((piece) => piece.name === 'Siphon Elements'), JSON.stringify(snapshot));
+  }
 });
 
 test('committed catalog never selects Chaos Bolt for Bow or Unearth for Spear', async () => {

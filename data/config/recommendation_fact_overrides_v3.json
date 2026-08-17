@@ -2,6 +2,49 @@
   "schema_version": "recommendation-fact-overrides-v3.0.0",
   "description": "Curated additions and suppressions for facts that cannot be interpreted safely from source data. Entity keys use the stable IDs emitted by recommendation_catalog_v3.json.",
   "entities": {
+    "skill:Metadata/Items/Gem/SkillGemSiphonElements": {
+      "reason": "Siphon Elements creates Infusion Remnants only after the player Freezes, Shocks, or Ignites a target; the trigger text does not make Siphon Elements an ailment applicator.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "freeze"
+        },
+        {
+          "relation": "generates",
+          "mechanic": "infusion"
+        },
+        {
+          "relation": "generates",
+          "mechanic": "remnant"
+        }
+      ],
+      "add_facts": [
+        {
+          "relation": "generates",
+          "subject": "skill",
+          "mechanic": "infusion",
+          "condition": "after_elemental_ailment_application",
+          "requires_any_mechanics": [
+            "freeze",
+            "shock",
+            "ignite"
+          ],
+          "confidence": "exact"
+        },
+        {
+          "relation": "generates",
+          "subject": "skill",
+          "mechanic": "remnant",
+          "condition": "after_elemental_ailment_application",
+          "requires_any_mechanics": [
+            "freeze",
+            "shock",
+            "ignite"
+          ],
+          "confidence": "exact"
+        }
+      ]
+    },
     "skill:Metadata/Items/Gem/SkillGemTameBeast": {
       "reason": "Tame Beast transforms after a rare Beast capture and then summons that Beast as a reviving Companion.",
       "add_facts": [

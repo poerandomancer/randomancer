@@ -11,7 +11,7 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5059,
+    "fact_count": 5058,
     "fact_relation_counts": {
       "consumes": 353,
       "converts": 112,
@@ -19,7 +19,7 @@
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 672,
-      "inflicts": 132,
+      "inflicts": 131,
       "modifies": 2239,
       "occupies": 444,
       "prevents": 375,
@@ -79576,26 +79576,38 @@
         {
           "relation": "generates",
           "subject": "skill",
+          "mechanic": "infusion",
+          "condition": "after_elemental_ailment_application",
+          "requires_any_mechanics": [
+            "freeze",
+            "shock",
+            "ignite"
+          ],
           "confidence": "exact",
           "evidence": [
             {
-              "kind": "active_skill_type",
-              "value": "GeneratesInfusion"
+              "kind": "curated_override",
+              "value": "Siphon Elements creates Infusion Remnants only after the player Freezes, Shocks, or Ignites a target; the trigger text does not make Siphon Elements an ailment applicator."
             }
-          ],
-          "mechanic": "infusion"
+          ]
         },
         {
           "relation": "generates",
           "subject": "skill",
+          "mechanic": "remnant",
+          "condition": "after_elemental_ailment_application",
+          "requires_any_mechanics": [
+            "freeze",
+            "shock",
+            "ignite"
+          ],
           "confidence": "exact",
           "evidence": [
             {
-              "kind": "active_skill_type",
-              "value": "GeneratesRemnants"
+              "kind": "curated_override",
+              "value": "Siphon Elements creates Infusion Remnants only after the player Freezes, Shocks, or Ignites a target; the trigger text does not make Siphon Elements an ailment applicator."
             }
-          ],
-          "mechanic": "remnant"
+          ]
         },
         {
           "relation": "has_property",
@@ -79644,19 +79656,6 @@
             }
           ],
           "mechanic": "lightning"
-        },
-        {
-          "relation": "inflicts",
-          "subject": "skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "While active, has a chance to create an [ElementalInfusion|Infusion] [Remnant] when you [Freeze], [Shock] or [Ignite] a target."
-            }
-          ],
-          "mechanic": "freeze",
-          "scope": "outgoing"
         },
         {
           "relation": "modifies",

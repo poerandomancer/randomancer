@@ -13,7 +13,7 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5059,
+    "fact_count": 5058,
     "fact_relation_counts": {
       "consumes": 353,
       "converts": 112,
@@ -21,7 +21,7 @@
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 672,
-      "inflicts": 132,
+      "inflicts": 131,
       "modifies": 2239,
       "occupies": 444,
       "prevents": 375,
@@ -321,11 +321,11 @@
     },
     "skill_descriptions": {
       "evidence_count": 1115,
-      "fact_count": 360,
-      "structured_count": 276,
+      "fact_count": 359,
+      "structured_count": 275,
       "unparsed_count": 127,
-      "recognized_unstructured_count": 712,
-      "structured_rate": 0.2475,
+      "recognized_unstructured_count": 713,
+      "structured_rate": 0.2466,
       "samples": {
         "recognized_unstructured": [
           {

@@ -820,6 +820,18 @@ def _has_direct_ailment_application(normalized: str, mechanic: str) -> bool:
     return False
 
 
+def _has_explicit_ailment_application(normalized: str, terms: str) -> bool:
+    application = re.compile(
+        rf"(?:always|chance_to|chance_to_cause|inflict|inflicts|inflicting|causing_them_to)"
+        rf"(?:_[a-z0-9]+){{0,8}}_(?:{terms})(?:_|$)"
+    )
+    conditional_reference = re.compile(r"(?:^|_)(?:when|if|whenever)_you(?:_|$)")
+    return any(
+        not conditional_reference.search(match.group(0))
+        for match in application.finditer(normalized)
+    )
+
+
 def _text_ailment_facts(
     text: str,
     normalized: str,
@@ -850,11 +862,7 @@ def _text_ailment_facts(
             )
 
         explicit_application = bool(
-            re.search(
-                rf"(?:always|chance_to|chance_to_cause|inflict|inflicts|inflicting|causing_them_to)"
-                rf"(?:_[a-z0-9]+){{0,8}}_(?:{terms})(?:_|$)",
-                normalized,
-            )
+            _has_explicit_ailment_application(normalized, terms)
             or _has_direct_ailment_application(normalized, mechanic)
         )
 

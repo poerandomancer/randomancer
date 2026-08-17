@@ -809,7 +809,13 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalP
   for (const fact of hardFacts) {
     if (SUPPLY_RELATIONS.has(fact?.relation)) {
       for (const mechanic of factMechanics(fact)) {
-        if (mechanic) supplies.push({ mechanic, relation: fact.relation, confidence: fact.confidence });
+        if (mechanic) supplies.push({
+          mechanic,
+          relation: fact.relation,
+          confidence: fact.confidence,
+          condition: normalizeToken(fact.condition),
+          requiresAnyMechanics: unique(asArray(fact.requires_any_mechanics).map(normalizeToken))
+        });
       }
     }
   }
@@ -931,11 +937,21 @@ function buildViableSkillPool(catalog, offenseObligations, snapshot, criticalPro
   });
 }
 
+function candidateSuppliesAnyMechanic(candidate, mechanics) {
+  const required = new Set(asArray(mechanics).map(normalizeToken).filter(Boolean));
+  if (!required.size) return true;
+  return candidate.hardFacts.some((fact) =>
+    SUPPLY_RELATIONS.has(fact?.relation)
+    && factMechanics(fact).some((mechanic) => required.has(mechanic))
+  );
+}
+
 function findDirectedSynergyEdges(supplier, consumer) {
   if (!supplier || !consumer) return [];
   const edges = [];
   const seen = new Set();
   for (const supply of supplier.supplies) {
+    if (!candidateSuppliesAnyMechanic(consumer, supply.requiresAnyMechanics)) continue;
     for (const demand of consumer.demands) {
       if (!supply.mechanic || supply.mechanic !== demand.mechanic) continue;
       // `charge` is a lossy parser umbrella and must not connect Power,
@@ -950,7 +966,11 @@ function findDirectedSynergyEdges(supplier, consumer) {
         mechanic: supply.mechanic,
         supplyRelation: supply.relation,
         demandRelation: demand.relation,
-        confidence: supply.confidence === 'exact' && demand.confidence === 'exact' ? 'exact' : 'strong'
+        confidence: supply.confidence === 'exact' && demand.confidence === 'exact' ? 'exact' : 'strong',
+        ...(supply.condition ? { condition: supply.condition } : {}),
+        ...(supply.requiresAnyMechanics.length
+          ? { requiresAnyMechanics: supply.requiresAnyMechanics }
+          : {})
       });
     }
   }
