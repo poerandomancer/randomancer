@@ -60,6 +60,18 @@ function getGemDescription(entry) {
   return stripMarkup(gem?.description || gem?.support_text || gem?.grants || '');
 }
 
+function skillRolePrefix(entry, index, weaponSet) {
+  const role = entry?.recommendationV3?.assignedRole;
+  const roleLabel = {
+    primary_damage: 'Primary',
+    secondary_damage: 'Secondary',
+    setup_control: 'Setup',
+    payoff: 'Payoff',
+    enabler: 'Enabler'
+  }[role] || (index === 0 ? 'Primary' : 'Setup');
+  return weaponSet ? `${weaponSet} · ${roleLabel}` : roleLabel;
+}
+
 function getPassiveDescription(entry) {
   const name = entry?.name || '';
   const fromData = (window.DATA?.passivesEnriched?.nodes || []).find((node) => node?.name === name);
@@ -132,14 +144,18 @@ function deriveBuildCardModel(snapshot) {
   const weapon2 = snap.weapon2 || snap.offhand2 ? formatWeaponLine(snap.weapon2, snap.offhand2) : '';
   const mechanics = [...(snap.ailmentList || []), ...(snap.tacticList || [])].filter(Boolean);
 
+  const skillItems = (entries, weaponSet) => (entries || []).slice(0, 2).map((entry, index) =>
+    item(getGemName(entry), {
+      prefix: skillRolePrefix(entry, index, weaponSet),
+      slotKey: 'ACTIVE_SKILL',
+      tipLines: [getGemDescription(entry)].filter(Boolean)
+    })
+  );
+  const hasSecondWeaponSet = Boolean((snap.recommendedSkills2 || []).length);
   const skills = [
-    { entry: (snap.recommendedSkills || [])[0], prefix: 'Weapon Set I' },
-    { entry: (snap.recommendedSkills2 || [])[0], prefix: 'Weapon Set II' }
-  ].filter(({ entry }) => entry).map(({ entry, prefix }) => item(getGemName(entry), {
-    prefix,
-    slotKey: 'ACTIVE_SKILL',
-    tipLines: [getGemDescription(entry)].filter(Boolean)
-  }));
+    ...skillItems(snap.recommendedSkills, hasSecondWeaponSet ? 'Set I' : ''),
+    ...skillItems(snap.recommendedSkills2, 'Set II')
+  ];
 
   const uniques = (snap.recommendedUniques || [])
     .map((entry) => typeof entry === 'string' ? entry : entry?.name)

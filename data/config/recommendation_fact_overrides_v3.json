@@ -1,5 +1,238 @@
 {
   "schema_version": "recommendation-fact-overrides-v3.0.0",
   "description": "Curated additions and suppressions for facts that cannot be interpreted safely from source data. Entity keys use the stable IDs emitted by recommendation_catalog_v3.json.",
-  "entities": {}
+  "entities": {
+    "skill:Metadata/Items/Gem/SkillGemSiphonElements": {
+      "reason": "Siphon Elements creates Infusion Remnants only after the player Freezes, Shocks, or Ignites a target; the trigger text does not make Siphon Elements an ailment applicator.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "freeze"
+        },
+        {
+          "relation": "generates",
+          "mechanic": "infusion"
+        },
+        {
+          "relation": "generates",
+          "mechanic": "remnant"
+        }
+      ],
+      "add_facts": [
+        {
+          "relation": "generates",
+          "subject": "skill",
+          "mechanic": "infusion",
+          "condition": "after_elemental_ailment_application",
+          "requires_any_mechanics": [
+            "freeze",
+            "shock",
+            "ignite"
+          ],
+          "confidence": "exact"
+        },
+        {
+          "relation": "generates",
+          "subject": "skill",
+          "mechanic": "remnant",
+          "condition": "after_elemental_ailment_application",
+          "requires_any_mechanics": [
+            "freeze",
+            "shock",
+            "ignite"
+          ],
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemTameBeast": {
+      "reason": "Tame Beast transforms after a rare Beast capture and then summons that Beast as a reviving Companion.",
+      "add_facts": [
+        {
+          "relation": "creates",
+          "subject": "skill",
+          "mechanic": "companion",
+          "condition": "after_beast_capture",
+          "confidence": "exact"
+        },
+        {
+          "relation": "creates",
+          "subject": "skill",
+          "mechanic": "minion",
+          "condition": "after_beast_capture",
+          "confidence": "exact"
+        }
+      ],
+      "compatibility": {
+        "equipment": {
+          "is_unrestricted": false,
+          "mainhand_tags_any_of": [
+            "spear"
+          ],
+          "offhand_tags_any_of": [],
+          "allowed_weapon_tags_any_of": [
+            "spear"
+          ],
+          "display": "Spear affinity"
+        }
+      }
+    },
+    "skill:Metadata/Items/Gems/SkillGemRhoaMount": {
+      "reason": "Rhoa Mount explicitly requires wielding a Bow or Spear even though the retained equipment record is unrestricted.",
+      "compatibility": {
+        "equipment": {
+          "is_unrestricted": false,
+          "mainhand_tags_any_of": [
+            "bow",
+            "spear"
+          ],
+          "offhand_tags_any_of": [],
+          "allowed_weapon_tags_any_of": [
+            "bow",
+            "spear"
+          ],
+          "display": "Requires Bow or Spear"
+        }
+      }
+    },
+    "skill:Metadata/Items/Gems/SkillGemWolfPounce": {
+      "reason": "Pounce triggers Predator's Mark; its activation triggers the nested Summon Wolf skill, which creates a Wolf Minion.",
+      "add_facts": [
+        {
+          "relation": "creates",
+          "subject": "skill",
+          "mechanic": "minion",
+          "condition": "predators_mark_activation",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "nested_active_skill",
+              "value": "Predator's Mark -> Summon Wolf"
+            }
+          ]
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SupportGemLivingLightning": {
+      "reason": "Living Lightning creates temporary Minions when the supported skill deals Lightning damage.",
+      "add_facts": [
+        {
+          "relation": "creates",
+          "subject": "supported_skill",
+          "mechanic": "minion",
+          "confidence": "exact"
+        },
+        {
+          "relation": "requires",
+          "subject": "supported_skill",
+          "mechanic": "lightning",
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SupportGemLivingLightningTwo": {
+      "reason": "Living Lightning II creates temporary Minions when the supported skill deals Lightning damage.",
+      "add_facts": [
+        {
+          "relation": "creates",
+          "subject": "supported_skill",
+          "mechanic": "minion",
+          "confidence": "exact"
+        },
+        {
+          "relation": "requires",
+          "subject": "supported_skill",
+          "mechanic": "lightning",
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SupportGemSkitteringStone": {
+      "reason": "Skittering Stone I releases stone Minions from shatterable earthen objects created by the supported skill.",
+      "add_facts": [
+        {
+          "relation": "creates",
+          "subject": "supported_skill",
+          "mechanic": "minion",
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SupportGemSkitteringStoneTwo": {
+      "reason": "Skittering Stone II releases stone Minions from shatterable earthen objects created by the supported skill.",
+      "add_facts": [
+        {
+          "relation": "creates",
+          "subject": "supported_skill",
+          "mechanic": "minion",
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemSpellTotem": {
+      "reason": "Spell Totem is a complete active package only when paired with an eligible socketed Spell.",
+      "add_candidate_roles": [
+        "primary_damage"
+      ],
+      "compatibility": {
+        "equipment": {
+          "is_unrestricted": false,
+          "mainhand_tags_any_of": [
+            "staff",
+            "wand",
+            "sceptre"
+          ],
+          "offhand_tags_any_of": [],
+          "allowed_weapon_tags_any_of": [
+            "staff",
+            "wand",
+            "sceptre"
+          ],
+          "display": "Caster weapon recommendation"
+        },
+        "meta_payload": {
+          "mechanic": "socketed_spell",
+          "allowed_skill_types_any_of": [
+            "Spell"
+          ],
+          "excluded_skill_types": [
+            "Cooldown"
+          ]
+        }
+      }
+    },
+    "skill:Metadata/Items/Gems/SkillGemAncestralWarriorTotem": {
+      "reason": "Ancestral Warrior Totem requires an eligible socketed Mace attack as its damage payload.",
+      "add_candidate_roles": [
+        "primary_damage"
+      ],
+      "compatibility": {
+        "meta_payload": {
+          "mechanic": "socketed_mace_skill",
+          "allowed_skill_types_any_of": [
+            "Attack"
+          ],
+          "excluded_skill_types": [
+            "Channel",
+            "Cooldown"
+          ]
+        }
+      }
+    },
+    "skill:Metadata/Items/Gem/SkillGemMortarCannon": {
+      "reason": "Mortar Cannon requires an eligible socketed Grenade skill as its damage payload.",
+      "add_candidate_roles": [
+        "primary_damage"
+      ],
+      "compatibility": {
+        "meta_payload": {
+          "mechanic": "socketed_grenade",
+          "allowed_skill_types_any_of": [
+            "Grenade"
+          ],
+          "excluded_skill_types": []
+        }
+      }
+    }
+  }
 }

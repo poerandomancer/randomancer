@@ -253,6 +253,161 @@
       ]
     },
     {
+      "id": "skill_chilled_ground_application",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "Hitting a [ParriedDebuff|Parried] target [Consume|Consumes] the [Debuff] to cause an explosion of frost and leave [ChilledGround|Chilled Ground].",
+      "expected_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "chill"
+        }
+      ],
+      "forbidden_facts": [
+        {
+          "relation": "consumes",
+          "mechanic": "chill"
+        }
+      ]
+    },
+    {
+      "id": "skill_direct_chill_application",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "The fragments [Chill] nearby enemies.",
+      "expected_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "chill"
+        }
+      ]
+    },
+    {
+      "id": "skill_poison_cloud_application",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "Fire a bouncing grenade that causes a burst of [Poison|Poison] gas and leaves behind a growing [Poison|Poison] cloud.",
+      "expected_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "poison"
+        }
+      ]
+    },
+    {
+      "id": "skill_electrocute_buildup_enabler",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "Causes all Lightning Hits against enemies to contribute to [Electrocute|Electrocution] buildup for a duration.",
+      "expected_facts": [
+        {
+          "relation": "provides",
+          "mechanic": "electrocute"
+        }
+      ],
+      "forbidden_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "electrocute"
+        }
+      ]
+    },
+    {
+      "id": "base_effect_no_damage_is_scoped",
+      "source_kind": "stat_id",
+      "subject": "skill",
+      "value": "base_deal_no_damage",
+      "expected_facts": [
+        {
+          "relation": "prevents",
+          "mechanic": "damage",
+          "condition": "base_effect_only"
+        }
+      ]
+    },
+    {
+      "id": "cold_damage_does_not_prove_chill",
+      "source_kind": "active_skill_type",
+      "subject": "skill",
+      "value": "Cold",
+      "expected_facts": [
+        {
+          "relation": "has_property",
+          "mechanic": "cold"
+        }
+      ],
+      "forbidden_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "chill"
+        },
+        {
+          "relation": "provides",
+          "mechanic": "chill"
+        }
+      ]
+    },
+    {
+      "id": "taxonomy_lightning_is_a_carrier_not_shock_application",
+      "source_kind": "taxonomy_damage_type",
+      "subject": "skill",
+      "value": "lightning",
+      "expected_facts": [
+        {
+          "relation": "has_property",
+          "mechanic": "lightning"
+        }
+      ],
+      "forbidden_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "shock"
+        }
+      ]
+    },
+    {
+      "id": "totemable_is_compatibility_not_totem_identity",
+      "source_kind": "active_skill_type",
+      "subject": "skill",
+      "value": "Totemable",
+      "expected_facts": [],
+      "forbidden_facts": [
+        {
+          "relation": "has_property",
+          "mechanic": "totem"
+        },
+        {
+          "relation": "creates",
+          "mechanic": "totem"
+        }
+      ]
+    },
+    {
+      "id": "summons_totem_is_totem_identity",
+      "source_kind": "active_skill_type",
+      "subject": "skill",
+      "value": "SummonsTotem",
+      "expected_facts": [
+        {
+          "relation": "creates",
+          "mechanic": "totem"
+        }
+      ]
+    },
+    {
+      "id": "conditional_ailment_reference_is_not_application",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "While active, gains Energy when you [Shock|Shock] enemies and triggers socketed spells on reaching maximum Energy.",
+      "expected_facts": [],
+      "forbidden_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "shock"
+        }
+      ]
+    },
+    {
       "id": "runic_ward_recovery",
       "source_kind": "skill_description",
       "subject": "skill",
@@ -313,9 +468,138 @@
           "mechanic": "runic_ward"
         }
       ]
+    },
+    {
+      "id": "stored_poison_damage_requires_poison_input",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "While active, stores a portion of the [Poison] Damage you deal.",
+      "expected_facts": [
+        {
+          "relation": "requires",
+          "mechanic": "poison"
+        }
+      ]
+    },
+    {
+      "id": "skill_breaks_enemy_armour",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "Fire bolts rapidly to [ArmourBreak|Break enemy Armour].",
+      "expected_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "armour_break"
+        }
+      ]
+    },
+    {
+      "id": "preventing_armour_break_is_not_application",
+      "source_kind": "skill_description",
+      "subject": "supported_skill",
+      "value": "Deals more damage but prevents them from [ArmourBreak|Breaking Armour] themselves.",
+      "expected_facts": [],
+      "forbidden_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "armour_break"
+        }
+      ]
+    },
+    {
+      "id": "conditional_armour_break_reference_is_not_application",
+      "source_kind": "skill_description",
+      "subject": "supported_skill",
+      "value": "Supported Attacks [Daze] enemies when they fully [ArmourBreak|Break Armour].",
+      "expected_facts": [],
+      "forbidden_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "armour_break"
+        }
+      ]
+    },
+    {
+      "id": "detonator_skill_type_provides_detonation",
+      "source_kind": "active_skill_type",
+      "subject": "skill",
+      "value": "Detonator",
+      "expected_facts": [
+        {
+          "relation": "provides",
+          "mechanic": "detonation"
+        }
+      ]
+    },
+    {
+      "id": "skill_detonates_grenades",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "The explosion will cause any [Grenade|Grenades] in its area to also explode.",
+      "expected_facts": [
+        {
+          "relation": "provides",
+          "mechanic": "detonation"
+        }
+      ]
+    },
+    {
+      "id": "gas_cloud_fire_payoff_requires_detonation",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "[Burning] effects or [Detonator|Detonator] skills will cause the cloud to explode in a fiery blast.",
+      "expected_facts": [
+        {
+          "relation": "requires",
+          "mechanic": "detonation"
+        }
+      ]
+    },
+    {
+      "id": "conditional_ailment_trigger_is_not_application",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "While active, has a chance to create an Infusion Remnant when you Freeze, Shock or Ignite a target.",
+      "expected_facts": [],
+      "forbidden_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "freeze"
+        },
+        {
+          "relation": "inflicts",
+          "mechanic": "shock"
+        },
+        {
+          "relation": "inflicts",
+          "mechanic": "ignite"
+        }
+      ]
     }
   ],
   "catalog_assertions": [
+    {
+      "entity_name": "Siphon Elements",
+      "relation": "generates",
+      "mechanic": "infusion",
+      "condition": "after_elemental_ailment_application",
+      "requires_any_mechanics": [
+        "freeze",
+        "shock",
+        "ignite"
+      ]
+    },
+    {
+      "entity_name": "Siphon Elements",
+      "relation": "generates",
+      "mechanic": "remnant",
+      "condition": "after_elemental_ailment_application",
+      "requires_any_mechanics": [
+        "freeze",
+        "shock",
+        "ignite"
+      ]
+    },
     {
       "entity_name": "The Empty Roar",
       "relation": "prevents",
@@ -345,6 +629,134 @@
       "entity_name": "Runic Infusion",
       "relation": "consumes",
       "mechanic": "runic_ward"
+    },
+    {
+      "entity_name": "Fangs of Frost",
+      "relation": "inflicts",
+      "mechanic": "chill"
+    },
+    {
+      "entity_name": "Glacial Lance",
+      "relation": "inflicts",
+      "mechanic": "chill"
+    },
+    {
+      "entity_name": "Gas Grenade",
+      "relation": "inflicts",
+      "mechanic": "poison"
+    },
+    {
+      "entity_name": "Voltaic Grenade",
+      "relation": "provides",
+      "mechanic": "electrocute"
+    },
+    {
+      "entity_name": "Plague Bearer",
+      "relation": "requires",
+      "mechanic": "poison"
+    },
+    {
+      "entity_name": "Armour Piercing Rounds",
+      "relation": "inflicts",
+      "mechanic": "armour_break"
+    },
+    {
+      "entity_name": "Explosive Shot",
+      "relation": "provides",
+      "mechanic": "detonation"
+    },
+    {
+      "entity_name": "Gas Grenade",
+      "relation": "requires",
+      "mechanic": "detonation"
+    },
+    {
+      "entity_name": "Spearfield",
+      "relation": "prevents",
+      "mechanic": "damage",
+      "condition": "base_effect_only"
+    },
+    {
+      "entity_name": "Galvanic Shards",
+      "relation": "prevents",
+      "mechanic": "damage",
+      "condition": "base_effect_only"
+    },
+    {
+      "entity_name": "Galvanic Shards",
+      "relation": "has_property",
+      "mechanic": "lightning"
+    }
+  ],
+  "catalog_forbidden_assertions": [
+    {
+      "entity_name": "Siphon Elements",
+      "relation": "inflicts",
+      "mechanic": "freeze"
+    },
+    {
+      "entity_name": "Siphon Elements",
+      "relation": "generates",
+      "mechanic": "infusion",
+      "condition": null
+    },
+    {
+      "entity_name": "Siphon Elements",
+      "relation": "generates",
+      "mechanic": "remnant",
+      "condition": null
+    },
+    {
+      "entity_name": "Fangs of Frost",
+      "relation": "consumes",
+      "mechanic": "chill"
+    },
+    {
+      "entity_name": "Voltaic Grenade",
+      "relation": "inflicts",
+      "mechanic": "electrocute"
+    },
+    {
+      "entity_name": "Spearfield",
+      "relation": "prevents",
+      "mechanic": "damage",
+      "condition": null
+    },
+    {
+      "entity_name": "Galvanic Shards",
+      "relation": "prevents",
+      "mechanic": "damage",
+      "condition": null
+    },
+    {
+      "entity_name": "Cast on Freeze",
+      "relation": "inflicts",
+      "mechanic": "freeze"
+    },
+    {
+      "entity_name": "Cast on Shock",
+      "relation": "inflicts",
+      "mechanic": "shock"
+    },
+    {
+      "entity_name": "Rolling Slam",
+      "relation": "has_property",
+      "mechanic": "totem"
+    },
+    {
+      "entity_name": "Battershout",
+      "relation": "inflicts",
+      "mechanic": "armour_break"
+    },
+    {
+      "entity_name": "Break Posture",
+      "relation": "inflicts",
+      "mechanic": "armour_break"
+    },
+    {
+      "entity_name": "Exploit Weakness",
+      "relation": "inflicts",
+      "mechanic": "armour_break"
     }
   ]
 }

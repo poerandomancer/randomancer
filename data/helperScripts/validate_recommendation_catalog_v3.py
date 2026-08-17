@@ -89,6 +89,20 @@ def validate_catalog_assertions(catalog: dict[str, Any], fixtures: dict[str, Any
         ):
             errors.append(f"catalog assertion failed for {name!r}: {expected}")
 
+    for assertion in fixtures.get("catalog_forbidden_assertions") or []:
+        name = assertion.get("entity_name")
+        forbidden = {key: value for key, value in assertion.items() if key != "entity_name"}
+        candidates = by_name.get(str(name), [])
+        if not candidates:
+            errors.append(f"catalog forbidden assertion entity not found: {name!r}")
+            continue
+        if any(
+            fact_matches(fact, forbidden)
+            for entity in candidates
+            for fact in entity.get("facts") or []
+        ):
+            errors.append(f"catalog forbidden assertion failed for {name!r}: {forbidden}")
+
 
 def validate_entities(catalog: dict[str, Any], ontology: dict[str, Any], errors: list[str]) -> None:
     valid_relations = {entry.get("id") for entry in ontology.get("relations") or []}

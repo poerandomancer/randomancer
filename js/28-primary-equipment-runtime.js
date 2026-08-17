@@ -3,7 +3,6 @@ import { ensureDataPreload } from './08-data-load.js';
 import { validOffhands } from './06-cohesion.js';
 
 const EQUIPMENT_FAMILY_CONTRACT = 'WEAPON_FAMILY_V1';
-const UNARMED_POOL_RATE = 0.40;
 const PRIMARY_CARD_STAGE_ID = 'primary-build-card-stage';
 
 let coreRef = null;
@@ -34,7 +33,6 @@ function makeSyntheticOffhand(name){
 function deriveFamilies(core){
   const two = Array.isArray(core?.Weapons?.['Two-Handed']) ? core.Weapons['Two-Handed'] : [];
   const one = Array.isArray(core?.Weapons?.['One-Handed']) ? core.Weapons['One-Handed'] : [];
-  const off = Array.isArray(core?.Weapons?.['Off-Hand']) ? core.Weapons['Off-Hand'] : [];
   const byName = new Map();
 
   for (const source of [...two, ...one].filter(Boolean)) {
@@ -84,26 +82,6 @@ function deriveFamilies(core){
     entry.poeNinjaModes = Array.from(new Set(modes));
     entry.legacyOffhands = Array.from(new Set(entry.legacyOffhands));
   }
-
-  const unarmedOffhands = off
-    .filter((item) => {
-      const tags = new Set(item?.tags || []);
-      return tags.has('defense') || tags.has('focus') || tags.has('sceptre');
-    })
-    .map((item) => item.name)
-    .filter(Boolean);
-
-  byName.set('Unarmed', {
-    id: 'unarmed',
-    name: 'Unarmed',
-    aliases: ['No Weapon'],
-    // Temporary Hollow Palm hint for the current recommendation layer.
-    tags: ['unarmed', 'melee', 'quarterstaff'],
-    attributes: { dexterity: 0.5, intelligence: 0.5 },
-    baseWeight: UNARMED_POOL_RATE,
-    legacyOffhands: ['None', 'Quiver', ...unarmedOffhands],
-    poeNinjaModes: ['Unarmed', 'Unarmed / Quiver', ...unarmedOffhands.map((name) => `Unarmed / ${name}`)]
-  });
 
   return Array.from(byName.values());
 }
@@ -170,13 +148,8 @@ function projectEquipmentFamilies(){
 
   const fate = canonicalizeEquipmentFates();
   const aboms = new Set(fate.abominations || []);
-  const oaths = new Set(fate.oaths || []);
   const allowed = families.filter((entry) => !aboms.has(entry.name));
-  const projectedFamilies = allowed.filter((entry) => {
-    if (entry.name !== 'Unarmed') return true;
-    if (oaths.has(entry.name) || allowed.length === 1) return true;
-    return Math.random() < UNARMED_POOL_RATE;
-  });
+  const projectedFamilies = allowed;
 
   const projected = projectedFamilies.map((entry) => ({
     name: entry.name,
@@ -377,7 +350,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 export {
-  EQUIPMENT_FAMILY_CONTRACT, UNARMED_POOL_RATE, resolveEquipmentFamily,
+  EQUIPMENT_FAMILY_CONTRACT, resolveEquipmentFamily,
   canonicalizeCurrentEquipment, projectEquipmentFamilies, restoreLegacyEquipment,
   renderEquipmentBindFates, buildFamilyPoeNinjaUrl
 };

@@ -285,6 +285,10 @@ def apply_entity_overrides(ctx: SourceContext, entity_id: str, facts: list[dict[
     return merge_facts([*kept, *additions])
 
 
+def entity_override(ctx: SourceContext, entity_id: str) -> dict[str, Any]:
+    return (ctx.overrides.get("entities") or {}).get(entity_id) or {}
+
+
 def build_skill_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[str, Any]]:
     entities = []
     for skill in ctx.skills:
@@ -299,6 +303,7 @@ def build_skill_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[st
 
         granted_effects, stats = granted_effect_source(ctx, links.get("granted_effect_rids") or [])
         type_names = active_skill_types(ctx, links.get("active_skill_rids") or [], granted_effects)
+        taxonomy_damage_types = unique_sorted((skill.get("taxonomy") or {}).get("damage_types") or [])
         facts: list[dict[str, Any]] = []
 
         for type_name in type_names:
@@ -310,6 +315,18 @@ def build_skill_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[st
                     source_kind="active_skill_type",
                     value=type_name,
                     subject="skill",
+                )
+            )
+
+        for damage_type in taxonomy_damage_types:
+            facts.extend(
+                record_and_parse(
+                    coverage,
+                    group="skill_taxonomy_damage_types",
+                    entity_id=entity_id,
+                    source_kind="taxonomy_damage_type",
+                    value=damage_type,
+                    subject=subject,
                 )
             )
 
@@ -374,6 +391,17 @@ def build_skill_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[st
         }
         if target_compatibility:
             compatibility["target_skill"] = target_compatibility
+        override = entity_override(ctx, entity_id)
+        compatibility.update(override.get("compatibility") or {})
+
+        roles = candidate_roles(
+            content_type=content_type,
+            facts=facts,
+            active_skill_types=type_names,
+        )
+        for role in reversed(override.get("add_candidate_roles") or []):
+            if role not in roles:
+                roles.insert(0, role)
 
         entities.append(
             {
@@ -381,11 +409,7 @@ def build_skill_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[st
                 "content_type": content_type,
                 "source_id": source_id,
                 "name": skill.get("name"),
-                "candidate_roles": candidate_roles(
-                    content_type=content_type,
-                    facts=facts,
-                    active_skill_types=type_names,
-                ),
+                "candidate_roles": roles,
                 "retrieval_terms": tags,
                 "facts": facts,
                 "compatibility": compatibility,
@@ -397,6 +421,7 @@ def build_skill_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[st
                 "source_evidence": {
                     "description": description,
                     "active_skill_types": type_names,
+                    "taxonomy_damage_types": taxonomy_damage_types,
                     "stats": stats,
                     "granted_effects": granted_effects,
                 },

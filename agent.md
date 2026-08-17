@@ -62,7 +62,18 @@ See `docs/cohesion_selection.md` for the canonical selection contract.
 - Primary Defense remains a core Fate component. Secondary defensive layers and recovery are solution obligations owned by the recommendation engine.
 - Recommendations are selected as a coherent package, not independent content-type buckets or fixed quotas.
 - Tags are candidate-retrieval hints only. Typed semantic facts and directed ontology relationships determine fulfillment, prerequisites, and conflicts.
-- `data/enriched/recommendation_catalog_v3.json` is the additive semantic migration boundary for the future package solver. The current selectors do not consume it yet.
+- Primary-skill delivery must match the selected weapon family. Generic spells are caster-weapon candidates, not permissive fallbacks for martial weapons; weapon-specific exceptions require typed skill-type or equipment evidence.
+- Native damage may qualify a skill as an ailment carrier, but it must not mark ailment application fulfilled. Keep the ailment unresolved until another package piece supplies explicit typed application evidence.
+- Treat `Totemable` as compatibility, never totem identity. Totem fulfillment requires explicit creation or provision evidence.
+- Exclude recommendation entities tagged with seasonal source `kalguuran` until the content is deliberately re-enabled; retain those entities in enrichment and Codex data.
+- If v3 cannot select a legal primary, preserve the existing canonical recommendation and attach unresolved diagnostics instead of replacing it with an empty list.
+- Build the viable active-skill pool before selection from weapon/access legality, permanent-content eligibility, direct Offense evidence, native carriers, and typed setup/payoff relationships.
+- Jointly score singleton and two-skill packages. Strongly prefer two skills when the second adds hard Offense coverage or a typed cross-skill relationship, but never add an unrelated skill to satisfy a quota.
+- Prefer coherent setup/payoff and enabler relationships over comparable parallel skills. Parallel skills remain legal when they add real coverage, including separate rolled Offenses.
+- Preserve package order and contextual role metadata in the canonical skill list: primary damage first, then Secondary, Setup, Payoff, Enabler, or Utility as appropriate.
+- Recommendation variation may sample only within a high-quality, fully legal shortlist. Persist the per-roll selection seed, suppress immediate repeats when equivalent alternatives exist, and never use Cohesion to vary recommendation quality.
+- `data/enriched/recommendation_catalog_v3.json` is the additive semantic migration boundary for the package solver. The feature-flagged runtime slice consumes it for a seed-reproducible, equipment-legal one- or two-skill package; the remaining live selectors stay unchanged.
+- Enable the migration slice explicitly with `?recommendationV3=1`. Do not make the large catalog part of the default startup payload until rollout evidence supports that change.
 - Scraped ascendancy descriptions and unique modifiers are intentional augmentation sources where datamined descriptions are incomplete or server-provided.
 
 ## Major-refactor follow-up docket
