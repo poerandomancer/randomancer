@@ -117,20 +117,30 @@
       "relations": {}
     },
     {
-      "id": "minions_companions",
-      "name": "Minions/Companions",
-      "aliases": ["Minions", "Companions"],
+      "id": "minions",
+      "name": "Minions",
+      "aliases": ["Minion", "Minions/Companions"],
       "category": "Archetype",
-      "tags": ["minion", "minions", "companion", "companions", "summon", "summons", "ally", "allies"],
-      "attributes": {"dexterity": 0.5, "intelligence": 0.5},
+      "tags": ["minion", "minions", "summon", "summons", "ally", "allies"],
+      "attributes": {"intelligence": 1.0},
+      "relations": {}
+    },
+    {
+      "id": "companions",
+      "name": "Companions",
+      "aliases": ["Companion"],
+      "category": "Archetype",
+      "tags": ["companion", "companions", "beast", "beasts", "summon", "summons", "ally", "allies"],
+      "attributes": {"dexterity": 1.0},
       "relations": {}
     },
     {
       "id": "totems",
       "name": "Totems",
+      "aliases": ["Totem"],
       "category": "Archetype",
       "tags": ["totem", "totems", "proxy"],
-      "attributes": {"strength": 0.5, "intelligence": 0.5},
+      "attributes": {"strength": 1.0},
       "relations": {}
     }
   ]
