@@ -77,7 +77,8 @@ const OFFENSE_MECHANICS = Object.freeze({
   shock: ['shock'],
   electrocute: ['electrocute'],
   critical_hits: ['critical_hits'],
-  minions_companions: ['minion', 'companion'],
+  minions: ['minion'],
+  companions: ['companion'],
   totems: ['totem']
 });
 
