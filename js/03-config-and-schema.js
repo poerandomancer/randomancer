@@ -29,7 +29,7 @@ const Config = (() => {
       useEnginePostValidator: false,
       enableDeflectionDefenseRule: true,
       deflectionRequiresEvasion: ["Evasion", "Armour & Evasion", "Evasion & Energy Shield"],
-      enableMinionsWeaponRule: true,
+      enableMinionsWeaponRule: false,
       minionsRequiresWeapon: ["Sceptre"],
       enableBlockOffhandRule: true,
       blockRequiresOffhand: ["Shield","Buckler"],
