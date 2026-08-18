@@ -14,7 +14,8 @@ const MAX_NOTABLES = 3;
 function cloneEntry(entry) {
   if (!entry || typeof entry !== 'object') return entry;
   const next = { ...entry };
-  // Supports are intentionally no longer part of the recommendation contract.
+  // Remove the deprecated flat support field. Typed v3 support assignments
+  // remain nested under recommendationV3 on the skill they actually support.
   delete next.recommended_supports;
   return next;
 }

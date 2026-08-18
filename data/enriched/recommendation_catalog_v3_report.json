@@ -13,7 +13,7 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5080,
+    "fact_count": 5071,
     "fact_relation_counts": {
       "consumes": 353,
       "converts": 112,
@@ -21,11 +21,11 @@
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 672,
-      "inflicts": 129,
+      "inflicts": 122,
       "modifies": 2239,
       "occupies": 444,
       "prevents": 375,
-      "provides": 320,
+      "provides": 318,
       "replaces": 27,
       "requires": 63
     },
@@ -35,7 +35,7 @@
       "payoff": 181,
       "primary_damage": 349,
       "recovery": 250,
-      "setup_control": 180,
+      "setup_control": 175,
       "utility": 206
     },
     "source_versions": {
@@ -50,7 +50,7 @@
     "support_family_count": 474,
     "tiered_support_family_count": 121,
     "tiered_support_entity_count": 280,
-    "support_entities_with_bridge_facts": 82,
+    "support_entities_with_bridge_facts": 77,
     "support_entities_with_conflicts": 39,
     "active_skills_with_granted_access": 40,
     "active_skills_requiring_unique_provider": 14,

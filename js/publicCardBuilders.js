@@ -13,6 +13,23 @@ function pickGemRef(entry) {
   const out = {};
   if (entry.id) out.id = entry.id;
   if (entry.name) out.name = entry.name;
+  const recommendation = entry.recommendationV3;
+  if (recommendation && typeof recommendation === 'object') {
+    const supports = compactArray(recommendation.supports, (support) => {
+      if (!support) return null;
+      if (typeof support === 'string') return { name: support };
+      const compact = {};
+      if (support.sourceId || support.id) compact.sourceId = support.sourceId || support.id;
+      if (support.name) compact.name = support.name;
+      if (support.familyId) compact.familyId = support.familyId;
+      if (support.tier != null) compact.tier = support.tier;
+      return Object.keys(compact).length ? compact : null;
+    }).slice(0, 2);
+    out.recommendationV3 = {
+      ...(recommendation.assignedRole ? { assignedRole: recommendation.assignedRole } : {}),
+      ...(supports.length ? { supports } : {})
+    };
+  }
   if (Array.isArray(entry.recommended_supports) && entry.recommended_supports.length) {
     out.recommended_supports = compactArray(entry.recommended_supports, (support) => {
       if (!support) return null;

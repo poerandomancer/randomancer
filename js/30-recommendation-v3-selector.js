@@ -5,6 +5,7 @@ const RECOMMENDATION_V3_QUERY_PARAM = 'recommendationV3';
 const PRIMARY_QUALITY_BAND = 12;
 const COMPANION_QUALITY_BAND = 8;
 const PACKAGE_QUALITY_BAND = 12;
+const MAX_SUPPORTS_PER_SKILL = 2;
 const RECOMMENDATION_EXCLUDED_SOURCE_TAGS = new Set(['kalguuran']);
 
 const HARD_CONFIDENCE = new Set(['exact', 'strong']);
@@ -105,6 +106,9 @@ const DAMAGE_TYPE_AFFINITIES = Object.freeze({
 const CARRIER_RELATIONS = new Set(['fulfills', 'has_property', 'converts']);
 const PACKAGE_CANDIDATE_ROLES = new Set(['primary_damage', 'setup_control', 'payoff', 'enabler', 'utility']);
 const SUPPLY_RELATIONS = new Set(['fulfills', 'inflicts', 'creates', 'provides', 'generates']);
+const SUPPORT_ACTION_RELATIONS = new Set(['fulfills', 'inflicts', 'creates', 'provides', 'generates', 'converts']);
+const SUPPORT_UNCONDITIONAL_PROVISION_RELATIONS = new Set(['fulfills', 'provides', 'generates', 'converts']);
+const SUPPORT_INDEX_CACHE = new WeakMap();
 
 const RELATION_WEIGHT = Object.freeze({
   fulfills: 9,
@@ -538,7 +542,16 @@ function targetSkillTypesMatch(rule, entity) {
   const allowed = asArray(rule?.allowed_skill_types_any_of).map(normalizeToken);
   const excluded = asArray(rule?.excluded_skill_types).map(normalizeToken);
   if (excluded.some((type) => types.has(type))) return false;
-  return !allowed.length || allowed.some((type) => types.has(type));
+  if (!allowed.length) return true;
+  const hasAnd = allowed.includes('and');
+  const hasOr = allowed.includes('or');
+  const concrete = allowed.filter((type) => type !== 'and' && type !== 'or');
+  // Datamined compound expressions are flattened in the current catalog.
+  // Pure AND lists are still unambiguous; mixed AND/OR lists are not and must
+  // remain ineligible until their grouping is preserved by the data boundary.
+  if (hasAnd && hasOr) return false;
+  if (hasAnd) return concrete.length > 0 && concrete.every((type) => types.has(type));
+  return concrete.some((type) => types.has(type));
 }
 
 function evaluateDeliveryCompatibilityV3(entity, snapshot = {}) {
@@ -679,61 +692,228 @@ function factMatchesCarrier(fact, obligation) {
   return carriers.size > 0 && factMechanics(fact).some((mechanic) => carriers.has(mechanic));
 }
 
-function supportCompletionProviders(catalog) {
-  return asArray(catalog?.entities)
-    .filter((entity) => entity?.content_type === 'support_gem')
-    .filter((entity) => asArray(entity.facts).some((fact) =>
-      fact?.relation === 'creates'
-      && ['minion', 'companion'].includes(normalizeToken(fact?.mechanic))
-      && HARD_CONFIDENCE.has(fact?.confidence)
-    ))
-    .sort((a, b) =>
-      String(a.name || '').localeCompare(String(b.name || ''))
-      || String(a.id || '').localeCompare(String(b.id || ''))
-    );
+function supportFamilyId(entity) {
+  return String(entity?.support_family?.id || `support-family:${normalizeToken(entity?.name || entity?.id)}`);
 }
 
-function supportRequirementIsMet(provider, entity, mechanic) {
-  return asArray(entity?.facts).some((fact) =>
-    HARD_CONFIDENCE.has(fact?.confidence)
-    && !['prevents', 'requires', 'consumes', 'modifies'].includes(fact?.relation)
-    && factMechanics(fact).includes(mechanic)
+function supportTier(entity) {
+  const value = Number(entity?.support_family?.tier);
+  return Number.isFinite(value) && value > 0 ? value : 0;
+}
+
+function hardSupportedSkillFacts(entity) {
+  return asArray(entity?.facts).filter((fact) =>
+    normalizeToken(fact?.subject) === 'supported_skill'
+    && HARD_CONFIDENCE.has(fact?.confidence)
   );
 }
 
-function supportCompletionProof(entity, obligation, providers) {
-  const obligationMechanics = new Set(asArray(obligation?.mechanics).map(normalizeToken));
-  if (!obligationMechanics.has('minion') && !obligationMechanics.has('companion')) return null;
+function actionableSupportFacts(entity) {
+  return hardSupportedSkillFacts(entity).filter((fact) => SUPPORT_ACTION_RELATIONS.has(fact?.relation));
+}
 
-  for (const provider of providers) {
-    if (!targetSkillTypesMatch(provider?.compatibility?.target_skill, entity)) continue;
-    const requirements = asArray(provider.facts).filter((fact) =>
-      fact?.relation === 'requires'
-      && normalizeToken(fact?.subject) === 'supported_skill'
-      && HARD_CONFIDENCE.has(fact?.confidence)
-    );
-    if (requirements.some((fact) => !supportRequirementIsMet(provider, entity, normalizeToken(fact.mechanic)))) {
-      continue;
+function supportRequirementFacts(entity) {
+  return hardSupportedSkillFacts(entity).filter((fact) => ['requires', 'consumes'].includes(fact?.relation));
+}
+
+function supportSemanticSignature(entity) {
+  const target = entity?.compatibility?.target_skill || {};
+  const facts = hardSupportedSkillFacts(entity)
+    .filter((fact) => SUPPORT_ACTION_RELATIONS.has(fact?.relation) || ['requires', 'consumes', 'prevents'].includes(fact?.relation))
+    .map((fact) => [
+      fact.relation,
+      ...factMechanics(fact),
+      normalizeToken(fact.condition),
+      ...unique(asArray(fact.requires_any_mechanics).map(normalizeToken)).sort()
+    ].join(':'))
+    .sort();
+  return JSON.stringify({
+    facts,
+    allowed: unique(asArray(target.allowed_skill_types_any_of).map(normalizeToken)).sort(),
+    excluded: unique(asArray(target.excluded_skill_types).map(normalizeToken)).sort(),
+    gemsOnly: Boolean(target.supports_gems_only)
+  });
+}
+
+function collapseSupportVariants(entities) {
+  const bestBySignature = new Map();
+  for (const entity of entities) {
+    const key = `${supportFamilyId(entity)}:${supportSemanticSignature(entity)}`;
+    const existing = bestBySignature.get(key);
+    if (!existing
+      || supportTier(entity) > supportTier(existing)
+      || (supportTier(entity) === supportTier(existing)
+        && String(entity.name || '').localeCompare(String(existing.name || '')) > 0)) {
+      bestBySignature.set(key, entity);
     }
-    const proof = asArray(provider.facts).find((fact) =>
-      fact?.relation === 'creates'
-      && obligationMechanics.has(normalizeToken(fact?.mechanic))
-      && HARD_CONFIDENCE.has(fact?.confidence)
-    );
-    if (!proof) continue;
-    return {
-      obligationId: obligation.id,
-      relation: 'support_completes',
-      confidence: proof.confidence,
-      mechanic: normalizeToken(proof.mechanic),
-      completionType: 'support',
-      providerEntityId: provider.id,
-      providerSourceId: provider.source_id,
-      providerName: provider.name,
-      prerequisiteMechanics: requirements.map((fact) => normalizeToken(fact.mechanic))
-    };
   }
-  return null;
+  return Array.from(bestBySignature.values()).sort((a, b) =>
+    String(a.name || '').localeCompare(String(b.name || ''))
+    || String(a.id || '').localeCompare(String(b.id || ''))
+  );
+}
+
+function supportIndexForCatalog(catalog) {
+  if (catalog && SUPPORT_INDEX_CACHE.has(catalog)) return SUPPORT_INDEX_CACHE.get(catalog);
+  const supports = collapseSupportVariants(asArray(catalog?.entities)
+    .filter((entity) => entity?.content_type === 'support_gem')
+    .filter((entity) => isSelectableSkillName(entity?.name) && isRecommendationContentAllowedV3(entity))
+    .filter((entity) => actionableSupportFacts(entity).length > 0));
+  const byEffectMechanic = new Map();
+  const bySupplyMechanic = new Map();
+  for (const support of supports) {
+    for (const fact of actionableSupportFacts(support)) {
+      for (const mechanic of factMechanics(fact)) {
+        if (!mechanic) continue;
+        if (!byEffectMechanic.has(mechanic)) byEffectMechanic.set(mechanic, []);
+        byEffectMechanic.get(mechanic).push(support);
+        if (!bySupplyMechanic.has(mechanic)) bySupplyMechanic.set(mechanic, []);
+        bySupplyMechanic.get(mechanic).push(support);
+      }
+    }
+  }
+  const index = { supports, byEffectMechanic, bySupplyMechanic };
+  if (catalog && typeof catalog === 'object') SUPPORT_INDEX_CACHE.set(catalog, index);
+  return index;
+}
+
+function activeSkillCanBeSupported(entity) {
+  return !asArray(entity?.source_evidence?.granted_effects).some((effect) => effect?.cannot_be_supported === true);
+}
+
+function supportTargetsSkill(support, entity) {
+  if (!activeSkillCanBeSupported(entity)) return false;
+  const rule = support?.compatibility?.target_skill || {};
+  if (rule.supports_gems_only && entity?.content_type !== 'active_skill') return false;
+  return targetSkillTypesMatch(rule, entity);
+}
+
+function baseFactSuppliesMechanic(fact, mechanic) {
+  return HARD_CONFIDENCE.has(fact?.confidence)
+    && !['prevents', 'requires', 'consumes', 'modifies'].includes(fact?.relation)
+    && factMechanics(fact).includes(mechanic);
+}
+
+function unconditionalSupportFactSuppliesMechanic(fact, mechanic) {
+  return SUPPORT_UNCONDITIONAL_PROVISION_RELATIONS.has(fact?.relation)
+    && !normalizeToken(fact?.condition)
+    && asArray(fact?.requires_any_mechanics).length === 0
+    && factMechanics(fact).includes(mechanic);
+}
+
+function supportPackageSuppliesMechanic(entity, supports, mechanic) {
+  const target = normalizeToken(mechanic);
+  if (!target) return false;
+  if (asArray(entity?.facts).some((fact) => baseFactSuppliesMechanic(fact, target))) return true;
+  return supports.some((support) =>
+    actionableSupportFacts(support).some((fact) => unconditionalSupportFactSuppliesMechanic(fact, target))
+  );
+}
+
+function supportFactConditionIsMet(fact, entity, supports) {
+  const anyMechanics = unique(asArray(fact?.requires_any_mechanics).map(normalizeToken));
+  if (anyMechanics.length && !anyMechanics.some((mechanic) => supportPackageSuppliesMechanic(entity, supports, mechanic))) {
+    return false;
+  }
+  const condition = normalizeToken(fact?.condition);
+  if (!condition) return true;
+  if (condition.endsWith('_damage')) {
+    return supportPackageSuppliesMechanic(entity, supports, condition.slice(0, -'_damage'.length));
+  }
+  return supportPackageSuppliesMechanic(entity, supports, condition);
+}
+
+function supportPackageRequirementsAreMet(entity, supports) {
+  return supports.every((support) => supportRequirementFacts(support).every((fact) =>
+    supportPackageSuppliesMechanic(entity, supports, normalizeToken(fact?.mechanic))
+  ));
+}
+
+function supportProofForObligation(entity, supports, obligation) {
+  const prevented = new Set(supports.flatMap((support) => hardSupportedSkillFacts(support)
+    .filter((fact) => fact?.relation === 'prevents')
+    .flatMap(factMechanics)));
+  const proofs = [];
+  for (const support of supports) {
+    for (const fact of actionableSupportFacts(support)) {
+      if (!factMatchesObligation(fact, obligation) || !supportFactConditionIsMet(fact, entity, supports)) continue;
+      const mechanic = factMechanics(fact)[0] || '';
+      if (!mechanic || prevented.has(mechanic)) continue;
+      proofs.push({
+        obligationId: obligation.id,
+        relation: fact.relation,
+        confidence: fact.confidence,
+        mechanic,
+        providerEntityId: support.id,
+        providerSourceId: support.source_id,
+        providerName: support.name,
+        supportCount: supports.length
+      });
+    }
+  }
+  return proofs.sort((a, b) =>
+    proofScore(b) - proofScore(a)
+    || String(a.providerName || '').localeCompare(String(b.providerName || ''))
+  )[0] || null;
+}
+
+function supportCompletionProof(entity, obligation, index) {
+  const terminalSupports = unique(asArray(obligation?.mechanics).flatMap((mechanic) =>
+    asArray(index?.byEffectMechanic?.get(normalizeToken(mechanic)))
+  )).filter((support) => supportTargetsSkill(support, entity));
+  const completions = [];
+
+  for (const terminal of terminalSupports) {
+    const single = [terminal];
+    if (supportPackageRequirementsAreMet(entity, single)) {
+      const proof = supportProofForObligation(entity, single, obligation);
+      if (proof) completions.push({ supports: single, proof });
+    }
+
+    const needed = supportRequirementFacts(terminal)
+      .map((fact) => normalizeToken(fact?.mechanic))
+      .filter((mechanic) => !supportPackageSuppliesMechanic(entity, single, mechanic));
+    const conditionMechanics = actionableSupportFacts(terminal)
+      .filter((fact) => factMatchesObligation(fact, obligation))
+      .map((fact) => normalizeToken(fact?.condition))
+      .filter((condition) => condition.endsWith('_damage'))
+      .map((condition) => condition.slice(0, -'_damage'.length))
+      .filter((mechanic) => !supportPackageSuppliesMechanic(entity, single, mechanic));
+    const providerMechanics = unique([...needed, ...conditionMechanics]);
+    const secondSupports = unique(providerMechanics.flatMap((mechanic) =>
+      asArray(index?.bySupplyMechanic?.get(mechanic))
+    ));
+    for (const second of secondSupports) {
+      if (second.id === terminal.id || supportFamilyId(second) === supportFamilyId(terminal)) continue;
+      if (!supportTargetsSkill(second, entity)) continue;
+      const pair = [terminal, second];
+      if (!supportPackageRequirementsAreMet(entity, pair)) continue;
+      const proof = supportProofForObligation(entity, pair, obligation);
+      if (proof) completions.push({ supports: pair, proof });
+    }
+  }
+
+  completions.sort((a, b) =>
+    a.supports.length - b.supports.length
+    || proofScore(b.proof) - proofScore(a.proof)
+    || b.supports.reduce((sum, support) => sum + supportTier(support), 0)
+      - a.supports.reduce((sum, support) => sum + supportTier(support), 0)
+    || a.supports.map((support) => support.name).sort().join('+')
+      .localeCompare(b.supports.map((support) => support.name).sort().join('+'))
+  );
+  const completion = completions[0];
+  if (!completion) return null;
+  return {
+    ...completion.proof,
+    relation: 'support_completes',
+    completionType: 'support',
+    supportEntityIds: completion.supports.map((support) => support.id),
+    supportSourceIds: completion.supports.map((support) => support.source_id),
+    supportNames: completion.supports.map((support) => support.name),
+    prerequisiteMechanics: unique(completion.supports.flatMap((support) =>
+      supportRequirementFacts(support).map((fact) => normalizeToken(fact?.mechanic))
+    ))
+  };
 }
 
 function factIsUsableForCandidate(entity, fact, obligation) {
@@ -820,6 +1000,20 @@ function candidateSetupCosts(entity) {
   return mechanics.includes('charge') && mechanics.some((mechanic) => /^(?:endurance|frenzy|power)_charge$/.test(mechanic))
     ? mechanics.filter((mechanic) => mechanic !== 'charge')
     : mechanics;
+}
+
+function candidateSetupCostGroups(candidate) {
+  const costs = asArray(candidate?.setupCosts);
+  const elementalAilments = costs.filter((mechanic) => ['freeze', 'ignite', 'shock'].includes(mechanic));
+  const grouped = [];
+  if (elementalAilments.length > 1) {
+    grouped.push({ mechanic: 'elemental_ailment', anyMechanics: elementalAilments });
+  }
+  for (const mechanic of costs) {
+    if (elementalAilments.length > 1 && elementalAilments.includes(mechanic)) continue;
+    grouped.push({ mechanic, anyMechanics: [mechanic] });
+  }
+  return grouped;
 }
 
 function criticalProfileForEntity(entity, criticalProfiles = {}) {
@@ -916,7 +1110,7 @@ function isUsablePackageActive(entity) {
   return !types.has('inbuilttrigger') && !types.has('triggered');
 }
 
-function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalProfiles = {}, supportProviders = []) {
+function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalProfiles = {}, supportIndex = null) {
   if (!isUsablePackageActive(entity)) return null;
   if (isSpiritOrPersistentActive(entity) && !createsRolledArchetype(entity, offenseObligations)) return null;
   const compatibility = evaluateCompatibilityV3(entity, snapshot);
@@ -958,7 +1152,7 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalP
       && factIsUsableForCandidate(entity, fact, obligation)
     );
     if (!carrierProofs.length) {
-      const completion = supportCompletionProof(entity, obligation, supportProviders);
+      const completion = supportCompletionProof(entity, obligation, supportIndex);
       if (!completion) continue;
       evidenceScore += proofScore(completion);
       if (completion.confidence === 'exact') exactCarrierProofs += 1;
@@ -1050,9 +1244,9 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalP
 }
 
 function buildViableSkillPool(catalog, offenseObligations, snapshot, criticalProfiles = {}) {
-  const providers = supportCompletionProviders(catalog);
+  const supportIndex = supportIndexForCatalog(catalog);
   const analyses = asArray(catalog?.entities)
-    .map((entity) => analyzePackageCandidate(entity, offenseObligations, snapshot, criticalProfiles, providers))
+    .map((entity) => analyzePackageCandidate(entity, offenseObligations, snapshot, criticalProfiles, supportIndex))
     .filter(Boolean);
   const seedMechanics = new Set(offenseObligations.flatMap((obligation) => [
     ...asArray(obligation.mechanics),
@@ -1220,7 +1414,12 @@ function offenseAnchoredSynergyEdges(
   supportingCarriers
 ) {
   const affinity = offenseAffinityMechanics(offenseObligations);
-  const supportingIsOffenseRelevant = supportingFulfilled.length > 0 || supportingCarriers.length > 0;
+  const primaryRepresented = new Set([
+    ...primary.fulfilled.map((proof) => proof.obligationId),
+    ...primary.carriers.map((proof) => proof.obligationId)
+  ]);
+  const supportingIsOffenseRelevant = [...supportingFulfilled, ...supportingCarriers]
+    .some((proof) => !primaryRepresented.has(proof.obligationId));
   const primaryHasAlignedDemand = primary.demands.some((demand) => affinity.has(demand.mechanic));
 
   return rawEdges.filter((edge) => {
@@ -1367,9 +1566,15 @@ function evaluateSkillPackage(primary, supporting, offenseObligations) {
     .filter((mechanic) => !resolvedKeys.has(`${candidate.entity.id}:requires:${mechanic}`))
     .map((mechanic) => ({ entityId: candidate.entity.id, mechanic }))
   );
-  const unresolvedSetupCosts = candidates.flatMap((candidate) => candidate.setupCosts
-    .filter((mechanic) => !resolvedKeys.has(`${candidate.entity.id}:consumes:${mechanic}`))
-    .map((mechanic) => ({ entityId: candidate.entity.id, mechanic }))
+  const unresolvedSetupCosts = candidates.flatMap((candidate) => candidateSetupCostGroups(candidate)
+    .filter((group) => !group.anyMechanics.some((mechanic) =>
+      resolvedKeys.has(`${candidate.entity.id}:consumes:${mechanic}`)
+    ))
+    .map((group) => ({
+      entityId: candidate.entity.id,
+      mechanic: group.mechanic,
+      anyMechanics: group.anyMechanics
+    }))
   );
   const newRepresentedBySupporting = supporting
     ? Array.from(supportingRepresentedIds).filter((id) => !primaryRepresentedIds.has(id)).length
@@ -1526,6 +1731,340 @@ function choosePackageCandidate(ranked, options = {}) {
   return { winner: pool[pool.length - 1], shortlist, qualityBand };
 }
 
+function supportDemandKey(target) {
+  const mechanics = unique(asArray(target?.anyMechanics).map(normalizeToken)).sort();
+  return `${target.entityId}:${target.relation}:${mechanics.length ? mechanics.join('|') : target.mechanic}`;
+}
+
+function supportPackageImprovementKeys(packageCandidate) {
+  return new Set([
+    ...asArray(packageCandidate?.fulfilled).map((proof) => `offense:${proof.obligationId}`),
+    ...asArray(packageCandidate?.resolvedDemands).map((target) => `demand:${supportDemandKey(target)}`)
+  ]);
+}
+
+function supportSupplyingFact(support, entity, supports, mechanic) {
+  return actionableSupportFacts(support).find((fact) =>
+    factMechanics(fact).includes(normalizeToken(mechanic))
+    && supportFactConditionIsMet(fact, entity, supports)
+  ) || null;
+}
+
+function analyzeSupportPackageForSkill(
+  candidate,
+  supports,
+  offenseObligations,
+  unresolvedOffenseIds,
+  demandTargets
+) {
+  if (!candidate) return null;
+  const families = supports.map(supportFamilyId);
+  if (new Set(families).size !== families.length) return null;
+  if (supports.some((support) => !supportTargetsSkill(support, candidate.entity))) return null;
+  if (!supportPackageRequirementsAreMet(candidate.entity, supports)) return null;
+
+  const prevented = new Set(supports.flatMap((support) => hardSupportedSkillFacts(support)
+    .filter((fact) => fact?.relation === 'prevents')
+    .flatMap(factMechanics)));
+  if (candidate.fulfilled.some((proof) => prevented.has(normalizeToken(proof.mechanic)))) return null;
+
+  const fulfilled = offenseObligations
+    .filter((obligation) => unresolvedOffenseIds.has(obligation.id))
+    .map((obligation) => supportProofForObligation(candidate.entity, supports, obligation))
+    .filter(Boolean);
+  const resolvedDemands = [];
+  for (const target of demandTargets.filter((entry) => entry.entityId === candidate.entity.id)) {
+    const targetMechanics = unique([
+      ...asArray(target.anyMechanics),
+      target.mechanic
+    ].map(normalizeToken));
+    for (const support of supports) {
+      const mechanic = targetMechanics.find((entry) =>
+        !prevented.has(entry) && supportSupplyingFact(support, candidate.entity, supports, entry)
+      );
+      if (!mechanic) continue;
+      const fact = supportSupplyingFact(support, candidate.entity, supports, mechanic);
+      resolvedDemands.push({
+        ...target,
+        mechanic,
+        relation: target.relation,
+        supplyRelation: fact.relation,
+        confidence: fact.confidence,
+        providerEntityId: support.id,
+        providerSourceId: support.source_id,
+        providerName: support.name
+      });
+      break;
+    }
+  }
+
+  const supportRequirementEdges = [];
+  for (const consumer of supports) {
+    for (const requirement of supportRequirementFacts(consumer)) {
+      const mechanic = normalizeToken(requirement?.mechanic);
+      if (asArray(candidate.entity?.facts).some((fact) => baseFactSuppliesMechanic(fact, mechanic))) continue;
+      const provider = supports.find((support) =>
+        support.id !== consumer.id
+        && actionableSupportFacts(support).some((fact) => unconditionalSupportFactSuppliesMechanic(fact, mechanic))
+      );
+      if (!provider) continue;
+      supportRequirementEdges.push({
+        targetKind: 'support_requirement',
+        targetId: consumer.id,
+        entityId: candidate.entity.id,
+        mechanic,
+        relation: 'requires',
+        providerEntityId: provider.id,
+        providerSourceId: provider.source_id,
+        providerName: provider.name,
+        consumerEntityId: consumer.id,
+        consumerName: consumer.name
+      });
+    }
+  }
+
+  const evidenceScore = fulfilled.reduce((sum, proof) => sum + proofScore(proof), 0)
+    + resolvedDemands.reduce((sum, target) => sum + proofScore({
+      relation: target.supplyRelation,
+      confidence: target.confidence
+    }), 0);
+  return {
+    candidate,
+    supports,
+    fulfilled,
+    resolvedDemands,
+    supportRequirementEdges,
+    prevented: Array.from(prevented),
+    evidenceScore,
+    tierScore: supports.reduce((sum, support) => sum + supportTier(support), 0)
+  };
+}
+
+function relevantSupportsForSkill(candidate, index, offenseObligations, unresolvedOffenseIds, demandTargets) {
+  const direct = offenseObligations
+    .filter((obligation) => unresolvedOffenseIds.has(obligation.id))
+    .flatMap((obligation) => asArray(obligation.mechanics).flatMap((mechanic) =>
+      asArray(index?.byEffectMechanic?.get(normalizeToken(mechanic)))
+    ));
+  const demandSuppliers = demandTargets
+    .filter((target) => target.entityId === candidate.entity.id)
+    .flatMap((target) => unique([
+      ...asArray(target.anyMechanics),
+      target.mechanic
+    ].map(normalizeToken)).flatMap((mechanic) =>
+      asArray(index?.bySupplyMechanic?.get(mechanic))
+    ));
+  const firstPass = unique([...direct, ...demandSuppliers])
+    .filter((support) => supportTargetsSkill(support, candidate.entity));
+  const bridgeMechanics = unique(firstPass.flatMap((support) => [
+    ...supportRequirementFacts(support).map((fact) => normalizeToken(fact?.mechanic)),
+    ...actionableSupportFacts(support)
+      .map((fact) => normalizeToken(fact?.condition))
+      .filter((condition) => condition.endsWith('_damage'))
+      .map((condition) => condition.slice(0, -'_damage'.length))
+  ]));
+  const bridges = bridgeMechanics.flatMap((mechanic) => asArray(index?.bySupplyMechanic?.get(mechanic)));
+  return unique([...firstPass, ...bridges])
+    .filter((support) => supportTargetsSkill(support, candidate.entity));
+}
+
+function enumerateSupportPackagesForSkill(
+  candidate,
+  index,
+  offenseObligations,
+  unresolvedOffenseIds,
+  demandTargets
+) {
+  const supports = relevantSupportsForSkill(
+    candidate,
+    index,
+    offenseObligations,
+    unresolvedOffenseIds,
+    demandTargets
+  );
+  const rawSets = [[]];
+  for (const support of supports) rawSets.push([support]);
+  for (let first = 0; first < supports.length; first += 1) {
+    for (let second = first + 1; second < supports.length; second += 1) {
+      if (supportFamilyId(supports[first]) === supportFamilyId(supports[second])) continue;
+      rawSets.push([supports[first], supports[second]]);
+    }
+  }
+
+  const analyzed = rawSets
+    .filter((set) => set.length <= MAX_SUPPORTS_PER_SKILL)
+    .map((set) => analyzeSupportPackageForSkill(
+      candidate,
+      set,
+      offenseObligations,
+      unresolvedOffenseIds,
+      demandTargets
+    ))
+    .filter(Boolean);
+  const byIds = new Map(analyzed.map((entry) => [
+    entry.supports.map((support) => support.id).sort().join('+'),
+    entry
+  ]));
+  return analyzed.filter((entry) => {
+    const keys = supportPackageImprovementKeys(entry);
+    if (!entry.supports.length) return true;
+    if (!keys.size) return false;
+    if (entry.supports.length < 2) return true;
+    return entry.supports.every((removed) => {
+      const subsetId = entry.supports
+        .filter((support) => support.id !== removed.id)
+        .map((support) => support.id)
+        .sort()
+        .join('+');
+      const subsetKeys = supportPackageImprovementKeys(byIds.get(subsetId));
+      return Array.from(keys).some((key) => !subsetKeys.has(key));
+    });
+  });
+}
+
+function supportEntryForAssignment(support, packageCandidate) {
+  const suppliedTargets = [
+    ...packageCandidate.resolvedDemands.filter((target) => target.providerEntityId === support.id),
+    ...packageCandidate.supportRequirementEdges.filter((target) => target.providerEntityId === support.id)
+  ];
+  return {
+    entityId: support.id,
+    sourceId: support.source_id,
+    name: support.name,
+    contentType: support.content_type,
+    familyId: supportFamilyId(support),
+    familyName: support?.support_family?.name || support.name,
+    tier: supportTier(support) || null,
+    assignedRole: 'enabler',
+    fulfilledObligations: packageCandidate.fulfilled.filter((proof) => proof.providerEntityId === support.id),
+    suppliedTargets,
+    prerequisiteMechanics: unique(supportRequirementFacts(support)
+      .map((fact) => normalizeToken(fact?.mechanic)))
+  };
+}
+
+function assignSupportPackagesV3(catalog, winner, offenseObligations) {
+  if (!winner?.primary) {
+    return {
+      assignments: [],
+      fulfilled: [],
+      resolvedDemandKeys: new Set(),
+      supportEdges: [],
+      assignedSupportCount: 0,
+      evaluatedPackages: 0
+    };
+  }
+  const selected = [winner.primary, winner.supporting].filter(Boolean);
+  const alreadyFulfilled = new Set(asArray(winner.fulfilled).map((proof) => proof.obligationId));
+  const unresolvedOffenseIds = new Set(offenseObligations
+    .map((obligation) => obligation.id)
+    .filter((id) => !alreadyFulfilled.has(id)));
+  const demandTargets = [
+    ...asArray(winner.unresolvedDependencies).map((target) => ({
+      ...target,
+      relation: 'requires'
+    })),
+    ...asArray(winner.unresolvedSetupCosts).map((target) => ({
+      ...target,
+      relation: 'consumes'
+    }))
+  ];
+  const index = supportIndexForCatalog(catalog);
+  const packagesBySkill = selected.map((candidate) => enumerateSupportPackagesForSkill(
+    candidate,
+    index,
+    offenseObligations,
+    unresolvedOffenseIds,
+    demandTargets
+  ));
+  const combinations = [];
+  const visit = (position, chosen, usedFamilies) => {
+    if (position >= packagesBySkill.length) {
+      const fulfilled = bestProofByObligation(chosen, 'fulfilled');
+      const demandByKey = new Map();
+      for (const target of chosen.flatMap((entry) => entry.resolvedDemands)) {
+        const key = supportDemandKey(target);
+        if (!demandByKey.has(key)) demandByKey.set(key, target);
+      }
+      const resolvedDemands = Array.from(demandByKey.values());
+      const supportCount = chosen.reduce((sum, entry) => sum + entry.supports.length, 0);
+      const requireCount = resolvedDemands.filter((target) => target.relation === 'requires').length;
+      const consumeCount = resolvedDemands.filter((target) => target.relation === 'consumes').length;
+      const evidenceScore = chosen.reduce((sum, entry) => sum + entry.evidenceScore, 0);
+      const tierScore = chosen.reduce((sum, entry) => sum + entry.tierScore, 0);
+      combinations.push({
+        chosen,
+        fulfilled,
+        resolvedDemands,
+        supportCount,
+        tierScore,
+        score: fulfilled.length * 10000
+          + requireCount * 2500
+          + consumeCount * 1500
+          + evidenceScore * 10
+          - supportCount * 100
+      });
+      return;
+    }
+    for (const packageCandidate of packagesBySkill[position]) {
+      const families = packageCandidate.supports.map(supportFamilyId);
+      if (families.some((family) => usedFamilies.has(family))) continue;
+      visit(position + 1, [...chosen, packageCandidate], new Set([...usedFamilies, ...families]));
+    }
+  };
+  visit(0, [], new Set());
+  combinations.sort((a, b) =>
+    b.score - a.score
+    || b.fulfilled.length - a.fulfilled.length
+    || b.resolvedDemands.length - a.resolvedDemands.length
+    || a.supportCount - b.supportCount
+    || b.tierScore - a.tierScore
+    || a.chosen.flatMap((entry) => entry.supports).map((support) => support.name).sort().join('+')
+      .localeCompare(b.chosen.flatMap((entry) => entry.supports).map((support) => support.name).sort().join('+'))
+  );
+  const winnerCombination = combinations[0] || {
+    chosen: [], fulfilled: [], resolvedDemands: [], supportCount: 0
+  };
+  const assignments = selected.map((candidate) => {
+    const packageCandidate = winnerCombination.chosen.find((entry) => entry.candidate.entity.id === candidate.entity.id);
+    return {
+      skillEntityId: candidate.entity.id,
+      skillName: candidate.entity.name,
+      supports: packageCandidate
+        ? packageCandidate.supports.map((support) => supportEntryForAssignment(support, packageCandidate))
+        : []
+    };
+  });
+  const supportEdges = winnerCombination.chosen.flatMap((packageCandidate) => [
+    ...packageCandidate.fulfilled.map((proof) => ({
+      fromEntityId: proof.providerEntityId,
+      toEntityId: packageCandidate.candidate.entity.id,
+      targetKind: 'offense',
+      targetId: proof.obligationId,
+      mechanic: proof.mechanic,
+      relation: proof.relation,
+      confidence: proof.confidence
+    })),
+    ...packageCandidate.resolvedDemands.map((target) => ({
+      fromEntityId: target.providerEntityId,
+      toEntityId: packageCandidate.candidate.entity.id,
+      targetKind: target.relation === 'requires' ? 'dependency' : 'setup',
+      targetId: supportDemandKey(target),
+      mechanic: target.mechanic,
+      relation: target.supplyRelation,
+      confidence: target.confidence
+    }))
+  ]);
+  return {
+    assignments,
+    fulfilled: winnerCombination.fulfilled,
+    resolvedDemandKeys: new Set(winnerCombination.resolvedDemands.map(supportDemandKey)),
+    supportEdges,
+    assignedSupportCount: winnerCombination.supportCount,
+    evaluatedPackages: packagesBySkill.reduce((sum, packages) => sum + packages.length, 0)
+  };
+}
+
 function unresolvedEntry(obligation, reason) {
   return {
     obligationId: obligation.id,
@@ -1573,8 +2112,12 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
   );
   const rankedPackages = buildRankedSkillPackages(viablePool, offenseObligations);
   const { winner, shortlist, qualityBand } = choosePackageCandidate(rankedPackages, options);
+  const supportResolution = assignSupportPackagesV3(catalog, winner, offenseObligations);
   const selectedCandidates = [winner?.primary, winner?.supporting].filter(Boolean);
-  const fulfilledIds = new Set(asArray(winner?.fulfilled).map((entry) => entry.obligationId));
+  const fulfilledIds = new Set([
+    ...asArray(winner?.fulfilled).map((entry) => entry.obligationId),
+    ...asArray(supportResolution.fulfilled).map((entry) => entry.obligationId)
+  ]);
   const carrierProofs = asArray(winner?.carriers);
   const carrierIds = new Set(carrierProofs.map((entry) => entry.obligationId));
   const unresolved = [];
@@ -1583,7 +2126,7 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     if (fulfilledIds.has(obligation.id)) continue;
     const carrier = carrierProofs.find((entry) => entry.obligationId === obligation.id);
     const reason = carrier?.completionType === 'support'
-      ? `${carrier.providerName} can complete this ${obligation.label} package, but support selection is deferred to the support pass.`
+      ? `A support route exists for ${obligation.label}, but no legal zero-, one-, or two-support assignment completed it.`
       : carrierIds.has(obligation.id)
         ? `The selected package has a viable ${carrier?.mechanic || 'damage'} carrier, but still lacks explicit ${obligation.label} application.`
       : 'No selected package skill provides hard semantic evidence for this Offense.';
@@ -1593,6 +2136,9 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     unresolved.push(unresolvedEntry(obligation, 'Not assigned by the current skill-package slice.'));
   }
   for (const unresolvedDependency of asArray(winner?.unresolvedDependencies)) {
+    if (supportResolution.resolvedDemandKeys.has(
+      supportDemandKey({ ...unresolvedDependency, relation: 'requires' })
+    )) continue;
     const candidate = selectedCandidates.find((entry) => entry.entity.id === unresolvedDependency.entityId);
     const isPrimary = candidate?.entity.id === winner?.primary?.entity.id;
     unresolved.push({
@@ -1602,9 +2148,24 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     });
   }
 
+  for (const unresolvedSetup of asArray(winner?.unresolvedSetupCosts)) {
+    if (supportResolution.resolvedDemandKeys.has(
+      supportDemandKey({ ...unresolvedSetup, relation: 'consumes' })
+    )) continue;
+    const candidate = selectedCandidates.find((entry) => entry.entity.id === unresolvedSetup.entityId);
+    const isPrimary = candidate?.entity.id === winner?.primary?.entity.id;
+    unresolved.push({
+      obligationId: `${isPrimary ? 'setup' : 'supporting_setup'}:${unresolvedSetup.mechanic}`,
+      label: `Generate ${unresolvedSetup.mechanic.replace(/_/g, ' ')}`,
+      reason: `The selected ${isPrimary ? 'primary' : (winner?.supportingRole || 'supporting').replace(/_/g, ' ')} skill consumes ${unresolvedSetup.mechanic.replace(/_/g, ' ')} without a selected provider.`
+    });
+  }
+
   const primary = winner?.primary || null;
   const supporting = winner?.supporting || null;
   const supportingTargets = suppliedTargetsForSupporting(winner);
+  const supportsFor = (candidate) => supportResolution.assignments
+    .find((assignment) => assignment.skillEntityId === candidate?.entity?.id)?.supports || [];
   const primarySkill = primary ? {
     entityId: primary.entity.id,
     sourceId: primary.entity.source_id,
@@ -1617,6 +2178,7 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     setupCosts: primary.setupCosts,
     delivery: primary.delivery,
     criticalAffinity: primary.criticalAffinity,
+    supports: supportsFor(primary),
     score: primary.individualScore,
     packageScore: winner.score
   } : null;
@@ -1632,6 +2194,7 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     dependencies: supporting.dependencies,
     setupCosts: supporting.setupCosts,
     criticalAffinity: supporting.criticalAffinity,
+    supports: supportsFor(supporting),
     score: supporting.individualScore,
     packageScore: winner.score
   } : null;
@@ -1649,6 +2212,9 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     pieces,
     packageScore: winner?.score ?? null,
     synergyEdges: asArray(winner?.synergyEdges),
+    supportAssignments: supportResolution.assignments,
+    supportEdges: supportResolution.supportEdges,
+    supportFulfilledObligations: supportResolution.fulfilled,
     unresolved,
     diagnostics: {
       viablePoolSize: viablePool.length,
@@ -1665,6 +2231,8 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
       shortlistedCandidates: shortlistedPrimaryIds.size,
       rankedCompanionCandidates: Math.max(0, viablePool.length - 1),
       shortlistedCompanionCandidates: shortlist.filter((candidate) => candidate.supporting).length,
+      assignedSupportCount: supportResolution.assignedSupportCount,
+      evaluatedSupportPackages: supportResolution.evaluatedPackages,
       qualityBand,
       companionQualityBand: COMPANION_QUALITY_BAND
     }
@@ -1687,7 +2255,19 @@ function adaptRecommendationPackageV3ToSnapshot(packageResult) {
         assignedRole: skill.assignedRole,
         fulfilledObligations: skill.fulfilledObligations,
         carrierObligations: skill.carrierObligations,
-        suppliedTargets: skill.suppliedTargets
+        suppliedTargets: skill.suppliedTargets,
+        supports: asArray(skill.supports).map((support) => ({
+          entityId: support.entityId,
+          sourceId: support.sourceId,
+          name: support.name,
+          familyId: support.familyId,
+          familyName: support.familyName,
+          tier: support.tier,
+          assignedRole: support.assignedRole,
+          fulfilledObligations: support.fulfilledObligations,
+          suppliedTargets: support.suppliedTargets,
+          prerequisiteMechanics: support.prerequisiteMechanics
+        }))
       }
     }));
   }
@@ -1702,6 +2282,7 @@ export {
   PRIMARY_QUALITY_BAND,
   COMPANION_QUALITY_BAND,
   PACKAGE_QUALITY_BAND,
+  MAX_SUPPORTS_PER_SKILL,
   adaptRecommendationPackageV3ToSnapshot,
   buildRecommendationObligationsV3,
   evaluateCompatibilityV3,

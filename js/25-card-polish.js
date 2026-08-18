@@ -26,9 +26,24 @@ function compactSkillEntry(entry) {
   if (!entry) return null;
   if (typeof entry === 'string') return { name: entry };
   const name = String(entry.name || '').trim();
-  if (name) return { name };
   const id = String(entry.id || '').trim();
-  return id ? { id } : null;
+  if (!name && !id) return null;
+  const compact = name ? { name } : { id };
+  const recommendation = entry.recommendationV3;
+  if (recommendation && typeof recommendation === 'object') {
+    const supports = (recommendation.supports || []).slice(0, 2).map((support) => {
+      if (!support) return null;
+      if (typeof support === 'string') return { name: support };
+      const supportName = String(support.name || '').trim();
+      const sourceId = String(support.sourceId || support.id || '').trim();
+      return supportName ? { name: supportName } : (sourceId ? { sourceId } : null);
+    }).filter(Boolean);
+    compact.recommendationV3 = {
+      ...(recommendation.assignedRole ? { assignedRole: recommendation.assignedRole } : {}),
+      ...(supports.length ? { supports } : {})
+    };
+  }
+  return compact;
 }
 
 function buildCompactSnapshotPayload(snapshot) {

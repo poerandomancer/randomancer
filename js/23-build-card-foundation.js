@@ -145,11 +145,23 @@ function deriveBuildCardModel(snapshot) {
   const mechanics = [...(snap.ailmentList || []), ...(snap.tacticList || [])].filter(Boolean);
 
   const skillItems = (entries, weaponSet) => (entries || []).slice(0, 2).map((entry, index) =>
-    item(getGemName(entry), {
-      prefix: skillRolePrefix(entry, index, weaponSet),
-      slotKey: 'ACTIVE_SKILL',
-      tipLines: [getGemDescription(entry)].filter(Boolean)
-    })
+    {
+      const supports = Array.isArray(entry?.recommendationV3?.supports)
+        ? entry.recommendationV3.supports.slice(0, 2)
+        : [];
+      const supportNames = supports.map(getGemName).filter(Boolean);
+      const supportLines = supports.map((support) => {
+        const name = getGemName(support);
+        const description = getGemDescription(support);
+        return [name, description].filter(Boolean).join(': ');
+      }).filter(Boolean);
+      return item(getGemName(entry), {
+        prefix: skillRolePrefix(entry, index, weaponSet),
+        meta: supportNames.length ? ` · Supports: ${supportNames.join(' + ')}` : '',
+        slotKey: 'ACTIVE_SKILL',
+        tipLines: [getGemDescription(entry), ...supportLines].filter(Boolean)
+      });
+    }
   );
   const hasSecondWeaponSet = Boolean((snap.recommendedSkills2 || []).length);
   const skills = [
