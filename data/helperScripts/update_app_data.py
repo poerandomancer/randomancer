@@ -212,8 +212,13 @@ def build_steps(ctx: PipelineContext) -> list[PipelineStep]:
             outputs=[
                 ctx.repo_root / "data/enriched/recommendation_catalog_v3.json",
                 ctx.repo_root / "data/enriched/recommendation_catalog_v3_report.json",
+                ctx.repo_root / "data/enriched/recommendation_granted_skill_access_v3.json",
             ],
-            summary_artifact_keys=["recommendation_catalog_v3", "recommendation_catalog_v3_report"],
+            summary_artifact_keys=[
+                "recommendation_catalog_v3",
+                "recommendation_catalog_v3_report",
+                "recommendation_granted_skill_access_v3",
+            ],
             required=True,
             description="Build the additive semantic recommendation catalog from current enriched and datamined sources.",
         ),

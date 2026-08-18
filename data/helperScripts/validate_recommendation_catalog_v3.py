@@ -162,6 +162,53 @@ def validate_source_parity(catalog: dict[str, Any], errors: list[str]) -> None:
         errors.append("passive GrantedSkill relationships were not preserved")
 
 
+def validate_granted_skill_access(catalog: dict[str, Any], errors: list[str]) -> None:
+    path = DATA / "enriched" / "recommendation_granted_skill_access_v3.json"
+    if not path.exists():
+        errors.append("granted skill access sidecar is missing")
+        return
+
+    access_payload = load_json(path)
+    if access_payload.get("schema_version") != "recommendation-granted-skill-access-v3.0.0":
+        errors.append("unexpected or missing granted skill access schema version")
+    if access_payload.get("catalog_schema_version") != "recommendation-catalog-v3.0.0":
+        errors.append("granted skill access sidecar targets the wrong catalog schema")
+
+    entity_ids = {
+        entity.get("id")
+        for entity in catalog.get("entities") or []
+        if entity.get("content_type") == "active_skill"
+    }
+    access_by_entity_id = access_payload.get("access_by_entity_id") or {}
+    if not isinstance(access_by_entity_id, dict) or not access_by_entity_id:
+        errors.append("granted skill access sidecar has no entries")
+        return
+
+    unique_required_count = 0
+    for entity_id, access in access_by_entity_id.items():
+        if entity_id not in entity_ids:
+            errors.append(f"granted skill access references unknown active skill: {entity_id}")
+            continue
+        if not access.get("requires_granted_source"):
+            errors.append(f"{entity_id}: granted access entry does not require a granted source")
+        sources = access.get("granted_sources") or []
+        if not isinstance(sources, list) or not sources:
+            errors.append(f"{entity_id}: granted access entry has no provider sources")
+            continue
+        if access.get("requires_unique_provider"):
+            unique_required_count += 1
+        for source in sources:
+            kind = source.get("kind")
+            if kind == "ascendancy_passive" and not source.get("ascendancy"):
+                errors.append(f"{entity_id}: ascendancy provider is missing ascendancy")
+            elif kind == "unique" and not source.get("unique_name"):
+                errors.append(f"{entity_id}: unique provider is missing unique name")
+            elif kind not in {"ascendancy_passive", "unique"}:
+                errors.append(f"{entity_id}: unknown granted access provider kind {kind!r}")
+    if unique_required_count <= 0:
+        errors.append("granted skill access sidecar has no unique-provider requirements")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate recommendation enrichment v3 artifacts.")
     parser.add_argument(
@@ -190,6 +237,7 @@ def main() -> int:
     validate_entities(catalog, ontology, errors)
     validate_catalog_assertions(catalog, fixtures, errors)
     validate_source_parity(catalog, errors)
+    validate_granted_skill_access(catalog, errors)
 
     if errors:
         print(f"Recommendation catalog v3 validation failed with {len(errors)} error(s):", file=sys.stderr)

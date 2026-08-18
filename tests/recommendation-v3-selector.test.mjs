@@ -11,10 +11,12 @@ const selector = await import(`data:text/javascript;base64,${Buffer.from(selecto
 const {
   adaptRecommendationPackageV3ToSnapshot,
   buildRecommendationObligationsV3,
+  evaluateCompatibilityV3,
   evaluateDeliveryCompatibilityV3,
   isEquipmentCompatibleV3,
   isRecommendationContentAllowedV3,
   isRecommendationV3Enabled,
+  mergeRecommendationGrantedSkillAccessV3,
   selectRecommendationPackageV3,
   validateRecommendationCatalogV3
 } = selector;
@@ -69,6 +71,14 @@ function catalog(entities) {
     _meta: { schema_version: 'recommendation-catalog-v3.0.0' },
     entities
   };
+}
+
+async function loadRealRecommendationCatalogV3() {
+  const [realCatalog, grantedAccess] = await Promise.all([
+    readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
+    readFile(new URL('../data/enriched/recommendation_granted_skill_access_v3.json', import.meta.url), 'utf8').then(JSON.parse)
+  ]);
+  return mergeRecommendationGrantedSkillAccessV3(realCatalog, grantedAccess);
 }
 
 test('feature flag is explicit and supports a test override', () => {
@@ -154,6 +164,62 @@ test('equipment compatibility distinguishes bow/crossbow and staff/quarterstaff'
   assert.equal(isEquipmentCompatibleV3(requires('bow'), { weapon: 'Crossbow' }), false);
   assert.equal(isEquipmentCompatibleV3(requires('staff'), { weapon: 'Staff' }), true);
   assert.equal(isEquipmentCompatibleV3(requires('staff'), { weapon: 'Quarterstaff' }), false);
+});
+
+test('granted skill access requires matching ascendancy or selected unique provider', () => {
+  const meleeRequirement = {
+    is_unrestricted: false,
+    mainhand_tags_any_of: ['mace', 'spear'],
+    offhand_tags_any_of: [],
+    allowed_weapon_tags_any_of: ['mace', 'spear'],
+    display: 'Requires Any Melee Weapon'
+  };
+  const bowRequirement = {
+    is_unrestricted: false,
+    mainhand_tags_any_of: ['bow'],
+    offhand_tags_any_of: [],
+    allowed_weapon_tags_any_of: ['bow'],
+    display: 'Requires Bow'
+  };
+  const manifest = entity({
+    id: 'manifest-weapon',
+    name: 'Manifest Weapon',
+    facts: [{ relation: 'creates', subject: 'skill', mechanic: 'companion', confidence: 'exact' }],
+    compatibility: {
+      access: {
+        requires_granted_source: true,
+        granted_sources: [{ kind: 'ascendancy_passive', ascendancy: 'Smith of Kitava' }]
+      },
+      equipment: meleeRequirement
+    }
+  });
+  const phantasmal = entity({
+    id: 'phantasmal-arrow',
+    name: 'Phantasmal Arrow',
+    facts: [{ relation: 'inflicts', subject: 'skill', mechanic: 'ignite', confidence: 'exact' }],
+    compatibility: {
+      access: {
+        requires_granted_source: true,
+        requires_unique_provider: true,
+        granted_sources: [{ kind: 'unique', unique_name: "Fairgraves' Curse" }]
+      },
+      equipment: bowRequirement
+    }
+  });
+
+  assert.equal(evaluateCompatibilityV3(manifest, { weapon: 'Mace', ascendancy: 'Titan' }).ok, false);
+  assert.equal(evaluateCompatibilityV3(manifest, { weapon: 'Mace', ascendancy: 'Smith of Kitava' }).ok, true);
+  assert.equal(evaluateCompatibilityV3(manifest, { weapon: 'Bow', ascendancy: 'Smith of Kitava' }).ok, false);
+
+  assert.equal(evaluateCompatibilityV3(phantasmal, { weapon: 'Bow' }).ok, false);
+  assert.equal(evaluateCompatibilityV3(phantasmal, {
+    weapon: 'Bow',
+    recommendedUniques: ["Fairgraves' Curse"]
+  }).ok, true);
+  assert.equal(evaluateCompatibilityV3(phantasmal, {
+    weapon: 'Mace',
+    recommendedUniques: ["Fairgraves' Curse"]
+  }).ok, false);
 });
 
 test('selector uses hard typed evidence, rejects prevention, and ignores cohesion', () => {
@@ -469,6 +535,73 @@ test('persistent Companion creators remain directly selectable when their weapon
   ]);
 });
 
+test('persistent minion skills do not become generic non-archetype damage primaries', () => {
+  const ragingSpirits = entity({
+    id: 'raging-spirits',
+    name: 'Raging Spirits',
+    facts: [
+      { relation: 'has_property', subject: 'skill', mechanic: 'fire', confidence: 'exact' },
+      { relation: 'creates', subject: 'skill', mechanic: 'minion', confidence: 'exact' }
+    ],
+    types: ['Buff', 'Persistent', 'HasReservation', 'CreatesMinion', 'Minion', 'Fire']
+  });
+  const fireball = entity({
+    id: 'fireball',
+    name: 'Fireball',
+    facts: [{ relation: 'has_property', subject: 'skill', mechanic: 'fire', confidence: 'exact' }],
+    types: ['Spell', 'Damage', 'Fire']
+  });
+
+  const fireResult = selectRecommendationPackageV3(catalog([ragingSpirits, fireball]), {
+    weapon: 'Wand',
+    offenseList: ['Fire Damage']
+  }, { offenseInventory: offenseInventory() });
+  const minionResult = selectRecommendationPackageV3(catalog([ragingSpirits, fireball]), {
+    weapon: 'Wand',
+    offenseList: ['Minions']
+  }, { offenseInventory: offenseInventory() });
+
+  assert.equal(fireResult.primarySkill?.name, 'Fireball');
+  assert.equal(minionResult.primarySkill?.name, 'Raging Spirits');
+});
+
+test('Minion rolls prefer non-Companion minions while Companion rolls prefer Companion evidence', () => {
+  const skeletons = entity({
+    id: 'skeletons',
+    name: 'Skeletal Warrior',
+    facts: [{ relation: 'creates', subject: 'skill', mechanic: 'minion', confidence: 'exact' }],
+    types: ['Persistent', 'HasReservation', 'CreatesMinion', 'Minion']
+  });
+  const wolf = entity({
+    id: 'wolf',
+    name: 'Azmerian Wolf',
+    facts: [
+      { relation: 'creates', subject: 'skill', mechanic: 'minion', confidence: 'exact' },
+      { relation: 'creates', subject: 'skill', mechanic: 'companion', confidence: 'exact' },
+      { relation: 'has_property', subject: 'skill', mechanic: 'companion', confidence: 'exact' }
+    ],
+    equipment: {
+      is_unrestricted: false,
+      mainhand_tags_any_of: ['bow'],
+      offhand_tags_any_of: [],
+      allowed_weapon_tags_any_of: ['bow']
+    },
+    types: ['Persistent', 'HasReservation', 'CreatesMinion', 'CreatesCompanion', 'Minion', 'Companion']
+  });
+
+  const minionResult = selectRecommendationPackageV3(catalog([wolf, skeletons]), {
+    weapon: 'Sceptre',
+    offenseList: ['Minions']
+  }, { offenseInventory: offenseInventory() });
+  const companionResult = selectRecommendationPackageV3(catalog([wolf, skeletons]), {
+    weapon: 'Bow',
+    offenseList: ['Companions']
+  }, { offenseInventory: offenseInventory() });
+
+  assert.equal(minionResult.primarySkill?.name, 'Skeletal Warrior');
+  assert.equal(companionResult.primarySkill?.name, 'Azmerian Wolf');
+});
+
 test('a provider support marks an active as support-completable without becoming a selected skill', () => {
   const maceEquipment = {
     is_unrestricted: false,
@@ -698,10 +831,10 @@ test('a companion enabler can satisfy an explicit primary dependency', () => {
 
 test('a conditional resource enabler requires its paired payoff to supply a trigger', () => {
   const siphon = entity({
-    id: 'siphon-elements',
-    name: 'Siphon Elements',
+    id: 'infusion-focus',
+    name: 'Infusion Focus',
     roles: ['setup_control', 'utility'],
-    types: ['Buff', 'HasReservation', 'Persistent'],
+    types: ['Buff'],
     facts: [{
       relation: 'generates',
       subject: 'skill',
@@ -740,7 +873,7 @@ test('a conditional resource enabler requires its paired payoff to supply a trig
   assert.deepEqual(withoutTrigger.pieces.map((piece) => piece.name), ['Plain Infusion Payoff']);
   assert.deepEqual(withTrigger.pieces.map((piece) => piece.name), [
     'Igniting Infusion Payoff',
-    'Siphon Elements'
+    'Infusion Focus'
   ]);
   assert.ok(withTrigger.synergyEdges.some((edge) =>
     edge.mechanic === 'infusion'
@@ -1187,7 +1320,7 @@ test('runtime adapter does not erase the existing recommendation when v3 has no 
 
 test('committed catalog produces a legal primary skill for representative rolls', async () => {
   const [realCatalog, realOffense] = await Promise.all([
-    readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
+    loadRealRecommendationCatalogV3(),
     readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
   ]);
   const snapshots = [
@@ -1214,7 +1347,7 @@ test('committed catalog produces a legal primary skill for representative rolls'
 
 test('committed critical profiles are complete, catalog-backed, and cover every weapon family', async () => {
   const [realCatalog, realOffense, criticalProfiles] = await Promise.all([
-    readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
+    loadRealRecommendationCatalogV3(),
     readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse),
     readFile(new URL('../data/config/recommendation_critical_profiles_v3.json', import.meta.url), 'utf8').then(JSON.parse)
   ]);
@@ -1249,7 +1382,7 @@ test('committed critical profiles are complete, catalog-backed, and cover every 
 
 test('committed catalog remains deterministic and equipment-legal across the roll matrix', async () => {
   const [realCatalog, realOffense, criticalProfiles] = await Promise.all([
-    readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
+    loadRealRecommendationCatalogV3(),
     readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse),
     readFile(new URL('../data/config/recommendation_critical_profiles_v3.json', import.meta.url), 'utf8').then(JSON.parse)
   ]);
@@ -1301,7 +1434,7 @@ test('committed catalog remains deterministic and equipment-legal across the rol
 
 test('the real 9 by 16 active matrix has a locked semantic coverage breakdown', async () => {
   const [realCatalog, realOffense] = await Promise.all([
-    readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
+    loadRealRecommendationCatalogV3(),
     readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
   ]);
   const weapons = [
@@ -1345,17 +1478,47 @@ test('the real 9 by 16 active matrix has a locked semantic coverage breakdown', 
 
   assert.equal(Object.values(counts).reduce((sum, value) => sum + value, 0), 144);
   assert.deepEqual(counts, {
-    direct: 100,
-    meta_or_nested: 3,
-    support_completable: 1,
-    carrier_only: 26,
-    unsupported: 14
+    direct: 89,
+    meta_or_nested: 4,
+    support_completable: 3,
+    carrier_only: 28,
+    unsupported: 20
   });
+});
+
+test('committed catalog gates granted-only active skills by their provider source', async () => {
+  const realCatalog = await loadRealRecommendationCatalogV3();
+  const findSkill = (name) => realCatalog.entities.find((entry) =>
+    entry.content_type === 'active_skill' && entry.name === name
+  );
+  const manifest = findSkill('Manifest Weapon');
+  const phantasmal = findSkill('Phantasmal Arrow');
+  const cackling = findSkill('Cackling Companions');
+  const azmerianWolf = findSkill('Azmerian Wolf');
+
+  assert.equal(manifest.compatibility.access.ascendancy, 'Smith of Kitava');
+  assert.equal(manifest.compatibility.access.requires_granted_source, true);
+  assert.equal(evaluateCompatibilityV3(manifest, { weapon: 'Mace', ascendancy: 'Titan' }).ok, false);
+  assert.equal(evaluateCompatibilityV3(manifest, { weapon: 'Mace', ascendancy: 'Smith of Kitava' }).ok, true);
+  assert.equal(evaluateCompatibilityV3(manifest, { weapon: 'Bow', ascendancy: 'Smith of Kitava' }).ok, false);
+
+  assert.equal(phantasmal.compatibility.access.requires_unique_provider, true);
+  assert.equal(phantasmal.compatibility.access.granted_sources[0].unique_name, "Fairgraves' Curse");
+  assert.equal(evaluateCompatibilityV3(phantasmal, { weapon: 'Bow' }).ok, false);
+  assert.equal(evaluateCompatibilityV3(phantasmal, {
+    weapon: 'Bow',
+    recommendedUniques: ["Fairgraves' Curse"]
+  }).ok, true);
+
+  assert.equal(cackling.compatibility.access.requires_unique_provider, true);
+  assert.equal(cackling.compatibility.access.granted_sources[0].unique_name, "Hysseg's Claw");
+  assert.equal(evaluateCompatibilityV3(cackling, { weapon: 'Talisman' }).ok, false);
+  assert.equal(azmerianWolf.compatibility.access, undefined);
 });
 
 test('committed catalog separates Companion and nested Minion archetype evidence', async () => {
   const [realCatalog, realOffense] = await Promise.all([
-    readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
+    loadRealRecommendationCatalogV3(),
     readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
   ]);
   const selectedNames = (weapon, offense) => {
@@ -1395,7 +1558,7 @@ test('committed catalog separates Companion and nested Minion archetype evidence
 
 test('committed caster Totem rolls emit Spell Totem with a legal socketed Spell', async () => {
   const [realCatalog, realOffense] = await Promise.all([
-    readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
+    loadRealRecommendationCatalogV3(),
     readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
   ]);
 
@@ -1421,10 +1584,7 @@ test('committed caster Totem rolls emit Spell Totem with a legal socketed Spell'
 });
 
 test('committed provider supports retain typed Minion creation and target constraints', async () => {
-  const realCatalog = await readFile(
-    new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url),
-    'utf8'
-  ).then(JSON.parse);
+  const realCatalog = await loadRealRecommendationCatalogV3();
   const living = realCatalog.entities.find((entry) => entry.name === 'Living Lightning');
   const skittering = realCatalog.entities.find((entry) => entry.name === 'Skittering Stone I');
 
@@ -1445,7 +1605,7 @@ test('committed provider supports retain typed Minion creation and target constr
 
 test('committed Siphon Elements data and historical false pairings stay corrected', async () => {
   const [realCatalog, realOffense] = await Promise.all([
-    readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
+    loadRealRecommendationCatalogV3(),
     readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
   ]);
   const siphon = realCatalog.entities.find((entry) => entry.name === 'Siphon Elements');
@@ -1481,7 +1641,7 @@ test('committed Siphon Elements data and historical false pairings stay correcte
 
 test('committed catalog never selects Chaos Bolt for Bow or Unearth for Spear', async () => {
   const [realCatalog, realOffense] = await Promise.all([
-    readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
+    loadRealRecommendationCatalogV3(),
     readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
   ]);
   const bow = selectRecommendationPackageV3(realCatalog, {
@@ -1508,7 +1668,7 @@ test('committed catalog never selects Chaos Bolt for Bow or Unearth for Spear', 
 
 test('committed catalog keeps the reported package failures Offense-aligned', async () => {
   const [realCatalog, realOffense] = await Promise.all([
-    readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
+    loadRealRecommendationCatalogV3(),
     readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
   ]);
 
@@ -1556,7 +1716,7 @@ test('committed catalog keeps the reported package failures Offense-aligned', as
 
 test('committed catalog keeps legal spear and crossbow options after the tighter companion gate', async () => {
   const [realCatalog, realOffense] = await Promise.all([
-    readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
+    loadRealRecommendationCatalogV3(),
     readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
   ]);
   const selectedNames = (snapshot) => {
@@ -1590,7 +1750,7 @@ test('committed catalog keeps legal spear and crossbow options after the tighter
 
 test('reported empty and false-totem rolls select specific legal primary skills', async () => {
   const [realCatalog, realOffense] = await Promise.all([
-    readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
+    loadRealRecommendationCatalogV3(),
     readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
   ]);
   const cases = [
@@ -1661,7 +1821,7 @@ test('reported empty and false-totem rolls select specific legal primary skills'
 
 test('committed catalog does not promote a non-damaging setup spell to primary damage', async () => {
   const [realCatalog, realOffense] = await Promise.all([
-    readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
+    loadRealRecommendationCatalogV3(),
     readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
   ]);
   for (let index = 0; index < 32; index += 1) {

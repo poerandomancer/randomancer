@@ -111,8 +111,13 @@
         "category": "Scaling"
       },
       {
-        "id": "minions_companions",
-        "name": "Minions/Companions",
+        "id": "minions",
+        "name": "Minions",
+        "category": "Archetype"
+      },
+      {
+        "id": "companions",
+        "name": "Companions",
         "category": "Archetype"
       },
       {
