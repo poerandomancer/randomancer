@@ -1603,6 +1603,54 @@ test('committed provider supports retain typed Minion creation and target constr
   ]);
 });
 
+test('committed support semantics collapse tiers and preserve typed bridges and conflicts', async () => {
+  const realCatalog = await loadRealRecommendationCatalogV3();
+  const support = (name) => realCatalog.entities.find((entry) =>
+    entry.content_type === 'support_gem' && entry.name === name
+  );
+  const hasFact = (entity, expected) => entity.facts.some((fact) =>
+    Object.entries(expected).every(([key, value]) => fact[key] === value)
+  );
+
+  const bleedOne = support('Bleed I');
+  const bleedFour = support('Bleed IV');
+  assert.equal(bleedOne.support_family.id, 'support-family:bleed');
+  assert.equal(bleedFour.support_family.id, bleedOne.support_family.id);
+  assert.equal(bleedOne.support_family.tier, 1);
+  assert.equal(bleedFour.support_family.tier, 4);
+  assert.equal(hasFact(bleedFour, { relation: 'inflicts', mechanic: 'bleed' }), false);
+  assert.equal(hasFact(bleedFour, { relation: 'prevents', mechanic: 'bleed' }), true);
+
+  const livingLightning = support('Living Lightning');
+  const livingLightningTwo = support('Living Lightning II');
+  assert.equal(livingLightning.support_family.id, livingLightningTwo.support_family.id);
+  assert.equal(livingLightning.support_family.tier, 1);
+  assert.equal(livingLightningTwo.support_family.tier, 2);
+
+  const fireAttunement = support('Fire Attunement');
+  assert.equal(hasFact(fireAttunement, { relation: 'provides', mechanic: 'fire' }), true);
+
+  const electrocute = support('Electrocute');
+  assert.equal(hasFact(electrocute, {
+    relation: 'provides',
+    mechanic: 'electrocute',
+    condition: 'lightning_damage'
+  }), true);
+  assert.equal(hasFact(electrocute, { relation: 'requires', mechanic: 'lightning' }), true);
+  assert.equal(hasFact(electrocute, { relation: 'prevents', mechanic: 'shock' }), true);
+
+  const eshsRadiance = support("Esh's Radiance");
+  assert.equal(hasFact(eshsRadiance, {
+    relation: 'provides',
+    mechanic: 'shock',
+    condition: 'chaos_damage'
+  }), true);
+  assert.equal(hasFact(eshsRadiance, { relation: 'requires', mechanic: 'chaos' }), true);
+
+  const lastingShock = support('Lasting Shock');
+  assert.equal(hasFact(lastingShock, { relation: 'inflicts', mechanic: 'shock' }), false);
+});
+
 test('committed Siphon Elements data and historical false pairings stay corrected', async () => {
   const [realCatalog, realOffense] = await Promise.all([
     loadRealRecommendationCatalogV3(),

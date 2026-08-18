@@ -60,6 +60,38 @@ def unique_sorted(values: Iterable[Any]) -> list[str]:
 
 
 GRANTS_SKILL_RE = re.compile(r"^\s*Grants\s+Skill:\s*(?P<name>.+?)\s*$", re.IGNORECASE)
+SUPPORT_TIER_RE = re.compile(r"^(?P<name>.+?)\s+(?P<tier>I|II|III|IV|V)$")
+SUPPORT_TIER_VALUES = {"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5}
+
+
+def support_family_metadata(skill: dict[str, Any]) -> dict[str, Any]:
+    """Return the stable family identity used to prevent tier stacking."""
+    display_name = str(skill.get("name") or "").strip()
+    match = SUPPORT_TIER_RE.match(display_name)
+    family_name = (match.group("name") if match else display_name).strip()
+    family_key = normalized_phrase(family_name or skill.get("id"))
+    return {
+        "id": f"support-family:{family_key}",
+        "name": family_name or display_name,
+        "tier": SUPPORT_TIER_VALUES.get(match.group("tier")) if match else None,
+    }
+
+
+def normalize_support_family_tiers(entities: list[dict[str, Any]]) -> None:
+    """Treat an unnumbered base gem as tier one when numbered siblings exist."""
+    by_family: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for entity in entities:
+        family = entity.get("support_family") or {}
+        if entity.get("content_type") == "support_gem" and family.get("id"):
+            by_family[str(family["id"])].append(entity)
+
+    for members in by_family.values():
+        if not any((member.get("support_family") or {}).get("tier") is not None for member in members):
+            continue
+        for member in members:
+            family = member.get("support_family") or {}
+            if family.get("tier") is None:
+                family["tier"] = 1
 
 
 def passive_granted_skill_providers(ctx: "SourceContext") -> dict[str, list[dict[str, Any]]]:
@@ -511,6 +543,7 @@ def build_skill_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[st
                 "source_id": source_id,
                 "name": skill.get("name"),
                 "candidate_roles": roles,
+                **({"support_family": support_family_metadata(skill)} if is_support else {}),
                 "retrieval_terms": tags,
                 "facts": facts,
                 "compatibility": compatibility,
@@ -533,6 +566,7 @@ def build_skill_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[st
                 },
             }
         )
+    normalize_support_family_tiers(entities)
     return entities
 
 
@@ -828,6 +862,17 @@ def build_catalog(ctx: SourceContext) -> tuple[dict[str, Any], dict[str, Any], d
         if fact.get("relation")
     )
     role_counts = Counter(role for entity in entities for role in entity.get("candidate_roles") or [])
+    support_entities = [entity for entity in skill_entities if entity.get("content_type") == "support_gem"]
+    support_family_ids = {
+        (entity.get("support_family") or {}).get("id")
+        for entity in support_entities
+        if (entity.get("support_family") or {}).get("id")
+    }
+    tiered_support_family_ids = {
+        (entity.get("support_family") or {}).get("id")
+        for entity in support_entities
+        if (entity.get("support_family") or {}).get("tier") is not None
+    }
 
     meta = {
         "schema_version": SCHEMA_VERSION,
@@ -866,6 +911,30 @@ def build_catalog(ctx: SourceContext) -> tuple[dict[str, Any], dict[str, Any], d
                 1
                 for entity in skill_entities
                 if ((entity.get("compatibility") or {}).get("target_skill") or {}).get("excluded_skill_types")
+            ),
+            "support_family_count": len(support_family_ids),
+            "tiered_support_family_count": len(tiered_support_family_ids),
+            "tiered_support_entity_count": sum(
+                1
+                for entity in support_entities
+                if (entity.get("support_family") or {}).get("tier") is not None
+            ),
+            "support_entities_with_bridge_facts": sum(
+                1
+                for entity in support_entities
+                if any(
+                    fact.get("subject") == "supported_skill"
+                    and fact.get("relation") in {"creates", "inflicts", "provides", "converts"}
+                    for fact in entity.get("facts") or []
+                )
+            ),
+            "support_entities_with_conflicts": sum(
+                1
+                for entity in support_entities
+                if any(
+                    fact.get("subject") == "supported_skill" and fact.get("relation") == "prevents"
+                    for fact in entity.get("facts") or []
+                )
             ),
             "active_skills_with_granted_access": sum(
                 1 for access in (granted_access.get("access_by_entity_id") or {}).values()

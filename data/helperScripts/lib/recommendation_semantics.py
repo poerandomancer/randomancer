@@ -600,6 +600,59 @@ def parse_stat_id(value: Any, subject: str = "player") -> list[dict[str, Any]]:
     if conversion:
         facts.append(conversion)
 
+    # "Gain as" is additive damage-type provision rather than conversion. It
+    # is the typed bridge used when a support adds a rolled damage type without
+    # replacing the supported skill's native damage.
+    gain_as = re.search(
+        r"(?:^|_)damage(?:_[a-z0-9]+){0,6}_to_gain_as_(physical|fire|cold|lightning|chaos)(?:_|$)",
+        normalized,
+    )
+    if gain_as and subject == "supported_skill":
+        facts.append(
+            make_fact(
+                "provides",
+                subject=subject,
+                source_kind="stat_id",
+                source_value=value,
+                mechanic=gain_as.group(1),
+                confidence="exact",
+                condition=_condition_from_normalized(normalized),
+            )
+        )
+
+    # Some supports allow one damage type to build or inflict an otherwise
+    # non-native ailment. Keep eligibility distinct from direct application:
+    # the support provides the ailment route and explicitly requires the
+    # contributing damage type.
+    damage_can_ailment = re.search(
+        r"(?:^|_)(?:base_)?(physical|fire|cold|lightning|chaos)_damage_can_"
+        r"(ignite|bleed|poison|chill|freeze|shock|electrocute)(?:_|$)",
+        normalized,
+    )
+    if damage_can_ailment and subject == "supported_skill":
+        damage_type, ailment = damage_can_ailment.groups()
+        facts.extend(
+            [
+                make_fact(
+                    "provides",
+                    subject=subject,
+                    source_kind="stat_id",
+                    source_value=value,
+                    mechanic=ailment,
+                    confidence="exact",
+                    condition=f"{damage_type}_damage",
+                ),
+                make_fact(
+                    "requires",
+                    subject=subject,
+                    source_kind="stat_id",
+                    source_value=value,
+                    mechanic=damage_type,
+                    confidence="exact",
+                ),
+            ]
+        )
+
     if "cannot_have_more_than_1_damaging_ailment" in normalized:
         facts.append(
             make_fact(

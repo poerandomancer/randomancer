@@ -169,6 +169,24 @@
         }
       ]
     },
+    "skill:Metadata/Items/Gems/SupportGemLacerateFour": {
+      "reason": "Bleed IV explicitly prevents the supported skill from inflicting Bleed; its Bleed reference describes a target condition, not application.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "bleed"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemLastingShock": {
+      "reason": "Lasting Shock reduces the supported skill's existing Shock application frequency and extends duration; it does not provide Shock application.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "shock"
+        }
+      ]
+    },
     "skill:Metadata/Items/Gems/SkillGemSpellTotem": {
       "reason": "Spell Totem is a complete active package only when paired with an eligible socketed Spell.",
       "add_candidate_roles": [
