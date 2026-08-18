@@ -623,7 +623,7 @@
         "Armour & Evasion",
         "Evasion & Energy Shield"
       ],
-      "enableMinionsWeaponRule": true,
+      "enableMinionsWeaponRule": false,
       "minionsRequiresWeapon": [
         "Sceptre"
       ],
