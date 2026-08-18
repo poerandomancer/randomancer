@@ -147,6 +147,246 @@
         }
       ]
     },
+    "skill:Metadata/Items/Gem/SupportGemBreachlordsRift": {
+      "reason": "Breachlord's Rift only breaks Armour when the supported skill Freezes or Electrocutes; those prerequisites must remain attached to the application fact.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "armour_break"
+        }
+      ],
+      "add_facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "mechanic": "armour_break",
+          "requires_any_mechanics": [
+            "freeze",
+            "electrocute"
+          ],
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemBrittleArmour": {
+      "reason": "Brittle Armour only breaks Armour against enemies Frozen by the supported skill.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "armour_break"
+        }
+      ],
+      "add_facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "mechanic": "armour_break",
+          "requires_any_mechanics": [
+            "freeze"
+          ],
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemCorrosion": {
+      "reason": "Corrosion breaks Armour through Poison applied by the supported skill, so Poison is a prerequisite rather than independent Armour Break application.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "armour_break"
+        }
+      ],
+      "add_facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "mechanic": "armour_break",
+          "requires_any_mechanics": [
+            "poison"
+          ],
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemEternalFlame": {
+      "reason": "Eternal Flame modifies existing Ignites; it does not independently grant Ignite application.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "ignite"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemFireExposure": {
+      "reason": "Fire Exposure applies Exposure when the supported skill Ignites; it does not independently grant Ignite application.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "ignite"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemFrostNexus": {
+      "reason": "Frost Nexus creates Chilled Ground around enemies Frozen by the supported skill, so Freeze is a prerequisite for its Chill route.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "chill"
+        }
+      ],
+      "add_facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "mechanic": "chill",
+          "requires_any_mechanics": [
+            "freeze"
+          ],
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemLightningExposure": {
+      "reason": "Lightning Exposure applies Exposure when the supported skill Shocks; it does not independently grant Shock application.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "shock"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SupportGemOutmaneuver": {
+      "reason": "Outmaneuver only breaks Armour against Parried enemies.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "armour_break"
+        }
+      ],
+      "add_facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "mechanic": "armour_break",
+          "requires_any_mechanics": [
+            "parried"
+          ],
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemOlrothsHubris": {
+      "reason": "Olroth's Hubris allows Physical damage to contribute to Freeze buildup; the supported skill does not gain unconditional Freeze application.",
+      "suppress_facts": [
+        {
+          "relation": "provides",
+          "mechanic": "freeze",
+          "condition": null
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemEnvenomThree": {
+      "reason": "Poison III strengthens Poison against Bleeding enemies; its Bleed reference is a target condition, not Bleed application.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "bleed"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemCoursingCurrent": {
+      "reason": "Shock Conduction spreads an existing Shock and does not independently create the first Shock.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "shock"
+        }
+      ],
+      "add_facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "mechanic": "shock",
+          "requires_any_mechanics": [
+            "shock"
+          ],
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemCoursingCurrentTwo": {
+      "reason": "Shock Conduction II spreads an existing Shock or Shocks Drenched enemies; it does not independently create the first Shock without either state.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "shock"
+        }
+      ],
+      "add_facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "mechanic": "shock",
+          "requires_any_mechanics": [
+            "shock",
+            "drenched"
+          ],
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SupportGemShockingLeap": {
+      "reason": "Shocking Leap creates Shocked Ground only after the supported skill Critically Hits, so it is not unconditional Shock application.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "shock"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemSpreadingFrost": {
+      "reason": "Spreading Frost Chills nearby enemies after the supported skill Freezes; it neither grants Freeze nor provides unconditional Chill.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "freeze"
+        },
+        {
+          "relation": "inflicts",
+          "mechanic": "chill"
+        }
+      ],
+      "add_facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "mechanic": "chill",
+          "requires_any_mechanics": [
+            "freeze"
+          ],
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemThrillOfTheKillTwo": {
+      "reason": "Thrill of the Kill II grants Shock chance only after culling an already Shocked enemy; it does not independently create the first Shock.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "shock"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SupportGemTulsStillness": {
+      "reason": "Tul's Stillness allows Chaos damage to contribute to Freeze buildup; its unconditional provision is Chaos damage, not Freeze application.",
+      "suppress_facts": [
+        {
+          "relation": "provides",
+          "mechanic": "freeze",
+          "condition": null
+        }
+      ]
+    },
     "skill:Metadata/Items/Gem/SupportGemSkitteringStone": {
       "reason": "Skittering Stone I releases stone Minions from shatterable earthen objects created by the supported skill.",
       "add_facts": [

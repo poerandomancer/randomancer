@@ -11,7 +11,7 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5080,
+    "fact_count": 5071,
     "fact_relation_counts": {
       "consumes": 353,
       "converts": 112,
@@ -19,11 +19,11 @@
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 672,
-      "inflicts": 129,
+      "inflicts": 122,
       "modifies": 2239,
       "occupies": 444,
       "prevents": 375,
-      "provides": 320,
+      "provides": 318,
       "replaces": 27,
       "requires": 63
     },
@@ -33,7 +33,7 @@
       "payoff": 181,
       "primary_damage": 349,
       "recovery": 250,
-      "setup_control": 180,
+      "setup_control": 175,
       "utility": 206
     },
     "source_versions": {
@@ -206027,15 +206027,18 @@
         {
           "relation": "inflicts",
           "subject": "supported_skill",
-          "confidence": "strong",
+          "mechanic": "armour_break",
+          "requires_any_mechanics": [
+            "freeze",
+            "electrocute"
+          ],
+          "confidence": "exact",
           "evidence": [
             {
-              "kind": "skill_description",
-              "value": "Supports any skill that [HitDamage|Hits] enemies, causing it to [ArmourBreak|Break Armour] of enemies it [Freeze|Freezes] or [Electrocute|Electrocutes]."
+              "kind": "curated_override",
+              "value": "Breachlord's Rift only breaks Armour when the supported skill Freezes or Electrocutes; those prerequisites must remain attached to the application fact."
             }
-          ],
-          "mechanic": "armour_break",
-          "scope": "outgoing"
+          ]
         },
         {
           "relation": "modifies",
@@ -206595,15 +206598,17 @@
         {
           "relation": "inflicts",
           "subject": "supported_skill",
-          "confidence": "strong",
+          "mechanic": "armour_break",
+          "requires_any_mechanics": [
+            "freeze"
+          ],
+          "confidence": "exact",
           "evidence": [
             {
-              "kind": "skill_description",
-              "value": "Supports Skills which can [HitDamage|Hit] enemies. [HitDamage|Hits] with Supported Skills which [Freeze] enemies cause [Physical] damage against them to [ArmourBreak|Break their Armour] while they remain [Freeze|Frozen]."
+              "kind": "curated_override",
+              "value": "Brittle Armour only breaks Armour against enemies Frozen by the supported skill."
             }
-          ],
-          "mechanic": "armour_break",
-          "scope": "outgoing"
+          ]
         },
         {
           "relation": "modifies",
@@ -212912,15 +212917,17 @@
         {
           "relation": "inflicts",
           "subject": "supported_skill",
-          "confidence": "strong",
+          "mechanic": "armour_break",
+          "requires_any_mechanics": [
+            "poison"
+          ],
+          "confidence": "exact",
           "evidence": [
             {
-              "kind": "skill_description",
-              "value": "Supports any skill that [HitDamage|Hits] enemies, causing [Poison] it applies to also [ArmourBreak|Break] enemy [Armour|Armour]. Cannot support skills that [Consume] [ArmourBreak|Fully Broken] [Armour]."
+              "kind": "curated_override",
+              "value": "Corrosion breaks Armour through Poison applied by the supported skill, so Poison is a prerequisite rather than independent Armour Break application."
             }
-          ],
-          "mechanic": "armour_break",
-          "scope": "outgoing"
+          ]
         },
         {
           "relation": "modifies",
@@ -221755,7 +221762,6 @@
       "source_id": "Metadata/Items/Gems/SupportGemEternalFlame",
       "name": "Eternal Flame I",
       "candidate_roles": [
-        "setup_control",
         "enabler"
       ],
       "support_family": {
@@ -221783,19 +221789,6 @@
             }
           ],
           "mechanic": "fire"
-        },
-        {
-          "relation": "inflicts",
-          "subject": "supported_skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "stat_id",
-              "value": "support_eternal_flame_chance_to_ignite_+%_final"
-            }
-          ],
-          "mechanic": "ignite",
-          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -224327,7 +224320,6 @@
       "source_id": "Metadata/Items/Gems/SupportGemFireExposure",
       "name": "Fire Exposure",
       "candidate_roles": [
-        "setup_control",
         "enabler"
       ],
       "support_family": {
@@ -224357,19 +224349,6 @@
             }
           ],
           "mechanic": "fire"
-        },
-        {
-          "relation": "inflicts",
-          "subject": "supported_skill",
-          "confidence": "exact",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports any skill that [HitDamage|Hits] enemies, causing it to inflict [Exposure] when [Ignite|Igniting]."
-            }
-          ],
-          "mechanic": "ignite",
-          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -227189,15 +227168,17 @@
         {
           "relation": "inflicts",
           "subject": "supported_skill",
-          "confidence": "strong",
+          "mechanic": "chill",
+          "requires_any_mechanics": [
+            "freeze"
+          ],
+          "confidence": "exact",
           "evidence": [
             {
-              "kind": "skill_description",
-              "value": "Supports any skill that [HitDamage|Hits] enemies, causing it to create patches of [ChilledGround|Chilled Ground] around [Frozen|Frozen] enemies."
+              "kind": "curated_override",
+              "value": "Frost Nexus creates Chilled Ground around enemies Frozen by the supported skill, so Freeze is a prerequisite for its Chill route."
             }
-          ],
-          "mechanic": "chill",
-          "scope": "outgoing"
+          ]
         },
         {
           "relation": "modifies",
@@ -236284,7 +236265,6 @@
       "source_id": "Metadata/Items/Gems/SupportGemLightningExposure",
       "name": "Lightning Exposure",
       "candidate_roles": [
-        "setup_control",
         "enabler"
       ],
       "support_family": {
@@ -236314,19 +236294,6 @@
             }
           ],
           "mechanic": "lightning"
-        },
-        {
-          "relation": "inflicts",
-          "subject": "supported_skill",
-          "confidence": "exact",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports any skill that [HitDamage|Hits] enemies, causing it to inflict [Exposure] when inflicting [Shock]."
-            }
-          ],
-          "mechanic": "shock",
-          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -241640,19 +241607,6 @@
           "condition": "physical_damage"
         },
         {
-          "relation": "provides",
-          "subject": "supported_skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports [Attack|Attacks] you use or [Trigger] yourself, causing them to cost [Ward|Runic Ward] to use but deal additional [Physical] and [Cold] damage based on their [Ward|Runic Ward] cost, in addition to causing [Physical] damage to [Contributes|Contribute] to [Freeze] buildup. Cannot Support [Channelling] Skills, [Sustained] Skills, or Skills without a cost."
-            }
-          ],
-          "mechanic": "freeze",
-          "scope": "outgoing"
-        },
-        {
           "relation": "requires",
           "subject": "supported_skill",
           "confidence": "exact",
@@ -241907,15 +241861,17 @@
         {
           "relation": "inflicts",
           "subject": "supported_skill",
-          "confidence": "strong",
+          "mechanic": "armour_break",
+          "requires_any_mechanics": [
+            "parried"
+          ],
+          "confidence": "exact",
           "evidence": [
             {
-              "kind": "skill_description",
-              "value": "Supports Skills you use yourself which can cause Damaging [HitDamage|Hits]. Supported Skills [ArmourBreak|Break Armour] against [ParriedDebuff|Parried] Enemies."
+              "kind": "curated_override",
+              "value": "Outmaneuver only breaks Armour against Parried enemies."
             }
-          ],
-          "mechanic": "armour_break",
-          "scope": "outgoing"
+          ]
         },
         {
           "relation": "modifies",
@@ -244495,19 +244451,6 @@
             }
           ],
           "mechanic": "chaos"
-        },
-        {
-          "relation": "inflicts",
-          "subject": "supported_skill",
-          "confidence": "exact",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports any skill that [HitDamage|Hits] enemies, giving it a chance to [Poison|Poison] enemies and causing it to inflict more powerful [Poison|Poisons] against [Bleeding] Enemies."
-            }
-          ],
-          "mechanic": "bleed",
-          "scope": "outgoing"
         },
         {
           "relation": "inflicts",
@@ -253763,19 +253706,17 @@
         {
           "relation": "inflicts",
           "subject": "supported_skill",
-          "confidence": "strong",
+          "mechanic": "shock",
+          "requires_any_mechanics": [
+            "shock"
+          ],
+          "confidence": "exact",
           "evidence": [
             {
-              "kind": "stat_id",
-              "value": "support_%_chance_to_shock_nearby_enemy_on_shock"
-            },
-            {
-              "kind": "skill_description",
-              "value": "Supports any skill that [HitDamage|Hits] enemies, giving it a chance to also [Shock|Shock] nearby enemies when you [Shock|Shock] an enemy."
+              "kind": "curated_override",
+              "value": "Shock Conduction spreads an existing Shock and does not independently create the first Shock."
             }
-          ],
-          "mechanic": "shock",
-          "scope": "outgoing"
+          ]
         },
         {
           "relation": "modifies",
@@ -253903,23 +253844,18 @@
         {
           "relation": "inflicts",
           "subject": "supported_skill",
+          "mechanic": "shock",
+          "requires_any_mechanics": [
+            "shock",
+            "drenched"
+          ],
           "confidence": "exact",
           "evidence": [
             {
-              "kind": "stat_id",
-              "value": "always_shock_wet_enemies"
-            },
-            {
-              "kind": "stat_id",
-              "value": "support_%_chance_to_shock_nearby_enemy_on_shock"
-            },
-            {
-              "kind": "skill_description",
-              "value": "Supports any skill that [HitDamage|Hits] enemies, giving it a chance to also [Shock|Shock] nearby enemies when you [Shock|Shock] an enemy. Always [Shock|Shocks] enemies which are [Drenched]."
+              "kind": "curated_override",
+              "value": "Shock Conduction II spreads an existing Shock or Shocks Drenched enemies; it does not independently create the first Shock without either state."
             }
-          ],
-          "mechanic": "shock",
-          "scope": "outgoing"
+          ]
         },
         {
           "relation": "modifies",
@@ -254148,7 +254084,6 @@
       "source_id": "Metadata/Items/Gem/SupportGemShockingLeap",
       "name": "Shocking Leap",
       "candidate_roles": [
-        "setup_control",
         "enabler"
       ],
       "support_family": {
@@ -254169,19 +254104,6 @@
         "createsgroundeffect"
       ],
       "facts": [
-        {
-          "relation": "inflicts",
-          "subject": "supported_skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports Skills that leap into the air and deal damage, causing them to create [ShockedGround|Shocked Ground] the first time they [Critical|Critically Hit] an enemy."
-            }
-          ],
-          "mechanic": "shock",
-          "scope": "outgoing"
-        },
         {
           "relation": "modifies",
           "subject": "supported_skill",
@@ -255876,28 +255798,17 @@
         {
           "relation": "inflicts",
           "subject": "supported_skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports any skill that hits enemies, causing them to [Chill] enemies near enemies they [Freeze]."
-            }
-          ],
           "mechanic": "chill",
-          "scope": "outgoing"
-        },
-        {
-          "relation": "inflicts",
-          "subject": "supported_skill",
-          "confidence": "strong",
+          "requires_any_mechanics": [
+            "freeze"
+          ],
+          "confidence": "exact",
           "evidence": [
             {
-              "kind": "skill_description",
-              "value": "Supports any skill that hits enemies, causing them to [Chill] enemies near enemies they [Freeze]."
+              "kind": "curated_override",
+              "value": "Spreading Frost Chills nearby enemies after the supported skill Freezes; it neither grants Freeze nor provides unconditional Chill."
             }
-          ],
-          "mechanic": "freeze",
-          "scope": "outgoing"
+          ]
         }
       ],
       "compatibility": {
@@ -259345,7 +259256,6 @@
       "source_id": "Metadata/Items/Gems/SupportGemThrillOfTheKillTwo",
       "name": "Thrill of the Kill II",
       "candidate_roles": [
-        "setup_control",
         "enabler"
       ],
       "support_family": {
@@ -259377,19 +259287,6 @@
             }
           ],
           "mechanic": "lightning"
-        },
-        {
-          "relation": "inflicts",
-          "subject": "supported_skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports Skills you use yourself which [HitDamage|Hit] enemies. [CullingStrike|Culling] a [Shock|Shocked] enemy with Supported Skills infuses all of your [Attack|Attacks] with [Lightning] damage and grants an increased chance to [Shock] for a short time."
-            }
-          ],
-          "mechanic": "shock",
-          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -260043,19 +259940,6 @@
           ],
           "mechanic": "freeze",
           "condition": "chaos_damage"
-        },
-        {
-          "relation": "provides",
-          "subject": "supported_skill",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports Skills that can cause [HitDamage|Damaging Hits], granting extra [Chaos] damage and causing [Chaos] damage to [Contributes|Contribute] to [Freeze|Freeze Buildup]."
-            }
-          ],
-          "mechanic": "freeze",
-          "scope": "outgoing"
         },
         {
           "relation": "requires",

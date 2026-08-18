@@ -27,6 +27,10 @@ function offenseInventory() {
       { id: 'poison', name: 'Poison', category: 'Ailment', aliases: [] },
       { id: 'shock', name: 'Shock', category: 'Ailment', aliases: [] },
       { id: 'ignite', name: 'Ignite', category: 'Ailment', aliases: [] },
+      { id: 'bleed', name: 'Bleed', category: 'Ailment', aliases: [] },
+      { id: 'chill', name: 'Chill', category: 'Ailment', aliases: [] },
+      { id: 'freeze', name: 'Freeze', category: 'Ailment', aliases: [] },
+      { id: 'electrocute', name: 'Electrocute', category: 'Ailment', aliases: [] },
       { id: 'physical', name: 'Physical Damage', category: 'Damage Type', aliases: [] },
       { id: 'fire', name: 'Fire Damage', category: 'Damage Type', aliases: [] },
       { id: 'cold', name: 'Cold Damage', category: 'Damage Type', aliases: [] },
@@ -50,13 +54,15 @@ function entity({
   roles = ['primary_damage'],
   description = '',
   contentType = 'active_skill',
-  compatibility = null
+  compatibility = null,
+  supportFamily = null
 }) {
   return {
     id: `skill:${id}`,
     source_id: id,
     content_type: contentType,
     name,
+    ...(supportFamily ? { support_family: supportFamily } : {}),
     candidate_roles: roles,
     retrieval_terms: [],
     facts,
@@ -602,7 +608,7 @@ test('Minion rolls prefer non-Companion minions while Companion rolls prefer Com
   assert.equal(companionResult.primarySkill?.name, 'Azmerian Wolf');
 });
 
-test('a provider support marks an active as support-completable without becoming a selected skill', () => {
+test('a provider support completes the active package without becoming a second active skill', () => {
   const maceEquipment = {
     is_unrestricted: false,
     mainhand_tags_any_of: ['mace'],
@@ -640,10 +646,202 @@ test('a provider support marks an active as support-completable without becoming
   assert.equal(result.supportingSkill, null);
   assert.equal(result.primarySkill?.carrierObligations[0]?.completionType, 'support');
   assert.equal(result.primarySkill?.carrierObligations[0]?.providerName, 'Skittering Stone I');
-  assert.ok(result.unresolved.some((entry) =>
-    entry.obligationId === 'offense:minions'
-      && entry.reason.includes('support selection is deferred')
+  assert.deepEqual(result.primarySkill?.supports.map((support) => support.name), ['Skittering Stone I']);
+  assert.ok(!result.unresolved.some((entry) => entry.obligationId === 'offense:minions'));
+  assert.equal(result.diagnostics.assignedSupportCount, 1);
+});
+
+test('support assignment chooses one best family tier and leaves unrelated slots empty', () => {
+  const maceEquipment = {
+    is_unrestricted: false,
+    mainhand_tags_any_of: ['mace'],
+    offhand_tags_any_of: [],
+    allowed_weapon_tags_any_of: ['mace']
+  };
+  const target = {
+    equipment: { is_unrestricted: true },
+    target_skill: {
+      allowed_skill_types_any_of: ['Attack', 'Damage'],
+      excluded_skill_types: []
+    }
+  };
+  const bleedSupport = (tier) => entity({
+    id: `bleed-${tier}`,
+    name: `Bleed ${tier === 1 ? 'I' : 'III'}`,
+    contentType: 'support_gem',
+    roles: ['enabler'],
+    facts: [{ relation: 'inflicts', subject: 'supported_skill', mechanic: 'bleed', confidence: 'exact' }],
+    types: [],
+    compatibility: target,
+    supportFamily: { id: 'support-family:bleed', name: 'Bleed', tier }
+  });
+  const result = selectRecommendationPackageV3(catalog([
+    entity({
+      id: 'mace-physical',
+      name: 'Mace Physical',
+      facts: [{ relation: 'has_property', subject: 'skill', mechanic: 'physical', confidence: 'exact' }],
+      equipment: maceEquipment,
+      types: ['Attack', 'Damage', 'Mace']
+    }),
+    bleedSupport(1),
+    bleedSupport(3),
+    entity({
+      id: 'unrelated-fire',
+      name: 'Unrelated Fire',
+      contentType: 'support_gem',
+      roles: ['enabler'],
+      facts: [{ relation: 'provides', subject: 'supported_skill', mechanic: 'fire', confidence: 'exact' }],
+      types: [],
+      compatibility: target,
+      supportFamily: { id: 'support-family:unrelated-fire', name: 'Unrelated Fire', tier: null }
+    })
+  ]), { weapon: 'Mace', offenseList: ['Bleed'] }, {
+    offenseInventory: offenseInventory()
+  });
+
+  assert.deepEqual(result.primarySkill?.supports.map((support) => support.name), ['Bleed III']);
+  assert.equal(result.primarySkill?.supports[0]?.familyId, 'support-family:bleed');
+  assert.ok(!result.unresolved.some((entry) => entry.obligationId === 'offense:bleed'));
+  assert.equal(result.diagnostics.assignedSupportCount, 1);
+});
+
+test('two supports may form a typed damage-to-ailment bridge on one skill', () => {
+  const target = {
+    equipment: { is_unrestricted: true },
+    target_skill: {
+      allowed_skill_types_any_of: ['Attack', 'Damage'],
+      excluded_skill_types: []
+    }
+  };
+  const result = selectRecommendationPackageV3(catalog([
+    entity({
+      id: 'mace-hit',
+      name: 'Mace Hit',
+      facts: [{ relation: 'has_property', subject: 'skill', mechanic: 'physical', confidence: 'exact' }],
+      equipment: {
+        is_unrestricted: false,
+        mainhand_tags_any_of: ['mace'],
+        offhand_tags_any_of: [],
+        allowed_weapon_tags_any_of: ['mace']
+      },
+      types: ['Attack', 'Damage', 'Mace']
+    }),
+    entity({
+      id: 'gain-chaos',
+      name: 'Gain Chaos',
+      contentType: 'support_gem',
+      roles: ['enabler'],
+      facts: [{ relation: 'provides', subject: 'supported_skill', mechanic: 'chaos', confidence: 'exact' }],
+      types: [],
+      compatibility: target,
+      supportFamily: { id: 'support-family:gain-chaos', name: 'Gain Chaos', tier: null }
+    }),
+    entity({
+      id: 'chaos-can-shock',
+      name: 'Chaos Can Shock',
+      contentType: 'support_gem',
+      roles: ['enabler'],
+      facts: [
+        {
+          relation: 'provides',
+          subject: 'supported_skill',
+          mechanic: 'shock',
+          condition: 'chaos_damage',
+          confidence: 'exact'
+        },
+        { relation: 'requires', subject: 'supported_skill', mechanic: 'chaos', confidence: 'exact' }
+      ],
+      types: [],
+      compatibility: target,
+      supportFamily: { id: 'support-family:chaos-can-shock', name: 'Chaos Can Shock', tier: null }
+    })
+  ]), { weapon: 'Mace', offenseList: ['Shock'] }, {
+    offenseInventory: offenseInventory()
+  });
+
+  assert.deepEqual(
+    new Set(result.primarySkill?.supports.map((support) => support.name)),
+    new Set(['Gain Chaos', 'Chaos Can Shock'])
+  );
+  assert.ok(!result.unresolved.some((entry) => entry.obligationId === 'offense:shock'));
+  assert.equal(result.diagnostics.assignedSupportCount, 2);
+  assert.ok(result.supportEdges.some((edge) =>
+    edge.targetKind === 'offense' && edge.mechanic === 'shock'
   ));
+});
+
+test('a support conflict cannot destroy an existing rolled-Offense route', () => {
+  const result = selectRecommendationPackageV3(catalog([
+    entity({
+      id: 'lightning-shock',
+      name: 'Lightning Shock',
+      facts: [
+        { relation: 'has_property', subject: 'skill', mechanic: 'lightning', confidence: 'exact' },
+        { relation: 'inflicts', subject: 'skill', mechanic: 'shock', confidence: 'exact' }
+      ]
+    }),
+    entity({
+      id: 'electrocute-conflict',
+      name: 'Electrocute Conflict',
+      contentType: 'support_gem',
+      roles: ['enabler'],
+      facts: [
+        { relation: 'provides', subject: 'supported_skill', mechanic: 'electrocute', confidence: 'exact' },
+        { relation: 'requires', subject: 'supported_skill', mechanic: 'lightning', confidence: 'exact' },
+        { relation: 'prevents', subject: 'supported_skill', mechanic: 'shock', confidence: 'exact' }
+      ],
+      types: [],
+      compatibility: {
+        equipment: { is_unrestricted: true },
+        target_skill: { allowed_skill_types_any_of: ['Damage'], excluded_skill_types: [] }
+      },
+      supportFamily: { id: 'support-family:electrocute', name: 'Electrocute', tier: null }
+    })
+  ]), { weapon: 'Wand', offenseList: ['Shock', 'Electrocute'] }, {
+    offenseInventory: offenseInventory()
+  });
+
+  assert.deepEqual(result.primarySkill?.supports, []);
+  assert.ok(!result.unresolved.some((entry) => entry.obligationId === 'offense:shock'));
+  assert.ok(result.unresolved.some((entry) => entry.obligationId === 'offense:electrocute'));
+});
+
+test('compound AND support targets require every concrete skill type', () => {
+  const result = selectRecommendationPackageV3(catalog([
+    entity({
+      id: 'mace-hit',
+      name: 'Mace Hit',
+      facts: [{ relation: 'has_property', subject: 'skill', mechanic: 'physical', confidence: 'exact' }],
+      equipment: {
+        is_unrestricted: false,
+        mainhand_tags_any_of: ['mace'],
+        offhand_tags_any_of: [],
+        allowed_weapon_tags_any_of: ['mace']
+      },
+      types: ['Attack', 'Damage', 'Mace']
+    }),
+    entity({
+      id: 'bow-lightning',
+      name: 'Bow Lightning',
+      contentType: 'support_gem',
+      roles: ['enabler'],
+      facts: [{ relation: 'provides', subject: 'supported_skill', mechanic: 'lightning', confidence: 'exact' }],
+      types: [],
+      compatibility: {
+        equipment: { is_unrestricted: true },
+        target_skill: {
+          allowed_skill_types_any_of: ['AND', 'Attack', 'Bow'],
+          excluded_skill_types: []
+        }
+      },
+      supportFamily: { id: 'support-family:bow-lightning', name: 'Bow Lightning', tier: null }
+    })
+  ]), { weapon: 'Mace', offenseList: ['Lightning Damage'] }, {
+    offenseInventory: offenseInventory()
+  });
+
+  assert.equal(result.primarySkill, null);
+  assert.equal(result.diagnostics.assignedSupportCount, 0);
 });
 
 test('Totem meta skills require and pair with a typed socketed payload', () => {
@@ -1236,11 +1434,22 @@ test('runtime adapter preserves package diagnostics while using the current skil
       sourceId: 'test',
       name: 'Test Skill',
       assignedRole: 'primary_damage',
-      fulfilledObligations: [{ obligationId: 'offense:fire' }]
+      fulfilledObligations: [{ obligationId: 'offense:fire' }],
+      supports: [{
+        entityId: 'skill:support',
+        sourceId: 'support',
+        name: 'Bridge Support',
+        familyId: 'support-family:bridge',
+        tier: 2
+      }]
     }
   };
   const adapted = adaptRecommendationPackageV3ToSnapshot(packageResult);
   assert.equal(adapted.recommendedSkills[0].name, 'Test Skill');
+  assert.deepEqual(
+    adapted.recommendedSkills[0].recommendationV3.supports.map((support) => support.name),
+    ['Bridge Support']
+  );
   assert.equal(adapted.recommendationV3, packageResult);
 });
 
@@ -1282,15 +1491,28 @@ test('recommendation contract and Build Card preserve two role-labeled skill ide
   globalThis.localStorage = { getItem() { return null; }, setItem() {} };
 
   try {
-    const [{ normalizeRecommendationContract }, { deriveBuildCardModel }] = await Promise.all([
+    const [
+      { normalizeRecommendationContract },
+      { deriveBuildCardModel },
+      { buildPublicBuildCardRequest },
+      { buildCompactSnapshotPayload }
+    ] = await Promise.all([
       import(new URL('../js/22-recommendation-contract.js', import.meta.url)),
-      import(new URL('../js/23-build-card-foundation.js', import.meta.url))
+      import(new URL('../js/23-build-card-foundation.js', import.meta.url)),
+      import(new URL('../js/publicCardBuilders.js', import.meta.url)),
+      import(new URL('../js/25-card-polish.js', import.meta.url))
     ]);
     const snapshot = normalizeRecommendationContract({
       buildName: 'Package Test',
       weapon: 'Crossbow',
       recommendedSkills: [
-        { name: 'Primary', recommendationV3: { assignedRole: 'primary_damage' } },
+        {
+          name: 'Primary',
+          recommendationV3: {
+            assignedRole: 'primary_damage',
+            supports: [{ name: 'Bleed III' }, { name: 'Gain Chaos' }]
+          }
+        },
         { name: 'Secondary', recommendationV3: { assignedRole: 'secondary_damage' } },
         { name: 'Filler' }
       ]
@@ -1300,6 +1522,18 @@ test('recommendation contract and Build Card preserve two role-labeled skill ide
     assert.deepEqual(snapshot.recommendedSkills.map((entry) => entry.name), ['Primary', 'Secondary']);
     assert.deepEqual(skillSection.values.map((entry) => entry.name), ['Primary', 'Secondary']);
     assert.deepEqual(skillSection.values.map((entry) => entry.prefix), ['Primary', 'Secondary']);
+    assert.equal(skillSection.values[0].meta, ' · Supports: Bleed III + Gain Chaos');
+    assert.deepEqual(skillSection.values[0].tipLines, ['Bleed III', 'Gain Chaos']);
+    assert.deepEqual(
+      buildPublicBuildCardRequest(snapshot).payload.snapshot.recommendedSkills[0]
+        .recommendationV3.supports.map((support) => support.name),
+      ['Bleed III', 'Gain Chaos']
+    );
+    assert.deepEqual(
+      buildCompactSnapshotPayload(snapshot).rs[0]
+        .recommendationV3.supports.map((support) => support.name),
+      ['Bleed III', 'Gain Chaos']
+    );
   } finally {
     globalThis.window = previousWindow;
     globalThis.document = previousDocument;
@@ -1453,6 +1687,18 @@ test('the real 9 by 16 active matrix has a locked semantic coverage breakdown', 
     for (const offense of realOffense.elements) {
       const snapshot = { weapon, offenseList: [offense.name] };
       const result = selectRecommendationPackageV3(realCatalog, snapshot, { offenseInventory: realOffense });
+      const assignedSupports = result.supportAssignments.flatMap((assignment) => {
+        assert.ok(assignment.supports.length <= 2, `${weapon} / ${offense.name}`);
+        return assignment.supports;
+      });
+      assert.equal(
+        new Set(assignedSupports.map((support) => support.familyId)).size,
+        assignedSupports.length,
+        `${weapon} / ${offense.name}`
+      );
+      assert.ok(assignedSupports.every((support) =>
+        support.fulfilledObligations.length + support.suppliedTargets.length > 0
+      ), `${weapon} / ${offense.name}`);
       const primary = result.primarySkill;
       if (!primary) {
         counts.unsupported += 1;
@@ -1480,9 +1726,9 @@ test('the real 9 by 16 active matrix has a locked semantic coverage breakdown', 
   assert.deepEqual(counts, {
     direct: 89,
     meta_or_nested: 4,
-    support_completable: 3,
-    carrier_only: 28,
-    unsupported: 20
+    support_completable: 34,
+    carrier_only: 8,
+    unsupported: 9
   });
 });
 
@@ -1735,8 +1981,13 @@ test('committed catalog keeps the reported package failures Offense-aligned', as
       weapon: 'Mace',
       offenseList: ['Shock']
     }, { offenseInventory: realOffense, selectionSeed: `reported-mace-shock-${index}` });
-    assert.equal(maceShock.primarySkill, null);
+    assert.ok(maceShock.primarySkill);
     assert.equal(maceShock.supportingSkill, null);
+    assert.deepEqual(
+      maceShock.primarySkill.supports.map((support) => support.name),
+      ["Esh's Radiance"]
+    );
+    assert.ok(!maceShock.unresolved.some((entry) => entry.obligationId === 'offense:shock'));
 
     const cold = selectRecommendationPackageV3(realCatalog, {
       weapon: 'Sceptre',
@@ -1806,7 +2057,8 @@ test('reported empty and false-totem rolls select specific legal primary skills'
       label: 'Crossbow / Shock',
       snapshot: { weapon: 'Crossbow', offenseList: ['Shock'] },
       carrierIds: ['offense:shock'],
-      expectSupporting: false
+      expectSupporting: true,
+      expectedSupports: ["Esh's Radiance"]
     },
     {
       label: 'Quarterstaff / Electrocute + Chill',
@@ -1831,6 +2083,13 @@ test('reported empty and false-totem rolls select specific legal primary skills'
         fixture.label
       );
       assert.ok(!result.pieces.some((entry) => entry.name === 'Enervating Nova'), fixture.label);
+      if (fixture.expectedSupports) {
+        assert.deepEqual(
+          result.supportAssignments.flatMap((assignment) => assignment.supports.map((support) => support.name)),
+          fixture.expectedSupports,
+          fixture.label
+        );
+      }
       if (fixture.expectSupporting === false) {
         assert.equal(result.supportingSkill, null, fixture.label);
         continue;

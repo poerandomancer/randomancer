@@ -23,7 +23,7 @@ Scraping and datamining provide evidence. They do not decide whether incidental 
 - `data/config/recommendation_fact_overrides_v3.json` is the curated exception boundary.
 - `data/config/recommendation_semantic_fixtures_v3.json` contains parser and catalog regression fixtures.
 
-The catalog is the data boundary consumed by the feature-flagged package-solver migration. The current runtime slice builds and scores complete one- or two-skill packages. Support-gem selection and broader survivability assignment remain later slices.
+The catalog is the data boundary consumed by the feature-flagged package-solver migration. The current runtime slice builds and scores complete one- or two-skill packages, then assigns zero, one, or two typed bridge supports to each selected skill. Broader survivability assignment remains a later slice.
 
 ## Runtime migration slice
 
@@ -45,6 +45,9 @@ The first slice:
 - permits parallel damage skills when they add real Offense coverage, while ranking explicit setup/payoff and enabler relationships above comparable parallel packages
 - samples complete packages from a narrow high-quality shortlist using a persisted per-roll seed, while suppressing an immediate primary repeat when an equivalent package exists
 - writes the ordered primary-plus-supporting package through the existing canonical recommendation contract
+- evaluates support assignments only after the active package is chosen, with at most two supports per skill and one selected member from each support family across the whole package
+- attaches a support only when it resolves a rolled Offense or an explicit unresolved skill dependency; unused support positions remain empty
+- displays each chosen support inline with the specific Build Card skill it modifies
 - records complementary defense, recovery, and package dependencies as unresolved instead of filling them with weak candidates
 
 Weapon delivery is intentionally stricter than technical equip legality. Generic spells are eligible for Wand, Sceptre, and caster Staff rolls. Martial rolls require structured evidence that the skill belongs to the selected weapon family, either through its active skill types or its equipment requirement. A spell may cross that boundary only when the catalog explicitly proves the martial-weapon relationship. If no direct fulfiller exists, a legal native damage carrier may be selected without claiming fulfillment. If no legal carrier exists either, the selector reports the obligation as unresolved.
@@ -124,11 +127,20 @@ target skill:
 Damage gained as another type is provision, not conversion. Likewise, a stat
 such as `chaos_damage_can_shock` provides Shock eligibility and requires Chaos
 damage; it does not claim the supported skill independently inflicts Shock.
-The package solver must evaluate zero-, one-, and two-support assignments as a
-unit so one support may supply another support's typed requirement. Direct
+The package solver evaluates zero-, one-, and two-support assignments as a unit
+so one support may supply another support's typed requirement. Direct
 fulfillment remains stronger than a one-support bridge, which remains stronger
-than a two-support bridge. Empty support positions are the correct result when
-no unresolved rolled Offense or explicit dependency is improved.
+than a two-support bridge. Every selected support must be necessary for at
+least one resolved target, and a family cannot be reused on another selected
+skill. Conflicts are applied after the full support set, so an enabler cannot
+silently remove an already-working rolled Offense route. Empty support
+positions are the correct result when no unresolved rolled Offense or explicit
+dependency is improved.
+
+Support target expressions that contain an unambiguous `AND` require every
+listed skill type. Mixed flattened `AND`/`OR` expressions remain ineligible
+until the catalog preserves their grouping; permissive matching would make
+weapon- or delivery-specific supports appear legal on unrelated skills.
 
 ## Contextual roles
 

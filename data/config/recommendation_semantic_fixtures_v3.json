@@ -760,6 +760,37 @@
       "relation": "provides",
       "mechanic": "shock",
       "condition": "chaos_damage"
+    },
+    {
+      "entity_name": "Frost Nexus",
+      "relation": "inflicts",
+      "mechanic": "chill",
+      "requires_any_mechanics": [
+        "freeze"
+      ]
+    },
+    {
+      "entity_name": "Shock Conduction II",
+      "relation": "inflicts",
+      "mechanic": "shock",
+      "requires_any_mechanics": [
+        "shock",
+        "drenched"
+      ]
+    },
+    {
+      "entity_name": "Spreading Frost",
+      "relation": "inflicts",
+      "mechanic": "chill",
+      "requires_any_mechanics": [
+        "freeze"
+      ]
+    },
+    {
+      "entity_name": "Tul's Stillness",
+      "relation": "provides",
+      "mechanic": "freeze",
+      "condition": "chaos_damage"
     }
   ],
   "catalog_forbidden_assertions": [
@@ -841,6 +872,32 @@
       "entity_name": "Lasting Shock",
       "relation": "inflicts",
       "mechanic": "shock"
+    },
+    {
+      "entity_name": "Fire Exposure",
+      "relation": "inflicts",
+      "mechanic": "ignite"
+    },
+    {
+      "entity_name": "Lightning Exposure",
+      "relation": "inflicts",
+      "mechanic": "shock"
+    },
+    {
+      "entity_name": "Poison III",
+      "relation": "inflicts",
+      "mechanic": "bleed"
+    },
+    {
+      "entity_name": "Spreading Frost",
+      "relation": "inflicts",
+      "mechanic": "freeze"
+    },
+    {
+      "entity_name": "Tul's Stillness",
+      "relation": "provides",
+      "mechanic": "freeze",
+      "condition": null
     }
   ]
 }
