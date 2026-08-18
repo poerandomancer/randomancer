@@ -2073,6 +2073,101 @@ function unresolvedEntry(obligation, reason) {
   };
 }
 
+function selectedActiveProofForObligation(candidates, obligationId) {
+  return candidates.flatMap((candidate) =>
+    asArray(candidate?.fulfilled)
+      .filter((proof) => proof.obligationId === obligationId)
+      .map((proof) => ({
+        ...proof,
+        providerKind: 'active_skill',
+        providerEntityId: candidate.entity.id,
+        providerSourceId: candidate.entity.source_id,
+        providerName: candidate.entity.name
+      }))
+  ).sort((a, b) =>
+    proofScore(b) - proofScore(a)
+    || String(a.providerName || '').localeCompare(String(b.providerName || ''))
+  )[0] || null;
+}
+
+function selectedCarrierProofForObligation(winner, obligationId) {
+  return asArray(winner?.carriers)
+    .filter((proof) => proof.obligationId === obligationId)
+    .sort((a, b) => proofScore(b) - proofScore(a))[0] || null;
+}
+
+function selectedSupportProofForObligation(supportResolution, obligationId) {
+  return asArray(supportResolution?.fulfilled)
+    .filter((proof) => proof.obligationId === obligationId)
+    .map((proof) => ({
+      ...proof,
+      providerKind: 'support_gem'
+    }))
+    .sort((a, b) =>
+      proofScore(b) - proofScore(a)
+      || String(a.providerName || '').localeCompare(String(b.providerName || ''))
+    )[0] || null;
+}
+
+function assignedSupportForProof(supportResolution, proof) {
+  if (!proof?.providerEntityId) return null;
+  return supportResolution?.assignments
+    ?.flatMap((assignment) => asArray(assignment.supports).map((support) => ({
+      ...support,
+      skillEntityId: assignment.skillEntityId,
+      skillName: assignment.skillName
+    })))
+    .find((support) => support.entityId === proof.providerEntityId) || null;
+}
+
+function coverageDiagnosticEntry(obligation, state, proof = null, extra = {}) {
+  return {
+    obligationId: obligation.id,
+    label: obligation.label,
+    state,
+    ...(proof?.relation ? { relation: proof.relation } : {}),
+    ...(proof?.confidence ? { confidence: proof.confidence } : {}),
+    ...(proof?.mechanic ? { mechanic: proof.mechanic } : {}),
+    ...(proof?.providerKind ? { providerKind: proof.providerKind } : {}),
+    ...(proof?.providerEntityId ? { providerEntityId: proof.providerEntityId } : {}),
+    ...(proof?.providerSourceId ? { providerSourceId: proof.providerSourceId } : {}),
+    ...(proof?.providerName ? { providerName: proof.providerName } : {}),
+    ...extra
+  };
+}
+
+function classifySelectedOffenseCoverage(obligation, selectedCandidates, winner, supportResolution) {
+  const activeProof = selectedActiveProofForObligation(selectedCandidates, obligation.id);
+  if (activeProof) return coverageDiagnosticEntry(obligation, 'active_direct', activeProof);
+
+  const supportProof = selectedSupportProofForObligation(supportResolution, obligation.id);
+  if (supportProof) {
+    const assignedSupport = assignedSupportForProof(supportResolution, supportProof);
+    return coverageDiagnosticEntry(obligation, 'support_assigned', supportProof, {
+      ...(assignedSupport?.familyId ? { familyId: assignedSupport.familyId } : {}),
+      ...(assignedSupport?.familyName ? { familyName: assignedSupport.familyName } : {}),
+      ...(assignedSupport?.tier ? { tier: assignedSupport.tier } : {}),
+      ...(assignedSupport?.skillEntityId ? { supportedSkillEntityId: assignedSupport.skillEntityId } : {}),
+      ...(assignedSupport?.skillName ? { supportedSkillName: assignedSupport.skillName } : {})
+    });
+  }
+
+  const carrierProof = selectedCarrierProofForObligation(winner, obligation.id);
+  if (carrierProof?.completionType === 'support') {
+    return coverageDiagnosticEntry(obligation, 'support_route_unassigned', carrierProof, {
+      supportNames: asArray(carrierProof.supportNames)
+    });
+  }
+  if (carrierProof) {
+    return coverageDiagnosticEntry(obligation, 'carrier_only', carrierProof);
+  }
+
+  return coverageDiagnosticEntry(
+    obligation,
+    selectedCandidates.length ? 'selected_unresolved' : 'no_primary'
+  );
+}
+
 function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
   const validation = validateRecommendationCatalogV3(catalog);
   if (!validation.ok) {
@@ -2166,6 +2261,9 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
   const supportingTargets = suppliedTargetsForSupporting(winner);
   const supportsFor = (candidate) => supportResolution.assignments
     .find((assignment) => assignment.skillEntityId === candidate?.entity?.id)?.supports || [];
+  const offenseCoverage = offenseObligations.map((obligation) =>
+    classifySelectedOffenseCoverage(obligation, selectedCandidates, winner, supportResolution)
+  );
   const primarySkill = primary ? {
     entityId: primary.entity.id,
     sourceId: primary.entity.source_id,
@@ -2233,6 +2331,7 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
       shortlistedCompanionCandidates: shortlist.filter((candidate) => candidate.supporting).length,
       assignedSupportCount: supportResolution.assignedSupportCount,
       evaluatedSupportPackages: supportResolution.evaluatedPackages,
+      offenseCoverage,
       qualityBand,
       companionQualityBand: COMPANION_QUALITY_BAND
     }

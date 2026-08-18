@@ -512,6 +512,8 @@ test('native damage can carry an ailment without falsely fulfilling its applicat
   assert.equal(result.primarySkill?.name, 'Lightning Carrier');
   assert.deepEqual(result.primarySkill?.fulfilledObligations, []);
   assert.deepEqual(result.primarySkill?.carrierObligations.map((entry) => entry.obligationId), ['offense:shock']);
+  assert.equal(result.diagnostics.offenseCoverage[0]?.state, 'carrier_only');
+  assert.equal(result.diagnostics.offenseCoverage[0]?.mechanic, 'lightning');
   assert.ok(result.unresolved.some((entry) =>
     entry.obligationId === 'offense:shock' && entry.reason.includes('explicit Shock application')
   ));
@@ -649,6 +651,14 @@ test('a provider support completes the active package without becoming a second 
   assert.deepEqual(result.primarySkill?.supports.map((support) => support.name), ['Skittering Stone I']);
   assert.ok(!result.unresolved.some((entry) => entry.obligationId === 'offense:minions'));
   assert.equal(result.diagnostics.assignedSupportCount, 1);
+  assert.deepEqual(result.diagnostics.offenseCoverage.map((entry) => [
+    entry.obligationId,
+    entry.state,
+    entry.providerName,
+    entry.supportedSkillName
+  ]), [
+    ['offense:minions', 'support_assigned', 'Skittering Stone I', 'Earthshatter']
+  ]);
 });
 
 test('support assignment chooses one best family tier and leaves unrelated slots empty', () => {
@@ -703,6 +713,14 @@ test('support assignment chooses one best family tier and leaves unrelated slots
   assert.equal(result.primarySkill?.supports[0]?.familyId, 'support-family:bleed');
   assert.ok(!result.unresolved.some((entry) => entry.obligationId === 'offense:bleed'));
   assert.equal(result.diagnostics.assignedSupportCount, 1);
+  assert.deepEqual(result.diagnostics.offenseCoverage.map((entry) => [
+    entry.obligationId,
+    entry.state,
+    entry.providerName,
+    entry.familyName
+  ]), [
+    ['offense:bleed', 'support_assigned', 'Bleed III', 'Bleed']
+  ]);
 });
 
 test('two supports may form a typed damage-to-ailment bridge on one skill', () => {
@@ -1666,7 +1684,7 @@ test('committed catalog remains deterministic and equipment-legal across the rol
   }
 });
 
-test('the real 9 by 16 active matrix has a locked semantic coverage breakdown', async () => {
+test('the real 9 by 16 active matrix has a locked final Offense coverage breakdown', async () => {
   const [realCatalog, realOffense] = await Promise.all([
     loadRealRecommendationCatalogV3(),
     readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
@@ -1675,11 +1693,10 @@ test('the real 9 by 16 active matrix has a locked semantic coverage breakdown', 
     'Mace', 'Quarterstaff', 'Bow', 'Crossbow', 'Talisman', 'Spear', 'Staff', 'Wand', 'Sceptre'
   ];
   const counts = {
-    direct: 0,
-    meta_or_nested: 0,
-    support_completable: 0,
+    active_direct: 0,
+    support_assigned: 0,
     carrier_only: 0,
-    unsupported: 0
+    no_primary: 0
   };
 
   assert.equal(realOffense.elements.length, 16);
@@ -1700,35 +1717,33 @@ test('the real 9 by 16 active matrix has a locked semantic coverage breakdown', 
         support.fulfilledObligations.length + support.suppliedTargets.length > 0
       ), `${weapon} / ${offense.name}`);
       const primary = result.primarySkill;
+      const obligationId = `offense:${offense.id}`;
+      const coverage = result.diagnostics.offenseCoverage.find((entry) => entry.obligationId === obligationId);
+      assert.ok(coverage, `${weapon} / ${offense.name}`);
+      assert.ok(Object.hasOwn(counts, coverage.state), `${weapon} / ${offense.name}: ${coverage.state}`);
+      counts[coverage.state] += 1;
+
       if (!primary) {
-        counts.unsupported += 1;
+        assert.equal(coverage.state, 'no_primary', `${weapon} / ${offense.name}`);
         continue;
       }
       const selected = realCatalog.entities.find((entry) => entry.id === primary.entityId);
       assert.equal(isEquipmentCompatibleV3(selected, snapshot), true, `${weapon} / ${offense.name}`);
       assert.equal(evaluateDeliveryCompatibilityV3(selected, snapshot).ok, true, `${weapon} / ${offense.name}`);
-
-      const obligationId = `offense:${offense.id}`;
-      const fulfilled = primary.fulfilledObligations.some((proof) => proof.obligationId === obligationId);
-      const carrier = primary.carrierObligations.find((proof) => proof.obligationId === obligationId);
-      const isMetaOrNested = Boolean(selected.compatibility?.meta_payload)
-        || selected.facts.some((fact) =>
-          ['predators_mark_activation', 'after_beast_capture'].includes(fact.condition)
-        );
-      if (fulfilled) counts[isMetaOrNested ? 'meta_or_nested' : 'direct'] += 1;
-      else if (carrier?.completionType === 'support') counts.support_completable += 1;
-      else if (carrier) counts.carrier_only += 1;
-      else counts.unsupported += 1;
+      if (coverage.state === 'support_assigned') {
+        assert.ok(coverage.providerName, `${weapon} / ${offense.name}`);
+        assert.ok(coverage.supportedSkillName, `${weapon} / ${offense.name}`);
+        assert.ok(!result.unresolved.some((entry) => entry.obligationId === obligationId), `${weapon} / ${offense.name}`);
+      }
     }
   }
 
   assert.equal(Object.values(counts).reduce((sum, value) => sum + value, 0), 144);
   assert.deepEqual(counts, {
-    direct: 89,
-    meta_or_nested: 4,
-    support_completable: 34,
-    carrier_only: 8,
-    unsupported: 9
+    active_direct: 93,
+    support_assigned: 40,
+    carrier_only: 2,
+    no_primary: 9
   });
 });
 
