@@ -1,0 +1,697 @@
+{
+  "schema_version": "recommendation-granted-skill-access-v3.0.0",
+  "catalog_schema_version": "recommendation-catalog-v3.0.0",
+  "access_by_entity_id": {
+    "skill:Metadata/Items/Gem/SkillGemAscendancyAlignFate": {
+      "ascendancy": "Oracle",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Fateful Vision",
+          "passive_id": "AscendancyDruid1Notable5",
+          "ascendancy": "Oracle",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Align Fate"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyAncestralSpirits": {
+      "ascendancy": "Warbringer",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Answered Call",
+          "passive_id": "AscendancyWarrior2Notable6",
+          "ascendancy": "Warbringer",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Ancestral Spirits"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyBloodBoil": {
+      "ascendancy": "Ritualist",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Corrupted Lifeforce",
+          "passive_id": "AscendancyHuntress3Notable6",
+          "ascendancy": "Ritualist",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Blood Boil"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyDemonForm": {
+      "ascendancy": "Infernalist",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Mastered Darkness",
+          "passive_id": "AscendancyWitch1Notable6",
+          "ascendancy": "Infernalist",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Demon Form"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyElementalExpression": {
+      "ascendancy": "Invoker",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "...and Scatter Them to the Winds",
+          "passive_id": "AscendancyMonk2Notable7_",
+          "ascendancy": "Invoker",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Elemental Expression"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyElementalStorm": {
+      "ascendancy": "Stormweaver",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Tempest Caller",
+          "passive_id": "AscendancySorceress1Notable3",
+          "ascendancy": "Stormweaver",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Elemental Storm"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyEncasedInJade": {
+      "ascendancy": "Warbringer",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Jade Heritage",
+          "passive_id": "AscendancyWarrior2Notable3",
+          "ascendancy": "Warbringer",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Encase in Jade"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyExplosiveConcoction": {
+      "ascendancy": "Pathfinder",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Brew Concoction",
+          "passive_id": "AscendancyRanger3Notable7_Choice",
+          "ascendancy": "Pathfinder",
+          "source_kind": "passive_line",
+          "source_value": "Grants Skill: Explosive Concoction"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyHollowFocus": {
+      "ascendancy": "Martial Artist",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Hollow Focus Technique",
+          "passive_id": "AscendancyMonk1Notable3",
+          "ascendancy": "Martial Artist",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Hollow Focus"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyHollowResonance": {
+      "ascendancy": "Martial Artist",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Hollow Resonance Technique",
+          "passive_id": "AscendancyMonk1Notable4",
+          "ascendancy": "Martial Artist",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Hollow Resonance"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyInevitableAgony": {
+      "ascendancy": "Chronomancer",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Inevitability",
+          "passive_id": "AscendancySorceress2Notable3",
+          "ascendancy": "Chronomancer",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Inevitable Agony"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyLifeRemnants": {
+      "ascendancy": "Blood Mage",
+      "requires_unique_provider": true,
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Sanguimancy",
+          "passive_id": "AscendancyWitch2Notable3",
+          "ascendancy": "Blood Mage",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Life Remnants"
+        },
+        {
+          "kind": "unique",
+          "unique_name": "The Covenant",
+          "unique_id": "The Covenant||Runemastered Altar Robe",
+          "slot": "Vaal Body Armour",
+          "base": "Runemastered Altar Robe",
+          "requirements": {
+            "level": 55,
+            "str": null,
+            "dex": null,
+            "int": 87
+          },
+          "granted_level": 18,
+          "source_value": "Level 18 Life Remnants"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyManifestWeapon": {
+      "ascendancy": "Smith of Kitava",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Against the Anvil",
+          "passive_id": "AscendancyWarrior3Notable3",
+          "ascendancy": "Smith of Kitava",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Manifest Weapon"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyMeditate": {
+      "ascendancy": "Invoker",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "The Soul Springs Eternal",
+          "passive_id": "AscendancyMonk2Notable9",
+          "ascendancy": "Invoker",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Meditate"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyMomentOfVulnerability": {
+      "ascendancy": "Oracle",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Converging Paths",
+          "passive_id": "AscendancyDruid1Notable4",
+          "ascendancy": "Oracle",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Moment of Vulnerability"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyRitualSacrifice": {
+      "ascendancy": "Ritualist",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "As the Whispers Demand",
+          "passive_id": "AscendancyHuntress3Notable7",
+          "ascendancy": "Ritualist",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Ritual Sacrifice"
+        },
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Devotion to the King",
+          "passive_id": "AscendancyHuntress3Notable8",
+          "ascendancy": "Ritualist",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Ritual Sacrifice"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancySorceryWard": {
+      "ascendancy": "Witchhunter",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Obsessive Rituals",
+          "passive_id": "AscendancyMercenary2Notable5",
+          "ascendancy": "Witchhunter",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Sorcery Ward"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancySummonInfernalHound": {
+      "ascendancy": "Infernalist",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Loyal Hellhound",
+          "passive_id": "AscendancyWitch1Notable10",
+          "ascendancy": "Infernalist",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Summon Infernal Hound"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyTemporalRift": {
+      "ascendancy": "Chronomancer",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Footprints in the Sand",
+          "passive_id": "AscendancySorceress2Notable1_",
+          "ascendancy": "Chronomancer",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Temporal Rift"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyTimeFreeze": {
+      "ascendancy": "Chronomancer",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Ultimate Command",
+          "passive_id": "AscendancySorceress2Notable2",
+          "ascendancy": "Chronomancer",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Time Freeze"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyTimeSnap": {
+      "ascendancy": "Chronomancer",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Unbound Encore",
+          "passive_id": "AscendancySorceress2Notable6",
+          "ascendancy": "Chronomancer",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Time Snap"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyUnboundAvatar": {
+      "ascendancy": "Invoker",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "...and I Shall Rage",
+          "passive_id": "AscendancyMonk2Notable5",
+          "ascendancy": "Invoker",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Unbound Avatar"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyVoidIllusion": {
+      "ascendancy": "Acolyte of Chayula",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Deepening Shadows",
+          "passive_id": "AscendancyMonk3Notable9",
+          "ascendancy": "Acolyte of Chayula",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Void Illusion"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemBlackPowderBlitz": {
+      "requires_unique_provider": true,
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "unique",
+          "unique_name": "Shankgonne",
+          "unique_id": "Shankgonne||Covered Sabatons",
+          "slot": "Boots",
+          "base": "Covered Sabatons",
+          "requirements": {
+            "level": 45,
+            "str": 34,
+            "dex": 34,
+            "int": null
+          },
+          "granted_level": 15,
+          "source_value": "Level 15 Black Powder Blitz"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemChaoticInfusion": {
+      "requires_unique_provider": true,
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "unique",
+          "unique_name": "Spire of Ire",
+          "unique_id": "Spire of Ire||Helix Spear",
+          "slot": "Spear",
+          "base": "Helix Spear",
+          "requirements": {
+            "level": 65,
+            "str": 36,
+            "dex": 89,
+            "int": null
+          },
+          "granted_level": 18,
+          "source_value": "Level 18 Chaotic Surge"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemExplodingPoisonToad": {
+      "requires_unique_provider": true,
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "unique",
+          "unique_name": "Murkshaft",
+          "unique_id": "Murkshaft||Toxic Quiver",
+          "slot": "Quiver",
+          "base": "Toxic Quiver",
+          "requirements": {
+            "level": 39,
+            "str": null,
+            "dex": null,
+            "int": null
+          },
+          "granted_level": 17,
+          "source_value": "Level 17 Bursting Fen Toad"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemGeminiSurge": {
+      "requires_unique_provider": true,
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "unique",
+          "unique_name": "Double Vision",
+          "unique_id": "Double Vision||Dyad Crossbow",
+          "slot": "Crossbow",
+          "base": "Dyad Crossbow",
+          "requirements": {
+            "level": 20,
+            "str": 22,
+            "dex": 22,
+            "int": null
+          },
+          "granted_level": 15,
+          "source_value": "Level 15 Gemini Surge"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemIcestorm": {
+      "requires_unique_provider": true,
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "unique",
+          "unique_name": "The Whispering Ice",
+          "unique_id": "The Whispering Ice||Permafrost Staff",
+          "slot": "Staff",
+          "base": "Permafrost Staff",
+          "requirements": {
+            "level": 75,
+            "str": null,
+            "dex": null,
+            "int": 114
+          },
+          "granted_level": 18,
+          "source_value": "Level 18 Icestorm"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemPhantasmalArrow": {
+      "requires_unique_provider": true,
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "unique",
+          "unique_name": "Fairgraves' Curse",
+          "unique_id": "Fairgraves' Curse||Artillery Bow",
+          "slot": "Bow",
+          "base": "Artillery Bow",
+          "requirements": {
+            "level": 45,
+            "str": null,
+            "dex": 80,
+            "int": null
+          },
+          "granted_level": 18,
+          "source_value": "Level 18 Phantasmal Arrow"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemPinnacleOfPower": {
+      "requires_unique_provider": true,
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "unique",
+          "unique_name": "Adonia's Ego",
+          "unique_id": "Adonia's Ego||Siphoning Wand",
+          "slot": "Ezomyte Wand",
+          "base": "Siphoning Wand",
+          "requirements": {
+            "level": 65,
+            "str": null,
+            "dex": null,
+            "int": 23
+          },
+          "granted_level": null,
+          "source_value": "Pinnacle of Power"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemTriggeredAbyssalApparition": {
+      "ascendancy": "Abyssal Lich",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Steward of Kulemak",
+          "passive_id": "AscendancyAltWitch1Notable4",
+          "ascendancy": "Abyssal Lich",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Abyssal Apparition"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemAscendancyApocalypse": {
+      "ascendancy": "Shaman",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Bringer of the Apocalypse",
+          "passive_id": "AscendancyDruid2Notable2",
+          "ascendancy": "Shaman",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Apocalypse"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemAscendancySupportingFire": {
+      "ascendancy": "Tactician",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Strategic Embankments",
+          "passive_id": "AscendancyMercenary1Notable10_",
+          "ascendancy": "Tactician",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Supporting Fire"
+        },
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Unleash Hell!",
+          "passive_id": "AscendancyMercenary1Notable9_",
+          "ascendancy": "Tactician",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Supporting Fire"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemAscendancyVirtuousBarrier": {
+      "ascendancy": "Gemling Legionnaire",
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Essence of Virtue",
+          "passive_id": "AscendancyMercenary3Notable1_",
+          "ascendancy": "Gemling Legionnaire",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Virtuous Barrier"
+        },
+        {
+          "kind": "ascendancy_passive",
+          "passive_name": "Implanted Gems",
+          "passive_id": "AscendancyMercenary3Notable2",
+          "ascendancy": "Gemling Legionnaire",
+          "source_kind": "scraped_passive_line",
+          "source_value": "Grants Skill: Virtuous Barrier"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemFuturePast": {
+      "requires_unique_provider": true,
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "unique",
+          "unique_name": "Hinekora's Sight",
+          "unique_id": "Hinekora's Sight||Stellar Amulet",
+          "slot": "Amulet",
+          "base": "Stellar Amulet",
+          "requirements": {
+            "level": 44,
+            "str": null,
+            "dex": null,
+            "int": null
+          },
+          "granted_level": 13,
+          "source_value": "Level 13 Future-Past"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemGlacialClash": {
+      "requires_unique_provider": true,
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "unique",
+          "unique_name": "Nightfall",
+          "unique_id": "Nightfall||Glacial Fortress",
+          "slot": "Shield",
+          "base": "Glacial Fortress",
+          "requirements": {
+            "level": 70,
+            "str": 249,
+            "dex": null,
+            "int": null
+          },
+          "granted_level": 18,
+          "source_value": "Level 18 Soaring Midnight"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemHisWinnowingFlame": {
+      "requires_unique_provider": true,
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "unique",
+          "unique_name": "The Unborn Lich",
+          "unique_id": "The Unborn Lich||Ravenous Staff",
+          "slot": "Staff",
+          "base": "Ravenous Staff",
+          "requirements": {
+            "level": 65,
+            "str": null,
+            "dex": null,
+            "int": 114
+          },
+          "granted_level": 19,
+          "source_value": "Level 19 His Winnowing Flame"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemHyenaCackle": {
+      "requires_unique_provider": true,
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "unique",
+          "unique_name": "Hysseg's Claw",
+          "unique_id": "Hysseg's Claw||Familial Talisman",
+          "slot": "Talisman",
+          "base": "Familial Talisman",
+          "requirements": {
+            "level": 16,
+            "str": 21,
+            "dex": null,
+            "int": 16
+          },
+          "granted_level": 14,
+          "source_value": "Level 14 Cackling Companions"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemShatteringSpite": {
+      "requires_unique_provider": true,
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "unique",
+          "unique_name": "Atziri's Contempt",
+          "unique_id": "Atziri's Contempt||Pronged Spear",
+          "slot": "Vaal Spear",
+          "base": "Pronged Spear",
+          "requirements": {
+            "level": 72,
+            "str": 46,
+            "dex": 115,
+            "int": null
+          },
+          "granted_level": 18,
+          "source_value": "Level 18 Shattering Spite"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemValakosCharge": {
+      "requires_unique_provider": true,
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "unique",
+          "unique_name": "Lightning Coil",
+          "unique_id": "Lightning Coil||Ancestral Mail",
+          "slot": "Body Armour",
+          "base": "Ancestral Mail",
+          "requirements": {
+            "level": 50,
+            "str": 44,
+            "dex": 44,
+            "int": null
+          },
+          "granted_level": 13,
+          "source_value": "Level 13 Valako's Charge"
+        }
+      ]
+    }
+  }
+}

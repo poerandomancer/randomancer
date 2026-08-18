@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Iterable
@@ -30,8 +31,10 @@ HERE = Path(__file__).resolve().parent
 REPO_ROOT = HERE.parents[1]
 DEFAULT_OUT = REPO_ROOT / "data" / "enriched" / "recommendation_catalog_v3.json"
 DEFAULT_REPORT_OUT = REPO_ROOT / "data" / "enriched" / "recommendation_catalog_v3_report.json"
+DEFAULT_ACCESS_OUT = REPO_ROOT / "data" / "enriched" / "recommendation_granted_skill_access_v3.json"
 SCHEMA_VERSION = "recommendation-catalog-v3.0.0"
 REPORT_SCHEMA_VERSION = "recommendation-catalog-v3-report.0.0"
+GRANTED_ACCESS_SCHEMA_VERSION = "recommendation-granted-skill-access-v3.0.0"
 
 
 def load_json(path: Path) -> Any:
@@ -54,6 +57,103 @@ def index_by_rid(rows: Iterable[dict[str, Any]]) -> dict[int, dict[str, Any]]:
 
 def unique_sorted(values: Iterable[Any]) -> list[str]:
     return sorted({str(value).strip() for value in values if str(value or "").strip()})
+
+
+GRANTS_SKILL_RE = re.compile(r"^\s*Grants\s+Skill:\s*(?P<name>.+?)\s*$", re.IGNORECASE)
+
+
+def passive_granted_skill_providers(ctx: "SourceContext") -> dict[str, list[dict[str, Any]]]:
+    providers: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for passive in ctx.passives.get("nodes") or []:
+        source_id = str(passive.get("id") or "")
+        if not source_id:
+            continue
+        for line in passive.get("lines") or []:
+            match = GRANTS_SKILL_RE.match(str(line or ""))
+            if not match:
+                continue
+            skill_name = match.group("name").strip()
+            if not skill_name:
+                continue
+            providers[normalized_phrase(skill_name)].append(
+                {
+                    "kind": "ascendancy_passive",
+                    "passive_name": passive.get("name"),
+                    "passive_id": source_id,
+                    "ascendancy": passive.get("ascendancy"),
+                    "source_kind": "scraped_passive_line" if passive.get("descriptionSource") == "scraped" else "passive_line",
+                    "source_value": line,
+                }
+            )
+    return {key: value for key, value in providers.items() if value}
+
+
+def unique_granted_skill_providers(ctx: "SourceContext") -> dict[str, list[dict[str, Any]]]:
+    providers: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    items = ctx.uniques.get("items") or {}
+    values = items.values() if isinstance(items, dict) else items
+    for unique in values:
+        if not isinstance(unique, dict) or unique.get("error") or not unique.get("name"):
+            continue
+        source_id = str(unique.get("key") or unique.get("name"))
+        for granted in unique.get("granted_skills") or []:
+            skill_name = str(granted.get("name") or "").strip()
+            if not skill_name:
+                continue
+            providers[normalized_phrase(skill_name)].append(
+                {
+                    "kind": "unique",
+                    "unique_name": unique.get("name"),
+                    "unique_id": source_id,
+                    "slot": unique.get("slot"),
+                    "base": unique.get("base"),
+                    "requirements": unique.get("requirements") or {},
+                    "granted_level": granted.get("level"),
+                    "source_value": granted.get("raw") or skill_name,
+                }
+            )
+    return {key: value for key, value in providers.items() if value}
+
+
+def strict_unique_granted_skill_names(ctx: "SourceContext") -> set[str]:
+    rows = (ctx.unique_granted_overrides.get("strictUniqueGrantedSkills") or [])
+    return {
+        normalized_phrase(row.get("skillName"))
+        for row in rows
+        if isinstance(row, dict) and row.get("skillName")
+    }
+
+
+def granted_access_for_skill(
+    skill: dict[str, Any],
+    passive_providers: dict[str, list[dict[str, Any]]],
+    unique_providers: dict[str, list[dict[str, Any]]],
+    strict_unique_granted_names: set[str],
+) -> dict[str, Any]:
+    skill_name_key = normalized_phrase(skill.get("name"))
+    passive_sources = passive_providers.get(skill_name_key) or []
+    unique_sources = unique_providers.get(skill_name_key) or []
+    granted_sources: list[dict[str, Any]] = []
+    access: dict[str, Any] = {}
+
+    if passive_sources:
+        granted_sources.extend(passive_sources)
+        ascendancies = unique_sorted(source.get("ascendancy") for source in passive_sources)
+        if len(ascendancies) == 1:
+            access["ascendancy"] = ascendancies[0]
+        elif ascendancies:
+            access["ascendancies_any_of"] = ascendancies
+
+    unique_requires_provider = bool(unique_sources) and skill_name_key in strict_unique_granted_names
+    if unique_requires_provider:
+        granted_sources.extend(unique_sources)
+        access["requires_unique_provider"] = True
+
+    if granted_sources:
+        access["requires_granted_source"] = True
+        access["granted_sources"] = granted_sources
+
+    return access
 
 
 class Coverage:
@@ -115,6 +215,7 @@ class SourceContext:
         self.core = load_json(data / "core-data.json")
         self.ontology = load_json(data / "recommendation_ontology_v3.json")
         self.overrides = load_json(data / "config" / "recommendation_fact_overrides_v3.json")
+        self.unique_granted_overrides = load_json(data / "config" / "challenge_unique_granted_skill_overrides.json")
 
         self.stats_by_rid = index_by_rid(load_json(data / "datamined" / "stats.json"))
         self.statsets_by_rid = index_by_rid(load_json(tables / "grantedeffectstatsets.json"))
@@ -435,6 +536,29 @@ def build_skill_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[st
     return entities
 
 
+def build_granted_skill_access_payload(ctx: SourceContext) -> dict[str, Any]:
+    passive_providers = passive_granted_skill_providers(ctx)
+    unique_providers = unique_granted_skill_providers(ctx)
+    strict_unique_names = strict_unique_granted_skill_names(ctx)
+    access_by_entity_id = {}
+
+    for skill in ctx.skills:
+        if skill.get("type") == "support":
+            continue
+        source_id = str(skill.get("id") or "")
+        if not source_id:
+            continue
+        access = granted_access_for_skill(skill, passive_providers, unique_providers, strict_unique_names)
+        if access:
+            access_by_entity_id[f"skill:{source_id}"] = access
+
+    return {
+        "schema_version": GRANTED_ACCESS_SCHEMA_VERSION,
+        "catalog_schema_version": SCHEMA_VERSION,
+        "access_by_entity_id": dict(sorted(access_by_entity_id.items())),
+    }
+
+
 def passive_stat_records(ctx: SourceContext, raw: dict[str, Any]) -> list[dict[str, Any]]:
     records = []
     for index, stat_rid in enumerate(raw.get("Stats") or [], start=1):
@@ -686,11 +810,12 @@ def fate_vocabulary(ctx: SourceContext) -> dict[str, Any]:
     }
 
 
-def build_catalog(ctx: SourceContext) -> tuple[dict[str, Any], dict[str, Any]]:
+def build_catalog(ctx: SourceContext) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
     coverage = Coverage()
     skill_entities = build_skill_entities(ctx, coverage)
     passive_entities = build_passive_entities(ctx, coverage)
     unique_entities = build_unique_entities(ctx, coverage)
+    granted_access = build_granted_skill_access_payload(ctx)
     entities = sorted(
         [*skill_entities, *passive_entities, *unique_entities],
         key=lambda entity: (entity.get("content_type", ""), str(entity.get("name") or ""), entity["id"]),
@@ -742,6 +867,14 @@ def build_catalog(ctx: SourceContext) -> tuple[dict[str, Any], dict[str, Any]]:
                 for entity in skill_entities
                 if ((entity.get("compatibility") or {}).get("target_skill") or {}).get("excluded_skill_types")
             ),
+            "active_skills_with_granted_access": sum(
+                1 for access in (granted_access.get("access_by_entity_id") or {}).values()
+                if access.get("requires_granted_source")
+            ),
+            "active_skills_requiring_unique_provider": sum(
+                1 for access in (granted_access.get("access_by_entity_id") or {}).values()
+                if access.get("requires_unique_provider")
+            ),
             "passives_with_more_than_two_source_stats": sum(
                 1 for entity in passive_entities if len((entity.get("source_evidence") or {}).get("stats") or []) > 2
             ),
@@ -751,28 +884,34 @@ def build_catalog(ctx: SourceContext) -> tuple[dict[str, Any], dict[str, Any]]:
         },
         "coverage": coverage_payload,
     }
-    return catalog, report
+    return catalog, report, granted_access
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Generate the additive recommendation enrichment v3 catalog.")
     parser.add_argument("--out", default=str(DEFAULT_OUT))
     parser.add_argument("--report-out", default=str(DEFAULT_REPORT_OUT))
+    parser.add_argument("--access-out", default=str(DEFAULT_ACCESS_OUT))
     args = parser.parse_args()
 
     out_path = Path(args.out)
     report_path = Path(args.report_out)
+    access_path = Path(args.access_out)
     if not out_path.is_absolute():
         out_path = REPO_ROOT / out_path
     if not report_path.is_absolute():
         report_path = REPO_ROOT / report_path
+    if not access_path.is_absolute():
+        access_path = REPO_ROOT / access_path
 
     context = SourceContext(REPO_ROOT)
-    catalog, report = build_catalog(context)
+    catalog, report, granted_access = build_catalog(context)
     write_json(out_path, catalog)
     write_json(report_path, report)
+    write_json(access_path, granted_access)
     print(f"Wrote {catalog['_meta']['entity_count']} entities to {out_path}")
     print(f"Wrote semantic coverage report to {report_path}")
+    print(f"Wrote granted skill access map to {access_path}")
     return 0
 
 

@@ -16,6 +16,7 @@ ARTIFACT_PATHS: dict[str, Path] = {
     "tag_vocab_audit": Path("data/enriched/tag_vocab_audit.json"),
     "recommendation_catalog_v3": Path("data/enriched/recommendation_catalog_v3.json"),
     "recommendation_catalog_v3_report": Path("data/enriched/recommendation_catalog_v3_report.json"),
+    "recommendation_granted_skill_access_v3": Path("data/enriched/recommendation_granted_skill_access_v3.json"),
 }
 
 
@@ -374,6 +375,7 @@ def _semantic_sha256_for_artifact(key: str, data: Any) -> str:
         "challenge_generated_pools",
         "tag_vocab_audit",
         "recommendation_catalog_v3_report",
+        "recommendation_granted_skill_access_v3",
     }:
         return _hash_json(_normalize_value(data))
     if key == "recommendation_catalog_v3":

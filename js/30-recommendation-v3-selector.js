@@ -1,5 +1,6 @@
 const RECOMMENDATION_CATALOG_V3_SCHEMA = 'recommendation-catalog-v3.0.0';
 const RECOMMENDATION_PACKAGE_V3_SCHEMA = 'recommendation-package-v3.0.0';
+const RECOMMENDATION_GRANTED_ACCESS_V3_SCHEMA = 'recommendation-granted-skill-access-v3.0.0';
 const RECOMMENDATION_V3_QUERY_PARAM = 'recommendationV3';
 const PRIMARY_QUALITY_BAND = 12;
 const COMPANION_QUALITY_BAND = 8;
@@ -93,6 +94,7 @@ const AILMENT_CARRIER_MECHANICS = Object.freeze({
 });
 const DAMAGE_TYPE_MECHANICS = new Set(['physical', 'fire', 'cold', 'lightning', 'chaos']);
 const AILMENT_MECHANICS = new Set(['ignite', 'bleed', 'poison', 'chill', 'freeze', 'shock', 'electrocute']);
+const ARCHETYPE_MECHANICS = new Set(['minion', 'companion', 'totem']);
 const DAMAGE_TYPE_AFFINITIES = Object.freeze({
   physical: ['armour_break'],
   fire: ['ignite', 'detonation'],
@@ -159,6 +161,48 @@ function validateRecommendationCatalogV3(catalog) {
     return { ok: false, reason: 'catalog entities are missing' };
   }
   return { ok: true, reason: '' };
+}
+
+function validateRecommendationGrantedSkillAccessV3(accessPayload) {
+  if (accessPayload === null || accessPayload === undefined) return { ok: true, reason: '' };
+  if (!accessPayload || typeof accessPayload !== 'object' || Array.isArray(accessPayload)) {
+    return { ok: false, reason: 'granted skill access map is not an object' };
+  }
+  const schema = accessPayload?.schema_version;
+  if (schema !== RECOMMENDATION_GRANTED_ACCESS_V3_SCHEMA) {
+    return { ok: false, reason: `unexpected granted skill access schema ${schema || '<missing>'}` };
+  }
+  if (accessPayload.catalog_schema_version && accessPayload.catalog_schema_version !== RECOMMENDATION_CATALOG_V3_SCHEMA) {
+    return { ok: false, reason: 'granted skill access map targets a different catalog schema' };
+  }
+  if (!accessPayload.access_by_entity_id || typeof accessPayload.access_by_entity_id !== 'object' || Array.isArray(accessPayload.access_by_entity_id)) {
+    return { ok: false, reason: 'granted skill access map entries are missing' };
+  }
+  return { ok: true, reason: '' };
+}
+
+function mergeRecommendationGrantedSkillAccessV3(catalog, accessPayload) {
+  const validation = validateRecommendationGrantedSkillAccessV3(accessPayload);
+  if (!validation.ok || !accessPayload) return catalog;
+  const accessByEntityId = accessPayload.access_by_entity_id || {};
+  return {
+    ...catalog,
+    entities: asArray(catalog?.entities).map((entity) => {
+      const access = accessByEntityId[entity?.id];
+      if (!access) return entity;
+      const compatibility = entity?.compatibility || {};
+      return {
+        ...entity,
+        compatibility: {
+          ...compatibility,
+          access: {
+            ...(compatibility.access || {}),
+            ...access
+          }
+        }
+      };
+    })
+  };
 }
 
 function offenseLookup(offenseInventory) {
@@ -318,16 +362,86 @@ function weaponDeliveryProfileV3(snapshot = {}) {
   return { family, kind };
 }
 
+function selectedUniqueNames(snapshot = {}) {
+  const names = new Set();
+  const add = (value) => {
+    if (!value) return;
+    if (Array.isArray(value)) {
+      for (const entry of value) add(entry);
+      return;
+    }
+    if (typeof value === 'object') {
+      for (const key of ['name', 'uniqueName', 'label', 'title']) add(value[key]);
+      return;
+    }
+    const normalized = normalizeToken(value);
+    if (normalized) names.add(normalized);
+  };
+  for (const key of [
+    'unique',
+    'uniqueName',
+    'recommendedUnique',
+    'recommendedUniques',
+    'uniqueItems',
+    'uniques'
+  ]) {
+    add(snapshot?.[key]);
+  }
+  return names;
+}
+
+function grantedSourceMatchesSnapshot(source, snapshot = {}) {
+  const kind = normalizeToken(source?.kind);
+  if (kind === 'ascendancy_passive') {
+    const required = normalizeToken(source?.ascendancy);
+    const actual = normalizeToken(snapshot.ascendancyName || snapshot.ascendancy);
+    return Boolean(required && required === actual);
+  }
+  if (kind === 'unique') {
+    const uniqueName = normalizeToken(source?.unique_name || source?.uniqueName || source?.name);
+    return Boolean(uniqueName && selectedUniqueNames(snapshot).has(uniqueName));
+  }
+  return false;
+}
+
+function evaluateGrantedAccessV3(access = {}, snapshot = {}) {
+  if (!access?.requires_granted_source) return { ok: true, reason: '' };
+  const sources = asArray(access.granted_sources);
+  if (sources.some((source) => grantedSourceMatchesSnapshot(source, snapshot))) {
+    return { ok: true, reason: '' };
+  }
+
+  const ascendancySources = sources
+    .filter((source) => normalizeToken(source?.kind) === 'ascendancy_passive' && source?.ascendancy);
+  const uniqueSources = sources
+    .filter((source) => normalizeToken(source?.kind) === 'unique' && (source?.unique_name || source?.uniqueName));
+  const requirements = [
+    ...unique(ascendancySources.map((source) => source.ascendancy)).map((name) => `ascendancy ${name}`),
+    ...unique(uniqueSources.map((source) => source.unique_name || source.uniqueName)).map((name) => `unique ${name}`)
+  ];
+  return {
+    ok: false,
+    reason: requirements.length
+      ? `requires ${requirements.join(' or ')}`
+      : 'requires a granted skill source'
+  };
+}
+
 function intersects(values, tags) {
   return asArray(values).some((value) => tags.has(normalizeToken(value)));
 }
 
 function evaluateCompatibilityV3(entity, snapshot = {}) {
   const access = entity?.compatibility?.access || {};
-  const requiredAscendancy = normalizeToken(access.ascendancy);
-  const actualAscendancy = normalizeToken(snapshot.ascendancyName || snapshot.ascendancy);
-  if (requiredAscendancy && requiredAscendancy !== actualAscendancy) {
-    return { ok: false, reason: `requires ascendancy ${access.ascendancy}` };
+  const grantedAccess = evaluateGrantedAccessV3(access, snapshot);
+  if (!grantedAccess.ok) return grantedAccess;
+
+  if (!access.requires_granted_source) {
+    const requiredAscendancy = normalizeToken(access.ascendancy);
+    const actualAscendancy = normalizeToken(snapshot.ascendancyName || snapshot.ascendancy);
+    if (requiredAscendancy && requiredAscendancy !== actualAscendancy) {
+      return { ok: false, reason: `requires ascendancy ${access.ascendancy}` };
+    }
   }
 
   const equipment = entity?.compatibility?.equipment || {};
@@ -385,6 +499,38 @@ function explicitWeaponDeliveryEvidence(entity, snapshot = {}) {
 
 function activeSkillTypes(entity) {
   return new Set(asArray(entity?.source_evidence?.active_skill_types).map(normalizeToken));
+}
+
+function entityHasHardMechanic(entity, mechanic, relations = null) {
+  const allowedRelations = relations ? new Set(relations) : null;
+  const target = normalizeToken(mechanic);
+  if (!target) return false;
+  return asArray(entity?.facts).some((fact) =>
+    HARD_CONFIDENCE.has(fact?.confidence)
+    && (!allowedRelations || allowedRelations.has(fact?.relation))
+    && factMechanics(fact).some((entry) => entry === target)
+  );
+}
+
+function rolledArchetypeMechanics(offenseObligations = []) {
+  return new Set(asArray(offenseObligations)
+    .filter((obligation) => normalizeToken(obligation?.category) === 'archetype')
+    .flatMap((obligation) => asArray(obligation.mechanics))
+    .map(normalizeToken)
+    .filter((mechanic) => ARCHETYPE_MECHANICS.has(mechanic)));
+}
+
+function createsRolledArchetype(entity, offenseObligations = []) {
+  const archetypes = rolledArchetypeMechanics(offenseObligations);
+  if (!archetypes.size) return false;
+  return Array.from(archetypes).some((mechanic) =>
+    entityHasHardMechanic(entity, mechanic, ['creates', 'fulfills', 'provides'])
+  );
+}
+
+function isSpiritOrPersistentActive(entity) {
+  const types = activeSkillTypes(entity);
+  return types.has('hasreservation') || types.has('persistent') || types.has('spirit');
 }
 
 function targetSkillTypesMatch(rule, entity) {
@@ -466,10 +612,11 @@ function evaluatePackagePieceDeliveryV3(entity, snapshot = {}) {
   };
 }
 
-function isDirectlyUsableActive(entity) {
+function isDirectlyUsableActive(entity, offenseObligations = []) {
   if (!entity || entity.content_type !== 'active_skill') return false;
   if (!asArray(entity.candidate_roles).includes('primary_damage')) return false;
   if (!isSelectableSkillName(entity.name)) return false;
+  if (isSpiritOrPersistentActive(entity) && !createsRolledArchetype(entity, offenseObligations)) return false;
 
   const types = activeSkillTypes(entity);
   const createsDamageProxy = asArray(entity.facts).some((fact) =>
@@ -620,6 +767,30 @@ function proofScore(fact) {
   return (RELATION_WEIGHT[fact?.relation] || 0) + (fact?.confidence === 'exact' ? 2 : 1);
 }
 
+function archetypeSpecificityScore(entity, offenseObligations = []) {
+  const archetypes = rolledArchetypeMechanics(offenseObligations);
+  if (!archetypes.size) return 0;
+
+  const createsMinion = entityHasHardMechanic(entity, 'minion', ['creates', 'fulfills', 'provides']);
+  const hasMinion = createsMinion || entityHasHardMechanic(entity, 'minion', ['has_property']);
+  const createsCompanion = entityHasHardMechanic(entity, 'companion', ['creates', 'fulfills', 'provides']);
+  const hasCompanion = createsCompanion || entityHasHardMechanic(entity, 'companion', ['has_property']);
+  const createsTotem = entityHasHardMechanic(entity, 'totem', ['creates', 'fulfills', 'provides']);
+
+  let score = 0;
+  if (archetypes.has('companion')) {
+    if (createsCompanion) score += 45;
+    else if (hasCompanion) score += 25;
+  }
+  if (archetypes.has('minion')) {
+    if (createsMinion && !hasCompanion) score += 45;
+    else if (hasMinion && !hasCompanion) score += 25;
+    if (hasCompanion) score -= 45;
+  }
+  if (archetypes.has('totem') && createsTotem) score += 35;
+  return score;
+}
+
 function candidateDependencies(entity, offenseObligations = []) {
   const ownProvision = new Set();
   for (const fact of asArray(entity?.facts)) {
@@ -747,6 +918,7 @@ function isUsablePackageActive(entity) {
 
 function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalProfiles = {}, supportProviders = []) {
   if (!isUsablePackageActive(entity)) return null;
+  if (isSpiritOrPersistentActive(entity) && !createsRolledArchetype(entity, offenseObligations)) return null;
   const compatibility = evaluateCompatibilityV3(entity, snapshot);
   if (!compatibility.ok) return null;
   const pieceDelivery = evaluatePackagePieceDeliveryV3(entity, snapshot);
@@ -840,7 +1012,7 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalP
       confidence: demandConfidence('consumes', mechanic)
     }))
   ];
-  const delivery = isDirectlyUsableActive(entity)
+  const delivery = isDirectlyUsableActive(entity, offenseObligations)
     ? evaluateDeliveryCompatibilityV3(entity, snapshot)
     : { ok: false, reason: 'not a directly usable primary damage skill', evidence: null };
   const touchedMechanics = unique(hardFacts.flatMap((fact) => [
@@ -848,6 +1020,7 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalP
     normalizeToken(fact?.from),
     normalizeToken(fact?.to)
   ]));
+  const specificityScore = archetypeSpecificityScore(entity, offenseObligations);
 
   return {
     entity,
@@ -862,6 +1035,7 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalP
     delivery,
     primaryEligible: delivery.ok,
     criticalAffinity: criticalEvidence.affinity,
+    archetypeSpecificityScore: specificityScore,
     evidenceScore,
     exactProofs,
     exactCarrierProofs,
@@ -871,6 +1045,7 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalP
       + exactCarrierProofs * 3
       + evidenceScore
       + criticalEvidence.affinity.score
+      + specificityScore
   };
 }
 
@@ -1225,6 +1400,8 @@ function evaluateSkillPackage(primary, supporting, offenseObligations) {
   const directCoverageComplete = offenseObligations.length > 0 && fulfilledIds.size === offenseObligations.length;
   const criticalAffinityScore = primary.criticalAffinity.score
     + (supporting ? Math.round(supporting.criticalAffinity.score * 0.5) : 0);
+  const archetypeSpecificityScore = primary.archetypeSpecificityScore
+    + (supporting ? Math.round(supporting.archetypeSpecificityScore * 0.5) : 0);
 
   // Direct rolled-Offense coverage is deliberately dominant. Synergy and the
   // two-skill preference decide among packages with comparable coverage; they
@@ -1244,6 +1421,7 @@ function evaluateSkillPackage(primary, supporting, offenseObligations) {
     + newDirectBySupporting * 35
     + (complementaryCoverage ? 35 : 0)
     + (complementaryRole ? 25 : 0)
+    + archetypeSpecificityScore
     - (redundantParallel ? 45 : 0)
     - (metaPayloadPair ? 15 : 0)
     - unresolvedDependencies.length * 90
@@ -1519,6 +1697,7 @@ function adaptRecommendationPackageV3ToSnapshot(packageResult) {
 export {
   RECOMMENDATION_CATALOG_V3_SCHEMA,
   RECOMMENDATION_PACKAGE_V3_SCHEMA,
+  RECOMMENDATION_GRANTED_ACCESS_V3_SCHEMA,
   RECOMMENDATION_V3_QUERY_PARAM,
   PRIMARY_QUALITY_BAND,
   COMPANION_QUALITY_BAND,
@@ -1530,7 +1709,9 @@ export {
   isEquipmentCompatibleV3,
   isRecommendationContentAllowedV3,
   isRecommendationV3Enabled,
+  mergeRecommendationGrantedSkillAccessV3,
   selectRecommendationPackageV3,
+  validateRecommendationGrantedSkillAccessV3,
   validateRecommendationCatalogV3,
   weaponDeliveryProfileV3
 };

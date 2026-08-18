@@ -2,6 +2,8 @@ import { buildPassiveIndex } from './07-skills-render.js';
 import { buildSkillFamilyIndex, resolveSkillFamily } from './17-skill-family-utils.js';
 import {
   isRecommendationV3Enabled,
+  mergeRecommendationGrantedSkillAccessV3,
+  validateRecommendationGrantedSkillAccessV3,
   validateRecommendationCatalogV3
 } from './30-recommendation-v3-selector.js';
 
@@ -69,6 +71,9 @@ async function loadData() {
       : Promise.resolve(null);
     const recommendationCriticalProfilesPromise = isRecommendationV3Enabled(window)
       ? tryLoad('data/config/recommendation_critical_profiles_v3.json')
+      : Promise.resolve(null);
+    const recommendationGrantedSkillAccessPromise = isRecommendationV3Enabled(window)
+      ? tryLoad('data/enriched/recommendation_granted_skill_access_v3.json')
       : Promise.resolve(null);
     const core = await loadJSON('data/core-data.json');
 
@@ -155,12 +160,20 @@ async function loadData() {
 
     const recommendationCatalogRaw = await recommendationCatalogPromise;
     const recommendationCriticalProfilesRaw = await recommendationCriticalProfilesPromise;
+    const recommendationGrantedSkillAccessRaw = await recommendationGrantedSkillAccessPromise;
     const recommendationCatalogValidation = validateRecommendationCatalogV3(recommendationCatalogRaw);
+    const recommendationGrantedSkillAccessValidation = validateRecommendationGrantedSkillAccessV3(recommendationGrantedSkillAccessRaw);
+    const recommendationGrantedSkillAccessV3 = recommendationGrantedSkillAccessValidation.ok
+      ? recommendationGrantedSkillAccessRaw
+      : null;
     const recommendationCatalogV3 = recommendationCatalogValidation.ok
-      ? recommendationCatalogRaw
+      ? mergeRecommendationGrantedSkillAccessV3(recommendationCatalogRaw, recommendationGrantedSkillAccessV3)
       : null;
     if (isRecommendationV3Enabled(window) && !recommendationCatalogValidation.ok) {
       console.warn(`[Recommendation v3] Catalog unavailable: ${recommendationCatalogValidation.reason}`);
+    }
+    if (isRecommendationV3Enabled(window) && !recommendationGrantedSkillAccessValidation.ok) {
+      console.warn(`[Recommendation v3] Granted skill access unavailable: ${recommendationGrantedSkillAccessValidation.reason}`);
     }
 
     window.DATA = {
@@ -179,6 +192,7 @@ async function loadData() {
       ascendancyByName,
       challengePools,
       recommendationCatalogV3,
+      recommendationGrantedSkillAccessV3,
       recommendationCriticalProfilesV3: recommendationCriticalProfilesRaw || {}
     };
     console.log("[Global DATA initialized]", window.DATA);
@@ -190,6 +204,7 @@ async function loadData() {
       passiveIndex,
       offenseInventory,
       recommendationCatalogV3,
+      recommendationGrantedSkillAccessV3,
       recommendationCriticalProfilesV3: recommendationCriticalProfilesRaw || {}
     };
   } catch (err) {
