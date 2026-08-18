@@ -109,6 +109,11 @@ const SUPPLY_RELATIONS = new Set(['fulfills', 'inflicts', 'creates', 'provides',
 const SUPPORT_ACTION_RELATIONS = new Set(['fulfills', 'inflicts', 'creates', 'provides', 'generates', 'converts']);
 const SUPPORT_UNCONDITIONAL_PROVISION_RELATIONS = new Set(['fulfills', 'provides', 'generates', 'converts']);
 const SUPPORT_INDEX_CACHE = new WeakMap();
+const SUPPORT_AVAILABILITY_PENALTY = Object.freeze({
+  normal: 0,
+  lineage: 1
+});
+const SUPPORT_AVAILABILITY_SCORE_WEIGHT = 500;
 
 const RELATION_WEIGHT = Object.freeze({
   fulfills: 9,
@@ -701,6 +706,22 @@ function supportTier(entity) {
   return Number.isFinite(value) && value > 0 ? value : 0;
 }
 
+function supportAvailability(entity) {
+  const terms = new Set([
+    ...asArray(entity?.retrieval_terms),
+    ...asArray(entity?.provenance?.source_tags)
+  ].map(normalizeToken));
+  return terms.has('lineage') ? 'lineage' : 'normal';
+}
+
+function supportAvailabilityPenalty(entity) {
+  return SUPPORT_AVAILABILITY_PENALTY[supportAvailability(entity)] || 0;
+}
+
+function supportSetAvailabilityPenalty(supports) {
+  return asArray(supports).reduce((sum, support) => sum + supportAvailabilityPenalty(support), 0);
+}
+
 function hardSupportedSkillFacts(entity) {
   return asArray(entity?.facts).filter((fact) =>
     normalizeToken(fact?.subject) === 'supported_skill'
@@ -894,7 +915,8 @@ function supportCompletionProof(entity, obligation, index) {
   }
 
   completions.sort((a, b) =>
-    a.supports.length - b.supports.length
+    supportSetAvailabilityPenalty(a.supports) - supportSetAvailabilityPenalty(b.supports)
+    || a.supports.length - b.supports.length
     || proofScore(b.proof) - proofScore(a.proof)
     || b.supports.reduce((sum, support) => sum + supportTier(support), 0)
       - a.supports.reduce((sum, support) => sum + supportTier(support), 0)
@@ -1836,6 +1858,7 @@ function analyzeSupportPackageForSkill(
     supportRequirementEdges,
     prevented: Array.from(prevented),
     evidenceScore,
+    availabilityPenalty: supportSetAvailabilityPenalty(supports),
     tierScore: supports.reduce((sum, support) => sum + supportTier(support), 0)
   };
 }
@@ -1935,6 +1958,7 @@ function supportEntryForAssignment(support, packageCandidate) {
     familyId: supportFamilyId(support),
     familyName: support?.support_family?.name || support.name,
     tier: supportTier(support) || null,
+    availability: supportAvailability(support),
     assignedRole: 'enabler',
     fulfilledObligations: packageCandidate.fulfilled.filter((proof) => proof.providerEntityId === support.id),
     suppliedTargets,
@@ -1991,17 +2015,20 @@ function assignSupportPackagesV3(catalog, winner, offenseObligations) {
       const requireCount = resolvedDemands.filter((target) => target.relation === 'requires').length;
       const consumeCount = resolvedDemands.filter((target) => target.relation === 'consumes').length;
       const evidenceScore = chosen.reduce((sum, entry) => sum + entry.evidenceScore, 0);
+      const availabilityPenalty = chosen.reduce((sum, entry) => sum + entry.availabilityPenalty, 0);
       const tierScore = chosen.reduce((sum, entry) => sum + entry.tierScore, 0);
       combinations.push({
         chosen,
         fulfilled,
         resolvedDemands,
         supportCount,
+        availabilityPenalty,
         tierScore,
         score: fulfilled.length * 10000
           + requireCount * 2500
           + consumeCount * 1500
           + evidenceScore * 10
+          - availabilityPenalty * SUPPORT_AVAILABILITY_SCORE_WEIGHT
           - supportCount * 100
       });
       return;
@@ -2017,6 +2044,7 @@ function assignSupportPackagesV3(catalog, winner, offenseObligations) {
     b.score - a.score
     || b.fulfilled.length - a.fulfilled.length
     || b.resolvedDemands.length - a.resolvedDemands.length
+    || a.availabilityPenalty - b.availabilityPenalty
     || a.supportCount - b.supportCount
     || b.tierScore - a.tierScore
     || a.chosen.flatMap((entry) => entry.supports).map((support) => support.name).sort().join('+')
@@ -2147,6 +2175,7 @@ function classifySelectedOffenseCoverage(obligation, selectedCandidates, winner,
       ...(assignedSupport?.familyId ? { familyId: assignedSupport.familyId } : {}),
       ...(assignedSupport?.familyName ? { familyName: assignedSupport.familyName } : {}),
       ...(assignedSupport?.tier ? { tier: assignedSupport.tier } : {}),
+      ...(assignedSupport?.availability ? { supportAvailability: assignedSupport.availability } : {}),
       ...(assignedSupport?.skillEntityId ? { supportedSkillEntityId: assignedSupport.skillEntityId } : {}),
       ...(assignedSupport?.skillName ? { supportedSkillName: assignedSupport.skillName } : {})
     });
@@ -2362,6 +2391,7 @@ function adaptRecommendationPackageV3ToSnapshot(packageResult) {
           familyId: support.familyId,
           familyName: support.familyName,
           tier: support.tier,
+          availability: support.availability,
           assignedRole: support.assignedRole,
           fulfilledObligations: support.fulfilledObligations,
           suppliedTargets: support.suppliedTargets,

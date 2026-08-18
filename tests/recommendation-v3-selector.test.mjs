@@ -51,6 +51,7 @@ function entity({
   equipment = { is_unrestricted: true },
   types = ['Spell', 'Damage'],
   sourceTags = [],
+  retrievalTerms = [],
   roles = ['primary_damage'],
   description = '',
   contentType = 'active_skill',
@@ -64,7 +65,7 @@ function entity({
     name,
     ...(supportFamily ? { support_family: supportFamily } : {}),
     candidate_roles: roles,
-    retrieval_terms: [],
+    retrieval_terms: retrievalTerms,
     facts,
     compatibility: compatibility || { equipment },
     source_evidence: { active_skill_types: types, description },
@@ -786,6 +787,84 @@ test('two supports may form a typed damage-to-ailment bridge on one skill', () =
   assert.ok(result.supportEdges.some((edge) =>
     edge.targetKind === 'offense' && edge.mechanic === 'shock'
   ));
+});
+
+test('two normal supports beat one lineage support for equivalent bridge coverage', () => {
+  const target = {
+    equipment: { is_unrestricted: true },
+    target_skill: {
+      allowed_skill_types_any_of: ['Attack', 'Damage'],
+      excluded_skill_types: []
+    }
+  };
+  const result = selectRecommendationPackageV3(catalog([
+    entity({
+      id: 'mace-hit',
+      name: 'Mace Hit',
+      facts: [{ relation: 'has_property', subject: 'skill', mechanic: 'physical', confidence: 'exact' }],
+      equipment: {
+        is_unrestricted: false,
+        mainhand_tags_any_of: ['mace'],
+        offhand_tags_any_of: [],
+        allowed_weapon_tags_any_of: ['mace']
+      },
+      types: ['Attack', 'Damage', 'Mace']
+    }),
+    entity({
+      id: 'gain-lightning',
+      name: 'Gain Lightning',
+      contentType: 'support_gem',
+      roles: ['enabler'],
+      facts: [{ relation: 'provides', subject: 'supported_skill', mechanic: 'lightning', confidence: 'exact' }],
+      types: [],
+      compatibility: target,
+      supportFamily: { id: 'support-family:gain-lightning', name: 'Gain Lightning', tier: null }
+    }),
+    entity({
+      id: 'shock',
+      name: 'Shock',
+      contentType: 'support_gem',
+      roles: ['enabler'],
+      facts: [
+        { relation: 'inflicts', subject: 'supported_skill', mechanic: 'shock', confidence: 'exact' },
+        { relation: 'requires', subject: 'supported_skill', mechanic: 'lightning', confidence: 'exact' }
+      ],
+      types: [],
+      compatibility: target,
+      supportFamily: { id: 'support-family:shock', name: 'Shock', tier: null }
+    }),
+    entity({
+      id: 'eshs-radiance',
+      name: "Esh's Radiance",
+      contentType: 'support_gem',
+      roles: ['enabler'],
+      retrievalTerms: ['lineage'],
+      facts: [
+        { relation: 'provides', subject: 'supported_skill', mechanic: 'chaos', confidence: 'exact' },
+        { relation: 'provides', subject: 'supported_skill', mechanic: 'shock', condition: 'chaos_damage', confidence: 'exact' },
+        { relation: 'requires', subject: 'supported_skill', mechanic: 'chaos', confidence: 'exact' }
+      ],
+      types: [],
+      compatibility: target,
+      supportFamily: { id: 'support-family:eshs-radiance', name: "Esh's Radiance", tier: null }
+    })
+  ]), { weapon: 'Mace', offenseList: ['Shock'] }, {
+    offenseInventory: offenseInventory()
+  });
+
+  assert.equal(result.primarySkill?.name, 'Mace Hit');
+  assert.deepEqual(
+    new Set(result.primarySkill?.carrierObligations[0]?.supportNames),
+    new Set(['Gain Lightning', 'Shock'])
+  );
+  assert.deepEqual(
+    new Set(result.primarySkill?.supports.map((support) => support.name)),
+    new Set(['Gain Lightning', 'Shock'])
+  );
+  assert.ok(result.primarySkill?.supports.every((support) => support.availability === 'normal'));
+  assert.equal(result.diagnostics.offenseCoverage[0]?.state, 'support_assigned');
+  assert.equal(result.diagnostics.offenseCoverage[0]?.supportAvailability, 'normal');
+  assert.ok(!result.unresolved.some((entry) => entry.obligationId === 'offense:shock'));
 });
 
 test('a support conflict cannot destroy an existing rolled-Offense route', () => {
@@ -2000,8 +2079,9 @@ test('committed catalog keeps the reported package failures Offense-aligned', as
     assert.equal(maceShock.supportingSkill, null);
     assert.deepEqual(
       maceShock.primarySkill.supports.map((support) => support.name),
-      ["Esh's Radiance"]
+      ['Shock']
     );
+    assert.ok(maceShock.primarySkill.supports.every((support) => support.availability === 'normal'));
     assert.ok(!maceShock.unresolved.some((entry) => entry.obligationId === 'offense:shock'));
 
     const cold = selectRecommendationPackageV3(realCatalog, {
@@ -2073,7 +2153,7 @@ test('reported empty and false-totem rolls select specific legal primary skills'
       snapshot: { weapon: 'Crossbow', offenseList: ['Shock'] },
       carrierIds: ['offense:shock'],
       expectSupporting: true,
-      expectedSupports: ["Esh's Radiance"]
+      expectedSupports: ['Shock']
     },
     {
       label: 'Quarterstaff / Electrocute + Chill',
