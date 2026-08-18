@@ -138,12 +138,15 @@ damage; it does not claim the supported skill independently inflicts Shock.
 The package solver evaluates zero-, one-, and two-support assignments as a unit
 so one support may supply another support's typed requirement. Direct
 fulfillment remains stronger than a one-support bridge, which remains stronger
-than a two-support bridge. Every selected support must be necessary for at
-least one resolved target, and a family cannot be reused on another selected
-skill. Conflicts are applied after the full support set, so an enabler cannot
-silently remove an already-working rolled Offense route. Empty support
-positions are the correct result when no unresolved rolled Offense or explicit
-dependency is improved.
+than a two-support bridge. Within otherwise equivalent support routes, normal
+support gems are preferred over lineage supports, and a two-support normal
+bridge may beat a one-support lineage bridge. Lineage supports remain legal
+when they provide the only route or solve extra package requirements. Every
+selected support must be necessary for at least one resolved target, and a
+family cannot be reused on another selected skill. Conflicts are applied after
+the full support set, so an enabler cannot silently remove an already-working
+rolled Offense route. Empty support positions are the correct result when no
+unresolved rolled Offense or explicit dependency is improved.
 
 Support target expressions that contain an unambiguous `AND` require every
 listed skill type. Mixed flattened `AND`/`OR` expressions remain ineligible
