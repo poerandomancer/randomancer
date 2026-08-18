@@ -52,6 +52,14 @@ The first slice:
 
 Weapon delivery is intentionally stricter than technical equip legality. Generic spells are eligible for Wand, Sceptre, and caster Staff rolls. Martial rolls require structured evidence that the skill belongs to the selected weapon family, either through its active skill types or its equipment requirement. A spell may cross that boundary only when the catalog explicitly proves the martial-weapon relationship. If no direct fulfiller exists, a legal native damage carrier may be selected without claiming fulfillment. If no legal carrier exists either, the selector reports the obligation as unresolved.
 
+The selector also emits a final `diagnostics.offenseCoverage` entry for each
+rolled Offense after support assignment. This classifies what actually happened
+to the selected package as `active_direct`, `support_assigned`, `carrier_only`,
+`support_route_unassigned`, `selected_unresolved`, or `no_primary`. The
+diagnostic is intentionally post-selection rather than a roll-time filter: it
+lets audits and future picker work distinguish a genuinely unsupported
+weapon/Offense pairing from a package that was made viable by a bridge support.
+
 That delivery rule identifies the primary damage position in every candidate package. A supporting skill is instead checked for explicit equipment and ascendancy access, so an otherwise unrestricted curse, mark, or spell can accompany a martial primary. Unrestricted access alone never earns a slot: the supporting skill must add hard Offense evidence or participate in a typed supply-to-require/consume relationship. Damage-type `has_property` and native-carrier evidence only count from a supporting skill when that skill is itself legal damage delivery; this prevents a passive aura or curse from masquerading as a second damage skill.
 
 The solver evaluates both relationship directions. A setup can supply a state or resource consumed by the primary, while the primary can establish a state consumed by a payoff. Generic `charge` evidence is deliberately too broad to bridge specific Power, Frenzy, or Endurance Charge costs. Package-wide direct Offense fulfillment outranks a superficially synergistic package that still leaves a rolled Offense unapplied.
