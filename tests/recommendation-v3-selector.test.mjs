@@ -31,7 +31,8 @@ function offenseInventory() {
       { id: 'lightning', name: 'Lightning Damage', category: 'Damage Type', aliases: [] },
       { id: 'chaos', name: 'Chaos Damage', category: 'Damage Type', aliases: [] },
       { id: 'critical_hits', name: 'Critical Hits', category: 'Scaling', aliases: ['Crit'] },
-      { id: 'minions_companions', name: 'Minions/Companions', category: 'Archetype', aliases: ['Minions'] },
+      { id: 'minions', name: 'Minions', category: 'Archetype', aliases: ['Minion', 'Minions/Companions'] },
+      { id: 'companions', name: 'Companions', category: 'Archetype', aliases: ['Companion'] },
       { id: 'totems', name: 'Totems', category: 'Archetype', aliases: [] }
     ]
   };
@@ -106,6 +107,23 @@ test('canonical Offense inventory no longer exposes Thorns as a roll option', as
 
   assert.equal(realOffense.elements.some((entry) => entry.id === 'thorns'), false);
   assert.equal(realOffense.elements.some((entry) => entry.name === 'Thorns'), false);
+});
+
+test('canonical Offense inventory splits Archetypes by attribute identity', async () => {
+  const realOffense = await readFile(
+    new URL('../data/offense-inventory.json', import.meta.url),
+    'utf8'
+  ).then(JSON.parse);
+  const archetypes = realOffense.elements.filter((entry) => entry.category === 'Archetype');
+
+  assert.deepEqual(archetypes.map((entry) => entry.name), ['Minions', 'Companions', 'Totems']);
+  assert.deepEqual(archetypes.map((entry) => entry.id), ['minions', 'companions', 'totems']);
+  assert.deepEqual(archetypes.map((entry) => entry.attributes), [
+    { intelligence: 1.0 },
+    { dexterity: 1.0 },
+    { strength: 1.0 }
+  ]);
+  assert.equal(archetypes.filter((entry) => entry.name === 'Minions/Companions').length, 0);
 });
 
 test('standard weapon adapters do not synthesize Unarmed as a randomized family', async () => {
@@ -240,7 +258,7 @@ test('weapon delivery rejects generic spells for martial rolls', () => {
   }, { offenseInventory: offenseInventory() });
   const spear = selectRecommendationPackageV3(fixtures, {
     weapon: 'Spear',
-    offenseList: ['Minions/Companions']
+    offenseList: ['Minions']
   }, { offenseInventory: offenseInventory() });
   const sceptre = selectRecommendationPackageV3(fixtures, {
     weapon: 'Sceptre',
@@ -441,13 +459,13 @@ test('persistent Companion creators remain directly selectable when their weapon
       },
       types: ['Persistent', 'HasReservation', 'CreatesCompanion', 'Companion']
     })
-  ]), { weapon: 'Bow', offenseList: ['Minions/Companions'] }, {
+  ]), { weapon: 'Bow', offenseList: ['Companions'] }, {
     offenseInventory: offenseInventory()
   });
 
   assert.equal(result.primarySkill?.name, 'Rhoa Mount');
   assert.deepEqual(result.primarySkill?.fulfilledObligations.map((proof) => proof.obligationId), [
-    'offense:minions_companions'
+    'offense:companions'
   ]);
 });
 
@@ -481,7 +499,7 @@ test('a provider support marks an active as support-completable without becoming
         }
       }
     })
-  ]), { weapon: 'Mace', offenseList: ['Minions/Companions'] }, {
+  ]), { weapon: 'Mace', offenseList: ['Minions'] }, {
     offenseInventory: offenseInventory()
   });
 
@@ -490,7 +508,7 @@ test('a provider support marks an active as support-completable without becoming
   assert.equal(result.primarySkill?.carrierObligations[0]?.completionType, 'support');
   assert.equal(result.primarySkill?.carrierObligations[0]?.providerName, 'Skittering Stone I');
   assert.ok(result.unresolved.some((entry) =>
-    entry.obligationId === 'offense:minions_companions'
+    entry.obligationId === 'offense:minions'
       && entry.reason.includes('support selection is deferred')
   ));
 });
@@ -1175,7 +1193,7 @@ test('committed catalog produces a legal primary skill for representative rolls'
   const snapshots = [
     { weapon: 'Bow', offhand: 'Quiver', offenseList: ['Poison'] },
     { weapon: 'Quarterstaff', offhand: '', offenseList: ['Lightning Damage'] },
-    { weapon: 'Sceptre', offhand: 'Focus', offenseList: ['Minions/Companions'] }
+    { weapon: 'Sceptre', offhand: 'Focus', offenseList: ['Minions'] }
   ];
 
   for (const snapshot of snapshots) {
@@ -1281,7 +1299,7 @@ test('committed catalog remains deterministic and equipment-legal across the rol
   }
 });
 
-test('the real 9 by 15 active matrix has a locked semantic coverage breakdown', async () => {
+test('the real 9 by 16 active matrix has a locked semantic coverage breakdown', async () => {
   const [realCatalog, realOffense] = await Promise.all([
     readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
     readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
@@ -1297,7 +1315,7 @@ test('the real 9 by 15 active matrix has a locked semantic coverage breakdown', 
     unsupported: 0
   };
 
-  assert.equal(realOffense.elements.length, 15);
+  assert.equal(realOffense.elements.length, 16);
   for (const weapon of weapons) {
     for (const offense of realOffense.elements) {
       const snapshot = { weapon, offenseList: [offense.name] };
@@ -1325,37 +1343,43 @@ test('the real 9 by 15 active matrix has a locked semantic coverage breakdown', 
     }
   }
 
-  assert.equal(Object.values(counts).reduce((sum, value) => sum + value, 0), 135);
+  assert.equal(Object.values(counts).reduce((sum, value) => sum + value, 0), 144);
   assert.deepEqual(counts, {
-    direct: 92,
+    direct: 100,
     meta_or_nested: 3,
     support_completable: 1,
     carrier_only: 26,
-    unsupported: 13
+    unsupported: 14
   });
 });
 
-test('committed catalog selects the corrected Companion and nested Minion actives', async () => {
+test('committed catalog separates Companion and nested Minion archetype evidence', async () => {
   const [realCatalog, realOffense] = await Promise.all([
     readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
     readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
   ]);
-  const selectedNames = (weapon) => {
+  const selectedNames = (weapon, offense) => {
     const names = new Set();
     for (let index = 0; index < 64; index += 1) {
       const result = selectRecommendationPackageV3(realCatalog, {
         weapon,
-        offenseList: ['Minions/Companions']
+        offenseList: [offense]
       }, { offenseInventory: realOffense, selectionSeed: `m-${index}` });
       if (result.primarySkill?.name) names.add(result.primarySkill.name);
     }
     return names;
   };
 
-  assert.deepEqual([...selectedNames('Bow')], ['Rhoa Mount']);
-  assert.ok(selectedNames('Spear').has('Tame Beast'));
-  assert.ok(selectedNames('Spear').has('Rhoa Mount'));
-  assert.ok(selectedNames('Talisman').has('Pounce'));
+  const bowCompanions = selectedNames('Bow', 'Companions');
+  const spearCompanions = selectedNames('Spear', 'Companions');
+  const talismanCompanions = selectedNames('Talisman', 'Companions');
+  const talismanMinions = selectedNames('Talisman', 'Minions');
+
+  assert.deepEqual([...bowCompanions], ['Rhoa Mount']);
+  assert.ok(spearCompanions.has('Tame Beast'));
+  assert.ok(spearCompanions.has('Rhoa Mount'));
+  assert.equal(talismanCompanions.has('Pounce'), false);
+  assert.ok(talismanMinions.has('Pounce'));
 
   const pounce = realCatalog.entities.find((entry) => entry.name === 'Pounce');
   const tameBeast = realCatalog.entities.find((entry) => entry.name === 'Tame Beast');
@@ -1444,7 +1468,7 @@ test('committed Siphon Elements data and historical false pairings stay correcte
     { weapon: 'Quarterstaff', offenseList: ['Cold Damage'] },
     { weapon: 'Staff', offenseList: ['Physical Damage'] },
     { weapon: 'Wand', offenseList: ['Freeze'] },
-    { weapon: 'Sceptre', offenseList: ['Minions/Companions'] },
+    { weapon: 'Sceptre', offenseList: ['Minions'] },
     { weapon: 'Mace', offenseList: ['Physical Damage', 'Freeze'] }
   ];
   for (const snapshot of historicalFalsePairings) {
@@ -1467,7 +1491,7 @@ test('committed catalog never selects Chaos Bolt for Bow or Unearth for Spear', 
   }, { offenseInventory: realOffense, selectionSeed: 'screenshot-bow' });
   const spear = selectRecommendationPackageV3(realCatalog, {
     weapon: 'Spear',
-    offenseList: ['Minions/Companions']
+    offenseList: ['Minions']
   }, { offenseInventory: realOffense, selectionSeed: 'screenshot-spear' });
 
   assert.notEqual(bow.primarySkill?.name, 'Chaos Bolt');
