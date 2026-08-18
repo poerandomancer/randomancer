@@ -13,7 +13,7 @@ The supported category values are:
 - `Scaling`
 - `Archetype`
 
-`Archetype` currently contains `Minions/Companions` and `Totems`. `Thorns`
+`Archetype` currently contains `Minions`, `Companions`, and `Totems`. `Thorns`
 remains available to passive and gearing semantics, but is not a rollable
 Offense obligation.
 
@@ -51,7 +51,7 @@ Ailment: Ignite, Bleed, Poison, Chill, Freeze, Shock, Electrocute.
 
 Scaling: Critical Hits.
 
-Archetype: Minions/Companions, Totems.
+Archetype: Minions, Companions, Totems.
 
 ## Roll contract
 
@@ -59,7 +59,7 @@ Standard Build rolls select either one or two distinct Offense elements. The Fat
 
 No pairwise Damage Type/Ailment compatibility matrix is applied. Weapon-to-Offense hard gates are also intentionally not introduced here; cohesion remains the primary governor of conventional versus unusual combinations.
 
-Bind the Fates uses the canonical Offense vocabulary while retaining the existing `combat` storage category as a migration detail. Legacy names such as `Minions`, `Companions`, `Critical Hit`, `Bleeding`, and `Electrocution` resolve through aliases where possible; retired mechanics that are no longer part of the Offense contract are dropped from the active standard-roll fate set.
+Bind the Fates uses the canonical Offense vocabulary while retaining the existing `combat` storage category as a migration detail. Legacy names such as `Minions/Companions`, `Critical Hit`, `Bleeding`, and `Electrocution` resolve through aliases where possible; retired mechanics that are no longer part of the Offense contract are dropped from the active standard-roll fate set.
 
 ## Recommendation compatibility
 
