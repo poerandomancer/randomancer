@@ -215,6 +215,11 @@ def summarize_artifact_key(repo_root: Path, key: str) -> dict[str, Any]:
                 "entities_without_facts": report_summary.get("entities_without_facts"),
                 "support_entities_with_allowed_types": report_summary.get("support_entities_with_allowed_types"),
                 "support_entities_with_excluded_types": report_summary.get("support_entities_with_excluded_types"),
+                "support_family_count": report_summary.get("support_family_count"),
+                "tiered_support_family_count": report_summary.get("tiered_support_family_count"),
+                "tiered_support_entity_count": report_summary.get("tiered_support_entity_count"),
+                "support_entities_with_bridge_facts": report_summary.get("support_entities_with_bridge_facts"),
+                "support_entities_with_conflicts": report_summary.get("support_entities_with_conflicts"),
                 "passives_with_more_than_two_source_stats": report_summary.get("passives_with_more_than_two_source_stats"),
                 "passives_with_granted_skill_links": report_summary.get("passives_with_granted_skill_links"),
             }
@@ -311,6 +316,11 @@ def analyze_semantic_stability(before: dict[str, Any], after: dict[str, Any]) ->
                 "entities_without_facts",
                 "support_entities_with_allowed_types",
                 "support_entities_with_excluded_types",
+                "support_family_count",
+                "tiered_support_family_count",
+                "tiered_support_entity_count",
+                "support_entities_with_bridge_facts",
+                "support_entities_with_conflicts",
                 "passives_with_more_than_two_source_stats",
                 "passives_with_granted_skill_links",
             )

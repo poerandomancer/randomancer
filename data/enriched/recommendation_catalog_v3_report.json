@@ -13,7 +13,7 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5058,
+    "fact_count": 5080,
     "fact_relation_counts": {
       "consumes": 353,
       "converts": 112,
@@ -21,13 +21,13 @@
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 672,
-      "inflicts": 131,
+      "inflicts": 129,
       "modifies": 2239,
       "occupies": 444,
       "prevents": 375,
-      "provides": 302,
+      "provides": 320,
       "replaces": 27,
-      "requires": 57
+      "requires": 63
     },
     "candidate_role_counts": {
       "defense": 420,
@@ -35,7 +35,7 @@
       "payoff": 181,
       "primary_damage": 349,
       "recovery": 250,
-      "setup_control": 182,
+      "setup_control": 180,
       "utility": 206
     },
     "source_versions": {
@@ -47,6 +47,11 @@
     "entities_without_facts": 865,
     "support_entities_with_allowed_types": 603,
     "support_entities_with_excluded_types": 237,
+    "support_family_count": 474,
+    "tiered_support_family_count": 121,
+    "tiered_support_entity_count": 280,
+    "support_entities_with_bridge_facts": 82,
+    "support_entities_with_conflicts": 39,
     "active_skills_with_granted_access": 40,
     "active_skills_requiring_unique_provider": 14,
     "passives_with_more_than_two_source_stats": 181,
@@ -457,7 +462,7 @@
     },
     "skill_stats": {
       "evidence_count": 6000,
-      "fact_count": 1777,
+      "fact_count": 1801,
       "unparsed_count": 2287,
       "structured_count": 1280,
       "recognized_unstructured_count": 2433,

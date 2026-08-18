@@ -116,6 +116,9 @@ def validate_entities(catalog: dict[str, Any], ontology: dict[str, Any], errors:
     if duplicate_ids:
         errors.append(f"duplicate entity IDs: {duplicate_ids[:10]}")
 
+    support_family_names: dict[str, str] = {}
+    support_family_tiers: dict[str, set[int]] = {}
+
     for entity in entities:
         entity_id = entity.get("id") or "<missing-id>"
         if not entity.get("id") or not entity.get("content_type") or not entity.get("name"):
@@ -123,6 +126,28 @@ def validate_entities(catalog: dict[str, Any], ontology: dict[str, Any], errors:
         invalid_roles = sorted(set(entity.get("candidate_roles") or []) - valid_roles)
         if invalid_roles:
             errors.append(f"{entity_id}: invalid candidate roles {invalid_roles}")
+
+        if entity.get("content_type") == "support_gem":
+            family = entity.get("support_family") or {}
+            family_id = str(family.get("id") or "")
+            family_name = str(family.get("name") or "")
+            tier = family.get("tier")
+            if not family_id or not family_name:
+                errors.append(f"{entity_id}: support family identity is missing")
+            elif family_id in support_family_names and support_family_names[family_id] != family_name:
+                errors.append(
+                    f"{entity_id}: support family {family_id!r} has inconsistent names "
+                    f"{support_family_names[family_id]!r} and {family_name!r}"
+                )
+            else:
+                support_family_names[family_id] = family_name
+            if tier is not None:
+                if not isinstance(tier, int) or tier <= 0:
+                    errors.append(f"{entity_id}: invalid support family tier {tier!r}")
+                elif tier in support_family_tiers.setdefault(family_id, set()):
+                    errors.append(f"{entity_id}: duplicate tier {tier} in support family {family_id!r}")
+                else:
+                    support_family_tiers.setdefault(family_id, set()).add(tier)
 
         for fact in entity.get("facts") or []:
             relation = fact.get("relation")
@@ -156,6 +181,16 @@ def validate_source_parity(catalog: dict[str, Any], errors: list[str]) -> None:
         errors.append("support allowed-skill-type relationships were not preserved")
     if summary.get("support_entities_with_excluded_types", 0) <= 0:
         errors.append("support excluded-skill-type relationships were not preserved")
+    if summary.get("support_family_count", 0) <= 0:
+        errors.append("support family identities were not generated")
+    if summary.get("tiered_support_family_count", 0) <= 0:
+        errors.append("tiered support families were not generated")
+    if summary.get("tiered_support_entity_count", 0) <= 0:
+        errors.append("tiered support entities were not generated")
+    if summary.get("support_entities_with_bridge_facts", 0) <= 0:
+        errors.append("support bridge facts were not preserved")
+    if summary.get("support_entities_with_conflicts", 0) <= 0:
+        errors.append("support conflict facts were not preserved")
     if summary.get("passives_with_more_than_two_source_stats", 0) <= 0:
         errors.append("full passive stat lists were not preserved")
     if summary.get("passives_with_granted_skill_links", 0) <= 0:

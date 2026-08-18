@@ -575,6 +575,58 @@
           "mechanic": "ignite"
         }
       ]
+    },
+    {
+      "id": "support_gain_as_damage_bridge",
+      "source_kind": "stat_id",
+      "subject": "supported_skill",
+      "value": "non_skill_base_all_damage_%_to_gain_as_fire",
+      "expected_facts": [
+        {
+          "relation": "provides",
+          "mechanic": "fire"
+        }
+      ]
+    },
+    {
+      "id": "support_cross_ailment_eligibility",
+      "source_kind": "stat_id",
+      "subject": "supported_skill",
+      "value": "chaos_damage_can_shock",
+      "expected_facts": [
+        {
+          "relation": "provides",
+          "mechanic": "shock",
+          "condition": "chaos_damage"
+        },
+        {
+          "relation": "requires",
+          "mechanic": "chaos"
+        }
+      ],
+      "forbidden_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "shock"
+        }
+      ]
+    },
+    {
+      "id": "support_electrocute_eligibility",
+      "source_kind": "stat_id",
+      "subject": "supported_skill",
+      "value": "base_lightning_damage_can_electrocute",
+      "expected_facts": [
+        {
+          "relation": "provides",
+          "mechanic": "electrocute",
+          "condition": "lightning_damage"
+        },
+        {
+          "relation": "requires",
+          "mechanic": "lightning"
+        }
+      ]
     }
   ],
   "catalog_assertions": [
@@ -686,6 +738,28 @@
       "entity_name": "Galvanic Shards",
       "relation": "has_property",
       "mechanic": "lightning"
+    },
+    {
+      "entity_name": "Fire Attunement",
+      "relation": "provides",
+      "mechanic": "fire"
+    },
+    {
+      "entity_name": "Electrocute",
+      "relation": "provides",
+      "mechanic": "electrocute",
+      "condition": "lightning_damage"
+    },
+    {
+      "entity_name": "Electrocute",
+      "relation": "requires",
+      "mechanic": "lightning"
+    },
+    {
+      "entity_name": "Esh's Radiance",
+      "relation": "provides",
+      "mechanic": "shock",
+      "condition": "chaos_damage"
     }
   ],
   "catalog_forbidden_assertions": [
@@ -757,6 +831,16 @@
       "entity_name": "Exploit Weakness",
       "relation": "inflicts",
       "mechanic": "armour_break"
+    },
+    {
+      "entity_name": "Bleed IV",
+      "relation": "inflicts",
+      "mechanic": "bleed"
+    },
+    {
+      "entity_name": "Lasting Shock",
+      "relation": "inflicts",
+      "mechanic": "shock"
     }
   ]
 }

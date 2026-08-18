@@ -11,7 +11,7 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5058,
+    "fact_count": 5080,
     "fact_relation_counts": {
       "consumes": 353,
       "converts": 112,
@@ -19,13 +19,13 @@
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 672,
-      "inflicts": 131,
+      "inflicts": 129,
       "modifies": 2239,
       "occupies": 444,
       "prevents": 375,
-      "provides": 302,
+      "provides": 320,
       "replaces": 27,
-      "requires": 57
+      "requires": 63
     },
     "candidate_role_counts": {
       "defense": 420,
@@ -33,7 +33,7 @@
       "payoff": 181,
       "primary_damage": 349,
       "recovery": 250,
-      "setup_control": 182,
+      "setup_control": 180,
       "utility": 206
     },
     "source_versions": {
@@ -197561,6 +197561,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:abiding_hex",
+        "name": "Abiding Hex",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "curse",
@@ -197711,6 +197716,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:accelerated_growth",
+        "name": "Accelerated Growth",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -197784,6 +197794,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:accelerated_growth",
+        "name": "Accelerated Growth",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -197862,6 +197877,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:acrimony",
+        "name": "Acrimony",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "elemental",
@@ -197966,6 +197986,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:adhesive_grenades",
+        "name": "Adhesive Grenades",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "grenade",
@@ -198044,6 +198069,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:adhesive_grenades",
+        "name": "Adhesive Grenades",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "grenade",
@@ -198114,6 +198144,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:adhesive_grenades",
+        "name": "Adhesive Grenades",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "grenade",
@@ -198199,6 +198234,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:admixture",
+        "name": "Admixture",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -198370,6 +198410,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:advancing_storm",
+        "name": "Advancing Storm",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "storm",
@@ -198454,6 +198499,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:aftershock",
+        "name": "Aftershock",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -198537,6 +198587,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:aftershock",
+        "name": "Aftershock",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -198620,6 +198675,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:aftershock",
+        "name": "Aftershock",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -198718,6 +198778,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:ahn_s_citadel",
+        "name": "Ahn's Citadel",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -198798,6 +198863,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:ailith_s_chimes",
+        "name": "Ailith's Chimes",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -198886,6 +198956,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:alignment",
+        "name": "Alignment",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -198990,6 +199065,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:alignment",
+        "name": "Alignment",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -199094,6 +199174,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:alignment",
+        "name": "Alignment",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -199198,6 +199283,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:amanamu_s_tithe",
+        "name": "Amanamu's Tithe",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -199287,6 +199377,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:ambrosia",
+        "name": "Ambrosia",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "bow",
@@ -199438,6 +199533,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:ambrosia",
+        "name": "Ambrosia",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "bow",
@@ -199588,6 +199688,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:ambush",
+        "name": "Ambush",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "elemental",
@@ -199680,6 +199785,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:ammo_conservation",
+        "name": "Ammo Conservation",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "ammunition",
@@ -199767,6 +199877,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:ammo_conservation",
+        "name": "Ammo Conservation",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "ammunition",
@@ -199854,6 +199969,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:ammo_conservation",
+        "name": "Ammo Conservation",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "ammunition",
@@ -199949,6 +200069,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:ancestral_aid",
+        "name": "Ancestral Aid",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -200106,6 +200231,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:ancestral_call",
+        "name": "Ancestral Call",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -200205,6 +200335,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:ancestral_call",
+        "name": "Ancestral Call",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -200304,6 +200439,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:ancestral_call",
+        "name": "Ancestral Call",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -200410,6 +200550,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:arakaali_s_lust",
+        "name": "Arakaali's Lust",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -200513,6 +200658,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:arbiter_s_ignition",
+        "name": "Arbiter's Ignition",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -200620,6 +200770,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:arbiter_s_reach",
+        "name": "Arbiter's Reach",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -200714,6 +200869,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:arcane_surge",
+        "name": "Arcane Surge",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -200824,6 +200984,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:arjun_s_medal",
+        "name": "Arjun's Medal",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -200899,6 +201064,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:armour_break",
+        "name": "Armour Break",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -201019,6 +201189,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:armour_break",
+        "name": "Armour Break",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -201150,6 +201325,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:armour_break",
+        "name": "Armour Break",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -201280,6 +201460,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:armour_demolisher",
+        "name": "Armour Demolisher",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "mace",
@@ -201346,6 +201531,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:armour_demolisher",
+        "name": "Armour Demolisher",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "mace",
@@ -201413,6 +201603,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:armour_explosion",
+        "name": "Armour Explosion",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -201522,6 +201717,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:arms_length",
+        "name": "Arms Length",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "hitdamage",
@@ -201603,6 +201803,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:astral_projection",
+        "name": "Astral Projection",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "occult",
@@ -201680,6 +201885,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:atalui_s_bloodletting",
+        "name": "Atalui's Bloodletting",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -201810,6 +202020,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:atziri_s_allure",
+        "name": "Atziri's Allure",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -201904,6 +202119,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:atziri_s_call",
+        "name": "Atziri's Call",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -201980,6 +202200,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:atziri_s_communion",
+        "name": "Atziri's Communion",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -202072,6 +202297,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:atziri_s_impatience",
+        "name": "Atziri's Impatience",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -202166,6 +202396,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:auto_reload",
+        "name": "Auto Reload",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "ammunition",
@@ -202239,6 +202474,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:barbs",
+        "name": "Barbs",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -202329,6 +202569,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:barbs",
+        "name": "Barbs",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -202419,6 +202664,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:barbs",
+        "name": "Barbs",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -202510,6 +202760,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:battershout",
+        "name": "Battershout",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "warcry",
@@ -202665,6 +202920,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:behead",
+        "name": "Behead",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -202741,6 +203001,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:behead",
+        "name": "Behead",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -202817,6 +203082,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:bhatair_s_vengeance",
+        "name": "Bhatair's Vengeance",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -202933,6 +203203,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:bidding",
+        "name": "Bidding",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -203029,6 +203304,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:bidding",
+        "name": "Bidding",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -203125,6 +203405,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:bidding",
+        "name": "Bidding",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -203214,6 +203499,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:biting_frost",
+        "name": "Biting Frost",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "cold",
@@ -203406,6 +203696,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:biting_frost",
+        "name": "Biting Frost",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "cold",
@@ -203640,6 +203935,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:blazing_critical",
+        "name": "Blazing Critical",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -203778,6 +204078,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:bleed",
+        "name": "Bleed",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -203900,6 +204205,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:bleed",
+        "name": "Bleed",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -204022,6 +204332,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:bleed",
+        "name": "Bleed",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -204141,9 +204456,13 @@
       "source_id": "Metadata/Items/Gems/SupportGemLacerateFour",
       "name": "Bleed IV",
       "candidate_roles": [
-        "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:bleed",
+        "name": "Bleed",
+        "tier": 4
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -204166,19 +204485,6 @@
             }
           ],
           "mechanic": "physical"
-        },
-        {
-          "relation": "inflicts",
-          "subject": "supported_skill",
-          "confidence": "exact",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports any skill that [HitDamage|Hits] enemies, causing it to deal more [Melee] [Physical] Damage to [Bleeding] Enemies, but be unable to inflict [Bleeding] itself. Supported Skills also inflict [Incision] on [HitDamage|Hit]."
-            }
-          ],
-          "mechanic": "bleed",
-          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -204305,6 +204611,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:blind",
+        "name": "Blind",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "bow",
@@ -204381,6 +204692,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:blind",
+        "name": "Blind",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "bow",
@@ -204465,6 +204781,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:blindside",
+        "name": "Blindside",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spear",
@@ -204604,6 +204925,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:bloodlust",
+        "name": "Bloodlust",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -204741,6 +205067,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:bone_shrapnel",
+        "name": "Bone Shrapnel",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "area",
@@ -204860,6 +205191,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:boundless_energy",
+        "name": "Boundless Energy",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "elemental",
@@ -204931,6 +205267,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:boundless_energy",
+        "name": "Boundless Energy",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "elemental",
@@ -205002,6 +205343,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:bounty",
+        "name": "Bounty",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "bow",
@@ -205095,6 +205441,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:bounty",
+        "name": "Bounty",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "bow",
@@ -205188,6 +205539,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:brambleslam",
+        "name": "Brambleslam",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -205301,6 +205657,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:branching_fissures",
+        "name": "Branching Fissures",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "mace"
@@ -205386,6 +205747,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:branching_fissures",
+        "name": "Branching Fissures",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "mace"
@@ -205471,6 +205837,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:breachlord_s_amalgam",
+        "name": "Breachlord's Amalgam",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -205608,6 +205979,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:breachlord_s_rift",
+        "name": "Breachlord's Rift",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -205792,6 +206168,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:break_endurance",
+        "name": "Break Endurance",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "hitdamage",
@@ -205871,6 +206252,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:break_posture",
+        "name": "Break Posture",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -205952,6 +206338,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:brink",
+        "name": "Brink",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -206045,6 +206436,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:brink",
+        "name": "Brink",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -206140,6 +206536,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:brittle_armour",
+        "name": "Brittle Armour",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -206300,6 +206701,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:brutality",
+        "name": "Brutality",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -206445,6 +206851,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:brutality",
+        "name": "Brutality",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -206590,6 +207001,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:brutality",
+        "name": "Brutality",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -206749,6 +207165,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:brutus_brain",
+        "name": "Brutus' Brain",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -206842,6 +207263,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:burgeon",
+        "name": "Burgeon",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "channelling",
@@ -206929,6 +207355,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:burgeon",
+        "name": "Burgeon",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "channelling",
@@ -207016,6 +207447,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:burning_inscription",
+        "name": "Burning Inscription",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "area",
@@ -207122,6 +207558,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:bursting_plague",
+        "name": "Bursting Plague",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "area",
@@ -207249,6 +207690,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:cadence",
+        "name": "Cadence",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -207346,6 +207792,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:caltrops",
+        "name": "Caltrops",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -207429,6 +207880,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:cannibalism",
+        "name": "Cannibalism",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -207518,6 +207974,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:cannibalism",
+        "name": "Cannibalism",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -207606,6 +208067,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:catalysing_elements",
+        "name": "Catalysing Elements",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -207725,6 +208191,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:catha_s_brilliance",
+        "name": "Catha's Brilliance",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -207867,6 +208338,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:catharsis",
+        "name": "Catharsis",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -207993,6 +208469,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:chain",
+        "name": "Chain",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -208081,6 +208562,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:chain",
+        "name": "Chain",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -208169,6 +208655,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:chain",
+        "name": "Chain",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -208257,6 +208748,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:chance_to_freeze",
+        "name": "Chance to Freeze",
+        "tier": null
+      },
       "retrieval_terms": [
         "support"
       ],
@@ -208312,6 +208808,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:chaos_attunement",
+        "name": "Chaos Attunement",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "chaos",
@@ -208345,6 +208846,18 @@
             {
               "kind": "stat_id",
               "value": "support_chaos_support_non_chaos_damage_+%_final"
+            }
+          ],
+          "mechanic": "chaos"
+        },
+        {
+          "relation": "provides",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "stat_id",
+              "value": "non_skill_base_all_damage_%_to_gain_as_chaos"
             }
           ],
           "mechanic": "chaos"
@@ -208428,6 +208941,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:chaos_mastery",
+        "name": "Chaos Mastery",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "chaos",
@@ -208529,6 +209047,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:chaotic_freeze",
+        "name": "Chaotic Freeze",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -208652,6 +209175,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:charge_profusion",
+        "name": "Charge Profusion",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "bow",
@@ -208722,6 +209250,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:charge_profusion",
+        "name": "Charge Profusion",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "bow",
@@ -208801,6 +209334,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:charged_mark",
+        "name": "Charged Mark",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -208906,6 +209444,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:charged_shots",
+        "name": "Charged Shots",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -208939,6 +209482,18 @@
             }
           ],
           "mechanic": "mana_recovery"
+        },
+        {
+          "relation": "provides",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "stat_id",
+              "value": "support_charged_shots_%_damage_to_gain_as_lightning"
+            }
+          ],
+          "mechanic": "lightning"
         }
       ],
       "compatibility": {
@@ -209025,6 +209580,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:charged_shots",
+        "name": "Charged Shots",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -209039,6 +209599,18 @@
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "stat_id",
+              "value": "support_charged_shots_%_damage_to_gain_as_lightning"
+            }
+          ],
+          "mechanic": "lightning"
+        },
+        {
+          "relation": "provides",
+          "subject": "supported_skill",
+          "confidence": "exact",
           "evidence": [
             {
               "kind": "stat_id",
@@ -209124,6 +209696,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:charm_bounty",
+        "name": "Charm Bounty",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "hitdamage",
@@ -209202,6 +209779,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:cirel_s_cultivation",
+        "name": "Cirel's Cultivation",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -209371,6 +209953,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:clarity",
+        "name": "Clarity",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -209464,6 +210051,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:clarity",
+        "name": "Clarity",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -209556,6 +210148,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:clash",
+        "name": "Clash",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -209647,6 +210244,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:close_combat",
+        "name": "Close Combat",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -209719,6 +210321,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:close_combat",
+        "name": "Close Combat",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -209791,6 +210398,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:cold_attunement",
+        "name": "Cold Attunement",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "cold",
@@ -209847,6 +210459,18 @@
             }
           ],
           "mechanic": "lightning"
+        },
+        {
+          "relation": "provides",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "stat_id",
+              "value": "non_skill_base_all_damage_%_to_gain_as_cold"
+            }
+          ],
+          "mechanic": "cold"
         }
       ],
       "compatibility": {
@@ -209927,6 +210551,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:cold_exposure",
+        "name": "Cold Exposure",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "cold",
@@ -210048,6 +210677,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:cold_mastery",
+        "name": "Cold Mastery",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "cold",
@@ -210150,6 +210784,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:cold_penetration",
+        "name": "Cold Penetration",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "cold",
@@ -210268,6 +210907,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:combo_finisher",
+        "name": "Combo Finisher",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -210398,6 +211042,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:combo_finisher",
+        "name": "Combo Finisher",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -210527,6 +211176,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:commandment",
+        "name": "Commandment",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -210622,6 +211276,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:commiserate",
+        "name": "Commiserate",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "bow",
@@ -210715,6 +211374,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:compressed_duration",
+        "name": "Compressed Duration",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "duration",
@@ -210793,6 +211457,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:compressed_duration",
+        "name": "Compressed Duration",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "duration",
@@ -210871,6 +211540,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:concentrated_area",
+        "name": "Concentrated Area",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "area",
@@ -210953,6 +211627,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:concoct",
+        "name": "Concoct",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "spear",
@@ -211132,6 +211811,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:concoct",
+        "name": "Concoct",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "spear",
@@ -211310,6 +211994,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:concussive_runes",
+        "name": "Concussive Runes",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -211415,6 +212104,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:concussive_spells",
+        "name": "Concussive Spells",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -211529,6 +212223,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:considered_casting",
+        "name": "Considered Casting",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -211627,6 +212326,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:controlled_destruction",
+        "name": "Controlled Destruction",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -211726,6 +212430,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:controlled_hazard",
+        "name": "Controlled Hazard",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "hazard",
@@ -211797,6 +212506,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:cool_headed",
+        "name": "Cool Headed",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -211886,6 +212600,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:cooldown_recovery",
+        "name": "Cooldown Recovery",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "bow",
@@ -211959,6 +212678,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:cooldown_recovery",
+        "name": "Cooldown Recovery",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "bow",
@@ -212033,6 +212757,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:corpse_conservation",
+        "name": "Corpse Conservation",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "elemental",
@@ -212124,6 +212853,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:corrosion",
+        "name": "Corrosion",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -212276,6 +213010,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:corrupting_cry",
+        "name": "Corrupting Cry",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "warcry",
@@ -212390,6 +213129,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:corrupting_cry",
+        "name": "Corrupting Cry",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "warcry",
@@ -212496,6 +213240,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:coursing_current",
+        "name": "Coursing Current",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -212607,6 +213356,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:crackling_barrier",
+        "name": "Crackling Barrier",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lightning",
@@ -212713,6 +213467,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:crater",
+        "name": "Crater",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -212818,6 +213577,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:crazed_minions",
+        "name": "Crazed Minions",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -212916,6 +213680,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:creeping_chill",
+        "name": "Creeping Chill",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "area",
@@ -213107,6 +213876,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:crescendo",
+        "name": "Crescendo",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -213181,6 +213955,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:crescendo",
+        "name": "Crescendo",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -213264,6 +214043,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:crescendo",
+        "name": "Crescendo",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -213340,6 +214124,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:crystalline_shards",
+        "name": "Crystalline Shards",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "elemental",
@@ -213439,6 +214228,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:culling_strike",
+        "name": "Culling Strike",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -213516,6 +214310,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:culling_strike",
+        "name": "Culling Strike",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -213601,6 +214400,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:culmination",
+        "name": "Culmination",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -213713,6 +214517,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:culmination",
+        "name": "Culmination",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -213825,6 +214634,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:cursed_ground",
+        "name": "Cursed Ground",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "curse",
@@ -213905,6 +214719,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:danse_macabre",
+        "name": "Danse Macabre",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "elemental",
@@ -213993,6 +214812,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:daresso_s_passion",
+        "name": "Daresso's Passion",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "banner",
@@ -214064,6 +214888,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:dauntless",
+        "name": "Dauntless",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "conditional",
@@ -214179,6 +215008,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:daze",
+        "name": "Daze",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -214258,6 +215092,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:dazing_cry",
+        "name": "Dazing Cry",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "warcry",
@@ -214336,6 +215175,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:dazzle",
+        "name": "Dazzle",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -214502,6 +215346,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:deadly_herald",
+        "name": "Deadly Herald",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "herald",
@@ -214574,6 +215423,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:deadly_poison",
+        "name": "Deadly Poison",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "chaos",
@@ -214704,6 +215558,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:deadly_poison",
+        "name": "Deadly Poison",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "chaos",
@@ -214834,6 +215693,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:deadly_resolve",
+        "name": "Deadly Resolve",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -214971,6 +215835,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:deathmarch",
+        "name": "Deathmarch",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -215078,6 +215947,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:decaying_hex",
+        "name": "Decaying Hex",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -215198,6 +216072,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:deep_cuts",
+        "name": "Deep Cuts",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -215324,6 +216203,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:deep_cuts",
+        "name": "Deep Cuts",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -215449,6 +216333,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:deep_freeze",
+        "name": "Deep Freeze",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "cold",
@@ -215554,6 +216443,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:defy",
+        "name": "Defy",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -215635,6 +216529,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:defy",
+        "name": "Defy",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -215723,6 +216622,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:delayed_gratification",
+        "name": "Delayed Gratification",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spear",
@@ -215810,6 +216714,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:delayed_reaction",
+        "name": "Delayed Reaction",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "hazard",
@@ -215896,6 +216805,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:deliberation",
+        "name": "Deliberation",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "bow"
@@ -215974,6 +216888,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:derange",
+        "name": "Derange",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "elemental",
@@ -216105,6 +217024,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:desperation",
+        "name": "Desperation",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -216188,6 +217112,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:devastate",
+        "name": "Devastate",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "hitdamage",
@@ -216277,6 +217206,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:dialla_s_desire",
+        "name": "Dialla's Desire",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -216352,6 +217286,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:direstrike",
+        "name": "Direstrike",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -216430,6 +217369,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:direstrike",
+        "name": "Direstrike",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -216508,6 +217452,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:doedre_s_undoing",
+        "name": "Doedre's Undoing",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -216631,6 +217580,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:dominus_grasp",
+        "name": "Dominus' Grasp",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -216711,6 +217665,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:double_barrel",
+        "name": "Double Barrel",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "ammunition",
@@ -216793,6 +217752,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:double_barrel",
+        "name": "Double Barrel",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "ammunition",
@@ -216875,6 +217839,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:double_barrel",
+        "name": "Double Barrel",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "ammunition",
@@ -216966,6 +217935,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:drain_ailments",
+        "name": "Drain Ailments",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -217188,6 +218162,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:dreamer_s_knell",
+        "name": "Dreamer's Knell",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -217263,6 +218242,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:durability",
+        "name": "Durability",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "bow",
@@ -217335,6 +218319,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:echoing_cry",
+        "name": "Echoing Cry",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "warcry",
@@ -217472,6 +218461,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:efficiency",
+        "name": "Efficiency",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "mace",
@@ -217542,6 +218536,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:efficiency",
+        "name": "Efficiency",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "mace",
@@ -217612,6 +218611,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:einhar_s_beastrite",
+        "name": "Einhar's Beastrite",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -217696,6 +218700,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:electrocute",
+        "name": "Electrocute",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lightning",
@@ -217756,6 +218765,31 @@
           ],
           "mechanic": "shock",
           "scope": "outgoing"
+        },
+        {
+          "relation": "provides",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "stat_id",
+              "value": "base_lightning_damage_can_electrocute"
+            }
+          ],
+          "mechanic": "electrocute",
+          "condition": "lightning_damage"
+        },
+        {
+          "relation": "requires",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "stat_id",
+              "value": "base_lightning_damage_can_electrocute"
+            }
+          ],
+          "mechanic": "lightning"
         }
       ],
       "compatibility": {
@@ -217835,6 +218869,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:electromagnetism",
+        "name": "Electromagnetism",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -217970,6 +219009,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:elemental_armament",
+        "name": "Elemental Armament",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -218044,6 +219088,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:elemental_armament",
+        "name": "Elemental Armament",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -218118,6 +219167,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:elemental_armament",
+        "name": "Elemental Armament",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -218228,6 +219282,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:elemental_army",
+        "name": "Elemental Army",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -218329,6 +219388,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:elemental_discharge",
+        "name": "Elemental Discharge",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -218650,6 +219714,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:elemental_focus",
+        "name": "Elemental Focus",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "elemental",
@@ -218750,6 +219819,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:embitter",
+        "name": "Embitter",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "cold",
@@ -218860,6 +219934,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:empowered_sparks",
+        "name": "Empowered Sparks",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -218952,6 +220031,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:empowered_sparks",
+        "name": "Empowered Sparks",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -219044,6 +220128,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:encroaching_ground",
+        "name": "Encroaching Ground",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "area",
@@ -219122,6 +220211,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:enduring_impact",
+        "name": "Enduring Impact",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "mace",
@@ -219208,6 +220302,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:enduring_impact",
+        "name": "Enduring Impact",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "mace",
@@ -219295,6 +220394,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:energy_barrier",
+        "name": "Energy Barrier",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "energyshield",
@@ -219385,6 +220489,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:energy_capacitor",
+        "name": "Energy Capacitor",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "elemental",
@@ -219456,6 +220565,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:energy_retention",
+        "name": "Energy Retention",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "trigger",
@@ -219531,6 +220645,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:enervation",
+        "name": "Enervation",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "hitdamage",
@@ -219613,6 +220732,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:enraged_warcry",
+        "name": "Enraged Warcry",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "warcry",
@@ -219713,6 +220837,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:enraged_warcry",
+        "name": "Enraged Warcry",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "warcry",
@@ -219798,6 +220927,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:eonyr_s_thunder",
+        "name": "Eonyr's Thunder",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -219932,6 +221066,31 @@
           "mechanic": "shock",
           "condition": "electrocute_electrocuted_by_supported_skills_explode_dealing_a_percentage_of_their_maximum_life_as_lightning_damage",
           "scope": "outgoing"
+        },
+        {
+          "relation": "provides",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "stat_id",
+              "value": "base_lightning_damage_can_electrocute"
+            }
+          ],
+          "mechanic": "electrocute",
+          "condition": "lightning_damage"
+        },
+        {
+          "relation": "requires",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "stat_id",
+              "value": "base_lightning_damage_can_electrocute"
+            }
+          ],
+          "mechanic": "lightning"
         }
       ],
       "compatibility": {
@@ -220018,6 +221177,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:escalating_poison",
+        "name": "Escalating Poison",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "chaos",
@@ -220147,6 +221311,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:esh_s_prowess",
+        "name": "Esh's Prowess",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -220265,6 +221434,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:esh_s_radiance",
+        "name": "Esh's Radiance",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -220340,6 +221514,43 @@
             }
           ],
           "mechanic": "shock"
+        },
+        {
+          "relation": "provides",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "stat_id",
+              "value": "non_skill_base_lightning_damage_%_to_gain_as_chaos"
+            }
+          ],
+          "mechanic": "chaos"
+        },
+        {
+          "relation": "provides",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "stat_id",
+              "value": "chaos_damage_can_shock"
+            }
+          ],
+          "mechanic": "shock",
+          "condition": "chaos_damage"
+        },
+        {
+          "relation": "requires",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "stat_id",
+              "value": "chaos_damage_can_shock"
+            }
+          ],
+          "mechanic": "chaos"
         }
       ],
       "compatibility": {
@@ -220419,6 +221630,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:essence_harvest",
+        "name": "Essence Harvest",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -220542,6 +221758,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:eternal_flame",
+        "name": "Eternal Flame",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "fire",
@@ -220671,6 +221892,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:eternal_flame",
+        "name": "Eternal Flame",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "fire",
@@ -220775,6 +222001,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:eternal_flame",
+        "name": "Eternal Flame",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "fire",
@@ -220895,6 +222126,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:eternal_mark",
+        "name": "Eternal Mark",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "mark",
@@ -220981,6 +222217,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:excise",
+        "name": "Excise",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "occult",
@@ -221098,6 +222339,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:excoriate",
+        "name": "Excoriate",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -221209,6 +222455,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:execrate",
+        "name": "Execrate",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "occult",
@@ -221325,6 +222576,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:execute",
+        "name": "Execute",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "mace",
@@ -221402,6 +222658,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:execute",
+        "name": "Execute",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "mace",
@@ -221479,6 +222740,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:execute",
+        "name": "Execute",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "mace",
@@ -221564,6 +222830,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:expand",
+        "name": "Expand",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -221695,6 +222966,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:expanse",
+        "name": "Expanse",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "area",
@@ -221797,6 +223073,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:exploit_weakness",
+        "name": "Exploit Weakness",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "payoff",
@@ -221941,6 +223222,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:exposing_cry",
+        "name": "Exposing Cry",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "warcry",
@@ -222017,6 +223303,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:extraction",
+        "name": "Extraction",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -222046,6 +223337,18 @@
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "stat_id",
+              "value": "non_skill_base_all_damage_%_to_gain_as_chaos"
+            }
+          ],
+          "mechanic": "chaos"
+        },
+        {
+          "relation": "provides",
+          "subject": "supported_skill",
+          "confidence": "exact",
           "evidence": [
             {
               "kind": "stat_id",
@@ -222147,6 +223450,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:fan_the_flames",
+        "name": "Fan The Flames",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -222259,6 +223567,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:fan_the_flames",
+        "name": "Fan The Flames",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -222373,6 +223686,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:feeding_frenzy",
+        "name": "Feeding Frenzy",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -222472,6 +223790,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:feeding_frenzy",
+        "name": "Feeding Frenzy",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -222572,6 +223895,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:ferocity",
+        "name": "Ferocity",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "charge",
@@ -222732,6 +224060,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:fiery_death",
+        "name": "Fiery Death",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -222843,6 +224176,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:fire_attunement",
+        "name": "Fire Attunement",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "fire",
@@ -222899,6 +224237,18 @@
             }
           ],
           "mechanic": "lightning"
+        },
+        {
+          "relation": "provides",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "stat_id",
+              "value": "non_skill_base_all_damage_%_to_gain_as_fire"
+            }
+          ],
+          "mechanic": "fire"
         }
       ],
       "compatibility": {
@@ -222980,6 +224330,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:fire_exposure",
+        "name": "Fire Exposure",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "fire",
@@ -223101,6 +224456,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:fire_mastery",
+        "name": "Fire Mastery",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "fire",
@@ -223203,6 +224563,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:fire_penetration",
+        "name": "Fire Penetration",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "fire",
@@ -223321,6 +224686,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:fire_penetration",
+        "name": "Fire Penetration",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "fire",
@@ -223436,6 +224806,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:first_blood",
+        "name": "First Blood",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -223551,6 +224926,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:fist_of_kalguur",
+        "name": "Fist Of Kalguur",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -223717,6 +225097,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:fist_of_war",
+        "name": "Fist of War",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -223808,6 +225193,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:fist_of_war",
+        "name": "Fist of War",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -223899,6 +225289,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:fist_of_war",
+        "name": "Fist of War",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -223998,6 +225393,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:flame_pillar",
+        "name": "Flame Pillar",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "area",
@@ -224235,6 +225635,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:flamepierce",
+        "name": "Flamepierce",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -224365,6 +225770,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:flow",
+        "name": "Flow",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "combo"
@@ -224434,6 +225844,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:fluke",
+        "name": "Fluke",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "trigger",
@@ -224528,6 +225943,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:focused_curse",
+        "name": "Focused Curse",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "curse",
@@ -224599,6 +226019,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:font_of_blood",
+        "name": "Font of Blood",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "totem",
@@ -224714,6 +226139,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:font_of_mana",
+        "name": "Font of Mana",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "totem",
@@ -224828,6 +226258,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:font_of_rage",
+        "name": "Font of Rage",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "totem",
@@ -224908,6 +226343,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:fork",
+        "name": "Fork",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -224998,6 +226438,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:fortress",
+        "name": "Fortress",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "elemental",
@@ -225084,6 +226529,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:fortress",
+        "name": "Fortress",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "elemental",
@@ -225178,6 +226628,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:freeze",
+        "name": "Freeze",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "cold",
@@ -225284,6 +226739,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:freezefork",
+        "name": "Freezefork",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -225414,6 +226874,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:frenzied_riposte",
+        "name": "Frenzied Riposte",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -225535,6 +227000,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:fresh_clip",
+        "name": "Fresh Clip",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "mace",
@@ -225607,6 +227077,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:fresh_clip",
+        "name": "Fresh Clip",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "mace",
@@ -225680,6 +227155,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:frost_nexus",
+        "name": "Frost Nexus",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "area",
@@ -225825,6 +227305,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:frostfire",
+        "name": "Frostfire",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "cold",
@@ -226081,6 +227566,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:frozen_spite",
+        "name": "Frozen Spite",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "area",
@@ -226198,6 +227688,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:frozen_vortex",
+        "name": "Frozen Vortex",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "area",
@@ -226321,6 +227816,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:fusillade",
+        "name": "Fusillade",
+        "tier": null
+      },
       "retrieval_terms": [
         "bow",
         "support",
@@ -226453,6 +227953,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:gambleshot",
+        "name": "Gambleshot",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -226537,6 +228042,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:garukhan_s_resolve",
+        "name": "Garukhan's Resolve",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -226658,6 +228168,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:glacier",
+        "name": "Glacier",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "occult",
@@ -226730,6 +228245,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:gorge",
+        "name": "Gorge",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "primal",
@@ -226825,6 +228345,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:greatwood",
+        "name": "Greatwood",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "totem",
@@ -227003,6 +228528,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:guatelitzi_s_ablation",
+        "name": "Guatelitzi's Ablation",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -227122,6 +228652,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:haemocrystals",
+        "name": "Haemocrystals",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -227328,6 +228863,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:hardy_totems",
+        "name": "Hardy Totems",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "totem",
@@ -227411,6 +228951,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:hardy_totems",
+        "name": "Hardy Totems",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "totem",
@@ -227494,6 +229039,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:harmonic_remnants",
+        "name": "Harmonic Remnants",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "remnant",
@@ -227565,6 +229115,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:harmonic_remnants",
+        "name": "Harmonic Remnants",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "remnant",
@@ -227644,6 +229199,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:hayoxi_s_fulmination",
+        "name": "Hayoxi's Fulmination",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -227839,6 +229399,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:healing_runes",
+        "name": "Healing Runes",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -227971,6 +229536,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:heavy_swing",
+        "name": "Heavy Swing",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -228082,6 +229652,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:heft",
+        "name": "Heft",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -228185,6 +229760,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:heightened_accuracy",
+        "name": "Heightened Accuracy",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -228258,6 +229838,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:heightened_accuracy",
+        "name": "Heightened Accuracy",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -228339,6 +229924,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:heightened_charges",
+        "name": "Heightened Charges",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spear",
@@ -228425,6 +230015,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:heightened_curse",
+        "name": "Heightened Curse",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "curse",
@@ -228498,6 +230093,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:helbrym_s_hide",
+        "name": "Helbrym's Hide",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -228612,6 +230212,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:her_declaration",
+        "name": "Her Declaration",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -228691,6 +230296,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:herbalism",
+        "name": "Herbalism",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -228793,6 +230403,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:herbalism",
+        "name": "Herbalism",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -228894,6 +230509,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:hex_bloom",
+        "name": "Hex Bloom",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "area",
@@ -228968,6 +230588,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:hinder",
+        "name": "Hinder",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -229062,6 +230687,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:hit_and_run",
+        "name": "Hit and Run",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -229169,6 +230799,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:hoarfrost",
+        "name": "Hoarfrost",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -229309,6 +230944,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:hobble",
+        "name": "Hobble",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -229393,6 +231033,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:holy_descent",
+        "name": "Holy Descent",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "area",
@@ -229486,6 +231131,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:hourglass",
+        "name": "Hourglass",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "elemental",
@@ -229592,6 +231242,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:hulking_minions",
+        "name": "Hulking Minions",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -229680,6 +231335,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:ice_bite",
+        "name": "Ice Bite",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "warcry",
@@ -229805,6 +231465,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:ice_bite",
+        "name": "Ice Bite",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "warcry",
@@ -229930,6 +231595,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:icicle",
+        "name": "Icicle",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "occult",
@@ -230002,6 +231672,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:ignite",
+        "name": "Ignite",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "fire",
@@ -230120,6 +231795,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:ignite",
+        "name": "Ignite",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "fire",
@@ -230238,6 +231918,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:ignite",
+        "name": "Ignite",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "fire",
@@ -230363,6 +232048,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:immolate",
+        "name": "Immolate",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "fire",
@@ -230422,6 +232112,19 @@
           ],
           "mechanic": "ignite",
           "scope": "outgoing"
+        },
+        {
+          "relation": "provides",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "stat_id",
+              "value": "non_skill_base_all_damage_%_to_gain_as_fire_with_attacks_vs_burning_enemies"
+            }
+          ],
+          "mechanic": "fire",
+          "condition": "burning_enemies"
         }
       ],
       "compatibility": {
@@ -230499,6 +232202,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:impact_shockwave",
+        "name": "Impact Shockwave",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -230588,6 +232296,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:impale",
+        "name": "Impale",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -230688,6 +232401,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:impending_doom",
+        "name": "Impending Doom",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -230789,6 +232507,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:incision",
+        "name": "Incision",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -230928,6 +232651,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:inexorable_critical",
+        "name": "Inexorable Critical",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "elemental",
@@ -231045,6 +232773,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:inexorable_critical",
+        "name": "Inexorable Critical",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "elemental",
@@ -231189,6 +232922,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:infernal_legion",
+        "name": "Infernal Legion",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -231363,6 +233101,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:infernal_legion",
+        "name": "Infernal Legion",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -231565,6 +233308,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:infernal_legion",
+        "name": "Infernal Legion",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -231764,6 +233512,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:infusion",
+        "name": "Infusion",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -231835,6 +233588,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:inhibitor",
+        "name": "Inhibitor",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -232009,6 +233767,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:innervate",
+        "name": "Innervate",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lightning",
@@ -232130,6 +233893,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:intense_agony",
+        "name": "Intense Agony",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -232229,6 +233997,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:invocation",
+        "name": "Invocation",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -232316,6 +234089,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:ixchel_s_torment",
+        "name": "Ixchel's Torment",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -232444,6 +234222,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:jagged_ground",
+        "name": "Jagged Ground",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -232622,6 +234405,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:jagged_ground",
+        "name": "Jagged Ground",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -232724,6 +234512,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:kalisa_s_crescendo",
+        "name": "Kalisa's Crescendo",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -232805,6 +234598,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:kaom_s_madness",
+        "name": "Kaom's Madness",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -232900,6 +234698,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:khatal_s_rejuvenation",
+        "name": "Khatal's Rejuvenation",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -232972,6 +234775,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:knockback",
+        "name": "Knockback",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "mace",
@@ -233064,6 +234872,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:kulemak_s_dominion",
+        "name": "Kulemak's Dominion",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -233145,6 +234958,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:kurgal_s_leash",
+        "name": "Kurgal's Leash",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -233257,6 +235075,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:last_gasp",
+        "name": "Last Gasp",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -233339,6 +235162,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:lasting_ground",
+        "name": "Lasting Ground",
+        "tier": null
+      },
       "retrieval_terms": [
         "support"
       ],
@@ -233405,9 +235233,13 @@
       "source_id": "Metadata/Items/Gems/SupportGemLastingShock",
       "name": "Lasting Shock",
       "candidate_roles": [
-        "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:lasting_shock",
+        "name": "Lasting Shock",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lightning",
@@ -233428,23 +235260,6 @@
             }
           ],
           "mechanic": "lightning"
-        },
-        {
-          "relation": "inflicts",
-          "subject": "supported_skill",
-          "confidence": "exact",
-          "evidence": [
-            {
-              "kind": "stat_id",
-              "value": "support_lasting_shock_chance_to_shock_+%_final"
-            },
-            {
-              "kind": "skill_description",
-              "value": "Supports any skill that [HitDamage|Hits] enemies or inflicts [Shock], causing its [Shock|Shocks] to be inflicted less often but last longer."
-            }
-          ],
-          "mechanic": "shock",
-          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -233541,6 +235356,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:leverage",
+        "name": "Leverage",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "hitdamage",
@@ -233632,6 +235452,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:life_bounty",
+        "name": "Life Bounty",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "hitdamage",
@@ -233707,6 +235532,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:life_drain",
+        "name": "Life Drain",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "bow",
@@ -233798,6 +235628,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:life_leech",
+        "name": "Life Leech",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -233925,6 +235760,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:life_leech",
+        "name": "Life Leech",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -234052,6 +235892,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:life_leech",
+        "name": "Life Leech",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -234189,6 +236034,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:lifetap",
+        "name": "Lifetap",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "mace",
@@ -234283,6 +236133,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:lightning_attunement",
+        "name": "Lightning Attunement",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lightning",
@@ -234332,6 +236187,18 @@
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "stat_id",
+              "value": "non_skill_base_all_damage_%_to_gain_as_lightning"
+            }
+          ],
+          "mechanic": "lightning"
+        },
+        {
+          "relation": "provides",
+          "subject": "supported_skill",
+          "confidence": "exact",
           "evidence": [
             {
               "kind": "stat_id",
@@ -234420,6 +236287,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:lightning_exposure",
+        "name": "Lightning Exposure",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lightning",
@@ -234541,6 +236413,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:lightning_mastery",
+        "name": "Lightning Mastery",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lightning",
@@ -234643,6 +236520,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:lightning_penetration",
+        "name": "Lightning Penetration",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lightning",
@@ -234760,6 +236642,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:living_lightning",
+        "name": "Living Lightning",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -234890,6 +236777,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:living_lightning",
+        "name": "Living Lightning",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -235020,6 +236912,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:lockdown",
+        "name": "Lockdown",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "hitdamage",
@@ -235096,6 +236993,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:long_fuse",
+        "name": "Long Fuse",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "crossbow",
@@ -235184,6 +237086,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:long_fuse",
+        "name": "Long Fuse",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "crossbow",
@@ -235272,6 +237179,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:longshot",
+        "name": "Longshot",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -235344,6 +237256,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:longshot",
+        "name": "Longshot",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -235416,6 +237333,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:loyalty",
+        "name": "Loyalty",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -235530,6 +237452,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:magnetic_remnants",
+        "name": "Magnetic Remnants",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "remnant",
@@ -235600,6 +237527,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:magnified_area",
+        "name": "Magnified Area",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "area",
@@ -235680,6 +237612,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:magnified_area",
+        "name": "Magnified Area",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "area",
@@ -235761,6 +237698,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:maim",
+        "name": "Maim",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -235852,6 +237794,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:malady",
+        "name": "Malady",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "hitdamage",
@@ -236021,6 +237968,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:mana_bounty",
+        "name": "Mana Bounty",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "hitdamage",
@@ -236096,6 +238048,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:mana_flare",
+        "name": "Mana Flare",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -236221,6 +238178,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:mana_leech",
+        "name": "Mana Leech",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -236347,6 +238309,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:mark_for_death",
+        "name": "Mark for Death",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "mark",
@@ -236462,6 +238429,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:mark_for_death",
+        "name": "Mark for Death",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "mark",
@@ -236578,6 +238550,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:mark_of_siphoning",
+        "name": "Mark of Siphoning",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "mark",
@@ -236693,6 +238670,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:mark_of_siphoning",
+        "name": "Mark of Siphoning",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "mark",
@@ -236847,6 +238829,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:meat_shield",
+        "name": "Meat Shield",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -236946,6 +238933,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:meat_shield",
+        "name": "Meat Shield",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -237045,6 +239037,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:medved_s_felling",
+        "name": "Medved's Felling",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -237142,6 +239139,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:minion_instability",
+        "name": "Minion Instability",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -237234,6 +239236,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:minion_mastery",
+        "name": "Minion Mastery",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -237321,6 +239328,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:minion_pact",
+        "name": "Minion Pact",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -237430,6 +239442,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:minion_pact",
+        "name": "Minion Pact",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -237539,6 +239556,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:minion_splash",
+        "name": "Minion Splash",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -237630,6 +239652,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:minion_splash",
+        "name": "Minion Splash",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -237733,6 +239760,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:mobility",
+        "name": "Mobility",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "bow"
@@ -237810,6 +239842,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:momentum",
+        "name": "Momentum",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "bow"
@@ -237899,6 +239936,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:morgana_s_tempest",
+        "name": "Morgana's Tempest",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -238017,6 +240059,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:multishot",
+        "name": "Multishot",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -238118,6 +240165,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:multishot",
+        "name": "Multishot",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -238219,6 +240271,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:murderous_intent",
+        "name": "Murderous Intent",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "empowered",
@@ -238290,6 +240347,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:muster",
+        "name": "Muster",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -238362,6 +240424,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:mysticism",
+        "name": "Mysticism",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -238454,6 +240521,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:mysticism",
+        "name": "Mysticism",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -238546,6 +240618,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:m_rrigan_s_insight",
+        "name": "Mórrigan's Insight",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -238738,6 +240815,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:nadir",
+        "name": "Nadir",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "stages",
@@ -238818,6 +240900,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:neural_overload",
+        "name": "Neural Overload",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lightning",
@@ -238918,6 +241005,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:nimble_reload",
+        "name": "Nimble Reload",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "ammunition",
@@ -238991,6 +241083,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:nova_projectiles",
+        "name": "Nova Projectiles",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -239075,6 +241172,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:nova_projectiles",
+        "name": "Nova Projectiles",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -239198,6 +241300,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:ois_n_s_oath",
+        "name": "Oisín's Oath",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -239319,6 +241426,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:olroth_s_conviction",
+        "name": "Olroth's Conviction",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -239428,6 +241540,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:olroth_s_hubris",
+        "name": "Olroth's Hubris",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -239512,6 +241629,19 @@
         {
           "relation": "provides",
           "subject": "supported_skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "stat_id",
+              "value": "physical_damage_can_freeze"
+            }
+          ],
+          "mechanic": "freeze",
+          "condition": "physical_damage"
+        },
+        {
+          "relation": "provides",
+          "subject": "supported_skill",
           "confidence": "strong",
           "evidence": [
             {
@@ -239521,6 +241651,18 @@
           ],
           "mechanic": "freeze",
           "scope": "outgoing"
+        },
+        {
+          "relation": "requires",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "stat_id",
+              "value": "physical_damage_can_freeze"
+            }
+          ],
+          "mechanic": "physical"
         },
         {
           "relation": "requires",
@@ -239648,6 +241790,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:opening_move",
+        "name": "Opening Move",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "primal",
@@ -239729,6 +241876,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:outmaneuver",
+        "name": "Outmaneuver",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -239859,6 +242011,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:overabundance",
+        "name": "Overabundance",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "bow",
@@ -239937,6 +242094,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:overabundance",
+        "name": "Overabundance",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "bow",
@@ -240015,6 +242177,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:overabundance",
+        "name": "Overabundance",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "curse",
@@ -240093,6 +242260,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:overcharge",
+        "name": "Overcharge",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lightning",
@@ -240208,6 +242380,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:overextend",
+        "name": "Overextend",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -240314,6 +242491,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:overreach",
+        "name": "Overreach",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -240399,6 +242581,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:paquate_s_pact",
+        "name": "Paquate's Pact",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -240513,6 +242700,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:payload",
+        "name": "Payload",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "grenade",
@@ -240592,6 +242784,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:perfected_endurance",
+        "name": "Perfected Endurance",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "channelling",
@@ -240668,6 +242865,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:perfection",
+        "name": "Perfection",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spear",
@@ -240743,6 +242945,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:perpetual_charge",
+        "name": "Perpetual Charge",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "bow",
@@ -240839,6 +243046,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:persistent_ground",
+        "name": "Persistent Ground",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "crossbow"
@@ -240908,6 +243120,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:persistent_ground",
+        "name": "Persistent Ground",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "crossbow"
@@ -240984,6 +243201,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:persistent_ground",
+        "name": "Persistent Ground",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "crossbow",
@@ -241070,6 +243292,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:physical_mastery",
+        "name": "Physical Mastery",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -241171,6 +243398,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:pierce",
+        "name": "Pierce",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -241254,6 +243486,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:pierce",
+        "name": "Pierce",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -241329,6 +243566,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:pierce",
+        "name": "Pierce",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -241411,6 +243653,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:pin",
+        "name": "Pin",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -241544,6 +243791,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:pin",
+        "name": "Pin",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -241701,6 +243953,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:pin",
+        "name": "Pin",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -241850,6 +244107,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:pinpoint_critical",
+        "name": "Pinpoint Critical",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "occult",
@@ -241953,6 +244215,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:poison",
+        "name": "Poison",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "chaos",
@@ -242075,6 +244342,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:poison",
+        "name": "Poison",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "chaos",
@@ -242197,6 +244469,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:poison",
+        "name": "Poison",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "chaos",
@@ -242366,6 +244643,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:poison_spores",
+        "name": "Poison Spores",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -242493,6 +244775,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:potent_exposure",
+        "name": "Potent Exposure",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -242573,6 +244860,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:potential",
+        "name": "Potential",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "charge",
@@ -242757,6 +245049,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:practical_magic",
+        "name": "Practical Magic",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -242846,6 +245143,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:practical_magic",
+        "name": "Practical Magic",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -242935,6 +245237,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:practiced_combo",
+        "name": "Practiced Combo",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -243032,6 +245339,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:precision",
+        "name": "Precision",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -243108,6 +245420,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:precision",
+        "name": "Precision",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -243184,6 +245501,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:premeditation",
+        "name": "Premeditation",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "empowered",
@@ -243255,6 +245577,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:profanity",
+        "name": "Profanity",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "chaos",
@@ -243423,6 +245750,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:profanity",
+        "name": "Profanity",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "chaos",
@@ -243579,6 +245911,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:projectile_acceleration",
+        "name": "Projectile Acceleration",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -243655,6 +245992,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:projectile_acceleration",
+        "name": "Projectile Acceleration",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -243740,6 +246082,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:projectile_acceleration",
+        "name": "Projectile Acceleration",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -243823,6 +246170,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:projectile_deceleration",
+        "name": "Projectile Deceleration",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -243899,6 +246251,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:projectile_deceleration",
+        "name": "Projectile Deceleration",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -243975,6 +246332,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:prolonged_duration",
+        "name": "Prolonged Duration",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "duration",
@@ -244045,6 +246407,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:prolonged_duration",
+        "name": "Prolonged Duration",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "duration",
@@ -244115,6 +246482,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:prolonged_duration",
+        "name": "Prolonged Duration",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "duration",
@@ -244213,6 +246585,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:prototype_seventeen",
+        "name": "Prototype Seventeen",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -244328,6 +246705,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:punch_through",
+        "name": "Punch Through",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -244406,6 +246788,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:pursuit",
+        "name": "Pursuit",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -244492,6 +246879,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:pursuit",
+        "name": "Pursuit",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -244578,6 +246970,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:pursuit",
+        "name": "Pursuit",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -244664,6 +247061,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:quill_burst",
+        "name": "Quill Burst",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -244778,6 +247180,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:rage",
+        "name": "Rage",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -244860,6 +247267,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:rage",
+        "name": "Rage",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -244942,6 +247354,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:rage",
+        "name": "Rage",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -245033,6 +247450,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:rageforged",
+        "name": "Rageforged",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "mace",
@@ -245155,6 +247577,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:rageforged",
+        "name": "Rageforged",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "mace",
@@ -245288,6 +247715,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:raging_cry",
+        "name": "Raging Cry",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "warcry",
@@ -245361,6 +247793,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:rakiata_s_flow",
+        "name": "Rakiata's Flow",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -245451,6 +247888,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:rally",
+        "name": "Rally",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -245622,6 +248064,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:rapid_attacks",
+        "name": "Rapid Attacks",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -245700,6 +248147,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:rapid_attacks",
+        "name": "Rapid Attacks",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -245778,6 +248230,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:rapid_attacks",
+        "name": "Rapid Attacks",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -245864,6 +248321,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:rapid_casting",
+        "name": "Rapid Casting",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -245942,6 +248404,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:rapid_casting",
+        "name": "Rapid Casting",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -246020,6 +248487,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:rapid_casting",
+        "name": "Rapid Casting",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -246098,6 +248570,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:ratha_s_assault",
+        "name": "Ratha's Assault",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -246195,6 +248672,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:rearm",
+        "name": "Rearm",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "hazard",
@@ -246266,6 +248748,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:rearm",
+        "name": "Rearm",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "hazard",
@@ -246338,6 +248825,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:refraction",
+        "name": "Refraction",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -246477,6 +248969,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:refraction",
+        "name": "Refraction",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -246616,6 +249113,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:refraction",
+        "name": "Refraction",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -246723,6 +249225,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:reinforced_totems",
+        "name": "Reinforced Totems",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "totem",
@@ -246838,6 +249345,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:reinforced_totems",
+        "name": "Reinforced Totems",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "totem",
@@ -246952,6 +249464,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:relentless_rage",
+        "name": "Relentless Rage",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "rage",
@@ -247042,6 +249559,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:remnant_potency",
+        "name": "Remnant Potency",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "remnant",
@@ -247113,6 +249635,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:remnant_potency",
+        "name": "Remnant Potency",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "remnant",
@@ -247192,6 +249719,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:remnant_potency",
+        "name": "Remnant Potency",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "remnant",
@@ -247272,6 +249804,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:rending_apex",
+        "name": "Rending Apex",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -247363,6 +249900,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:retaliate",
+        "name": "Retaliate",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -247444,6 +249986,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:retaliate",
+        "name": "Retaliate",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -247535,6 +250082,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:retreat",
+        "name": "Retreat",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -247616,6 +250168,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:retreat",
+        "name": "Retreat",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -247697,6 +250254,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:retreat",
+        "name": "Retreat",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -247778,6 +250340,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:reverberate",
+        "name": "Reverberate",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -247852,6 +250419,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:ricochet",
+        "name": "Ricochet",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -247929,6 +250501,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:ricochet",
+        "name": "Ricochet",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -248006,6 +250583,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:ricochet",
+        "name": "Ricochet",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -248089,6 +250671,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:rigwald_s_ferocity",
+        "name": "Rigwald's Ferocity",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -248192,6 +250779,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:rime",
+        "name": "Rime",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "cold",
@@ -248316,6 +250908,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:rip",
+        "name": "Rip",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -248492,6 +251089,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:rising_tempest",
+        "name": "Rising Tempest",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "occult",
@@ -248576,6 +251178,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:ritualistic_curse",
+        "name": "Ritualistic Curse",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "area",
@@ -248656,6 +251263,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:romira_s_requital",
+        "name": "Romira's Requital",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -248792,6 +251404,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:runeforged_blades",
+        "name": "Runeforged Blades",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -248963,6 +251580,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:runic_extraction",
+        "name": "Runic Extraction",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "remnant",
@@ -249084,6 +251706,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:runic_infusion",
+        "name": "Runic Infusion",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -249247,6 +251874,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:rupture",
+        "name": "Rupture",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -249353,6 +251985,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:rusted_spikes",
+        "name": "Rusted Spikes",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "hitdamage",
@@ -249450,6 +252087,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:ruthless",
+        "name": "Ruthless",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -249529,6 +252171,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:sacrificial_lamb",
+        "name": "Sacrificial Lamb",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -249606,6 +252253,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:sacrificial_lamb",
+        "name": "Sacrificial Lamb",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -249703,6 +252355,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:sacrificial_offering",
+        "name": "Sacrificial Offering",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "elemental",
@@ -249793,6 +252450,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:salvo",
+        "name": "Salvo",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -249928,6 +252590,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:scouring_flame",
+        "name": "Scouring Flame",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "fire",
@@ -250083,6 +252750,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:searing_flame",
+        "name": "Searing Flame",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "fire",
@@ -250199,6 +252871,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:searing_flame",
+        "name": "Searing Flame",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "fire",
@@ -250315,6 +252992,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:second_wind",
+        "name": "Second Wind",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "bow",
@@ -250404,6 +253086,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:second_wind",
+        "name": "Second Wind",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "bow",
@@ -250493,6 +253180,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:second_wind",
+        "name": "Second Wind",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "bow",
@@ -250591,6 +253283,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:see_red",
+        "name": "See Red",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -250730,6 +253427,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:selfless_remnants",
+        "name": "Selfless Remnants",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "remnant",
@@ -250807,6 +253509,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:seraph_s_heart",
+        "name": "Seraph's Heart",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -250903,6 +253610,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:shock",
+        "name": "Shock",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lightning",
@@ -251021,6 +253733,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:shock_conduction",
+        "name": "Shock Conduction",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "area",
@@ -251156,6 +253873,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:shock_conduction",
+        "name": "Shock Conduction",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "area",
@@ -251306,6 +254028,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:shock_siphon",
+        "name": "Shock Siphon",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lightning",
@@ -251424,6 +254151,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:shocking_leap",
+        "name": "Shocking Leap",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "area",
@@ -251554,6 +254286,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:short_fuse",
+        "name": "Short Fuse",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "crossbow",
@@ -251626,6 +254363,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:short_fuse",
+        "name": "Short Fuse",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "crossbow",
@@ -251706,6 +254448,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:sione_s_temper",
+        "name": "Sione's Temper",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -251806,6 +254553,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:skittering_stone",
+        "name": "Skittering Stone",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -251922,6 +254674,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:skittering_stone",
+        "name": "Skittering Stone",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -252038,6 +254795,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:slow_potency",
+        "name": "Slow Potency",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -252118,6 +254880,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:soul_drain",
+        "name": "Soul Drain",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "bow",
@@ -252209,6 +254976,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:soulbreaker",
+        "name": "Soulbreaker",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "area",
@@ -252312,6 +255084,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:spar",
+        "name": "Spar",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -252390,6 +255167,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:spectral_volley",
+        "name": "Spectral Volley",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -252526,6 +255308,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:spell_cascade",
+        "name": "Spell Cascade",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "area",
@@ -252623,6 +255410,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:spell_echo",
+        "name": "Spell Echo",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -252720,6 +255512,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:splinter_totem",
+        "name": "Splinter Totem",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "totem",
@@ -252883,6 +255680,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:splinter_totem",
+        "name": "Splinter Totem",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "totem",
@@ -253047,6 +255849,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:spreading_frost",
+        "name": "Spreading Frost",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "cold",
@@ -253154,6 +255961,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:static_shocks",
+        "name": "Static Shocks",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -253270,6 +256082,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:steadfast",
+        "name": "Steadfast",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "channelling",
@@ -253350,6 +256167,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:steadfast",
+        "name": "Steadfast",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "channelling",
@@ -253440,6 +256262,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:stoicism",
+        "name": "Stoicism",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "crossbow",
@@ -253532,6 +256359,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:stoicism",
+        "name": "Stoicism",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "crossbow",
@@ -253624,6 +256456,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:stomping_ground",
+        "name": "Stomping Ground",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -253728,6 +256565,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:stormchain",
+        "name": "Stormchain",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -253874,6 +256716,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:stormfire",
+        "name": "Stormfire",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lightning",
@@ -254017,6 +256864,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:streamlined_rounds",
+        "name": "Streamlined Rounds",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "ammunition",
@@ -254123,6 +256975,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:strong_hearted",
+        "name": "Strong Hearted",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -254212,6 +257069,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:stun",
+        "name": "Stun",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "mace",
@@ -254288,6 +257150,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:stun",
+        "name": "Stun",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "mace",
@@ -254364,6 +257231,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:stun",
+        "name": "Stun",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "mace",
@@ -254448,6 +257320,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:styrn_s_anthem",
+        "name": "Styrn's Anthem",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -254506,6 +257383,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:styrn_s_ferocity",
+        "name": "Styrn's Ferocity",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -254654,6 +257536,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:styrn_s_mountain",
+        "name": "Styrn's Mountain",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage"
@@ -254744,6 +257631,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:supercritical",
+        "name": "Supercritical",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "elemental",
@@ -254846,6 +257738,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:swift_affliction",
+        "name": "Swift Affliction",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "duration",
@@ -254945,6 +257842,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:swift_affliction",
+        "name": "Swift Affliction",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "duration",
@@ -255044,6 +257946,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:swift_affliction",
+        "name": "Swift Affliction",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "duration",
@@ -255145,6 +258052,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:syzygy",
+        "name": "Syzygy",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -255297,6 +258209,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:tacati_s_ire",
+        "name": "Tacati's Ire",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -255401,6 +258318,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:tangmazu_s_thurible",
+        "name": "Tangmazu's Thurible",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -255556,6 +258478,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:tasalio_s_rhythm",
+        "name": "Tasalio's Rhythm",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -255636,6 +258563,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:tawhoa_s_tending",
+        "name": "Tawhoa's Tending",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -255748,6 +258680,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:tear",
+        "name": "Tear",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -255858,6 +258795,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:tecrod_s_revenge",
+        "name": "Tecrod's Revenge",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -255971,6 +258913,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:tectonic_slams",
+        "name": "Tectonic Slams",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -256081,6 +259028,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:thornskin",
+        "name": "Thornskin",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -256170,6 +259122,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:thornskin",
+        "name": "Thornskin",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -256259,6 +259216,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:thrill_of_the_kill",
+        "name": "Thrill of the Kill",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -256386,6 +259348,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:thrill_of_the_kill",
+        "name": "Thrill of the Kill",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -256545,6 +259512,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:tireless",
+        "name": "Tireless",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "warcry",
@@ -256618,6 +259590,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:tremors",
+        "name": "Tremors",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -256724,6 +259701,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:trickster_s_shard",
+        "name": "Trickster's Shard",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -256815,6 +259797,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:tul_s_avalanche",
+        "name": "Tul's Avalanche",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -256949,6 +259936,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:tul_s_stillness",
+        "name": "Tul's Stillness",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -257030,6 +260022,31 @@
         {
           "relation": "provides",
           "subject": "supported_skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "stat_id",
+              "value": "non_skill_base_cold_damage_%_to_gain_as_chaos"
+            }
+          ],
+          "mechanic": "chaos"
+        },
+        {
+          "relation": "provides",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "stat_id",
+              "value": "chaos_damage_can_freeze"
+            }
+          ],
+          "mechanic": "freeze",
+          "condition": "chaos_damage"
+        },
+        {
+          "relation": "provides",
+          "subject": "supported_skill",
           "confidence": "strong",
           "evidence": [
             {
@@ -257039,6 +260056,18 @@
           ],
           "mechanic": "freeze",
           "scope": "outgoing"
+        },
+        {
+          "relation": "requires",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "stat_id",
+              "value": "chaos_damage_can_freeze"
+            }
+          ],
+          "mechanic": "chaos"
         }
       ],
       "compatibility": {
@@ -257119,6 +260148,11 @@
         "payoff",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:tumult",
+        "name": "Tumult",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -257325,6 +260359,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:uhtred_s_augury",
+        "name": "Uhtred's Augury",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage"
@@ -257394,6 +260433,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:uhtred_s_constellation",
+        "name": "Uhtred's Constellation",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage"
@@ -257485,6 +260529,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:uhtred_s_exodus",
+        "name": "Uhtred's Exodus",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage"
@@ -257554,6 +260603,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:uhtred_s_omen",
+        "name": "Uhtred's Omen",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage"
@@ -257623,6 +260677,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:uhtred_s_rite",
+        "name": "Uhtred's Rite",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -257716,6 +260775,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:unabating",
+        "name": "Unabating",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -257824,6 +260888,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:unbending",
+        "name": "Unbending",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -257916,6 +260985,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:unbreakable",
+        "name": "Unbreakable",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "stun"
@@ -257998,6 +261072,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:undermine",
+        "name": "Undermine",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -258166,6 +261245,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:unerring_power",
+        "name": "Unerring Power",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -258257,6 +261341,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:unleash",
+        "name": "Unleash",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -258413,6 +261502,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:unsteady_tempo",
+        "name": "Unsteady Tempo",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -258494,6 +261588,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:untouchable",
+        "name": "Untouchable",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -258603,6 +261702,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:unyielding",
+        "name": "Unyielding",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -258700,6 +261804,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:upheaval",
+        "name": "Upheaval",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "mace"
@@ -258785,6 +261894,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:upheaval",
+        "name": "Upheaval",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "mace"
@@ -258870,6 +261984,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:upwelling",
+        "name": "Upwelling",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -258960,6 +262079,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:upwelling",
+        "name": "Upwelling",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -259050,6 +262174,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:urgent_totems",
+        "name": "Urgent Totems",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "totem",
@@ -259135,6 +262264,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:urgent_totems",
+        "name": "Urgent Totems",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "totem",
@@ -259220,6 +262354,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:urgent_totems",
+        "name": "Urgent Totems",
+        "tier": 3
+      },
       "retrieval_terms": [
         "support",
         "totem",
@@ -259331,6 +262470,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:uruk_s_smelting",
+        "name": "Uruk's Smelting",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -259447,6 +262591,11 @@
         "setup_control",
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:uul_netol_s_embrace",
+        "name": "Uul-Netol's Embrace",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -259522,6 +262671,18 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "provides",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "stat_id",
+              "value": "non_skill_base_physical_damage_%_to_gain_as_chaos"
+            }
+          ],
+          "mechanic": "chaos"
         }
       ],
       "compatibility": {
@@ -259602,6 +262763,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:vanguard",
+        "name": "Vanguard",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "mace",
@@ -259721,6 +262887,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:vanguard",
+        "name": "Vanguard",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "mace",
@@ -259839,6 +263010,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:varashta_s_blessing",
+        "name": "Varashta's Blessing",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -259918,6 +263094,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:verglas",
+        "name": "Verglas",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "cold",
@@ -260042,6 +263223,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:vilenta_s_propulsion",
+        "name": "Vilenta's Propulsion",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -260122,6 +263308,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:vitality",
+        "name": "Vitality",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -260215,6 +263406,11 @@
         "enabler",
         "recovery"
       ],
+      "support_family": {
+        "id": "support-family:vitality",
+        "name": "Vitality",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -260307,6 +263503,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:volatile_power",
+        "name": "Volatile Power",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -260411,6 +263612,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:volatility",
+        "name": "Volatility",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "physical",
@@ -260529,6 +263735,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:volcanic_eruption",
+        "name": "Volcanic Eruption",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -260644,6 +263855,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:volt",
+        "name": "Volt",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -260771,6 +263987,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:vorana_s_siege",
+        "name": "Vorana's Siege",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -260862,6 +264083,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:vruun_s_aftermath",
+        "name": "Vruun's Aftermath",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -260951,6 +264177,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:vruun_s_inevitability",
+        "name": "Vruun's Inevitability",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -261063,6 +264294,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:warm_blooded",
+        "name": "Warm Blooded",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -261153,6 +264389,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:wildfire",
+        "name": "Wildfire",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "area",
@@ -261262,6 +264503,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:wildshards",
+        "name": "Wildshards",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -261354,6 +264600,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:wildshards",
+        "name": "Wildshards",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -261446,6 +264697,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:wind_wave",
+        "name": "Wind Wave",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "area",
@@ -261520,6 +264776,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:window_of_opportunity",
+        "name": "Window of Opportunity",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "channelling",
@@ -261601,6 +264862,11 @@
         "enabler",
         "defense"
       ],
+      "support_family": {
+        "id": "support-family:window_of_opportunity",
+        "name": "Window of Opportunity",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "channelling",
@@ -261718,6 +264984,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:withering_touch",
+        "name": "Withering Touch",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "chaos",
@@ -261861,6 +265132,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:xibaqua_s_rending",
+        "name": "Xibaqua's Rending",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -261967,6 +265243,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:xoph_s_pyre",
+        "name": "Xoph's Pyre",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -262042,6 +265323,43 @@
             }
           ],
           "mechanic": "ignite"
+        },
+        {
+          "relation": "provides",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "stat_id",
+              "value": "non_skill_base_fire_damage_%_to_gain_as_chaos"
+            }
+          ],
+          "mechanic": "chaos"
+        },
+        {
+          "relation": "provides",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "stat_id",
+              "value": "base_chaos_damage_can_ignite"
+            }
+          ],
+          "mechanic": "ignite",
+          "condition": "chaos_damage"
+        },
+        {
+          "relation": "requires",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "stat_id",
+              "value": "base_chaos_damage_can_ignite"
+            }
+          ],
+          "mechanic": "chaos"
         }
       ],
       "compatibility": {
@@ -262120,6 +265438,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:zarokh_s_refrain",
+        "name": "Zarokh's Refrain",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -262226,6 +265549,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:zarokh_s_revolt",
+        "name": "Zarokh's Revolt",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -262381,6 +265709,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:zenith",
+        "name": "Zenith",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -262458,6 +265791,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:zenith",
+        "name": "Zenith",
+        "tier": 2
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -262544,6 +265882,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:zerphi_s_infamy",
+        "name": "Zerphi's Infamy",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -262650,6 +265993,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:dnt_unused_iron_grip",
+        "name": "[DNT-UNUSED] Iron Grip",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -262724,6 +266072,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:dnt_unused_iron_will",
+        "name": "[DNT-UNUSED] Iron Will",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "spell",
@@ -262795,6 +266148,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:dnt_unused_spectral_palm",
+        "name": "[DNT-UNUSED] Spectral Palm",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "dnt_unused"
@@ -262864,6 +266222,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:dnt_unused_spiral_projectiles",
+        "name": "[DNT-UNUSED] Spiral Projectiles",
+        "tier": 1
+      },
       "retrieval_terms": [
         "support",
         "projectile",
@@ -262955,6 +266318,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:dnt_unused_timerot",
+        "name": "[DNT-UNUSED] Timerot",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "buff",
@@ -263033,6 +266401,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:dnt_unused_titanic_arrows",
+        "name": "[DNT-UNUSED] Titanic Arrows",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "area",
@@ -263146,6 +266519,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:dnt_arbiters_calling",
+        "name": "[DNT] Arbiters Calling",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -263203,6 +266581,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:dnt_from_the_grave",
+        "name": "[DNT] From the Grave",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "minion",
@@ -263404,6 +266787,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:dnt_greybeard_s_fuse",
+        "name": "[DNT] Greybeard's Fuse",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -263461,6 +266849,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:dnt_mhacha_s_guidance",
+        "name": "[DNT] Mhacha's Guidance",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -263518,6 +266911,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:dnt_stone_slam_aegis",
+        "name": "[DNT] Stone Slam Aegis",
+        "tier": null
+      },
       "retrieval_terms": [
         "support"
       ],
@@ -263598,6 +266996,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:dnt_tangmazu_lineage",
+        "name": "[DNT] Tangmazu Lineage",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -263690,6 +267093,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:dnt_tekaru_s_snare",
+        "name": "[DNT] Tekaru's Snare",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "mark",
@@ -263784,6 +267192,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:dnt_totemic_aegis",
+        "name": "[DNT] Totemic Aegis",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "attack",
@@ -263886,6 +267299,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:dnt_vorana_s_touch",
+        "name": "[DNT] Vorana's Touch",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -263943,6 +267361,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:dnt_wendigo_s_pareidolia",
+        "name": "[DNT] Wendigo's Pareidolia",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",
@@ -264000,6 +267423,11 @@
       "candidate_roles": [
         "enabler"
       ],
+      "support_family": {
+        "id": "support-family:dnt_wendigos_authority",
+        "name": "[DNT] Wendigos Authority",
+        "tier": null
+      },
       "retrieval_terms": [
         "support",
         "lineage",

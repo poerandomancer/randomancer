@@ -69,6 +69,11 @@ Each entity has:
 - retained `source_evidence`
 - dataset `provenance`
 
+Support-gem entities additionally carry a `support_family` object with a
+stable family ID, display name, and optional numeric tier. All tiers in a
+family are one recommendation concept: they may provide different values, but
+they cannot occupy multiple support positions in the same package.
+
 Retrieval terms never prove fulfillment. They may retrieve a candidate for semantic evaluation, but only typed facts and curated ontology relationships can satisfy an obligation.
 
 ## Fact contract
@@ -100,6 +105,30 @@ These are legality and package-cost facts. They are never relaxed by a low-cohes
 `Totemable` is compatibility evidence only: it means a skill can be used by a totem-supporting system. It does not prove that the skill creates or is a totem. Only explicit structured evidence such as `SummonsTotem` or `SummonsAttackTotem` establishes that identity.
 
 Seasonal availability is also a legality boundary. The current selector excludes entities whose provenance contains the `kalguuran` source tag. The data stays enriched so the exclusion can be removed cleanly if that content becomes appropriate for a future league.
+
+## Support bridge contract
+
+Support effects are facts whose subject is `supported_skill`. They retain the
+same relation semantics as active skills while remaining attached to a legal
+target skill:
+
+- `provides` records an additive damage-type bridge or ailment-eligibility
+  route, such as gaining Fire damage or allowing Chaos damage to Shock
+- `inflicts` records explicit application by the supported skill
+- `creates` records a provider effect such as creating Minions
+- `converts` records replacement of one damage type or mechanic with another
+- `requires` records the native carrier or state needed by the support
+- `prevents` records a hard conflict that must be evaluated after all support
+  effects are applied
+
+Damage gained as another type is provision, not conversion. Likewise, a stat
+such as `chaos_damage_can_shock` provides Shock eligibility and requires Chaos
+damage; it does not claim the supported skill independently inflicts Shock.
+The package solver must evaluate zero-, one-, and two-support assignments as a
+unit so one support may supply another support's typed requirement. Direct
+fulfillment remains stronger than a one-support bridge, which remains stronger
+than a two-support bridge. Empty support positions are the correct result when
+no unresolved rolled Offense or explicit dependency is improved.
 
 ## Contextual roles
 
