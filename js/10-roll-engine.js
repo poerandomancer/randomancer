@@ -639,36 +639,17 @@ function rollSecondaryWeaponSet(dataWrap){
 
   const bind = getBindFatesFromApp();
   const weaponCfg = bind.weapon || { oaths: [], abominations: [] };
-  const combatCfg = bind.combat || { oaths: [], abominations: [] };
   const wOaths = new Set(weaponCfg.oaths || []);
   const wAboms = new Set(weaponCfg.abominations || []);
-  const cOaths = new Set(combatCfg.oaths || []);
   const currentStrategyName = current.defStratObj?.name || current.defStrat?.name || current.defStrat || '';
   const currentStrategy = (data.DefensiveStrategies || []).find((strategy) => strategy?.name === currentStrategyName) || null;
   const currentDefense = current.defenseObj || (data.Defense || []).find((defense) => defense?.name === current.defense) || null;
-
-  const minionsOath = cOaths.has('Minions');
-  const sceptreAbomination = wAboms.has('Sceptre');
-
-  if (minionsOath && sceptreAbomination) {
-    console.warn('[secondary weapons] Minions oath requires Sceptre, but Sceptre is an abomination.');
-    return null;
-  }
 
   const weaponPool = (data.Weapons['Two-Handed'] || []).concat(data.Weapons['One-Handed'] || []);
   let filteredWeaponPool = weaponPool.filter((w) => !wAboms.has(w.name) && w.name !== current.weapon);
   if (wOaths.size > 0) {
     const fromOath = filteredWeaponPool.filter((w) => wOaths.has(w.name));
     filteredWeaponPool = fromOath;
-  }
-
-  if (minionsOath) {
-    const sceptreOption = filteredWeaponPool.find((w) => w?.name === 'Sceptre');
-    if (!sceptreOption) {
-      console.warn('[secondary weapons] Minions oath requires a Sceptre, but none are available.');
-      return null;
-    }
-    filteredWeaponPool = [sceptreOption];
   }
 
   let compatibleLoadouts = weaponLoadouts(data, filteredWeaponPool);
@@ -873,14 +854,6 @@ function rollBuild(dataWrap){
 	  return;
 	}
 	
-	// Keep existing hard conflict check (Minions requires Sceptre; Sceptre cannot be an abomination).
-	const minionsOath = cOaths.has('Minions');
-	const sceptreAbomination = wAboms.has('Sceptre');
-	if (minionsOath && sceptreAbomination) {
-	  showBindFatesError('Minions combat mechanic is not a valid Oath while Sceptre is an Abomination.');
-	  return;
-	}
-	
 	// ---- Active anchor picks (used to select class/asc candidate, and as roll driver if present) ----
 	let anchorAttrs = null;                 // {strength,dexterity,intelligence} ratio-ish
 	let activeWeaponOathName = null;        // string name of the active weapon oath (weapon tier)
@@ -977,15 +950,6 @@ function rollBuild(dataWrap){
 	  filteredWeaponPool = filteredWeaponPool.filter((w) => wOaths.has(w.name));
 	}
 	
-	if (minionsOath) {
-	  const sceptreOption = filteredWeaponPool.find((w) => w?.name === 'Sceptre');
-	  if (!sceptreOption) {
-		showBindFatesError('Minions combat mechanic requires a Sceptre, but no Sceptre is available with your current Oaths & Abominations.');
-		return;
-	  }
-	  filteredWeaponPool = [sceptreOption];
-	}
-	
 	if (!filteredWeaponPool.length) {
 	  showBindFatesError('No valid weapons with your current Oaths & Abominations.');
 	  return;
@@ -1025,16 +989,9 @@ function rollBuild(dataWrap){
 	const dsPool = strategyPool.filter((strategy) => isStrategyCompatible(strategy, pickedDefense, selectedLoadout));
 	const pickedDefStrat = pickByCohesion(dsPool, base, th);
 
-  function filterTacticsByStrictRules(allTactics, weapon, offhand){
-  const w = String(weapon?.name||'').toLowerCase();
-  const o = String(offhand?.name||'').toLowerCase();
-  const hasSceptre = (w.includes('sceptre') || o.includes('sceptre'));
-  return allTactics.filter(t => {
-    const tn = String(t?.name||'').toLowerCase();
-    if(tn==='minions' && !hasSceptre) return false;
-    return true;
-  });
-}
+  function filterTacticsByStrictRules(allTactics){
+    return allTactics;
+  }
 
 // Ailments/Tactics roll (with duplicate prevention + cohesion bias)
   let ailmentSet = [];
