@@ -17,7 +17,9 @@ const {
   isRecommendationContentAllowedV3,
   isRecommendationV3Enabled,
   mergeRecommendationGrantedSkillAccessV3,
+  mergeRecommendationSkillCraftingV3,
   selectRecommendationPackageV3,
+  validateRecommendationSkillCraftingV3,
   validateRecommendationCatalogV3
 } = selector;
 
@@ -50,6 +52,7 @@ function entity({
   facts,
   equipment = { is_unrestricted: true },
   types = ['Spell', 'Damage'],
+  crafting = undefined,
   sourceTags = [],
   retrievalTerms = [],
   roles = ['primary_damage'],
@@ -58,6 +61,38 @@ function entity({
   compatibility = null,
   supportFamily = null
 }) {
+  const normalizedTypes = new Set(types.map((type) => String(type || '').toLowerCase()));
+  const weaponFamilies = [
+    'mace',
+    'quarterstaff',
+    'bow',
+    'crossbow',
+    'talisman',
+    'spear',
+    'unarmed'
+  ];
+  const titleCase = (value) => `${value.charAt(0).toUpperCase()}${value.slice(1)}`;
+  const inferredWeaponAffinities = weaponFamilies.filter((family) =>
+    normalizedTypes.has(family)
+    || (equipment?.mainhand_tags_any_of || []).includes(family)
+    || (equipment?.allowed_weapon_tags_any_of || []).includes(family)
+  );
+  const hasSpellMetaPayload = (Array.isArray(compatibility?.meta_payload?.allowed_skill_types_any_of)
+    ? compatibility.meta_payload.allowed_skill_types_any_of
+    : [])
+    .map((type) => String(type || '').toLowerCase())
+    .includes('spell');
+  const inferredCrafting = contentType === 'active_skill'
+    ? (inferredWeaponAffinities.length
+      ? {
+          types_raw: inferredWeaponAffinities.map(titleCase),
+          schools: [],
+          weapon_affinities: inferredWeaponAffinities
+        }
+      : (normalizedTypes.has('spell') || normalizedTypes.has('areaspell') || hasSpellMetaPayload
+          ? { types_raw: ['Elemental'], schools: ['elemental'], weapon_affinities: [] }
+          : { types_raw: [], schools: [], weapon_affinities: [] }))
+    : { types_raw: [], schools: [], weapon_affinities: [] };
   return {
     id: `skill:${id}`,
     source_id: id,
@@ -65,6 +100,7 @@ function entity({
     name,
     ...(supportFamily ? { support_family: supportFamily } : {}),
     candidate_roles: roles,
+    crafting: crafting === undefined ? inferredCrafting : crafting,
     retrieval_terms: retrievalTerms,
     facts,
     compatibility: compatibility || { equipment },
@@ -81,11 +117,16 @@ function catalog(entities) {
 }
 
 async function loadRealRecommendationCatalogV3() {
-  const [realCatalog, grantedAccess] = await Promise.all([
+  const [realCatalog, skillCrafting, grantedAccess] = await Promise.all([
     readFile(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url), 'utf8').then(JSON.parse),
+    readFile(new URL('../data/enriched/recommendation_skill_crafting_v3.json', import.meta.url), 'utf8').then(JSON.parse),
     readFile(new URL('../data/enriched/recommendation_granted_skill_access_v3.json', import.meta.url), 'utf8').then(JSON.parse)
   ]);
-  return mergeRecommendationGrantedSkillAccessV3(realCatalog, grantedAccess);
+  assert.equal(validateRecommendationSkillCraftingV3(skillCrafting).ok, true);
+  return mergeRecommendationGrantedSkillAccessV3(
+    mergeRecommendationSkillCraftingV3(realCatalog, skillCrafting),
+    grantedAccess
+  );
 }
 
 test('feature flag is explicit and supports a test override', () => {
@@ -520,7 +561,7 @@ test('native damage can carry an ailment without falsely fulfilling its applicat
   ));
 });
 
-test('Companion rolls prefer Tame Beast and suppress Rhoa Mount skill ideas', () => {
+test('Companion rolls do not select spirit or non-craftable companion skill ideas', () => {
   const result = selectRecommendationPackageV3(catalog([
     entity({
       id: 'tame-beast',
@@ -548,14 +589,11 @@ test('Companion rolls prefer Tame Beast and suppress Rhoa Mount skill ideas', ()
     offenseInventory: offenseInventory()
   });
 
-  assert.equal(result.primarySkill?.name, 'Tame Beast');
-  assert.deepEqual(result.primarySkill?.fulfilledObligations.map((proof) => proof.obligationId), [
-    'offense:companions'
-  ]);
+  assert.equal(result.primarySkill, null);
   assert.equal(result.pieces.some((piece) => piece.name === 'Rhoa Mount'), false);
 });
 
-test('persistent minion skills do not become generic non-archetype damage primaries', () => {
+test('persistent minion skills do not become skill ideas, even for archetype rolls', () => {
   const ragingSpirits = entity({
     id: 'raging-spirits',
     name: 'Raging Spirits',
@@ -582,7 +620,7 @@ test('persistent minion skills do not become generic non-archetype damage primar
   }, { offenseInventory: offenseInventory() });
 
   assert.equal(fireResult.primarySkill?.name, 'Fireball');
-  assert.equal(minionResult.primarySkill?.name, 'Raging Spirits');
+  assert.equal(minionResult.primarySkill, null);
 });
 
 test('unrestricted summon skills do not become generic ailment carriers without a rolled archetype', () => {
@@ -618,10 +656,10 @@ test('unrestricted summon skills do not become generic ailment carriers without 
   }, { offenseInventory: offenseInventory() });
 
   assert.equal(poisonResult.primarySkill?.name, 'Crossbow Hit');
-  assert.equal(minionResult.primarySkill?.name, 'Raise Zombie');
+  assert.equal(minionResult.primarySkill, null);
 });
 
-test('Minion rolls prefer non-Companion minions while Companion rolls prefer Companion evidence', () => {
+test('spirit minion and companion reservations stay out of Skill Ideas', () => {
   const skeletons = entity({
     id: 'skeletons',
     name: 'Skeletal Warrior',
@@ -654,8 +692,8 @@ test('Minion rolls prefer non-Companion minions while Companion rolls prefer Com
     offenseList: ['Companions']
   }, { offenseInventory: offenseInventory() });
 
-  assert.equal(minionResult.primarySkill?.name, 'Skeletal Warrior');
-  assert.equal(companionResult.primarySkill?.name, 'Azmerian Wolf');
+  assert.equal(minionResult.primarySkill, null);
+  assert.equal(companionResult.primarySkill, null);
 });
 
 test('a provider support completes the active package without becoming a second active skill', () => {
@@ -836,7 +874,7 @@ test('two supports may form a typed damage-to-ailment bridge on one skill', () =
   ));
 });
 
-test('two normal supports beat one lineage support for equivalent bridge coverage', () => {
+test('lineage support routes are excluded from Skill Ideas support assignment', () => {
   const target = {
     equipment: { is_unrestricted: true },
     target_skill: {
@@ -1272,7 +1310,7 @@ test('a conditional resource enabler requires its paired payoff to supply a trig
     id: 'infusion-focus',
     name: 'Infusion Focus',
     roles: ['setup_control', 'utility'],
-    types: ['Buff'],
+    types: ['Spell', 'Buff'],
     facts: [{
       relation: 'generates',
       subject: 'skill',
@@ -1819,7 +1857,7 @@ test('committed catalog produces a legal primary skill for representative rolls'
   }
 });
 
-test('committed critical profiles are complete, catalog-backed, and cover every weapon family', async () => {
+test('committed critical profiles are complete and cover recommendation-backed weapon families', async () => {
   const [realCatalog, realOffense, criticalProfiles] = await Promise.all([
     loadRealRecommendationCatalogV3(),
     readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse),
@@ -1835,11 +1873,7 @@ test('committed critical profiles are complete, catalog-backed, and cover every 
     && profile.base_crit_chance > 0
   ));
 
-  const weapons = [
-    'Two-handed Mace', 'Two-handed Axe', 'Two-handed Sword', 'Bow', 'Crossbow',
-    'Quarterstaff', 'Staff', 'One-handed Mace', 'One-handed Axe', 'One-handed Sword',
-    'Claw', 'Dagger', 'Flail', 'Spear', 'Wand', 'Sceptre', 'Talisman'
-  ];
+  const weapons = ['Mace', 'Quarterstaff', 'Bow', 'Crossbow', 'Spear', 'Staff', 'Wand', 'Sceptre'];
   for (const weapon of weapons) {
     const snapshot = { weapon, offenseList: ['Critical Hits'] };
     const result = selectRecommendationPackageV3(realCatalog, snapshot, {
@@ -1852,6 +1886,12 @@ test('committed critical profiles are complete, catalog-backed, and cover every 
     const selected = realCatalog.entities.find((entry) => entry.id === result.primarySkill.entityId);
     assert.equal(evaluateDeliveryCompatibilityV3(selected, snapshot).ok, true, weapon);
   }
+
+  const talisman = selectRecommendationPackageV3(realCatalog, {
+    weapon: 'Talisman',
+    offenseList: ['Critical Hits']
+  }, { offenseInventory: realOffense, criticalProfiles });
+  assert.equal(talisman.primarySkill, null);
 });
 
 test('committed catalog remains deterministic and equipment-legal across the roll matrix', async () => {
@@ -1938,6 +1978,7 @@ test('the real 9 by 16 active matrix has a locked final Offense coverage breakdo
       assert.ok(assignedSupports.every((support) =>
         support.fulfilledObligations.length + support.suppliedTargets.length > 0
       ), `${weapon} / ${offense.name}`);
+      assert.ok(assignedSupports.every((support) => support.availability === 'normal'), `${weapon} / ${offense.name}`);
       const primary = result.primarySkill;
       const obligationId = `offense:${offense.id}`;
       const coverage = result.diagnostics.offenseCoverage.find((entry) => entry.obligationId === obligationId);
@@ -1962,10 +2003,10 @@ test('the real 9 by 16 active matrix has a locked final Offense coverage breakdo
 
   assert.equal(Object.values(counts).reduce((sum, value) => sum + value, 0), 144);
   assert.deepEqual(counts, {
-    active_direct: 100,
+    active_direct: 68,
     support_assigned: 37,
-    carrier_only: 2,
-    no_primary: 5
+    carrier_only: 7,
+    no_primary: 32
   });
 });
 
@@ -1999,34 +2040,91 @@ test('committed catalog gates granted-only active skills by their provider sourc
   assert.equal(azmerianWolf.compatibility.access, undefined);
 });
 
-test('committed catalog separates Companion and nested Minion archetype evidence', async () => {
+test('committed catalog applies normal Skill Ideas gates to screenshot bad cases', async () => {
+  const [realCatalog, realOffense] = await Promise.all([
+    loadRealRecommendationCatalogV3(),
+    readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
+  ]);
+  const blockedNames = new Set([
+    'Azmerian Swarms',
+    'Kelari, the Tainted Sands',
+    'Navira, the Last Mirage',
+    'Punch',
+    'Raging Spirits',
+    'Spear Throw',
+    'Spiraling Conspiracy'
+  ]);
+  const cases = [
+    { weapon: 'Mace', offenseList: ['Minions'] },
+    { weapon: 'Mace', offenseList: ['Minions', 'Cold Damage'] },
+    { weapon: 'Mace', offenseList: ['Minions', 'Critical Hits'], ascendancy: 'Martial Artist' },
+    { weapon: 'Staff', offenseList: ['Freeze', 'Minions'], ascendancy: 'Disciple of Varashta' },
+    { weapon: 'Spear', offenseList: ['Critical Hits', 'Chaos Damage'] }
+  ];
+  const normalSkillEntity = (piece) => realCatalog.entities.find((entry) => entry.id === piece.entityId);
+  const exactTerms = (entity) => new Set((entity?.retrieval_terms || []).map((term) => String(term).toLowerCase()));
+
+  for (const snapshot of cases) {
+    const result = selectRecommendationPackageV3(realCatalog, snapshot, {
+      offenseInventory: realOffense,
+      selectionSeed: `screenshot-gates-${snapshot.weapon}-${snapshot.offenseList.join('-')}`
+    });
+    assert.ok(!result.pieces.some((piece) => blockedNames.has(piece.name)), JSON.stringify(snapshot));
+    for (const piece of result.pieces) {
+      const entity = normalSkillEntity(piece);
+      assert.ok(entity, piece.name);
+      assert.ok((entity.crafting?.types_raw || []).length > 0, piece.name);
+      assert.doesNotMatch(entity.source_id, /SkillGemPlayerDefault/i, piece.name);
+      const terms = exactTerms(entity);
+      assert.equal(terms.has('persistent') || terms.has('hasreservation') || terms.has('spirit'), false, piece.name);
+    }
+    for (const support of result.supportAssignments.flatMap((assignment) => assignment.supports)) {
+      assert.equal(support.availability, 'normal', support.name);
+    }
+  }
+
+  const maceMinions = selectRecommendationPackageV3(realCatalog, {
+    weapon: 'Mace',
+    offenseList: ['Minions']
+  }, { offenseInventory: realOffense });
+  assert.ok(maceMinions.supportAssignments.some((assignment) =>
+    assignment.supports.some((support) => support.name === 'Living Lightning II')
+  ));
+});
+
+test('committed catalog keeps spirit companions out and bridges martial Minions with normal supports', async () => {
   const [realCatalog, realOffense] = await Promise.all([
     loadRealRecommendationCatalogV3(),
     readFile(new URL('../data/offense-inventory.json', import.meta.url), 'utf8').then(JSON.parse)
   ]);
   const selectedNames = (weapon, offense) => {
     const names = new Set();
+    const supportNames = new Set();
     for (let index = 0; index < 64; index += 1) {
       const result = selectRecommendationPackageV3(realCatalog, {
         weapon,
         offenseList: [offense]
       }, { offenseInventory: realOffense, selectionSeed: `m-${index}` });
       if (result.primarySkill?.name) names.add(result.primarySkill.name);
+      for (const support of result.supportAssignments.flatMap((assignment) => assignment.supports)) {
+        supportNames.add(support.name);
+        assert.equal(support.availability, 'normal');
+      }
     }
-    return names;
+    return { names, supportNames };
   };
 
   const bowCompanions = selectedNames('Bow', 'Companions');
   const spearCompanions = selectedNames('Spear', 'Companions');
   const talismanCompanions = selectedNames('Talisman', 'Companions');
-  const talismanMinions = selectedNames('Talisman', 'Minions');
+  const maceMinions = selectedNames('Mace', 'Minions');
+  const bowMinions = selectedNames('Bow', 'Minions');
 
-  assert.ok(bowCompanions.has('Tame Beast'));
-  assert.equal(bowCompanions.has('Rhoa Mount'), false);
-  assert.ok(spearCompanions.has('Tame Beast'));
-  assert.equal(spearCompanions.has('Rhoa Mount'), false);
-  assert.equal(talismanCompanions.has('Pounce'), false);
-  assert.ok(talismanMinions.has('Pounce'));
+  assert.deepEqual([...bowCompanions.names], []);
+  assert.deepEqual([...spearCompanions.names], []);
+  assert.deepEqual([...talismanCompanions.names], []);
+  assert.ok(maceMinions.supportNames.has('Living Lightning II'));
+  assert.ok(bowMinions.supportNames.has('Living Lightning II'));
 
   const pounce = realCatalog.entities.find((entry) => entry.name === 'Pounce');
   const tameBeast = realCatalog.entities.find((entry) => entry.name === 'Tame Beast');
@@ -2038,7 +2136,7 @@ test('committed catalog separates Companion and nested Minion archetype evidence
   assert.ok(tameBeast.facts.some((fact) =>
     fact.relation === 'creates' && fact.mechanic === 'companion'
   ));
-  assert.equal(evaluateCompatibilityV3(tameBeast, { weapon: 'Bow' }).ok, true);
+  assert.equal(evaluateCompatibilityV3(tameBeast, { weapon: 'Spear' }).ok, true);
 });
 
 test('committed caster Totem rolls emit Spell Totem with a legal socketed Spell', async () => {
@@ -2284,7 +2382,7 @@ test('committed catalog keeps legal spear and crossbow options after the tighter
   assert.ok(crossbow.names.has('Gas Grenade'));
   assert.ok(crossbow.names.has('Voltaic Grenade'));
   assert.ok(crossbow.diagnostics.rankedCandidates >= 3);
-  assert.equal(crossbow.diagnostics.shortlistedCandidates, 3);
+  assert.equal(crossbow.diagnostics.shortlistedCandidates, 2);
 });
 
 test('reported empty and false-totem rolls select specific legal primary skills', async () => {
@@ -2356,23 +2454,13 @@ test('reported empty and false-totem rolls select specific legal primary skills'
       weapon: 'Talisman',
       offenseList: ['Shock', 'Electrocute']
     }, { offenseInventory: realOffense, selectionSeed: `reported-talisman-lanes-${index}` });
-    assert.ok(result.supportingSkill, `Talisman Shock/Electrocute ${index}`);
+    assert.equal(result.primarySkill, null, `Talisman Shock/Electrocute ${index}`);
     assert.ok(!result.pieces.some((piece) => piece.name === 'Thunderstorm'), `Talisman Shock/Electrocute ${index}`);
     assert.deepEqual(
       new Set(result.diagnostics.offenseCoverage
         .filter((entry) => ['offense:shock', 'offense:electrocute'].includes(entry.obligationId))
         .map((entry) => entry.state)),
-      new Set(['support_assigned']),
-      `Talisman Shock/Electrocute ${index}`
-    );
-    const assigned = result.supportAssignments.flatMap((assignment) =>
-      assignment.supports.map((support) => ({ ...support, skillName: assignment.skillName }))
-    );
-    assert.ok(assigned.some((support) => support.name === 'Shock'), `Talisman Shock/Electrocute ${index}`);
-    assert.ok(assigned.some((support) => support.name === 'Electrocute'), `Talisman Shock/Electrocute ${index}`);
-    assert.notEqual(
-      assigned.find((support) => support.name === 'Shock')?.skillName,
-      assigned.find((support) => support.name === 'Electrocute')?.skillName,
+      new Set(['no_primary']),
       `Talisman Shock/Electrocute ${index}`
     );
   }

@@ -1,6 +1,7 @@
 const RECOMMENDATION_CATALOG_V3_SCHEMA = 'recommendation-catalog-v3.0.0';
 const RECOMMENDATION_PACKAGE_V3_SCHEMA = 'recommendation-package-v3.0.0';
 const RECOMMENDATION_GRANTED_ACCESS_V3_SCHEMA = 'recommendation-granted-skill-access-v3.0.0';
+const RECOMMENDATION_SKILL_CRAFTING_V3_SCHEMA = 'recommendation-skill-crafting-v3.0.0';
 const RECOMMENDATION_V3_QUERY_PARAM = 'recommendationV3';
 const PRIMARY_QUALITY_BAND = 12;
 const COMPANION_QUALITY_BAND = 8;
@@ -109,11 +110,18 @@ const SUPPLY_RELATIONS = new Set(['fulfills', 'inflicts', 'creates', 'provides',
 const SUPPORT_ACTION_RELATIONS = new Set(['fulfills', 'inflicts', 'creates', 'provides', 'generates', 'converts']);
 const SUPPORT_UNCONDITIONAL_PROVISION_RELATIONS = new Set(['fulfills', 'provides', 'generates', 'converts']);
 const SUPPORT_INDEX_CACHE = new WeakMap();
-const SUPPORT_AVAILABILITY_PENALTY = Object.freeze({
-  normal: 0,
-  lineage: 1
-});
-const SUPPORT_AVAILABILITY_SCORE_WEIGHT = 500;
+const CASTER_CRAFTING_SCHOOLS = new Set(['occult', 'elemental', 'primal']);
+const DEFAULT_ACTIVE_SKILL_NAMES = new Set([
+  'axe_slash',
+  'bow_shot',
+  'claw_stab',
+  'crossbow_shot',
+  'dagger_stab',
+  'flail_strike',
+  'grenade',
+  'punch',
+  'spear_throw'
+]);
 const SUPPRESSED_COMPANION_SKILL_IDEAS = new Set(['rhoa_mount']);
 const COMPANION_SKILL_PREFERENCE_SCORE = Object.freeze({
   tame_beast: 90
@@ -213,6 +221,47 @@ function mergeRecommendationGrantedSkillAccessV3(catalog, accessPayload) {
             ...access
           }
         }
+      };
+    })
+  };
+}
+
+function validateRecommendationSkillCraftingV3(craftingPayload) {
+  if (!craftingPayload || typeof craftingPayload !== 'object' || Array.isArray(craftingPayload)) {
+    return { ok: false, reason: 'skill crafting map is not an object' };
+  }
+  const schema = craftingPayload?.schema_version;
+  if (schema !== RECOMMENDATION_SKILL_CRAFTING_V3_SCHEMA) {
+    return { ok: false, reason: `unexpected skill crafting schema ${schema || '<missing>'}` };
+  }
+  if (craftingPayload.catalog_schema_version && craftingPayload.catalog_schema_version !== RECOMMENDATION_CATALOG_V3_SCHEMA) {
+    return { ok: false, reason: 'skill crafting map targets a different catalog schema' };
+  }
+  if (!craftingPayload.crafting_by_entity_id || typeof craftingPayload.crafting_by_entity_id !== 'object' || Array.isArray(craftingPayload.crafting_by_entity_id)) {
+    return { ok: false, reason: 'skill crafting map entries are missing' };
+  }
+  return { ok: true, reason: '' };
+}
+
+function normalizedCraftingMetadata(crafting) {
+  return {
+    types_raw: unique(asArray(crafting?.types_raw).map(String)),
+    schools: unique(asArray(crafting?.schools).map(String)),
+    weapon_affinities: unique(asArray(crafting?.weapon_affinities).map(String))
+  };
+}
+
+function mergeRecommendationSkillCraftingV3(catalog, craftingPayload) {
+  const validation = validateRecommendationSkillCraftingV3(craftingPayload);
+  if (!validation.ok || !craftingPayload) return catalog;
+  const craftingByEntityId = craftingPayload.crafting_by_entity_id || {};
+  return {
+    ...catalog,
+    entities: asArray(catalog?.entities).map((entity) => {
+      if (entity?.content_type !== 'active_skill') return entity;
+      return {
+        ...entity,
+        crafting: normalizedCraftingMetadata(craftingByEntityId[entity?.id])
       };
     })
   };
@@ -514,6 +563,44 @@ function activeSkillTypes(entity) {
   return new Set(asArray(entity?.source_evidence?.active_skill_types).map(normalizeToken));
 }
 
+function craftingMetadata(entity) {
+  return entity?.crafting || entity?.source_evidence?.crafting || {};
+}
+
+function craftingTypeTokens(entity) {
+  return new Set(asArray(craftingMetadata(entity)?.types_raw).map(normalizeToken).filter(Boolean));
+}
+
+function craftingSchoolTokens(entity) {
+  return new Set([
+    ...asArray(craftingMetadata(entity)?.schools),
+    ...asArray(craftingMetadata(entity)?.types_raw).filter((value) =>
+      CASTER_CRAFTING_SCHOOLS.has(normalizeToken(value))
+    )
+  ].map(normalizeToken).filter(Boolean));
+}
+
+function craftingWeaponAffinityTokens(entity) {
+  return new Set([
+    ...asArray(craftingMetadata(entity)?.weapon_affinities),
+    ...asArray(craftingMetadata(entity)?.types_raw).filter((value) =>
+      MARTIAL_WEAPON_FAMILIES.has(normalizeToken(value))
+    )
+  ].map(normalizeToken).filter(Boolean));
+}
+
+function isDefaultOrBasicActiveSkill(entity) {
+  const sourceId = normalizeToken(entity?.source_id || entity?.id);
+  const name = normalizeToken(entity?.name);
+  return sourceId.includes('skillgemplayerdefault') || DEFAULT_ACTIVE_SKILL_NAMES.has(name);
+}
+
+function hasNormalActiveSkillCrafting(entity) {
+  return entity?.content_type === 'active_skill'
+    && craftingTypeTokens(entity).size > 0
+    && !isDefaultOrBasicActiveSkill(entity);
+}
+
 function entityHasHardMechanic(entity, mechanic, relations = null) {
   const allowedRelations = relations ? new Set(relations) : null;
   const target = normalizeToken(mechanic);
@@ -543,7 +630,13 @@ function createsRolledArchetype(entity, offenseObligations = []) {
 
 function isSpiritOrPersistentActive(entity) {
   const types = activeSkillTypes(entity);
-  return types.has('hasreservation') || types.has('persistent') || types.has('spirit');
+  const terms = new Set(asArray(entity?.retrieval_terms).map(normalizeToken));
+  return types.has('hasreservation')
+    || types.has('persistent')
+    || types.has('spirit')
+    || terms.has('hasreservation')
+    || terms.has('persistent')
+    || terms.has('spirit');
 }
 
 function targetSkillTypesMatch(rule, entity) {
@@ -624,6 +717,34 @@ function evaluateDeliveryCompatibilityV3(entity, snapshot = {}) {
   };
 }
 
+function evaluateCraftingDeliveryCompatibilityV3(entity, snapshot = {}) {
+  if (entity?.content_type !== 'active_skill') return { ok: true, reason: '' };
+  if (!hasNormalActiveSkillCrafting(entity)) {
+    return { ok: false, reason: 'active skill is not in the normal craftable skill gem pool' };
+  }
+
+  const weapon = weaponDeliveryProfileV3(snapshot);
+  if (weapon.kind === 'unknown') return { ok: true, reason: '', weapon };
+
+  const types = activeSkillTypes(entity);
+  if (weapon.kind === 'martial') {
+    return craftingWeaponAffinityTokens(entity).has(weapon.family)
+      ? { ok: true, reason: '', weapon }
+      : { ok: false, reason: `skill is not a ${weapon.family} crafting type`, weapon };
+  }
+
+  const metaPayloadTypes = new Set(
+    asArray(entity?.compatibility?.meta_payload?.allowed_skill_types_any_of).map(normalizeToken)
+  );
+  const isSpell = types.has('spell') || types.has('areaspell') || metaPayloadTypes.has('spell');
+  const hasCasterSchool = Array.from(craftingSchoolTokens(entity)).some((school) =>
+    CASTER_CRAFTING_SCHOOLS.has(school)
+  );
+  return isSpell && hasCasterSchool
+    ? { ok: true, reason: '', weapon }
+    : { ok: false, reason: 'caster weapons require an Occult, Elemental, or Primal spell', weapon };
+}
+
 function evaluatePackagePieceDeliveryV3(entity, snapshot = {}) {
   const weapon = weaponDeliveryProfileV3(snapshot);
   if (weapon.kind !== 'martial') return { ok: true, reason: '', weapon };
@@ -646,7 +767,8 @@ function isDirectlyUsableActive(entity, offenseObligations = []) {
   if (!entity || entity.content_type !== 'active_skill') return false;
   if (!asArray(entity.candidate_roles).includes('primary_damage')) return false;
   if (!isSelectableSkillName(entity.name)) return false;
-  if (isSpiritOrPersistentActive(entity) && !createsRolledArchetype(entity, offenseObligations)) return false;
+  if (!hasNormalActiveSkillCrafting(entity)) return false;
+  if (isSpiritOrPersistentActive(entity)) return false;
 
   const types = activeSkillTypes(entity);
   const createsDamageProxy = asArray(entity.facts).some((fact) =>
@@ -727,14 +849,6 @@ function supportAvailability(entity) {
   return terms.has('lineage') ? 'lineage' : 'normal';
 }
 
-function supportAvailabilityPenalty(entity) {
-  return SUPPORT_AVAILABILITY_PENALTY[supportAvailability(entity)] || 0;
-}
-
-function supportSetAvailabilityPenalty(supports) {
-  return asArray(supports).reduce((sum, support) => sum + supportAvailabilityPenalty(support), 0);
-}
-
 function hardSupportedSkillFacts(entity) {
   return asArray(entity?.facts).filter((fact) =>
     normalizeToken(fact?.subject) === 'supported_skill'
@@ -792,6 +906,7 @@ function supportIndexForCatalog(catalog) {
   const supports = collapseSupportVariants(asArray(catalog?.entities)
     .filter((entity) => entity?.content_type === 'support_gem')
     .filter((entity) => isSelectableSkillName(entity?.name) && isRecommendationContentAllowedV3(entity))
+    .filter((entity) => supportAvailability(entity) !== 'lineage')
     .filter((entity) => actionableSupportFacts(entity).length > 0));
   const byEffectMechanic = new Map();
   const bySupplyMechanic = new Map();
@@ -928,8 +1043,7 @@ function supportCompletionProof(entity, obligation, index) {
   }
 
   completions.sort((a, b) =>
-    supportSetAvailabilityPenalty(a.supports) - supportSetAvailabilityPenalty(b.supports)
-    || a.supports.length - b.supports.length
+    a.supports.length - b.supports.length
     || proofScore(b.proof) - proofScore(a.proof)
     || b.supports.reduce((sum, support) => sum + supportTier(support), 0)
       - a.supports.reduce((sum, support) => sum + supportTier(support), 0)
@@ -1150,6 +1264,8 @@ function stableHash32(value) {
 function isUsablePackageActive(entity) {
   if (!entity || entity.content_type !== 'active_skill') return false;
   if (!isSelectableSkillName(entity.name) || !isRecommendationContentAllowedV3(entity)) return false;
+  if (!hasNormalActiveSkillCrafting(entity)) return false;
+  if (isSpiritOrPersistentActive(entity)) return false;
   const roles = new Set(asArray(entity.candidate_roles));
   if (!Array.from(PACKAGE_CANDIDATE_ROLES).some((role) => roles.has(role))) return false;
 
@@ -1160,9 +1276,10 @@ function isUsablePackageActive(entity) {
 function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalProfiles = {}, supportIndex = null) {
   if (!isUsablePackageActive(entity)) return null;
   if (isSuppressedCompanionSkillIdea(entity, offenseObligations)) return null;
-  if (isSpiritOrPersistentActive(entity) && !createsRolledArchetype(entity, offenseObligations)) return null;
   const compatibility = evaluateCompatibilityV3(entity, snapshot);
   if (!compatibility.ok) return null;
+  const craftingDelivery = evaluateCraftingDeliveryCompatibilityV3(entity, snapshot);
+  if (!craftingDelivery.ok) return null;
   const pieceDelivery = evaluatePackagePieceDeliveryV3(entity, snapshot);
   if (!pieceDelivery.ok) return null;
   const criticalEvidence = criticalEvidenceForEntity(entity, offenseObligations, criticalProfiles);
@@ -1923,7 +2040,6 @@ function analyzeSupportPackageForSkill(
     supportRequirementEdges,
     prevented: Array.from(prevented),
     evidenceScore,
-    availabilityPenalty: supportSetAvailabilityPenalty(supports),
     tierScore: supports.reduce((sum, support) => sum + supportTier(support), 0)
   };
 }
@@ -2080,20 +2196,17 @@ function assignSupportPackagesV3(catalog, winner, offenseObligations) {
       const requireCount = resolvedDemands.filter((target) => target.relation === 'requires').length;
       const consumeCount = resolvedDemands.filter((target) => target.relation === 'consumes').length;
       const evidenceScore = chosen.reduce((sum, entry) => sum + entry.evidenceScore, 0);
-      const availabilityPenalty = chosen.reduce((sum, entry) => sum + entry.availabilityPenalty, 0);
       const tierScore = chosen.reduce((sum, entry) => sum + entry.tierScore, 0);
       combinations.push({
         chosen,
         fulfilled,
         resolvedDemands,
         supportCount,
-        availabilityPenalty,
         tierScore,
         score: fulfilled.length * 10000
           + requireCount * 2500
           + consumeCount * 1500
           + evidenceScore * 10
-          - availabilityPenalty * SUPPORT_AVAILABILITY_SCORE_WEIGHT
           - supportCount * 100
       });
       return;
@@ -2109,7 +2222,6 @@ function assignSupportPackagesV3(catalog, winner, offenseObligations) {
     b.score - a.score
     || b.fulfilled.length - a.fulfilled.length
     || b.resolvedDemands.length - a.resolvedDemands.length
-    || a.availabilityPenalty - b.availabilityPenalty
     || a.supportCount - b.supportCount
     || b.tierScore - a.tierScore
     || a.chosen.flatMap((entry) => entry.supports).map((support) => support.name).sort().join('+')
@@ -2472,6 +2584,7 @@ export {
   RECOMMENDATION_CATALOG_V3_SCHEMA,
   RECOMMENDATION_PACKAGE_V3_SCHEMA,
   RECOMMENDATION_GRANTED_ACCESS_V3_SCHEMA,
+  RECOMMENDATION_SKILL_CRAFTING_V3_SCHEMA,
   RECOMMENDATION_V3_QUERY_PARAM,
   PRIMARY_QUALITY_BAND,
   COMPANION_QUALITY_BAND,
@@ -2485,8 +2598,10 @@ export {
   isRecommendationContentAllowedV3,
   isRecommendationV3Enabled,
   mergeRecommendationGrantedSkillAccessV3,
+  mergeRecommendationSkillCraftingV3,
   selectRecommendationPackageV3,
   validateRecommendationGrantedSkillAccessV3,
+  validateRecommendationSkillCraftingV3,
   validateRecommendationCatalogV3,
   weaponDeliveryProfileV3
 };

@@ -1,0 +1,4050 @@
+{
+  "schema_version": "recommendation-skill-crafting-v3.0.0",
+  "catalog_schema_version": "recommendation-catalog-v3.0.0",
+  "active_skill_count": 558,
+  "craftable_active_skill_count": 261,
+  "crafting_by_entity_id": {
+    "skill:Metadata/Items/Gem/SkillGemAbyssalLivingBomb": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAlchemistsBoon": {
+      "types_raw": [
+        "Bow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemAncestralCry": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemArchmage": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemArmourPiercingRounds": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyAlignFate": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyAncestralSpirits": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyBleedingConcoction": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyBloodBoil": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyCommandFireDjinnFlameRunes": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyCommandFireDjinnMassFusillade": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyCommandFireDjinnMeteor": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyCommandSandDaggerSlam": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyCommandSandExplodeTeleport": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyCommandWaterDjinnESRecharge": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyCommandWaterDjinnGroundBurst": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyCommandWaterDjinnOasis": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyCorpseBeetles": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyDemonForm": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyElementalExpression": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyElementalStorm": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyEncasedInJade": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyExplosiveConcoction": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyFireSpellOnHit": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyFulminatingConcoction": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyHollowFocus": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyHollowForm": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyHollowResonance": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyInevitableAgony": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyInfuseWeapon": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyIntoTheBreach": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyLifeRemnants": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyManifestWeapon": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyMeditate": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyMetaArcaneArchery": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyMetaRangedAttackOnFreeze": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyMetaRangedAttackOnIgnite": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyMetaRangedAttackOnShock": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyMirageDeadeye": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyMomentOfVulnerability": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyPoisonousConcoction": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyQueensProcession": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyRitualSacrifice": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyShatteringConcoction": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancySorceryWard": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancySummonFireDjinn": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancySummonInfernalHound": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancySummonSandDjinn": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyTemperWeapon": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyTemporalRift": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyTimeFreeze": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyTimeSnap": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyUnboundAvatar": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyUnleash": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyVividStampede": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyVoidIllusion": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendancyWitchHunterMark": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAscendanyMetaDeadeyeMarks": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemAttrition": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemBarkskin": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemBearFuryOfTheMountain": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemBerserk": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemBlackPowderBlitz": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemBlink": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemBlinkSandPlayer": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemBloodhoundsMark": {
+      "types_raw": [
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemBoneBlast": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemBoneCage": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemBonestorm": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemChaoticInfusion": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemChargeInfusion": {
+      "types_raw": [
+        "Crossbow",
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow",
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemClusterGrenade": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemColdSnap": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemCombatFrenzy": {
+      "types_raw": [
+        "Bow",
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow",
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemConvalescence": {
+      "types_raw": [
+        "Elemental",
+        "Occult"
+      ],
+      "schools": [
+        "elemental",
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemCrossbowRequiem": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemCullTheWeak": {
+      "types_raw": [
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemDarkEffigy": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemDefianceBanner": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemDetonateMinion": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemDetonatingArrow": {
+      "types_raw": [
+        "Bow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemDreadBanner": {
+      "types_raw": [
+        "Crossbow",
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow",
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemElectrocutingArrow": {
+      "types_raw": [
+        "Bow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemElementalConflux": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemElementalInvocation": {
+      "types_raw": [
+        "Elemental",
+        "Quarterstaff"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemElementalSiphon": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemElementalSundering": {
+      "types_raw": [
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemElementalWeakness": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemEmergencyReload": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemEntangle": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemExplodingPoisonToad": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemExplosiveGrenade": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemExplosiveShot": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemExplosiveSpear": {
+      "types_raw": [
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemFangsOfFrost": {
+      "types_raw": [
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemFeastOfFlesh": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemFeralInvocation": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemFireball": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemFlameLink": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemFlashGrenade": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemForgeHammer": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemFortifyingCry": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemFragmentationRounds": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemFreezingMark": {
+      "types_raw": [
+        "Bow",
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow",
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemFreezingSalvo": {
+      "types_raw": [
+        "Bow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemFrostDarts": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemFrozenLocus": {
+      "types_raw": [
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemFulmination": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemGalvanicShards": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemGasArrow": {
+      "types_raw": [
+        "Bow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemGasGrenade": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemGatheringStorm": {
+      "types_raw": [
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemGeminiSurge": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemGlacialBolt": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemGrimFeast": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemHailstormRounds": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemHammerOfNgamahu": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemHammerOfTheGods": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemHandOfChayula": {
+      "types_raw": [
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemHeartOfIce": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemHeraldOfBlood": {
+      "types_raw": [
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemHeraldOfPlague": {
+      "types_raw": [
+        "Bow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemHighVelocityRounds": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemHydra": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemIceFragments": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemIceShards": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemIceShot": {
+      "types_raw": [
+        "Bow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemIceTippedArrows": {
+      "types_raw": [
+        "Bow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemIcestorm": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemIncendiaryShot": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemInternecineDraw": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemIronWard": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemLightlessStalker": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemLightningRod": {
+      "types_raw": [
+        "Bow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemLivingBombPlayer": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemLunarAssault": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemMagmaBarrier": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemMagneticSalvo": {
+      "types_raw": [
+        "Bow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemMalice": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemManaDrain": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemManaRemnants": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemMantraOfDestruction": {
+      "types_raw": [
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemMirageArcher": {
+      "types_raw": [
+        "Bow",
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow",
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemMoltenBlast": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemMortarCannon": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemOilBarrage": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemOilGrenade": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemOverwhelmingPresence": {
+      "types_raw": [
+        "Crossbow",
+        "Mace",
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": [
+        "crossbow",
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemParry": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPerfectStrike": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemPermafrostBolts": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemPhantasmalArrow": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPinnacleOfPower": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlasmaBlast": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlayerDefault1HAxe": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlayerDefault1HMace": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlayerDefault1HSword": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlayerDefault2HAxe": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlayerDefault2HMace": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlayerDefault2HSword": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlayerDefaultAxeAxe": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlayerDefaultBow": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlayerDefaultClaw": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlayerDefaultClawClaw": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlayerDefaultCrossbow": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlayerDefaultDagger": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlayerDefaultDaggerDagger": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlayerDefaultFlail": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlayerDefaultGrenadeLauncher": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlayerDefaultMaceMace": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlayerDefaultQuarterstaff": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlayerDefaultSpear": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlayerDefaultSpearOffHand": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlayerDefaultSpearThrow": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlayerDefaultSwordSword": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlayerDefaultUnarmed": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlaytestAttack": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlaytestSlam": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPlaytestSpell": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPoisonBurstArrow": {
+      "types_raw": [
+        "Bow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemPrimalAvatar": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPrimalAvatarQuadrillaSlam": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPrimalBounty": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemPrimalStrikes": {
+      "types_raw": [
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemProfaneRitual": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemRagingSpirits": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemRake": {
+      "types_raw": [
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemRapidShot": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemRavenousSwarm": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemReapersInvocation": {
+      "types_raw": [
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemRedQueenVisage": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemResonatingShield": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemSacrifice": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemSanguineRevelry": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemScavengedPlating": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemShardScavenger": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemShieldBlock": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemShieldWall": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemShockburstRounds": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemShockchainArrow": {
+      "types_raw": [
+        "Bow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemSiegeCascade": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemSiphonElements": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemSiphoningStrike": {
+      "types_raw": [
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemSnipe": {
+      "types_raw": [
+        "Bow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemSolarOrb": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemSoulLink": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemSoulOffering": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemSpearOfSolaris": {
+      "types_raw": [
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemSpearWindVortex": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemSpellslinger": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemStampede": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemStormLance": {
+      "types_raw": [
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemStormWave": {
+      "types_raw": [
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemStormblastBolts": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemStormcallerArrow": {
+      "types_raw": [
+        "Bow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemTameBeast": {
+      "types_raw": [
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemTempestBell": {
+      "types_raw": [
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemThrashingVines": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemThunderousLeap": {
+      "types_raw": [
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemTimeOfNeed": {
+      "types_raw": [
+        "Mace",
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemTornadoShot": {
+      "types_raw": [
+        "Bow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemToxicDomain": {
+      "types_raw": [
+        "Bow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemToxicGrowth": {
+      "types_raw": [
+        "Bow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemTriggeredAbyssalApparition": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemTriggeredCausticCloud": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemTriggeredDetonation": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemTriggeredGasCloud": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemTrinity": {
+      "types_raw": [
+        "Primal",
+        "Spear"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": [
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemTwister": {
+      "types_raw": [
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemUnearth": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemUniqueBreachLightningBolt": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemUniqueDuskVigilTriggeredBlazingCluster": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemUniqueEarthboundTriggeredSpark": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemUnusable": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemVaultingImpact": {
+      "types_raw": [
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemVineArrow": {
+      "types_raw": [
+        "Bow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemVoltaicMark": {
+      "types_raw": [
+        "Bow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemWarBanner": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemWhirlwindLance": {
+      "types_raw": [
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemWildProtector": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemWindDancer": {
+      "types_raw": [
+        "Bow",
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow",
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemWindSerpentsFury": {
+      "types_raw": [
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemWingBlast": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemWitheringPresence": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemWolfArcticHowl": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemWolfCrossSlash": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemWolfLunarBlessing": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemWolfShred": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemWyvernDevour": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gem/SkillGemWyvernFlameBreath": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/ReservationSkillGemUnknown1": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/ReservationSkillGemUnknown2": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/ReservationSkillGemUnknown3": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/ReservationSkillGemUnknown4": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/ReservationSkillGemUnknown5": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/ReservationSkillGemUnknown6": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/ReservationSkillGemUnknown7": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/ReservationSkillGemUnknown8": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/ReservationSkillGemUnknown9": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemAbyssalPact": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemAncestralWarriorTotem": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemAncientGifts": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemAnimusExchange": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemAnimusSplinters": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemArc": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemArchonOfChayula": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemArcticArmour": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemArmourBreaker": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemArtilleryBallista": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemAscendancyApocalypse": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemAscendancySupportingFire": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemAscendancyVirtuousBarrier": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemAxeChop": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemAxeExecute": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemAxeHeavyCleave": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemAxeLeapingChop": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemAxeRaisedChop": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemAxeSlash": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemAxeWhirlingSlash": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemAzmerianSwarm": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemAzmerianWolf": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemBallLightning": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemBarrage": {
+      "types_raw": [
+        "Bow",
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow",
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemBarrierInvocation": {
+      "types_raw": [
+        "Elemental",
+        "Occult",
+        "Quarterstaff"
+      ],
+      "schools": [
+        "elemental",
+        "occult"
+      ],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemBearMaul": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemBearRampage": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemBindSpectre": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemBitterDead": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemBladeDance": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemBladeNova": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemBlasphemy": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemBloodHunt": {
+      "types_raw": [
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemBoneOffering": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemBoneshatter": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemBriarpatch": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemCastCurseOnBlock": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemCastOnBlock": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemCastOnCharmUse": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemCastOnCritical": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemCastOnDeath": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemCastOnDodge": {
+      "types_raw": [
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemCastOnElementalAilment": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemCastOnFreeze": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemCastOnIgnite": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemCastOnMeleeKill": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemCastOnMeleeStun": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemCastOnMinionDeath": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemCastOnShock": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemCastWhenDamageTaken": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemCastWhenStunned": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemCastWhileChannelling": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemChaosbolt": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemChargedStaff": {
+      "types_raw": [
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemClawRake": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemCoilingBolts": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemComboKnifeThrow": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemComet": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemConductiveRunes": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemConductivity": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemContagion": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemCorpseCloud": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemCorpsewadeCorpseCloud": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemCracklingPalm": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemCrushingEarth": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemCrushingFear": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemDarkPact": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemDarkTempest": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemDemonMagus": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemDespair": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemDetonateDead": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemDetonateLiving": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemDiscipline": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemDisengage": {
+      "types_raw": [
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemDodgeRoll": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemDominatingAura": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemEarthquake": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemEarthshatter": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemEmberFusillade": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemEnervatingNova": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemEnfeeble": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemEscapeShot": {
+      "types_raw": [
+        "Bow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemEssenceDrain": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemEternalMarch": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemEternalRage": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemEvasiveStrike": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemExplosiveTransmutation": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemExsanguinate": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemEyeOfWinter": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemFallingThunder": {
+      "types_raw": [
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemFerociousRoar": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemFirebolt": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemFirestorm": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemFlameSlice": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemFlameWall": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemFlameblast": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemFlammability": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemFlickerStrike": {
+      "types_raw": [
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemFragmentsOfThePast": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemFreezingShards": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemFrostBomb": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemFrostWall": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemFrostbolt": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemFrostflameNova": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemFungalTerrain": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemFuriousSlam": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemFuturePast": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemGalvanicField": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemGelidPalm": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemGhostDance": {
+      "types_raw": [
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemGlacialCascade": {
+      "types_raw": [
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemGlacialClash": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemGlacialLance": {
+      "types_raw": [
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemGraveCommand": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemGrimPillars": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemHarbingerOfMadness": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemHazardousHoldout": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemHeraldOfAsh": {
+      "types_raw": [
+        "Mace",
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemHeraldOfIce": {
+      "types_raw": [
+        "Primal",
+        "Quarterstaff"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemHeraldOfThunder": {
+      "types_raw": [
+        "Bow",
+        "Crossbow",
+        "Quarterstaff",
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow",
+        "crossbow",
+        "quarterstaff",
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemHexblast": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemHisFoulEmergence": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemHisWinnowingFlame": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemHollowShell": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemHyenaCackle": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemHyperSlash": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemHypothermia": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemIceNova": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemIceStrike": {
+      "types_raw": [
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemImpurity": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemIncinerate": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemInfernalCry": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemKillingPalm": {
+      "types_raw": [
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemKnifeFlip": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemLandslide": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemLeapSlam": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemLeapingAxeCatch": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemLeylines": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemLightningArrow": {
+      "types_raw": [
+        "Bow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemLightningBolt": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemLightningConduit": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemLightningSpear": {
+      "types_raw": [
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemLightningSpellOnHit": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemLightningWarp": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemLingeringIllusion": {
+      "types_raw": [
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemManaTempest": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemMetaBowTotem": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemMidnightStar": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemMirrorOfRefraction": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemMistRaven": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemMistRavenCompanionSwoop": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemMoltenCrash": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemMoltenShower": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemOrbOfStorms": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemPainOffering": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemPlagueBearer": {
+      "types_raw": [
+        "Bow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemPlungingBlade": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemPowerSiphon": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemPoweredByVerisium": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemPurityOfFire": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemPurityOfIce": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemPurityOfLightning": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemRainOfArrows": {
+      "types_raw": [
+        "Bow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemRainOfBlades": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemRaiseZombie": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemRapidAssault": {
+      "types_raw": [
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemReap": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemRefutation": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemRemnantsOfKalguur": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemRend": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemRepulsion": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemRhoaMount": {
+      "types_raw": [
+        "Bow",
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow",
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemRighteousDescent": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemRingOfBlades": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemRipwireBallista": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemRollingMagma": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemRollingSlam": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemRunicReprieve": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemRunicTempering": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSavageFury": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemScatteringCalamity": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSeismicCry": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemShadowAmbush": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemShadowDash": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemShadowThiefSlash": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemShatteringPalm": {
+      "types_raw": [
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemShatteringSpite": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemShieldCharge": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemShockwaveTotem": {
+      "types_raw": [
+        "Mace",
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemShroud": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSigilOfLife": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSigilOfPower": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSkeletalArsonist": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSkeletalBrute": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSkeletalCleric": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSkeletalFrostMage": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSkeletalReaver": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSkeletalSniper": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSkeletalStormMage": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSkeletalWarrior": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSkeletalWarriorWeaponSkill": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSkyfall": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSmashToSmithereens": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSnipersMark": {
+      "types_raw": [
+        "Bow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemSoulCrystal": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSoulrend": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSpark": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSpearfield": {
+      "types_raw": [
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemSpellTotem": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSpinningFlail": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSpinningInferno": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSpinningThrow": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSpiralThrow": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSpiralVolley": {
+      "types_raw": [
+        "Bow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "bow"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemSpiralingConspiracy": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSpiritVessel": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemStaggeringPalm": {
+      "types_raw": [
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemStarbornOnslaught": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemStormBlade": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSummonBeast": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSummonMercenaryCompanion": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSummonSpectre": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSunder": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemSuperchargedSlam": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemSwordLeapSlash": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemSwordLunge": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemTempestFlurry": {
+      "types_raw": [
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemTemporalChains": {
+      "types_raw": [
+        "Elemental"
+      ],
+      "schools": [
+        "elemental"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemTheFlawedEdict": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemTheStarsAnswer": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemThunderstorm": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemTornado": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemTrailOfCaltrops": {
+      "types_raw": [
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemTreeWhip": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemTripleSlash": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemTriskelionCascade": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemUniqueAtziriHerald": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown1": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown10": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown11": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown12": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown13": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown14": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown15": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown16": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown17": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown18": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown19": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown2": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown20": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown21": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown22": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown23": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown24": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown25": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown26": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown27": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown3": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown4": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown5": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown6": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown7": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown8": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemUnknown9": {
+      "types_raw": [
+        "Axe",
+        "Dagger",
+        "Flail",
+        "Sword"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "axe",
+        "dagger",
+        "flail",
+        "sword"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemValakosCharge": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemVerisiumManifestation": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemVileDisruption": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemVolatileDead": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemVolcanicFissure": {
+      "types_raw": [
+        "Mace"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "mace"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemVolcano": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemVoltaicBarrier": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemVoltaicGrenade": {
+      "types_raw": [
+        "Crossbow"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "crossbow"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemVulnerability": {
+      "types_raw": [
+        "Occult"
+      ],
+      "schools": [
+        "occult"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemWalkingCalamity": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemWardboundMinions": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemWaveOfFrost": {
+      "types_raw": [
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemWhirlingAssault": {
+      "types_raw": [
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemWhirlingSlash": {
+      "types_raw": [
+        "Spear"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "spear"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemWindBlast": {
+      "types_raw": [
+        "Quarterstaff"
+      ],
+      "schools": [],
+      "weapon_affinities": [
+        "quarterstaff"
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemWither": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemWolfHowl": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemWolfPack": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SkillGemWolfPounce": {
+      "types_raw": [
+        "Primal"
+      ],
+      "schools": [
+        "primal"
+      ],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SupportGemUnknown1": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SupportGemUnknown2": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SupportGemUnknown3": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SupportGemUnknown4": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SupportGemUnknown5": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SupportGemUnknown6": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SupportGemUnknown7": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SupportGemUnknown8": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/SupportGemUnknown9": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/UniqueSkillGemHeraldOfAsh": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/UniqueSkillGemHeraldOfIce": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/UniqueSkillGemHeraldOfThunder": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/Items/Gems/UniqueSkillGemWitheringPresence": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/items/Gems/SkillGemStaffConsecrate": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    },
+    "skill:Metadata/items/Gems/SkillGemStaffUnleash": {
+      "types_raw": [],
+      "schools": [],
+      "weapon_affinities": []
+    }
+  }
+}
