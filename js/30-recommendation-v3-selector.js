@@ -628,7 +628,35 @@ function createsRolledArchetype(entity, offenseObligations = []) {
   );
 }
 
-function isSpiritOrPersistentActive(entity) {
+function isSummoningActive(entity) {
+  const types = activeSkillTypes(entity);
+  return types.has('createsminion')
+    || types.has('createscompanion')
+    || types.has('minion')
+    || asArray(entity?.facts).some((fact) =>
+      ['creates', 'provides'].includes(fact?.relation)
+      && ['minion', 'companion'].includes(normalizeToken(fact?.mechanic))
+      && HARD_CONFIDENCE.has(fact?.confidence)
+    );
+}
+
+function isExplicitSpiritActive(entity) {
+  const types = activeSkillTypes(entity);
+  const terms = new Set(asArray(entity?.retrieval_terms).map(normalizeToken));
+  const name = normalizeToken(entity?.name);
+  return types.has('spirit')
+    || terms.has('spirit')
+    || /(?:^|_)spirits?(?:_|$)/.test(name);
+}
+
+function isOngoingReservationBuffActive(entity) {
+  const types = activeSkillTypes(entity);
+  const terms = new Set(asArray(entity?.retrieval_terms).map(normalizeToken));
+  const hasReservation = types.has('hasreservation') || terms.has('hasreservation');
+  return hasReservation && (types.has('buff') || types.has('ongoingskill'));
+}
+
+function isPersistentOrReservationActive(entity) {
   const types = activeSkillTypes(entity);
   const terms = new Set(asArray(entity?.retrieval_terms).map(normalizeToken));
   return types.has('hasreservation')
@@ -637,6 +665,13 @@ function isSpiritOrPersistentActive(entity) {
     || terms.has('hasreservation')
     || terms.has('persistent')
     || terms.has('spirit');
+}
+
+function isBlockedPersistentOrReservationActive(entity, offenseObligations = []) {
+  if (!isPersistentOrReservationActive(entity)) return false;
+  if (isExplicitSpiritActive(entity) || isOngoingReservationBuffActive(entity)) return true;
+  if (!hasNormalActiveSkillCrafting(entity)) return true;
+  return !createsRolledArchetype(entity, offenseObligations);
 }
 
 function targetSkillTypesMatch(rule, entity) {
@@ -665,14 +700,7 @@ function evaluateDeliveryCompatibilityV3(entity, snapshot = {}) {
   const types = new Set(asArray(entity?.source_evidence?.active_skill_types).map(normalizeToken));
   const isAttack = types.has('attack');
   const isSpell = types.has('spell');
-  const isSummoning = types.has('createsminion')
-    || types.has('createscompanion')
-    || types.has('minion')
-    || asArray(entity?.facts).some((fact) =>
-      ['creates', 'provides'].includes(fact?.relation)
-      && ['minion', 'companion'].includes(normalizeToken(fact?.mechanic))
-      && HARD_CONFIDENCE.has(fact?.confidence)
-    );
+  const isSummoning = isSummoningActive(entity);
   const explicit = explicitWeaponDeliveryEvidence(entity, snapshot);
 
   if (weapon.kind === 'martial') {
@@ -737,12 +765,13 @@ function evaluateCraftingDeliveryCompatibilityV3(entity, snapshot = {}) {
     asArray(entity?.compatibility?.meta_payload?.allowed_skill_types_any_of).map(normalizeToken)
   );
   const isSpell = types.has('spell') || types.has('areaspell') || metaPayloadTypes.has('spell');
+  const isSummoning = isSummoningActive(entity);
   const hasCasterSchool = Array.from(craftingSchoolTokens(entity)).some((school) =>
     CASTER_CRAFTING_SCHOOLS.has(school)
   );
-  return isSpell && hasCasterSchool
+  return (isSpell || isSummoning) && hasCasterSchool
     ? { ok: true, reason: '', weapon }
-    : { ok: false, reason: 'caster weapons require an Occult, Elemental, or Primal spell', weapon };
+    : { ok: false, reason: 'caster weapons require an Occult, Elemental, or Primal spell or summon', weapon };
 }
 
 function evaluatePackagePieceDeliveryV3(entity, snapshot = {}) {
@@ -768,7 +797,7 @@ function isDirectlyUsableActive(entity, offenseObligations = []) {
   if (!asArray(entity.candidate_roles).includes('primary_damage')) return false;
   if (!isSelectableSkillName(entity.name)) return false;
   if (!hasNormalActiveSkillCrafting(entity)) return false;
-  if (isSpiritOrPersistentActive(entity)) return false;
+  if (isBlockedPersistentOrReservationActive(entity, offenseObligations)) return false;
 
   const types = activeSkillTypes(entity);
   const createsDamageProxy = asArray(entity.facts).some((fact) =>
@@ -1261,11 +1290,11 @@ function stableHash32(value) {
   return hash >>> 0;
 }
 
-function isUsablePackageActive(entity) {
+function isUsablePackageActive(entity, offenseObligations = []) {
   if (!entity || entity.content_type !== 'active_skill') return false;
   if (!isSelectableSkillName(entity.name) || !isRecommendationContentAllowedV3(entity)) return false;
   if (!hasNormalActiveSkillCrafting(entity)) return false;
-  if (isSpiritOrPersistentActive(entity)) return false;
+  if (isBlockedPersistentOrReservationActive(entity, offenseObligations)) return false;
   const roles = new Set(asArray(entity.candidate_roles));
   if (!Array.from(PACKAGE_CANDIDATE_ROLES).some((role) => roles.has(role))) return false;
 
@@ -1274,7 +1303,7 @@ function isUsablePackageActive(entity) {
 }
 
 function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalProfiles = {}, supportIndex = null) {
-  if (!isUsablePackageActive(entity)) return null;
+  if (!isUsablePackageActive(entity, offenseObligations)) return null;
   if (isSuppressedCompanionSkillIdea(entity, offenseObligations)) return null;
   const compatibility = evaluateCompatibilityV3(entity, snapshot);
   if (!compatibility.ok) return null;

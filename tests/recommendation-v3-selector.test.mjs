@@ -561,7 +561,13 @@ test('native damage can carry an ailment without falsely fulfilling its applicat
   ));
 });
 
-test('Companion rolls do not select spirit or non-craftable companion skill ideas', () => {
+test('Companion rolls select craftable companion skills but not non-craftable reservations', () => {
+  const spearEquipment = {
+    is_unrestricted: false,
+    mainhand_tags_any_of: ['spear'],
+    offhand_tags_any_of: [],
+    allowed_weapon_tags_any_of: ['spear']
+  };
   const result = selectRecommendationPackageV3(catalog([
     entity({
       id: 'tame-beast',
@@ -571,6 +577,7 @@ test('Companion rolls do not select spirit or non-craftable companion skill idea
         { relation: 'creates', subject: 'skill', mechanic: 'minion', confidence: 'exact' },
         { relation: 'prevents', subject: 'skill', mechanic: 'damage', condition: 'base_effect_only', confidence: 'exact' }
       ],
+      equipment: spearEquipment,
       types: ['Companion', 'Duration', 'Minion']
     }),
     entity({
@@ -583,17 +590,18 @@ test('Companion rolls do not select spirit or non-craftable companion skill idea
         offhand_tags_any_of: [],
         allowed_weapon_tags_any_of: ['bow', 'spear']
       },
+      crafting: { types_raw: [], schools: [], weapon_affinities: [] },
       types: ['Persistent', 'HasReservation', 'CreatesCompanion', 'Companion']
     })
-  ]), { weapon: 'Bow', offenseList: ['Companions'] }, {
+  ]), { weapon: 'Spear', offenseList: ['Companions'] }, {
     offenseInventory: offenseInventory()
   });
 
-  assert.equal(result.primarySkill, null);
+  assert.equal(result.primarySkill?.name, 'Tame Beast');
   assert.equal(result.pieces.some((piece) => piece.name === 'Rhoa Mount'), false);
 });
 
-test('persistent minion skills do not become skill ideas, even for archetype rolls', () => {
+test('persistent minion reservations are allowed only for craftable archetype skills', () => {
   const ragingSpirits = entity({
     id: 'raging-spirits',
     name: 'Raging Spirits',
@@ -602,6 +610,16 @@ test('persistent minion skills do not become skill ideas, even for archetype rol
       { relation: 'creates', subject: 'skill', mechanic: 'minion', confidence: 'exact' }
     ],
     types: ['Buff', 'Persistent', 'HasReservation', 'CreatesMinion', 'Minion', 'Fire']
+  });
+  const skeletalReaver = entity({
+    id: 'skeletal-reaver',
+    name: 'Skeletal Reaver',
+    facts: [
+      { relation: 'creates', subject: 'skill', mechanic: 'minion', confidence: 'exact' },
+      { relation: 'has_property', subject: 'skill', mechanic: 'physical', confidence: 'exact' }
+    ],
+    crafting: { types_raw: ['Occult'], schools: ['occult'], weapon_affinities: [] },
+    types: ['Persistent', 'HasReservation', 'CreatesMinion', 'Minion', 'Physical']
   });
   const fireball = entity({
     id: 'fireball',
@@ -614,13 +632,13 @@ test('persistent minion skills do not become skill ideas, even for archetype rol
     weapon: 'Wand',
     offenseList: ['Fire Damage']
   }, { offenseInventory: offenseInventory() });
-  const minionResult = selectRecommendationPackageV3(catalog([ragingSpirits, fireball]), {
+  const minionResult = selectRecommendationPackageV3(catalog([ragingSpirits, skeletalReaver, fireball]), {
     weapon: 'Wand',
     offenseList: ['Minions']
   }, { offenseInventory: offenseInventory() });
 
   assert.equal(fireResult.primarySkill?.name, 'Fireball');
-  assert.equal(minionResult.primarySkill, null);
+  assert.equal(minionResult.primarySkill?.name, 'Skeletal Reaver');
 });
 
 test('unrestricted summon skills do not become generic ailment carriers without a rolled archetype', () => {
@@ -680,6 +698,7 @@ test('spirit minion and companion reservations stay out of Skill Ideas', () => {
       offhand_tags_any_of: [],
       allowed_weapon_tags_any_of: ['bow']
     },
+    crafting: { types_raw: [], schools: [], weapon_affinities: [] },
     types: ['Persistent', 'HasReservation', 'CreatesMinion', 'CreatesCompanion', 'Minion', 'Companion']
   });
 
@@ -1998,10 +2017,10 @@ test('the real 9 by 16 active matrix has a locked final Offense coverage breakdo
 
   assert.equal(Object.values(counts).reduce((sum, value) => sum + value, 0), 144);
   assert.deepEqual(counts, {
-    active_direct: 75,
-    support_assigned: 43,
+    active_direct: 80,
+    support_assigned: 42,
     carrier_only: 8,
-    no_primary: 18
+    no_primary: 14
   });
 });
 
@@ -2049,7 +2068,6 @@ test('committed catalog applies normal Skill Ideas gates to screenshot bad cases
     'Skeletal Warrior',
     'Spear Throw',
     'Spiraling Conspiracy',
-    'Tame Beast',
     "Tul's Stillness"
   ]);
   const cases = [
@@ -2064,6 +2082,23 @@ test('committed catalog applies normal Skill Ideas gates to screenshot bad cases
   ];
   const normalSkillEntity = (piece) => realCatalog.entities.find((entry) => entry.id === piece.entityId);
   const exactTerms = (entity) => new Set((entity?.retrieval_terms || []).map((term) => String(term).toLowerCase()));
+  const activeTypes = (entity) => new Set((entity?.source_evidence?.active_skill_types || []).map((term) =>
+    String(term).toLowerCase()
+  ));
+  const createsRolledArchetype = (entity, snapshot) => {
+    const offenseMechanics = new Set(snapshot.offenseList.flatMap((offense) => {
+      if (offense === 'Minions') return ['minion'];
+      if (offense === 'Companions') return ['companion'];
+      if (offense === 'Totems') return ['totem'];
+      return [];
+    }));
+    if (!offenseMechanics.size) return false;
+    return entity.facts.some((fact) =>
+      ['creates', 'fulfills', 'provides'].includes(fact.relation)
+        && offenseMechanics.has(String(fact.mechanic || '').toLowerCase())
+        && ['exact', 'strong'].includes(fact.confidence)
+    );
+  };
 
   for (const snapshot of cases) {
     const result = selectRecommendationPackageV3(realCatalog, snapshot, {
@@ -2077,7 +2112,16 @@ test('committed catalog applies normal Skill Ideas gates to screenshot bad cases
       assert.ok((entity.crafting?.types_raw || []).length > 0, piece.name);
       assert.doesNotMatch(entity.source_id, /SkillGemPlayerDefault/i, piece.name);
       const terms = exactTerms(entity);
-      assert.equal(terms.has('persistent') || terms.has('hasreservation') || terms.has('spirit'), false, piece.name);
+      const types = activeTypes(entity);
+      const hasPersistentOrReservation = terms.has('persistent')
+        || terms.has('hasreservation')
+        || types.has('persistent')
+        || types.has('hasreservation');
+      assert.equal(terms.has('spirit') || /(?:^|_)spirits?(?:_|$)/.test(String(piece.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '_')), false, piece.name);
+      assert.equal(terms.has('hasreservation') && (types.has('buff') || types.has('ongoingskill')), false, piece.name);
+      if (hasPersistentOrReservation) {
+        assert.equal(createsRolledArchetype(entity, snapshot), true, piece.name);
+      }
     }
     for (const support of result.supportAssignments.flatMap((assignment) => assignment.supports)) {
       assert.equal(support.availability, 'normal', support.name);
@@ -2136,11 +2180,20 @@ test('committed catalog keeps spirit companions out and bridges martial Minions 
   const bowMinions = selectedNames('Bow', 'Minions');
 
   assert.deepEqual([...bowCompanions.names], []);
-  assert.deepEqual([...spearCompanions.names], []);
+  assert.deepEqual([...spearCompanions.names], ['Tame Beast']);
   assert.deepEqual([...talismanCompanions.names], ['Pounce']);
   assert.deepEqual([...talismanMinions.names], ['Pounce']);
   assert.ok(maceMinions.supportNames.has('Living Lightning II'));
   assert.ok(bowMinions.supportNames.has('Living Lightning II'));
+
+  const casterMinionNames = [
+    selectedNames('Sceptre', 'Minions'),
+    selectedNames('Staff', 'Minions'),
+    selectedNames('Wand', 'Minions')
+  ].flatMap((entry) => [...entry.names]);
+  assert.ok(casterMinionNames.includes('Unearth'));
+  assert.ok(casterMinionNames.some((name) => /^Skeletal /.test(name)));
+  assert.ok(new Set(casterMinionNames).size > 1);
 
   const pounce = realCatalog.entities.find((entry) => entry.name === 'Pounce');
   const skeletalWarrior = realCatalog.entities.find((entry) => entry.name === 'Skeletal Warrior');
