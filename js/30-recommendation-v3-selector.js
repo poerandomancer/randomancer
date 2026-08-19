@@ -122,7 +122,6 @@ const DEFAULT_ACTIVE_SKILL_NAMES = new Set([
   'punch',
   'spear_throw'
 ]);
-const SUPPRESSED_COMPANION_SKILL_IDEAS = new Set(['rhoa_mount']);
 const COMPANION_SKILL_PREFERENCE_SCORE = Object.freeze({
   tame_beast: 90
 });
@@ -649,13 +648,6 @@ function isExplicitSpiritActive(entity) {
     || /(?:^|_)spirits?(?:_|$)/.test(name);
 }
 
-function isOngoingReservationBuffActive(entity) {
-  const types = activeSkillTypes(entity);
-  const terms = new Set(asArray(entity?.retrieval_terms).map(normalizeToken));
-  const hasReservation = types.has('hasreservation') || terms.has('hasreservation');
-  return hasReservation && (types.has('buff') || types.has('ongoingskill'));
-}
-
 function isPersistentOrReservationActive(entity) {
   const types = activeSkillTypes(entity);
   const terms = new Set(asArray(entity?.retrieval_terms).map(normalizeToken));
@@ -669,7 +661,7 @@ function isPersistentOrReservationActive(entity) {
 
 function isBlockedPersistentOrReservationActive(entity, offenseObligations = []) {
   if (!isPersistentOrReservationActive(entity)) return false;
-  if (isExplicitSpiritActive(entity) || isOngoingReservationBuffActive(entity)) return true;
+  if (isExplicitSpiritActive(entity)) return true;
   if (!hasNormalActiveSkillCrafting(entity)) return true;
   return !createsRolledArchetype(entity, offenseObligations);
 }
@@ -1155,12 +1147,6 @@ function archetypeSpecificityScore(entity, offenseObligations = []) {
   return score;
 }
 
-function isSuppressedCompanionSkillIdea(entity, offenseObligations = []) {
-  const archetypes = rolledArchetypeMechanics(offenseObligations);
-  return archetypes.has('companion')
-    && SUPPRESSED_COMPANION_SKILL_IDEAS.has(normalizeToken(entity?.name));
-}
-
 function candidateDependencies(entity, offenseObligations = []) {
   const ownProvision = new Set();
   for (const fact of asArray(entity?.facts)) {
@@ -1304,7 +1290,6 @@ function isUsablePackageActive(entity, offenseObligations = []) {
 
 function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalProfiles = {}, supportIndex = null) {
   if (!isUsablePackageActive(entity, offenseObligations)) return null;
-  if (isSuppressedCompanionSkillIdea(entity, offenseObligations)) return null;
   const compatibility = evaluateCompatibilityV3(entity, snapshot);
   if (!compatibility.ok) return null;
   const craftingDelivery = evaluateCraftingDeliveryCompatibilityV3(entity, snapshot);
