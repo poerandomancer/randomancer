@@ -11,11 +11,11 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5071,
+    "fact_count": 5072,
     "fact_relation_counts": {
       "consumes": 353,
       "converts": 112,
-      "creates": 71,
+      "creates": 72,
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 672,
@@ -66157,6 +66157,19 @@
         "shockwave"
       ],
       "facts": [
+        {
+          "relation": "creates",
+          "subject": "skill",
+          "mechanic": "companion",
+          "condition": "predators_mark_activation",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "nested_active_skill",
+              "value": "Predator's Mark -> Summon Wolf"
+            }
+          ]
+        },
         {
           "relation": "creates",
           "subject": "skill",
