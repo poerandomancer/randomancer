@@ -561,14 +561,14 @@ test('native damage can carry an ailment without falsely fulfilling its applicat
   ));
 });
 
-test('Companion rolls select craftable companion skills but not non-craftable reservations', () => {
+test('Bow Companion rolls allow craftable Rhoa Mount through the reservation filter', () => {
   const spearEquipment = {
     is_unrestricted: false,
     mainhand_tags_any_of: ['spear'],
     offhand_tags_any_of: [],
     allowed_weapon_tags_any_of: ['spear']
   };
-  const result = selectRecommendationPackageV3(catalog([
+  const candidates = catalog([
     entity({
       id: 'tame-beast',
       name: 'Tame Beast',
@@ -590,15 +590,24 @@ test('Companion rolls select craftable companion skills but not non-craftable re
         offhand_tags_any_of: [],
         allowed_weapon_tags_any_of: ['bow', 'spear']
       },
-      crafting: { types_raw: [], schools: [], weapon_affinities: [] },
-      types: ['Persistent', 'HasReservation', 'CreatesCompanion', 'Companion']
+      crafting: { types_raw: ['Bow', 'Spear'], schools: [], weapon_affinities: ['bow', 'spear'] },
+      types: ['Buff', 'Persistent', 'HasReservation', 'CreatesCompanion', 'Companion']
     })
-  ]), { weapon: 'Spear', offenseList: ['Companions'] }, {
+  ]);
+  const bowResult = selectRecommendationPackageV3(candidates, {
+    weapon: 'Bow', offenseList: ['Companions']
+  }, {
+    offenseInventory: offenseInventory()
+  });
+  const spearResult = selectRecommendationPackageV3(candidates, {
+    weapon: 'Spear', offenseList: ['Companions']
+  }, {
     offenseInventory: offenseInventory()
   });
 
-  assert.equal(result.primarySkill?.name, 'Tame Beast');
-  assert.equal(result.pieces.some((piece) => piece.name === 'Rhoa Mount'), false);
+  assert.equal(bowResult.primarySkill?.name, 'Rhoa Mount');
+  assert.equal(bowResult.pieces.some((piece) => piece.name === 'Rhoa Mount'), true);
+  assert.equal(spearResult.primarySkill?.name, 'Tame Beast');
 });
 
 test('persistent minion reservations are allowed only for craftable archetype skills', () => {
@@ -701,12 +710,25 @@ test('spirit minion and companion reservations stay out of Skill Ideas', () => {
     crafting: { types_raw: [], schools: [], weapon_affinities: [] },
     types: ['Persistent', 'HasReservation', 'CreatesMinion', 'CreatesCompanion', 'Minion', 'Companion']
   });
+  const spiritCompanion = entity({
+    id: 'spirit-companion',
+    name: 'Spirit Companion',
+    facts: [{ relation: 'creates', subject: 'skill', mechanic: 'companion', confidence: 'exact' }],
+    equipment: {
+      is_unrestricted: false,
+      mainhand_tags_any_of: ['bow'],
+      offhand_tags_any_of: [],
+      allowed_weapon_tags_any_of: ['bow']
+    },
+    crafting: { types_raw: ['Bow'], schools: [], weapon_affinities: ['bow'] },
+    types: ['Spirit', 'Persistent', 'HasReservation', 'CreatesCompanion', 'Companion']
+  });
 
   const minionResult = selectRecommendationPackageV3(catalog([wolf, skeletons]), {
     weapon: 'Sceptre',
     offenseList: ['Minions']
   }, { offenseInventory: offenseInventory() });
-  const companionResult = selectRecommendationPackageV3(catalog([wolf, skeletons]), {
+  const companionResult = selectRecommendationPackageV3(catalog([wolf, skeletons, spiritCompanion]), {
     weapon: 'Bow',
     offenseList: ['Companions']
   }, { offenseInventory: offenseInventory() });
@@ -2017,10 +2039,10 @@ test('the real 9 by 16 active matrix has a locked final Offense coverage breakdo
 
   assert.equal(Object.values(counts).reduce((sum, value) => sum + value, 0), 144);
   assert.deepEqual(counts, {
-    active_direct: 80,
-    support_assigned: 42,
+    active_direct: 82,
+    support_assigned: 41,
     carrier_only: 8,
-    no_primary: 14
+    no_primary: 13
   });
 });
 
@@ -2118,7 +2140,6 @@ test('committed catalog applies normal Skill Ideas gates to screenshot bad cases
         || types.has('persistent')
         || types.has('hasreservation');
       assert.equal(terms.has('spirit') || /(?:^|_)spirits?(?:_|$)/.test(String(piece.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '_')), false, piece.name);
-      assert.equal(terms.has('hasreservation') && (types.has('buff') || types.has('ongoingskill')), false, piece.name);
       if (hasPersistentOrReservation) {
         assert.equal(createsRolledArchetype(entity, snapshot), true, piece.name);
       }
@@ -2179,12 +2200,12 @@ test('committed catalog keeps spirit companions out and bridges martial Minions 
   const maceMinions = selectedNames('Mace', 'Minions');
   const bowMinions = selectedNames('Bow', 'Minions');
 
-  assert.deepEqual([...bowCompanions.names], []);
+  assert.deepEqual([...bowCompanions.names], ['Rhoa Mount']);
   assert.deepEqual([...spearCompanions.names], ['Tame Beast']);
   assert.deepEqual([...talismanCompanions.names], ['Pounce']);
   assert.deepEqual([...talismanMinions.names], ['Pounce']);
   assert.ok(maceMinions.supportNames.has('Living Lightning II'));
-  assert.ok(bowMinions.supportNames.has('Living Lightning II'));
+  assert.ok(bowMinions.names.has('Rhoa Mount'));
 
   const casterMinionNames = [
     selectedNames('Sceptre', 'Minions'),
@@ -2196,6 +2217,7 @@ test('committed catalog keeps spirit companions out and bridges martial Minions 
   assert.ok(new Set(casterMinionNames).size > 1);
 
   const pounce = realCatalog.entities.find((entry) => entry.name === 'Pounce');
+  const rhoaMount = realCatalog.entities.find((entry) => entry.name === 'Rhoa Mount');
   const skeletalWarrior = realCatalog.entities.find((entry) => entry.name === 'Skeletal Warrior');
   const tameBeast = realCatalog.entities.find((entry) => entry.name === 'Tame Beast');
   assert.ok(pounce.facts.some((fact) =>
@@ -2209,6 +2231,9 @@ test('committed catalog keeps spirit companions out and bridges martial Minions 
       && fact.condition === 'predators_mark_activation'
   ));
   assert.equal(evaluateCompatibilityV3(pounce, { weapon: 'Talisman' }).ok, true);
+  assert.ok(rhoaMount.source_evidence.active_skill_types.includes('HasReservation'));
+  assert.ok(rhoaMount.source_evidence.active_skill_types.includes('Buff'));
+  assert.deepEqual(rhoaMount.crafting?.weapon_affinities || [], ['bow', 'spear']);
   assert.equal((skeletalWarrior.crafting?.types_raw || []).length, 0);
   assert.ok(['persistent', 'hasreservation'].every((term) =>
     skeletalWarrior.retrieval_terms.map(String).map((value) => value.toLowerCase()).includes(term)
