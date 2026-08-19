@@ -237,8 +237,6 @@ function renderCurrentBuild({ animate = false, forceFront = false, snapshot = nu
     : (mount.dataset.cardFace === BUILD_CARD_FACES.BACK ? BUILD_CARD_FACES.BACK : BUILD_CARD_FACES.FRONT);
 
   stage.dataset.cardState = 'result';
-  const quote = getStageQuote();
-  if (quote) quote.hidden = true;
 
   mount.classList.remove('is-dealing');
   mountBuildCardSnapshot(mount, current, {
