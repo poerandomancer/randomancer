@@ -19,7 +19,7 @@ let challengeSeverity = 'cruel';
 let stashedBuildState = null;
 let stashedChallengeState = null;
 
-const STANDARD_LEDE_HTML = 'Tune <strong>Cohesion</strong> for tighter themes or wilder chaos. Use <strong>Bind the Fates</strong> to favor or ban certain options. Toggle <strong>Weapon Set II</strong> for an additional weapon set, and choose <strong>Combat Mechanics</strong>: 1-3 for ailment/tactic depth.<br><strong>---</strong><br>Click <strong>Roll Your Fate</strong> to begin.';
+const STANDARD_LEDE_HTML = 'Tune <strong>Cohesion</strong> for tighter themes or wilder chaos. Use <strong>Bind the Fates</strong> to favor or ban certain options. Toggle <strong>Weapon Set II</strong> for an additional weapon set, and choose <strong>Combat Mechanics</strong>: 1-3 for ailment/tactic depth.';
 const CHALLENGE_LEDE_TEXT = '<strong>Challenge Mode</strong> rolls a <strong>Contract</strong>, not a build. Use <strong>Bind the Fates</strong> to favor or ban certain options. Choose 1–3 <strong>Tasks</strong>, set <strong>Severity</strong>, then <strong>Draft a Contract</strong> to receive a stacked set of constraints to overcome.<br><strong>---</strong><br>Click <strong>Draft Contract</strong> to begin.';
 const CODEX_LEDE_TEXT = '<strong>Codex Mode</strong> is a non-random library for browsing Path of Exile 2 data. Explore <strong>Ascendancy</strong>, <strong>Skills</strong>, <strong>Passives</strong>, and <strong>Gear</strong> with search and tags. <strong>Pin</strong> entries to create a poe.ninja filter to view endgame builds.<br><strong>---</strong><br>Select an entry to inspect full details.';
 const LEGACY_LEDE_TEXT = '<strong>Legacy Mode</strong> rolls a sparse old-school build seed. Choose <strong>Class</strong> or <strong>Ascendancy</strong>, cycle the <strong>Weapons/Skills</strong> format selector, and optionally enable a <strong>Damage Type</strong>. Every result is fully random, with no cohesion, no defensive guidance, and no curated synergy.<br><strong>---</strong><br>Click <strong>Roll Your Fate</strong> to generate a minimal prompt.';
@@ -1067,7 +1067,11 @@ function syncMode(mode) {
   }
 
   const rollText = document.querySelector('#roll .roll-text');
-  if (rollText) rollText.textContent = isChallenge ? 'Draft Contract' : 'Roll Your Fate';
+  if (rollText) {
+    rollText.textContent = isChallenge
+      ? 'Draft Contract'
+      : (isLegacy ? 'Roll Your Fate' : 'Draw Your Fate');
+  }
 
   if (isLegacy && typeof window.RandomancerLegacyRenderLast === 'function') {
     window.RandomancerLegacyRenderLast();

@@ -111,4 +111,10 @@ img, video { max-width: 100%; height: auto; }
     --resume-btn-size: 28px;
     --resume-btn-gap: 8px;
   }
+
+  body[data-mode="build"] .roll-sticky .roll-btn{
+    min-height:38px;
+    padding:7px 14px;
+    border-radius:9px 9px 14px 14px;
+  }
 }

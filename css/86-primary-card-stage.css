@@ -35,7 +35,7 @@ body[data-mode="build"] #rc-reveal-fog{
   --card-flip-ease:cubic-bezier(.24,.72,.22,1);
   position:relative;
   min-height:var(--primary-card-stage-space);
-  margin-top:12px;
+  margin-top:-20px;
 }
 
 .primary-build-card-stage__inner{
@@ -43,26 +43,9 @@ body[data-mode="build"] #rc-reveal-fog{
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:center;
-  gap:1rem;
+  justify-content:flex-start;
+  gap:0;
   padding:18px 0 30px;
-}
-
-.primary-build-card-stage__quote{
-  max-width:38rem;
-  margin:0 auto .2rem;
-  padding:0 1rem;
-  color:rgba(236,227,214,.68);
-  font-family:'Cormorant Infant','Cormorant Garamond',serif;
-  font-size:clamp(1.02rem,2vw,1.28rem);
-  font-style:italic;
-  line-height:1.45;
-  text-align:center;
-  text-shadow:0 2px 14px rgba(0,0,0,.28);
-}
-
-.primary-build-card-stage[data-card-state="result"] .primary-build-card-stage__quote{
-  display:none;
 }
 
 /* Keep the card at a readable physical size. The stage may extend below the

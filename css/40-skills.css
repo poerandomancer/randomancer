@@ -150,14 +150,24 @@ border-top: 1px dotted var(--gold);
   z-index: 3;
 }
 /* === v0.6.4: Cohesion Slider + Skill Cards === */
-.cohesion-slider{ margin:0.45rem auto 0.1rem; width:min(640px,90%); text-align:center; color:var(--gold); }
+.fate-controls-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+  margin:.2rem auto .55rem;
+  width:100%;
+}
+
+.cohesion-slider{ flex:1 1 330px; margin:0; width:auto; text-align:center; color:var(--gold); }
 .cohesion-slider input[type=range]{ width:100%; appearance:none; height:6px; border-radius:6px; background:linear-gradient(90deg, rgba(212,170,80,0.4), rgba(212,170,80,0.9)); outline:none; cursor:pointer; box-shadow:0 0 6px rgba(212,170,80,0.3); }
 .cohesion-slider .mode-labels{ display:flex; justify-content:space-between; font-size:.9rem; opacity:.8; margin-top:.2rem; color:var(--muted); }
 
 /* Bind the Fates */
 .bind-fates-row{
-  width:min(640px,90%);
-  margin:0.45rem auto 0.65rem;
+  flex:0 1 235px;
+  width:auto;
+  margin:0;
   display:flex;
   flex-direction:column;
   align-items:stretch;
@@ -176,9 +186,15 @@ border-top: 1px dotted var(--gold);
   border-radius:999px;
   width:100%;
   white-space:nowrap;
+  transition:background .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
 
 .bind-fates:hover{ background:linear-gradient(90deg, rgba(200,168,107,0.24), rgba(0,0,0,0.35)); }
+
+.bind-fates.is-active{
+  background:linear-gradient(90deg, rgba(200,168,107,.32), rgba(48,38,18,.58));
+  box-shadow:0 0 12px rgba(212,170,80,.25), 0 4px 16px rgba(0,0,0,.3);
+}
 
 .bind-fates-toggle{
   flex:1 1 auto;
@@ -197,16 +213,6 @@ border-top: 1px dotted var(--gold);
 
 .bind-fates-icon{ width:22px; height:22px; filter:drop-shadow(0 0 4px rgba(0,0,0,0.4)); }
 
-.bind-fates-text{
-  display:flex;
-  flex-direction:row;
-  align-items:baseline;
-  gap:0.75rem;
-  flex:1 1 auto;
-  min-width:0;
-  justify-content:space-between; /* label left, counters/summary right */
-}
-
 .bind-fates-label{
   font-family:'Cormorant Infant',serif;
   font-weight:600;
@@ -216,16 +222,12 @@ border-top: 1px dotted var(--gold);
 }
 
 .bind-fates-summary{
-  font-family:'Cormorant Infant',serif;
-  color:var(--gold);
-  font-size:0.92rem;
-  letter-spacing:.02em;
-  white-space:nowrap;
+  position:absolute;
+  width:1px;
+  height:1px;
   overflow:hidden;
-  text-overflow:ellipsis;
-  margin-left:auto;
-  text-align:right;
-  max-width:min(26rem, 50vw);
+  clip-path:inset(50%);
+  white-space:nowrap;
 }
 
 .bind-fates-clear{
@@ -251,6 +253,17 @@ border-top: 1px dotted var(--gold);
   text-align:right;
   align-self:flex-end;
   min-width:0;
+}
+
+@media (max-width:600px){
+  .fate-controls-row{
+    flex-wrap:wrap;
+    gap:.55rem;
+  }
+  .bind-fates-row,
+  .cohesion-slider{
+    flex:1 1 100%;
+  }
 }
 
 /* Align Weapon Set II + Mechanics on one row */
@@ -722,4 +735,3 @@ input:checked
   background: rgba(12,12,14,0.35);
   border-left:2px solid var(--edge);
 }
-

@@ -51,9 +51,11 @@ function updateBindFatesSummary(explicitMode){
     : countBindFatesSelections(window.App?.getBindFates ? window.App.getBindFates() : getBindFatesFromApp());
 
   if (summaryEl) {
-    summaryEl.textContent = (counts.oaths + counts.abominations) > 0
+    const hasSelections = (counts.oaths + counts.abominations) > 0;
+    summaryEl.textContent = hasSelections
       ? `${counts.oaths} Oath${counts.oaths === 1 ? '' : 's'} | ${counts.abominations} Abomination${counts.abominations === 1 ? '' : 's'}`
       : 'No Fates Bound';
+    document.getElementById('bind-fates-bar')?.classList.toggle('is-active', hasSelections);
   }
 }
 

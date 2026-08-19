@@ -196,6 +196,14 @@
 
   <div id="asc-art" class="asc-art" aria-hidden="true"></div>
   <div id="app" data-has-roll="false">
+    <nav class="app-mode-chrome" aria-label="Randomancer mode">
+      <div id="randomancer-mode-control" class="mode-segmented" role="tablist" aria-label="Randomancer mode switcher">
+        <button class="mode-segment is-active" type="button" role="tab" aria-selected="true" data-mode-target="standard">Build</button>
+        <button class="mode-segment" type="button" role="tab" aria-selected="false" data-mode-target="challenge">Challenge</button>
+        <button class="mode-segment" type="button" role="tab" aria-selected="false" data-mode-target="codex">Codex</button>
+        <button class="mode-segment" type="button" role="tab" aria-selected="false" data-mode-target="legacy">Legacy</button>
+      </div>
+    </nav>
     <header id="app-header" class="rc-header">
       <div class="patch-indicator" aria-label="Supported Path of Exile 2 patch">
         Supports POE2 · <strong>v0.5.x</strong> ·
@@ -229,34 +237,6 @@
         <h2 class="subtitle">Conjure the Impossible. Defy the Meta.</h2>
         <div id="app-lede" class="app-lede" role="note" aria-label="How to use the Randomancer">
           Tune <strong>Cohesion</strong> for tighter themes or wilder chaos. Use <strong>Bind the Fates</strong> to favor or ban certain options. Toggle <strong>Weapon Set II</strong> for an additional weapon set, and choose <strong>Combat Mechanics</strong>: 1-3 for ailment/tactic depth.<br>
-          <strong>---</strong><br>
-          Click <strong>Roll Your Fate</strong> to begin.
-        </div>
-      </div>
-
-      <div class="roll-sticky">
-        <button id="roll" class="roll-btn roll-btn">
-          <img src="images/dice.png" alt="The Randomancer – Path of Exile 2 build randomizer thrice dice icon" class="btn-ico">
-          <span class="roll-text">Roll Your Fate</span>
-          <span class="roll-status" aria-live="polite"></span>
-        </button>
-        <button id="resumeRollBtn" class="resume-roll-btn is-hidden" type="button" aria-label="Resume last Build" title="Resume last Build">
-          <svg class="resume-roll-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M12 7v5l3 2" />
-            <path d="M20.5 12a8.5 8.5 0 1 1-2.49-6.01" />
-            <path d="M20.5 4.5v3.75h-3.75" />
-          </svg>
-        </button>
-      </div>
-
-      <div class="controls-rail mode-switch-under-roll">
-        <div class="mode-switch-row" role="group" aria-label="Randomancer mode">
-          <div id="randomancer-mode-control" class="mode-segmented" role="tablist" aria-label="Randomancer mode switcher">
-            <button class="mode-segment is-active" type="button" role="tab" aria-selected="true" data-mode-target="standard">Build</button>
-            <button class="mode-segment" type="button" role="tab" aria-selected="false" data-mode-target="challenge">Challenge</button>
-            <button class="mode-segment" type="button" role="tab" aria-selected="false" data-mode-target="codex">Codex</button>
-            <button class="mode-segment" type="button" role="tab" aria-selected="false" data-mode-target="legacy">Legacy</button>
-          </div>
         </div>
       </div>
 	</header>
@@ -265,7 +245,19 @@
     <main>
       <div class="controls-rail">
       <div id="standard-controls">
-    
+      <div class="fate-controls-row">
+      <div class="bind-fates-row">
+        <div id="bind-fates-bar" class="bind-fates" aria-expanded="false">
+          <button class="bind-fates-toggle" type="button" aria-label="Open Bind the Fates">
+            <img src="images/bind-the-fates.png" alt="" class="bind-fates-icon" aria-hidden="true">
+            <span class="bind-fates-label">Bind the Fates</span>
+            <span id="bind-fates-summary" class="bind-fates-summary" aria-live="polite">No Fates Bound</span>
+          </button>
+          <button id="bind-fates-clear" class="bind-fates-clear" type="button" aria-label="Clear bound fates" title="Clear bound fates">×</button>
+        </div>
+        <span id="bind-fates-error" class="bind-fates-error" aria-live="polite"></span>
+      </div>
+
       <div class="cohesion-slider cohesion-bar-wrapper" data-cohesion-constrained="false">
                   <div class="mode-labels">
                         <span>Cohesive</span><span>Chaotic</span>
@@ -281,21 +273,6 @@
 			aria-label="Cohesion threshold"
 		  >
                 </div>
-
-      <div class="bind-fates-row">
-        <div id="bind-fates-bar" class="bind-fates" aria-expanded="false">
-          <button class="bind-fates-toggle" type="button" aria-label="Open Bind the Fates">
-            <img src="images/bind-the-fates.png" alt="The Randomancer – Path of Exile 2 build randomizer bind the fates icon" class="bind-fates-icon" aria-hidden="true">
-            <div class="bind-fates-text">
-              <span class="bind-fates-label">Bind the Fates</span>
-              <span id="bind-fates-summary" class="bind-fates-summary">
-                No Fates Bound
-              </span>
-            </div>
-          </button>
-          <button id="bind-fates-clear" class="bind-fates-clear" type="button" aria-label="Clear bound fates" title="Clear bound fates">×</button>
-        </div>
-        <span id="bind-fates-error" class="bind-fates-error" aria-live="polite"></span>
       </div>
       
       <div class="control-item weapon-set2-control">
@@ -368,6 +345,19 @@
       </div>
 
       <div id="results-stage" class="results-stage">
+        <div class="roll-sticky">
+          <button id="roll" class="roll-btn">
+            <span class="roll-text">Draw Your Fate</span>
+            <span class="roll-status" aria-live="polite"></span>
+          </button>
+          <button id="resumeRollBtn" class="resume-roll-btn is-hidden" type="button" aria-label="Resume last Build" title="Resume last Build">
+            <svg class="resume-roll-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M12 7v5l3 2" />
+              <path d="M20.5 12a8.5 8.5 0 1 1-2.49-6.01" />
+              <path d="M20.5 4.5v3.75h-3.75" />
+            </svg>
+          </button>
+        </div>
         <hr id="challenge-empty-divider" class="gold subtle challenge-empty-divider is-hidden" aria-hidden="true"/>
         <div id="challenge-empty-flavor" class="challenge-empty-flavor is-hidden" aria-live="polite"></div>
 
@@ -549,7 +539,6 @@ const INTRO_LINES = [
   "In the stillness, the Fates stir. Reach forth and claim your thread.",
   "Wraeclast remembers every sin you dare to repeat.",
   "The shore was mercy, Exile. This is not.",
-  "The gods have stopped listening. Fate has not.",
   "Maps fade, monuments crumble, legends reroll.",
   "Some destinies are forged in blood; others in chance.",
   "Innocence burned, Sin smiled, and the world kept turning.",

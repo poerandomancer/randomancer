@@ -64,14 +64,6 @@ function getBuildIdentity(snapshot) {
   ]);
 }
 
-function pickIntroLine() {
-  const lines = Array.isArray(window.RandomancerIntroLines)
-    ? window.RandomancerIntroLines.filter(Boolean)
-    : [];
-  if (!lines.length) return 'The Fates Await...';
-  return lines[Math.floor(Math.random() * lines.length)];
-}
-
 function createStage() {
   let stage = document.getElementById(STAGE_ID);
   if (stage) return stage;
@@ -85,7 +77,6 @@ function createStage() {
   stage.setAttribute('aria-label', 'Randomized Build Card');
   stage.innerHTML = `
     <div class="primary-build-card-stage__inner">
-      <p class="primary-build-card-stage__quote" data-primary-card-quote></p>
       <div class="primary-build-card-stage__slot">
         <div id="${MOUNT_ID}" class="primary-build-card-stage__mount" aria-live="polite"></div>
         <div class="primary-build-card-stage__transition-back" data-primary-transition-back aria-hidden="true"></div>
@@ -99,10 +90,6 @@ function createStage() {
 function getMount() {
   createStage();
   return document.getElementById(MOUNT_ID);
-}
-
-function getStageQuote() {
-  return createStage()?.querySelector('[data-primary-card-quote]') || null;
 }
 
 function renderDeck() {
@@ -122,11 +109,6 @@ function renderDeck() {
     </div>
   `;
 
-  const quote = getStageQuote();
-  if (quote) {
-    if (!quote.textContent.trim()) quote.textContent = pickIntroLine();
-    quote.hidden = false;
-  }
   requestAnimationFrame(updateStageMetrics);
 }
 

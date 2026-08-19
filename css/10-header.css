@@ -5,6 +5,22 @@ header{
   text-shadow:0 1px 2px rgba(0,0,0,.6);
 }
 
+.app-mode-chrome{
+  position:absolute;
+  top:0;
+  left:50%;
+  z-index:60;
+  width:min(430px, calc(100% - 2rem));
+  transform:translateX(-50%);
+}
+
+.app-mode-chrome .mode-segmented{
+  width:100%;
+  border-top:0;
+  border-radius:0 0 14px 14px;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.35), 0 5px 16px rgba(0,0,0,.26);
+}
+
 .rc-header-topbar{
   display:flex;
   align-items:center;
@@ -133,10 +149,14 @@ strong, b { font-weight: 600; }
 @media (max-width: 600px){
   .patch-indicator{
     font-size:0.7rem;
-    top:0.9rem;
+    top:2.45rem;
     left:50%;
     transform:translateX(-50%);
     text-align:center;
+  }
+
+  header{
+    padding-top:5rem;
   }
 }
 
