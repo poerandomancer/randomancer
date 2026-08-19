@@ -32,9 +32,11 @@ REPO_ROOT = HERE.parents[1]
 DEFAULT_OUT = REPO_ROOT / "data" / "enriched" / "recommendation_catalog_v3.json"
 DEFAULT_REPORT_OUT = REPO_ROOT / "data" / "enriched" / "recommendation_catalog_v3_report.json"
 DEFAULT_ACCESS_OUT = REPO_ROOT / "data" / "enriched" / "recommendation_granted_skill_access_v3.json"
+DEFAULT_CRAFTING_OUT = REPO_ROOT / "data" / "enriched" / "recommendation_skill_crafting_v3.json"
 SCHEMA_VERSION = "recommendation-catalog-v3.0.0"
 REPORT_SCHEMA_VERSION = "recommendation-catalog-v3-report.0.0"
 GRANTED_ACCESS_SCHEMA_VERSION = "recommendation-granted-skill-access-v3.0.0"
+SKILL_CRAFTING_SCHEMA_VERSION = "recommendation-skill-crafting-v3.0.0"
 
 
 def load_json(path: Path) -> Any:
@@ -593,6 +595,34 @@ def build_granted_skill_access_payload(ctx: SourceContext) -> dict[str, Any]:
     }
 
 
+def build_skill_crafting_payload(ctx: SourceContext) -> dict[str, Any]:
+    crafting_by_entity_id: dict[str, dict[str, Any]] = {}
+    for skill in ctx.skills:
+        if skill.get("type") == "support":
+            continue
+        source_id = str(skill.get("id") or "")
+        if not source_id:
+            continue
+        crafting = skill.get("crafting") if isinstance(skill.get("crafting"), dict) else {}
+        crafting_by_entity_id[f"skill:{source_id}"] = {
+            "types_raw": unique_sorted(crafting.get("types_raw") or []),
+            "schools": unique_sorted(crafting.get("schools") or []),
+            "weapon_affinities": unique_sorted(crafting.get("weapon_affinities") or []),
+        }
+
+    craftable_count = sum(
+        1 for crafting in crafting_by_entity_id.values()
+        if crafting.get("types_raw")
+    )
+    return {
+        "schema_version": SKILL_CRAFTING_SCHEMA_VERSION,
+        "catalog_schema_version": SCHEMA_VERSION,
+        "active_skill_count": len(crafting_by_entity_id),
+        "craftable_active_skill_count": craftable_count,
+        "crafting_by_entity_id": dict(sorted(crafting_by_entity_id.items())),
+    }
+
+
 def passive_stat_records(ctx: SourceContext, raw: dict[str, Any]) -> list[dict[str, Any]]:
     records = []
     for index, stat_rid in enumerate(raw.get("Stats") or [], start=1):
@@ -844,12 +874,13 @@ def fate_vocabulary(ctx: SourceContext) -> dict[str, Any]:
     }
 
 
-def build_catalog(ctx: SourceContext) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+def build_catalog(ctx: SourceContext) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
     coverage = Coverage()
     skill_entities = build_skill_entities(ctx, coverage)
     passive_entities = build_passive_entities(ctx, coverage)
     unique_entities = build_unique_entities(ctx, coverage)
     granted_access = build_granted_skill_access_payload(ctx)
+    skill_crafting = build_skill_crafting_payload(ctx)
     entities = sorted(
         [*skill_entities, *passive_entities, *unique_entities],
         key=lambda entity: (entity.get("content_type", ""), str(entity.get("name") or ""), entity["id"]),
@@ -940,6 +971,7 @@ def build_catalog(ctx: SourceContext) -> tuple[dict[str, Any], dict[str, Any], d
                 1 for access in (granted_access.get("access_by_entity_id") or {}).values()
                 if access.get("requires_granted_source")
             ),
+            "active_skills_with_crafting_metadata": skill_crafting.get("craftable_active_skill_count"),
             "active_skills_requiring_unique_provider": sum(
                 1 for access in (granted_access.get("access_by_entity_id") or {}).values()
                 if access.get("requires_unique_provider")
@@ -953,7 +985,7 @@ def build_catalog(ctx: SourceContext) -> tuple[dict[str, Any], dict[str, Any], d
         },
         "coverage": coverage_payload,
     }
-    return catalog, report, granted_access
+    return catalog, report, granted_access, skill_crafting
 
 
 def main() -> int:
@@ -961,26 +993,32 @@ def main() -> int:
     parser.add_argument("--out", default=str(DEFAULT_OUT))
     parser.add_argument("--report-out", default=str(DEFAULT_REPORT_OUT))
     parser.add_argument("--access-out", default=str(DEFAULT_ACCESS_OUT))
+    parser.add_argument("--crafting-out", default=str(DEFAULT_CRAFTING_OUT))
     args = parser.parse_args()
 
     out_path = Path(args.out)
     report_path = Path(args.report_out)
     access_path = Path(args.access_out)
+    crafting_path = Path(args.crafting_out)
     if not out_path.is_absolute():
         out_path = REPO_ROOT / out_path
     if not report_path.is_absolute():
         report_path = REPO_ROOT / report_path
     if not access_path.is_absolute():
         access_path = REPO_ROOT / access_path
+    if not crafting_path.is_absolute():
+        crafting_path = REPO_ROOT / crafting_path
 
     context = SourceContext(REPO_ROOT)
-    catalog, report, granted_access = build_catalog(context)
+    catalog, report, granted_access, skill_crafting = build_catalog(context)
     write_json(out_path, catalog)
     write_json(report_path, report)
     write_json(access_path, granted_access)
+    write_json(crafting_path, skill_crafting)
     print(f"Wrote {catalog['_meta']['entity_count']} entities to {out_path}")
     print(f"Wrote semantic coverage report to {report_path}")
     print(f"Wrote granted skill access map to {access_path}")
+    print(f"Wrote skill crafting map to {crafting_path}")
     return 0
 
 

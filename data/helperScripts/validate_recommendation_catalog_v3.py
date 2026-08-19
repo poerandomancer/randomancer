@@ -244,6 +244,53 @@ def validate_granted_skill_access(catalog: dict[str, Any], errors: list[str]) ->
         errors.append("granted skill access sidecar has no unique-provider requirements")
 
 
+def validate_skill_crafting(catalog: dict[str, Any], errors: list[str]) -> None:
+    path = DATA / "enriched" / "recommendation_skill_crafting_v3.json"
+    if not path.exists():
+        errors.append("skill crafting sidecar is missing")
+        return
+
+    crafting_payload = load_json(path)
+    if crafting_payload.get("schema_version") != "recommendation-skill-crafting-v3.0.0":
+        errors.append("unexpected or missing skill crafting schema version")
+    if crafting_payload.get("catalog_schema_version") != "recommendation-catalog-v3.0.0":
+        errors.append("skill crafting sidecar targets the wrong catalog schema")
+
+    active_skill_ids = {
+        entity.get("id")
+        for entity in catalog.get("entities") or []
+        if entity.get("content_type") == "active_skill"
+    }
+    crafting_by_entity_id = crafting_payload.get("crafting_by_entity_id") or {}
+    if not isinstance(crafting_by_entity_id, dict) or not crafting_by_entity_id:
+        errors.append("skill crafting sidecar has no entries")
+        return
+
+    missing = sorted(active_skill_ids - set(crafting_by_entity_id))
+    unknown = sorted(set(crafting_by_entity_id) - active_skill_ids)
+    if missing:
+        errors.append(f"skill crafting sidecar is missing active skills: {missing[:10]}")
+    if unknown:
+        errors.append(f"skill crafting sidecar references unknown active skills: {unknown[:10]}")
+
+    craftable_count = 0
+    for entity_id, crafting in crafting_by_entity_id.items():
+        if not isinstance(crafting, dict):
+            errors.append(f"{entity_id}: crafting entry is not an object")
+            continue
+        for field in ("types_raw", "schools", "weapon_affinities"):
+            if not isinstance(crafting.get(field), list):
+                errors.append(f"{entity_id}: crafting field {field!r} is not a list")
+        if crafting.get("types_raw"):
+            craftable_count += 1
+    if crafting_payload.get("active_skill_count") != len(active_skill_ids):
+        errors.append("skill crafting sidecar active skill count does not match catalog")
+    if crafting_payload.get("craftable_active_skill_count") != craftable_count:
+        errors.append("skill crafting sidecar craftable count does not match entries")
+    if craftable_count <= 0:
+        errors.append("skill crafting sidecar has no craftable active skills")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate recommendation enrichment v3 artifacts.")
     parser.add_argument(
@@ -273,6 +320,7 @@ def main() -> int:
     validate_catalog_assertions(catalog, fixtures, errors)
     validate_source_parity(catalog, errors)
     validate_granted_skill_access(catalog, errors)
+    validate_skill_crafting(catalog, errors)
 
     if errors:
         print(f"Recommendation catalog v3 validation failed with {len(errors)} error(s):", file=sys.stderr)

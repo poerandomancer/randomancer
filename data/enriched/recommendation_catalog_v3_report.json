@@ -53,6 +53,7 @@
     "support_entities_with_bridge_facts": 77,
     "support_entities_with_conflicts": 39,
     "active_skills_with_granted_access": 40,
+    "active_skills_with_crafting_metadata": 261,
     "active_skills_requiring_unique_provider": 14,
     "passives_with_more_than_two_source_stats": 181,
     "passives_with_granted_skill_links": 50

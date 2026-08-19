@@ -3,7 +3,9 @@ import { buildSkillFamilyIndex, resolveSkillFamily } from './17-skill-family-uti
 import {
   isRecommendationV3Enabled,
   mergeRecommendationGrantedSkillAccessV3,
+  mergeRecommendationSkillCraftingV3,
   validateRecommendationGrantedSkillAccessV3,
+  validateRecommendationSkillCraftingV3,
   validateRecommendationCatalogV3
 } from './30-recommendation-v3-selector.js';
 
@@ -68,6 +70,9 @@ async function loadData() {
     // override) and begins this larger fetch in parallel with core data.
     const recommendationCatalogPromise = isRecommendationV3Enabled(window)
       ? tryLoad('data/enriched/recommendation_catalog_v3.json')
+      : Promise.resolve(null);
+    const recommendationSkillCraftingPromise = isRecommendationV3Enabled(window)
+      ? tryLoad('data/enriched/recommendation_skill_crafting_v3.json')
       : Promise.resolve(null);
     const recommendationCriticalProfilesPromise = isRecommendationV3Enabled(window)
       ? tryLoad('data/config/recommendation_critical_profiles_v3.json')
@@ -159,18 +164,26 @@ async function loadData() {
     });
 
     const recommendationCatalogRaw = await recommendationCatalogPromise;
+    const recommendationSkillCraftingRaw = await recommendationSkillCraftingPromise;
     const recommendationCriticalProfilesRaw = await recommendationCriticalProfilesPromise;
     const recommendationGrantedSkillAccessRaw = await recommendationGrantedSkillAccessPromise;
-    const recommendationCatalogValidation = validateRecommendationCatalogV3(recommendationCatalogRaw);
+    const recommendationSkillCraftingValidation = validateRecommendationSkillCraftingV3(recommendationSkillCraftingRaw);
+    const recommendationCatalogWithCrafting = recommendationSkillCraftingValidation.ok
+      ? mergeRecommendationSkillCraftingV3(recommendationCatalogRaw, recommendationSkillCraftingRaw)
+      : recommendationCatalogRaw;
+    const recommendationCatalogValidation = validateRecommendationCatalogV3(recommendationCatalogWithCrafting);
     const recommendationGrantedSkillAccessValidation = validateRecommendationGrantedSkillAccessV3(recommendationGrantedSkillAccessRaw);
     const recommendationGrantedSkillAccessV3 = recommendationGrantedSkillAccessValidation.ok
       ? recommendationGrantedSkillAccessRaw
       : null;
-    const recommendationCatalogV3 = recommendationCatalogValidation.ok
-      ? mergeRecommendationGrantedSkillAccessV3(recommendationCatalogRaw, recommendationGrantedSkillAccessV3)
+    const recommendationCatalogV3 = recommendationCatalogValidation.ok && recommendationSkillCraftingValidation.ok
+      ? mergeRecommendationGrantedSkillAccessV3(recommendationCatalogWithCrafting, recommendationGrantedSkillAccessV3)
       : null;
     if (isRecommendationV3Enabled(window) && !recommendationCatalogValidation.ok) {
       console.warn(`[Recommendation v3] Catalog unavailable: ${recommendationCatalogValidation.reason}`);
+    }
+    if (isRecommendationV3Enabled(window) && !recommendationSkillCraftingValidation.ok) {
+      console.warn(`[Recommendation v3] Skill crafting map unavailable: ${recommendationSkillCraftingValidation.reason}`);
     }
     if (isRecommendationV3Enabled(window) && !recommendationGrantedSkillAccessValidation.ok) {
       console.warn(`[Recommendation v3] Granted skill access unavailable: ${recommendationGrantedSkillAccessValidation.reason}`);
