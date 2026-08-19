@@ -36,6 +36,8 @@ The first slice:
 - requires at least one package member with a legal `primary_damage` role and weapon delivery; unrestricted setup, payoff, and enabler skills still need equipment and ascendancy access
 - uses only exact or strong typed facts as fulfillment evidence
 - distinguishes direct fulfillment from native damage carriers: a Lightning skill can carry Shock or Electrocute, for example, but the corresponding ailment remains unresolved until another package piece explicitly applies it
+- treats weapon-agnostic Minion and Companion summons as legal primary delivery only when the rolled Offense asks for that archetype; otherwise they do not become generic damage or ailment carriers
+- prefers `Tame Beast` as the general Companion recommendation anchor and suppresses `Rhoa Mount` from Companion skill ideas while mount/spirit-style utility remains out of scope
 - treats `prevents` as a hard conflict for the matching Offense
 - excludes source-tagged Kalguuran gems from recommendation eligibility while retaining them in the catalog and Codex
 - ignores Cohesion entirely
@@ -50,7 +52,7 @@ The first slice:
 - displays each chosen support inline with the specific Build Card skill it modifies
 - records complementary defense, recovery, and package dependencies as unresolved instead of filling them with weak candidates
 
-Weapon delivery is intentionally stricter than technical equip legality. Generic spells are eligible for Wand, Sceptre, and caster Staff rolls. Martial rolls require structured evidence that the skill belongs to the selected weapon family, either through its active skill types or its equipment requirement. A spell may cross that boundary only when the catalog explicitly proves the martial-weapon relationship. If no direct fulfiller exists, a legal native damage carrier may be selected without claiming fulfillment. If no legal carrier exists either, the selector reports the obligation as unresolved.
+Weapon delivery is intentionally stricter than technical equip legality. Generic spells are eligible for Wand, Sceptre, and caster Staff rolls. Martial rolls require structured evidence that the skill belongs to the selected weapon family, either through its active skill types or its equipment requirement. A spell may cross that boundary only when the catalog explicitly proves the martial-weapon relationship. Non-spell summon skills may cross the martial boundary for a rolled Minion or Companion archetype, but that proxy evidence is not allowed to carry unrelated damage-type or ailment rolls. If no direct fulfiller exists, a legal native damage carrier may be selected without claiming fulfillment. If no legal carrier exists either, the selector reports the obligation as unresolved.
 
 The selector also emits a final `diagnostics.offenseCoverage` entry for each
 rolled Offense after support assignment. This classifies what actually happened
@@ -147,6 +149,14 @@ family cannot be reused on another selected skill. Conflicts are applied after
 the full support set, so an enabler cannot silently remove an already-working
 rolled Offense route. Empty support positions are the correct result when no
 unresolved rolled Offense or explicit dependency is improved.
+
+Some bridges are mutually exclusive on a single supported skill. `Electrocute`
+is the canonical example: it can let Lightning damage inflict Electrocute, but
+it also prevents the supported skill from Shocking. When two rolled Offenses
+need conflicting support routes, the solver may select a second active skill as
+a separate support lane even if both skills expose the same potential carrier
+coverage. This keeps Shock and Electrocute recommendations honest instead of
+pretending one supported skill can do both jobs.
 
 Support target expressions that contain an unambiguous `AND` require every
 listed skill type. Mixed flattened `AND`/`OR` expressions remain ineligible

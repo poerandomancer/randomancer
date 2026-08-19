@@ -321,7 +321,7 @@ test('weapon delivery rejects generic spells for martial rolls', () => {
         { relation: 'creates', subject: 'skill', mechanic: 'minion', confidence: 'exact' },
         { relation: 'has_property', subject: 'skill', mechanic: 'physical', confidence: 'exact' }
       ],
-      types: ['Spell', 'CreatesMinion', 'Physical']
+      types: ['Spell', 'Damage', 'CreatesMinion', 'Physical']
     })
   ]);
 
@@ -520,8 +520,18 @@ test('native damage can carry an ailment without falsely fulfilling its applicat
   ));
 });
 
-test('persistent Companion creators remain directly selectable when their weapon delivery is explicit', () => {
+test('Companion rolls prefer Tame Beast and suppress Rhoa Mount skill ideas', () => {
   const result = selectRecommendationPackageV3(catalog([
+    entity({
+      id: 'tame-beast',
+      name: 'Tame Beast',
+      facts: [
+        { relation: 'creates', subject: 'skill', mechanic: 'companion', confidence: 'exact' },
+        { relation: 'creates', subject: 'skill', mechanic: 'minion', confidence: 'exact' },
+        { relation: 'prevents', subject: 'skill', mechanic: 'damage', condition: 'base_effect_only', confidence: 'exact' }
+      ],
+      types: ['Companion', 'Duration', 'Minion']
+    }),
     entity({
       id: 'rhoa-mount',
       name: 'Rhoa Mount',
@@ -538,10 +548,11 @@ test('persistent Companion creators remain directly selectable when their weapon
     offenseInventory: offenseInventory()
   });
 
-  assert.equal(result.primarySkill?.name, 'Rhoa Mount');
+  assert.equal(result.primarySkill?.name, 'Tame Beast');
   assert.deepEqual(result.primarySkill?.fulfilledObligations.map((proof) => proof.obligationId), [
     'offense:companions'
   ]);
+  assert.equal(result.pieces.some((piece) => piece.name === 'Rhoa Mount'), false);
 });
 
 test('persistent minion skills do not become generic non-archetype damage primaries', () => {
@@ -572,6 +583,42 @@ test('persistent minion skills do not become generic non-archetype damage primar
 
   assert.equal(fireResult.primarySkill?.name, 'Fireball');
   assert.equal(minionResult.primarySkill?.name, 'Raging Spirits');
+});
+
+test('unrestricted summon skills do not become generic ailment carriers without a rolled archetype', () => {
+  const raiseZombie = entity({
+    id: 'raise-zombie',
+    name: 'Raise Zombie',
+    facts: [
+      { relation: 'creates', subject: 'skill', mechanic: 'minion', confidence: 'exact' },
+      { relation: 'has_property', subject: 'skill', mechanic: 'physical', confidence: 'exact' }
+    ],
+    types: ['CreatesMinion', 'Minion', 'Physical']
+  });
+  const crossbowHit = entity({
+    id: 'crossbow-hit',
+    name: 'Crossbow Hit',
+    facts: [{ relation: 'has_property', subject: 'skill', mechanic: 'physical', confidence: 'exact' }],
+    equipment: {
+      is_unrestricted: false,
+      mainhand_tags_any_of: ['crossbow'],
+      offhand_tags_any_of: [],
+      allowed_weapon_tags_any_of: ['crossbow']
+    },
+    types: ['Attack', 'Damage', 'Crossbow']
+  });
+
+  const poisonResult = selectRecommendationPackageV3(catalog([raiseZombie, crossbowHit]), {
+    weapon: 'Crossbow',
+    offenseList: ['Poison']
+  }, { offenseInventory: offenseInventory() });
+  const minionResult = selectRecommendationPackageV3(catalog([raiseZombie, crossbowHit]), {
+    weapon: 'Crossbow',
+    offenseList: ['Minions']
+  }, { offenseInventory: offenseInventory() });
+
+  assert.equal(poisonResult.primarySkill?.name, 'Crossbow Hit');
+  assert.equal(minionResult.primarySkill?.name, 'Raise Zombie');
 });
 
 test('Minion rolls prefer non-Companion minions while Companion rolls prefer Companion evidence', () => {
@@ -901,6 +948,102 @@ test('a support conflict cannot destroy an existing rolled-Offense route', () =>
   assert.deepEqual(result.primarySkill?.supports, []);
   assert.ok(!result.unresolved.some((entry) => entry.obligationId === 'offense:shock'));
   assert.ok(result.unresolved.some((entry) => entry.obligationId === 'offense:electrocute'));
+});
+
+test('conflicting Shock and Electrocute support routes split across separate active skill lanes', () => {
+  const talismanEquipment = {
+    is_unrestricted: false,
+    mainhand_tags_any_of: ['talisman'],
+    offhand_tags_any_of: [],
+    allowed_weapon_tags_any_of: ['talisman']
+  };
+  const attackSupportTarget = {
+    equipment: { is_unrestricted: true },
+    target_skill: { allowed_skill_types_any_of: ['Attack', 'Damage'], excluded_skill_types: [] }
+  };
+  const result = selectRecommendationPackageV3(catalog([
+    entity({
+      id: 'rampage',
+      name: 'Rampage',
+      facts: [{ relation: 'has_property', subject: 'skill', mechanic: 'physical', confidence: 'exact' }],
+      equipment: talismanEquipment,
+      types: ['Attack', 'Damage', 'Talisman']
+    }),
+    entity({
+      id: 'rend',
+      name: 'Rend',
+      facts: [
+        { relation: 'has_property', subject: 'skill', mechanic: 'physical', confidence: 'exact' },
+        { relation: 'modifies', subject: 'skill', mechanic: 'lightning', confidence: 'strong' }
+      ],
+      equipment: talismanEquipment,
+      types: ['Attack', 'Damage', 'Talisman']
+    }),
+    entity({
+      id: 'thunderstorm',
+      name: 'Thunderstorm',
+      facts: [
+        { relation: 'has_property', subject: 'skill', mechanic: 'lightning', confidence: 'exact' },
+        { relation: 'inflicts', subject: 'skill', mechanic: 'shock', confidence: 'strong' }
+      ],
+      types: ['Spell', 'Damage', 'Lightning']
+    }),
+    entity({
+      id: 'lightning-attunement',
+      name: 'Lightning Attunement',
+      contentType: 'support_gem',
+      roles: ['enabler'],
+      facts: [{ relation: 'provides', subject: 'supported_skill', mechanic: 'lightning', confidence: 'exact' }],
+      types: [],
+      compatibility: attackSupportTarget,
+      supportFamily: { id: 'support-family:lightning-attunement', name: 'Lightning Attunement', tier: null }
+    }),
+    entity({
+      id: 'shock',
+      name: 'Shock',
+      contentType: 'support_gem',
+      roles: ['enabler'],
+      facts: [
+        { relation: 'has_property', subject: 'supported_skill', mechanic: 'lightning', confidence: 'exact' },
+        { relation: 'inflicts', subject: 'supported_skill', mechanic: 'shock', confidence: 'strong' }
+      ],
+      types: [],
+      compatibility: attackSupportTarget,
+      supportFamily: { id: 'support-family:shock', name: 'Shock', tier: null }
+    }),
+    entity({
+      id: 'electrocute',
+      name: 'Electrocute',
+      contentType: 'support_gem',
+      roles: ['enabler'],
+      facts: [
+        { relation: 'provides', subject: 'supported_skill', mechanic: 'electrocute', condition: 'lightning_damage', confidence: 'exact' },
+        { relation: 'requires', subject: 'supported_skill', mechanic: 'lightning', confidence: 'exact' },
+        { relation: 'prevents', subject: 'supported_skill', mechanic: 'shock', confidence: 'exact' }
+      ],
+      types: [],
+      compatibility: attackSupportTarget,
+      supportFamily: { id: 'support-family:electrocute', name: 'Electrocute', tier: null }
+    })
+  ]), { weapon: 'Talisman', offenseList: ['Shock', 'Electrocute'] }, {
+    offenseInventory: offenseInventory()
+  });
+
+  assert.ok(result.pieces.some((piece) => piece.name === 'Rend'));
+  assert.equal(result.pieces.some((piece) => piece.name === 'Thunderstorm'), false);
+  assert.ok(!result.unresolved.some((entry) => entry.obligationId === 'offense:shock'));
+  assert.ok(!result.unresolved.some((entry) => entry.obligationId === 'offense:electrocute'));
+
+  const assignedSupports = result.supportAssignments.flatMap((assignment) =>
+    assignment.supports.map((support) => ({ ...support, skillName: assignment.skillName }))
+  );
+  assert.deepEqual(
+    new Set(assignedSupports.map((support) => support.name)),
+    new Set(['Electrocute', 'Lightning Attunement', 'Shock'])
+  );
+  const shockSkill = assignedSupports.find((support) => support.name === 'Shock')?.skillName;
+  const electrocuteSkill = assignedSupports.find((support) => support.name === 'Electrocute')?.skillName;
+  assert.notEqual(shockSkill, electrocuteSkill);
 });
 
 test('compound AND support targets require every concrete skill type', () => {
@@ -1819,10 +1962,10 @@ test('the real 9 by 16 active matrix has a locked final Offense coverage breakdo
 
   assert.equal(Object.values(counts).reduce((sum, value) => sum + value, 0), 144);
   assert.deepEqual(counts, {
-    active_direct: 93,
-    support_assigned: 40,
+    active_direct: 100,
+    support_assigned: 37,
     carrier_only: 2,
-    no_primary: 9
+    no_primary: 5
   });
 });
 
@@ -1878,9 +2021,10 @@ test('committed catalog separates Companion and nested Minion archetype evidence
   const talismanCompanions = selectedNames('Talisman', 'Companions');
   const talismanMinions = selectedNames('Talisman', 'Minions');
 
-  assert.deepEqual([...bowCompanions], ['Rhoa Mount']);
+  assert.ok(bowCompanions.has('Tame Beast'));
+  assert.equal(bowCompanions.has('Rhoa Mount'), false);
   assert.ok(spearCompanions.has('Tame Beast'));
-  assert.ok(spearCompanions.has('Rhoa Mount'));
+  assert.equal(spearCompanions.has('Rhoa Mount'), false);
   assert.equal(talismanCompanions.has('Pounce'), false);
   assert.ok(talismanMinions.has('Pounce'));
 
@@ -1894,6 +2038,7 @@ test('committed catalog separates Companion and nested Minion archetype evidence
   assert.ok(tameBeast.facts.some((fact) =>
     fact.relation === 'creates' && fact.mechanic === 'companion'
   ));
+  assert.equal(evaluateCompatibilityV3(tameBeast, { weapon: 'Bow' }).ok, true);
 });
 
 test('committed caster Totem rolls emit Spell Totem with a legal socketed Spell', async () => {
@@ -2204,6 +2349,32 @@ test('reported empty and false-totem rolls select specific legal primary skills'
         assert.deepEqual([...represented].sort(), fixture.carrierIds.slice().sort(), fixture.label);
       }
     }
+  }
+
+  for (let index = 0; index < 64; index += 1) {
+    const result = selectRecommendationPackageV3(realCatalog, {
+      weapon: 'Talisman',
+      offenseList: ['Shock', 'Electrocute']
+    }, { offenseInventory: realOffense, selectionSeed: `reported-talisman-lanes-${index}` });
+    assert.ok(result.supportingSkill, `Talisman Shock/Electrocute ${index}`);
+    assert.ok(!result.pieces.some((piece) => piece.name === 'Thunderstorm'), `Talisman Shock/Electrocute ${index}`);
+    assert.deepEqual(
+      new Set(result.diagnostics.offenseCoverage
+        .filter((entry) => ['offense:shock', 'offense:electrocute'].includes(entry.obligationId))
+        .map((entry) => entry.state)),
+      new Set(['support_assigned']),
+      `Talisman Shock/Electrocute ${index}`
+    );
+    const assigned = result.supportAssignments.flatMap((assignment) =>
+      assignment.supports.map((support) => ({ ...support, skillName: assignment.skillName }))
+    );
+    assert.ok(assigned.some((support) => support.name === 'Shock'), `Talisman Shock/Electrocute ${index}`);
+    assert.ok(assigned.some((support) => support.name === 'Electrocute'), `Talisman Shock/Electrocute ${index}`);
+    assert.notEqual(
+      assigned.find((support) => support.name === 'Shock')?.skillName,
+      assigned.find((support) => support.name === 'Electrocute')?.skillName,
+      `Talisman Shock/Electrocute ${index}`
+    );
   }
 
   for (let index = 0; index < 64; index += 1) {
