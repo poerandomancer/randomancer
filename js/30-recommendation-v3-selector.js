@@ -114,6 +114,10 @@ const SUPPORT_AVAILABILITY_PENALTY = Object.freeze({
   lineage: 1
 });
 const SUPPORT_AVAILABILITY_SCORE_WEIGHT = 500;
+const SUPPRESSED_COMPANION_SKILL_IDEAS = new Set(['rhoa_mount']);
+const COMPANION_SKILL_PREFERENCE_SCORE = Object.freeze({
+  tame_beast: 90
+});
 
 const RELATION_WEIGHT = Object.freeze({
   fulfills: 9,
@@ -580,6 +584,14 @@ function evaluateDeliveryCompatibilityV3(entity, snapshot = {}) {
 
   if (weapon.kind === 'martial') {
     if (explicit) return { ok: true, reason: '', weapon, evidence: explicit };
+    if (isSummoning && !isSpell && !isAttack) {
+      return {
+        ok: true,
+        reason: '',
+        weapon,
+        evidence: { source: 'summoning', value: 'minion' }
+      };
+    }
     return {
       ok: false,
       reason: `does not have typed ${weapon.family} delivery evidence`,
@@ -642,15 +654,16 @@ function isDirectlyUsableActive(entity, offenseObligations = []) {
     && ['companion', 'minion', 'totem'].includes(normalizeToken(fact?.mechanic))
     && HARD_CONFIDENCE.has(fact?.confidence)
   );
+  const createsRolledProxy = createsDamageProxy && createsRolledArchetype(entity, offenseObligations);
   for (const blocked of DIRECT_USE_ALWAYS_BLOCKED_TYPES) if (types.has(blocked)) return false;
   if (!createsDamageProxy && Array.from(DIRECT_USE_PROXY_ALLOWED_TYPES).some((type) => types.has(type))) {
     return false;
   }
-  const hasDamageDelivery = types.has('attack')
+  const hasNativeDamageDelivery = types.has('attack')
     || types.has('damage')
     || types.has('damageovertime')
-    || types.has('degenonlyspelldamage')
-    || createsDamageProxy;
+    || types.has('degenonlyspelldamage');
+  const hasDamageDelivery = hasNativeDamageDelivery || createsRolledProxy;
   if (!hasDamageDelivery) return false;
   const hardPreventsDamage = asArray(entity.facts).some((fact) =>
     fact?.relation === 'prevents'
@@ -932,6 +945,11 @@ function supportCompletionProof(entity, obligation, index) {
     supportEntityIds: completion.supports.map((support) => support.id),
     supportSourceIds: completion.supports.map((support) => support.source_id),
     supportNames: completion.supports.map((support) => support.name),
+    preventedMechanics: unique(completion.supports.flatMap((support) =>
+      hardSupportedSkillFacts(support)
+        .filter((fact) => fact?.relation === 'prevents')
+        .flatMap(factMechanics)
+    )),
     prerequisiteMechanics: unique(completion.supports.flatMap((support) =>
       supportRequirementFacts(support).map((fact) => normalizeToken(fact?.mechanic))
     ))
@@ -983,6 +1001,7 @@ function archetypeSpecificityScore(entity, offenseObligations = []) {
   if (archetypes.has('companion')) {
     if (createsCompanion) score += 45;
     else if (hasCompanion) score += 25;
+    score += COMPANION_SKILL_PREFERENCE_SCORE[normalizeToken(entity?.name)] || 0;
   }
   if (archetypes.has('minion')) {
     if (createsMinion && !hasCompanion) score += 45;
@@ -991,6 +1010,12 @@ function archetypeSpecificityScore(entity, offenseObligations = []) {
   }
   if (archetypes.has('totem') && createsTotem) score += 35;
   return score;
+}
+
+function isSuppressedCompanionSkillIdea(entity, offenseObligations = []) {
+  const archetypes = rolledArchetypeMechanics(offenseObligations);
+  return archetypes.has('companion')
+    && SUPPRESSED_COMPANION_SKILL_IDEAS.has(normalizeToken(entity?.name));
 }
 
 function candidateDependencies(entity, offenseObligations = []) {
@@ -1134,6 +1159,7 @@ function isUsablePackageActive(entity) {
 
 function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalProfiles = {}, supportIndex = null) {
   if (!isUsablePackageActive(entity)) return null;
+  if (isSuppressedCompanionSkillIdea(entity, offenseObligations)) return null;
   if (isSpiritOrPersistentActive(entity) && !createsRolledArchetype(entity, offenseObligations)) return null;
   const compatibility = evaluateCompatibilityV3(entity, snapshot);
   if (!compatibility.ok) return null;
@@ -1414,6 +1440,40 @@ function adjacentOffenseFacts(candidate, offenseObligations) {
   );
 }
 
+function supportLaneConflictIds(candidate, offenseObligations) {
+  const ids = new Set();
+  const supportRoutes = asArray(candidate?.carriers)
+    .filter((proof) => proof?.completionType === 'support');
+  for (const route of supportRoutes) {
+    const prevented = new Set(asArray(route.preventedMechanics).map(normalizeToken));
+    if (!prevented.size) continue;
+    for (const obligation of offenseObligations) {
+      if (obligation.id === route.obligationId) continue;
+      const blocked = asArray(obligation.mechanics)
+        .map(normalizeToken)
+        .some((mechanic) => prevented.has(mechanic));
+      if (!blocked) continue;
+      ids.add(route.obligationId);
+      ids.add(obligation.id);
+    }
+  }
+  return ids;
+}
+
+function enablesSeparateSupportLanes(primary, supporting, offenseObligations) {
+  if (!primary || !supporting || offenseObligations.length < 2) return false;
+  const conflictIds = new Set([
+    ...supportLaneConflictIds(primary, offenseObligations),
+    ...supportLaneConflictIds(supporting, offenseObligations)
+  ]);
+  if (conflictIds.size < 2) return false;
+  return [primary, supporting].every((candidate) =>
+    asArray(candidate.carriers).some((proof) =>
+      proof?.completionType === 'support' && conflictIds.has(proof.obligationId)
+    )
+  );
+}
+
 function offenseAffinityMechanics(offenseObligations) {
   return new Set(offenseObligations.flatMap((obligation) => {
     const mechanics = [
@@ -1549,6 +1609,7 @@ function evaluateSkillPackage(primary, supporting, offenseObligations) {
     ]
     : [];
   const supportingAdjacentFacts = adjacentOffenseFacts(supporting, offenseObligations);
+  const primaryAdjacentFacts = adjacentOffenseFacts(primary, offenseObligations);
   const primaryRepresentedBeforePair = new Set([
     ...primary.fulfilled.map((entry) => entry.obligationId),
     ...primary.carriers.map((entry) => entry.obligationId)
@@ -1560,13 +1621,14 @@ function evaluateSkillPackage(primary, supporting, offenseObligations) {
     && supportingFulfilled.some((proof) =>
       primary.carriers.some((carrier) => carrier.obligationId === proof.obligationId)
     );
+  const separateSupportLanes = enablesSeparateSupportLanes(primary, supporting, offenseObligations);
   if (supportingDisplacesCarrierPrimary) return null;
   if (supporting && !supportingFulfilled.length && !supportingCarriers.length
     && !synergyEdges.length) {
     return null;
   }
   if (supporting && !supportingFulfilled.length && !supportingAddsCarrierCoverage && !synergyEdges.length) {
-    return null;
+    if (!separateSupportLanes) return null;
   }
 
   const coverageCandidates = [primary, supportingView].filter(Boolean);
@@ -1606,7 +1668,8 @@ function evaluateSkillPackage(primary, supporting, offenseObligations) {
     : 0;
   if (supporting && !synergyEdges.length
     && newRepresentedBySupporting === 0
-    && newDirectBySupporting === 0) return null;
+    && newDirectBySupporting === 0
+    && !separateSupportLanes) return null;
   const complementaryCoverage = supporting && offenseObligations.length > 1
     && Array.from(primaryRepresentedIds).some((id) => !supportingRepresentedIds.has(id))
     && Array.from(supportingRepresentedIds).some((id) => !primaryRepresentedIds.has(id));
@@ -1642,14 +1705,16 @@ function evaluateSkillPackage(primary, supporting, offenseObligations) {
     + criticalAffinityScore
     + primary.fulfilled.length * 45
     + (supporting && !metaPayloadPair ? 70 : 0)
+    + (separateSupportLanes ? 140 : 0)
     + synergyEdges.filter((edge) => edge.demandRelation === 'requires' && !edge.metaPayload).length * 135
     + synergyEdges.filter((edge) => edge.demandRelation === 'consumes').length * 115
     + newRepresentedBySupporting * 55
     + newDirectBySupporting * 35
     + (complementaryCoverage ? 35 : 0)
     + (complementaryRole ? 25 : 0)
+    + (separateSupportLanes ? (primaryAdjacentFacts.length + supportingAdjacentFacts.length) * 25 : 0)
     + archetypeSpecificityScore
-    - (redundantParallel ? 45 : 0)
+    - (redundantParallel && !separateSupportLanes ? 45 : 0)
     - (metaPayloadPair ? 15 : 0)
     - unresolvedDependencies.length * 90
     - unresolvedSetupCosts.length * 20;

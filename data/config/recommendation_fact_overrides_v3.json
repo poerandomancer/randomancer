@@ -65,15 +65,7 @@
       ],
       "compatibility": {
         "equipment": {
-          "is_unrestricted": false,
-          "mainhand_tags_any_of": [
-            "spear"
-          ],
-          "offhand_tags_any_of": [],
-          "allowed_weapon_tags_any_of": [
-            "spear"
-          ],
-          "display": "Spear affinity"
+          "is_unrestricted": true
         }
       }
     },
