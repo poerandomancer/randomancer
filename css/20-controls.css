@@ -1,5 +1,5 @@
 .roll-btn{
-  margin-top:.5rem; padding:.48rem 1.35rem .55rem;
+  margin-top:0; padding:.35rem 1.2rem .42rem;
   border-radius:10px 10px 16px 16px;
   border:1px solid rgba(212,170,80,.52);
   border-top-color:rgba(240,211,142,.72);
@@ -27,15 +27,16 @@
   align-items: center;
 }
 
-body[data-mode="build"] .results-stage > .roll-sticky{
+body[data-mode="build"] .primary-build-card-stage__inner > .roll-sticky{
   position:relative;
   bottom:auto;
   z-index:12;
-  margin-top:.2rem;
+  flex:0 0 auto;
+  margin:0 0 -13px;
   pointer-events:none;
 }
 
-body[data-mode="build"] .results-stage > .roll-sticky :is(.roll-btn,.resume-roll-btn){
+body[data-mode="build"] .primary-build-card-stage__inner > .roll-sticky :is(.roll-btn,.resume-roll-btn){
   pointer-events:auto;
 }
 
@@ -382,7 +383,11 @@ body[data-mode="legacy"] main > .controls-rail{
 
 /* Keep Roll + Resume perfectly vertically aligned inside the sticky cluster */
 .roll-sticky{
-  margin-top: .5rem; /* preserve the original spacing that used to live on .roll-btn */
+  margin-top: .5rem;
+}
+
+body[data-mode="build"] .primary-build-card-stage__inner > .roll-sticky{
+  margin-top:0;
 }
 
 .roll-sticky .roll-btn{

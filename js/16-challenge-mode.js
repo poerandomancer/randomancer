@@ -663,27 +663,9 @@ function initChallengeInlineTooltips() {
 function stabilizeLedeHeight() {
   const lede = document.getElementById('app-lede');
   if (!lede) return;
-
-  const previous = lede.innerHTML;
-  const previousMinHeight = lede.style.minHeight;
+  // Let each mode occupy only the height its own copy needs. Reserving the
+  // tallest mode's lede left a large blank band above the Build controls.
   lede.style.minHeight = '';
-
-  lede.innerHTML = STANDARD_LEDE_HTML;
-  const standardHeight = lede.offsetHeight;
-
-  lede.innerHTML = CHALLENGE_LEDE_TEXT;
-  const challengeHeight = lede.offsetHeight;
-
-  lede.innerHTML = LEGACY_LEDE_TEXT;
-  const legacyHeight = lede.offsetHeight;
-
-  lede.innerHTML = previous;
-  const targetHeight = Math.max(standardHeight, challengeHeight, legacyHeight);
-  lede.style.minHeight = `${targetHeight}px`;
-
-  if (previousMinHeight && Number.parseFloat(previousMinHeight) > targetHeight) {
-    lede.style.minHeight = previousMinHeight;
-  }
 }
 
 function prefersReducedMotion() {

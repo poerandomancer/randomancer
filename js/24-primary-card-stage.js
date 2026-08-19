@@ -87,6 +87,25 @@ function createStage() {
   return stage;
 }
 
+function positionRollCluster() {
+  const stage = document.getElementById(STAGE_ID);
+  const resultsStage = document.getElementById('results-stage');
+  const cluster = document.getElementById('roll')?.closest('.roll-sticky');
+  if (!stage || !resultsStage || !cluster) return;
+
+  if (isBuildMode()) {
+    const slot = stage.querySelector('.primary-build-card-stage__slot');
+    if (slot && cluster.parentElement !== stage.querySelector('.primary-build-card-stage__inner')) {
+      slot.before(cluster);
+    }
+    return;
+  }
+
+  if (cluster.parentElement !== resultsStage) {
+    stage.after(cluster);
+  }
+}
+
 function getMount() {
   createStage();
   return document.getElementById(MOUNT_ID);
@@ -459,6 +478,7 @@ function installHeaderObserver() {
 function syncMode() {
   const stage = createStage();
   if (!stage) return;
+  positionRollCluster();
   const buildMode = isBuildMode();
   stage.setAttribute('aria-hidden', buildMode ? 'false' : 'true');
   if (!buildMode) {
@@ -471,6 +491,7 @@ function syncMode() {
 
 function install() {
   createStage();
+  positionRollCluster();
   installSnapshotBridge();
   installHeaderObserver();
   retireLegacyBuildShareLauncher();

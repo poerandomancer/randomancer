@@ -1,5 +1,9 @@
 main{ max-width:860px; margin:0 auto; padding:1rem 1.25rem 1.25rem; }
 
+body[data-mode="build"] main{
+  padding-top:.3rem;
+}
+
 .panel{
   position:relative;
   background:var(--panel);
