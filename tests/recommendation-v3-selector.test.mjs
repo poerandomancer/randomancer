@@ -1873,7 +1873,7 @@ test('committed critical profiles are complete and cover recommendation-backed w
     && profile.base_crit_chance > 0
   ));
 
-  const weapons = ['Mace', 'Quarterstaff', 'Bow', 'Crossbow', 'Spear', 'Staff', 'Wand', 'Sceptre'];
+  const weapons = ['Mace', 'Quarterstaff', 'Bow', 'Crossbow', 'Talisman', 'Spear', 'Staff', 'Wand', 'Sceptre'];
   for (const weapon of weapons) {
     const snapshot = { weapon, offenseList: ['Critical Hits'] };
     const result = selectRecommendationPackageV3(realCatalog, snapshot, {
@@ -1887,11 +1887,6 @@ test('committed critical profiles are complete and cover recommendation-backed w
     assert.equal(evaluateDeliveryCompatibilityV3(selected, snapshot).ok, true, weapon);
   }
 
-  const talisman = selectRecommendationPackageV3(realCatalog, {
-    weapon: 'Talisman',
-    offenseList: ['Critical Hits']
-  }, { offenseInventory: realOffense, criticalProfiles });
-  assert.equal(talisman.primarySkill, null);
 });
 
 test('committed catalog remains deterministic and equipment-legal across the roll matrix', async () => {
@@ -2003,10 +1998,10 @@ test('the real 9 by 16 active matrix has a locked final Offense coverage breakdo
 
   assert.equal(Object.values(counts).reduce((sum, value) => sum + value, 0), 144);
   assert.deepEqual(counts, {
-    active_direct: 68,
-    support_assigned: 37,
-    carrier_only: 7,
-    no_primary: 32
+    active_direct: 75,
+    support_assigned: 43,
+    carrier_only: 8,
+    no_primary: 18
   });
 });
 
@@ -2051,15 +2046,21 @@ test('committed catalog applies normal Skill Ideas gates to screenshot bad cases
     'Navira, the Last Mirage',
     'Punch',
     'Raging Spirits',
+    'Skeletal Warrior',
     'Spear Throw',
-    'Spiraling Conspiracy'
+    'Spiraling Conspiracy',
+    'Tame Beast',
+    "Tul's Stillness"
   ]);
   const cases = [
+    { weapon: 'Crossbow', offenseList: ['Freeze'], ascendancy: 'Martial Artist' },
     { weapon: 'Mace', offenseList: ['Minions'] },
     { weapon: 'Mace', offenseList: ['Minions', 'Cold Damage'] },
     { weapon: 'Mace', offenseList: ['Minions', 'Critical Hits'], ascendancy: 'Martial Artist' },
     { weapon: 'Staff', offenseList: ['Freeze', 'Minions'], ascendancy: 'Disciple of Varashta' },
-    { weapon: 'Spear', offenseList: ['Critical Hits', 'Chaos Damage'] }
+    { weapon: 'Spear', offenseList: ['Critical Hits', 'Chaos Damage'] },
+    { weapon: 'Talisman', offenseList: ['Minions'], ascendancy: 'Stormweaver' },
+    { weapon: 'Talisman', offenseList: ['Companions'], ascendancy: 'Titan' }
   ];
   const normalSkillEntity = (piece) => realCatalog.entities.find((entry) => entry.id === piece.entityId);
   const exactTerms = (entity) => new Set((entity?.retrieval_terms || []).map((term) => String(term).toLowerCase()));
@@ -2080,6 +2081,7 @@ test('committed catalog applies normal Skill Ideas gates to screenshot bad cases
     }
     for (const support of result.supportAssignments.flatMap((assignment) => assignment.supports)) {
       assert.equal(support.availability, 'normal', support.name);
+      assert.equal(blockedNames.has(support.name), false, support.name);
     }
   }
 
@@ -2090,6 +2092,18 @@ test('committed catalog applies normal Skill Ideas gates to screenshot bad cases
   assert.ok(maceMinions.supportAssignments.some((assignment) =>
     assignment.supports.some((support) => support.name === 'Living Lightning II')
   ));
+
+  const talismanMinions = selectRecommendationPackageV3(realCatalog, {
+    weapon: 'Talisman',
+    offenseList: ['Minions']
+  }, { offenseInventory: realOffense });
+  assert.equal(talismanMinions.primarySkill?.name, 'Pounce');
+
+  const talismanCompanions = selectRecommendationPackageV3(realCatalog, {
+    weapon: 'Talisman',
+    offenseList: ['Companions']
+  }, { offenseInventory: realOffense });
+  assert.equal(talismanCompanions.primarySkill?.name, 'Pounce');
 });
 
 test('committed catalog keeps spirit companions out and bridges martial Minions with normal supports', async () => {
@@ -2117,26 +2131,40 @@ test('committed catalog keeps spirit companions out and bridges martial Minions 
   const bowCompanions = selectedNames('Bow', 'Companions');
   const spearCompanions = selectedNames('Spear', 'Companions');
   const talismanCompanions = selectedNames('Talisman', 'Companions');
+  const talismanMinions = selectedNames('Talisman', 'Minions');
   const maceMinions = selectedNames('Mace', 'Minions');
   const bowMinions = selectedNames('Bow', 'Minions');
 
   assert.deepEqual([...bowCompanions.names], []);
   assert.deepEqual([...spearCompanions.names], []);
-  assert.deepEqual([...talismanCompanions.names], []);
+  assert.deepEqual([...talismanCompanions.names], ['Pounce']);
+  assert.deepEqual([...talismanMinions.names], ['Pounce']);
   assert.ok(maceMinions.supportNames.has('Living Lightning II'));
   assert.ok(bowMinions.supportNames.has('Living Lightning II'));
 
   const pounce = realCatalog.entities.find((entry) => entry.name === 'Pounce');
+  const skeletalWarrior = realCatalog.entities.find((entry) => entry.name === 'Skeletal Warrior');
   const tameBeast = realCatalog.entities.find((entry) => entry.name === 'Tame Beast');
   assert.ok(pounce.facts.some((fact) =>
     fact.relation === 'creates'
       && fact.mechanic === 'minion'
       && fact.condition === 'predators_mark_activation'
   ));
+  assert.ok(pounce.facts.some((fact) =>
+    fact.relation === 'creates'
+      && fact.mechanic === 'companion'
+      && fact.condition === 'predators_mark_activation'
+  ));
+  assert.equal(evaluateCompatibilityV3(pounce, { weapon: 'Talisman' }).ok, true);
+  assert.equal((skeletalWarrior.crafting?.types_raw || []).length, 0);
+  assert.ok(['persistent', 'hasreservation'].every((term) =>
+    skeletalWarrior.retrieval_terms.map(String).map((value) => value.toLowerCase()).includes(term)
+  ));
   assert.ok(tameBeast.facts.some((fact) =>
     fact.relation === 'creates' && fact.mechanic === 'companion'
   ));
   assert.equal(evaluateCompatibilityV3(tameBeast, { weapon: 'Spear' }).ok, true);
+  assert.deepEqual(tameBeast.crafting?.weapon_affinities || [], ['spear']);
 });
 
 test('committed caster Totem rolls emit Spell Totem with a legal socketed Spell', async () => {
@@ -2454,13 +2482,19 @@ test('reported empty and false-totem rolls select specific legal primary skills'
       weapon: 'Talisman',
       offenseList: ['Shock', 'Electrocute']
     }, { offenseInventory: realOffense, selectionSeed: `reported-talisman-lanes-${index}` });
-    assert.equal(result.primarySkill, null, `Talisman Shock/Electrocute ${index}`);
+    assert.ok(result.primarySkill, `Talisman Shock/Electrocute ${index}`);
     assert.ok(!result.pieces.some((piece) => piece.name === 'Thunderstorm'), `Talisman Shock/Electrocute ${index}`);
+    assert.ok(!result.pieces.some((piece) =>
+      piece.name === 'Skeletal Warrior' || piece.name === 'Tame Beast'
+    ), `Talisman Shock/Electrocute ${index}`);
+    assert.ok(result.supportAssignments.flatMap((assignment) => assignment.supports).every((support) =>
+      support.availability === 'normal'
+    ), `Talisman Shock/Electrocute ${index}`);
     assert.deepEqual(
       new Set(result.diagnostics.offenseCoverage
         .filter((entry) => ['offense:shock', 'offense:electrocute'].includes(entry.obligationId))
         .map((entry) => entry.state)),
-      new Set(['no_primary']),
+      new Set(['support_assigned']),
       `Talisman Shock/Electrocute ${index}`
     );
   }

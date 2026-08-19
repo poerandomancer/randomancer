@@ -340,7 +340,9 @@
       "schools": [
         "primal"
       ],
-      "weapon_affinities": []
+      "weapon_affinities": [
+        "talisman"
+      ]
     },
     "skill:Metadata/Items/Gem/SkillGemBerserk": {
       "types_raw": [
@@ -639,7 +641,9 @@
       "schools": [
         "primal"
       ],
-      "weapon_affinities": []
+      "weapon_affinities": [
+        "talisman"
+      ]
     },
     "skill:Metadata/Items/Gem/SkillGemFireball": {
       "types_raw": [
@@ -952,7 +956,9 @@
       "schools": [
         "primal"
       ],
-      "weapon_affinities": []
+      "weapon_affinities": [
+        "talisman"
+      ]
     },
     "skill:Metadata/Items/Gem/SkillGemMagmaBarrier": {
       "types_raw": [
@@ -1036,7 +1042,9 @@
       "schools": [
         "primal"
       ],
-      "weapon_affinities": []
+      "weapon_affinities": [
+        "talisman"
+      ]
     },
     "skill:Metadata/Items/Gem/SkillGemOilGrenade": {
       "types_raw": [
@@ -1734,7 +1742,9 @@
       "schools": [
         "primal"
       ],
-      "weapon_affinities": []
+      "weapon_affinities": [
+        "talisman"
+      ]
     },
     "skill:Metadata/Items/Gem/SkillGemWitheringPresence": {
       "types_raw": [
@@ -1752,7 +1762,9 @@
       "schools": [
         "primal"
       ],
-      "weapon_affinities": []
+      "weapon_affinities": [
+        "talisman"
+      ]
     },
     "skill:Metadata/Items/Gem/SkillGemWolfCrossSlash": {
       "types_raw": [
@@ -1761,7 +1773,9 @@
       "schools": [
         "primal"
       ],
-      "weapon_affinities": []
+      "weapon_affinities": [
+        "talisman"
+      ]
     },
     "skill:Metadata/Items/Gem/SkillGemWolfLunarBlessing": {
       "types_raw": [
@@ -1770,7 +1784,9 @@
       "schools": [
         "primal"
       ],
-      "weapon_affinities": []
+      "weapon_affinities": [
+        "talisman"
+      ]
     },
     "skill:Metadata/Items/Gem/SkillGemWolfShred": {
       "types_raw": [],
@@ -1784,7 +1800,9 @@
       "schools": [
         "primal"
       ],
-      "weapon_affinities": []
+      "weapon_affinities": [
+        "talisman"
+      ]
     },
     "skill:Metadata/Items/Gem/SkillGemWyvernFlameBreath": {
       "types_raw": [
@@ -1793,7 +1811,9 @@
       "schools": [
         "primal"
       ],
-      "weapon_affinities": []
+      "weapon_affinities": [
+        "talisman"
+      ]
     },
     "skill:Metadata/Items/Gems/ReservationSkillGemUnknown1": {
       "types_raw": [
@@ -2106,7 +2126,9 @@
       "schools": [
         "primal"
       ],
-      "weapon_affinities": []
+      "weapon_affinities": [
+        "talisman"
+      ]
     },
     "skill:Metadata/Items/Gems/SkillGemBindSpectre": {
       "types_raw": [
@@ -2530,7 +2552,9 @@
       "schools": [
         "primal"
       ],
-      "weapon_affinities": []
+      "weapon_affinities": [
+        "talisman"
+      ]
     },
     "skill:Metadata/Items/Gems/SkillGemFirebolt": {
       "types_raw": [],
@@ -2637,7 +2661,9 @@
       "schools": [
         "primal"
       ],
-      "weapon_affinities": []
+      "weapon_affinities": [
+        "talisman"
+      ]
     },
     "skill:Metadata/Items/Gems/SkillGemFuturePast": {
       "types_raw": [],
@@ -3113,7 +3139,9 @@
       "schools": [
         "primal"
       ],
-      "weapon_affinities": []
+      "weapon_affinities": [
+        "talisman"
+      ]
     },
     "skill:Metadata/Items/Gems/SkillGemRollingSlam": {
       "types_raw": [
@@ -3900,7 +3928,9 @@
       "schools": [
         "primal"
       ],
-      "weapon_affinities": []
+      "weapon_affinities": [
+        "talisman"
+      ]
     },
     "skill:Metadata/Items/Gems/SkillGemWardboundMinions": {
       "types_raw": [],
@@ -3969,7 +3999,9 @@
       "schools": [
         "primal"
       ],
-      "weapon_affinities": []
+      "weapon_affinities": [
+        "talisman"
+      ]
     },
     "skill:Metadata/Items/Gems/SupportGemUnknown1": {
       "types_raw": [],

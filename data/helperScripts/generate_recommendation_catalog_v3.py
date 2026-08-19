@@ -37,6 +37,20 @@ SCHEMA_VERSION = "recommendation-catalog-v3.0.0"
 REPORT_SCHEMA_VERSION = "recommendation-catalog-v3-report.0.0"
 GRANTED_ACCESS_SCHEMA_VERSION = "recommendation-granted-skill-access-v3.0.0"
 SKILL_CRAFTING_SCHEMA_VERSION = "recommendation-skill-crafting-v3.0.0"
+MARTIAL_CRAFTING_TYPES = {
+    "axe",
+    "bow",
+    "claw",
+    "crossbow",
+    "dagger",
+    "flail",
+    "mace",
+    "quarterstaff",
+    "spear",
+    "sword",
+    "talisman",
+    "unarmed",
+}
 
 
 def load_json(path: Path) -> Any:
@@ -604,10 +618,39 @@ def build_skill_crafting_payload(ctx: SourceContext) -> dict[str, Any]:
         if not source_id:
             continue
         crafting = skill.get("crafting") if isinstance(skill.get("crafting"), dict) else {}
+        types_raw = unique_sorted(crafting.get("types_raw") or [])
+        weapon_requirements = (
+            skill.get("weapon_requirements")
+            if isinstance(skill.get("weapon_requirements"), dict)
+            else {}
+        )
+        base_weapon_affinities = unique_sorted(crafting.get("weapon_affinities") or [])
+        required_weapon_affinities = unique_sorted(
+            weapon_requirements.get("allowed_weapon_tags_any_of")
+            or weapon_requirements.get("mainhand_tags_any_of")
+            or []
+        )
+        has_martial_crafting_type = any(
+            str(type_name).strip().lower() in MARTIAL_CRAFTING_TYPES
+            for type_name in types_raw
+        )
+        fallback_weapon_affinities = (
+            required_weapon_affinities
+            if (
+                types_raw
+                and not base_weapon_affinities
+                and not has_martial_crafting_type
+                and len(required_weapon_affinities) <= 2
+            )
+            else []
+        )
         crafting_by_entity_id[f"skill:{source_id}"] = {
-            "types_raw": unique_sorted(crafting.get("types_raw") or []),
+            "types_raw": types_raw,
             "schools": unique_sorted(crafting.get("schools") or []),
-            "weapon_affinities": unique_sorted(crafting.get("weapon_affinities") or []),
+            "weapon_affinities": unique_sorted([
+                *base_weapon_affinities,
+                *fallback_weapon_affinities,
+            ]),
         }
 
     craftable_count = sum(

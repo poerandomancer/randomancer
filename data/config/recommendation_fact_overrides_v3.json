@@ -88,12 +88,25 @@
       }
     },
     "skill:Metadata/Items/Gems/SkillGemWolfPounce": {
-      "reason": "Pounce triggers Predator's Mark; its activation triggers the nested Summon Wolf skill, which creates a Wolf Minion.",
+      "reason": "Pounce triggers Predator's Mark; its activation triggers the nested Summon Wolf skill, which creates a Wolf Minion that serves as the Talisman companion-style route.",
       "add_facts": [
         {
           "relation": "creates",
           "subject": "skill",
           "mechanic": "minion",
+          "condition": "predators_mark_activation",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "nested_active_skill",
+              "value": "Predator's Mark -> Summon Wolf"
+            }
+          ]
+        },
+        {
+          "relation": "creates",
+          "subject": "skill",
+          "mechanic": "companion",
           "condition": "predators_mark_activation",
           "confidence": "exact",
           "evidence": [
