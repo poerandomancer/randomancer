@@ -15,7 +15,7 @@ function cloneEntry(entry) {
   if (!entry || typeof entry !== 'object') return entry;
   const next = { ...entry };
   // Remove the deprecated flat support field. Typed v3 support assignments
-  // remain nested under recommendationV3 on the skill they actually support.
+  // remain nested under recommendationPackage on the skill they actually support.
   delete next.recommended_supports;
   return next;
 }
@@ -73,7 +73,7 @@ function normalizeRecommendationContract(snapshot) {
     recommendedPersistentBuff: null,
     recommendedUniques: normalizeUniqueIdeas(snapshot.recommendedUniques),
     passives: normalizePassiveIdeas(snapshot.passives),
-    recommendationV3: normalizeRecommendationV3(snapshot.recommendationV3)
+    recommendationPackage: normalizeRecommendationV3(snapshot.recommendationPackage)
   };
 }
 
@@ -101,7 +101,7 @@ function normalizeMergePartial(partial) {
     next.recommendedPersistentBuff = null;
     next.recommendedUniques = [];
     next.passives = null;
-    next.recommendationV3 = null;
+    next.recommendationPackage = null;
   }
 
   if (Object.prototype.hasOwnProperty.call(partial, 'recommendedSkills')) {
@@ -116,8 +116,8 @@ function normalizeMergePartial(partial) {
   if (Object.prototype.hasOwnProperty.call(partial, 'passives')) {
     next.passives = normalizePassiveIdeas(partial.passives);
   }
-  if (Object.prototype.hasOwnProperty.call(partial, 'recommendationV3')) {
-    next.recommendationV3 = normalizeRecommendationV3(partial.recommendationV3);
+  if (Object.prototype.hasOwnProperty.call(partial, 'recommendationPackage')) {
+    next.recommendationPackage = normalizeRecommendationV3(partial.recommendationPackage);
   }
 
   // Deprecated recommendation families stay empty even if an older generator
@@ -140,7 +140,7 @@ function syncLegacyRecommendationContext(snapshot) {
   legacy.recommendedPersistentBuff = null;
   legacy.recommendedUniques = snapshot.recommendedUniques || [];
   legacy.passives = snapshot.passives || null;
-  legacy.recommendationV3 = snapshot.recommendationV3 || null;
+  legacy.recommendationPackage = snapshot.recommendationPackage || null;
 }
 
 function installCanonicalContract() {

@@ -1,6 +1,5 @@
 import {
   adaptRecommendationPackageV3ToSnapshot,
-  isRecommendationV3Enabled,
   selectRecommendationPackageV3,
   validateRecommendationCatalogV3
 } from './30-recommendation-v3-selector.js';
@@ -24,7 +23,7 @@ function createSelectionSeed() {
 }
 
 function runRecommendationV3(snapshot = currentSnapshot()) {
-  if (!isRecommendationV3Enabled(window) || !snapshot || typeof snapshot !== 'object') return null;
+  if (!snapshot || typeof snapshot !== 'object') return null;
 
   const catalog = window.DATA?.recommendationCatalogV3;
   const validation = validateRecommendationCatalogV3(catalog);
@@ -33,7 +32,7 @@ function runRecommendationV3(snapshot = currentSnapshot()) {
     return null;
   }
 
-  const existingSeed = snapshot?.recommendationV3?.selectionSeed;
+  const existingSeed = snapshot?.recommendationPackage?.selectionSeed;
   const isExistingSelection = existingSeed !== undefined && existingSeed !== null;
   const selectionSeed = isExistingSelection ? existingSeed : createSelectionSeed();
   const result = selectRecommendationPackageV3(catalog, snapshot, {
@@ -63,8 +62,7 @@ function installRecommendationV3Runtime() {
     runRecommendationV3();
   };
 
-  window.RandomancerRecommendationV3 = Object.freeze({
-    enabled: () => isRecommendationV3Enabled(window),
+  window.RandomancerRecommendations = Object.freeze({
     run: runRecommendationV3
   });
 }

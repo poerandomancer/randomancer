@@ -29,7 +29,7 @@ function compactSkillEntry(entry) {
   const id = String(entry.id || '').trim();
   if (!name && !id) return null;
   const compact = name ? { name } : { id };
-  const recommendation = entry.recommendationV3;
+  const recommendation = entry.recommendationPackage;
   if (recommendation && typeof recommendation === 'object') {
     const supports = (recommendation.supports || []).slice(0, 2).map((support) => {
       if (!support) return null;
@@ -38,7 +38,7 @@ function compactSkillEntry(entry) {
       const sourceId = String(support.sourceId || support.id || '').trim();
       return supportName ? { name: supportName } : (sourceId ? { sourceId } : null);
     }).filter(Boolean);
-    compact.recommendationV3 = {
+    compact.recommendationPackage = {
       ...(recommendation.assignedRole ? { assignedRole: recommendation.assignedRole } : {}),
       ...(supports.length ? { supports } : {})
     };

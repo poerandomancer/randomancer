@@ -1,7 +1,6 @@
 import { buildPassiveIndex } from './07-skills-render.js';
 import { buildSkillFamilyIndex, resolveSkillFamily } from './17-skill-family-utils.js';
 import {
-  isRecommendationV3Enabled,
   mergeRecommendationGrantedSkillAccessV3,
   mergeRecommendationSkillCraftingV3,
   validateRecommendationGrantedSkillAccessV3,
@@ -64,22 +63,12 @@ function ensureDataPreload(){
 // ---------- data initialization ----------
 async function loadData() {
   try {
-    // The generated catalog is intentionally excluded from the normal startup
-    // payload. The first selector migration slice opts in explicitly with
-    // ?recommendationV3=1 (or a true window.RandomancerRecommendationV3Enabled
-    // override) and begins this larger fetch in parallel with core data.
-    const recommendationCatalogPromise = isRecommendationV3Enabled(window)
-      ? tryLoad('data/enriched/recommendation_catalog_v3.json')
-      : Promise.resolve(null);
-    const recommendationSkillCraftingPromise = isRecommendationV3Enabled(window)
-      ? tryLoad('data/enriched/recommendation_skill_crafting_v3.json')
-      : Promise.resolve(null);
-    const recommendationCriticalProfilesPromise = isRecommendationV3Enabled(window)
-      ? tryLoad('data/config/recommendation_critical_profiles_v3.json')
-      : Promise.resolve(null);
-    const recommendationGrantedSkillAccessPromise = isRecommendationV3Enabled(window)
-      ? tryLoad('data/enriched/recommendation_granted_skill_access_v3.json')
-      : Promise.resolve(null);
+    // The package selector is the standard recommendation workflow, so its
+    // supporting data is always loaded with the core application data.
+    const recommendationCatalogPromise = tryLoad('data/enriched/recommendation_catalog_v3.json');
+    const recommendationSkillCraftingPromise = tryLoad('data/enriched/recommendation_skill_crafting_v3.json');
+    const recommendationCriticalProfilesPromise = tryLoad('data/config/recommendation_critical_profiles_v3.json');
+    const recommendationGrantedSkillAccessPromise = tryLoad('data/enriched/recommendation_granted_skill_access_v3.json');
     const core = await loadJSON('data/core-data.json');
 
     // Canonical Build Offense vocabulary. Keep it separate on disk from the
@@ -179,13 +168,13 @@ async function loadData() {
     const recommendationCatalogV3 = recommendationCatalogValidation.ok && recommendationSkillCraftingValidation.ok
       ? mergeRecommendationGrantedSkillAccessV3(recommendationCatalogWithCrafting, recommendationGrantedSkillAccessV3)
       : null;
-    if (isRecommendationV3Enabled(window) && !recommendationCatalogValidation.ok) {
+    if (!recommendationCatalogValidation.ok) {
       console.warn(`[Recommendation v3] Catalog unavailable: ${recommendationCatalogValidation.reason}`);
     }
-    if (isRecommendationV3Enabled(window) && !recommendationSkillCraftingValidation.ok) {
+    if (!recommendationSkillCraftingValidation.ok) {
       console.warn(`[Recommendation v3] Skill crafting map unavailable: ${recommendationSkillCraftingValidation.reason}`);
     }
-    if (isRecommendationV3Enabled(window) && !recommendationGrantedSkillAccessValidation.ok) {
+    if (!recommendationGrantedSkillAccessValidation.ok) {
       console.warn(`[Recommendation v3] Granted skill access unavailable: ${recommendationGrantedSkillAccessValidation.reason}`);
     }
 

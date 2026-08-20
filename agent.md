@@ -44,7 +44,6 @@ Primary Defense uses a topology-aware policy because its six outcomes map direct
 - Within the legal ring radius, use soft distance weighting so closer defenses remain more common.
 - If explicit user Fates or hard game compatibility remove every in-radius option, use only the nearest remaining legal ring distance rather than failing the roll.
 
-See `docs/cohesion_selection.md` for the canonical selection contract.
 
 ## Key runtime boundaries
 
@@ -72,8 +71,7 @@ See `docs/cohesion_selection.md` for the canonical selection contract.
 - Prefer coherent setup/payoff and enabler relationships over comparable parallel skills. Parallel skills remain legal when they add real coverage, including separate rolled Offenses.
 - Preserve package order and contextual role metadata in the canonical skill list: primary damage first, then Secondary, Setup, Payoff, Enabler, or Utility as appropriate.
 - Recommendation variation may sample only within a high-quality, fully legal shortlist. Persist the per-roll selection seed, suppress immediate repeats when equivalent alternatives exist, and never use Cohesion to vary recommendation quality.
-- `data/enriched/recommendation_catalog_v3.json` is the additive semantic migration boundary for the package solver. The feature-flagged runtime slice consumes it for a seed-reproducible, equipment-legal one- or two-skill package; the remaining live selectors stay unchanged.
-- Enable the migration slice explicitly with `?recommendationV3=1`. Do not make the large catalog part of the default startup payload until rollout evidence supports that change.
+- `data/enriched/recommendation_catalog_v3.json` is the semantic boundary for the default package solver, which produces a seed-reproducible, equipment-legal one- or two-skill package.
 - Scraped ascendancy descriptions and unique modifiers are intentional augmentation sources where datamined descriptions are incomplete or server-provided.
 
 ## Major-refactor follow-up docket

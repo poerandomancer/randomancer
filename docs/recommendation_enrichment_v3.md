@@ -25,11 +25,11 @@ Scraping and datamining provide evidence. They do not decide whether incidental 
 - `data/config/recommendation_fact_overrides_v3.json` is the curated exception boundary.
 - `data/config/recommendation_semantic_fixtures_v3.json` contains parser and catalog regression fixtures.
 
-The catalog is the data boundary consumed by the feature-flagged package-solver migration. The current runtime slice builds and scores complete one- or two-skill packages, then assigns zero, one, or two typed bridge supports to each selected skill. Broader survivability assignment remains a later slice.
+The catalog is the data boundary consumed by the package solver. The current runtime slice builds and scores complete one- or two-skill packages, then assigns zero, one, or two typed bridge supports to each selected skill. Broader survivability assignment remains a later slice.
 
 ## Runtime migration slice
 
-Append `?recommendationV3=1` to opt into the experimental selector. The normal application path does not fetch the 8 MB catalog and continues using the existing recommendation selectors.
+The package selector is the default recommendation workflow and its catalog loads during normal application startup.
 
 The first slice:
 

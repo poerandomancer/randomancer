@@ -13,7 +13,7 @@ function pickGemRef(entry) {
   const out = {};
   if (entry.id) out.id = entry.id;
   if (entry.name) out.name = entry.name;
-  const recommendation = entry.recommendationV3;
+  const recommendation = entry.recommendationPackage;
   if (recommendation && typeof recommendation === 'object') {
     const supports = compactArray(recommendation.supports, (support) => {
       if (!support) return null;
@@ -25,7 +25,7 @@ function pickGemRef(entry) {
       if (support.tier != null) compact.tier = support.tier;
       return Object.keys(compact).length ? compact : null;
     }).slice(0, 2);
-    out.recommendationV3 = {
+    out.recommendationPackage = {
       ...(recommendation.assignedRole ? { assignedRole: recommendation.assignedRole } : {}),
       ...(supports.length ? { supports } : {})
     };
