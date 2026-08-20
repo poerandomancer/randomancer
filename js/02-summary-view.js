@@ -279,7 +279,7 @@ function readSavedList(storageKey) {
 }
 
 function isSavedBuild() {
-  const snap = window.App?.state?.currentRoll || window.CURRENT_ROLL;
+  const snap = window.App?.state?.currentDraw;
   const code = window.RandomancerEncodeSnapshot?.(snap);
   return !!(code && readSavedList(BUILD_SAVE_STORAGE_KEY).some((entry) => entry.code === code));
 }
@@ -521,7 +521,7 @@ function getShareStateKey(type) {
   if (type === CARD_TYPE_CHALLENGE) {
     return window.RandomancerEncodeChallengeContract?.(window.CURRENT_CHALLENGE_CONTRACT) || '';
   }
-  return window.RandomancerEncodeSnapshot?.(window.App?.state?.currentRoll || window.CURRENT_ROLL) || '';
+  return window.RandomancerEncodeSnapshot?.(window.App?.state?.currentDraw) || '';
 }
 
 function createEmptyShareState(type) {
@@ -791,7 +791,7 @@ async function shareCurrentCard(type, options = {}) {
 
   const body = cardType === CARD_TYPE_CHALLENGE
     ? buildPublicChallengeCardRequest(window.CURRENT_CHALLENGE_CONTRACT)
-    : buildPublicBuildCardRequest(window.App?.state?.currentRoll || window.CURRENT_ROLL);
+    : buildPublicBuildCardRequest(window.App?.state?.currentDraw);
 
   const missingPayload = cardType === CARD_TYPE_CHALLENGE ? !body?.payload?.contract?.tasks?.length : !body?.payload?.snapshot?.ascendancy;
   if (missingPayload) {
@@ -989,7 +989,7 @@ function setOverlayContent({ type, html, error = '', face = '' }) {
 }
 
 function renderBuildCardOverlay(face = 'front', options = {}) {
-  const model = deriveBuildCardModel(window.App?.state?.currentRoll || window.CURRENT_ROLL);
+  const model = deriveBuildCardModel(window.App?.state?.currentDraw);
   if (!model) {
     setOverlayContent({ type: CARD_TYPE_BUILD, error: 'Build card could not be loaded.', html: '' });
     return false;

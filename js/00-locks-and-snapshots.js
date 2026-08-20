@@ -18,11 +18,11 @@ import {
   renderSummaryFromSnapshot
 } from './02-summary-view.js';
 import { buildGemDictionary, lookupGem } from './05-tags-and-scorer.js';
-import { buildBuildContext } from './06-cohesion.js';
+import { buildBuildContext } from './06-build-context.js';
 import { applyGemBorderFromReqWeights, grantLine, renderSupportCards } from './07-skills-render.js';
 import { ensureDataPreload } from './08-data-load.js';
 import { renderPassiveRecommendations } from './07-skills-render.js';
-import { updateAscArt } from './10-roll-engine.js';
+const updateAscArt = () => {};
 import {
   pickRecommendedAscendancyNodes,
   pickRecommendedKeystones,
@@ -42,7 +42,7 @@ import {
     try { return decodeURIComponent(escape(atob(str))); } catch { return ''; }
   };
 
-  const currentSnap = () => (window.App?.state?.currentRoll) ? window.App.state.currentRoll : null;
+  const currentSnap = () => (window.App?.state?.currentDraw) ? window.App.state.currentDraw : null;
   const currentChallenge = () => (window.CURRENT_CHALLENGE_CONTRACT && typeof window.CURRENT_CHALLENGE_CONTRACT === 'object') ? window.CURRENT_CHALLENGE_CONTRACT : null;
   const savedOverlay = document.getElementById('saved-overlay');
   const savedCloseBtn = document.getElementById('saved-close');
@@ -55,118 +55,17 @@ import {
     try { return localStorage.getItem('randomancer_mode') === 'challenge'; } catch { return false; }
   };
 
-  function encodeSnapshot(snap){
-    if (!snap || typeof snap !== 'object') return '';
-    
-    const compact = {
-      v: snap.snapshotVersion || 1,
-      c: snap.className || '',
-      a: snap.ascendancy || '',
-      ai: snap.ascendancyId ?? null,
-      w: snap.weapon || '',
-      o: snap.offhand || '',
-      w2: snap.weapon2 || '',
-      o2: snap.offhand2 || '',
-      al: Array.isArray(snap.ailmentList) ? snap.ailmentList : [],
-      tl: Array.isArray(snap.tacticList) ? snap.tacticList : [],
-      d: snap.defense || '',
-      ds: snap.defStrat || '',
-      b: snap.buildName || '',
-      f: snap.flavor || '',
-      attr: snap.attributes || { strength:0, dexterity:0, intelligence:0 },
-      rs: Array.isArray(snap.recommendedSkills) ? snap.recommendedSkills : [],
-      rs2: Array.isArray(snap.recommendedSkills2) ? snap.recommendedSkills2 : [],
-      ss: Array.isArray(snap.synergySupports) ? snap.synergySupports : [],
-      ss2: Array.isArray(snap.synergySupports2) ? snap.synergySupports2 : [],
-      pb: snap.recommendedPersistentBuff || null,
-      u: Array.isArray(snap.recommendedUniques)
-        ? snap.recommendedUniques.map(u => (typeof u === 'string' ? u : (u && typeof u === 'object' ? u.name : null))).filter(Boolean)
-        : [],
-
-      // passives (packed) so rehydrated builds preserve these panels
-      p: (() => {
-        const pass = snap.passives;
-        if (!pass || typeof pass !== 'object') return null;
-
-        const packNode = (n) => {
-          if (!n || typeof n !== 'object') return null;
-          return {
-            name: n.name || '',
-            lines: Array.isArray(n.lines) ? n.lines.slice(0, 16) : [],
-            tags: Array.isArray(n.tags) ? n.tags.slice(0, 24) : [],
-            icon: n.icon || ''
-          };
-        };
-
-        const packList = (arr, max) =>
-          Array.isArray(arr) ? arr.slice(0, max).map(packNode).filter(Boolean) : [];
-
-        return {
-          a: packList(pass.ascendancyNodes, 2),
-          k: packList(pass.keystones, 2),
-          n: packList(pass.notables, 8)
-        };
-      })()
-
-    };
-
-    return safeBtoa(JSON.stringify(compact));
+  function encodeSnapshot(draw){
+    if (!draw || draw.schema !== 'randomancer-draw-v1') return '';
+    return safeBtoa(JSON.stringify(draw));
   }
 
   function decodeSnapshot(code){
     if (!code) return null;
-    const json = safeAtob(code);
-    if (!json) return null;
     try {
-      const raw = JSON.parse(json);
-      return {
-        snapshotVersion: raw.v || 1,
-        className: raw.c || '',
-        ascendancy: raw.a || '',
-        ascendancyId: raw.ai ?? null,
-        weapon: raw.w || '',
-        offhand: raw.o || '',
-        weapon2: raw.w2 || '',
-        offhand2: raw.o2 || '',
-        ailments: (raw.al || []).join(' & '),
-        tactics: (raw.tl || []).join(' & '),
-        ailmentList: raw.al || [],
-        tacticList: raw.tl || [],
-        defense: raw.d || '',
-        defStrat: raw.ds || '',
-        buildName: raw.b || '',
-        flavor: raw.f || '',
-        attributes: raw.attr || { strength:0, dexterity:0, intelligence:0 },
-        recommendedSkills: raw.rs || [],
-        recommendedSkills2: raw.rs2 || [],
-        synergySupports: raw.ss || [],
-        synergySupports2: raw.ss2 || [],
-        recommendedPersistentBuff: raw.pb || null,
-        recommendedUniques: raw.u || [],
-
-        passives: (() => {
-          const p = raw.p;
-          if (!p || typeof p !== 'object') return null;
-
-          // v2 packed shape: { a, k, n }
-          if ('a' in p || 'k' in p || 'n' in p) {
-            return {
-              ascendancyNodes: Array.isArray(p.a) ? p.a : [],
-              keystones: Array.isArray(p.k) ? p.k : [],
-              notables: Array.isArray(p.n) ? p.n : []
-            };
-          }
-
-          // legacy / dev shape (already expanded)
-          if (p.ascendancyNodes || p.keystones || p.notables) return p;
-
-          return null;
-        })()
-      };
-    } catch (e) {
-      console.warn('[build code] decode failed', e);
-      return null;
-    }
+      const draw = JSON.parse(safeAtob(code));
+      return draw?.schema === 'randomancer-draw-v1' ? draw : null;
+    } catch { return null; }
   }
 
   function encodeChallengeContract(contract){
@@ -449,7 +348,7 @@ function renderSnapshotToDom(snap){
     setSkillsTabsAvailability(hasSet2);
     setActiveSkillsTab('1');
     try {
-      renderPassiveRecommendations((window.App && window.App.state && window.App.state.currentRoll) || snap, window.DATA);
+      renderPassiveRecommendations((window.App && window.App.state && window.App.state.currentDraw) || snap, window.DATA);
     } catch (e) {
       console.warn('[render] passives panel failed', e);
     }
@@ -492,10 +391,10 @@ function renderSnapshotToDom(snap){
 
   // Replace global roll state so restored snapshots do not leak prior roll fields.
   const rollPayload = { ...snap };
-  if (window.App?.replaceCurrentRoll) {
-    window.App.replaceCurrentRoll(rollPayload);
-  } else if (window.App?.mergeCurrentRoll) {
-    window.App.mergeCurrentRoll(rollPayload);
+  if (window.App?.replaceCurrentDraw) {
+    window.App.replaceCurrentDraw(rollPayload);
+  } else if (window.App?.mergeCurrentDraw) {
+    window.App.mergeCurrentDraw(rollPayload);
   }
 
   renderSnapshotToDom(rollPayload);
@@ -767,7 +666,7 @@ function renderSnapshotToDom(snap){
       window.RandomancerShowToast?.('Saved locally.');
     });
     buildPoeBtn?.addEventListener('click', () => {
-      const snap = window.App?.state?.currentRoll || window.CURRENT_ROLL;
+      const snap = window.App?.state?.currentDraw;
       const url = window.RandomancerBuildPoeNinjaUrl?.(snap);
       if (url) window.open(url, '_blank', 'noopener,noreferrer');
     });
@@ -882,8 +781,7 @@ function renderSnapshotToDom(snap){
     });
     const ws2 = document.getElementById('weapons-set2');
     if (ws2) ws2.hidden = true;
-    if (window.App?.state) window.App.state.currentRoll = null;
-    window.CURRENT_ROLL = null;
+    if (window.App?.state) window.App.state.currentDraw = null;
   }
 
   async function openSharedCardBySlug(slug){
@@ -1003,9 +901,8 @@ function renderSnapshotToDom(snap){
     if (!snap || typeof snap !== 'object') return false;
     const safeSnap = cloneJsonSafe(snap) || { ...snap };
     let canonical = safeSnap;
-    if (window.App?.replaceCurrentRoll) canonical = window.App.replaceCurrentRoll(safeSnap) || safeSnap;
-    else if (window.App?.mergeCurrentRoll) canonical = window.App.mergeCurrentRoll({ ...safeSnap }) || safeSnap;
-    window.CURRENT_ROLL = cloneJsonSafe(canonical) || { ...canonical };
+    if (window.App?.replaceCurrentDraw) canonical = window.App.replaceCurrentDraw(safeSnap) || safeSnap;
+    else if (window.App?.mergeCurrentDraw) canonical = window.App.mergeCurrentDraw({ ...safeSnap }) || safeSnap;
     renderSnapshotToDom(canonical);
     return true;
   };

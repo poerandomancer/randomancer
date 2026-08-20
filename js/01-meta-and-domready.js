@@ -160,7 +160,7 @@ const DEBUG_SMOKE_CHECK = false;
 function runSmokeCheck(){
   const requiredExports = [
     'App',
-    'rollBuild',
+    'drawBuild',
     'scheduleSummaryRefresh',
     'RandomancerEncodeSnapshot',
     'RandomancerApplyBuildCode',
@@ -177,7 +177,6 @@ function runSmokeCheck(){
 
   const requiredNodes = {
     rollButton: '#roll',
-    cohesionSlider: '#cohesionRange',
     buildViewCard: '#build-view-card',
     bindFatesModal: '#bind-fates-modal',
     savedOverlay: '#saved-overlay',

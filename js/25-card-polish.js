@@ -8,7 +8,7 @@ let synergyObserver = null;
 let synergyFrame = 0;
 
 function currentSnapshot() {
-  return window.App?.state?.currentRoll || window.CURRENT_ROLL || null;
+  return window.App?.state?.currentDraw || null;
 }
 
 function safeBtoa(value) {

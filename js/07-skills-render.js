@@ -12,7 +12,8 @@ import {
   scoreGemSynergy,
   synergyTunings
 } from './05-tags-and-scorer.js';
-import { buildBuildContext, cohesionThreshold } from './06-cohesion.js';
+import { buildBuildContext } from './06-build-context.js';
+const baseSelectionWeight = 0.75;
 
 const SHOW_EMPTY_SYNERGY_SUPPORTS = true; // set false later if you want to hide again
 
@@ -52,7 +53,7 @@ function applyRepeatPenalty(score, kind, key, coh, meta){
   // If a skill helps cover rolled mechanics (esp. multi-mechanic rolls), soften the penalty.
   if (kind === 'skills' && meta && (meta.totalMechs|0) >= 2 && (meta.mechHits|0) > 0) {
     const shield = 0.10 + 0.45 * c;  // 0.10..0.55
-    pen *= (1 - shield);            // reduce penalty more at high cohesion
+    pen *= (1 - shield);            // reduce penalty more at high affinity
   }
 
   return score - pen;
@@ -78,7 +79,7 @@ function pickTwoDiverseTopKWithMechanics(sorted, lambda = 0.7, coh = 0.75, mechS
   const c = (typeof coh === 'number' && Number.isFinite(coh)) ? coh : 0.75;
   const hasMechs = Array.isArray(mechSets) && mechSets.length >= 2;
 
-  // Higher cohesion => smaller K. Lower cohesion => larger K.
+  // Higher affinity => smaller K. Lower affinity => larger K.
   const baseK =
     (c >= 0.85) ? 5 :
     (c >= 0.70) ? 6 :
@@ -111,7 +112,7 @@ function pickTwoDiverseTopKWithMechanics(sorted, lambda = 0.7, coh = 0.75, mechS
 
   const minScore = firstPool[firstPool.length - 1].score;
 
-  // Higher cohesion => more peaked weights.
+  // Higher affinity => more peaked weights.
   const pow = 1.0 + c;
   const weights = firstPool.map(s => Math.pow(Math.max(0, s.score - minScore) + 1e-6, pow));
   const idx = weightedPickIndex(weights);
@@ -123,7 +124,7 @@ function pickTwoDiverseTopKWithMechanics(sorted, lambda = 0.7, coh = 0.75, mechS
     return false;
   }) : [];
 
-  // IMPORTANT: For exactly-2 mechanics, always try to cover the uncovered mechanic with #2 (even at low cohesion).
+  // IMPORTANT: For exactly-2 mechanics, always try to cover the uncovered mechanic with #2 (even at low affinity).
   const requireUncovered =
     hasMechs &&
     cov1.some(v => !v) &&
@@ -396,7 +397,7 @@ function createPassiveNodeElement(node, type, buildTagSet) {
   return wrapper;
 }
 
-function renderPassiveRecommendations(currentRoll, dataWrap) {
+function renderPassiveRecommendations(currentDraw, dataWrap) {
   const panel = document.getElementById('passives-panel');
   const grid = document.getElementById('passives-grid');
 
@@ -408,17 +409,17 @@ function renderPassiveRecommendations(currentRoll, dataWrap) {
   const passivesData =
     dataWrap?.passivesEnriched || (window.DATA && window.DATA.passivesEnriched);
   const hasPassiveData = passivesData && Array.isArray(passivesData.nodes);
-  if (!panel || !grid || !hasPassiveData || !currentRoll || !currentRoll.passives) {
+  if (!panel || !grid || !hasPassiveData || !currentDraw || !currentDraw.passives) {
     hideAll();
     return;
   }
 
-  const ctx = buildBuildContext(currentRoll);
+  const ctx = buildBuildContext(currentDraw);
   const buildTagSet = new Set();
   (ctx?.tags || []).forEach((t) => buildTagSet.add(normTagPlus(t)));
   (ctx?.defenseTags || []).forEach((t) => buildTagSet.add(normTagPlus(t)));
 
-  const passives = currentRoll.passives || {};
+  const passives = currentDraw.passives || {};
   const ascendancyNodes = Array.isArray(passives.ascendancyNodes)
     ? passives.ascendancyNodes.slice(0, 2)
     : [];
@@ -605,7 +606,7 @@ function isGemWeaponCompatible(g, ctx){
   const hasSceptre = wTags.has('sceptre') || oTags.has('sceptre') || wName.includes('sceptre') || oName.includes('sceptre');
   if (isMinion && !hasSceptre) return false;
 
-  // Spell skills: allowed if you have a “spell weapon” (wand/staff/sceptre) — enforce strongly only at higher cohesion
+  // Spell skills: allowed if you have a “spell weapon” (wand/staff/sceptre) — enforce strongly only at higher affinity
   const isSpell = typeSet.has('spell') || tagSet.has('spell');
   const hasSpellWeapon = wTags.has('spell') || oTags.has('spell') || wTags.has('wand') || oTags.has('wand') || wTags.has('staff') || oTags.has('staff') || hasSceptre;
 
@@ -748,7 +749,7 @@ function selectSynergySupports(picks, ctx, gemDict, maxCount=4){
     const mech = _mechTagSetsFromCtx(ctx);
     if (!mech || mech.mechCount < 2) return [];
     
-    const coh = (typeof cohesionThreshold === 'number' && Number.isFinite(cohesionThreshold)) ? cohesionThreshold : 0.75;
+    const coh = (typeof baseSelectionWeight === 'number' && Number.isFinite(baseSelectionWeight)) ? baseSelectionWeight : 0.75;
 
     // Candidate pool = ALL supports, EXCEPT supports already in the two skills' recommended_supports lists
 	const excluded = new Set();
@@ -961,7 +962,7 @@ function pickTwoDiverseTopK(sorted, lambda = 0.7, coh = 0.75){
 
   const c = (typeof coh === 'number' && Number.isFinite(coh)) ? coh : 0.75;
 
-  // Higher cohesion => smaller K (more deterministic). Lower cohesion => larger K (more variance).
+  // Higher affinity => smaller K (more deterministic). Lower affinity => larger K (more variance).
   const K =
     (c >= 0.85) ? 5 :
     (c >= 0.70) ? 6 :
@@ -971,7 +972,7 @@ function pickTwoDiverseTopK(sorted, lambda = 0.7, coh = 0.75){
   const top = sorted.slice(0, Math.min(K, sorted.length));
   const minScore = top[top.length - 1].score;
 
-  // Higher cohesion => more peaked weights (more likely to pick the top entries).
+  // Higher affinity => more peaked weights (more likely to pick the top entries).
   const pow = 1.0 + c; // ~1.0–2.0
 
   const weights = top.map(s => Math.pow(Math.max(0, s.score - minScore) + 1e-6, pow));
@@ -1093,7 +1094,7 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx, opts = {}){
     }
 
     // Build rolled profile context
-    const ctx = rollCtx || window.CURRENT_ROLL || {};
+    const ctx = rollCtx || {};
     const rolledProfile = buildRolledTagProfileCtx({
       tacticsTags: (ctx.tacticSet||[]).flatMap(t=>t?.tags||[]),
       ailmentsTags: (ctx.ailmentSet||[]).flatMap(a=>a?.tags||[]),
@@ -1106,14 +1107,14 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx, opts = {}){
       rollCtx.tagProfile = rolledProfile;
     }
 
-    // Scoring knobs from cohesion mode
+    // Scoring knobs from affinity mode
     const knobs = synergyTunings();
     knobs.rollAttr = ctx.rollAttr || baseAttrs || {strength:0.33,dexterity:0.33,intelligence:0.33};
     knobs.weaponHints = deriveWeaponHints(picked.weapon, picked.offhand);
     
-        // ---------- mechanic coverage bonus (scales with cohesion + mechanic count) ----------
-    const coh = (typeof cohesionThreshold === 'number' && Number.isFinite(cohesionThreshold))
-      ? cohesionThreshold
+        // ---------- mechanic coverage bonus (scales with affinity + mechanic count) ----------
+    const coh = (typeof baseSelectionWeight === 'number' && Number.isFinite(baseSelectionWeight))
+      ? baseSelectionWeight
       : 0.75;
 
     // Each rolled tactic/ailment counts as a "mechanic". We reward gems that cover more of them.
@@ -1143,7 +1144,7 @@ function rollRecommendedSkills(dataWrap, baseAttrs, picked, rollCtx, opts = {}){
       const coverage = tHits + aHits;
       if (!coverage) return 0;
 
-      // Per-mechanic bonus scales with cohesion (more strict => more "match the roll")
+      // Per-mechanic bonus scales with affinity (more strict => more "match the roll")
       const per = 0.08 + 0.12 * coh;   // ~0.08–0.20
       let bonus = coverage * per;
 
@@ -1283,7 +1284,7 @@ function renderPersistentBuffSkill(persistentPool, rolledProfile, tagIDF, knobs,
     const actives = persistentPool.filter(g => g && g.type === 'active');
     if (!actives.length) return;
     
-    const coh = (typeof cohesionThreshold === 'number' && Number.isFinite(cohesionThreshold)) ? cohesionThreshold : 0.75;
+    const coh = (typeof baseSelectionWeight === 'number' && Number.isFinite(baseSelectionWeight)) ? baseSelectionWeight : 0.75;
 
     // Score persistent buff candidates with the same synergy engine
     const scoredPB = actives.map(g => {
