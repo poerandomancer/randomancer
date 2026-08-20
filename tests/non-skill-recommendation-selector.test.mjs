@@ -25,6 +25,25 @@ test('owns ascendancy, excludes keystones, and enforces unique weapon family', (
   assert.equal(JSON.stringify(result).includes('keystone'), false);
 });
 
+test('off-hand uniques require a one-handed rolled weapon', () => {
+  const offHands = [
+    entity('shield', 'unique', ['freeze'], { compatibility: { access: {}, equipment: { slot: 'Shield', base: 'Tower Shield' } } }),
+    entity('buckler', 'unique', ['freeze'], { compatibility: { access: {}, equipment: { slot: 'Buckler', base: 'Iron Buckler' } } }),
+    entity('focus', 'unique', ['freeze'], { compatibility: { access: {}, equipment: { slot: 'Focus', base: 'Twig Focus' } } })
+  ];
+  const staff = selectNonSkillRecommendations(catalog(offHands), { ...snap, weaponFamily: 'Staff' }, pkg);
+  const crossbow = selectNonSkillRecommendations(catalog(offHands), { ...snap, weaponFamily: 'Crossbow' }, pkg);
+  const talisman = selectNonSkillRecommendations(catalog(offHands), { ...snap, weaponFamily: 'Talisman' }, pkg);
+  const wand = selectNonSkillRecommendations(catalog(offHands), { ...snap, weaponFamily: 'Wand' }, pkg);
+  const mace = selectNonSkillRecommendations(catalog(offHands), { ...snap, weaponFamily: 'Mace' }, pkg);
+  assert.deepEqual(staff.recommendedUniques, []);
+  assert.deepEqual(crossbow.recommendedUniques, []);
+  assert.deepEqual(talisman.recommendedUniques, []);
+  assert.ok(wand.recommendedUniques.length > 0);
+  assert.ok(mace.recommendedUniques.length > 0);
+  assert.ok(wand.recommendedUniques.every((entry) => ['shield', 'buckler', 'focus'].includes(entry.recommendationEvidence.matches[0].mechanic)));
+});
+
 test('rejects generic, contradictory, DNT, prototype, inaccessible, and seasonal candidates', () => {
   const blocked = [
     entity('generic', 'passive', ['damage', 'hit']),

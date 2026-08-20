@@ -6,6 +6,8 @@ import { isRecommendationContentAllowedV3 } from './30-recommendation-v3-selecto
 const GENERIC = new Set(['damage', 'hit', 'attack', 'attributes', 'attribute', 'strength', 'dexterity', 'intelligence', 'armour', 'evasion', 'energy_shield', 'life', 'mana', 'defence', 'defenses']);
 const SEASONAL = new Set(['kalguuran', 'prototype', 'inaccessible', 'dnt', 'dnt_unused', 'coming_soon', 'derived_template']);
 const WEAPONS = ['quarterstaff', 'crossbow', 'sceptre', 'talisman', 'staff', 'wand', 'spear', 'flail', 'dagger', 'claw', 'sword', 'mace', 'axe', 'bow', 'unarmed'];
+const ONE_HANDED_WEAPONS = new Set(['sceptre', 'wand', 'spear', 'flail', 'dagger', 'claw', 'sword', 'mace', 'axe']);
+const OFF_HAND_WEAPONS = new Set(['shield', 'buckler', 'focus']);
 const GOOD_RELATIONS = new Set(['fulfills', 'inflicts', 'creates', 'provides', 'generates', 'converts', 'modifies', 'has_property']);
 const IMPACT = new Map([['fulfills', 8], ['inflicts', 8], ['creates', 8], ['provides', 7], ['generates', 7], ['converts', 7], ['has_property', 5], ['modifies', 4]]);
 
@@ -47,9 +49,10 @@ function uniqueWeaponFamily(entity) {
   const baseTerms = [equipment.weapon_family, equipment.base, slot].map(token);
   const terms = [...baseTerms, ...arr(entity?.retrieval_terms).map(token)];
   const families = WEAPONS.filter((family) => terms.some((term) => term === family || term.includes(`${family}_`) || term.endsWith(`_${family}`)));
+  const offHandFamilies = [...OFF_HAND_WEAPONS].filter((family) => baseTerms.some((term) => term === family || term.includes(`${family}_`) || term.endsWith(`_${family}`)));
   const weaponSlot = slot.includes('weapon') || slot === 'main_hand' || slot === 'off_hand'
     || WEAPONS.some((family) => baseTerms.some((term) => term === family || term.includes(`${family}_`) || term.endsWith(`_${family}`)));
-  return { weaponSlot, families };
+  return { weaponSlot, families, offHandFamilies };
 }
 
 function contradicts(entity, essentials) {
@@ -69,12 +72,16 @@ function analyze(entity, snapshot, context) {
   const rolledWeapon = token(snapshot?.weaponFamily || snapshot?.weapon);
   const weapon = uniqueWeaponFamily(entity);
   if (entity.content_type === 'unique' && weapon.weaponSlot && (!rolledWeapon || !weapon.families.includes(rolledWeapon))) return null;
+  if (entity.content_type === 'unique' && weapon.offHandFamilies.length && !ONE_HANDED_WEAPONS.has(rolledWeapon)) return null;
   const essentials = new Set([...context.offense, ...context.package]);
   if (contradicts(entity, essentials)) return null;
 
   const matches = [];
   if (entity.content_type === 'unique' && weapon.weaponSlot && weapon.families.includes(rolledWeapon)) {
     matches.push({ kind: 'weapon', mechanic: rolledWeapon, relation: 'requires', weight: 9 });
+  }
+  if (entity.content_type === 'unique' && weapon.offHandFamilies.length && ONE_HANDED_WEAPONS.has(rolledWeapon)) {
+    matches.push({ kind: 'weapon', mechanic: weapon.offHandFamilies[0], relation: 'off_hand_for', weight: 9 });
   }
   for (const fact of arr(entity.facts)) {
     const mechanic = token(fact?.relation === 'converts' ? fact.to : fact?.mechanic);
