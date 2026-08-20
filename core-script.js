@@ -58,5 +58,3 @@ import './js/23-build-card-foundation.js';
 import './js/24-primary-card-stage.js';
 import './js/25-card-polish.js';
 import './js/26-offense-roll.js';
-
-import './js/20-trending-cards.js';
