@@ -43,7 +43,9 @@ function pickGemRef(entry) {
 function pickPassiveNode(node) {
   if (!node || typeof node !== 'object') return null;
   return {
+    id: node.id || '',
     name: node.name || '',
+    recommendationEvidence: node.recommendationEvidence || undefined,
     lines: compactArray(node.lines),
     tags: compactArray(node.tags),
     icon: node.icon || ''
@@ -54,7 +56,6 @@ function pickPassives(passives) {
   if (!passives || typeof passives !== 'object') return null;
   return {
     ascendancyNodes: compactArray(passives.ascendancyNodes, pickPassiveNode),
-    keystones: compactArray(passives.keystones, pickPassiveNode),
     notables: compactArray(passives.notables, pickPassiveNode),
   };
 }
