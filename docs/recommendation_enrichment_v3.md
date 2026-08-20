@@ -67,7 +67,7 @@ That delivery rule identifies the primary damage position in every candidate pac
 
 The solver evaluates both relationship directions. A setup can supply a state or resource consumed by the primary, while the primary can establish a state consumed by a payoff. Generic `charge` evidence is deliberately too broad to bridge specific Power, Frenzy, or Endurance Charge costs. Package-wide direct Offense fulfillment outranks a superficially synergistic package that still leaves a drawn Offense unapplied.
 
-The primary Build Card is authoritative during this migration. Legacy recommendation rendering may still compute its former result, but the v3 runtime adapter replaces the canonical skill ideas after Offense normalization only when v3 has selected a primary. The card preserves package order and labels contextual roles as Primary, Secondary, Setup, Payoff, or Enabler. An unresolved v3 result records diagnostics without erasing the existing recommendation.
+The primary Build Card is authoritative during this migration. The v3 runtime installs canonical skill ideas after Offense normalization only when v3 has selected a primary. The card preserves package order and labels contextual roles as Primary, Secondary, Setup, Payoff, or Enabler. An unresolved v3 result records diagnostics without erasing the existing recommendation.
 
 ## Entity contract
 

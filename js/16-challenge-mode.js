@@ -9,8 +9,7 @@ const MODE_TRANSITION_MS = 380;
 const MODES = {
   STANDARD: 'standard',
   CHALLENGE: 'challenge',
-  CODEX: 'codex',
-  LEGACY: 'legacy'
+  CODEX: 'codex'
 };
 const SEVERITY_ORDER = ['mild', 'cruel', 'diabolical'];
 let challengeHasRoll = false;
@@ -22,7 +21,6 @@ let stashedChallengeState = null;
 const STANDARD_LEDE_HTML = 'Use <strong>Bind the Fates</strong> to favor or ban certain options. Each draw chooses a weapon and one or two Offense concepts.<br><strong>---</strong><br>Click <strong>Draw Your Fate</strong> to begin.';
 const CHALLENGE_LEDE_TEXT = '<strong>Challenge Mode</strong> rolls a <strong>Contract</strong>, not a build. Use <strong>Bind the Fates</strong> to favor or ban certain options. Choose 1–3 <strong>Tasks</strong>, set <strong>Severity</strong>, then <strong>Draft a Contract</strong> to receive a stacked set of constraints to overcome.<br><strong>---</strong><br>Click <strong>Draft Contract</strong> to begin.';
 const CODEX_LEDE_TEXT = '<strong>Codex Mode</strong> is a non-random library for browsing Path of Exile 2 data. Explore <strong>Ascendancy</strong>, <strong>Skills</strong>, <strong>Passives</strong>, and <strong>Gear</strong> with search and tags. <strong>Pin</strong> entries to create a poe.ninja filter to view endgame builds.<br><strong>---</strong><br>Select an entry to inspect full details.';
-const LEGACY_LEDE_TEXT = '<strong>Legacy Mode</strong> rolls a sparse old-school build seed. Choose <strong>Class</strong> or <strong>Ascendancy</strong>, cycle the <strong>Weapons/Skills</strong> format selector, and optionally enable a <strong>Damage Type</strong>. Every result is fully random, with no curated affinity or defensive guidance, and no curated synergy.<br><strong>---</strong><br>Click <strong>Roll Your Fate</strong> to generate a minimal prompt.';
 
 let CHALLENGE_TEMPLATE_BY_ID = Object.create(null);
 
@@ -674,11 +672,8 @@ function stabilizeLedeHeight() {
   lede.innerHTML = CHALLENGE_LEDE_TEXT;
   const challengeHeight = lede.offsetHeight;
 
-  lede.innerHTML = LEGACY_LEDE_TEXT;
-  const legacyHeight = lede.offsetHeight;
-
   lede.innerHTML = previous;
-  const targetHeight = Math.max(standardHeight, challengeHeight, legacyHeight);
+  const targetHeight = Math.max(standardHeight, challengeHeight);
   lede.style.minHeight = `${targetHeight}px`;
 
   if (previousMinHeight && Number.parseFloat(previousMinHeight) > targetHeight) {
@@ -809,15 +804,15 @@ function getMode() {
   try {
     const qp = new URLSearchParams(location.search);
     const fromUrl = qp.get('mode');
-    if (fromUrl === MODES.CHALLENGE || fromUrl === MODES.CODEX || fromUrl === MODES.LEGACY) return fromUrl;
+    if (fromUrl) return fromUrl === MODES.CHALLENGE || fromUrl === MODES.CODEX ? fromUrl : MODES.STANDARD;
     const stored = localStorage.getItem(MODE_KEY);
-    if (stored === MODES.CHALLENGE || stored === MODES.CODEX || stored === MODES.LEGACY) return stored;
+    if (stored === MODES.CHALLENGE || stored === MODES.CODEX) return stored;
   } catch {}
   return MODES.STANDARD;
 }
 
 function setMode(mode) {
-  const next = [MODES.STANDARD, MODES.CHALLENGE, MODES.CODEX, MODES.LEGACY].includes(mode) ? mode : MODES.STANDARD;
+  const next = [MODES.STANDARD, MODES.CHALLENGE, MODES.CODEX].includes(mode) ? mode : MODES.STANDARD;
   try { localStorage.setItem(MODE_KEY, next); } catch {}
   try {
     const params = new URLSearchParams(location.search);
@@ -832,19 +827,16 @@ function setMode(mode) {
 function setChallengeVisibility(mode) {
   const standardControls = document.getElementById('standard-controls');
   const challengeControls = document.getElementById('challenge-controls');
-  const legacyControls = document.getElementById('legacy-controls');
   const isChallenge = mode === MODES.CHALLENGE;
   const isCodex = mode === MODES.CODEX;
-  const isLegacy = mode === MODES.LEGACY;
 
   if (standardControls) {
     Array.from(standardControls.children || []).forEach((child) => {
       const keepVisible = child.classList?.contains('bind-fates-row');
-      child.classList.toggle('is-hidden', (isChallenge && !keepVisible) || isCodex || isLegacy);
+      child.classList.toggle('is-hidden', (isChallenge && !keepVisible) || isCodex);
     });
   }
   challengeControls?.classList.toggle('is-hidden', !isChallenge);
-  legacyControls?.classList.toggle('is-hidden', !isLegacy);
   document.getElementById('roll')?.closest('.roll-sticky')?.classList.toggle('is-hidden', isCodex);
 }
 
@@ -853,7 +845,6 @@ function setHeaderLede(mode) {
   if (!lede) return;
   if (mode === MODES.CHALLENGE) lede.innerHTML = CHALLENGE_LEDE_TEXT;
   else if (mode === MODES.CODEX) lede.innerHTML = CODEX_LEDE_TEXT;
-  else if (mode === MODES.LEGACY) lede.innerHTML = LEGACY_LEDE_TEXT;
   else lede.innerHTML = STANDARD_LEDE_HTML;
 }
 
@@ -868,39 +859,26 @@ function setChallengePanels(mode) {
   const passivesPanel = document.getElementById('passives-panel');
   const emptyState = document.getElementById('empty-state');
   const codexPanel = document.getElementById('codex-panel');
-  const legacyPanel = document.getElementById('legacy-panel');
   const hasStandardRoll = document.getElementById('app')?.dataset?.hasRoll === 'true';
-  const legacyHasRoll = typeof window.RandomancerLegacyHasRoll === 'function' && window.RandomancerLegacyHasRoll();
   const isChallenge = mode === MODES.CHALLENGE;
   const isCodex = mode === MODES.CODEX;
-  const isLegacy = mode === MODES.LEGACY;
 
   const showChallengeEmpty = isChallenge && !challengeHasRoll;
   const showChallengePanel = isChallenge && challengeHasRoll;
-  const showLegacyPanel = isLegacy && legacyHasRoll;
-  const showLegacyEmpty = isLegacy && !legacyHasRoll;
-  const showStandardEmpty = !isChallenge && !isCodex && !isLegacy && !hasStandardRoll;
+  const showStandardEmpty = !isChallenge && !isCodex && !hasStandardRoll;
 
   challengePanel?.classList.toggle('is-hidden', !showChallengePanel);
   challengeDivider?.classList.toggle('is-hidden', !showChallengeEmpty);
   challengeFlavor?.classList.toggle('is-hidden', !showChallengeEmpty);
-  buildBanner?.classList.toggle('is-hidden', isChallenge || isCodex || isLegacy);
-  buildPanel?.classList.toggle('is-hidden', isChallenge || isCodex || isLegacy);
-  skillsPanel?.classList.toggle('is-hidden', isChallenge || isCodex || isLegacy);
-  uniquesPanel?.classList.toggle('is-hidden', isChallenge || isCodex || isLegacy);
-  passivesPanel?.classList.toggle('is-hidden', isChallenge || isCodex || isLegacy);
+  buildBanner?.classList.toggle('is-hidden', isChallenge || isCodex);
+  buildPanel?.classList.toggle('is-hidden', isChallenge || isCodex);
+  skillsPanel?.classList.toggle('is-hidden', isChallenge || isCodex);
+  uniquesPanel?.classList.toggle('is-hidden', isChallenge || isCodex);
+  passivesPanel?.classList.toggle('is-hidden', isChallenge || isCodex);
   codexPanel?.classList.toggle('is-hidden', !isCodex);
-  legacyPanel?.classList.toggle('is-hidden', !showLegacyPanel);
 
   if (emptyState) {
-    emptyState.classList.toggle('is-hidden', !(showStandardEmpty || showLegacyEmpty));
-    const title = emptyState.querySelector('.empty-title');
-    if (title && showLegacyEmpty) {
-      title.textContent = 'Awaiting Legacy Seed...';
-    } else if (title && showStandardEmpty && title.textContent === 'Awaiting Legacy Seed...') {
-      const pool = Array.isArray(window.RandomancerIntroLines) ? window.RandomancerIntroLines : [];
-      title.textContent = pool.length ? pool[Math.floor(Math.random() * pool.length)] : 'The Fates Await...';
-    }
+    emptyState.classList.toggle('is-hidden', !showStandardEmpty);
   }
 
   updateResumePrompts(mode);
@@ -1044,19 +1022,17 @@ async function handleChallengeRoll({ statusEl }) {
 function syncMode(mode) {
   const isChallenge = mode === MODES.CHALLENGE;
   const isCodex = mode === MODES.CODEX;
-  const isLegacy = mode === MODES.LEGACY;
   const modeToggleControl = document.getElementById('randomancer-mode-control');
   const app = document.getElementById('app');
 
   document.body?.classList.toggle('challenge-mode', isChallenge);
   document.body?.classList.toggle('codex-mode', isCodex);
-  document.body?.classList.toggle('legacy-mode', isLegacy);
-  if (document.body) document.body.dataset.mode = isChallenge ? 'challenge' : (isCodex ? 'codex' : (isLegacy ? 'legacy' : 'build'));
+  if (document.body) document.body.dataset.mode = isChallenge ? 'challenge' : (isCodex ? 'codex' : 'build');
   setHeaderLede(mode);
   setChallengeVisibility(mode);
   setChallengePanels(mode);
 
-  if (app && !isChallenge && !isLegacy && app.dataset.hasRoll !== 'true') {
+  if (app && !isChallenge && app.dataset.hasRoll !== 'true') {
     app.dataset.hasRoll = 'false';
     const ascArt = document.getElementById('asc-art');
     if (ascArt) {
@@ -1069,10 +1045,6 @@ function syncMode(mode) {
   const rollText = document.querySelector('#roll .roll-text');
   if (rollText) rollText.textContent = isChallenge ? 'Draft Contract' : 'Draw Your Fate';
 
-  if (isLegacy && typeof window.RandomancerLegacyRenderLast === 'function') {
-    window.RandomancerLegacyRenderLast();
-  }
-
   modeToggleControl?.querySelectorAll('[data-mode-target]').forEach((btn) => {
     const on = btn.dataset.modeTarget === mode;
     btn.classList.toggle('is-active', on);
@@ -1082,7 +1054,7 @@ function syncMode(mode) {
 
 document.addEventListener('DOMContentLoaded', async () => {
   const modeControl = document.getElementById('randomancer-mode-control');
-  const initialMode = getMode();
+  const initialMode = setMode(getMode());
 
   hydrateStash();
   stabilizeLedeHeight();
@@ -1122,10 +1094,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const btn = event.target?.closest?.('[data-mode-target]');
     if (!btn) return;
     const targetMode = btn.dataset.modeTarget;
-    if (![MODES.STANDARD, MODES.CHALLENGE, MODES.CODEX, MODES.LEGACY].includes(targetMode)) return;
+    if (![MODES.STANDARD, MODES.CHALLENGE, MODES.CODEX].includes(targetMode)) return;
     const label = targetMode === MODES.CHALLENGE
       ? 'Entering Challenge Mode…'
-      : targetMode === MODES.CODEX ? 'Opening Codex…' : targetMode === MODES.LEGACY ? 'Entering Legacy Mode…' : 'Returning to Build Mode…';
+      : targetMode === MODES.CODEX ? 'Opening Codex…' : 'Returning to Build Mode…';
 
     await runModeTransition(label, () => {
       const nextMode = setMode(targetMode);
@@ -1133,10 +1105,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   });
 
-  document.addEventListener('randomancer:legacy-roll', () => {
-    if (getMode() !== MODES.LEGACY) return;
-    setChallengePanels(MODES.LEGACY);
-  });
 
 	try {
 		const lib = await loadChallengeLibrary();
@@ -1163,10 +1131,6 @@ window.RandomancerClearChallengeResults = clearChallengeResultsToEmpty;
 
 window.RandomancerHandleRollOverride = async ({ statusEl }) => {
   const mode = getMode();
-  if (mode === MODES.LEGACY && typeof window.RandomancerHandleLegacyRollOverride === 'function') {
-    return window.RandomancerHandleLegacyRollOverride({ statusEl });
-  }
-
   if (mode !== MODES.CHALLENGE) return false;
 
   try {

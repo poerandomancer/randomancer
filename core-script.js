@@ -5,7 +5,7 @@
  * Module Map + Public API
  * 1) 01-meta-and-domready: selectors, DOM helpers, onDomReady, shared helpers, smoke check.
  * 2) 00-locks-and-snapshots: snapshots/build codes/saved builds.
- * 3) 02-summary-view: legacy card overlay + public share behavior.
+ * 3) 02-summary-view: Build Card overlay + public share behavior.
  * 4) 03-config-and-schema: Schema/Config/RulesEngine scaffolding.
  * 5) 04-app-state: window.App, bootstrap, and canonical draw state.
  * 6) 05-tags-and-scorer: tag normalization + scorer glue + dictionary builders.
@@ -54,7 +54,6 @@ import './js/17-skill-family-utils.js';
 import './js/15-challenge-engine.js';
 import './js/16-challenge-mode.js';
 import './js/18-codex-mode.js';
-import './js/21-legacy-mode.js';
 import './js/23-build-card-foundation.js';
 import './js/24-primary-card-stage.js';
 import './js/25-card-polish.js';

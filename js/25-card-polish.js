@@ -309,7 +309,7 @@ function installSynergyObserver() {
 function install() {
   // Capture the primary-card Copy Link action before the card's existing
   // bubbling handler. Saved-build encoding remains unchanged; only copied URLs
-  // use this compact, legacy-decoder-compatible payload.
+  // use this compact current-schema payload.
   document.addEventListener('click', (event) => {
     const target = event.target.closest?.('[data-card-action="copy-link"]');
     if (!target || !target.closest(`#${PRIMARY_STAGE_ID}`)) return;

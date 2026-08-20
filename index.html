@@ -247,7 +247,6 @@
             <button class="mode-segment is-active" type="button" role="tab" aria-selected="true" data-mode-target="standard">Build</button>
             <button class="mode-segment" type="button" role="tab" aria-selected="false" data-mode-target="challenge">Challenge</button>
             <button class="mode-segment" type="button" role="tab" aria-selected="false" data-mode-target="codex">Codex</button>
-            <button class="mode-segment" type="button" role="tab" aria-selected="false" data-mode-target="legacy">Legacy</button>
           </div>
         </div>
       </div>
@@ -277,32 +276,6 @@
 
 
 
-
-      <div id="legacy-controls" class="control-item weapon-set2-control legacy-controls is-hidden" aria-label="Legacy Mode controls">
-        <div class="legacy-controls-stack">
-          <div id="legacy-basis-row" class="legacy-selector-row" role="button" tabindex="0" aria-label="Identity selector">
-            <span class="legacy-selector-label">Identity:</span>
-            <div class="legacy-selector-options">
-              <span class="legacy-selector-option" data-choice="class">Class</span>
-              <span class="legacy-selector-option" data-choice="ascendancy">Ascendancy</span>
-            </div>
-          </div>
-          <div id="legacy-format-row" class="legacy-selector-row" role="button" tabindex="0" aria-label="Offense selector">
-            <span class="legacy-selector-label">Offense:</span>
-            <div class="legacy-selector-options">
-              <span class="legacy-selector-option" data-choice="weapons">Weapons</span>
-              <span class="legacy-selector-option" data-choice="skills">Skills</span>
-            </div>
-          </div>
-          <div id="legacy-damage-row" class="legacy-selector-row" role="button" tabindex="0" aria-label="Damage Type selector">
-            <span class="legacy-selector-label">Damage Type:</span>
-            <div class="legacy-selector-options">
-              <span class="legacy-selector-option" data-choice="off">Off</span>
-              <span class="legacy-selector-option" data-choice="on">On</span>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <div id="challenge-controls" class="control-item weapon-set2-control challenge-controls is-hidden" aria-label="Challenge Mode controls">
         <button id="challenge-task-count-btn" class="rm-dotstep mechanics-like-btn" type="button" aria-label="Tasks: 2">
@@ -356,12 +329,6 @@
       </section>
 
 
-
-      <section id="legacy-panel" class="panel legacy-panel is-hidden" aria-label="Legacy Seed Output">
-        <div id="legacy-output" class="legacy-output" aria-live="polite">
-          <div class="legacy-line"><span class="legacy-k">Status:</span> <span class="legacy-v legacy-v--muted">Awaiting legacy roll.</span></div>
-        </div>
-      </section>
 
       <section id="challenge-panel" class="panel is-hidden" aria-label="Challenge Contract">
         <div class="panel-actions panel-actions--build" aria-label="Challenge utilities">

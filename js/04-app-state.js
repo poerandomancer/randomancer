@@ -124,12 +124,12 @@ const App = window.App = (() => {
   }
 
 
-  function legacyInit(){
+  function exposeRuntimeData(){
     try{
       if (typeof window !== 'undefined') {
         window.DATA = state.DATA; window.SKILL_GEMS = state.GEMS; window.SKILLS = state.SKILLS;
       }
-    }catch(e){ console.warn("legacyInit exposure failed:", e); }
+    }catch(e){ console.warn("exposeRuntimeData failed:", e); }
   }
 
   // Post-roll validator: thin wrapper over RulesEngine.enforce
@@ -169,7 +169,7 @@ const App = window.App = (() => {
   return {
     state,
     bootstrap,
-    legacyInit,
+    exposeRuntimeData,
     replaceCurrentDraw,
     getBindFates,
     setBindFatesCategory,
