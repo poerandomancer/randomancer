@@ -571,7 +571,6 @@ function install() {
     const contract = window.CURRENT_CHALLENGE_CONTRACT;
     if (!contract?.tasks?.length) return;
     const stage = createStage();
-    const mount = getMount();
     const wasReroll = stage?.dataset?.cardState === 'result';
     if (prefersReducedMotion()) {
       clearPendingRoll();
@@ -582,8 +581,6 @@ function install() {
       stage?.classList.remove('is-drawing');
       stage?.classList.add(wasReroll ? 'is-revealing-next' : 'is-revealing-first');
       renderCurrentChallenge(contract, { animate: false, suppressDeal: true });
-      mount?.classList.add('is-dealing');
-      clearDealClass(mount);
       window.setTimeout(() => stage?.classList.remove('is-rerolling', 'is-revealing-first', 'is-revealing-next'), INITIAL_REVEAL_MS + 60);
       pendingRoll = null;
     }, wasReroll ? REROLL_ADVANCE_MS : INITIAL_LIFT_MS);
