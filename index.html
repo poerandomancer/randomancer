@@ -147,14 +147,6 @@
           <div id="bind-fates-list-weapon" class="bind-fates-list"></div>
         </section>
         <hr class="bind-fates-divider">
-        <section class="bind-fates-section" data-category="defensiveStrategy">
-          <div class="bind-fates-section-head">
-            <h4>Defensive Strategy</h4>
-            <p class="bind-fates-hint">Favor the protections you will rely on, or bar strategies you want fate to avoid.</p>
-          </div>
-          <div id="bind-fates-list-defensive-strategy" class="bind-fates-list"></div>
-        </section>
-        <hr class="bind-fates-divider">
         <section class="bind-fates-section" data-category="combat">
           <div class="bind-fates-section-head">
             <h4>Combat Mechanics</h4>
@@ -228,7 +220,7 @@
       <div id="rc-header-extra" class="rc-header-extra">
         <h2 class="subtitle">Conjure the Impossible. Defy the Meta.</h2>
         <div id="app-lede" class="app-lede" role="note" aria-label="How to use the Randomancer">
-          Tune <strong>Cohesion</strong> for tighter themes or wilder chaos. Use <strong>Bind the Fates</strong> to favor or ban certain options. Toggle <strong>Weapon Set II</strong> for an additional weapon set, and choose <strong>Combat Mechanics</strong>: 1-3 for ailment/tactic depth.<br>
+          Use <strong>Bind the Fates</strong> to favor or ban certain options. Each roll chooses a weapon and one or two offense concepts.<br>
           <strong>---</strong><br>
           Click <strong>Roll Your Fate</strong> to begin.
         </div>
@@ -266,22 +258,6 @@
       <div class="controls-rail">
       <div id="standard-controls">
     
-      <div class="cohesion-slider cohesion-bar-wrapper" data-cohesion-constrained="false">
-                  <div class="mode-labels">
-                        <span>Cohesive</span><span>Chaotic</span>
-                  </div>
-                  <!-- Continuous slider: 0–100 mapped to threshold 1.00 → 0.00 -->
-		  <input
-			type="range"
-			id="cohesionRange"
-			min="0"
-			max="100"
-			step="1"
-			value="25"
-			aria-label="Cohesion threshold"
-		  >
-                </div>
-
       <div class="bind-fates-row">
         <div id="bind-fates-bar" class="bind-fates" aria-expanded="false">
           <button class="bind-fates-toggle" type="button" aria-label="Open Bind the Fates">
@@ -463,19 +439,6 @@
           <div class="grid two">
             <div class="wide"><span class="label">Ailments</span><span id="ailments"></span></div>
             <div class="wide"><span class="label">Tactics</span><span id="tactics"></span></div>
-          </div>
-        </div>
-        <hr class="gold subtle"/>
-        <div class="sect">
-          <div class="sect-head section-header">
-            <div class="section-title-row">
-              <h3 class="section-title">Survivability</h3>
-            </div>
-            <div class="underline"></div>
-          </div>
-          <div class="grid two">
-            <div><span class="label">Defense</span><span id="defense"></span></div>
-            <div><span class="label">Defensive Strategy</span><span id="defstrat"></span></div>
           </div>
         </div>
         <hr class="gold subtle"/>

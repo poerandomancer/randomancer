@@ -154,7 +154,7 @@ test('canonical Offense fields win over the legacy compatibility fields', () => 
   const offense = result.obligations.filter((entry) => entry.kind === 'offense');
   assert.deepEqual(offense.map((entry) => entry.id), ['offense:poison']);
   assert.equal(result.context.weapon, 'Bow');
-  assert.equal(result.context.primaryDefense, 'Evasion');
+  assert.equal('primaryDefense' in result.context, false);
 });
 
 test('canonical Offense inventory no longer exposes Thorns as a roll option', async () => {
@@ -328,9 +328,8 @@ test('selector uses hard typed evidence, rejects prevention, and ignores cohesio
     strict.primarySkill.fulfilledObligations.map((entry) => entry.obligationId),
     ['offense:poison']
   );
-  assert.equal(strict.status, 'partial');
-  assert.ok(strict.unresolved.some((entry) => entry.obligationId === 'survivability:secondary_defense'));
-  assert.ok(strict.unresolved.some((entry) => entry.obligationId === 'survivability:recovery'));
+  assert.equal(strict.status, 'complete');
+  assert.equal(strict.unresolved.length, 0);
 });
 
 test('weapon delivery rejects generic spells for martial rolls', () => {

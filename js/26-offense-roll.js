@@ -3,6 +3,12 @@ import { cohesionThreshold, pickByCohesion } from './06-cohesion.js';
 const OFFENSE_CATEGORY_ARCHETYPE = 'Archetype';
 const MIN_OFFENSE_COUNT = 1;
 const MAX_OFFENSE_COUNT = 2;
+const NON_ROLLABLE_OFFENSE_IDS = new Set(['critical_hits', 'critical_hit']);
+
+function isRollableOffense(entry) {
+  const ids = offenseNames(entry).map((value) => value.toLowerCase().replace(/[^a-z0-9]+/g, '_'));
+  return !ids.some((id) => NON_ROLLABLE_OFFENSE_IDS.has(id));
+}
 
 function randomOffenseCount() {
   return Math.random() < 0.5 ? MIN_OFFENSE_COUNT : MAX_OFFENSE_COUNT;
@@ -83,7 +89,7 @@ function selectOffense(options = {}) {
   const target = Math.min(MAX_OFFENSE_COUNT, normalizeOffenseCount(options.count));
   const fates = resolveCombatFates(options.bindFates);
 
-  const fullPool = resolveOffenseElements(data);
+  const fullPool = resolveOffenseElements(data).filter(isRollableOffense);
   const allowed = fullPool.filter((entry) => !matchesConfiguredName(entry, fates.abominations));
   const oathPool = fates.oaths.length
     ? allowed.filter((entry) => matchesConfiguredName(entry, fates.oaths))
@@ -181,6 +187,7 @@ export {
   resolveOffenseElements,
   resolveOffenseEntry,
   isArchetype,
+  isRollableOffense,
   selectOffense,
   buildOffenseSnapshotFields,
   migrateLegacyMechanicsToOffense

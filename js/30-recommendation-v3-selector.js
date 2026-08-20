@@ -350,29 +350,12 @@ function buildRecommendationObligationsV3(snapshot = {}, offenseInventory = {}) 
     };
   });
 
-  obligations.push(
-    {
-      id: 'survivability:secondary_defense',
-      kind: 'survivability',
-      category: 'Defense',
-      label: 'Complementary defensive layer',
-      primaryDefense: snapshot?.defense || ''
-    },
-    {
-      id: 'survivability:recovery',
-      kind: 'survivability',
-      category: 'Recovery',
-      label: 'Credible recovery loop'
-    }
-  );
-
   return {
     context: {
       className: snapshot?.className || '',
       ascendancy: snapshot?.ascendancyName || snapshot?.ascendancy || '',
       weapon: snapshot?.weapon || '',
-      offhand: snapshot?.offhand || '',
-      primaryDefense: snapshot?.defense || ''
+      offhand: snapshot?.offhand || ''
     },
     obligations
   };
