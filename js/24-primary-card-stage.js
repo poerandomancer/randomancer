@@ -187,7 +187,7 @@ function handleCardAction(action) {
   }
 }
 
-function retireLegacyBuildShareLauncher() {
+function removeObsoleteBuildShareLauncher() {
   document.getElementById('build-open-card')?.remove();
 }
 
@@ -491,7 +491,7 @@ function install() {
   createStage();
   installSnapshotBridge();
   installHeaderObserver();
-  retireLegacyBuildShareLauncher();
+  removeObsoleteBuildShareLauncher();
 
   // Capture before the existing roll handler so the currently displayed card
   // starts its transition before generation mutates the canonical snapshot.
@@ -519,7 +519,7 @@ function install() {
     const forceFront = source === 'replace';
     renderCurrentBuild({ animate: forceFront, forceFront, snapshot });
 
-    // Build-code/saved-build restoration updates the hidden legacy save button
+    // Build-code/saved-build restoration updates the hidden save button
     // immediately after replaceCurrentDraw(). Refresh one frame later so the
     // card star mirrors that canonical saved state as well.
     if (source === 'replace') {

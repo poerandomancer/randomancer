@@ -58,7 +58,7 @@ The `public_cards` table now stores:
 - `snapshot_hash`
 - timestamps
 
-Legacy preview columns remain for backward compatibility and are backfilled into the new fields by migration `0002_share_artifact_metadata.sql`.
+Preview columns are retained as stored artifact metadata by migration `0002_share_artifact_metadata.sql`.
 
 ## Migrations
 
@@ -98,4 +98,3 @@ What to verify manually:
 2. The page redirects to `https://therandomancer.com/?card=<slug>` (or your local `APP_BASE_URL`) for humans.
 3. Fresh build shares render a front-face-oriented preview using ascendancy art when available, plus title, subtitle, and grouped card content instead of the old summary slab.
 4. Unknown slugs return a branded not-found page and a fallback image.
-5. Existing legacy `/:slug` links redirect to the new canonical `/s/{kind}/{slug}` URL when the slug still exists.

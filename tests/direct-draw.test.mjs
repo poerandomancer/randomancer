@@ -9,6 +9,7 @@ const core = JSON.parse(await readFile(new URL('../data/core-data.json', import.
 const engineSource = await readFile(new URL('../js/10-roll-engine.js', import.meta.url), 'utf8');
 const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 const entry = await readFile(new URL('../core-script.js', import.meta.url), 'utf8');
+const modeSource = await readFile(new URL('../js/16-challenge-mode.js', import.meta.url), 'utf8');
 
 test('canonical Offense draw contains one or two concepts', () => {
   const one = offense.selectOffense({ data: { OffenseInventory: inventory }, count: 1, random: () => 0 });
@@ -57,6 +58,11 @@ test('obsolete standard controls and migration runtimes are absent', () => {
   assert.doesNotMatch(entry, /27-offense-runtime|28-primary-equipment-runtime|29-selection-frequency-runtime|31-recommendation-v3-runtime/);
 });
 
-test('Challenge, Codex, and supported Legacy modes remain mounted', () => {
-  for (const id of ['challenge-panel', 'codex-panel', 'legacy-panel']) assert.match(html, new RegExp(`id="${id}"`));
+test('standard, Challenge, and Codex entry points remain mounted without Legacy', () => {
+  for (const id of ['build-panel', 'challenge-panel', 'codex-panel']) assert.match(html, new RegExp(`id="${id}"`));
+  assert.doesNotMatch(html, /data-mode-target="legacy"|id="legacy-(?:panel|controls)"/);
+  assert.doesNotMatch(entry, /21-legacy-mode/);
+  assert.doesNotMatch(modeSource, /MODES\.LEGACY|RandomancerLegacy|legacy-mode/);
+  assert.match(modeSource, /if \(fromUrl\) return .*MODES\.STANDARD/);
+  assert.match(modeSource, /const initialMode = setMode\(getMode\(\)\)/);
 });

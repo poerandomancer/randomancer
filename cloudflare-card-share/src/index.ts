@@ -67,19 +67,6 @@ type BuildCardData = {
   }>;
 };
 
-type LegacyBuildCardData = {
-  title: string;
-  subtitle?: string;
-  ascendancy?: string;
-  className?: string;
-  weaponLabel?: string;
-  primarySkills?: string[];
-  mechanicTags?: string[];
-  uniqueHighlights?: string[];
-  cohesionLabels?: string[];
-  footerText?: string;
-};
-
 type ChallengeCardData = {
   title: string;
   subtitle?: string;
@@ -124,7 +111,7 @@ type TinyPngCanvas = {
 
 const MAX_PAYLOAD_BYTES = 32 * 1024;
 const SHARE_ORIGIN = "https://therandomancer.com";
-const LEGACY_SHARE_ORIGIN = "https://cards.therandomancer.com";
+const DEFAULT_CARD_ASSET_ORIGIN = "https://cards.therandomancer.com";
 const NOT_FOUND_TITLE = "Randomancer Shared Card";
 const NOT_FOUND_DESCRIPTION = "This Randomancer share link is unavailable, expired, or invalid.";
 const CARD_KIND_PREFIX: Record<CardKind, string> = {
@@ -213,7 +200,6 @@ export default {
             "GET /s/challenge/:slug",
             "GET /og/build/:slug.png",
             "GET /og/challenge/:slug.png",
-            "GET /:slug (legacy redirect)",
           ],
         });
       }
@@ -225,11 +211,6 @@ export default {
         const ogMatch = matchOgPath(url.pathname);
         if (ogMatch) return handleOgImage(ogMatch.kind, ogMatch.slug, env);
 
-        const legacySlug = normalizeLegacySlugPath(url.pathname);
-        if (legacySlug) {
-          const row = await getCardBySlug(env.DB, legacySlug);
-          if (row) return Response.redirect(buildCanonicalShareUrl(row.card_kind, row.slug), 301);
-        }
       }
 
       return json({ ok: false, error: "Not found" }, 404);
@@ -536,26 +517,17 @@ function renderShareHtml(input: {
 }
 
 function parseCardData(serialized: string, kind: CardKind, row: PublicCardRow): BuildCardData | ChallengeCardData {
+  if (row.schema_version !== "public-card.v1") throw new Error("Unsupported card schema");
   const parsed = parseJson<JsonValue>(serialized);
-  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return fallbackCardDataFromLegacyRow(kind, row);
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) throw new Error("Invalid current card data");
   const title = coerceString((parsed as Record<string, unknown>).title);
-  if (!title) return fallbackCardDataFromLegacyRow(kind, row);
+  if (!title) throw new Error("Current card data requires a title");
   if (kind === "build") return normalizeBuildCardData(parsed as Record<string, unknown>, row);
   return parsed as ChallengeCardData;
 }
 
-function fallbackCardDataFromLegacyRow(kind: CardKind, row: PublicCardRow): BuildCardData | ChallengeCardData {
-  return kind === "build"
-    ? {
-        title: row.meta_title || row.preview_title || "Randomancer Build Card",
-        subtitle: row.meta_description || row.preview_description || "",
-        cardTypeLabel: "Randomancer Build Card",
-      }
-    : { title: row.meta_title || row.preview_title || "Randomancer Challenge Card", subtitle: row.meta_description || row.preview_description || "", footerText: "Randomancer challenge share" };
-}
-
 function normalizeBuildCardData(parsed: Record<string, unknown>, row: PublicCardRow): BuildCardData {
-  const directGroups = Array.isArray(parsed.frontFaceGroups)
+  const frontFaceGroups = Array.isArray(parsed.frontFaceGroups)
     ? parsed.frontFaceGroups
         .map((entry) => {
           if (!entry || typeof entry !== "object" || Array.isArray(entry)) return null;
@@ -566,33 +538,18 @@ function normalizeBuildCardData(parsed: Record<string, unknown>, row: PublicCard
         })
         .filter((entry): entry is { label: string; values: string[] } => !!entry)
     : [];
-
-  const legacy = parsed as LegacyBuildCardData;
-  const ascendancy = coerceString(parsed.ascendancy) || coerceString(parsed.className);
+  if (!frontFaceGroups.length) throw new Error("Current Build Card data requires frontFaceGroups");
+  const ascendancy = coerceString(parsed.ascendancy);
   return {
-    title: coerceString(parsed.title) || row.meta_title || "Randomancer Build Card",
+    title: coerceString(parsed.title),
     subtitle: coerceString(parsed.subtitle),
     cardTypeLabel: coerceString(parsed.cardTypeLabel) || "Randomancer Build Card",
     ascendancy,
     ascendancyArtPath: coerceString(parsed.ascendancyArtPath) || inferAscendancyArtPath(ascendancy),
     className: coerceString(parsed.className),
     weaponLabel: coerceString(parsed.weaponLabel),
-    frontFaceGroups: directGroups.length ? directGroups : buildLegacyFrontFaceGroups(legacy),
+    frontFaceGroups,
   };
-}
-
-function buildLegacyFrontFaceGroups(cardData: LegacyBuildCardData): Array<{ label: string; values: string[] }> {
-  const groups = [
-    { label: "Ascendancy", values: compactLegacyList([cardData.ascendancy || cardData.className || ""]).slice(0, 1) },
-    { label: "Weapons", values: compactLegacyList([cardData.weaponLabel || ""]).slice(0, 1) },
-    { label: "Combat", values: compactLegacyList(cardData.mechanicTags).slice(0, 3) },
-    { label: "Skills", values: compactLegacyList(cardData.primarySkills).slice(0, 2) },
-  ];
-  return groups.filter((group) => group.values.length);
-}
-
-function compactLegacyList(values?: string[]): string[] {
-  return Array.isArray(values) ? values.map(coerceString).filter(Boolean) : [];
 }
 
 function inferAscendancyArtPath(ascendancy: string): string {
@@ -1759,7 +1716,7 @@ function crc32(data: Uint8Array): number {
 
 function validateShareRequest(body: unknown): { ok: true; value: ShareRequestBody } | { ok: false; error: string } {
   if (!isRecord(body)) return { ok: false, error: "Body must be a JSON object" };
-  if (!isNonEmptyString(body.schema_version)) return { ok: false, error: "schema_version is required" };
+  if (body.schema_version !== "public-card.v1") return { ok: false, error: "schema_version must be public-card.v1" };
   if (!isCardKind(body.card_kind)) return { ok: false, error: "card_kind must be build or challenge" };
   if (!isJsonValue(body.payload)) return { ok: false, error: "payload must be valid JSON" };
 
@@ -1793,10 +1750,8 @@ function normalizeMeta(body: Record<string, unknown>) {
 }
 
 function normalizeCardData(body: Record<string, unknown>) {
-  if (isJsonValue(body.card_data)) return { ok: true as const, value: body.card_data };
-  if (isRecord(body.preview)) {
-    return { ok: true as const, value: { title: coerceString(body.preview.title) || "Randomancer Shared Card", subtitle: coerceString(body.preview.subtitle), footerText: "Randomancer" } };
-  }
+  const cardData = body.card_data;
+  if (isRecord(cardData) && isNonEmptyString(cardData.title) && isJsonValue(cardData)) return { ok: true as const, value: cardData };
   return { ok: false as const, error: "card_data must be valid JSON" };
 }
 
@@ -2044,7 +1999,6 @@ function shareResponse(slug: string, kind: CardKind, created: boolean, env: Env)
 function buildCanonicalShareUrl(kind: CardKind, slug: string): string { return `${SHARE_ORIGIN}/s/${kind}/${slug}`; }
 function buildOgImageUrl(kind: CardKind, slug: string): string { return `${SHARE_ORIGIN}/og/${kind}/${slug}.png`; }
 function buildAppUrl(slug: string, env: Env): string { const url = new URL(env.APP_BASE_URL && env.APP_BASE_URL.length > 0 ? env.APP_BASE_URL : SHARE_ORIGIN); url.searchParams.set("sharedCard", slug); return url.toString(); }
-function normalizeLegacySlugPath(pathname: string): string | null { const slug = pathname.replace(/^\/+/, "").replace(/\/+$/, ""); return /^[bc]-[a-z0-9]{8}$/.test(slug) ? slug : null; }
 function matchSharePath(pathname: string): ParsedSharePageRoute | null { const match = pathname.match(/^\/s\/(build|challenge)\/([bc]-[a-z0-9]{8})$/); return match ? { kind: match[1] as CardKind, slug: match[2] } : null; }
 function matchOgPath(pathname: string): ParsedSharePageRoute | null { const match = pathname.match(/^\/og\/(build|challenge)\/([bc]-[a-z0-9]{8})\.png$/); return match ? { kind: match[1] as CardKind, slug: match[2] } : null; }
 function matchCardReactionApiPath(pathname: string): string | null { return pathname.match(/^\/api\/cards\/([bc]-[a-z0-9]{8})\/reactions$/)?.[1] ?? null; }
@@ -2065,7 +2019,7 @@ function coerceString(value: unknown): string { return typeof value === "string"
 function formatError(error: unknown) { return error instanceof Error ? { name: error.name, message: error.message, stack: error.stack } : { message: String(error) }; }
 
 async function fallbackImageResponse(kind: CardKind, env: Env, status: number): Promise<Response> {
-  const fallbackUrl = kind === "build" ? env.BUILD_OG_IMAGE_URL || `${LEGACY_SHARE_ORIGIN}/build-share-og.png` : env.CHALLENGE_OG_IMAGE_URL || `${LEGACY_SHARE_ORIGIN}/challenge-share-og.png`;
+  const fallbackUrl = kind === "build" ? env.BUILD_OG_IMAGE_URL || `${DEFAULT_CARD_ASSET_ORIGIN}/build-share-og.png` : env.CHALLENGE_OG_IMAGE_URL || `${DEFAULT_CARD_ASSET_ORIGIN}/challenge-share-og.png`;
   try {
     const response = await fetch(fallbackUrl);
     if (response.ok) {
