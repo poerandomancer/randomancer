@@ -8,7 +8,7 @@ import {
   SUPPORT,
 } from './01-meta-and-domready.js';
 import { fetchPublicCardBySlug } from './publicCardApi.js';
-import { hydrateSharedBuildCard, hydrateSharedChallengeCard, validatePublicCardRecord } from './publicCardHydration.js';
+import { hydrateSharedBuildCard, validatePublicCardRecord } from './publicCardHydration.js';
 import {
   closeCardOverlay,
   getSummaryTextFromSnapshot,
@@ -74,8 +74,6 @@ import {
       v: 1,
       title: contract.title || '',
       subtitle: contract.subtitle || '',
-      severity: contract.severity || 'cruel',
-      taskCount: Number(contract.taskCount) || 2,
       tasks: Array.isArray(contract.tasks)
         ? contract.tasks.map(t => ({
             id: t?.id || '',
@@ -103,8 +101,6 @@ import {
         mode: 'challenge',
         title: raw.title || '',
         subtitle: raw.subtitle || '',
-        severity: raw.severity || 'cruel',
-        taskCount: Number(raw.taskCount) || 2,
         tasks: Array.isArray(raw.tasks) ? raw.tasks : [],
         challengeFates: raw.cf && typeof raw.cf === 'object'
           ? raw.cf
@@ -547,7 +543,7 @@ function renderSnapshotToDom(snap){
       const entry = {
         code,
         name: contract.title || 'Challenge Contract',
-        meta: [contract.severity, contract.subtitle].filter(Boolean).join(' • ')
+        meta: contract.subtitle || ''
       };
       const existing = list.filter(e => e.code !== code);
       existing.unshift(entry);
@@ -651,7 +647,6 @@ function renderSnapshotToDom(snap){
 
   function bindUI(){
     const buildViewCardBtn = document.getElementById('build-open-card');
-    const challengeViewCardBtn = document.getElementById('challenge-open-card');
     const buildSaveBtn = document.getElementById('build-actions-save');
     const buildPoeBtn = document.getElementById('build-actions-poe');
     const challengeSaveBtn = document.getElementById('challenge-actions-save');
@@ -660,7 +655,6 @@ function renderSnapshotToDom(snap){
     installSummaryAutoRefresh();
 
     buildViewCardBtn?.addEventListener('click', () => openCardOverlay('build'));
-    challengeViewCardBtn?.addEventListener('click', () => openCardOverlay('challenge'));
     buildSaveBtn?.addEventListener('click', () => {
       saveCurrentBuild();
       window.RandomancerShowToast?.('Saved locally.');
@@ -786,20 +780,10 @@ function renderSnapshotToDom(snap){
 
   async function openSharedCardBySlug(slug){
     const safeSlug = String(slug || '').trim().toLowerCase();
-    const slugPattern = /^[bc]-[a-z0-9]{8}$/i;
+    const slugPattern = /^b-[a-z0-9]{8}$/i;
     if (!slugPattern.test(safeSlug)) throw new Error('Shared card slug was invalid.');
 
     const shared = validatePublicCardRecord(await fetchPublicCardBySlug(safeSlug));
-    if (shared.card_kind === 'challenge') {
-      if (typeof window.RandomancerSetMode === 'function') window.RandomancerSetMode('challenge');
-      const contract = hydrateSharedChallengeCard(shared.payload);
-      if (typeof window.RandomancerRenderChallengeContract === 'function') {
-        window.RandomancerRenderChallengeContract(contract);
-      }
-      setSharedCardSlug('challenge', shared.slug);
-      openCardOverlay('challenge', { skipUrl: true });
-      return shared;
-    }
 
     if (typeof window.RandomancerSetMode === 'function') window.RandomancerSetMode('standard');
     const snapshot = hydrateSharedBuildCard(shared.payload);
@@ -813,7 +797,7 @@ function renderSnapshotToDom(snap){
 
   async function autoLoadFromQuery(){
     const q = getQueryParams();
-    const slugPattern = /^[bc]-[a-z0-9]{8}$/i;
+    const slugPattern = /^b-[a-z0-9]{8}$/i;
     const cardParam = q.get('card');
     const requestedSharedCard = q.get('sharedCard');
     const requestedCard = requestedSharedCard || (slugPattern.test(cardParam || '') ? cardParam : '');

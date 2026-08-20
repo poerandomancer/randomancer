@@ -11,15 +11,12 @@ const MODES = {
   CHALLENGE: 'challenge',
   CODEX: 'codex'
 };
-const SEVERITY_ORDER = ['mild', 'cruel', 'diabolical'];
 let challengeHasRoll = false;
-let challengeTaskCount = 2;
-let challengeSeverity = 'cruel';
 let stashedBuildState = null;
 let stashedChallengeState = null;
 
 const STANDARD_LEDE_HTML = 'Use <strong>Bind the Fates</strong> to favor or ban certain options. Each draw chooses a weapon and one or two Offense concepts.<br><strong>---</strong><br>Click <strong>Draw Your Fate</strong> to begin.';
-const CHALLENGE_LEDE_TEXT = '<strong>Challenge Mode</strong> rolls a <strong>Contract</strong>, not a build. Use <strong>Bind the Fates</strong> to favor or ban certain options. Choose 1–3 <strong>Tasks</strong>, set <strong>Severity</strong>, then <strong>Draft a Contract</strong> to receive a stacked set of constraints to overcome.<br><strong>---</strong><br>Click <strong>Draft Contract</strong> to begin.';
+const CHALLENGE_LEDE_TEXT = '<strong>Challenge Mode</strong> draws three compatible Challenge cards: one anchor and two twists. Use <strong>Bind the Fates</strong> to favor or ban certain options.<br><strong>---</strong><br>Click <strong>Draw Challenge</strong> to begin.';
 const CODEX_LEDE_TEXT = '<strong>Codex Mode</strong> is a non-random library for browsing Path of Exile 2 data. Explore <strong>Ascendancy</strong>, <strong>Skills</strong>, <strong>Passives</strong>, and <strong>Gear</strong> with search and tags. <strong>Pin</strong> entries to create a poe.ninja filter to view endgame builds.<br><strong>---</strong><br>Select an entry to inspect full details.';
 
 let CHALLENGE_TEMPLATE_BY_ID = Object.create(null);
@@ -753,12 +750,6 @@ function isValidStashableChallengeState(contract) {
 function clearChallengeResultsToEmpty() {
   challengeHasRoll = false;
   window.CURRENT_CHALLENGE_CONTRACT = null;
-  const title = document.getElementById('challenge-contract-title');
-  const subtitle = document.getElementById('challenge-contract-subtitle');
-  const list = document.getElementById('challenge-contract-lines');
-  if (title) title.textContent = '';
-  if (subtitle) subtitle.textContent = '';
-  if (list) list.innerHTML = '';
 }
 
 function updateResumePrompts(mode) {
@@ -826,7 +817,6 @@ function setMode(mode) {
 
 function setChallengeVisibility(mode) {
   const standardControls = document.getElementById('standard-controls');
-  const challengeControls = document.getElementById('challenge-controls');
   const isChallenge = mode === MODES.CHALLENGE;
   const isCodex = mode === MODES.CODEX;
 
@@ -836,7 +826,6 @@ function setChallengeVisibility(mode) {
       child.classList.toggle('is-hidden', (isChallenge && !keepVisible) || isCodex);
     });
   }
-  challengeControls?.classList.toggle('is-hidden', !isChallenge);
   document.getElementById('roll')?.closest('.roll-sticky')?.classList.toggle('is-hidden', isCodex);
 }
 
@@ -849,9 +838,6 @@ function setHeaderLede(mode) {
 }
 
 function setChallengePanels(mode) {
-  const challengePanel = document.getElementById('challenge-panel');
-  const challengeDivider = document.getElementById('challenge-empty-divider');
-  const challengeFlavor = document.getElementById('challenge-empty-flavor');
   const buildBanner = document.getElementById('build-roll-banner');
   const buildPanel = document.getElementById('build-panel');
   const skillsPanel = document.getElementById('skills-panel');
@@ -863,13 +849,8 @@ function setChallengePanels(mode) {
   const isChallenge = mode === MODES.CHALLENGE;
   const isCodex = mode === MODES.CODEX;
 
-  const showChallengeEmpty = isChallenge && !challengeHasRoll;
-  const showChallengePanel = isChallenge && challengeHasRoll;
   const showStandardEmpty = !isChallenge && !isCodex && !hasStandardRoll;
 
-  challengePanel?.classList.toggle('is-hidden', !showChallengePanel);
-  challengeDivider?.classList.toggle('is-hidden', !showChallengeEmpty);
-  challengeFlavor?.classList.toggle('is-hidden', !showChallengeEmpty);
   buildBanner?.classList.toggle('is-hidden', isChallenge || isCodex);
   buildPanel?.classList.toggle('is-hidden', isChallenge || isCodex);
   skillsPanel?.classList.toggle('is-hidden', isChallenge || isCodex);
@@ -882,14 +863,6 @@ function setChallengePanels(mode) {
   }
 
   updateResumePrompts(mode);
-}
-
-function setChallengeFlavorLine() {
-  const challengeFlavor = document.getElementById('challenge-empty-flavor');
-  if (!challengeFlavor) return;
-  const pool = Array.isArray(window.RandomancerIntroLines) ? window.RandomancerIntroLines : [];
-  if (!pool.length) return;
-  challengeFlavor.textContent = pool[Math.floor(Math.random() * pool.length)];
 }
 
 function renderChallengeContract(contract) {
@@ -966,51 +939,9 @@ function renderChallengeContract(contract) {
   setChallengePanels(getMode());
 }
 
-function updateChallengeTaskButton() {
-  const btn = document.getElementById('challenge-task-count-btn');
-  if (!btn) return;
-  btn.setAttribute('aria-label', `Tasks: ${challengeTaskCount}`);
-  btn.querySelectorAll('.rm-dotstep__dot').forEach(dot => {
-    const n = Number(dot.dataset.dot || 0);
-    dot.classList.toggle('is-on', n <= challengeTaskCount);
-  });
-}
-
-function titleCaseSeverity(value) {
-  return value ? value.charAt(0).toUpperCase() + value.slice(1) : '';
-}
-
-function updateChallengeSeverityButton() {
-  const btn = document.getElementById('challenge-severity-btn');
-  const text = document.getElementById('challenge-severity-value');
-  if (btn) btn.setAttribute('aria-label', `Severity: ${titleCaseSeverity(challengeSeverity)}`);
-  if (text) text.textContent = titleCaseSeverity(challengeSeverity);
-}
-
-function bindChallengeControls() {
-  const taskBtn = document.getElementById('challenge-task-count-btn');
-  const severityBtn = document.getElementById('challenge-severity-btn');
-
-  taskBtn?.addEventListener('click', () => {
-    challengeTaskCount = challengeTaskCount >= 3 ? 1 : challengeTaskCount + 1;
-    updateChallengeTaskButton();
-  });
-
-  severityBtn?.addEventListener('click', () => {
-    const idx = SEVERITY_ORDER.indexOf(challengeSeverity);
-    challengeSeverity = SEVERITY_ORDER[(idx + 1) % SEVERITY_ORDER.length];
-    updateChallengeSeverityButton();
-  });
-
-  updateChallengeTaskButton();
-  updateChallengeSeverityButton();
-}
-
-async function handleChallengeRoll({ statusEl }) {
+async function handleChallengeDraw({ statusEl }) {
   await ensureDataPreload();
   const contract = await generateChallengeContract({
-    taskCount: challengeTaskCount,
-    severity: challengeSeverity,
     challengeFates: window.App?.getChallengeFates?.()
   });
 
@@ -1043,7 +974,7 @@ function syncMode(mode) {
   }
 
   const rollText = document.querySelector('#roll .roll-text');
-  if (rollText) rollText.textContent = isChallenge ? 'Draft Contract' : 'Draw Your Fate';
+  if (rollText) rollText.textContent = isChallenge ? 'Draw Challenge' : 'Draw Your Fate';
 
   modeToggleControl?.querySelectorAll('[data-mode-target]').forEach((btn) => {
     const on = btn.dataset.modeTarget === mode;
@@ -1058,8 +989,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   hydrateStash();
   stabilizeLedeHeight();
-  setChallengeFlavorLine();
-  bindChallengeControls();
   initChallengeInlineTooltips();
   syncMode(initialMode);
   try { document.dispatchEvent(new CustomEvent('randomancer:mode-change', { detail: { mode: initialMode } })); } catch {}
@@ -1137,10 +1066,10 @@ window.RandomancerHandleRollOverride = async ({ statusEl }) => {
     if (typeof window.RandomancerPrepareChallengeRoll === 'function') {
       window.RandomancerPrepareChallengeRoll();
     }
-    if (statusEl) statusEl.textContent = 'Forging your contract…';
-    await handleChallengeRoll({ statusEl });
+    if (statusEl) statusEl.textContent = 'Drawing your challenge…';
+    await handleChallengeDraw({ statusEl });
   } catch (err) {
-    console.error('[Randomancer][Challenge] roll failed', err);
+    console.error('[Randomancer][Challenge] draw failed', err);
     if (statusEl) statusEl.textContent = 'Challenge generation failed. Try again.';
   }
   return true;

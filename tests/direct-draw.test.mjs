@@ -10,6 +10,7 @@ const engineSource = await readFile(new URL('../js/10-roll-engine.js', import.me
 const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 const entry = await readFile(new URL('../core-script.js', import.meta.url), 'utf8');
 const modeSource = await readFile(new URL('../js/16-challenge-mode.js', import.meta.url), 'utf8');
+const primaryStageSource = await readFile(new URL('../js/24-primary-card-stage.js', import.meta.url), 'utf8');
 const controlsCss = await readFile(new URL('../css/20-controls.css', import.meta.url), 'utf8');
 
 test('canonical Offense draw contains one or two concepts', () => {
@@ -60,7 +61,8 @@ test('obsolete standard controls and migration runtimes are absent', () => {
 });
 
 test('standard, Challenge, and Codex entry points remain mounted without Legacy', () => {
-  for (const id of ['build-panel', 'challenge-panel', 'codex-panel']) assert.match(html, new RegExp(`id="${id}"`));
+  for (const id of ['build-panel', 'codex-panel']) assert.match(html, new RegExp(`id="${id}"`));
+  assert.match(primaryStageSource, /primary-build-card-stage/);
   assert.doesNotMatch(html, /data-mode-target="legacy"|id="legacy-(?:panel|controls)"/);
   assert.doesNotMatch(entry, /21-legacy-mode/);
   assert.doesNotMatch(modeSource, /MODES\.LEGACY|RandomancerLegacy|legacy-mode/);

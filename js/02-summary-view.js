@@ -1,7 +1,7 @@
 import { APP_VERSION, formatWeaponLine } from './01-meta-and-domready.js';
 import { sharePublicCard, fetchCardReactions, toggleCardReaction } from './publicCardApi.js';
 import { PUBLIC_CARD_REACTIONS } from './publicCardReactions.js';
-import { buildPublicBuildCardRequest, buildPublicChallengeCardRequest } from './publicCardBuilders.js';
+import { buildPublicBuildCardRequest } from './publicCardBuilders.js';
 import { buildGemDictionary, lookupGem } from './05-tags-and-scorer.js';
 import { getFamilySkillNames, resolveSkillFamily } from './17-skill-family-utils.js';
 
@@ -789,11 +789,10 @@ async function shareCurrentCard(type, options = {}) {
   const currentState = getShareUiState(cardType);
   if (currentState.status === 'loading') return false;
 
-  const body = cardType === CARD_TYPE_CHALLENGE
-    ? buildPublicChallengeCardRequest(window.CURRENT_CHALLENGE_CONTRACT)
-    : buildPublicBuildCardRequest(window.App?.state?.currentDraw);
+  if (cardType === CARD_TYPE_CHALLENGE) return false;
+  const body = buildPublicBuildCardRequest(window.App?.state?.currentDraw);
 
-  const missingPayload = cardType === CARD_TYPE_CHALLENGE ? !body?.payload?.contract?.tasks?.length : !body?.payload?.snapshot?.ascendancy;
+  const missingPayload = !body?.payload?.snapshot?.ascendancy;
   if (missingPayload) {
     setShareUiState(cardType, { status: 'error', url: null, errorMessage: 'Open a card before sharing it.', feedbackMessage: '', feedbackTone: '' });
     return false;
@@ -890,12 +889,12 @@ function renderChallengeClause(clause) {
   `;
 }
 
-function renderChallengeCard(model, actionsHtml = '', reactionHtml = '') {
+function renderChallengeCard(model, actionsHtml = '', reactionHtml = '', { showShareStatus = true } = {}) {
   return `
     <div class="card-stage">
     <article class="rc-card rc-card--challenge">
       ${renderCardHeader(actionsHtml, reactionHtml, model.title, model.subtitle)}
-      ${renderShareStatus(CARD_TYPE_CHALLENGE)}
+      ${showShareStatus ? renderShareStatus(CARD_TYPE_CHALLENGE) : ''}
       <div class="rc-card__body rc-card__body--challenge">
         ${model.clauses?.length ? `<div class="rc-contract">${model.clauses.map(renderChallengeClause).join('')}</div>` : ''}
       </div>
@@ -1303,6 +1302,7 @@ export {
   openSharePanel,
   deriveBuildCardModel,
   deriveChallengeCardModel,
+  renderChallengeCard,
   openCardOverlay,
   closeCardOverlay,
   refreshOpenCardOverlay,

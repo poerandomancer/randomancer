@@ -4,8 +4,18 @@
   display:none;
 }
 
-body[data-mode="build"] #primary-build-card-stage{
+body[data-mode="build"] #primary-build-card-stage,
+body[data-mode="challenge"] #primary-build-card-stage{
   display:block;
+}
+
+body[data-mode="challenge"] #challenge-empty-divider,
+body[data-mode="challenge"] #challenge-empty-flavor{ display:none !important; }
+
+.primary-build-card-stage .rc-card--challenge{
+  background-image:linear-gradient(rgba(12,8,8,.18),rgba(12,8,8,.18)),url('/images/challenge-background.png');
+  background-size:cover;
+  background-position:center;
 }
 
 /* The legacy Build result DOM remains alive for generation, save state, and
