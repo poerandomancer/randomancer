@@ -2,14 +2,7 @@ import { ensureDataPreload } from './08-data-load.js';
 import { resolveSkillFamily } from './17-skill-family-utils.js';
 import { toMatchKey } from './tag-normalization.js';
 
-const SEVERITY_ORDER = { mild: 1, cruel: 2, diabolical: 3 };
-
-// V2: no more "taboo" role — 2 tasks is anchor+twist; 3 tasks is anchor+twist+twist
-const STACK_PLAN = {
-  1: ['anchor'],
-  2: ['anchor', 'twist'],
-  3: ['anchor', 'twist', 'twist']
-};
+const STACK_PLAN = ['anchor', 'twist', 'twist'];
 
 let challengeLibraryPromise = null;
 
@@ -26,15 +19,15 @@ function randomPick(items) {
   return items[Math.floor(Math.random() * items.length)];
 }
 
-function weightedPick(items, severity) {
-  const weighted = items.filter(item => Number(item?.weights?.[severity] || 0) > 0);
+function weightedPick(items) {
+  const weighted = items.filter(item => Number(item?.weight || 0) > 0);
   if (!weighted.length) return null;
 
-  const total = weighted.reduce((sum, item) => sum + Number(item.weights?.[severity] || 0), 0);
+  const total = weighted.reduce((sum, item) => sum + Number(item.weight || 0), 0);
   let roll = Math.random() * total;
 
   for (const item of weighted) {
-    roll -= Number(item.weights?.[severity] || 0);
+    roll -= Number(item.weight || 0);
     if (roll <= 0) return item;
   }
   return weighted[weighted.length - 1];
@@ -318,7 +311,7 @@ async function buildPickerContext() {
     weaponLoadoutLean[phr] = offHandLean[oh] || null;
   });
 
-  // Diabolical-only extras (filtered out below diabolical severity in pickSlotValue)
+  // Extended weapon loadouts available to the full Challenge pool
   weaponLoadout.push('Empty Off-hand');
   weaponLoadoutLean['Empty Off-hand'] = 'str_dex_int';
 
@@ -567,7 +560,7 @@ async function buildPickerContext() {
 }
 
 // -------------------------
-// Template + severity helpers
+// Template helpers
 // -------------------------
 
 function fillTemplate(template, slots) {
@@ -628,10 +621,6 @@ function applySkillFamilyRules(slots, context) {
   }
 }
 
-function minSeverityAllowed(userSeverity, taskSeverity) {
-  return (SEVERITY_ORDER[userSeverity] || 0) >= (SEVERITY_ORDER[taskSeverity] || 0);
-}
-
 // -------------------------
 // Conflicts (V2: directive + domainTags)
 // -------------------------
@@ -650,12 +639,11 @@ function matchesWith(task, matcher) {
   return true;
 }
 
-function conflictRejects(level, severity) {
-  if (level === 'hard') return true;
-  return level === 'soft' && severity === 'diabolical';
+function conflictRejects(level) {
+  return level === 'hard' || level === 'soft';
 }
 
-function hasConflict(candidate, selected, severity) {
+function hasConflict(candidate, selected) {
   const candTags = new Set(toArray(candidate?.conflictTags));
   for (const existing of selected) {
     // Conflict tags: simple overlap-based hard conflicts (e.g. support_policy, skill_policy)
@@ -667,12 +655,12 @@ function hasConflict(candidate, selected, severity) {
 
     // Structured conflicts (optional, for future fine-grained rules)
     for (const conflict of toArray(candidate.conflicts)) {
-      if (matchesWith(existing.task, conflict.with) && conflictRejects(conflict.level, severity)) {
+      if (matchesWith(existing.task, conflict.with) && conflictRejects(conflict.level)) {
         return true;
       }
     }
     for (const conflict of toArray(existing.task?.conflicts)) {
-      if (matchesWith(candidate, conflict.with) && conflictRejects(conflict.level, severity)) {
+      if (matchesWith(candidate, conflict.with) && conflictRejects(conflict.level)) {
         return true;
       }
     }
@@ -816,7 +804,6 @@ function resolveMatchOptions({ pickerName, options, optionLeanMap, defs, slots, 
 function pickSlotValue(slotKey, slotConfig, slots, defs, context) {
   const pickerName = slotConfig?.picker;
   let options = toArray(context[pickerName]);
-  const severity = context.__severity || 'cruel';
 
   if (pickerName === 'strictUniqueGrantedSkill') {
     const current = slots.__strictUniqueGrantedEntry;
@@ -832,10 +819,9 @@ function pickSlotValue(slotKey, slotConfig, slots, defs, context) {
     return null;
   }
 
-  // Picker-specific, severity-aware behavior
+  // Full-pool Challenge profile: all authored picker outcomes are eligible.
   if (pickerName === 'weaponLoadout') {
-    // Occasionally require two weapon sets (Cruel/Diabolical only)
-    const dualChance = severity === 'diabolical' ? 0.18 : (severity === 'cruel' ? 0.08 : 0);
+    const dualChance = 0.12;
     if (dualChance && Math.random() < dualChance && slots?.CLASS && Array.isArray(context.weaponSet)) {
       const ws = toArray(context.weaponSet).filter(v => v && v !== 'Unarmed');
       const classLean = context.__lean?.class?.[slots.CLASS] || null;
@@ -852,10 +838,6 @@ function pickSlotValue(slotKey, slotConfig, slots, defs, context) {
       if (set1 && set2) return `Weapon Set I: ${set1}; Weapon Set II: ${set2}`;
     }
 
-    // Diabolical-only extras
-    if (severity !== 'diabolical') {
-      options = options.filter(v => v !== 'Unarmed' && v !== 'Empty Off-hand');
-    }
   }
 
   // Basic filters
@@ -937,12 +919,8 @@ function resolveSlots(task, context, maxRetries = 40) {
 // Title helper
 // -------------------------
 
-function buildContractTitle({ picks, severity }) {
-  const poolBySeverity = {
-    mild: ['Wayward', 'Unquiet', 'Odd', 'Restless'],
-    cruel: ['Cursed', 'Bloodbound', 'Blight-Touched', 'Grim'],
-    diabolical: ['Doomsworn', 'Maledict', 'Abyssal', 'Accursed']
-  };
+function buildContractTitle({ picks }) {
+  const epithets = ['Wayward', 'Unquiet', 'Cursed', 'Bloodbound', 'Grim', 'Doomsworn', 'Maledict', 'Abyssal'];
   const nouns = ['Contract', 'Covenant', 'Edict', 'Writ', 'Decree', 'Oath'];
   const ids = picks.map(p => p.task.id);
 
@@ -955,25 +933,22 @@ function buildContractTitle({ picks, severity }) {
   if (ids.includes('G1_unarmed')) return 'The Empty Hand Oath';
   if (ids.includes('F3_ironman_normals_only_pickup')) return 'The Ironman Covenant';
 
-  return `The ${randomPick(poolBySeverity[severity] || poolBySeverity.cruel)} ${randomPick(nouns)}`;
+  return `The ${randomPick(epithets)} ${randomPick(nouns)}`;
 }
 
 // -------------------------
 // Generator
 // -------------------------
 
-async function generateChallengeContract({ taskCount = 2, severity = 'cruel', maxAttempts = 140, challengeFates = null } = {}) {
-  const normalizedCount = [1, 2, 3].includes(Number(taskCount)) ? Number(taskCount) : 2;
-  const normalizedSeverity = SEVERITY_ORDER[severity] ? severity : 'cruel';
-  const rolePlan = STACK_PLAN[normalizedCount];
+async function generateChallengeContract({ maxAttempts = 140, challengeFates = null } = {}) {
+  const rolePlan = STACK_PLAN;
 
   const library = await loadChallengeLibrary();
   const pickerContext = await buildPickerContext();
-  pickerContext.__severity = normalizedSeverity;
 
   const tasksByRole = rolePlan.map((role, index) => {
     const exactCount = rolePlan.filter(r => r === role).length;
-    const base = library.filter(task => task.role === role && minSeverityAllowed(normalizedSeverity, task.minSeverity));
+    const base = library.filter(task => task.role === role);
     return applyFatesToCandidates({ role, baseCandidates: base, fates: challengeFates, exactCount, index, rolePlan });
   });
 
@@ -1009,13 +984,13 @@ async function generateChallengeContract({ taskCount = 2, severity = 'cruel', ma
     const queue = [...candidates];
     while (queue.length) {
       attempts.count += 1;
-      const picked = weightedPick(queue, normalizedSeverity);
+      const picked = weightedPick(queue);
       const chosen = picked || queue[0];
       queue.splice(queue.findIndex(item => item.id === chosen.id), 1);
 
       const slots = resolveSlots(chosen, pickerContext);
       if (!slots) continue;
-      if (hasConflict(chosen, selected, normalizedSeverity)) continue;
+      if (hasConflict(chosen, selected)) continue;
       if (failsLockCollision(chosen, slots, state)) continue;
 
       const nextState = cloneState(state);
@@ -1040,9 +1015,7 @@ async function generateChallengeContract({ taskCount = 2, severity = 'cruel', ma
 
   return {
     mode: 'challenge',
-    severity: normalizedSeverity,
-    taskCount: normalizedCount,
-    title: buildContractTitle({ picks, severity: normalizedSeverity }),
+    title: buildContractTitle({ picks }),
     subtitle: picks.map(item => item.task.shortLabel).join(' • '),
     tasks: picks.map(item => ({
       id: item.task.id,

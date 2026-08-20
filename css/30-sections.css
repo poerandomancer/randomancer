@@ -113,16 +113,6 @@ main .panel + .panel{
   z-index: 5;
 }
 
-.challenge-contract-output{
-  margin: .2rem 0 0;
-  padding: 0;
-}
-
-.challenge-contract-output .build-title-block{
-  margin-top:.15rem;
-}
-
-.challenge-contract-lines{
   margin-top:.55rem;
 }
 

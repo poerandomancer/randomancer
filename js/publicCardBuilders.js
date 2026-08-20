@@ -146,73 +146,8 @@ function buildPublicBuildCardRequest(snapshot) {
   };
 }
 
-function buildPublicChallengeCardRequest(contract) {
-  const safe = contract || {};
-  const tasks = compactArray(safe.tasks, (task) => {
-    if (!task || typeof task !== 'object') return null;
-    return {
-      id: task.id || '',
-      role: task.role || '',
-      shortLabel: task.shortLabel || '',
-      line: task.line || '',
-      slots: task.slots && typeof task.slots === 'object' ? task.slots : {}
-    };
-  });
-  const title = safe.title || 'Challenge Contract';
-  const anchor = tasks.find((task) => task.role === 'anchor') || tasks[0] || null;
-  const twist = tasks.find((task) => task.role === 'twist') || tasks[1] || null;
-  const anchorShortLabel = anchor?.shortLabel || anchor?.label || anchor?.shortName || anchor?.name || 'Anchor';
-  const twistShortLabel = twist?.shortLabel || twist?.label || twist?.shortName || twist?.name || 'Twist';
-  const anchorTask = anchor?.line || '';
-  const twistTask = twist?.line || '';
-  const tagChips = compactArray([safe.severity, anchor?.shortLabel, twist?.shortLabel]).slice(0, 3);
-  const description = [anchorTask, twistTask].filter(Boolean).join(' • ').slice(0, 155) || (safe.subtitle || 'Randomancer challenge contract');
-  const metaTitle = `Randomancer Challenge Card — ${title}`;
-
-  return {
-    schema_version: PUBLIC_CARD_SCHEMA_VERSION,
-    card_kind: 'challenge',
-    app_version: APP_VERSION,
-    payload: {
-      contract: {
-        mode: 'challenge',
-        title: safe.title || '',
-        subtitle: safe.subtitle || '',
-        severity: safe.severity || 'cruel',
-        taskCount: Number(safe.taskCount) || 2,
-        tasks,
-        challengeFates: safe.challengeFates && typeof safe.challengeFates === 'object'
-          ? safe.challengeFates
-          : { anchors: { favor: [], ban: [] }, twistCategories: { favor: [], ban: [] } }
-      }
-    },
-    card_data: {
-      title,
-      subtitle: safe.subtitle || '',
-      severity: safe.severity || 'cruel',
-      category: twist?.shortLabel || anchor?.shortLabel || '',
-      anchorShortLabel,
-      twistShortLabel,
-      anchorTask,
-      twistTask,
-      tagChips,
-      footerText: 'Randomancer • Shared challenge artifact',
-    },
-    meta: {
-      title: metaTitle,
-      description,
-    },
-    preview: {
-      title: metaTitle,
-      subtitle: safe.subtitle || undefined,
-      description,
-      image_kind: 'challenge'
-    }
-  };
-}
 
 export {
   PUBLIC_CARD_SCHEMA_VERSION,
   buildPublicBuildCardRequest,
-  buildPublicChallengeCardRequest,
 };

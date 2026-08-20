@@ -146,16 +146,8 @@ body.challenge-mode .challenge-empty-flavor{
   text-shadow:0 0 8px rgba(0,0,0,0.88);
 }
 
-.challenge-controls{ margin:0.15rem auto 0.85rem; }
 
-#challenge-severity-btn{ margin-left:auto; }
 
-#challenge-severity-value{
-  font-size:.88rem;
-  letter-spacing:.06em;
-  text-transform:uppercase;
-  line-height:1;
-}
 
 .challenge-empty-divider{ margin:.9rem 0 0; }
 

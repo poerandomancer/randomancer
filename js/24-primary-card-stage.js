@@ -4,6 +4,11 @@ import {
   hideBuildCardTooltip,
   mountBuildCardSnapshot
 } from './23-build-card-foundation.js';
+import {
+  attachTooltipHandlers,
+  deriveChallengeCardModel,
+  renderChallengeCard
+} from './02-summary-view.js';
 
 const STAGE_ID = 'primary-build-card-stage';
 const MOUNT_ID = 'primary-build-card-mount';
@@ -26,6 +31,14 @@ let transitionCleanupTimer = 0;
 function isBuildMode() {
   const mode = document.body?.dataset?.mode;
   return !mode || mode === 'build';
+}
+
+function isChallengeMode() {
+  return document.body?.dataset?.mode === 'challenge';
+}
+
+function isCardMode() {
+  return isBuildMode() || isChallengeMode();
 }
 
 function prefersReducedMotion() {
@@ -93,6 +106,7 @@ function createStage() {
     </div>
   `;
   resultsStage.prepend(stage);
+  attachTooltipHandlers(stage.querySelector(`#${MOUNT_ID}`));
   return stage;
 }
 
@@ -126,6 +140,26 @@ function renderDeck() {
   if (quote) {
     if (!quote.textContent.trim()) quote.textContent = pickIntroLine();
     quote.hidden = false;
+  }
+  requestAnimationFrame(updateStageMetrics);
+}
+
+function renderCurrentChallenge(contract, { animate = false, suppressDeal = false } = {}) {
+  const stage = createStage();
+  const mount = getMount();
+  if (!stage || !mount || !isChallengeMode() || !contract?.tasks?.length) return;
+  const hadResult = stage.dataset.cardState === 'result';
+  stage.dataset.cardState = 'result';
+  const quote = getStageQuote();
+  if (quote) quote.hidden = true;
+  const actions = `<button type="button" class="icon-btn card-action-btn" data-card-action="challenge-save" aria-label="Save" title="Save"><span aria-hidden="true">☆</span></button>`;
+  mount.innerHTML = renderChallengeCard(deriveChallengeCardModel(contract), actions, '', { showShareStatus: false });
+  mount.dataset.cardFace = 'front';
+  mount.classList.remove('is-dealing');
+  if (!suppressDeal && (animate || !hadResult)) {
+    void mount.offsetWidth;
+    mount.classList.add('is-dealing');
+    clearDealClass(mount);
   }
   requestAnimationFrame(updateStageMetrics);
 }
@@ -167,7 +201,7 @@ function renderCardActions() {
   const saved = isSavedBuild();
   return `
     <button type="button" class="icon-btn card-action-btn" data-card-action="poe-ninja" aria-label="Open in poe.ninja" title="Open in poe.ninja"><span aria-hidden="true">🥷</span></button>
-    <button type="button" class="icon-btn card-action-btn${saved ? ' is-active' : ''}" data-card-action="save" aria-label="${saved ? 'Saved' : 'Save'}" title="${saved ? 'Saved' : 'Save'}" ${saved ? 'data-saved="1"' : ''}><span aria-hidden="true">${saved ? '★' : '☆'}</span></button>
+    <button type="button" class="icon-btn card-action-btn${saved ? ' is-active' : ''}" data-card-action="save" aria-label="${saved ? 'Saved' : 'Save'}" title="${saved ? 'Saved' : 'Save'}" ${saved ? 'data-saved="1"' : ''}><span aria-hidden="true">☆</span></button>
     <button type="button" class="icon-btn card-action-btn" data-card-action="copy-link" aria-label="Copy Build Link" title="Copy Build Link"><span aria-hidden="true">🔗</span></button>
   `;
 }
@@ -334,14 +368,14 @@ function startRerollAdvance() {
 }
 
 function armDrawAnimation() {
-  if (!isBuildMode()) return;
+  if (!isCardMode()) return;
 
   if (pendingRoll) clearPendingRoll();
   hideBuildCardTooltip();
 
   const stage = createStage();
   const snapshot = getCurrentSnapshot();
-  const hadResult = stage?.dataset?.cardState === 'result' && hasUsableBuild(snapshot);
+  const hadResult = stage?.dataset?.cardState === 'result' && (isChallengeMode() || hasUsableBuild(snapshot));
   const now = performance.now();
 
   pendingRoll = {
@@ -460,7 +494,7 @@ function revealPendingRoll(snapshot) {
 
 function updateStageMetrics() {
   const stage = document.getElementById(STAGE_ID);
-  if (!stage || !isBuildMode()) return;
+  if (!stage || !isCardMode()) return;
   const top = Math.max(0, stage.getBoundingClientRect().top);
   const available = Math.max(520, window.innerHeight - top - 20);
   stage.style.setProperty('--primary-card-stage-space', `${Math.round(available)}px`);
@@ -477,13 +511,17 @@ function installHeaderObserver() {
 function syncMode() {
   const stage = createStage();
   if (!stage) return;
-  const buildMode = isBuildMode();
-  stage.setAttribute('aria-hidden', buildMode ? 'false' : 'true');
-  if (!buildMode) {
+  const cardMode = isCardMode();
+  stage.setAttribute('aria-hidden', cardMode ? 'false' : 'true');
+  if (!cardMode) {
     hideBuildCardTooltip();
     return;
   }
-  renderCurrentBuild({ animate: false });
+  if (isChallengeMode()) {
+    const contract = window.CURRENT_CHALLENGE_CONTRACT;
+    if (contract?.tasks?.length) renderCurrentChallenge(contract);
+    else renderDeck();
+  } else renderCurrentBuild({ animate: false });
   requestAnimationFrame(updateStageMetrics);
 }
 
@@ -496,6 +534,12 @@ function install() {
   // Capture before the existing roll handler so the currently displayed card
   // starts its transition before generation mutates the canonical snapshot.
   document.getElementById('roll')?.addEventListener('click', armDrawAnimation, true);
+  document.getElementById(MOUNT_ID)?.addEventListener('click', (event) => {
+    if (event.target?.closest?.('[data-card-action="challenge-save"]')) {
+      window.RandomancerSaveCurrentChallenge?.();
+      window.RandomancerShowToast?.('Saved locally.');
+    }
+  });
 
   document.addEventListener(SNAPSHOT_EVENT, (event) => {
     if (!isBuildMode()) return;
@@ -525,6 +569,26 @@ function install() {
     if (source === 'replace') {
       requestAnimationFrame(() => renderCurrentBuild({ animate: false, forceFront: true }));
     }
+  });
+
+  document.addEventListener('randomancer:challenge-rendered', () => {
+    if (!isChallengeMode()) return;
+    const contract = window.CURRENT_CHALLENGE_CONTRACT;
+    if (!contract?.tasks?.length) return;
+    const stage = createStage();
+    const wasReroll = stage?.dataset?.cardState === 'result';
+    if (prefersReducedMotion()) {
+      clearPendingRoll();
+      renderCurrentChallenge(contract);
+      return;
+    }
+    window.setTimeout(() => {
+      stage?.classList.remove('is-drawing');
+      stage?.classList.add(wasReroll ? 'is-revealing-next' : 'is-revealing-first');
+      renderCurrentChallenge(contract, { animate: false, suppressDeal: true });
+      window.setTimeout(() => stage?.classList.remove('is-rerolling', 'is-revealing-first', 'is-revealing-next'), INITIAL_REVEAL_MS + 60);
+      pendingRoll = null;
+    }, wasReroll ? REROLL_ADVANCE_MS : INITIAL_LIFT_MS);
   });
 
   document.addEventListener('randomancer:mode-change', () => {
