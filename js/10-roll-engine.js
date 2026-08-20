@@ -814,7 +814,7 @@ function rollBuild(dataWrap){
 
   showBindFatesError('');
 
-    const th = (typeof cohesionThreshold === 'number') ? cohesionThreshold : 3/4;
+    const th = 0;
 
   const bind = getBindFatesFromApp();
 
@@ -825,9 +825,9 @@ function rollBuild(dataWrap){
   const cAboms = new Set(combatCfg.abominations || []);
 
 	// --- Archetype ---
-	// (hierarchical active-anchor: ascendancy > weapon > Defensive Strategy > mechanics)
+	// (hierarchical active-anchor: ascendancy > weapon > mechanics)
 	// - If ascendancy oaths exist, we keep the current behavior (random within allowed).
-	// - Otherwise, we pick one active weapon, Defensive Strategy, or 1–2 mechanics,
+	// - Otherwise, we pick one active weapon or 1–2 mechanics,
 	//   use that as an attribute anchor to choose the class/asc-candidate via pickByCohesion,
 	//   then revert to class attributes as the driver for the rest of the roll.
 	
@@ -840,24 +840,9 @@ function rollBuild(dataWrap){
 	const wOaths = new Set(weaponCfg.oaths || []);
 	const wAboms = new Set(weaponCfg.abominations || []);
 
-	const defensiveStrategyCfg = bind.defensiveStrategy || { oaths: [], abominations: [] };
-	const dsOaths = new Set(defensiveStrategyCfg.oaths || []);
-	const dsAboms = new Set(defensiveStrategyCfg.abominations || []);
-	let allowedDefensiveStrategies = (data.DefensiveStrategies || []).filter((strategy) =>
-	  strategy && !dsAboms.has(strategy.name)
-	);
-	if (dsOaths.size > 0) {
-	  allowedDefensiveStrategies = allowedDefensiveStrategies.filter((strategy) => dsOaths.has(strategy.name));
-	}
-	if (!allowedDefensiveStrategies.length) {
-	  showBindFatesError('No valid Defensive Strategies with your current Oaths & Abominations.');
-	  return;
-	}
-	
 	// ---- Active anchor picks (used to select class/asc candidate, and as roll driver if present) ----
 	let anchorAttrs = null;                 // {strength,dexterity,intelligence} ratio-ish
 	let activeWeaponOathName = null;        // string name of the active weapon oath (weapon tier)
-	let activeDefensiveStrategyOathName = null;
 	let activeMechanicOathNames = null;     // [name, name?] for mechanics-tier-only
 	
 	// Tier 2: weapon anchor (only when NO ascendancy oaths)
@@ -869,14 +854,8 @@ function rollBuild(dataWrap){
 		anchorAttrs = picked?.attributes || null;
 	  }
 	}
-	// Tier 3: Defensive Strategy anchor (only when no higher-tier Oath exists).
-	else if (ascOaths.size === 0 && wOaths.size === 0 && dsOaths.size > 0) {
-	  const picked = allowedDefensiveStrategies[Math.floor(Math.random() * allowedDefensiveStrategies.length)];
-	  activeDefensiveStrategyOathName = picked?.name || null;
-	  anchorAttrs = picked?.attributes || null;
-	}
-	// Tier 4: mechanics anchor (only when no higher-tier Oath exists).
-	else if (ascOaths.size === 0 && wOaths.size === 0 && dsOaths.size === 0 && cOaths.size > 0) {
+	// Tier 3: mechanics anchor (only when no higher-tier Oath exists).
+	else if (ascOaths.size === 0 && wOaths.size === 0 && cOaths.size > 0) {
 	  const ail = (data.Ailments || []).filter(a => a && !cAboms.has(a.name));
 	  const tac = (data.Tactics || []).filter(t => t && !cAboms.has(t.name));
 	  const oathMechRefs = [...ail, ...tac].filter(m => cOaths.has(m.name));
@@ -961,16 +940,9 @@ function rollBuild(dataWrap){
 	  if (forced) filteredWeaponPool = [forced];
 	}
 
-	let strategyPool = allowedDefensiveStrategies;
-	if (activeDefensiveStrategyOathName) {
-	  strategyPool = strategyPool.filter((strategy) => strategy?.name === activeDefensiveStrategyOathName);
-	}
-	const defensePool = Array.isArray(data.Defense) ? data.Defense : [];
-	const validLoadouts = weaponLoadouts(data, filteredWeaponPool).filter((loadout) =>
-	  loadoutHasStrategyOption(loadout, defensePool, strategyPool)
-	);
+	const validLoadouts = weaponLoadouts(data, filteredWeaponPool);
 	if (!validLoadouts.length) {
-	  showBindFatesError('No valid Weapon, Defense, and Defensive Strategy combination matches your current Oaths & Abominations.');
+	  showBindFatesError('No valid weapon combination matches your current Oaths & Abominations.');
 	  return;
 	}
 
@@ -979,16 +951,6 @@ function rollBuild(dataWrap){
 	const weaponLoadoutPool = validLoadouts.filter((loadout) => loadout.weapon?.name === weapon?.name);
 	const offhandPool = uniqueByName(weaponLoadoutPool.map((loadout) => loadout.offhand));
 	const offhand = offhandPool.length ? pickByCohesion(offhandPool, base, th) : null;
-	const selectedLoadout = { weapon, offhand };
-
-	// --- Survivability ---
-	const validDefenses = defensePool.filter((defense) =>
-	  strategyPool.some((strategy) => isStrategyCompatible(strategy, defense, selectedLoadout))
-	);
-	const pickedDefense = pickByCohesion(validDefenses, base, th);
-	const dsPool = strategyPool.filter((strategy) => isStrategyCompatible(strategy, pickedDefense, selectedLoadout));
-	const pickedDefStrat = pickByCohesion(dsPool, base, th);
-
   function filterTacticsByStrictRules(allTactics){
     return allTactics;
   }
@@ -1232,12 +1194,6 @@ function rollBuild(dataWrap){
     wOaths
   );
   resetSecondaryWeaponSetUI();
-  document.getElementById('defense')?.replaceChildren(document.createTextNode(pickedDefense?.name || ''));
-  renderOathAwareText(
-    document.getElementById('defstrat'),
-    pickedDefStrat?.name || '',
-    dsOaths
-  );
 
   renderOathAwareText(
     document.getElementById('ailments'),
@@ -1262,9 +1218,7 @@ function rollBuild(dataWrap){
 	const sumParts = [
 	  norm(classBase),
 	  norm(weapon?.attributes||{}),
-	  norm(offhand?.attributes||{}),
-	  norm(pickedDefense?.attributes||{}),
-	  norm(pickedDefStrat?.attributes||{})
+	  norm(offhand?.attributes||{})
 	].reduce((acc,a)=>add(acc,a), {strength:0,dexterity:0,intelligence:0});
 	
 	const ailSum = ailmentSet.filter(Boolean).map(a=>a.attributes||{}).map(norm).reduce((acc,a)=>add(acc,a), {strength:0,dexterity:0,intelligence:0});
@@ -1299,9 +1253,6 @@ function rollBuild(dataWrap){
     ascendancy: asc || '',
     ascendancyName: asc || '',
     ascendancyId: ascendancyId ?? null,
-    defense: pickedDefense?.name || '',
-    defStrat: pickedDefStrat?.name || '',
-    defStratObj: pickedDefStrat || null,
     weapon: weapon?.name || '',
     offhand: offhand?.name || '',
     weapon2: '',
@@ -1316,7 +1267,6 @@ function rollBuild(dataWrap){
     flavor: buildFlavor,
     attributes: { strength: S, dexterity: D, intelligence: I },
     rollAttr: { strength: S, dexterity: D, intelligence: I },
-    defenseObj: pickedDefense || null,
     recommendedSkills2: []
   };
 
@@ -1334,8 +1284,6 @@ function rollBuild(dataWrap){
           ascendancyId: ascendancyId ?? null,
           ailmentSet: ailmentSet.filter(Boolean),
           tacticSet: tacticSet.filter(Boolean),
-          defense: pickedDefense,
-          defStrat: pickedDefStrat,
           weapon: weapon?.name || '',
           offhand: offhand?.name || '',
           weapon2: '',

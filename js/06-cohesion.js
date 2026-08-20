@@ -42,7 +42,7 @@ const PRIMARY_DEFENSE_NAMES = new Set(PRIMARY_DEFENSE_RING);
 
 // App default (matches the current UI default). The legacy variable/function
 // names remain for compatibility even though this is no longer globally a threshold.
-let cohesionThreshold = 3/4;
+let cohesionThreshold = 0;
 
 function setCohesionThreshold(threshold){
   let t = Number(threshold);

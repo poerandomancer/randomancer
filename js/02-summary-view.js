@@ -327,7 +327,6 @@ function deriveBuildCardModel(snap) {
       { label: 'Ascendancy', values: snap.ascendancy ? [createNamedItem(snap.ascendancy)] : [] },
       { label: 'Weapons', values: [primaryWeapons, secondaryWeapons ? `Set II — ${secondaryWeapons}` : ''].filter(Boolean).map((name) => createNamedItem(name)) },
       { label: 'Combat', values: [...(snap.ailmentList || []), ...(snap.tacticList || [])].filter(Boolean).map((name) => createNamedItem(name)) },
-      { label: 'Defense', values: snap.defStrat ? [createNamedItem(snap.defStrat)] : [] },
       { label: 'Skills', values: skills }
     ],
     backSections: [

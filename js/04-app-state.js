@@ -21,9 +21,6 @@ const App = window.App = (() => {
       className: src.className || '',
       ascendancy: src.ascendancy || '',
       ascendancyId: src.ascendancyId ?? null,
-      defense: src.defense || '',
-      defStrat: src.defStrat || '',
-      defStratObj: src.defStratObj ?? null,
       weapon: src.weapon || '',
       offhand: src.offhand || '',
       weapon2: src.weapon2 || '',
@@ -46,7 +43,6 @@ const App = window.App = (() => {
         dexterity: Number(rollAttrs.dexterity) || 0,
         intelligence: Number(rollAttrs.intelligence) || 0
       },
-      defenseObj: src.defenseObj ?? null,
       recommendedSkills: Array.isArray(src.recommendedSkills) ? src.recommendedSkills : [],
       recommendedSkills2: Array.isArray(src.recommendedSkills2) ? src.recommendedSkills2 : [],
       synergySupports: Array.isArray(src.synergySupports) ? src.synergySupports : [],
@@ -68,9 +64,8 @@ const App = window.App = (() => {
     SKILLS: null,
     CONFIG: null,
 
-    // Cohesion slider: continuous [0..1], but we still track the nearest preset index + name
-    // 0=strict,1=cohesive,2=chaotic,3=madness (legacy index for saved builds)
-    cohesionThreshold: 3/4,
+    // Standard rolls always use the former Madness behavior.
+    cohesionThreshold: 0,
 
 
     // canonical current roll snapshot
@@ -79,7 +74,6 @@ const App = window.App = (() => {
     bindFates: {
       ascendancy: { oaths: [], abominations: [] },
       weapon:     { oaths: [], abominations: [] },
-      defensiveStrategy: { oaths: [], abominations: [] },
       combat:     { oaths: [], abominations: [] }
     },
 
@@ -116,15 +110,9 @@ const App = window.App = (() => {
 		state.CONFIG = Config.resolve(data);
 	  }
 
-	function setCohesion(raw){
-	  let threshold = Number(raw);
-	  if (!Number.isFinite(threshold)) return;
-	
-	  if (threshold < 0) threshold = 0;
-	  if (threshold > 1) threshold = 1;
-	
-	  state.cohesionThreshold = threshold;
-	  setCohesionThreshold(threshold);
+	function setCohesion(){
+	  state.cohesionThreshold = 0;
+	  setCohesionThreshold(0);
 	}
 
 
@@ -252,8 +240,6 @@ const App = window.App = (() => {
       state.currentRoll = {
         ...state.currentRoll,
         ...meta,
-        defense:   firstText('#defense'),
-        defStrat:  firstText('#defstrat'),
         weapon:    firstText('#weapons'),
         offhand,
         tactics:   firstText('#tactics'),

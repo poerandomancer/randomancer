@@ -197,8 +197,7 @@ function deriveBuildCardModel(snapshot) {
     frontRows: [
       { label: 'Ascendancy', values: snap.ascendancy ? [item(snap.ascendancy, { meta: snap.className || '' })] : [] },
       { label: 'Weapons', values: [weapon1 ? item(weapon1, { prefix: 'Set I' }) : null, weapon2 ? item(weapon2, { prefix: 'Set II' }) : null].filter(Boolean) },
-      { label: 'Combat', values: mechanics.map((name) => item(name)) },
-      { label: 'Defense', values: [snap.defense ? item(snap.defense, { prefix: 'Defense' }) : null, snap.defStrat ? item(snap.defStrat, { prefix: 'Strategy' }) : null].filter(Boolean) }
+      { label: 'Combat', values: mechanics.map((name) => item(name)) }
     ],
     balance: normalizeBalance(snap.attributes || snap.rollAttr),
     backSections: [

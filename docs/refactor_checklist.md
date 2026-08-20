@@ -10,9 +10,9 @@ Run through each item manually after changes. Do not skip.
 - “Roll Your Fate” works on first click.
 - Build output appears; no missing section rendering.
 
-3) **Cohesion slider**
-- Slider moves without errors.
-- Changing cohesion influences *subsequent* rolls (sanity-check by rolling a few times at low vs high cohesion).
+3) **Core roll controls**
+- No Cohesion or defensive-strategy control is shown in Build mode.
+- Repeated rolls use the unconstrained Madness selection behavior.
 
 4) **Bind the Fates**
 - Modal opens/closes.
@@ -57,3 +57,7 @@ Run through each item manually after changes. Do not skip.
 - Run `make normalize-tags-check` before opening a PR.
 - Use `make normalize-tags-strict` when touching normalization helpers/rules.
 - Confirm CI workflow `.github/workflows/tag-normalization-check.yml` is green.
+## Core roll simplification follow-up
+
+- The standard build roll is fixed to cohesion `0`; the shared cohesion helpers remain temporarily because legacy/recommendation code still imports them.
+- Defense catalogs and compatibility helpers remain as non-roll data for old shared snapshots, Challenge mode, and possible future recommendation work. They must not be reconnected to the standard roll premise.

@@ -2,6 +2,7 @@ import { ensureDataPreload } from './08-data-load.js';
 import {
   buildOffenseSnapshotFields,
   isArchetype,
+  isRollableOffense,
   migrateLegacyMechanicsToOffense,
   randomOffenseCount,
   resolveOffenseElements,
@@ -86,8 +87,9 @@ function projectOffenseIntoLegacyPools(){
   if (!elements.length) return;
 
   const combatFates = canonicalizeCombatFates();
-  const projected = elements.filter((entry) => !isArchetype(entry));
-  const archetype = chooseProjectedArchetype(elements, combatFates);
+  const rollableElements = elements.filter(isRollableOffense);
+  const projected = rollableElements.filter((entry) => !isArchetype(entry));
+  const archetype = chooseProjectedArchetype(rollableElements, combatFates);
 
   // The legacy roll engine still sees Ailments/Tactics for this migration pass.
   // Put the entire canonical Offense vocabulary into one legacy pool so its old
@@ -237,7 +239,7 @@ function renderOffenseBindFates(){
   const combat = canonicalizeCombatFates();
   const oaths = new Set(combat.oaths || []);
   const aboms = new Set(combat.abominations || []);
-  const elements = resolveOffenseElements(window.DATA || {});
+  const elements = resolveOffenseElements(window.DATA || {}).filter(isRollableOffense);
 
   list.innerHTML = '';
   elements.forEach((entry) => {

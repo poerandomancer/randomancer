@@ -107,7 +107,6 @@ function buildFrontFaceGroups(snapshot, weaponLabel) {
     { label: 'Ascendancy', values: compactArray([snap.ascendancy || snap.className]).slice(0, 1) },
     { label: 'Weapons', values: compactArray([weaponLabel]).slice(0, 2) },
     { label: 'Combat', values: compactArray([...(snap.ailmentList || []), ...(snap.tacticList || [])]).slice(0, 3) },
-    { label: 'Defense', values: compactArray([snap.defStrat || snap.defense]).slice(0, 2) },
     { label: 'Skills', values: compactArray(snap.recommendedSkills, (entry) => entry?.name || entry?.id || entry).slice(0, 2) },
   ];
   return groups.filter((group) => group.values.length);
@@ -133,8 +132,6 @@ function buildPublicBuildCardRequest(snapshot) {
         className: snap.className || '',
         ascendancy: snap.ascendancy || '',
         ascendancyId: snap.ascendancyId ?? null,
-        defense: snap.defense || '',
-        defStrat: snap.defStrat || '',
         weapon: snap.weapon || '',
         offhand: snap.offhand || '',
         weapon2: snap.weapon2 || '',
