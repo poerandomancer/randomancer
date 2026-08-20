@@ -64,7 +64,25 @@ import {
     if (!code) return null;
     try {
       const draw = JSON.parse(safeAtob(code));
-      return draw?.schema === 'randomancer-draw-v1' ? draw : null;
+      if (draw?.schema === 'randomancer-draw-v1') return draw;
+
+      // Links produced by the short-lived compact-link implementation use
+      // abbreviated keys. Continue accepting them so already-copied links do
+      // not become dead links.
+      if (!draw || typeof draw !== 'object' || (!draw.c && !draw.b)) return null;
+      return {
+        schema: 'randomancer-draw-v1',
+        snapshotVersion: 2,
+        className: draw.c || '', ascendancy: draw.a || '', ascendancyId: draw.ai,
+        weapon: draw.w || '', offhand: draw.o || '', weapon2: draw.w2 || '', offhand2: draw.o2 || '',
+        ailmentList: Array.isArray(draw.al) ? draw.al : [], tacticList: Array.isArray(draw.tl) ? draw.tl : [],
+        defense: draw.d || '', defStrat: draw.ds || '', buildName: draw.b || '', flavor: draw.f || '',
+        attributes: draw.attr || {}, recommendedSkills: draw.rs || [], recommendedSkills2: draw.rs2 || [],
+        recommendedUniques: draw.u || [],
+        passives: draw.p ? {
+          ascendancyNodes: draw.p.a || [], keystones: draw.p.k || [], notables: draw.p.n || []
+        } : undefined
+      };
     } catch { return null; }
   }
 
@@ -117,6 +135,7 @@ import {
     if (typeof window.RandomancerSetMode === 'function') {
       window.RandomancerSetMode('challenge');
     }
+    document.dispatchEvent(new CustomEvent('randomancer:card-restore-start'));
     const render = () => {
       if (typeof window.RandomancerRenderChallengeContract === 'function') {
         window.RandomancerRenderChallengeContract(contract);
@@ -364,6 +383,7 @@ function renderSnapshotToDom(snap){
   if (!snap) return false;
 
   const dataWrap = await ensureDataPreload();
+  document.dispatchEvent(new CustomEvent('randomancer:card-restore-start'));
 
   // Back-compat: older build codes didn't store passives; rebuild them from the snapshot context.
   if (!snap.passives) {
@@ -787,6 +807,7 @@ function renderSnapshotToDom(snap){
 
     if (typeof window.RandomancerSetMode === 'function') window.RandomancerSetMode('standard');
     const snapshot = hydrateSharedBuildCard(shared.payload);
+    document.dispatchEvent(new CustomEvent('randomancer:card-restore-start'));
     if (typeof window.RandomancerRenderBuildSnapshot === 'function') {
       window.RandomancerRenderBuildSnapshot(snapshot);
     }
@@ -796,6 +817,9 @@ function renderSnapshotToDom(snap){
   }
 
   async function autoLoadFromQuery(){
+    // Other modules install the primary-card animation controller during the
+    // same DOM-ready turn. Let those listeners mount before restoring a URL.
+    await new Promise(resolve => requestAnimationFrame(resolve));
     const q = getQueryParams();
     const slugPattern = /^b-[a-z0-9]{8}$/i;
     const cardParam = q.get('card');

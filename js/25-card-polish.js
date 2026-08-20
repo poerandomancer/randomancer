@@ -119,7 +119,10 @@ function encodeBuildQueryValue(code) {
 }
 
 function buildCompactBuildLink(snapshot) {
-  const code = encodeCompactBuildSnapshot(snapshot);
+  // Use the canonical snapshot contract for new links. The restore path still
+  // understands legacy compact links, but a full snapshot preserves every
+  // card field as the schema evolves.
+  const code = window.RandomancerEncodeSnapshot?.(snapshot) || encodeCompactBuildSnapshot(snapshot);
   if (!code) return '';
 
   try {

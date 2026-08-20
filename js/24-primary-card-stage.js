@@ -152,7 +152,8 @@ function renderCurrentChallenge(contract, { animate = false, suppressDeal = fals
   stage.dataset.cardState = 'result';
   const quote = getStageQuote();
   if (quote) quote.hidden = true;
-  const actions = `<button type="button" class="icon-btn card-action-btn" data-card-action="challenge-save" aria-label="Save" title="Save"><span aria-hidden="true">☆</span></button>`;
+  const saved = document.getElementById('challenge-actions-save')?.dataset?.saved === '1';
+  const actions = `<button type="button" class="icon-btn card-action-btn${saved ? ' is-active' : ''}" data-card-action="challenge-save" aria-label="${saved ? 'Saved' : 'Save'}" title="${saved ? 'Saved' : 'Save'}" ${saved ? 'data-saved="1"' : ''}><span aria-hidden="true">${saved ? '★' : '☆'}</span></button>`;
   mount.innerHTML = renderChallengeCard(deriveChallengeCardModel(contract), actions, '', { showShareStatus: false });
   mount.dataset.cardFace = 'front';
   mount.classList.remove('is-dealing');
@@ -201,7 +202,7 @@ function renderCardActions() {
   const saved = isSavedBuild();
   return `
     <button type="button" class="icon-btn card-action-btn" data-card-action="poe-ninja" aria-label="Open in poe.ninja" title="Open in poe.ninja"><span aria-hidden="true">🥷</span></button>
-    <button type="button" class="icon-btn card-action-btn${saved ? ' is-active' : ''}" data-card-action="save" aria-label="${saved ? 'Saved' : 'Save'}" title="${saved ? 'Saved' : 'Save'}" ${saved ? 'data-saved="1"' : ''}><span aria-hidden="true">☆</span></button>
+    <button type="button" class="icon-btn card-action-btn${saved ? ' is-active' : ''}" data-card-action="save" aria-label="${saved ? 'Saved' : 'Save'}" title="${saved ? 'Saved' : 'Save'}" ${saved ? 'data-saved="1"' : ''}><span aria-hidden="true">${saved ? '★' : '☆'}</span></button>
     <button type="button" class="icon-btn card-action-btn" data-card-action="copy-link" aria-label="Copy Build Link" title="Copy Build Link"><span aria-hidden="true">🔗</span></button>
   `;
 }
@@ -367,7 +368,7 @@ function startRerollAdvance() {
   maybeRevealPendingRoll();
 }
 
-function armDrawAnimation() {
+function armDrawAnimation({ forceFresh = false } = {}) {
   if (!isCardMode()) return;
 
   if (pendingRoll) clearPendingRoll();
@@ -380,7 +381,7 @@ function armDrawAnimation() {
 
   pendingRoll = {
     startedAt: now,
-    startIdentity: getBuildIdentity(snapshot),
+    startIdentity: forceFresh ? '' : getBuildIdentity(snapshot),
     latestSnapshot: null,
     latestSource: '',
     hadResult,
@@ -533,11 +534,13 @@ function install() {
 
   // Capture before the existing roll handler so the currently displayed card
   // starts its transition before generation mutates the canonical snapshot.
-  document.getElementById('roll')?.addEventListener('click', armDrawAnimation, true);
+  document.getElementById('roll')?.addEventListener('click', () => armDrawAnimation(), true);
+  document.addEventListener('randomancer:card-restore-start', () => armDrawAnimation({ forceFresh: true }));
   document.getElementById(MOUNT_ID)?.addEventListener('click', (event) => {
     if (event.target?.closest?.('[data-card-action="challenge-save"]')) {
       window.RandomancerSaveCurrentChallenge?.();
       window.RandomancerShowToast?.('Saved locally.');
+      requestAnimationFrame(() => renderCurrentChallenge(window.CURRENT_CHALLENGE_CONTRACT));
     }
   });
 
