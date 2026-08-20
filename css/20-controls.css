@@ -323,11 +323,11 @@ body.challenge-mode .challenge-empty-flavor{
   --mode-accent: var(--gold);
   --mode-accent-rgb: 200, 168, 107;
   --seg-index: 0;
-  --seg-count: 4;
+  --seg-count: 3;
 
   position: relative;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: stretch;
 
   height: 30px;
