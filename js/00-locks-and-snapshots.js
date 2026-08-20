@@ -437,6 +437,16 @@ function renderSnapshotToDom(snap){
     try { localStorage.setItem(CHALLENGE_STORAGE_KEY, JSON.stringify(list.slice(0, MAX_SAVED))); } catch {}
   }
 
+  function isBuildSaved(snapshot = currentSnap()){
+    const code = encodeSnapshot(snapshot);
+    return !!(code && loadSaved().some(entry => entry.code === code));
+  }
+
+  function isChallengeSaved(contract = currentChallenge()){
+    const code = encodeChallengeContract(contract);
+    return !!(code && loadSavedChallenges().some(entry => entry.code === code));
+  }
+
   function syncSaveButtonState(code){
 	  const btn = document.getElementById('build-actions-save');
 	  if (!btn) return;
@@ -896,6 +906,8 @@ function renderSnapshotToDom(snap){
 
 
   window.RandomancerEncodeChallengeContract = encodeChallengeContract;
+  window.RandomancerIsBuildSaved = isBuildSaved;
+  window.RandomancerIsChallengeSaved = isChallengeSaved;
   window.RandomancerApplyChallengeCode = applyChallengeCode;
   window.RandomancerSaveCurrentBuild = saveCurrentBuild;
   window.RandomancerSaveCurrentChallenge = saveCurrentChallenge;

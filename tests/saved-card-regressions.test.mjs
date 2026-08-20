@@ -8,7 +8,12 @@ const polish = readFileSync(new URL('../js/25-card-polish.js', import.meta.url),
 
 test('saved primary-card actions render a filled star', () => {
   assert.match(stage, /saved \? '★' : '☆'/);
-  assert.match(stage, /challenge-actions-save'[\s\S]*?saved \? '★' : '☆'/);
+  assert.match(stage, /data-card-action="challenge-save"[^\n]+saved \? '★' : '☆'/);
+  assert.match(stage, /RandomancerIsBuildSaved\?\.\(snapshot\) === true/);
+  assert.match(stage, /RandomancerIsChallengeSaved\?\.\(contract\) === true/);
+  assert.doesNotMatch(stage, /function isSavedBuild\([^}]+build-actions-save/);
+  assert.match(snapshots, /window\.RandomancerIsBuildSaved = isBuildSaved/);
+  assert.match(snapshots, /window\.RandomancerIsChallengeSaved = isChallengeSaved/);
 });
 
 test('saved and linked card restores arm the standard card animation', () => {
