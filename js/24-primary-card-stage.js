@@ -4,7 +4,11 @@ import {
   hideBuildCardTooltip,
   mountBuildCardSnapshot
 } from './23-build-card-foundation.js';
-import { deriveChallengeCardModel, renderChallengeCard } from './02-summary-view.js';
+import {
+  attachTooltipHandlers,
+  deriveChallengeCardModel,
+  renderChallengeCard
+} from './02-summary-view.js';
 
 const STAGE_ID = 'primary-build-card-stage';
 const MOUNT_ID = 'primary-build-card-mount';
@@ -102,6 +106,7 @@ function createStage() {
     </div>
   `;
   resultsStage.prepend(stage);
+  attachTooltipHandlers(stage.querySelector(`#${MOUNT_ID}`));
   return stage;
 }
 

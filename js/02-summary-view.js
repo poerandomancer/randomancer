@@ -1302,6 +1302,7 @@ export {
   openSharePanel,
   deriveBuildCardModel,
   deriveChallengeCardModel,
+  attachTooltipHandlers,
   renderChallengeCard,
   openCardOverlay,
   closeCardOverlay,

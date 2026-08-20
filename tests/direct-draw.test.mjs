@@ -72,3 +72,7 @@ test('standard, Challenge, and Codex entry points remain mounted without Legacy'
   assert.match(controlsCss, /grid-template-columns:\s*repeat\(3,/);
   assert.doesNotMatch(controlsCss, /--seg-count:\s*4|grid-template-columns:\s*repeat\(4,/);
 });
+
+test('the primary Challenge stage binds the shared interactive tooltip handlers', () => {
+  assert.match(primaryStageSource, /attachTooltipHandlers\(stage\.querySelector\(`/);
+});
