@@ -61,7 +61,7 @@ function getGemDescription(entry) {
 }
 
 function skillRolePrefix(entry, index, weaponSet) {
-  const role = entry?.recommendationV3?.assignedRole;
+  const role = entry?.recommendationPackage?.assignedRole;
   const roleLabel = {
     primary_damage: 'Primary',
     secondary_damage: 'Secondary',
@@ -146,8 +146,8 @@ function deriveBuildCardModel(snapshot) {
 
   const skillItems = (entries, weaponSet) => (entries || []).slice(0, 2).map((entry, index) =>
     {
-      const supports = Array.isArray(entry?.recommendationV3?.supports)
-        ? entry.recommendationV3.supports.slice(0, 2)
+      const supports = Array.isArray(entry?.recommendationPackage?.supports)
+        ? entry.recommendationPackage.supports.slice(0, 2)
         : [];
       const supportNames = supports.map(getGemName).filter(Boolean);
       const supportLines = supports.map((support) => {

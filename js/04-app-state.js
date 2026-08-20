@@ -1,6 +1,5 @@
 import { Dom, firstText } from './01-meta-and-domready.js';
 import { Config, RulesEngine, Schema } from './03-config-and-schema.js';
-import { setCohesionThreshold } from './06-cohesion.js';
 import { ensureDataPreload } from './08-data-load.js';
 
 // ===== App API =====
@@ -50,8 +49,8 @@ const App = window.App = (() => {
       recommendedPersistentBuff: src.recommendedPersistentBuff ?? null,
       recommendedUniques: Array.isArray(src.recommendedUniques) ? src.recommendedUniques : [],
       passives: src.passives && typeof src.passives === 'object' ? src.passives : null,
-      recommendationV3: src.recommendationV3 && typeof src.recommendationV3 === 'object'
-        ? src.recommendationV3
+      recommendationPackage: src.recommendationPackage && typeof src.recommendationPackage === 'object'
+        ? src.recommendationPackage
         : null,
       tagProfile: src.tagProfile ?? null,
       snapshotVersion: Number(src.snapshotVersion) || 1
@@ -63,10 +62,6 @@ const App = window.App = (() => {
     GEMS:   null,
     SKILLS: null,
     CONFIG: null,
-
-    // Standard rolls always use the former Madness behavior.
-    cohesionThreshold: 0,
-
 
     // canonical current roll snapshot
     currentRoll: canonicalizeRollSnapshot(),
@@ -109,12 +104,6 @@ const App = window.App = (() => {
 		state.SKILLS = data.skills || null;  // raw skills saved by loadData()
 		state.CONFIG = Config.resolve(data);
 	  }
-
-	function setCohesion(){
-	  state.cohesionThreshold = 0;
-	  setCohesionThreshold(0);
-	}
-
 
   function getBindFates(){
     return state.bindFates;
@@ -259,7 +248,6 @@ const App = window.App = (() => {
   return {
     state,
     bootstrap,
-    setCohesion,
     legacyInit,
     roll,
     captureCurrentRollFromDOM,

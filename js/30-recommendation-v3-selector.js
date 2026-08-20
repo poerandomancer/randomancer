@@ -2,7 +2,6 @@ const RECOMMENDATION_CATALOG_V3_SCHEMA = 'recommendation-catalog-v3.0.0';
 const RECOMMENDATION_PACKAGE_V3_SCHEMA = 'recommendation-package-v3.0.0';
 const RECOMMENDATION_GRANTED_ACCESS_V3_SCHEMA = 'recommendation-granted-skill-access-v3.0.0';
 const RECOMMENDATION_SKILL_CRAFTING_V3_SCHEMA = 'recommendation-skill-crafting-v3.0.0';
-const RECOMMENDATION_V3_QUERY_PARAM = 'recommendationV3';
 const PRIMARY_QUALITY_BAND = 12;
 const COMPANION_QUALITY_BAND = 8;
 const PACKAGE_QUALITY_BAND = 12;
@@ -153,20 +152,6 @@ function normalizeToken(value) {
 
 function unique(values) {
   return Array.from(new Set(values.filter(Boolean)));
-}
-
-function isRecommendationV3Enabled(environment = globalThis) {
-  if (environment?.RandomancerRecommendationV3Enabled === true) return true;
-  if (environment?.RandomancerRecommendationV3Enabled === false) return false;
-
-  const search = String(environment?.location?.search || '');
-  try {
-    const params = new URLSearchParams(search);
-    const value = normalizeToken(params.get(RECOMMENDATION_V3_QUERY_PARAM));
-    return ['1', 'enabled', 'on', 'true'].includes(value);
-  } catch {
-    return new RegExp(`(?:^|[?&])${RECOMMENDATION_V3_QUERY_PARAM}=1(?:&|$)`).test(search);
-  }
 }
 
 function validateRecommendationCatalogV3(catalog) {
@@ -2546,13 +2531,13 @@ function adaptRecommendationPackageV3ToSnapshot(packageResult) {
     ? asArray(packageResult.pieces)
     : [packageResult?.primarySkill].filter(Boolean);
   const adapted = {
-    recommendationV3: packageResult || null
+    recommendationPackage: packageResult || null
   };
   if (skills.length) {
     adapted.recommendedSkills = skills.slice(0, 2).map((skill) => ({
       id: skill.sourceId || skill.entityId,
       name: skill.name,
-      recommendationV3: {
+      recommendationPackage: {
         entityId: skill.entityId,
         assignedRole: skill.assignedRole,
         fulfilledObligations: skill.fulfilledObligations,
@@ -2582,7 +2567,6 @@ export {
   RECOMMENDATION_PACKAGE_V3_SCHEMA,
   RECOMMENDATION_GRANTED_ACCESS_V3_SCHEMA,
   RECOMMENDATION_SKILL_CRAFTING_V3_SCHEMA,
-  RECOMMENDATION_V3_QUERY_PARAM,
   PRIMARY_QUALITY_BAND,
   COMPANION_QUALITY_BAND,
   PACKAGE_QUALITY_BAND,
@@ -2593,7 +2577,6 @@ export {
   evaluateDeliveryCompatibilityV3,
   isEquipmentCompatibleV3,
   isRecommendationContentAllowedV3,
-  isRecommendationV3Enabled,
   mergeRecommendationGrantedSkillAccessV3,
   mergeRecommendationSkillCraftingV3,
   selectRecommendationPackageV3,

@@ -19,7 +19,7 @@
 14. **`js/13-info-lightbox.js`** — info overlay controller.
 15. **`js/14-feedback-menu.js`** — feedback + mobile header menu.
 16. **`js/30-recommendation-v3-selector.js`** — pure Fate-obligation builder, typed-fact one- or two-skill package solver, and zero/one/two-support assignment pass.
-17. **`js/31-recommendation-v3-runtime.js`** — feature-flagged adapter that applies v3 package output to the canonical Build snapshot.
+17. **`js/31-recommendation-v3-runtime.js`** — default adapter that applies package output to the canonical Build snapshot.
 
 **CSS (split layers, aggregated by `styles.css`)**
 - `css/00-base.css`
@@ -59,12 +59,12 @@ Runtime-loaded:
 - `data/enriched/skills_enriched.json`
 - `data/enriched/poe2db_uniques_min.json`
 
-Generated recommendation migration data (conditionally runtime-loaded):
+Generated recommendation data (runtime-loaded):
 - `data/enriched/recommendation_catalog_v3.json`
 - `data/enriched/recommendation_catalog_v3_report.json`
 - `data/recommendation_ontology_v3.json`
 
-The v3 catalog joins datamined mechanics with scrape-backed unique and ascendancy evidence. It remains outside the default startup payload. With `?recommendationV3=1`, the current migration slice loads it, builds an Offense-aware viable skill pool, jointly scores legal singleton and two-skill packages, assigns only necessary bridge supports to the selected skills, and replaces the skill ideas with the selected ordered package. Two skills are strongly preferred when both contribute; an unrelated second skill or support is never forced. Support assignments are nested on their target skill and rendered inline on the Build Card. All other recommendation families retain their current selectors while the package solver expands.
+The v3 catalog joins datamined mechanics with scrape-backed unique and ascendancy evidence. The default package selector loads it, builds an Offense-aware viable skill pool, jointly scores legal singleton and two-skill packages, assigns only necessary bridge supports to each selected skill, and supplies the ordered skill ideas. Two skills are strongly preferred when both contribute; an unrelated second skill or support is never forced. Support assignments are nested on their target skill and rendered inline on the Build Card. All other recommendation families retain their current selectors while the package solver expands.
 
 Reference / datamined (not necessarily used directly at runtime):
 - `data/datamined/*`

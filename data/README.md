@@ -47,7 +47,7 @@ python data/helperScripts/update_app_data.py --profile recommendations-only --fa
 
 ## Recommendation enrichment v3
 
-The additive recommendation v3 stage builds a unified qualitative mechanics catalog. It remains outside the default runtime payload; the explicit `?recommendationV3=1` migration path consumes it for the primary-plus-one-companion package slice:
+The additive recommendation v3 stage builds a unified qualitative mechanics catalog. The default recommendation workflow consumes it for the primary-plus-one-companion package slice:
 
 - `data/enriched/recommendation_catalog_v3.json`
 - `data/enriched/recommendation_catalog_v3_report.json`

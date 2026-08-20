@@ -1,5 +1,4 @@
 import { getBindFatesFromApp } from './04-app-state.js';
-import { sliderValueToThreshold, thresholdToSliderValue } from './06-cohesion.js';
 import { ensureDataPreload } from './08-data-load.js';
 import { loadChallengeLibrary } from './15-challenge-engine.js';
 
@@ -85,32 +84,6 @@ function writeJsonStorage(key, value) {
 
 // ---------- wireup ----------
 document.addEventListener('DOMContentLoaded', ()=>{
-  const slider = document.getElementById('cohesionRange');
-
-  const applyThreshold = (t) => {
-    if (window.App && typeof window.App.setCohesion === 'function') {
-      window.App.setCohesion(t);
-    }
-  };
-
-  if (slider) {
-    let initialThreshold = 3/4;
-    try {
-      const st = window.App && window.App.state;
-      if (st && typeof st.cohesionThreshold === 'number') {
-        initialThreshold = st.cohesionThreshold;
-      }
-    } catch (e) {}
-
-    slider.value = String(thresholdToSliderValue(initialThreshold));
-    applyThreshold(initialThreshold);
-
-    slider.addEventListener('input', (e) => {
-      const t = sliderValueToThreshold(e.target.value);
-      applyThreshold(t);
-    });
-  }
-
   const bindBar = document.getElementById('bind-fates-bar');
   const toggleBtn = bindBar?.querySelector('.bind-fates-toggle');
   const clearBtn = document.getElementById('bind-fates-clear');

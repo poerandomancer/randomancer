@@ -32,7 +32,7 @@
  * 27) 28-primary-equipment-runtime: primary family roll adapter + Bind Fates/poe.ninja presentation bridge.
  * 28) 29-selection-frequency-runtime: explicit base-frequency adapter for primary families.
  * 29) 30-recommendation-v3-selector: pure obligation and primary-skill package selector.
- * 30) 31-recommendation-v3-runtime: feature-flagged catalog-to-Build-Card migration bridge.
+ * 30) 31-recommendation-v3-runtime: default catalog-to-Build-Card recommendation bridge.
  *
  * Public window exports (must remain available):
  * window.App, window.rollBuild, window.scheduleSummaryRefresh, window.RandomancerEncodeSnapshot,

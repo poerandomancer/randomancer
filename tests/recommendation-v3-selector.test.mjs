@@ -15,7 +15,6 @@ const {
   evaluateDeliveryCompatibilityV3,
   isEquipmentCompatibleV3,
   isRecommendationContentAllowedV3,
-  isRecommendationV3Enabled,
   mergeRecommendationGrantedSkillAccessV3,
   mergeRecommendationSkillCraftingV3,
   selectRecommendationPackageV3,
@@ -128,14 +127,6 @@ async function loadRealRecommendationCatalogV3() {
     grantedAccess
   );
 }
-
-test('feature flag is explicit and supports a test override', () => {
-  assert.equal(isRecommendationV3Enabled({ location: { search: '' } }), false);
-  assert.equal(isRecommendationV3Enabled({ location: { search: '?recommendationV3=1' } }), true);
-  assert.equal(isRecommendationV3Enabled({ location: { search: '?recommendationV3=false' } }), false);
-  assert.equal(isRecommendationV3Enabled({ RandomancerRecommendationV3Enabled: true }), true);
-  assert.equal(isRecommendationV3Enabled({ RandomancerRecommendationV3Enabled: false, location: { search: '?recommendationV3=1' } }), false);
-});
 
 test('catalog validation rejects missing and stale schemas', () => {
   assert.equal(validateRecommendationCatalogV3(null).ok, false);
@@ -1765,10 +1756,10 @@ test('runtime adapter preserves package diagnostics while using the current skil
   const adapted = adaptRecommendationPackageV3ToSnapshot(packageResult);
   assert.equal(adapted.recommendedSkills[0].name, 'Test Skill');
   assert.deepEqual(
-    adapted.recommendedSkills[0].recommendationV3.supports.map((support) => support.name),
+    adapted.recommendedSkills[0].recommendationPackage.supports.map((support) => support.name),
     ['Bridge Support']
   );
-  assert.equal(adapted.recommendationV3, packageResult);
+  assert.equal(adapted.recommendationPackage, packageResult);
 });
 
 test('runtime adapter writes both primary and supporting skills in package order', () => {
@@ -1785,7 +1776,7 @@ test('runtime adapter writes both primary and supporting skills in package order
 
   assert.deepEqual(adapted.recommendedSkills.map((entry) => entry.name), ['Primary', 'Setup']);
   assert.deepEqual(
-    adapted.recommendedSkills.map((entry) => entry.recommendationV3.assignedRole),
+    adapted.recommendedSkills.map((entry) => entry.recommendationPackage.assignedRole),
     ['primary_damage', 'setup_control']
   );
 });
@@ -1826,12 +1817,12 @@ test('recommendation contract and Build Card preserve two role-labeled skill ide
       recommendedSkills: [
         {
           name: 'Primary',
-          recommendationV3: {
+          recommendationPackage: {
             assignedRole: 'primary_damage',
             supports: [{ name: 'Bleed III' }, { name: 'Gain Chaos' }]
           }
         },
-        { name: 'Secondary', recommendationV3: { assignedRole: 'secondary_damage' } },
+        { name: 'Secondary', recommendationPackage: { assignedRole: 'secondary_damage' } },
         { name: 'Filler' }
       ]
     });
@@ -1844,12 +1835,12 @@ test('recommendation contract and Build Card preserve two role-labeled skill ide
     assert.deepEqual(skillSection.values[0].tipLines, ['Bleed III', 'Gain Chaos']);
     assert.deepEqual(
       buildPublicBuildCardRequest(snapshot).payload.snapshot.recommendedSkills[0]
-        .recommendationV3.supports.map((support) => support.name),
+        .recommendationPackage.supports.map((support) => support.name),
       ['Bleed III', 'Gain Chaos']
     );
     assert.deepEqual(
       buildCompactSnapshotPayload(snapshot).rs[0]
-        .recommendationV3.supports.map((support) => support.name),
+        .recommendationPackage.supports.map((support) => support.name),
       ['Bleed III', 'Gain Chaos']
     );
   } finally {
@@ -1867,7 +1858,7 @@ test('runtime adapter does not erase the existing recommendation when v3 has no 
   });
 
   assert.equal(Object.hasOwn(adapted, 'recommendedSkills'), false);
-  assert.equal(adapted.recommendationV3.status, 'unresolved');
+  assert.equal(adapted.recommendationPackage.status, 'unresolved');
 });
 
 test('committed catalog produces a legal primary skill for representative rolls', async () => {
