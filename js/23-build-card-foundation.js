@@ -29,6 +29,13 @@ function stripMarkup(value) {
     .trim();
 }
 
+function cleanTooltipLines(values) {
+  const seen = new Set();
+  return (Array.isArray(values) ? values : [values]).flatMap((value) => String(value || '').split(/\r?\n/))
+    .map(stripMarkup).filter((line) => line && !/^(?:undefined|null|nan)$/i.test(line))
+    .filter((line) => { const key = line.toLowerCase(); if (seen.has(key)) return false; seen.add(key); return true; });
+}
+
 function normalizeBalance(attributes) {
   const raw = attributes && typeof attributes === 'object' ? attributes : {};
   const clamp = (value) => Math.max(0, Number(value) || 0);
@@ -76,7 +83,7 @@ function getPassiveDescription(entry) {
   const name = entry?.name || '';
   const fromData = (window.DATA?.passivesEnriched?.nodes || []).find((node) => node?.name === name);
   const lines = Array.isArray(fromData?.lines) && fromData.lines.length ? fromData.lines : (entry?.lines || []);
-  return (Array.isArray(lines) ? lines : []).map(stripMarkup).filter(Boolean).join(' ');
+  return cleanTooltipLines(lines);
 }
 
 function normalizeUniqueSource(source) {
@@ -114,10 +121,14 @@ async function ensureBuildCardUniqueData() {
 function getUniqueDescription(name) {
   const items = getUniqueSourceCollection();
   const found = items.find((entry) => entry?.name === name || entry?.base_item?.display_name === name || entry?.source?.label === name);
-  const base = found?.base || found?.base_item?.display_name || found?.slot || '';
-  const mods = Array.isArray(found?.explicit_mods) ? found.explicit_mods : (found?.lines || found?.explicit || []);
-  return [base, ...(Array.isArray(mods) ? mods : [])].map(stripMarkup).filter(Boolean).slice(0, 7);
+  const slot = found?.slot || found?.base_item?.slot || '';
+  const base = found?.base || found?.base_item?.display_name || '';
+  const implicit = found?.implicit_mods || found?.implicit || [];
+  const explicit = found?.explicit_mods || found?.lines || found?.explicit || [];
+  return cleanTooltipLines([[base, slot].filter(Boolean).join(' · '), ...arrify(implicit), ...arrify(explicit)]).slice(0, 9);
 }
+
+function arrify(value) { return Array.isArray(value) ? value : (value ? [value] : []); }
 
 function getAscendancyArtPath(ascendancy) {
   if (!ascendancy) return '';
@@ -167,20 +178,20 @@ function deriveBuildCardModel(snapshot) {
   const uniques = (snap.recommendedUniques || [])
     .map((entry) => typeof entry === 'string' ? entry : entry?.name)
     .filter(Boolean)
-    .slice(0, 3)
+    .slice(0, 2)
     .map((name) => item(name, { slotKey: 'UNIQUE', tipLines: getUniqueDescription(name) }));
 
   const passives = snap.passives && typeof snap.passives === 'object' ? snap.passives : {};
   const passiveIdeas = [
-    ...(passives.ascendancyNodes || []).slice(0, 2).map((entry) => item(entry?.name, {
+    ...(passives.ascendancyNodes || []).slice(0, 1).map((entry) => item(entry?.name, {
       prefix: 'Ascendancy',
       slotKey: 'ASCENDANCY_PASSIVE',
-      tipLines: [getPassiveDescription(entry)].filter(Boolean)
+      tipLines: ['Ascendancy Passive', ...getPassiveDescription(entry)]
     })),
     ...(passives.notables || []).slice(0, 3).map((entry) => item(entry?.name, {
       prefix: 'Notable',
       slotKey: 'NOTABLE',
-      tipLines: [getPassiveDescription(entry)].filter(Boolean)
+      tipLines: ['Notable Passive', ...getPassiveDescription(entry)]
     }))
   ].filter((entry) => entry.name);
 

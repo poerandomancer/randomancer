@@ -4,6 +4,7 @@ import { dataReady, ensureDataPreload } from './08-data-load.js';
 import { deriveWeaponFamilies, pickWeaponFamily } from './06-equipment.js';
 import { buildOffenseSnapshotFields, selectOffense } from './26-offense-roll.js';
 import { adaptRecommendationPackageV3ToSnapshot, selectRecommendationPackageV3, validateRecommendationCatalogV3 } from './30-recommendation-v3-selector.js';
+import { selectNonSkillRecommendations } from './31-non-skill-recommendation-selector.js';
 
 const randomItem = (items, random = Math.random) => items[Math.floor(random() * items.length)] || null;
 const cleanFate = (fate = {}) => ({ oaths: fate.oaths || [], abominations: fate.abominations || [] });
@@ -80,6 +81,7 @@ function drawBuild(dataWrap, { random = Math.random } = {}) {
   if (validation.ok) {
     const recommendation = selectRecommendationPackageV3(catalog, draw, { offenseInventory: data.OffenseInventory || {}, criticalProfiles: data.recommendationCriticalProfilesV3 || {}, selectionSeed: selectionSeed() });
     draw = { ...draw, ...adaptRecommendationPackageV3ToSnapshot(recommendation) };
+    draw = { ...draw, ...selectNonSkillRecommendations(catalog, draw, recommendation, { selectionSeed: recommendation.selectionSeed }) };
   } else {
     draw.recommendationError = validation.reason || 'Recommendation catalog is unavailable.';
   }
