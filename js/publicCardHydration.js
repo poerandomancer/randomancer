@@ -21,34 +21,9 @@ function validatePublicCardRecord(record) {
 }
 
 function hydrateSharedBuildCard(payload) {
-  const snapshot = isRecord(payload?.snapshot) ? payload.snapshot : null;
-  if (!snapshot) throw new Error('Shared build payload was invalid.');
-  return cloneJsonSafe({
-    snapshotVersion: Number(snapshot.snapshotVersion) || 1,
-    className: snapshot.className || '',
-    ascendancy: snapshot.ascendancy || '',
-    ascendancyId: snapshot.ascendancyId ?? null,
-    defense: snapshot.defense || '',
-    defStrat: snapshot.defStrat || '',
-    weapon: snapshot.weapon || '',
-    offhand: snapshot.offhand || '',
-    weapon2: snapshot.weapon2 || '',
-    offhand2: snapshot.offhand2 || '',
-    ailments: Array.isArray(snapshot.ailments) ? snapshot.ailments.join(' & ') : '',
-    tactics: Array.isArray(snapshot.tactics) ? snapshot.tactics.join(' & ') : '',
-    ailmentList: Array.isArray(snapshot.ailments) ? snapshot.ailments : [],
-    tacticList: Array.isArray(snapshot.tactics) ? snapshot.tactics : [],
-    buildName: snapshot.buildName || '',
-    flavor: snapshot.flavor || '',
-    attributes: snapshot.attributes || { strength: 0, dexterity: 0, intelligence: 0 },
-    recommendedSkills: Array.isArray(snapshot.recommendedSkills) ? snapshot.recommendedSkills : [],
-    recommendedSkills2: Array.isArray(snapshot.recommendedSkills2) ? snapshot.recommendedSkills2 : [],
-    synergySupports: Array.isArray(snapshot.synergySupports) ? snapshot.synergySupports : [],
-    synergySupports2: Array.isArray(snapshot.synergySupports2) ? snapshot.synergySupports2 : [],
-    recommendedPersistentBuff: snapshot.recommendedPersistentBuff || null,
-    recommendedUniques: Array.isArray(snapshot.recommendedUniques) ? snapshot.recommendedUniques : [],
-    passives: isRecord(snapshot.passives) ? snapshot.passives : null,
-  });
+  const draw = isRecord(payload?.snapshot) ? payload.snapshot : null;
+  if (!draw || draw.schema !== 'randomancer-draw-v1') throw new Error('Shared draw schema is unsupported.');
+  return cloneJsonSafe(draw);
 }
 
 function hydrateSharedChallengeCard(payload) {

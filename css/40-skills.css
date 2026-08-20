@@ -149,10 +149,6 @@ border-top: 1px dotted var(--gold);
   position: relative;
   z-index: 3;
 }
-/* === v0.6.4: Cohesion Slider + Skill Cards === */
-.cohesion-slider{ margin:0.45rem auto 0.1rem; width:min(640px,90%); text-align:center; color:var(--gold); }
-.cohesion-slider input[type=range]{ width:100%; appearance:none; height:6px; border-radius:6px; background:linear-gradient(90deg, rgba(212,170,80,0.4), rgba(212,170,80,0.9)); outline:none; cursor:pointer; box-shadow:0 0 6px rgba(212,170,80,0.3); }
-.cohesion-slider .mode-labels{ display:flex; justify-content:space-between; font-size:.9rem; opacity:.8; margin-top:.2rem; color:var(--muted); }
 
 /* Bind the Fates */
 .bind-fates-row{
@@ -666,8 +662,6 @@ input:checked
 }
 
 
-.cohesion-bar-wrapper[data-cohesion-constrained="true"] input[type=range]::-webkit-slider-thumb{ box-shadow:0 0 0 2px rgba(255,204,0,0.7), 0 0 12px rgba(255,204,0,0.55); }
-.cohesion-bar-wrapper[data-cohesion-constrained="true"] input[type=range]::-moz-range-thumb{ box-shadow:0 0 0 2px rgba(255,204,0,0.7), 0 0 12px rgba(255,204,0,0.55); }
 
 /* build name + subtext (rolled build banner) */
 #build-name{

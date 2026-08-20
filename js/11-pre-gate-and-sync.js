@@ -54,8 +54,8 @@ import { buildTagIDF } from './05-tags-and-scorer.js';
   function notifyRoll() {
     try {
       const App = window.App;
-      if (!App || !App.state || !App.state.currentRoll) return;
-      const snap = { ...App.state.currentRoll };
+      if (!App || !App.state || !App.state.currentDraw) return;
+      const snap = { ...App.state.currentDraw };
       rollListeners.forEach(fn => {
         try { fn(snap); } catch (e) {
           console.warn('[App.onRoll listener]', e);
@@ -80,14 +80,14 @@ import { buildTagIDF } from './05-tags-and-scorer.js';
 	  };
 	});
 
-  // State→DOM sync: keeps DOM in line with App.state.currentRoll (non-invasive)
+  // State→DOM sync: keeps DOM in line with App.state.currentDraw (non-invasive)
 	onDomReady(() => {
 	  const App = window.App;
 	  if (!App) return;
 	
 	  App.syncDOMFromState = function(){
 		try{
-		  const s = App.state.currentRoll;
+		  const s = App.state.currentDraw;
 		  const set = (sel, txt)=>{ const el = document.querySelector(sel); if(el && (typeof txt==='string')) el.textContent = txt; };
 		  set('#defense',  s.defense);
 		  set('#defstrat', s.defStrat);
@@ -133,8 +133,8 @@ import { buildTagIDF } from './05-tags-and-scorer.js';
 
     // Patch App.roll to include optional pre‑gate
     const prevRoll = App.roll || function(mode){
-      if (typeof window.rollBuild === 'function'){
-        try{ window.rollBuild(App.state?.DATA || window.DATA); }catch(e){}
+      if (typeof window.drawBuild === 'function'){
+        try{ window.drawBuild(App.state?.DATA || window.DATA); }catch(e){}
       } else {
         const btn = document.querySelector('#roll'); if (btn) btn.click();
       }
@@ -148,8 +148,8 @@ import { buildTagIDF } from './05-tags-and-scorer.js';
         while (attempts < maxPreAttempts){
           attempts++;
           // trigger a roll via legacy path
-          if (typeof window.rollBuild === 'function'){
-            try{ window.rollBuild(App.state?.DATA || window.DATA); }catch(e){}
+          if (typeof window.drawBuild === 'function'){
+            try{ window.drawBuild(App.state?.DATA || window.DATA); }catch(e){}
           } else {
             const btn = document.querySelector('#roll'); if (btn) btn.click();
           }
@@ -174,7 +174,7 @@ import { buildTagIDF } from './05-tags-and-scorer.js';
       }
 
       // capture → sync
-      try { App.captureCurrentRollFromDOM(); App.syncDOMFromState(); } catch {}
+      try { App.captureCurrentDrawFromDOM(); App.syncDOMFromState(); } catch {}
       try { if (window.scheduleSummaryRefresh) window.scheduleSummaryRefresh(); } catch {}
       
       // notify listeners that a roll has completed
@@ -235,7 +235,7 @@ import { buildTagIDF } from './05-tags-and-scorer.js';
         const orig = window.RulesEngine.snapshot;
         window.RulesEngine.snapshot = function(){
           try{
-            const s = App.state.currentRoll;
+            const s = App.state.currentDraw;
             return {
               defense:  (s && s.defense)  || '',
               defstrat: (s && s.defStrat) || '',

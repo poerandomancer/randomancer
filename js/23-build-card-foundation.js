@@ -140,9 +140,8 @@ function deriveBuildCardModel(snapshot) {
   const snap = snapshot && typeof snapshot === 'object' ? snapshot : null;
   if (!snap) return null;
 
-  const weapon1 = formatWeaponLine(snap.weapon, snap.offhand);
-  const weapon2 = snap.weapon2 || snap.offhand2 ? formatWeaponLine(snap.weapon2, snap.offhand2) : '';
-  const mechanics = [...(snap.ailmentList || []), ...(snap.tacticList || [])].filter(Boolean);
+  const weapon = snap.weaponFamily || snap.weapon || '';
+  const offense = (snap.offenseList || []).filter(Boolean);
 
   const skillItems = (entries, weaponSet) => (entries || []).slice(0, 2).map((entry, index) =>
     {
@@ -163,11 +162,7 @@ function deriveBuildCardModel(snapshot) {
       });
     }
   );
-  const hasSecondWeaponSet = Boolean((snap.recommendedSkills2 || []).length);
-  const skills = [
-    ...skillItems(snap.recommendedSkills, hasSecondWeaponSet ? 'Set I' : ''),
-    ...skillItems(snap.recommendedSkills2, 'Set II')
-  ];
+  const skills = skillItems(snap.recommendedSkills, '');
 
   const uniques = (snap.recommendedUniques || [])
     .map((entry) => typeof entry === 'string' ? entry : entry?.name)
@@ -196,10 +191,10 @@ function deriveBuildCardModel(snapshot) {
     artPath: getAscendancyArtPath(snap.ascendancy),
     frontRows: [
       { label: 'Ascendancy', values: snap.ascendancy ? [item(snap.ascendancy, { meta: snap.className || '' })] : [] },
-      { label: 'Weapons', values: [weapon1 ? item(weapon1, { prefix: 'Set I' }) : null, weapon2 ? item(weapon2, { prefix: 'Set II' }) : null].filter(Boolean) },
-      { label: 'Combat', values: mechanics.map((name) => item(name)) }
+      { label: 'Weapon', values: weapon ? [item(weapon)] : [] },
+      { label: 'Offense', values: offense.map((name) => item(name)) }
     ],
-    balance: normalizeBalance(snap.attributes || snap.rollAttr),
+    balance: normalizeBalance(snap.attributes),
     backSections: [
       { label: 'Skill Ideas', values: skills },
       { label: 'Unique Ideas', values: uniques },

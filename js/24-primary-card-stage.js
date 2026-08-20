@@ -33,7 +33,7 @@ function prefersReducedMotion() {
 }
 
 function getCurrentSnapshot() {
-  return window.App?.state?.currentRoll || window.CURRENT_ROLL || null;
+  return window.App?.state?.currentDraw || null;
 }
 
 function hasUsableBuild(snapshot) {
@@ -270,15 +270,15 @@ function installSnapshotBridge() {
   const App = window.App;
   if (!App || App.__primaryCardStageSnapshotBridgeInstalled) return false;
 
-  const originalMerge = typeof App.mergeCurrentRoll === 'function'
-    ? App.mergeCurrentRoll.bind(App)
+  const originalMerge = typeof App.mergeCurrentDraw === 'function'
+    ? App.mergeCurrentDraw.bind(App)
     : null;
-  const originalReplace = typeof App.replaceCurrentRoll === 'function'
-    ? App.replaceCurrentRoll.bind(App)
+  const originalReplace = typeof App.replaceCurrentDraw === 'function'
+    ? App.replaceCurrentDraw.bind(App)
     : null;
 
   if (originalMerge) {
-    App.mergeCurrentRoll = function mergeCurrentRollWithPrimaryCardSignal(partial) {
+    App.mergeCurrentDraw = function mergeCurrentDrawWithPrimaryCardSignal(partial) {
       const result = originalMerge(partial);
       emitSnapshotChanged(result, 'merge');
       return result;
@@ -286,7 +286,7 @@ function installSnapshotBridge() {
   }
 
   if (originalReplace) {
-    App.replaceCurrentRoll = function replaceCurrentRollWithPrimaryCardSignal(snapshot) {
+    App.replaceCurrentDraw = function replaceCurrentDrawWithPrimaryCardSignal(snapshot) {
       const result = originalReplace(snapshot);
       emitSnapshotChanged(result, 'replace');
       return result;
@@ -520,7 +520,7 @@ function install() {
     renderCurrentBuild({ animate: forceFront, forceFront, snapshot });
 
     // Build-code/saved-build restoration updates the hidden legacy save button
-    // immediately after replaceCurrentRoll(). Refresh one frame later so the
+    // immediately after replaceCurrentDraw(). Refresh one frame later so the
     // card star mirrors that canonical saved state as well.
     if (source === 'replace') {
       requestAnimationFrame(() => renderCurrentBuild({ animate: false, forceFront: true }));

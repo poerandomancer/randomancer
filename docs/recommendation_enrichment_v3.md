@@ -4,7 +4,7 @@
 
 Recommendation enrichment v3 is the semantic input contract for solution-oriented Build Ideas. It is additive during migration: the existing skill, passive, and unique datasets remain available to the current application, while the new recommendation catalog normalizes their mechanics into one vocabulary.
 
-Cohesion is deliberately outside this contract. Cohesion controls only randomized Fate selection. Recommendations always seek the most compatible and mechanically complete solution available.
+Affinity is deliberately outside this contract. Affinity controls only randomized Fate selection. Recommendations always seek the most compatible and mechanically complete solution available.
 
 ## Source precedence
 
@@ -41,31 +41,31 @@ The first slice:
 - excludes active skills without populated crafting metadata, item- or passive-granted skills, basic/default attack skills, and Spirit, persistent, or reservation-style active gems from Skill Ideas
 - treats `prevents` as a hard conflict for the matching Offense
 - excludes source-tagged Kalguuran gems from recommendation eligibility while retaining them in the catalog and Codex
-- ignores Cohesion entirely
+- ignores Affinity entirely
 - enumerates legal singleton and ordered two-skill packages before choosing either skill
 - scores package-wide direct coverage, carrier coverage, directed setup/payoff edges, prerequisite resolution, complementary roles, and unresolved costs
 - strongly prefers two skills when the second contributes typed Offense coverage or a real cross-skill relationship, but lets a singleton win instead of adding unrelated filler
 - permits parallel damage skills when they add real Offense coverage, while ranking explicit setup/payoff and enabler relationships above comparable parallel packages
-- samples complete packages from a narrow high-quality shortlist using a persisted per-roll seed, while suppressing an immediate primary repeat when an equivalent package exists
+- samples complete packages from a narrow high-quality shortlist using a persisted per-draw seed, while suppressing an immediate primary repeat when an equivalent package exists
 - writes the ordered primary-plus-supporting package through the existing canonical recommendation contract
 - evaluates support assignments only after the active package is chosen, with at most two supports per skill and one selected member from each support family across the whole package
-- attaches a normal support only when it resolves a rolled Offense or an explicit unresolved skill dependency; unused support positions remain empty
+- attaches a normal support only when it resolves a drawn Offense or an explicit unresolved skill dependency; unused support positions remain empty
 - displays each chosen support inline with the specific Build Card skill it modifies
 - records complementary defense, recovery, and package dependencies as unresolved instead of filling them with weak candidates
 
 Weapon delivery is intentionally stricter than technical equip legality. Skill Ideas use normal craftable active skill gems, not item-granted skills, passive-granted skills, default attacks, or Spirit/persistent reservation skills. Martial rolls require the skill's crafting metadata to identify the selected weapon family. Caster rolls for Staff, Wand, and Sceptre require a craftable spell from the Occult, Elemental, or Primal schools, with a narrow metadata exception for skills whose payload explicitly permits Spell support even when the active type list omits it. Weapon-agnostic Minion or Companion skills no longer cross the martial boundary by archetype alone; if a martial weapon can use Minions, that should come from a weapon-native skill and any required normal support bridge. If no direct fulfiller exists, a legal native damage carrier may be selected without claiming fulfillment. If no legal carrier exists either, the selector reports the obligation as unresolved.
 
 The selector also emits a final `diagnostics.offenseCoverage` entry for each
-rolled Offense after support assignment. This classifies what actually happened
+drawn Offense after support assignment. This classifies what actually happened
 to the selected package as `active_direct`, `support_assigned`, `carrier_only`,
 `support_route_unassigned`, `selected_unresolved`, or `no_primary`. The
-diagnostic is intentionally post-selection rather than a roll-time filter: it
+diagnostic is intentionally post-selection rather than a draw-time filter: it
 lets audits and future picker work distinguish a genuinely unsupported
 weapon/Offense pairing from a package that was made viable by a bridge support.
 
 That delivery rule identifies the primary damage position in every candidate package. A supporting skill is instead checked for explicit equipment and ascendancy access, so an otherwise unrestricted curse, mark, or spell can accompany a martial primary. Unrestricted access alone never earns a slot: the supporting skill must add hard Offense evidence or participate in a typed supply-to-require/consume relationship. Damage-type `has_property` and native-carrier evidence only count from a supporting skill when that skill is itself legal damage delivery; this prevents a passive aura or curse from masquerading as a second damage skill.
 
-The solver evaluates both relationship directions. A setup can supply a state or resource consumed by the primary, while the primary can establish a state consumed by a payoff. Generic `charge` evidence is deliberately too broad to bridge specific Power, Frenzy, or Endurance Charge costs. Package-wide direct Offense fulfillment outranks a superficially synergistic package that still leaves a rolled Offense unapplied.
+The solver evaluates both relationship directions. A setup can supply a state or resource consumed by the primary, while the primary can establish a state consumed by a payoff. Generic `charge` evidence is deliberately too broad to bridge specific Power, Frenzy, or Endurance Charge costs. Package-wide direct Offense fulfillment outranks a superficially synergistic package that still leaves a drawn Offense unapplied.
 
 The primary Build Card is authoritative during this migration. Legacy recommendation rendering may still compute its former result, but the v3 runtime adapter replaces the canonical skill ideas after Offense normalization only when v3 has selected a primary. The card preserves package order and labels contextual roles as Primary, Secondary, Setup, Payoff, or Enabler. An unresolved v3 result records diagnostics without erasing the existing recommendation.
 
@@ -114,7 +114,7 @@ Compatibility is represented separately from affinity and candidate ranking:
 - ascendancy exclusivity
 - equipment-slot occupation
 
-These are legality and package-cost facts. They are never relaxed by a low-cohesion Fate.
+These are legality and package-cost facts. They are never relaxed by a low-affinity Fate.
 
 `Totemable` is compatibility evidence only: it means a skill can be used by a totem-supporting system. It does not prove that the skill creates or is a totem. Only explicit structured evidence such as `SummonsTotem` or `SummonsAttackTotem` establishes that identity.
 
@@ -147,13 +147,13 @@ as unique or conditional idea sections, but they do not occupy active support
 recommendation slots. Every selected support must be necessary for at least one
 resolved target, and a family cannot be reused on another selected skill.
 Conflicts are applied after the full support set, so an enabler cannot silently
-remove an already-working rolled Offense route. Empty support positions are the
-correct result when no unresolved rolled Offense or explicit dependency is
+remove an already-working drawn Offense route. Empty support positions are the
+correct result when no unresolved drawn Offense or explicit dependency is
 improved.
 
 Some bridges are mutually exclusive on a single supported skill. `Electrocute`
 is the canonical example: it can let Lightning damage inflict Electrocute, but
-it also prevents the supported skill from Shocking. When two rolled Offenses
+it also prevents the supported skill from Shocking. When two drawn Offenses
 need conflicting support routes, the solver may select a second active skill as
 a separate support lane even if both skills expose the same potential carrier
 coverage. This keeps Shock and Electrocute recommendations honest instead of

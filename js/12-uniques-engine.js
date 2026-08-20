@@ -100,14 +100,9 @@ import { ensureMarketBadgeDelegation, hydrateMarketBadges, renderMarketBadgeMark
 	  // 1) Explicit snapshot (from App.onRoll or direct call)
 	  if (snap && typeof snap === 'object') return snap;
 	
-	  // 2) App.state.currentRoll (DOM-driven snapshot)
+	  // 2) App.state.currentDraw (DOM-driven snapshot)
 	  const App = window.App;
-	  if (App && App.state && App.state.currentRoll) return App.state.currentRoll;
-	
-	  // 3) Fallback to global CURRENT_ROLL if we’re using that
-	  if (window.CURRENT_ROLL && typeof window.CURRENT_ROLL === 'object') {
-		return window.CURRENT_ROLL;
-	  }
+	  if (App && App.state && App.state.currentDraw) return App.state.currentDraw;
 	
 	  return null;
 	}
@@ -628,8 +623,8 @@ function weaponSlotAllowed(it, slotAllow){
 	  if (r) s += Math.min(0.6, r * 0.2);
 	}
 
-    // Attribute leaning (very light; stronger at higher cohesion)
-    const th = (typeof window.cohesionThreshold === 'number') ? window.cohesionThreshold : 0.75;
+    // Attribute leaning (very light; stronger at higher affinity)
+    const th = (typeof window.baseSelectionWeight === 'number') ? window.baseSelectionWeight : 0.75;
     const attr = it?.meta?.attributes;
     const rollAttr = state?.rollAttr;
     if (attr && rollAttr){
@@ -753,7 +748,7 @@ function weaponSlotAllowed(it, slotAllow){
     if (ub) s += Math.min(0.45, ub);
 
     // Attribute leaning (very light; a nudge, not a driver)
-    const th = (typeof window.cohesionThreshold === 'number') ? window.cohesionThreshold : 0.75;
+    const th = (typeof window.baseSelectionWeight === 'number') ? window.baseSelectionWeight : 0.75;
     const attr = it?.meta?.attributes;
     const rollAttr = state?.rollAttr;
     if (attr && rollAttr){
@@ -1122,8 +1117,8 @@ function ensureUniqueSection(){
                 const picks = pickPasses(items, rolled, snap);
                 maybeLogUniqueTagDiagnostics(items, rolledSet);
 
-                if (window.App && typeof window.App.mergeCurrentRoll === 'function') {
-                  window.App.mergeCurrentRoll({ recommendedUniques: picks.map(p => p.name) });
+                if (window.App && typeof window.App.mergeCurrentDraw === 'function') {
+                  window.App.mergeCurrentDraw({ recommendedUniques: picks.map(p => p.name) });
                 }
                 if (typeof window.RandomancerUpdateBuildCodeUI === 'function') {
                   window.RandomancerUpdateBuildCodeUI();
@@ -1153,7 +1148,7 @@ function ensureUniqueSection(){
 		  const snap =
 			(snapOrRolledSet && typeof snapOrRolledSet === 'object')
 			  ? snapOrRolledSet
-			  : (window.App?.state?.currentRoll || window.CURRENT_ROLL || {});
+			  : (window.App?.state?.currentDraw || {});
 		  const rolled = rolledByCategory(snap || {});
 		  rolledSet = new Set([
 			...(rolled?.tactics || []),
