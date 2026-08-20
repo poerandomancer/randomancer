@@ -89,18 +89,6 @@ type ChallengeCardData = {
 type ParsedSharePageRoute = { kind: CardKind; slug: string };
 type ReactionType = "fire" | "cursed" | "big_brain" | "chaotic";
 type CardReactionCounts = Record<ReactionType, number>;
-type TrendingWindow = "week" | "month" | "all";
-type TrendingType = "both" | CardKind;
-type TrendingReaction = "all" | ReactionType;
-
-type TrendingCardItem = {
-  slug: string;
-  card_type: CardKind;
-  title: string;
-  subtitle: string;
-  shared_at: string;
-  reaction_counts: CardReactionCounts & { total: number };
-};
 type PngColor = [number, number, number, number];
 
 type TinyPngCanvas = {
@@ -177,7 +165,6 @@ export default {
       if (isApiRequest(url.pathname)) {
         if (request.method === "OPTIONS") return corsResponse(request);
         if (request.method === "POST" && url.pathname === "/api/cards/share") return withCors(request, await handleShare(request, env));
-        if (request.method === "GET" && url.pathname === "/api/cards/trending") return withCors(request, await handleTrending(url, env));
         const reactionMatch = matchCardReactionApiPath(url.pathname);
         if (reactionMatch && request.method === "GET") return withCors(request, await handleGetReactions(request, reactionMatch, env));
         if (reactionMatch && request.method === "POST") return withCors(request, await handlePostReactions(request, reactionMatch, env));
@@ -192,7 +179,6 @@ export default {
           service: "randomancer-card-share",
           routes: [
             "POST /api/cards/share",
-            "GET /api/cards/trending",
             "GET /api/cards/:slug",
             "GET /api/cards/:slug/reactions",
             "POST /api/cards/:slug/reactions",
@@ -373,33 +359,6 @@ async function handlePostReactions(request: Request, slug: string, env: Env): Pr
     slug,
     counts,
     viewer_reaction: viewerReaction,
-  }, 200, { "cache-control": "no-store" });
-}
-
-async function handleTrending(url: URL, env: Env): Promise<Response> {
-  const windowParam = parseTrendingWindow(url.searchParams.get("window"));
-  const typeParam = parseTrendingType(url.searchParams.get("type"));
-  const reactionParam = parseTrendingReaction(url.searchParams.get("reaction"));
-  const limitParam = parseTrendingLimit(url.searchParams.get("limit"));
-
-  if (!windowParam || !typeParam || !reactionParam) {
-    return json({ ok: false, error: "Invalid trending query params" }, 400);
-  }
-
-  const items = await getTrendingCards(env.DB, {
-    window: windowParam,
-    type: typeParam,
-    reaction: reactionParam,
-    limit: limitParam,
-  });
-
-  return json({
-    ok: true,
-    window: windowParam,
-    type: typeParam,
-    reaction: reactionParam,
-    limit: limitParam,
-    items,
   }, 200, { "cache-control": "no-store" });
 }
 
@@ -1789,125 +1748,6 @@ function parseReactionType(value: unknown): ReactionType | null {
   return REACTION_TYPES.find((reaction) => reaction === normalized) ?? null;
 }
 
-function parseTrendingWindow(value: string | null): TrendingWindow | null {
-  if (value == null || value.trim() === "") return "month";
-  const normalized = value.trim().toLowerCase();
-  return normalized === "week" || normalized === "month" || normalized === "all" ? normalized : null;
-}
-
-function parseTrendingType(value: string | null): TrendingType | null {
-  if (value == null || value.trim() === "") return "both";
-  const normalized = value.trim().toLowerCase();
-  return normalized === "both" || normalized === "build" || normalized === "challenge" ? (normalized as TrendingType) : null;
-}
-
-function parseTrendingReaction(value: string | null): TrendingReaction | null {
-  if (value == null || value.trim() === "") return "all";
-  const normalized = value.trim().toLowerCase();
-  if (normalized === "all") return "all";
-  return parseReactionType(normalized);
-}
-
-function parseTrendingLimit(value: string | null): number {
-  const parsed = Number(value);
-  if (!Number.isFinite(parsed)) return 10;
-  return Math.max(1, Math.min(50, Math.floor(parsed)));
-}
-
-function getTrendingWindowStartIso(window: TrendingWindow): string | null {
-  if (window === "all") return null;
-  const now = Date.now();
-  const deltaMs = window === "week" ? 7 * 24 * 60 * 60 * 1000 : 30 * 24 * 60 * 60 * 1000;
-  return new Date(now - deltaMs).toISOString();
-}
-
-function deriveTrendingSubtitle(row: { card_type: CardKind; card_data_json: string; preview_subtitle: string | null; preview_description: string | null; meta_description: string | null }): string {
-  const parsed = parseJson<Record<string, unknown>>(row.card_data_json);
-  const fromCardData = coerceString(parsed?.subtitle);
-  if (fromCardData) return fromCardData;
-  return coerceString(row.preview_subtitle) || coerceString(row.preview_description) || coerceString(row.meta_description);
-}
-
-async function getTrendingCards(db: D1Database, input: { window: TrendingWindow; type: TrendingType; reaction: TrendingReaction; limit: number }): Promise<TrendingCardItem[]> {
-  const sinceIso = getTrendingWindowStartIso(input.window);
-  const where: string[] = [];
-  const binds: Array<string | number | null> = [];
-
-  if (input.type !== "both") {
-    where.push(`pc.card_kind = ?${binds.length + 1}`);
-    binds.push(input.type);
-  }
-  if (sinceIso) {
-    where.push(`cr.created_at >= ?${binds.length + 1}`);
-    binds.push(sinceIso);
-  }
-  const whereClause = where.length ? `WHERE ${where.join(" AND ")}` : "";
-
-  const selectedExpr = input.reaction === "all"
-    ? "COUNT(*)"
-    : `SUM(CASE WHEN cr.reaction_type = '${input.reaction}' THEN 1 ELSE 0 END)`;
-  const havingExpr = input.reaction === "all"
-    ? "COUNT(*) > 0"
-    : `SUM(CASE WHEN cr.reaction_type = '${input.reaction}' THEN 1 ELSE 0 END) > 0`;
-  const orderClause = input.reaction === "all"
-    ? "ORDER BY total_reactions DESC, shared_at DESC"
-    : "ORDER BY selected_reactions DESC, total_reactions DESC, shared_at DESC";
-
-  const sql = `
-    SELECT
-      pc.slug,
-      pc.card_kind AS card_type,
-      COALESCE(pc.meta_title, pc.preview_title, 'Randomancer Shared Card') AS title,
-      pc.card_data_json,
-      pc.preview_subtitle,
-      pc.preview_description,
-      pc.meta_description,
-      pc.created_at AS shared_at,
-      SUM(CASE WHEN cr.reaction_type = 'fire' THEN 1 ELSE 0 END) AS fire,
-      SUM(CASE WHEN cr.reaction_type = 'cursed' THEN 1 ELSE 0 END) AS cursed,
-      SUM(CASE WHEN cr.reaction_type = 'big_brain' THEN 1 ELSE 0 END) AS big_brain,
-      SUM(CASE WHEN cr.reaction_type = 'chaotic' THEN 1 ELSE 0 END) AS chaotic,
-      COUNT(*) AS total_reactions,
-      ${selectedExpr} AS selected_reactions
-    FROM card_reactions cr
-    INNER JOIN public_cards pc ON pc.slug = cr.public_card_slug
-    ${whereClause}
-    GROUP BY pc.slug
-    HAVING ${havingExpr}
-    ${orderClause}
-    LIMIT ?${binds.length + 1}
-  `;
-
-  binds.push(input.limit);
-  const rows = await db.prepare(sql).bind(...binds).all<Record<string, unknown>>();
-  const results = Array.isArray(rows?.results) ? rows.results : [];
-
-  return results.map((row) => {
-    const counts = {
-      fire: Math.max(0, Number(row.fire) || 0),
-      cursed: Math.max(0, Number(row.cursed) || 0),
-      big_brain: Math.max(0, Number(row.big_brain) || 0),
-      chaotic: Math.max(0, Number(row.chaotic) || 0),
-    };
-    return {
-      slug: coerceString(row.slug),
-      card_type: (row.card_type === "challenge" ? "challenge" : "build") as CardKind,
-      title: coerceString(row.title) || "Randomancer Shared Card",
-      subtitle: deriveTrendingSubtitle({
-        card_type: (row.card_type === "challenge" ? "challenge" : "build") as CardKind,
-        card_data_json: coerceString(row.card_data_json),
-        preview_subtitle: coerceString(row.preview_subtitle) || null,
-        preview_description: coerceString(row.preview_description) || null,
-        meta_description: coerceString(row.meta_description) || null,
-      }),
-      shared_at: coerceString(row.shared_at),
-      reaction_counts: {
-        ...counts,
-        total: Math.max(0, Number(row.total_reactions) || 0),
-      },
-    };
-  }).filter((item) => item.slug);
-}
 
 function getReactorKeyFromHeader(request: Request): string | null {
   const raw = request.headers.get("x-randomancer-reactor-key");
