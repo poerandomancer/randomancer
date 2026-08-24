@@ -98,7 +98,6 @@ function createStage() {
   stage.setAttribute('aria-label', 'Randomized Build Card');
   stage.innerHTML = `
     <div class="primary-build-card-stage__inner">
-      <p class="primary-build-card-stage__quote" data-primary-card-quote></p>
       <div class="primary-build-card-stage__slot">
         <button id="roll" class="deck-draw-tab" type="button" aria-label="Draw Your Fate">
           <span class="roll-text">Draw Your Fate</span>
@@ -119,8 +118,12 @@ function getMount() {
   return document.getElementById(MOUNT_ID);
 }
 
-function getStageQuote() {
-  return createStage()?.querySelector('[data-primary-card-quote]') || null;
+function populateHeaderFlavor() {
+  const flavor = document.querySelector('[data-app-lede-flavor]');
+  if (flavor && !flavor.dataset.randomized) {
+    flavor.textContent = pickIntroLine();
+    flavor.dataset.randomized = 'true';
+  }
 }
 
 function renderDeck() {
@@ -140,11 +143,7 @@ function renderDeck() {
     </div>
   `;
 
-  const quote = getStageQuote();
-  if (quote) {
-    if (!quote.textContent.trim()) quote.textContent = pickIntroLine();
-    quote.hidden = false;
-  }
+  populateHeaderFlavor();
   requestAnimationFrame(updateStageMetrics);
 }
 
@@ -154,8 +153,6 @@ function renderCurrentChallenge(contract, { animate = false, suppressDeal = fals
   if (!stage || !mount || !isChallengeMode() || !contract?.tasks?.length) return;
   const hadResult = stage.dataset.cardState === 'result';
   stage.dataset.cardState = 'result';
-  const quote = getStageQuote();
-  if (quote) quote.hidden = true;
   const saved = window.RandomancerIsChallengeSaved?.(contract) === true;
   const actions = `<button type="button" class="icon-btn card-action-btn${saved ? ' is-active' : ''}" data-card-action="challenge-save" aria-label="${saved ? 'Saved' : 'Save'}" title="${saved ? 'Saved' : 'Save'}" ${saved ? 'data-saved="1"' : ''}><span aria-hidden="true">${saved ? '★' : '☆'}</span></button>`;
   mount.innerHTML = renderChallengeCard(deriveChallengeCardModel(contract), actions, '', { showShareStatus: false });
@@ -275,8 +272,6 @@ function renderCurrentBuild({ animate = false, forceFront = false, snapshot = nu
     : (mount.dataset.cardFace === BUILD_CARD_FACES.BACK ? BUILD_CARD_FACES.BACK : BUILD_CARD_FACES.FRONT);
 
   stage.dataset.cardState = 'result';
-  const quote = getStageQuote();
-  if (quote) quote.hidden = true;
 
   mount.classList.remove('is-dealing');
   mountBuildCardSnapshot(mount, current, {
@@ -531,6 +526,7 @@ function syncMode() {
 }
 
 function install() {
+  populateHeaderFlavor();
   createStage();
   installSnapshotBridge();
   installHeaderObserver();
