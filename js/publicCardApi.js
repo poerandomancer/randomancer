@@ -119,6 +119,4 @@ export {
   sharePublicCard,
   fetchPublicCardBySlug,
   getOrCreateReactorKey,
-  fetchCardReactions,
-  toggleCardReaction,
 };
