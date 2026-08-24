@@ -104,10 +104,10 @@ body[data-mode="build"] #rc-reveal-fog{
   min-height:44px;
   padding:.62rem 1.15rem;
   border:1px solid rgba(220,181,94,.72);
-  border-radius:999px 999px 14px 14px;
-  background:
-    radial-gradient(circle at 50% 0, rgba(255,225,153,.16), transparent 62%),
-    linear-gradient(180deg, rgba(35,30,22,.98), rgba(13,12,14,.96));
+  border-radius:12px;
+  overflow:hidden;
+  isolation:isolate;
+  background:rgba(16,13,12,.96);
   box-shadow:
     inset 0 1px 0 rgba(255,240,204,.16),
     0 0 0 2px rgba(9,8,10,.72),
@@ -125,6 +125,35 @@ body[data-mode="build"] #rc-reveal-fog{
   white-space:nowrap;
   transition:border-color 160ms ease, box-shadow 160ms ease, color 160ms ease, transform 160ms ease;
 }
+.deck-draw-tab::before{
+  content:"";
+  position:absolute;
+  top:-180%;
+  right:35%;
+  bottom:-180%;
+  left:35%;
+  z-index:0;
+  background:url('/images/card-texture-front.png') center/cover no-repeat;
+  opacity:.76;
+  transform:rotate(90deg);
+  pointer-events:none;
+}
+.deck-draw-tab::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  border-radius:inherit;
+  background:
+    radial-gradient(circle at 50% 0, rgba(255,225,153,.14), transparent 62%),
+    linear-gradient(180deg, rgba(35,24,16,.2), rgba(8,7,8,.42));
+  pointer-events:none;
+}
+.deck-draw-tab .roll-text,
+.deck-draw-tab .roll-status{
+  position:relative;
+  z-index:2;
+}
 .deck-draw-tab:hover{
   border-color:rgba(241,207,126,.94);
   color:#f0d694;
@@ -139,12 +168,6 @@ body[data-mode="build"] #rc-reveal-fog{
 .deck-draw-tab.is-loading{
   cursor:wait;
   opacity:.82;
-}
-.deck-draw-tab__icon{
-  width:18px;
-  height:18px;
-  object-fit:contain;
-  filter:drop-shadow(0 0 3px rgba(212,168,76,.48));
 }
 .deck-draw-tab .roll-status{
   max-width:0;
