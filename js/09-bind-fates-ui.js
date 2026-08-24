@@ -1,6 +1,7 @@
 import { getBindFatesFromApp } from './04-app-state.js';
 import { ensureDataPreload } from './08-data-load.js';
 import { loadChallengeLibrary } from './15-challenge-engine.js';
+import { resolveRollableOffenseElements } from './26-offense-roll.js';
 
 const BIND_FATES_STORAGE_KEY = 'randomancer_bind_fates_v1';
 const CHALLENGE_FATES_STORAGE_KEY = 'randomancer_challenge_fates_v1';
@@ -101,7 +102,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const standardSections = {
     ascendancy: { listEl: document.getElementById('bind-fates-list-ascendancy'), heading: 'Ascendancy', hint: 'Swear Oaths to favored ascendancies, or name Abominations that fate will never grant.' },
     weapon: { listEl: document.getElementById('bind-fates-list-weapon'), heading: 'Weapon', hint: 'Bind yourself to chosen arms, or curse weapons you will never wield.' },
-    combat: { listEl: document.getElementById('bind-fates-list-combat'), heading: 'Combat Mechanics', hint: 'Favor certain ailments or tactics, or name those that are forbidden.' }
+    combat: { listEl: document.getElementById('bind-fates-list-combat'), heading: 'Combat Mechanics', hint: 'Favor Offense concepts, or name those that are forbidden.' }
   };
 
   const challengeSections = {
@@ -196,9 +197,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
       return (data.DefensiveStrategies || []).map((strategy) => strategy?.name).filter(Boolean);
     }
     if (category === 'combat') {
-      const ail = (data.Ailments || []).map((a) => ({ name: a.name, kind: 'ailment' }));
-      const tac = (data.Tactics || []).map((t) => ({ name: t.name, kind: 'tactic' }));
-      return [...ail, ...tac];
+      return resolveRollableOffenseElements(data).map((entry) => ({
+        name: entry.id,
+        label: entry.name,
+        kind: 'offense'
+      }));
     }
     return [];
   };
