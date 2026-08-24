@@ -30,8 +30,7 @@
 .roll-btn { min-height: 44px; display: inline-flex; align-items: center; gap: .5rem; }
 .roll-btn .btn-ico{ width:18px; height:18px; display:inline-block; object-fit:contain; filter: drop-shadow(0 0 2px rgba(0,0,0,.6)); }
 .roll-sticky { position: sticky; bottom: 16px; z-index: 50; display:flex; justify-content:center; align-items:center; gap:.5rem; pointer-events:none; }
-.roll-sticky .roll-btn,
-.roll-sticky .resume-roll-btn { pointer-events:auto; }
+.roll-sticky .roll-btn { pointer-events:auto; }
 .roll-sticky .roll-btn { border-radius: 999px; padding: 10px 16px; }
 @supports (padding: max(0px)) {
   .roll-sticky { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
@@ -97,18 +96,3 @@ img, video { max-width: 100%; height: auto; }
   margin: var(--section-gap) 0;
 }
 #uniques-section.sect { margin-top: 0; }
-
-/* ================================
-   Roll + Resume alignment (mobile overrides)
-================================== */
-
-@media (max-width: 960px){
-  .roll-sticky{ gap: 0 !important; }
-}
-
-@media (max-width: 520px){
-  :root{
-    --resume-btn-size: 28px;
-    --resume-btn-gap: 8px;
-  }
-}

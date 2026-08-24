@@ -781,33 +781,6 @@ function renderSnapshotToDom(snap){
     try { return JSON.parse(JSON.stringify(value)); } catch { return null; }
   }
 
-  function clearBuildResultsToEmpty(){
-    const appEl = document.getElementById('app');
-    if (appEl) appEl.dataset.hasRoll = 'false';
-    const ascArt = document.getElementById('asc-art');
-    if (ascArt) {
-      ascArt.classList.remove('show');
-      ascArt.style.removeProperty('--asc-img');
-      delete ascArt.dataset.ascPath;
-    }
-    const ids = [
-      'class','ascendancy','weapons','weapons-set2','defense','defstrat','ailments','tactics','build-name','build-subtext',
-      'balance-bar','balance-text'
-    ];
-    ids.forEach(id => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      if (id === 'balance-bar') {
-        el.style.removeProperty('width');
-      } else {
-        el.textContent = '';
-      }
-    });
-    const ws2 = document.getElementById('weapons-set2');
-    if (ws2) ws2.hidden = true;
-    if (window.App?.state) window.App.state.currentDraw = null;
-  }
-
   async function openSharedCardBySlug(slug){
     const safeSlug = String(slug || '').trim().toLowerCase();
     const slugPattern = /^b-[a-z0-9]{8}$/i;
@@ -926,7 +899,6 @@ function renderSnapshotToDom(snap){
     renderSnapshotToDom(canonical);
     return true;
   };
-  window.RandomancerClearBuildResults = clearBuildResultsToEmpty;
   window.RandomancerOpenSharedCardBySlug = (slug) => openSharedCardBySlug(slug);
   window.RandomancerUpdateBuildCodeUI = () => {
     const snap = currentSnap();
