@@ -58,6 +58,10 @@ body[data-mode="build"] #rc-reveal-fog{
   padding:22px 0 30px;
 }
 
+.primary-build-card-stage[data-card-state="empty"] .primary-build-card-stage__inner{
+  gap:2.25rem;
+}
+
 .primary-build-card-stage__quote{
   max-width:38rem;
   margin:0 auto .2rem;
@@ -113,7 +117,7 @@ body[data-mode="build"] #rc-reveal-fog{
   letter-spacing:.045em;
   text-shadow:0 1px 8px rgba(220,179,84,.3);
   cursor:pointer;
-  transform:translate(-50%,-56%);
+  transform:translate(-50%,-84%);
   display:inline-flex;
   align-items:center;
   justify-content:center;
@@ -125,7 +129,7 @@ body[data-mode="build"] #rc-reveal-fog{
   border-color:rgba(241,207,126,.94);
   color:#f0d694;
   box-shadow:inset 0 1px 0 rgba(255,240,204,.2),0 0 0 2px rgba(9,8,10,.72),0 6px 24px rgba(212,168,76,.38);
-  transform:translate(-50%,-60%);
+  transform:translate(-50%,-88%);
 }
 .deck-draw-tab:focus-visible{
   outline:2px solid rgba(238,202,115,.96);
