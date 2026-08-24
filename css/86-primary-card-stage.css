@@ -28,10 +28,6 @@ body[data-mode="build"] #passives-panel{
   display:none !important;
 }
 
-/* The selected ascendancy now belongs to the card itself rather than being
-   repeated as a viewport background. The old element stays available to legacy
-   code and non-Build modes. */
-body[data-mode="build"] #asc-art,
 body[data-mode="build"] #rc-reveal-fog{
   display:none !important;
 }

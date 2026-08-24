@@ -57,8 +57,6 @@ img, video { max-width: 100%; height: auto; }
     background-size: cover;
     background-repeat: no-repeat;
 
-    /* 3) Apply the blur directly to the art so it doesn't flicker */
-    filter: blur(3px) saturate(.9) brightness(1.05);
     opacity: 0;           /* keep the fade-in behavior */
     pointer-events: none;
     transition: opacity var(--asc-fade-ms) ease;

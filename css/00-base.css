@@ -76,13 +76,9 @@ body[data-mode="challenge"]{
   position:fixed; inset:0; opacity:0; pointer-events:none;
   --asc-fade-ms: 1100ms;
   transition:opacity var(--asc-fade-ms) ease;
-  background-image:
-    linear-gradient(135deg, rgba(0,0,0,0.25), rgba(0,0,0,0.6)),
-    var(--asc-img);
-  background-position:center; background-size:cover; background-repeat:no-repeat;
+  overflow:hidden;
 }
-.asc-art::after{
-  content:"";
+.asc-art__layer{
   position:absolute;
   inset:0;
   pointer-events:none;
@@ -90,12 +86,13 @@ body[data-mode="challenge"]{
   transition:opacity var(--asc-fade-ms) ease;
   background-image:
     linear-gradient(135deg, rgba(0,0,0,0.25), rgba(0,0,0,0.6)),
-    var(--asc-next-img);
+    var(--asc-layer-img);
   background-position:center;
   background-size:cover;
   background-repeat:no-repeat;
+  will-change:opacity;
 }
-.asc-art.is-crossfading::after{ opacity: .92; }
+.asc-art__layer.is-visible{ opacity:1; }
 .asc-art.show{ opacity:.92; }
 
 body.challenge-mode .asc-art,
@@ -234,6 +231,7 @@ body[data-mode="challenge"] #app::after{
 @media (prefers-reduced-motion: reduce){
   .mode-transition{ transition: none; }
   .asc-art,
+  .asc-art__layer,
   #app,
   #app::after,
   .mode-toggle,
