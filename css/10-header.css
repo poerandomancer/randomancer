@@ -82,14 +82,14 @@ header{
   color:var(--gold);
 }
 
-.patch-indicator{
+.header-socials{
   position:absolute;
   top:1.1rem;
   left: max(1.25rem, env(safe-area-inset-left));
-  padding:0.2rem 0.8rem;
-  font-size:0.75rem;
-  letter-spacing:0.09em;
-  text-transform:uppercase;
+  display:flex;
+  align-items:center;
+  gap:0.45rem;
+  padding:0.35rem 0.55rem;
   color:var(--muted);
   border-radius:999px;
   border:1px solid rgba(200,168,107,.45);
@@ -97,29 +97,21 @@ header{
     radial-gradient(circle at 30% 0%, rgba(255,240,210,0.16), transparent 65%),
     linear-gradient(to right, rgba(8,8,9,0.96), rgba(24,20,14,0.94));
   box-shadow:0 0 6px rgba(0,0,0,.7);
-  white-space:nowrap;
 }
 
-.patch-indicator strong{
-  color:var(--gold);
-  font-weight:600;
-}
-
-.patch-indicator__social-link{
+.header-socials__link{
   display:inline-flex;
   align-items:center;
   color:var(--muted);
   text-decoration:none;
-  vertical-align:middle;
-  margin-left:0.2rem;
 }
 
-.patch-indicator__social-link:hover,
-.patch-indicator__social-link:focus-visible{
+.header-socials__link:hover,
+.header-socials__link:focus-visible{
   color:var(--gold);
 }
 
-.patch-indicator__social-icon{
+.header-socials__icon{
   width:0.95rem;
   height:0.95rem;
   fill:currentColor;
@@ -131,12 +123,9 @@ strong, b { font-weight: 600; }
 
 
 @media (max-width: 600px){
-  .patch-indicator{
-    font-size:0.7rem;
+  .header-socials{
     top:0.9rem;
     left:max(0.75rem, env(safe-area-inset-left));
-    transform:none;
-    text-align:left;
   }
 }
 

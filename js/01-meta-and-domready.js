@@ -55,13 +55,6 @@ function onDomReady(fn) {
   }
 }
 
-onDomReady(() => {
-  const el = document.querySelector('.version');
-  if (el) {
-    el.textContent = `Randomancer v${APP_VERSION}`;
-  }
-});
-
 function formatWeaponLine(weapon, offhand){
   const w = (weapon || '').trim();
   const o = (offhand || '').trim();
