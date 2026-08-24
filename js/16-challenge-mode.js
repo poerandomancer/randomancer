@@ -11,7 +11,7 @@ const MODES = {
 };
 let challengeHasRoll = false;
 
-const STANDARD_LEDE_HTML = 'Use <strong>Bind the Fates</strong> to favor or ban certain options. Each draw chooses a weapon and one or two Offense concepts.';
+const STANDARD_LEDE_HTML = '<strong>Draw Your Fate</strong> to randomly select an ascendancy, weapon, and one or two offense concepts. <strong>Flip the Card</strong> to reveal build ideas and suggestions. <strong>Bind the Fates</strong> to favor or ban certain options.';
 const CHALLENGE_LEDE_TEXT = '<strong>Challenge Mode</strong> draws three compatible Challenge cards: one anchor and two twists. Use <strong>Bind the Fates</strong> to favor or ban certain options.';
 const CODEX_LEDE_TEXT = '<strong>Codex Mode</strong> is a non-random library for browsing Path of Exile 2 data. Explore <strong>Ascendancy</strong>, <strong>Skills</strong>, <strong>Passives</strong>, and <strong>Gear</strong> with search and tags. <strong>Pin</strong> entries to create a poe.ninja filter to view endgame builds.<br><strong>---</strong><br>Select an entry to inspect full details.';
 
@@ -650,19 +650,20 @@ function initChallengeInlineTooltips() {
 
 function stabilizeLedeHeight() {
   const lede = document.getElementById('app-lede');
-  if (!lede) return;
+  const instructions = lede?.querySelector('[data-app-lede-instructions]');
+  if (!lede || !instructions) return;
 
-  const previous = lede.innerHTML;
+  const previous = instructions.innerHTML;
   const previousMinHeight = lede.style.minHeight;
   lede.style.minHeight = '';
 
-  lede.innerHTML = STANDARD_LEDE_HTML;
+  instructions.innerHTML = STANDARD_LEDE_HTML;
   const standardHeight = lede.offsetHeight;
 
-  lede.innerHTML = CHALLENGE_LEDE_TEXT;
+  instructions.innerHTML = CHALLENGE_LEDE_TEXT;
   const challengeHeight = lede.offsetHeight;
 
-  lede.innerHTML = previous;
+  instructions.innerHTML = previous;
   const targetHeight = Math.max(standardHeight, challengeHeight);
   lede.style.minHeight = `${targetHeight}px`;
 
@@ -735,10 +736,11 @@ function setChallengeVisibility(mode) {
 
 function setHeaderLede(mode) {
   const lede = document.getElementById('app-lede');
-  if (!lede) return;
-  if (mode === MODES.CHALLENGE) lede.innerHTML = CHALLENGE_LEDE_TEXT;
-  else if (mode === MODES.CODEX) lede.innerHTML = CODEX_LEDE_TEXT;
-  else lede.innerHTML = STANDARD_LEDE_HTML;
+  const instructions = lede?.querySelector('[data-app-lede-instructions]');
+  if (!instructions) return;
+  if (mode === MODES.CHALLENGE) instructions.innerHTML = CHALLENGE_LEDE_TEXT;
+  else if (mode === MODES.CODEX) instructions.innerHTML = CODEX_LEDE_TEXT;
+  else instructions.innerHTML = STANDARD_LEDE_HTML;
 }
 
 function setChallengePanels(mode) {

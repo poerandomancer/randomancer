@@ -45,7 +45,7 @@ body[data-mode="build"] #rc-reveal-fog{
   --card-flip-ease:cubic-bezier(.24,.72,.22,1);
   position:relative;
   min-height:var(--primary-card-stage-space);
-  margin-top:4px;
+  margin-top:20px;
 }
 
 .primary-build-card-stage__inner{
@@ -54,33 +54,12 @@ body[data-mode="build"] #rc-reveal-fog{
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:1rem;
-  padding:22px 0 30px;
+  gap:0;
+  padding:12px 0 30px;
 }
 
 .primary-build-card-stage[data-card-state="empty"] .primary-build-card-stage__inner{
-  gap:2.25rem;
-}
-
-.primary-build-card-stage[data-card-state="result"]{
-  margin-top:20px;
-}
-
-.primary-build-card-stage__quote{
-  max-width:38rem;
-  margin:0 auto .2rem;
-  padding:0 1rem;
-  color:rgba(236,227,214,.68);
-  font-family:'Cormorant Infant','Cormorant Garamond',serif;
-  font-size:clamp(1.02rem,2vw,1.28rem);
-  font-style:italic;
-  line-height:1.45;
-  text-align:center;
-  text-shadow:0 2px 14px rgba(0,0,0,.28);
-}
-
-.primary-build-card-stage[data-card-state="result"] .primary-build-card-stage__quote{
-  display:none;
+  gap:0;
 }
 
 /* Keep the card at a readable physical size. The stage may extend below the
@@ -121,7 +100,7 @@ body[data-mode="build"] #rc-reveal-fog{
   letter-spacing:.045em;
   text-shadow:0 1px 8px rgba(220,179,84,.3);
   cursor:pointer;
-  transform:translate(-50%,-84%);
+  transform:translate(-50%,-72%);
   display:inline-flex;
   align-items:center;
   justify-content:center;
@@ -133,7 +112,7 @@ body[data-mode="build"] #rc-reveal-fog{
   border-color:rgba(241,207,126,.94);
   color:#f0d694;
   box-shadow:inset 0 1px 0 rgba(255,240,204,.2),0 0 0 2px rgba(9,8,10,.72),0 6px 24px rgba(212,168,76,.38);
-  transform:translate(-50%,-88%);
+  transform:translate(-50%,-76%);
 }
 .deck-draw-tab:focus-visible{
   outline:2px solid rgba(238,202,115,.96);

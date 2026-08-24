@@ -181,6 +181,13 @@ strong, b { font-weight: 600; }
   text-align:center;
 }
 .app-lede strong{ color:var(--gold); font-weight:600; }
+.app-lede p{ margin:0; }
+.app-lede__flavor{
+  padding-top:.35rem;
+  font-family:'Cormorant Infant','Cormorant Garamond',serif;
+  font-size:1.08rem;
+  font-style:italic;
+}
 
 .results-stage{
   position:relative;
