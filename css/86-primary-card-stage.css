@@ -45,7 +45,7 @@ body[data-mode="build"] #rc-reveal-fog{
   --card-flip-ease:cubic-bezier(.24,.72,.22,1);
   position:relative;
   min-height:var(--primary-card-stage-space);
-  margin-top:4px;
+  margin-top:20px;
 }
 
 .primary-build-card-stage__inner{
@@ -60,10 +60,6 @@ body[data-mode="build"] #rc-reveal-fog{
 
 .primary-build-card-stage[data-card-state="empty"] .primary-build-card-stage__inner{
   gap:0;
-}
-
-.primary-build-card-stage[data-card-state="result"]{
-  margin-top:20px;
 }
 
 /* Keep the card at a readable physical size. The stage may extend below the
