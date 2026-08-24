@@ -56,9 +56,9 @@ function onDomReady(fn) {
 }
 
 onDomReady(() => {
-  const el = document.querySelector('.version');
+  const el = document.querySelector('.supported-patch');
   if (el) {
-    el.textContent = `Randomancer v${APP_VERSION}`;
+    el.textContent = `Supports POE2 · v${SUPPORT.poe2Patch} · ${SUPPORT.league.name}`;
   }
 });
 
