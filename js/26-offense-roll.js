@@ -13,6 +13,10 @@ function resolveOffenseElements(data = window.DATA || {}) {
   return (Array.isArray(data.Offense) ? data.Offense : data.OffenseInventory?.elements || []).filter(Boolean);
 }
 
+function resolveRollableOffenseElements(data = window.DATA || {}) {
+  return resolveOffenseElements(data).filter(isRollableOffense);
+}
+
 function resolveOffenseEntry(data, raw) {
   const needle = String(raw?.id || raw?.name || raw || '').trim().toLowerCase();
   return resolveOffenseElements(data).find((entry) => offenseNames(entry).some((name) => name.toLowerCase() === needle)) || null;
@@ -26,7 +30,7 @@ function matches(entry, values) {
 function selectOffense({ data = window.DATA || {}, bindFates = {}, count, random = Math.random } = {}) {
   const target = normalizeOffenseCount(count, random);
   const fate = bindFates.combat || {};
-  const allowed = resolveOffenseElements(data).filter((entry) => isRollableOffense(entry) && !matches(entry, fate.abominations));
+  const allowed = resolveRollableOffenseElements(data).filter((entry) => !matches(entry, fate.abominations));
   const preferred = allowed.filter((entry) => matches(entry, fate.oaths));
   const picks = [];
   const take = (source) => {
@@ -52,4 +56,4 @@ function buildOffenseSnapshotFields(picks = []) {
   };
 }
 
-export { OFFENSE_CATEGORY_ARCHETYPE, MIN_OFFENSE_COUNT, MAX_OFFENSE_COUNT, randomOffenseCount, normalizeOffenseCount, resolveOffenseElements, resolveOffenseEntry, isArchetype, isRollableOffense, selectOffense, buildOffenseSnapshotFields };
+export { OFFENSE_CATEGORY_ARCHETYPE, MIN_OFFENSE_COUNT, MAX_OFFENSE_COUNT, randomOffenseCount, normalizeOffenseCount, resolveOffenseElements, resolveRollableOffenseElements, resolveOffenseEntry, isArchetype, isRollableOffense, selectOffense, buildOffenseSnapshotFields };

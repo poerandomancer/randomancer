@@ -23,6 +23,17 @@ test('Critical Hits is excluded from standard draws', () => {
   assert.equal(offense.isRollableOffense({ id: 'critical_hits', name: 'Critical Hits' }), false);
 });
 
+test('Bind the Fates combat options use every rollable Offense ID and no others', async () => {
+  const uiSource = await readFile(new URL('../js/09-bind-fates-ui.js', import.meta.url), 'utf8');
+  assert.match(uiSource, /resolveRollableOffenseElements\(data\)\.map\(\(entry\) => \(\{[\s\S]*?name: entry\.id,[\s\S]*?label: entry\.name,[\s\S]*?kind: 'offense'/);
+  assert.doesNotMatch(uiSource, /data\.(?:Ailments|Tactics)/);
+
+  const expectedIds = inventory.elements.filter(offense.isRollableOffense).map((entry) => entry.id);
+  const bindFatesIds = offense.resolveRollableOffenseElements({ OffenseInventory: inventory }).map((entry) => entry.id);
+  assert.deepEqual(bindFatesIds, expectedIds);
+  assert.ok(!bindFatesIds.includes('critical_hits'));
+});
+
 test('a draw cannot contain two Archetypes', () => {
   const result = offense.selectOffense({ data: { Offense: [{ id: 'a', name: 'A', category: 'Archetype' }, { id: 'b', name: 'B', category: 'Archetype' }, { id: 'c', name: 'C' }] }, count: 2, random: () => 0 });
   assert.equal(result.picks.filter(offense.isArchetype).length, 1);
@@ -30,8 +41,20 @@ test('a draw cannot contain two Archetypes', () => {
 
 test('Bind the Fates favors and bans canonical Offense', () => {
   const data = { Offense: [{ id: 'fire', name: 'Fire' }, { id: 'cold', name: 'Cold' }] };
-  const result = offense.selectOffense({ data, count: 1, bindFates: { combat: { oaths: ['Cold'], abominations: ['Fire'] } }, random: () => 0 });
+  const result = offense.selectOffense({ data, count: 1, bindFates: { combat: { oaths: ['cold'], abominations: ['fire'] } }, random: () => 0 });
   assert.equal(result.picks[0].name, 'Cold');
+});
+
+test('obsolete Bind the Fates mechanic IDs are ignored safely', () => {
+  const data = { Offense: [{ id: 'fire', name: 'Fire' }, { id: 'cold', name: 'Cold' }] };
+  const result = offense.selectOffense({
+    data,
+    count: 1,
+    bindFates: { combat: { oaths: ['thorns'], abominations: ['culling_strike', 'slow_maim_hinder'] } },
+    random: () => 0
+  });
+  assert.equal(result.error, null);
+  assert.equal(result.picks[0].id, 'fire');
 });
 
 test('weapon-family derivation collapses handed variants', () => {
