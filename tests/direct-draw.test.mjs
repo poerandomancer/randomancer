@@ -13,10 +13,15 @@ const modeSource = await readFile(new URL('../js/16-challenge-mode.js', import.m
 const primaryStageSource = await readFile(new URL('../js/24-primary-card-stage.js', import.meta.url), 'utf8');
 const controlsCss = await readFile(new URL('../css/20-controls.css', import.meta.url), 'utf8');
 
-test('canonical Offense draw contains one or two concepts', () => {
-  const one = offense.selectOffense({ data: { OffenseInventory: inventory }, count: 1, random: () => 0 });
-  const two = offense.selectOffense({ data: { OffenseInventory: inventory }, count: 2, random: () => 0 });
-  assert.equal(one.picks.length, 1); assert.equal(two.picks.length, 2);
+test('canonical Offense draw always contains exactly one concept', () => {
+  for (let index = 0; index < 100; index += 1) {
+    const result = offense.selectOffense({ data: { OffenseInventory: inventory }, random: () => index / 100 });
+    assert.equal(result.error, null);
+    assert.equal(result.picks.length, 1);
+    const snapshot = offense.buildOffenseSnapshotFields(result.picks);
+    assert.equal(snapshot.offenseList.length, 1);
+    assert.equal(snapshot.offenseSet.length, 1);
+  }
 });
 
 test('Critical Hits is excluded from standard draws', () => {
@@ -34,15 +39,22 @@ test('Bind the Fates combat options use every rollable Offense ID and no others'
   assert.ok(!bindFatesIds.includes('critical_hits'));
 });
 
-test('a draw cannot contain two Archetypes', () => {
-  const result = offense.selectOffense({ data: { Offense: [{ id: 'a', name: 'A', category: 'Archetype' }, { id: 'b', name: 'B', category: 'Archetype' }, { id: 'c', name: 'C' }] }, count: 2, random: () => 0 });
-  assert.equal(result.picks.filter(offense.isArchetype).length, 1);
+test('a requested legacy count cannot produce multiple Offense concepts', () => {
+  const result = offense.selectOffense({ data: { Offense: [{ id: 'a', name: 'A' }, { id: 'b', name: 'B' }] }, count: 2, random: () => 0 });
+  assert.deepEqual(result.picks.map((entry) => entry.id), ['a']);
 });
 
 test('Bind the Fates favors and bans canonical Offense', () => {
   const data = { Offense: [{ id: 'fire', name: 'Fire' }, { id: 'cold', name: 'Cold' }] };
   const result = offense.selectOffense({ data, count: 1, bindFates: { combat: { oaths: ['cold'], abominations: ['fire'] } }, random: () => 0 });
   assert.equal(result.picks[0].name, 'Cold');
+});
+
+test('Bind the Fates Abominations can make a single Offense draw impossible', () => {
+  const data = { Offense: [{ id: 'fire', name: 'Fire' }] };
+  const result = offense.selectOffense({ data, bindFates: { combat: { abominations: ['fire'] } }, random: () => 0 });
+  assert.deepEqual(result.picks, []);
+  assert.match(result.error, /No valid Offense concept/);
 });
 
 test('obsolete Bind the Fates mechanic IDs are ignored safely', () => {
