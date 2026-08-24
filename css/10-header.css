@@ -118,6 +118,14 @@ header{
   display:block;
 }
 
+.header-socials__icon--heart{
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
 /* Soften bold weight across the UI (avoids chunky/synthetic 700 weight in some browsers) */
 strong, b { font-weight: 600; }
 
