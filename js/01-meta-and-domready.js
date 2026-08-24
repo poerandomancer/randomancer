@@ -55,6 +55,13 @@ function onDomReady(fn) {
   }
 }
 
+onDomReady(() => {
+  const el = document.querySelector('.supported-patch');
+  if (el) {
+    el.textContent = `Supports POE2 · v${SUPPORT.poe2Patch} · ${SUPPORT.league.name}`;
+  }
+});
+
 function formatWeaponLine(weapon, offhand){
   const w = (weapon || '').trim();
   const o = (offhand || '').trim();
