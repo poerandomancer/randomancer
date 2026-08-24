@@ -17,6 +17,15 @@ test('new build flavor prefers the selected ascendancy pool', () => {
   assert.notEqual(flavor, 'A fate drawn from one weapon family and the Offense it must carry.');
 });
 
+test('ascendancy names embedded in a tagline are excluded from card flavor', () => {
+  const flavor = selectBuildFlavor(manifest, {
+    className: 'Monk', ascendancy: 'Acolyte of Chayula', random: () => 0
+  });
+
+  assert.equal(flavor, 'Reality frays at the edges; you pull on the loose threads.');
+  assert.doesNotMatch(flavor, /Chayula|Acolyte|Monk/i);
+});
+
 test('ascendancy taglines remove identity labels before reaching the card', () => {
   const taggedManifest = {
     ascendancy_flavor: { Witch: { Lich: ['Lich: The dead keep excellent counsel.'] } },
@@ -30,12 +39,14 @@ test('ascendancy taglines remove identity labels before reaching the card', () =
   );
   assert.equal(
     selectBuildFlavor(taggedManifest, { className: 'Witch', ascendancy: 'Unknown', random: () => 0 }),
-    'A forbidden fallback.'
+    GENERIC_BUILD_FLAVOR
   );
 });
 
-test('build flavor falls back to class base without using lore pools', () => {
+test('build flavor never uses class, lore, fallback, intro, or subtitle pools', () => {
   const restrictedManifest = {
+    intro: { lore: ['Forbidden intro lore.'], meta: ['Forbidden intro meta.'] },
+    subtitles: ['Forbidden subtitle.'],
     class_flavor: {
       Warrior: {
         base: ['Allowed base line.'],
@@ -43,17 +54,14 @@ test('build flavor falls back to class base without using lore pools', () => {
         lore_mode: ['Forbidden lore mode.']
       }
     },
-    fallback_flavor: ['Allowed fallback.']
+    fallback_flavor: ['Forbidden manifest fallback.']
   };
 
-  assert.equal(selectBuildFlavor(restrictedManifest, { className: 'Warrior', ascendancy: 'Unknown', random: () => 0.99 }), 'Allowed base line.');
+  assert.equal(selectBuildFlavor(restrictedManifest, { className: 'Warrior', ascendancy: 'Unknown', random: () => 0.99 }), GENERIC_BUILD_FLAVOR);
 });
 
-test('build flavor uses manifest fallback when its class has no lines', () => {
-  assert.equal(
-    selectBuildFlavor(manifest, { className: 'Unknown', random: () => 0 }),
-    manifest.fallback_flavor[0]
-  );
+test('build flavor uses the safe generic when no ascendancy tagline exists', () => {
+  assert.equal(selectBuildFlavor(manifest, { className: 'Unknown', random: () => 0 }), GENERIC_BUILD_FLAVOR);
 });
 
 test('missing or malformed flavor manifests use a safe poetic fallback', () => {
