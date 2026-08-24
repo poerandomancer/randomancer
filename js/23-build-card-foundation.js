@@ -1,5 +1,6 @@
 import { formatWeaponLine } from './01-meta-and-domready.js';
 import { buildGemDictionary, lookupGem } from './05-tags-and-scorer.js';
+import { getClassIconPath } from './ascendancy-visuals.js';
 
 const CARD_TYPE_BUILD = 'build';
 const BUILD_CARD_FACES = Object.freeze({ FRONT: 'front', BACK: 'back' });
@@ -130,12 +131,6 @@ function getUniqueDescription(name) {
 
 function arrify(value) { return Array.isArray(value) ? value : (value ? [value] : []); }
 
-function getAscendancyArtPath(ascendancy) {
-  if (!ascendancy) return '';
-  const slug = String(ascendancy).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-  return `/images/ascendancies/${slug}.webp`;
-}
-
 function item(name, options = {}) {
   return {
     name: String(name || '').trim(),
@@ -199,7 +194,7 @@ function deriveBuildCardModel(snapshot) {
     type: CARD_TYPE_BUILD,
     title: snap.buildName || [snap.className, snap.ascendancy].filter(Boolean).join(' '),
     subtitle: snap.flavor || '',
-    artPath: getAscendancyArtPath(snap.ascendancy),
+    artPath: getClassIconPath(snap.className, snap.ascendancy),
     frontRows: [
       { label: 'Ascendancy', values: snap.ascendancy ? [item(snap.ascendancy, { meta: snap.className || '' })] : [] },
       { label: 'Weapon', values: weapon ? [item(weapon)] : [] },

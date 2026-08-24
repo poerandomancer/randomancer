@@ -3,6 +3,7 @@ import { sharePublicCard } from './publicCardApi.js';
 import { buildPublicBuildCardRequest } from './publicCardBuilders.js';
 import { buildGemDictionary, lookupGem } from './05-tags-and-scorer.js';
 import { getFamilySkillNames, resolveSkillFamily } from './17-skill-family-utils.js';
+import { getClassIconPath } from './ascendancy-visuals.js';
 
 const CARD_PARAM = 'card';
 const SHARED_CARD_PARAM = 'sharedCard';
@@ -242,11 +243,6 @@ function getUniqueTooltipPayload(name) {
   };
 }
 
-function getAscendancyArtPath(ascendancy) {
-  if (!ascendancy) return '';
-  return `/images/ascendancies/${String(ascendancy).toLowerCase().replace(/\s+/g, '-')}.webp`;
-}
-
 function createNamedItem(name, slotKey, description, opts = {}) {
   return {
     name,
@@ -315,7 +311,7 @@ function deriveBuildCardModel(snap) {
     type: CARD_TYPE_BUILD,
     title: snap.buildName || [snap.className, snap.ascendancy].filter(Boolean).join(' '),
     subtitle: snap.flavor || '',
-    artPath: getAscendancyArtPath(snap.ascendancy),
+    artPath: getClassIconPath(snap.className, snap.ascendancy),
     frontRows: [
       { label: 'Ascendancy', values: snap.ascendancy ? [createNamedItem(snap.ascendancy)] : [] },
       { label: 'Weapons', values: [primaryWeapons, secondaryWeapons ? `Set II — ${secondaryWeapons}` : ''].filter(Boolean).map((name) => createNamedItem(name)) },

@@ -1,4 +1,5 @@
 import { APP_VERSION, formatWeaponLine } from './01-meta-and-domready.js';
+import { getClassIconPath } from './ascendancy-visuals.js';
 
 const PUBLIC_CARD_SCHEMA_VERSION = 'public-card.v1';
 
@@ -70,11 +71,6 @@ function normalizeBuildSnapshotForShare(snapshot) {
   return JSON.parse(JSON.stringify(draw));
 }
 
-function getAscendancyArtPath(ascendancy) {
-  if (!ascendancy) return '';
-  return `/images/ascendancies/${String(ascendancy).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}.webp`;
-}
-
 function buildFrontFaceGroups(snapshot, weaponLabel) {
   const snap = snapshot || {};
   const groups = [
@@ -129,7 +125,7 @@ function buildPublicBuildCardRequest(snapshot) {
       title,
       subtitle: snap.flavor || '',
       ascendancy: snap.ascendancy || '',
-      ascendancyArtPath: getAscendancyArtPath(snap.ascendancy),
+      ascendancyArtPath: getClassIconPath(snap.className, snap.ascendancy),
       className: snap.className || '',
       weaponLabel,
       frontFaceGroups

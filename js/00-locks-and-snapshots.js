@@ -22,7 +22,7 @@ import { buildBuildContext } from './06-build-context.js';
 import { applyGemBorderFromReqWeights, grantLine, renderSupportCards } from './07-skills-render.js';
 import { ensureDataPreload } from './08-data-load.js';
 import { renderPassiveRecommendations } from './07-skills-render.js';
-const updateAscArt = () => {};
+import { updateAscendancyAmbiance } from './ascendancy-visuals.js';
 import {
   pickRecommendedAscendancyNodes,
   pickRecommendedKeystones,
@@ -327,7 +327,7 @@ function renderSnapshotToDom(snap){
     if (!snap) return;
     setElText('#class', snap.className || '');
     setElText('#ascendancy', snap.ascendancy || '');
-    updateAscArt(snap.ascendancy || '');
+    updateAscendancyAmbiance(snap.ascendancy || '');
     const appEl = document.getElementById('app');
     if (appEl) appEl.dataset.hasRoll = 'true';
     const weaponsTxt = formatWeaponLine(snap.weapon, snap.offhand);
