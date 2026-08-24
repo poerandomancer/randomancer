@@ -11,8 +11,8 @@ const MODES = {
 };
 let challengeHasRoll = false;
 
-const STANDARD_LEDE_HTML = 'Use <strong>Bind the Fates</strong> to favor or ban certain options. Each draw chooses a weapon and one or two Offense concepts.<br><strong>---</strong><br>Click <strong>Draw Your Fate</strong> to begin.';
-const CHALLENGE_LEDE_TEXT = '<strong>Challenge Mode</strong> draws three compatible Challenge cards: one anchor and two twists. Use <strong>Bind the Fates</strong> to favor or ban certain options.<br><strong>---</strong><br>Click <strong>Draw Challenge</strong> to begin.';
+const STANDARD_LEDE_HTML = 'Use <strong>Bind the Fates</strong> to favor or ban certain options. Each draw chooses a weapon and one or two Offense concepts.';
+const CHALLENGE_LEDE_TEXT = '<strong>Challenge Mode</strong> draws three compatible Challenge cards: one anchor and two twists. Use <strong>Bind the Fates</strong> to favor or ban certain options.';
 const CODEX_LEDE_TEXT = '<strong>Codex Mode</strong> is a non-random library for browsing Path of Exile 2 data. Explore <strong>Ascendancy</strong>, <strong>Skills</strong>, <strong>Passives</strong>, and <strong>Gear</strong> with search and tags. <strong>Pin</strong> entries to create a poe.ninja filter to view endgame builds.<br><strong>---</strong><br>Select an entry to inspect full details.';
 
 let CHALLENGE_TEMPLATE_BY_ID = Object.create(null);
@@ -877,7 +877,10 @@ function syncMode(mode) {
   }
 
   const rollText = document.querySelector('#roll .roll-text');
-  if (rollText) rollText.textContent = isChallenge ? 'Draw Challenge' : 'Draw Your Fate';
+  const rollButton = document.getElementById('roll');
+  const drawLabel = isChallenge ? 'Draw Challenge' : 'Draw Your Fate';
+  if (rollText) rollText.textContent = drawLabel;
+  rollButton?.setAttribute('aria-label', drawLabel);
 
   modeToggleControl?.querySelectorAll('[data-mode-target]').forEach((btn) => {
     const on = btn.dataset.modeTarget === mode;

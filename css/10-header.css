@@ -1,7 +1,7 @@
 header{
   position: relative;
   text-align:center;
-  padding:3rem 1rem 1rem;
+  padding:2.5rem 1rem .45rem;
   text-shadow:0 1px 2px rgba(0,0,0,.6);
 }
 
@@ -173,7 +173,7 @@ strong, b { font-weight: 600; }
 
 /* --- Header lede / onboarding blurb (replaces initial build name) --- */
 .app-lede{
-  margin:-0.65rem auto 0.9rem;
+  margin:-0.65rem auto .45rem;
   max-width:74ch;
   color:var(--muted);
   font-size:1.02rem;
