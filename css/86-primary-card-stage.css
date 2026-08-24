@@ -62,6 +62,10 @@ body[data-mode="build"] #rc-reveal-fog{
   gap:2.25rem;
 }
 
+.primary-build-card-stage[data-card-state="result"]{
+  margin-top:20px;
+}
+
 .primary-build-card-stage__quote{
   max-width:38rem;
   margin:0 auto .2rem;
@@ -101,8 +105,8 @@ body[data-mode="build"] #rc-reveal-fog{
   top:0;
   left:50%;
   z-index:0;
-  min-height:44px;
-  padding:.62rem 1.15rem;
+  min-height:40px;
+  padding:.5rem .9rem;
   border:1px solid rgba(220,181,94,.72);
   border-radius:999px 999px 14px 14px;
   background:
@@ -139,12 +143,6 @@ body[data-mode="build"] #rc-reveal-fog{
 .deck-draw-tab.is-loading{
   cursor:wait;
   opacity:.82;
-}
-.deck-draw-tab__icon{
-  width:18px;
-  height:18px;
-  object-fit:contain;
-  filter:drop-shadow(0 0 3px rgba(212,168,76,.48));
 }
 .deck-draw-tab .roll-status{
   max-width:0;
