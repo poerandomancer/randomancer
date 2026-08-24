@@ -5,6 +5,7 @@ import { deriveWeaponFamilies, pickWeaponFamily } from './06-equipment.js';
 import { buildOffenseSnapshotFields, selectOffense } from './26-offense-roll.js';
 import { adaptRecommendationPackageV3ToSnapshot, selectRecommendationPackageV3, validateRecommendationCatalogV3 } from './30-recommendation-v3-selector.js';
 import { selectNonSkillRecommendations } from './31-non-skill-recommendation-selector.js';
+import { selectBuildFlavor } from './build-flavor.js';
 
 const randomItem = (items, random = Math.random) => items[Math.floor(random() * items.length)] || null;
 const cleanFate = (fate = {}) => ({ oaths: fate.oaths || [], abominations: fate.abominations || [] });
@@ -73,7 +74,13 @@ function drawBuild(dataWrap, { random = Math.random } = {}) {
     weaponFamily: weapon.name, weapon: weapon.name,
     ...offenseFields, attributes,
     buildName: buildName(identity, weapon, offenseResult.picks),
-    flavor: 'A fate drawn from one weapon family and the Offense it must carry.',
+    flavor: selectBuildFlavor(dataWrap?.flavorManifest || data.flavorManifest || window.DATA?.flavorManifest, {
+      className: identity.className,
+      ascendancy: identity.ascendancy,
+      weapon: weapon.name,
+      offense: offenseResult.picks[0]?.name,
+      random
+    }),
     recommendationPackage: null, recommendedUniques: [], passives: null
   };
   const catalog = data.recommendationCatalogV3 || window.DATA?.recommendationCatalogV3;
