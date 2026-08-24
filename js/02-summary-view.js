@@ -1,6 +1,5 @@
 import { APP_VERSION, formatWeaponLine } from './01-meta-and-domready.js';
-import { sharePublicCard, fetchCardReactions, toggleCardReaction } from './publicCardApi.js';
-import { PUBLIC_CARD_REACTIONS } from './publicCardReactions.js';
+import { sharePublicCard } from './publicCardApi.js';
 import { buildPublicBuildCardRequest } from './publicCardBuilders.js';
 import { buildGemDictionary, lookupGem } from './05-tags-and-scorer.js';
 import { getFamilySkillNames, resolveSkillFamily } from './17-skill-family-utils.js';
@@ -14,8 +13,6 @@ const SHARED_LINK_CACHE_KEY = 'rm_shared_card_links_v1';
 const BUILD_SAVE_STORAGE_KEY = 'randomancer_saved_builds_v1';
 const CHALLENGE_SAVE_STORAGE_KEY = 'randomancer_saved_challenges_v1';
 const SKILL_TOOLTIP_KEYS = new Set(['ACTIVE_SKILL', 'SKILL', 'SUPPORT', 'PERSISTENT_BUFF', 'UNIQUE', 'PASSIVE', 'KEYSTONE', 'SKILL_FAMILY', 'SKILL_FAMILY_2']);
-const REACTION_TYPES = PUBLIC_CARD_REACTIONS;
-
 let tooltipEl = null;
 let tooltipTarget = null;
 let tooltipPinned = false;
@@ -35,10 +32,6 @@ let floatingPanelState = {
 const shareUiState = {
   [CARD_TYPE_BUILD]: { status: 'idle', url: null, errorMessage: null, feedbackMessage: '', feedbackTone: '', key: '' },
   [CARD_TYPE_CHALLENGE]: { status: 'idle', url: null, errorMessage: null, feedbackMessage: '', feedbackTone: '', key: '' }
-};
-const reactionUiState = {
-  [CARD_TYPE_BUILD]: { status: 'idle', slug: '', counts: { fire: 0, cursed: 0, big_brain: 0, chaotic: 0 }, viewerReaction: null, busy: false, key: '' },
-  [CARD_TYPE_CHALLENGE]: { status: 'idle', slug: '', counts: { fire: 0, cursed: 0, big_brain: 0, chaotic: 0 }, viewerReaction: null, busy: false, key: '' }
 };
 
 function readSharedLinkCache() {
@@ -1006,8 +999,7 @@ function renderBuildCardOverlay(face = 'front', options = {}) {
     renderActionButton({ action: 'share-card', label: shareState.status === 'loading' ? 'Sharing card' : 'Share', icon: shareState.status === 'loading' ? '…' : '↗', disabled: shareState.status === 'loading', busy: shareState.status === 'loading' }),
     renderActionButton({ action: 'save', label: isSavedBuild() ? 'Saved' : 'Save', icon: isSavedBuild() ? '★' : '☆', active: isSavedBuild() })
   ].join('');
-  const reactions = renderReactionRail(CARD_TYPE_BUILD);
-  setOverlayContent({ type: CARD_TYPE_BUILD, html: renderBuildCard(model, face, actions, reactions, options.stageClass || ''), face });
+  setOverlayContent({ type: CARD_TYPE_BUILD, html: renderBuildCard(model, face, actions, '', options.stageClass || ''), face });
   return true;
 }
 
@@ -1027,8 +1019,7 @@ function renderChallengeCardOverlay() {
     renderActionButton({ action: 'share-card', label: shareState.status === 'loading' ? 'Sharing card' : 'Share', icon: shareState.status === 'loading' ? '…' : '↗', disabled: shareState.status === 'loading', busy: shareState.status === 'loading' }),
     renderActionButton({ action: 'save', label: isSavedChallenge() ? 'Saved' : 'Save', icon: isSavedChallenge() ? '★' : '☆', active: isSavedChallenge() })
   ].join('');
-  const reactions = renderReactionRail(CARD_TYPE_CHALLENGE);
-  setOverlayContent({ type: CARD_TYPE_CHALLENGE, html: renderChallengeCard(model, actions, reactions), face: '' });
+  setOverlayContent({ type: CARD_TYPE_CHALLENGE, html: renderChallengeCard(model, actions, ''), face: '' });
   return true;
 }
 
@@ -1173,17 +1164,7 @@ function bindCardOverlayUI() {
       openSharePanel(overlay.dataset.cardType, evt.target.closest('[data-card-action]'));
       return;
     }
-    if (action === 'react-card') {
-      const button = evt.target.closest('[data-reaction-id]');
-      const reactionType = button?.dataset?.reactionId || '';
-      if (!reactionType) return;
-      if (button?.dataset?.reactionDisabled === '1') {
-        window.RandomancerShowToast?.('Share to enable reactions');
-        return;
-      }
-      toggleReactionForCard(overlay.dataset.cardType, reactionType);
-      return;
-    }
+
     if (action === 'save') {
       if (overlay.dataset.cardType === CARD_TYPE_CHALLENGE) window.RandomancerSaveCurrentChallenge?.();
       else window.RandomancerSaveCurrentBuild?.();
