@@ -1,11 +1,11 @@
 const OFFENSE_NAME_TEMPLATES = {
-  physical: ['The Iron Argument', '{ascendancy} of Splintered Stone', 'The Stone-Breaking {weapon}'],
-  fire: ['The Kindled {weapon}', '{ascendancy} of the Last Ember', 'The Ash-Crowned {weapon}'],
-  cold: ['The Frostbound {weapon}', '{ascendancy} of the Still Hour', 'The Winter-Edged {weapon}'],
-  lightning: ['The Thunderstruck {weapon}', '{ascendancy} of the First Thunder', 'The Storm-Tipped {weapon}'],
-  chaos: ['The Venom-Touched {weapon}', '{ascendancy} of the Black Bloom', 'The Withering {weapon}'],
-  bleed: ['The Red-Edged {weapon}', '{ascendancy} of the Open Vein', 'The Crimson Wound'],
-  minions: ['The Many-Handed Omen', '{ascendancy} of the Bound Pack', 'The Raised Standard']
+  physical: ['The Iron Argument', 'The Splintered-Stone Warden', 'The Stonebreaking Pathbreaker'],
+  fire: ['The Last Ember', 'The Ashen Harbinger', 'The Kindled Emberhand'],
+  cold: ['The Still Hour', 'The Frostbound Seer', 'The Winter Warden'],
+  lightning: ['The First Thunder', 'The Stormmarked Harbinger', 'The Thunderborn Stormcaller'],
+  chaos: ['The Black Bloom', 'The Withering Apostate', 'The Venom-Sworn Hexbearer'],
+  bleed: ['The Crimson Wound', 'The Red-Handed Butcher', 'The Veinbound Bloodletter'],
+  minions: ['The Many-Handed Omen', 'The Bound-Pack Oathbinder', 'The Raised Standard']
 };
 
 const OFFENSE_GROUPS = {
@@ -23,6 +23,18 @@ const WEAPON_DISPLAY_NAMES = new Map([
   ['staff', 'Staff'], ['talisman', 'Talisman'], ['wand', 'Wand'], ['sceptre', 'Sceptre'], ['spear', 'Spear']
 ]);
 
+const WEAPON_IDENTITY_TEMPLATES = new Map([
+  ['Mace', 'The Mace-Borne Penitent'],
+  ['Quarterstaff', 'The Quarterstaff-Sworn Duelist'],
+  ['Bow', 'The Bowmarked Outrider'],
+  ['Crossbow', 'The Crossbow-Borne Warden'],
+  ['Staff', 'The Staff-Touched Seer'],
+  ['Talisman', 'The Talisman-Sworn Beastcaller'],
+  ['Wand', 'The Wandmarked Heretic'],
+  ['Sceptre', 'The Sceptre-Crowned Hexbearer'],
+  ['Spear', 'The Spearbound Harrier']
+]);
+
 function cleanText(value) {
   return typeof value === 'string' ? value.trim().replace(/\s+/g, ' ') : '';
 }
@@ -38,13 +50,6 @@ function randomItem(items, random) {
   return items[index];
 }
 
-function fillTemplate(template, context) {
-  return template.replace(/\{(ascendancy|weapon|offense)\}/g, (_, key) => context[key] || '')
-    .replace(/\s+/g, ' ')
-    .replace(/\s+([,:])/g, '$1')
-    .trim();
-}
-
 /** Select one evocative title to persist with a newly-created build draw. */
 function selectBuildName({ ascendancy, weapon, offense, random } = {}) {
   const context = {
@@ -54,10 +59,10 @@ function selectBuildName({ ascendancy, weapon, offense, random } = {}) {
   };
   const offenseKey = OFFENSE_GROUPS[cleanText(offense).toLowerCase()];
   const templates = OFFENSE_NAME_TEMPLATES[offenseKey];
-  if (templates?.length) return fillTemplate(randomItem(templates, random), context);
-  if (context.offense && context.weapon) return `The ${context.offense} ${context.weapon}`;
-  if (context.weapon) return `The Fated ${context.weapon}`;
-  if (context.ascendancy) return `${context.ascendancy} of the Unwritten Path`;
+  if (templates?.length) return randomItem(templates, random);
+  if (context.offense) return `The ${context.offense} Harbinger`;
+  if (WEAPON_IDENTITY_TEMPLATES.has(context.weapon)) return WEAPON_IDENTITY_TEMPLATES.get(context.weapon);
+  if (context.ascendancy) return 'The Unwritten Pilgrim';
   return 'The Unwritten Fate';
 }
 
