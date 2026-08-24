@@ -1,6 +1,4 @@
 const GENERIC_BUILD_FLAVOR = 'Some paths are chosen. This one was rolled.';
-const CLASS_FLAVOR_POOLS = ['base', 'named_lore', 'lore_mode'];
-
 function flavorLines(value) {
   return Array.isArray(value)
     ? value.filter((line) => typeof line === 'string' && line.trim()).map((line) => line.trim())
@@ -26,17 +24,22 @@ function selectBuildFlavor(manifest, {
   random,
   seed
 } = {}) {
-  void ascendancy;
   void weapon;
   void offense;
 
-  const classEntry = manifest && typeof manifest === 'object' && !Array.isArray(manifest)
+  const validManifest = manifest && typeof manifest === 'object' && !Array.isArray(manifest)
+    ? manifest
+    : null;
+  const ascendancyLines = flavorLines(validManifest?.ascendancy_flavor?.[className]?.[ascendancy]);
+  const classEntry = validManifest
     ? manifest.class_flavor?.[className]
     : null;
-  const classLines = classEntry && typeof classEntry === 'object' && !Array.isArray(classEntry)
-    ? CLASS_FLAVOR_POOLS.flatMap((pool) => flavorLines(classEntry[pool]))
+  const classBaseLines = classEntry && typeof classEntry === 'object' && !Array.isArray(classEntry)
+    ? flavorLines(classEntry.base)
     : [];
-  const candidates = classLines.length ? classLines : flavorLines(manifest?.fallback_flavor);
+  const candidates = ascendancyLines.length
+    ? ascendancyLines
+    : (classBaseLines.length ? classBaseLines : flavorLines(validManifest?.fallback_flavor));
   if (!candidates.length) return GENERIC_BUILD_FLAVOR;
 
   const seeded = seededFraction(seed);

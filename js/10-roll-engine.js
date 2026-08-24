@@ -6,6 +6,7 @@ import { buildOffenseSnapshotFields, selectOffense } from './26-offense-roll.js'
 import { adaptRecommendationPackageV3ToSnapshot, selectRecommendationPackageV3, validateRecommendationCatalogV3 } from './30-recommendation-v3-selector.js';
 import { selectNonSkillRecommendations } from './31-non-skill-recommendation-selector.js';
 import { selectBuildFlavor } from './build-flavor.js';
+import { selectBuildName } from './build-name.js';
 
 const randomItem = (items, random = Math.random) => items[Math.floor(random() * items.length)] || null;
 const cleanFate = (fate = {}) => ({ oaths: fate.oaths || [], abominations: fate.abominations || [] });
@@ -32,10 +33,6 @@ function normalizeAttributes(...sources) {
 function selectionSeed() {
   if (globalThis.crypto?.getRandomValues) return [...globalThis.crypto.getRandomValues(new Uint32Array(2))].map((n) => n.toString(16).padStart(8, '0')).join('');
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
-}
-
-function buildName(identity, weapon, offenses) {
-  return `${identity.ascendancy} ${weapon.name} of ${offenses[0]?.name || 'Fate'}`;
 }
 
 function paintDraw(draw, fates) {
@@ -73,7 +70,12 @@ function drawBuild(dataWrap, { random = Math.random } = {}) {
     className: identity.className, ascendancy: identity.ascendancy,
     weaponFamily: weapon.name, weapon: weapon.name,
     ...offenseFields, attributes,
-    buildName: buildName(identity, weapon, offenseResult.picks),
+    buildName: selectBuildName({
+      ascendancy: identity.ascendancy,
+      weapon: weapon.name,
+      offense: offenseResult.picks[0]?.name,
+      random
+    }),
     flavor: selectBuildFlavor(dataWrap?.flavorManifest || data.flavorManifest || window.DATA?.flavorManifest, {
       className: identity.className,
       ascendancy: identity.ascendancy,
