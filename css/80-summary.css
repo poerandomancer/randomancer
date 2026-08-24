@@ -22,9 +22,13 @@
   overflow-wrap:break-word;
 }
 @media (max-width:600px){
+  .panel-actions--build{
+    top:8px;
+    right:8px;
+  }
   #build-panel > .build-title-block{
     width:100%;
-    padding-top:2rem;
+    padding-top:2.5rem;
   }
 }
 .build-card-launch-link{
@@ -681,8 +685,8 @@
   .card-overlay__body,
   .card-overlay__error{ width:min(calc(100vw - 32px), 360px); }
   .rc-card{ padding:.9rem .82rem .88rem; border-radius:24px; }
-  .rc-card__actions{ top:.84rem; right:.76rem; }
-  .rc-card__hero{ padding:2.2rem 1.7rem .92rem; }
+  .rc-card__actions{ top:.58rem; right:.5rem; }
+  .rc-card__hero{ padding:2.55rem 1.7rem .92rem; }
   .rc-card__title{ font-size: clamp(1.18rem, 5vw, 1.58rem); }
   .rc-card__subtitle{ font-size:.86rem; max-width:21rem; }
 }

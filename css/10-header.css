@@ -134,9 +134,9 @@ strong, b { font-weight: 600; }
   .patch-indicator{
     font-size:0.7rem;
     top:0.9rem;
-    left:50%;
-    transform:translateX(-50%);
-    text-align:center;
+    left:max(0.75rem, env(safe-area-inset-left));
+    transform:none;
+    text-align:left;
   }
 }
 

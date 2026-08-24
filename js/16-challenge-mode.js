@@ -3,8 +3,6 @@ import { generateChallengeContract, loadChallengeLibrary } from './15-challenge-
 import { getFamilySkillNames, resolveSkillFamily } from './17-skill-family-utils.js';
 
 const MODE_KEY = 'randomancer_mode';
-const STASHED_BUILD_KEY = 'stashedBuildState';
-const STASHED_CHALLENGE_KEY = 'stashedChallengeState';
 const MODE_TRANSITION_MS = 380;
 const MODES = {
   STANDARD: 'standard',
@@ -12,8 +10,6 @@ const MODES = {
   CODEX: 'codex'
 };
 let challengeHasRoll = false;
-let stashedBuildState = null;
-let stashedChallengeState = null;
 
 const STANDARD_LEDE_HTML = 'Use <strong>Bind the Fates</strong> to favor or ban certain options. Each draw chooses a weapon and one or two Offense concepts.<br><strong>---</strong><br>Click <strong>Draw Your Fate</strong> to begin.';
 const CHALLENGE_LEDE_TEXT = '<strong>Challenge Mode</strong> draws three compatible Challenge cards: one anchor and two twists. Use <strong>Bind the Fates</strong> to favor or ban certain options.<br><strong>---</strong><br>Click <strong>Draw Challenge</strong> to begin.';
@@ -89,7 +85,6 @@ function buildTemplateSegments(template, slots) {
 
   return out;
 }
-
 
 // -------------------------
 // Inline tooltips for Contract values (Active Skills / Keystones)
@@ -275,7 +270,6 @@ function getTooltipPayload(slotKey, value) {
     if (!lines.length) return null;
     return { title: value, lines };
   }
-
 
   if (slotKey === 'SKILL_FAMILY' || slotKey === 'SKILL_FAMILY_2') {
     const core = window.DATA || {};
@@ -654,7 +648,6 @@ function initChallengeInlineTooltips() {
   }, true);
 }
 
-
 function stabilizeLedeHeight() {
   const lede = document.getElementById('app-lede');
   if (!lede) return;
@@ -700,95 +693,6 @@ async function runModeTransition(label, swapFn) {
   swapFn?.();
   await sleep(MODE_TRANSITION_MS);
   overlay.classList.remove('is-on');
-}
-
-function cloneJsonSafe(value) {
-  if (!value || typeof value !== 'object') return null;
-  try {
-    if (typeof structuredClone === 'function') return structuredClone(value);
-  } catch {}
-  try { return JSON.parse(JSON.stringify(value)); } catch { return null; }
-}
-
-function persistStash() {
-  try {
-    if (stashedBuildState) localStorage.setItem(STASHED_BUILD_KEY, JSON.stringify(stashedBuildState));
-    else localStorage.removeItem(STASHED_BUILD_KEY);
-    if (stashedChallengeState) localStorage.setItem(STASHED_CHALLENGE_KEY, JSON.stringify(stashedChallengeState));
-    else localStorage.removeItem(STASHED_CHALLENGE_KEY);
-  } catch {}
-}
-
-function hydrateStash() {
-  try {
-    stashedBuildState = JSON.parse(localStorage.getItem(STASHED_BUILD_KEY) || 'null');
-    stashedChallengeState = JSON.parse(localStorage.getItem(STASHED_CHALLENGE_KEY) || 'null');
-    if (!isValidStashableBuildState(stashedBuildState)) stashedBuildState = null;
-    if (!isValidStashableChallengeState(stashedChallengeState)) stashedChallengeState = null;
-    persistStash();
-  } catch {
-    stashedBuildState = null;
-    stashedChallengeState = null;
-  }
-}
-
-function isValidStashableBuildState(snap) {
-  if (!snap || typeof snap !== 'object') return false;
-  const hasCoreIdentity = !!(snap.className || snap.ascendancy || snap.buildName);
-  const hasCoreSelections = !!(snap.weapon || snap.defense || snap.tactics || snap.ailments);
-  const hasSkills = Array.isArray(snap.recommendedSkills) && snap.recommendedSkills.length > 0;
-  return hasCoreIdentity || hasCoreSelections || hasSkills;
-}
-
-function isValidStashableChallengeState(contract) {
-  if (!contract || typeof contract !== 'object') return false;
-  const hasTitle = typeof contract.title === 'string' && contract.title.trim().length > 0;
-  const hasTasks = Array.isArray(contract.tasks) && contract.tasks.length > 0;
-  return hasTitle && hasTasks;
-}
-
-function clearChallengeResultsToEmpty() {
-  challengeHasRoll = false;
-  window.CURRENT_CHALLENGE_CONTRACT = null;
-}
-
-function updateResumePrompts(mode) {
-  const app = document.getElementById('app');
-  const hasBuildRoll = app?.dataset?.hasRoll === 'true';
-  const resumeBtn = document.getElementById('resumeRollBtn');
-
-  const showBuildResume = mode === MODES.STANDARD && !hasBuildRoll && !!stashedBuildState;
-  const showChallengeResume = mode === MODES.CHALLENGE && !challengeHasRoll && !!stashedChallengeState;
-  const isChallengeResume = showChallengeResume && !showBuildResume;
-
-  if (!resumeBtn) return;
-  const show = showBuildResume || showChallengeResume;
-  resumeBtn.classList.toggle('is-hidden', !show);
-  if (!show) return;
-
-  const label = isChallengeResume ? 'Resume last Contract' : 'Resume last Build';
-  resumeBtn.setAttribute('title', label);
-  resumeBtn.setAttribute('aria-label', label);
-  resumeBtn.dataset.resumeMode = isChallengeResume ? MODES.CHALLENGE : MODES.STANDARD;
-}
-
-function stashCurrentBuildState() {
-  const hasBuildRoll = document.getElementById('app')?.dataset?.hasRoll === 'true';
-  if (!hasBuildRoll) return;
-  const snap = typeof window.RandomancerGetCurrentBuildSnapshot === 'function'
-    ? window.RandomancerGetCurrentBuildSnapshot()
-    : cloneJsonSafe(window.App?.state?.currentDraw);
-  if (!isValidStashableBuildState(snap)) return;
-  stashedBuildState = snap;
-  persistStash();
-}
-
-function stashCurrentChallengeState() {
-  if (!challengeHasRoll) return;
-  const contract = cloneJsonSafe(window.CURRENT_CHALLENGE_CONTRACT);
-  if (!isValidStashableChallengeState(contract)) return;
-  stashedChallengeState = contract;
-  persistStash();
 }
 
 function getMode() {
@@ -862,7 +766,6 @@ function setChallengePanels(mode) {
     emptyState.classList.toggle('is-hidden', !showStandardEmpty);
   }
 
-  updateResumePrompts(mode);
 }
 
 function renderChallengeContract(contract) {
@@ -987,37 +890,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   const modeControl = document.getElementById('randomancer-mode-control');
   const initialMode = setMode(getMode());
 
-  hydrateStash();
   stabilizeLedeHeight();
   initChallengeInlineTooltips();
   syncMode(initialMode);
   try { document.dispatchEvent(new CustomEvent('randomancer:mode-change', { detail: { mode: initialMode } })); } catch {}
 
   window.addEventListener('resize', stabilizeLedeHeight);
-
-
-  const resumeRollBtn = document.getElementById('resumeRollBtn');
-  resumeRollBtn?.addEventListener('click', () => {
-    const target = resumeRollBtn.dataset.resumeMode;
-    if (target === MODES.STANDARD) {
-      if (!stashedBuildState) return;
-      if (typeof window.RandomancerRenderBuildSnapshot === 'function') {
-        window.RandomancerRenderBuildSnapshot(cloneJsonSafe(stashedBuildState));
-        stashedBuildState = null;
-        persistStash();
-        updateResumePrompts(MODES.STANDARD);
-      }
-      return;
-    }
-
-    if (target === MODES.CHALLENGE) {
-      if (!stashedChallengeState) return;
-      renderChallengeContract(cloneJsonSafe(stashedChallengeState));
-      stashedChallengeState = null;
-      persistStash();
-      updateResumePrompts(MODES.CHALLENGE);
-    }
-  });
 
   modeControl?.addEventListener('click', async (event) => {
     const btn = event.target?.closest?.('[data-mode-target]');
@@ -1034,7 +912,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   });
 
-
 	try {
 		const lib = await loadChallengeLibrary();
 		CHALLENGE_TEMPLATE_BY_ID = Object.create(null);
@@ -1045,27 +922,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 });
 
-
-window.RandomancerPrepareChallengeRoll = () => {
-  stashCurrentBuildState();
-  if (typeof window.RandomancerClearBuildResults === 'function') {
-    window.RandomancerClearBuildResults();
-  }
-  updateResumePrompts(MODES.CHALLENGE);
-};
-
 window.RandomancerGetMode = getMode;
-window.RandomancerClearChallengeResults = clearChallengeResultsToEmpty;
-
 
 window.RandomancerHandleRollOverride = async ({ statusEl }) => {
   const mode = getMode();
   if (mode !== MODES.CHALLENGE) return false;
 
   try {
-    if (typeof window.RandomancerPrepareChallengeRoll === 'function') {
-      window.RandomancerPrepareChallengeRoll();
-    }
     if (statusEl) statusEl.textContent = 'Drawing your challenge…';
     await handleChallengeDraw({ statusEl });
   } catch (err) {
