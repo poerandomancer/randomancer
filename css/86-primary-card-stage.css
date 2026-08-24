@@ -144,6 +144,9 @@ body[data-mode="build"] #rc-reveal-fog{
   cursor:wait;
   opacity:.82;
 }
+.deck-draw-tab .roll-text{
+  transform:translateX(.08em);
+}
 .deck-draw-tab .roll-status{
   max-width:0;
   overflow:hidden;
