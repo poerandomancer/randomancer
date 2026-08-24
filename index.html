@@ -214,18 +214,8 @@
       <div id="rc-header-extra" class="rc-header-extra">
         <h2 class="subtitle">Conjure the Impossible. Defy the Meta.</h2>
         <div id="app-lede" class="app-lede" role="note" aria-label="How to use the Randomancer">
-          Use <strong>Bind the Fates</strong> to favor or ban certain options. Each draw chooses a weapon and one or two Offense concepts.<br>
-          <strong>---</strong><br>
-          Click <strong>Draw Your Fate</strong> to begin.
+          Use <strong>Bind the Fates</strong> to favor or ban certain options. Each draw chooses a weapon and one or two Offense concepts.
         </div>
-      </div>
-
-      <div class="roll-sticky">
-        <button id="roll" class="roll-btn roll-btn">
-          <img src="images/dice.png" alt="The Randomancer – Path of Exile 2 build randomizer thrice dice icon" class="btn-ico">
-          <span class="roll-text">Draw Your Fate</span>
-          <span class="roll-status" aria-live="polite"></span>
-        </button>
       </div>
 
       <div class="controls-rail mode-switch-under-roll">
@@ -267,6 +257,19 @@
       </div>
 
       <div id="results-stage" class="results-stage">
+      <section id="primary-build-card-stage" class="primary-build-card-stage" aria-label="Randomized Build Card">
+        <div class="primary-build-card-stage__inner">
+          <p class="primary-build-card-stage__quote" data-primary-card-quote></p>
+          <div class="primary-build-card-stage__slot">
+            <button id="roll" class="deck-draw-tab" type="button" aria-label="Draw Your Fate">
+              <span class="roll-text">Draw Your Fate</span>
+              <span class="roll-status" aria-live="polite"></span>
+            </button>
+            <div id="primary-build-card-mount" class="primary-build-card-stage__mount" aria-live="polite"></div>
+            <div class="primary-build-card-stage__transition-back" data-primary-transition-back aria-hidden="true"></div>
+          </div>
+        </div>
+      </section>
       <section id="codex-panel" class="panel codex-panel is-hidden" aria-label="Codex Library">
         <div class="codex-header">
           <div class="build-panel-tabs codex-pillars" role="tablist" aria-label="Codex pillars">

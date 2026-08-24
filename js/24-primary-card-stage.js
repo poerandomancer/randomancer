@@ -100,6 +100,10 @@ function createStage() {
     <div class="primary-build-card-stage__inner">
       <p class="primary-build-card-stage__quote" data-primary-card-quote></p>
       <div class="primary-build-card-stage__slot">
+        <button id="roll" class="deck-draw-tab" type="button" aria-label="Draw Your Fate">
+          <span class="roll-text">Draw Your Fate</span>
+          <span class="roll-status" aria-live="polite"></span>
+        </button>
         <div id="${MOUNT_ID}" class="primary-build-card-stage__mount" aria-live="polite"></div>
         <div class="primary-build-card-stage__transition-back" data-primary-transition-back aria-hidden="true"></div>
       </div>

@@ -1,37 +1,3 @@
-.roll-btn{
-  margin-top:.5rem; padding:.7rem 1.1rem;
-  border-radius:var(--radius);
-  border:1px solid var(--edge);
-  background:rgba(24,24,26,.55);
-  color:var(--ink);
-  cursor:pointer;
-  display:inline-flex;
-  align-items:center;
-  gap:.45rem;
-}
-
-.roll-sticky{
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.roll-btn .roll-text{
-  white-space:nowrap;
-}
-
-.roll-btn .roll-status{
-  font-size:.8rem;
-  color:var(--muted);
-  opacity:0;
-  transition:opacity .25s ease;
-}
-
-.roll-btn.is-loading .roll-status{
-  opacity:1;
-}
-
 .is-hidden{ display:none !important; }
 
 .controls-rail{
@@ -41,7 +7,7 @@
 
 .mode-switch-under-roll .mode-switch-row{
   justify-content:center;
-  margin:.45rem 0 .65rem;
+  margin:.25rem 0 .4rem;
 }
 
 .mode-switch-row{
@@ -134,8 +100,8 @@ body.challenge-mode .mode-toggle input:checked + .toggle-ui{
   box-shadow:0 0 8px rgba(159,47,55,0.55), inset 0 0 2px rgba(255,255,255,0.25);
 }
 
-body[data-mode="challenge"] :is(.rm-dotstep, .mechanics-like-btn, .roll-btn):focus-visible,
-body.challenge-mode :is(.rm-dotstep, .mechanics-like-btn, .roll-btn):focus-visible{
+body[data-mode="challenge"] :is(.rm-dotstep, .mechanics-like-btn, .deck-draw-tab):focus-visible,
+body.challenge-mode :is(.rm-dotstep, .mechanics-like-btn, .deck-draw-tab):focus-visible{
   outline:1px solid rgba(159,47,55,0.85);
   outline-offset:2px;
 }
@@ -202,15 +168,6 @@ body.challenge-mode .challenge-empty-flavor{
   .controls-rail{ width:calc(100% - 20px); }
   .mode-switch-row{ margin-bottom:.45rem; }
 }
-
-.roll-sticky{
-  margin-top: .5rem;
-}
-
-.roll-sticky .roll-btn{
-  margin-top: 0 !important; /* remove the offset that was pulling Roll down */
-}
-
 
 .mode-segmented{
   /* 3-state "ornate switch" — compact, stylized, mode-tinted */
