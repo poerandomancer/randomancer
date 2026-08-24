@@ -5,6 +5,16 @@ function flavorLines(value) {
     : [];
 }
 
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function withoutIdentityPrefix(line, identities) {
+  const names = identities.filter((name) => typeof name === 'string' && name.trim()).map((name) => escapeRegExp(name.trim()));
+  if (!names.length) return line;
+  return line.replace(new RegExp(`^(?:${names.join('|')})\\s*(?::|[-–—])\\s*`, 'i'), '').trim();
+}
+
 function seededFraction(seed) {
   if (seed == null || seed === '') return null;
   let hash = 2166136261;
@@ -45,7 +55,7 @@ function selectBuildFlavor(manifest, {
   const seeded = seededFraction(seed);
   const roll = seeded ?? (typeof random === 'function' ? random() : Math.random());
   const index = Math.min(candidates.length - 1, Math.max(0, Math.floor((Number(roll) || 0) * candidates.length)));
-  return candidates[index];
+  return withoutIdentityPrefix(candidates[index], [ascendancy, className]) || GENERIC_BUILD_FLAVOR;
 }
 
 export { GENERIC_BUILD_FLAVOR, selectBuildFlavor };

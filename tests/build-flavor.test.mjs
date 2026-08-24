@@ -12,8 +12,26 @@ test('new build flavor prefers the selected ascendancy pool', () => {
     className: 'Warrior', ascendancy: 'Titan', weapon: 'Mace', offense: 'Fire', random: () => 0
   });
 
-  assert.equal(flavor, manifest.ascendancy_flavor.Warrior.Titan[0]);
+  assert.equal(flavor, manifest.ascendancy_flavor.Warrior.Titan[0].replace(/^Titan:\s*/, ''));
+  assert.doesNotMatch(flavor, /^(?:Titan|Warrior)\s*:/);
   assert.notEqual(flavor, 'A fate drawn from one weapon family and the Offense it must carry.');
+});
+
+test('ascendancy taglines remove identity labels before reaching the card', () => {
+  const taggedManifest = {
+    ascendancy_flavor: { Witch: { Lich: ['Lich: The dead keep excellent counsel.'] } },
+    class_flavor: { Witch: { base: ['Witch: A forbidden fallback.'] } },
+    fallback_flavor: ['A final fallback.']
+  };
+
+  assert.equal(
+    selectBuildFlavor(taggedManifest, { className: 'Witch', ascendancy: 'Lich', random: () => 0 }),
+    'The dead keep excellent counsel.'
+  );
+  assert.equal(
+    selectBuildFlavor(taggedManifest, { className: 'Witch', ascendancy: 'Unknown', random: () => 0 }),
+    'A forbidden fallback.'
+  );
 });
 
 test('build flavor falls back to class base without using lore pools', () => {
