@@ -12,7 +12,7 @@ Core principles:
 ## Current Build contract
 
 - Standard Build mode rolls one broad primary equipment family; detailed hand configuration is not part of the Fate.
-- Standard Build mode rolls 1–2 canonical Offense elements, with at most one Archetype.
+- Standard Build mode rolls exactly one canonical Offense element.
 - Canonical Offense lives in `data/offense-inventory.json`; legacy mechanic fields remain only as a compatibility boundary for current recommendations.
 - Build snapshots store outcomes rather than user-control settings.
 

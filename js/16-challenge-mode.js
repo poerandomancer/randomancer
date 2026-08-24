@@ -11,7 +11,7 @@ const MODES = {
 };
 let challengeHasRoll = false;
 
-const STANDARD_LEDE_HTML = '<strong>Draw Your Fate</strong> to randomly select an ascendancy, weapon, and one or two offense concepts. <strong>Flip the Card</strong> to reveal build ideas and suggestions. <strong>Bind the Fates</strong> to favor or ban certain options.';
+const STANDARD_LEDE_HTML = '<strong>Draw Your Fate</strong> to randomly select an ascendancy, weapon, and one Offense concept. <strong>Flip the Card</strong> to reveal build ideas and suggestions. <strong>Bind the Fates</strong> to favor or ban certain options.';
 const CHALLENGE_LEDE_TEXT = '<strong>Challenge Mode</strong> draws three compatible Challenge cards: one anchor and two twists. Use <strong>Bind the Fates</strong> to favor or ban certain options.';
 const CODEX_LEDE_TEXT = '<strong>Codex Mode</strong> is a non-random library for browsing Path of Exile 2 data. Explore <strong>Ascendancy</strong>, <strong>Skills</strong>, <strong>Passives</strong>, and <strong>Gear</strong> with search and tags. <strong>Pin</strong> entries to create a poe.ninja filter to view endgame builds.<br><strong>---</strong><br>Select an entry to inspect full details.';
 

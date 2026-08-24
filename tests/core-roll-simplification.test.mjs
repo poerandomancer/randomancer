@@ -17,7 +17,7 @@ test('Critical Hits remains available as data but cannot be rolled as Offense', 
   assert.equal(offenseModule.resolveOffenseElements(data).includes(criticalHits), true);
   assert.equal(offenseModule.isRollableOffense(criticalHits), false);
   assert.equal(offenseModule.isRollableOffense(totems), true);
-  assert.deepEqual(offenseModule.selectOffense({ data, count: 1, threshold: 0 }).picks, [totems]);
+  assert.deepEqual(offenseModule.selectOffense({ data }).picks, [totems]);
 });
 
 test('standard UI has no Cohesion or randomized defense controls', async () => {
