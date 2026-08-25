@@ -875,14 +875,31 @@ def _has_direct_ailment_application(normalized: str, mechanic: str) -> bool:
 
 def _has_explicit_ailment_application(normalized: str, terms: str) -> bool:
     application = re.compile(
-        rf"(?:always|chance_to|chance_to_cause|inflict|inflicts|inflicting|causing_them_to)"
+        rf"(?:always|can|chance_to|inflict|inflicts|inflicting|cause|causes|causing_them_to)"
         rf"(?:_[a-z0-9]+){{0,8}}_(?:{terms})(?:_|$)"
     )
     conditional_reference = re.compile(r"(?:^|_)(?:when|if|whenever)_you(?:_|$)")
-    return any(
-        not conditional_reference.search(match.group(0))
-        for match in application.finditer(normalized)
+    scaling_or_reference = re.compile(
+        r"(?:more_likely_to|increased_chance_to|chance_to|magnitude|duration|buildup)"
+        r"(?:_[a-z0-9]+){0,8}$|skills?_(?:which|that)_can(?:_[a-z0-9]+){0,5}$"
     )
+    for match in application.finditer(normalized):
+        prefix = normalized[:match.start()].rstrip("_")
+        chance_is_scaling = match.group(0).startswith("chance_to_") and bool(
+            re.search(r"(?:increased|more|reduced|less)(?:_[a-z0-9]+){0,3}$", prefix)
+        )
+        if conditional_reference.search(match.group(0)) or scaling_or_reference.search(prefix) or chance_is_scaling:
+            continue
+        # "Ailment inflicted with supported skills ..." describes an ailment
+        # that must already exist; it is not application capability.
+        if re.search(rf"(?:{terms})_inflicted_with(?:_[a-z0-9]+){{0,3}}$", prefix):
+            continue
+        return True
+    verb_application = re.search(rf"(?:^|_)(?:{terms})_(?:enemy|enemies|target|targets)(?:_|$)", normalized)
+    if verb_application:
+        prefix = normalized[:verb_application.start()].rstrip("_")
+        return not re.search(r"(?:against|while|when|if|already)(?:_[a-z0-9]+){0,4}$", prefix)
+    return False
 
 
 def _text_ailment_facts(
@@ -901,6 +918,14 @@ def _text_ailment_facts(
                 normalized,
             )
         )
+        if mechanic == "electrocute":
+            buildup = buildup or bool(
+                re.search(
+                    r"(?:build|builds|building)(?:_up)?(?:_[a-z0-9]+){0,5}_electrocution(?:_|$)"
+                    r"|(?:contribute|contributes|contributing)(?:_[a-z0-9]+){0,5}_electrocution(?:_[a-z0-9]+){0,2}_buildup(?:_|$)",
+                    normalized,
+                )
+            )
         if buildup:
             facts.append(
                 make_fact(
@@ -918,6 +943,8 @@ def _text_ailment_facts(
             _has_explicit_ailment_application(normalized, terms)
             or _has_direct_ailment_application(normalized, mechanic)
         )
+        if mechanic == "electrocute" and buildup:
+            explicit_application = False
 
         delivered_environment = False
         if mechanic == "chill":
@@ -940,10 +967,27 @@ def _text_ailment_facts(
             delivered_environment = bool(
                 re.search(
                     r"(?:cause|causes|causing|create|creates|creating|leave|leaves|leaving|release|releases)"
-                    r"(?:_[a-z0-9]+){0,10}_poison(?:_poison)?_(?:gas|cloud)(?:_|$)",
+                    r"(?:_[a-z0-9]+){0,10}_(?:burst_of_)?poison(?:_poison)?_(?:gas|cloud|on_hit)(?:_|$)",
                     normalized,
                 )
             )
+
+        if mechanic == "electrocute":
+            if buildup and not any(
+                fact.get("mechanic") == mechanic and fact.get("relation") == "provides"
+                for fact in facts
+            ):
+                facts.append(
+                    make_fact(
+                        "provides",
+                        subject=subject,
+                        source_kind=source_kind,
+                        source_value=text,
+                        mechanic=mechanic,
+                        confidence="strong",
+                        scope="outgoing",
+                    )
+                )
 
         if explicit_application or delivered_environment:
             facts.append(

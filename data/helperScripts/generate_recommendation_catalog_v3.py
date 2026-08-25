@@ -914,6 +914,10 @@ def fate_vocabulary(ctx: SourceContext) -> dict[str, Any]:
             for entry in ctx.core.get("Defense") or []
         ],
         "secondary_survivability_families": ctx.ontology.get("survivability_families") or [],
+        "global_offense_rules": [
+            rule for rule in ctx.ontology.get("offense_semantics") or []
+            if rule.get("fulfills_source_from_target")
+        ],
     }
 
 

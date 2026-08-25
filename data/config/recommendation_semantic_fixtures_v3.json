@@ -627,6 +627,55 @@
           "mechanic": "lightning"
         }
       ]
+    },
+    {
+      "id": "poisons_enemies_as_hit",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "Poisons enemies as though Hitting them.",
+      "expected_facts": [{ "relation": "inflicts", "mechanic": "poison" }]
+    },
+    {
+      "id": "can_poison",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "This skill can Poison enemies.",
+      "expected_facts": [{ "relation": "inflicts", "mechanic": "poison" }]
+    },
+    {
+      "id": "chance_to_poison",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "This skill has a chance to Poison enemies.",
+      "expected_facts": [{ "relation": "inflicts", "mechanic": "poison" }]
+    },
+    {
+      "id": "causes_hits_to_shock",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "Causes Hits to Shock enemies.",
+      "expected_facts": [{ "relation": "inflicts", "mechanic": "shock" }]
+    },
+    {
+      "id": "increased_shock_chance_is_affinity_only",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "50% increased chance to Shock.",
+      "forbidden_facts": [{ "relation": "inflicts", "mechanic": "shock" }]
+    },
+    {
+      "id": "ailment_scaling_is_not_capability",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "100% more Poison magnitude and increased Poison duration against Poisoned enemies.",
+      "forbidden_facts": [{ "relation": "inflicts", "mechanic": "poison" }]
+    },
+    {
+      "id": "freeze_buildup_scaling_is_not_capability",
+      "source_kind": "skill_description",
+      "subject": "skill",
+      "value": "50% increased Freeze buildup.",
+      "forbidden_facts": [{ "relation": "inflicts", "mechanic": "freeze" }, { "relation": "provides", "mechanic": "freeze" }]
     }
   ],
   "catalog_assertions": [

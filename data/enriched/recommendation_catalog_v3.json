@@ -11,7 +11,7 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5072,
+    "fact_count": 5109,
     "fact_relation_counts": {
       "consumes": 353,
       "converts": 112,
@@ -19,21 +19,21 @@
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 672,
-      "inflicts": 122,
+      "inflicts": 158,
       "modifies": 2239,
       "occupies": 444,
       "prevents": 375,
-      "provides": 318,
+      "provides": 319,
       "replaces": 27,
       "requires": 63
     },
     "candidate_role_counts": {
       "defense": 420,
-      "enabler": 1157,
+      "enabler": 1159,
       "payoff": 181,
       "primary_damage": 349,
       "recovery": 250,
-      "setup_control": 175,
+      "setup_control": 207,
       "utility": 206
     },
     "source_versions": {
@@ -206,6 +206,44 @@
           "low_life_recovery",
           "damage_triggered_recovery"
         ]
+      }
+    ],
+    "global_offense_rules": [
+      {
+        "source": "ignite",
+        "relation": "native_damage_type",
+        "target": "fire",
+        "fulfills_source_from_target": true,
+        "requires_hit": true,
+        "proof_type": "inherent",
+        "description": "Fire Hit damage has inherent Ignite capability."
+      },
+      {
+        "source": "chill",
+        "relation": "native_affinity",
+        "target": "cold",
+        "fulfills_source_from_target": true,
+        "requires_hit": true,
+        "proof_type": "inherent",
+        "description": "Cold Hit damage has inherent Chill capability."
+      },
+      {
+        "source": "freeze",
+        "relation": "native_affinity",
+        "target": "cold",
+        "fulfills_source_from_target": true,
+        "requires_hit": true,
+        "proof_type": "inherent",
+        "description": "Cold Hit damage inherently contributes to Freeze buildup."
+      },
+      {
+        "source": "shock",
+        "relation": "native_affinity",
+        "target": "lightning",
+        "fulfills_source_from_target": true,
+        "requires_hit": true,
+        "proof_type": "inherent",
+        "description": "Lightning Hit damage has inherent Shock capability."
       }
     ]
   },
@@ -1109,6 +1147,7 @@
       "source_id": "Metadata/Items/Gem/SkillGemAncestralCry",
       "name": "Ancestral Cry",
       "candidate_roles": [
+        "setup_control",
         "payoff",
         "utility"
       ],
@@ -1195,6 +1234,19 @@
             }
           ],
           "mechanic": "warcry"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Perform a [Warcry] using [Glory] gained by [Ignite|Igniting] enemies to turn you into an embodiment of Kaom. While embodying Kaom, you [Trigger] Volcanic Steps while travelling, [Melee] [Strike|Strikes] and [Slam|Slams] are [AncestralBoost|Ancestrally Boosted], and your [Melee] [Strike|Strikes] [Trigger] Volcanic Eruption."
+            }
+          ],
+          "mechanic": "ignite",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -6704,6 +6756,7 @@
       "source_id": "Metadata/Items/Gem/SkillGemBlackPowderBlitz",
       "name": "Black Powder Blitz",
       "candidate_roles": [
+        "setup_control",
         "utility"
       ],
       "retrieval_terms": [
@@ -6748,6 +6801,19 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Replaces your dodge roll with an explosive-assisted leap, firing off a round from your prosthetic cannon leg that [Blind|Blinds] and [Ignite|Ignites] enemies in the area you escape from. The explosion will cause any [Grenade|Grenades] in its area of effect to also explode."
+            }
+          ],
+          "mechanic": "ignite",
+          "scope": "outgoing"
         },
         {
           "relation": "prevents",
@@ -7688,6 +7754,7 @@
       "name": "Blood Hunt",
       "candidate_roles": [
         "primary_damage",
+        "setup_control",
         "payoff",
         "utility"
       ],
@@ -7756,6 +7823,19 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Lunge at a target and skewers them. Hitting an enemy that has suffered [BloodLoss|Blood Loss] will cause a blood explosion and also [Consume] [Bleeding]. This skill cannot be [AncestralBoost|Ancestrally Boosted]."
+            }
+          ],
+          "mechanic": "bleed",
+          "scope": "outgoing"
         },
         {
           "relation": "prevents",
@@ -23388,6 +23468,19 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "provides",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Fire an electrifying arrow that explodes in an Area on [HitDamage|Hit]. [HitDamage|Hitting] an enemy will attach an Electrocuting Rod to them, causing all incoming [Lightning|Lightning] damage to build up [Electrocute|Electrocution.] This rod is removed when the enemy is next [Electrocute|Electrocuted.]"
+            }
+          ],
+          "mechanic": "electrocute",
+          "scope": "outgoing"
         }
       ],
       "compatibility": {
@@ -27566,6 +27659,19 @@
             }
           ],
           "mechanic": "cold"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Leap backwards, firing an icy arrow which can [Chill] or [Freeze] enemies around the location from which you escaped. This arrow will create [IceFragment|Ice Fragments] on impact."
+            }
+          ],
+          "mechanic": "chill",
+          "scope": "outgoing"
         },
         {
           "relation": "inflicts",
@@ -37128,7 +37234,8 @@
       "source_id": "Metadata/Items/Gems/SkillGemFrostbolt",
       "name": "Frostbolt",
       "candidate_roles": [
-        "primary_damage"
+        "primary_damage",
+        "setup_control"
       ],
       "retrieval_terms": [
         "intelligence",
@@ -37168,6 +37275,19 @@
             }
           ],
           "mechanic": "cold"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Fire a slow-moving [Pierce|Piercing] [Projectile|Projectile] that is effective at [Chill|Chilling] enemies and explodes on colliding with terrain."
+            }
+          ],
+          "mechanic": "chill",
+          "scope": "outgoing"
         }
       ],
       "compatibility": {
@@ -44155,6 +44275,10 @@
             {
               "kind": "active_skill_type",
               "value": "CausesBurning"
+            },
+            {
+              "kind": "skill_description",
+              "value": "While active, enemies you sufficiently [Overkill] with non-[Herald] [Attack|Attacks] will cause an explosion that [Ignite|Ignites] nearby enemies based on the [Overkill] damage dealt."
             }
           ],
           "mechanic": "ignite",
@@ -44405,6 +44529,10 @@
             {
               "kind": "active_skill_type",
               "value": "CausesBurning"
+            },
+            {
+              "kind": "skill_description",
+              "value": "While active, enemies you sufficiently [Overkill] with non-[Herald] [Attack|Attacks] will cause an explosion that [Ignite|Ignites] nearby enemies based on the [Overkill] damage dealt."
             }
           ],
           "mechanic": "ignite",
@@ -51554,7 +51682,8 @@
       "source_id": "Metadata/Items/Gem/SkillGemIncendiaryShot",
       "name": "Incendiary Shot",
       "candidate_roles": [
-        "primary_damage"
+        "primary_damage",
+        "setup_control"
       ],
       "retrieval_terms": [
         "strength",
@@ -51585,6 +51714,19 @@
             }
           ],
           "mechanic": "fire"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "[Ammunition|Load your Crossbow] with flaming bolts that fragment in flight, damaging and [Ignite|Igniting] enemies on hit and in a small cone behind their final target. These fragments can [Merging|Merge]."
+            }
+          ],
+          "mechanic": "ignite",
+          "scope": "outgoing"
         },
         {
           "relation": "prevents",
@@ -51735,6 +51877,7 @@
       "name": "Incinerate",
       "candidate_roles": [
         "primary_damage",
+        "setup_control",
         "payoff"
       ],
       "retrieval_terms": [
@@ -51825,6 +51968,19 @@
             }
           ],
           "mechanic": "fire"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Gain fuel by spending Mana on any Skill, then use the accumulated fuel to conjure a torrent of [Fire] from your hand, [Ignite|Igniting] enemies in front of you. The flames grow stronger the longer you [Channelling|Channel]. [Consume|Consumes] a [Fire] [ElementalInfusion|Infusion] if possible to also create [IgnitedGround|Ignited Ground]. Cannot gain fuel while using this skill."
+            }
+          ],
+          "mechanic": "ignite",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -62780,6 +62936,7 @@
       "name": "Oil Grenade",
       "candidate_roles": [
         "primary_damage",
+        "setup_control",
         "defense"
       ],
       "retrieval_terms": [
@@ -62838,6 +62995,19 @@
             }
           ],
           "mechanic": "fire"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Fire a bouncing [Grenade] that bursts in a spray of [Oil] when the fuse expires or when it impacts an Enemy, dealing minimal damage but covering the [OilGround|ground] and nearby enemies in [Oil]. Oil created this way can be [Ignite|Ignited] by [Detonator] Skills or [IgnitedGround|Ignited Ground]."
+            }
+          ],
+          "mechanic": "ignite",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -64338,7 +64508,8 @@
       "source_id": "Metadata/Items/Gem/SkillGemPermafrostBolts",
       "name": "Permafrost Bolts",
       "candidate_roles": [
-        "primary_damage"
+        "primary_damage",
+        "setup_control"
       ],
       "retrieval_terms": [
         "strength",
@@ -64371,6 +64542,19 @@
             }
           ],
           "mechanic": "cold"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "[Ammunition|Load your Crossbow] with icy bolts that fragment in flight, damaging enemies on hit and in a small cone behind their final target. The icy coating on the bolts makes them extremely potent at [Freeze|Freezing] enemies. These fragments can [Merging|Merge]."
+            }
+          ],
+          "mechanic": "freeze",
+          "scope": "outgoing"
         },
         {
           "relation": "prevents",
@@ -65835,7 +66019,8 @@
       "source_id": "Metadata/Items/Gem/SkillGemPoisonBurstArrow",
       "name": "Poisonburst Arrow",
       "candidate_roles": [
-        "primary_damage"
+        "primary_damage",
+        "setup_control"
       ],
       "retrieval_terms": [
         "dexterity",
@@ -65869,6 +66054,19 @@
             }
           ],
           "mechanic": "chaos"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Fire a virulent arrow that creates a burst of [Poison|Poison] on hit, affecting all enemies in an area."
+            }
+          ],
+          "mechanic": "poison",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -66866,7 +67064,6 @@
       "name": "Primal Strikes",
       "candidate_roles": [
         "primary_damage",
-        "setup_control",
         "payoff"
       ],
       "retrieval_terms": [
@@ -66940,19 +67137,6 @@
             }
           ],
           "mechanic": "lightning"
-        },
-        {
-          "relation": "inflicts",
-          "subject": "skill",
-          "confidence": "exact",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Perform a [Lightning]-charged stab that can be chained into a combination of up to three attacks. The first two attacks conjure a charging Wildwood spirit if they [HitDamage|Hit] a [Shock|Shocked] enemy and refresh [Shock] duration. The third attack is a large swipe that inflicts [ElementalDamage|Elemental] [Exposure], and can [Consume] [Shock] to conjure a stampede of spirits."
-            }
-          ],
-          "mechanic": "shock",
-          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -83038,6 +83222,7 @@
       "name": "Snipe",
       "candidate_roles": [
         "primary_damage",
+        "setup_control",
         "payoff"
       ],
       "retrieval_terms": [
@@ -83111,6 +83296,19 @@
             }
           ],
           "mechanic": "cold"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "[Channelling|Channel] to charge up your bow before releasing a powerful shot. Releasing with [PerfectTiming|Perfect Timing] causes the arrow to explode on impact and [Consume] [Freeze] on directly [HitDamage|Hitting]. [Consume|Consuming] [Freeze] enhances the explosion."
+            }
+          ],
+          "mechanic": "freeze",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -88706,7 +88904,8 @@
       "source_id": "Metadata/Items/Gems/SkillGemStarbornOnslaught",
       "name": "Starborn Onslaught",
       "candidate_roles": [
-        "primary_damage"
+        "primary_damage",
+        "setup_control"
       ],
       "retrieval_terms": [
         "attack",
@@ -88772,6 +88971,19 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Build up Glory by [Freeze|Freezing] or [Chill|Chilling] enemies. When you have maximum [Glory] you may jump backwards loosing your [Mace] with the force of a falling comet onto your target. The impact releases [MoltenFissure|Fissures] and causes stars to fall in the area for a brief period."
+            }
+          ],
+          "mechanic": "chill",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -90515,6 +90727,7 @@
       "name": "Summon Infernal Hound",
       "candidate_roles": [
         "primary_damage",
+        "setup_control",
         "utility"
       ],
       "retrieval_terms": [
@@ -90599,6 +90812,19 @@
             }
           ],
           "mechanic": "minion"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Activate to summon a [Reviving] Infernal Hound which [Ignite|Ignites] enemies near it."
+            }
+          ],
+          "mechanic": "ignite",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -95242,6 +95468,10 @@
             {
               "kind": "stat_id",
               "value": "base_chance_to_poison_on_hit_%"
+            },
+            {
+              "kind": "skill_description",
+              "value": "Create an area of Toxic Bloom on the ground around you. While in the Bloom, you have increased Skill costs, Regenerate Life, and your [Projectile] [Attack|Attacks] attach a Toxic Pustule, which can be [Poison|Poisoned]. Pustules will [DetonationTime|Detonate] after a duration or when enough [Poison] has been applied, dealing more damage based on the stored [Poison] damage and applying [Poison] in an area around it."
             }
           ],
           "mechanic": "poison",
@@ -95582,6 +95812,10 @@
             {
               "kind": "stat_id",
               "value": "base_chance_to_poison_on_hit_%"
+            },
+            {
+              "kind": "skill_description",
+              "value": "Fire a rain of Toxic Pustules into the air. The Pustules deal damage on impact, then [DetonationTime|Detonate] after a delay. They can also be [Poison|Poisoned], causing them to [DetonationTime|Detonate] faster and more violently."
             }
           ],
           "mechanic": "poison",
@@ -98223,7 +98457,8 @@
       "source_id": "Metadata/Items/Gem/SkillGemVineArrow",
       "name": "Vine Arrow",
       "candidate_roles": [
-        "primary_damage"
+        "primary_damage",
+        "setup_control"
       ],
       "retrieval_terms": [
         "dexterity",
@@ -98277,6 +98512,19 @@
             }
           ],
           "mechanic": "damage_over_time"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Fire an arrow into the air that lands after a short delay, damaging enemies and causing a plant to spring up at the impact location. The plant sprouts vines that latch onto nearby enemies, [Slow|Slowing] their movement speed and dealing [Chaos] damage over time. The plant can be [Poison|Poisoned], causing it to deal more damage."
+            }
+          ],
+          "mechanic": "poison",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -99230,6 +99478,7 @@
       "name": "Volatile Dead",
       "candidate_roles": [
         "primary_damage",
+        "setup_control",
         "payoff"
       ],
       "retrieval_terms": [
@@ -99284,6 +99533,19 @@
             }
           ],
           "mechanic": "fire"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Consume a [Corpse] to create a volatile core that seeks out enemies and [Ignite|Ignites] enemies near it. The core explodes at the end of its duration."
+            }
+          ],
+          "mechanic": "ignite",
+          "scope": "outgoing"
         }
       ],
       "compatibility": {
@@ -100033,7 +100295,8 @@
       "source_id": "Metadata/Items/Gems/SkillGemVoltaicBarrier",
       "name": "Voltaic Barrier",
       "candidate_roles": [
-        "primary_damage"
+        "primary_damage",
+        "setup_control"
       ],
       "retrieval_terms": [
         "attack",
@@ -100083,6 +100346,19 @@
             }
           ],
           "mechanic": "lightning"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Raise a pair of electrified pylons in front of you which project a wall of electricity between them, damaging and [Electrocute|Electrocuting] enemies caught between them. [Projectile|Projectiles] you fire through the wall become energised, and discharge that energy on [HitDamage|Hit] as [Chain|Chaining] [Lightning] beams."
+            }
+          ],
+          "mechanic": "electrocute",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -101737,6 +102013,7 @@
       "name": "Wave of Frost",
       "candidate_roles": [
         "primary_damage",
+        "setup_control",
         "utility"
       ],
       "retrieval_terms": [
@@ -101787,6 +102064,19 @@
             }
           ],
           "mechanic": "cold"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Flip backwards and send forth a [Freeze|Freezing] wave in front of you, immediately [Freeze|Freezing] enemies which are [PrimedFreeze|Primed for Freeze]."
+            }
+          ],
+          "mechanic": "freeze",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -109808,7 +110098,8 @@
       "source_id": "Metadata/Items/Gem/SkillGemHammerOfNgamahu",
       "name": "[DNT] Hammer of Ngamahu",
       "candidate_roles": [
-        "primary_damage"
+        "primary_damage",
+        "setup_control"
       ],
       "retrieval_terms": [
         "attack",
@@ -109839,6 +110130,19 @@
           ],
           "from": "physical",
           "to": "fire",
+          "scope": "outgoing"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "[DNT] Build [Glory] by Break Armour and Igniting enemies. When you have maximum [Glory] you may entreat the Ancestors to crush your enemies, manifesting a massive hammer that falls from the sky onto your target, [Slam|Slamming] into the ground after a short duration and dealing immense damage based on your weapon."
+            }
+          ],
+          "mechanic": "ignite",
           "scope": "outgoing"
         },
         {
@@ -117902,6 +118206,7 @@
       "source_id": "AscendancySorceress1Notable7",
       "name": "Heavy Snows",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -117920,6 +118225,23 @@
             }
           ],
           "mechanic": "stormweaver"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "scraped_passive_line",
+              "value": "Targets can be affected by two of your Chill"
+            },
+            {
+              "kind": "scraped_passive_description",
+              "value": "Targets can be affected by two of your Chill Your Chills can Slow you inflict"
+            }
+          ],
+          "mechanic": "chill",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -118259,6 +118581,19 @@
           "scope": "outgoing"
         },
         {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "scraped_passive_description",
+              "value": "Gain 10% of Damage as Extra Cold Damage On Freezing Enemies create Chilled Ground"
+            }
+          ],
+          "mechanic": "freeze",
+          "scope": "outgoing"
+        },
+        {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
@@ -118330,6 +118665,7 @@
       "source_id": "AscendancyMonk2Notable3",
       "name": "I am the Thunder...",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -118348,6 +118684,19 @@
             }
           ],
           "mechanic": "invoker"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "scraped_passive_description",
+              "value": "Gain 10% of Damage as Extra Lightning Damage 25% chance on Shocking Enemies to created Shocked Ground"
+            }
+          ],
+          "mechanic": "shock",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -123645,6 +123994,7 @@
       "source_id": "AscendancySorceress1Notable6",
       "name": "Shaper of Storms",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -123662,6 +124012,19 @@
             }
           ],
           "mechanic": "stormweaver"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "passive_line",
+              "value": "All damage can shock"
+            }
+          ],
+          "mechanic": "shock",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -123714,6 +124077,7 @@
       "source_id": "AscendancySorceress1Notable8",
       "name": "Shaper of Winter",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -123731,6 +124095,19 @@
             }
           ],
           "mechanic": "stormweaver"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "passive_line",
+              "value": "All damage can chill"
+            }
+          ],
+          "mechanic": "chill",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -124538,6 +124915,7 @@
       "source_id": "AscendancySorceress1Notable5",
       "name": "Strike Twice",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -124555,6 +124933,23 @@
             }
           ],
           "mechanic": "stormweaver"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "scraped_passive_line",
+              "value": "Targets can be affected by two of your Shock"
+            },
+            {
+              "kind": "scraped_passive_description",
+              "value": "Targets can be affected by two of your Shock s at the same time 25% less Magnitude of Shock you inflict"
+            }
+          ],
+          "mechanic": "shock",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -134799,12 +135194,30 @@
       "source_id": "bleed18",
       "name": "Bleeding Out",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
         "bleed"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "passive_line",
+              "value": "+250 Accuracy rating vs bleeding enemies"
+            },
+            {
+              "kind": "passive_description",
+              "value": "+250 Accuracy rating vs bleeding enemies +10% Faster bleed"
+            }
+          ],
+          "mechanic": "bleed",
+          "scope": "outgoing"
+        },
         {
           "relation": "modifies",
           "subject": "passive",
@@ -173483,6 +173896,7 @@
       "source_id": "bleed12",
       "name": "Perfectly Placed Knife",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -173492,6 +173906,23 @@
         "critical_hit"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "passive_line",
+              "value": "+25% Critical strike chance   vs bleeding enemies"
+            },
+            {
+              "kind": "passive_description",
+              "value": "+25% Critical strike chance   vs bleeding enemies +20% Aggravate bleeding on attack crit chance"
+            }
+          ],
+          "mechanic": "bleed",
+          "scope": "outgoing"
+        },
         {
           "relation": "modifies",
           "subject": "passive",
@@ -198237,6 +198668,7 @@
       "source_id": "Metadata/Items/Gem/SupportGemAdmixture",
       "name": "Admixture",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "support_family": {
@@ -198278,6 +198710,19 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports Skills which can cause Damaging [HitDamage|Hits]. [Bleeding] inflicted by those [HitDamage|Hits] is more effective against [Poison|Poisoned] Enemies, and [Poison] inflicted by Supported Skills is more effective against [Bleeding] Enemies."
+            }
+          ],
+          "mechanic": "bleed",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -206616,6 +207061,19 @@
           ]
         },
         {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports Skills which can [HitDamage|Hit] enemies. [HitDamage|Hits] with Supported Skills which [Freeze] enemies cause [Physical] damage against them to [ArmourBreak|Break their Armour] while they remain [Freeze|Frozen]."
+            }
+          ],
+          "mechanic": "freeze",
+          "scope": "outgoing"
+        },
+        {
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
@@ -207566,6 +208024,7 @@
       "source_id": "Metadata/Items/Gems/SupportGemBurstingPlague",
       "name": "Bursting Plague",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "support_family": {
@@ -207607,6 +208066,19 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports skills that can [Poison|Poison] enemies, causing [Poison|Poisoned] enemies to gain Plague over time and explode in a Plague Burst on death. Cannot support the skills of [Minion|Minions]."
+            }
+          ],
+          "mechanic": "poison",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -224787,7 +225259,6 @@
       "source_id": "Metadata/Items/Gem/SupportGemFirstBlood",
       "name": "First Blood",
       "candidate_roles": [
-        "setup_control",
         "enabler"
       ],
       "support_family": {
@@ -224815,19 +225286,6 @@
             }
           ],
           "mechanic": "physical"
-        },
-        {
-          "relation": "inflicts",
-          "subject": "supported_skill",
-          "confidence": "exact",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports [Attack|Attacks]. Supported Skills are far more likely to inflict [Bleeding] on [HitDamage|Hitting] full Life Enemies."
-            }
-          ],
-          "mechanic": "bleed",
-          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -226610,6 +227068,7 @@
       "source_id": "Metadata/Items/Gems/SupportGemGlaciation",
       "name": "Freeze",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "support_family": {
@@ -226639,6 +227098,19 @@
             }
           ],
           "mechanic": "cold"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports any skill that [HitDamage|Hits] enemies, making it more effective at [Freeze|Freezing] enemies."
+            }
+          ],
+          "mechanic": "freeze",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -230928,6 +231400,7 @@
       "source_id": "Metadata/Items/Gem/SupportGemBloodintheEyes",
       "name": "Hobble",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "support_family": {
@@ -230956,6 +231429,19 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports Skills that [HitDamage|Hit] Enemies, causing those [HitDamage|Hits] to [Hobble] [Bleeding] Enemies based on a portion of [Physical|Physical Damage] dealt."
+            }
+          ],
+          "mechanic": "bleed",
+          "scope": "outgoing"
         }
       ],
       "compatibility": {
@@ -232032,6 +232518,7 @@
       "source_id": "Metadata/Items/Gems/SupportGemImmolate",
       "name": "Immolate",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "support_family": {
@@ -232059,6 +232546,19 @@
             }
           ],
           "mechanic": "fire"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports [Attack|Attacks], granting them extra [Fire] damage against [Ignite|Ignited] enemies but making them unable to [Ignite] enemies themselves."
+            }
+          ],
+          "mechanic": "ignite",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -250902,6 +251402,19 @@
           "mechanic": "physical"
         },
         {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports [Melee] [Attack] Skills you use or [Trigger] yourself. [KillingBlow|Killing Blows] with Supported Skills on [Bleeding] enemies create a Blood [Remnant]. Blood [Remnant|Remnants] increase your Life regeneration rate for a short while after being collected."
+            }
+          ],
+          "mechanic": "bleed",
+          "scope": "outgoing"
+        },
+        {
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
@@ -255875,6 +256388,7 @@
       "source_id": "Metadata/Items/Gem/SupportGemStaticShocks",
       "name": "Static Shocks",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "support_family": {
@@ -255908,6 +256422,19 @@
             }
           ],
           "mechanic": "lightning"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports Skills which can [HitDamage|Hit] enemies. [Shock|Shocking] an enemy with [HitDamage|Hits] from Supported Skills [Trigger|Triggers] Static Shocks, causing that enemy to become a source of [Lightning] damage sending pulses towards nearby enemies."
+            }
+          ],
+          "mechanic": "shock",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -258123,6 +258650,7 @@
       "source_id": "Metadata/Items/Gem/SupportGemTacatisIre",
       "name": "Tacati's Ire",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "support_family": {
@@ -258151,6 +258679,19 @@
             }
           ],
           "mechanic": "chaos"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports Skills which can cause [HitDamage|Damaging Hits]. [Poison] inflicted with Supported Skills deals Damage faster the higher your [Rage]."
+            }
+          ],
+          "mechanic": "poison",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -258594,6 +259135,7 @@
       "source_id": "Metadata/Items/Gem/SupportGemTear",
       "name": "Tear",
       "candidate_roles": [
+        "setup_control",
         "enabler"
       ],
       "support_family": {
@@ -258624,6 +259166,19 @@
             }
           ],
           "mechanic": "physical"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "skill_description",
+              "value": "Supports [Melee] [Attack|Attacks] you use or [Trigger] yourself. On-Kill effects caused by [KillingBlow|Killing Blows] with Supported Skills on [Bleeding] enemies have a chance to occur twice."
+            }
+          ],
+          "mechanic": "bleed",
+          "scope": "outgoing"
         },
         {
           "relation": "modifies",
@@ -270219,7 +270774,10 @@
       "content_type": "unique",
       "source_id": "Blackgleam||Fire Quiver",
       "name": "Blackgleam",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "setup_control",
+        "enabler"
+      ],
       "retrieval_terms": [
         "attack",
         "fire",
@@ -270229,6 +270787,19 @@
         "quiver"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "item",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Projectile Pierce all Ignite enemies"
+            }
+          ],
+          "mechanic": "ignite",
+          "scope": "outgoing"
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -270833,13 +271404,29 @@
       "content_type": "unique",
       "source_id": "Brain Rattler||Studded Greatclub",
       "name": "Brain Rattler",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "setup_control",
+        "enabler"
+      ],
       "retrieval_terms": [
         "electrocution",
         "lightning",
         "ezomyte_mace"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "item",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "All damage with this Weapon causes Electrocute buildup"
+            }
+          ],
+          "mechanic": "electrocute",
+          "scope": "outgoing"
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -276276,10 +276863,6 @@
           "subject": "item",
           "confidence": "strong",
           "evidence": [
-            {
-              "kind": "unique_mod",
-              "value": "24% increased chance to Shock"
-            },
             {
               "kind": "unique_mod",
               "value": "Trigger Spark Skill on killing a Shock Enemy"
@@ -282904,10 +283487,7 @@
       "content_type": "unique",
       "source_id": "Levinstone||Topaz Ring",
       "name": "Levinstone",
-      "candidate_roles": [
-        "setup_control",
-        "enabler"
-      ],
+      "candidate_roles": [],
       "retrieval_terms": [
         "lightning_resistance",
         "magnitude",
@@ -282915,19 +283495,6 @@
         "ring"
       ],
       "facts": [
-        {
-          "relation": "inflicts",
-          "subject": "item",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "unique_mod",
-              "value": "16% increased chance to Shock"
-            }
-          ],
-          "mechanic": "shock",
-          "scope": "outgoing"
-        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -290931,10 +291498,7 @@
       "content_type": "unique",
       "source_id": "Skysliver||Winged Spear",
       "name": "Skysliver",
-      "candidate_roles": [
-        "setup_control",
-        "enabler"
-      ],
+      "candidate_roles": [],
       "retrieval_terms": [
         "damage_type",
         "lightning",
@@ -290942,19 +291506,6 @@
         "spear"
       ],
       "facts": [
-        {
-          "relation": "inflicts",
-          "subject": "item",
-          "confidence": "strong",
-          "evidence": [
-            {
-              "kind": "unique_mod",
-              "value": "54% increased chance to Shock"
-            }
-          ],
-          "mechanic": "shock",
-          "scope": "outgoing"
-        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -291150,6 +291701,10 @@
             {
               "kind": "unique_mod",
               "value": "27% chance to Poison on HitDamage"
+            },
+            {
+              "kind": "unique_mod",
+              "value": "Targets can be affected by +1 of your Poison at the same time"
             }
           ],
           "mechanic": "poison",
@@ -293517,7 +294072,10 @@
       "content_type": "unique",
       "source_id": "The Blood Thorn||Wrapped Quarterstaff",
       "name": "The Blood Thorn",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "setup_control",
+        "enabler"
+      ],
       "retrieval_terms": [
         "bleed",
         "hit",
@@ -293527,6 +294085,19 @@
         "ezomyte_quarterstaff"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "item",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Causes Bleeding on HitDamage"
+            }
+          ],
+          "mechanic": "bleed",
+          "scope": "outgoing"
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -295865,7 +296436,10 @@
       "content_type": "unique",
       "source_id": "The Pandemonius||Lapis Amulet",
       "name": "The Pandemonius",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "setup_control",
+        "enabler"
+      ],
       "retrieval_terms": [
         "chill",
         "cold_resistance",
@@ -295875,6 +296449,19 @@
         "amulet"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "item",
+          "confidence": "strong",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Blind Chill enemies on HitDamage"
+            }
+          ],
+          "mechanic": "chill",
+          "scope": "outgoing"
+        },
         {
           "relation": "occupies",
           "subject": "item",
