@@ -588,7 +588,10 @@ def parse_stat_id(value: Any, subject: str = "player") -> list[dict[str, Any]]:
         return []
 
     if (
-        normalized.startswith("display_")
+        (normalized.startswith("display_") and not re.search(
+            r"display(?:_[a-z0-9]+){0,4}_(?:bleed|bleeding|poison|ignite|chill|freeze|shock|electrocute|electrocution)s?_(?:without_hit|on_hit|enemies)",
+            normalized,
+        ))
         or "_no_display" in normalized
         or normalized.startswith("disable_visual_")
         or normalized.startswith("show_")
@@ -599,6 +602,40 @@ def parse_stat_id(value: Any, subject: str = "player") -> list[dict[str, Any]]:
     conversion = _conversion_fact(value, "stat_id", subject)
     if conversion:
         facts.append(conversion)
+
+    # These are structured application statements, despite being display/stat
+    # identifiers rather than prose.  Match the grammatical family rather than
+    # individual skills: refreshes frequently introduce the same semantics on
+    # a different cloud, projectile, or secondary effect.
+    ailment_stat_application = re.search(
+        r"(?:^|_)(?:global_)?(bleed|bleeding|poison|ignite|chill|freeze|shock|electrocute|electrocution)"
+        r"(?:_on_hit|_without_hit|s?_as_though)(?:_|$)",
+        normalized,
+    )
+    display_application = re.search(
+        r"(?:^|_)display(?:_[a-z0-9]+){0,4}_(bleed|bleeding|poison|ignite|chill|freeze|shock|electrocute|electrocution)"
+        r"(?:s)?_(?:without_hit|on_hit|enemies)(?:_|$)",
+        normalized,
+    )
+    application_match = None if "consume" in normalized else (ailment_stat_application or display_application)
+    if application_match:
+        mechanic = {"bleeding": "bleed", "electrocution": "electrocute"}.get(
+            application_match.group(1), application_match.group(1)
+        )
+        facts.append(make_fact(
+            "inflicts", subject=subject, source_kind="stat_id", source_value=value,
+            mechanic=mechanic, confidence="exact", scope="outgoing",
+        ))
+
+    direct_ailment_eligibility = re.search(
+        r"(?:^|_)(?:base_)?(?:physical|fire|cold|lightning|chaos)_damage_can_"
+        r"(ignite|bleed|poison|chill|freeze|shock|electrocute)(?:_|$)", normalized,
+    )
+    if direct_ailment_eligibility and subject == "skill":
+        facts.append(make_fact(
+            "provides", subject=subject, source_kind="stat_id", source_value=value,
+            mechanic=direct_ailment_eligibility.group(1), confidence="exact", scope="outgoing",
+        ))
 
     # "Gain as" is additive damage-type provision rather than conversion. It
     # is the typed bridge used when a support adds a rolled damage type without
@@ -860,7 +897,7 @@ def _has_direct_ailment_application(normalized: str, mechanic: str) -> bool:
     )
     contextual_reference = re.compile(
         r"(?:when_you|if_you|whenever_you|skills?_which|skills?_that_can|"
-        r"can|cannot|unable_to|against|all|blind)$"
+        r"can|cannot|unable_to|against|from|all|blind)$"
     )
     for match in application.finditer(normalized):
         prefix = normalized[:match.start()].rstrip("_")
@@ -875,7 +912,7 @@ def _has_direct_ailment_application(normalized: str, mechanic: str) -> bool:
 
 def _has_explicit_ailment_application(normalized: str, terms: str) -> bool:
     application = re.compile(
-        rf"(?:always|can|chance_to|inflict|inflicts|inflicting|cause|causes|causing_them_to)"
+        rf"(?:always|can|chance_to|apply|applies|applying|inflict|inflicts|inflicting|inflicted_with|cause|causes|causing_them_to)"
         rf"(?:_[a-z0-9]+){{0,8}}_(?:{terms})(?:_|$)"
     )
     conditional_reference = re.compile(r"(?:^|_)(?:when|if|whenever)_you(?:_|$)")
@@ -885,6 +922,10 @@ def _has_explicit_ailment_application(normalized: str, terms: str) -> bool:
     )
     for match in application.finditer(normalized):
         prefix = normalized[:match.start()].rstrip("_")
+        # Do not let a verb cross into a later clause. For example, "inflicts
+        # Exposure, and can Consume Shock" applies Exposure, not Shock.
+        if re.search(r"_(?:consume|consumes|consuming|exposure|from|but|however)_", match.group(0)):
+            continue
         chance_is_scaling = match.group(0).startswith("chance_to_") and bool(
             re.search(r"(?:increased|more|reduced|less)(?:_[a-z0-9]+){0,3}$", prefix)
         )
@@ -900,6 +941,64 @@ def _has_explicit_ailment_application(normalized: str, terms: str) -> bool:
         prefix = normalized[:verb_application.start()].rstrip("_")
         return not re.search(r"(?:against|while|when|if|already)(?:_[a-z0-9]+){0,4}$", prefix)
     return False
+
+
+def strong_ailment_application_signals(value: Any) -> list[tuple[str, str]]:
+    """Return conservative (mechanic, category) expectations for the audit.
+
+    This intentionally shares the parser's grammatical primitives.  It is not
+    a broad ailment-name search, so scaling, consumption, limits, thresholds,
+    and afflicted-enemy context do not create noisy warnings.
+    """
+    normalized = normalized_phrase(value)
+    if (
+        not normalized
+        or _negative_mechanics(value, source_kind="semantic_audit")
+        or re.search(r"(?:^|_)(?:consume|consumes|consuming|against|while|when|if|whenever|maximum|threshold)(?:_|$)", normalized)
+        or re.search(r"(?:^|_)cannot_(?:poison|ignite|bleed|chill|freeze|shock|electrocute)(?:_|$)", normalized)
+        or "unable_to_inflict" in normalized
+        or re.search(r"skills?_(?:which|that)_can(?:_|$)", normalized)
+    ):
+        return []
+    signals: list[tuple[str, str]] = []
+    for mechanic, terms in AILMENT_TEXT_TERMS.items():
+        buildup = bool(re.search(
+            rf"(?:cause|causes|build|builds|building|contribute|contributes|contributing)"
+            rf"(?:_[a-z0-9]+){{0,8}}_(?:{terms})(?:_[a-z0-9]+){{0,2}}_buildup(?:_|$)"
+            rf"|(?:build|builds|building)(?:_up)?(?:_[a-z0-9]+){{0,5}}_(?:electrocution)(?:_|$)",
+            normalized,
+        ))
+        application = _has_explicit_ailment_application(normalized, terms) or _has_direct_ailment_application(normalized, mechanic)
+        if buildup:
+            signals.append((mechanic, "BUILDUP_TEXT_WITHOUT_FACT"))
+        elif application:
+            signals.append((mechanic, "APPLICATION_TEXT_WITHOUT_FACT"))
+    return list(dict.fromkeys(signals))
+
+
+def semantic_completeness_warnings(
+    *, entity_id: str, sources: Iterable[dict[str, Any]], facts: Iterable[dict[str, Any]]
+) -> list[dict[str, Any]]:
+    facts = list(facts)
+    warnings: list[dict[str, Any]] = []
+    for source in sources:
+        for mechanic, category in strong_ailment_application_signals(source.get("value")):
+            capable = any(
+                fact.get("mechanic") == mechanic
+                and fact.get("relation") in {"inflicts", "provides", "enables", "fulfills", "contributes_to_buildup", "creates"}
+                for fact in facts
+            )
+            if capable:
+                continue
+            warnings.append({
+                "category": "COMPONENT_APPLICATION_NOT_PROMOTED" if source.get("component") not in {None, "base"} else category,
+                "entity": entity_id,
+                "component": source.get("component") or "base",
+                "source": source.get("kind"),
+                "snippet": str(source.get("value") or "")[:180],
+                "expected_mechanic": mechanic,
+            })
+    return sorted(warnings, key=lambda row: (row["entity"], row["component"], row["expected_mechanic"], row["category"], row["snippet"]))
 
 
 def _text_ailment_facts(

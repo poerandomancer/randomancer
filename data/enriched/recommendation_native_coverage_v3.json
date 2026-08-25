@@ -79,8 +79,8 @@
     "GAP": 24
   },
   "directCandidateCounts": {
-    "explicit": 274,
-    "inherent": 133
+    "explicit": 287,
+    "inherent": 121
   },
   "changedClassifications": [
     {
@@ -94,13 +94,6 @@
       "weapon": "Quarterstaff",
       "offenseId": "chill",
       "offense": "Chill",
-      "from": "CARRIER",
-      "to": "DIRECT"
-    },
-    {
-      "weapon": "Quarterstaff",
-      "offenseId": "freeze",
-      "offense": "Freeze",
       "from": "CARRIER",
       "to": "DIRECT"
     },
@@ -129,13 +122,6 @@
       "weapon": "Crossbow",
       "offenseId": "chill",
       "offense": "Chill",
-      "from": "CARRIER",
-      "to": "DIRECT"
-    },
-    {
-      "weapon": "Crossbow",
-      "offenseId": "freeze",
-      "offense": "Freeze",
       "from": "CARRIER",
       "to": "DIRECT"
     },
@@ -197,12 +183,8 @@
   "affinityOnlySkills": [
     "Acidic Concoction",
     "Decompose",
-    "Exsanguinate",
-    "Gas Arrow",
     "Sanguine Revelry",
-    "Shockchain Arrow",
-    "Valako's Charge",
-    "Voltaic Barrier"
+    "Shockchain Arrow"
   ],
   "cells": [
     {
@@ -1118,7 +1100,7 @@
       "offenseId": "freeze",
       "offense": "Freeze",
       "classification": "DIRECT",
-      "baselineClassification": "CARRIER",
+      "baselineClassification": "DIRECT",
       "directCandidates": [
         {
           "id": "skill:Metadata/Items/Gem/SkillGemFrozenLocus",
@@ -1173,15 +1155,15 @@
         {
           "id": "skill:Metadata/Items/Gems/SkillGemWaveOfFrost",
           "name": "Wave of Frost",
-          "proofType": "inherent",
+          "proofType": "explicit",
           "evidence": [
             {
-              "relation": "fulfills",
+              "relation": "inflicts",
               "mechanic": "freeze",
               "confidence": "strong",
-              "proofType": "inherent",
-              "globalRule": "cold_hit_to_freeze",
-              "damageEvidence": "converts:cold:exact",
+              "proofType": "explicit",
+              "globalRule": null,
+              "damageEvidence": null,
               "affinity": [
                 "modifies:freeze:strong"
               ]
@@ -1822,6 +1804,24 @@
       "baselineClassification": "DIRECT",
       "directCandidates": [
         {
+          "id": "skill:Metadata/Items/Gem/SkillGemGasArrow",
+          "name": "Gas Arrow",
+          "proofType": "explicit",
+          "evidence": [
+            {
+              "relation": "inflicts",
+              "mechanic": "poison",
+              "confidence": "exact",
+              "proofType": "explicit",
+              "globalRule": null,
+              "damageEvidence": null,
+              "affinity": [
+                "modifies:poison:strong"
+              ]
+            }
+          ]
+        },
+        {
           "id": "skill:Metadata/Items/Gem/SkillGemPoisonBurstArrow",
           "name": "Poisonburst Arrow",
           "proofType": "explicit",
@@ -1829,7 +1829,7 @@
             {
               "relation": "inflicts",
               "mechanic": "poison",
-              "confidence": "strong",
+              "confidence": "exact",
               "proofType": "explicit",
               "globalRule": null,
               "damageEvidence": null,
@@ -1847,7 +1847,7 @@
             {
               "relation": "inflicts",
               "mechanic": "poison",
-              "confidence": "strong",
+              "confidence": "exact",
               "proofType": "explicit",
               "globalRule": null,
               "damageEvidence": null,
@@ -1865,7 +1865,7 @@
             {
               "relation": "inflicts",
               "mechanic": "poison",
-              "confidence": "strong",
+              "confidence": "exact",
               "proofType": "explicit",
               "globalRule": null,
               "damageEvidence": null,
@@ -1896,7 +1896,7 @@
       ],
       "carrierCandidates": [],
       "counts": {
-        "direct": 4,
+        "direct": 5,
         "carrier": 0
       }
     },
@@ -2123,7 +2123,7 @@
             {
               "relation": "inflicts",
               "mechanic": "shock",
-              "confidence": "strong",
+              "confidence": "exact",
               "proofType": "explicit",
               "globalRule": null,
               "damageEvidence": null,
@@ -2707,15 +2707,15 @@
         {
           "id": "skill:Metadata/Items/Gem/SkillGemIncendiaryShot",
           "name": "Incendiary Shot",
-          "proofType": "inherent",
+          "proofType": "explicit",
           "evidence": [
             {
-              "relation": "fulfills",
+              "relation": "inflicts",
               "mechanic": "ignite",
               "confidence": "strong",
-              "proofType": "inherent",
-              "globalRule": "fire_hit_to_ignite",
-              "damageEvidence": "has_property:fire:exact",
+              "proofType": "explicit",
+              "globalRule": null,
+              "damageEvidence": null,
               "affinity": []
             }
           ]
@@ -2804,7 +2804,7 @@
             {
               "relation": "inflicts",
               "mechanic": "poison",
-              "confidence": "strong",
+              "confidence": "exact",
               "proofType": "explicit",
               "globalRule": null,
               "damageEvidence": null,
@@ -2904,7 +2904,7 @@
       "offenseId": "freeze",
       "offense": "Freeze",
       "classification": "DIRECT",
-      "baselineClassification": "CARRIER",
+      "baselineClassification": "DIRECT",
       "directCandidates": [
         {
           "id": "skill:Metadata/Items/Gem/SkillGemGlacialBolt",
@@ -2957,15 +2957,15 @@
         {
           "id": "skill:Metadata/Items/Gem/SkillGemPermafrostBolts",
           "name": "Permafrost Bolts",
-          "proofType": "inherent",
+          "proofType": "explicit",
           "evidence": [
             {
-              "relation": "fulfills",
+              "relation": "inflicts",
               "mechanic": "freeze",
               "confidence": "strong",
-              "proofType": "inherent",
-              "globalRule": "cold_hit_to_freeze",
-              "damageEvidence": "has_property:cold:exact",
+              "proofType": "explicit",
+              "globalRule": null,
+              "damageEvidence": null,
               "affinity": []
             }
           ]
@@ -3084,7 +3084,7 @@
           "proofType": "explicit",
           "evidence": [
             {
-              "relation": "provides",
+              "relation": "inflicts",
               "mechanic": "electrocute",
               "confidence": "strong",
               "proofType": "explicit",
@@ -3995,15 +3995,15 @@
         {
           "id": "skill:Metadata/Items/Gems/SkillGemIncinerate",
           "name": "Incinerate",
-          "proofType": "inherent",
+          "proofType": "explicit",
           "evidence": [
             {
-              "relation": "fulfills",
+              "relation": "inflicts",
               "mechanic": "ignite",
               "confidence": "strong",
-              "proofType": "inherent",
-              "globalRule": "fire_hit_to_ignite",
-              "damageEvidence": "has_property:fire:exact",
+              "proofType": "explicit",
+              "globalRule": null,
+              "damageEvidence": null,
               "affinity": [
                 "modifies:ignite:strong"
               ]
@@ -4245,15 +4245,15 @@
         {
           "id": "skill:Metadata/Items/Gems/SkillGemFrostBomb",
           "name": "Frost Bomb",
-          "proofType": "inherent",
+          "proofType": "explicit",
           "evidence": [
             {
-              "relation": "fulfills",
+              "relation": "inflicts",
               "mechanic": "chill",
-              "confidence": "strong",
-              "proofType": "inherent",
-              "globalRule": "cold_hit_to_chill",
-              "damageEvidence": "has_property:cold:exact",
+              "confidence": "exact",
+              "proofType": "explicit",
+              "globalRule": null,
+              "damageEvidence": null,
               "affinity": [
                 "modifies:chill:strong"
               ]
@@ -4281,15 +4281,15 @@
         {
           "id": "skill:Metadata/Items/Gems/SkillGemFrostbolt",
           "name": "Frostbolt",
-          "proofType": "inherent",
+          "proofType": "explicit",
           "evidence": [
             {
-              "relation": "fulfills",
+              "relation": "inflicts",
               "mechanic": "chill",
               "confidence": "strong",
-              "proofType": "inherent",
-              "globalRule": "cold_hit_to_chill",
-              "damageEvidence": "has_property:cold:exact",
+              "proofType": "explicit",
+              "globalRule": null,
+              "damageEvidence": null,
               "affinity": []
             }
           ]
@@ -6254,15 +6254,15 @@
         {
           "id": "skill:Metadata/Items/Gems/SkillGemIncinerate",
           "name": "Incinerate",
-          "proofType": "inherent",
+          "proofType": "explicit",
           "evidence": [
             {
-              "relation": "fulfills",
+              "relation": "inflicts",
               "mechanic": "ignite",
               "confidence": "strong",
-              "proofType": "inherent",
-              "globalRule": "fire_hit_to_ignite",
-              "damageEvidence": "has_property:fire:exact",
+              "proofType": "explicit",
+              "globalRule": null,
+              "damageEvidence": null,
               "affinity": [
                 "modifies:ignite:strong"
               ]
@@ -6504,15 +6504,15 @@
         {
           "id": "skill:Metadata/Items/Gems/SkillGemFrostBomb",
           "name": "Frost Bomb",
-          "proofType": "inherent",
+          "proofType": "explicit",
           "evidence": [
             {
-              "relation": "fulfills",
+              "relation": "inflicts",
               "mechanic": "chill",
-              "confidence": "strong",
-              "proofType": "inherent",
-              "globalRule": "cold_hit_to_chill",
-              "damageEvidence": "has_property:cold:exact",
+              "confidence": "exact",
+              "proofType": "explicit",
+              "globalRule": null,
+              "damageEvidence": null,
               "affinity": [
                 "modifies:chill:strong"
               ]
@@ -6540,15 +6540,15 @@
         {
           "id": "skill:Metadata/Items/Gems/SkillGemFrostbolt",
           "name": "Frostbolt",
-          "proofType": "inherent",
+          "proofType": "explicit",
           "evidence": [
             {
-              "relation": "fulfills",
+              "relation": "inflicts",
               "mechanic": "chill",
               "confidence": "strong",
-              "proofType": "inherent",
-              "globalRule": "cold_hit_to_chill",
-              "damageEvidence": "has_property:cold:exact",
+              "proofType": "explicit",
+              "globalRule": null,
+              "damageEvidence": null,
               "affinity": []
             }
           ]
@@ -7959,15 +7959,15 @@
         {
           "id": "skill:Metadata/Items/Gems/SkillGemIncinerate",
           "name": "Incinerate",
-          "proofType": "inherent",
+          "proofType": "explicit",
           "evidence": [
             {
-              "relation": "fulfills",
+              "relation": "inflicts",
               "mechanic": "ignite",
               "confidence": "strong",
-              "proofType": "inherent",
-              "globalRule": "fire_hit_to_ignite",
-              "damageEvidence": "has_property:fire:exact",
+              "proofType": "explicit",
+              "globalRule": null,
+              "damageEvidence": null,
               "affinity": [
                 "modifies:ignite:strong"
               ]
@@ -8209,15 +8209,15 @@
         {
           "id": "skill:Metadata/Items/Gems/SkillGemFrostBomb",
           "name": "Frost Bomb",
-          "proofType": "inherent",
+          "proofType": "explicit",
           "evidence": [
             {
-              "relation": "fulfills",
+              "relation": "inflicts",
               "mechanic": "chill",
-              "confidence": "strong",
-              "proofType": "inherent",
-              "globalRule": "cold_hit_to_chill",
-              "damageEvidence": "has_property:cold:exact",
+              "confidence": "exact",
+              "proofType": "explicit",
+              "globalRule": null,
+              "damageEvidence": null,
               "affinity": [
                 "modifies:chill:strong"
               ]
@@ -8245,15 +8245,15 @@
         {
           "id": "skill:Metadata/Items/Gems/SkillGemFrostbolt",
           "name": "Frostbolt",
-          "proofType": "inherent",
+          "proofType": "explicit",
           "evidence": [
             {
-              "relation": "fulfills",
+              "relation": "inflicts",
               "mechanic": "chill",
               "confidence": "strong",
-              "proofType": "inherent",
-              "globalRule": "cold_hit_to_chill",
-              "damageEvidence": "has_property:cold:exact",
+              "proofType": "explicit",
+              "globalRule": null,
+              "damageEvidence": null,
               "affinity": []
             }
           ]

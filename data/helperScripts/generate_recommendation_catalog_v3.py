@@ -23,6 +23,7 @@ from lib.recommendation_semantics import (
     merge_facts,
     normalized_phrase,
     parse_evidence,
+    semantic_completeness_warnings,
 )
 from lib.tag_normalization import normalize_tag_list
 
@@ -414,8 +415,15 @@ def record_and_parse(
     source_kind: str,
     value: Any,
     subject: str,
+    component: str | None = None,
 ) -> list[dict[str, Any]]:
     facts = parse_evidence(source_kind, value, subject)
+    for fact in facts:
+        for evidence in fact.get("evidence") or []:
+            evidence["parent_entity_id"] = entity_id
+            if component:
+                evidence["component"] = component
+            evidence["pattern_category"] = "structured_stat" if source_kind == "stat_id" else "semantic_text"
     coverage.record(group, entity_id=entity_id, kind=source_kind, value=value, facts=facts)
     return facts
 
@@ -454,6 +462,7 @@ def build_skill_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[st
         type_names = active_skill_types(ctx, links.get("active_skill_rids") or [], granted_effects)
         taxonomy_damage_types = unique_sorted((skill.get("taxonomy") or {}).get("damage_types") or [])
         facts: list[dict[str, Any]] = []
+        semantic_sources: list[dict[str, Any]] = []
 
         for type_name in type_names:
             facts.extend(
@@ -480,6 +489,12 @@ def build_skill_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[st
             )
 
         for stat in stats:
+            component = f"statset:{stat.get('statset_rid')}" if stat.get("statset_rid") is not None else "structured_stats"
+            # Only application-like structured identifiers participate in the
+            # completeness audit. All stats are still parsed; excluding broad
+            # scaling identifiers here keeps this diagnostic conservative.
+            if re.search(r"(?:on_hit|without_hit|damage_can_(?:ignite|bleed|poison|chill|freeze|shock|electrocute)|electrocutes_as_though)", stat["id"]):
+                semantic_sources.append({"kind": "stat_id", "value": stat["id"], "component": component})
             facts.extend(
                 record_and_parse(
                     coverage,
@@ -488,19 +503,45 @@ def build_skill_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[st
                     source_kind="stat_id",
                     value=stat["id"],
                     subject=subject,
+                    component=component,
                 )
             )
 
         description = str(skill.get("description") or "").strip()
+        text_sources: list[dict[str, str]] = []
         if description:
+            text_sources.append({"kind": "skill_description", "value": description, "component": "base"})
+        for active in skill.get("active_skills") or []:
+            component = str(active.get("display_name") or active.get("name") or active.get("id") or "active_skill")
+            for field in ("description", "short_description", "website_description"):
+                value = str(active.get(field) or "").strip()
+                if value:
+                    text_sources.append({"kind": f"active_skill_{field}", "value": value, "component": component})
+        for active_rid in links.get("active_skill_rids") or []:
+            active = ctx.active_by_rid.get(active_rid) or {}
+            component = str(active.get("DisplayedName") or active.get("Id") or f"active_skill:{active_rid}")
+            for field, source_kind in (("Description", "active_skill_description"), ("ShortDescription", "active_skill_short_description"), ("WebsiteDescription", "active_skill_website_description")):
+                value = str(active.get(field) or "").strip()
+                if value:
+                    text_sources.append({"kind": source_kind, "value": value, "component": component})
+        deduped_text_sources = []
+        seen_text = set()
+        for source in text_sources:
+            key = (source["component"], source["value"])
+            if key not in seen_text:
+                seen_text.add(key)
+                deduped_text_sources.append(source)
+        semantic_sources.extend(deduped_text_sources)
+        for source in deduped_text_sources:
             facts.extend(
                 record_and_parse(
                     coverage,
                     group="skill_descriptions",
                     entity_id=entity_id,
-                    source_kind="skill_description",
-                    value=description,
+                    source_kind=source["kind"],
+                    value=source["value"],
                     subject=subject,
+                    component=source["component"],
                 )
             )
 
@@ -552,6 +593,7 @@ def build_skill_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[st
             if role not in roles:
                 roles.insert(0, role)
 
+        completeness_warnings = semantic_completeness_warnings(entity_id=entity_id, sources=semantic_sources, facts=facts)
         entities.append(
             {
                 "id": entity_id,
@@ -580,6 +622,7 @@ def build_skill_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[st
                     "schema_version": skill.get("schema_version"),
                     "source_tags": skill.get("source_tags") or [],
                 },
+                **({"semantic_completeness_warnings": completeness_warnings} if completeness_warnings else {}),
             }
         )
     normalize_support_family_tiers(entities)
@@ -980,6 +1023,9 @@ def build_catalog(ctx: SourceContext) -> tuple[dict[str, Any], dict[str, Any], d
             **meta,
             "entities_with_facts": sum(1 for entity in entities if entity.get("facts")),
             "entities_without_facts": sum(1 for entity in entities if not entity.get("facts")),
+            "semantic_completeness_warning_count": sum(
+                len(entity.get("semantic_completeness_warnings") or []) for entity in entities
+            ),
             "support_entities_with_allowed_types": sum(
                 1
                 for entity in skill_entities

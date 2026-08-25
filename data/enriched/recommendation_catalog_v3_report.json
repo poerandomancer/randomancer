@@ -13,29 +13,29 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5109,
+    "fact_count": 5128,
     "fact_relation_counts": {
-      "consumes": 353,
+      "consumes": 356,
       "converts": 112,
       "creates": 72,
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 672,
-      "inflicts": 158,
-      "modifies": 2239,
+      "inflicts": 166,
+      "modifies": 2244,
       "occupies": 444,
       "prevents": 375,
-      "provides": 319,
+      "provides": 322,
       "replaces": 27,
       "requires": 63
     },
     "candidate_role_counts": {
-      "defense": 420,
+      "defense": 422,
       "enabler": 1159,
-      "payoff": 181,
+      "payoff": 182,
       "primary_damage": 349,
       "recovery": 250,
-      "setup_control": 207,
+      "setup_control": 214,
       "utility": 206
     },
     "source_versions": {
@@ -45,6 +45,7 @@
     },
     "entities_with_facts": 2099,
     "entities_without_facts": 865,
+    "semantic_completeness_warning_count": 2,
     "support_entities_with_allowed_types": 603,
     "support_entities_with_excluded_types": 237,
     "support_family_count": 474,
@@ -195,7 +196,7 @@
     },
     "passive_stats": {
       "evidence_count": 2294,
-      "fact_count": 1416,
+      "fact_count": 1418,
       "unparsed_count": 456,
       "structured_count": 1069,
       "recognized_unstructured_count": 769,
@@ -328,18 +329,53 @@
       }
     },
     "skill_descriptions": {
-      "evidence_count": 1115,
-      "fact_count": 388,
-      "structured_count": 297,
-      "unparsed_count": 127,
-      "recognized_unstructured_count": 691,
-      "structured_rate": 0.2664,
+      "evidence_count": 1893,
+      "fact_count": 652,
+      "structured_count": 505,
+      "unparsed_count": 262,
+      "recognized_unstructured_count": 1126,
+      "structured_rate": 0.2668,
       "samples": {
         "recognized_unstructured": [
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "active_skill_website_description",
+            "value": "Reaching deep within, the caster of the mighty Ice Nova assaults surrounding enemies with a shivering blast of pure rime. The shock wave from this nova is often enough to slay outright, and those who survive the blast will be frozen, their very blood chilled solid. With precise use, a master weaver of frost can annihilate his enemies without suffering a scratch."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemLeapSlam",
+            "kind": "active_skill_website_description",
+            "value": "Long ago, the marauders of Oriath perfected a devastating battle technique - the ferocious Leap Slam. With a guttural cry, the leaper hurtles forward and smashes the ground at the feet of the enemy. The force from this blow deals substantial damage in a circle around the targeted spot, and will even knock back and stun. The Leap Slam is useful not only as an offensive technique, but also because it can serve, in a pinch, to escape from danger. The Marauders of Oriath were famous for attacking their foes from above, leaping down from high ledges to crush their enemies' skulls."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemShieldCharge",
+            "kind": "active_skill_short_description",
+            "value": "Raise your [Shield] and charge forward."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemShieldCharge",
+            "kind": "active_skill_website_description",
+            "value": "In the hands of a talented combatant, even a shield becomes a deadly weapon. With Shield Charge, a warrior dashes forward at a single enemy, slamming them senseless. The violence of the charge will push nearby foes out of its path, and inflict great damage on target. An opponent unlucky enough to be struck by the full brunt of a Shield Charge will be knocked back and stunned for a time."
+          },
           {
             "entity_id": "skill:Metadata/Items/Gems/SkillGemDetonateDead",
             "kind": "skill_description",
             "value": "Cause a [Corpse] to violently explode, damaging surrounding enemies."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemDetonateDead",
+            "kind": "active_skill_description",
+            "value": "Cause a [Corpse] to violently explode, damaging surrounding enemies."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemDetonateDead",
+            "kind": "active_skill_short_description",
+            "value": "Detonate a [Corpse], damaging nearby enemies."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemDetonateDead",
+            "kind": "active_skill_website_description",
+            "value": "To a skilled practitioner of the occult, the corpses of slain foes are a tool to bend to their dark purpose. While most seek to animate the very souls of fallen enemies, a crafty handful have discovered an even more potent use. Infusing the enzymes and acids of the target's body with magical energy, the caster creates a volatile mixture that detonates violently when a final word is spoken. The explosion blasts outwards in every direction, showering nearby enemies with flame and toxic liquid. At higher levels of skill, the detonation will damage and stun foes in a wide area."
           },
           {
             "entity_id": "skill:Metadata/Items/Gems/SupportGemFireInfusion",
@@ -360,48 +396,33 @@
             "entity_id": "skill:Metadata/Items/Gems/SupportGemMartialTempoThree",
             "kind": "skill_description",
             "value": "Supports [Attack|Attacks], causing them to [Attack] faster at the cost of Damage."
-          },
-          {
-            "entity_id": "skill:Metadata/Items/Gems/SupportGemScattershot",
-            "kind": "skill_description",
-            "value": "Supports [Projectile|Projectile] skills, making them fire extra [Projectile|Projectiles]. Also lowers [Attack] and Cast speed of supported skills, as well as lessening their damage."
-          },
-          {
-            "entity_id": "skill:Metadata/Items/Gems/SupportGemScattershotTwo",
-            "kind": "skill_description",
-            "value": "Supports [Projectile|Projectile] skills, making them fire extra [Projectile|Projectiles]. Also lowers [Attack] and Cast speed of supported skills, as well as lessening their damage."
-          },
-          {
-            "entity_id": "skill:Metadata/Items/Gems/SupportGemNovaProjectiles",
-            "kind": "skill_description",
-            "value": "Supports [Projectile|Projectile] Skills, making them fire [Projectile|Projectiles] in a circle. Does not Support Skills which rain down [Projectile|Projectiles] from above."
-          },
-          {
-            "entity_id": "skill:Metadata/Items/Gems/SupportGemAcceleration",
-            "kind": "skill_description",
-            "value": "Supports [Projectile|Projectile] skills, making those [Projectile|Projectiles] travel faster."
-          },
-          {
-            "entity_id": "skill:Metadata/Items/Gems/SupportGemAccelerationTwo",
-            "kind": "skill_description",
-            "value": "Supports [Projectile|Projectile] skills, making those [Projectile|Projectiles] travel faster, and granting them a chance to [Pierce] Enemies."
-          },
-          {
-            "entity_id": "skill:Metadata/Items/Gems/SupportGemAccelerationThree",
-            "kind": "skill_description",
-            "value": "Supports [Projectile|Projectile] skills, making those [Projectile|Projectiles] travel faster, and causing increases and reductions to [Projectile] speed to also apply to Damage."
-          },
-          {
-            "entity_id": "skill:Metadata/Items/Gems/SupportGemColdInfusion",
-            "kind": "skill_description",
-            "value": "Supports any skill that deals damage, causing them to [Gain] [Cold] Damage but deal less [Fire] and [Lightning] Damage."
           }
         ],
         "unparsed": [
           {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemIceNova",
+            "kind": "active_skill_short_description",
+            "value": "Conjure a wave of ice that damages and [Knockback|Knocks Back] enemies."
+          },
+          {
             "entity_id": "skill:Metadata/Items/Gems/SkillGemLeapSlam",
             "kind": "skill_description",
             "value": "Jump into the air, damaging and [Knockback|Knocking Back] enemies with your mace where you land. Enemies you would land on are\npushed out of the way."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemLeapSlam",
+            "kind": "active_skill_description",
+            "value": "Jump into the air, damaging and [Knockback|Knocking Back] enemies with your mace where you land. Enemies you would land on are\npushed out of the way."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemLeapSlam",
+            "kind": "active_skill_short_description",
+            "value": "Jump to the target location and [Slam] the ground."
+          },
+          {
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemMoltenCrash",
+            "kind": "active_skill_short_description",
+            "value": "Jump to the target location [Slam|Slamming] twice and creating [MoltenFissure|Molten Fissures]."
           },
           {
             "entity_id": "skill:Metadata/Items/Gems/SupportGemSpiralProjectiles",
@@ -419,55 +440,35 @@
             "value": "Supports any skill with an area of effect, making it larger."
           },
           {
-            "entity_id": "skill:Metadata/Items/Gems/SkillGemFlameblast",
-            "kind": "skill_description",
-            "value": "[Channelling|Channel] to build destructive energy around you. Releasing the energy causes a devastating explosion that is larger and more intense the longer you [Channelling|Channelled] for."
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemFlickerStrike",
+            "kind": "active_skill_website_description",
+            "value": "They should have known the rule: never corner a Duelist. He was surrounded by four hulking brutes, each one uglier than the one before. They had come for the fine mail tunic he wore, but he had given them nothing but insults and injury. As the Duelist fought, his speed grew more frenetic, until he was a blur of whirling steel. After a time though, superior numbers took their toll, and the attackers began to find openings. With blood oozing from a dozen wounds, the Duelist gathered himself for one final assault. He waited until just the right moment, right as his foes rushed in for the kill.__BREAK__ __BREAK__ There was a flash, and in the blink of an eye, he suddenly appeared behind the first assailant, plunging his sword to the hilt in the exposed neck. Then he was beheading the second in one quick swipe. Then the third fell with a shriek, his bowels spilling onto the cobblestones. The fourth turned to run, and found himself facing the Duelist, who met his momentum with a stab through the heart. Spent, panting on the ground, the victor wiped his blade clean, and recorded four more kills with Flicker Strike."
           },
           {
-            "entity_id": "skill:Metadata/Items/Gems/SkillGemWither",
-            "kind": "skill_description",
-            "value": "Channel a debilitating hex that [Withered|Withers] enemies in the area."
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemSpark",
+            "kind": "active_skill_short_description",
+            "value": "Launch a spray of erratically moving sparks."
           },
           {
-            "entity_id": "skill:Metadata/Items/Gems/SupportGemBehead",
-            "kind": "skill_description",
-            "value": "Supports [Strike] skills, causing them to steal a [MonsterModifiers|Modifier] from [Rarity|Rare] monsters they kill."
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemSummonSpectre",
+            "kind": "active_skill_website_description",
+            "value": "True masters of the dark arts learn to use their enemy's greatest strengths against them, binding the souls of the fallen to their bidding. With a dark incantation, the caster's words imbue a slain being with dark energy, animating it with sinister strength and purpose. The raised entity possesses all the abilities it had while living, augmented further by the skill of its new master. With practice, many raised specters can be controlled at once, creating an army of undead to lay waste to everything in its path."
           },
           {
-            "entity_id": "skill:Metadata/Items/Gems/SupportGemBeheadTwo",
-            "kind": "skill_description",
-            "value": "Supports [Strike] skills, causing them to steal two [MonsterModifiers|Modifiers] from [Rarity|Rare] monsters they kill."
-          },
-          {
-            "entity_id": "skill:Metadata/Items/Gems/SkillGemWhirlingAssault",
-            "kind": "skill_description",
-            "value": "Advance while hitting enemies around you with a series of spinning [Strike|Strikes]."
-          },
-          {
-            "entity_id": "skill:Metadata/Items/Gems/SkillGemEvasiveStrike",
-            "kind": "skill_description",
-            "value": "[DNT-UNUSED] Leap back before dashing forward, taking out enemies in a path."
-          },
-          {
-            "entity_id": "skill:Metadata/Items/Gems/SkillGemSpinningFlail",
-            "kind": "skill_description",
-            "value": "[DNT-UNUSED] Advance forward, striking enemies around you with whirling swings of your flail."
-          },
-          {
-            "entity_id": "skill:Metadata/Items/Gems/SkillGemSwordLunge",
-            "kind": "skill_description",
-            "value": "[DNT-UNUSED] Sword Lunge"
+            "entity_id": "skill:Metadata/Items/Gems/SkillGemFirestorm",
+            "kind": "active_skill_short_description",
+            "value": "Rain fiery bolts over the target area."
           }
         ]
       }
     },
     "skill_stats": {
       "evidence_count": 6000,
-      "fact_count": 1801,
+      "fact_count": 1817,
       "unparsed_count": 2287,
-      "structured_count": 1280,
-      "recognized_unstructured_count": 2433,
-      "structured_rate": 0.2133,
+      "structured_count": 1284,
+      "recognized_unstructured_count": 2429,
+      "structured_rate": 0.214,
       "samples": {
         "recognized_unstructured": [
           {

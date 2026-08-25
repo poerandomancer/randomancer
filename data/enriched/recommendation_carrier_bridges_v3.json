@@ -23,9 +23,9 @@
         }
       ],
       "counts": {
-        "considered": 7,
+        "considered": 10,
         "complete": 1,
-        "partial": 4,
+        "partial": 7,
         "invalid": 2
       },
       "unresolvedReason": null
@@ -61,9 +61,9 @@
         }
       ],
       "counts": {
-        "considered": 5,
+        "considered": 4,
         "complete": 2,
-        "partial": 3,
+        "partial": 2,
         "invalid": 0
       },
       "unresolvedReason": null
@@ -116,9 +116,9 @@
         }
       ],
       "counts": {
-        "considered": 21,
+        "considered": 30,
         "complete": 3,
-        "partial": 12,
+        "partial": 21,
         "invalid": 6
       },
       "unresolvedReason": null
@@ -220,9 +220,9 @@
         }
       ],
       "counts": {
-        "considered": 20,
+        "considered": 16,
         "complete": 8,
-        "partial": 12,
+        "partial": 8,
         "invalid": 0
       },
       "unresolvedReason": null
@@ -330,10 +330,10 @@
         }
       ],
       "counts": {
-        "considered": 7,
+        "considered": 10,
         "complete": 1,
-        "partial": 4,
-        "invalid": 2
+        "partial": 5,
+        "invalid": 4
       },
       "unresolvedReason": null
     },
@@ -372,10 +372,10 @@
         }
       ],
       "counts": {
-        "considered": 14,
+        "considered": 20,
         "complete": 2,
-        "partial": 8,
-        "invalid": 4
+        "partial": 10,
+        "invalid": 8
       },
       "unresolvedReason": null
     },
@@ -470,10 +470,10 @@
         }
       ],
       "counts": {
-        "considered": 49,
+        "considered": 70,
         "complete": 6,
-        "partial": 18,
-        "invalid": 25
+        "partial": 24,
+        "invalid": 40
       },
       "unresolvedReason": null
     },
@@ -674,10 +674,10 @@
         }
       ],
       "counts": {
-        "considered": 55,
+        "considered": 44,
         "complete": 16,
-        "partial": 24,
-        "invalid": 15
+        "partial": 16,
+        "invalid": 12
       },
       "unresolvedReason": null
     },
@@ -921,10 +921,10 @@
         }
       ],
       "counts": {
-        "considered": 49,
+        "considered": 70,
         "complete": 6,
-        "partial": 18,
-        "invalid": 25
+        "partial": 24,
+        "invalid": 40
       },
       "unresolvedReason": null
     },
@@ -1125,10 +1125,10 @@
         }
       ],
       "counts": {
-        "considered": 55,
+        "considered": 44,
         "complete": 16,
-        "partial": 24,
-        "invalid": 15
+        "partial": 16,
+        "invalid": 12
       },
       "unresolvedReason": null
     },
@@ -1343,10 +1343,10 @@
         }
       ],
       "counts": {
-        "considered": 49,
+        "considered": 70,
         "complete": 6,
-        "partial": 18,
-        "invalid": 25
+        "partial": 24,
+        "invalid": 40
       },
       "unresolvedReason": null
     },
@@ -1547,10 +1547,10 @@
         }
       ],
       "counts": {
-        "considered": 55,
+        "considered": 44,
         "complete": 16,
-        "partial": 24,
-        "invalid": 15
+        "partial": 16,
+        "invalid": 12
       },
       "unresolvedReason": null
     },
@@ -1749,9 +1749,9 @@
         }
       ],
       "counts": {
-        "considered": 15,
+        "considered": 12,
         "complete": 6,
-        "partial": 9,
+        "partial": 6,
         "invalid": 0
       },
       "unresolvedReason": null
