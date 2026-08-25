@@ -974,7 +974,9 @@ function supportProofForObligation(entity, supports, obligation) {
   const proofs = [];
   for (const support of supports) {
     for (const fact of actionableSupportFacts(support)) {
-      if (!factMatchesObligation(fact, obligation) || !supportFactConditionIsMet(fact, entity, supports)) continue;
+      if (!factMatchesObligation(fact, obligation)
+        || !supportFactExplicitlyEnables(fact)
+        || !supportFactConditionIsMet(fact, entity, supports)) continue;
       const mechanic = factMechanics(fact)[0] || '';
       if (!mechanic || prevented.has(mechanic)) continue;
       proofs.push({
@@ -993,6 +995,20 @@ function supportProofForObligation(entity, supports, obligation) {
     proofScore(b) - proofScore(a)
     || String(a.providerName || '').localeCompare(String(b.providerName || ''))
   )[0] || null;
+}
+
+function supportFactExplicitlyEnables(fact) {
+  if (!['inflicts', 'creates', 'provides', 'generates', 'converts', 'fulfills'].includes(fact?.relation)) return false;
+  const evidence = asArray(fact?.evidence).map((entry) => String(entry?.value || '').toLowerCase()).filter(Boolean);
+  if (!evidence.length) return false;
+  // Exact parser facts can still describe scaling or payoff.  A bridge needs
+  // affirmative capability language, rather than merely mentioning an ailment.
+  return fact.relation !== 'inflicts'
+    || evidence.some((value) =>
+      /(?:causing|allowing) it to inflict|giving it a chance to|base_chance_to_(?:inflict_bleeding|poison_on_hit)/.test(value)
+      && !/skills? (?:which|that) can|inflicted (?:by|with)|shocking an enemy|chance_to_(?:shock|ignite)_\+%_final/.test(value)
+      && !/(?:causing it to .*inflict more (?:potent|powerful))/.test(value)
+    );
 }
 
 function supportCompletionProof(entity, obligation, index) {
@@ -1387,6 +1403,148 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalP
       + evidenceScore
       + criticalEvidence.affinity.score
       + specificityScore
+  };
+}
+
+function globalOffenseRules(catalog) {
+  return asArray(catalog?.fate_vocabulary?.global_offense_rules)
+    .filter((rule) => rule?.fulfills_source_from_target && rule?.proof_type === 'inherent');
+}
+
+function entityHasHitDelivery(entity) {
+  const types = activeSkillTypes(entity);
+  return types.has('attack') || types.has('damage');
+}
+
+function offenseAffinityFacts(candidate, obligation) {
+  const mechanics = new Set(asArray(obligation?.mechanics).map(normalizeToken));
+  return asArray(candidate?.hardFacts).filter((fact) =>
+    mechanics.has(normalizeToken(fact?.mechanic))
+    && ['modifies', 'requires', 'consumes'].includes(fact?.relation)
+    && !String(fact?.condition || '').includes('base_effect_only')
+  );
+}
+
+function inherentProofForObligation(candidate, obligation, rules) {
+  if (!entityHasHitDelivery(candidate?.entity)) return null;
+  const offenseMechanics = new Set(asArray(obligation?.mechanics).map(normalizeToken));
+  const rule = rules.find((entry) => offenseMechanics.has(normalizeToken(entry?.source)));
+  if (!rule) return null;
+  const damageMechanic = normalizeToken(rule.target);
+  const damageProof = asArray(candidate?.hardFacts).find((fact) =>
+    baseFactSuppliesMechanic(fact, damageMechanic)
+  );
+  if (!damageProof) return null;
+  return {
+    obligationId: obligation.id,
+    relation: 'fulfills',
+    confidence: 'strong',
+    mechanic: normalizeToken(rule.source),
+    proofType: 'inherent',
+    globalRule: `${damageMechanic}_hit_to_${normalizeToken(rule.source)}`,
+    damageEvidence: `${damageProof.relation}:${damageMechanic}:${damageProof.confidence}`
+  };
+}
+
+// This is the shared legality and semantic boundary used by both runtime tiering
+// and the generated coverage reports.  Keeping it here prevents the audit from
+// quietly acquiring a more permissive definition of a legal skill.
+function analyzeRecommendationCellV3(catalog, snapshot = {}, options = {}) {
+  const model = buildRecommendationObligationsV3(snapshot, options.offenseInventory || {});
+  const obligations = model.obligations.filter((entry) => entry.kind === 'offense');
+  const index = supportIndexForCatalog(catalog);
+  const legal = asArray(catalog?.entities)
+    .filter((entity) => entity?.content_type === 'active_skill')
+    .map((entity) => analyzePackageCandidate(entity, obligations, snapshot, options.criticalProfiles || {}, null))
+    .filter((candidate) => candidate?.primaryEligible);
+  const rules = globalOffenseRules(catalog);
+  const direct = legal.map((candidate) => {
+    const directProofs = [];
+    const fulfilled = [...candidate.fulfilled];
+    let affinityScore = 0;
+    for (const obligation of obligations) {
+      const explicit = fulfilled.find((proof) => proof.obligationId === obligation.id);
+      const affinityFacts = offenseAffinityFacts(candidate, obligation);
+      affinityScore += affinityFacts.length;
+      if (explicit) {
+        explicit.proofType = 'explicit';
+        directProofs.push({ ...explicit, proofType: 'explicit', affinityFacts });
+        continue;
+      }
+      const inherent = inherentProofForObligation(candidate, obligation, rules);
+      if (inherent) {
+        fulfilled.push(inherent);
+        directProofs.push({ ...inherent, affinityFacts });
+      }
+    }
+    if (!obligations.length || directProofs.length !== obligations.length) return null;
+    const explicitCount = directProofs.filter((proof) => proof.proofType === 'explicit').length;
+    const directPreferenceScore = explicitCount * 100 + affinityScore;
+    return {
+      ...candidate,
+      fulfilled,
+      directProofs,
+      directKind: explicitCount === obligations.length ? 'EXPLICIT_DIRECT' : 'INHERENT_DIRECT',
+      explicitDirectCount: explicitCount,
+      directAffinityScore: affinityScore,
+      directPreferenceScore,
+      individualScore: candidate.individualScore + directPreferenceScore
+    };
+  }).filter(Boolean);
+  const nativeCarriers = direct.length ? [] : legal.filter((candidate) => obligations.some((obligation) =>
+    candidate.carriers.some((proof) => proof.obligationId === obligation.id && proof.completionType !== 'support')
+  ));
+  const bridgeEvaluations = [];
+  if (!direct.length && nativeCarriers.length) {
+    for (const candidate of nativeCarriers) {
+      for (const obligation of obligations) {
+        const relevant = unique(asArray(obligation.mechanics).flatMap((mechanic) =>
+          asArray(index.byEffectMechanic.get(normalizeToken(mechanic)))
+        ));
+        let partial = 0;
+        let invalid = 0;
+        const complete = [];
+        for (const support of relevant) {
+          if (!supportTargetsSkill(support, candidate.entity)
+            || !supportPackageRequirementsAreMet(candidate.entity, [support])) {
+            invalid += 1;
+            continue;
+          }
+          const proof = supportProofForObligation(candidate.entity, [support], obligation);
+          if (!proof) {
+            partial += 1;
+            continue;
+          }
+          complete.push({
+            support,
+            proof: {
+              ...proof,
+              relation: 'support_completes',
+              completionType: 'support',
+              supportEntityIds: [support.id],
+              supportSourceIds: [support.source_id],
+              supportNames: [support.name],
+              prerequisiteMechanics: supportRequirementFacts(support).map((fact) => normalizeToken(fact.mechanic))
+            }
+          });
+        }
+        bridgeEvaluations.push({ candidate, obligation, considered: relevant.length, complete, partial, invalid });
+      }
+    }
+  }
+  const bridges = bridgeEvaluations.flatMap((evaluation) => evaluation.complete.map((completion) => ({
+    candidate: { ...evaluation.candidate, carriers: [completion.proof] },
+    support: completion.support,
+    proof: completion.proof
+  })));
+  return {
+    model,
+    legal,
+    direct,
+    carriers: nativeCarriers,
+    bridges,
+    bridgeEvaluations,
+    classification: direct.length ? 'DIRECT' : nativeCarriers.length ? 'CARRIER' : 'GAP'
   };
 }
 
@@ -1796,6 +1954,8 @@ function evaluateSkillPackage(primary, supporting, offenseObligations) {
   // two-skill preference decide among packages with comparable coverage; they
   // cannot rescue an attractive combo that leaves a satisfiable Fate unmet.
   const score = fulfilledIds.size * 500
+    + (primary.explicitDirectCount || 0) * 10000
+    + (primary.directAffinityScore || 0) * 100
     + carriers.length * 110
     + (directCoverageComplete ? 80 : 0)
     + exactProofs * 10
@@ -2384,6 +2544,7 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     && asArray(entity?.candidate_roles).includes('primary_damage')
   );
   const contentEligiblePrimaries = allPrimaryCandidates.filter(isRecommendationContentAllowedV3);
+  const tierAnalysis = analyzeRecommendationCellV3(catalog, snapshot, options);
   const viablePool = buildViableSkillPool(
     catalog,
     offenseObligations,
@@ -2393,7 +2554,22 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
   const primaryPool = viablePool.filter((candidate) =>
     candidate.primaryEligible && (candidate.fulfilled.length || candidate.carriers.length)
   );
-  const rankedPackages = buildRankedSkillPackages(viablePool, offenseObligations);
+  const directPackages = tierAnalysis.direct
+    .map((candidate) => evaluateSkillPackage(candidate, null, offenseObligations))
+    .filter(Boolean);
+  const bridgePackages = tierAnalysis.bridges
+    .map((entry) => evaluateSkillPackage(entry.candidate, null, offenseObligations))
+    .filter(Boolean);
+  // Tier choice is lexicographic, not a score bonus: lower tiers are never
+  // present in the ranking when a simpler solution exists.
+  const recommendationTier = directPackages.length
+    ? 'DIRECT'
+    : bridgePackages.length ? 'CARRIER_BRIDGE' : 'FALLBACK';
+  const rankedPackages = recommendationTier === 'DIRECT'
+    ? buildRankedSkillPackages(tierAnalysis.direct, offenseObligations).filter((entry) => !entry.supporting)
+    : recommendationTier === 'CARRIER_BRIDGE'
+      ? bridgePackages.sort((a, b) => b.score - a.score || String(a.id).localeCompare(String(b.id)))
+      : buildRankedSkillPackages(viablePool, offenseObligations);
   const { winner, shortlist, qualityBand } = choosePackageCandidate(rankedPackages, options);
   const supportResolution = assignSupportPackagesV3(catalog, winner, offenseObligations);
   const selectedCandidates = [winner?.primary, winner?.supporting].filter(Boolean);
@@ -2520,6 +2696,7 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
       assignedSupportCount: supportResolution.assignedSupportCount,
       evaluatedSupportPackages: supportResolution.evaluatedPackages,
       offenseCoverage,
+      recommendationTier,
       qualityBand,
       companionQualityBand: COMPANION_QUALITY_BAND
     }
@@ -2573,6 +2750,7 @@ export {
   MAX_SUPPORTS_PER_SKILL,
   adaptRecommendationPackageV3ToSnapshot,
   buildRecommendationObligationsV3,
+  analyzeRecommendationCellV3,
   evaluateCompatibilityV3,
   evaluateDeliveryCompatibilityV3,
   isEquipmentCompatibleV3,

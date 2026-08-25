@@ -13,7 +13,7 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5072,
+    "fact_count": 5109,
     "fact_relation_counts": {
       "consumes": 353,
       "converts": 112,
@@ -21,21 +21,21 @@
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 672,
-      "inflicts": 122,
+      "inflicts": 158,
       "modifies": 2239,
       "occupies": 444,
       "prevents": 375,
-      "provides": 318,
+      "provides": 319,
       "replaces": 27,
       "requires": 63
     },
     "candidate_role_counts": {
       "defense": 420,
-      "enabler": 1157,
+      "enabler": 1159,
       "payoff": 181,
       "primary_damage": 349,
       "recovery": 250,
-      "setup_control": 175,
+      "setup_control": 207,
       "utility": 206
     },
     "source_versions": {
@@ -50,7 +50,7 @@
     "support_family_count": 474,
     "tiered_support_family_count": 121,
     "tiered_support_entity_count": 280,
-    "support_entities_with_bridge_facts": 77,
+    "support_entities_with_bridge_facts": 84,
     "support_entities_with_conflicts": 39,
     "active_skills_with_granted_access": 40,
     "active_skills_with_crafting_metadata": 261,
@@ -61,11 +61,11 @@
   "coverage": {
     "passive_descriptions": {
       "evidence_count": 2495,
-      "fact_count": 296,
+      "fact_count": 302,
       "unparsed_count": 657,
-      "recognized_unstructured_count": 1568,
-      "structured_count": 270,
-      "structured_rate": 0.1082,
+      "recognized_unstructured_count": 1562,
+      "structured_count": 276,
+      "structured_rate": 0.1106,
       "samples": {
         "recognized_unstructured": [
           {
@@ -329,11 +329,11 @@
     },
     "skill_descriptions": {
       "evidence_count": 1115,
-      "fact_count": 359,
-      "structured_count": 275,
+      "fact_count": 388,
+      "structured_count": 297,
       "unparsed_count": 127,
-      "recognized_unstructured_count": 713,
-      "structured_rate": 0.2466,
+      "recognized_unstructured_count": 691,
+      "structured_rate": 0.2664,
       "samples": {
         "recognized_unstructured": [
           {
@@ -738,11 +738,11 @@
     },
     "unique_modifiers": {
       "evidence_count": 2141,
-      "fact_count": 345,
-      "recognized_unstructured_count": 1255,
+      "fact_count": 347,
+      "recognized_unstructured_count": 1253,
       "unparsed_count": 575,
-      "structured_count": 311,
-      "structured_rate": 0.1453,
+      "structured_count": 313,
+      "structured_rate": 0.1462,
       "samples": {
         "recognized_unstructured": [
           {

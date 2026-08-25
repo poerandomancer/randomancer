@@ -125,7 +125,10 @@
       "source": "ignite",
       "relation": "native_damage_type",
       "target": "fire",
-      "fulfills_source_from_target": false
+      "fulfills_source_from_target": true,
+      "requires_hit": true,
+      "proof_type": "inherent",
+      "description": "Fire Hit damage has inherent Ignite capability."
     },
     {
       "source": "bleed",
@@ -137,19 +140,28 @@
       "source": "chill",
       "relation": "native_affinity",
       "target": "cold",
-      "fulfills_source_from_target": false
+      "fulfills_source_from_target": true,
+      "requires_hit": true,
+      "proof_type": "inherent",
+      "description": "Cold Hit damage has inherent Chill capability."
     },
     {
       "source": "freeze",
       "relation": "native_affinity",
       "target": "cold",
-      "fulfills_source_from_target": false
+      "fulfills_source_from_target": true,
+      "requires_hit": true,
+      "proof_type": "inherent",
+      "description": "Cold Hit damage inherently contributes to Freeze buildup."
     },
     {
       "source": "shock",
       "relation": "native_affinity",
       "target": "lightning",
-      "fulfills_source_from_target": false
+      "fulfills_source_from_target": true,
+      "requires_hit": true,
+      "proof_type": "inherent",
+      "description": "Lightning Hit damage has inherent Shock capability."
     },
     {
       "source": "electrocute",

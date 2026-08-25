@@ -1,0 +1,1841 @@
+{
+  "schemaVersion": "recommendation-carrier-bridges-v3.0.0",
+  "cells": [
+    {
+      "weapon": "Mace",
+      "offenseId": "bleed",
+      "offense": "Bleed",
+      "carriers": [
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemArmourBreaker",
+          "name": "Armour Breaker"
+        }
+      ],
+      "complete": [
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemArmourBreaker",
+          "carrier": "Armour Breaker",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+          "support": "Bleed III",
+          "family": "Bleed",
+          "tier": 3,
+          "evidence": "support_completes:bleed:exact"
+        }
+      ],
+      "counts": {
+        "considered": 7,
+        "complete": 1,
+        "partial": 4,
+        "invalid": 2
+      },
+      "unresolvedReason": null
+    },
+    {
+      "weapon": "Mace",
+      "offenseId": "poison",
+      "offense": "Poison",
+      "carriers": [
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemArmourBreaker",
+          "name": "Armour Breaker"
+        }
+      ],
+      "complete": [
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemArmourBreaker",
+          "carrier": "Armour Breaker",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemArmourBreaker",
+          "carrier": "Armour Breaker",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        }
+      ],
+      "counts": {
+        "considered": 5,
+        "complete": 2,
+        "partial": 3,
+        "invalid": 0
+      },
+      "unresolvedReason": null
+    },
+    {
+      "weapon": "Quarterstaff",
+      "offenseId": "bleed",
+      "offense": "Bleed",
+      "carriers": [
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemKillingPalm",
+          "name": "Killing Palm"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemStaggeringPalm",
+          "name": "Staggering Palm"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemVaultingImpact",
+          "name": "Vaulting Impact"
+        }
+      ],
+      "complete": [
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemKillingPalm",
+          "carrier": "Killing Palm",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+          "support": "Bleed III",
+          "family": "Bleed",
+          "tier": 3,
+          "evidence": "support_completes:bleed:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemStaggeringPalm",
+          "carrier": "Staggering Palm",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+          "support": "Bleed III",
+          "family": "Bleed",
+          "tier": 3,
+          "evidence": "support_completes:bleed:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemVaultingImpact",
+          "carrier": "Vaulting Impact",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+          "support": "Bleed III",
+          "family": "Bleed",
+          "tier": 3,
+          "evidence": "support_completes:bleed:exact"
+        }
+      ],
+      "counts": {
+        "considered": 21,
+        "complete": 3,
+        "partial": 12,
+        "invalid": 6
+      },
+      "unresolvedReason": null
+    },
+    {
+      "weapon": "Quarterstaff",
+      "offenseId": "poison",
+      "offense": "Poison",
+      "carriers": [
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemHandOfChayula",
+          "name": "Hand of Chayula"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemKillingPalm",
+          "name": "Killing Palm"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemStaggeringPalm",
+          "name": "Staggering Palm"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemVaultingImpact",
+          "name": "Vaulting Impact"
+        }
+      ],
+      "complete": [
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemHandOfChayula",
+          "carrier": "Hand of Chayula",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemHandOfChayula",
+          "carrier": "Hand of Chayula",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemKillingPalm",
+          "carrier": "Killing Palm",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemKillingPalm",
+          "carrier": "Killing Palm",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemStaggeringPalm",
+          "carrier": "Staggering Palm",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemStaggeringPalm",
+          "carrier": "Staggering Palm",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemVaultingImpact",
+          "carrier": "Vaulting Impact",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemVaultingImpact",
+          "carrier": "Vaulting Impact",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        }
+      ],
+      "counts": {
+        "considered": 20,
+        "complete": 8,
+        "partial": 12,
+        "invalid": 0
+      },
+      "unresolvedReason": null
+    },
+    {
+      "weapon": "Quarterstaff",
+      "offenseId": "electrocute",
+      "offense": "Electrocute",
+      "carriers": [
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemFallingThunder",
+          "name": "Falling Thunder"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemGatheringStorm",
+          "name": "Gathering Storm"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemSiphoningStrike",
+          "name": "Siphoning Strike"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemStormWave",
+          "name": "Storm Wave"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemTempestFlurry",
+          "name": "Tempest Flurry"
+        }
+      ],
+      "complete": [
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemFallingThunder",
+          "carrier": "Falling Thunder",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemGatheringStorm",
+          "carrier": "Gathering Storm",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemSiphoningStrike",
+          "carrier": "Siphoning Strike",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemStormWave",
+          "carrier": "Storm Wave",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemTempestFlurry",
+          "carrier": "Tempest Flurry",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        }
+      ],
+      "counts": {
+        "considered": 5,
+        "complete": 5,
+        "partial": 0,
+        "invalid": 0
+      },
+      "unresolvedReason": null
+    },
+    {
+      "weapon": "Bow",
+      "offenseId": "bleed",
+      "offense": "Bleed",
+      "carriers": [
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemTornadoShot",
+          "name": "Tornado Shot"
+        }
+      ],
+      "complete": [
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemTornadoShot",
+          "carrier": "Tornado Shot",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+          "support": "Bleed III",
+          "family": "Bleed",
+          "tier": 3,
+          "evidence": "support_completes:bleed:exact"
+        }
+      ],
+      "counts": {
+        "considered": 7,
+        "complete": 1,
+        "partial": 4,
+        "invalid": 2
+      },
+      "unresolvedReason": null
+    },
+    {
+      "weapon": "Crossbow",
+      "offenseId": "bleed",
+      "offense": "Bleed",
+      "carriers": [
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemArmourPiercingRounds",
+          "name": "Armour Piercing Rounds"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemHighVelocityRounds",
+          "name": "High Velocity Rounds"
+        }
+      ],
+      "complete": [
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemArmourPiercingRounds",
+          "carrier": "Armour Piercing Rounds",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+          "support": "Bleed III",
+          "family": "Bleed",
+          "tier": 3,
+          "evidence": "support_completes:bleed:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemHighVelocityRounds",
+          "carrier": "High Velocity Rounds",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+          "support": "Bleed III",
+          "family": "Bleed",
+          "tier": 3,
+          "evidence": "support_completes:bleed:exact"
+        }
+      ],
+      "counts": {
+        "considered": 14,
+        "complete": 2,
+        "partial": 8,
+        "invalid": 4
+      },
+      "unresolvedReason": null
+    },
+    {
+      "weapon": "Staff",
+      "offenseId": "bleed",
+      "offense": "Bleed",
+      "carriers": [
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemBoneCage",
+          "name": "Bone Cage"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemBonestorm",
+          "name": "Bonestorm"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemDetonateDead",
+          "name": "Detonate Dead"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemEntangle",
+          "name": "Entangle"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemThrashingVines",
+          "name": "Thrashing Vines"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemTornado",
+          "name": "Tornado"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemUnearth",
+          "name": "Unearth"
+        }
+      ],
+      "complete": [
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemBoneCage",
+          "carrier": "Bone Cage",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+          "support": "Bleed III",
+          "family": "Bleed",
+          "tier": 3,
+          "evidence": "support_completes:bleed:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemBonestorm",
+          "carrier": "Bonestorm",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+          "support": "Bleed III",
+          "family": "Bleed",
+          "tier": 3,
+          "evidence": "support_completes:bleed:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemDetonateDead",
+          "carrier": "Detonate Dead",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+          "support": "Bleed III",
+          "family": "Bleed",
+          "tier": 3,
+          "evidence": "support_completes:bleed:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemEntangle",
+          "carrier": "Entangle",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+          "support": "Bleed III",
+          "family": "Bleed",
+          "tier": 3,
+          "evidence": "support_completes:bleed:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemThrashingVines",
+          "carrier": "Thrashing Vines",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+          "support": "Bleed III",
+          "family": "Bleed",
+          "tier": 3,
+          "evidence": "support_completes:bleed:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemUnearth",
+          "carrier": "Unearth",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+          "support": "Bleed III",
+          "family": "Bleed",
+          "tier": 3,
+          "evidence": "support_completes:bleed:exact"
+        }
+      ],
+      "counts": {
+        "considered": 49,
+        "complete": 6,
+        "partial": 18,
+        "invalid": 25
+      },
+      "unresolvedReason": null
+    },
+    {
+      "weapon": "Staff",
+      "offenseId": "poison",
+      "offense": "Poison",
+      "carriers": [
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemBoneCage",
+          "name": "Bone Cage"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemBonestorm",
+          "name": "Bonestorm"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemContagion",
+          "name": "Contagion"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemDetonateDead",
+          "name": "Detonate Dead"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemEntangle",
+          "name": "Entangle"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemEssenceDrain",
+          "name": "Essence Drain"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemHexblast",
+          "name": "Hexblast"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemProfaneRitual",
+          "name": "Profane Ritual"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemThrashingVines",
+          "name": "Thrashing Vines"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemTornado",
+          "name": "Tornado"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemUnearth",
+          "name": "Unearth"
+        }
+      ],
+      "complete": [
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemBoneCage",
+          "carrier": "Bone Cage",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemBoneCage",
+          "carrier": "Bone Cage",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemBonestorm",
+          "carrier": "Bonestorm",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemBonestorm",
+          "carrier": "Bonestorm",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemDetonateDead",
+          "carrier": "Detonate Dead",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemDetonateDead",
+          "carrier": "Detonate Dead",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemEntangle",
+          "carrier": "Entangle",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemEntangle",
+          "carrier": "Entangle",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemEssenceDrain",
+          "carrier": "Essence Drain",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemEssenceDrain",
+          "carrier": "Essence Drain",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemHexblast",
+          "carrier": "Hexblast",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemHexblast",
+          "carrier": "Hexblast",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemThrashingVines",
+          "carrier": "Thrashing Vines",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemThrashingVines",
+          "carrier": "Thrashing Vines",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemUnearth",
+          "carrier": "Unearth",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemUnearth",
+          "carrier": "Unearth",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        }
+      ],
+      "counts": {
+        "considered": 55,
+        "complete": 16,
+        "partial": 24,
+        "invalid": 15
+      },
+      "unresolvedReason": null
+    },
+    {
+      "weapon": "Staff",
+      "offenseId": "electrocute",
+      "offense": "Electrocute",
+      "carriers": [
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemArc",
+          "name": "Arc"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemBallLightning",
+          "name": "Ball Lightning"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemLightningConduit",
+          "name": "Lightning Conduit"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemLightningWarp",
+          "name": "Lightning Warp"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemOrbOfStorms",
+          "name": "Orb of Storms"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemColdSnap",
+          "name": "Snap"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemSpark",
+          "name": "Spark"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemThunderstorm",
+          "name": "Thunderstorm"
+        }
+      ],
+      "complete": [
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemArc",
+          "carrier": "Arc",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemBallLightning",
+          "carrier": "Ball Lightning",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemLightningConduit",
+          "carrier": "Lightning Conduit",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemLightningWarp",
+          "carrier": "Lightning Warp",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemOrbOfStorms",
+          "carrier": "Orb of Storms",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemColdSnap",
+          "carrier": "Snap",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemSpark",
+          "carrier": "Spark",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemThunderstorm",
+          "carrier": "Thunderstorm",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        }
+      ],
+      "counts": {
+        "considered": 8,
+        "complete": 8,
+        "partial": 0,
+        "invalid": 0
+      },
+      "unresolvedReason": null
+    },
+    {
+      "weapon": "Talisman",
+      "offenseId": "electrocute",
+      "offense": "Electrocute",
+      "carriers": [
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemOilBarrage",
+          "name": "Oil Barrage"
+        }
+      ],
+      "complete": [
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemOilBarrage",
+          "carrier": "Oil Barrage",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        }
+      ],
+      "counts": {
+        "considered": 1,
+        "complete": 1,
+        "partial": 0,
+        "invalid": 0
+      },
+      "unresolvedReason": null
+    },
+    {
+      "weapon": "Wand",
+      "offenseId": "bleed",
+      "offense": "Bleed",
+      "carriers": [
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemBoneCage",
+          "name": "Bone Cage"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemBonestorm",
+          "name": "Bonestorm"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemDetonateDead",
+          "name": "Detonate Dead"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemEntangle",
+          "name": "Entangle"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemThrashingVines",
+          "name": "Thrashing Vines"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemTornado",
+          "name": "Tornado"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemUnearth",
+          "name": "Unearth"
+        }
+      ],
+      "complete": [
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemBoneCage",
+          "carrier": "Bone Cage",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+          "support": "Bleed III",
+          "family": "Bleed",
+          "tier": 3,
+          "evidence": "support_completes:bleed:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemBonestorm",
+          "carrier": "Bonestorm",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+          "support": "Bleed III",
+          "family": "Bleed",
+          "tier": 3,
+          "evidence": "support_completes:bleed:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemDetonateDead",
+          "carrier": "Detonate Dead",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+          "support": "Bleed III",
+          "family": "Bleed",
+          "tier": 3,
+          "evidence": "support_completes:bleed:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemEntangle",
+          "carrier": "Entangle",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+          "support": "Bleed III",
+          "family": "Bleed",
+          "tier": 3,
+          "evidence": "support_completes:bleed:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemThrashingVines",
+          "carrier": "Thrashing Vines",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+          "support": "Bleed III",
+          "family": "Bleed",
+          "tier": 3,
+          "evidence": "support_completes:bleed:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemUnearth",
+          "carrier": "Unearth",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+          "support": "Bleed III",
+          "family": "Bleed",
+          "tier": 3,
+          "evidence": "support_completes:bleed:exact"
+        }
+      ],
+      "counts": {
+        "considered": 49,
+        "complete": 6,
+        "partial": 18,
+        "invalid": 25
+      },
+      "unresolvedReason": null
+    },
+    {
+      "weapon": "Wand",
+      "offenseId": "poison",
+      "offense": "Poison",
+      "carriers": [
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemBoneCage",
+          "name": "Bone Cage"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemBonestorm",
+          "name": "Bonestorm"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemContagion",
+          "name": "Contagion"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemDetonateDead",
+          "name": "Detonate Dead"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemEntangle",
+          "name": "Entangle"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemEssenceDrain",
+          "name": "Essence Drain"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemHexblast",
+          "name": "Hexblast"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemProfaneRitual",
+          "name": "Profane Ritual"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemThrashingVines",
+          "name": "Thrashing Vines"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemTornado",
+          "name": "Tornado"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemUnearth",
+          "name": "Unearth"
+        }
+      ],
+      "complete": [
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemBoneCage",
+          "carrier": "Bone Cage",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemBoneCage",
+          "carrier": "Bone Cage",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemBonestorm",
+          "carrier": "Bonestorm",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemBonestorm",
+          "carrier": "Bonestorm",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemDetonateDead",
+          "carrier": "Detonate Dead",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemDetonateDead",
+          "carrier": "Detonate Dead",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemEntangle",
+          "carrier": "Entangle",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemEntangle",
+          "carrier": "Entangle",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemEssenceDrain",
+          "carrier": "Essence Drain",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemEssenceDrain",
+          "carrier": "Essence Drain",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemHexblast",
+          "carrier": "Hexblast",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemHexblast",
+          "carrier": "Hexblast",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemThrashingVines",
+          "carrier": "Thrashing Vines",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemThrashingVines",
+          "carrier": "Thrashing Vines",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemUnearth",
+          "carrier": "Unearth",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemUnearth",
+          "carrier": "Unearth",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        }
+      ],
+      "counts": {
+        "considered": 55,
+        "complete": 16,
+        "partial": 24,
+        "invalid": 15
+      },
+      "unresolvedReason": null
+    },
+    {
+      "weapon": "Wand",
+      "offenseId": "electrocute",
+      "offense": "Electrocute",
+      "carriers": [
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemArc",
+          "name": "Arc"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemBallLightning",
+          "name": "Ball Lightning"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemLightningConduit",
+          "name": "Lightning Conduit"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemLightningWarp",
+          "name": "Lightning Warp"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemOrbOfStorms",
+          "name": "Orb of Storms"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemColdSnap",
+          "name": "Snap"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemSpark",
+          "name": "Spark"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemThunderstorm",
+          "name": "Thunderstorm"
+        }
+      ],
+      "complete": [
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemArc",
+          "carrier": "Arc",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemBallLightning",
+          "carrier": "Ball Lightning",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemLightningConduit",
+          "carrier": "Lightning Conduit",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemLightningWarp",
+          "carrier": "Lightning Warp",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemOrbOfStorms",
+          "carrier": "Orb of Storms",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemColdSnap",
+          "carrier": "Snap",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemSpark",
+          "carrier": "Spark",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemThunderstorm",
+          "carrier": "Thunderstorm",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        }
+      ],
+      "counts": {
+        "considered": 8,
+        "complete": 8,
+        "partial": 0,
+        "invalid": 0
+      },
+      "unresolvedReason": null
+    },
+    {
+      "weapon": "Sceptre",
+      "offenseId": "bleed",
+      "offense": "Bleed",
+      "carriers": [
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemBoneCage",
+          "name": "Bone Cage"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemBonestorm",
+          "name": "Bonestorm"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemDetonateDead",
+          "name": "Detonate Dead"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemEntangle",
+          "name": "Entangle"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemThrashingVines",
+          "name": "Thrashing Vines"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemTornado",
+          "name": "Tornado"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemUnearth",
+          "name": "Unearth"
+        }
+      ],
+      "complete": [
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemBoneCage",
+          "carrier": "Bone Cage",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+          "support": "Bleed III",
+          "family": "Bleed",
+          "tier": 3,
+          "evidence": "support_completes:bleed:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemBonestorm",
+          "carrier": "Bonestorm",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+          "support": "Bleed III",
+          "family": "Bleed",
+          "tier": 3,
+          "evidence": "support_completes:bleed:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemDetonateDead",
+          "carrier": "Detonate Dead",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+          "support": "Bleed III",
+          "family": "Bleed",
+          "tier": 3,
+          "evidence": "support_completes:bleed:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemEntangle",
+          "carrier": "Entangle",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+          "support": "Bleed III",
+          "family": "Bleed",
+          "tier": 3,
+          "evidence": "support_completes:bleed:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemThrashingVines",
+          "carrier": "Thrashing Vines",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+          "support": "Bleed III",
+          "family": "Bleed",
+          "tier": 3,
+          "evidence": "support_completes:bleed:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemUnearth",
+          "carrier": "Unearth",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+          "support": "Bleed III",
+          "family": "Bleed",
+          "tier": 3,
+          "evidence": "support_completes:bleed:exact"
+        }
+      ],
+      "counts": {
+        "considered": 49,
+        "complete": 6,
+        "partial": 18,
+        "invalid": 25
+      },
+      "unresolvedReason": null
+    },
+    {
+      "weapon": "Sceptre",
+      "offenseId": "poison",
+      "offense": "Poison",
+      "carriers": [
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemBoneCage",
+          "name": "Bone Cage"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemBonestorm",
+          "name": "Bonestorm"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemContagion",
+          "name": "Contagion"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemDetonateDead",
+          "name": "Detonate Dead"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemEntangle",
+          "name": "Entangle"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemEssenceDrain",
+          "name": "Essence Drain"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemHexblast",
+          "name": "Hexblast"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemProfaneRitual",
+          "name": "Profane Ritual"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemThrashingVines",
+          "name": "Thrashing Vines"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemTornado",
+          "name": "Tornado"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemUnearth",
+          "name": "Unearth"
+        }
+      ],
+      "complete": [
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemBoneCage",
+          "carrier": "Bone Cage",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemBoneCage",
+          "carrier": "Bone Cage",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemBonestorm",
+          "carrier": "Bonestorm",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemBonestorm",
+          "carrier": "Bonestorm",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemDetonateDead",
+          "carrier": "Detonate Dead",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemDetonateDead",
+          "carrier": "Detonate Dead",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemEntangle",
+          "carrier": "Entangle",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemEntangle",
+          "carrier": "Entangle",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemEssenceDrain",
+          "carrier": "Essence Drain",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemEssenceDrain",
+          "carrier": "Essence Drain",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemHexblast",
+          "carrier": "Hexblast",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemHexblast",
+          "carrier": "Hexblast",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemThrashingVines",
+          "carrier": "Thrashing Vines",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemThrashingVines",
+          "carrier": "Thrashing Vines",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemUnearth",
+          "carrier": "Unearth",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemUnearth",
+          "carrier": "Unearth",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        }
+      ],
+      "counts": {
+        "considered": 55,
+        "complete": 16,
+        "partial": 24,
+        "invalid": 15
+      },
+      "unresolvedReason": null
+    },
+    {
+      "weapon": "Sceptre",
+      "offenseId": "electrocute",
+      "offense": "Electrocute",
+      "carriers": [
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemArc",
+          "name": "Arc"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemBallLightning",
+          "name": "Ball Lightning"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemLightningConduit",
+          "name": "Lightning Conduit"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemLightningWarp",
+          "name": "Lightning Warp"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemOrbOfStorms",
+          "name": "Orb of Storms"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemColdSnap",
+          "name": "Snap"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemSpark",
+          "name": "Spark"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemThunderstorm",
+          "name": "Thunderstorm"
+        }
+      ],
+      "complete": [
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemArc",
+          "carrier": "Arc",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemBallLightning",
+          "carrier": "Ball Lightning",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemLightningConduit",
+          "carrier": "Lightning Conduit",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemLightningWarp",
+          "carrier": "Lightning Warp",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemOrbOfStorms",
+          "carrier": "Orb of Storms",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemColdSnap",
+          "carrier": "Snap",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemSpark",
+          "carrier": "Spark",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemThunderstorm",
+          "carrier": "Thunderstorm",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        }
+      ],
+      "counts": {
+        "considered": 8,
+        "complete": 8,
+        "partial": 0,
+        "invalid": 0
+      },
+      "unresolvedReason": null
+    },
+    {
+      "weapon": "Spear",
+      "offenseId": "poison",
+      "offense": "Poison",
+      "carriers": [
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemBloodHunt",
+          "name": "Blood Hunt"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemRake",
+          "name": "Rake"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemRapidAssault",
+          "name": "Rapid Assault"
+        }
+      ],
+      "complete": [
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemBloodHunt",
+          "carrier": "Blood Hunt",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemBloodHunt",
+          "carrier": "Blood Hunt",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemRake",
+          "carrier": "Rake",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemRake",
+          "carrier": "Rake",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemRapidAssault",
+          "carrier": "Rapid Assault",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemComorbidity",
+          "support": "Escalating Poison",
+          "family": "Escalating Poison",
+          "tier": null,
+          "evidence": "support_completes:poison:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemRapidAssault",
+          "carrier": "Rapid Assault",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+          "support": "Poison III",
+          "family": "Poison",
+          "tier": 3,
+          "evidence": "support_completes:poison:exact"
+        }
+      ],
+      "counts": {
+        "considered": 15,
+        "complete": 6,
+        "partial": 9,
+        "invalid": 0
+      },
+      "unresolvedReason": null
+    },
+    {
+      "weapon": "Spear",
+      "offenseId": "electrocute",
+      "offense": "Electrocute",
+      "carriers": [
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemElementalSundering",
+          "name": "Elemental Sundering"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemLightningSpear",
+          "name": "Lightning Spear"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemPrimalStrikes",
+          "name": "Primal Strikes"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemStormLance",
+          "name": "Storm Lance"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemThunderousLeap",
+          "name": "Thunderous Leap"
+        }
+      ],
+      "complete": [
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemElementalSundering",
+          "carrier": "Elemental Sundering",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemLightningSpear",
+          "carrier": "Lightning Spear",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemPrimalStrikes",
+          "carrier": "Primal Strikes",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemStormLance",
+          "carrier": "Storm Lance",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemThunderousLeap",
+          "carrier": "Thunderous Leap",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+          "support": "Electrocute",
+          "family": "Electrocute",
+          "tier": null,
+          "evidence": "support_completes:electrocute:exact"
+        }
+      ],
+      "counts": {
+        "considered": 5,
+        "complete": 5,
+        "partial": 0,
+        "invalid": 0
+      },
+      "unresolvedReason": null
+    }
+  ]
+}
