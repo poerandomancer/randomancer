@@ -1454,6 +1454,55 @@ function buildViableSkillPool(catalog, offenseObligations, snapshot, criticalPro
   });
 }
 
+/**
+ * Return the native, legal active-skill coverage for a Weapon + Offense draw.
+ * This deliberately delegates legality and semantic proof construction to the
+ * same candidate analysis used by the package selector. Support-completion
+ * pseudo-carriers are omitted: this boundary describes native skills only.
+ */
+function classifyNativeOffenseCoverageV3(catalog, snapshot = {}, options = {}) {
+  const validation = validateRecommendationCatalogV3(catalog);
+  if (!validation.ok) return { classification: 'GAP', directCandidates: [], carrierCandidates: [] };
+  const model = buildRecommendationObligationsV3(snapshot, options.offenseInventory || {});
+  const obligations = model.obligations.filter((entry) => entry.kind === 'offense');
+  const supportIndex = supportIndexForCatalog(catalog);
+  const candidates = asArray(catalog?.entities)
+    .map((entity) => analyzePackageCandidate(
+      entity,
+      obligations,
+      snapshot,
+      options.criticalProfiles || {},
+      supportIndex
+    ))
+    .filter((candidate) => candidate?.primaryEligible);
+  const resultCandidate = (candidate, evidence) => ({
+    entityId: candidate.entity.id,
+    sourceId: candidate.entity.source_id,
+    name: candidate.entity.name,
+    evidence
+  });
+  const directCandidates = candidates
+    .filter((candidate) => obligations.length > 0 && obligations.every((obligation) =>
+      candidate.fulfilled.some((proof) => proof.obligationId === obligation.id)
+    ))
+    .map((candidate) => resultCandidate(candidate, candidate.fulfilled))
+    .sort((a, b) => String(a.name).localeCompare(String(b.name)) || String(a.entityId).localeCompare(String(b.entityId)));
+  const carrierCandidates = candidates
+    .filter((candidate) => !directCandidates.some((entry) => entry.entityId === candidate.entity.id))
+    .map((candidate) => ({
+      candidate,
+      evidence: candidate.carriers.filter((proof) => proof.completionType !== 'support')
+    }))
+    .filter((entry) => entry.evidence.length > 0)
+    .map((entry) => resultCandidate(entry.candidate, entry.evidence))
+    .sort((a, b) => String(a.name).localeCompare(String(b.name)) || String(a.entityId).localeCompare(String(b.entityId)));
+  return {
+    classification: directCandidates.length ? 'DIRECT' : (carrierCandidates.length ? 'CARRIER' : 'GAP'),
+    directCandidates,
+    carrierCandidates
+  };
+}
+
 function candidateSuppliesAnyMechanic(candidate, mechanics) {
   const required = new Set(asArray(mechanics).map(normalizeToken).filter(Boolean));
   if (!required.size) return true;
@@ -2393,7 +2442,21 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
   const primaryPool = viablePool.filter((candidate) =>
     candidate.primaryEligible && (candidate.fulfilled.length || candidate.carriers.length)
   );
-  const rankedPackages = buildRankedSkillPackages(viablePool, offenseObligations);
+  const directPrimaries = new Set(viablePool
+    .filter((candidate) => offenseObligations.length > 0 && offenseObligations.every((obligation) =>
+      candidate.primaryEligible
+      && candidate.fulfilled.some((proof) => proof.obligationId === obligation.id)
+    ))
+    .map((candidate) => candidate.entity.id));
+  const allRankedPackages = buildRankedSkillPackages(viablePool, offenseObligations);
+  // A native solution is lexicographically superior to every carrier/support
+  // route. Keep all strong direct primaries available for seeded variety, but
+  // stop package escalation (and therefore do not add an arbitrary second skill).
+  const rankedPackages = directPrimaries.size
+    ? allRankedPackages.filter((candidate) =>
+      !candidate.supporting && directPrimaries.has(candidate.primary.entity.id)
+    )
+    : allRankedPackages;
   const { winner, shortlist, qualityBand } = choosePackageCandidate(rankedPackages, options);
   const supportResolution = assignSupportPackagesV3(catalog, winner, offenseObligations);
   const selectedCandidates = [winner?.primary, winner?.supporting].filter(Boolean);
@@ -2520,6 +2583,8 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
       assignedSupportCount: supportResolution.assignedSupportCount,
       evaluatedSupportPackages: supportResolution.evaluatedPackages,
       offenseCoverage,
+      recommendationTier: directPrimaries.size ? 'DIRECT' : 'FALLBACK',
+      directCandidateCount: directPrimaries.size,
       qualityBand,
       companionQualityBand: COMPANION_QUALITY_BAND
     }
@@ -2573,6 +2638,7 @@ export {
   MAX_SUPPORTS_PER_SKILL,
   adaptRecommendationPackageV3ToSnapshot,
   buildRecommendationObligationsV3,
+  classifyNativeOffenseCoverageV3,
   evaluateCompatibilityV3,
   evaluateDeliveryCompatibilityV3,
   isEquipmentCompatibleV3,

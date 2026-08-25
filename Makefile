@@ -1,4 +1,4 @@
-.PHONY: normalize-tags-check normalize-tags-strict normalize-tags-audit recommendation-data recommendation-data-check recommendation-selector-check recommendation-critical-profiles
+.PHONY: normalize-tags-check normalize-tags-strict normalize-tags-audit recommendation-data recommendation-data-check recommendation-selector-check recommendation-critical-profiles recommendation-coverage
 
 normalize-tags-check:
 	python data/helperScripts/generate_tag_rules_js.py
@@ -23,3 +23,6 @@ recommendation-selector-check:
 
 recommendation-critical-profiles:
 	python data/helperScripts/scrape_skill_critical_profiles_v3.py
+
+recommendation-coverage:
+	node data/helperScripts/generate_weapon_offense_coverage_v3.mjs
