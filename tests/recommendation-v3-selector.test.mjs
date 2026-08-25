@@ -35,7 +35,9 @@ test('native artifact contains every live non-critical cell exactly once', () =>
 test('representative native semantic facts remain strict', () => {
   assert.ok(analyze('Mace', 'ignite').direct.every((c) => c.directKind === 'INHERENT_DIRECT'));
   assert.ok(analyze('Quarterstaff', 'chill').direct.every((c) => c.directKind === 'INHERENT_DIRECT'));
-  assert.ok(analyze('Quarterstaff', 'freeze').direct.every((c) => c.directKind === 'INHERENT_DIRECT'));
+  assert.ok(analyze('Quarterstaff', 'freeze').direct.some(
+    (c) => c.entity.name === 'Wave of Frost' && c.directKind === 'EXPLICIT_DIRECT'
+  ));
   assert.ok(analyze('Crossbow', 'shock').direct.every((c) => c.directKind === 'INHERENT_DIRECT'));
   assert.equal(analyze('Bow', 'freeze').classification, 'DIRECT');
   assert.ok(analyze('Bow', 'freeze').direct.some((c) => c.entity.name === 'Escape Shot'));
