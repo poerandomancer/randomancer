@@ -70,7 +70,8 @@ for (const weapon of weapons) for (const offense of offenses) {
     }));
     bridgeCells.push({
       weapon, offenseId: offense.id, offense: offense.name,
-      carriers: result.carriers.map((candidate) => ({ id: candidate.entity.id, name: candidate.entity.name })), complete,
+      carriers: result.carriers.slice(0, 10).map((candidate) => ({ id: candidate.entity.id, name: candidate.entity.name })),
+      complete: complete.slice(0, 10),
       counts: result.bridgeEvaluations.reduce((sum, item) => ({
         considered: sum.considered + item.considered, complete: sum.complete + item.complete.length,
         partial: sum.partial + item.partial, invalid: sum.invalid + item.invalid

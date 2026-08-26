@@ -100,3 +100,54 @@ test('bridge audit is compact and contains only native CARRIER cells', () => {
   assert.ok(!JSON.stringify(bridges).includes('invalidPairs'));
   assert.ok(fs.statSync(new URL('../data/enriched/recommendation_carrier_bridges_v3.json', import.meta.url)).size < 200_000);
 });
+
+test('structured broad and unrestricted legality resolve archetypes generically', () => {
+  for (const weapon of ['Quarterstaff', 'Bow', 'Talisman', 'Spear']) {
+    const cell = analyze(weapon, 'totems');
+    assert.equal(cell.classification, 'DIRECT');
+    assert.ok(cell.direct.some((candidate) => candidate.entity.name === 'Shockwave Totem'));
+  }
+  for (const weapon of ['Mace', 'Quarterstaff', 'Crossbow']) {
+    const cell = analyze(weapon, 'companions');
+    assert.equal(cell.classification, 'DIRECT');
+    assert.ok(cell.direct.some((candidate) => candidate.entity.name === 'Tame Beast'));
+  }
+  assert.ok(!analyze('Bow', 'companions').direct.some((candidate) => candidate.entity.name === 'Rhoa Mount'));
+});
+
+test('support-added elemental damage closes through Hit ontology with prevention intact', () => {
+  for (const [weapon, offense, support] of [
+    ['Mace', 'chill', 'Cold Attunement'],
+    ['Mace', 'freeze', 'Cold Attunement'],
+    ['Mace', 'shock', 'Lightning Attunement'],
+    ['Quarterstaff', 'ignite', 'Fire Attunement']
+  ]) {
+    assert.equal(analyze(weapon, offense).classification, 'CARRIER');
+    const result = selectRecommendationPackageV3(catalog, { weapon, offenseSet: [offense] }, {
+      offenseInventory, selectionSeed: `derived-${weapon}-${offense}`
+    });
+    assert.equal(result.diagnostics.recommendationTier, 'CARRIER_BRIDGE');
+    assert.ok(result.supportAssignments.flatMap((entry) => entry.supports)
+      .some((entry) => entry.name === support));
+    assert.equal(result.unresolved.length, 0);
+  }
+});
+
+test('strong inherited weapon Physical is distinct and conversion-conservative', () => {
+  const cell = analyze('Talisman', 'physical');
+  assert.equal(cell.classification, 'DIRECT');
+  assert.ok(cell.direct.some((candidate) => candidate.directProofs.some((proof) =>
+    proof.semanticSource === 'inherited_weapon_damage' && proof.relation === 'has_property')));
+  assert.ok(!cell.direct.some((candidate) => candidate.entity.name === 'Fury of the Mountain'));
+});
+
+test('exact-native identity wins inside an equally complete DIRECT tier', () => {
+  for (const [weapon, offense] of [['Bow', 'physical'], ['Mace', 'physical'], ['Quarterstaff', 'lightning']]) {
+    const result = selectRecommendationPackageV3(catalog, { weapon, offenseSet: [offense] }, {
+      offenseInventory, selectionSeed: `native-${weapon}-${offense}`
+    });
+    const crafting = result.primarySkill?.entityId
+      ? catalog.entities.find((entity) => entity.id === result.primarySkill.entityId)?.crafting : null;
+    assert.ok(crafting?.weapon_affinities?.map((value) => value.toLowerCase()).includes(weapon.toLowerCase()));
+  }
+});
