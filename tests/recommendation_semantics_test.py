@@ -77,8 +77,15 @@ class AilmentApplicationGrammarTests(unittest.TestCase):
 class GeneratedComponentPromotionTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        payload = json.loads((Path(__file__).parents[1] / "data/enriched/recommendation_catalog_v3.json").read_text())
-        cls.by_name = {entity.get("name"): entity for entity in payload["entities"]}
+        import sys
+        helpers = Path(__file__).parents[1] / "data/helperScripts"
+        sys.path.insert(0, str(helpers))
+        from generate_recommendation_catalog_v3 import SourceContext, build_catalog, compact_catalog
+        full, _, _, _ = build_catalog(SourceContext(Path(__file__).parents[1]))
+        runtime = compact_catalog(full)
+        cls.full = full
+        cls.runtime = runtime
+        cls.by_name = {entity.get("name"): entity for entity in full["entities"]}
 
     def capability(self, name, mechanic):
         return [fact for fact in self.by_name[name]["facts"] if fact.get("mechanic") == mechanic and fact.get("relation") in {"inflicts", "provides"}]
@@ -100,6 +107,15 @@ class GeneratedComponentPromotionTests(unittest.TestCase):
             self.assertTrue(all(e.get("parent_entity_id") for e in fact["evidence"]))
         semantic_keys = [(fact["relation"], fact.get("mechanic"), fact.get("subject"), fact.get("scope")) for fact in gas + barrier + bleed]
         self.assertEqual(len(semantic_keys), len(set(semantic_keys)))
+
+    def test_runtime_projection_preserves_normalized_semantics(self):
+        semantic = lambda catalog: [(entity["id"], [{k: v for k, v in fact.items() if k != "evidence"} for fact in entity.get("facts") or []]) for entity in catalog["entities"]]
+        self.assertEqual(semantic(self.full), semantic(self.runtime))
+        self.assertEqual(2964, len(self.runtime["entities"]))
+        self.assertEqual(5128, sum(len(entity.get("facts") or []) for entity in self.runtime["entities"]))
+        for entity in self.runtime["entities"]:
+            for fact in entity.get("facts") or []:
+                self.assertTrue(all(set(proof) <= {"kind", "value"} for proof in fact["evidence"]))
 
     def test_non_applicators_stay_excluded(self):
         self.assertFalse(self.capability("Shockchain Arrow", "shock"))

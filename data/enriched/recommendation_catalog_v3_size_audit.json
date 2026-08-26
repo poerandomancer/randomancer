@@ -1,0 +1,380 @@
+{
+  "schema_version": "recommendation-catalog-v3-size-audit.1.0.0",
+  "before": {
+    "raw_bytes": 9246297,
+    "gzip_bytes": 679923,
+    "brotli_bytes": null,
+    "entity_count": 2964,
+    "semantic_fact_count": 5128,
+    "evidence_record_count": 6832,
+    "average_fact_bytes": 345.53,
+    "source_snippets": {
+      "occurrences": 6688,
+      "unique": 2417,
+      "repeated_occurrences": 4271
+    },
+    "approximate_category_bytes": {
+      "entity_identity_roles_tags": 804267,
+      "compatibility_access_metadata": 285210,
+      "semantic_facts_excluding_evidence": 492975,
+      "semantic_evidence_arrays": 1225012,
+      "raw_intermediate_source_evidence": 1898820,
+      "descriptions": 339177,
+      "component_provenance": 639902,
+      "entity_provenance": 266995,
+      "structured_stat_provenance": 1388256,
+      "repeated_object_metadata": 469012
+    },
+    "largest_entities": [
+      {
+        "bytes": 14127,
+        "id": "skill:Metadata/Items/Gem/SkillGemElementalSundering",
+        "facts": 18
+      },
+      {
+        "bytes": 11657,
+        "id": "skill:Metadata/Items/Gem/SkillGemSpearOfSolaris",
+        "facts": 10
+      },
+      {
+        "bytes": 11569,
+        "id": "skill:Metadata/Items/Gems/SkillGemFirestorm",
+        "facts": 12
+      },
+      {
+        "bytes": 11239,
+        "id": "skill:Metadata/Items/Gem/SkillGemGasGrenade",
+        "facts": 8
+      },
+      {
+        "bytes": 11078,
+        "id": "skill:Metadata/Items/Gem/SkillGemStormLance",
+        "facts": 7
+      },
+      {
+        "bytes": 11040,
+        "id": "skill:Metadata/Items/Gem/SkillGemColdSnap",
+        "facts": 11
+      },
+      {
+        "bytes": 11023,
+        "id": "skill:Metadata/Items/Gem/SkillGemOilBarrage",
+        "facts": 9
+      },
+      {
+        "bytes": 10760,
+        "id": "skill:Metadata/Items/Gems/SkillGemGlacialLance",
+        "facts": 9
+      },
+      {
+        "bytes": 10425,
+        "id": "skill:Metadata/Items/Gems/SkillGemConductiveRunes",
+        "facts": 9
+      },
+      {
+        "bytes": 10395,
+        "id": "skill:Metadata/Items/Gem/SkillGemShockchainArrow",
+        "facts": 10
+      }
+    ],
+    "largest_evidence_arrays": [
+      {
+        "records": 29,
+        "id": "skill:Metadata/Items/Gem/SkillGemElementalSundering"
+      },
+      {
+        "records": 24,
+        "id": "skill:Metadata/Items/Gems/SkillGemSpellTotem"
+      },
+      {
+        "records": 23,
+        "id": "skill:Metadata/Items/Gems/SkillGemFirestorm"
+      },
+      {
+        "records": 20,
+        "id": "skill:Metadata/Items/Gem/SkillGemColdSnap"
+      },
+      {
+        "records": 18,
+        "id": "skill:Metadata/Items/Gem/SkillGemAscendancyInfuseWeapon"
+      },
+      {
+        "records": 17,
+        "id": "skill:Metadata/Items/Gem/SkillGemShardScavenger"
+      },
+      {
+        "records": 16,
+        "id": "skill:Metadata/Items/Gems/SupportGemElementalDischarge"
+      },
+      {
+        "records": 16,
+        "id": "skill:Metadata/Items/Gems/SkillGemSkyfall"
+      },
+      {
+        "records": 16,
+        "id": "skill:Metadata/Items/Gems/SkillGemAncestralWarriorTotem"
+      },
+      {
+        "records": 16,
+        "id": "skill:Metadata/Items/Gem/SkillGemWyvernFlameBreath"
+      }
+    ],
+    "largest_repeated_strings": [
+      {
+        "duplicate_bytes": 4644,
+        "occurrences": 87,
+        "sample": "active_skill_base_physical_damage_%_to_convert_to_fire"
+      },
+      {
+        "duplicate_bytes": 4543,
+        "occurrences": 78,
+        "sample": "active_skill_base_physical_damage_%_to_convert_to_lightning"
+      },
+      {
+        "duplicate_bytes": 3348,
+        "occurrences": 63,
+        "sample": "active_skill_base_physical_damage_%_to_convert_to_cold"
+      },
+      {
+        "duplicate_bytes": 3173,
+        "occurrences": 168,
+        "sample": "base_deal_no_damage"
+      },
+      {
+        "duplicate_bytes": 2530,
+        "occurrences": 56,
+        "sample": "armour_%_applies_to_fire_cold_lightning_damage"
+      },
+      {
+        "duplicate_bytes": 2415,
+        "occurrences": 8,
+        "sample": "While active, [Consume|Consuming] [Freeze], [Shock], [Ignite], or [ArmourBreak|Fully Broken Armour] on an enemy reloads "
+      },
+      {
+        "duplicate_bytes": 2215,
+        "occurrences": 6,
+        "sample": "Build [Glory] by inflicting [Freeze], [Shock] or [Ignite] on enemies. When you have maximum [Glory] you may call forth t"
+      },
+      {
+        "duplicate_bytes": 2090,
+        "occurrences": 6,
+        "sample": "Spends all your [Ward] to gain a short-duration [Buff] that causes you to [Block] all [Block|Blockable] [HitDamage|Hits]"
+      },
+      {
+        "duplicate_bytes": 1932,
+        "occurrences": 8,
+        "sample": "Place a Sigil on the ground, providing a powerful [Buff] to you and [Allies] standing in it which grants Life Regenerati"
+      },
+      {
+        "duplicate_bytes": 1860,
+        "occurrences": 6,
+        "sample": "[Consume] the elemental energy from a [Frozen], [Shock|Shocked] or [Ignite|Ignited] enemy, creating an elemental blast t"
+      }
+    ]
+  },
+  "after": {
+    "raw_bytes": 4378418,
+    "gzip_bytes": 322931,
+    "brotli_bytes": null,
+    "entity_count": 2964,
+    "semantic_fact_count": 5128,
+    "evidence_record_count": 6832,
+    "average_fact_bytes": 224.37,
+    "source_snippets": {
+      "occurrences": 6688,
+      "unique": 2417,
+      "repeated_occurrences": 4271
+    },
+    "approximate_category_bytes": {
+      "entity_identity_roles_tags": 804267,
+      "compatibility_access_metadata": 285210,
+      "semantic_facts_excluding_evidence": 492975,
+      "semantic_evidence_arrays": 603714,
+      "raw_intermediate_source_evidence": 328405,
+      "descriptions": 233850,
+      "component_provenance": 24325,
+      "entity_provenance": 6840,
+      "structured_stat_provenance": 6024,
+      "repeated_object_metadata": 11856
+    },
+    "largest_entities": [
+      {
+        "bytes": 7040,
+        "id": "skill:Metadata/Items/Gem/SkillGemElementalSundering",
+        "facts": 18
+      },
+      {
+        "bytes": 6065,
+        "id": "skill:Metadata/Items/Gem/SkillGemSpearOfSolaris",
+        "facts": 10
+      },
+      {
+        "bytes": 5841,
+        "id": "skill:Metadata/Items/Gem/SkillGemColdSnap",
+        "facts": 11
+      },
+      {
+        "bytes": 5771,
+        "id": "skill:Metadata/Items/Gem/SkillGemShardScavenger",
+        "facts": 9
+      },
+      {
+        "bytes": 5469,
+        "id": "skill:Metadata/Items/Gems/SkillGemRefutation",
+        "facts": 7
+      },
+      {
+        "bytes": 5109,
+        "id": "skill:Metadata/Items/Gems/SupportGemEonyrsThunder",
+        "facts": 11
+      },
+      {
+        "bytes": 4910,
+        "id": "skill:Metadata/Items/Gem/SkillGemAscendancyPoisonousConcoction",
+        "facts": 7
+      },
+      {
+        "bytes": 4840,
+        "id": "skill:Metadata/Items/Gems/SkillGemSkyfall",
+        "facts": 8
+      },
+      {
+        "bytes": 4828,
+        "id": "skill:Metadata/Items/Gem/SkillGemStormLance",
+        "facts": 7
+      },
+      {
+        "bytes": 4770,
+        "id": "skill:Metadata/Items/Gem/SkillGemShockchainArrow",
+        "facts": 10
+      }
+    ],
+    "largest_evidence_arrays": [
+      {
+        "records": 29,
+        "id": "skill:Metadata/Items/Gem/SkillGemElementalSundering"
+      },
+      {
+        "records": 24,
+        "id": "skill:Metadata/Items/Gems/SkillGemSpellTotem"
+      },
+      {
+        "records": 23,
+        "id": "skill:Metadata/Items/Gems/SkillGemFirestorm"
+      },
+      {
+        "records": 20,
+        "id": "skill:Metadata/Items/Gem/SkillGemColdSnap"
+      },
+      {
+        "records": 18,
+        "id": "skill:Metadata/Items/Gem/SkillGemAscendancyInfuseWeapon"
+      },
+      {
+        "records": 17,
+        "id": "skill:Metadata/Items/Gem/SkillGemShardScavenger"
+      },
+      {
+        "records": 16,
+        "id": "skill:Metadata/Items/Gems/SupportGemElementalDischarge"
+      },
+      {
+        "records": 16,
+        "id": "skill:Metadata/Items/Gems/SkillGemSkyfall"
+      },
+      {
+        "records": 16,
+        "id": "skill:Metadata/Items/Gems/SkillGemAncestralWarriorTotem"
+      },
+      {
+        "records": 16,
+        "id": "skill:Metadata/Items/Gem/SkillGemWyvernFlameBreath"
+      }
+    ],
+    "largest_repeated_strings": [
+      {
+        "duplicate_bytes": 4644,
+        "occurrences": 87,
+        "sample": "active_skill_base_physical_damage_%_to_convert_to_fire"
+      },
+      {
+        "duplicate_bytes": 4543,
+        "occurrences": 78,
+        "sample": "active_skill_base_physical_damage_%_to_convert_to_lightning"
+      },
+      {
+        "duplicate_bytes": 3348,
+        "occurrences": 63,
+        "sample": "active_skill_base_physical_damage_%_to_convert_to_cold"
+      },
+      {
+        "duplicate_bytes": 3173,
+        "occurrences": 168,
+        "sample": "base_deal_no_damage"
+      },
+      {
+        "duplicate_bytes": 2530,
+        "occurrences": 56,
+        "sample": "armour_%_applies_to_fire_cold_lightning_damage"
+      },
+      {
+        "duplicate_bytes": 2415,
+        "occurrences": 8,
+        "sample": "While active, [Consume|Consuming] [Freeze], [Shock], [Ignite], or [ArmourBreak|Fully Broken Armour] on an enemy reloads "
+      },
+      {
+        "duplicate_bytes": 2215,
+        "occurrences": 6,
+        "sample": "Build [Glory] by inflicting [Freeze], [Shock] or [Ignite] on enemies. When you have maximum [Glory] you may call forth t"
+      },
+      {
+        "duplicate_bytes": 2090,
+        "occurrences": 6,
+        "sample": "Spends all your [Ward] to gain a short-duration [Buff] that causes you to [Block] all [Block|Blockable] [HitDamage|Hits]"
+      },
+      {
+        "duplicate_bytes": 1932,
+        "occurrences": 8,
+        "sample": "Place a Sigil on the ground, providing a powerful [Buff] to you and [Allies] standing in it which grants Life Regenerati"
+      },
+      {
+        "duplicate_bytes": 1860,
+        "occurrences": 6,
+        "sample": "[Consume] the elemental energy from a [Frozen], [Shock|Shocked] or [Ignite|Ignited] enemy, creating an elemental blast t"
+      }
+    ]
+  },
+  "reduction": {
+    "raw_bytes": 4867879,
+    "percent": 52.65
+  },
+  "runtime_field_classification": {
+    "RUNTIME_REQUIRED": [
+      "identity/name/roles/retrieval_terms/support_family",
+      "compatibility",
+      "typed semantic fact fields",
+      "evidence.kind/value",
+      "source_evidence.description/active_skill_types/cannot_be_supported",
+      "provenance.source_tags"
+    ],
+    "GENERATION_REQUIRED": [
+      "component/stat-set/parser provenance",
+      "complete source evidence",
+      "semantic completeness warnings"
+    ],
+    "DIAGNOSTIC_ONLY": [
+      "entity dataset/schema provenance",
+      "evidence parent/component/pattern_category",
+      "structured raw stats",
+      "passive lines",
+      "unique modifiers/source metadata",
+      "taxonomy metadata",
+      "full granted effects",
+      "links"
+    ],
+    "REDUNDANT": [
+      "evidence.parent_entity_id"
+    ],
+    "UNKNOWN": []
+  }
+}
