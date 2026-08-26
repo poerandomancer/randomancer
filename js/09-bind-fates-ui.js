@@ -2,6 +2,7 @@ import { getBindFatesFromApp } from './04-app-state.js';
 import { sliderValueToThreshold, thresholdToSliderValue } from './06-cohesion.js';
 import { ensureDataPreload } from './08-data-load.js';
 import { loadChallengeLibrary } from './15-challenge-engine.js';
+import { getBindFatesWeaponOptions } from './weapon-categories.js';
 
 const BIND_FATES_STORAGE_KEY = 'randomancer_bind_fates_v1';
 const CHALLENGE_FATES_STORAGE_KEY = 'randomancer_challenge_fates_v1';
@@ -12,6 +13,23 @@ function normalizeTemplateText(templateString) {
     .replace(/\{SKILL_FAMILY_RULE\}/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
+}
+
+function buildStandardOptions(category, data) {
+  if (category === 'ascendancy') {
+    const ascSet = new Set();
+    Object.values(data.Classes || {}).forEach((cls) => {
+      (cls?.ascendancies || []).forEach((name) => ascSet.add(name));
+    });
+    return Array.from(ascSet).sort();
+  }
+  if (category === 'weapon') return getBindFatesWeaponOptions(data);
+  if (category === 'combat') {
+    const ail = (data.Ailments || []).map((a) => ({ name: a.name, kind: 'ailment' }));
+    const tac = (data.Tactics || []).map((t) => ({ name: t.name, kind: 'tactic' }));
+    return [...ail, ...tac];
+  }
+  return [];
 }
 
 function hasCategory(task, cat) {
@@ -204,27 +222,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
       btn.addEventListener('click', () => cycleOptionState(btn));
       listEl.appendChild(btn);
     });
-  };
-
-  const buildStandardOptions = (category, data) => {
-    if (category === 'ascendancy') {
-      const ascSet = new Set();
-      Object.values(data.Classes || {}).forEach((cls) => {
-        (cls?.ascendancies || []).forEach((name) => ascSet.add(name));
-      });
-      return Array.from(ascSet).sort();
-    }
-    if (category === 'weapon') {
-      const two = Array.isArray(data.Weapons?.['Two-Handed']) ? data.Weapons['Two-Handed'] : [];
-      const one = Array.isArray(data.Weapons?.['One-Handed']) ? data.Weapons['One-Handed'] : [];
-      return [...two, ...one].map((w) => w.name);
-    }
-    if (category === 'combat') {
-      const ail = (data.Ailments || []).map((a) => ({ name: a.name, kind: 'ailment' }));
-      const tac = (data.Tactics || []).map((t) => ({ name: t.name, kind: 'tactic' }));
-      return [...ail, ...tac];
-    }
-    return [];
   };
 
   const buildChallengeOptions = () => {

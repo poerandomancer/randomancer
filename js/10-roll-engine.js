@@ -6,6 +6,7 @@ import { applyHardRestrictions, buildBuildContext, cohesionThreshold, lookupAsce
 import { renderPassiveRecommendations, rollRecommendedSkills } from './07-skills-render.js';
 import { dataReady, ensureDataPreload } from './08-data-load.js';
 import { pickRecommendedAscendancyNodes, pickRecommendedKeystones, pickRecommendedNotables } from '../passivesEngine.js';
+import { getCoreBuildWeaponInventory, weaponMatchesCategory } from './weapon-categories.js';
 
 // ---------- ascendancy art ----------
 const ASC_CROSSFADE_MS = 1400;
@@ -605,10 +606,14 @@ function rollSecondaryWeaponSet(dataWrap){
     return null;
   }
 
-  const weaponPool = (data.Weapons['Two-Handed'] || []).concat(data.Weapons['One-Handed'] || []);
-  let filteredWeaponPool = weaponPool.filter((w) => !wAboms.has(w.name) && w.name !== current.weapon);
+  const weaponPool = getCoreBuildWeaponInventory(data);
+  let filteredWeaponPool = weaponPool.filter((w) =>
+    ![...wAboms].some((category) => weaponMatchesCategory(w, category)) && w.name !== current.weapon
+  );
   if (wOaths.size > 0) {
-    const fromOath = filteredWeaponPool.filter((w) => wOaths.has(w.name));
+    const fromOath = filteredWeaponPool.filter((w) =>
+      [...wOaths].some((category) => weaponMatchesCategory(w, category))
+    );
     if (fromOath.length > 0) filteredWeaponPool = fromOath;
   }
 
@@ -650,7 +655,9 @@ async function handleSecondaryWeaponSetSelection(dataWrap){
   let offhandName = offhand?.name || '';
   if (weaponName && /^bow$/i.test(weaponName) && !offhandName) offhandName = 'Quiver';
 
-  renderSecondaryWeaponLine([weaponName, offhandName].filter(Boolean), wOaths);
+  const displayOaths = new Set(wOaths);
+  if ([...wOaths].some((category) => weaponMatchesCategory(weapon, category))) displayOaths.add(weaponName);
+  renderSecondaryWeaponLine([weaponName, offhandName].filter(Boolean), displayOaths);
   const weapons2El = document.getElementById('weapons-set2');
   if (weapons2El) weapons2El.hidden = false;
   const avoidSkills = new Set(
@@ -796,7 +803,7 @@ function rollBuild(dataWrap){
 	const ascOaths = new Set(ascCfg.oaths || []);
 	const ascAboms = new Set(ascCfg.abominations || []);
 	
-	const weaponPool = (data.Weapons['Two-Handed'] || []).concat(data.Weapons['One-Handed'] || []);
+	const weaponPool = getCoreBuildWeaponInventory(data);
 	const weaponCfg = bind.weapon || { oaths: [], abominations: [] };
 	const wOaths = new Set(weaponCfg.oaths || []);
 	const wAboms = new Set(weaponCfg.abominations || []);
@@ -816,10 +823,12 @@ function rollBuild(dataWrap){
 	
 	// Tier 2: weapon anchor (only when NO ascendancy oaths)
 	if (ascOaths.size === 0 && wOaths.size > 0) {
-	  const oathWeapons = weaponPool.filter(w => w && wOaths.has(w.name) && !wAboms.has(w.name));
+	  const oathWeapons = weaponPool.filter(w => w
+	    && [...wOaths].some((category) => weaponMatchesCategory(w, category))
+	    && ![...wAboms].some((category) => weaponMatchesCategory(w, category)));
 	  if (oathWeapons.length) {
 		const picked = oathWeapons[Math.floor(Math.random() * oathWeapons.length)];
-		activeWeaponOathName = picked?.name || null;
+		activeWeaponOathName = [...wOaths].find((category) => weaponMatchesCategory(picked, category)) || null;
 		anchorAttrs = picked?.attributes || null;
 	  }
 	}
@@ -892,10 +901,14 @@ function rollBuild(dataWrap){
 	// --- Weapons ---
 	// (use oath anchor as the driver from here onward, when present)
 
-	let filteredWeaponPool = weaponPool.filter((w) => !wAboms.has(w.name));
+	let filteredWeaponPool = weaponPool.filter((w) =>
+	  ![...wAboms].some((category) => weaponMatchesCategory(w, category))
+	);
 	
 	if (wOaths.size > 0) {
-	  const fromOath = filteredWeaponPool.filter((w) => wOaths.has(w.name));
+	  const fromOath = filteredWeaponPool.filter((w) =>
+	    [...wOaths].some((category) => weaponMatchesCategory(w, category))
+	  );
 	  if (fromOath.length > 0) filteredWeaponPool = fromOath;
 	}
 	
@@ -915,8 +928,8 @@ function rollBuild(dataWrap){
 	
 	// If Tier-2 weapon anchor was selected, FORCE that weapon later (no “drift”).
 	if (activeWeaponOathName) {
-	  const forced = filteredWeaponPool.find(w => w?.name === activeWeaponOathName);
-	  if (forced) filteredWeaponPool = [forced];
+	  const forced = filteredWeaponPool.filter(w => weaponMatchesCategory(w, activeWeaponOathName));
+	  if (forced.length) filteredWeaponPool = forced;
 	}
 	
 	const weapon = pickByCohesion(filteredWeaponPool, base, th);
@@ -1177,11 +1190,15 @@ function rollBuild(dataWrap){
     if (wName && /^bow$/i.test(wName)) return [wName, oName || 'Quiver'];
     return [wName, oName].filter(Boolean);
   })();
+  const weaponDisplayOaths = new Set(wOaths);
+  if ([...wOaths].some((category) => weaponMatchesCategory(weapon, category))) {
+    weaponDisplayOaths.add(weapon?.name);
+  }
 
   renderOathAwareText(
     document.getElementById('weapons'),
     weaponParts,
-    wOaths
+    weaponDisplayOaths
   );
   resetSecondaryWeaponSetUI();
   document.getElementById('defense')?.replaceChildren(document.createTextNode(pickedDefense?.name || ''));
