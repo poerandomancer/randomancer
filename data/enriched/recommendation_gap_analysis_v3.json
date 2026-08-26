@@ -2,19 +2,19 @@
   "schemaVersion": "recommendation-gap-analysis-v3.0.0",
   "sourceSchemaVersion": "recommendation-native-coverage-v3.1.0",
   "summary": {
-    "gapCount": 3,
+    "gapCount": 0,
     "counts": {
       "primaryClassification": {
         "SUPPORT_FIRST_SIMPLE": 0,
         "MULTI_SKILL": 0,
         "ACCESS_DEPENDENT": 0,
         "CONDITIONAL_WEIRD": 0,
-        "NO_CREDIBLE_SOLUTION": 3
+        "NO_CREDIBLE_SOLUTION": 0
       },
       "confidence": {
         "STRONG": 0,
         "PLAUSIBLE": 0,
-        "WEAK": 3
+        "WEAK": 0
       }
     },
     "successfulSupportFamilies": [],
@@ -24,69 +24,5 @@
     "runtimeBehaviorChanged": true,
     "namedSkillOrCellExceptionsIntroduced": false
   },
-  "cells": [
-    {
-      "weapon": "Staff",
-      "offenseId": "companions",
-      "offense": "Companions",
-      "nativeClassification": "GAP",
-      "candidateSupportRoutes": [],
-      "multiSkillChains": [],
-      "accessDependency": null,
-      "rejectedHighRelevanceRoutes": [],
-      "conflictsAndPrevention": [],
-      "unresolvedMechanics": [
-        "companions"
-      ],
-      "bestProposedRoute": {
-        "type": "UNRESOLVED",
-        "reason": "No complete typed support-first or explicit provider/consumer chain."
-      },
-      "primaryClassification": "NO_CREDIBLE_SOLUTION",
-      "confidence": "WEAK",
-      "rationale": "No runtime-legal support-first construction completes the Offense; the catalog contains no explicit two-active chain that improves this result."
-    },
-    {
-      "weapon": "Wand",
-      "offenseId": "companions",
-      "offense": "Companions",
-      "nativeClassification": "GAP",
-      "candidateSupportRoutes": [],
-      "multiSkillChains": [],
-      "accessDependency": null,
-      "rejectedHighRelevanceRoutes": [],
-      "conflictsAndPrevention": [],
-      "unresolvedMechanics": [
-        "companions"
-      ],
-      "bestProposedRoute": {
-        "type": "UNRESOLVED",
-        "reason": "No complete typed support-first or explicit provider/consumer chain."
-      },
-      "primaryClassification": "NO_CREDIBLE_SOLUTION",
-      "confidence": "WEAK",
-      "rationale": "No runtime-legal support-first construction completes the Offense; the catalog contains no explicit two-active chain that improves this result."
-    },
-    {
-      "weapon": "Sceptre",
-      "offenseId": "companions",
-      "offense": "Companions",
-      "nativeClassification": "GAP",
-      "candidateSupportRoutes": [],
-      "multiSkillChains": [],
-      "accessDependency": null,
-      "rejectedHighRelevanceRoutes": [],
-      "conflictsAndPrevention": [],
-      "unresolvedMechanics": [
-        "companions"
-      ],
-      "bestProposedRoute": {
-        "type": "UNRESOLVED",
-        "reason": "No complete typed support-first or explicit provider/consumer chain."
-      },
-      "primaryClassification": "NO_CREDIBLE_SOLUTION",
-      "confidence": "WEAK",
-      "rationale": "No runtime-legal support-first construction completes the Offense; the catalog contains no explicit two-active chain that improves this result."
-    }
-  ]
+  "cells": []
 }
