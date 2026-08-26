@@ -38,7 +38,7 @@ test('every cell has the closed classification and confidence taxonomy', () => {
 
 test('STRONG routes retain complete semantic and runtime legality proof', () => {
   const strong = analysis.cells.filter((cell) => cell.confidence === 'STRONG');
-  assert.ok(strong.length);
+  // Native SUPPORT_CHAIN routes leave the GAP-only diagnostic once implemented.
   for (const cell of strong) for (const route of cell.candidateSupportRoutes) {
     assert.ok(route.supports.length === 1 || route.supports.length === 2);
     assert.equal(route.semanticProof.allRequirementsMet, true);
@@ -61,9 +61,9 @@ test('simplicity ordering, prevention, and affinity boundaries remain explicit',
     assert.ok(cell.candidateSupportRoutes.every((route) =>
       !route.semanticProof.preventedMechanics.includes(route.semanticProof.mechanic)));
   }
-  const electrocute = analysis.cells.find((cell) => key(cell) === 'Mace:electrocute');
-  assert.equal(electrocute.bestProposedRoute.supports.length, 2);
-  assert.ok(electrocute.bestProposedRoute.semanticProof.prerequisiteMechanics.length);
+  const electrocute = native.cells.find((cell) => key(cell) === 'Mace:electrocute');
+  assert.equal(electrocute.classification, 'SUPPORT_CHAIN');
+  assert.ok(electrocute.supportChainCandidates.every((route) => route.intermediateMechanic));
   assert.ok(analysis.cells.every((cell) => cell.nativeClassification === 'GAP'));
 });
 

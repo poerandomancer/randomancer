@@ -24,11 +24,13 @@ test('native artifact contains every live non-critical cell exactly once', () =>
   assert.ok(!report.offenses.some((offense) => offense.id === 'critical_hits'));
   for (const cell of report.cells) {
     if (cell.classification === 'DIRECT') assert.ok(cell.directCandidates.length);
-    if (cell.classification === 'CARRIER') {
+    if (cell.classification === 'CARRIER_BRIDGE') {
       assert.equal(cell.directCandidates.length, 0);
       assert.ok(cell.carrierCandidates.length);
     }
-    if (cell.classification === 'GAP') assert.deepEqual(cell.counts, { direct: 0, carrier: 0 });
+    if (cell.classification === 'SUPPORT_CHAIN') assert.ok(cell.supportChainCandidates.length);
+    if (cell.classification === 'GAP') assert.deepEqual(cell.counts,
+      { direct: 0, carrierBridge: 0, supportChain: 0 });
   }
 });
 
@@ -46,9 +48,9 @@ test('representative native semantic facts remain strict', () => {
   assert.ok(!analyze('Quarterstaff', 'shock').direct.some((c) => c.entity.name === 'Primal Strikes'));
   assert.ok(analyze('Bow', 'poison').direct.some((c) => c.entity.name === 'Poisonburst Arrow'));
   assert.ok(analyze('Bow', 'electrocute').direct.some((c) => c.entity.name === 'Electrocuting Arrow'));
-  assert.equal(analyze('Mace', 'bleed').classification, 'CARRIER');
-  assert.equal(analyze('Mace', 'poison').classification, 'CARRIER');
-  assert.equal(analyze('Quarterstaff', 'electrocute').classification, 'CARRIER');
+  assert.equal(analyze('Mace', 'bleed').classification, 'CARRIER_BRIDGE');
+  assert.equal(analyze('Mace', 'poison').classification, 'CARRIER_BRIDGE');
+  assert.equal(analyze('Quarterstaff', 'electrocute').classification, 'CARRIER_BRIDGE');
 });
 
 test('explicit capability and inherent affinity rank only already-valid DIRECT candidates', () => {
@@ -93,7 +95,7 @@ test('one compatible enabling support forms CARRIER_BRIDGE ahead of fallback', (
 test('bridge audit is compact and contains only native CARRIER cells', () => {
   const native = read('data/enriched/recommendation_native_coverage_v3.json');
   const bridges = read('data/enriched/recommendation_carrier_bridges_v3.json');
-  const carrierKeys = new Set(native.cells.filter((cell) => cell.classification === 'CARRIER')
+  const carrierKeys = new Set(native.cells.filter((cell) => cell.classification === 'CARRIER_BRIDGE')
     .map((cell) => `${cell.weapon}:${cell.offenseId}`));
   assert.equal(bridges.cells.length, carrierKeys.size);
   assert.ok(bridges.cells.every((cell) => carrierKeys.has(`${cell.weapon}:${cell.offenseId}`)));
@@ -122,7 +124,7 @@ test('support-added elemental damage closes through Hit ontology with prevention
     ['Mace', 'shock', 'Lightning Attunement'],
     ['Quarterstaff', 'ignite', 'Fire Attunement']
   ]) {
-    assert.equal(analyze(weapon, offense).classification, 'CARRIER');
+    assert.equal(analyze(weapon, offense).classification, 'CARRIER_BRIDGE');
     const result = selectRecommendationPackageV3(catalog, { weapon, offenseSet: [offense] }, {
       offenseInventory, selectionSeed: `derived-${weapon}-${offense}`
     });
@@ -149,5 +151,37 @@ test('exact-native identity wins inside an equally complete DIRECT tier', () => 
     const crafting = result.primarySkill?.entityId
       ? catalog.entities.find((entity) => entity.id === result.primarySkill.entityId)?.crafting : null;
     assert.ok(crafting?.weapon_affinities?.map((value) => value.toLowerCase()).includes(weapon.toLowerCase()));
+  }
+});
+
+test('bounded SUPPORT_CHAIN resolves Mace Electrocute in semantic support order', () => {
+  const cell = analyze('Mace', 'electrocute');
+  assert.equal(cell.classification, 'SUPPORT_CHAIN');
+  assert.equal(cell.direct.length, 0);
+  assert.equal(cell.bridges.length, 0);
+  assert.ok(cell.supportChains.length > 0);
+  for (const chain of cell.supportChains) {
+    assert.equal(chain.proof.supportEntityIds.length, 2);
+    assert.deepEqual(chain.proof.supportRoles,
+      ['REQUIRED_PREREQUISITE_SUPPORT', 'REQUIRED_ENABLE_SUPPORT']);
+    assert.equal(chain.proof.intermediateMechanic, 'lightning');
+  }
+  const result = selectRecommendationPackageV3(catalog,
+    { weapon: 'Mace', offenseSet: ['electrocute'] },
+    { offenseInventory, selectionSeed: 'support-chain-regression' });
+  assert.equal(result.diagnostics.recommendationTier, 'SUPPORT_CHAIN');
+  assert.deepEqual(result.supportAssignments.flatMap((entry) => entry.supports)
+    .map((support) => [support.name, support.assignedRole]), [
+    ['Lightning Attunement', 'REQUIRED_PREREQUISITE_SUPPORT'],
+    ['Electrocute', 'REQUIRED_ENABLE_SUPPORT']
+  ]);
+  assert.equal(result.unresolved.length, 0);
+});
+
+test('caster Companion GAPs remain unresolved after bounded chain tier', () => {
+  for (const weapon of ['Staff', 'Wand', 'Sceptre']) {
+    const cell = analyze(weapon, 'companions');
+    assert.equal(cell.classification, 'GAP');
+    assert.equal(cell.supportChains.length, 0);
   }
 });

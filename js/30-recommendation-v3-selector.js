@@ -1057,7 +1057,11 @@ function supportCompletionProof(entity, obligation, index) {
       if (proof) completions.push({ supports: single, proof });
     }
 
+    // One-hop chains may satisfy explicit requirements, never consumption/payoff.
+    // Consumption can invalidate the state that the terminal support needs.
+    if (supportRequirementFacts(terminal).some((fact) => fact.relation === 'consumes')) continue;
     const needed = supportRequirementFacts(terminal)
+      .filter((fact) => fact.relation === 'requires')
       .map((fact) => normalizeToken(fact?.mechanic))
       .filter((mechanic) => !supportPackageSuppliesMechanic(entity, single, mechanic));
     const conditionMechanics = actionableSupportFacts(terminal)
@@ -1073,8 +1077,15 @@ function supportCompletionProof(entity, obligation, index) {
     for (const second of secondSupports) {
       if (second.id === terminal.id || supportFamilyId(second) === supportFamilyId(terminal)) continue;
       if (!supportTargetsSkill(second, entity)) continue;
-      const pair = [terminal, second];
+      // Runtime order is semantic: prerequisite provider, then terminal enabler.
+      const pair = [second, terminal];
       if (!supportPackageRequirementsAreMet(entity, pair)) continue;
+      const protectedMechanics = new Set([...providerMechanics,
+        ...asArray(obligation?.mechanics).map(normalizeToken)]);
+      const preventsProtected = [entity, ...pair].some((piece) => asArray(piece?.facts).some((fact) =>
+        fact.relation === 'prevents' && HARD_CONFIDENCE.has(fact.confidence)
+        && factMechanics(fact).some((mechanic) => protectedMechanics.has(mechanic))));
+      if (preventsProtected) continue;
       const proof = supportProofForObligation(entity, pair, obligation);
       if (proof) completions.push({ supports: pair, proof });
     }
@@ -1097,6 +1108,12 @@ function supportCompletionProof(entity, obligation, index) {
     supportEntityIds: completion.supports.map((support) => support.id),
     supportSourceIds: completion.supports.map((support) => support.source_id),
     supportNames: completion.supports.map((support) => support.name),
+    supportRoles: completion.supports.map((support, index) => completion.supports.length === 2
+      ? (index === 0 ? 'REQUIRED_PREREQUISITE_SUPPORT' : 'REQUIRED_ENABLE_SUPPORT')
+      : 'REQUIRED_ENABLE_SUPPORT'),
+    intermediateMechanic: completion.supports.length === 2
+      ? unique(supportRequirementFacts(completion.supports[1]).map((fact) => normalizeToken(fact?.mechanic)))[0] || null
+      : null,
     preventedMechanics: unique(completion.supports.flatMap((support) =>
       hardSupportedSkillFacts(support)
         .filter((fact) => fact?.relation === 'prevents')
@@ -1714,15 +1731,32 @@ function analyzeRecommendationCellV3(catalog, snapshot = {}, options = {}) {
     support: completion.support,
     proof: completion.proof
   })));
-  const carrierCandidates = unique([...nativeCarriers, ...bridges.map((bridge) => bridge.candidate)]);
+  const supportChains = [];
+  // A bounded one-hop chain is considered only after every one-support bridge
+  // has failed. This makes tier precedence structural rather than score-based.
+  if (!direct.length && !bridges.length) {
+    for (const candidate of legal) {
+      for (const obligation of obligations) {
+        const proof = supportCompletionProof(candidate.entity, obligation, index);
+        if (!proof || proof.supportEntityIds.length !== 2) continue;
+        supportChains.push({
+          candidate: { ...candidate, carriers: [proof] },
+          supports: proof.supportEntityIds.map((id) => index.supports.find((support) => support.id === id)),
+          proof
+        });
+      }
+    }
+  }
+  supportChains.sort((a, b) =>
+    (b.candidate.weaponRelationship?.rank || 0) - (a.candidate.weaponRelationship?.rank || 0)
+    || String(a.candidate.entity.name).localeCompare(String(b.candidate.entity.name))
+    || a.proof.supportNames.join('+').localeCompare(b.proof.supportNames.join('+')));
+  const carrierCandidates = unique([...nativeCarriers, ...bridges.map((bridge) => bridge.candidate),
+    ...supportChains.map((chain) => chain.candidate)]);
   return {
-    model,
-    legal,
-    direct,
-    carriers: carrierCandidates,
-    bridges,
-    bridgeEvaluations,
-    classification: direct.length ? 'DIRECT' : bridges.length ? 'CARRIER' : 'GAP'
+    model, legal, direct, carriers: carrierCandidates, bridges, supportChains, bridgeEvaluations,
+    classification: direct.length ? 'DIRECT' : bridges.length ? 'CARRIER_BRIDGE'
+      : supportChains.length ? 'SUPPORT_CHAIN' : 'GAP'
   };
 }
 
@@ -2479,7 +2513,8 @@ function supportEntryForAssignment(support, packageCandidate) {
     familyName: support?.support_family?.name || support.name,
     tier: supportTier(support) || null,
     availability: supportAvailability(support),
-    assignedRole: 'enabler',
+    assignedRole: packageCandidate.supportRequirementEdges.some((edge) => edge.providerEntityId === support.id)
+      ? 'REQUIRED_PREREQUISITE_SUPPORT' : 'REQUIRED_ENABLE_SUPPORT',
     fulfilledObligations: packageCandidate.fulfilled.filter((proof) => proof.providerEntityId === support.id),
     suppliedTargets,
     prerequisiteMechanics: unique(supportRequirementFacts(support)
@@ -2575,7 +2610,12 @@ function assignSupportPackagesV3(catalog, winner, offenseObligations) {
       skillEntityId: candidate.entity.id,
       skillName: candidate.entity.name,
       supports: packageCandidate
-        ? packageCandidate.supports.map((support) => supportEntryForAssignment(support, packageCandidate))
+        ? [...packageCandidate.supports].sort((a, b) => {
+          const aProvides = packageCandidate.supportRequirementEdges.some((edge) => edge.providerEntityId === a.id);
+          const bProvides = packageCandidate.supportRequirementEdges.some((edge) => edge.providerEntityId === b.id);
+          return Number(bProvides) - Number(aProvides)
+            || String(a.name).localeCompare(String(b.name));
+        }).map((support) => supportEntryForAssignment(support, packageCandidate))
         : []
     };
   });
@@ -2757,15 +2797,19 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
   const bridgePackages = tierAnalysis.bridges
     .map((entry) => evaluateSkillPackage(entry.candidate, null, offenseObligations))
     .filter(Boolean);
+  const supportChainPackages = tierAnalysis.supportChains
+    .map((entry) => evaluateSkillPackage(entry.candidate, null, offenseObligations))
+    .filter(Boolean);
   // Tier choice is lexicographic, not a score bonus: lower tiers are never
   // present in the ranking when a simpler solution exists.
   const recommendationTier = directPackages.length
     ? 'DIRECT'
-    : bridgePackages.length ? 'CARRIER_BRIDGE' : 'FALLBACK';
+    : bridgePackages.length ? 'CARRIER_BRIDGE'
+      : supportChainPackages.length ? 'SUPPORT_CHAIN' : 'FALLBACK';
   const rankedPackages = recommendationTier === 'DIRECT'
     ? buildRankedSkillPackages(tierAnalysis.direct, offenseObligations).filter((entry) => !entry.supporting)
-    : recommendationTier === 'CARRIER_BRIDGE'
-      ? bridgePackages.sort((a, b) =>
+    : ['CARRIER_BRIDGE', 'SUPPORT_CHAIN'].includes(recommendationTier)
+      ? (recommendationTier === 'CARRIER_BRIDGE' ? bridgePackages : supportChainPackages).sort((a, b) =>
         (b.primary.weaponRelationship?.rank || 0) - (a.primary.weaponRelationship?.rank || 0)
         || b.score - a.score || String(a.id).localeCompare(String(b.id)))
       : buildRankedSkillPackages(viablePool, offenseObligations);
@@ -2838,6 +2882,7 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     dependencies: primary.dependencies,
     setupCosts: primary.setupCosts,
     delivery: primary.delivery,
+    weaponRelationship: primary.weaponRelationship,
     criticalAffinity: primary.criticalAffinity,
     supports: supportsFor(primary),
     score: primary.individualScore,
@@ -2896,6 +2941,10 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
       evaluatedSupportPackages: supportResolution.evaluatedPackages,
       offenseCoverage,
       recommendationTier,
+      ...(recommendationTier === 'SUPPORT_CHAIN' ? {
+        supportChain: tierAnalysis.supportChains.find((chain) =>
+          chain.candidate.entity.id === primary?.entity.id)?.proof || null
+      } : {}),
       qualityBand,
       companionQualityBand: COMPANION_QUALITY_BAND
     }

@@ -19597,57 +19597,7 @@
     ]
   },
   "derivedRoutes": [],
-  "constructedRoutes": [
-    {
-      "weapon": "Mace",
-      "offenseId": "electrocute",
-      "subtype": "SUPPORT_FIRST_EXPLICIT",
-      "active": {
-        "id": "skill:Metadata/Items/Gems/SkillGemArmourBreaker",
-        "name": "Armour Breaker"
-      },
-      "requiredSupports": [
-        {
-          "id": "skill:Metadata/Items/Gems/SupportGemElectrocute",
-          "name": "Electrocute",
-          "family": "Electrocute",
-          "familyId": "support-family:electrocute",
-          "tier": 0,
-          "effects": [
-            {
-              "relation": "provides",
-              "mechanic": "electrocute",
-              "condition": "lightning_damage"
-            }
-          ],
-          "requirements": [
-            {
-              "relation": "requires",
-              "mechanic": "lightning"
-            }
-          ],
-          "constructionRole": "REQUIRED_ENABLE_SUPPORT"
-        },
-        {
-          "id": "skill:Metadata/Items/Gems/SupportGemLightningInfusion",
-          "name": "Lightning Attunement",
-          "family": "Lightning Attunement",
-          "familyId": "support-family:lightning_attunement",
-          "tier": 0,
-          "effects": [
-            {
-              "relation": "provides",
-              "mechanic": "lightning",
-              "condition": null
-            }
-          ],
-          "requirements": [],
-          "constructionRole": "REQUIRED_PREREQUISITE_SUPPORT"
-        }
-      ],
-      "optimizer": null
-    }
-  ],
+  "constructedRoutes": [],
   "supportTools": [
     {
       "support": "Brittle Armour",
