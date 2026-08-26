@@ -75,6 +75,17 @@ test('weapon-family derivation collapses handed variants', () => {
   assert.ok(families.some((family) => family.aliases.length > 1));
 });
 
+test('Bind the Fates weapon options exactly match the core Build weapon categories', async () => {
+  const uiSource = await readFile(new URL('../js/09-bind-fates-ui.js', import.meta.url), 'utf8');
+  const coreWeaponCategories = equipment.deriveWeaponFamilies(core).map((family) => family.name);
+
+  assert.deepEqual(coreWeaponCategories, [
+    'Mace', 'Quarterstaff', 'Bow', 'Crossbow', 'Staff', 'Talisman', 'Wand', 'Sceptre', 'Spear'
+  ]);
+  assert.match(uiSource, /return deriveWeaponFamilies\(data\)\.map\(\(family\) => family\.name\);/);
+  assert.doesNotMatch(uiSource, /data\.Weapons\?\.\['(?:Two|One)-Handed'\]/);
+});
+
 test('weapon-family Bind the Fates honors legality', () => {
   const families = [{ name: 'Bow' }, { name: 'Wand' }];
   assert.equal(equipment.pickWeaponFamily(families, { oaths: ['Wand'], abominations: ['Bow'] }, () => 0).name, 'Wand');

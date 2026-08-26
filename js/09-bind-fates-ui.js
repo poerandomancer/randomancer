@@ -1,4 +1,5 @@
 import { getBindFatesFromApp } from './04-app-state.js';
+import { deriveWeaponFamilies } from './06-equipment.js';
 import { ensureDataPreload } from './08-data-load.js';
 import { loadChallengeLibrary } from './15-challenge-engine.js';
 import { resolveRollableOffenseElements } from './26-offense-roll.js';
@@ -189,9 +190,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
       return Array.from(ascSet).sort();
     }
     if (category === 'weapon') {
-      const two = Array.isArray(data.Weapons?.['Two-Handed']) ? data.Weapons['Two-Handed'] : [];
-      const one = Array.isArray(data.Weapons?.['One-Handed']) ? data.Weapons['One-Handed'] : [];
-      return [...two, ...one].map((w) => w.name);
+      return deriveWeaponFamilies(data).map((family) => family.name);
     }
     if (category === 'defensiveStrategy') {
       return (data.DefensiveStrategies || []).map((strategy) => strategy?.name).filter(Boolean);
