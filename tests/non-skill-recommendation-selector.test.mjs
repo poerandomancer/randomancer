@@ -41,7 +41,52 @@ test('off-hand uniques require a one-handed rolled weapon', () => {
   assert.deepEqual(talisman.recommendedUniques, []);
   assert.ok(wand.recommendedUniques.length > 0);
   assert.ok(mace.recommendedUniques.length > 0);
-  assert.ok(wand.recommendedUniques.every((entry) => ['shield', 'buckler', 'focus'].includes(entry.recommendationEvidence.matches[0].mechanic)));
+  assert.ok(wand.recommendedUniques.every((entry) => entry.recommendationEvidence.matches[0].mechanic === 'freeze'));
+});
+
+test('unique selector uses exact primary families, meaningful offense facts, and one result', () => {
+  const unique = (id, base, mechanics) => entity(id, 'unique', mechanics, {
+    compatibility: { access: {}, equipment: { slot: base, base } }
+  });
+  const candidates = catalog([
+    unique('bow-freeze', 'Bow', ['freeze']),
+    unique('quiver-freeze', 'Quiver', ['freeze']),
+    unique('crossbow-freeze', 'Crossbow', ['freeze']),
+    unique('helmet-freeze', 'Helmet', ['freeze']),
+    unique('bow-generic', 'Bow', ['damage'])
+  ]);
+  const result = selectNonSkillRecommendations(candidates, snap, pkg);
+  assert.equal(result.recommendedUniques.length, 1);
+  assert.ok(['bow-freeze', 'quiver-freeze'].includes(result.recommendedUniques[0].id));
+  assert.deepEqual(selectNonSkillRecommendations(candidates, { ...snap, weaponFamily: 'Crossbow' }, pkg).recommendedUniques.map((item) => item.id), ['crossbow-freeze']);
+});
+
+test('mace family covers one- and two-handed bases and primary beats off-hand fallback', () => {
+  const mace = entity('mace', 'unique', ['freeze'], { compatibility: { access: {}, equipment: { slot: 'Mace', base: 'Great Mace' } } });
+  const shield = entity('shield', 'unique', [{ ...fact('freeze'), relation: 'inflicts' }], { compatibility: { access: {}, equipment: { slot: 'Shield', base: 'Tower Shield' } } });
+  const candidates = catalog([mace, shield]);
+  assert.deepEqual(selectNonSkillRecommendations(candidates, { ...snap, weaponFamily: 'One-handed Mace' }, pkg).recommendedUniques.map((item) => item.id), ['mace']);
+  assert.deepEqual(selectNonSkillRecommendations(candidates, { ...snap, weaponFamily: 'Two-handed Mace' }, pkg).recommendedUniques.map((item) => item.id), ['mace']);
+});
+
+test('unique selector accepts toward conversion and rejects contradictions and away conversion', () => {
+  const bow = (id, mechanics) => entity(id, 'unique', mechanics, { compatibility: { access: {}, equipment: { slot: 'Bow', base: 'Bow' } } });
+  const conversion = { relation: 'converts', from: 'fire', to: 'freeze', confidence: 'exact' };
+  const result = selectNonSkillRecommendations(catalog([
+    bow('toward', [conversion]),
+    bow('cannot', [fact('freeze'), { ...fact('freeze'), relation: 'cannot' }]),
+    bow('away', [fact('freeze'), { relation: 'converts', from: 'freeze', to: 'fire' }])
+  ]), snap, pkg);
+  assert.deepEqual(result.recommendedUniques.map((item) => item.id), ['toward']);
+});
+
+test('off-hand fallback is restricted to one-handed weapons and empty is valid', () => {
+  const focus = entity('focus', 'unique', ['freeze'], { compatibility: { access: {}, equipment: { slot: 'Focus', base: 'Focus' } } });
+  const unrelated = entity('ring', 'unique', ['freeze'], { compatibility: { access: {}, equipment: { slot: 'Ring', base: 'Ring' } } });
+  const candidates = catalog([focus, unrelated]);
+  assert.deepEqual(selectNonSkillRecommendations(candidates, { ...snap, weaponFamily: 'Wand' }, pkg).recommendedUniques.map((item) => item.id), ['focus']);
+  assert.deepEqual(selectNonSkillRecommendations(candidates, { ...snap, weaponFamily: 'Staff' }, pkg).recommendedUniques, []);
+  assert.deepEqual(selectNonSkillRecommendations(catalog([]), snap, pkg).recommendedUniques, []);
 });
 
 test('rejects generic, contradictory, DNT, prototype, inaccessible, and seasonal candidates', () => {
