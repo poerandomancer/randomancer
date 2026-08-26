@@ -1,0 +1,3516 @@
+{
+  "schemaVersion": "recommendation-gap-analysis-v3.0.0",
+  "sourceSchemaVersion": "recommendation-native-coverage-v3.1.0",
+  "summary": {
+    "gapCount": 24,
+    "counts": {
+      "primaryClassification": {
+        "SUPPORT_FIRST_SIMPLE": 12,
+        "MULTI_SKILL": 0,
+        "ACCESS_DEPENDENT": 0,
+        "CONDITIONAL_WEIRD": 0,
+        "NO_CREDIBLE_SOLUTION": 12
+      },
+      "confidence": {
+        "STRONG": 12,
+        "PLAUSIBLE": 0,
+        "WEAK": 12
+      }
+    },
+    "successfulSupportFamilies": [
+      {
+        "family": "Chaos Attunement",
+        "count": 3
+      },
+      {
+        "family": "Lightning Attunement",
+        "count": 2
+      },
+      {
+        "family": "Living Lightning",
+        "count": 2
+      },
+      {
+        "family": "Bleed",
+        "count": 1
+      },
+      {
+        "family": "Cold Attunement",
+        "count": 1
+      },
+      {
+        "family": "Electrocute",
+        "count": 1
+      },
+      {
+        "family": "Fire Attunement",
+        "count": 1
+      },
+      {
+        "family": "Poison",
+        "count": 1
+      },
+      {
+        "family": "Skittering Stone",
+        "count": 1
+      }
+    ],
+    "commonPrerequisiteMechanics": [
+      "lightning"
+    ],
+    "commonFailureReasons": [
+      "no legal skill satisfies target compatibility and every typed prerequisite"
+    ],
+    "suspiciousSemanticDataGaps": [
+      "Mace:chill",
+      "Mace:freeze",
+      "Mace:shock",
+      "Quarterstaff:ignite"
+    ],
+    "runtimeBehaviorChanged": false,
+    "namedSkillOrCellExceptionsIntroduced": false
+  },
+  "cells": [
+    {
+      "weapon": "Mace",
+      "offenseId": "cold",
+      "offense": "Cold Damage",
+      "nativeClassification": "GAP",
+      "candidateSupportRoutes": [
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemArmourBreaker",
+            "name": "Armour Breaker"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemColdInfusion",
+              "name": "Cold Attunement",
+              "family": "Cold Attunement",
+              "familyId": "support-family:cold_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "cold",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "cold",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemBoneshatter",
+            "name": "Boneshatter"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemColdInfusion",
+              "name": "Cold Attunement",
+              "family": "Cold Attunement",
+              "familyId": "support-family:cold_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "cold",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "cold",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemEarthquake",
+            "name": "Earthquake"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemColdInfusion",
+              "name": "Cold Attunement",
+              "family": "Cold Attunement",
+              "familyId": "support-family:cold_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "cold",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "cold",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemEarthshatter",
+            "name": "Earthshatter"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemColdInfusion",
+              "name": "Cold Attunement",
+              "family": "Cold Attunement",
+              "familyId": "support-family:cold_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "cold",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "cold",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemForgeHammer",
+            "name": "Forge Hammer"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemColdInfusion",
+              "name": "Cold Attunement",
+              "family": "Cold Attunement",
+              "familyId": "support-family:cold_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "cold",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "cold",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        }
+      ],
+      "multiSkillChains": [],
+      "accessDependency": null,
+      "rejectedHighRelevanceRoutes": [],
+      "conflictsAndPrevention": [],
+      "unresolvedMechanics": [],
+      "bestProposedRoute": {
+        "type": "ONE_ACTIVE_ONE_SUPPORT",
+        "active": {
+          "id": "skill:Metadata/Items/Gems/SkillGemArmourBreaker",
+          "name": "Armour Breaker"
+        },
+        "supports": [
+          {
+            "id": "skill:Metadata/Items/Gems/SupportGemColdInfusion",
+            "name": "Cold Attunement",
+            "family": "Cold Attunement",
+            "familyId": "support-family:cold_attunement",
+            "tier": 0,
+            "effects": [
+              {
+                "relation": "provides",
+                "mechanic": "cold",
+                "condition": null
+              }
+            ],
+            "requirements": []
+          }
+        ],
+        "twoSupportChain": null,
+        "semanticProof": {
+          "mechanic": "cold",
+          "prerequisiteMechanics": [],
+          "preventedMechanics": [],
+          "allRequirementsMet": true,
+          "targetCompatibility": true,
+          "accessLegal": true,
+          "deliveryLegal": true,
+          "conflictsClear": true
+        },
+        "confidence": "STRONG"
+      },
+      "primaryClassification": "SUPPORT_FIRST_SIMPLE",
+      "confidence": "STRONG",
+      "rationale": "ONE_ACTIVE_ONE_SUPPORT completes the Offense through runtime-legal delivery and fully proven typed support prerequisites."
+    },
+    {
+      "weapon": "Mace",
+      "offenseId": "lightning",
+      "offense": "Lightning Damage",
+      "nativeClassification": "GAP",
+      "candidateSupportRoutes": [
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemArmourBreaker",
+            "name": "Armour Breaker"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemLightningInfusion",
+              "name": "Lightning Attunement",
+              "family": "Lightning Attunement",
+              "familyId": "support-family:lightning_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "lightning",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "lightning",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemBoneshatter",
+            "name": "Boneshatter"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemLightningInfusion",
+              "name": "Lightning Attunement",
+              "family": "Lightning Attunement",
+              "familyId": "support-family:lightning_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "lightning",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "lightning",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemEarthquake",
+            "name": "Earthquake"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemLightningInfusion",
+              "name": "Lightning Attunement",
+              "family": "Lightning Attunement",
+              "familyId": "support-family:lightning_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "lightning",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "lightning",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemEarthshatter",
+            "name": "Earthshatter"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemLightningInfusion",
+              "name": "Lightning Attunement",
+              "family": "Lightning Attunement",
+              "familyId": "support-family:lightning_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "lightning",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "lightning",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemForgeHammer",
+            "name": "Forge Hammer"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemLightningInfusion",
+              "name": "Lightning Attunement",
+              "family": "Lightning Attunement",
+              "familyId": "support-family:lightning_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "lightning",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "lightning",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        }
+      ],
+      "multiSkillChains": [],
+      "accessDependency": null,
+      "rejectedHighRelevanceRoutes": [],
+      "conflictsAndPrevention": [],
+      "unresolvedMechanics": [],
+      "bestProposedRoute": {
+        "type": "ONE_ACTIVE_ONE_SUPPORT",
+        "active": {
+          "id": "skill:Metadata/Items/Gems/SkillGemArmourBreaker",
+          "name": "Armour Breaker"
+        },
+        "supports": [
+          {
+            "id": "skill:Metadata/Items/Gems/SupportGemLightningInfusion",
+            "name": "Lightning Attunement",
+            "family": "Lightning Attunement",
+            "familyId": "support-family:lightning_attunement",
+            "tier": 0,
+            "effects": [
+              {
+                "relation": "provides",
+                "mechanic": "lightning",
+                "condition": null
+              }
+            ],
+            "requirements": []
+          }
+        ],
+        "twoSupportChain": null,
+        "semanticProof": {
+          "mechanic": "lightning",
+          "prerequisiteMechanics": [],
+          "preventedMechanics": [],
+          "allRequirementsMet": true,
+          "targetCompatibility": true,
+          "accessLegal": true,
+          "deliveryLegal": true,
+          "conflictsClear": true
+        },
+        "confidence": "STRONG"
+      },
+      "primaryClassification": "SUPPORT_FIRST_SIMPLE",
+      "confidence": "STRONG",
+      "rationale": "ONE_ACTIVE_ONE_SUPPORT completes the Offense through runtime-legal delivery and fully proven typed support prerequisites."
+    },
+    {
+      "weapon": "Mace",
+      "offenseId": "chaos",
+      "offense": "Chaos Damage",
+      "nativeClassification": "GAP",
+      "candidateSupportRoutes": [
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemArmourBreaker",
+            "name": "Armour Breaker"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+              "name": "Chaos Attunement",
+              "family": "Chaos Attunement",
+              "familyId": "support-family:chaos_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "chaos",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "chaos",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemBoneshatter",
+            "name": "Boneshatter"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+              "name": "Chaos Attunement",
+              "family": "Chaos Attunement",
+              "familyId": "support-family:chaos_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "chaos",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "chaos",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemEarthquake",
+            "name": "Earthquake"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+              "name": "Chaos Attunement",
+              "family": "Chaos Attunement",
+              "familyId": "support-family:chaos_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "chaos",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "chaos",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemEarthshatter",
+            "name": "Earthshatter"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+              "name": "Chaos Attunement",
+              "family": "Chaos Attunement",
+              "familyId": "support-family:chaos_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "chaos",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "chaos",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemForgeHammer",
+            "name": "Forge Hammer"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+              "name": "Chaos Attunement",
+              "family": "Chaos Attunement",
+              "familyId": "support-family:chaos_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "chaos",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "chaos",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        }
+      ],
+      "multiSkillChains": [],
+      "accessDependency": null,
+      "rejectedHighRelevanceRoutes": [],
+      "conflictsAndPrevention": [],
+      "unresolvedMechanics": [],
+      "bestProposedRoute": {
+        "type": "ONE_ACTIVE_ONE_SUPPORT",
+        "active": {
+          "id": "skill:Metadata/Items/Gems/SkillGemArmourBreaker",
+          "name": "Armour Breaker"
+        },
+        "supports": [
+          {
+            "id": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+            "name": "Chaos Attunement",
+            "family": "Chaos Attunement",
+            "familyId": "support-family:chaos_attunement",
+            "tier": 0,
+            "effects": [
+              {
+                "relation": "provides",
+                "mechanic": "chaos",
+                "condition": null
+              }
+            ],
+            "requirements": []
+          }
+        ],
+        "twoSupportChain": null,
+        "semanticProof": {
+          "mechanic": "chaos",
+          "prerequisiteMechanics": [],
+          "preventedMechanics": [],
+          "allRequirementsMet": true,
+          "targetCompatibility": true,
+          "accessLegal": true,
+          "deliveryLegal": true,
+          "conflictsClear": true
+        },
+        "confidence": "STRONG"
+      },
+      "primaryClassification": "SUPPORT_FIRST_SIMPLE",
+      "confidence": "STRONG",
+      "rationale": "ONE_ACTIVE_ONE_SUPPORT completes the Offense through runtime-legal delivery and fully proven typed support prerequisites."
+    },
+    {
+      "weapon": "Mace",
+      "offenseId": "chill",
+      "offense": "Chill",
+      "nativeClassification": "GAP",
+      "candidateSupportRoutes": [],
+      "multiSkillChains": [],
+      "accessDependency": null,
+      "rejectedHighRelevanceRoutes": [
+        {
+          "support": "Creeping Chill",
+          "family": "Creeping Chill",
+          "reason": "no legal skill satisfies target compatibility and every typed prerequisite"
+        },
+        {
+          "support": "Frost Nexus",
+          "family": "Frost Nexus",
+          "reason": "no legal skill satisfies target compatibility and every typed prerequisite"
+        },
+        {
+          "support": "Spreading Frost",
+          "family": "Spreading Frost",
+          "reason": "no legal skill satisfies target compatibility and every typed prerequisite"
+        }
+      ],
+      "conflictsAndPrevention": [],
+      "unresolvedMechanics": [
+        "chill"
+      ],
+      "bestProposedRoute": {
+        "type": "UNRESOLVED",
+        "reason": "No complete typed support-first or explicit provider/consumer chain."
+      },
+      "primaryClassification": "NO_CREDIBLE_SOLUTION",
+      "confidence": "WEAK",
+      "rationale": "No runtime-legal support-first construction completes the Offense; the catalog contains no explicit two-active chain that improves this result."
+    },
+    {
+      "weapon": "Mace",
+      "offenseId": "freeze",
+      "offense": "Freeze",
+      "nativeClassification": "GAP",
+      "candidateSupportRoutes": [],
+      "multiSkillChains": [],
+      "accessDependency": null,
+      "rejectedHighRelevanceRoutes": [
+        {
+          "support": "Brittle Armour",
+          "family": "Brittle Armour",
+          "reason": "no legal skill satisfies target compatibility and every typed prerequisite"
+        },
+        {
+          "support": "Freeze",
+          "family": "Freeze",
+          "reason": "no legal skill satisfies target compatibility and every typed prerequisite"
+        }
+      ],
+      "conflictsAndPrevention": [],
+      "unresolvedMechanics": [
+        "freeze"
+      ],
+      "bestProposedRoute": {
+        "type": "UNRESOLVED",
+        "reason": "No complete typed support-first or explicit provider/consumer chain."
+      },
+      "primaryClassification": "NO_CREDIBLE_SOLUTION",
+      "confidence": "WEAK",
+      "rationale": "No runtime-legal support-first construction completes the Offense; the catalog contains no explicit two-active chain that improves this result."
+    },
+    {
+      "weapon": "Mace",
+      "offenseId": "shock",
+      "offense": "Shock",
+      "nativeClassification": "GAP",
+      "candidateSupportRoutes": [],
+      "multiSkillChains": [],
+      "accessDependency": null,
+      "rejectedHighRelevanceRoutes": [
+        {
+          "support": "Charged Mark",
+          "family": "Charged Mark",
+          "reason": "no legal skill satisfies target compatibility and every typed prerequisite"
+        },
+        {
+          "support": "Shock",
+          "family": "Shock",
+          "reason": "no legal skill satisfies target compatibility and every typed prerequisite"
+        },
+        {
+          "support": "Shock Conduction",
+          "family": "Shock Conduction",
+          "reason": "no legal skill satisfies target compatibility and every typed prerequisite"
+        },
+        {
+          "support": "Shock Conduction II",
+          "family": "Shock Conduction",
+          "reason": "no legal skill satisfies target compatibility and every typed prerequisite"
+        },
+        {
+          "support": "Static Shocks",
+          "family": "Static Shocks",
+          "reason": "no legal skill satisfies target compatibility and every typed prerequisite"
+        }
+      ],
+      "conflictsAndPrevention": [],
+      "unresolvedMechanics": [
+        "shock"
+      ],
+      "bestProposedRoute": {
+        "type": "UNRESOLVED",
+        "reason": "No complete typed support-first or explicit provider/consumer chain."
+      },
+      "primaryClassification": "NO_CREDIBLE_SOLUTION",
+      "confidence": "WEAK",
+      "rationale": "No runtime-legal support-first construction completes the Offense; the catalog contains no explicit two-active chain that improves this result."
+    },
+    {
+      "weapon": "Mace",
+      "offenseId": "electrocute",
+      "offense": "Electrocute",
+      "nativeClassification": "GAP",
+      "candidateSupportRoutes": [
+        {
+          "type": "ONE_ACTIVE_TWO_SUPPORTS",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemArmourBreaker",
+            "name": "Armour Breaker"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+              "name": "Electrocute",
+              "family": "Electrocute",
+              "familyId": "support-family:electrocute",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "electrocute",
+                  "condition": "lightning_damage"
+                }
+              ],
+              "requirements": [
+                {
+                  "relation": "requires",
+                  "mechanic": "lightning"
+                }
+              ]
+            },
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemLightningInfusion",
+              "name": "Lightning Attunement",
+              "family": "Lightning Attunement",
+              "familyId": "support-family:lightning_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "lightning",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": {
+            "intermediateMechanics": [
+              "lightning"
+            ],
+            "requirementsProven": true
+          },
+          "semanticProof": {
+            "mechanic": "electrocute",
+            "prerequisiteMechanics": [
+              "lightning"
+            ],
+            "preventedMechanics": [
+              "shock"
+            ],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_TWO_SUPPORTS",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemBoneshatter",
+            "name": "Boneshatter"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+              "name": "Electrocute",
+              "family": "Electrocute",
+              "familyId": "support-family:electrocute",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "electrocute",
+                  "condition": "lightning_damage"
+                }
+              ],
+              "requirements": [
+                {
+                  "relation": "requires",
+                  "mechanic": "lightning"
+                }
+              ]
+            },
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemLightningInfusion",
+              "name": "Lightning Attunement",
+              "family": "Lightning Attunement",
+              "familyId": "support-family:lightning_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "lightning",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": {
+            "intermediateMechanics": [
+              "lightning"
+            ],
+            "requirementsProven": true
+          },
+          "semanticProof": {
+            "mechanic": "electrocute",
+            "prerequisiteMechanics": [
+              "lightning"
+            ],
+            "preventedMechanics": [
+              "shock"
+            ],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_TWO_SUPPORTS",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemEarthquake",
+            "name": "Earthquake"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+              "name": "Electrocute",
+              "family": "Electrocute",
+              "familyId": "support-family:electrocute",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "electrocute",
+                  "condition": "lightning_damage"
+                }
+              ],
+              "requirements": [
+                {
+                  "relation": "requires",
+                  "mechanic": "lightning"
+                }
+              ]
+            },
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemLightningInfusion",
+              "name": "Lightning Attunement",
+              "family": "Lightning Attunement",
+              "familyId": "support-family:lightning_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "lightning",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": {
+            "intermediateMechanics": [
+              "lightning"
+            ],
+            "requirementsProven": true
+          },
+          "semanticProof": {
+            "mechanic": "electrocute",
+            "prerequisiteMechanics": [
+              "lightning"
+            ],
+            "preventedMechanics": [
+              "shock"
+            ],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_TWO_SUPPORTS",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemEarthshatter",
+            "name": "Earthshatter"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+              "name": "Electrocute",
+              "family": "Electrocute",
+              "familyId": "support-family:electrocute",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "electrocute",
+                  "condition": "lightning_damage"
+                }
+              ],
+              "requirements": [
+                {
+                  "relation": "requires",
+                  "mechanic": "lightning"
+                }
+              ]
+            },
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemLightningInfusion",
+              "name": "Lightning Attunement",
+              "family": "Lightning Attunement",
+              "familyId": "support-family:lightning_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "lightning",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": {
+            "intermediateMechanics": [
+              "lightning"
+            ],
+            "requirementsProven": true
+          },
+          "semanticProof": {
+            "mechanic": "electrocute",
+            "prerequisiteMechanics": [
+              "lightning"
+            ],
+            "preventedMechanics": [
+              "shock"
+            ],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_TWO_SUPPORTS",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemForgeHammer",
+            "name": "Forge Hammer"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+              "name": "Electrocute",
+              "family": "Electrocute",
+              "familyId": "support-family:electrocute",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "electrocute",
+                  "condition": "lightning_damage"
+                }
+              ],
+              "requirements": [
+                {
+                  "relation": "requires",
+                  "mechanic": "lightning"
+                }
+              ]
+            },
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemLightningInfusion",
+              "name": "Lightning Attunement",
+              "family": "Lightning Attunement",
+              "familyId": "support-family:lightning_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "lightning",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": {
+            "intermediateMechanics": [
+              "lightning"
+            ],
+            "requirementsProven": true
+          },
+          "semanticProof": {
+            "mechanic": "electrocute",
+            "prerequisiteMechanics": [
+              "lightning"
+            ],
+            "preventedMechanics": [
+              "shock"
+            ],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        }
+      ],
+      "multiSkillChains": [],
+      "accessDependency": null,
+      "rejectedHighRelevanceRoutes": [],
+      "conflictsAndPrevention": [
+        "shock"
+      ],
+      "unresolvedMechanics": [],
+      "bestProposedRoute": {
+        "type": "ONE_ACTIVE_TWO_SUPPORTS",
+        "active": {
+          "id": "skill:Metadata/Items/Gems/SkillGemArmourBreaker",
+          "name": "Armour Breaker"
+        },
+        "supports": [
+          {
+            "id": "skill:Metadata/Items/Gems/SupportGemElectrocute",
+            "name": "Electrocute",
+            "family": "Electrocute",
+            "familyId": "support-family:electrocute",
+            "tier": 0,
+            "effects": [
+              {
+                "relation": "provides",
+                "mechanic": "electrocute",
+                "condition": "lightning_damage"
+              }
+            ],
+            "requirements": [
+              {
+                "relation": "requires",
+                "mechanic": "lightning"
+              }
+            ]
+          },
+          {
+            "id": "skill:Metadata/Items/Gems/SupportGemLightningInfusion",
+            "name": "Lightning Attunement",
+            "family": "Lightning Attunement",
+            "familyId": "support-family:lightning_attunement",
+            "tier": 0,
+            "effects": [
+              {
+                "relation": "provides",
+                "mechanic": "lightning",
+                "condition": null
+              }
+            ],
+            "requirements": []
+          }
+        ],
+        "twoSupportChain": {
+          "intermediateMechanics": [
+            "lightning"
+          ],
+          "requirementsProven": true
+        },
+        "semanticProof": {
+          "mechanic": "electrocute",
+          "prerequisiteMechanics": [
+            "lightning"
+          ],
+          "preventedMechanics": [
+            "shock"
+          ],
+          "allRequirementsMet": true,
+          "targetCompatibility": true,
+          "accessLegal": true,
+          "deliveryLegal": true,
+          "conflictsClear": true
+        },
+        "confidence": "STRONG"
+      },
+      "primaryClassification": "SUPPORT_FIRST_SIMPLE",
+      "confidence": "STRONG",
+      "rationale": "ONE_ACTIVE_TWO_SUPPORTS completes the Offense through runtime-legal delivery and fully proven typed support prerequisites."
+    },
+    {
+      "weapon": "Mace",
+      "offenseId": "minions",
+      "offense": "Minions",
+      "nativeClassification": "GAP",
+      "candidateSupportRoutes": [
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemEarthshatter",
+            "name": "Earthshatter"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gem/SupportGemSkitteringStoneTwo",
+              "name": "Skittering Stone II",
+              "family": "Skittering Stone",
+              "familyId": "support-family:skittering_stone",
+              "tier": 2,
+              "effects": [
+                {
+                  "relation": "creates",
+                  "mechanic": "minion",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "minion",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemForgeHammer",
+            "name": "Forge Hammer"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gem/SupportGemSkitteringStoneTwo",
+              "name": "Skittering Stone II",
+              "family": "Skittering Stone",
+              "familyId": "support-family:skittering_stone",
+              "tier": 2,
+              "effects": [
+                {
+                  "relation": "creates",
+                  "mechanic": "minion",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "minion",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_TWO_SUPPORTS",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemArmourBreaker",
+            "name": "Armour Breaker"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gem/SupportGemLivingLightningTwo",
+              "name": "Living Lightning II",
+              "family": "Living Lightning",
+              "familyId": "support-family:living_lightning",
+              "tier": 2,
+              "effects": [
+                {
+                  "relation": "creates",
+                  "mechanic": "minion",
+                  "condition": null
+                }
+              ],
+              "requirements": [
+                {
+                  "relation": "requires",
+                  "mechanic": "lightning"
+                }
+              ]
+            },
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemLightningInfusion",
+              "name": "Lightning Attunement",
+              "family": "Lightning Attunement",
+              "familyId": "support-family:lightning_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "lightning",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": {
+            "intermediateMechanics": [
+              "lightning"
+            ],
+            "requirementsProven": true
+          },
+          "semanticProof": {
+            "mechanic": "minion",
+            "prerequisiteMechanics": [
+              "lightning"
+            ],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_TWO_SUPPORTS",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemBoneshatter",
+            "name": "Boneshatter"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gem/SupportGemLivingLightningTwo",
+              "name": "Living Lightning II",
+              "family": "Living Lightning",
+              "familyId": "support-family:living_lightning",
+              "tier": 2,
+              "effects": [
+                {
+                  "relation": "creates",
+                  "mechanic": "minion",
+                  "condition": null
+                }
+              ],
+              "requirements": [
+                {
+                  "relation": "requires",
+                  "mechanic": "lightning"
+                }
+              ]
+            },
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemLightningInfusion",
+              "name": "Lightning Attunement",
+              "family": "Lightning Attunement",
+              "familyId": "support-family:lightning_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "lightning",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": {
+            "intermediateMechanics": [
+              "lightning"
+            ],
+            "requirementsProven": true
+          },
+          "semanticProof": {
+            "mechanic": "minion",
+            "prerequisiteMechanics": [
+              "lightning"
+            ],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_TWO_SUPPORTS",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemEarthquake",
+            "name": "Earthquake"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gem/SupportGemLivingLightningTwo",
+              "name": "Living Lightning II",
+              "family": "Living Lightning",
+              "familyId": "support-family:living_lightning",
+              "tier": 2,
+              "effects": [
+                {
+                  "relation": "creates",
+                  "mechanic": "minion",
+                  "condition": null
+                }
+              ],
+              "requirements": [
+                {
+                  "relation": "requires",
+                  "mechanic": "lightning"
+                }
+              ]
+            },
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemLightningInfusion",
+              "name": "Lightning Attunement",
+              "family": "Lightning Attunement",
+              "familyId": "support-family:lightning_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "lightning",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": {
+            "intermediateMechanics": [
+              "lightning"
+            ],
+            "requirementsProven": true
+          },
+          "semanticProof": {
+            "mechanic": "minion",
+            "prerequisiteMechanics": [
+              "lightning"
+            ],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        }
+      ],
+      "multiSkillChains": [],
+      "accessDependency": null,
+      "rejectedHighRelevanceRoutes": [],
+      "conflictsAndPrevention": [],
+      "unresolvedMechanics": [],
+      "bestProposedRoute": {
+        "type": "ONE_ACTIVE_ONE_SUPPORT",
+        "active": {
+          "id": "skill:Metadata/Items/Gems/SkillGemEarthshatter",
+          "name": "Earthshatter"
+        },
+        "supports": [
+          {
+            "id": "skill:Metadata/Items/Gem/SupportGemSkitteringStoneTwo",
+            "name": "Skittering Stone II",
+            "family": "Skittering Stone",
+            "familyId": "support-family:skittering_stone",
+            "tier": 2,
+            "effects": [
+              {
+                "relation": "creates",
+                "mechanic": "minion",
+                "condition": null
+              }
+            ],
+            "requirements": []
+          }
+        ],
+        "twoSupportChain": null,
+        "semanticProof": {
+          "mechanic": "minion",
+          "prerequisiteMechanics": [],
+          "preventedMechanics": [],
+          "allRequirementsMet": true,
+          "targetCompatibility": true,
+          "accessLegal": true,
+          "deliveryLegal": true,
+          "conflictsClear": true
+        },
+        "confidence": "STRONG"
+      },
+      "primaryClassification": "SUPPORT_FIRST_SIMPLE",
+      "confidence": "STRONG",
+      "rationale": "ONE_ACTIVE_ONE_SUPPORT completes the Offense through runtime-legal delivery and fully proven typed support prerequisites."
+    },
+    {
+      "weapon": "Mace",
+      "offenseId": "companions",
+      "offense": "Companions",
+      "nativeClassification": "GAP",
+      "candidateSupportRoutes": [],
+      "multiSkillChains": [],
+      "accessDependency": null,
+      "rejectedHighRelevanceRoutes": [],
+      "conflictsAndPrevention": [],
+      "unresolvedMechanics": [
+        "companions"
+      ],
+      "bestProposedRoute": {
+        "type": "UNRESOLVED",
+        "reason": "No complete typed support-first or explicit provider/consumer chain."
+      },
+      "primaryClassification": "NO_CREDIBLE_SOLUTION",
+      "confidence": "WEAK",
+      "rationale": "No runtime-legal support-first construction completes the Offense; the catalog contains no explicit two-active chain that improves this result."
+    },
+    {
+      "weapon": "Quarterstaff",
+      "offenseId": "fire",
+      "offense": "Fire Damage",
+      "nativeClassification": "GAP",
+      "candidateSupportRoutes": [
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemFallingThunder",
+            "name": "Falling Thunder"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemFireInfusion",
+              "name": "Fire Attunement",
+              "family": "Fire Attunement",
+              "familyId": "support-family:fire_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "fire",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "fire",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemFlickerStrike",
+            "name": "Flicker Strike"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemFireInfusion",
+              "name": "Fire Attunement",
+              "family": "Fire Attunement",
+              "familyId": "support-family:fire_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "fire",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "fire",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemFrozenLocus",
+            "name": "Frozen Locus"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemFireInfusion",
+              "name": "Fire Attunement",
+              "family": "Fire Attunement",
+              "familyId": "support-family:fire_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "fire",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "fire",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemGatheringStorm",
+            "name": "Gathering Storm"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemFireInfusion",
+              "name": "Fire Attunement",
+              "family": "Fire Attunement",
+              "familyId": "support-family:fire_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "fire",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "fire",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemGlacialCascade",
+            "name": "Glacial Cascade"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemFireInfusion",
+              "name": "Fire Attunement",
+              "family": "Fire Attunement",
+              "familyId": "support-family:fire_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "fire",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "fire",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        }
+      ],
+      "multiSkillChains": [],
+      "accessDependency": null,
+      "rejectedHighRelevanceRoutes": [],
+      "conflictsAndPrevention": [],
+      "unresolvedMechanics": [],
+      "bestProposedRoute": {
+        "type": "ONE_ACTIVE_ONE_SUPPORT",
+        "active": {
+          "id": "skill:Metadata/Items/Gems/SkillGemFallingThunder",
+          "name": "Falling Thunder"
+        },
+        "supports": [
+          {
+            "id": "skill:Metadata/Items/Gems/SupportGemFireInfusion",
+            "name": "Fire Attunement",
+            "family": "Fire Attunement",
+            "familyId": "support-family:fire_attunement",
+            "tier": 0,
+            "effects": [
+              {
+                "relation": "provides",
+                "mechanic": "fire",
+                "condition": null
+              }
+            ],
+            "requirements": []
+          }
+        ],
+        "twoSupportChain": null,
+        "semanticProof": {
+          "mechanic": "fire",
+          "prerequisiteMechanics": [],
+          "preventedMechanics": [],
+          "allRequirementsMet": true,
+          "targetCompatibility": true,
+          "accessLegal": true,
+          "deliveryLegal": true,
+          "conflictsClear": true
+        },
+        "confidence": "STRONG"
+      },
+      "primaryClassification": "SUPPORT_FIRST_SIMPLE",
+      "confidence": "STRONG",
+      "rationale": "ONE_ACTIVE_ONE_SUPPORT completes the Offense through runtime-legal delivery and fully proven typed support prerequisites."
+    },
+    {
+      "weapon": "Quarterstaff",
+      "offenseId": "ignite",
+      "offense": "Ignite",
+      "nativeClassification": "GAP",
+      "candidateSupportRoutes": [],
+      "multiSkillChains": [],
+      "accessDependency": null,
+      "rejectedHighRelevanceRoutes": [
+        {
+          "support": "Ignite III",
+          "family": "Ignite",
+          "reason": "no legal skill satisfies target compatibility and every typed prerequisite"
+        },
+        {
+          "support": "Immolate",
+          "family": "Immolate",
+          "reason": "no legal skill satisfies target compatibility and every typed prerequisite"
+        }
+      ],
+      "conflictsAndPrevention": [],
+      "unresolvedMechanics": [
+        "ignite"
+      ],
+      "bestProposedRoute": {
+        "type": "UNRESOLVED",
+        "reason": "No complete typed support-first or explicit provider/consumer chain."
+      },
+      "primaryClassification": "NO_CREDIBLE_SOLUTION",
+      "confidence": "WEAK",
+      "rationale": "No runtime-legal support-first construction completes the Offense; the catalog contains no explicit two-active chain that improves this result."
+    },
+    {
+      "weapon": "Quarterstaff",
+      "offenseId": "minions",
+      "offense": "Minions",
+      "nativeClassification": "GAP",
+      "candidateSupportRoutes": [
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemFallingThunder",
+            "name": "Falling Thunder"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gem/SupportGemLivingLightningTwo",
+              "name": "Living Lightning II",
+              "family": "Living Lightning",
+              "familyId": "support-family:living_lightning",
+              "tier": 2,
+              "effects": [
+                {
+                  "relation": "creates",
+                  "mechanic": "minion",
+                  "condition": null
+                }
+              ],
+              "requirements": [
+                {
+                  "relation": "requires",
+                  "mechanic": "lightning"
+                }
+              ]
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "minion",
+            "prerequisiteMechanics": [
+              "lightning"
+            ],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemGatheringStorm",
+            "name": "Gathering Storm"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gem/SupportGemLivingLightningTwo",
+              "name": "Living Lightning II",
+              "family": "Living Lightning",
+              "familyId": "support-family:living_lightning",
+              "tier": 2,
+              "effects": [
+                {
+                  "relation": "creates",
+                  "mechanic": "minion",
+                  "condition": null
+                }
+              ],
+              "requirements": [
+                {
+                  "relation": "requires",
+                  "mechanic": "lightning"
+                }
+              ]
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "minion",
+            "prerequisiteMechanics": [
+              "lightning"
+            ],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemSiphoningStrike",
+            "name": "Siphoning Strike"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gem/SupportGemLivingLightningTwo",
+              "name": "Living Lightning II",
+              "family": "Living Lightning",
+              "familyId": "support-family:living_lightning",
+              "tier": 2,
+              "effects": [
+                {
+                  "relation": "creates",
+                  "mechanic": "minion",
+                  "condition": null
+                }
+              ],
+              "requirements": [
+                {
+                  "relation": "requires",
+                  "mechanic": "lightning"
+                }
+              ]
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "minion",
+            "prerequisiteMechanics": [
+              "lightning"
+            ],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemStormWave",
+            "name": "Storm Wave"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gem/SupportGemLivingLightningTwo",
+              "name": "Living Lightning II",
+              "family": "Living Lightning",
+              "familyId": "support-family:living_lightning",
+              "tier": 2,
+              "effects": [
+                {
+                  "relation": "creates",
+                  "mechanic": "minion",
+                  "condition": null
+                }
+              ],
+              "requirements": [
+                {
+                  "relation": "requires",
+                  "mechanic": "lightning"
+                }
+              ]
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "minion",
+            "prerequisiteMechanics": [
+              "lightning"
+            ],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemTempestFlurry",
+            "name": "Tempest Flurry"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gem/SupportGemLivingLightningTwo",
+              "name": "Living Lightning II",
+              "family": "Living Lightning",
+              "familyId": "support-family:living_lightning",
+              "tier": 2,
+              "effects": [
+                {
+                  "relation": "creates",
+                  "mechanic": "minion",
+                  "condition": null
+                }
+              ],
+              "requirements": [
+                {
+                  "relation": "requires",
+                  "mechanic": "lightning"
+                }
+              ]
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "minion",
+            "prerequisiteMechanics": [
+              "lightning"
+            ],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        }
+      ],
+      "multiSkillChains": [],
+      "accessDependency": null,
+      "rejectedHighRelevanceRoutes": [],
+      "conflictsAndPrevention": [],
+      "unresolvedMechanics": [],
+      "bestProposedRoute": {
+        "type": "ONE_ACTIVE_ONE_SUPPORT",
+        "active": {
+          "id": "skill:Metadata/Items/Gems/SkillGemFallingThunder",
+          "name": "Falling Thunder"
+        },
+        "supports": [
+          {
+            "id": "skill:Metadata/Items/Gem/SupportGemLivingLightningTwo",
+            "name": "Living Lightning II",
+            "family": "Living Lightning",
+            "familyId": "support-family:living_lightning",
+            "tier": 2,
+            "effects": [
+              {
+                "relation": "creates",
+                "mechanic": "minion",
+                "condition": null
+              }
+            ],
+            "requirements": [
+              {
+                "relation": "requires",
+                "mechanic": "lightning"
+              }
+            ]
+          }
+        ],
+        "twoSupportChain": null,
+        "semanticProof": {
+          "mechanic": "minion",
+          "prerequisiteMechanics": [
+            "lightning"
+          ],
+          "preventedMechanics": [],
+          "allRequirementsMet": true,
+          "targetCompatibility": true,
+          "accessLegal": true,
+          "deliveryLegal": true,
+          "conflictsClear": true
+        },
+        "confidence": "STRONG"
+      },
+      "primaryClassification": "SUPPORT_FIRST_SIMPLE",
+      "confidence": "STRONG",
+      "rationale": "ONE_ACTIVE_ONE_SUPPORT completes the Offense through runtime-legal delivery and fully proven typed support prerequisites."
+    },
+    {
+      "weapon": "Quarterstaff",
+      "offenseId": "companions",
+      "offense": "Companions",
+      "nativeClassification": "GAP",
+      "candidateSupportRoutes": [],
+      "multiSkillChains": [],
+      "accessDependency": null,
+      "rejectedHighRelevanceRoutes": [],
+      "conflictsAndPrevention": [],
+      "unresolvedMechanics": [
+        "companions"
+      ],
+      "bestProposedRoute": {
+        "type": "UNRESOLVED",
+        "reason": "No complete typed support-first or explicit provider/consumer chain."
+      },
+      "primaryClassification": "NO_CREDIBLE_SOLUTION",
+      "confidence": "WEAK",
+      "rationale": "No runtime-legal support-first construction completes the Offense; the catalog contains no explicit two-active chain that improves this result."
+    },
+    {
+      "weapon": "Quarterstaff",
+      "offenseId": "totems",
+      "offense": "Totems",
+      "nativeClassification": "GAP",
+      "candidateSupportRoutes": [],
+      "multiSkillChains": [],
+      "accessDependency": null,
+      "rejectedHighRelevanceRoutes": [],
+      "conflictsAndPrevention": [],
+      "unresolvedMechanics": [
+        "totems"
+      ],
+      "bestProposedRoute": {
+        "type": "UNRESOLVED",
+        "reason": "No complete typed support-first or explicit provider/consumer chain."
+      },
+      "primaryClassification": "NO_CREDIBLE_SOLUTION",
+      "confidence": "WEAK",
+      "rationale": "No runtime-legal support-first construction completes the Offense; the catalog contains no explicit two-active chain that improves this result."
+    },
+    {
+      "weapon": "Bow",
+      "offenseId": "totems",
+      "offense": "Totems",
+      "nativeClassification": "GAP",
+      "candidateSupportRoutes": [],
+      "multiSkillChains": [],
+      "accessDependency": null,
+      "rejectedHighRelevanceRoutes": [],
+      "conflictsAndPrevention": [],
+      "unresolvedMechanics": [
+        "totems"
+      ],
+      "bestProposedRoute": {
+        "type": "UNRESOLVED",
+        "reason": "No complete typed support-first or explicit provider/consumer chain."
+      },
+      "primaryClassification": "NO_CREDIBLE_SOLUTION",
+      "confidence": "WEAK",
+      "rationale": "No runtime-legal support-first construction completes the Offense; the catalog contains no explicit two-active chain that improves this result."
+    },
+    {
+      "weapon": "Crossbow",
+      "offenseId": "minions",
+      "offense": "Minions",
+      "nativeClassification": "GAP",
+      "candidateSupportRoutes": [
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemGalvanicShards",
+            "name": "Galvanic Shards"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gem/SupportGemLivingLightningTwo",
+              "name": "Living Lightning II",
+              "family": "Living Lightning",
+              "familyId": "support-family:living_lightning",
+              "tier": 2,
+              "effects": [
+                {
+                  "relation": "creates",
+                  "mechanic": "minion",
+                  "condition": null
+                }
+              ],
+              "requirements": [
+                {
+                  "relation": "requires",
+                  "mechanic": "lightning"
+                }
+              ]
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "minion",
+            "prerequisiteMechanics": [
+              "lightning"
+            ],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemPlasmaBlast",
+            "name": "Plasma Blast"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gem/SupportGemLivingLightningTwo",
+              "name": "Living Lightning II",
+              "family": "Living Lightning",
+              "familyId": "support-family:living_lightning",
+              "tier": 2,
+              "effects": [
+                {
+                  "relation": "creates",
+                  "mechanic": "minion",
+                  "condition": null
+                }
+              ],
+              "requirements": [
+                {
+                  "relation": "requires",
+                  "mechanic": "lightning"
+                }
+              ]
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "minion",
+            "prerequisiteMechanics": [
+              "lightning"
+            ],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemShockburstRounds",
+            "name": "Shockburst Rounds"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gem/SupportGemLivingLightningTwo",
+              "name": "Living Lightning II",
+              "family": "Living Lightning",
+              "familyId": "support-family:living_lightning",
+              "tier": 2,
+              "effects": [
+                {
+                  "relation": "creates",
+                  "mechanic": "minion",
+                  "condition": null
+                }
+              ],
+              "requirements": [
+                {
+                  "relation": "requires",
+                  "mechanic": "lightning"
+                }
+              ]
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "minion",
+            "prerequisiteMechanics": [
+              "lightning"
+            ],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemStormblastBolts",
+            "name": "Stormblast Bolts"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gem/SupportGemLivingLightningTwo",
+              "name": "Living Lightning II",
+              "family": "Living Lightning",
+              "familyId": "support-family:living_lightning",
+              "tier": 2,
+              "effects": [
+                {
+                  "relation": "creates",
+                  "mechanic": "minion",
+                  "condition": null
+                }
+              ],
+              "requirements": [
+                {
+                  "relation": "requires",
+                  "mechanic": "lightning"
+                }
+              ]
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "minion",
+            "prerequisiteMechanics": [
+              "lightning"
+            ],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemVoltaicGrenade",
+            "name": "Voltaic Grenade"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gem/SupportGemLivingLightningTwo",
+              "name": "Living Lightning II",
+              "family": "Living Lightning",
+              "familyId": "support-family:living_lightning",
+              "tier": 2,
+              "effects": [
+                {
+                  "relation": "creates",
+                  "mechanic": "minion",
+                  "condition": null
+                }
+              ],
+              "requirements": [
+                {
+                  "relation": "requires",
+                  "mechanic": "lightning"
+                }
+              ]
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "minion",
+            "prerequisiteMechanics": [
+              "lightning"
+            ],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        }
+      ],
+      "multiSkillChains": [],
+      "accessDependency": null,
+      "rejectedHighRelevanceRoutes": [],
+      "conflictsAndPrevention": [],
+      "unresolvedMechanics": [],
+      "bestProposedRoute": {
+        "type": "ONE_ACTIVE_ONE_SUPPORT",
+        "active": {
+          "id": "skill:Metadata/Items/Gem/SkillGemGalvanicShards",
+          "name": "Galvanic Shards"
+        },
+        "supports": [
+          {
+            "id": "skill:Metadata/Items/Gem/SupportGemLivingLightningTwo",
+            "name": "Living Lightning II",
+            "family": "Living Lightning",
+            "familyId": "support-family:living_lightning",
+            "tier": 2,
+            "effects": [
+              {
+                "relation": "creates",
+                "mechanic": "minion",
+                "condition": null
+              }
+            ],
+            "requirements": [
+              {
+                "relation": "requires",
+                "mechanic": "lightning"
+              }
+            ]
+          }
+        ],
+        "twoSupportChain": null,
+        "semanticProof": {
+          "mechanic": "minion",
+          "prerequisiteMechanics": [
+            "lightning"
+          ],
+          "preventedMechanics": [],
+          "allRequirementsMet": true,
+          "targetCompatibility": true,
+          "accessLegal": true,
+          "deliveryLegal": true,
+          "conflictsClear": true
+        },
+        "confidence": "STRONG"
+      },
+      "primaryClassification": "SUPPORT_FIRST_SIMPLE",
+      "confidence": "STRONG",
+      "rationale": "ONE_ACTIVE_ONE_SUPPORT completes the Offense through runtime-legal delivery and fully proven typed support prerequisites."
+    },
+    {
+      "weapon": "Crossbow",
+      "offenseId": "companions",
+      "offense": "Companions",
+      "nativeClassification": "GAP",
+      "candidateSupportRoutes": [],
+      "multiSkillChains": [],
+      "accessDependency": null,
+      "rejectedHighRelevanceRoutes": [],
+      "conflictsAndPrevention": [],
+      "unresolvedMechanics": [
+        "companions"
+      ],
+      "bestProposedRoute": {
+        "type": "UNRESOLVED",
+        "reason": "No complete typed support-first or explicit provider/consumer chain."
+      },
+      "primaryClassification": "NO_CREDIBLE_SOLUTION",
+      "confidence": "WEAK",
+      "rationale": "No runtime-legal support-first construction completes the Offense; the catalog contains no explicit two-active chain that improves this result."
+    },
+    {
+      "weapon": "Talisman",
+      "offenseId": "physical",
+      "offense": "Physical Damage",
+      "nativeClassification": "GAP",
+      "candidateSupportRoutes": [],
+      "multiSkillChains": [],
+      "accessDependency": null,
+      "rejectedHighRelevanceRoutes": [],
+      "conflictsAndPrevention": [],
+      "unresolvedMechanics": [
+        "physical"
+      ],
+      "bestProposedRoute": {
+        "type": "UNRESOLVED",
+        "reason": "No complete typed support-first or explicit provider/consumer chain."
+      },
+      "primaryClassification": "NO_CREDIBLE_SOLUTION",
+      "confidence": "WEAK",
+      "rationale": "No runtime-legal support-first construction completes the Offense; the catalog contains no explicit two-active chain that improves this result."
+    },
+    {
+      "weapon": "Talisman",
+      "offenseId": "chaos",
+      "offense": "Chaos Damage",
+      "nativeClassification": "GAP",
+      "candidateSupportRoutes": [
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemWolfArcticHowl",
+            "name": "Arctic Howl"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+              "name": "Chaos Attunement",
+              "family": "Chaos Attunement",
+              "familyId": "support-family:chaos_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "chaos",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "chaos",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemWolfCrossSlash",
+            "name": "Cross Slash"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+              "name": "Chaos Attunement",
+              "family": "Chaos Attunement",
+              "familyId": "support-family:chaos_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "chaos",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "chaos",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemWyvernDevour",
+            "name": "Devour"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+              "name": "Chaos Attunement",
+              "family": "Chaos Attunement",
+              "familyId": "support-family:chaos_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "chaos",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "chaos",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemWyvernFlameBreath",
+            "name": "Flame Breath"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+              "name": "Chaos Attunement",
+              "family": "Chaos Attunement",
+              "familyId": "support-family:chaos_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "chaos",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "chaos",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemFuriousSlam",
+            "name": "Furious Slam"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+              "name": "Chaos Attunement",
+              "family": "Chaos Attunement",
+              "familyId": "support-family:chaos_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "chaos",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "chaos",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        }
+      ],
+      "multiSkillChains": [],
+      "accessDependency": null,
+      "rejectedHighRelevanceRoutes": [],
+      "conflictsAndPrevention": [],
+      "unresolvedMechanics": [],
+      "bestProposedRoute": {
+        "type": "ONE_ACTIVE_ONE_SUPPORT",
+        "active": {
+          "id": "skill:Metadata/Items/Gem/SkillGemWolfArcticHowl",
+          "name": "Arctic Howl"
+        },
+        "supports": [
+          {
+            "id": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+            "name": "Chaos Attunement",
+            "family": "Chaos Attunement",
+            "familyId": "support-family:chaos_attunement",
+            "tier": 0,
+            "effects": [
+              {
+                "relation": "provides",
+                "mechanic": "chaos",
+                "condition": null
+              }
+            ],
+            "requirements": []
+          }
+        ],
+        "twoSupportChain": null,
+        "semanticProof": {
+          "mechanic": "chaos",
+          "prerequisiteMechanics": [],
+          "preventedMechanics": [],
+          "allRequirementsMet": true,
+          "targetCompatibility": true,
+          "accessLegal": true,
+          "deliveryLegal": true,
+          "conflictsClear": true
+        },
+        "confidence": "STRONG"
+      },
+      "primaryClassification": "SUPPORT_FIRST_SIMPLE",
+      "confidence": "STRONG",
+      "rationale": "ONE_ACTIVE_ONE_SUPPORT completes the Offense through runtime-legal delivery and fully proven typed support prerequisites."
+    },
+    {
+      "weapon": "Talisman",
+      "offenseId": "bleed",
+      "offense": "Bleed",
+      "nativeClassification": "GAP",
+      "candidateSupportRoutes": [
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemWolfArcticHowl",
+            "name": "Arctic Howl"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+              "name": "Bleed III",
+              "family": "Bleed",
+              "familyId": "support-family:bleed",
+              "tier": 3,
+              "effects": [
+                {
+                  "relation": "inflicts",
+                  "mechanic": "bleed",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "bleed",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemWolfCrossSlash",
+            "name": "Cross Slash"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+              "name": "Bleed III",
+              "family": "Bleed",
+              "familyId": "support-family:bleed",
+              "tier": 3,
+              "effects": [
+                {
+                  "relation": "inflicts",
+                  "mechanic": "bleed",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "bleed",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemWyvernDevour",
+            "name": "Devour"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+              "name": "Bleed III",
+              "family": "Bleed",
+              "familyId": "support-family:bleed",
+              "tier": 3,
+              "effects": [
+                {
+                  "relation": "inflicts",
+                  "mechanic": "bleed",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "bleed",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemWyvernFlameBreath",
+            "name": "Flame Breath"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+              "name": "Bleed III",
+              "family": "Bleed",
+              "familyId": "support-family:bleed",
+              "tier": 3,
+              "effects": [
+                {
+                  "relation": "inflicts",
+                  "mechanic": "bleed",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "bleed",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemFuriousSlam",
+            "name": "Furious Slam"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+              "name": "Bleed III",
+              "family": "Bleed",
+              "familyId": "support-family:bleed",
+              "tier": 3,
+              "effects": [
+                {
+                  "relation": "inflicts",
+                  "mechanic": "bleed",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "bleed",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        }
+      ],
+      "multiSkillChains": [],
+      "accessDependency": null,
+      "rejectedHighRelevanceRoutes": [],
+      "conflictsAndPrevention": [],
+      "unresolvedMechanics": [],
+      "bestProposedRoute": {
+        "type": "ONE_ACTIVE_ONE_SUPPORT",
+        "active": {
+          "id": "skill:Metadata/Items/Gem/SkillGemWolfArcticHowl",
+          "name": "Arctic Howl"
+        },
+        "supports": [
+          {
+            "id": "skill:Metadata/Items/Gems/SupportGemLacerateThree",
+            "name": "Bleed III",
+            "family": "Bleed",
+            "familyId": "support-family:bleed",
+            "tier": 3,
+            "effects": [
+              {
+                "relation": "inflicts",
+                "mechanic": "bleed",
+                "condition": null
+              }
+            ],
+            "requirements": []
+          }
+        ],
+        "twoSupportChain": null,
+        "semanticProof": {
+          "mechanic": "bleed",
+          "prerequisiteMechanics": [],
+          "preventedMechanics": [],
+          "allRequirementsMet": true,
+          "targetCompatibility": true,
+          "accessLegal": true,
+          "deliveryLegal": true,
+          "conflictsClear": true
+        },
+        "confidence": "STRONG"
+      },
+      "primaryClassification": "SUPPORT_FIRST_SIMPLE",
+      "confidence": "STRONG",
+      "rationale": "ONE_ACTIVE_ONE_SUPPORT completes the Offense through runtime-legal delivery and fully proven typed support prerequisites."
+    },
+    {
+      "weapon": "Talisman",
+      "offenseId": "poison",
+      "offense": "Poison",
+      "nativeClassification": "GAP",
+      "candidateSupportRoutes": [
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemWolfArcticHowl",
+            "name": "Arctic Howl"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+              "name": "Poison III",
+              "family": "Poison",
+              "familyId": "support-family:poison",
+              "tier": 3,
+              "effects": [
+                {
+                  "relation": "inflicts",
+                  "mechanic": "poison",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "poison",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemWolfCrossSlash",
+            "name": "Cross Slash"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+              "name": "Poison III",
+              "family": "Poison",
+              "familyId": "support-family:poison",
+              "tier": 3,
+              "effects": [
+                {
+                  "relation": "inflicts",
+                  "mechanic": "poison",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "poison",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemWyvernDevour",
+            "name": "Devour"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+              "name": "Poison III",
+              "family": "Poison",
+              "familyId": "support-family:poison",
+              "tier": 3,
+              "effects": [
+                {
+                  "relation": "inflicts",
+                  "mechanic": "poison",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "poison",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemWyvernFlameBreath",
+            "name": "Flame Breath"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+              "name": "Poison III",
+              "family": "Poison",
+              "familyId": "support-family:poison",
+              "tier": 3,
+              "effects": [
+                {
+                  "relation": "inflicts",
+                  "mechanic": "poison",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "poison",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemFuriousSlam",
+            "name": "Furious Slam"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+              "name": "Poison III",
+              "family": "Poison",
+              "familyId": "support-family:poison",
+              "tier": 3,
+              "effects": [
+                {
+                  "relation": "inflicts",
+                  "mechanic": "poison",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "poison",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        }
+      ],
+      "multiSkillChains": [],
+      "accessDependency": null,
+      "rejectedHighRelevanceRoutes": [],
+      "conflictsAndPrevention": [],
+      "unresolvedMechanics": [],
+      "bestProposedRoute": {
+        "type": "ONE_ACTIVE_ONE_SUPPORT",
+        "active": {
+          "id": "skill:Metadata/Items/Gem/SkillGemWolfArcticHowl",
+          "name": "Arctic Howl"
+        },
+        "supports": [
+          {
+            "id": "skill:Metadata/Items/Gems/SupportGemEnvenomThree",
+            "name": "Poison III",
+            "family": "Poison",
+            "familyId": "support-family:poison",
+            "tier": 3,
+            "effects": [
+              {
+                "relation": "inflicts",
+                "mechanic": "poison",
+                "condition": null
+              }
+            ],
+            "requirements": []
+          }
+        ],
+        "twoSupportChain": null,
+        "semanticProof": {
+          "mechanic": "poison",
+          "prerequisiteMechanics": [],
+          "preventedMechanics": [],
+          "allRequirementsMet": true,
+          "targetCompatibility": true,
+          "accessLegal": true,
+          "deliveryLegal": true,
+          "conflictsClear": true
+        },
+        "confidence": "STRONG"
+      },
+      "primaryClassification": "SUPPORT_FIRST_SIMPLE",
+      "confidence": "STRONG",
+      "rationale": "ONE_ACTIVE_ONE_SUPPORT completes the Offense through runtime-legal delivery and fully proven typed support prerequisites."
+    },
+    {
+      "weapon": "Talisman",
+      "offenseId": "totems",
+      "offense": "Totems",
+      "nativeClassification": "GAP",
+      "candidateSupportRoutes": [],
+      "multiSkillChains": [],
+      "accessDependency": null,
+      "rejectedHighRelevanceRoutes": [],
+      "conflictsAndPrevention": [],
+      "unresolvedMechanics": [
+        "totems"
+      ],
+      "bestProposedRoute": {
+        "type": "UNRESOLVED",
+        "reason": "No complete typed support-first or explicit provider/consumer chain."
+      },
+      "primaryClassification": "NO_CREDIBLE_SOLUTION",
+      "confidence": "WEAK",
+      "rationale": "No runtime-legal support-first construction completes the Offense; the catalog contains no explicit two-active chain that improves this result."
+    },
+    {
+      "weapon": "Spear",
+      "offenseId": "chaos",
+      "offense": "Chaos Damage",
+      "nativeClassification": "GAP",
+      "candidateSupportRoutes": [
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemBloodHunt",
+            "name": "Blood Hunt"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+              "name": "Chaos Attunement",
+              "family": "Chaos Attunement",
+              "familyId": "support-family:chaos_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "chaos",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "chaos",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemCullTheWeak",
+            "name": "Cull The Weak"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+              "name": "Chaos Attunement",
+              "family": "Chaos Attunement",
+              "familyId": "support-family:chaos_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "chaos",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "chaos",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gems/SkillGemDisengage",
+            "name": "Disengage"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+              "name": "Chaos Attunement",
+              "family": "Chaos Attunement",
+              "familyId": "support-family:chaos_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "chaos",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "chaos",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemElementalSundering",
+            "name": "Elemental Sundering"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+              "name": "Chaos Attunement",
+              "family": "Chaos Attunement",
+              "familyId": "support-family:chaos_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "chaos",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "chaos",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        },
+        {
+          "type": "ONE_ACTIVE_ONE_SUPPORT",
+          "active": {
+            "id": "skill:Metadata/Items/Gem/SkillGemExplosiveSpear",
+            "name": "Explosive Spear"
+          },
+          "supports": [
+            {
+              "id": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+              "name": "Chaos Attunement",
+              "family": "Chaos Attunement",
+              "familyId": "support-family:chaos_attunement",
+              "tier": 0,
+              "effects": [
+                {
+                  "relation": "provides",
+                  "mechanic": "chaos",
+                  "condition": null
+                }
+              ],
+              "requirements": []
+            }
+          ],
+          "twoSupportChain": null,
+          "semanticProof": {
+            "mechanic": "chaos",
+            "prerequisiteMechanics": [],
+            "preventedMechanics": [],
+            "allRequirementsMet": true,
+            "targetCompatibility": true,
+            "accessLegal": true,
+            "deliveryLegal": true,
+            "conflictsClear": true
+          },
+          "confidence": "STRONG"
+        }
+      ],
+      "multiSkillChains": [],
+      "accessDependency": null,
+      "rejectedHighRelevanceRoutes": [],
+      "conflictsAndPrevention": [],
+      "unresolvedMechanics": [],
+      "bestProposedRoute": {
+        "type": "ONE_ACTIVE_ONE_SUPPORT",
+        "active": {
+          "id": "skill:Metadata/Items/Gems/SkillGemBloodHunt",
+          "name": "Blood Hunt"
+        },
+        "supports": [
+          {
+            "id": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+            "name": "Chaos Attunement",
+            "family": "Chaos Attunement",
+            "familyId": "support-family:chaos_attunement",
+            "tier": 0,
+            "effects": [
+              {
+                "relation": "provides",
+                "mechanic": "chaos",
+                "condition": null
+              }
+            ],
+            "requirements": []
+          }
+        ],
+        "twoSupportChain": null,
+        "semanticProof": {
+          "mechanic": "chaos",
+          "prerequisiteMechanics": [],
+          "preventedMechanics": [],
+          "allRequirementsMet": true,
+          "targetCompatibility": true,
+          "accessLegal": true,
+          "deliveryLegal": true,
+          "conflictsClear": true
+        },
+        "confidence": "STRONG"
+      },
+      "primaryClassification": "SUPPORT_FIRST_SIMPLE",
+      "confidence": "STRONG",
+      "rationale": "ONE_ACTIVE_ONE_SUPPORT completes the Offense through runtime-legal delivery and fully proven typed support prerequisites."
+    },
+    {
+      "weapon": "Spear",
+      "offenseId": "totems",
+      "offense": "Totems",
+      "nativeClassification": "GAP",
+      "candidateSupportRoutes": [],
+      "multiSkillChains": [],
+      "accessDependency": null,
+      "rejectedHighRelevanceRoutes": [],
+      "conflictsAndPrevention": [],
+      "unresolvedMechanics": [
+        "totems"
+      ],
+      "bestProposedRoute": {
+        "type": "UNRESOLVED",
+        "reason": "No complete typed support-first or explicit provider/consumer chain."
+      },
+      "primaryClassification": "NO_CREDIBLE_SOLUTION",
+      "confidence": "WEAK",
+      "rationale": "No runtime-legal support-first construction completes the Offense; the catalog contains no explicit two-active chain that improves this result."
+    }
+  ]
+}
