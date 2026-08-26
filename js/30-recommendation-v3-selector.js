@@ -1075,6 +1075,93 @@ function supportCompletionProof(entity, obligation, index) {
   };
 }
 
+// Diagnostic-only entry point for the support-first GAP audit.  Keeping this
+// beside the package solver deliberately makes the audit cross the identical
+// content, access, crafting, delivery, target, prerequisite, and prevention
+// boundaries as runtime without adding another (weaker) legality model.
+function analyzeSupportFirstGapCellV3(catalog, snapshot = {}, options = {}) {
+  const offenseObligations = buildRecommendationObligationsV3(
+    snapshot, options.offenseInventory || {}
+  ).obligations;
+  const obligation = offenseObligations[0];
+  const index = supportIndexForCatalog(catalog);
+  const activeEntities = asArray(catalog?.entities)
+    .filter((entity) => entity?.content_type === 'active_skill')
+    .sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''))
+      || String(a.id || '').localeCompare(String(b.id || '')));
+  const legal = [];
+  const rejected = [];
+
+  for (const entity of activeEntities) {
+    const failures = [];
+    if (!isRecommendationContentAllowedV3(entity)) failures.push('excluded content');
+    if (!isSelectableSkillName(entity?.name)) failures.push('unselectable skill');
+    const access = evaluateCompatibilityV3(entity, snapshot);
+    if (!access.ok) failures.push(access.reason);
+    const delivery = evaluateDeliveryCompatibilityV3(entity, snapshot);
+    if (!delivery.ok) failures.push(delivery.reason);
+    const crafting = evaluateCraftingDeliveryCompatibilityV3(entity, snapshot);
+    if (!crafting.ok) failures.push(crafting.reason);
+    const pieceDelivery = evaluatePackagePieceDeliveryV3(entity, snapshot);
+    if (!pieceDelivery.ok) failures.push(pieceDelivery.reason);
+    if (!isDirectlyUsableActive(entity, offenseObligations)) failures.push('not a runtime-usable primary active');
+    if (failures.length) continue;
+
+    const proof = supportCompletionProof(entity, obligation, index);
+    if (!proof) continue;
+    legal.push({
+      active: { id: entity.id, name: entity.name },
+      supports: proof.supportEntityIds.map((id, offset) => {
+        const support = index.supports.find((candidate) => candidate.id === id);
+        return {
+          id,
+          name: proof.supportNames[offset],
+          family: support?.support_family?.name || support?.name || proof.supportNames[offset],
+          familyId: supportFamilyId(support),
+          tier: supportTier(support),
+          effects: actionableSupportFacts(support).map((fact) => ({
+            relation: fact.relation,
+            mechanic: factMechanics(fact)[0] || '',
+            condition: normalizeToken(fact.condition) || null
+          })),
+          requirements: supportRequirementFacts(support).map((fact) => ({
+            relation: fact.relation, mechanic: normalizeToken(fact.mechanic)
+          }))
+        };
+      }),
+      proof: {
+        mechanic: proof.mechanic,
+        prerequisiteMechanics: proof.prerequisiteMechanics,
+        preventedMechanics: proof.preventedMechanics,
+        allRequirementsMet: true,
+        targetCompatibility: true,
+        accessLegal: true,
+        deliveryLegal: true,
+        conflictsClear: !proof.preventedMechanics.includes(proof.mechanic)
+      }
+    });
+  }
+  legal.sort((a, b) => a.supports.length - b.supports.length
+    || a.active.name.localeCompare(b.active.name)
+    || a.supports.map((support) => support.name).join('+')
+      .localeCompare(b.supports.map((support) => support.name).join('+')));
+
+  // Retain only useful terminal-support failures, rather than an invalid-pair
+  // matrix.  These explain when the catalog knows a relevant support but no
+  // runtime-legal active can complete its typed requirements.
+  const terminal = unique(asArray(obligation?.mechanics).flatMap((mechanic) =>
+    asArray(index.byEffectMechanic.get(normalizeToken(mechanic)))
+  ));
+  if (!legal.length) for (const support of terminal.slice(0, 5)) rejected.push({
+    support: support.name,
+    family: support.support_family?.name || support.name,
+    reason: supportAvailability(support) === 'lineage'
+      ? 'lineage support'
+      : 'no legal skill satisfies target compatibility and every typed prerequisite'
+  });
+  return { obligation, routes: legal, rejected };
+}
+
 function factIsUsableForCandidate(entity, fact, obligation) {
   if (!['has_property', 'converts'].includes(fact?.relation)) return true;
   const facts = asArray(entity?.facts);
@@ -2750,6 +2837,7 @@ export {
   MAX_SUPPORTS_PER_SKILL,
   adaptRecommendationPackageV3ToSnapshot,
   buildRecommendationObligationsV3,
+  analyzeSupportFirstGapCellV3,
   analyzeRecommendationCellV3,
   evaluateCompatibilityV3,
   evaluateDeliveryCompatibilityV3,
