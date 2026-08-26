@@ -24,8 +24,9 @@ function pickGemRef(entry) {
       if (support.name) compact.name = support.name;
       if (support.familyId) compact.familyId = support.familyId;
       if (support.tier != null) compact.tier = support.tier;
+      if (support.assignedRole) compact.assignedRole = support.assignedRole;
       return Object.keys(compact).length ? compact : null;
-    }).slice(0, 2);
+    }).slice(0, 3);
     out.recommendationPackage = {
       ...(recommendation.assignedRole ? { assignedRole: recommendation.assignedRole } : {}),
       ...(supports.length ? { supports } : {})
