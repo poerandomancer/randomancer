@@ -5,7 +5,11 @@ const RECOMMENDATION_SKILL_CRAFTING_V3_SCHEMA = 'recommendation-skill-crafting-v
 const PRIMARY_QUALITY_BAND = 12;
 const COMPANION_QUALITY_BAND = 8;
 const PACKAGE_QUALITY_BAND = 12;
-const MAX_SUPPORTS_PER_SKILL = 2;
+const MAX_REQUIRED_SUPPORTS = 2;
+const MAX_OPTIMIZER_SUPPORTS = 1;
+const MAX_TOTAL_SUPPORTS = 3;
+// Compatibility alias for consumers which used the old required-support cap.
+const MAX_SUPPORTS_PER_SKILL = MAX_REQUIRED_SUPPORTS;
 const RECOMMENDATION_EXCLUDED_SOURCE_TAGS = new Set(['kalguuran']);
 
 const HARD_CONFIDENCE = new Set(['exact', 'strong']);
@@ -880,6 +884,20 @@ function hardSupportedSkillFacts(entity) {
 
 function actionableSupportFacts(entity) {
   return hardSupportedSkillFacts(entity).filter((fact) => SUPPORT_ACTION_RELATIONS.has(fact?.relation));
+}
+
+function optimizerRoleV3(support, offenseId) {
+  const target = normalizeToken(offenseId);
+  const facts = hardSupportedSkillFacts(support);
+  if (facts.some((fact) => fact?.relation === 'prevents' && factMechanics(fact).includes(target))) return 'PREVENTION';
+  if (facts.some((fact) => fact?.relation === 'consumes' && factMechanics(fact).includes(target))) return 'CONSUMER';
+  if (facts.some((fact) => fact?.relation === 'requires' && factMechanics(fact).includes(target))) return 'CONDITIONAL';
+  if (facts.some((fact) => fact?.relation === 'modifies'
+    && factMechanics(fact).includes(target) && normalizeToken(fact?.condition))) return 'CONDITIONAL';
+  if (facts.some((fact) => fact?.relation === 'modifies' && factMechanics(fact).includes(target))) {
+    return 'OPTIONAL_OFFENSE_OPTIMIZER';
+  }
+  return null;
 }
 
 function supportRequirementFacts(entity) {
@@ -2522,6 +2540,73 @@ function supportEntryForAssignment(support, packageCandidate) {
   };
 }
 
+function optimizerPriority(support, offenseId) {
+  const text = hardSupportedSkillFacts(support)
+    .filter((fact) => fact?.relation === 'modifies' && factMechanics(fact).includes(normalizeToken(offenseId)))
+    .flatMap((fact) => asArray(fact?.evidence).map((entry) => String(entry?.value || '')))
+    .join(' ').toLowerCase();
+  // Application is intentionally preferred over chance, effect, duration, and payoff.
+  const semanticRank = /buildup|application|appl(?:y|ies|ied)/.test(text) ? 5
+    : /chance/.test(text) ? 4
+      : /magnitude|effect/.test(text) ? 3
+        : /duration|lasts|persistence/.test(text) ? 2
+          : /damage|payoff/.test(text) ? 1 : 0;
+  return semanticRank * 100 + supportTier(support);
+}
+
+function attachOptionalOptimizerV3(catalog, selected, assignments, offenseObligations, requiredResolution) {
+  const requiredCount = requiredResolution.assignedSupportCount;
+  const allOffenseFulfilled = new Set([
+    ...asArray(selected?.flatMap((candidate) => candidate.fulfilled)).map((proof) => proof.obligationId),
+    ...asArray(requiredResolution.fulfilled).map((proof) => proof.obligationId)
+  ]);
+  // This is the removal proof: optimizer search cannot begin until the active skill and
+  // required-only construction is independently complete and legal.
+  if (requiredCount > MAX_REQUIRED_SUPPORTS || requiredResolution.requiredConstructionComplete !== true
+    || offenseObligations.some((obligation) => !allOffenseFulfilled.has(obligation.id))) return null;
+  const usedFamilies = new Set(assignments.flatMap((assignment) => assignment.supports.map((support) => support.familyId)));
+  const offenseIds = unique(offenseObligations.map((obligation) => normalizeToken(obligation.offenseId || obligation.mechanics?.[0])));
+  if (offenseIds.some((offenseId) => DAMAGE_TYPE_MECHANICS.has(offenseId))) return null;
+  const candidates = [];
+  for (const candidate of selected) {
+    for (const support of collapseSupportVariants(asArray(catalog?.entities)
+      .filter((entity) => entity?.content_type === 'support_gem')
+      .filter((entity) => isSelectableSkillName(entity?.name) && isRecommendationContentAllowedV3(entity))
+      .filter((entity) => supportAvailability(entity) !== 'lineage'))) {
+      const offenseId = offenseIds.find((id) => optimizerRoleV3(support, id) === 'OPTIONAL_OFFENSE_OPTIMIZER');
+      if (!offenseId || !supportTargetsSkill(support, candidate.entity)) continue;
+      if (usedFamilies.has(supportFamilyId(support))) continue;
+      // An optimizer must neither need/provide prerequisite proof nor alter prevention/consumption.
+      if (supportRequirementFacts(support).length) continue;
+      if (hardSupportedSkillFacts(support).some((fact) => ['prevents', 'consumes'].includes(fact?.relation))) continue;
+      candidates.push({ candidate, support, offenseId, priority: optimizerPriority(support, offenseId) });
+    }
+  }
+  candidates.sort((a, b) => b.priority - a.priority
+    || supportTier(b.support) - supportTier(a.support)
+    || String(a.support.name).localeCompare(String(b.support.name))
+    || String(a.candidate.entity.id).localeCompare(String(b.candidate.entity.id)));
+  const chosen = candidates[0] || null;
+  if (!chosen || requiredCount + MAX_OPTIMIZER_SUPPORTS > MAX_TOTAL_SUPPORTS) return null;
+  const assignment = assignments.find((entry) => entry.skillEntityId === chosen.candidate.entity.id);
+  if (!assignment) return null;
+  assignment.supports.push({
+    entityId: chosen.support.id,
+    sourceId: chosen.support.source_id,
+    name: chosen.support.name,
+    contentType: chosen.support.content_type,
+    familyId: supportFamilyId(chosen.support),
+    familyName: chosen.support?.support_family?.name || chosen.support.name,
+    tier: supportTier(chosen.support) || null,
+    availability: supportAvailability(chosen.support),
+    assignedRole: 'OPTIONAL_OFFENSE_OPTIMIZER',
+    fulfilledObligations: [],
+    suppliedTargets: [],
+    prerequisiteMechanics: []
+  });
+  return chosen;
+}
+
 function assignSupportPackagesV3(catalog, winner, offenseObligations) {
   if (!winner?.primary) {
     return {
@@ -2619,6 +2704,12 @@ function assignSupportPackagesV3(catalog, winner, offenseObligations) {
         : []
     };
   });
+  const optimizer = attachOptionalOptimizerV3(catalog, selected, assignments, offenseObligations, {
+    ...winnerCombination,
+    assignedSupportCount: winnerCombination.supportCount,
+    requiredConstructionComplete: demandTargets.every((target) =>
+      winnerCombination.resolvedDemands.some((resolved) => supportDemandKey(resolved) === supportDemandKey(target)))
+  });
   const supportEdges = winnerCombination.chosen.flatMap((packageCandidate) => [
     ...packageCandidate.fulfilled.map((proof) => ({
       fromEntityId: proof.providerEntityId,
@@ -2644,7 +2735,9 @@ function assignSupportPackagesV3(catalog, winner, offenseObligations) {
     fulfilled: winnerCombination.fulfilled,
     resolvedDemandKeys: new Set(winnerCombination.resolvedDemands.map(supportDemandKey)),
     supportEdges,
-    assignedSupportCount: winnerCombination.supportCount,
+    assignedSupportCount: winnerCombination.supportCount + (optimizer ? 1 : 0),
+    assignedRequiredSupportCount: winnerCombination.supportCount,
+    assignedOptimizerSupportCount: optimizer ? 1 : 0,
     evaluatedPackages: packagesBySkill.reduce((sum, packages) => sum + packages.length, 0)
   };
 }
@@ -2938,6 +3031,8 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
       rankedCompanionCandidates: Math.max(0, viablePool.length - 1),
       shortlistedCompanionCandidates: shortlist.filter((candidate) => candidate.supporting).length,
       assignedSupportCount: supportResolution.assignedSupportCount,
+      assignedRequiredSupportCount: supportResolution.assignedRequiredSupportCount,
+      assignedOptimizerSupportCount: supportResolution.assignedOptimizerSupportCount,
       evaluatedSupportPackages: supportResolution.evaluatedPackages,
       offenseCoverage,
       recommendationTier,
@@ -2995,6 +3090,9 @@ export {
   PRIMARY_QUALITY_BAND,
   COMPANION_QUALITY_BAND,
   PACKAGE_QUALITY_BAND,
+  MAX_REQUIRED_SUPPORTS,
+  MAX_OPTIMIZER_SUPPORTS,
+  MAX_TOTAL_SUPPORTS,
   MAX_SUPPORTS_PER_SKILL,
   adaptRecommendationPackageV3ToSnapshot,
   buildRecommendationObligationsV3,
@@ -3006,6 +3104,7 @@ export {
   isRecommendationContentAllowedV3,
   mergeRecommendationGrantedSkillAccessV3,
   mergeRecommendationSkillCraftingV3,
+  optimizerRoleV3,
   selectRecommendationPackageV3,
   validateRecommendationGrantedSkillAccessV3,
   validateRecommendationSkillCraftingV3,

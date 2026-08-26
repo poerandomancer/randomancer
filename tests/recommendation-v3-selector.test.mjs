@@ -3,6 +3,9 @@ import fs from 'node:fs';
 import test from 'node:test';
 import {
   analyzeRecommendationCellV3,
+  MAX_OPTIMIZER_SUPPORTS,
+  MAX_REQUIRED_SUPPORTS,
+  MAX_TOTAL_SUPPORTS,
   mergeRecommendationGrantedSkillAccessV3,
   mergeRecommendationSkillCraftingV3,
   selectRecommendationPackageV3
@@ -89,7 +92,103 @@ test('one compatible enabling support forms CARRIER_BRIDGE ahead of fallback', (
   assert.equal(result.diagnostics.recommendationTier, 'CARRIER_BRIDGE');
   assert.equal(result.pieces.length, 1);
   assert.equal(result.supportingSkill, null);
-  assert.equal(result.supportAssignments.flatMap((entry) => entry.supports).length, 1);
+  const supports = result.supportAssignments.flatMap((entry) => entry.supports);
+  assert.equal(supports.filter((support) => support.assignedRole !== 'OPTIONAL_OFFENSE_OPTIMIZER').length, 1);
+  assert.ok(supports.length <= MAX_TOTAL_SUPPORTS);
+});
+
+test('optional Offense optimizers attach after, and never participate in, fulfillment', () => {
+  assert.deepEqual([MAX_REQUIRED_SUPPORTS, MAX_OPTIMIZER_SUPPORTS, MAX_TOTAL_SUPPORTS], [2, 1, 3]);
+  for (const [weapon, offense, tier] of [
+    ['Quarterstaff', 'freeze', 'DIRECT'],
+    ['Crossbow', 'shock', 'DIRECT'],
+    ['Mace', 'ignite', 'DIRECT'],
+    ['Spear', 'bleed', 'DIRECT'],
+    ['Bow', 'poison', 'DIRECT'],
+    ['Mace', 'freeze', 'CARRIER_BRIDGE']
+  ]) {
+    const result = selectRecommendationPackageV3(catalog, { weapon, offenseSet: [offense] }, {
+      offenseInventory, selectionSeed: `optimizer-${weapon}-${offense}`
+    });
+    const supports = result.supportAssignments.flatMap((entry) => entry.supports);
+    const optimizer = supports.find((support) => support.assignedRole === 'OPTIONAL_OFFENSE_OPTIMIZER');
+    assert.ok(optimizer, `${weapon} ${offense} should have a typed optimizer`);
+    assert.equal(result.diagnostics.recommendationTier, tier);
+    assert.deepEqual(optimizer.fulfilledObligations, []);
+    assert.deepEqual(optimizer.suppliedTargets, []);
+    assert.equal(supports.at(-1).assignedRole, 'OPTIONAL_OFFENSE_OPTIMIZER');
+    assert.ok(supports.length <= MAX_TOTAL_SUPPORTS);
+    assert.equal(result.unresolved.length, 0);
+  }
+});
+
+test('optimizer is deterministic, family-safe, and conservative for damage identities', () => {
+  const run = (seed) => selectRecommendationPackageV3(catalog,
+    { weapon: 'Quarterstaff', offenseSet: ['freeze'] }, { offenseInventory, selectionSeed: seed });
+  const names = (result) => result.supportAssignments.flatMap((entry) => entry.supports)
+    .filter((support) => support.assignedRole === 'OPTIONAL_OFFENSE_OPTIMIZER').map((support) => support.name);
+  assert.deepEqual(names(run('same-optimizer')), names(run('same-optimizer')));
+  for (const offense of ['physical', 'fire', 'cold', 'lightning', 'chaos']) {
+    const result = selectRecommendationPackageV3(catalog, { weapon: 'Quarterstaff', offenseSet: [offense] }, {
+      offenseInventory, selectionSeed: `no-filler-${offense}`
+    });
+    assert.equal(names(result).length, 0);
+  }
+  const chain = selectRecommendationPackageV3(catalog, { weapon: 'Mace', offenseSet: ['electrocute'] }, {
+    offenseInventory, selectionSeed: 'chain-capacity'
+  });
+  assert.equal(chain.diagnostics.recommendationTier, 'SUPPORT_CHAIN');
+  assert.equal(chain.diagnostics.assignedRequiredSupportCount, 2);
+  assert.ok(chain.diagnostics.assignedOptimizerSupportCount <= 1);
+  assert.ok(chain.supportAssignments.flatMap((entry) => entry.supports).length <= 3);
+});
+
+test('SUPPORT_CHAIN can use its full required capacity before one safe optimizer', () => {
+  const targetTemplate = catalog.entities.find((entity) => entity.content_type === 'support_gem'
+    && entity.compatibility?.target_skill);
+  const optimizer = {
+    ...targetTemplate,
+    id: 'test:electrocute-optimizer',
+    source_id: 'test:electrocute-optimizer',
+    name: 'Test Electrocute Buildup',
+    support_family: { id: 'test:electrocute-buildup', name: 'Test Electrocute Buildup', tier: 1 },
+    retrieval_terms: [],
+    provenance: { source_tags: [] },
+    compatibility: { target_skill: {} },
+    facts: [{ subject: 'supported_skill', relation: 'modifies', mechanic: 'electrocute',
+      confidence: 'exact', evidence: [{ value: 'More Electrocute buildup' }] }]
+  };
+  const run = (extraFacts = [], sourceTags = []) => selectRecommendationPackageV3({
+    ...catalog,
+    entities: [...catalog.entities, { ...optimizer,
+      provenance: { source_tags: sourceTags }, facts: [...optimizer.facts, ...extraFacts] }]
+  }, { weapon: 'Mace', offenseSet: ['electrocute'] }, {
+    offenseInventory, selectionSeed: 'synthetic-chain-optimizer'
+  });
+  const safe = run();
+  assert.equal(safe.diagnostics.recommendationTier, 'SUPPORT_CHAIN');
+  assert.deepEqual(safe.supportAssignments.flatMap((entry) => entry.supports).map((support) => support.assignedRole), [
+    'REQUIRED_PREREQUISITE_SUPPORT', 'REQUIRED_ENABLE_SUPPORT', 'OPTIONAL_OFFENSE_OPTIMIZER'
+  ]);
+  assert.equal(safe.diagnostics.assignedRequiredSupportCount, 2);
+  assert.equal(safe.diagnostics.assignedOptimizerSupportCount, 1);
+  for (const [facts, tags] of [
+    [[{ subject: 'supported_skill', relation: 'prevents', mechanic: 'electrocute', confidence: 'exact' }], []],
+    [[{ subject: 'supported_skill', relation: 'consumes', mechanic: 'electrocute', confidence: 'exact' }], []],
+    [[], ['lineage']],
+    [[], ['kalguuran']]
+  ]) {
+    const rejected = run(facts, tags);
+    assert.equal(rejected.diagnostics.recommendationTier, 'SUPPORT_CHAIN');
+    assert.equal(rejected.diagnostics.assignedOptimizerSupportCount, 0);
+    assert.equal(rejected.diagnostics.assignedRequiredSupportCount, 2);
+  }
+});
+
+test('public-card serialization preserves three ordered support roles', () => {
+  const source = fs.readFileSync(new URL('../js/publicCardBuilders.js', import.meta.url), 'utf8');
+  assert.match(source, /support\.assignedRole/);
+  assert.match(source, /\}\)\.slice\(0, 3\)/);
 });
 
 test('bridge audit is compact and contains only native CARRIER cells', () => {
