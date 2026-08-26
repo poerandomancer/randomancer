@@ -473,7 +473,10 @@ function evaluateCompatibilityV3(entity, snapshot = {}) {
     }
   }
 
-  const equipment = entity?.compatibility?.equipment || {};
+  const equipment = (entity?.content_type === 'active_skill'
+    && weaponDeliveryProfileV3(snapshot).kind === 'martial'
+    && entity?.structured_weapon_requirements)
+    || entity?.compatibility?.equipment || {};
   if (equipment.is_unrestricted === true) return { ok: true, reason: '' };
 
   const mainhand = weaponTags(snapshot.weapon);
@@ -516,7 +519,9 @@ function explicitWeaponDeliveryEvidence(entity, snapshot = {}) {
   const types = new Set(asArray(entity?.source_evidence?.active_skill_types).map(normalizeToken));
   if (types.has(family)) return { source: 'active_skill_type', value: family };
 
-  const equipment = entity?.compatibility?.equipment || {};
+  const equipment = weaponDeliveryProfileV3(snapshot).kind === 'martial'
+    ? (entity?.structured_weapon_requirements || entity?.compatibility?.equipment || {})
+    : (entity?.compatibility?.equipment || {});
   if (equipment.is_unrestricted === true) return null;
   const requirements = [
     ...asArray(equipment.mainhand_tags_any_of),
@@ -554,6 +559,24 @@ function craftingWeaponAffinityTokens(entity) {
       MARTIAL_WEAPON_FAMILIES.has(normalizeToken(value))
     )
   ].map(normalizeToken).filter(Boolean));
+}
+
+function martialWeaponRelationshipV3(entity, snapshot = {}) {
+  const weapon = weaponDeliveryProfileV3(snapshot);
+  if (weapon.kind !== 'martial') return { tier: 'NOT_MARTIAL', rank: 0 };
+  if (craftingWeaponAffinityTokens(entity).has(weapon.family)) {
+    return { tier: 'EXACT_NATIVE', rank: 2 };
+  }
+  const equipment = entity?.structured_weapon_requirements || entity?.compatibility?.equipment || {};
+  const requirement = normalizeToken(equipment.requirement_id || equipment.display);
+  const allowed = unique([
+    ...asArray(equipment.mainhand_tags_any_of),
+    ...asArray(equipment.allowed_weapon_tags_any_of)
+  ].map(normalizeToken));
+  if (requirement.includes('any_martial_weapon') || allowed.length > 1) {
+    return { tier: 'EXPLICIT_BROAD_LEGALITY', rank: 1 };
+  }
+  return { tier: 'UNRESTRICTED_CROSS_AFFINITY', rank: 0 };
 }
 
 function isDefaultOrBasicActiveSkill(entity) {
@@ -629,6 +652,8 @@ function isPersistentOrReservationActive(entity) {
 
 function isBlockedPersistentOrReservationActive(entity, offenseObligations = []) {
   if (!isPersistentOrReservationActive(entity)) return false;
+  if (activeSkillTypes(entity).has('hasreservation')
+    && rolledArchetypeMechanics(offenseObligations).has('companion')) return true;
   if (isExplicitSpiritActive(entity)) return true;
   if (!hasNormalActiveSkillCrafting(entity)) return true;
   return !createsRolledArchetype(entity, offenseObligations);
@@ -665,6 +690,14 @@ function evaluateDeliveryCompatibilityV3(entity, snapshot = {}) {
 
   if (weapon.kind === 'martial') {
     if (explicit) return { ok: true, reason: '', weapon, evidence: explicit };
+    if (isAttack && evaluateCompatibilityV3(entity, snapshot).ok) {
+      return {
+        ok: true,
+        reason: '',
+        weapon,
+        evidence: { source: 'structured_weapon_requirement', value: martialWeaponRelationshipV3(entity, snapshot).tier }
+      };
+    }
     if (isSummoning && !isSpell && !isAttack) {
       return {
         ok: true,
@@ -716,9 +749,9 @@ function evaluateCraftingDeliveryCompatibilityV3(entity, snapshot = {}) {
 
   const types = activeSkillTypes(entity);
   if (weapon.kind === 'martial') {
-    return craftingWeaponAffinityTokens(entity).has(weapon.family)
-      ? { ok: true, reason: '', weapon }
-      : { ok: false, reason: `skill is not a ${weapon.family} crafting type`, weapon };
+    // Crafting identity is a ranking preference. Structured equipment
+    // requirements, evaluated above, are the gameplay legality boundary.
+    return { ok: true, reason: '', weapon, relationship: martialWeaponRelationshipV3(entity, snapshot) };
   }
 
   const metaPayloadTypes = new Set(
@@ -1075,6 +1108,93 @@ function supportCompletionProof(entity, obligation, index) {
   };
 }
 
+// Diagnostic-only entry point for the support-first GAP audit.  Keeping this
+// beside the package solver deliberately makes the audit cross the identical
+// content, access, crafting, delivery, target, prerequisite, and prevention
+// boundaries as runtime without adding another (weaker) legality model.
+function analyzeSupportFirstGapCellV3(catalog, snapshot = {}, options = {}) {
+  const offenseObligations = buildRecommendationObligationsV3(
+    snapshot, options.offenseInventory || {}
+  ).obligations;
+  const obligation = offenseObligations[0];
+  const index = supportIndexForCatalog(catalog);
+  const activeEntities = asArray(catalog?.entities)
+    .filter((entity) => entity?.content_type === 'active_skill')
+    .sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''))
+      || String(a.id || '').localeCompare(String(b.id || '')));
+  const legal = [];
+  const rejected = [];
+
+  for (const entity of activeEntities) {
+    const failures = [];
+    if (!isRecommendationContentAllowedV3(entity)) failures.push('excluded content');
+    if (!isSelectableSkillName(entity?.name)) failures.push('unselectable skill');
+    const access = evaluateCompatibilityV3(entity, snapshot);
+    if (!access.ok) failures.push(access.reason);
+    const delivery = evaluateDeliveryCompatibilityV3(entity, snapshot);
+    if (!delivery.ok) failures.push(delivery.reason);
+    const crafting = evaluateCraftingDeliveryCompatibilityV3(entity, snapshot);
+    if (!crafting.ok) failures.push(crafting.reason);
+    const pieceDelivery = evaluatePackagePieceDeliveryV3(entity, snapshot);
+    if (!pieceDelivery.ok) failures.push(pieceDelivery.reason);
+    if (!isDirectlyUsableActive(entity, offenseObligations)) failures.push('not a runtime-usable primary active');
+    if (failures.length) continue;
+
+    const proof = supportCompletionProof(entity, obligation, index);
+    if (!proof) continue;
+    legal.push({
+      active: { id: entity.id, name: entity.name },
+      supports: proof.supportEntityIds.map((id, offset) => {
+        const support = index.supports.find((candidate) => candidate.id === id);
+        return {
+          id,
+          name: proof.supportNames[offset],
+          family: support?.support_family?.name || support?.name || proof.supportNames[offset],
+          familyId: supportFamilyId(support),
+          tier: supportTier(support),
+          effects: actionableSupportFacts(support).map((fact) => ({
+            relation: fact.relation,
+            mechanic: factMechanics(fact)[0] || '',
+            condition: normalizeToken(fact.condition) || null
+          })),
+          requirements: supportRequirementFacts(support).map((fact) => ({
+            relation: fact.relation, mechanic: normalizeToken(fact.mechanic)
+          }))
+        };
+      }),
+      proof: {
+        mechanic: proof.mechanic,
+        prerequisiteMechanics: proof.prerequisiteMechanics,
+        preventedMechanics: proof.preventedMechanics,
+        allRequirementsMet: true,
+        targetCompatibility: true,
+        accessLegal: true,
+        deliveryLegal: true,
+        conflictsClear: !proof.preventedMechanics.includes(proof.mechanic)
+      }
+    });
+  }
+  legal.sort((a, b) => a.supports.length - b.supports.length
+    || a.active.name.localeCompare(b.active.name)
+    || a.supports.map((support) => support.name).join('+')
+      .localeCompare(b.supports.map((support) => support.name).join('+')));
+
+  // Retain only useful terminal-support failures, rather than an invalid-pair
+  // matrix.  These explain when the catalog knows a relevant support but no
+  // runtime-legal active can complete its typed requirements.
+  const terminal = unique(asArray(obligation?.mechanics).flatMap((mechanic) =>
+    asArray(index.byEffectMechanic.get(normalizeToken(mechanic)))
+  ));
+  if (!legal.length) for (const support of terminal.slice(0, 5)) rejected.push({
+    support: support.name,
+    family: support.support_family?.name || support.name,
+    reason: supportAvailability(support) === 'lineage'
+      ? 'lineage support'
+      : 'no legal skill satisfies target compatibility and every typed prerequisite'
+  });
+  return { obligation, routes: legal, rejected };
+}
+
 function factIsUsableForCandidate(entity, fact, obligation) {
   if (!['has_property', 'converts'].includes(fact?.relation)) return true;
   const facts = asArray(entity?.facts);
@@ -1272,6 +1392,33 @@ function isUsablePackageActive(entity, offenseObligations = []) {
   return !types.has('inbuilttrigger') && !types.has('triggered');
 }
 
+function inheritedWeaponPhysicalFactV3(entity, snapshot = {}) {
+  const weapon = weaponDeliveryProfileV3(snapshot);
+  if (weapon.kind !== 'martial') return null;
+  const types = activeSkillTypes(entity);
+  if (!types.has('attack')) return null;
+  const equipment = entity?.structured_weapon_requirements || entity?.compatibility?.equipment || {};
+  const allowed = new Set([
+    ...asArray(equipment.mainhand_tags_any_of),
+    ...asArray(equipment.allowed_weapon_tags_any_of)
+  ].map(normalizeToken));
+  // An explicit structured weapon requirement is the proof that this Attack
+  // uses the rolled weapon. Unrestricted Attacks remain conservative here.
+  if (!allowed.has(weapon.family)) return null;
+  const hardFacts = asArray(entity?.facts).filter((fact) => HARD_CONFIDENCE.has(fact?.confidence));
+  if (hardFacts.some((fact) => fact.relation === 'prevents'
+    && normalizeToken(fact.mechanic) === 'physical')) return null;
+  const conversions = hardFacts.filter((fact) => fact.relation === 'converts'
+    && normalizeToken(fact.from) === 'physical');
+  if (conversions.some((fact) => !Number.isFinite(Number(fact.percent ?? fact.value)))) return null;
+  if (conversions.reduce((sum, fact) => sum + Number(fact.percent ?? fact.value), 0) >= 100) return null;
+  return {
+    relation: 'has_property', subject: 'skill', mechanic: 'physical', confidence: 'strong',
+    proof_type: 'inherited_weapon_damage',
+    evidence: [{ kind: 'structured_weapon_requirement', value: equipment.display || equipment.requirement_id || weapon.family }]
+  };
+}
+
 function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalProfiles = {}, supportIndex = null) {
   if (!isUsablePackageActive(entity, offenseObligations)) return null;
   const compatibility = evaluateCompatibilityV3(entity, snapshot);
@@ -1281,7 +1428,8 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalP
   const pieceDelivery = evaluatePackagePieceDeliveryV3(entity, snapshot);
   if (!pieceDelivery.ok) return null;
   const criticalEvidence = criticalEvidenceForEntity(entity, offenseObligations, criticalProfiles);
-  const facts = [...asArray(entity.facts), ...criticalEvidence.facts];
+  const inheritedPhysical = inheritedWeaponPhysicalFactV3(entity, snapshot);
+  const facts = [...asArray(entity.facts), ...criticalEvidence.facts, ...[inheritedPhysical].filter(Boolean)];
   if (offenseObligations.some((obligation) => facts.some((fact) => factPreventsObligation(fact, obligation)))) {
     return null;
   }
@@ -1305,7 +1453,8 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalP
         obligationId: obligation.id,
         relation: proof.relation,
         confidence: proof.confidence,
-        mechanic: factMechanics(proof)[0] || ''
+        mechanic: factMechanics(proof)[0] || '',
+        semanticSource: proof.proof_type || 'entity_fact'
       });
       continue;
     }
@@ -1393,6 +1542,7 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalP
     primaryEligible: delivery.ok,
     criticalAffinity: criticalEvidence.affinity,
     archetypeSpecificityScore: specificityScore,
+    weaponRelationship: martialWeaponRelationshipV3(entity, snapshot),
     evidenceScore,
     exactProofs,
     exactCarrierProofs,
@@ -1446,6 +1596,29 @@ function inherentProofForObligation(candidate, obligation, rules) {
   };
 }
 
+function supportDerivedOntologyProof(entity, support, obligation, rules) {
+  if (!entityHasHitDelivery(entity) || !supportTargetsSkill(support, entity)) return null;
+  const offenseMechanics = new Set(asArray(obligation?.mechanics).map(normalizeToken));
+  const rule = rules.find((entry) => offenseMechanics.has(normalizeToken(entry?.source)) && entry?.requires_hit);
+  if (!rule || !supportPackageRequirementsAreMet(entity, [support])) return null;
+  const damageMechanic = normalizeToken(rule.target);
+  const providesDamage = actionableSupportFacts(support).some((fact) =>
+    ['provides', 'generates', 'converts'].includes(fact.relation)
+    && factMechanics(fact).includes(damageMechanic)
+    && supportFactConditionIsMet(fact, entity, [support]));
+  if (!providesDamage) return null;
+  const prevented = [entity, support].some((piece) => asArray(piece?.facts).some((fact) =>
+    fact.relation === 'prevents' && HARD_CONFIDENCE.has(fact.confidence)
+    && [normalizeToken(rule.source), damageMechanic, 'elemental_damage'].includes(normalizeToken(fact.mechanic))));
+  if (prevented) return null;
+  return {
+    obligationId: obligation.id, relation: 'support_completes', confidence: 'strong',
+    mechanic: normalizeToken(rule.source), completionType: 'support_derived_ontology',
+    supportEntityIds: [support.id], supportSourceIds: [support.source_id], supportNames: [support.name],
+    prerequisiteMechanics: [], globalRule: `${damageMechanic}_hit_to_${normalizeToken(rule.source)}`
+  };
+}
+
 // This is the shared legality and semantic boundary used by both runtime tiering
 // and the generated coverage reports.  Keeping it here prevents the audit from
 // quietly acquiring a more permissive definition of a legal skill.
@@ -1495,22 +1668,26 @@ function analyzeRecommendationCellV3(catalog, snapshot = {}, options = {}) {
     candidate.carriers.some((proof) => proof.obligationId === obligation.id && proof.completionType !== 'support')
   ));
   const bridgeEvaluations = [];
-  if (!direct.length && nativeCarriers.length) {
-    for (const candidate of nativeCarriers) {
+  if (!direct.length) {
+    for (const candidate of legal) {
       for (const obligation of obligations) {
         const relevant = unique(asArray(obligation.mechanics).flatMap((mechanic) =>
           asArray(index.byEffectMechanic.get(normalizeToken(mechanic)))
         ));
+        const ontologyRule = rules.find((rule) => asArray(obligation.mechanics)
+          .map(normalizeToken).includes(normalizeToken(rule.source)) && rule.requires_hit);
+        if (ontologyRule) relevant.push(...asArray(index.bySupplyMechanic.get(normalizeToken(ontologyRule.target))));
         let partial = 0;
         let invalid = 0;
         const complete = [];
-        for (const support of relevant) {
+        for (const support of unique(relevant)) {
           if (!supportTargetsSkill(support, candidate.entity)
             || !supportPackageRequirementsAreMet(candidate.entity, [support])) {
             invalid += 1;
             continue;
           }
-          const proof = supportProofForObligation(candidate.entity, [support], obligation);
+          const proof = supportProofForObligation(candidate.entity, [support], obligation)
+            || supportDerivedOntologyProof(candidate.entity, support, obligation, rules);
           if (!proof) {
             partial += 1;
             continue;
@@ -1520,7 +1697,7 @@ function analyzeRecommendationCellV3(catalog, snapshot = {}, options = {}) {
             proof: {
               ...proof,
               relation: 'support_completes',
-              completionType: 'support',
+              completionType: proof.completionType || 'support',
               supportEntityIds: [support.id],
               supportSourceIds: [support.source_id],
               supportNames: [support.name],
@@ -1537,14 +1714,15 @@ function analyzeRecommendationCellV3(catalog, snapshot = {}, options = {}) {
     support: completion.support,
     proof: completion.proof
   })));
+  const carrierCandidates = unique([...nativeCarriers, ...bridges.map((bridge) => bridge.candidate)]);
   return {
     model,
     legal,
     direct,
-    carriers: nativeCarriers,
+    carriers: carrierCandidates,
     bridges,
     bridgeEvaluations,
-    classification: direct.length ? 'DIRECT' : nativeCarriers.length ? 'CARRIER' : 'GAP'
+    classification: direct.length ? 'DIRECT' : bridges.length ? 'CARRIER' : 'GAP'
   };
 }
 
@@ -1599,6 +1777,7 @@ function buildViableSkillPool(catalog, offenseObligations, snapshot, criticalPro
     .filter((candidate) => included.has(candidate.entity.id))
     .sort((a, b) =>
       Number(b.primaryEligible) - Number(a.primaryEligible)
+      || (b.weaponRelationship?.rank || 0) - (a.weaponRelationship?.rank || 0)
       || b.individualScore - a.individualScore
       || String(a.entity.name || '').localeCompare(String(b.entity.name || ''))
       || String(a.entity.id || '').localeCompare(String(b.entity.id || ''))
@@ -2012,8 +2191,9 @@ function buildRankedSkillPackages(pool, offenseObligations) {
     }
   }
   return packages.sort((a, b) =>
-    b.score - a.score
-    || b.fulfilled.length - a.fulfilled.length
+    b.fulfilled.length - a.fulfilled.length
+    || (b.primary.weaponRelationship?.rank || 0) - (a.primary.weaponRelationship?.rank || 0)
+    || b.score - a.score
     || b.synergyEdges.length - a.synergyEdges.length
     || Number(Boolean(b.supporting)) - Number(Boolean(a.supporting))
     || b.exactProofs - a.exactProofs
@@ -2054,7 +2234,11 @@ function choosePackageCandidate(ranked, options = {}) {
   const qualityBand = Number.isFinite(requestedBand) && requestedBand >= 0
     ? requestedBand
     : PACKAGE_QUALITY_BAND;
-  const shortlist = ranked.filter((candidate) => top.score - candidate.score <= qualityBand);
+  const topWeaponRank = top.primary?.weaponRelationship?.rank || 0;
+  const shortlist = ranked.filter((candidate) =>
+    candidate.fulfilled.length === top.fulfilled.length
+    && (candidate.primary?.weaponRelationship?.rank || 0) === topWeaponRank
+    && top.score - candidate.score <= qualityBand);
   let pool = shortlist;
   const previousEntityId = String(options.previousPrimaryEntityId || '');
   if (previousEntityId && shortlist.length > 1) {
@@ -2116,7 +2300,18 @@ function analyzeSupportPackageForSkill(
 
   const fulfilled = offenseObligations
     .filter((obligation) => unresolvedOffenseIds.has(obligation.id))
-    .map((obligation) => supportProofForObligation(candidate.entity, supports, obligation))
+    .map((obligation) => supportProofForObligation(candidate.entity, supports, obligation)
+      || asArray(candidate.carriers).find((proof) =>
+        proof.obligationId === obligation.id
+        && proof.completionType === 'support_derived_ontology'
+        && asArray(proof.supportEntityIds).every((id) => supports.some((support) => support.id === id)))
+    )
+    .map((proof) => proof && proof.providerEntityId ? proof : proof ? {
+      ...proof,
+      providerEntityId: proof.supportEntityIds?.[0],
+      providerSourceId: proof.supportSourceIds?.[0],
+      providerName: proof.supportNames?.[0]
+    } : null)
     .filter(Boolean);
   const resolvedDemands = [];
   for (const target of demandTargets.filter((entry) => entry.entityId === candidate.entity.id)) {
@@ -2200,7 +2395,9 @@ function relevantSupportsForSkill(candidate, index, offenseObligations, unresolv
     ].map(normalizeToken)).flatMap((mechanic) =>
       asArray(index?.bySupplyMechanic?.get(mechanic))
     ));
-  const firstPass = unique([...direct, ...demandSuppliers])
+  const carrierSupports = asArray(candidate.carriers).flatMap((proof) =>
+    asArray(proof.supportEntityIds).map((id) => index.supports.find((support) => support.id === id)).filter(Boolean));
+  const firstPass = unique([...direct, ...demandSuppliers, ...carrierSupports])
     .filter((support) => supportTargetsSkill(support, candidate.entity));
   const bridgeMechanics = unique(firstPass.flatMap((support) => [
     ...supportRequirementFacts(support).map((fact) => normalizeToken(fact?.mechanic)),
@@ -2568,7 +2765,9 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
   const rankedPackages = recommendationTier === 'DIRECT'
     ? buildRankedSkillPackages(tierAnalysis.direct, offenseObligations).filter((entry) => !entry.supporting)
     : recommendationTier === 'CARRIER_BRIDGE'
-      ? bridgePackages.sort((a, b) => b.score - a.score || String(a.id).localeCompare(String(b.id)))
+      ? bridgePackages.sort((a, b) =>
+        (b.primary.weaponRelationship?.rank || 0) - (a.primary.weaponRelationship?.rank || 0)
+        || b.score - a.score || String(a.id).localeCompare(String(b.id)))
       : buildRankedSkillPackages(viablePool, offenseObligations);
   const { winner, shortlist, qualityBand } = choosePackageCandidate(rankedPackages, options);
   const supportResolution = assignSupportPackagesV3(catalog, winner, offenseObligations);
@@ -2750,6 +2949,7 @@ export {
   MAX_SUPPORTS_PER_SKILL,
   adaptRecommendationPackageV3ToSnapshot,
   buildRecommendationObligationsV3,
+  analyzeSupportFirstGapCellV3,
   analyzeRecommendationCellV3,
   evaluateCompatibilityV3,
   evaluateDeliveryCompatibilityV3,

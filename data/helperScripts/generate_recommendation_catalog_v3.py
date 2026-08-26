@@ -606,6 +606,8 @@ def build_skill_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[st
                 "retrieval_terms": tags,
                 "facts": facts,
                 "compatibility": compatibility,
+                **({"structured_weapon_requirements": skill.get("weapon_requirements") or {"is_unrestricted": True}}
+                   if content_type == "active_skill" else {}),
                 "links": {
                     "recommended_support_ids": skill.get("recommended_supports") or [],
                     "active_skill_ids": links.get("active_skill_ids") or [],
@@ -1084,7 +1086,7 @@ def build_catalog(ctx: SourceContext) -> tuple[dict[str, Any], dict[str, Any], d
 
 RUNTIME_ENTITY_FIELDS = (
     "id", "content_type", "source_id", "name", "candidate_roles",
-    "retrieval_terms", "support_family", "compatibility",
+    "retrieval_terms", "support_family", "compatibility", "structured_weapon_requirements",
 )
 
 
