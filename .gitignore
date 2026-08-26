@@ -7,3 +7,6 @@ __MACOSX/
 # Python helper bytecode
 __pycache__/
 *.py[cod]
+
+# Developer-only, on-demand recommendation provenance
+/data/enriched/debug/recommendation_catalog_v3_provenance.json

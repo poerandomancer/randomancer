@@ -31,6 +31,7 @@ from lib.tag_normalization import normalize_tag_list
 HERE = Path(__file__).resolve().parent
 REPO_ROOT = HERE.parents[1]
 DEFAULT_OUT = REPO_ROOT / "data" / "enriched" / "recommendation_catalog_v3.json"
+DEFAULT_PROVENANCE_OUT = REPO_ROOT / "data" / "enriched" / "debug" / "recommendation_catalog_v3_provenance.json"
 DEFAULT_REPORT_OUT = REPO_ROOT / "data" / "enriched" / "recommendation_catalog_v3_report.json"
 DEFAULT_ACCESS_OUT = REPO_ROOT / "data" / "enriched" / "recommendation_granted_skill_access_v3.json"
 DEFAULT_CRAFTING_OUT = REPO_ROOT / "data" / "enriched" / "recommendation_skill_crafting_v3.json"
@@ -1081,12 +1082,64 @@ def build_catalog(ctx: SourceContext) -> tuple[dict[str, Any], dict[str, Any], d
     return catalog, report, granted_access, skill_crafting
 
 
+RUNTIME_ENTITY_FIELDS = (
+    "id", "content_type", "source_id", "name", "candidate_roles",
+    "retrieval_terms", "support_family", "compatibility",
+)
+
+
+def compact_fact(fact: dict[str, Any]) -> dict[str, Any]:
+    """Project a fully evidenced generation fact onto the browser contract."""
+    # Every typed semantic attribute participates in matching or ranking; only the
+    # evidence envelope is projected separately.
+    projected = {key: value for key, value in fact.items() if key != "evidence"}
+    projected["evidence"] = [
+        {key: proof[key] for key in ("kind", "value") if key in proof}
+        for proof in fact.get("evidence") or []
+    ]
+    return projected
+
+
+def compact_entity(entity: dict[str, Any]) -> dict[str, Any]:
+    projected = {key: entity[key] for key in RUNTIME_ENTITY_FIELDS if key in entity}
+    projected["facts"] = [compact_fact(fact) for fact in entity.get("facts") or []]
+
+    # These source summaries are read by delivery/support qualification and UI search.
+    source = entity.get("source_evidence") or {}
+    runtime_source = {key: source[key] for key in ("description", "active_skill_types") if key in source}
+    if "granted_effects" in source:
+        effects = [
+            {"cannot_be_supported": True}
+            for effect in source.get("granted_effects") or []
+            if effect.get("cannot_be_supported") is True
+        ]
+        if effects:
+            runtime_source["granted_effects"] = effects
+    if runtime_source:
+        projected["source_evidence"] = runtime_source
+
+    source_tags = (entity.get("provenance") or {}).get("source_tags") or []
+    if source_tags:
+        projected["provenance"] = {"source_tags": source_tags}
+    return projected
+
+
+def compact_catalog(catalog: dict[str, Any]) -> dict[str, Any]:
+    """Return the deterministic, readable browser-facing projection."""
+    return {
+        "_meta": catalog["_meta"],
+        "fate_vocabulary": catalog["fate_vocabulary"],
+        "entities": [compact_entity(entity) for entity in catalog["entities"]],
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Generate the additive recommendation enrichment v3 catalog.")
     parser.add_argument("--out", default=str(DEFAULT_OUT))
     parser.add_argument("--report-out", default=str(DEFAULT_REPORT_OUT))
     parser.add_argument("--access-out", default=str(DEFAULT_ACCESS_OUT))
     parser.add_argument("--crafting-out", default=str(DEFAULT_CRAFTING_OUT))
+    parser.add_argument("--provenance-out", help="Optional developer-only full catalog output")
     args = parser.parse_args()
 
     out_path = Path(args.out)
@@ -1104,7 +1157,13 @@ def main() -> int:
 
     context = SourceContext(REPO_ROOT)
     catalog, report, granted_access, skill_crafting = build_catalog(context)
-    write_json(out_path, catalog)
+    if args.provenance_out:
+        provenance_path = Path(args.provenance_out)
+        if not provenance_path.is_absolute():
+            provenance_path = REPO_ROOT / provenance_path
+        write_json(provenance_path, catalog)
+        print(f"Wrote full provenance catalog to {provenance_path}")
+    write_json(out_path, compact_catalog(catalog))
     write_json(report_path, report)
     write_json(access_path, granted_access)
     write_json(crafting_path, skill_crafting)

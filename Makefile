@@ -1,4 +1,4 @@
-.PHONY: normalize-tags-check normalize-tags-strict normalize-tags-audit recommendation-data recommendation-data-check recommendation-selector-check recommendation-critical-profiles recommendation-coverage
+.PHONY: normalize-tags-check normalize-tags-strict normalize-tags-audit recommendation-data recommendation-data-check recommendation-selector-check recommendation-critical-profiles recommendation-coverage recommendation-provenance
 
 normalize-tags-check:
 	python data/helperScripts/generate_tag_rules_js.py
@@ -26,3 +26,7 @@ recommendation-coverage:
 
 recommendation-critical-profiles:
 	python data/helperScripts/scrape_skill_critical_profiles_v3.py
+
+recommendation-provenance:
+	python data/helperScripts/generate_recommendation_catalog_v3.py --provenance-out data/enriched/debug/recommendation_catalog_v3_provenance.json
+	python data/helperScripts/validate_recommendation_catalog_v3.py
