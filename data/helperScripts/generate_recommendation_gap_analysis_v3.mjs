@@ -154,7 +154,7 @@ const constructedRoutes = [...cells.filter((cell) => cell.primaryClassification 
   weapon: cell.weapon, offenseId: cell.offenseId, subtype: 'SUPPORT_FIRST_EXPLICIT',
   active: cell.bestProposedRoute.active,
   requiredSupports: cell.bestProposedRoute.supports.map((support, index, all) => ({ ...support,
-    constructionRole: all.length === 2 && index === 1 ? 'REQUIRED_PREREQUISITE_SUPPORT' : 'REQUIRED_ENABLE_SUPPORT' }))
+    constructionRole: all.length === 2 && index === 0 ? 'REQUIRED_PREREQUISITE_SUPPORT' : 'REQUIRED_ENABLE_SUPPORT' }))
 })), ...derivedRoutes.map((route) => ({ weapon: route.weapon, offenseId: route.offenseId,
   subtype: 'SUPPORT_FIRST_DERIVED', active: route.active,
   requiredSupports: [{ ...route.enableSupport, constructionRole: 'REQUIRED_ENABLE_SUPPORT' }],
