@@ -742,7 +742,7 @@ function evaluateDeliveryCompatibilityV3(entity, snapshot = {}) {
   };
 }
 
-function evaluateCraftingDeliveryCompatibilityV3(entity, snapshot = {}) {
+function evaluateCraftingDeliveryCompatibilityV3(entity, snapshot = {}, offenseObligations = []) {
   if (entity?.content_type !== 'active_skill') return { ok: true, reason: '' };
   if (!hasNormalActiveSkillCrafting(entity)) {
     return { ok: false, reason: 'active skill is not in the normal craftable skill gem pool' };
@@ -756,6 +756,16 @@ function evaluateCraftingDeliveryCompatibilityV3(entity, snapshot = {}) {
     // Crafting identity is a ranking preference. Structured equipment
     // requirements, evaluated above, are the gameplay legality boundary.
     return { ok: true, reason: '', weapon, relationship: martialWeaponRelationshipV3(entity, snapshot) };
+  }
+
+  // Explicit archetype creation is its own delivery mechanism.  Once the
+  // structured equipment and ordinary recommendation gates have admitted the
+  // skill, a crafting school must not invent a caster-weapon restriction.
+  // Reservation-bearing and otherwise blocked persistent skills deliberately
+  // remain outside this exemption.
+  if (createsRolledArchetype(entity, offenseObligations)
+    && !isBlockedPersistentOrReservationActive(entity, offenseObligations)) {
+    return { ok: true, reason: '', weapon, relationship: { tier: 'ARCHETYPE_CREATOR' } };
   }
 
   const metaPayloadTypes = new Set(
@@ -1168,7 +1178,7 @@ function analyzeSupportFirstGapCellV3(catalog, snapshot = {}, options = {}) {
     if (!access.ok) failures.push(access.reason);
     const delivery = evaluateDeliveryCompatibilityV3(entity, snapshot);
     if (!delivery.ok) failures.push(delivery.reason);
-    const crafting = evaluateCraftingDeliveryCompatibilityV3(entity, snapshot);
+    const crafting = evaluateCraftingDeliveryCompatibilityV3(entity, snapshot, offenseObligations);
     if (!crafting.ok) failures.push(crafting.reason);
     const pieceDelivery = evaluatePackagePieceDeliveryV3(entity, snapshot);
     if (!pieceDelivery.ok) failures.push(pieceDelivery.reason);
@@ -1458,7 +1468,7 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalP
   if (!isUsablePackageActive(entity, offenseObligations)) return null;
   const compatibility = evaluateCompatibilityV3(entity, snapshot);
   if (!compatibility.ok) return null;
-  const craftingDelivery = evaluateCraftingDeliveryCompatibilityV3(entity, snapshot);
+  const craftingDelivery = evaluateCraftingDeliveryCompatibilityV3(entity, snapshot, offenseObligations);
   if (!craftingDelivery.ok) return null;
   const pieceDelivery = evaluatePackagePieceDeliveryV3(entity, snapshot);
   if (!pieceDelivery.ok) return null;

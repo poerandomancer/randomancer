@@ -19963,27 +19963,5 @@
       "Poison Spores"
     ]
   },
-  "revisedGaps": [
-    {
-      "weapon": "Staff",
-      "offenseId": "companions",
-      "interpretation": "REMAINS_UNRESOLVED",
-      "modelingReason": null,
-      "evidenceEntityIds": []
-    },
-    {
-      "weapon": "Wand",
-      "offenseId": "companions",
-      "interpretation": "REMAINS_UNRESOLVED",
-      "modelingReason": null,
-      "evidenceEntityIds": []
-    },
-    {
-      "weapon": "Sceptre",
-      "offenseId": "companions",
-      "interpretation": "REMAINS_UNRESOLVED",
-      "modelingReason": null,
-      "evidenceEntityIds": []
-    }
-  ]
+  "revisedGaps": []
 }

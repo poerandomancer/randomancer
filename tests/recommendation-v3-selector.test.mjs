@@ -213,7 +213,35 @@ test('structured broad and unrestricted legality resolve archetypes generically'
     assert.equal(cell.classification, 'DIRECT');
     assert.ok(cell.direct.some((candidate) => candidate.entity.name === 'Tame Beast'));
   }
+  for (const weapon of ['Staff', 'Wand', 'Sceptre']) {
+    const cell = analyze(weapon, 'companions');
+    assert.equal(cell.classification, 'DIRECT');
+    assert.ok(cell.direct.some((candidate) => candidate.entity.name === 'Tame Beast'));
+    assert.ok(!cell.direct.some((candidate) => candidate.entity.name === 'Shockwave Totem'));
+  }
   assert.ok(!analyze('Bow', 'companions').direct.some((candidate) => candidate.entity.name === 'Rhoa Mount'));
+});
+
+test('caster archetype exemption follows typed semantics rather than skill identity', () => {
+  const renamedCatalog = structuredClone(catalog);
+  const tame = renamedCatalog.entities.find((entity) => entity.name === 'Tame Beast');
+  tame.name = 'Generic Companion Fixture';
+  for (const weapon of ['Staff', 'Wand', 'Sceptre']) {
+    const cell = analyzeRecommendationCellV3(
+      renamedCatalog, { weapon, offenseSet: ['companions'] }, { offenseInventory }
+    );
+    assert.ok(cell.direct.some((candidate) => candidate.entity.name === 'Generic Companion Fixture'));
+  }
+
+  const nonArchetypeCatalog = structuredClone(renamedCatalog);
+  const fixture = nonArchetypeCatalog.entities.find((entity) => entity.name === 'Generic Companion Fixture');
+  fixture.facts = fixture.facts.filter((fact) =>
+    !['creates', 'fulfills', 'provides'].includes(fact.relation)
+      || !['companion', 'minion', 'totem'].includes(String(fact.mechanic).toLowerCase())
+  );
+  assert.ok(!analyzeRecommendationCellV3(
+    nonArchetypeCatalog, { weapon: 'Wand', offenseSet: ['companions'] }, { offenseInventory }
+  ).direct.some((candidate) => candidate.entity.name === 'Generic Companion Fixture'));
 });
 
 test('support-added elemental damage closes through Hit ontology with prevention intact', () => {
@@ -277,10 +305,10 @@ test('bounded SUPPORT_CHAIN resolves Mace Electrocute in semantic support order'
   assert.equal(result.unresolved.length, 0);
 });
 
-test('caster Companion GAPs remain unresolved after bounded chain tier', () => {
+test('caster Companion cells resolve directly without support-chain fallback', () => {
   for (const weapon of ['Staff', 'Wand', 'Sceptre']) {
     const cell = analyze(weapon, 'companions');
-    assert.equal(cell.classification, 'GAP');
+    assert.equal(cell.classification, 'DIRECT');
     assert.equal(cell.supportChains.length, 0);
   }
 });

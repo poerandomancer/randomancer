@@ -74,13 +74,13 @@
     }
   ],
   "totals": {
-    "DIRECT": 102,
+    "DIRECT": 105,
     "CARRIER_BRIDGE": 29,
     "SUPPORT_CHAIN": 1,
-    "GAP": 3
+    "GAP": 0
   },
   "directCandidateCounts": {
-    "explicit": 408,
+    "explicit": 414,
     "inherent": 121
   },
   "changedClassifications": [
@@ -9384,6 +9384,22 @@
           ]
         },
         {
+          "id": "skill:Metadata/Items/Gem/SkillGemTameBeast",
+          "name": "Tame Beast",
+          "proofType": "explicit",
+          "evidence": [
+            {
+              "relation": "creates",
+              "mechanic": "minion",
+              "confidence": "exact",
+              "proofType": "explicit",
+              "globalRule": null,
+              "damageEvidence": null,
+              "affinity": []
+            }
+          ]
+        },
+        {
           "id": "skill:Metadata/Items/Gem/SkillGemUnearth",
           "name": "Unearth",
           "proofType": "explicit",
@@ -9422,7 +9438,7 @@
       ],
       "carrierCandidates": [],
       "counts": {
-        "direct": 11,
+        "direct": 12,
         "carrierBridge": 0,
         "supportChain": 0
       }
@@ -9431,12 +9447,29 @@
       "weapon": "Staff",
       "offenseId": "companions",
       "offense": "Companions",
-      "classification": "GAP",
-      "baselineClassification": "GAP",
-      "directCandidates": [],
+      "classification": "DIRECT",
+      "baselineClassification": "DIRECT",
+      "directCandidates": [
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemTameBeast",
+          "name": "Tame Beast",
+          "proofType": "explicit",
+          "evidence": [
+            {
+              "relation": "creates",
+              "mechanic": "companion",
+              "confidence": "exact",
+              "proofType": "explicit",
+              "globalRule": null,
+              "damageEvidence": null,
+              "affinity": []
+            }
+          ]
+        }
+      ],
       "carrierCandidates": [],
       "counts": {
-        "direct": 0,
+        "direct": 1,
         "carrierBridge": 0,
         "supportChain": 0
       }
@@ -13195,6 +13228,22 @@
           ]
         },
         {
+          "id": "skill:Metadata/Items/Gem/SkillGemTameBeast",
+          "name": "Tame Beast",
+          "proofType": "explicit",
+          "evidence": [
+            {
+              "relation": "creates",
+              "mechanic": "minion",
+              "confidence": "exact",
+              "proofType": "explicit",
+              "globalRule": null,
+              "damageEvidence": null,
+              "affinity": []
+            }
+          ]
+        },
+        {
           "id": "skill:Metadata/Items/Gem/SkillGemUnearth",
           "name": "Unearth",
           "proofType": "explicit",
@@ -13233,7 +13282,7 @@
       ],
       "carrierCandidates": [],
       "counts": {
-        "direct": 11,
+        "direct": 12,
         "carrierBridge": 0,
         "supportChain": 0
       }
@@ -13242,12 +13291,29 @@
       "weapon": "Wand",
       "offenseId": "companions",
       "offense": "Companions",
-      "classification": "GAP",
-      "baselineClassification": "GAP",
-      "directCandidates": [],
+      "classification": "DIRECT",
+      "baselineClassification": "DIRECT",
+      "directCandidates": [
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemTameBeast",
+          "name": "Tame Beast",
+          "proofType": "explicit",
+          "evidence": [
+            {
+              "relation": "creates",
+              "mechanic": "companion",
+              "confidence": "exact",
+              "proofType": "explicit",
+              "globalRule": null,
+              "damageEvidence": null,
+              "affinity": []
+            }
+          ]
+        }
+      ],
       "carrierCandidates": [],
       "counts": {
-        "direct": 0,
+        "direct": 1,
         "carrierBridge": 0,
         "supportChain": 0
       }
@@ -15605,6 +15671,22 @@
           ]
         },
         {
+          "id": "skill:Metadata/Items/Gem/SkillGemTameBeast",
+          "name": "Tame Beast",
+          "proofType": "explicit",
+          "evidence": [
+            {
+              "relation": "creates",
+              "mechanic": "minion",
+              "confidence": "exact",
+              "proofType": "explicit",
+              "globalRule": null,
+              "damageEvidence": null,
+              "affinity": []
+            }
+          ]
+        },
+        {
           "id": "skill:Metadata/Items/Gem/SkillGemUnearth",
           "name": "Unearth",
           "proofType": "explicit",
@@ -15643,7 +15725,7 @@
       ],
       "carrierCandidates": [],
       "counts": {
-        "direct": 11,
+        "direct": 12,
         "carrierBridge": 0,
         "supportChain": 0
       }
@@ -15652,12 +15734,29 @@
       "weapon": "Sceptre",
       "offenseId": "companions",
       "offense": "Companions",
-      "classification": "GAP",
-      "baselineClassification": "GAP",
-      "directCandidates": [],
+      "classification": "DIRECT",
+      "baselineClassification": "DIRECT",
+      "directCandidates": [
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemTameBeast",
+          "name": "Tame Beast",
+          "proofType": "explicit",
+          "evidence": [
+            {
+              "relation": "creates",
+              "mechanic": "companion",
+              "confidence": "exact",
+              "proofType": "explicit",
+              "globalRule": null,
+              "damageEvidence": null,
+              "affinity": []
+            }
+          ]
+        }
+      ],
       "carrierCandidates": [],
       "counts": {
-        "direct": 0,
+        "direct": 1,
         "carrierBridge": 0,
         "supportChain": 0
       }
