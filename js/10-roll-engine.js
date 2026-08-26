@@ -7,6 +7,7 @@ import { renderPassiveRecommendations, rollRecommendedSkills } from './07-skills
 import { dataReady, ensureDataPreload } from './08-data-load.js';
 import { pickRecommendedAscendancyNodes, pickRecommendedKeystones, pickRecommendedNotables } from '../passivesEngine.js';
 import { getCoreBuildWeaponInventory, weaponMatchesCategory } from './weapon-categories.js';
+import { getCoreBuildOffenseInventory } from './offense-options.js';
 
 // ---------- ascendancy art ----------
 const ASC_CROSSFADE_MS = 1400;
@@ -834,8 +835,9 @@ function rollBuild(dataWrap){
 	}
 	// Tier 3: mechanics anchor (only when NO ascendancy oaths AND NO weapon oaths)
 	else if (ascOaths.size === 0 && wOaths.size === 0 && cOaths.size > 0) {
-	  const ail = (data.Ailments || []).filter(a => a && !cAboms.has(a.name));
-	  const tac = (data.Tactics || []).filter(t => t && !cAboms.has(t.name));
+	  const offenseInventory = getCoreBuildOffenseInventory(data);
+	  const ail = offenseInventory.ailments.filter(a => a && !cAboms.has(a.name));
+	  const tac = offenseInventory.tactics.filter(t => t && !cAboms.has(t.name));
 	  const oathMechRefs = [...ail, ...tac].filter(m => cOaths.has(m.name));
 	
 	  if (oathMechRefs.length) {
@@ -972,8 +974,9 @@ function rollBuild(dataWrap){
 
   const r = Math.random();
 
-  const allAil = data.Ailments || [];
-  const allTac = filterTacticsByStrictRules(data.Tactics || [], weapon, offhand);
+  const offenseInventory = getCoreBuildOffenseInventory(data);
+  const allAil = offenseInventory.ailments;
+  const allTac = filterTacticsByStrictRules(offenseInventory.tactics, weapon, offhand);
 
   const validAil = allAil.filter((a) => a && !cAboms.has(a.name));
   const validTac = allTac.filter((t) => t && !cAboms.has(t.name));

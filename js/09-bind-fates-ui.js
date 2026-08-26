@@ -3,6 +3,7 @@ import { sliderValueToThreshold, thresholdToSliderValue } from './06-cohesion.js
 import { ensureDataPreload } from './08-data-load.js';
 import { loadChallengeLibrary } from './15-challenge-engine.js';
 import { getBindFatesWeaponOptions } from './weapon-categories.js';
+import { getBindFatesOffenseOptions } from './offense-options.js';
 
 const BIND_FATES_STORAGE_KEY = 'randomancer_bind_fates_v1';
 const CHALLENGE_FATES_STORAGE_KEY = 'randomancer_challenge_fates_v1';
@@ -24,11 +25,7 @@ function buildStandardOptions(category, data) {
     return Array.from(ascSet).sort();
   }
   if (category === 'weapon') return getBindFatesWeaponOptions(data);
-  if (category === 'combat') {
-    const ail = (data.Ailments || []).map((a) => ({ name: a.name, kind: 'ailment' }));
-    const tac = (data.Tactics || []).map((t) => ({ name: t.name, kind: 'tactic' }));
-    return [...ail, ...tac];
-  }
+  if (category === 'combat') return getBindFatesOffenseOptions(data);
   return [];
 }
 
