@@ -7,6 +7,7 @@ import {
   validateRecommendationSkillCraftingV3,
   validateRecommendationCatalogV3
 } from './30-recommendation-v3-selector.js';
+import { mergeRecommendationUniqueSemanticsV3 } from './31-non-skill-recommendation-selector.js';
 
 // ---------- async data loader ----------
 async function loadJSON(path) {
@@ -69,6 +70,7 @@ async function loadData() {
     const recommendationSkillCraftingPromise = tryLoad('data/enriched/recommendation_skill_crafting_v3.json');
     const recommendationCriticalProfilesPromise = tryLoad('data/config/recommendation_critical_profiles_v3.json');
     const recommendationGrantedSkillAccessPromise = tryLoad('data/enriched/recommendation_granted_skill_access_v3.json');
+    const recommendationUniqueSemanticsPromise = tryLoad('data/enriched/recommendation_unique_semantics_v3.json');
     const flavorManifestPromise = tryLoad('randomancer_flavor_manifest.json');
     const core = await loadJSON('data/core-data.json');
 
@@ -157,6 +159,7 @@ async function loadData() {
     const recommendationSkillCraftingRaw = await recommendationSkillCraftingPromise;
     const recommendationCriticalProfilesRaw = await recommendationCriticalProfilesPromise;
     const recommendationGrantedSkillAccessRaw = await recommendationGrantedSkillAccessPromise;
+    const recommendationUniqueSemanticsRaw = await recommendationUniqueSemanticsPromise;
     const flavorManifest = await flavorManifestPromise;
     const recommendationSkillCraftingValidation = validateRecommendationSkillCraftingV3(recommendationSkillCraftingRaw);
     const recommendationCatalogWithCrafting = recommendationSkillCraftingValidation.ok
@@ -167,9 +170,10 @@ async function loadData() {
     const recommendationGrantedSkillAccessV3 = recommendationGrantedSkillAccessValidation.ok
       ? recommendationGrantedSkillAccessRaw
       : null;
-    const recommendationCatalogV3 = recommendationCatalogValidation.ok && recommendationSkillCraftingValidation.ok
+    const recommendationCatalogWithAccess = recommendationCatalogValidation.ok && recommendationSkillCraftingValidation.ok
       ? mergeRecommendationGrantedSkillAccessV3(recommendationCatalogWithCrafting, recommendationGrantedSkillAccessV3)
       : null;
+    const recommendationCatalogV3 = mergeRecommendationUniqueSemanticsV3(recommendationCatalogWithAccess, recommendationUniqueSemanticsRaw);
     if (!recommendationCatalogValidation.ok) {
       console.warn(`[Recommendation v3] Catalog unavailable: ${recommendationCatalogValidation.reason}`);
     }

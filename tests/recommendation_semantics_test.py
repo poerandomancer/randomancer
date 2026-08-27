@@ -50,6 +50,16 @@ class AilmentApplicationGrammarTests(unittest.TestCase):
                 "bleed", "poison", "shock", "freeze", "electrocute"
             } for f in facts), (text, facts))
 
+    def test_unique_modifier_add_gain_and_context_stay_distinct(self):
+        added = parse_evidence("unique_mod", "Adds 91 to 126 Fire Damage", "item")
+        gained = parse_evidence("unique_mod", "Gain 8% of Damage as Extra Fire Damage", "item")
+        context = parse_evidence("unique_mod", "Projectiles Pierce all Ignited enemies", "item")
+        self.assertTrue(any(f.get("relation") == "provides" and f.get("mechanic") == "fire" for f in added))
+        self.assertTrue(any(f.get("relation") == "provides" and f.get("mechanic") == "fire" for f in gained))
+        self.assertFalse(any(f.get("relation") == "converts" for f in added + gained))
+        self.assertTrue(any(f.get("relation") == "requires" and f.get("mechanic") == "ignite" for f in context))
+        self.assertFalse(any(f.get("relation") == "inflicts" for f in context))
+
     def test_structured_application_stats(self):
         for stat, mechanic in [
             ("global_bleed_on_hit", "bleed"),
@@ -112,7 +122,7 @@ class GeneratedComponentPromotionTests(unittest.TestCase):
         semantic = lambda catalog: [(entity["id"], [{k: v for k, v in fact.items() if k != "evidence"} for fact in entity.get("facts") or []]) for entity in catalog["entities"]]
         self.assertEqual(semantic(self.full), semantic(self.runtime))
         self.assertEqual(2964, len(self.runtime["entities"]))
-        self.assertEqual(5128, sum(len(entity.get("facts") or []) for entity in self.runtime["entities"]))
+        self.assertEqual(5278, sum(len(entity.get("facts") or []) for entity in self.runtime["entities"]))
         for entity in self.runtime["entities"]:
             for fact in entity.get("facts") or []:
                 self.assertTrue(all(set(proof) <= {"kind", "value"} for proof in fact["evidence"]))
@@ -123,6 +133,7 @@ class GeneratedComponentPromotionTests(unittest.TestCase):
         self.assertFalse(self.capability("Acidic Concoction", "poison"))
         self.assertTrue(self.capability("Poisonburst Arrow", "poison"))
         self.assertTrue(self.capability("Electrocuting Arrow", "electrocute"))
+        self.assertFalse(self.capability("Blackgleam", "ignite"))
 
 
 if __name__ == "__main__":

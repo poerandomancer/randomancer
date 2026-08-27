@@ -14,6 +14,7 @@ normalize-tags-audit:
 recommendation-data:
 	python data/helperScripts/generate_recommendation_catalog_v3.py
 	python data/helperScripts/validate_recommendation_catalog_v3.py
+	node data/helperScripts/generate_recommendation_unique_analysis_v3.mjs
 
 recommendation-data-check:
 	python data/helperScripts/validate_recommendation_catalog_v3.py
