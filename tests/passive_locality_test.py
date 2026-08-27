@@ -12,6 +12,11 @@ SPEC = importlib.util.spec_from_file_location(
 )
 MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
+CATALOG_SPEC = importlib.util.spec_from_file_location(
+    "generate_recommendation_catalog_v3", ROOT / "data/helperScripts/generate_recommendation_catalog_v3.py"
+)
+CATALOG_MODULE = importlib.util.module_from_spec(CATALOG_SPEC)
+CATALOG_SPEC.loader.exec_module(CATALOG_MODULE)
 
 
 class PassiveLocalityTest(unittest.TestCase):
@@ -63,6 +68,27 @@ class PassiveLocalityTest(unittest.TestCase):
             if node["type"] == "notable":
                 self.assertTrue(node.get("passiveTreeStarts") or node["id"] in reported, node["name"])
                 self.assertLessEqual(len(node.get("passiveTreeStarts", [])), 6)
+
+    def test_passive_fact_direction_rejects_defense_and_recovery_mentions(self):
+        from lib.recommendation_semantics import parse_evidence
+
+        def roles(stat_id):
+            return {
+                CATALOG_MODULE.passive_fact_offense_role(fact)
+                for fact in parse_evidence("stat_id", stat_id, "passive")
+            } - {None}
+
+        for offensive in (
+            "chaos_damage_+%", "enemies_chaos_resistance_%_while_cursed",
+            "chance_to_poison_on_hit", "poison_damage_+%",
+        ):
+            self.assertTrue(roles(offensive), offensive)
+        for non_offensive in (
+            "base_chaos_damage_resistance_%", "chaos_damage_taken_-%",
+            "recover_life_after_taking_chaos_damage", "poison_damage_taken_-%",
+            "bleeding_damage_taken_-%", "ignite_damage_taken_-%",
+        ):
+            self.assertFalse(roles(non_offensive), non_offensive)
 
 
 if __name__ == "__main__":

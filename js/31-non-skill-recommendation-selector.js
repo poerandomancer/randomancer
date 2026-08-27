@@ -22,6 +22,7 @@ const UNIQUE_TIER = new Map([['PAYOFF_CONTEXT', 1], ['AFFINITY_AMPLIFICATION', 2
   ['STRONG_SPECIALIZATION', 3], ['BUILD_DEFINING_CAPABILITY', 4]]);
 const GOOD_RELATIONS = new Set(['fulfills', 'inflicts', 'creates', 'provides', 'generates', 'consumes', 'converts', 'modifies', 'has_property']);
 const IMPACT = new Map([['fulfills', 8], ['inflicts', 8], ['creates', 8], ['provides', 7], ['generates', 7], ['consumes', 7], ['converts', 7], ['has_property', 5], ['modifies', 4]]);
+const PASSIVE_OFFENSE_ROLES = new Set(['primary_damage', 'setup_control', 'payoff', 'enabler']);
 
 const arr = (value) => Array.isArray(value) ? value : [];
 const token = (value) => String(value || '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
@@ -94,15 +95,23 @@ function analyze(entity, snapshot, context) {
     const owner = token(entity?.compatibility?.access?.ascendancy || arr(entity?.facts).find((fact) => fact.relation === 'exclusive_to')?.evidence?.[0]?.value);
     if (!owner || owner !== token(snapshot?.ascendancyName || snapshot?.ascendancy)) return null;
   }
+  if (entity.content_type === 'passive') {
+    const classStart = token(snapshot?.passiveTreeStart);
+    const starts = arr(entity?.passive_tree_starts).map(token).filter(Boolean);
+    if (!classStart || !starts.length) return null;
+    if (!starts.includes(classStart)) return null;
+  }
   const essentials = new Set([...context.offense, ...context.package]);
   if (contradicts(entity, essentials)) return null;
 
   const matches = [];
   for (const fact of arr(entity.facts)) {
+    if (entity.content_type === 'passive' && !PASSIVE_OFFENSE_ROLES.has(token(fact?.offense_role))) continue;
     const mechanic = token(fact?.relation === 'converts' ? fact.to : fact?.mechanic);
     if (!mechanic || GENERIC.has(mechanic) || !GOOD_RELATIONS.has(fact?.relation)) continue;
     const kind = context.offense.has(mechanic) ? 'offense' : context.package.has(mechanic) ? 'skill_support' : '';
-    if (kind) matches.push({ kind, mechanic, relation: fact.relation, weight: IMPACT.get(fact.relation) || 0 });
+    if (kind) matches.push({ kind, mechanic, relation: fact.relation,
+      weight: entity.content_type === 'passive' ? Math.max(5, IMPACT.get(fact.relation) || 0) : (IMPACT.get(fact.relation) || 0) });
   }
   if (!matches.length) return null;
   const distinct = uniq(matches.map((match) => `${match.kind}:${match.mechanic}`));
