@@ -407,7 +407,8 @@ test('build card renders skill, unique, ascendancy, and notable tooltip content'
     DATA: {
       gems: [
         { id: 'skill-id', name: 'Ice Skill', description: '[Cold|Cold] skill text' },
-        { id: 'support-id', name: 'Deep Freeze', description: 'Support-only detail' }
+        { id: 'support-id', name: 'Deep Freeze', description: 'Support-only detail' },
+        { id: 'support-id-2', name: 'Cold Reach', description: 'Second support detail' }
       ],
       passivesEnriched: { nodes: [
         { name: 'Cold Ascendancy', lines: ['Asc effect'] },
@@ -422,7 +423,10 @@ test('build card renders skill, unique, ascendancy, and notable tooltip content'
     ascendancy: 'Invoker', weaponFamily: 'Bow', offenseList: ['Freeze'], attributes: {},
     recommendedSkills: [{
       id: 'skill-id', name: 'Ice Skill',
-      recommendationPackage: { assignedRole: 'primary_damage', supports: [{ id: 'support-id', name: 'Deep Freeze' }] }
+      recommendationPackage: { assignedRole: 'primary_damage', supports: [
+        { id: 'support-id', name: 'Deep Freeze' },
+        { id: 'support-id-2', name: 'Cold Reach' }
+      ] }
     }],
     recommendedUniques: [{ id: 'cold-bow', name: 'Cold Bow', recommendationEvidence: {} }],
     passives: {
@@ -436,6 +440,8 @@ test('build card renders skill, unique, ascendancy, and notable tooltip content'
   assert.doesNotMatch(html, /(?:Primary|Notable) —/);
   assert.match(html, /rc-skill-group__skill[\s\S]*Ice Skill[\s\S]*rc-skill-group__supports[\s\S]*Deep Freeze/);
   assert.match(html, /rc-skill-group__support[\s\S]*Deep Freeze/);
+  assert.match(html, /rc-skill-group__support">[\s\S]*Deep Freeze[\s\S]*<\/span><span class="rc-skill-group__support">[\s\S]*Cold Reach/);
+  assert.doesNotMatch(html, /Deep Freeze[\s\S]*rc-sep[\s\S]*Cold Reach/);
   assert.match(html, /data-tip-title="Deep Freeze" data-tip-lines="\[&quot;Support-only detail&quot;\]"/);
   assert.doesNotMatch(html, /data-tip-title="Ice Skill"[^>]*Support-only detail/);
   assert.match(html, /Ice Skill[\s\S]*tabindex="0"|tabindex="0"[\s\S]*Ice Skill/);
@@ -444,10 +450,13 @@ test('build card renders skill, unique, ascendancy, and notable tooltip content'
   }
 });
 
-test('build card skill groups center skills and wrap columns and supports', () => {
+test('build card centers and atomically wraps skill groups with branched support lines', () => {
   const css = fs.readFileSync(new URL('../css/85-build-card-foundation.css', import.meta.url), 'utf8');
-  assert.match(css, /\.rc-skill-groups\s*\{[^}]*display:grid;[^}]*grid-template-columns:repeat\(auto-fit,/s);
-  assert.match(css, /\.rc-skill-group\s*\{[^}]*width:fit-content;[^}]*justify-self:center;/s);
+  assert.match(css, /\.rc-skill-groups\s*\{[^}]*display:flex;[^}]*flex-wrap:wrap;[^}]*justify-content:center;/s);
+  assert.match(css, /\.rc-skill-group\s*\{[^}]*flex:1 1 11rem;[^}]*max-width:16rem;/s);
   assert.match(css, /\.rc-skill-group__skill\s*\{[^}]*text-align:center;/s);
-  assert.match(css, /\.rc-skill-group__supports\s*\{[^}]*display:flex;[^}]*flex-wrap:wrap;[^}]*width:fit-content;[^}]*margin:\.18rem auto 0;/s);
+  assert.match(css, /\.rc-skill-group__skill::after\s*\{[^}]*left:50%;[^}]*border-left:/s);
+  assert.match(css, /\.rc-skill-group__supports::before\s*\{[^}]*border-top:[^}]*border-left:/s);
+  assert.match(css, /\.rc-skill-group__support\s*\{[^}]*display:block;/s);
+  assert.match(css, /\.rc-skill-group__support::before\s*\{[^}]*border-top:/s);
 });
