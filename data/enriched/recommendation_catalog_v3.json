@@ -51336,6 +51336,16 @@
       "compatibility": {
         "access": {
           "ascendancy": "Infernalist"
+        },
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
         }
       },
       "passive_tree_starts": [
@@ -51893,6 +51903,16 @@
       "compatibility": {
         "access": {
           "ascendancy": "Blood Mage"
+        },
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
         }
       },
       "passive_tree_starts": [
@@ -51980,6 +52000,16 @@
       "compatibility": {
         "access": {
           "ascendancy": "Lich"
+        },
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
         }
       },
       "passive_tree_starts": [
@@ -52209,6 +52239,16 @@
       "compatibility": {
         "access": {
           "ascendancy": "Lich"
+        },
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
         }
       },
       "passive_tree_starts": [
@@ -52471,6 +52511,16 @@
       "compatibility": {
         "access": {
           "ascendancy": "Lich"
+        },
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
         }
       },
       "passive_tree_starts": [
@@ -52939,6 +52989,16 @@
       "compatibility": {
         "access": {
           "ascendancy": "Infernalist"
+        },
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
         }
       },
       "passive_tree_starts": [
@@ -53510,6 +53570,16 @@
       "compatibility": {
         "access": {
           "ascendancy": "Disciple of Varashta"
+        },
+        "passive_weapon": {
+          "requirements_any_of": [
+            "staff"
+          ],
+          "compatible_weapon_family_ids": [
+            "staff"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
         }
       },
       "passive_tree_starts": [
@@ -53834,6 +53904,16 @@
       "compatibility": {
         "access": {
           "ascendancy": "Invoker"
+        },
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
         }
       },
       "passive_tree_starts": [
@@ -53996,6 +54076,16 @@
       "compatibility": {
         "access": {
           "ascendancy": "Martial Artist"
+        },
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
         }
       },
       "passive_tree_starts": [
@@ -54849,6 +54939,16 @@
       "compatibility": {
         "access": {
           "ascendancy": "Infernalist"
+        },
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
         }
       },
       "passive_tree_starts": [
@@ -54988,6 +55088,16 @@
       "compatibility": {
         "access": {
           "ascendancy": "Warbringer"
+        },
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
         }
       },
       "passive_tree_starts": [
@@ -55292,6 +55402,16 @@
       "compatibility": {
         "access": {
           "ascendancy": "Disciple of Varashta"
+        },
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
         }
       },
       "passive_tree_starts": [
@@ -55638,6 +55758,16 @@
       "compatibility": {
         "access": {
           "ascendancy": "Lich"
+        },
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
         }
       },
       "passive_tree_starts": [
@@ -56348,6 +56478,16 @@
       "compatibility": {
         "access": {
           "ascendancy": "Disciple of Varashta"
+        },
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
         }
       },
       "passive_tree_starts": [
@@ -56894,6 +57034,16 @@
       "compatibility": {
         "access": {
           "ascendancy": "Disciple of Varashta"
+        },
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
         }
       },
       "passive_tree_starts": [
@@ -57514,7 +57664,17 @@
       "source_id": "passive_keystone_ignore_shapeshift_restrictions",
       "name": "Chimeral Blood",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "talisman"
+          ],
+          "compatible_weapon_family_ids": [
+            "talisman"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": []
     },
@@ -57544,7 +57704,23 @@
       "source_id": "passive_keystone_dance_with_death",
       "name": "Dance with Death",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "martial"
+          ],
+          "compatible_weapon_family_ids": [
+            "bow",
+            "crossbow",
+            "one_handed_mace",
+            "quarterstaff",
+            "spear",
+            "talisman",
+            "two_handed_mace"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": []
     },
@@ -57554,7 +57730,17 @@
       "source_id": "passive_keystone_eldritch_battery__",
       "name": "Eldritch Battery",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": []
     },
@@ -57574,7 +57760,17 @@
       "source_id": "passive_keystone_eternal_youth",
       "name": "Eternal Youth",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": [
         {
@@ -57598,7 +57794,18 @@
       "source_id": "passive_keystone_giants_blood",
       "name": "Giant's Blood",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "axe",
+            "mace",
+            "martial",
+            "sword"
+          ],
+          "compatible_weapon_family_ids": [],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": []
     },
@@ -57648,7 +57855,19 @@
       "source_id": "passive_keystone_lord_of_the_wilds",
       "name": "Lord of the Wilds",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "sceptre",
+            "talisman"
+          ],
+          "compatible_weapon_family_ids": [
+            "sceptre",
+            "talisman"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": []
     },
@@ -57658,7 +57877,17 @@
       "source_id": "passive_keystone_mind_over_matter",
       "name": "Mind Over Matter",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": [
         {
@@ -57760,7 +57989,17 @@
       "source_id": "passive_keystone_alternate_es_recovery",
       "name": "Scarred Faith",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": [
         {
@@ -57862,7 +58101,17 @@
       "source_id": "passive_keystone_zealots_oath",
       "name": "Zealot's Oath",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": [
         {
@@ -57891,7 +58140,17 @@
       "source_id": "stun_threshold_from_energy_shield19_",
       "name": "Abasement",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -58053,12 +58312,6 @@
           "mechanic": "shock",
           "offense_role": "enabler"
         }
-      ],
-      "overridden_for_class_ids": [
-        1
-      ],
-      "overridden_for_classes": [
-        "Witch"
       ]
     },
     {
@@ -58499,7 +58752,17 @@
       "source_id": "energy_shield_and_armour11",
       "name": "Ancient Aegis",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -58709,7 +58972,17 @@
       "source_id": "cold17",
       "name": "Archon of the Blizzard",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex_int",
@@ -58864,7 +59137,17 @@
       "source_id": "stun_threshold_from_energy_shield10",
       "name": "Asceticism",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -58956,14 +59239,12 @@
           "override_of": "flasks24"
         }
       },
-      "facts": [],
-      "class_override": {
-        "characterId": 8,
-        "className": "Huntress",
-        "overrideOf": "flasks24",
-        "physicalPassiveSkillGraphId": 44527,
-        "localityResolved": true
-      }
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "facts": []
     },
     {
       "id": "passive:DeliriumAnoint_AugmentedFlesh",
@@ -58981,7 +59262,17 @@
       "source_id": "stun_threshold_from_energy_shield9",
       "name": "Austerity Measures",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": [
         {
@@ -59046,7 +59337,15 @@
       "source_id": "dagger18",
       "name": "Backstabbing",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "dagger"
+          ],
+          "compatible_weapon_family_ids": [],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -59119,7 +59418,15 @@
       "source_id": "flail5",
       "name": "Ball and Chain",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "flail"
+          ],
+          "compatible_weapon_family_ids": [],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -59167,7 +59474,17 @@
       "source_id": "energy_shield_and_armour13",
       "name": "Barrier of Venarius",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -59218,7 +59535,17 @@
       "source_id": "DeliriumAnoint_BastionOfLight",
       "name": "Bastion of Light",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": []
     },
@@ -59232,8 +59559,23 @@
           "passive_tree_character_id": 11,
           "class_name": "Druid",
           "override_of": "templar_druid_notable2"
+        },
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
         }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
       "facts": [
         {
           "relation": "modifies",
@@ -59277,14 +59619,7 @@
           "mechanic": "physical",
           "offense_role": "enabler"
         }
-      ],
-      "class_override": {
-        "characterId": 11,
-        "className": "Druid",
-        "overrideOf": "templar_druid_notable2",
-        "physicalPassiveSkillGraphId": 28950,
-        "localityResolved": true
-      }
+      ]
     },
     {
       "id": "passive:physical37",
@@ -59443,7 +59778,17 @@
       "source_id": "energy_shield_and_armour49_",
       "name": "Bhatair's Storm",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -59936,13 +60281,7 @@
         "str",
         "str_int"
       ],
-      "facts": [],
-      "overridden_for_class_ids": [
-        11
-      ],
-      "overridden_for_classes": [
-        "Druid"
-      ]
+      "facts": []
     },
     {
       "id": "passive:warcries24",
@@ -60165,7 +60504,15 @@
       "source_id": "mace7",
       "name": "Bone Breaker",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "mace"
+          ],
+          "compatible_weapon_family_ids": [],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": []
     },
@@ -60779,7 +61126,17 @@
       "source_id": "energy_shield30",
       "name": "Calibration",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": [
         {
@@ -60832,7 +61189,17 @@
       "source_id": "companions4",
       "name": "Captivating Companionship",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -61077,13 +61444,7 @@
         "dex_int",
         "str_dex"
       ],
-      "facts": [],
-      "overridden_for_class_ids": [
-        8
-      ],
-      "overridden_for_classes": [
-        "Huntress"
-      ]
+      "facts": []
     },
     {
       "id": "passive:AbyssJewelHistoricOverrideNotable_T_T_19",
@@ -61115,7 +61476,17 @@
       "source_id": "unarmed12",
       "name": "Chakra of Breathing",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": [
         {
@@ -61440,7 +61811,17 @@
       "source_id": "energy_shield_and_armour56_",
       "name": "Cirel of Tarth's Light",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": [
         {
@@ -61499,13 +61880,7 @@
         "dex_int",
         "str_dex"
       ],
-      "facts": [],
-      "overridden_for_class_ids": [
-        8
-      ],
-      "overridden_for_classes": [
-        "Huntress"
-      ]
+      "facts": []
     },
     {
       "id": "passive:knockback20_",
@@ -61645,7 +62020,23 @@
       "source_id": "one_handed26",
       "name": "Coated Arms",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "one_handed"
+          ],
+          "compatible_weapon_family_ids": [
+            "buckler",
+            "focus",
+            "one_handed_mace",
+            "sceptre",
+            "shield",
+            "spear",
+            "wand"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": []
     },
@@ -61655,7 +62046,15 @@
       "source_id": "dagger17",
       "name": "Coated Knife",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "dagger"
+          ],
+          "compatible_weapon_family_ids": [],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -61890,7 +62289,17 @@
       "source_id": "energy_shield_and_armour40",
       "name": "Conall the Hunted",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -62104,7 +62513,17 @@
       "source_id": "energy_shield_recovery22",
       "name": "Convalescence",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex_int",
@@ -62132,7 +62551,17 @@
       "source_id": "criticals49",
       "name": "Cooked",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -62172,7 +62601,17 @@
       "source_id": "shield14_",
       "name": "Core of the Guardian",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -62267,7 +62706,17 @@
       "source_id": "energy_shield_recovery15",
       "name": "Covering Ward",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": [
         {
@@ -62606,12 +63055,6 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
-      ],
-      "overridden_for_class_ids": [
-        11
-      ],
-      "overridden_for_classes": [
-        "Druid"
       ]
     },
     {
@@ -62833,7 +63276,17 @@
       "source_id": "energy_shield37",
       "name": "Dampening Shield",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex_int",
@@ -62906,7 +63359,17 @@
       "source_id": "shield34",
       "name": "Dazing Blocks",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "str",
@@ -63068,12 +63531,6 @@
           "mechanic": "minion",
           "offense_role": "enabler"
         }
-      ],
-      "overridden_for_class_ids": [
-        11
-      ],
-      "overridden_for_classes": [
-        "Druid"
       ]
     },
     {
@@ -63397,7 +63854,17 @@
       "source_id": "energy_shield_recovery18",
       "name": "Dependable Ward",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex_int",
@@ -63621,6 +64088,16 @@
           "overridden_for_classes": [
             "Druid"
           ]
+        },
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
         }
       },
       "passive_tree_starts": [
@@ -63671,12 +64148,6 @@
           "mechanic": "physical",
           "offense_role": "enabler"
         }
-      ],
-      "overridden_for_class_ids": [
-        11
-      ],
-      "overridden_for_classes": [
-        "Druid"
       ]
     },
     {
@@ -63750,7 +64221,17 @@
       "source_id": "caster_staff8",
       "name": "Directed Forces",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "staff"
+          ],
+          "compatible_weapon_family_ids": [
+            "staff"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": [
         {
@@ -63936,7 +64417,17 @@
       "source_id": "energy_shield_and_armour48",
       "name": "Dominus' Providence",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -64036,7 +64527,17 @@
       "source_id": "focus10",
       "name": "Dreamcatcher",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": [
         {
@@ -64115,13 +64616,7 @@
         "dex_int",
         "str_dex"
       ],
-      "facts": [],
-      "overridden_for_class_ids": [
-        8
-      ],
-      "overridden_for_classes": [
-        "Huntress"
-      ]
+      "facts": []
     },
     {
       "id": "passive:companions1_",
@@ -64398,7 +64893,17 @@
       "source_id": "crossbow26",
       "name": "Efficient Loading",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "crossbow"
+          ],
+          "compatible_weapon_family_ids": [
+            "crossbow"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -64413,7 +64918,17 @@
       "source_id": "stun_threshold_from_energy_shield22",
       "name": "Eldritch Will",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex_int",
@@ -64660,13 +65175,7 @@
         "int",
         "str_int"
       ],
-      "facts": [],
-      "overridden_for_class_ids": [
-        1
-      ],
-      "overridden_for_classes": [
-        "Witch"
-      ]
+      "facts": []
     },
     {
       "id": "passive:maximum_resistances13",
@@ -65149,7 +65658,17 @@
       "source_id": "archon14",
       "name": "Energising Archon",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex_int",
@@ -65172,7 +65691,17 @@
       "source_id": "deflect46",
       "name": "Energising Deflection",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": [
         {
@@ -65217,7 +65746,17 @@
       "source_id": "energy_shield36",
       "name": "Enhanced Barrier",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex_int",
@@ -65284,7 +65823,15 @@
       "source_id": "axe14",
       "name": "Enraged Reaver",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "axe"
+          ],
+          "compatible_weapon_family_ids": [],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "str",
@@ -65348,6 +65895,11 @@
           "override_of": "lightning34"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
       "facts": [
         {
           "relation": "modifies",
@@ -65356,14 +65908,7 @@
           "mechanic": "chaos",
           "offense_role": "enabler"
         }
-      ],
-      "class_override": {
-        "characterId": 1,
-        "className": "Witch",
-        "overrideOf": "lightning34",
-        "physicalPassiveSkillGraphId": 64046,
-        "localityResolved": true
-      }
+      ]
     },
     {
       "id": "passive:auras17",
@@ -65563,7 +66108,17 @@
       "source_id": "energy_shield_recovery16",
       "name": "Essence Infusion",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex_int",
@@ -65682,7 +66237,17 @@
       "source_id": "chaos33_",
       "name": "Event Horizon",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -66167,7 +66732,17 @@
       "source_id": "curses14",
       "name": "Fated End",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -66283,7 +66858,17 @@
       "source_id": "bow13",
       "name": "Feathered Fletching",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "bow"
+          ],
+          "compatible_weapon_family_ids": [
+            "bow"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": []
     },
@@ -66524,7 +67109,17 @@
       "source_id": "evasion_and_energy_shield31",
       "name": "First Principle of the Hollow",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": [
         {
@@ -66615,7 +67210,15 @@
       "source_id": "dagger2",
       "name": "First Strike",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "dagger"
+          ],
+          "compatible_weapon_family_ids": [],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": []
     },
@@ -66625,7 +67228,17 @@
       "source_id": "evasion_and_energy_shield28",
       "name": "First Teachings of the Keeper",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": [
         {
@@ -66880,7 +67493,17 @@
       "source_id": "minion_defence22_",
       "name": "Fleshcrafting",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -67090,7 +67713,17 @@
       "source_id": "spear9",
       "name": "Focused Thrust",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "spear"
+          ],
+          "compatible_weapon_family_ids": [
+            "spear"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -67214,7 +67847,17 @@
       "source_id": "energy_shield_and_armour12",
       "name": "Fortified Aegis",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -67605,7 +68248,17 @@
       "source_id": "crossbow18",
       "name": "Full Salvo",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "crossbow"
+          ],
+          "compatible_weapon_family_ids": [
+            "crossbow"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -67948,7 +68601,17 @@
       "source_id": "shield9",
       "name": "Greatest Defence",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": [
         {
@@ -68104,14 +68767,12 @@
           "override_of": "templar_druid_notable1"
         }
       },
-      "facts": [],
-      "class_override": {
-        "characterId": 11,
-        "className": "Druid",
-        "overrideOf": "templar_druid_notable1",
-        "physicalPassiveSkillGraphId": 6898,
-        "localityResolved": true
-      }
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "facts": []
     },
     {
       "id": "passive:melee65",
@@ -68274,7 +68935,17 @@
       "source_id": "stun_threshold_from_energy_shield12",
       "name": "Hallowed",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex_int",
@@ -68303,6 +68974,11 @@
           "override_of": "auras18"
         }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
       "facts": [
         {
           "relation": "modifies",
@@ -68310,14 +68986,7 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
-      ],
-      "class_override": {
-        "characterId": 11,
-        "className": "Druid",
-        "overrideOf": "auras18",
-        "physicalPassiveSkillGraphId": 64299,
-        "localityResolved": true
-      }
+      ]
     },
     {
       "id": "passive:life_regeneration17_",
@@ -68684,7 +69353,15 @@
       "source_id": "sword6",
       "name": "Heavy Blade",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "sword"
+          ],
+          "compatible_weapon_family_ids": [],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -68699,7 +69376,17 @@
       "source_id": "energy_shield38",
       "name": "Heavy Buffer",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex_int",
@@ -68857,6 +69544,16 @@
       "compatibility": {
         "access": {
           "ascendancy": "Oracle"
+        },
+        "passive_weapon": {
+          "requirements_any_of": [
+            "bow"
+          ],
+          "compatible_weapon_family_ids": [
+            "bow"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
         }
       },
       "passive_tree_starts": [
@@ -69075,13 +69772,7 @@
         "dex_int",
         "str_dex"
       ],
-      "facts": [],
-      "overridden_for_class_ids": [
-        8
-      ],
-      "overridden_for_classes": [
-        "Huntress"
-      ]
+      "facts": []
     },
     {
       "id": "passive:melee51_",
@@ -69273,7 +69964,17 @@
       "source_id": "freeze_and_chill_mitigation12",
       "name": "Icebreaker",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -69341,7 +70042,17 @@
       "source_id": "energy_shield39",
       "name": "Illuminated Crown",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex_int",
@@ -69378,7 +70089,17 @@
       "source_id": "evasion_and_energy_shield14",
       "name": "Immaterial",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -69485,7 +70206,17 @@
       "source_id": "mana_leech20",
       "name": "Immortal Thirst",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -69551,7 +70282,23 @@
       "source_id": "one_handed20",
       "name": "Impair",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "one_handed"
+          ],
+          "compatible_weapon_family_ids": [
+            "buckler",
+            "focus",
+            "one_handed_mace",
+            "sceptre",
+            "shield",
+            "spear",
+            "wand"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "str",
@@ -69598,7 +70345,17 @@
       "source_id": "caster_staff4",
       "name": "Implement of the Weaver",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "staff"
+          ],
+          "compatible_weapon_family_ids": [
+            "staff"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": []
     },
@@ -69900,7 +70657,17 @@
       "source_id": "evasion_and_energy_shield12_",
       "name": "Inner Faith",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -69939,7 +70706,17 @@
       "source_id": "energy_shield34_",
       "name": "Insightfulness",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex_int",
@@ -70067,7 +70844,17 @@
       "source_id": "shapeshifting37",
       "name": "Insulating Hide",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -70325,7 +71112,17 @@
       "source_id": "energy_shield_and_armour29_",
       "name": "Iron Slippers",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -70389,6 +71186,11 @@
           "override_of": "fire32"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
       "facts": [
         {
           "relation": "modifies",
@@ -70403,14 +71205,7 @@
           "mechanic": "physical",
           "offense_role": "enabler"
         }
-      ],
-      "class_override": {
-        "characterId": 1,
-        "className": "Witch",
-        "overrideOf": "fire32",
-        "physicalPassiveSkillGraphId": 51335,
-        "localityResolved": true
-      }
+      ]
     },
     {
       "id": "passive:spear4",
@@ -70418,7 +71213,17 @@
       "source_id": "spear4",
       "name": "Javelin",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "spear"
+          ],
+          "compatible_weapon_family_ids": [
+            "spear"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -71441,7 +72246,17 @@
       "source_id": "energy_shield_and_armour36",
       "name": "Lysanda of Myr",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": [
         {
@@ -71630,7 +72445,17 @@
       "source_id": "quarterstaff18",
       "name": "Martial Artistry",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "quarterstaff"
+          ],
+          "compatible_weapon_family_ids": [
+            "quarterstaff"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -71679,7 +72504,19 @@
       "source_id": "bow10",
       "name": "Master Fletcher",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "bow",
+            "crossbow"
+          ],
+          "compatible_weapon_family_ids": [
+            "bow",
+            "crossbow"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": []
     },
@@ -71800,7 +72637,17 @@
       "source_id": "energy_shield35",
       "name": "Melding",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex_int",
@@ -71852,7 +72699,17 @@
       "source_id": "deflect66",
       "name": "Mending Deflection",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": [
         {
@@ -72011,7 +72868,17 @@
       "source_id": "evasion_and_energy_shield35_",
       "name": "Mindful Awareness",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": [
         {
@@ -72065,6 +72932,11 @@
           "override_of": "energy_shield_recovery29"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
       "facts": [
         {
           "relation": "modifies",
@@ -72072,14 +72944,7 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
-      ],
-      "class_override": {
-        "characterId": 1,
-        "className": "Witch",
-        "overrideOf": "energy_shield_recovery29",
-        "physicalPassiveSkillGraphId": 22691,
-        "localityResolved": true
-      }
+      ]
     },
     {
       "id": "passive:ignite_mitigation8",
@@ -72246,7 +73111,17 @@
       "source_id": "energy_shield_and_armour24",
       "name": "Morgana, the Storm Seer",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -72310,7 +73185,15 @@
       "source_id": "flail11",
       "name": "Morning Star",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "flail"
+          ],
+          "compatible_weapon_family_ids": [],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -72410,7 +73293,17 @@
       "source_id": "energy_shield_recovery12",
       "name": "Mystic Stance",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -72451,8 +73344,23 @@
           "passive_tree_character_id": 11,
           "class_name": "Druid",
           "override_of": "minion_offence13"
+        },
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
         }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
       "facts": [
         {
           "relation": "modifies",
@@ -72468,14 +73376,7 @@
           "mechanic": "physical",
           "offense_role": "enabler"
         }
-      ],
-      "class_override": {
-        "characterId": 11,
-        "className": "Druid",
-        "overrideOf": "minion_offence13",
-        "physicalPassiveSkillGraphId": 5777,
-        "localityResolved": true
-      }
+      ]
     },
     {
       "id": "passive:spell_suppression14",
@@ -72821,7 +73722,19 @@
       "source_id": "quarterstaff4",
       "name": "One with the River",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "quarterstaff",
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "quarterstaff",
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -72865,7 +73778,17 @@
       "source_id": "quarterstaff14",
       "name": "One with the Storm",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "quarterstaff"
+          ],
+          "compatible_weapon_family_ids": [
+            "quarterstaff"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -73030,7 +73953,22 @@
       "source_id": "two_handed18",
       "name": "Overwhelm",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "two_handed"
+          ],
+          "compatible_weapon_family_ids": [
+            "bow",
+            "crossbow",
+            "quarterstaff",
+            "staff",
+            "talisman",
+            "two_handed_mace"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -73176,7 +74114,17 @@
       "source_id": "energy_shield33_",
       "name": "Patient Barrier",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": [
         {
@@ -73592,7 +74540,17 @@
       "source_id": "crossbow8_",
       "name": "Power Shots",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "crossbow"
+          ],
+          "compatible_weapon_family_ids": [
+            "crossbow"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -73620,6 +74578,11 @@
           "override_of": "cold34"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
       "facts": [
         {
           "relation": "modifies",
@@ -73628,14 +74591,7 @@
           "mechanic": "minion",
           "offense_role": "enabler"
         }
-      ],
-      "class_override": {
-        "characterId": 1,
-        "className": "Witch",
-        "overrideOf": "cold34",
-        "physicalPassiveSkillGraphId": 3823,
-        "localityResolved": true
-      }
+      ]
     },
     {
       "id": "passive:oracle_energy_gain3",
@@ -73717,7 +74673,17 @@
       "source_id": "spear13",
       "name": "Precise Point",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "spear"
+          ],
+          "compatible_weapon_family_ids": [
+            "spear"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -73875,14 +74841,12 @@
           "override_of": "ranger_huntress_notable2"
         }
       },
-      "facts": [],
-      "class_override": {
-        "characterId": 8,
-        "className": "Huntress",
-        "overrideOf": "ranger_huntress_notable2",
-        "physicalPassiveSkillGraphId": 28992,
-        "localityResolved": true
-      }
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "facts": []
     },
     {
       "id": "passive:charms3",
@@ -73922,6 +74886,11 @@
           "override_of": "criticals25_"
         }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
       "facts": [
         {
           "relation": "modifies",
@@ -73930,14 +74899,7 @@
           "mechanic": "critical_hits",
           "condition": "shapeshifted"
         }
-      ],
-      "class_override": {
-        "characterId": 11,
-        "className": "Druid",
-        "overrideOf": "criticals25_",
-        "physicalPassiveSkillGraphId": 18465,
-        "localityResolved": true
-      }
+      ]
     },
     {
       "id": "passive:elemental56",
@@ -73996,13 +74958,7 @@
         "int",
         "str_int"
       ],
-      "facts": [],
-      "overridden_for_class_ids": [
-        1
-      ],
-      "overridden_for_classes": [
-        "Witch"
-      ]
+      "facts": []
     },
     {
       "id": "passive:maximum_resistances21",
@@ -74265,7 +75221,17 @@
       "source_id": "witch_sorceress_notable2",
       "name": "Pure Energy",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex_int",
@@ -74359,7 +75325,17 @@
       "source_id": "bow23",
       "name": "Quick Fingers",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "bow"
+          ],
+          "compatible_weapon_family_ids": [
+            "bow"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": [
         {
@@ -74455,6 +75431,16 @@
           "overridden_for_classes": [
             "Witch"
           ]
+        },
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
         }
       },
       "passive_tree_starts": [
@@ -74475,12 +75461,6 @@
           "confidence": "strong",
           "mechanic": "energy_shield_recharge"
         }
-      ],
-      "overridden_for_class_ids": [
-        1
-      ],
-      "overridden_for_classes": [
-        "Witch"
       ]
     },
     {
@@ -74537,7 +75517,15 @@
       "source_id": "flail15",
       "name": "Rattling Ball",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "flail"
+          ],
+          "compatible_weapon_family_ids": [],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -74581,13 +75569,7 @@
         "int",
         "str_int"
       ],
-      "facts": [],
-      "overridden_for_class_ids": [
-        1
-      ],
-      "overridden_for_classes": [
-        "Witch"
-      ]
+      "facts": []
     },
     {
       "id": "passive:melee38",
@@ -74682,6 +75664,11 @@
           "override_of": "accuracy18"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
       "facts": [
         {
           "relation": "modifies",
@@ -74690,14 +75677,7 @@
           "mechanic": "evasion",
           "offense_role": "enabler"
         }
-      ],
-      "class_override": {
-        "characterId": 8,
-        "className": "Huntress",
-        "overrideOf": "accuracy18",
-        "physicalPassiveSkillGraphId": 19104,
-        "localityResolved": true
-      }
+      ]
     },
     {
       "id": "passive:energy_shield_recovery17",
@@ -74734,7 +75714,17 @@
       "source_id": "minion_defence47",
       "name": "Reformed Barrier",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": [
         {
@@ -74889,12 +75879,6 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
-      ],
-      "overridden_for_class_ids": [
-        11
-      ],
-      "overridden_for_classes": [
-        "Druid"
       ]
     },
     {
@@ -75078,7 +76062,17 @@
       "source_id": "stun_threshold9",
       "name": "Resolution",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -75112,7 +76106,17 @@
       "source_id": "quarterstaff5_",
       "name": "Resonating Impact",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "quarterstaff"
+          ],
+          "compatible_weapon_family_ids": [
+            "quarterstaff"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": []
     },
@@ -75199,7 +76203,17 @@
       "source_id": "crossbow14",
       "name": "Reusable Ammunition",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "crossbow"
+          ],
+          "compatible_weapon_family_ids": [
+            "crossbow"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -75403,7 +76417,15 @@
       "source_id": "sword14",
       "name": "Ripping Blade",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "sword"
+          ],
+          "compatible_weapon_family_ids": [],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -75448,7 +76470,17 @@
       "source_id": "spear18",
       "name": "Roll and Strike",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "spear"
+          ],
+          "compatible_weapon_family_ids": [
+            "spear"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -75513,7 +76545,17 @@
       "source_id": "energy_shield_and_armour35",
       "name": "Ruinic Helm",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex_int",
@@ -75908,7 +76950,17 @@
       "source_id": "wyvern4",
       "name": "Scales of the Wyvern",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -76056,7 +77108,17 @@
       "source_id": "stun_threshold_from_energy_shield11",
       "name": "Self Mortification",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -76127,7 +77189,17 @@
       "source_id": "evasion_and_energy_shield13",
       "name": "Shadow Dancing",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -76330,6 +77402,16 @@
       "compatibility": {
         "access": {
           "ascendancy": "Oracle"
+        },
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
         }
       },
       "passive_tree_starts": [
@@ -76397,7 +77479,17 @@
       "source_id": "evasion_and_energy_shield15",
       "name": "Shimmering",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -76439,7 +77531,17 @@
       "source_id": "stun_threshold_from_energy_shield21",
       "name": "Shimmering Mirage",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -76522,7 +77624,22 @@
       "source_id": "two_handed16",
       "name": "Shockwaves",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "two_handed"
+          ],
+          "compatible_weapon_family_ids": [
+            "bow",
+            "crossbow",
+            "quarterstaff",
+            "staff",
+            "talisman",
+            "two_handed_mace"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "str",
@@ -76746,7 +77863,15 @@
       "source_id": "dagger13",
       "name": "Silent Shiv",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "dagger"
+          ],
+          "compatible_weapon_family_ids": [],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -76768,7 +77893,22 @@
       "source_id": "two_handed8",
       "name": "Singular Purpose",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "two_handed"
+          ],
+          "compatible_weapon_family_ids": [
+            "bow",
+            "crossbow",
+            "quarterstaff",
+            "staff",
+            "talisman",
+            "two_handed_mace"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "str",
@@ -76852,7 +77992,15 @@
       "source_id": "mace6_",
       "name": "Skullcrusher",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "mace"
+          ],
+          "compatible_weapon_family_ids": [],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "str",
@@ -77013,7 +78161,17 @@
       "source_id": "mana40",
       "name": "Soul Bloom",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": [
         {
@@ -77059,7 +78217,17 @@
       "source_id": "crossbow29",
       "name": "Specialised Shots",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "crossbow"
+          ],
+          "compatible_weapon_family_ids": [
+            "crossbow"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -77075,7 +78243,17 @@
       "source_id": "evasion_and_energy_shield11",
       "name": "Spectral Ward",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -77125,7 +78303,21 @@
       "source_id": "spells34",
       "name": "Spellblade",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "melee"
+          ],
+          "compatible_weapon_family_ids": [
+            "one_handed_mace",
+            "quarterstaff",
+            "spear",
+            "talisman",
+            "two_handed_mace"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -77185,7 +78377,17 @@
       "source_id": "block17",
       "name": "Spiked Shield",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -77222,7 +78424,15 @@
       "source_id": "flail18",
       "name": "Spiked Whip",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "flail"
+          ],
+          "compatible_weapon_family_ids": [],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -77237,7 +78447,17 @@
       "source_id": "energy_shield_and_armour14",
       "name": "Spiral into Depression",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -77267,7 +78487,17 @@
       "source_id": "chaos34__",
       "name": "Spiral into Insanity",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex_int",
@@ -77495,7 +78725,15 @@
       "source_id": "mace15",
       "name": "Split the Earth",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "mace"
+          ],
+          "compatible_weapon_family_ids": [],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "str",
@@ -77630,14 +78868,12 @@
           "override_of": "projectiles23"
         }
       },
-      "facts": [],
-      "class_override": {
-        "characterId": 8,
-        "className": "Huntress",
-        "overrideOf": "projectiles23",
-        "physicalPassiveSkillGraphId": 42781,
-        "localityResolved": true
-      }
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "facts": []
     },
     {
       "id": "passive:sword18",
@@ -77645,7 +78881,15 @@
       "source_id": "sword18",
       "name": "Stance Breaker",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "sword"
+          ],
+          "compatible_weapon_family_ids": [],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -77934,7 +79178,17 @@
       "source_id": "energy_shield_recovery40",
       "name": "Storm Driven",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -78381,7 +79635,17 @@
       "source_id": "evasion_and_energy_shield25",
       "name": "Subterfuge Mask",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -78606,7 +79870,23 @@
       "source_id": "one_handed5",
       "name": "Sweep and Slice",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "one_handed"
+          ],
+          "compatible_weapon_family_ids": [
+            "buckler",
+            "focus",
+            "one_handed_mace",
+            "sceptre",
+            "shield",
+            "spear",
+            "wand"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": []
     },
@@ -79085,7 +80365,17 @@
       "source_id": "energy_shield_recovery13",
       "name": "The Soul Meridian",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -79641,7 +80931,17 @@
       "source_id": "wand8",
       "name": "Tools of the Betrayed",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "wand"
+          ],
+          "compatible_weapon_family_ids": [
+            "wand"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": []
     },
@@ -79692,7 +80992,17 @@
       "source_id": "block14",
       "name": "Towering Shield",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": [
         {
@@ -79948,7 +81258,17 @@
       "source_id": "wand4",
       "name": "Twisted Implement",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "wand"
+          ],
+          "compatible_weapon_family_ids": [
+            "wand"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": []
     },
@@ -80827,13 +82147,7 @@
         "dex_int",
         "str_dex"
       ],
-      "facts": [],
-      "overridden_for_class_ids": [
-        8
-      ],
-      "overridden_for_classes": [
-        "Huntress"
-      ]
+      "facts": []
     },
     {
       "id": "passive:warcries12",
@@ -80954,7 +82268,17 @@
       "source_id": "energy_shield_and_armour44",
       "name": "Voll's Protection",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -81064,7 +82388,17 @@
       "source_id": "focus5",
       "name": "Warding Fetish",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "shield"
+          ],
+          "compatible_weapon_family_ids": [
+            "shield"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": [
         {
@@ -81252,7 +82586,17 @@
       "source_id": "crossbow25",
       "name": "Well Maintained Tools",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "crossbow"
+          ],
+          "compatible_weapon_family_ids": [
+            "crossbow"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "facts": [
         {
@@ -81358,7 +82702,17 @@
       "source_id": "quarterstaff10",
       "name": "Whirling Assault",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "quarterstaff"
+          ],
+          "compatible_weapon_family_ids": [
+            "quarterstaff"
+          ],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "dex",
@@ -81380,7 +82734,15 @@
       "source_id": "axe13",
       "name": "Whirling Onslaught",
       "compatibility": {
-        "access": {}
+        "access": {},
+        "passive_weapon": {
+          "requirements_any_of": [
+            "axe"
+          ],
+          "compatible_weapon_family_ids": [],
+          "unresolved_requirements": [],
+          "fail_closed": false
+        }
       },
       "passive_tree_starts": [
         "str",

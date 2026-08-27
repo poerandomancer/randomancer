@@ -54,6 +54,71 @@ MARTIAL_CRAFTING_TYPES = {
     "unarmed",
 }
 
+# Canonical weapon terms used by datamined stat ids.  These are vocabulary
+# aliases, not passive-name assignments; live compatibility is derived from
+# core-data's actual roll pool below.
+PASSIVE_WEAPON_ALIASES = {
+    "axe": "axe", "axes": "axe", "bow": "bow", "bows": "bow",
+    "claw": "claw", "claws": "claw", "crossbow": "crossbow", "crossbows": "crossbow",
+    "dagger": "dagger", "daggers": "dagger", "flail": "flail", "flails": "flail",
+    "mace": "mace", "maces": "mace", "quarterstaff": "quarterstaff", "quarterstaves": "quarterstaff",
+    "sceptre": "sceptre", "sceptres": "sceptre", "shield": "shield", "shields": "shield",
+    "spear": "spear", "spears": "spear", "staff": "staff", "staves": "staff",
+    "sword": "sword", "swords": "sword", "talisman": "talisman", "talismans": "talisman",
+    "wand": "wand", "wands": "wand",
+}
+PASSIVE_WEAPON_CATEGORIES = {"one_handed", "two_handed", "melee", "martial"}
+
+
+def live_weapon_metadata(core: dict[str, Any]) -> list[dict[str, Any]]:
+    """Project the authoritative Randomancer roll pool to normalized identities."""
+    result = []
+    for handedness, entries in (core.get("Weapons") or {}).items():
+        for entry in entries or []:
+            raw_name = str(entry.get("name") or "")
+            family = re.sub(r"^(?:one|two)[- ]handed_?", "", normalized_phrase(raw_name))
+            tags = {normalized_phrase(tag) for tag in entry.get("tags") or []}
+            tags.add("two_handed" if normalized_phrase(handedness) == "two_handed" else "one_handed")
+            if family in MARTIAL_CRAFTING_TYPES or "melee" in tags:
+                tags.add("martial")
+            result.append({"id": family, "tags": tags})
+    return result
+
+
+def passive_weapon_compatibility(core: dict[str, Any], stats: list[dict[str, Any]], lines: list[str]) -> dict[str, Any] | None:
+    """Extract only explicit weapon applicability from authoritative stat evidence."""
+    evidence = [str(stat.get("id") or "") for stat in stats] + lines
+    normalized = [normalized_phrase(value) for value in evidence]
+    requirements: set[str] = set()
+    for value in normalized:
+        for alias, family in PASSIVE_WEAPON_ALIASES.items():
+            if re.search(rf"(?:^|_){re.escape(alias)}(?:_|$)", value):
+                requirements.add(family)
+        if re.search(r"(?:^|_)one_handed_weapons?(?:_|$)", value):
+            requirements.add("one_handed")
+        if re.search(r"(?:^|_)two_handed(?:_melee)?_weapons?(?:_|$)", value):
+            requirements.add("two_handed")
+        if re.search(r"(?:while_wielding|with)_(?:a_)?melee_weapons?(?:_|$)", value):
+            requirements.add("melee")
+        if re.search(r"(?:^|_)(?:any_)?martial_weapons?(?:_|$)", value):
+            requirements.add("martial")
+    if not requirements:
+        return None
+    live = live_weapon_metadata(core)
+    known = set(PASSIVE_WEAPON_ALIASES.values()) | PASSIVE_WEAPON_CATEGORIES
+    unresolved = sorted(requirements - known)
+    families = requirements - PASSIVE_WEAPON_CATEGORIES
+    categories = requirements & PASSIVE_WEAPON_CATEGORIES
+    compatible = sorted({weapon["id"] for weapon in live
+                         if (not families or weapon["id"] in families)
+                         and categories.issubset(weapon["tags"])})
+    return {
+        "requirements_any_of": sorted(requirements),
+        "compatible_weapon_family_ids": compatible,
+        "unresolved_requirements": unresolved,
+        "fail_closed": bool(unresolved),
+    }
+
 
 def load_json(path: Path) -> Any:
     with path.open("r", encoding="utf-8") as handle:
@@ -856,6 +921,11 @@ def build_passive_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[
             access["overridden_for_passive_tree_character_ids"] = overridden_for_ids
             access["overridden_for_classes"] = overridden_for_classes
 
+        weapon_compatibility = passive_weapon_compatibility(ctx.core, stats, lines)
+        compatibility = {"access": access}
+        if weapon_compatibility:
+            compatibility["passive_weapon"] = weapon_compatibility
+
         entities.append(
             {
                 "id": entity_id,
@@ -868,7 +938,7 @@ def build_passive_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[
                 ),
                 "retrieval_terms": tags,
                 "facts": facts,
-                "compatibility": {"access": access},
+                "compatibility": compatibility,
                 **({"passive_tree_starts": passive["passiveTreeStarts"]} if passive.get("passiveTreeStarts") else {}),
                 **({"required_ascendancy": required_ascendancy} if required_ascendancy else {}),
                 **({"class_override": class_override} if class_override else {}),
@@ -1054,6 +1124,13 @@ def build_catalog(ctx: SourceContext) -> tuple[dict[str, Any], dict[str, Any], d
         for entity in support_entities
         if (entity.get("support_family") or {}).get("tier") is not None
     }
+    weapon_restricted_passives = [entity for entity in passive_entities
+                                  if entity.get("content_type") == "passive"
+                                  and ((entity.get("compatibility") or {}).get("passive_weapon"))]
+    passive_weapon_requirements = sorted({requirement for entity in weapon_restricted_passives
+        for requirement in ((entity.get("compatibility") or {}).get("passive_weapon") or {}).get("requirements_any_of", [])})
+    unresolved_passive_weapon_requirements = sorted({requirement for entity in weapon_restricted_passives
+        for requirement in ((entity.get("compatibility") or {}).get("passive_weapon") or {}).get("unresolved_requirements", [])})
 
     meta = {
         "schema_version": SCHEMA_VERSION,
@@ -1135,6 +1212,9 @@ def build_catalog(ctx: SourceContext) -> tuple[dict[str, Any], dict[str, Any], d
             "passives_with_granted_skill_links": sum(
                 1 for entity in passive_entities if (entity.get("links") or {}).get("granted_skill_rid") is not None
             ),
+            "ordinary_notables_with_weapon_requirements": len(weapon_restricted_passives),
+            "passive_weapon_requirements_represented": passive_weapon_requirements,
+            "unresolved_passive_weapon_requirements": unresolved_passive_weapon_requirements,
         },
         "coverage": coverage_payload,
     }

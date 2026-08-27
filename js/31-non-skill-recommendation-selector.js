@@ -61,6 +61,14 @@ function rolledWeaponFamily(snapshot) {
   return WEAPON_FAMILIES.has(rolled) ? rolled : '';
 }
 
+function passiveWeaponCompatible(entity, snapshot) {
+  const requirement = entity?.compatibility?.passive_weapon;
+  if (!requirement) return true;
+  if (requirement.fail_closed || arr(requirement.unresolved_requirements).length) return false;
+  const rolled = rolledWeaponFamily(snapshot);
+  return Boolean(rolled) && arr(requirement.compatible_weapon_family_ids).map(token).includes(rolled);
+}
+
 function uniqueEquipmentFamily(entity) {
   const equipment = entity?.compatibility?.equipment || {};
   const slot = token(equipment.slot);
@@ -115,6 +123,9 @@ function analyze(entity, snapshot, context) {
     const starts = arr(entity?.passive_tree_starts).map(token).filter(Boolean);
     if (!classStart || !starts.length) return null;
     if (!starts.includes(classStart)) return null;
+    // This is a hard eligibility gate on the resolved entity. It runs before
+    // semantic scoring, so ranking and every selection fallback see only legal candidates.
+    if (!passiveWeaponCompatible(entity, snapshot)) return null;
   }
   const essentials = new Set([...context.offense, ...context.package]);
   if (contradicts(entity, essentials)) return null;

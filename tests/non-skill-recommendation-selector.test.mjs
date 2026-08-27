@@ -296,6 +296,57 @@ test('ordinary notables fail closed when either side of locality metadata is mis
   assert.deepEqual(selectNonSkillRecommendations(catalog([{ ...candidate, passive_tree_starts: undefined }]), snap, null).passives.notables, []);
 });
 
+test('ordinary notable weapon requirements are a hard gate before selection', () => {
+  const restricted = (id, requirements, compatible) => entity(id, 'passive', ['poison'], {
+    compatibility: { access: {}, passive_weapon: {
+      requirements_any_of: requirements, compatible_weapon_family_ids: compatible,
+      unresolved_requirements: [], fail_closed: false
+    } }
+  });
+  const bow = restricted('bow-poison', ['bow'], ['bow']);
+  const bowOrSpear = restricted('bow-or-spear-poison', ['bow', 'spear'], ['bow', 'spear']);
+  const generic = entity('generic-poison', 'passive', ['poison']);
+  const base = { ...snap, offenseList: ['Poison'] };
+
+  assert.deepEqual(selectNonSkillRecommendations(catalog([bow]),
+    { ...base, weaponFamily: 'Bow' }, null).passives.notables.map((entry) => entry.id), ['bow-poison']);
+  assert.deepEqual(selectNonSkillRecommendations(catalog([bow]),
+    { ...base, weaponFamily: 'Mace' }, null).passives.notables, []);
+  for (const weaponFamily of ['Bow', 'Spear']) {
+    assert.deepEqual(selectNonSkillRecommendations(catalog([bowOrSpear]),
+      { ...base, weaponFamily }, null).passives.notables.map((entry) => entry.id), ['bow-or-spear-poison']);
+  }
+  assert.deepEqual(selectNonSkillRecommendations(catalog([generic]),
+    { ...base, weaponFamily: 'Crossbow' }, null).passives.notables.map((entry) => entry.id), ['generic-poison']);
+});
+
+test('future and unresolved weapon requirements fail closed without fallback', () => {
+  const futureDagger = entity('future-dagger', 'passive', ['poison'], { compatibility: { access: {}, passive_weapon: {
+    requirements_any_of: ['dagger'], compatible_weapon_family_ids: [], unresolved_requirements: [], fail_closed: false
+  } } });
+  const unresolved = entity('unknown-weapon', 'passive', ['poison'], { compatibility: { access: {}, passive_weapon: {
+    requirements_any_of: ['future_blade'], compatible_weapon_family_ids: [], unresolved_requirements: ['future_blade'], fail_closed: true
+  } } });
+  for (const weaponFamily of ['Bow', 'Mace', 'Quarterstaff']) {
+    assert.deepEqual(selectNonSkillRecommendations(catalog([futureDagger, unresolved]),
+      { ...snap, offenseList: ['Poison'], weaponFamily }, null).passives.notables, []);
+  }
+});
+
+test('production Coated Knife dagger restriction rejects unrelated live weapons', () => {
+  const production = JSON.parse(fs.readFileSync(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url)));
+  const coatedBlade = production.entities.find((candidate) => ['Coated Blade', 'Coated Knife'].includes(candidate.name)
+    && candidate.content_type === 'passive');
+  assert.ok(coatedBlade, 'expected the production dagger poison notable');
+  assert.deepEqual(coatedBlade.compatibility.passive_weapon.requirements_any_of, ['dagger']);
+  assert.deepEqual(coatedBlade.compatibility.passive_weapon.compatible_weapon_family_ids, []);
+  const base = { ...snap, offenseList: ['Poison'], passiveTreeStart: coatedBlade.passive_tree_starts[0] };
+  for (const weaponFamily of ['Bow', 'Mace']) {
+    assert.deepEqual(selectNonSkillRecommendations(catalog([coatedBlade]),
+      { ...base, weaponFamily }, null).passives.notables, []);
+  }
+});
+
 test('ascendancy-owned ordinary notables require their owner before normal checks', () => {
   const owned = entity('oracle-chaos', 'passive', ['chaos'], {
     required_ascendancy: 'Oracle', passive_tree_starts: ['str_int']

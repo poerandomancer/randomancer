@@ -199,6 +199,11 @@ def validate_source_parity(catalog: dict[str, Any], errors: list[str]) -> None:
         errors.append("full passive stat lists were not preserved")
     if summary.get("passives_with_granted_skill_links", 0) <= 0:
         errors.append("passive GrantedSkill relationships were not preserved")
+    if summary.get("ordinary_notables_with_weapon_requirements", 0) <= 0:
+        errors.append("ordinary notable weapon requirements were not preserved")
+    if summary.get("unresolved_passive_weapon_requirements"):
+        errors.append("ordinary notable weapon requirements could not be normalized: "
+                      + ", ".join(summary["unresolved_passive_weapon_requirements"]))
 
 
 def validate_granted_skill_access(catalog: dict[str, Any], errors: list[str]) -> None:
