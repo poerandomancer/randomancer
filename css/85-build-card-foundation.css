@@ -68,24 +68,25 @@
 }
 
 .rc-skill-groups{
-  display:flex;
-  flex-wrap:wrap;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(min(11rem,100%),1fr));
   align-items:flex-start;
-  justify-content:center;
   gap:.65rem 1.6rem;
 }
 .rc-skill-group{
-  flex:1 1 11rem;
   min-width:0;
-  max-width:14rem;
   text-align:left;
 }
 .rc-skill-group__skill{
   font-weight:600;
+  text-align:center;
   overflow-wrap:anywhere;
 }
 .rc-skill-group__supports{
   position:relative;
+  display:flex;
+  flex-wrap:wrap;
+  gap:0 .35em;
   margin:.18rem 0 0 .28rem;
   padding-left:.9rem;
   color:var(--muted);
@@ -107,11 +108,14 @@
 .rc-skill-group__supports .rc-name{
   color:inherit;
 }
+.rc-skill-group__support{
+  min-width:0;
+  overflow-wrap:anywhere;
+}
+.rc-skill-group__support:not(:last-child)::after{
+  content:" ·";
+}
 
 @media (max-width:520px){
   .rc-skill-groups{ gap:.7rem; }
-  .rc-skill-group{
-    flex-basis:100%;
-    max-width:100%;
-  }
 }

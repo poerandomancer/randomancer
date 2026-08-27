@@ -435,10 +435,18 @@ test('build card renders skill, unique, ascendancy, and notable tooltip content'
   assert.match(html, /Ascendancy — [\s\S]*Cold Ascendancy/);
   assert.doesNotMatch(html, /(?:Primary|Notable) —/);
   assert.match(html, /rc-skill-group__skill[\s\S]*Ice Skill[\s\S]*rc-skill-group__supports[\s\S]*Deep Freeze/);
+  assert.match(html, /rc-skill-group__support[\s\S]*Deep Freeze/);
   assert.match(html, /data-tip-title="Deep Freeze" data-tip-lines="\[&quot;Support-only detail&quot;\]"/);
   assert.doesNotMatch(html, /data-tip-title="Ice Skill"[^>]*Support-only detail/);
   assert.match(html, /Ice Skill[\s\S]*tabindex="0"|tabindex="0"[\s\S]*Ice Skill/);
   for (const text of ['Expert Bow · Weapon', 'Cold implicit', 'Freeze mod', 'Ascendancy Passive', 'Asc effect', 'Notable Passive', 'Notable effect']) {
     assert.match(html, new RegExp(text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
+});
+
+test('build card skill groups center skills and wrap columns and supports', () => {
+  const css = fs.readFileSync(new URL('../css/85-build-card-foundation.css', import.meta.url), 'utf8');
+  assert.match(css, /\.rc-skill-groups\s*\{[^}]*display:grid;[^}]*grid-template-columns:repeat\(auto-fit,/s);
+  assert.match(css, /\.rc-skill-group__skill\s*\{[^}]*text-align:center;/s);
+  assert.match(css, /\.rc-skill-group__supports\s*\{[^}]*display:flex;[^}]*flex-wrap:wrap;/s);
 });

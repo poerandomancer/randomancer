@@ -217,7 +217,7 @@ function renderSkillGroups(values, face) {
   return `<div class="rc-skill-groups">${(values || []).map((entry) => `
     <div class="rc-skill-group">
       <div class="rc-skill-group__skill">${renderName(entry, face)}</div>
-      ${entry.supports?.length ? `<div class="rc-skill-group__supports">${entry.supports.map((support, index) => `${index ? '<span class="rc-sep"> · </span>' : ''}${renderName(support, face)}`).join('')}</div>` : ''}
+      ${entry.supports?.length ? `<div class="rc-skill-group__supports">${entry.supports.map((support) => `<span class="rc-skill-group__support">${renderName(support, face)}</span>`).join('')}</div>` : ''}
     </div>
   `).join('')}</div>`;
 }
