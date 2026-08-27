@@ -61,34 +61,51 @@ jobs:
           RUNTIME_SUPPORT_POTENCY_RE = re.compile(
               r"causing it to .*inflict more (?:potent|powerful)", re.IGNORECASE
           )
+          RUNTIME_UNIQUE_PAYOFF_RE = re.compile(
+              r"(?:against|affected by|all\s+\w+\s+enemies|while\s+\w+ed|if\s+\w+ed)", re.IGNORECASE
+          )
+          RUNTIME_COMPONENT_RE = re.compile(r"explod|cloud|ground|burst|projectile", re.IGNORECASE)
 
 
-          def _runtime_support_evidence(fact: dict[str, Any]) -> list[dict[str, str]]:
-              """Compile verbose proof text down to the tiny marker the runtime actually tests."""
-              if fact.get("subject") != "supported_skill" or fact.get("relation") not in RUNTIME_SUPPORT_ACTION_RELATIONS:
-                  return []
-              values = [
-                  str(proof.get("value") or "").lower()
-                  for proof in fact.get("evidence") or []
+          def _runtime_fact_evidence(fact: dict[str, Any], content_type: str) -> list[dict[str, str]]:
+              """Compile verbose proof text to only the semantic markers still consumed after generation."""
+              proofs = [
+                  proof for proof in fact.get("evidence") or []
                   if str(proof.get("value") or "").strip()
               ]
-              if not values:
+              if not proofs:
                   return []
-              if fact.get("relation") != "inflicts":
-                  return [{"value": "runtime"}]
-              enabled = any(
-                  RUNTIME_SUPPORT_ENABLE_RE.search(value)
-                  and not RUNTIME_SUPPORT_FALSE_POSITIVE_RE.search(value)
-                  and not RUNTIME_SUPPORT_POTENCY_RE.search(value)
-                  for value in values
-              )
-              return [{"value": "allowing it to inflict" if enabled else "reference only"}]
+              values = [str(proof.get("value") or "").lower() for proof in proofs]
+
+              if content_type == "support_gem" and fact.get("subject") == "supported_skill" \
+                      and fact.get("relation") in RUNTIME_SUPPORT_ACTION_RELATIONS:
+                  if fact.get("relation") != "inflicts":
+                      return [{"value": "runtime"}]
+                  enabled = any(
+                      RUNTIME_SUPPORT_ENABLE_RE.search(value)
+                      and not RUNTIME_SUPPORT_FALSE_POSITIVE_RE.search(value)
+                      and not RUNTIME_SUPPORT_POTENCY_RE.search(value)
+                      for value in values
+                  )
+                  return [{"value": "allowing it to inflict" if enabled else "reference only"}]
+
+              if content_type in {"active_skill", "unique"}:
+                  first = proofs[0]
+                  marker_parts = ["against"] if any(RUNTIME_UNIQUE_PAYOFF_RE.search(value) for value in values) else ["runtime"]
+                  component = RUNTIME_COMPONENT_RE.search(str(first.get("value") or ""))
+                  if component:
+                      marker_parts.append(component.group(0).lower())
+                  marker = {"value": " ".join(marker_parts)}
+                  if first.get("kind"):
+                      marker["kind"] = str(first["kind"])
+                  return [marker]
+              return []
 
 
-          def compact_fact(fact: dict[str, Any]) -> dict[str, Any]:
+          def compact_fact(fact: dict[str, Any], content_type: str) -> dict[str, Any]:
               """Project a fully evidenced generation fact onto the browser contract."""
               projected = {key: value for key, value in fact.items() if key != "evidence"}
-              runtime_evidence = _runtime_support_evidence(fact)
+              runtime_evidence = _runtime_fact_evidence(fact, content_type)
               if runtime_evidence:
                   projected["evidence"] = runtime_evidence
               return projected
@@ -121,7 +138,7 @@ jobs:
               if retrieval_terms:
                   projected["retrieval_terms"] = retrieval_terms
 
-              projected["facts"] = [compact_fact(fact) for fact in entity.get("facts") or []]
+              projected["facts"] = [compact_fact(fact, content_type) for fact in entity.get("facts") or []]
 
               if content_type == "active_skill":
                   structured = entity.get("structured_weapon_requirements")
@@ -163,7 +180,7 @@ jobs:
           path = Path('data/helperScripts/validate_recommendation_catalog_v3.py')
           text = path.read_text()
           old = '''            if not fact.get("evidence"):\n                errors.append(f"{entity_id}: fact has no evidence: {fact}")'''
-          new = '''            runtime_evidence = fact.get("evidence") or []\n            if runtime_evidence:\n                if entity.get("content_type") != "support_gem" or fact.get("subject") != "supported_skill":\n                    errors.append(f"{entity_id}: runtime evidence retained outside support semantics: {fact}")\n                if len(runtime_evidence) != 1 or any(set(proof) - {"value"} for proof in runtime_evidence):\n                    errors.append(f"{entity_id}: runtime evidence is not compact: {fact}")'''
+          new = '''            runtime_evidence = fact.get("evidence") or []\n            if runtime_evidence:\n                if entity.get("content_type") not in {"support_gem", "active_skill", "unique"}:\n                    errors.append(f"{entity_id}: runtime evidence retained for an unused content type: {fact}")\n                if len(runtime_evidence) != 1 or any(set(proof) - {"kind", "value"} for proof in runtime_evidence):\n                    errors.append(f"{entity_id}: runtime evidence is not compact: {fact}")'''
           if old not in text:
               raise SystemExit('validator evidence block not found')
           path.write_text(text.replace(old, new, 1))
@@ -171,7 +188,7 @@ jobs:
           path = Path('data/helperScripts/audit_recommendation_catalog_v3_size.py')
           text = path.read_text()
           old = "  'RUNTIME_REQUIRED':['identity/name/roles/retrieval_terms/support_family','compatibility','typed semantic fact fields','evidence.kind/value','source_evidence.description/active_skill_types/cannot_be_supported','provenance.source_tags'],\n  'GENERATION_REQUIRED':['component/stat-set/parser provenance','complete source evidence','semantic completeness warnings'],\n  'DIAGNOSTIC_ONLY':['entity dataset/schema provenance','evidence parent/component/pattern_category','structured raw stats','passive lines','unique modifiers/source metadata','taxonomy metadata','full granted effects','links'],"
-          new = "  'RUNTIME_REQUIRED':['identity/name','active-skill roles/retrieval terms','support family','compatibility','typed semantic fact fields','minimal support-enable marker','active skill types/cannot_be_supported','eligibility source tags'],\n  'GENERATION_REQUIRED':['full evidence text','descriptions','component/stat-set/parser provenance','complete source evidence','semantic completeness warnings'],\n  'DIAGNOSTIC_ONLY':['entity dataset/schema provenance','evidence parent/component/pattern_category','structured raw stats','passive lines','unique modifiers/source metadata','taxonomy metadata','full granted effects','links'],"
+          new = "  'RUNTIME_REQUIRED':['identity/name','active-skill roles/retrieval terms','support family','compatibility','typed semantic fact fields','minimal support/unique-analysis evidence markers','active skill types/cannot_be_supported','eligibility source tags'],\n  'GENERATION_REQUIRED':['full evidence text','descriptions','component/stat-set/parser provenance','complete source evidence','semantic completeness warnings'],\n  'DIAGNOSTIC_ONLY':['entity dataset/schema provenance','evidence parent/component/pattern_category','structured raw stats','passive lines','unique modifiers/source metadata','taxonomy metadata','full granted effects','links'],"
           if old not in text:
               raise SystemExit('size audit classification block not found')
           path.write_text(text.replace(old, new, 1))
@@ -184,7 +201,7 @@ jobs:
           )
           text = text.replace('## Entity contract\n', '## Build-time entity contract\n', 1)
           marker = '## Fact contract\n'
-          section = '''## Runtime catalog projection\n\nThe generator deliberately builds the rich entity contract above only as a build-time intermediate. The committed `recommendation_catalog_v3.json` is a deterministic runtime projection containing only fields read by the application. Full descriptions, original evidence clauses, raw stats, parser/component provenance, links, and other diagnostic material are not browser payload.\n\nSupport facts retain only a tiny compiled evidence marker where the current selector needs to distinguish an affirmative support bridge from an incidental ailment mention. Normal skill prose is omitted; only a minimal exclusion marker is retained for DNT/unused content. Active-skill type data, compatibility, access sidecars, crafting metadata, and the typed fact fields used by matching remain authoritative. No additional runtime network request is introduced by this projection; display text continues to come from the existing enriched skill/passive/unique datasets already loaded by the app.\n\nFor investigation during a patch refresh, generate the full developer artifact explicitly with `--provenance-out data/enriched/debug/recommendation_catalog_v3_provenance.json`. That path is gitignored and is intentionally not part of the application or normal Git history.\n\n'''
+          section = '''## Runtime catalog projection\n\nThe generator deliberately builds the rich entity contract above only as a build-time intermediate. The committed `recommendation_catalog_v3.json` is a deterministic runtime projection containing only fields read by the application plus tiny semantic markers required to keep downstream recommendation audits deterministic. Full descriptions, original evidence clauses, raw stats, parser/component provenance, links, and other diagnostic material are not browser payload.\n\nVerbose fact evidence is compiled to short markers. Support markers preserve the selector's affirmative-bridge distinction; active-skill and unique markers preserve only payoff/component classification used by the deterministic unique-semantics audit. Normal skill prose is omitted; only a minimal exclusion marker is retained for DNT/unused content. Active-skill type data, compatibility, access sidecars, crafting metadata, and the typed fact fields used by matching remain authoritative. No additional runtime network request is introduced by this projection; display text continues to come from the existing enriched skill/passive/unique datasets already loaded by the app.\n\nFor investigation during a patch refresh, generate the full developer artifact explicitly with `--provenance-out data/enriched/debug/recommendation_catalog_v3_provenance.json`. That path is gitignored and is intentionally not part of the application or normal Git history.\n\n'''
           if marker not in text:
               raise SystemExit('doc fact-contract marker not found')
           text = text.replace(marker, section + marker, 1)
