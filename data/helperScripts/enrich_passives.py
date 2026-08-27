@@ -18,7 +18,7 @@ import argparse
 import json
 import re
 import sys
-from collections import Counter, defaultdict
+from collections import Counter, defaultdict, deque
 from html import unescape
 from pathlib import Path
 from urllib.error import HTTPError
@@ -65,10 +65,73 @@ DATA_ROOT = HERE.parent
 INPUT_PASSIVES = DATA_ROOT / "datamined" / "passiveskills.json"
 INPUT_STATS = DATA_ROOT / "datamined" / "stats.json"
 INPUT_ASCENDANCY = DATA_ROOT / "datamined" / "ascendancy.json"
+INPUT_PASSIVE_TREE = DATA_ROOT / "datamined" / "Default.json"
 OUTPUT_FILE = DATA_ROOT / "enriched" / "passives_enriched.json"
 OUTPUT_REPORT_FILE = DATA_ROOT / "enriched" / "passive_scrape_report.json"
 LEGACY_KEYSTONE_TOOLTIPS = DATA_ROOT / "enriched" / "keystone_tooltips.json"
 POE2DB_HOST = "https://poe2db.tw"
+
+PASSIVE_TREE_STARTS = {
+    "str": 47175,
+    "dex": 50459,
+    "int": 54447,
+    "str_dex": 50986,
+    "dex_int": 44683,
+    "str_int": 61525,
+}
+
+
+def participates_in_character_tree(node):
+    """Whether a datamined node may be used for ordinary tree travel."""
+    return bool(
+        node
+        and node.get("SkillType") == 0
+        and node.get("Ascendancy") is None
+        and not node.get("IsAnointmentOnly")
+        and not node.get("IsJustIcon")
+        and not node.get("IsKeystone")
+        and node.get("MasteryGroup") is None
+        and not node.get("IsProxyPassive")
+        and not node.get("IsExpansion")
+    )
+
+
+def build_passive_tree_adjacency(tree, passive_skills):
+    """Build the filtered character graph; exported connections are undirected."""
+    raw_by_hash = {row.get("PassiveSkillGraphId"): row for row in passive_skills}
+    allowed = {graph_id for graph_id, row in raw_by_hash.items() if participates_in_character_tree(row)}
+    adjacency = {graph_id: set() for graph_id in allowed}
+    for group in tree.get("groups") or []:
+        for graph_node in group.get("passives") or []:
+            source = graph_node.get("hash")
+            if source not in allowed:
+                continue
+            for target in graph_node.get("connections") or []:
+                if target in allowed:
+                    adjacency[source].add(target)
+                    adjacency[target].add(source)
+    return adjacency
+
+
+def shortest_path_distances(adjacency, root):
+    distances = {root: 0} if root in adjacency else {}
+    queue = deque(distances)
+    while queue:
+        source = queue.popleft()
+        for target in sorted(adjacency[source]):
+            if target not in distances:
+                distances[target] = distances[source] + 1
+                queue.append(target)
+    return distances
+
+
+def closest_passive_tree_starts(distance_by_start, graph_id):
+    """Return all regions at or below the third-lowest distance, preserving ties."""
+    reachable = [(distance[graph_id], start) for start, distance in distance_by_start.items() if graph_id in distance]
+    if len(reachable) < 3:
+        return []
+    cutoff = sorted(distance for distance, _ in reachable)[2]
+    return sorted(start for distance, start in reachable if distance <= cutoff)
 
 MANUAL_SCRAPE_ALIASES = {
     "giants blood": "giant s blood",
@@ -1208,9 +1271,15 @@ def main():
     passive_skills = load_json(INPUT_PASSIVES)
     stats = load_json(INPUT_STATS)
     ascendancy_entries = load_json(INPUT_ASCENDANCY)
+    passive_tree = load_json(INPUT_PASSIVE_TREE)
 
     stat_by_rid = {s.get("_rid"): s for s in stats}
     ascendancy_names_by_id = build_ascendancy_map_from_file(ascendancy_entries)
+    tree_adjacency = build_passive_tree_adjacency(passive_tree, passive_skills)
+    distance_by_start = {
+        start: shortest_path_distances(tree_adjacency, root)
+        for start, root in PASSIVE_TREE_STARTS.items()
+    }
 
     target_nodes = []
     for node in passive_skills:
@@ -1250,6 +1319,7 @@ def main():
         "networkErrors": network_errors,
         "excludedNonCharacterNodes": 0,
         "excludedNonCharacterNodesBySkillType": {},
+        "ordinaryNotablesMissingFromGraph": [],
     }
 
     excluded_by_skill_type = Counter()
@@ -1351,8 +1421,7 @@ def main():
         if set(final_tags) - set(derived_tags):
             report["nodesWithTagsEnhancedByScraping"] += 1
 
-        enriched_nodes.append(
-            {
+        enriched_node = {
                 "id": node.get("Id"),
                 "type": node_type,
                 "name": node.get("Name"),
@@ -1373,7 +1442,16 @@ def main():
                 "scrapeRejectedReason": scrape_rejected_reason if (scrape_entry and not scrape_valid) else None,
                 "tagSources": sorted(set(tag_sources)),
             }
-        )
+        if node_type == "notable":
+            graph_id = node.get("PassiveSkillGraphId")
+            starts = closest_passive_tree_starts(distance_by_start, graph_id)
+            if starts:
+                enriched_node["passiveTreeStarts"] = starts
+            else:
+                report["ordinaryNotablesMissingFromGraph"].append({
+                    "id": node.get("Id"), "name": node.get("Name"), "passiveSkillGraphId": graph_id
+                })
+        enriched_nodes.append(enriched_node)
 
     type_order = {"keystone": 0, "ascendancy": 1, "notable": 2}
     enriched_nodes.sort(key=lambda n: (type_order.get(n.get("type"), 99), n.get("name") or ""))
@@ -1388,6 +1466,7 @@ def main():
         json.dump(output, f, indent=2, ensure_ascii=False)
 
     report["unmatchedNames"] = sorted({x for x in report["unmatchedNames"] if x})
+    report["ordinaryNotablesMissingFromGraph"].sort(key=lambda row: (row["name"] or "", row["id"] or ""))
     with OUTPUT_REPORT_FILE.open("w", encoding="utf-8") as f:
         json.dump(report, f, indent=2, ensure_ascii=False)
 

@@ -56579,6 +56579,11 @@
           "confidence": "strong",
           "mechanic": "energy_shield"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -56599,7 +56604,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:shaman12",
@@ -56616,6 +56626,11 @@
           "confidence": "strong",
           "mechanic": "elemental_resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -56626,7 +56641,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:movement_speed11",
@@ -56646,7 +56666,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:mana39",
@@ -56692,6 +56717,11 @@
           "confidence": "strong",
           "mechanic": "shock"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -56736,7 +56766,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:bleed13",
@@ -56801,6 +56836,12 @@
           "confidence": "strong",
           "mechanic": "evasion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_dex"
       ]
     },
     {
@@ -56836,7 +56877,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:auras34",
@@ -56846,7 +56892,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:elemental39",
@@ -56856,7 +56907,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:mana_flasks10",
@@ -56880,6 +56937,11 @@
           "confidence": "strong",
           "mechanic": "mana_recovery"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -56951,6 +57013,12 @@
           "confidence": "strong",
           "mechanic": "totem"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -56968,6 +57036,11 @@
           "confidence": "strong",
           "mechanic": "totem"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -56985,6 +57058,11 @@
           "confidence": "strong",
           "mechanic": "totem"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -57021,6 +57099,11 @@
           "confidence": "strong",
           "mechanic": "life_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -57038,6 +57121,12 @@
           "confidence": "strong",
           "mechanic": "totem"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -57055,6 +57144,11 @@
           "confidence": "strong",
           "mechanic": "totem"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -57072,6 +57166,11 @@
           "confidence": "strong",
           "mechanic": "energy_shield"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -57119,6 +57218,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -57129,7 +57233,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:mana_regeneration19",
@@ -57162,7 +57271,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:energy_shield_recovery25_",
@@ -57172,7 +57287,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:mana_regeneration44_",
@@ -57182,7 +57303,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:remnant10",
@@ -57205,6 +57331,11 @@
           "confidence": "strong",
           "mechanic": "mana_recovery"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -57215,7 +57346,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:cold17",
@@ -57239,6 +57375,11 @@
           "confidence": "strong",
           "mechanic": "energy_shield_recharge"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -57267,7 +57408,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:armour_and_evasion54_",
@@ -57324,7 +57470,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:ballista16",
@@ -57372,6 +57523,12 @@
           "from": "life",
           "to": "energy_shield"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -57395,6 +57552,11 @@
           "confidence": "strong",
           "mechanic": "mana_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -57469,7 +57631,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:deflect42",
@@ -57496,7 +57663,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:dagger18",
@@ -57513,6 +57685,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -57556,6 +57733,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -57566,7 +57748,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:banners9",
@@ -57593,6 +57780,12 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -57624,6 +57817,11 @@
           "confidence": "strong",
           "mechanic": "energy_shield"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -57634,7 +57832,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:DeliriumAnoint_BastionOfLight",
@@ -57708,6 +57911,12 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -57718,7 +57927,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:duelist_mercenary_notable1",
@@ -57747,6 +57962,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -57757,7 +57977,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:evasion33",
@@ -57811,6 +58036,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -57852,6 +58082,11 @@
           "confidence": "strong",
           "mechanic": "lightning"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -57892,6 +58127,11 @@
           "confidence": "strong",
           "mechanic": "armour"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -57910,6 +58150,11 @@
           "mechanic": "critical_hits",
           "condition": "dual_wielding"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -57933,6 +58178,12 @@
           "confidence": "strong",
           "mechanic": "ignite"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -57981,6 +58232,11 @@
           "confidence": "strong",
           "mechanic": "freeze"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -57991,7 +58247,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:attack16",
@@ -58008,6 +58269,11 @@
           "confidence": "strong",
           "mechanic": "hit"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -58049,6 +58315,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -58073,6 +58344,12 @@
           "from": "mana",
           "to": "life"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -58083,7 +58360,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:wolf8",
@@ -58140,6 +58422,11 @@
           "confidence": "strong",
           "mechanic": "life_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -58206,6 +58493,11 @@
           "confidence": "strong",
           "mechanic": "evasion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -58226,7 +58518,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:warcries24",
@@ -58236,7 +58533,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:companions66",
@@ -58253,6 +58555,11 @@
           "confidence": "strong",
           "mechanic": "companion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -58270,6 +58577,11 @@
           "confidence": "strong",
           "mechanic": "companion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -58299,6 +58611,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -58322,6 +58639,12 @@
           "confidence": "strong",
           "mechanic": "companion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -58358,6 +58681,11 @@
           "confidence": "strong",
           "mechanic": "hit"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -58375,6 +58703,11 @@
           "confidence": "strong",
           "mechanic": "companion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -58392,6 +58725,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -58425,6 +58763,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -58435,7 +58778,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:physical62",
@@ -58445,7 +58793,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:slaying11",
@@ -58455,7 +58808,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:cold69_",
@@ -58484,6 +58842,11 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -58501,6 +58864,11 @@
           "confidence": "strong",
           "mechanic": "lightning"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -58528,7 +58896,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:marks11",
@@ -58571,7 +58944,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:elemental37_",
@@ -58581,7 +58959,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:fire_penetration23_",
@@ -58604,6 +58988,11 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -58627,6 +59016,11 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -58650,6 +59044,11 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -58679,6 +59078,11 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -58696,6 +59100,11 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -58706,7 +59115,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:deflect34",
@@ -58740,7 +59154,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:strength108_",
@@ -58819,6 +59238,12 @@
           "confidence": "strong",
           "mechanic": "ignite"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -58842,6 +59267,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -58852,7 +59282,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:warcries11",
@@ -58862,7 +59297,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:oracle_slow_crits4__",
@@ -58879,6 +59319,12 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -58913,6 +59359,11 @@
           "confidence": "strong",
           "mechanic": "elemental_resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -58968,6 +59419,11 @@
           "mechanic": "evasion",
           "condition": "in_presence_of_companion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -58978,7 +59434,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:criticals84",
@@ -58995,6 +59456,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -59026,6 +59492,12 @@
           "confidence": "strong",
           "mechanic": "evasion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -59043,6 +59515,11 @@
           "confidence": "strong",
           "mechanic": "totem"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -59053,7 +59530,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:elemental_attacks8",
@@ -59070,6 +59552,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -59080,7 +59567,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:evasion39",
@@ -59104,6 +59597,11 @@
           "mechanic": "evasion",
           "condition": "you_dodge_rolled_recently"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -59114,7 +59612,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:AbyssJewelHistoricOverrideNotable_T_T_19",
@@ -59245,7 +59748,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:monkchakra18",
@@ -59278,7 +59786,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:monkchakra12",
@@ -59350,7 +59863,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:chill_and_freeze14",
@@ -59367,6 +59885,11 @@
           "confidence": "strong",
           "mechanic": "chill"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -59425,7 +59948,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:energy_shield_and_armour56_",
@@ -59476,7 +60005,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:knockback20_",
@@ -59486,7 +60020,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:trap13",
@@ -59503,6 +60042,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -59541,6 +60085,11 @@
           "confidence": "strong",
           "mechanic": "freeze"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -59568,7 +60117,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:grenades11",
@@ -59578,7 +60133,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:one_handed26",
@@ -59618,6 +60178,11 @@
           "confidence": "strong",
           "mechanic": "poison"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -59658,6 +60223,12 @@
           "confidence": "strong",
           "mechanic": "cold"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -59668,7 +60239,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:flasks21",
@@ -59685,6 +60261,11 @@
           "confidence": "exact",
           "mechanic": "charge"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -59757,6 +60338,12 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -59822,6 +60409,11 @@
           "confidence": "strong",
           "mechanic": "lightning"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -59832,7 +60424,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:shock36",
@@ -59886,6 +60483,11 @@
           "confidence": "strong",
           "mechanic": "mana_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -59904,6 +60506,11 @@
           "mechanic": "critical_hits",
           "scope": "incoming"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -59921,6 +60528,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -59931,7 +60543,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:spell_criticals15",
@@ -59948,6 +60565,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -59971,6 +60593,11 @@
           "confidence": "strong",
           "mechanic": "energy_shield_recharge"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -60006,6 +60633,11 @@
           "confidence": "strong",
           "mechanic": "evasion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -60029,6 +60661,11 @@
           "confidence": "strong",
           "mechanic": "energy_shield"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -60039,7 +60676,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:deflect12",
@@ -60049,7 +60691,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:shock_mitigation8_",
@@ -60144,6 +60791,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -60172,6 +60824,11 @@
           "mechanic": "critical_hits",
           "condition": "have_crit_in_past_8_seconds"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -60182,7 +60839,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:poison5",
@@ -60250,6 +60912,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -60273,6 +60940,11 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -60314,6 +60986,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -60331,6 +61008,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -60341,7 +61023,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:criticals25_",
@@ -60358,6 +61045,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -60385,7 +61077,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:slow_attacks10",
@@ -60395,7 +61092,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:elemental_attacks9",
@@ -60405,7 +61107,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:minion_defence21",
@@ -60428,6 +61136,12 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -60488,7 +61202,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:two_handed15",
@@ -60498,7 +61217,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:physical31",
@@ -60521,6 +61245,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -60548,6 +61277,11 @@
           "confidence": "strong",
           "mechanic": "energy_shield"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -60565,6 +61299,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -60609,6 +61348,11 @@
           "confidence": "strong",
           "mechanic": "block"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -60632,6 +61376,11 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -60649,6 +61398,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -60673,6 +61427,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -60690,6 +61449,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -60723,6 +61487,11 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -60740,6 +61509,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -60750,7 +61524,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:projectiles30",
@@ -60795,7 +61575,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:cold48",
@@ -60834,7 +61620,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:AbyssJewelHistoricOverrideNotable_T_T_13",
@@ -60886,6 +61677,11 @@
           "confidence": "strong",
           "mechanic": "block"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -60920,6 +61716,11 @@
           "confidence": "strong",
           "mechanic": "block"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -60969,7 +61770,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:grenades28",
@@ -60986,6 +61792,11 @@
           "confidence": "strong",
           "mechanic": "fire"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -61015,6 +61826,12 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -61032,6 +61849,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -61110,6 +61932,12 @@
           "confidence": "strong",
           "mechanic": "life_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -61120,7 +61948,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:ailments17",
@@ -61157,7 +61990,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:trap17",
@@ -61167,7 +62005,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:templar_druid_notable2",
@@ -61214,6 +62057,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -61249,6 +62097,11 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -61267,6 +62120,12 @@
           "mechanic": "critical_hits",
           "condition": "enemies_without_elemental_status_ailments"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -61295,7 +62154,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:blind10",
@@ -61305,7 +62169,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:criticals80",
@@ -61323,6 +62192,11 @@
           "mechanic": "critical_hits",
           "condition": "have_not_crit_recently"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -61364,6 +62238,11 @@
           "mechanic": "critical_hits",
           "condition": "blinded_enemies"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -61374,7 +62253,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:daze_19",
@@ -61402,7 +62286,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:spirit16",
@@ -61463,6 +62352,11 @@
           "confidence": "strong",
           "mechanic": "lightning"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -61506,6 +62400,11 @@
           "confidence": "strong",
           "mechanic": "poison"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -61562,7 +62461,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:accuracy18",
@@ -61572,7 +62477,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:companions1_",
@@ -61589,6 +62499,11 @@
           "confidence": "strong",
           "mechanic": "companion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -61616,6 +62531,11 @@
           "condition": "heavy_stunned_enemies",
           "scope": "incoming"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -61626,7 +62546,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:fire34",
@@ -61672,7 +62597,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:lightning40",
@@ -61700,7 +62630,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:flasks9",
@@ -61724,6 +62659,12 @@
           "confidence": "strong",
           "mechanic": "mana_recovery"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -61741,6 +62682,11 @@
           "confidence": "strong",
           "mechanic": "mana_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -61751,7 +62697,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:triggers26",
@@ -61761,7 +62712,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:mana_regeneration49",
@@ -61784,6 +62740,11 @@
           "confidence": "strong",
           "mechanic": "mana_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -61794,7 +62755,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:stun_threshold_from_energy_shield22",
@@ -61811,6 +62777,11 @@
           "confidence": "strong",
           "mechanic": "energy_shield"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -61881,6 +62852,11 @@
           "mechanic": "lightning",
           "condition": "shapeshifted"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -61906,6 +62882,11 @@
           "mechanic": "physical",
           "condition": "dazed_enemies"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -61929,6 +62910,12 @@
           "confidence": "strong",
           "mechanic": "shock"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -62005,7 +62992,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:maximum_resistances13",
@@ -62058,6 +63050,11 @@
           "mechanic": "bleed",
           "condition": "archon"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -62101,6 +63098,11 @@
           "mechanic": "freeze",
           "condition": "archon"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -62119,6 +63121,11 @@
           "mechanic": "shock",
           "condition": "archon"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -62154,6 +63161,12 @@
           "confidence": "strong",
           "mechanic": "shock"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -62164,7 +63177,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:spells59",
@@ -62182,6 +63200,11 @@
           "mechanic": "minion",
           "condition": "enemy_hit_recently"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -62205,6 +63228,11 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -62229,6 +63257,11 @@
           "confidence": "strong",
           "mechanic": "infusion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -62247,6 +63280,11 @@
           "mechanic": "minion",
           "condition": "minion_died_recently"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -62257,7 +63295,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:area_of_effect16",
@@ -62267,7 +63310,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:cold38",
@@ -62284,6 +63332,11 @@
           "confidence": "strong",
           "mechanic": "cold"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -62311,7 +63364,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:endurance_charges7",
@@ -62348,7 +63406,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:deflect41",
@@ -62385,7 +63448,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:archon14",
@@ -62403,6 +63471,11 @@
           "mechanic": "energy_shield",
           "condition": "affected_by_archon"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -62443,6 +63516,11 @@
           "confidence": "strong",
           "mechanic": "ignite"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -62467,6 +63545,11 @@
           "confidence": "strong",
           "mechanic": "energy_shield"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -62500,7 +63583,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:axe14",
@@ -62510,7 +63598,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:minion_reservation14",
@@ -62545,6 +63638,11 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -62572,7 +63670,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:AbyssJewelHistoricOverrideNotable_T_T_1",
@@ -62600,7 +63704,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:armour_break38",
@@ -62641,6 +63750,12 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -62651,7 +63766,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:poison9",
@@ -62678,7 +63798,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:evasion6",
@@ -62743,6 +63868,11 @@
           "confidence": "strong",
           "mechanic": "energy_shield"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -62766,6 +63896,11 @@
           "confidence": "strong",
           "mechanic": "freeze"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -62789,6 +63924,11 @@
           "confidence": "strong",
           "mechanic": "shock"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -62820,6 +63960,12 @@
           "confidence": "strong",
           "mechanic": "mana_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -62851,6 +63997,11 @@
           "mechanic": "energy_shield",
           "condition": "you_use_a_chaos_skill"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -62861,7 +64012,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:glory7",
@@ -62871,7 +64027,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:infusion3",
@@ -62888,6 +64050,11 @@
           "confidence": "exact",
           "mechanic": "infusion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -62996,7 +64163,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:warcries42",
@@ -63013,6 +64185,11 @@
           "confidence": "strong",
           "mechanic": "fire"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -63036,6 +64213,11 @@
           "confidence": "strong",
           "mechanic": "ignite"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -63046,7 +64228,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:cold_penetration23",
@@ -63069,6 +64256,11 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -63139,6 +64331,11 @@
           "confidence": "strong",
           "mechanic": "ignite"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -63176,6 +64373,11 @@
           "confidence": "strong",
           "mechanic": "ignite"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -63186,7 +64388,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:ailments38",
@@ -63206,7 +64414,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:heralds17",
@@ -63216,7 +64429,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:curses14",
@@ -63254,6 +64472,11 @@
           "mechanic": "energy_shield_recharge",
           "scope": "self"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -63291,6 +64514,12 @@
           "confidence": "strong",
           "mechanic": "deflection"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -63316,6 +64545,11 @@
           "mechanic": "freeze",
           "condition": "pinned_heavy_stunned_frozen_or_electrocuted"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -63366,6 +64600,11 @@
           "confidence": "strong",
           "mechanic": "shock"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -63386,7 +64625,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:enemies_on_low_life11",
@@ -63416,7 +64660,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:enemies_on_low_life9_",
@@ -63426,7 +64675,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:fire84",
@@ -63495,6 +64749,12 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -63520,6 +64780,12 @@
           "condition": "on_full_life",
           "scope": "incoming"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_dex"
       ]
     },
     {
@@ -63600,6 +64866,11 @@
           "confidence": "strong",
           "mechanic": "hit"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -63680,6 +64951,11 @@
           "confidence": "strong",
           "mechanic": "ignite"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -63704,6 +64980,11 @@
           "confidence": "strong",
           "mechanic": "ignite"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -63779,6 +65060,11 @@
           "confidence": "strong",
           "mechanic": "block"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -63832,6 +65118,11 @@
           "mechanic": "shock",
           "condition": "shocked"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -63862,6 +65153,11 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -63885,6 +65181,11 @@
           "confidence": "strong",
           "mechanic": "life_recovery"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -63895,7 +65196,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:attack_speed37",
@@ -63912,6 +65218,11 @@
           "confidence": "strong",
           "mechanic": "mana_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -63935,6 +65246,12 @@
           "confidence": "strong",
           "mechanic": "recoup"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -63958,6 +65275,12 @@
           "confidence": "strong",
           "mechanic": "recoup"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -63989,6 +65312,11 @@
           "mechanic": "cold",
           "condition": "performing_cold_skills"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -63999,7 +65327,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:spear9",
@@ -64009,7 +65342,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:criticals29",
@@ -64026,6 +65364,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -64049,6 +65392,11 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -64059,7 +65407,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:knockback18",
@@ -64076,6 +65430,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -64086,7 +65445,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:energy_shield_and_armour12",
@@ -64115,6 +65479,11 @@
           "confidence": "strong",
           "mechanic": "evasion"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -64205,6 +65574,11 @@
           "confidence": "strong",
           "mechanic": "life_leech"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -64215,7 +65589,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:area_attacks56",
@@ -64225,7 +65605,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:blind11",
@@ -64242,6 +65627,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -64309,6 +65699,11 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -64319,7 +65714,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:ground9",
@@ -64350,6 +65750,11 @@
           "mechanic": "cold",
           "condition": "on_ground_ice_chill"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -64368,6 +65773,11 @@
           "mechanic": "cold",
           "condition": "shapeshifted"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -64385,6 +65795,11 @@
           "confidence": "strong",
           "mechanic": "cold"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -64408,6 +65823,11 @@
           "confidence": "strong",
           "mechanic": "mana_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -64418,7 +65838,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:fire40",
@@ -64442,6 +65867,11 @@
           "confidence": "strong",
           "mechanic": "ignite"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -64498,6 +65928,11 @@
           "confidence": "strong",
           "mechanic": "evasion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -64508,7 +65943,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:oracle_power_charge4",
@@ -64552,6 +65992,11 @@
           "confidence": "strong",
           "mechanic": "life_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -64575,6 +66020,11 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -64602,7 +66052,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:glory15",
@@ -64612,7 +66067,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:life_leech16",
@@ -64635,6 +66095,11 @@
           "confidence": "strong",
           "mechanic": "life_leech"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -64686,6 +66151,11 @@
           "mechanic": "minion",
           "condition": "one_of_your_minions_is_revived"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -64719,7 +66189,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:AbyssJewelHistoricOverrideNotable_T_T_22",
@@ -64752,6 +66227,11 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -64772,7 +66252,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:DeliriumAnoint_GrowingPeril",
@@ -64812,6 +66297,11 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -64832,7 +66322,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:endurance_charges8",
@@ -64877,7 +66372,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:physical_witch8",
@@ -64902,6 +66403,11 @@
           "mechanic": "life_regeneration",
           "scope": "self"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -64952,7 +66458,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:stun_threshold_from_energy_shield12",
@@ -64969,6 +66481,12 @@
           "confidence": "strong",
           "mechanic": "energy_shield"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -65021,6 +66539,11 @@
           "confidence": "strong",
           "mechanic": "life_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -65050,6 +66573,11 @@
           "confidence": "strong",
           "mechanic": "totem"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -65108,6 +66636,11 @@
           "confidence": "strong",
           "mechanic": "cold"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -65118,7 +66651,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:projectiles36",
@@ -65136,6 +66674,11 @@
           "mechanic": "critical_hits",
           "condition": "enemies_further_than_6m_distance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -65160,6 +66703,11 @@
           "confidence": "strong",
           "mechanic": "life_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -65177,6 +66725,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -65194,6 +66747,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -65211,6 +66769,12 @@
           "confidence": "strong",
           "mechanic": "life_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -65253,6 +66817,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -65263,7 +66832,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:armour33",
@@ -65290,7 +66864,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:energy_shield38",
@@ -65307,6 +66886,12 @@
           "confidence": "strong",
           "mechanic": "energy_shield"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -65382,6 +66967,11 @@
           "confidence": "strong",
           "mechanic": "freeze"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -65402,7 +66992,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:stun_threshold24_",
@@ -65412,7 +67007,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:AbyssJewelHistoricOverrideNotable_T_T_16",
@@ -65439,6 +67040,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -65456,6 +67062,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -65508,6 +67119,11 @@
           "mechanic": "resistance",
           "condition": "shapeshifted"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -65532,6 +67148,11 @@
           "confidence": "strong",
           "mechanic": "evasion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -65552,7 +67173,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:marks1",
@@ -65585,6 +67211,11 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -65595,7 +67226,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:melee51_",
@@ -65613,6 +67249,11 @@
           "mechanic": "armour",
           "condition": "hit_enemy_with_melee_attack_recently"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -65623,7 +67264,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:stun13",
@@ -65633,7 +67279,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:block13",
@@ -65668,6 +67319,11 @@
           "mechanic": "critical_hits",
           "condition": "humanoids"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -65678,7 +67334,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:companions8",
@@ -65696,6 +67357,11 @@
           "mechanic": "companion",
           "condition": "in_presence_of_beast_companion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -65725,6 +67391,11 @@
           "confidence": "strong",
           "mechanic": "lightning"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -65735,7 +67406,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:freeze_and_chill_mitigation12",
@@ -65758,6 +67435,11 @@
           "confidence": "strong",
           "mechanic": "freeze"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -65775,6 +67457,12 @@
           "confidence": "strong",
           "mechanic": "fire"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -65785,7 +67473,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:energy_shield39",
@@ -65802,6 +67496,11 @@
           "confidence": "strong",
           "mechanic": "energy_shield"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -65812,7 +67511,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:evasion_and_energy_shield14",
@@ -65869,6 +67573,11 @@
           "confidence": "strong",
           "mechanic": "evasion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -65886,6 +67595,11 @@
           "confidence": "strong",
           "mechanic": "ignite"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -65903,6 +67617,11 @@
           "confidence": "strong",
           "mechanic": "life_recovery"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -65932,6 +67651,11 @@
           "confidence": "strong",
           "mechanic": "mana_leech"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -65942,7 +67666,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:area_attacks29",
@@ -65952,7 +67682,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:one_handed20",
@@ -65962,7 +67698,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:curses5",
@@ -65972,7 +67713,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:armour36",
@@ -66009,7 +67755,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:being_surrounded9",
@@ -66033,6 +67784,11 @@
           "confidence": "strong",
           "mechanic": "life_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -66057,6 +67813,11 @@
           "confidence": "strong",
           "mechanic": "ignite"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -66084,6 +67845,11 @@
           "confidence": "strong",
           "mechanic": "freeze"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -66094,7 +67860,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:infusion24",
@@ -66111,6 +67882,11 @@
           "confidence": "strong",
           "mechanic": "fire"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -66121,7 +67897,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:infusion1",
@@ -66131,7 +67913,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:infusion2",
@@ -66141,7 +67928,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:power_charges20",
@@ -66192,7 +67984,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:melee40",
@@ -66202,7 +67999,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:oracle_flat_lightning3_",
@@ -66219,6 +68021,12 @@
           "confidence": "strong",
           "mechanic": "lightning"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -66242,6 +68050,12 @@
           "confidence": "strong",
           "mechanic": "evasion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -66275,6 +68089,11 @@
           "confidence": "strong",
           "mechanic": "mana_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -66302,6 +68121,11 @@
           "confidence": "strong",
           "mechanic": "companion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -66312,7 +68136,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:volatility3",
@@ -66322,7 +68151,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:armour_and_evasion14__",
@@ -66351,6 +68185,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -66376,6 +68215,11 @@
           "mechanic": "energy_shield",
           "condition": "shapeshifted"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -66404,6 +68248,11 @@
           "mechanic": "ignite",
           "condition": "burning_enemies"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -66421,6 +68270,11 @@
           "confidence": "strong",
           "mechanic": "bleed"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -66455,6 +68309,11 @@
           "confidence": "strong",
           "mechanic": "mana_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -66472,6 +68331,11 @@
           "confidence": "strong",
           "mechanic": "elemental_resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -66489,6 +68353,12 @@
           "confidence": "exact",
           "mechanic": "life"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -66520,6 +68390,12 @@
           "confidence": "strong",
           "mechanic": "rage"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -66530,7 +68406,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:triggers17",
@@ -66540,7 +68421,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:triggers19",
@@ -66550,7 +68436,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:energy_shield_and_armour29_",
@@ -66573,6 +68464,11 @@
           "confidence": "strong",
           "mechanic": "energy_shield"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -66583,7 +68479,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:all_attributes10",
@@ -66593,7 +68494,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:physical_witch4_",
@@ -66633,6 +68539,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -66671,7 +68582,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:AbyssJewelHistoricOverrideNotable_T_T_24",
@@ -66691,7 +68607,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:armour_and_evasion51",
@@ -66819,6 +68740,11 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -66839,7 +68765,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:flasks14",
@@ -66859,7 +68790,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:poison28",
@@ -66886,7 +68822,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:life_flasks42",
@@ -66896,7 +68837,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:AbyssJewelHistoricOverrideNotable_T_T_23",
@@ -66933,7 +68880,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:criticals26",
@@ -66950,6 +68902,12 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -66973,6 +68931,11 @@
           "confidence": "strong",
           "mechanic": "evasion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -66990,6 +68953,11 @@
           "confidence": "strong",
           "mechanic": "poison"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -67025,6 +68993,11 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -67048,6 +69021,11 @@
           "confidence": "strong",
           "mechanic": "recoup"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -67071,6 +69049,11 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -67081,7 +69064,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:life_leech18",
@@ -67129,6 +69117,11 @@
           "mechanic": "minion",
           "condition": "all_active_minions_are_companions"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -67202,6 +69195,11 @@
           "confidence": "strong",
           "mechanic": "shock"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -67212,7 +69210,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:chaos37",
@@ -67239,7 +69243,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:minion_defence42",
@@ -67262,6 +69271,11 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -67289,6 +69303,12 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -67316,6 +69336,11 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -67326,7 +69351,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:minion_offence14",
@@ -67343,6 +69373,11 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -67379,6 +69414,12 @@
           "mechanic": "poison",
           "condition": "non_poisoned_enemies"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_dex"
       ]
     },
     {
@@ -67389,7 +69430,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:charms6",
@@ -67399,7 +69445,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:oracle_wolf_addon2",
@@ -67423,6 +69474,11 @@
           "confidence": "strong",
           "mechanic": "mana_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -67451,6 +69507,11 @@
           "mechanic": "minion",
           "condition": "you_have_at_least_two_different_active_offerings"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -67514,6 +69575,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -67534,7 +69600,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:mana18",
@@ -67551,6 +69622,11 @@
           "confidence": "strong",
           "mechanic": "mana_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -67574,6 +69650,12 @@
           "confidence": "strong",
           "mechanic": "mana_leech"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_dex"
       ]
     },
     {
@@ -67631,6 +69713,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -67688,7 +69775,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:slow_mitigation33",
@@ -67725,7 +69817,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:corpses10",
@@ -67742,6 +69839,12 @@
           "confidence": "exact",
           "mechanic": "corpse"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -67769,6 +69872,11 @@
           "confidence": "strong",
           "mechanic": "energy_shield"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -67792,6 +69900,11 @@
           "confidence": "strong",
           "mechanic": "ignite"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -67833,6 +69946,12 @@
           "confidence": "strong",
           "mechanic": "mana_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -67860,6 +69979,12 @@
           "confidence": "strong",
           "mechanic": "mana_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_dex"
       ]
     },
     {
@@ -67877,6 +70002,11 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -67900,6 +70030,11 @@
           "confidence": "strong",
           "mechanic": "totem"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -67917,6 +70052,11 @@
           "confidence": "strong",
           "mechanic": "mana_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -68017,6 +70157,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -68056,6 +70201,11 @@
           "mechanic": "resistance",
           "condition": "ignited"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -68074,6 +70224,11 @@
           "mechanic": "fire",
           "condition": "shapeshifted"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -68098,6 +70253,11 @@
           "mechanic": "critical_hits",
           "condition": "have_dealt_non_crit_recently"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -68169,6 +70329,11 @@
           "mechanic": "electrocute",
           "scope": "incoming"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -68186,6 +70351,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -68203,6 +70373,11 @@
           "confidence": "strong",
           "mechanic": "fire"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -68242,6 +70417,11 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -68269,6 +70449,11 @@
           "confidence": "strong",
           "mechanic": "energy_shield"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -68279,7 +70464,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:druid_class_start11",
@@ -68339,6 +70529,12 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_dex"
       ]
     },
     {
@@ -68349,7 +70545,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:mercenary9",
@@ -68366,6 +70568,11 @@
           "confidence": "strong",
           "mechanic": "life_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -68389,6 +70596,11 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -68418,6 +70630,11 @@
           "confidence": "strong",
           "mechanic": "life_recovery"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -68521,6 +70738,11 @@
           "confidence": "strong",
           "mechanic": "life_recovery"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -68538,6 +70760,11 @@
           "confidence": "strong",
           "mechanic": "mana_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -68548,7 +70775,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:auras37",
@@ -68558,7 +70790,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:ignite_mitigation6",
@@ -68575,6 +70812,11 @@
           "confidence": "strong",
           "mechanic": "ignite"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -68613,6 +70855,11 @@
           "confidence": "strong",
           "mechanic": "freeze"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -68630,6 +70877,11 @@
           "confidence": "exact",
           "mechanic": "power_charge"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -68647,6 +70899,11 @@
           "confidence": "strong",
           "mechanic": "mana_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -68727,6 +70984,11 @@
           "mechanic": "physical",
           "condition": "heavy_stunned"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -68767,7 +71029,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:criticals64",
@@ -68784,6 +71051,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -68794,7 +71066,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:companions35",
@@ -68811,6 +71088,11 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -68831,7 +71113,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:armour_break19",
@@ -68870,6 +71157,11 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -68897,7 +71189,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:bleed12",
@@ -68959,6 +71257,11 @@
           "mechanic": "bleed",
           "condition": "inflicted_vs_enemies_on_jagged_ground_chance"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -68992,7 +71295,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:elemental31",
@@ -69037,6 +71345,12 @@
           "mechanic": "elemental_resistance",
           "condition": "shapeshifted"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -69047,7 +71361,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:armour_break35",
@@ -69057,7 +71376,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:pin10",
@@ -69125,6 +71449,12 @@
           "confidence": "strong",
           "mechanic": "recoup"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -69135,7 +71465,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:poison26",
@@ -69175,6 +71511,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -69185,7 +71526,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:flasks4",
@@ -69239,6 +71585,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -69266,7 +71617,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:oracle_strength_spell4",
@@ -69286,7 +71643,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:triggers28",
@@ -69303,6 +71665,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -69313,7 +71680,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:volatility18",
@@ -69358,6 +71730,12 @@
           "mechanic": "critical_hits",
           "condition": "enemies_on_full_life"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_dex"
       ]
     },
     {
@@ -69368,7 +71746,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:duration6",
@@ -69378,7 +71761,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:poise39",
@@ -69395,6 +71783,11 @@
           "confidence": "strong",
           "mechanic": "freeze"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -69423,7 +71816,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:huntress_class_start7",
@@ -69453,7 +71851,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:druid_class_start15",
@@ -69488,6 +71892,11 @@
           "confidence": "strong",
           "mechanic": "elemental_resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -69498,7 +71907,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:lightning34",
@@ -69508,7 +71922,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:maximum_resistances21",
@@ -69563,7 +71982,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:dexterity102",
@@ -69606,7 +72031,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:attack11",
@@ -69616,7 +72046,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:rage10",
@@ -69636,7 +72072,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:projectile_spells10",
@@ -69678,6 +72119,11 @@
           "mechanic": "life_regeneration",
           "scope": "self"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -69715,6 +72161,11 @@
           "confidence": "strong",
           "mechanic": "chaos"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -69732,6 +72183,11 @@
           "confidence": "strong",
           "mechanic": "energy_shield"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -69797,6 +72253,11 @@
           "mechanic": "ignite",
           "condition": "ignited"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -69838,6 +72299,11 @@
           "confidence": "strong",
           "mechanic": "life_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -69866,6 +72332,11 @@
           "mechanic": "companion",
           "condition": "you_are_shapeshifted"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -69899,6 +72370,11 @@
           "confidence": "strong",
           "mechanic": "energy_shield_recharge"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -69909,7 +72385,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:melee30_",
@@ -69919,7 +72400,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:shock18",
@@ -69946,7 +72432,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:mana38",
@@ -69956,7 +72447,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:witch_sorceress_notable1",
@@ -69966,7 +72462,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:melee38",
@@ -69976,7 +72477,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:attack_speed32_",
@@ -69986,7 +72492,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:armour_and_evasion44",
@@ -70015,6 +72526,11 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -70025,7 +72541,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:huntress_class_start16",
@@ -70066,6 +72587,11 @@
           "mechanic": "mana_regeneration",
           "condition": "stationary"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -70171,6 +72697,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -70188,6 +72719,11 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -70205,6 +72741,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -70222,6 +72763,11 @@
           "confidence": "strong",
           "mechanic": "chaos"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -70242,7 +72788,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:crossbow10",
@@ -70252,7 +72803,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:DeliriumAnoint_ReplenishingHorde",
@@ -70280,7 +72836,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:area_spells25",
@@ -70290,7 +72851,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:life_regeneration15_",
@@ -70307,6 +72873,11 @@
           "confidence": "strong",
           "mechanic": "life_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -70324,6 +72895,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -70370,6 +72946,11 @@
           "confidence": "strong",
           "mechanic": "evasion"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -70397,6 +72978,12 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -70407,7 +72994,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:getting_hit10",
@@ -70425,6 +73017,11 @@
           "mechanic": "thorns",
           "condition": "blocked_recently"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -70435,7 +73032,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:crossbow14",
@@ -70459,6 +73061,11 @@
           "confidence": "strong",
           "mechanic": "ammunition"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -70482,6 +73089,11 @@
           "confidence": "strong",
           "mechanic": "thorns"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -70492,7 +73104,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:deflect22",
@@ -70502,7 +73119,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:area_spells27",
@@ -70512,7 +73135,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:fire76",
@@ -70529,6 +73157,11 @@
           "confidence": "strong",
           "mechanic": "fire"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -70546,6 +73179,11 @@
           "confidence": "strong",
           "mechanic": "cold"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -70556,7 +73194,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:minion_offence28",
@@ -70585,6 +73228,11 @@
           "confidence": "strong",
           "mechanic": "hit"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -70595,7 +73243,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:warcries39",
@@ -70605,7 +73258,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:area_spells24",
@@ -70615,7 +73273,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:spear18",
@@ -70625,7 +73288,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:oracle_thorns3",
@@ -70650,6 +73318,11 @@
           "mechanic": "thorns",
           "condition": "shapeshifted"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -70660,7 +73333,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:energy_shield_and_armour35",
@@ -70683,6 +73361,12 @@
           "confidence": "strong",
           "mechanic": "energy_shield"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -70718,6 +73402,11 @@
           "confidence": "strong",
           "mechanic": "bleed"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -70753,6 +73442,11 @@
           "confidence": "strong",
           "mechanic": "totem"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -70763,7 +73457,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:attack_speed35",
@@ -70780,6 +73480,11 @@
           "confidence": "strong",
           "mechanic": "hit"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -70803,6 +73508,12 @@
           "confidence": "strong",
           "mechanic": "mana_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -70820,6 +73531,11 @@
           "confidence": "strong",
           "mechanic": "bleed"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -70830,7 +73546,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:armour_and_evasion34",
@@ -70865,6 +73586,11 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -70900,6 +73626,11 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -70967,6 +73698,11 @@
           "confidence": "strong",
           "mechanic": "life_leech"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -71029,6 +73765,11 @@
           "mechanic": "resistance",
           "condition": "shapeshifted"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -71046,6 +73787,11 @@
           "confidence": "strong",
           "mechanic": "bleed"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -71063,6 +73809,12 @@
           "confidence": "strong",
           "mechanic": "ignite"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -71083,7 +73835,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:ignite_mitigation13",
@@ -71100,6 +73857,11 @@
           "confidence": "strong",
           "mechanic": "ignite"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -71117,6 +73879,12 @@
           "confidence": "strong",
           "mechanic": "energy_shield"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -71134,6 +73902,11 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -71151,6 +73924,12 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_dex"
       ]
     },
     {
@@ -71176,6 +73955,11 @@
           "mechanic": "evasion",
           "condition": "hit_recently"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -71186,7 +73970,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:shapeshifting12",
@@ -71204,6 +73994,12 @@
           "mechanic": "physical",
           "condition": "shapeshifted"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -71221,6 +74017,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -71231,7 +74032,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:chill_and_freeze8",
@@ -71254,6 +74061,11 @@
           "confidence": "strong",
           "mechanic": "freeze"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -71264,7 +74076,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:daze_17",
@@ -71289,6 +74106,11 @@
           "mechanic": "physical",
           "condition": "dazed_enemies"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -71299,7 +74121,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:oracle_crab_claw9_",
@@ -71322,6 +74149,11 @@
           "confidence": "strong",
           "mechanic": "energy_shield"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -71339,6 +74171,12 @@
           "confidence": "strong",
           "mechanic": "block"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -71349,7 +74187,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:evasion_and_energy_shield15",
@@ -71386,6 +74229,11 @@
           "confidence": "strong",
           "mechanic": "evasion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -71403,6 +74251,11 @@
           "confidence": "strong",
           "mechanic": "energy_shield"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -71420,6 +74273,11 @@
           "confidence": "strong",
           "mechanic": "lightning"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -71465,7 +74323,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:ranged37",
@@ -71475,7 +74338,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:ranged39",
@@ -71485,7 +74354,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:hazards2",
@@ -71508,6 +74382,11 @@
           "confidence": "strong",
           "mechanic": "evasion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -71525,6 +74404,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -71543,6 +74427,12 @@
           "mechanic": "companion",
           "condition": "immobilised_enemies"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -71561,6 +74451,12 @@
           "mechanic": "ignite",
           "condition": "ignited_enemies"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -71579,6 +74475,12 @@
           "mechanic": "chill",
           "condition": "chilled_enemies"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -71597,6 +74499,12 @@
           "mechanic": "shock",
           "condition": "shocked_enemies"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -71620,6 +74528,11 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -71637,6 +74550,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -71647,7 +74565,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:mana_leech18",
@@ -71710,6 +74633,12 @@
           "condition": "immobilised_enemies",
           "scope": "self"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -71720,7 +74649,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:projectiles39",
@@ -71747,6 +74681,11 @@
           "confidence": "strong",
           "mechanic": "chill"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -71764,6 +74703,12 @@
           "confidence": "strong",
           "mechanic": "ignite"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -71774,7 +74719,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:fire_penetration25",
@@ -71797,6 +74747,11 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -71837,6 +74792,12 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_dex"
       ]
     },
     {
@@ -71877,6 +74838,11 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -71887,7 +74853,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:evasion_and_energy_shield11",
@@ -71910,6 +74882,11 @@
           "confidence": "strong",
           "mechanic": "evasion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -71927,6 +74904,11 @@
           "confidence": "strong",
           "mechanic": "evasion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -71937,7 +74919,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:jagged_ground26",
@@ -71947,7 +74934,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:getting_hit11",
@@ -71970,6 +74962,11 @@
           "confidence": "strong",
           "mechanic": "thorns"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -71999,6 +74996,12 @@
           "confidence": "strong",
           "mechanic": "evasion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -72009,7 +75012,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:energy_shield_and_armour14",
@@ -72032,6 +75040,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -72067,6 +75080,12 @@
           "confidence": "strong",
           "mechanic": "evasion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -72090,6 +75109,12 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -72107,6 +75132,11 @@
           "confidence": "strong",
           "mechanic": "totem"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -72134,7 +75164,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:wolf11",
@@ -72152,6 +75187,11 @@
           "mechanic": "critical_hits",
           "condition": "shapeshifted"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -72162,7 +75202,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:AbyssJewelHistoricOverrideNotable_T_T_21",
@@ -72195,6 +75240,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -72205,7 +75255,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:ranged35",
@@ -72225,7 +75280,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:area_attacks40_",
@@ -72313,6 +75373,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -72350,7 +75415,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:poise40",
@@ -72398,6 +75468,12 @@
           "confidence": "strong",
           "mechanic": "life_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -72426,7 +75502,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:deflect53",
@@ -72501,7 +75582,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:shield35",
@@ -72520,6 +75606,11 @@
           "condition": "you_have_been_stunned_recently",
           "scope": "incoming"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -72530,7 +75621,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:shadow_monk_notable2",
@@ -72547,6 +75643,11 @@
           "confidence": "strong",
           "mechanic": "mana_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -72571,6 +75672,11 @@
           "confidence": "strong",
           "mechanic": "life_recovery"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -72581,7 +75687,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:energy_shield_recovery40",
@@ -72610,6 +75721,12 @@
           "confidence": "strong",
           "mechanic": "recoup"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -72639,6 +75756,11 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -72668,6 +75790,12 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_dex"
       ]
     },
     {
@@ -72701,7 +75829,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:elemental33",
@@ -72718,6 +75851,11 @@
           "confidence": "strong",
           "mechanic": "elemental_resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -72741,6 +75879,11 @@
           "confidence": "strong",
           "mechanic": "shock"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -72772,6 +75915,11 @@
           "confidence": "strong",
           "mechanic": "shock"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -72848,6 +75996,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -72875,6 +76028,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -72902,6 +76060,11 @@
           "confidence": "strong",
           "mechanic": "companion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -72912,7 +76075,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:mana17",
@@ -72946,6 +76114,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -72969,6 +76142,12 @@
           "confidence": "strong",
           "mechanic": "evasion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_dex"
       ]
     },
     {
@@ -72993,6 +76172,11 @@
           "confidence": "strong",
           "mechanic": "life_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -73017,6 +76201,11 @@
           "mechanic": "critical_hits",
           "condition": "have_crit_recently"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -73105,6 +76294,12 @@
           "confidence": "strong",
           "mechanic": "totem"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -73115,7 +76310,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:lightning_penetration26__",
@@ -73138,6 +76338,11 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -73175,7 +76380,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:projectiles48",
@@ -73192,6 +76403,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -73212,7 +76428,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:being_surrounded21",
@@ -73222,7 +76443,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:criticals79",
@@ -73239,6 +76466,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -73249,7 +76481,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:life_recoup14",
@@ -73266,6 +76503,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -73334,7 +76576,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:attack_speed30",
@@ -73344,7 +76591,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:AbyssJewelHistoricOverrideNotable_T_T_15",
@@ -73535,6 +76787,12 @@
           "confidence": "strong",
           "mechanic": "deflection"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -73587,6 +76845,11 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -73597,7 +76860,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:azmerianimals42",
@@ -73668,6 +76936,11 @@
           "mechanic": "life_regeneration",
           "condition": "stationary"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -73709,6 +76982,11 @@
           "confidence": "strong",
           "mechanic": "freeze"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -73719,7 +76997,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:power_endurance_charges3",
@@ -73729,7 +77012,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:duelist_minions10",
@@ -73746,6 +77034,11 @@
           "confidence": "strong",
           "mechanic": "companion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -73786,6 +77079,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -73796,7 +77094,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:glory16",
@@ -73806,7 +77109,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:criticals90",
@@ -73823,6 +77131,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -73872,7 +77185,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:slowed_enemies9",
@@ -73906,6 +77224,11 @@
           "confidence": "strong",
           "mechanic": "life_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -73987,6 +77310,11 @@
           "mechanic": "poison",
           "condition": "helmet_grants_higher_evasion_than_armour"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -74059,6 +77387,11 @@
           "mechanic": "ignite",
           "condition": "ignited_enemies"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -74128,6 +77461,11 @@
           "confidence": "strong",
           "mechanic": "poison"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -74192,7 +77530,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:criticals28",
@@ -74209,6 +77552,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -74226,6 +77574,11 @@
           "confidence": "strong",
           "mechanic": "companion"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -74244,6 +77597,12 @@
           "from": "mana",
           "to": "life_flask"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -74254,7 +77613,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:projectile_spells9",
@@ -74264,7 +77628,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:AbyssJewelHistoricOverrideNotable_T_T_25",
@@ -74343,7 +77712,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:cold26",
@@ -74403,6 +77777,11 @@
           "confidence": "strong",
           "mechanic": "shock"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -74420,6 +77799,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -74488,7 +77872,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:attack33_",
@@ -74498,7 +77887,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:DeliriumAnoint_Unfettered",
@@ -74569,7 +77963,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:duration_spells4",
@@ -74579,7 +77978,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:ranged25",
@@ -74620,6 +78024,11 @@
           "confidence": "strong",
           "mechanic": "life_regeneration"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -74645,6 +78054,11 @@
           "mechanic": "resistance",
           "condition": "at_least_5_red_supports_socketed"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -74668,6 +78082,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -74755,6 +78174,11 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -74772,6 +78196,11 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -74789,6 +78218,11 @@
           "confidence": "strong",
           "mechanic": "block"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -74809,7 +78243,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:grenades27",
@@ -74819,7 +78258,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:corpses21",
@@ -74870,6 +78314,11 @@
           "confidence": "strong",
           "mechanic": "bleed"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -74909,6 +78358,12 @@
           "confidence": "strong",
           "mechanic": "life_leech"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -74946,7 +78401,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:shield25",
@@ -74963,6 +78423,11 @@
           "confidence": "strong",
           "mechanic": "block"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -74986,6 +78451,11 @@
           "confidence": "strong",
           "mechanic": "life_recovery"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -75021,6 +78491,11 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -75031,7 +78506,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:warcries12",
@@ -75041,7 +78521,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:chaos36",
@@ -75072,6 +78557,11 @@
           "mechanic": "resistance",
           "condition": "cursed"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -75082,7 +78572,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:grenades18",
@@ -75092,7 +78587,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:fire37",
@@ -75115,6 +78615,11 @@
           "confidence": "strong",
           "mechanic": "resistance"
         }
+      ],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -75162,6 +78667,11 @@
           "confidence": "strong",
           "mechanic": "lightning"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -75172,7 +78682,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:criticals73",
@@ -75189,6 +78705,12 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -75199,7 +78721,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "passive:focus5",
@@ -75226,7 +78753,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:auras24",
@@ -75236,7 +78768,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:auras23",
@@ -75246,7 +78783,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:spell_suppression24",
@@ -75263,6 +78805,11 @@
           "confidence": "strong",
           "mechanic": "freeze"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -75309,6 +78856,11 @@
           "confidence": "strong",
           "mechanic": "hit"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -75338,6 +78890,11 @@
           "confidence": "strong",
           "mechanic": "recoup"
         }
+      ],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -75348,7 +78905,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:crossbow25",
@@ -75440,7 +79003,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:quarterstaff10",
@@ -75457,6 +79025,11 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -75467,7 +79040,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "passive:shield10",
@@ -75490,6 +79068,11 @@
           "confidence": "strong",
           "mechanic": "physical"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -75500,7 +79083,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:lightning33",
@@ -75533,7 +79121,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "passive:chaos40",
@@ -75561,6 +79154,11 @@
           "mechanic": "critical_hits",
           "condition": "youve_shapeshifted_to_animal_recently"
         }
+      ],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -75571,7 +79169,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "passive:quivers9",
@@ -75591,7 +79194,12 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "passive:curses6",
@@ -75601,7 +79209,13 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [],
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "skill:Metadata/Items/Gem/SupportGemAbidingHex",

@@ -817,6 +817,7 @@ def build_passive_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[
                 "retrieval_terms": tags,
                 "facts": facts,
                 "compatibility": {"access": access},
+                **({"passive_tree_starts": passive["passiveTreeStarts"]} if passive.get("passiveTreeStarts") else {}),
                 "links": {
                     "ascendancy_id": passive.get("ascendancyId"),
                     "passive_skill_graph_id": raw.get("PassiveSkillGraphId"),
@@ -1170,7 +1171,7 @@ def compact_entity(entity: dict[str, Any]) -> dict[str, Any]:
     content_type = entity.get("content_type")
     projected = {
         key: entity[key]
-        for key in ("id", "content_type", "source_id", "name", "compatibility")
+        for key in ("id", "content_type", "source_id", "name", "compatibility", "passive_tree_starts")
         if key in entity
     }
 

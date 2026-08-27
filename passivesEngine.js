@@ -26,6 +26,7 @@ import { normalizeTagList, toMatchKey } from './js/tag-normalization.js';
  * @property {string[]} tags
  * @property {string} flavour
  * @property {RawStat[]} rawStats
+ * @property {string[]} [passiveTreeStarts]
  *
  * @typedef {Object} PassivesData
  * @property {PassiveNode[]} nodes
@@ -282,9 +283,13 @@ export function pickRecommendedKeystones(passivesData, passiveIndex, ctx, count 
  * @returns {PassiveNode[]}
  */
 export function pickRecommendedNotables(passivesData, passiveIndex, ctx, count = 8) {
-  const candidates = passiveIndex?.notables?.length
+  const baseCandidates = passiveIndex?.notables?.length
     ? passiveIndex.notables
     : (passivesData?.nodes || []).filter((node) => node?.type === 'notable');
+  const start = ctx?.passiveTreeStart;
+  const candidates = start
+    ? baseCandidates.filter((node) => node?.passiveTreeStarts?.includes(start))
+    : baseCandidates;
   if (!candidates.length) return [];
   const scores = new Map();
   candidates.forEach((node) => {
