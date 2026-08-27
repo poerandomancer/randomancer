@@ -2094,5 +2094,37 @@
       "name": "Wrapped Quiver",
       "passiveSkillGraphId": 30132
     }
-  ]
+  ],
+  "classPassiveOverrides": {
+    "totalRecords": 61,
+    "resolvedForeignKeys": 61,
+    "diagnostics": [
+      {
+        "recordRid": 51,
+        "characterId": 11,
+        "skillToOverrideRid": 2622,
+        "overrideRid": 5687,
+        "reason": "original_graph_id_missing_from_default_tree",
+        "originalId": "minion_offence2",
+        "originalName": "Minion Damage",
+        "originalPassiveSkillGraphId": 55194,
+        "replacementId": "druid_class_start10",
+        "replacementName": "Armour and Energy Shield",
+        "replacementIsNotable": false
+      },
+      {
+        "recordRid": 53,
+        "characterId": 11,
+        "skillToOverrideRid": 1942,
+        "overrideRid": 5689,
+        "reason": "original_graph_id_missing_from_default_tree",
+        "originalId": "criticals1_",
+        "originalName": "Critical Chance",
+        "originalPassiveSkillGraphId": 19680,
+        "replacementId": "druid_class_start12",
+        "replacementName": "Skill Speed while Shapeshifted",
+        "replacementIsNotable": false
+      }
+    ]
+  }
 }

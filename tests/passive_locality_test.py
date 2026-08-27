@@ -99,6 +99,42 @@ class PassiveLocalityTest(unittest.TestCase):
                 self.assertTrue(node.get("passiveTreeStarts") or node["id"] in reported, node["name"])
                 self.assertLessEqual(len(node.get("passiveTreeStarts", [])), 6)
 
+    def test_real_class_overrides_resolve_and_inherit_physical_locality(self):
+        enriched = json.loads((ROOT / "data/enriched/passives_enriched.json").read_text())["nodes"]
+        by_name = {row["name"]: row for row in enriched}
+        for original_name, replacement_name, character_id, class_name in [
+            ("Honed Instincts", "Primal Instinct", 8, "Huntress"),
+            ("Relentless Vindicator", "Guardian of the Wilds", 11, "Druid"),
+        ]:
+            original, replacement = by_name[original_name], by_name[replacement_name]
+            self.assertIn(character_id, original["overriddenForClassIds"])
+            self.assertEqual(replacement["classOverride"]["className"], class_name)
+            self.assertEqual(replacement["passiveTreeStarts"], original["passiveTreeStarts"])
+        # This real Witch mapping proves a non-notable physical slot can emit a
+        # notable replacement, based on the replacement's status.
+        self.assertEqual(by_name["Minion Life"]["classOverride"]["characterId"], 1)
+        self.assertEqual(by_name["Minion Life"]["type"], "notable")
+
+    def test_override_reference_validation_and_notable_status_changes(self):
+        passives = json.loads((ROOT / "data/datamined/passiveskills.json").read_text())
+        overrides = json.loads((ROOT / "data/datamined/classpassiveskilloverrides.json").read_text())
+        tree = json.loads((ROOT / "data/datamined/Default.json").read_text())
+        graph = MODULE.build_passive_tree_adjacency(tree, passives)
+        distances = {start: MODULE.shortest_path_distances(graph, root)
+                     for start, root in MODULE.PASSIVE_TREE_STARTS.items()}
+        defaults, replacements, diagnostics = MODULE.resolve_class_passive_overrides(
+            passives, overrides, distances, tree
+        )
+        self.assertEqual(len(overrides), 61)
+        self.assertEqual(sum(map(len, defaults.values())), 61)
+        self.assertEqual(sum(map(len, replacements.values())), 61)
+        self.assertFalse([row for row in diagnostics if row["reason"].startswith("unresolved_")])
+        by_rid = {row["_rid"]: row for row in passives}
+        changes = [(bool(by_rid[row["SkillToOverride"]].get("IsNotable")),
+                    bool(by_rid[row["Override"]].get("IsNotable"))) for row in overrides]
+        self.assertIn((True, False), changes)
+        self.assertIn((False, True), changes)
+
     def test_passive_fact_direction_rejects_defense_and_recovery_mentions(self):
         from lib.recommendation_semantics import parse_evidence
 

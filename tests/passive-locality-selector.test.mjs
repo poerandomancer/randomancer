@@ -14,3 +14,18 @@ test('notable locality is a hard class-start gate while tied central nodes remai
   assert.deepEqual(new Set(picked.map((node) => node.id)), new Set(['near', 'central']));
   assert.ok(!picked.some((node) => node.id === 'opposite'));
 });
+
+test('class overrides are hard gates even when selection falls back to fill its count', () => {
+  const overrideNodes = [
+    { id: 'default', type: 'notable', tags: ['fire'], passiveTreeStarts: ['dex'],
+      overriddenForClassIds: [8], overriddenForClasses: ['Huntress'] },
+    { id: 'replacement', type: 'notable', tags: ['fire'], passiveTreeStarts: ['dex'],
+      classOverride: { characterId: 8, className: 'Huntress' } },
+  ];
+  const huntress = pickRecommendedNotables({ nodes: overrideNodes }, null,
+    { ...context, className: 'Huntress', passiveTreeCharacterId: 8, passiveTreeStart: 'dex' }, 8);
+  const ranger = pickRecommendedNotables({ nodes: overrideNodes }, null,
+    { ...context, className: 'Ranger', passiveTreeCharacterId: 2, passiveTreeStart: 'dex' }, 8);
+  assert.deepEqual(new Set(huntress.map((node) => node.id)), new Set(['replacement']));
+  assert.deepEqual(new Set(ranger.map((node) => node.id)), new Set(['default']));
+});

@@ -67,6 +67,7 @@ INPUT_PASSIVES = DATA_ROOT / "datamined" / "passiveskills.json"
 INPUT_STATS = DATA_ROOT / "datamined" / "stats.json"
 INPUT_ASCENDANCY = DATA_ROOT / "datamined" / "ascendancy.json"
 INPUT_PASSIVE_TREE = DATA_ROOT / "datamined" / "Default.json"
+INPUT_CLASS_OVERRIDES = DATA_ROOT / "datamined" / "classpassiveskilloverrides.json"
 OUTPUT_FILE = DATA_ROOT / "enriched" / "passives_enriched.json"
 OUTPUT_REPORT_FILE = DATA_ROOT / "enriched" / "passive_scrape_report.json"
 LEGACY_KEYSTONE_TOOLTIPS = DATA_ROOT / "enriched" / "keystone_tooltips.json"
@@ -80,6 +81,58 @@ PASSIVE_TREE_STARTS = {
     "dex_int": 44683,
     "str_int": 61525,
 }
+
+PASSIVE_TREE_CLASS_NAMES = {
+    1: "Witch", 2: "Ranger", 6: "Warrior", 7: "Sorceress",
+    8: "Huntress", 9: "Mercenary", 10: "Monk", 11: "Druid",
+}
+
+
+def resolve_class_passive_overrides(passive_skills, overrides, distance_by_start, tree):
+    """Resolve override foreign keys and physical-slot locality once at generation time."""
+    by_rid = {row.get("_rid"): row for row in passive_skills}
+    tree_hashes = {
+        node.get("hash")
+        for group in tree.get("groups") or []
+        for node in group.get("passives") or []
+    }
+    by_default, by_replacement, diagnostics = defaultdict(list), defaultdict(list), []
+    for mapping in sorted(overrides, key=lambda row: row.get("_rid", -1)):
+        original = by_rid.get(mapping.get("SkillToOverride"))
+        replacement = by_rid.get(mapping.get("Override"))
+        issue = None
+        if original is None:
+            issue = "unresolved_skill_to_override"
+        elif replacement is None:
+            issue = "unresolved_override"
+        graph_id = original.get("PassiveSkillGraphId") if original else None
+        starts = closest_passive_tree_starts(distance_by_start, graph_id) if original else []
+        if not issue and graph_id not in tree_hashes:
+            issue = "original_graph_id_missing_from_default_tree"
+        resolved = {
+            "recordRid": mapping.get("_rid"),
+            "characterId": mapping.get("CharacterToOverrideFor"),
+            "className": PASSIVE_TREE_CLASS_NAMES.get(mapping.get("CharacterToOverrideFor")),
+            "original": original,
+            "replacement": replacement,
+            "physicalGraphId": graph_id,
+            "passiveTreeStarts": starts,
+            "issue": issue,
+        }
+        if issue:
+            diagnostics.append({
+                "recordRid": resolved["recordRid"], "characterId": resolved["characterId"],
+                "skillToOverrideRid": mapping.get("SkillToOverride"),
+                "overrideRid": mapping.get("Override"), "reason": issue,
+                **({"originalId": original.get("Id"), "originalName": original.get("Name"),
+                    "originalPassiveSkillGraphId": graph_id} if original else {}),
+                **({"replacementId": replacement.get("Id"), "replacementName": replacement.get("Name"),
+                    "replacementIsNotable": bool(replacement.get("IsNotable"))} if replacement else {}),
+            })
+        if original and replacement:
+            by_default[original.get("_rid")].append(resolved)
+            by_replacement[replacement.get("_rid")].append(resolved)
+    return dict(by_default), dict(by_replacement), diagnostics
 
 
 def participates_in_character_tree(node):
@@ -1358,6 +1411,7 @@ def main():
     stats = load_json(INPUT_STATS)
     ascendancy_entries = load_json(INPUT_ASCENDANCY)
     passive_tree = load_json(INPUT_PASSIVE_TREE)
+    class_overrides = load_json(INPUT_CLASS_OVERRIDES)
 
     stat_by_rid = {s.get("_rid"): s for s in stats}
     ascendancy_names_by_id = build_ascendancy_map_from_file(ascendancy_entries)
@@ -1367,6 +1421,9 @@ def main():
         start: shortest_path_distances(tree_adjacency, root)
         for start, root in PASSIVE_TREE_STARTS.items()
     }
+    overrides_by_default, overrides_by_replacement, override_diagnostics = resolve_class_passive_overrides(
+        passive_skills, class_overrides, distance_by_start, passive_tree
+    )
     owned_distance_by_start = ascendancy_owned_distances(
         passive_tree, passive_skills, tree_adjacency, distance_by_start
     )
@@ -1410,6 +1467,14 @@ def main():
         "excludedNonCharacterNodes": 0,
         "excludedNonCharacterNodesBySkillType": {},
         "ordinaryNotablesMissingFromGraph": [],
+        "classPassiveOverrides": {
+            "totalRecords": len(class_overrides),
+            "resolvedForeignKeys": len(class_overrides) - sum(
+                row["reason"] in {"unresolved_skill_to_override", "unresolved_override"}
+                for row in override_diagnostics
+            ),
+            "diagnostics": override_diagnostics,
+        },
     }
 
     excluded_by_skill_type = Counter()
@@ -1532,11 +1597,29 @@ def main():
                 "scrapeRejectedReason": scrape_rejected_reason if (scrape_entry and not scrape_valid) else None,
                 "tagSources": sorted(set(tag_sources)),
             }
+        default_overrides = overrides_by_default.get(node.get("_rid"), [])
+        replacement_overrides = overrides_by_replacement.get(node.get("_rid"), [])
+        if default_overrides:
+            enriched_node["overriddenForClassIds"] = sorted({row["characterId"] for row in default_overrides})
+            enriched_node["overriddenForClasses"] = sorted({row["className"] for row in default_overrides if row["className"]})
+        if replacement_overrides:
+            # Current authoritative data has one occupant/class per replacement. Keep the
+            # representation singular and reject ambiguous future data in diagnostics.
+            override = replacement_overrides[0]
+            enriched_node["classOverride"] = {
+                "characterId": override["characterId"], "className": override["className"],
+                "overrideOf": override["original"].get("Id"),
+                "physicalPassiveSkillGraphId": override["physicalGraphId"],
+                "localityResolved": bool(override["passiveTreeStarts"]),
+            }
         required_ascendancy = passive_owner_by_id.get(node.get("Id"))
         if node_type in {"notable", "ascendancy"}:
             graph_id = node.get("PassiveSkillGraphId")
+            if replacement_overrides:
+                graph_id = replacement_overrides[0]["physicalGraphId"]
             locality_distances = owned_distance_by_start if required_ascendancy else distance_by_start
-            starts = closest_passive_tree_starts(locality_distances, graph_id)
+            starts = (replacement_overrides[0]["passiveTreeStarts"] if replacement_overrides
+                      else closest_passive_tree_starts(locality_distances, graph_id))
             if starts:
                 enriched_node["passiveTreeStarts"] = starts
             elif node_type == "notable" and not required_ascendancy:
