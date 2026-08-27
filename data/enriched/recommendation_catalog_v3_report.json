@@ -57,7 +57,29 @@
     "active_skills_with_crafting_metadata": 261,
     "active_skills_requiring_unique_provider": 14,
     "passives_with_more_than_two_source_stats": 181,
-    "passives_with_granted_skill_links": 50
+    "passives_with_granted_skill_links": 50,
+    "ordinary_notables_with_weapon_requirements": 146,
+    "passive_weapon_requirements_represented": [
+      "axe",
+      "bow",
+      "crossbow",
+      "dagger",
+      "flail",
+      "mace",
+      "martial",
+      "melee",
+      "one_handed",
+      "quarterstaff",
+      "sceptre",
+      "shield",
+      "spear",
+      "staff",
+      "sword",
+      "talisman",
+      "two_handed",
+      "wand"
+    ],
+    "unresolved_passive_weapon_requirements": []
   },
   "coverage": {
     "passive_descriptions": {
