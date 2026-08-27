@@ -99,6 +99,18 @@ function analyze(entity, snapshot, context) {
     const requiredAscendancy = token(entity?.required_ascendancy || entity?.compatibility?.access?.ascendancy);
     const rolledAscendancy = token(snapshot?.ascendancyName || snapshot?.ascendancy);
     if (requiredAscendancy && requiredAscendancy !== rolledAscendancy) return null;
+    const access = entity?.compatibility?.access || {};
+    const rolledClassId = Number(snapshot?.passiveTreeCharacterId);
+    const rolledClass = token(snapshot?.className);
+    const overrideClassId = Number(access.passive_tree_character_id ?? entity?.class_override?.characterId);
+    const overrideClass = token(access.class_name || entity?.class_override?.className);
+    if ((Number.isFinite(overrideClassId) || overrideClass)
+      && !((Number.isFinite(rolledClassId) && rolledClassId === overrideClassId)
+        || (!Number.isFinite(rolledClassId) && rolledClass && rolledClass === overrideClass))) return null;
+    const replacedIds = arr(access.overridden_for_passive_tree_character_ids || entity?.overridden_for_class_ids).map(Number);
+    const replacedClasses = arr(access.overridden_for_classes || entity?.overridden_for_classes).map(token);
+    if ((Number.isFinite(rolledClassId) && replacedIds.includes(rolledClassId))
+      || (!Number.isFinite(rolledClassId) && rolledClass && replacedClasses.includes(rolledClass))) return null;
     const classStart = token(snapshot?.passiveTreeStart);
     const starts = arr(entity?.passive_tree_starts).map(token).filter(Boolean);
     if (!classStart || !starts.length) return null;

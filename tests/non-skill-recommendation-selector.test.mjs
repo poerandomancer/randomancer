@@ -27,6 +27,21 @@ test('owns ascendancy, excludes keystones, and enforces unique weapon family', (
   assert.equal(JSON.stringify(result).includes('keystone'), false);
 });
 
+test('catalog passive class overrides cannot leak through selection fallback', () => {
+  const defaultPassive = entity('default', 'passive', ['freeze'], { compatibility: { access: {
+    overridden_for_passive_tree_character_ids: [8], overridden_for_classes: ['Huntress']
+  } } });
+  const replacement = entity('replacement', 'passive', ['freeze'], { compatibility: { access: {
+    passive_tree_character_id: 8, class_name: 'Huntress', override_of: 'default'
+  } } });
+  const forHuntress = selectNonSkillRecommendations(catalog([defaultPassive, replacement]),
+    { ...snap, className: 'Huntress', passiveTreeCharacterId: 8 }, pkg).passives.notables;
+  const forRanger = selectNonSkillRecommendations(catalog([defaultPassive, replacement]),
+    { ...snap, className: 'Ranger', passiveTreeCharacterId: 2 }, pkg).passives.notables;
+  assert.deepEqual(forHuntress.map((entry) => entry.id), ['replacement']);
+  assert.deepEqual(forRanger.map((entry) => entry.id), ['default']);
+});
+
 test('off-hand uniques require a one-handed rolled weapon', () => {
   const offHands = [
     entity('shield', 'unique', ['freeze'], { compatibility: { access: {}, equipment: { slot: 'Shield', base: 'Tower Shield' } } }),

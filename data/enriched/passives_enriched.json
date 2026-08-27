@@ -13206,6 +13206,12 @@
         "dex_int",
         "int",
         "str_int"
+      ],
+      "overriddenForClassIds": [
+        1
+      ],
+      "overriddenForClasses": [
+        "Witch"
       ]
     },
     {
@@ -15206,7 +15212,19 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
-      ]
+      ],
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "classOverride": {
+        "characterId": 8,
+        "className": "Huntress",
+        "overrideOf": "flasks24",
+        "physicalPassiveSkillGraphId": 44527,
+        "localityResolved": true
+      }
     },
     {
       "id": "DeliriumAnoint_AugmentedFlesh",
@@ -15874,7 +15892,19 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
-      ]
+      ],
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "classOverride": {
+        "characterId": 11,
+        "className": "Druid",
+        "overrideOf": "templar_druid_notable2",
+        "physicalPassiveSkillGraphId": 28950,
+        "localityResolved": true
+      }
     },
     {
       "id": "physical37",
@@ -17221,6 +17251,12 @@
         "int",
         "str",
         "str_int"
+      ],
+      "overriddenForClassIds": [
+        11
+      ],
+      "overriddenForClasses": [
+        "Druid"
       ]
     },
     {
@@ -19693,6 +19729,12 @@
         "dex",
         "dex_int",
         "str_dex"
+      ],
+      "overriddenForClassIds": [
+        8
+      ],
+      "overriddenForClasses": [
+        "Huntress"
       ]
     },
     {
@@ -20473,6 +20515,12 @@
         "dex",
         "dex_int",
         "str_dex"
+      ],
+      "overriddenForClassIds": [
+        8
+      ],
+      "overriddenForClasses": [
+        "Huntress"
       ]
     },
     {
@@ -22657,6 +22705,12 @@
         "int",
         "str",
         "str_int"
+      ],
+      "overriddenForClassIds": [
+        11
+      ],
+      "overriddenForClasses": [
+        "Druid"
       ]
     },
     {
@@ -23702,6 +23756,12 @@
         "int",
         "str",
         "str_int"
+      ],
+      "overriddenForClassIds": [
+        11
+      ],
+      "overriddenForClasses": [
+        "Druid"
       ]
     },
     {
@@ -24957,6 +25017,12 @@
         "int",
         "str",
         "str_int"
+      ],
+      "overriddenForClassIds": [
+        11
+      ],
+      "overriddenForClasses": [
+        "Druid"
       ]
     },
     {
@@ -25991,6 +26057,12 @@
         "dex",
         "dex_int",
         "str_dex"
+      ],
+      "overriddenForClassIds": [
+        8
+      ],
+      "overriddenForClasses": [
+        "Huntress"
       ]
     },
     {
@@ -27082,6 +27154,12 @@
         "dex_int",
         "int",
         "str_int"
+      ],
+      "overriddenForClassIds": [
+        1
+      ],
+      "overriddenForClasses": [
+        "Witch"
       ]
     },
     {
@@ -28489,7 +28567,19 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
-      ]
+      ],
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "classOverride": {
+        "characterId": 1,
+        "className": "Witch",
+        "overrideOf": "lightning34",
+        "physicalPassiveSkillGraphId": 64046,
+        "localityResolved": true
+      }
     },
     {
       "id": "auras17",
@@ -34266,7 +34356,19 @@
       "scrapeMatched": false,
       "scrapeMatchedBy": null,
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "classOverride": {
+        "characterId": 11,
+        "className": "Druid",
+        "overrideOf": "templar_druid_notable1",
+        "physicalPassiveSkillGraphId": 6898,
+        "localityResolved": true
+      }
     },
     {
       "id": "melee65",
@@ -34682,7 +34784,19 @@
       "scrapeMatched": false,
       "scrapeMatchedBy": null,
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "classOverride": {
+        "characterId": 11,
+        "className": "Druid",
+        "overrideOf": "auras18",
+        "physicalPassiveSkillGraphId": 64299,
+        "localityResolved": true
+      }
     },
     {
       "id": "life_regeneration17_",
@@ -36383,6 +36497,12 @@
         "dex",
         "dex_int",
         "str_dex"
+      ],
+      "overriddenForClassIds": [
+        8
+      ],
+      "overriddenForClasses": [
+        "Huntress"
       ]
     },
     {
@@ -39375,7 +39495,19 @@
       "tagSources": [
         "derived",
         "text_fallback"
-      ]
+      ],
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "classOverride": {
+        "characterId": 1,
+        "className": "Witch",
+        "overrideOf": "fire32",
+        "physicalPassiveSkillGraphId": 51335,
+        "localityResolved": true
+      }
     },
     {
       "id": "spear4",
@@ -43399,7 +43531,19 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
-      ]
+      ],
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "classOverride": {
+        "characterId": 1,
+        "className": "Witch",
+        "overrideOf": "energy_shield_recovery29",
+        "physicalPassiveSkillGraphId": 22691,
+        "localityResolved": true
+      }
     },
     {
       "id": "ignite_mitigation8",
@@ -44104,7 +44248,19 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
-      ]
+      ],
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "classOverride": {
+        "characterId": 11,
+        "className": "Druid",
+        "overrideOf": "minion_offence13",
+        "physicalPassiveSkillGraphId": 5777,
+        "localityResolved": true
+      }
     },
     {
       "id": "spell_suppression14",
@@ -46747,7 +46903,19 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
-      ]
+      ],
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "classOverride": {
+        "characterId": 1,
+        "className": "Witch",
+        "overrideOf": "cold34",
+        "physicalPassiveSkillGraphId": 3823,
+        "localityResolved": true
+      }
     },
     {
       "id": "oracle_energy_gain3",
@@ -47399,7 +47567,19 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
-      ]
+      ],
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "classOverride": {
+        "characterId": 8,
+        "className": "Huntress",
+        "overrideOf": "ranger_huntress_notable2",
+        "physicalPassiveSkillGraphId": 28992,
+        "localityResolved": true
+      }
     },
     {
       "id": "charms3",
@@ -47537,7 +47717,19 @@
       "tagSources": [
         "derived",
         "text_fallback"
-      ]
+      ],
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "classOverride": {
+        "characterId": 11,
+        "className": "Druid",
+        "overrideOf": "criticals25_",
+        "physicalPassiveSkillGraphId": 18465,
+        "localityResolved": true
+      }
     },
     {
       "id": "elemental56",
@@ -47684,6 +47876,12 @@
         "dex_int",
         "int",
         "str_int"
+      ],
+      "overriddenForClassIds": [
+        1
+      ],
+      "overriddenForClasses": [
+        "Witch"
       ]
     },
     {
@@ -48775,6 +48973,12 @@
         "dex_int",
         "int",
         "str_int"
+      ],
+      "overriddenForClassIds": [
+        1
+      ],
+      "overriddenForClasses": [
+        "Witch"
       ]
     },
     {
@@ -49060,6 +49264,12 @@
         "dex_int",
         "int",
         "str_int"
+      ],
+      "overriddenForClassIds": [
+        1
+      ],
+      "overriddenForClasses": [
+        "Witch"
       ]
     },
     {
@@ -49301,7 +49511,19 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
-      ]
+      ],
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "classOverride": {
+        "characterId": 8,
+        "className": "Huntress",
+        "overrideOf": "accuracy18",
+        "physicalPassiveSkillGraphId": 19104,
+        "localityResolved": true
+      }
     },
     {
       "id": "energy_shield_recovery17",
@@ -49692,6 +49914,12 @@
         "int",
         "str",
         "str_int"
+      ],
+      "overriddenForClassIds": [
+        11
+      ],
+      "overriddenForClasses": [
+        "Druid"
       ]
     },
     {
@@ -55843,7 +56071,19 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
-      ]
+      ],
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "classOverride": {
+        "characterId": 8,
+        "className": "Huntress",
+        "overrideOf": "projectiles23",
+        "physicalPassiveSkillGraphId": 42781,
+        "localityResolved": true
+      }
     },
     {
       "id": "sword18",
@@ -62949,6 +63189,12 @@
         "dex",
         "dex_int",
         "str_dex"
+      ],
+      "overriddenForClassIds": [
+        8
+      ],
+      "overriddenForClasses": [
+        "Huntress"
       ]
     },
     {

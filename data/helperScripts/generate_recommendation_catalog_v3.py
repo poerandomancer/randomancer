@@ -845,6 +845,16 @@ def build_passive_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[
         tags = normalize_tag_list(passive.get("tags") or [], expand=False, match_keys=False)
         required_ascendancy = passive.get("requiredAscendancy") or ascendancy
         access: dict[str, Any] = {"ascendancy": required_ascendancy} if required_ascendancy else {}
+        class_override = passive.get("classOverride")
+        if class_override:
+            access["passive_tree_character_id"] = class_override.get("characterId")
+            access["class_name"] = class_override.get("className")
+            access["override_of"] = class_override.get("overrideOf")
+        overridden_for_ids = passive.get("overriddenForClassIds") or []
+        overridden_for_classes = passive.get("overriddenForClasses") or []
+        if overridden_for_ids:
+            access["overridden_for_passive_tree_character_ids"] = overridden_for_ids
+            access["overridden_for_classes"] = overridden_for_classes
 
         entities.append(
             {
@@ -861,6 +871,9 @@ def build_passive_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[
                 "compatibility": {"access": access},
                 **({"passive_tree_starts": passive["passiveTreeStarts"]} if passive.get("passiveTreeStarts") else {}),
                 **({"required_ascendancy": required_ascendancy} if required_ascendancy else {}),
+                **({"class_override": class_override} if class_override else {}),
+                **({"overridden_for_class_ids": overridden_for_ids,
+                    "overridden_for_classes": overridden_for_classes} if overridden_for_ids else {}),
                 "links": {
                     "ascendancy_id": passive.get("ascendancyId"),
                     "passive_skill_graph_id": raw.get("PassiveSkillGraphId"),

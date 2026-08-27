@@ -58017,7 +58017,14 @@
       "source_id": "fire32",
       "name": "Affliction Enforcer",
       "compatibility": {
-        "access": {}
+        "access": {
+          "overridden_for_passive_tree_character_ids": [
+            1
+          ],
+          "overridden_for_classes": [
+            "Witch"
+          ]
+        }
       },
       "passive_tree_starts": [
         "dex_int",
@@ -58046,6 +58053,12 @@
           "mechanic": "shock",
           "offense_role": "enabler"
         }
+      ],
+      "overridden_for_class_ids": [
+        1
+      ],
+      "overridden_for_classes": [
+        "Witch"
       ]
     },
     {
@@ -58937,9 +58950,20 @@
       "source_id": "huntress_class_start12_",
       "name": "Attuned with Nature",
       "compatibility": {
-        "access": {}
+        "access": {
+          "passive_tree_character_id": 8,
+          "class_name": "Huntress",
+          "override_of": "flasks24"
+        }
       },
-      "facts": []
+      "facts": [],
+      "class_override": {
+        "characterId": 8,
+        "className": "Huntress",
+        "overrideOf": "flasks24",
+        "physicalPassiveSkillGraphId": 44527,
+        "localityResolved": true
+      }
     },
     {
       "id": "passive:DeliriumAnoint_AugmentedFlesh",
@@ -59204,7 +59228,11 @@
       "source_id": "druid_class_start20",
       "name": "Bastion of the Forest",
       "compatibility": {
-        "access": {}
+        "access": {
+          "passive_tree_character_id": 11,
+          "class_name": "Druid",
+          "override_of": "templar_druid_notable2"
+        }
       },
       "facts": [
         {
@@ -59249,7 +59277,14 @@
           "mechanic": "physical",
           "offense_role": "enabler"
         }
-      ]
+      ],
+      "class_override": {
+        "characterId": 11,
+        "className": "Druid",
+        "overrideOf": "templar_druid_notable2",
+        "physicalPassiveSkillGraphId": 28950,
+        "localityResolved": true
+      }
     },
     {
       "id": "passive:physical37",
@@ -59887,14 +59922,27 @@
       "source_id": "auras18",
       "name": "Bolstering Presence",
       "compatibility": {
-        "access": {}
+        "access": {
+          "overridden_for_passive_tree_character_ids": [
+            11
+          ],
+          "overridden_for_classes": [
+            "Druid"
+          ]
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
-      "facts": []
+      "facts": [],
+      "overridden_for_class_ids": [
+        11
+      ],
+      "overridden_for_classes": [
+        "Druid"
+      ]
     },
     {
       "id": "passive:warcries24",
@@ -61015,14 +61063,27 @@
       "source_id": "flasks24",
       "name": "Cautious Concoctions",
       "compatibility": {
-        "access": {}
+        "access": {
+          "overridden_for_passive_tree_character_ids": [
+            8
+          ],
+          "overridden_for_classes": [
+            "Huntress"
+          ]
+        }
       },
       "passive_tree_starts": [
         "dex",
         "dex_int",
         "str_dex"
       ],
-      "facts": []
+      "facts": [],
+      "overridden_for_class_ids": [
+        8
+      ],
+      "overridden_for_classes": [
+        "Huntress"
+      ]
     },
     {
       "id": "passive:AbyssJewelHistoricOverrideNotable_T_T_19",
@@ -61424,14 +61485,27 @@
       "source_id": "projectiles23",
       "name": "Clean Shot",
       "compatibility": {
-        "access": {}
+        "access": {
+          "overridden_for_passive_tree_character_ids": [
+            8
+          ],
+          "overridden_for_classes": [
+            "Huntress"
+          ]
+        }
       },
       "passive_tree_starts": [
         "dex",
         "dex_int",
         "str_dex"
       ],
-      "facts": []
+      "facts": [],
+      "overridden_for_class_ids": [
+        8
+      ],
+      "overridden_for_classes": [
+        "Huntress"
+      ]
     },
     {
       "id": "passive:knockback20_",
@@ -62511,7 +62585,14 @@
       "source_id": "criticals25_",
       "name": "Cruel Fate",
       "compatibility": {
-        "access": {}
+        "access": {
+          "overridden_for_passive_tree_character_ids": [
+            11
+          ],
+          "overridden_for_classes": [
+            "Druid"
+          ]
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -62525,6 +62606,12 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "overridden_for_class_ids": [
+        11
+      ],
+      "overridden_for_classes": [
+        "Druid"
       ]
     },
     {
@@ -62953,7 +63040,14 @@
       "source_id": "minion_offence13",
       "name": "Deadly Swarm",
       "compatibility": {
-        "access": {}
+        "access": {
+          "overridden_for_passive_tree_character_ids": [
+            11
+          ],
+          "overridden_for_classes": [
+            "Druid"
+          ]
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -62974,6 +63068,12 @@
           "mechanic": "minion",
           "offense_role": "enabler"
         }
+      ],
+      "overridden_for_class_ids": [
+        11
+      ],
+      "overridden_for_classes": [
+        "Druid"
       ]
     },
     {
@@ -63514,7 +63614,14 @@
       "source_id": "templar_druid_notable2",
       "name": "Devoted Protector",
       "compatibility": {
-        "access": {}
+        "access": {
+          "overridden_for_passive_tree_character_ids": [
+            11
+          ],
+          "overridden_for_classes": [
+            "Druid"
+          ]
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -63564,6 +63671,12 @@
           "mechanic": "physical",
           "offense_role": "enabler"
         }
+      ],
+      "overridden_for_class_ids": [
+        11
+      ],
+      "overridden_for_classes": [
+        "Druid"
       ]
     },
     {
@@ -63988,14 +64101,27 @@
       "source_id": "accuracy18",
       "name": "Eagle Eye",
       "compatibility": {
-        "access": {}
+        "access": {
+          "overridden_for_passive_tree_character_ids": [
+            8
+          ],
+          "overridden_for_classes": [
+            "Huntress"
+          ]
+        }
       },
       "passive_tree_starts": [
         "dex",
         "dex_int",
         "str_dex"
       ],
-      "facts": []
+      "facts": [],
+      "overridden_for_class_ids": [
+        8
+      ],
+      "overridden_for_classes": [
+        "Huntress"
+      ]
     },
     {
       "id": "passive:companions1_",
@@ -64520,14 +64646,27 @@
       "source_id": "cold34",
       "name": "Elemental Force",
       "compatibility": {
-        "access": {}
+        "access": {
+          "overridden_for_passive_tree_character_ids": [
+            1
+          ],
+          "overridden_for_classes": [
+            "Witch"
+          ]
+        }
       },
       "passive_tree_starts": [
         "dex_int",
         "int",
         "str_int"
       ],
-      "facts": []
+      "facts": [],
+      "overridden_for_class_ids": [
+        1
+      ],
+      "overridden_for_classes": [
+        "Witch"
+      ]
     },
     {
       "id": "passive:maximum_resistances13",
@@ -65203,7 +65342,11 @@
       "source_id": "chaos_witch4",
       "name": "Entropy",
       "compatibility": {
-        "access": {}
+        "access": {
+          "passive_tree_character_id": 1,
+          "class_name": "Witch",
+          "override_of": "lightning34"
+        }
       },
       "facts": [
         {
@@ -65213,7 +65356,14 @@
           "mechanic": "chaos",
           "offense_role": "enabler"
         }
-      ]
+      ],
+      "class_override": {
+        "characterId": 1,
+        "className": "Witch",
+        "overrideOf": "lightning34",
+        "physicalPassiveSkillGraphId": 64046,
+        "localityResolved": true
+      }
     },
     {
       "id": "passive:auras17",
@@ -67948,9 +68098,20 @@
       "source_id": "druid_class_start7",
       "name": "Guardian of the Wilds",
       "compatibility": {
-        "access": {}
+        "access": {
+          "passive_tree_character_id": 11,
+          "class_name": "Druid",
+          "override_of": "templar_druid_notable1"
+        }
       },
-      "facts": []
+      "facts": [],
+      "class_override": {
+        "characterId": 11,
+        "className": "Druid",
+        "overrideOf": "templar_druid_notable1",
+        "physicalPassiveSkillGraphId": 6898,
+        "localityResolved": true
+      }
     },
     {
       "id": "passive:melee65",
@@ -68136,7 +68297,11 @@
       "source_id": "druid_class_start19",
       "name": "Harbinger of Disaster",
       "compatibility": {
-        "access": {}
+        "access": {
+          "passive_tree_character_id": 11,
+          "class_name": "Druid",
+          "override_of": "auras18"
+        }
       },
       "facts": [
         {
@@ -68145,7 +68310,14 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
-      ]
+      ],
+      "class_override": {
+        "characterId": 11,
+        "className": "Druid",
+        "overrideOf": "auras18",
+        "physicalPassiveSkillGraphId": 64299,
+        "localityResolved": true
+      }
     },
     {
       "id": "passive:life_regeneration17_",
@@ -68889,14 +69061,27 @@
       "source_id": "ranger_huntress_notable2",
       "name": "Honed Instincts",
       "compatibility": {
-        "access": {}
+        "access": {
+          "overridden_for_passive_tree_character_ids": [
+            8
+          ],
+          "overridden_for_classes": [
+            "Huntress"
+          ]
+        }
       },
       "passive_tree_starts": [
         "dex",
         "dex_int",
         "str_dex"
       ],
-      "facts": []
+      "facts": [],
+      "overridden_for_class_ids": [
+        8
+      ],
+      "overridden_for_classes": [
+        "Huntress"
+      ]
     },
     {
       "id": "passive:melee51_",
@@ -70198,7 +70383,11 @@
       "source_id": "physical_witch4_",
       "name": "Jagged Shards",
       "compatibility": {
-        "access": {}
+        "access": {
+          "passive_tree_character_id": 1,
+          "class_name": "Witch",
+          "override_of": "fire32"
+        }
       },
       "facts": [
         {
@@ -70214,7 +70403,14 @@
           "mechanic": "physical",
           "offense_role": "enabler"
         }
-      ]
+      ],
+      "class_override": {
+        "characterId": 1,
+        "className": "Witch",
+        "overrideOf": "fire32",
+        "physicalPassiveSkillGraphId": 51335,
+        "localityResolved": true
+      }
     },
     {
       "id": "passive:spear4",
@@ -71863,7 +72059,11 @@
       "source_id": "minion_defence_witch5",
       "name": "Minion Life",
       "compatibility": {
-        "access": {}
+        "access": {
+          "passive_tree_character_id": 1,
+          "class_name": "Witch",
+          "override_of": "energy_shield_recovery29"
+        }
       },
       "facts": [
         {
@@ -71872,7 +72072,14 @@
           "confidence": "strong",
           "mechanic": "minion"
         }
-      ]
+      ],
+      "class_override": {
+        "characterId": 1,
+        "className": "Witch",
+        "overrideOf": "energy_shield_recovery29",
+        "physicalPassiveSkillGraphId": 22691,
+        "localityResolved": true
+      }
     },
     {
       "id": "passive:ignite_mitigation8",
@@ -72240,7 +72447,11 @@
       "source_id": "druid_class_start11",
       "name": "Natural Essence",
       "compatibility": {
-        "access": {}
+        "access": {
+          "passive_tree_character_id": 11,
+          "class_name": "Druid",
+          "override_of": "minion_offence13"
+        }
       },
       "facts": [
         {
@@ -72257,7 +72468,14 @@
           "mechanic": "physical",
           "offense_role": "enabler"
         }
-      ]
+      ],
+      "class_override": {
+        "characterId": 11,
+        "className": "Druid",
+        "overrideOf": "minion_offence13",
+        "physicalPassiveSkillGraphId": 5777,
+        "localityResolved": true
+      }
     },
     {
       "id": "passive:spell_suppression14",
@@ -73396,7 +73614,11 @@
       "source_id": "minion_offence_witch4",
       "name": "Power of the Dead",
       "compatibility": {
-        "access": {}
+        "access": {
+          "passive_tree_character_id": 1,
+          "class_name": "Witch",
+          "override_of": "cold34"
+        }
       },
       "facts": [
         {
@@ -73406,7 +73628,14 @@
           "mechanic": "minion",
           "offense_role": "enabler"
         }
-      ]
+      ],
+      "class_override": {
+        "characterId": 1,
+        "className": "Witch",
+        "overrideOf": "cold34",
+        "physicalPassiveSkillGraphId": 3823,
+        "localityResolved": true
+      }
     },
     {
       "id": "passive:oracle_energy_gain3",
@@ -73640,9 +73869,20 @@
       "source_id": "huntress_class_start7",
       "name": "Primal Instinct",
       "compatibility": {
-        "access": {}
+        "access": {
+          "passive_tree_character_id": 8,
+          "class_name": "Huntress",
+          "override_of": "ranger_huntress_notable2"
+        }
       },
-      "facts": []
+      "facts": [],
+      "class_override": {
+        "characterId": 8,
+        "className": "Huntress",
+        "overrideOf": "ranger_huntress_notable2",
+        "physicalPassiveSkillGraphId": 28992,
+        "localityResolved": true
+      }
     },
     {
       "id": "passive:charms3",
@@ -73676,7 +73916,11 @@
       "source_id": "druid_class_start15",
       "name": "Primal Spirit",
       "compatibility": {
-        "access": {}
+        "access": {
+          "passive_tree_character_id": 11,
+          "class_name": "Druid",
+          "override_of": "criticals25_"
+        }
       },
       "facts": [
         {
@@ -73686,7 +73930,14 @@
           "mechanic": "critical_hits",
           "condition": "shapeshifted"
         }
-      ]
+      ],
+      "class_override": {
+        "characterId": 11,
+        "className": "Druid",
+        "overrideOf": "criticals25_",
+        "physicalPassiveSkillGraphId": 18465,
+        "localityResolved": true
+      }
     },
     {
       "id": "passive:elemental56",
@@ -73731,14 +73982,27 @@
       "source_id": "lightning34",
       "name": "Principal Infusion",
       "compatibility": {
-        "access": {}
+        "access": {
+          "overridden_for_passive_tree_character_ids": [
+            1
+          ],
+          "overridden_for_classes": [
+            "Witch"
+          ]
+        }
       },
       "passive_tree_starts": [
         "dex_int",
         "int",
         "str_int"
       ],
-      "facts": []
+      "facts": [],
+      "overridden_for_class_ids": [
+        1
+      ],
+      "overridden_for_classes": [
+        "Witch"
+      ]
     },
     {
       "id": "passive:maximum_resistances21",
@@ -74184,7 +74448,14 @@
       "source_id": "energy_shield_recovery14",
       "name": "Rapid Recharge",
       "compatibility": {
-        "access": {}
+        "access": {
+          "overridden_for_passive_tree_character_ids": [
+            1
+          ],
+          "overridden_for_classes": [
+            "Witch"
+          ]
+        }
       },
       "passive_tree_starts": [
         "dex_int",
@@ -74204,6 +74475,12 @@
           "confidence": "strong",
           "mechanic": "energy_shield_recharge"
         }
+      ],
+      "overridden_for_class_ids": [
+        1
+      ],
+      "overridden_for_classes": [
+        "Witch"
       ]
     },
     {
@@ -74290,14 +74567,27 @@
       "source_id": "witch_sorceress_notable1",
       "name": "Raw Power",
       "compatibility": {
-        "access": {}
+        "access": {
+          "overridden_for_passive_tree_character_ids": [
+            1
+          ],
+          "overridden_for_classes": [
+            "Witch"
+          ]
+        }
       },
       "passive_tree_starts": [
         "dex_int",
         "int",
         "str_int"
       ],
-      "facts": []
+      "facts": [],
+      "overridden_for_class_ids": [
+        1
+      ],
+      "overridden_for_classes": [
+        "Witch"
+      ]
     },
     {
       "id": "passive:melee38",
@@ -74386,7 +74676,11 @@
       "source_id": "huntress_class_start16",
       "name": "Reflex Action",
       "compatibility": {
-        "access": {}
+        "access": {
+          "passive_tree_character_id": 8,
+          "class_name": "Huntress",
+          "override_of": "accuracy18"
+        }
       },
       "facts": [
         {
@@ -74396,7 +74690,14 @@
           "mechanic": "evasion",
           "offense_role": "enabler"
         }
-      ]
+      ],
+      "class_override": {
+        "characterId": 8,
+        "className": "Huntress",
+        "overrideOf": "accuracy18",
+        "physicalPassiveSkillGraphId": 19104,
+        "localityResolved": true
+      }
     },
     {
       "id": "passive:energy_shield_recovery17",
@@ -74567,7 +74868,14 @@
       "source_id": "templar_druid_notable1",
       "name": "Relentless Vindicator",
       "compatibility": {
-        "access": {}
+        "access": {
+          "overridden_for_passive_tree_character_ids": [
+            11
+          ],
+          "overridden_for_classes": [
+            "Druid"
+          ]
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -74581,6 +74889,12 @@
           "confidence": "strong",
           "mechanic": "critical_hits"
         }
+      ],
+      "overridden_for_class_ids": [
+        11
+      ],
+      "overridden_for_classes": [
+        "Druid"
       ]
     },
     {
@@ -77310,9 +77624,20 @@
       "source_id": "huntress_class_start8",
       "name": "Stalk and Leap",
       "compatibility": {
-        "access": {}
+        "access": {
+          "passive_tree_character_id": 8,
+          "class_name": "Huntress",
+          "override_of": "projectiles23"
+        }
       },
-      "facts": []
+      "facts": [],
+      "class_override": {
+        "characterId": 8,
+        "className": "Huntress",
+        "overrideOf": "projectiles23",
+        "physicalPassiveSkillGraphId": 42781,
+        "localityResolved": true
+      }
     },
     {
       "id": "passive:sword18",
@@ -80488,14 +80813,27 @@
       "source_id": "exploiting_elemental_ailments10",
       "name": "Vile Wounds",
       "compatibility": {
-        "access": {}
+        "access": {
+          "overridden_for_passive_tree_character_ids": [
+            8
+          ],
+          "overridden_for_classes": [
+            "Huntress"
+          ]
+        }
       },
       "passive_tree_starts": [
         "dex",
         "dex_int",
         "str_dex"
       ],
-      "facts": []
+      "facts": [],
+      "overridden_for_class_ids": [
+        8
+      ],
+      "overridden_for_classes": [
+        "Huntress"
+      ]
     },
     {
       "id": "passive:warcries12",

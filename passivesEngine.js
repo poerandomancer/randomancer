@@ -27,6 +27,8 @@ import { normalizeTagList, toMatchKey } from './js/tag-normalization.js';
  * @property {string} flavour
  * @property {RawStat[]} rawStats
  * @property {string[]} [passiveTreeStarts]
+ * @property {number[]} [overriddenForClassIds]
+ * @property {{characterId:number, className:string}} [classOverride]
  *
  * @typedef {Object} PassivesData
  * @property {PassiveNode[]} nodes
@@ -287,9 +289,20 @@ export function pickRecommendedNotables(passivesData, passiveIndex, ctx, count =
     ? passiveIndex.notables
     : (passivesData?.nodes || []).filter((node) => node?.type === 'notable');
   const start = ctx?.passiveTreeStart;
-  const candidates = start
-    ? baseCandidates.filter((node) => node?.passiveTreeStarts?.includes(start))
-    : baseCandidates;
+  const classId = ctx?.passiveTreeCharacterId;
+  const className = String(ctx?.className || '').toLowerCase();
+  const existsForClass = (node) => {
+    if (node?.classOverride) {
+      return classId != null
+        ? node.classOverride.characterId === classId
+        : String(node.classOverride.className || '').toLowerCase() === className;
+    }
+    return classId != null
+      ? !(node?.overriddenForClassIds || []).includes(classId)
+      : !(node?.overriddenForClasses || []).some((name) => String(name).toLowerCase() === className);
+  };
+  const candidates = baseCandidates.filter((node) => existsForClass(node)
+    && (!start || node?.passiveTreeStarts?.includes(start)));
   if (!candidates.length) return [];
   const scores = new Map();
   candidates.forEach((node) => {
