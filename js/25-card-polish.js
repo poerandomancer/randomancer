@@ -91,6 +91,11 @@ function buildCompactSnapshotPayload(snapshot) {
     .filter(Boolean)
     .slice(0, 3);
   put('u', uniques);
+  const jewelry = (snap.recommendedJewelryUniques || []).slice(0, 2).map((entry) => ({
+    n: typeof entry === 'string' ? entry : entry?.name,
+    ...(typeof entry === 'object' && entry?.itemType ? { t: entry.itemType } : {})
+  })).filter((entry) => entry.n);
+  put('ju', jewelry);
 
   const passives = snap.passives && typeof snap.passives === 'object' ? snap.passives : null;
   if (passives) {

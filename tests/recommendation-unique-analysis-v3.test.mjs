@@ -11,6 +11,18 @@ const root = new URL('../', import.meta.url);
 const read = (path) => JSON.parse(fs.readFileSync(new URL(path, root), 'utf8'));
 const artifact = read('data/enriched/recommendation_unique_analysis_v3.json');
 const runtimeSemantics = read('data/enriched/recommendation_unique_semantics_v3.json');
+
+test('jewelry diagnostic is offense-level, slot-legal, and capacity-safe', () => {
+  assert.equal(artifact.jewelryCells.length, 15);
+  assert.equal(artifact.summary.jewelry.eligibleRings, 37);
+  assert.equal(artifact.summary.jewelry.eligibleAmulets, 25);
+  for (const cell of artifact.jewelryCells) {
+    assert.ok(cell.selected.length <= 2);
+    assert.ok(cell.selected.filter((entry) => entry.itemType === 'Amulet').length <= 1);
+    assert.equal(new Set(cell.selected.map((entry) => entry.id)).size, cell.selected.length);
+    assert.ok(cell.selected.every((entry) => ['Ring', 'Amulet'].includes(entry.itemType)));
+  }
+});
 const fact = (relation, mechanic, extra = {}) => ({ relation, mechanic, confidence: 'exact', ...extra });
 const unique = (facts = [], extra = {}) => ({ id: 'unique:test', source_id: 'test||Bow', name: 'Test', content_type: 'unique',
   facts, compatibility: { equipment: { slot: 'Bow', base: 'Bow' } }, ...extra });

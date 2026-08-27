@@ -170,10 +170,10 @@ function deriveBuildCardModel(snapshot) {
   );
   const skills = skillItems(snap.recommendedSkills, '');
 
-  const uniques = (snap.recommendedUniques || [])
+  const uniques = [...(snap.recommendedUniques || []).slice(0, 1), ...(snap.recommendedJewelryUniques || []).slice(0, 2)]
     .map((entry) => typeof entry === 'string' ? entry : entry?.name)
     .filter(Boolean)
-    .slice(0, 2)
+    .slice(0, 3)
     .map((name) => item(name, { slotKey: 'UNIQUE', tipLines: getUniqueDescription(name) }));
 
   const passives = snap.passives && typeof snap.passives === 'object' ? snap.passives : {};

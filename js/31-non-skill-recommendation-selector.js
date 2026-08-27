@@ -171,6 +171,53 @@ function selectUniqueRecommendation(catalog, snapshot, seed = '') {
   }));
 }
 
+function jewelrySlot(entity) {
+  const slot = token(entity?.compatibility?.equipment?.slot);
+  if (slot === 'ring') return 'Ring';
+  if (slot === 'amulet') return 'Amulet';
+  return '';
+}
+
+function recommendationEntry(candidate, bandSize) {
+  const { entity, score, tier, matches } = candidate;
+  const itemType = jewelrySlot(entity);
+  return {
+    id: entity.source_id || entity.id,
+    name: entity.name,
+    ...(itemType ? { itemType } : {}),
+    recommendationEvidence: { score, tier, qualityBandSize: bandSize,
+      matches: matches.map(({ kind, mechanic, relation, category, sourceKind, sourceEntity }) =>
+        ({ kind, mechanic, relation, category, sourceKind, ...(sourceEntity ? { sourceEntity } : {}) })) }
+  };
+}
+
+function selectJewelryRecommendations(catalog, snapshot, seed = '') {
+  const offense = rolledOffenseMechanics(snapshot);
+  if (!offense.size) return [];
+  const ranked = arr(catalog?.entities)
+    .filter((entity) => jewelrySlot(entity))
+    .map((entity) => analyzeUnique(entity, offense))
+    .filter(Boolean)
+    .sort((a, b) => b.tierRank - a.tierRank || b.score - a.score || a.entity.id.localeCompare(b.entity.id));
+  if (!ranked.length) return [];
+  const band = ranked.filter((candidate) => candidate.tier === ranked[0].tier
+    && candidate.score >= ranked[0].score - 10).slice(0, 3);
+  const ordered = [...band].sort((a, b) => seededUnit(seed, a.entity.id) - seededUnit(seed, b.entity.id)
+    || a.entity.id.localeCompare(b.entity.id));
+  const selected = [];
+  const identities = new Set();
+  let amulets = 0;
+  for (const candidate of ordered) {
+    const identity = token(candidate.entity.source_id || candidate.entity.id || candidate.entity.name);
+    const slot = jewelrySlot(candidate.entity);
+    if (!identity || identities.has(identity) || (slot === 'Amulet' && amulets >= 1)) continue;
+    selected.push(candidate); identities.add(identity);
+    if (slot === 'Amulet') amulets += 1;
+    if (selected.length === 2) break;
+  }
+  return selected.map((candidate) => recommendationEntry(candidate, band.length));
+}
+
 function seededUnit(seed, salt) {
   let hash = 2166136261;
   for (const char of `${seed ?? ''}:${salt}`) { hash ^= char.charCodeAt(0); hash = Math.imul(hash, 16777619); }
@@ -204,6 +251,7 @@ function selectNonSkillRecommendations(catalog, snapshot = {}, recommendationPac
   const seed = options.selectionSeed ?? recommendationPackage?.selectionSeed ?? '';
   return {
     recommendedUniques: selectUniqueRecommendation(catalog, snapshot, `${seed}:unique`),
+    recommendedJewelryUniques: selectJewelryRecommendations(catalog, snapshot, `${seed}:jewelry`),
     passives: {
       ascendancyNodes: choose(byType('ascendancy_passive'), 1, `${seed}:ascendancy`, false),
       notables: choose(byType('passive'), 3, `${seed}:notable`, true)
@@ -218,4 +266,4 @@ function mergeRecommendationUniqueSemanticsV3(catalog, payload) {
 }
 
 export { selectNonSkillRecommendations, mergeRecommendationUniqueSemanticsV3,
-  isExcluded as isNonSkillRecommendationExcluded };
+  selectJewelryRecommendations, isExcluded as isNonSkillRecommendationExcluded };
