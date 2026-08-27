@@ -13,7 +13,7 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5128,
+    "fact_count": 5278,
     "fact_relation_counts": {
       "consumes": 356,
       "converts": 112,
@@ -21,21 +21,21 @@
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 672,
-      "inflicts": 166,
-      "modifies": 2244,
+      "inflicts": 156,
+      "modifies": 2308,
       "occupies": 444,
       "prevents": 375,
-      "provides": 322,
+      "provides": 415,
       "replaces": 27,
-      "requires": 63
+      "requires": 66
     },
     "candidate_role_counts": {
       "defense": 422,
-      "enabler": 1159,
+      "enabler": 1256,
       "payoff": 182,
       "primary_damage": 349,
       "recovery": 250,
-      "setup_control": 214,
+      "setup_control": 205,
       "utility": 206
     },
     "source_versions": {
@@ -51,7 +51,7 @@
     "support_family_count": 474,
     "tiered_support_family_count": 121,
     "tiered_support_entity_count": 280,
-    "support_entities_with_bridge_facts": 84,
+    "support_entities_with_bridge_facts": 83,
     "support_entities_with_conflicts": 39,
     "active_skills_with_granted_access": 40,
     "active_skills_with_crafting_metadata": 261,
@@ -62,11 +62,11 @@
   "coverage": {
     "passive_descriptions": {
       "evidence_count": 2495,
-      "fact_count": 302,
+      "fact_count": 298,
       "unparsed_count": 657,
-      "recognized_unstructured_count": 1562,
-      "structured_count": 276,
-      "structured_rate": 0.1106,
+      "recognized_unstructured_count": 1566,
+      "structured_count": 272,
+      "structured_rate": 0.109,
       "samples": {
         "recognized_unstructured": [
           {
@@ -330,11 +330,11 @@
     },
     "skill_descriptions": {
       "evidence_count": 1893,
-      "fact_count": 652,
-      "structured_count": 505,
+      "fact_count": 645,
+      "structured_count": 503,
       "unparsed_count": 262,
-      "recognized_unstructured_count": 1126,
-      "structured_rate": 0.2668,
+      "recognized_unstructured_count": 1128,
+      "structured_rate": 0.2657,
       "samples": {
         "recognized_unstructured": [
           {
@@ -739,18 +739,13 @@
     },
     "unique_modifiers": {
       "evidence_count": 2141,
-      "fact_count": 347,
-      "recognized_unstructured_count": 1253,
+      "fact_count": 513,
+      "structured_count": 468,
       "unparsed_count": 575,
-      "structured_count": 313,
-      "structured_rate": 0.1462,
+      "recognized_unstructured_count": 1098,
+      "structured_rate": 0.2186,
       "samples": {
         "recognized_unstructured": [
-          {
-            "entity_id": "unique:Brynhand's Mark||Wooden Club",
-            "kind": "unique_mod",
-            "value": "Adds 11 to 18 Physical Damage"
-          },
           {
             "entity_id": "unique:Brynhand's Mark||Wooden Club",
             "kind": "unique_mod",
@@ -764,22 +759,7 @@
           {
             "entity_id": "unique:Frostbreath||Slim Mace",
             "kind": "unique_mod",
-            "value": "Adds 10 to 18 Physical Damage"
-          },
-          {
-            "entity_id": "unique:Frostbreath||Slim Mace",
-            "kind": "unique_mod",
-            "value": "Adds 9 to 17 Cold Damage"
-          },
-          {
-            "entity_id": "unique:Frostbreath||Slim Mace",
-            "kind": "unique_mod",
             "value": "CullingStrike against Frozen Enemies"
-          },
-          {
-            "entity_id": "unique:Trenchtimbre||Spiked Club",
-            "kind": "unique_mod",
-            "value": "Adds 15 to 24 Physical Damage"
           },
           {
             "entity_id": "unique:Trenchtimbre||Spiked Club",
@@ -804,7 +784,27 @@
           {
             "entity_id": "unique:Sculpted Suffering||Warpick",
             "kind": "unique_mod",
-            "value": "Adds 25 to 25 Physical Damage"
+            "value": "10% increased Attack Speed"
+          },
+          {
+            "entity_id": "unique:Sculpted Suffering||Warpick",
+            "kind": "unique_mod",
+            "value": "ArmourBreak equal to 40% of damage from HitDamage with this weapon"
+          },
+          {
+            "entity_id": "unique:Sculpted Suffering||Warpick",
+            "kind": "unique_mod",
+            "value": "ArmourBreak enemies you kill with HitDamage Shatter"
+          },
+          {
+            "entity_id": "unique:Brutus' Lead Sprinkler||Morning Star",
+            "kind": "unique_mod",
+            "value": "Hits with this Weapon have 5% chance to Trigger Molten Shower per 25 Strength"
+          },
+          {
+            "entity_id": "unique:Brutus' Lead Sprinkler||Morning Star",
+            "kind": "unique_mod",
+            "value": "6% increased Attack Speed"
           }
         ],
         "unparsed": [

@@ -911,6 +911,14 @@ def _has_direct_ailment_application(normalized: str, mechanic: str) -> bool:
 
 
 def _has_explicit_ailment_application(normalized: str, terms: str) -> bool:
+    # Afflicted-target conditions are payoff/context, not application. Keep
+    # this ahead of the flexible verb matcher so an earlier word such as
+    # "can" cannot bridge into "all Ignited enemies" in a later clause.
+    if re.search(
+        rf"(?:^|_)(?:against|all|affected_by|while|when|if)(?:_[a-z0-9]+){{0,5}}_(?:{terms}|ignited|bled|bleeding|poisoned|chilled|frozen|shocked|electrocuted)(?:_(?:enemy|enemies|target|targets))?(?:_|$)",
+        normalized,
+    ):
+        return False
     application = re.compile(
         rf"(?:always|can|chance_to|apply|applies|applying|inflict|inflicts|inflicting|inflicted_with|cause|causes|causing_them_to)"
         rf"(?:_[a-z0-9]+){{0,8}}_(?:{terms})(?:_|$)"
@@ -1113,6 +1121,21 @@ def parse_text(value: Any, source_kind: str, subject: str) -> list[dict[str, Any
     conversion = _conversion_fact(text, source_kind, subject)
     if conversion:
         facts.append(conversion)
+
+    # Modifier grammar shared by uniques and other textual semantic sources.
+    # These relations deliberately distinguish addition/gain, amplification,
+    # and afflicted-target payoff from conversion or application capability.
+    if source_kind == "unique_mod":
+        for mechanic in OFFENSE_MECHANICS & set(mechanics_in(text)):
+            if re.search(r"(?:^|_)(?:adds?|gain)(?:_[a-z0-9]+){0,8}(?:_as_extra)?(?:_[a-z0-9]+){0,4}_" + re.escape(mechanic) + r"(?:_|$)", normalized):
+                facts.append(make_fact("provides", subject=subject, source_kind=source_kind,
+                    source_value=text, mechanic=mechanic, confidence="strong", scope="outgoing"))
+            elif re.search(r"(?:^|_)(?:increased|more|magnitude|effect|penetrat|exposure)(?:_[a-z0-9]+){0,8}_" + re.escape(mechanic) + r"(?:_|$)", normalized):
+                facts.append(make_fact("modifies", subject=subject, source_kind=source_kind,
+                    source_value=text, mechanic=mechanic, confidence="strong", scope="outgoing"))
+            if re.search(r"(?:^|_)(?:against|all|affected_by|while|when|if)(?:_[a-z0-9]+){0,5}_" + re.escape(mechanic) + r"(?:d|ed)?_(?:enemy|enemies|target|targets)(?:_|$)", normalized):
+                facts.append(make_fact("requires", subject=subject, source_kind=source_kind,
+                    source_value=text, mechanic=mechanic, confidence="strong"))
 
     negative_mechanics = _negative_mechanics(text, source_kind=source_kind)
     is_prohibition = bool(negative_mechanics)
