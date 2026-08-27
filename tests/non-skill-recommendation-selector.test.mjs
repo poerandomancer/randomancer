@@ -300,6 +300,17 @@ test('ascendancy-owned ordinary notables require their owner before normal check
   assert.deepEqual(wrongOffense, []);
 });
 
+test('production First Sting is Oracle-only', () => {
+  const production = JSON.parse(fs.readFileSync(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url)));
+  const firstSting = production.entities.find((candidate) => candidate.name === 'First Sting' && candidate.content_type === 'passive');
+  assert.equal(firstSting.required_ascendancy, 'Oracle');
+  const base = { ...snap, offenseList: ['Poison'], passiveTreeStart: firstSting.passive_tree_starts[0] };
+  assert.deepEqual(selectNonSkillRecommendations(catalog([firstSting]),
+    { ...base, ascendancy: 'Disciple of Varashta' }, null).passives.notables, []);
+  assert.deepEqual(selectNonSkillRecommendations(catalog([firstSting]),
+    { ...base, ascendancy: 'Oracle' }, null).passives.notables.map((entry) => entry.name), ['First Sting']);
+});
+
 test('passive offense matching requires an explicitly offensive semantic role', () => {
   const passive = (id, mechanic, offenseRole) => entity(id, 'passive', [
     { mechanic, relation: 'modifies', confidence: 'strong', ...(offenseRole ? { offense_role: offenseRole } : {}) }

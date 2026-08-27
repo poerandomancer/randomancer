@@ -58518,8 +58518,16 @@
       "source_id": "oracle_rage3",
       "name": "Anger Management",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "required_ascendancy": "Oracle",
       "facts": []
     },
     {
@@ -60697,7 +60705,9 @@
       "source_id": "oracle_slow_crits4__",
       "name": "Calculated Hunter",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -60705,6 +60715,7 @@
         "str_dex",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -60737,13 +60748,16 @@
       "source_id": "oracle_glory_elemental5_",
       "name": "Call Upon the Deep",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -61776,8 +61790,16 @@
       "source_id": "oracle_damage_and_minions4",
       "name": "Comradery",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -62104,13 +62126,16 @@
       "source_id": "oracle_beast_corruption15_",
       "name": "Corruption Endures",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": []
     },
     {
@@ -62191,13 +62216,16 @@
       "source_id": "oracle_hierarchy7",
       "name": "Cower Before the First Ones",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "dex_int",
         "int",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -62954,13 +62982,16 @@
       "source_id": "oracle_duration_physical6",
       "name": "Deadly Thorns",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -64026,13 +64057,16 @@
       "source_id": "oracle_bear_addon2__",
       "name": "Echoes of Ferocity",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": []
     },
     {
@@ -64872,13 +64906,16 @@
       "source_id": "oracle_wyvern_addon2",
       "name": "Endlessly Soaring",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": []
     },
     {
@@ -65532,13 +65569,16 @@
       "source_id": "oracle_duration_physical9",
       "name": "Everlasting Bloom",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": []
     },
     {
@@ -65621,8 +65661,16 @@
       "source_id": "oracle_archon_crit4",
       "name": "Exhaust All Power",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -66367,13 +66415,16 @@
       "source_id": "oracle_poison5",
       "name": "First Sting",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "inflicts",
@@ -66616,13 +66667,16 @@
       "source_id": "oracle_beast_corruption7",
       "name": "Flesh Withstands",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -66923,13 +66977,16 @@
       "source_id": "oracle_forbidden_path5",
       "name": "Forbidden Path",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -67244,13 +67301,16 @@
       "source_id": "oracle_big_family9",
       "name": "Friend to Many",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -67518,8 +67578,16 @@
       "source_id": "oracle_power_charge4",
       "name": "Gift of the Plains",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "required_ascendancy": "Oracle",
       "facts": []
     },
     {
@@ -67545,13 +67613,16 @@
       "source_id": "oracle_life_corruption4",
       "name": "Give Up Your Essence",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -68612,13 +68683,16 @@
       "source_id": "oracle_bow_movement9",
       "name": "Her Final Bite",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -68658,8 +68732,16 @@
       "source_id": "oracle_shapeshifting_path3",
       "name": "Hidden Forms",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "required_ascendancy": "Oracle",
       "facts": []
     },
     {
@@ -69606,7 +69688,9 @@
       "source_id": "oracle_flat_lightning3_",
       "name": "Innate Rune",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -69614,6 +69698,7 @@
         "str_dex",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -70348,13 +70433,16 @@
       "source_id": "oracle_big_family10",
       "name": "Known by All",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -70836,7 +70924,9 @@
       "source_id": "oracle_movement_cooldown5_",
       "name": "Limitless Pursuit",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
@@ -70844,6 +70934,7 @@
         "str_dex",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": []
     },
     {
@@ -71088,13 +71179,16 @@
       "source_id": "oracle_wolf_addon2",
       "name": "Lunar Boon",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -71491,8 +71585,17 @@
       "source_id": "oracle_channelling5_",
       "name": "Meditative Focus",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Oracle",
       "facts": []
     },
     {
@@ -71633,13 +71736,16 @@
       "source_id": "oracle_solo_commander3",
       "name": "Mentorship",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -71656,13 +71762,16 @@
       "source_id": "oracle_totems8",
       "name": "Mighty Trunk",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -72299,8 +72408,16 @@
       "source_id": "oracle_spell_poison4",
       "name": "Night's Bite",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -72408,13 +72525,16 @@
       "source_id": "oracle_life_corruption7",
       "name": "Nurturing Nature",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -73294,7 +73414,9 @@
       "source_id": "oracle_energy_gain3",
       "name": "Power of the Storm",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "dex_int",
@@ -73302,6 +73424,7 @@
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": []
     },
     {
@@ -73310,8 +73433,16 @@
       "source_id": "oracle_strength_spell4",
       "name": "Powerful Casting",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "required_ascendancy": "Oracle",
       "facts": []
     },
     {
@@ -73654,8 +73785,17 @@
       "source_id": "oracle_frenzy_charge4",
       "name": "Prize of the Hunt",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
+      ],
+      "required_ascendancy": "Oracle",
       "facts": []
     },
     {
@@ -74449,13 +74589,16 @@
       "source_id": "oracle_beast_corruption14",
       "name": "Relinquish Your Life",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -75006,13 +75149,16 @@
       "source_id": "oracle_thorns3",
       "name": "Rough Carapace",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -75141,13 +75287,16 @@
       "source_id": "oracle_totems7",
       "name": "Rustle of the Leaves",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -75495,13 +75644,16 @@
       "source_id": "oracle_bleed3",
       "name": "Scent of Blood",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -75613,13 +75765,16 @@
       "source_id": "oracle_self_sacrificing5_",
       "name": "Self Sacrificing",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -75859,13 +76014,16 @@
       "source_id": "oracle_crab_claw9_",
       "name": "Shelter from the Rain",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -77697,8 +77855,16 @@
       "source_id": "oracle_endurance_charge4",
       "name": "Strength of the Deep",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "required_ascendancy": "Oracle",
       "facts": []
     },
     {
@@ -79357,13 +79523,16 @@
       "source_id": "oracle_big_family8",
       "name": "Trusted Partner",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -79801,13 +79970,16 @@
       "source_id": "oracle_crab_claw5",
       "name": "Unmoving Craiceann",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "int",
         "str",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -79867,13 +80039,16 @@
       "source_id": "oracle_rust_king8",
       "name": "Unquenchable Iron",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "str",
         "str_dex",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",
@@ -80093,13 +80268,16 @@
       "source_id": "oracle_iron_blood4",
       "name": "Vale Dweller",
       "compatibility": {
-        "access": {}
+        "access": {
+          "ascendancy": "Oracle"
+        }
       },
       "passive_tree_starts": [
         "str",
         "str_dex",
         "str_int"
       ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "modifies",

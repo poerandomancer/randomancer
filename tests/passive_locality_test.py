@@ -62,10 +62,10 @@ class PassiveLocalityTest(unittest.TestCase):
 
     def test_owned_nodes_get_position_without_becoming_travel_shortcuts(self):
         rows = [
-            {"PassiveSkillGraphId": 1, "SkillType": 0, "Ascendancy": None},
-            {"PassiveSkillGraphId": 2, "SkillType": 0, "Ascendancy": None},
-            {"PassiveSkillGraphId": 3, "SkillType": 0, "Ascendancy": 28},
-            {"PassiveSkillGraphId": 4, "SkillType": 0, "Ascendancy": 28},
+            {"_rid": 1, "PassiveSkillGraphId": 1, "SkillType": 0, "Ascendancy": None},
+            {"_rid": 2, "PassiveSkillGraphId": 2, "SkillType": 0, "Ascendancy": None},
+            {"_rid": 3, "PassiveSkillGraphId": 3, "SkillType": 0, "Ascendancy": 28},
+            {"_rid": 4, "PassiveSkillGraphId": 4, "SkillType": 0, "Ascendancy": 28},
         ]
         tree = {"groups": [{"passives": [
             {"hash": 1, "connections": [3]},
@@ -79,6 +79,16 @@ class PassiveLocalityTest(unittest.TestCase):
         owned = MODULE.ascendancy_owned_distances(tree, rows, ordinary, ordinary_distances)
         self.assertEqual(owned["str"][3], 1)
         self.assertEqual(owned["str"][4], 2)
+
+    def test_indirect_oracle_ownership_is_resolved_from_datamined_references(self):
+        rows = json.loads((ROOT / "data/datamined/passiveskills.json").read_text())
+        ascendancies = MODULE.build_ascendancy_map_from_file(
+            json.loads((ROOT / "data/datamined/ascendancy.json").read_text())
+        )
+        owner_by_id, owner_by_graph = MODULE.resolve_passive_ascendancy_owners(rows, ascendancies)
+        first_sting = next(row for row in rows if row["Id"] == "oracle_poison5")
+        self.assertEqual(owner_by_id["oracle_poison5"], "Oracle")
+        self.assertIn(first_sting["PassiveSkillGraphId"], owner_by_graph)
 
     def test_generated_ordinary_notables_have_locality_or_are_reported(self):
         enriched = json.loads((ROOT / "data/enriched/passives_enriched.json").read_text())

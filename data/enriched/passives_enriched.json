@@ -14277,6 +14277,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Oracle",
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -19022,6 +19028,7 @@
         "derived",
         "text_fallback"
       ],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -19113,6 +19120,7 @@
       "scrapeMatchedBy": null,
       "scrapeRejectedReason": null,
       "tagSources": [],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -21246,6 +21254,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Oracle",
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -21882,6 +21896,7 @@
       "scrapeMatchedBy": null,
       "scrapeRejectedReason": null,
       "tagSources": [],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -22090,6 +22105,7 @@
       "tagSources": [
         "derived"
       ],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "dex_int",
         "int",
@@ -23726,6 +23742,7 @@
       "tagSources": [
         "derived"
       ],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -26098,6 +26115,7 @@
       "tagSources": [
         "derived"
       ],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -27771,6 +27789,7 @@
       "scrapeMatchedBy": null,
       "scrapeRejectedReason": null,
       "tagSources": [],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -29230,6 +29249,7 @@
       "scrapeMatchedBy": null,
       "scrapeRejectedReason": null,
       "tagSources": [],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -29446,6 +29466,12 @@
       "tagSources": [
         "derived",
         "text_fallback"
+      ],
+      "requiredAscendancy": "Oracle",
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -31126,6 +31152,7 @@
       "tagSources": [
         "derived"
       ],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -31518,6 +31545,7 @@
       "tagSources": [
         "derived"
       ],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -32086,6 +32114,7 @@
       "tagSources": [
         "derived"
       ],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -32776,6 +32805,7 @@
       "tagSources": [
         "derived"
       ],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -33365,6 +33395,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Oracle",
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -33465,6 +33501,7 @@
         "derived",
         "text_fallback"
       ],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -35854,6 +35891,7 @@
       "tagSources": [
         "derived"
       ],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -35946,7 +35984,13 @@
       "scrapeMatched": false,
       "scrapeMatchedBy": null,
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Oracle",
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "damage_from_mana9_",
@@ -38198,6 +38242,7 @@
       "tagSources": [
         "derived"
       ],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -39797,6 +39842,7 @@
       "tagSources": [
         "derived"
       ],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -40943,6 +40989,7 @@
       "scrapeMatchedBy": null,
       "scrapeRejectedReason": null,
       "tagSources": [],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -41604,6 +41651,7 @@
         "derived",
         "text_fallback"
       ],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -42722,7 +42770,14 @@
       "scrapeMatched": false,
       "scrapeMatchedBy": null,
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Oracle",
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "energy_shield35",
@@ -43090,6 +43145,7 @@
       "tagSources": [
         "derived"
       ],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -43143,6 +43199,7 @@
       "tagSources": [
         "derived"
       ],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -44447,6 +44504,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Oracle",
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -44657,6 +44720,7 @@
         "derived",
         "text_fallback"
       ],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -46717,6 +46781,7 @@
       "scrapeMatchedBy": null,
       "scrapeRejectedReason": null,
       "tagSources": [],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "dex_int",
         "int",
@@ -46761,6 +46826,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Oracle",
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -47706,6 +47777,13 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Oracle",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -49657,6 +49735,7 @@
       "scrapeMatchedBy": null,
       "scrapeRejectedReason": null,
       "tagSources": [],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -51047,6 +51126,7 @@
       "tagSources": [
         "derived"
       ],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -51346,6 +51426,7 @@
       "tagSources": [
         "derived"
       ],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -51988,6 +52069,7 @@
       "tagSources": [
         "derived"
       ],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -52282,6 +52364,7 @@
       "tagSources": [
         "derived"
       ],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -52865,6 +52948,7 @@
       "tagSources": [
         "derived"
       ],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -56822,6 +56906,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Oracle",
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -60582,6 +60672,7 @@
       "tagSources": [
         "derived"
       ],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -61782,6 +61873,7 @@
         "derived",
         "text_fallback"
       ],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "int",
         "str",
@@ -61879,6 +61971,7 @@
       "tagSources": [
         "derived"
       ],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "str",
         "str_dex",
@@ -62428,6 +62521,7 @@
       "tagSources": [
         "derived"
       ],
+      "requiredAscendancy": "Oracle",
       "passiveTreeStarts": [
         "str",
         "str_dex",

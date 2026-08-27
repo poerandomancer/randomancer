@@ -295,11 +295,6 @@
       "passiveSkillGraphId": 50654
     },
     {
-      "id": "oracle_rage3",
-      "name": "Anger Management",
-      "passiveSkillGraphId": 45422
-    },
-    {
       "id": "spells29_",
       "name": "Anticipation",
       "passiveSkillGraphId": 62431
@@ -538,11 +533,6 @@
       "id": "heralds16_",
       "name": "Coming Calamity",
       "passiveSkillGraphId": 28044
-    },
-    {
-      "id": "oracle_damage_and_minions4",
-      "name": "Comradery",
-      "passiveSkillGraphId": 49153
     },
     {
       "id": "shock36",
@@ -840,11 +830,6 @@
       "passiveSkillGraphId": 27348
     },
     {
-      "id": "oracle_archon_crit4",
-      "name": "Exhaust All Power",
-      "passiveSkillGraphId": 11428
-    },
-    {
       "id": "minion_reservation2___",
       "name": "Expendable Army",
       "passiveSkillGraphId": 47420
@@ -975,11 +960,6 @@
       "passiveSkillGraphId": 27875
     },
     {
-      "id": "oracle_power_charge4",
-      "name": "Gift of the Plains",
-      "passiveSkillGraphId": 54289
-    },
-    {
       "id": "minion_reservation16",
       "name": "Gigantic Following",
       "passiveSkillGraphId": 46365
@@ -1083,11 +1063,6 @@
       "id": "AbyssJewelHistoricOverrideNotable_T_T_16",
       "name": "Heightened Shadows",
       "passiveSkillGraphId": 58943
-    },
-    {
-      "id": "oracle_shapeshifting_path3",
-      "name": "Hidden Forms",
-      "passiveSkillGraphId": 479
     },
     {
       "id": "damage_from_mana9_",
@@ -1325,11 +1300,6 @@
       "passiveSkillGraphId": 27513
     },
     {
-      "id": "oracle_channelling5_",
-      "name": "Meditative Focus",
-      "passiveSkillGraphId": 34940
-    },
-    {
       "id": "deflect66",
       "name": "Mending Deflection",
       "passiveSkillGraphId": 9652
@@ -1383,11 +1353,6 @@
       "id": "ailments48",
       "name": "Nature's Bite",
       "passiveSkillGraphId": 53265
-    },
-    {
-      "id": "oracle_spell_poison4",
-      "name": "Night's Bite",
-      "passiveSkillGraphId": 56466
     },
     {
       "id": "accuracy45_",
@@ -1505,11 +1470,6 @@
       "passiveSkillGraphId": 17324
     },
     {
-      "id": "oracle_strength_spell4",
-      "name": "Powerful Casting",
-      "passiveSkillGraphId": 3281
-    },
-    {
       "id": "volatility18",
       "name": "Precise Volatility",
       "passiveSkillGraphId": 34425
@@ -1543,11 +1503,6 @@
       "id": "maximum_resistances21",
       "name": "Prism Guard",
       "passiveSkillGraphId": 62034
-    },
-    {
-      "id": "oracle_frenzy_charge4",
-      "name": "Prize of the Hunt",
-      "passiveSkillGraphId": 26228
     },
     {
       "id": "dexterity102",
@@ -1778,11 +1733,6 @@
       "id": "AbyssJewelHistoricOverrideNotable_T_T_17",
       "name": "Stratified Wards",
       "passiveSkillGraphId": 55791
-    },
-    {
-      "id": "oracle_endurance_charge4",
-      "name": "Strength of the Deep",
-      "passiveSkillGraphId": 50908
     },
     {
       "id": "accuracy48",
