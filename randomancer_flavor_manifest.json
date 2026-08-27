@@ -45,201 +45,267 @@
   ],
   "build_flavor": {
     "fallback": [
-      "Steel, instinct, and strange conviction carry the day.",
-      "Power takes many shapes; survival favors the bold.",
-      "Every road narrows to the moment of decision.",
-      "Where certainty ends, resolve begins.",
-      "Some paths are walked. Others are carved."
+      "Steel, instinct, and strange conviction.",
+      "Power takes many shapes.",
+      "Resolve begins where certainty ends.",
+      "Every road narrows eventually.",
+      "Some paths must be carved."
     ],
     "classes": {
       "Warrior": [
-        "Steel bends before the will that swings it.",
-        "Every scar is proof that standing ground is a weapon.",
-        "Strength speaks plainly, and the battlefield listens."
-      ],
-      "Mercenary": [
-        "Every problem has a price, a distance, and a clean solution.",
-        "Cold judgment travels faster than hesitation.",
-        "Survival belongs to whoever controls the next heartbeat."
+        "Born of war, bound by honor.",
+        "Strength tempered by flame.",
+        "Steel answers steel.",
+        "Iron before fear.",
+        "Scars outlast hesitation.",
+        "Strength speaks plainly."
       ],
       "Ranger": [
-        "The horizon is measured in heartbeats and distance.",
-        "She moves where the wind leaves room and strikes where it does not.",
-        "Distance is not safety. It is an invitation."
-      ],
-      "Huntress": [
-        "She reads the ground like scripture and answers without hesitation.",
-        "Instinct sharpens where hesitation goes to die.",
-        "The quarry always learns too late which of them was being hunted."
+        "Swift as shadow, silent as dusk.",
+        "The hunt never ends.",
+        "An arrow is a promise.",
+        "The horizon has no shelter.",
+        "Wind favors the watchful.",
+        "Distance sharpens intent."
       ],
       "Witch": [
-        "The dark yields secrets to those willing to pay for them.",
-        "She speaks softly to powers that should have stayed unnamed.",
-        "Death, blood, and shadow are merely different kinds of leverage."
+        "Wisdom is a double-edged curse.",
+        "Power whispers, and she listens.",
+        "A pact is still a blade.",
+        "Secrets have sharp edges.",
+        "The dark always answers.",
+        "Knowledge exacts its price."
       ],
       "Sorceress": [
-        "Flame, frost, and storm gather at a gesture.",
-        "The air changes its mind when she raises a hand.",
-        "She turns raw elements into precise catastrophe."
+        "Lightning is a prayer with teeth.",
+        "Stars remember those who dare.",
+        "Time bends for the bold.",
+        "Storm follows the gesture.",
+        "Frost keeps perfect counsel.",
+        "Fire rewards certainty."
       ],
       "Monk": [
-        "Stillness gathers force until motion becomes inevitable.",
-        "Discipline makes a weapon of every breath.",
-        "Each strike begins long before the body moves."
+        "Every strike, a meditation.",
+        "Balance through battle.",
+        "Stillness is a weapon.",
+        "Breath before impact.",
+        "Discipline outlives fury.",
+        "Motion begins in silence."
+      ],
+      "Huntress": [
+        "The wild answers in kind.",
+        "Footfalls like falling leaves.",
+        "Fangs bared to fate.",
+        "Instinct leaves no footprints.",
+        "The quarry always learns last.",
+        "Silence favors the hunter."
+      ],
+      "Mercenary": [
+        "Gold buys blades, not mercy.",
+        "No banner, only resolve.",
+        "Contracts are written in scars.",
+        "Every problem has a price.",
+        "Cold judgment, clean work.",
+        "Survival settles every account."
       ],
       "Druid": [
-        "The wild answers in fang, storm, root, and flame.",
-        "Bone and bark remember older shapes.",
-        "Nature does not ask permission before it changes."
+        "Roots remember. Storms obey.",
+        "The grove speaks; the world listens.",
+        "Fate is read in bark and bone.",
+        "Wild blood remembers.",
+        "Bone yields. Nature does not.",
+        "The old shapes endure."
       ]
     },
     "ascendancies": {
       "Titan": [
-        "The earth yields first; everything else follows.",
-        "Each step carries the promise of an impact yet to come.",
-        "Armour turns aside blows. Mass turns aside armies.",
-        "He does not weather the battle; the battle breaks around him.",
-        "Strength becomes something geological in his hands."
+        "A mountain with a heartbeat.",
+        "Unmoved. Unbroken.",
+        "The earth yields first.",
+        "Strength becomes geological.",
+        "Impact answers everything.",
+        "Mass needs no argument.",
+        "Stone learns fear."
       ],
       "Warbringer": [
-        "One roar is enough to turn fear into momentum.",
-        "The battlefield answers when his voice becomes a weapon.",
-        "Old voices gather behind every challenge he bellows.",
-        "He calls for violence, and violence arrives in ranks.",
-        "Even silence feels like the breath before his next command."
+        "The drums of war follow close.",
+        "A banner is a blade.",
+        "One roar changes the field.",
+        "Fear becomes momentum.",
+        "Battle answers the call.",
+        "Silence before the warcry.",
+        "Victory arrives shouting."
       ],
       "Smith of Kitava": [
-        "The forge does not end at the anvil; it follows him into battle.",
-        "Every weapon is unfinished until it has tasted war.",
-        "Heat, iron, and intent are hammered into the same shape.",
-        "Steel remembers the hand that gave it purpose.",
-        "What he forges does not always stay still."
+        "Forge-fire in the veins.",
+        "Hammered into legend.",
+        "Steel remembers the hammer.",
+        "Every spark seeks purpose.",
+        "War completes the forging.",
+        "Heat gives iron a voice.",
+        "The anvil follows to battle."
       ],
       "Tactician": [
-        "Every battlefield has a shape, and he decides where it breaks.",
-        "One signal moves a dozen dangers into place.",
-        "Victory begins with choosing where the enemy is allowed to stand.",
-        "He turns preparation into pressure and pressure into surrender.",
-        "Nothing is improvised except the enemy's retreat."
+        "Victory is a calculation.",
+        "The battlefield is a board.",
+        "Position decides the outcome.",
+        "Preparation becomes pressure.",
+        "Every angle has a cost.",
+        "One signal changes everything.",
+        "Retreat was already accounted for."
       ],
       "Witchhunter": [
-        "Magic is only dangerous until someone learns where to strike.",
-        "He hunts the unnatural with the patience of a held breath.",
-        "Every spell leaves an opening; he has made a profession of finding it.",
-        "Superstition ends where his certainty begins.",
-        "The stranger the threat, the steadier his hand."
+        "No hex goes unanswered.",
+        "Purity by fire.",
+        "Every spell leaves an opening.",
+        "The unnatural leaves tracks.",
+        "Certainty cuts through sorcery.",
+        "No omen escapes judgment.",
+        "Magic bleeds like anything else."
       ],
       "Gemling Legionnaire": [
-        "Jewelled power glows beneath skin trained to endure it.",
-        "His body is an arsenal written in light.",
-        "Every gift of power finds somewhere new to take root.",
-        "Flesh adapts, hardens, and makes room for one more impossible talent.",
-        "He wears versatility as others wear armour."
+        "Facets catch every fate.",
+        "A legion in crystal.",
+        "Power finds another socket.",
+        "Flesh learns new geometry.",
+        "Light under the skin.",
+        "Versatility becomes armor.",
+        "Every gift finds room."
       ],
       "Deadeye": [
-        "The horizon narrows to a single point.",
-        "Distance only gives intent more time to become inevitable.",
-        "The wind carries every strike along the path she chose.",
-        "She leaves the enemy no safe angle to stand in.",
-        "By the time the attack is noticed, the decision was made long ago."
+        "One shot. One verdict.",
+        "Distance is mercy.",
+        "The horizon narrows.",
+        "Every angle is exposed.",
+        "Intent travels farther.",
+        "Precision leaves no refuge.",
+        "The path was chosen already."
       ],
       "Pathfinder": [
-        "Every vial is a promise with uncertain consequences.",
-        "Poison, remedy, and opportunity differ only by dosage.",
-        "She carries a travelling laboratory and no shortage of volunteers.",
-        "One measured draught turns endurance into momentum.",
-        "Where others see a toxin, she sees a tool waiting for refinement."
+        "Every trail has teeth.",
+        "The wild is a map of scars.",
+        "Dosage decides the difference.",
+        "Poison is only preparation.",
+        "Every vial has an answer.",
+        "Survival travels bottled.",
+        "The path remembers every toxin."
       ],
       "Amazon": [
-        "Her attack lands where instinct and precision agree.",
-        "She closes distance with the grace of a hunting bird.",
-        "Every motion is measured, every opening earned.",
-        "Speed sharpens strength into something finer than brute force.",
-        "The duel is decided in the instant before her opponent commits."
+        "Steel-sister of the sun.",
+        "Spearpoint prophecy.",
+        "Precision outruns brute force.",
+        "Every opening has an edge.",
+        "Speed sharpens strength.",
+        "The duel ends early.",
+        "Grace lands hard."
       ],
       "Ritualist": [
-        "Blood marks the boundary; something unseen answers from beyond it.",
-        "Every offering leaves the circle emptier and the silence less alone.",
-        "She turns sacrifice into a language the dead still understand.",
-        "Pain is never wasted when it can be given purpose.",
-        "The ritual ends only when every debt has found a body."
+        "Circles close. Blood binds.",
+        "Rites carved in night.",
+        "Blood speaks where breath cannot.",
+        "Every offering leaves an echo.",
+        "Pain given purpose.",
+        "The circle remembers.",
+        "Debts prefer living vessels."
       ],
       "Blood Mage": [
-        "Every heartbeat is both weapon and price.",
-        "Blood leaves the body only to return as power.",
-        "She spends life with the confidence of someone certain more can be taken.",
-        "Pain becomes precise when guided by practiced hands.",
-        "Her strongest incantations begin beneath the ribs."
+        "Crimson is currency.",
+        "Life traded for power.",
+        "Every heartbeat has a price.",
+        "Blood answers blood.",
+        "Pain becomes precision.",
+        "Power waits beneath the ribs.",
+        "Nothing living is free."
       ],
       "Lich": [
-        "Death is less an ending than a discipline.",
-        "Cold patience settles where mortal urgency once lived.",
-        "She trades warmth for power and finds the bargain favorable.",
-        "Decay gathers close, obedient and unhurried.",
-        "Her shadow lingers a little longer than the body that cast it."
+        "Death is a door left open.",
+        "A crown of bone and silence.",
+        "Cold patience outlives breath.",
+        "Decay keeps perfect time.",
+        "Warmth was a fair trade.",
+        "The grave has discipline.",
+        "Silence survives the body."
       ],
       "Infernalist": [
-        "Fire answers hunger with hunger of its own.",
-        "Something monstrous waits just beneath the skin.",
-        "She makes bargains in heat, ash, and breath.",
-        "Flames gather around her as though recognizing their kin.",
-        "Every transformation leaves less room for mercy."
+        "Flame speaks first.",
+        "Ash writes the epilogue.",
+        "Hunger answers hunger.",
+        "The furnace waits within.",
+        "Mercy burns quickly.",
+        "Heat remembers every bargain.",
+        "Something monstrous stirs."
       ],
       "Abyssal Lich": [
-        "The dark beneath death has begun to answer her.",
-        "Souls gather where servants once stood, stripped down to pure purpose.",
-        "She has learned that even undeath casts a deeper shadow.",
-        "Curses linger long after mercy would have ended them.",
-        "Something bottomless looks through her eyes and finds the world insufficient."
+        "Starless depths answer back.",
+        "The void keeps its promises.",
+        "Death casts deeper shadows.",
+        "Souls become raw material.",
+        "Curses outlive mercy.",
+        "The dark has another floor.",
+        "Bottomless hunger looks outward."
       ],
       "Chronomancer": [
-        "She steps aside from moments that would have killed her.",
-        "Time loosens when she refuses to accept its first answer.",
-        "Seconds fold, repeat, and vanish at her command.",
-        "Every mistake is merely a future she has not kept.",
-        "The battle ends once she reaches the version where she wins."
+        "Seconds are weapons.",
+        "Time, broken to purpose.",
+        "The future already answered.",
+        "Mistakes belong to discarded moments.",
+        "One second is enough.",
+        "The present remains negotiable.",
+        "Tomorrow arrives early."
       ],
       "Stormweaver": [
-        "Lightning and frost meet in the air before choosing a victim.",
-        "She braids thunder through cold until the sky itself shudders.",
-        "Storms do not follow her; they gather around her.",
-        "Every spark seeks another path, and she provides one.",
-        "The battlefield becomes weather with intent."
+        "Thunder in the lungs.",
+        "The sky is a spellbook.",
+        "Storm gathers with intent.",
+        "Lightning seeks another path.",
+        "Frost sharpens the thunder.",
+        "Weather becomes a weapon.",
+        "The air remembers the charge."
       ],
       "Disciple of Varashta": [
-        "At a word, bound spirits rise from silence to fulfill their debt.",
-        "She does not cast alone; every command wakes another oath.",
-        "Invisible servants wait in stillness until duty calls.",
-        "Fire, water, and shadow answer from vessels kept close at hand.",
-        "Her authority is quiet; the powers bound to it are not."
+        "Wards within wards.",
+        "Oaths etched in starlight.",
+        "Bound spirits await command.",
+        "Every vessel holds a promise.",
+        "Silent servants, sudden ruin.",
+        "Elements answer old debts.",
+        "Authority needs no voice."
       ],
       "Invoker": [
-        "Elemental force gathers at the end of every practiced motion.",
-        "Each strike invites another current into the body.",
-        "Fire, frost, and lightning become forms of discipline.",
-        "He moves through violence as though completing a familiar sequence.",
-        "Power accumulates where breath, balance, and impact meet."
+        "Breath, stance, strike.",
+        "A mantra with teeth.",
+        "Discipline gathers elements.",
+        "Impact completes the form.",
+        "Power follows perfect motion.",
+        "Balance invites the storm.",
+        "Every strike carries a current."
       ],
       "Acolyte of Chayula": [
-        "Darkness gathers around him like a second discipline.",
-        "He finds strength in the places light refuses to enter.",
-        "Chaos is not disorder when the mind holding it is still.",
-        "Shadow becomes shelter before it becomes a weapon.",
-        "He walks calmly beside powers that would unmake a lesser will."
+        "The Breach watches.",
+        "Shadow is devotion.",
+        "Darkness rewards stillness.",
+        "Chaos obeys a quiet mind.",
+        "The void offers shelter.",
+        "Night gathers close.",
+        "Discipline survives the dark."
       ],
       "Shaman": [
-        "Fang, claw, storm, and stone answer the same ancient rhythm.",
-        "Every transformation reveals a truth the human shape could not hold.",
-        "He carries the weather in his breath and the wild in his bones.",
-        "Power rises from earth, blood, and instinct together.",
-        "The beast within is not a loss of control, but another kind of mastery."
+        "Ancestors at your shoulder.",
+        "Spirits carry the strike.",
+        "Wild blood answers.",
+        "Storm speaks through bone.",
+        "Every shape remembers.",
+        "The old voices gather.",
+        "Fang, root, thunder."
       ],
       "Oracle": [
-        "He has already seen the moment when this choice succeeds.",
-        "Possible futures crowd close, waiting to be made real.",
-        "Chance loses some of its mystery beneath his gaze.",
-        "He walks paths that exist only because he knows where they lead.",
-        "The present is merely the future he has decided to keep."
+        "Omens do not lie.",
+        "The future already blinked.",
+        "Possible futures crowd close.",
+        "Chance loses its mystery.",
+        "The present was chosen.",
+        "Every path leaves an omen.",
+        "Tomorrow casts a shadow."
       ]
     }
   }
