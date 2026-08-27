@@ -5,71 +5,69 @@ import test from 'node:test';
 import { GENERIC_BUILD_FLAVOR, selectBuildFlavor } from '../js/build-flavor.js';
 
 const manifest = JSON.parse(await readFile(new URL('../randomancer_flavor_manifest.json', import.meta.url)));
+const core = JSON.parse(await readFile(new URL('../data/core-data.json', import.meta.url)));
 const engineSource = await readFile(new URL('../js/10-roll-engine.js', import.meta.url), 'utf8');
+const stateSource = await readFile(new URL('../js/04-app-state.js', import.meta.url), 'utf8');
+const hydrationSource = await readFile(new URL('../js/00-locks-and-snapshots.js', import.meta.url), 'utf8');
+const selectorSource = await readFile(new URL('../js/build-flavor.js', import.meta.url), 'utf8');
 
-test('new build flavor prefers the selected ascendancy pool', () => {
+test('ascendancy flavor takes priority without mixing lower-priority pools', () => {
   const flavor = selectBuildFlavor(manifest, {
-    className: 'Warrior', ascendancy: 'Titan', weapon: 'Mace', offense: 'Fire', random: () => 0
+    className: 'Warrior', ascendancy: 'Titan', random: () => 0
   });
 
-  assert.equal(flavor, manifest.ascendancy_flavor.Warrior.Titan[0].replace(/^Titan:\s*/, ''));
-  assert.doesNotMatch(flavor, /^(?:Titan|Warrior)\s*:/);
-  assert.notEqual(flavor, 'A fate drawn from one weapon family and the Offense it must carry.');
+  assert.equal(flavor, manifest.build_flavor.ascendancies.Titan[0]);
+  assert.ok(!manifest.build_flavor.classes.Warrior.includes(flavor));
+  assert.ok(!manifest.build_flavor.fallback.includes(flavor));
 });
 
-test('ascendancy names embedded in a tagline are excluded from card flavor', () => {
-  const flavor = selectBuildFlavor(manifest, {
-    className: 'Monk', ascendancy: 'Acolyte of Chayula', random: () => 0
-  });
-
-  assert.equal(flavor, 'Reality frays at the edges; you pull on the loose threads.');
-  assert.doesNotMatch(flavor, /Chayula|Acolyte|Monk/i);
-});
-
-test('ascendancy taglines remove identity labels before reaching the card', () => {
-  const taggedManifest = {
-    ascendancy_flavor: { Witch: { Lich: ['Lich: The dead keep excellent counsel.'] } },
-    class_flavor: { Witch: { base: ['Witch: A forbidden fallback.'] } },
-    fallback_flavor: ['A final fallback.']
+test('class flavor is used when the ascendancy pool is missing or empty', () => {
+  const fixture = {
+    build_flavor: {
+      ascendancies: { Missing: [] },
+      classes: { Warrior: ['Class fallback.'] },
+      fallback: ['Global fallback.']
+    }
   };
 
+  assert.equal(selectBuildFlavor(fixture, { className: 'Warrior', ascendancy: 'Missing', random: () => 0 }), 'Class fallback.');
+});
+
+test('global flavor is used when ascendancy and class pools are unavailable', () => {
   assert.equal(
-    selectBuildFlavor(taggedManifest, { className: 'Witch', ascendancy: 'Lich', random: () => 0 }),
-    'The dead keep excellent counsel.'
-  );
-  assert.equal(
-    selectBuildFlavor(taggedManifest, { className: 'Witch', ascendancy: 'Unknown', random: () => 0 }),
-    GENERIC_BUILD_FLAVOR
+    selectBuildFlavor({ build_flavor: { fallback: ['Global fallback.'] } }, { className: 'Unknown', ascendancy: 'Missing', random: () => 0 }),
+    'Global fallback.'
   );
 });
 
-test('build flavor never uses class, lore, fallback, intro, or subtitle pools', () => {
-  const restrictedManifest = {
-    intro: { lore: ['Forbidden intro lore.'], meta: ['Forbidden intro meta.'] },
-    subtitles: ['Forbidden subtitle.'],
-    class_flavor: {
-      Warrior: {
-        base: ['Allowed base line.'],
-        named_lore: ['Forbidden named lore.'],
-        lore_mode: ['Forbidden lore mode.']
-      }
-    },
-    fallback_flavor: ['Forbidden manifest fallback.']
-  };
-
-  assert.equal(selectBuildFlavor(restrictedManifest, { className: 'Warrior', ascendancy: 'Unknown', random: () => 0.99 }), GENERIC_BUILD_FLAVOR);
+test('invalid manifests retain a safe atmospheric fallback', () => {
+  assert.equal(selectBuildFlavor(null), GENERIC_BUILD_FLAVOR);
+  assert.equal(selectBuildFlavor({ build_flavor: { fallback: 'invalid' } }), GENERIC_BUILD_FLAVOR);
 });
 
-test('build flavor uses the safe generic when no ascendancy tagline exists', () => {
-  assert.equal(selectBuildFlavor(manifest, { className: 'Unknown', random: () => 0 }), GENERIC_BUILD_FLAVOR);
+test('manifest covers every live class and each supplied live ascendancy pool', () => {
+  for (const className of Object.keys(core.Classes)) {
+    assert.ok(manifest.build_flavor.classes[className]?.length, `missing class flavor: ${className}`);
+  }
+
+  const flavorAscendancies = Object.keys(manifest.build_flavor.ascendancies);
+  const liveAscendancies = new Set(Object.values(core.Classes).flatMap(({ ascendancies }) => ascendancies));
+  for (const ascendancy of flavorAscendancies) {
+    assert.ok(liveAscendancies.has(ascendancy), `non-live ascendancy flavor: ${ascendancy}`);
+    assert.ok(manifest.build_flavor.ascendancies[ascendancy]?.length, `empty ascendancy flavor: ${ascendancy}`);
+  }
 });
 
-test('missing or malformed flavor manifests use a safe poetic fallback', () => {
-  assert.equal(selectBuildFlavor(null, { className: 'Warrior', random: () => 0 }), GENERIC_BUILD_FLAVOR);
-  assert.equal(selectBuildFlavor({ class_flavor: [], fallback_flavor: 'invalid' }, {}), GENERIC_BUILD_FLAVOR);
+test('obsolete build-flavor keys and selector concepts are removed', () => {
+  for (const key of ['fallback_flavor', 'class_flavor', 'ascendancy_flavor']) assert.ok(!(key in manifest));
+  for (const obsolete of ['named_lore', 'lore_mode', 'fallback_flavor', 'class_flavor', 'ascendancy_flavor']) {
+    assert.doesNotMatch(selectorSource, new RegExp(obsolete));
+  }
 });
 
-test('draw construction stores its selected flavor in the snapshot', () => {
+test('selected flavor remains a stored snapshot outcome through render and hydration', () => {
   assert.match(engineSource, /flavor:\s*selectBuildFlavor\(/);
-  assert.doesNotMatch(engineSource, /flavor:\s*['"]A fate drawn from one weapon family/);
+  assert.match(stateSource, /flavor:\s*src\.flavor\s*\|\|\s*['"]['"]/);
+  assert.match(hydrationSource, /flavor:\s*draw\.f\s*\|\|\s*['"]['"]/);
+  assert.match(hydrationSource, /#build-subtext[^\n]+snap\.flavor/);
 });
