@@ -74,7 +74,10 @@
   gap:.65rem 1.6rem;
 }
 .rc-skill-group{
+  width:fit-content;
+  max-width:100%;
   min-width:0;
+  justify-self:center;
   text-align:left;
 }
 .rc-skill-group__skill{
@@ -86,8 +89,10 @@
   position:relative;
   display:flex;
   flex-wrap:wrap;
+  width:fit-content;
+  max-width:calc(100% - .56rem);
   gap:0 .35em;
-  margin:.18rem 0 0 .28rem;
+  margin:.18rem auto 0;
   padding-left:.9rem;
   color:var(--muted);
   font-size:.78em;

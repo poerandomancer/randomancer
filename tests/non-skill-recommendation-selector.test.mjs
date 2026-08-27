@@ -447,6 +447,7 @@ test('build card renders skill, unique, ascendancy, and notable tooltip content'
 test('build card skill groups center skills and wrap columns and supports', () => {
   const css = fs.readFileSync(new URL('../css/85-build-card-foundation.css', import.meta.url), 'utf8');
   assert.match(css, /\.rc-skill-groups\s*\{[^}]*display:grid;[^}]*grid-template-columns:repeat\(auto-fit,/s);
+  assert.match(css, /\.rc-skill-group\s*\{[^}]*width:fit-content;[^}]*justify-self:center;/s);
   assert.match(css, /\.rc-skill-group__skill\s*\{[^}]*text-align:center;/s);
-  assert.match(css, /\.rc-skill-group__supports\s*\{[^}]*display:flex;[^}]*flex-wrap:wrap;/s);
+  assert.match(css, /\.rc-skill-group__supports\s*\{[^}]*display:flex;[^}]*flex-wrap:wrap;[^}]*width:fit-content;[^}]*margin:\.18rem auto 0;/s);
 });
