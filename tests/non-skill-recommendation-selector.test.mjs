@@ -405,7 +405,10 @@ test('build card renders skill, unique, ascendancy, and notable tooltip content'
   globalThis.document = { readyState: 'loading', addEventListener() {} };
   globalThis.window = {
     DATA: {
-      gems: [{ id: 'skill-id', name: 'Ice Skill', description: '[Cold|Cold] skill text' }],
+      gems: [
+        { id: 'skill-id', name: 'Ice Skill', description: '[Cold|Cold] skill text' },
+        { id: 'support-id', name: 'Deep Freeze', description: 'Support-only detail' }
+      ],
       passivesEnriched: { nodes: [
         { name: 'Cold Ascendancy', lines: ['Asc effect'] },
         { name: 'Cold Notable', lines: ['Notable effect'] }
@@ -417,7 +420,10 @@ test('build card renders skill, unique, ascendancy, and notable tooltip content'
   const { deriveBuildCardModel, renderBuildCard, BUILD_CARD_FACES } = await import('../js/23-build-card-foundation.js');
   const model = deriveBuildCardModel({
     ascendancy: 'Invoker', weaponFamily: 'Bow', offenseList: ['Freeze'], attributes: {},
-    recommendedSkills: [{ id: 'skill-id', name: 'Ice Skill' }],
+    recommendedSkills: [{
+      id: 'skill-id', name: 'Ice Skill',
+      recommendationPackage: { assignedRole: 'primary_damage', supports: [{ id: 'support-id', name: 'Deep Freeze' }] }
+    }],
     recommendedUniques: [{ id: 'cold-bow', name: 'Cold Bow', recommendationEvidence: {} }],
     passives: {
       ascendancyNodes: [{ id: 'asc', name: 'Cold Ascendancy', recommendationEvidence: {} }],
@@ -427,7 +433,10 @@ test('build card renders skill, unique, ascendancy, and notable tooltip content'
   const html = renderBuildCard(model, { face: BUILD_CARD_FACES.BACK });
   assert.match(html, /Unique Ideas[\s\S]*Cold Bow/);
   assert.match(html, /Ascendancy — [\s\S]*Cold Ascendancy/);
-  assert.match(html, /Notable — [\s\S]*Cold Notable/);
+  assert.doesNotMatch(html, /(?:Primary|Notable) —/);
+  assert.match(html, /rc-skill-group__skill[\s\S]*Ice Skill[\s\S]*rc-skill-group__supports[\s\S]*Deep Freeze/);
+  assert.match(html, /data-tip-title="Deep Freeze" data-tip-lines="\[&quot;Support-only detail&quot;\]"/);
+  assert.doesNotMatch(html, /data-tip-title="Ice Skill"[^>]*Support-only detail/);
   assert.match(html, /Ice Skill[\s\S]*tabindex="0"|tabindex="0"[\s\S]*Ice Skill/);
   for (const text of ['Expert Bow · Weapon', 'Cold implicit', 'Freeze mod', 'Ascendancy Passive', 'Asc effect', 'Notable Passive', 'Notable effect']) {
     assert.match(html, new RegExp(text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));

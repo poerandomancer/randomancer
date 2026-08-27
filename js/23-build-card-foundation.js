@@ -68,18 +68,6 @@ function getGemDescription(entry) {
   return stripMarkup(gem?.description || gem?.support_text || gem?.grants || '');
 }
 
-function skillRolePrefix(entry, index, weaponSet) {
-  const role = entry?.recommendationPackage?.assignedRole;
-  const roleLabel = {
-    primary_damage: 'Primary',
-    secondary_damage: 'Secondary',
-    setup_control: 'Setup',
-    payoff: 'Payoff',
-    enabler: 'Enabler'
-  }[role] || (index === 0 ? 'Primary' : 'Setup');
-  return weaponSet ? `${weaponSet} · ${roleLabel}` : roleLabel;
-}
-
 function getPassiveDescription(entry) {
   const name = entry?.name || '';
   const fromData = (window.DATA?.passivesEnriched?.nodes || []).find((node) => node?.name === name);
@@ -138,7 +126,8 @@ function item(name, options = {}) {
     meta: options.meta || '',
     slotKey: options.slotKey || '',
     tipTitle: options.tipTitle || String(name || '').trim(),
-    tipLines: Array.isArray(options.tipLines) ? options.tipLines.filter(Boolean) : []
+    tipLines: Array.isArray(options.tipLines) ? options.tipLines.filter(Boolean) : [],
+    supports: Array.isArray(options.supports) ? options.supports : []
   };
 }
 
@@ -149,26 +138,22 @@ function deriveBuildCardModel(snapshot) {
   const weapon = snap.weaponFamily || snap.weapon || '';
   const offense = (snap.offenseList || []).filter(Boolean);
 
-  const skillItems = (entries, weaponSet) => (entries || []).slice(0, 2).map((entry, index) =>
+  const skillItems = (entries) => (entries || []).slice(0, 2).map((entry) =>
     {
       const supports = Array.isArray(entry?.recommendationPackage?.supports)
         ? entry.recommendationPackage.supports.slice(0, 2)
         : [];
-      const supportNames = supports.map(getGemName).filter(Boolean);
-      const supportLines = supports.map((support) => {
-        const name = getGemName(support);
-        const description = getGemDescription(support);
-        return [name, description].filter(Boolean).join(': ');
-      }).filter(Boolean);
       return item(getGemName(entry), {
-        prefix: skillRolePrefix(entry, index, weaponSet),
-        meta: supportNames.length ? ` · Supports: ${supportNames.join(' + ')}` : '',
         slotKey: 'ACTIVE_SKILL',
-        tipLines: [getGemDescription(entry), ...supportLines].filter(Boolean)
+        tipLines: [getGemDescription(entry)].filter(Boolean),
+        supports: supports.map((support) => item(getGemName(support), {
+          slotKey: 'ACTIVE_SKILL',
+          tipLines: [getGemDescription(support)].filter(Boolean)
+        })).filter((support) => support.name)
       });
     }
   );
-  const skills = skillItems(snap.recommendedSkills, '');
+  const skills = skillItems(snap.recommendedSkills);
 
   const uniques = [...(snap.recommendedUniques || []).slice(0, 1), ...(snap.recommendedJewelryUniques || []).slice(0, 2)]
     .map((entry) => typeof entry === 'string' ? entry : entry?.name)
@@ -184,7 +169,6 @@ function deriveBuildCardModel(snapshot) {
       tipLines: ['Ascendancy Passive', ...getPassiveDescription(entry)]
     })),
     ...(passives.notables || []).slice(0, 3).map((entry) => item(entry?.name, {
-      prefix: 'Notable',
       slotKey: 'NOTABLE',
       tipLines: ['Notable Passive', ...getPassiveDescription(entry)]
     }))
@@ -227,6 +211,15 @@ function renderName(entry, face) {
 
 function renderValues(values, face) {
   return (values || []).map((entry, index) => `${index ? '<span class="rc-sep">, </span>' : ''}${renderName(entry, face)}`).join('');
+}
+
+function renderSkillGroups(values, face) {
+  return `<div class="rc-skill-groups">${(values || []).map((entry) => `
+    <div class="rc-skill-group">
+      <div class="rc-skill-group__skill">${renderName(entry, face)}</div>
+      ${entry.supports?.length ? `<div class="rc-skill-group__supports">${entry.supports.map((support, index) => `${index ? '<span class="rc-sep"> · </span>' : ''}${renderName(support, face)}`).join('')}</div>` : ''}
+    </div>
+  `).join('')}</div>`;
 }
 
 function renderBalance(balance) {
@@ -286,7 +279,7 @@ function renderBuildCard(model, options = {}) {
         ${renderHeader(model, options.actionsHtml || '')}
         <div class="rc-card__body rc-card__body--back">
           <div class="rc-card-ideas__intro">Optional starting points, not build requirements.</div>
-          ${sections.length ? sections.map((section) => `<section class="rc-print-block"><div class="rc-print-block__label">${escapeHtml(section.label)}</div><div class="rc-print-block__value">${renderValues(section.values, face)}</div></section>`).join('') : '<div class="rc-card-ideas__empty">No strong build ideas were found for this roll.</div>'}
+          ${sections.length ? sections.map((section) => `<section class="rc-print-block"><div class="rc-print-block__label">${escapeHtml(section.label)}</div><div class="rc-print-block__value">${section.label === 'Skill Ideas' ? renderSkillGroups(section.values, face) : renderValues(section.values, face)}</div></section>`).join('') : '<div class="rc-card-ideas__empty">No strong build ideas were found for this roll.</div>'}
         </div>
         ${footer}
       </article>
