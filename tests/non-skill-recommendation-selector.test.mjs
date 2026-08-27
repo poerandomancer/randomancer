@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { selectNonSkillRecommendations } from '../js/31-non-skill-recommendation-selector.js';
+import { selectNonSkillRecommendations, selectJewelryRecommendations } from '../js/31-non-skill-recommendation-selector.js';
 
 const fact = (mechanic, relation = 'provides') => ({ mechanic, relation, confidence: 'exact' });
 const entity = (id, content_type, mechanics, extra = {}) => ({
@@ -152,6 +152,89 @@ test('compact contradictions reject while incoming immunity does not', () => {
   const incoming = entity('incoming', 'unique', [fact('freeze'), { ...fact('freeze'), relation: 'prevents', scope: 'incoming' }],
     { compatibility: { access: {}, equipment: { slot: 'Bow', base: 'Bow' } } });
   assert.equal(selectNonSkillRecommendations(catalog([incoming]), snap, pkg).recommendedUniques[0].id, 'incoming');
+});
+
+test('jewelry eligibility uses authoritative Ring and Amulet slots only', () => {
+  const candidate = (id, slot) => semanticUnique(id, slot, 'freeze', 'STRONG_SPECIALIZATION', 310,
+    [{ c: 'STRONG_SPECIALIZATION', r: 'provides', m: 'freeze', k: 'item_fact' }]);
+  const result = selectJewelryRecommendations(catalog([
+    candidate('ring', 'Ring'), candidate('amulet', 'Amulet'), candidate('jewel', 'Jewel'),
+    candidate('belt', 'Belt'), candidate('charm', 'Charm'), candidate('helmet', 'Helmet'), candidate('bow', 'Bow')
+  ]), snap, 'eligibility');
+  assert.deepEqual(new Set(result.map((entry) => entry.itemType)), new Set(['Ring', 'Amulet']));
+  assert.ok(result.every((entry) => !['jewel', 'belt', 'charm', 'helmet', 'bow'].includes(entry.id)));
+});
+
+test('jewelry capacity permits two distinct Rings but at most one Amulet', () => {
+  const jewelry = (id, slot, strength = 410, sourceId = id) => ({
+    ...semanticUnique(id, slot, 'freeze', 'BUILD_DEFINING_CAPABILITY', strength,
+      [{ c: 'BUILD_DEFINING_CAPABILITY', r: 'inflicts', m: 'freeze', k: 'item_fact' }]), source_id: sourceId
+  });
+  const rings = selectJewelryRecommendations(catalog([
+    jewelry('ring-a', 'Ring'), jewelry('ring-b', 'Ring'), jewelry('weak-amulet', 'Amulet', 300)
+  ]), snap, 'rings');
+  assert.equal(rings.length, 2);
+  assert.ok(rings.every((entry) => entry.itemType === 'Ring'));
+  const mixed = selectJewelryRecommendations(catalog([
+    jewelry('ring', 'Ring'), jewelry('amulet-a', 'Amulet'), jewelry('amulet-b', 'Amulet')
+  ]), snap, 'mixed');
+  assert.equal(mixed.filter((entry) => entry.itemType === 'Amulet').length, 1);
+  assert.equal(new Set(mixed.map((entry) => entry.id)).size, mixed.length);
+  const duplicate = selectJewelryRecommendations(catalog([
+    jewelry('copy-a', 'Ring', 410, 'same-ring'), jewelry('copy-b', 'Ring', 409, 'same-ring')
+  ]), snap, 'duplicate');
+  assert.equal(duplicate.length, 1);
+});
+
+test('jewelry shares semantic tiers, granted facts, contradictions, and directional conversion', () => {
+  const candidates = catalog([
+    semanticUnique('granted-capability', 'Ring', 'freeze', 'BUILD_DEFINING_CAPABILITY', 401,
+      [{ c: 'BUILD_DEFINING_CAPABILITY', r: 'inflicts', m: 'freeze', k: 'granted_skill', e: 'skill:freeze' }]),
+    semanticUnique('specialization', 'Amulet', 'freeze', 'STRONG_SPECIALIZATION', 999,
+      [{ c: 'STRONG_SPECIALIZATION', r: 'provides', m: 'freeze', k: 'item_fact' }]),
+    semanticUnique('affinity', 'Ring', 'freeze', 'AFFINITY_AMPLIFICATION', 9999,
+      [{ c: 'AFFINITY_AMPLIFICATION', r: 'modifies', m: 'freeze', k: 'item_fact' }]),
+    semanticUnique('payoff', 'Ring', 'freeze', 'PAYOFF_CONTEXT', 99999,
+      [{ c: 'PAYOFF_CONTEXT', r: 'requires', m: 'freeze', k: 'item_fact' }]),
+    semanticUnique('blocked', 'Ring', 'freeze', 'CONTRADICTION_PREVENTION', -1,
+      [{ c: 'CONTRADICTION_PREVENTION', r: 'prevents', m: 'freeze', k: 'item_fact' }])
+  ]);
+  const result = selectJewelryRecommendations(candidates, snap, 'tiers');
+  assert.deepEqual(result.map((entry) => entry.id), ['granted-capability']);
+  assert.equal(result[0].recommendationEvidence.matches[0].sourceEntity, 'skill:freeze');
+  const raw = (id, facts) => entity(id, 'unique', facts, { compatibility: { access: {}, equipment: { slot: 'Ring', base: 'Gold Ring' } } });
+  assert.deepEqual(selectJewelryRecommendations(catalog([
+    raw('toward', [{ relation: 'converts', from: 'fire', to: 'freeze' }]),
+    raw('away', [fact('freeze'), { relation: 'converts', from: 'freeze', to: 'fire' }])
+  ]), snap, 'conversion').map((entry) => entry.id), ['toward']);
+});
+
+test('jewelry selection is deterministic, varies within its band, and does not force weak slots', () => {
+  const ring = (id, strength) => semanticUnique(id, 'Ring', 'freeze', 'STRONG_SPECIALIZATION', strength,
+    [{ c: 'STRONG_SPECIALIZATION', r: 'provides', m: 'freeze', k: 'item_fact' }]);
+  const candidates = catalog([ring('a', 310), ring('b', 308), ring('c', 305)]);
+  const pick = (seed) => selectJewelryRecommendations(candidates, snap, seed).map((entry) => entry.id);
+  assert.deepEqual(pick('same'), pick('same'));
+  assert.ok(new Set(Array.from({ length: 20 }, (_, index) => pick(`seed-${index}`).join(','))).size > 1);
+  const single = selectJewelryRecommendations(catalog([
+    ring('strong', 310), semanticUnique('lower-tier', 'Amulet', 'freeze', 'AFFINITY_AMPLIFICATION', 299,
+      [{ c: 'AFFINITY_AMPLIFICATION', r: 'modifies', m: 'freeze', k: 'item_fact' }])
+  ]), snap, 'single');
+  assert.deepEqual(single.map((entry) => entry.id), ['strong']);
+  assert.deepEqual(selectJewelryRecommendations(catalog([]), snap, 'empty'), []);
+});
+
+test('jewelry lane is weapon-independent and cannot displace the primary unique', () => {
+  const bow = semanticUnique('primary-bow', 'Bow', 'freeze', 'AFFINITY_AMPLIFICATION', 201,
+    [{ c: 'AFFINITY_AMPLIFICATION', r: 'modifies', m: 'freeze', k: 'item_fact' }]);
+  const ring = semanticUnique('strong-ring', 'Ring', 'freeze', 'BUILD_DEFINING_CAPABILITY', 410,
+    [{ c: 'BUILD_DEFINING_CAPABILITY', r: 'inflicts', m: 'freeze', k: 'item_fact' }]);
+  for (const weaponFamily of ['Bow', 'Crossbow']) {
+    const result = selectNonSkillRecommendations(catalog([bow, ring]), { ...snap, weaponFamily }, pkg);
+    assert.deepEqual(result.recommendedJewelryUniques.map((entry) => entry.id), ['strong-ring']);
+    assert.ok(result.recommendedUniques.length <= 1);
+    if (weaponFamily === 'Bow') assert.deepEqual(result.recommendedUniques.map((entry) => entry.id), ['primary-bow']);
+  }
 });
 
 test('rejects generic, contradictory, DNT, prototype, inaccessible, and seasonal candidates', () => {

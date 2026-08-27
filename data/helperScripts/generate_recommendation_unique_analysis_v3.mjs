@@ -27,6 +27,9 @@ catalog = { ...catalog, entities: catalog.entities.map((entity) => entity.conten
 const weaponLabels = [...core.Weapons['Two-Handed'], ...core.Weapons['One-Handed']].map((weapon) => weapon.name);
 const weapons = [...new Set(weaponLabels.map((weapon) => weapon.replace(/^(?:One|Two)-handed Mace$/, 'Mace')))]
   .filter((weapon) => FAMILY_MAP.has(weapon));
+const jewelrySlot = (entity) => ['Ring', 'Amulet'].includes(entity?.compatibility?.equipment?.slot)
+  ? entity.compatibility.equipment.slot : '';
+const jewelryUniques = uniques.filter(jewelrySlot);
 
 const compactCandidate = (candidate, currentId, proposedRank, bandIds) => ({
   id: candidate.id, name: candidate.name, slot: candidate.equipment.slot, family: candidate.equipment.primary || candidate.equipment.offhand,
@@ -86,6 +89,25 @@ for (const weapon of weapons) for (const offense of offenses) {
     qualityBandSize: band.length, candidates });
 }
 
+const jewelryCells = offenses.map((offense) => {
+  const analyzed = jewelryUniques.map((entity) => ({ id: entity.id, sourceId: entity.source_id, name: entity.name,
+    itemType: jewelrySlot(entity), ...analyzeWholeUnique(entity, offense.id, sources) }));
+  const ranked = rankCandidates(analyzed); const band = qualityBand(ranked);
+  const selected = selectNonSkillRecommendations(catalog, { offenseList: [offense.id] }, null,
+    { selectionSeed: `diagnostic:${offense.id}` }).recommendedJewelryUniques;
+  return { offenseId: offense.id, offense: offense.name,
+    eligibleRings: jewelryUniques.filter((entity) => jewelrySlot(entity) === 'Ring').length,
+    eligibleAmulets: jewelryUniques.filter((entity) => jewelrySlot(entity) === 'Amulet').length,
+    meaningfulCandidates: ranked.length,
+    contradictionRejections: analyzed.filter((candidate) => candidate.contradiction).length,
+    strongestTier: ranked[0]?.bestTier || null, qualityBandSize: band.length,
+    qualityBand: band.map((candidate) => ({ id: candidate.sourceId, name: candidate.name,
+      itemType: candidate.itemType, tier: candidate.bestTier, score: candidate.proposedScore })),
+    selected: selected.map((entry) => ({ id: entry.id, name: entry.name, itemType: entry.itemType,
+      tier: entry.recommendationEvidence.tier, score: entry.recommendationEvidence.score })),
+    empty: selected.length === 0 };
+});
+
 const grantedSkillUniques = uniques.filter((entity) => (rawByKey.get(entity.source_id)?.granted_skills || []).length);
 const grantedEffectUniques = grantedSkillUniques.filter((entity) => (rawByKey.get(entity.source_id)?.granted_skills || []).some((skill) =>
   (entitiesByName.get(skill.name) || []).some((granted) => (granted.source_evidence?.granted_effects || []).length)));
@@ -117,10 +139,24 @@ const summary = {
     promotedFactCount: runtimeSemantics.promotedFactCount,
     bytes: fs.statSync('data/enriched/recommendation_unique_semantics_v3.json').size }
 };
+summary.jewelry = {
+  eligibleRings: jewelryUniques.filter((entity) => jewelrySlot(entity) === 'Ring').length,
+  eligibleAmulets: jewelryUniques.filter((entity) => jewelrySlot(entity) === 'Amulet').length,
+  enrichedWithGrantedSemantics: jewelryUniques.filter((entity) => Object.values(runtimeSemantics.byUniqueId[entity.source_id] || {})
+    .some((entry) => entry.facts.some((fact) => ['granted_skill', 'granted_effect', 'nested_component'].includes(fact.k)))).length,
+  resultCounts: Object.fromEntries([0, 1, 2].map((count) => [count, jewelryCells.filter((cell) => cell.selected.length === count).length])),
+  combinations: {
+    ringRing: jewelryCells.filter((cell) => cell.selected.map((entry) => entry.itemType).join('+') === 'Ring+Ring').length,
+    ringAmulet: jewelryCells.filter((cell) => new Set(cell.selected.map((entry) => entry.itemType)).size === 2).length,
+    ringOnly: jewelryCells.filter((cell) => cell.selected.length === 1 && cell.selected[0].itemType === 'Ring').length,
+    amuletOnly: jewelryCells.filter((cell) => cell.selected.length === 1 && cell.selected[0].itemType === 'Amulet').length
+  },
+  variationOpportunities: jewelryCells.filter((cell) => cell.qualityBandSize > 2).length
+};
 const payload = { schemaVersion: 'recommendation-unique-analysis-v3.0.0', summary,
   semanticHierarchy: ['BUILD_DEFINING_CAPABILITY', 'STRONG_SPECIALIZATION', 'AFFINITY_AMPLIFICATION', 'PAYOFF_CONTEXT'],
   qualityBandRule: 'At most three candidates in the best semantic tier and within 10 diagnostic score points of its leader.',
-  grantedCompletenessFindings: materialItems, contradictionFindings: [...contradictions.values()], cells };
+  grantedCompletenessFindings: materialItems, contradictionFindings: [...contradictions.values()], jewelryCells, cells };
 fs.writeFileSync('data/enriched/recommendation_unique_analysis_v3.json', `${JSON.stringify(payload, null, 2)}\n`);
 
 const probe = (offense) => cells.find((cell) => cell.weapon === 'Bow' && cell.offenseId === offense);

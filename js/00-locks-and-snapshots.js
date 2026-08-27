@@ -79,6 +79,8 @@ import {
         defense: draw.d || '', defStrat: draw.ds || '', buildName: draw.b || '', flavor: draw.f || '',
         attributes: draw.attr || {}, recommendedSkills: draw.rs || [], recommendedSkills2: draw.rs2 || [],
         recommendedUniques: draw.u || [],
+        recommendedJewelryUniques: Array.isArray(draw.ju) ? draw.ju.map((entry) => typeof entry === 'string'
+          ? entry : ({ name: entry?.n || '', ...(entry?.t ? { itemType: entry.t } : {}) })).filter((entry) => entry && (typeof entry === 'string' || entry.name)) : [],
         passives: draw.p ? {
           ascendancyNodes: draw.p.a || [], keystones: draw.p.k || [], notables: draw.p.n || []
         } : undefined

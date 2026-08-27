@@ -29,6 +29,23 @@
       "enrichedUniqueCount": 73,
       "promotedFactCount": 250,
       "bytes": 74309
+    },
+    "jewelry": {
+      "eligibleRings": 37,
+      "eligibleAmulets": 25,
+      "enrichedWithGrantedSemantics": 1,
+      "resultCounts": {
+        "0": 4,
+        "1": 8,
+        "2": 3
+      },
+      "combinations": {
+        "ringRing": 3,
+        "ringAmulet": 0,
+        "ringOnly": 6,
+        "amuletOnly": 2
+      },
+      "variationOpportunities": 3
     }
   },
   "semanticHierarchy": [
@@ -1401,6 +1418,442 @@
           }
         }
       ]
+    }
+  ],
+  "jewelryCells": [
+    {
+      "offenseId": "physical",
+      "offense": "Physical Damage",
+      "eligibleRings": 37,
+      "eligibleAmulets": 25,
+      "meaningfulCandidates": 4,
+      "contradictionRejections": 1,
+      "strongestTier": "STRONG_SPECIALIZATION",
+      "qualityBandSize": 3,
+      "qualityBand": [
+        {
+          "id": "Blackheart||Iron Ring",
+          "name": "Blackheart",
+          "itemType": "Ring",
+          "tier": "STRONG_SPECIALIZATION",
+          "score": 306
+        },
+        {
+          "id": "Icefang Orbit||Iron Ring",
+          "name": "Icefang Orbit",
+          "itemType": "Ring",
+          "tier": "STRONG_SPECIALIZATION",
+          "score": 306
+        },
+        {
+          "id": "Prized Pain||Iron Ring",
+          "name": "Prized Pain",
+          "itemType": "Ring",
+          "tier": "STRONG_SPECIALIZATION",
+          "score": 306
+        }
+      ],
+      "selected": [
+        {
+          "id": "Blackheart||Iron Ring",
+          "name": "Blackheart",
+          "itemType": "Ring",
+          "tier": "STRONG_SPECIALIZATION",
+          "score": 306
+        },
+        {
+          "id": "Prized Pain||Iron Ring",
+          "name": "Prized Pain",
+          "itemType": "Ring",
+          "tier": "STRONG_SPECIALIZATION",
+          "score": 306
+        }
+      ],
+      "empty": false
+    },
+    {
+      "offenseId": "fire",
+      "offense": "Fire Damage",
+      "eligibleRings": 37,
+      "eligibleAmulets": 25,
+      "meaningfulCandidates": 1,
+      "contradictionRejections": 1,
+      "strongestTier": "AFFINITY_AMPLIFICATION",
+      "qualityBandSize": 1,
+      "qualityBand": [
+        {
+          "id": "Cracklecreep||Ruby Ring",
+          "name": "Cracklecreep",
+          "itemType": "Ring",
+          "tier": "AFFINITY_AMPLIFICATION",
+          "score": 206
+        }
+      ],
+      "selected": [
+        {
+          "id": "Cracklecreep||Ruby Ring",
+          "name": "Cracklecreep",
+          "itemType": "Ring",
+          "tier": "AFFINITY_AMPLIFICATION",
+          "score": 206
+        }
+      ],
+      "empty": false
+    },
+    {
+      "offenseId": "cold",
+      "offense": "Cold Damage",
+      "eligibleRings": 37,
+      "eligibleAmulets": 25,
+      "meaningfulCandidates": 1,
+      "contradictionRejections": 0,
+      "strongestTier": "AFFINITY_AMPLIFICATION",
+      "qualityBandSize": 1,
+      "qualityBand": [
+        {
+          "id": "Polcirkeln||Sapphire Ring",
+          "name": "Polcirkeln",
+          "itemType": "Ring",
+          "tier": "AFFINITY_AMPLIFICATION",
+          "score": 206
+        }
+      ],
+      "selected": [
+        {
+          "id": "Polcirkeln||Sapphire Ring",
+          "name": "Polcirkeln",
+          "itemType": "Ring",
+          "tier": "AFFINITY_AMPLIFICATION",
+          "score": 206
+        }
+      ],
+      "empty": false
+    },
+    {
+      "offenseId": "lightning",
+      "offense": "Lightning Damage",
+      "eligibleRings": 37,
+      "eligibleAmulets": 25,
+      "meaningfulCandidates": 1,
+      "contradictionRejections": 0,
+      "strongestTier": "AFFINITY_AMPLIFICATION",
+      "qualityBandSize": 1,
+      "qualityBand": [
+        {
+          "id": "Choir of the Storm||Jade Amulet",
+          "name": "Choir of the Storm",
+          "itemType": "Amulet",
+          "tier": "AFFINITY_AMPLIFICATION",
+          "score": 211
+        }
+      ],
+      "selected": [
+        {
+          "id": "Choir of the Storm||Jade Amulet",
+          "name": "Choir of the Storm",
+          "itemType": "Amulet",
+          "tier": "AFFINITY_AMPLIFICATION",
+          "score": 211
+        }
+      ],
+      "empty": false
+    },
+    {
+      "offenseId": "chaos",
+      "offense": "Chaos Damage",
+      "eligibleRings": 37,
+      "eligibleAmulets": 25,
+      "meaningfulCandidates": 3,
+      "contradictionRejections": 0,
+      "strongestTier": "STRONG_SPECIALIZATION",
+      "qualityBandSize": 3,
+      "qualityBand": [
+        {
+          "id": "Blackheart||Iron Ring",
+          "name": "Blackheart",
+          "itemType": "Ring",
+          "tier": "STRONG_SPECIALIZATION",
+          "score": 306
+        },
+        {
+          "id": "Evergrasping Ring||Pearl Ring",
+          "name": "Evergrasping Ring",
+          "itemType": "Ring",
+          "tier": "STRONG_SPECIALIZATION",
+          "score": 306
+        },
+        {
+          "id": "Ming's Heart||Amethyst Ring",
+          "name": "Ming's Heart",
+          "itemType": "Ring",
+          "tier": "STRONG_SPECIALIZATION",
+          "score": 306
+        }
+      ],
+      "selected": [
+        {
+          "id": "Blackheart||Iron Ring",
+          "name": "Blackheart",
+          "itemType": "Ring",
+          "tier": "STRONG_SPECIALIZATION",
+          "score": 306
+        },
+        {
+          "id": "Ming's Heart||Amethyst Ring",
+          "name": "Ming's Heart",
+          "itemType": "Ring",
+          "tier": "STRONG_SPECIALIZATION",
+          "score": 306
+        }
+      ],
+      "empty": false
+    },
+    {
+      "offenseId": "ignite",
+      "offense": "Ignite",
+      "eligibleRings": 37,
+      "eligibleAmulets": 25,
+      "meaningfulCandidates": 1,
+      "contradictionRejections": 0,
+      "strongestTier": "AFFINITY_AMPLIFICATION",
+      "qualityBandSize": 1,
+      "qualityBand": [
+        {
+          "id": "Blackflame||Amethyst Ring",
+          "name": "Blackflame",
+          "itemType": "Ring",
+          "tier": "AFFINITY_AMPLIFICATION",
+          "score": 206
+        }
+      ],
+      "selected": [
+        {
+          "id": "Blackflame||Amethyst Ring",
+          "name": "Blackflame",
+          "itemType": "Ring",
+          "tier": "AFFINITY_AMPLIFICATION",
+          "score": 206
+        }
+      ],
+      "empty": false
+    },
+    {
+      "offenseId": "bleed",
+      "offense": "Bleed",
+      "eligibleRings": 37,
+      "eligibleAmulets": 25,
+      "meaningfulCandidates": 1,
+      "contradictionRejections": 0,
+      "strongestTier": "BUILD_DEFINING_CAPABILITY",
+      "qualityBandSize": 1,
+      "qualityBand": [
+        {
+          "id": "Venopuncture||Iron Ring",
+          "name": "Venopuncture",
+          "itemType": "Ring",
+          "tier": "BUILD_DEFINING_CAPABILITY",
+          "score": 406
+        }
+      ],
+      "selected": [
+        {
+          "id": "Venopuncture||Iron Ring",
+          "name": "Venopuncture",
+          "itemType": "Ring",
+          "tier": "BUILD_DEFINING_CAPABILITY",
+          "score": 406
+        }
+      ],
+      "empty": false
+    },
+    {
+      "offenseId": "poison",
+      "offense": "Poison",
+      "eligibleRings": 37,
+      "eligibleAmulets": 25,
+      "meaningfulCandidates": 1,
+      "contradictionRejections": 0,
+      "strongestTier": "BUILD_DEFINING_CAPABILITY",
+      "qualityBandSize": 1,
+      "qualityBand": [
+        {
+          "id": "Icefang Orbit||Iron Ring",
+          "name": "Icefang Orbit",
+          "itemType": "Ring",
+          "tier": "BUILD_DEFINING_CAPABILITY",
+          "score": 406
+        }
+      ],
+      "selected": [
+        {
+          "id": "Icefang Orbit||Iron Ring",
+          "name": "Icefang Orbit",
+          "itemType": "Ring",
+          "tier": "BUILD_DEFINING_CAPABILITY",
+          "score": 406
+        }
+      ],
+      "empty": false
+    },
+    {
+      "offenseId": "chill",
+      "offense": "Chill",
+      "eligibleRings": 37,
+      "eligibleAmulets": 25,
+      "meaningfulCandidates": 3,
+      "contradictionRejections": 0,
+      "strongestTier": "BUILD_DEFINING_CAPABILITY",
+      "qualityBandSize": 1,
+      "qualityBand": [
+        {
+          "id": "The Pandemonius||Lapis Amulet",
+          "name": "The Pandemonius",
+          "itemType": "Amulet",
+          "tier": "BUILD_DEFINING_CAPABILITY",
+          "score": 406
+        }
+      ],
+      "selected": [
+        {
+          "id": "The Pandemonius||Lapis Amulet",
+          "name": "The Pandemonius",
+          "itemType": "Amulet",
+          "tier": "BUILD_DEFINING_CAPABILITY",
+          "score": 406
+        }
+      ],
+      "empty": false
+    },
+    {
+      "offenseId": "freeze",
+      "offense": "Freeze",
+      "eligibleRings": 37,
+      "eligibleAmulets": 25,
+      "meaningfulCandidates": 1,
+      "contradictionRejections": 0,
+      "strongestTier": "AFFINITY_AMPLIFICATION",
+      "qualityBandSize": 1,
+      "qualityBand": [
+        {
+          "id": "Call of the Brotherhood||Topaz Ring",
+          "name": "Call of the Brotherhood",
+          "itemType": "Ring",
+          "tier": "AFFINITY_AMPLIFICATION",
+          "score": 206
+        }
+      ],
+      "selected": [
+        {
+          "id": "Call of the Brotherhood||Topaz Ring",
+          "name": "Call of the Brotherhood",
+          "itemType": "Ring",
+          "tier": "AFFINITY_AMPLIFICATION",
+          "score": 206
+        }
+      ],
+      "empty": false
+    },
+    {
+      "offenseId": "shock",
+      "offense": "Shock",
+      "eligibleRings": 37,
+      "eligibleAmulets": 25,
+      "meaningfulCandidates": 3,
+      "contradictionRejections": 0,
+      "strongestTier": "AFFINITY_AMPLIFICATION",
+      "qualityBandSize": 3,
+      "qualityBand": [
+        {
+          "id": "Choir of the Storm||Jade Amulet",
+          "name": "Choir of the Storm",
+          "itemType": "Amulet",
+          "tier": "AFFINITY_AMPLIFICATION",
+          "score": 211
+        },
+        {
+          "id": "Levinstone||Topaz Ring",
+          "name": "Levinstone",
+          "itemType": "Ring",
+          "tier": "AFFINITY_AMPLIFICATION",
+          "score": 211
+        },
+        {
+          "id": "Berek's Respite||Two-Stone Ring",
+          "name": "Berek's Respite",
+          "itemType": "Ring",
+          "tier": "AFFINITY_AMPLIFICATION",
+          "score": 206
+        }
+      ],
+      "selected": [
+        {
+          "id": "Levinstone||Topaz Ring",
+          "name": "Levinstone",
+          "itemType": "Ring",
+          "tier": "AFFINITY_AMPLIFICATION",
+          "score": 211
+        },
+        {
+          "id": "Berek's Respite||Two-Stone Ring",
+          "name": "Berek's Respite",
+          "itemType": "Ring",
+          "tier": "AFFINITY_AMPLIFICATION",
+          "score": 206
+        }
+      ],
+      "empty": false
+    },
+    {
+      "offenseId": "electrocute",
+      "offense": "Electrocute",
+      "eligibleRings": 37,
+      "eligibleAmulets": 25,
+      "meaningfulCandidates": 0,
+      "contradictionRejections": 0,
+      "strongestTier": null,
+      "qualityBandSize": 0,
+      "qualityBand": [],
+      "selected": [],
+      "empty": true
+    },
+    {
+      "offenseId": "minions",
+      "offense": "Minions",
+      "eligibleRings": 37,
+      "eligibleAmulets": 25,
+      "meaningfulCandidates": 0,
+      "contradictionRejections": 0,
+      "strongestTier": null,
+      "qualityBandSize": 0,
+      "qualityBand": [],
+      "selected": [],
+      "empty": true
+    },
+    {
+      "offenseId": "companions",
+      "offense": "Companions",
+      "eligibleRings": 37,
+      "eligibleAmulets": 25,
+      "meaningfulCandidates": 0,
+      "contradictionRejections": 0,
+      "strongestTier": null,
+      "qualityBandSize": 0,
+      "qualityBand": [],
+      "selected": [],
+      "empty": true
+    },
+    {
+      "offenseId": "totems",
+      "offense": "Totems",
+      "eligibleRings": 37,
+      "eligibleAmulets": 25,
+      "meaningfulCandidates": 0,
+      "contradictionRejections": 0,
+      "strongestTier": null,
+      "qualityBandSize": 0,
+      "qualityBand": [],
+      "selected": [],
+      "empty": true
     }
   ],
   "cells": [

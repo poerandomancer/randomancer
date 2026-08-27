@@ -118,6 +118,7 @@ function buildPublicBuildCardRequest(snapshot) {
         synergySupports2: snap.synergySupports2,
         recommendedPersistentBuff: snap.recommendedPersistentBuff,
         recommendedUniques: snap.recommendedUniques,
+        recommendedJewelryUniques: snap.recommendedJewelryUniques,
         passives: snap.passives,
       }
     },

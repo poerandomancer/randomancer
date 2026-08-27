@@ -35,6 +35,7 @@ const App = window.App = (() => {
       synergySupports: Array.isArray(src.synergySupports) ? src.synergySupports : [],
       recommendedPersistentBuff: src.recommendedPersistentBuff ?? null,
       recommendedUniques: Array.isArray(src.recommendedUniques) ? src.recommendedUniques : [],
+      recommendedJewelryUniques: Array.isArray(src.recommendedJewelryUniques) ? src.recommendedJewelryUniques : [],
       passives: src.passives && typeof src.passives === 'object' ? src.passives : null,
       recommendationPackage: src.recommendationPackage && typeof src.recommendationPackage === 'object'
         ? src.recommendationPackage
