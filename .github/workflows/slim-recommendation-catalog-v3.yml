@@ -155,7 +155,7 @@ jobs:
               return projected
           '''
           pattern = re.compile(r'RUNTIME_ENTITY_FIELDS = \(.*?\n\ndef compact_catalog', re.S)
-          text, count = pattern.subn(replacement + '\n\ndef compact_catalog', text, count=1)
+          text, count = pattern.subn(lambda _match: replacement + '\n\ndef compact_catalog', text, count=1)
           if count != 1:
               raise SystemExit(f'generator runtime projection replacement count: {count}')
           path.write_text(text)
