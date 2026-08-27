@@ -96,6 +96,9 @@ function analyze(entity, snapshot, context) {
     if (!owner || owner !== token(snapshot?.ascendancyName || snapshot?.ascendancy)) return null;
   }
   if (entity.content_type === 'passive') {
+    const requiredAscendancy = token(entity?.required_ascendancy || entity?.compatibility?.access?.ascendancy);
+    const rolledAscendancy = token(snapshot?.ascendancyName || snapshot?.ascendancy);
+    if (requiredAscendancy && requiredAscendancy !== rolledAscendancy) return null;
     const classStart = token(snapshot?.passiveTreeStart);
     const starts = arr(entity?.passive_tree_starts).map(token).filter(Boolean);
     if (!classStart || !starts.length) return null;

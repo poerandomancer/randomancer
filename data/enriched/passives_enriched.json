@@ -1724,6 +1724,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Invoker",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -1787,6 +1793,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Invoker",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -1836,6 +1848,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Invoker",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -1871,7 +1889,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Tactician",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancyMercenary3Notable6",
@@ -1906,7 +1930,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Gemling Legionnaire",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancyMercenary3Notable4",
@@ -1943,7 +1973,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_forward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Gemling Legionnaire",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancyWarrior3Notable3",
@@ -1968,7 +2004,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_backward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Smith of Kitava",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancyWitch1Notable4",
@@ -2039,6 +2081,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Infernalist",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -2082,6 +2130,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Titan",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -2127,7 +2181,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Warbringer",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancyWarrior2Notable1",
@@ -2174,6 +2234,12 @@
         "derived",
         "scraped",
         "text_fallback"
+      ],
+      "requiredAscendancy": "Warbringer",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -2218,6 +2284,12 @@
       "tagSources": [
         "derived",
         "text_fallback"
+      ],
+      "requiredAscendancy": "Chronomancer",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -2255,6 +2327,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Acolyte of Chayula",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -2292,7 +2370,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_forward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Ritualist",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancyDruid2Notable5",
@@ -2354,6 +2438,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Shaman",
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -2397,6 +2487,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Deadeye",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -2445,6 +2541,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Amazon",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -2470,7 +2572,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Disciple of Varashta",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancySorceress3Notable7",
@@ -2495,7 +2603,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Disciple of Varashta",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancySorceress3Notable9",
@@ -2538,6 +2652,12 @@
       "scrapeRejectedReason": "contains_metadata_lines",
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Disciple of Varashta",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -2573,7 +2693,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Disciple of Varashta",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancyWitch1Notable1",
@@ -2630,6 +2756,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Infernalist",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -2689,6 +2821,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Infernalist",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -2743,6 +2881,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Infernalist",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -2791,6 +2935,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Lich",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -2846,6 +2996,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Blood Mage",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -2873,7 +3029,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_forward",
       "scrapeRejectedReason": "contains_metadata_lines",
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Pathfinder",
+      "passiveTreeStarts": [
+        "dex",
+        "int",
+        "str"
+      ]
     },
     {
       "id": "AscendancyWitch1Notable8",
@@ -2916,6 +3078,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Infernalist",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -2941,7 +3109,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Shaman",
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancyRanger1Notable8",
@@ -2987,6 +3161,12 @@
         "derived",
         "scraped",
         "text_fallback"
+      ],
+      "requiredAscendancy": "Deadeye",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -3016,7 +3196,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Deadeye",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancyMercenary1Notable8",
@@ -3084,6 +3270,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Tactician",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -3132,6 +3324,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Witchhunter",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -3184,6 +3382,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Acolyte of Chayula",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -3237,6 +3441,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Smith of Kitava",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -3272,7 +3482,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_forward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Titan",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancySorceress1Notable1",
@@ -3307,7 +3523,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_backward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Stormweaver",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancyRanger3Notable3",
@@ -3328,7 +3550,8 @@
       "scrapeMatched": false,
       "scrapeMatchedBy": null,
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Pathfinder"
     },
     {
       "id": "AscendancyDruid1Notable4",
@@ -3353,7 +3576,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Oracle",
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancyHuntress3Notable6",
@@ -3390,7 +3619,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Ritualist",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancyWitch2Notable8",
@@ -3435,6 +3670,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Blood Mage",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -3486,6 +3727,12 @@
         "derived",
         "scraped",
         "text_fallback"
+      ],
+      "requiredAscendancy": "Amazon",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -3539,6 +3786,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Titan",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -3598,6 +3851,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Lich",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -3660,6 +3919,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Smith of Kitava",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -3701,6 +3966,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Acolyte of Chayula",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -3746,6 +4017,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Infernalist",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -3773,7 +4050,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_backward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Ritualist",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancyDruid2Notable3",
@@ -3821,6 +4104,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Shaman",
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -3866,6 +4155,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Titan",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -3923,6 +4218,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Lich",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -3973,6 +4274,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Amazon",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -4024,6 +4331,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Acolyte of Chayula",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -4067,6 +4380,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Deadeye",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -4114,6 +4433,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Pathfinder",
+      "passiveTreeStarts": [
+        "dex",
+        "int",
+        "str"
       ]
     },
     {
@@ -4161,7 +4486,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_forward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Gemling Legionnaire",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancyDruid1Notable1",
@@ -4196,7 +4527,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Oracle",
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancyMercenary3Notable1_",
@@ -4233,7 +4570,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_forward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Gemling Legionnaire",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancyWitch3Notable6",
@@ -4279,6 +4622,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Lich",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -4316,6 +4665,12 @@
       "tagSources": [
         "scraped",
         "text_fallback"
+      ],
+      "requiredAscendancy": "Invoker",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -4341,7 +4696,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Oracle",
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancyWarrior3Notable6_8",
@@ -4403,6 +4764,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Smith of Kitava",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -4428,7 +4795,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Chronomancer",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancySorceress1Notable2",
@@ -4486,6 +4859,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Stormweaver",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -4529,6 +4908,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Oracle",
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -4580,6 +4965,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Smith of Kitava",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -4645,6 +5036,12 @@
         "derived",
         "scraped",
         "text_fallback"
+      ],
+      "requiredAscendancy": "Shaman",
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -4690,7 +5087,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Deadeye",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancyMercenary3Notable3",
@@ -4751,6 +5154,12 @@
         "derived",
         "scraped",
         "text_fallback"
+      ],
+      "requiredAscendancy": "Gemling Legionnaire",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -4799,6 +5208,12 @@
         "derived",
         "scraped",
         "text_fallback"
+      ],
+      "requiredAscendancy": "Blood Mage",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -4824,7 +5239,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_forward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Acolyte of Chayula",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "AscendancyWitch2Notable7",
@@ -4865,6 +5286,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Blood Mage",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -4934,6 +5361,12 @@
         "derived",
         "scraped",
         "text_fallback"
+      ],
+      "requiredAscendancy": "Infernalist",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -4993,6 +5426,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Oracle",
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -5026,6 +5465,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Smith of Kitava",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -5086,6 +5531,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Smith of Kitava",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -5141,6 +5592,12 @@
       "tagSources": [
         "derived",
         "text_fallback"
+      ],
+      "requiredAscendancy": "Stormweaver",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -5166,7 +5623,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Martial Artist",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "AscendancyMonk1Notable7",
@@ -5201,6 +5664,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Martial Artist",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -5228,7 +5697,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_forward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Martial Artist",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "AscendancyWarrior1Notable5",
@@ -5264,7 +5739,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_backward",
       "scrapeRejectedReason": "no_meaningful_ascendancy_lines",
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Titan",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancyMonk2Notable4",
@@ -5321,6 +5802,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Invoker",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -5378,6 +5865,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Invoker",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -5425,7 +5918,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_backward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Spirit Walker",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancyMercenary3Notable2",
@@ -5452,7 +5951,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_backward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Gemling Legionnaire",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancyWarrior2Notable2",
@@ -5509,6 +6014,12 @@
         "derived",
         "scraped",
         "text_fallback"
+      ],
+      "requiredAscendancy": "Warbringer",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -5556,7 +6067,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Amazon",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancyWitch3Notable9",
@@ -5601,7 +6118,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_backward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Lich",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancySorceress2Notable3",
@@ -5626,7 +6149,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Chronomancer",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancyMonk3Notable1",
@@ -5679,6 +6208,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Acolyte of Chayula",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -5730,6 +6265,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Disciple of Varashta",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -5777,7 +6318,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Gemling Legionnaire",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancyWarrior3Notable6_10",
@@ -5841,6 +6388,12 @@
         "derived",
         "scraped",
         "text_fallback"
+      ],
+      "requiredAscendancy": "Smith of Kitava",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -5886,7 +6439,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_forward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Ritualist",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancyWarrior2Notable3",
@@ -5943,6 +6502,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Warbringer",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -5978,7 +6543,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_forward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Witchhunter",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancySorceress3Notable13",
@@ -6015,6 +6586,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Disciple of Varashta",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -6054,6 +6631,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Disciple of Varashta",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -6079,7 +6662,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Disciple of Varashta",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancyWarrior3Notable6_5",
@@ -6135,6 +6724,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Smith of Kitava",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -6193,6 +6788,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Smith of Kitava",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -6258,6 +6859,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Invoker",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -6321,6 +6928,12 @@
         "derived",
         "scraped",
         "text_fallback"
+      ],
+      "requiredAscendancy": "Smith of Kitava",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -6346,7 +6959,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_forward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Smith of Kitava",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancyWitch1Notable10",
@@ -6383,7 +7002,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_forward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Infernalist",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancyMonk3Notable6_Choice",
@@ -6412,7 +7037,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_backward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Acolyte of Chayula",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "AscendancyMonk1Notable1_",
@@ -6473,6 +7104,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Martial Artist",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -6527,6 +7164,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Martial Artist",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -6564,7 +7207,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_backward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Infernalist",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancyHuntress3Notable4",
@@ -6610,6 +7259,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Ritualist",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -6639,7 +7294,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Deadeye",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancyWarrior3Notable6_9",
@@ -6699,6 +7360,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Smith of Kitava",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -6748,6 +7415,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Titan",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -6791,6 +7464,12 @@
       "tagSources": [
         "scraped",
         "text_fallback"
+      ],
+      "requiredAscendancy": "Stormweaver",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -6835,6 +7514,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Titan",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -6870,7 +7555,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Ritualist",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancyHuntress1Notable9",
@@ -6921,6 +7612,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Amazon",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -6950,7 +7647,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Disciple of Varashta",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancySorceress3Notable12_",
@@ -6981,7 +7684,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Disciple of Varashta",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancySorceress3Notable11",
@@ -7010,7 +7719,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Disciple of Varashta",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancyWitch3Notable3",
@@ -7066,6 +7781,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Lich",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -7101,7 +7822,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Witchhunter",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancySorceress2Notable5",
@@ -7152,6 +7879,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Chronomancer",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -7200,6 +7933,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Witchhunter",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -7253,6 +7992,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Pathfinder",
+      "passiveTreeStarts": [
+        "dex",
+        "int",
+        "str"
       ]
     },
     {
@@ -7286,7 +8031,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_forward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Pathfinder",
+      "passiveTreeStarts": [
+        "dex",
+        "int",
+        "str"
+      ]
     },
     {
       "id": "AscendancyHuntress1Notable2",
@@ -7334,6 +8085,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Amazon",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -7385,7 +8142,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_forward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Chronomancer",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancyMercenary2Notable1",
@@ -7420,7 +8183,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_backward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Witchhunter",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancyMercenary1Notable6",
@@ -7481,6 +8250,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Tactician",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -7526,7 +8301,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Amazon",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancyWitch3Notable7",
@@ -7573,6 +8354,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Lich",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -7620,6 +8407,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Spirit Walker",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -7647,7 +8440,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_backward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Deadeye",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancyWitch1Notable7",
@@ -7717,6 +8516,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Infernalist",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -7768,6 +8573,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Chronomancer",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -7821,7 +8632,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_forward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Shaman",
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancySorceress1Notable10",
@@ -7858,7 +8675,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_backward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Stormweaver",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancyRanger3Notable2",
@@ -7899,6 +8722,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Pathfinder",
+      "passiveTreeStarts": [
+        "dex",
+        "int",
+        "str"
       ]
     },
     {
@@ -7944,6 +8773,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Warbringer",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -7997,6 +8832,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Tactician",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -8048,6 +8889,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Martial Artist",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -8099,6 +8946,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Pathfinder",
+      "passiveTreeStarts": [
+        "dex",
+        "int",
+        "str"
       ]
     },
     {
@@ -8161,7 +9014,8 @@
       "tagSources": [
         "derived",
         "scraped"
-      ]
+      ],
+      "requiredAscendancy": "Abyssal Lich"
     },
     {
       "id": "AscendancyWitch3Notable2",
@@ -8223,6 +9077,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Lich",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -8248,7 +9108,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_forward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Disciple of Varashta",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancySorceress3Notable17",
@@ -8276,7 +9142,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": "contains_metadata_lines",
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Disciple of Varashta",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancySorceress3Notable16",
@@ -8302,7 +9174,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": "contains_metadata_lines",
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Disciple of Varashta",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancyDruid2Notable7",
@@ -8339,7 +9217,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_forward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Shaman",
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancySorceress3Notable1",
@@ -8392,6 +9276,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Disciple of Varashta",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -8471,6 +9361,12 @@
         "derived",
         "scraped",
         "text_fallback"
+      ],
+      "requiredAscendancy": "Spirit Walker",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -8529,6 +9425,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Blood Mage",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -8592,6 +9494,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Blood Mage",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -8637,6 +9545,12 @@
       "tagSources": [
         "derived",
         "text_fallback"
+      ],
+      "requiredAscendancy": "Acolyte of Chayula",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -8695,6 +9609,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Infernalist",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -8737,6 +9657,12 @@
       "scrapeRejectedReason": "no_meaningful_ascendancy_lines",
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Stormweaver",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -8779,6 +9705,12 @@
       "scrapeRejectedReason": "no_meaningful_ascendancy_lines",
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Stormweaver",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -8833,6 +9765,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Smith of Kitava",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -8898,6 +9836,12 @@
         "derived",
         "scraped",
         "text_fallback"
+      ],
+      "requiredAscendancy": "Lich",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -8951,6 +9895,12 @@
       "scrapeRejectedReason": "no_meaningful_ascendancy_lines",
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Smith of Kitava",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -9006,6 +9956,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Amazon",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -9070,6 +10026,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Tactician",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -9109,7 +10071,8 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Abyssal Lich"
     },
     {
       "id": "AscendancyWarrior1Notable8",
@@ -9153,6 +10116,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Titan",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -9198,7 +10167,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Stormweaver",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancyMercenary1Notable10_",
@@ -9239,6 +10214,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Tactician",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -9294,6 +10275,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Stormweaver",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -9339,6 +10326,12 @@
       "tagSources": [
         "derived",
         "text_fallback"
+      ],
+      "requiredAscendancy": "Invoker",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -9390,6 +10383,12 @@
         "derived",
         "scraped",
         "text_fallback"
+      ],
+      "requiredAscendancy": "Blood Mage",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -9443,6 +10442,12 @@
       "scrapeRejectedReason": "no_meaningful_ascendancy_lines",
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Smith of Kitava",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -9489,6 +10494,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Tactician",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -9550,6 +10561,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Amazon",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -9596,6 +10613,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Pathfinder",
+      "passiveTreeStarts": [
+        "dex",
+        "int",
+        "str"
       ]
     },
     {
@@ -9629,7 +10652,8 @@
       "scrapeMatched": false,
       "scrapeMatchedBy": null,
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Disciple of Varashta"
     },
     {
       "id": "AscendancyWarrior3Notable6_1",
@@ -9685,6 +10709,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Smith of Kitava",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -9733,6 +10763,12 @@
         "derived",
         "scraped",
         "text_fallback"
+      ],
+      "requiredAscendancy": "Stormweaver",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -9794,6 +10830,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Gemling Legionnaire",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -9840,6 +10882,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Spirit Walker",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -9898,6 +10946,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Disciple of Varashta",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -9958,6 +11012,12 @@
         "derived",
         "scraped",
         "text_fallback"
+      ],
+      "requiredAscendancy": "Oracle",
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -10003,7 +11063,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_forward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Spirit Walker",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancyHuntress2Notable2",
@@ -10054,7 +11120,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_forward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Spirit Walker",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancyHuntress2Notable7",
@@ -10109,7 +11181,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_forward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Spirit Walker",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancyMonk2Notable9",
@@ -10152,7 +11230,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_backward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Invoker",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "AscendancyDruid1Notable2",
@@ -10191,7 +11275,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Oracle",
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancyRanger1Notable6",
@@ -10232,6 +11322,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Deadeye",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -10271,7 +11367,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Pathfinder",
+      "passiveTreeStarts": [
+        "dex",
+        "int",
+        "str"
+      ]
     },
     {
       "id": "AscendancyWarrior3Notable6_6",
@@ -10329,6 +11431,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Smith of Kitava",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -10374,7 +11482,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Shaman",
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancyWarrior2Notable9",
@@ -10425,6 +11539,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "derived"
+      ],
+      "requiredAscendancy": "Warbringer",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -10450,7 +11570,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Chronomancer",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancyAltWitch1Notable2",
@@ -10487,7 +11613,8 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Abyssal Lich"
     },
     {
       "id": "AscendancySorceress2Notable6",
@@ -10512,7 +11639,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Chronomancer",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancyHuntress3Notable2",
@@ -10547,7 +11680,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_backward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Ritualist",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancyMercenary1Notable9_",
@@ -10578,6 +11717,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Tactician",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -10631,6 +11776,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Oracle",
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
       ]
     },
     {
@@ -10668,7 +11819,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_backward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Acolyte of Chayula",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "AscendancyAltWitch1Notable3",
@@ -10721,7 +11878,8 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_forward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Abyssal Lich"
     },
     {
       "id": "AscendancySorceress3Notable3",
@@ -10766,6 +11924,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Disciple of Varashta",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -10817,6 +11981,12 @@
         "derived",
         "scraped",
         "text_fallback"
+      ],
+      "requiredAscendancy": "Blood Mage",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -10872,6 +12042,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Spirit Walker",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -10901,7 +12077,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "overview_forward",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Acolyte of Chayula",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "AscendancyWarrior2Notable4_",
@@ -10960,6 +12142,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Warbringer",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -11006,6 +12194,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Tactician",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -11061,6 +12255,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Martial Artist",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
       ]
     },
     {
@@ -11110,7 +12310,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Martial Artist",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "int"
+      ]
     },
     {
       "id": "AscendancyMercenary2Notable8",
@@ -11143,6 +12349,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Witchhunter",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -11202,6 +12414,12 @@
         "derived",
         "scraped",
         "text_fallback"
+      ],
+      "requiredAscendancy": "Blood Mage",
+      "passiveTreeStarts": [
+        "dex_int",
+        "int",
+        "str_int"
       ]
     },
     {
@@ -11249,7 +12467,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Tactician",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
+      ]
     },
     {
       "id": "AscendancyHuntress2Notable3",
@@ -11282,6 +12506,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Spirit Walker",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -11325,6 +12555,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Ritualist",
+      "passiveTreeStarts": [
+        "dex",
+        "dex_int",
+        "str_dex"
       ]
     },
     {
@@ -11364,7 +12600,13 @@
       "scrapeMatched": true,
       "scrapeMatchedBy": "skill_page",
       "scrapeRejectedReason": null,
-      "tagSources": []
+      "tagSources": [],
+      "requiredAscendancy": "Shaman",
+      "passiveTreeStarts": [
+        "int",
+        "str",
+        "str_int"
+      ]
     },
     {
       "id": "AscendancyMercenary2Notable3_",
@@ -11422,6 +12664,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Witchhunter",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {
@@ -11472,6 +12720,12 @@
       "tagSources": [
         "derived",
         "scraped"
+      ],
+      "requiredAscendancy": "Warbringer",
+      "passiveTreeStarts": [
+        "str",
+        "str_dex",
+        "str_int"
       ]
     },
     {
@@ -11515,6 +12769,12 @@
       "scrapeRejectedReason": null,
       "tagSources": [
         "scraped"
+      ],
+      "requiredAscendancy": "Witchhunter",
+      "passiveTreeStarts": [
+        "dex",
+        "str",
+        "str_dex"
       ]
     },
     {

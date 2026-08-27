@@ -19,6 +19,7 @@ import json
 import re
 import sys
 from collections import Counter, defaultdict, deque
+import heapq
 from html import unescape
 from pathlib import Path
 from urllib.error import HTTPError
@@ -123,6 +124,51 @@ def shortest_path_distances(adjacency, root):
                 distances[target] = distances[source] + 1
                 queue.append(target)
     return distances
+
+
+def ascendancy_owned_distances(tree, passive_skills, ordinary_adjacency, ordinary_distances):
+    """Locate owned nodes without ever using them as ordinary-tree shortcuts."""
+    raw_by_hash = {row.get("PassiveSkillGraphId"): row for row in passive_skills}
+    owner_by_hash = {
+        graph_id: row.get("Ascendancy")
+        for graph_id, row in raw_by_hash.items()
+        if row.get("SkillType") == 0 and row.get("Ascendancy") is not None
+        and not row.get("IsAnointmentOnly") and not row.get("IsJustIcon")
+    }
+    owned_adjacency = {graph_id: set() for graph_id in owner_by_hash}
+    boundaries = defaultdict(set)
+    for group in tree.get("groups") or []:
+        for graph_node in group.get("passives") or []:
+            source = graph_node.get("hash")
+            for target in graph_node.get("connections") or []:
+                if source in owner_by_hash and target in owner_by_hash and owner_by_hash[source] == owner_by_hash[target]:
+                    owned_adjacency[source].add(target)
+                    owned_adjacency[target].add(source)
+                elif source in owner_by_hash and target in ordinary_adjacency:
+                    boundaries[source].add(target)
+                elif target in owner_by_hash and source in ordinary_adjacency:
+                    boundaries[target].add(source)
+
+    result = {}
+    for start, ordinary in ordinary_distances.items():
+        distances = {}
+        queue = []
+        for owned, neighbors in boundaries.items():
+            seeds = [ordinary[node] + 1 for node in neighbors if node in ordinary]
+            if seeds:
+                distances[owned] = min(seeds)
+                heapq.heappush(queue, (distances[owned], owned))
+        while queue:
+            distance, source = heapq.heappop(queue)
+            if distance != distances[source]:
+                continue
+            for target in sorted(owned_adjacency[source]):
+                candidate = distance + 1
+                if candidate < distances.get(target, sys.maxsize):
+                    distances[target] = candidate
+                    heapq.heappush(queue, (candidate, target))
+        result[start] = distances
+    return result
 
 
 def closest_passive_tree_starts(distance_by_start, graph_id):
@@ -1280,6 +1326,9 @@ def main():
         start: shortest_path_distances(tree_adjacency, root)
         for start, root in PASSIVE_TREE_STARTS.items()
     }
+    owned_distance_by_start = ascendancy_owned_distances(
+        passive_tree, passive_skills, tree_adjacency, distance_by_start
+    )
 
     target_nodes = []
     for node in passive_skills:
@@ -1442,15 +1491,18 @@ def main():
                 "scrapeRejectedReason": scrape_rejected_reason if (scrape_entry and not scrape_valid) else None,
                 "tagSources": sorted(set(tag_sources)),
             }
-        if node_type == "notable":
+        if node_type in {"notable", "ascendancy"}:
             graph_id = node.get("PassiveSkillGraphId")
-            starts = closest_passive_tree_starts(distance_by_start, graph_id)
+            locality_distances = owned_distance_by_start if node_type == "ascendancy" else distance_by_start
+            starts = closest_passive_tree_starts(locality_distances, graph_id)
             if starts:
                 enriched_node["passiveTreeStarts"] = starts
-            else:
+            elif node_type == "notable":
                 report["ordinaryNotablesMissingFromGraph"].append({
                     "id": node.get("Id"), "name": node.get("Name"), "passiveSkillGraphId": graph_id
                 })
+        if classification.get("ascendancy"):
+            enriched_node["requiredAscendancy"] = classification["ascendancy"]
         enriched_nodes.append(enriched_node)
 
     type_order = {"keystone": 0, "ascendancy": 1, "notable": 2}

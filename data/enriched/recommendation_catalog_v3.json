@@ -50561,6 +50561,12 @@
           "ascendancy": "Invoker"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Invoker",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -50586,6 +50592,12 @@
           "ascendancy": "Invoker"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Invoker",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -50626,6 +50638,12 @@
           "ascendancy": "Invoker"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Invoker",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -50657,6 +50675,12 @@
           "ascendancy": "Tactician"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Tactician",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -50676,6 +50700,12 @@
           "ascendancy": "Gemling Legionnaire"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Gemling Legionnaire",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -50695,6 +50725,12 @@
           "ascendancy": "Gemling Legionnaire"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Gemling Legionnaire",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -50714,6 +50750,12 @@
           "ascendancy": "Smith of Kitava"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Smith of Kitava",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -50739,6 +50781,12 @@
           "ascendancy": "Infernalist"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Infernalist",
       "facts": [
         {
           "relation": "converts",
@@ -50818,6 +50866,12 @@
           "ascendancy": "Titan"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Titan",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -50837,6 +50891,12 @@
           "ascendancy": "Warbringer"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Warbringer",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -50868,6 +50928,12 @@
           "ascendancy": "Warbringer"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Warbringer",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -50887,6 +50953,12 @@
           "ascendancy": "Chronomancer"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Chronomancer",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -50906,6 +50978,12 @@
           "ascendancy": "Acolyte of Chayula"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Acolyte of Chayula",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -50931,6 +51009,12 @@
           "ascendancy": "Ritualist"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Ritualist",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -50956,6 +51040,12 @@
           "ascendancy": "Shaman"
         }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "required_ascendancy": "Shaman",
       "facts": [
         {
           "relation": "converts",
@@ -51037,6 +51127,12 @@
           "ascendancy": "Deadeye"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Deadeye",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51056,6 +51152,12 @@
           "ascendancy": "Amazon"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Amazon",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51087,6 +51189,12 @@
           "ascendancy": "Disciple of Varashta"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Disciple of Varashta",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51112,6 +51220,12 @@
           "ascendancy": "Disciple of Varashta"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Disciple of Varashta",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51137,6 +51251,12 @@
           "ascendancy": "Disciple of Varashta"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Disciple of Varashta",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51168,6 +51288,12 @@
           "ascendancy": "Disciple of Varashta"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Disciple of Varashta",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51187,6 +51313,12 @@
           "ascendancy": "Infernalist"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Infernalist",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51206,6 +51338,12 @@
           "ascendancy": "Infernalist"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Infernalist",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51231,6 +51369,12 @@
           "ascendancy": "Infernalist"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Infernalist",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51250,6 +51394,12 @@
           "ascendancy": "Lich"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Lich",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51269,6 +51419,12 @@
           "ascendancy": "Blood Mage"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Blood Mage",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51302,6 +51458,12 @@
           "ascendancy": "Pathfinder"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "int",
+        "str"
+      ],
+      "required_ascendancy": "Pathfinder",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51321,6 +51483,12 @@
           "ascendancy": "Infernalist"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Infernalist",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51347,6 +51515,12 @@
           "ascendancy": "Shaman"
         }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "required_ascendancy": "Shaman",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51372,6 +51546,12 @@
           "ascendancy": "Deadeye"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Deadeye",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51391,6 +51571,12 @@
           "ascendancy": "Deadeye"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Deadeye",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51416,6 +51602,12 @@
           "ascendancy": "Tactician"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Tactician",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51448,6 +51640,12 @@
           "ascendancy": "Witchhunter"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Witchhunter",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51479,6 +51677,12 @@
           "ascendancy": "Acolyte of Chayula"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Acolyte of Chayula",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51510,6 +51714,12 @@
           "ascendancy": "Smith of Kitava"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Smith of Kitava",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51553,6 +51763,12 @@
           "ascendancy": "Titan"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Titan",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51572,6 +51788,12 @@
           "ascendancy": "Stormweaver"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Stormweaver",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51591,6 +51813,7 @@
           "ascendancy": "Pathfinder"
         }
       },
+      "required_ascendancy": "Pathfinder",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51610,6 +51833,12 @@
           "ascendancy": "Oracle"
         }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51635,6 +51864,12 @@
           "ascendancy": "Ritualist"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Ritualist",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51660,6 +51895,12 @@
           "ascendancy": "Blood Mage"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Blood Mage",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51685,6 +51926,12 @@
           "ascendancy": "Amazon"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Amazon",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51710,6 +51957,12 @@
           "ascendancy": "Titan"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Titan",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51729,6 +51982,12 @@
           "ascendancy": "Lich"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Lich",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51763,6 +52022,12 @@
           "ascendancy": "Smith of Kitava"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Smith of Kitava",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51789,6 +52054,12 @@
           "ascendancy": "Acolyte of Chayula"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Acolyte of Chayula",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51820,6 +52091,12 @@
           "ascendancy": "Infernalist"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Infernalist",
       "facts": [
         {
           "relation": "converts",
@@ -51853,6 +52130,12 @@
           "ascendancy": "Ritualist"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Ritualist",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51878,6 +52161,12 @@
           "ascendancy": "Shaman"
         }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "required_ascendancy": "Shaman",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51897,6 +52186,12 @@
           "ascendancy": "Titan"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Titan",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51916,6 +52211,12 @@
           "ascendancy": "Lich"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Lich",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -51955,6 +52256,12 @@
           "ascendancy": "Amazon"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Amazon",
       "facts": [
         {
           "relation": "consumes",
@@ -52010,6 +52317,12 @@
           "ascendancy": "Acolyte of Chayula"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Acolyte of Chayula",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52029,6 +52342,12 @@
           "ascendancy": "Deadeye"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Deadeye",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52048,6 +52367,12 @@
           "ascendancy": "Pathfinder"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "int",
+        "str"
+      ],
+      "required_ascendancy": "Pathfinder",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52067,6 +52392,12 @@
           "ascendancy": "Gemling Legionnaire"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Gemling Legionnaire",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52086,6 +52417,12 @@
           "ascendancy": "Oracle"
         }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52105,6 +52442,12 @@
           "ascendancy": "Gemling Legionnaire"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Gemling Legionnaire",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52130,6 +52473,12 @@
           "ascendancy": "Lich"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Lich",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52157,6 +52506,12 @@
           "ascendancy": "Invoker"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Invoker",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52182,6 +52537,12 @@
           "ascendancy": "Oracle"
         }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52207,6 +52568,12 @@
           "ascendancy": "Smith of Kitava"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Smith of Kitava",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52247,6 +52614,12 @@
           "ascendancy": "Chronomancer"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Chronomancer",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52272,6 +52645,12 @@
           "ascendancy": "Stormweaver"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Stormweaver",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52291,6 +52670,12 @@
           "ascendancy": "Oracle"
         }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52316,6 +52701,12 @@
           "ascendancy": "Smith of Kitava"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Smith of Kitava",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52359,6 +52750,12 @@
           "ascendancy": "Shaman"
         }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "required_ascendancy": "Shaman",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52390,6 +52787,12 @@
           "ascendancy": "Deadeye"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Deadeye",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52409,6 +52812,12 @@
           "ascendancy": "Gemling Legionnaire"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Gemling Legionnaire",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52451,6 +52860,12 @@
           "ascendancy": "Blood Mage"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Blood Mage",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52470,6 +52885,12 @@
           "ascendancy": "Acolyte of Chayula"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Acolyte of Chayula",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52495,6 +52916,12 @@
           "ascendancy": "Blood Mage"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Blood Mage",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52514,6 +52941,12 @@
           "ascendancy": "Infernalist"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Infernalist",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52546,6 +52979,12 @@
           "ascendancy": "Oracle"
         }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52565,6 +53004,12 @@
           "ascendancy": "Smith of Kitava"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Smith of Kitava",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52590,6 +53035,12 @@
           "ascendancy": "Smith of Kitava"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Smith of Kitava",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52609,6 +53060,12 @@
           "ascendancy": "Stormweaver"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Stormweaver",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52635,6 +53092,12 @@
           "ascendancy": "Martial Artist"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Martial Artist",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52660,6 +53123,12 @@
           "ascendancy": "Martial Artist"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Martial Artist",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52685,6 +53154,12 @@
           "ascendancy": "Martial Artist"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Martial Artist",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52710,6 +53185,12 @@
           "ascendancy": "Titan"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Titan",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52729,6 +53210,12 @@
           "ascendancy": "Invoker"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Invoker",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52777,6 +53264,12 @@
           "ascendancy": "Invoker"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Invoker",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52817,6 +53310,12 @@
           "ascendancy": "Spirit Walker"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Spirit Walker",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52843,6 +53342,12 @@
           "ascendancy": "Gemling Legionnaire"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Gemling Legionnaire",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52862,6 +53367,12 @@
           "ascendancy": "Warbringer"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Warbringer",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52895,6 +53406,12 @@
           "ascendancy": "Amazon"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Amazon",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52914,6 +53431,12 @@
           "ascendancy": "Lich"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Lich",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52933,6 +53456,12 @@
           "ascendancy": "Chronomancer"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Chronomancer",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52958,6 +53487,12 @@
           "ascendancy": "Acolyte of Chayula"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Acolyte of Chayula",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52977,6 +53512,12 @@
           "ascendancy": "Disciple of Varashta"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Disciple of Varashta",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -52996,6 +53537,12 @@
           "ascendancy": "Gemling Legionnaire"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Gemling Legionnaire",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53021,6 +53568,12 @@
           "ascendancy": "Smith of Kitava"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Smith of Kitava",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53046,6 +53599,12 @@
           "ascendancy": "Ritualist"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Ritualist",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53065,6 +53624,12 @@
           "ascendancy": "Warbringer"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Warbringer",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53097,6 +53662,12 @@
           "ascendancy": "Witchhunter"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Witchhunter",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53116,6 +53687,12 @@
           "ascendancy": "Disciple of Varashta"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Disciple of Varashta",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53141,6 +53718,12 @@
           "ascendancy": "Disciple of Varashta"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Disciple of Varashta",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53166,6 +53749,12 @@
           "ascendancy": "Disciple of Varashta"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Disciple of Varashta",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53191,6 +53780,12 @@
           "ascendancy": "Smith of Kitava"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Smith of Kitava",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53210,6 +53805,12 @@
           "ascendancy": "Smith of Kitava"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Smith of Kitava",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53235,6 +53836,12 @@
           "ascendancy": "Invoker"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Invoker",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53273,6 +53880,12 @@
           "ascendancy": "Smith of Kitava"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Smith of Kitava",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53298,6 +53911,12 @@
           "ascendancy": "Smith of Kitava"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Smith of Kitava",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53323,6 +53942,12 @@
           "ascendancy": "Infernalist"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Infernalist",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53348,6 +53973,12 @@
           "ascendancy": "Acolyte of Chayula"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Acolyte of Chayula",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53367,6 +53998,12 @@
           "ascendancy": "Martial Artist"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Martial Artist",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53404,6 +54041,12 @@
           "ascendancy": "Martial Artist"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Martial Artist",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53423,6 +54066,12 @@
           "ascendancy": "Infernalist"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Infernalist",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53442,6 +54091,12 @@
           "ascendancy": "Ritualist"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Ritualist",
       "facts": [
         {
           "relation": "consumes",
@@ -53468,6 +54123,12 @@
           "ascendancy": "Deadeye"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Deadeye",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53493,6 +54154,12 @@
           "ascendancy": "Smith of Kitava"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Smith of Kitava",
       "facts": [
         {
           "relation": "converts",
@@ -53540,6 +54207,12 @@
           "ascendancy": "Titan"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Titan",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53559,6 +54232,12 @@
           "ascendancy": "Stormweaver"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Stormweaver",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53578,6 +54257,12 @@
           "ascendancy": "Titan"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Titan",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53597,6 +54282,12 @@
           "ascendancy": "Ritualist"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Ritualist",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53616,6 +54307,12 @@
           "ascendancy": "Amazon"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Amazon",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53648,6 +54345,12 @@
           "ascendancy": "Disciple of Varashta"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Disciple of Varashta",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53673,6 +54376,12 @@
           "ascendancy": "Disciple of Varashta"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Disciple of Varashta",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53698,6 +54407,12 @@
           "ascendancy": "Disciple of Varashta"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Disciple of Varashta",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53723,6 +54438,12 @@
           "ascendancy": "Lich"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Lich",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53742,6 +54463,12 @@
           "ascendancy": "Witchhunter"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Witchhunter",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53761,6 +54488,12 @@
           "ascendancy": "Chronomancer"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Chronomancer",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53780,6 +54513,12 @@
           "ascendancy": "Witchhunter"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Witchhunter",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53817,6 +54556,12 @@
           "ascendancy": "Pathfinder"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "int",
+        "str"
+      ],
+      "required_ascendancy": "Pathfinder",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53843,6 +54588,12 @@
           "ascendancy": "Pathfinder"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "int",
+        "str"
+      ],
+      "required_ascendancy": "Pathfinder",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53862,6 +54613,12 @@
           "ascendancy": "Amazon"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Amazon",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53888,6 +54645,12 @@
           "ascendancy": "Chronomancer"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Chronomancer",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53907,6 +54670,12 @@
           "ascendancy": "Witchhunter"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Witchhunter",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53926,6 +54695,12 @@
           "ascendancy": "Tactician"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Tactician",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53963,6 +54738,12 @@
           "ascendancy": "Amazon"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Amazon",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -53982,6 +54763,12 @@
           "ascendancy": "Lich"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Lich",
       "facts": [
         {
           "relation": "consumes",
@@ -54008,6 +54795,12 @@
           "ascendancy": "Spirit Walker"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Spirit Walker",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54033,6 +54826,12 @@
           "ascendancy": "Deadeye"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Deadeye",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54052,6 +54851,12 @@
           "ascendancy": "Infernalist"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Infernalist",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54085,6 +54890,12 @@
           "ascendancy": "Chronomancer"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Chronomancer",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54104,6 +54915,12 @@
           "ascendancy": "Shaman"
         }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "required_ascendancy": "Shaman",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54123,6 +54940,12 @@
           "ascendancy": "Stormweaver"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Stormweaver",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54142,6 +54965,12 @@
           "ascendancy": "Pathfinder"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "int",
+        "str"
+      ],
+      "required_ascendancy": "Pathfinder",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54161,6 +54990,12 @@
           "ascendancy": "Warbringer"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Warbringer",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54193,6 +55028,12 @@
           "ascendancy": "Tactician"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Tactician",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54212,6 +55053,12 @@
           "ascendancy": "Martial Artist"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Martial Artist",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54231,6 +55078,12 @@
           "ascendancy": "Pathfinder"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "int",
+        "str"
+      ],
+      "required_ascendancy": "Pathfinder",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54266,6 +55119,7 @@
           "ascendancy": "Abyssal Lich"
         }
       },
+      "required_ascendancy": "Abyssal Lich",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54291,6 +55145,12 @@
           "ascendancy": "Lich"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Lich",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54316,6 +55176,12 @@
           "ascendancy": "Disciple of Varashta"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Disciple of Varashta",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54341,6 +55207,12 @@
           "ascendancy": "Disciple of Varashta"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Disciple of Varashta",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54366,6 +55238,12 @@
           "ascendancy": "Disciple of Varashta"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Disciple of Varashta",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54391,6 +55269,12 @@
           "ascendancy": "Shaman"
         }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "required_ascendancy": "Shaman",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54410,6 +55294,12 @@
           "ascendancy": "Disciple of Varashta"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Disciple of Varashta",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54450,6 +55340,12 @@
           "ascendancy": "Spirit Walker"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Spirit Walker",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54489,6 +55385,12 @@
           "ascendancy": "Blood Mage"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Blood Mage",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54514,6 +55416,12 @@
           "ascendancy": "Blood Mage"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Blood Mage",
       "facts": [
         {
           "relation": "consumes",
@@ -54573,6 +55481,12 @@
           "ascendancy": "Acolyte of Chayula"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Acolyte of Chayula",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54599,6 +55513,12 @@
           "ascendancy": "Infernalist"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Infernalist",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54618,6 +55538,12 @@
           "ascendancy": "Stormweaver"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Stormweaver",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54644,6 +55570,12 @@
           "ascendancy": "Stormweaver"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Stormweaver",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54670,6 +55602,12 @@
           "ascendancy": "Smith of Kitava"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Smith of Kitava",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54702,6 +55640,12 @@
           "ascendancy": "Lich"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Lich",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54747,6 +55691,12 @@
           "ascendancy": "Smith of Kitava"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Smith of Kitava",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54773,6 +55723,12 @@
           "ascendancy": "Amazon"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Amazon",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54798,6 +55754,12 @@
           "ascendancy": "Tactician"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Tactician",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54838,6 +55800,7 @@
           "ascendancy": "Abyssal Lich"
         }
       },
+      "required_ascendancy": "Abyssal Lich",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54863,6 +55826,12 @@
           "ascendancy": "Titan"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Titan",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54882,6 +55851,12 @@
           "ascendancy": "Stormweaver"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Stormweaver",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54901,6 +55876,12 @@
           "ascendancy": "Tactician"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Tactician",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54926,6 +55907,12 @@
           "ascendancy": "Stormweaver"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Stormweaver",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54952,6 +55939,12 @@
           "ascendancy": "Invoker"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Invoker",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -54977,6 +55970,12 @@
           "ascendancy": "Blood Mage"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Blood Mage",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55002,6 +56001,12 @@
           "ascendancy": "Smith of Kitava"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Smith of Kitava",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55021,6 +56026,12 @@
           "ascendancy": "Tactician"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Tactician",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55047,6 +56058,12 @@
           "ascendancy": "Amazon"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Amazon",
       "facts": [
         {
           "relation": "consumes",
@@ -55126,6 +56143,12 @@
           "ascendancy": "Pathfinder"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "int",
+        "str"
+      ],
+      "required_ascendancy": "Pathfinder",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55152,6 +56175,7 @@
           "ascendancy": "Disciple of Varashta"
         }
       },
+      "required_ascendancy": "Disciple of Varashta",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55171,6 +56195,12 @@
           "ascendancy": "Smith of Kitava"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Smith of Kitava",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55202,6 +56232,12 @@
           "ascendancy": "Stormweaver"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Stormweaver",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55233,6 +56269,12 @@
           "ascendancy": "Gemling Legionnaire"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Gemling Legionnaire",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55276,6 +56318,12 @@
           "ascendancy": "Spirit Walker"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Spirit Walker",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55302,6 +56350,12 @@
           "ascendancy": "Disciple of Varashta"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Disciple of Varashta",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55327,6 +56381,12 @@
           "ascendancy": "Oracle"
         }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55346,6 +56406,12 @@
           "ascendancy": "Spirit Walker"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Spirit Walker",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55365,6 +56431,12 @@
           "ascendancy": "Spirit Walker"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Spirit Walker",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55391,6 +56463,12 @@
           "ascendancy": "Spirit Walker"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Spirit Walker",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55410,6 +56488,12 @@
           "ascendancy": "Invoker"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Invoker",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55429,6 +56513,12 @@
           "ascendancy": "Oracle"
         }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55454,6 +56544,12 @@
           "ascendancy": "Deadeye"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Deadeye",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55473,6 +56569,12 @@
           "ascendancy": "Pathfinder"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "int",
+        "str"
+      ],
+      "required_ascendancy": "Pathfinder",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55492,6 +56594,12 @@
           "ascendancy": "Smith of Kitava"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Smith of Kitava",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55511,6 +56619,12 @@
           "ascendancy": "Shaman"
         }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "required_ascendancy": "Shaman",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55530,6 +56644,12 @@
           "ascendancy": "Warbringer"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Warbringer",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55556,6 +56676,12 @@
           "ascendancy": "Chronomancer"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Chronomancer",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55581,6 +56707,7 @@
           "ascendancy": "Abyssal Lich"
         }
       },
+      "required_ascendancy": "Abyssal Lich",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55606,6 +56733,12 @@
           "ascendancy": "Chronomancer"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Chronomancer",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55631,6 +56764,12 @@
           "ascendancy": "Ritualist"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Ritualist",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55650,6 +56789,12 @@
           "ascendancy": "Tactician"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Tactician",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55675,6 +56820,12 @@
           "ascendancy": "Oracle"
         }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "required_ascendancy": "Oracle",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55700,6 +56851,12 @@
           "ascendancy": "Acolyte of Chayula"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Acolyte of Chayula",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55719,6 +56876,7 @@
           "ascendancy": "Abyssal Lich"
         }
       },
+      "required_ascendancy": "Abyssal Lich",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55738,6 +56896,12 @@
           "ascendancy": "Disciple of Varashta"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Disciple of Varashta",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55763,6 +56927,12 @@
           "ascendancy": "Blood Mage"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Blood Mage",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55789,6 +56959,12 @@
           "ascendancy": "Spirit Walker"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Spirit Walker",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55814,6 +56990,12 @@
           "ascendancy": "Acolyte of Chayula"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Acolyte of Chayula",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55839,6 +57021,12 @@
           "ascendancy": "Warbringer"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Warbringer",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55865,6 +57053,12 @@
           "ascendancy": "Tactician"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Tactician",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55884,6 +57078,12 @@
           "ascendancy": "Martial Artist"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Martial Artist",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55903,6 +57103,12 @@
           "ascendancy": "Martial Artist"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "int"
+      ],
+      "required_ascendancy": "Martial Artist",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55922,6 +57128,12 @@
           "ascendancy": "Witchhunter"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Witchhunter",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55941,6 +57153,12 @@
           "ascendancy": "Blood Mage"
         }
       },
+      "passive_tree_starts": [
+        "dex_int",
+        "int",
+        "str_int"
+      ],
+      "required_ascendancy": "Blood Mage",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55966,6 +57184,12 @@
           "ascendancy": "Tactician"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Tactician",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -55985,6 +57209,12 @@
           "ascendancy": "Spirit Walker"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Spirit Walker",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -56010,6 +57240,12 @@
           "ascendancy": "Ritualist"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "dex_int",
+        "str_dex"
+      ],
+      "required_ascendancy": "Ritualist",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -56035,6 +57271,12 @@
           "ascendancy": "Shaman"
         }
       },
+      "passive_tree_starts": [
+        "int",
+        "str",
+        "str_int"
+      ],
+      "required_ascendancy": "Shaman",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -56054,6 +57296,12 @@
           "ascendancy": "Witchhunter"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Witchhunter",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -56073,6 +57321,12 @@
           "ascendancy": "Warbringer"
         }
       },
+      "passive_tree_starts": [
+        "str",
+        "str_dex",
+        "str_int"
+      ],
+      "required_ascendancy": "Warbringer",
       "facts": [
         {
           "relation": "exclusive_to",
@@ -56099,6 +57353,12 @@
           "ascendancy": "Witchhunter"
         }
       },
+      "passive_tree_starts": [
+        "dex",
+        "str",
+        "str_dex"
+      ],
+      "required_ascendancy": "Witchhunter",
       "facts": [
         {
           "relation": "exclusive_to",

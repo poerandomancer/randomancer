@@ -60,6 +60,26 @@ class PassiveLocalityTest(unittest.TestCase):
             ["dex", "dex_int", "int", "str_dex"],
         )
 
+    def test_owned_nodes_get_position_without_becoming_travel_shortcuts(self):
+        rows = [
+            {"PassiveSkillGraphId": 1, "SkillType": 0, "Ascendancy": None},
+            {"PassiveSkillGraphId": 2, "SkillType": 0, "Ascendancy": None},
+            {"PassiveSkillGraphId": 3, "SkillType": 0, "Ascendancy": 28},
+            {"PassiveSkillGraphId": 4, "SkillType": 0, "Ascendancy": 28},
+        ]
+        tree = {"groups": [{"passives": [
+            {"hash": 1, "connections": [3]},
+            {"hash": 3, "connections": [4]},
+            {"hash": 4, "connections": [2]},
+        ]}]}
+        ordinary = MODULE.build_passive_tree_adjacency(tree, rows)
+        ordinary_distances = {"str": MODULE.shortest_path_distances(ordinary, 1)}
+        self.assertNotIn(2, ordinary_distances["str"])
+        self.assertNotIn(3, ordinary)
+        owned = MODULE.ascendancy_owned_distances(tree, rows, ordinary, ordinary_distances)
+        self.assertEqual(owned["str"][3], 1)
+        self.assertEqual(owned["str"][4], 2)
+
     def test_generated_ordinary_notables_have_locality_or_are_reported(self):
         enriched = json.loads((ROOT / "data/enriched/passives_enriched.json").read_text())
         report = json.loads((ROOT / "data/enriched/passive_scrape_report.json").read_text())

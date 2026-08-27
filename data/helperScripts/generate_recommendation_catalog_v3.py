@@ -843,7 +843,8 @@ def build_passive_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[
             if offense_role:
                 fact["offense_role"] = offense_role
         tags = normalize_tag_list(passive.get("tags") or [], expand=False, match_keys=False)
-        access: dict[str, Any] = {"ascendancy": ascendancy} if ascendancy else {}
+        required_ascendancy = passive.get("requiredAscendancy") or ascendancy
+        access: dict[str, Any] = {"ascendancy": required_ascendancy} if required_ascendancy else {}
 
         entities.append(
             {
@@ -859,6 +860,7 @@ def build_passive_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[
                 "facts": facts,
                 "compatibility": {"access": access},
                 **({"passive_tree_starts": passive["passiveTreeStarts"]} if passive.get("passiveTreeStarts") else {}),
+                **({"required_ascendancy": required_ascendancy} if required_ascendancy else {}),
                 "links": {
                     "ascendancy_id": passive.get("ascendancyId"),
                     "passive_skill_graph_id": raw.get("PassiveSkillGraphId"),
@@ -1212,7 +1214,7 @@ def compact_entity(entity: dict[str, Any]) -> dict[str, Any]:
     content_type = entity.get("content_type")
     projected = {
         key: entity[key]
-        for key in ("id", "content_type", "source_id", "name", "compatibility", "passive_tree_starts")
+        for key in ("id", "content_type", "source_id", "name", "compatibility", "passive_tree_starts", "required_ascendancy")
         if key in entity
     }
 

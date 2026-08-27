@@ -281,6 +281,25 @@ test('ordinary notables fail closed when either side of locality metadata is mis
   assert.deepEqual(selectNonSkillRecommendations(catalog([{ ...candidate, passive_tree_starts: undefined }]), snap, null).passives.notables, []);
 });
 
+test('ascendancy-owned ordinary notables require their owner before normal checks', () => {
+  const owned = entity('oracle-chaos', 'passive', ['chaos'], {
+    required_ascendancy: 'Oracle', passive_tree_starts: ['str_int']
+  });
+  const ordinary = entity('ordinary-chaos', 'passive', ['chaos'], {
+    passive_tree_starts: ['str_int']
+  });
+  const base = { ...snap, offenseList: ['Chaos'], passiveTreeStart: 'str_int' };
+  const ritualist = selectNonSkillRecommendations(catalog([owned, ordinary]),
+    { ...base, ascendancy: 'Ritualist' }, null).passives.notables;
+  assert.deepEqual(ritualist.map((entry) => entry.id), ['ordinary-chaos']);
+  const oracle = selectNonSkillRecommendations(catalog([owned]),
+    { ...base, ascendancy: 'Oracle' }, null).passives.notables;
+  assert.deepEqual(oracle.map((entry) => entry.id), ['oracle-chaos']);
+  const wrongOffense = selectNonSkillRecommendations(catalog([owned]),
+    { ...base, ascendancy: 'Oracle', offenseList: ['Freeze'] }, null).passives.notables;
+  assert.deepEqual(wrongOffense, []);
+});
+
 test('passive offense matching requires an explicitly offensive semantic role', () => {
   const passive = (id, mechanic, offenseRole) => entity(id, 'passive', [
     { mechanic, relation: 'modifies', confidence: 'strong', ...(offenseRole ? { offense_role: offenseRole } : {}) }
