@@ -162,8 +162,12 @@ def validate_entities(catalog: dict[str, Any], ontology: dict[str, Any], errors:
                     errors.append(f"{entity_id}: {relation} fact requires from/to: {fact}")
             elif not fact.get("mechanic"):
                 errors.append(f"{entity_id}: {relation} fact requires mechanic: {fact}")
-            if not fact.get("evidence"):
-                errors.append(f"{entity_id}: fact has no evidence: {fact}")
+            runtime_evidence = fact.get("evidence") or []
+            if runtime_evidence:
+                if entity.get("content_type") not in {"support_gem", "active_skill", "unique"}:
+                    errors.append(f"{entity_id}: runtime evidence retained for an unused content type: {fact}")
+                if len(runtime_evidence) != 1 or any(set(proof) - {"kind", "value"} for proof in runtime_evidence):
+                    errors.append(f"{entity_id}: runtime evidence is not compact: {fact}")
 
 
 def validate_source_parity(catalog: dict[str, Any], errors: list[str]) -> None:

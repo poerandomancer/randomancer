@@ -64,8 +64,8 @@ def main():
  out={'schema_version':'recommendation-catalog-v3-size-audit.1.0.0','before':before,'after':after,
  'reduction':{'raw_bytes':before['raw_bytes']-after['raw_bytes'],'percent':round(100*(before['raw_bytes']-after['raw_bytes'])/before['raw_bytes'],2)},
  'runtime_field_classification':{
-  'RUNTIME_REQUIRED':['identity/name/roles/retrieval_terms/support_family','compatibility','typed semantic fact fields','evidence.kind/value','source_evidence.description/active_skill_types/cannot_be_supported','provenance.source_tags'],
-  'GENERATION_REQUIRED':['component/stat-set/parser provenance','complete source evidence','semantic completeness warnings'],
+  'RUNTIME_REQUIRED':['identity/name','active-skill roles/retrieval terms','support family','compatibility','typed semantic fact fields','minimal support/unique-analysis evidence markers','active skill types/cannot_be_supported','eligibility source tags'],
+  'GENERATION_REQUIRED':['full evidence text','descriptions','component/stat-set/parser provenance','complete source evidence','semantic completeness warnings'],
   'DIAGNOSTIC_ONLY':['entity dataset/schema provenance','evidence parent/component/pattern_category','structured raw stats','passive lines','unique modifiers/source metadata','taxonomy metadata','full granted effects','links'],
   'REDUNDANT':['evidence.parent_entity_id'], 'UNKNOWN':[]}}
  Path(a.out).write_text(json.dumps(out,indent=2,ensure_ascii=False)+'\n')

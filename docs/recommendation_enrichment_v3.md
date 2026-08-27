@@ -17,7 +17,7 @@ Scraping and datamining provide evidence. They do not decide whether incidental 
 
 ## Generated artifacts
 
-- `data/enriched/recommendation_catalog_v3.json` contains normalized recommendation entities.
+- `data/enriched/recommendation_catalog_v3.json` contains the compact browser-facing recommendation entities.
 - `data/enriched/recommendation_catalog_v3_report.json` reports source coverage, parsed evidence, ambiguity, and unparsed samples.
 - `data/enriched/recommendation_skill_crafting_v3.json` maps active Skill Idea candidates to their crafting type, school, and weapon-affinity metadata.
 - `data/enriched/recommendation_granted_skill_access_v3.json` records skill access that depends on ascendancy passives or selected uniques.
@@ -69,7 +69,7 @@ The solver evaluates both relationship directions. A setup can supply a state or
 
 The primary Build Card is authoritative during this migration. The v3 runtime installs canonical skill ideas after Offense normalization only when v3 has selected a primary. The card preserves package order and labels contextual roles as Primary, Secondary, Setup, Payoff, or Enabler. An unresolved v3 result records diagnostics without erasing the existing recommendation.
 
-## Entity contract
+## Build-time entity contract
 
 Each entity has:
 
@@ -89,6 +89,14 @@ family are one recommendation concept: they may provide different values, but
 they cannot occupy multiple support positions in the same package.
 
 Retrieval terms never prove fulfillment. They may retrieve a candidate for semantic evaluation, but only typed facts and curated ontology relationships can satisfy an obligation.
+
+## Runtime catalog projection
+
+The generator deliberately builds the rich entity contract above only as a build-time intermediate. The committed `recommendation_catalog_v3.json` is a deterministic runtime projection containing only fields read by the application plus tiny semantic markers required to keep downstream recommendation audits deterministic. Full descriptions, original evidence clauses, raw stats, parser/component provenance, links, and other diagnostic material are not browser payload.
+
+Verbose fact evidence is compiled to short markers. Support markers preserve the selector's affirmative-bridge distinction; active-skill and unique markers preserve only payoff/component classification used by the deterministic unique-semantics audit. Normal skill prose is omitted; only a minimal exclusion marker is retained for DNT/unused content. Active-skill type data, compatibility, access sidecars, crafting metadata, and the typed fact fields used by matching remain authoritative. No additional runtime network request is introduced by this projection; display text continues to come from the existing enriched skill/passive/unique datasets already loaded by the app.
+
+For investigation during a patch refresh, generate the full developer artifact explicitly with `--provenance-out data/enriched/debug/recommendation_catalog_v3_provenance.json`. That path is gitignored and is intentionally not part of the application or normal Git history.
 
 ## Fact contract
 

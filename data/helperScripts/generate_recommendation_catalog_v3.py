@@ -1084,32 +1084,120 @@ def build_catalog(ctx: SourceContext) -> tuple[dict[str, Any], dict[str, Any], d
     return catalog, report, granted_access, skill_crafting
 
 
-RUNTIME_ENTITY_FIELDS = (
-    "id", "content_type", "source_id", "name", "candidate_roles",
-    "retrieval_terms", "support_family", "compatibility", "structured_weapon_requirements",
+RUNTIME_SUPPORT_ACTION_RELATIONS = {
+    "fulfills", "inflicts", "creates", "provides", "generates", "converts",
+}
+RUNTIME_RELEVANT_SOURCE_TAGS = {"kalguuran", "derived_template", "lineage"}
+RUNTIME_NON_SKILL_RETRIEVAL_TERMS = {
+    "kalguuran", "prototype", "inaccessible", "dnt", "dnt_unused",
+    "coming_soon", "derived_template",
+}
+RUNTIME_DESCRIPTION_EXCLUSION_RE = re.compile(
+    r"^\s*\[?(?:DNT(?:-UNUSED)?|UNUSED|Coming\s+Soon)\]?", re.IGNORECASE
 )
+RUNTIME_SUPPORT_ENABLE_RE = re.compile(
+    r"(?:causing|allowing) it to inflict|giving it a chance to|base_chance_to_(?:inflict_bleeding|poison_on_hit)",
+    re.IGNORECASE,
+)
+RUNTIME_SUPPORT_FALSE_POSITIVE_RE = re.compile(
+    r"skills? (?:which|that) can|inflicted (?:by|with)|shocking an enemy|chance_to_(?:shock|ignite)_\+%_final",
+    re.IGNORECASE,
+)
+RUNTIME_SUPPORT_POTENCY_RE = re.compile(
+    r"causing it to .*inflict more (?:potent|powerful)", re.IGNORECASE
+)
+RUNTIME_UNIQUE_PAYOFF_RE = re.compile(
+    r"(?:against|affected by|all\s+\w+\s+enemies|while\s+\w+ed|if\s+\w+ed)", re.IGNORECASE
+)
+RUNTIME_COMPONENT_RE = re.compile(r"explod|cloud|ground|burst|projectile", re.IGNORECASE)
 
 
-def compact_fact(fact: dict[str, Any]) -> dict[str, Any]:
-    """Project a fully evidenced generation fact onto the browser contract."""
-    # Every typed semantic attribute participates in matching or ranking; only the
-    # evidence envelope is projected separately.
-    projected = {key: value for key, value in fact.items() if key != "evidence"}
-    projected["evidence"] = [
-        {key: proof[key] for key in ("kind", "value") if key in proof}
-        for proof in fact.get("evidence") or []
+def _runtime_fact_evidence(fact: dict[str, Any], content_type: str) -> list[dict[str, str]]:
+    """Compile verbose proof text to only the semantic markers still consumed after generation."""
+    proofs = [
+        proof for proof in fact.get("evidence") or []
+        if str(proof.get("value") or "").strip()
     ]
+    if not proofs:
+        return []
+    values = [str(proof.get("value") or "").lower() for proof in proofs]
+
+    if content_type == "support_gem" and fact.get("subject") == "supported_skill" \
+            and fact.get("relation") in RUNTIME_SUPPORT_ACTION_RELATIONS:
+        if fact.get("relation") != "inflicts":
+            return [{"value": "runtime"}]
+        enabled = any(
+            RUNTIME_SUPPORT_ENABLE_RE.search(value)
+            and not RUNTIME_SUPPORT_FALSE_POSITIVE_RE.search(value)
+            and not RUNTIME_SUPPORT_POTENCY_RE.search(value)
+            for value in values
+        )
+        return [{"value": "allowing it to inflict" if enabled else "reference only"}]
+
+    if content_type in {"active_skill", "unique"}:
+        first = proofs[0]
+        marker_parts = ["against"] if any(RUNTIME_UNIQUE_PAYOFF_RE.search(value) for value in values) else ["runtime"]
+        component = RUNTIME_COMPONENT_RE.search(str(first.get("value") or ""))
+        if component:
+            marker_parts.append(component.group(0).lower())
+        marker = {"value": " ".join(marker_parts)}
+        if first.get("kind"):
+            marker["kind"] = str(first["kind"])
+        return [marker]
+    return []
+
+
+def compact_fact(fact: dict[str, Any], content_type: str) -> dict[str, Any]:
+    """Project a fully evidenced generation fact onto the browser contract."""
+    projected = {key: value for key, value in fact.items() if key != "evidence"}
+    runtime_evidence = _runtime_fact_evidence(fact, content_type)
+    if runtime_evidence:
+        projected["evidence"] = runtime_evidence
     return projected
 
 
-def compact_entity(entity: dict[str, Any]) -> dict[str, Any]:
-    projected = {key: entity[key] for key in RUNTIME_ENTITY_FIELDS if key in entity}
-    projected["facts"] = [compact_fact(fact) for fact in entity.get("facts") or []]
+def _runtime_retrieval_terms(entity: dict[str, Any]) -> list[str]:
+    terms = entity.get("retrieval_terms") or []
+    if entity.get("content_type") in {"active_skill", "support_gem"}:
+        return terms
+    return [
+        term for term in terms
+        if normalized_phrase(term) in RUNTIME_NON_SKILL_RETRIEVAL_TERMS
+    ]
 
-    # These source summaries are read by delivery/support qualification and UI search.
+
+def compact_entity(entity: dict[str, Any]) -> dict[str, Any]:
+    content_type = entity.get("content_type")
+    projected = {
+        key: entity[key]
+        for key in ("id", "content_type", "source_id", "name", "compatibility")
+        if key in entity
+    }
+
+    if content_type == "active_skill":
+        projected["candidate_roles"] = entity.get("candidate_roles") or []
+    if content_type == "support_gem" and "support_family" in entity:
+        projected["support_family"] = entity["support_family"]
+
+    retrieval_terms = _runtime_retrieval_terms(entity)
+    if retrieval_terms:
+        projected["retrieval_terms"] = retrieval_terms
+
+    projected["facts"] = [compact_fact(fact, content_type) for fact in entity.get("facts") or []]
+
+    if content_type == "active_skill":
+        structured = entity.get("structured_weapon_requirements")
+        equipment = (entity.get("compatibility") or {}).get("equipment")
+        if structured is not None and structured != equipment:
+            projected["structured_weapon_requirements"] = structured
+
     source = entity.get("source_evidence") or {}
-    runtime_source = {key: source[key] for key in ("description", "active_skill_types") if key in source}
-    if "granted_effects" in source:
+    runtime_source: dict[str, Any] = {}
+    description = str(source.get("description") or "")
+    if description and RUNTIME_DESCRIPTION_EXCLUSION_RE.search(description):
+        runtime_source["description"] = "DNT"
+    if content_type == "active_skill" and "active_skill_types" in source:
+        runtime_source["active_skill_types"] = source["active_skill_types"]
         effects = [
             {"cannot_be_supported": True}
             for effect in source.get("granted_effects") or []
@@ -1120,7 +1208,10 @@ def compact_entity(entity: dict[str, Any]) -> dict[str, Any]:
     if runtime_source:
         projected["source_evidence"] = runtime_source
 
-    source_tags = (entity.get("provenance") or {}).get("source_tags") or []
+    source_tags = [
+        tag for tag in (entity.get("provenance") or {}).get("source_tags") or []
+        if normalized_phrase(tag) in RUNTIME_RELEVANT_SOURCE_TAGS
+    ]
     if source_tags:
         projected["provenance"] = {"source_tags": source_tags}
     return projected
