@@ -1,0 +1,368 @@
+[
+  {
+    "_rid": 0,
+    "CharacterToOverrideFor": 1,
+    "SkillToOverride": 2779,
+    "Override": 4935
+  },
+  {
+    "_rid": 1,
+    "CharacterToOverrideFor": 1,
+    "SkillToOverride": 2776,
+    "Override": 4936
+  },
+  {
+    "_rid": 2,
+    "CharacterToOverrideFor": 1,
+    "SkillToOverride": 4704,
+    "Override": 4937
+  },
+  {
+    "_rid": 3,
+    "CharacterToOverrideFor": 1,
+    "SkillToOverride": 4703,
+    "Override": 4938
+  },
+  {
+    "_rid": 4,
+    "CharacterToOverrideFor": 1,
+    "SkillToOverride": 4694,
+    "Override": 4696
+  },
+  {
+    "_rid": 5,
+    "CharacterToOverrideFor": 1,
+    "SkillToOverride": 3389,
+    "Override": 4939
+  },
+  {
+    "_rid": 6,
+    "CharacterToOverrideFor": 1,
+    "SkillToOverride": 3390,
+    "Override": 4940
+  },
+  {
+    "_rid": 7,
+    "CharacterToOverrideFor": 1,
+    "SkillToOverride": 3011,
+    "Override": 3350
+  },
+  {
+    "_rid": 8,
+    "CharacterToOverrideFor": 1,
+    "SkillToOverride": 3040,
+    "Override": 3353
+  },
+  {
+    "_rid": 9,
+    "CharacterToOverrideFor": 1,
+    "SkillToOverride": 3095,
+    "Override": 2680
+  },
+  {
+    "_rid": 10,
+    "CharacterToOverrideFor": 1,
+    "SkillToOverride": 3127,
+    "Override": 2683
+  },
+  {
+    "_rid": 11,
+    "CharacterToOverrideFor": 1,
+    "SkillToOverride": 3168,
+    "Override": 3276
+  },
+  {
+    "_rid": 12,
+    "CharacterToOverrideFor": 1,
+    "SkillToOverride": 3196,
+    "Override": 3279
+  },
+  {
+    "_rid": 13,
+    "CharacterToOverrideFor": 1,
+    "SkillToOverride": 3480,
+    "Override": 2734
+  },
+  {
+    "_rid": 14,
+    "CharacterToOverrideFor": 1,
+    "SkillToOverride": 3463,
+    "Override": 2735
+  },
+  {
+    "_rid": 15,
+    "CharacterToOverrideFor": 1,
+    "SkillToOverride": 1479,
+    "Override": 2737
+  },
+  {
+    "_rid": 16,
+    "CharacterToOverrideFor": 1,
+    "SkillToOverride": 1469,
+    "Override": 2741
+  },
+  {
+    "_rid": 17,
+    "CharacterToOverrideFor": 1,
+    "SkillToOverride": 1484,
+    "Override": 2738
+  },
+  {
+    "_rid": 18,
+    "CharacterToOverrideFor": 1,
+    "SkillToOverride": 1475,
+    "Override": 3496
+  },
+  {
+    "_rid": 19,
+    "CharacterToOverrideFor": 1,
+    "SkillToOverride": 1474,
+    "Override": 3497
+  },
+  {
+    "_rid": 20,
+    "CharacterToOverrideFor": 1,
+    "SkillToOverride": 3370,
+    "Override": 3373
+  },
+  {
+    "_rid": 21,
+    "CharacterToOverrideFor": 1,
+    "SkillToOverride": 3371,
+    "Override": 3374
+  },
+  {
+    "_rid": 22,
+    "CharacterToOverrideFor": 1,
+    "SkillToOverride": 3372,
+    "Override": 3375
+  },
+  {
+    "_rid": 23,
+    "CharacterToOverrideFor": 8,
+    "SkillToOverride": 4642,
+    "Override": 5660
+  },
+  {
+    "_rid": 24,
+    "CharacterToOverrideFor": 8,
+    "SkillToOverride": 4649,
+    "Override": 5661
+  },
+  {
+    "_rid": 25,
+    "CharacterToOverrideFor": 8,
+    "SkillToOverride": 4635,
+    "Override": 5662
+  },
+  {
+    "_rid": 26,
+    "CharacterToOverrideFor": 8,
+    "SkillToOverride": 4641,
+    "Override": 5663
+  },
+  {
+    "_rid": 27,
+    "CharacterToOverrideFor": 8,
+    "SkillToOverride": 4643,
+    "Override": 5664
+  },
+  {
+    "_rid": 28,
+    "CharacterToOverrideFor": 8,
+    "SkillToOverride": 4644,
+    "Override": 5665
+  },
+  {
+    "_rid": 29,
+    "CharacterToOverrideFor": 8,
+    "SkillToOverride": 4693,
+    "Override": 5666
+  },
+  {
+    "_rid": 30,
+    "CharacterToOverrideFor": 8,
+    "SkillToOverride": 4650,
+    "Override": 5667
+  },
+  {
+    "_rid": 31,
+    "CharacterToOverrideFor": 8,
+    "SkillToOverride": 4604,
+    "Override": 5668
+  },
+  {
+    "_rid": 32,
+    "CharacterToOverrideFor": 8,
+    "SkillToOverride": 1925,
+    "Override": 5669
+  },
+  {
+    "_rid": 33,
+    "CharacterToOverrideFor": 8,
+    "SkillToOverride": 1926,
+    "Override": 5670
+  },
+  {
+    "_rid": 34,
+    "CharacterToOverrideFor": 8,
+    "SkillToOverride": 1927,
+    "Override": 5671
+  },
+  {
+    "_rid": 35,
+    "CharacterToOverrideFor": 8,
+    "SkillToOverride": 2954,
+    "Override": 5672
+  },
+  {
+    "_rid": 36,
+    "CharacterToOverrideFor": 8,
+    "SkillToOverride": 3646,
+    "Override": 5673
+  },
+  {
+    "_rid": 37,
+    "CharacterToOverrideFor": 8,
+    "SkillToOverride": 3647,
+    "Override": 5674
+  },
+  {
+    "_rid": 38,
+    "CharacterToOverrideFor": 8,
+    "SkillToOverride": 3656,
+    "Override": 5675
+  },
+  {
+    "_rid": 39,
+    "CharacterToOverrideFor": 8,
+    "SkillToOverride": 4602,
+    "Override": 5676
+  },
+  {
+    "_rid": 40,
+    "CharacterToOverrideFor": 8,
+    "SkillToOverride": 4603,
+    "Override": 5677
+  },
+  {
+    "_rid": 41,
+    "CharacterToOverrideFor": 11,
+    "SkillToOverride": 4160,
+    "Override": 5678
+  },
+  {
+    "_rid": 42,
+    "CharacterToOverrideFor": 11,
+    "SkillToOverride": 4161,
+    "Override": 5679
+  },
+  {
+    "_rid": 43,
+    "CharacterToOverrideFor": 11,
+    "SkillToOverride": 2823,
+    "Override": 5680
+  },
+  {
+    "_rid": 44,
+    "CharacterToOverrideFor": 11,
+    "SkillToOverride": 4708,
+    "Override": 5698
+  },
+  {
+    "_rid": 45,
+    "CharacterToOverrideFor": 11,
+    "SkillToOverride": 4709,
+    "Override": 5699
+  },
+  {
+    "_rid": 46,
+    "CharacterToOverrideFor": 11,
+    "SkillToOverride": 2763,
+    "Override": 5700
+  },
+  {
+    "_rid": 47,
+    "CharacterToOverrideFor": 11,
+    "SkillToOverride": 4699,
+    "Override": 5684
+  },
+  {
+    "_rid": 48,
+    "CharacterToOverrideFor": 11,
+    "SkillToOverride": 4700,
+    "Override": 5697
+  },
+  {
+    "_rid": 49,
+    "CharacterToOverrideFor": 11,
+    "SkillToOverride": 2624,
+    "Override": 5685
+  },
+  {
+    "_rid": 50,
+    "CharacterToOverrideFor": 11,
+    "SkillToOverride": 2621,
+    "Override": 5686
+  },
+  {
+    "_rid": 51,
+    "CharacterToOverrideFor": 11,
+    "SkillToOverride": 2622,
+    "Override": 5687
+  },
+  {
+    "_rid": 52,
+    "CharacterToOverrideFor": 11,
+    "SkillToOverride": 2633,
+    "Override": 5688
+  },
+  {
+    "_rid": 53,
+    "CharacterToOverrideFor": 11,
+    "SkillToOverride": 1942,
+    "Override": 5689
+  },
+  {
+    "_rid": 54,
+    "CharacterToOverrideFor": 11,
+    "SkillToOverride": 1943,
+    "Override": 5690
+  },
+  {
+    "_rid": 55,
+    "CharacterToOverrideFor": 11,
+    "SkillToOverride": 1977,
+    "Override": 5691
+  },
+  {
+    "_rid": 56,
+    "CharacterToOverrideFor": 11,
+    "SkillToOverride": 1966,
+    "Override": 5692
+  },
+  {
+    "_rid": 57,
+    "CharacterToOverrideFor": 11,
+    "SkillToOverride": 3713,
+    "Override": 5693
+  },
+  {
+    "_rid": 58,
+    "CharacterToOverrideFor": 11,
+    "SkillToOverride": 3715,
+    "Override": 5694
+  },
+  {
+    "_rid": 59,
+    "CharacterToOverrideFor": 11,
+    "SkillToOverride": 3716,
+    "Override": 5695
+  },
+  {
+    "_rid": 60,
+    "CharacterToOverrideFor": 11,
+    "SkillToOverride": 3730,
+    "Override": 5696
+  }
+]
