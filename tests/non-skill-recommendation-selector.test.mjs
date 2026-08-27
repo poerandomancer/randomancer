@@ -1,14 +1,16 @@
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import test from 'node:test';
 import { selectNonSkillRecommendations, selectJewelryRecommendations } from '../js/31-non-skill-recommendation-selector.js';
 
-const fact = (mechanic, relation = 'provides') => ({ mechanic, relation, confidence: 'exact' });
+const fact = (mechanic, relation = 'provides') => ({ mechanic, relation, confidence: 'exact', offense_role: 'enabler' });
 const entity = (id, content_type, mechanics, extra = {}) => ({
   id, source_id: id, name: id, content_type,
   facts: mechanics.map((mechanic) => typeof mechanic === 'string' ? fact(mechanic) : mechanic),
-  retrieval_terms: [], compatibility: { access: {} }, provenance: {}, ...extra
+  retrieval_terms: [], compatibility: { access: {} }, provenance: {},
+  ...(content_type === 'passive' ? { passive_tree_starts: ['dex'] } : {}), ...extra
 });
-const snap = { ascendancy: 'Invoker', weaponFamily: 'Bow', offenseList: ['Freeze'] };
+const snap = { ascendancy: 'Invoker', weaponFamily: 'Bow', offenseList: ['Freeze'], passiveTreeStart: 'dex' };
 const pkg = { selectionSeed: 'fixed', pieces: [{ entityId: 'skill' }] };
 const catalog = (entities) => ({ entities: [entity('skill', 'active_skill', ['freeze']), ...entities] });
 
@@ -259,6 +261,78 @@ test('limits, deduplicates weak interactions, is seeded, and permits empty categ
   assert.ok(first.passives.notables.every((entry) => entry.recommendationEvidence.matches.length));
   assert.deepEqual(first.recommendedUniques, []);
   assert.deepEqual(first.passives.ascendancyNodes, []);
+});
+
+test('production path enforces Void locality for Huntress while retaining Int eligibility', () => {
+  const production = JSON.parse(fs.readFileSync(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url)));
+  const voidEntity = production.entities.find((candidate) => candidate.name === 'Void' && candidate.content_type === 'passive');
+  assert.deepEqual(voidEntity.passive_tree_starts, ['dex_int', 'int', 'str_int']);
+  assert.ok(voidEntity.facts.some((entry) => entry.mechanic === 'chaos' && entry.offense_role === 'enabler'));
+  const onlyVoid = catalog([voidEntity]);
+  const huntress = { ascendancy: 'Ritualist', weaponFamily: 'Spear', offenseList: ['Chaos'], passiveTreeStart: 'dex' };
+  const witch = { ...huntress, ascendancy: 'Lich', passiveTreeStart: 'int' };
+  assert.deepEqual(selectNonSkillRecommendations(onlyVoid, huntress, null).passives.notables, []);
+  assert.deepEqual(selectNonSkillRecommendations(onlyVoid, witch, null).passives.notables.map((entry) => entry.name), ['Void']);
+});
+
+test('ordinary notables fail closed when either side of locality metadata is missing', () => {
+  const candidate = entity('chaos-notable', 'passive', ['chaos'], { passive_tree_starts: ['dex'] });
+  assert.deepEqual(selectNonSkillRecommendations(catalog([candidate]), { ...snap, passiveTreeStart: '' }, null).passives.notables, []);
+  assert.deepEqual(selectNonSkillRecommendations(catalog([{ ...candidate, passive_tree_starts: undefined }]), snap, null).passives.notables, []);
+});
+
+test('ascendancy-owned ordinary notables require their owner before normal checks', () => {
+  const owned = entity('oracle-chaos', 'passive', ['chaos'], {
+    required_ascendancy: 'Oracle', passive_tree_starts: ['str_int']
+  });
+  const ordinary = entity('ordinary-chaos', 'passive', ['chaos'], {
+    passive_tree_starts: ['str_int']
+  });
+  const base = { ...snap, offenseList: ['Chaos'], passiveTreeStart: 'str_int' };
+  const ritualist = selectNonSkillRecommendations(catalog([owned, ordinary]),
+    { ...base, ascendancy: 'Ritualist' }, null).passives.notables;
+  assert.deepEqual(ritualist.map((entry) => entry.id), ['ordinary-chaos']);
+  const oracle = selectNonSkillRecommendations(catalog([owned]),
+    { ...base, ascendancy: 'Oracle' }, null).passives.notables;
+  assert.deepEqual(oracle.map((entry) => entry.id), ['oracle-chaos']);
+  const wrongOffense = selectNonSkillRecommendations(catalog([owned]),
+    { ...base, ascendancy: 'Oracle', offenseList: ['Freeze'] }, null).passives.notables;
+  assert.deepEqual(wrongOffense, []);
+});
+
+test('production First Sting is Oracle-only', () => {
+  const production = JSON.parse(fs.readFileSync(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url)));
+  const firstSting = production.entities.find((candidate) => candidate.name === 'First Sting' && candidate.content_type === 'passive');
+  assert.equal(firstSting.required_ascendancy, 'Oracle');
+  const base = { ...snap, offenseList: ['Poison'], passiveTreeStart: firstSting.passive_tree_starts[0] };
+  assert.deepEqual(selectNonSkillRecommendations(catalog([firstSting]),
+    { ...base, ascendancy: 'Disciple of Varashta' }, null).passives.notables, []);
+  assert.deepEqual(selectNonSkillRecommendations(catalog([firstSting]),
+    { ...base, ascendancy: 'Oracle' }, null).passives.notables.map((entry) => entry.name), ['First Sting']);
+});
+
+test('passive offense matching requires an explicitly offensive semantic role', () => {
+  const passive = (id, mechanic, offenseRole) => entity(id, 'passive', [
+    { mechanic, relation: 'modifies', confidence: 'strong', ...(offenseRole ? { offense_role: offenseRole } : {}) }
+  ]);
+  const eligible = [
+    passive('increased-chaos-damage', 'chaos', 'enabler'),
+    passive('enemy-chaos-resistance-reduction', 'chaos', 'setup_control')
+  ];
+  for (const candidate of eligible) {
+    const selected = selectNonSkillRecommendations(catalog([candidate]),
+      { ...snap, offenseList: ['Chaos'] }, null).passives.notables;
+    assert.deepEqual(selected.map((entry) => entry.id), [candidate.id]);
+  }
+  const result = selectNonSkillRecommendations(catalog([
+    passive('chaos-resistance', 'chaos', null),
+    passive('reduced-chaos-damage-taken', 'chaos', null),
+    passive('chaos-recovery', 'chaos', 'recovery'),
+    passive('poison-protection', 'poison', 'defense'),
+    passive('bleed-recovery', 'bleed', 'recovery'),
+    passive('ignite-protection', 'ignite', 'defense')
+  ]), { ...snap, offenseList: ['Chaos'] }, null, { selectionSeed: 'semantic-direction' });
+  assert.deepEqual(result.passives.notables, []);
 });
 
 test('build card renders skill, unique, ascendancy, and notable tooltip content', async () => {

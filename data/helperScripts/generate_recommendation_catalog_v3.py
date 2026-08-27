@@ -724,6 +724,43 @@ def passive_stat_records(ctx: SourceContext, raw: dict[str, Any]) -> list[dict[s
     return records
 
 
+PASSIVE_NON_OFFENSIVE_EVIDENCE_RE = re.compile(
+    r"(?:^|_)(?:resistance|damage_taken|taking_damage|recover|recovery|recoup|"
+    r"regenerat|immun|avoid|prevent|reduced_damage_taken)(?:_|$)", re.I
+)
+PASSIVE_OFFENSIVE_EVIDENCE_RE = re.compile(
+    r"(?:(?:^|_)(?:[a-z0-9]+_)*damage(?:_|$)|additional_.+_damage|damage_as_|_damage_.*_to_gain_as_|"
+    r"penetrat|enemies_.+_resistance|chance_to_(?:inflict|poison|bleed|ignite|shock)|"
+    r"(?:poison|bleed|ignite|shock|chill|freeze).*(?:chance|damage|duration|magnitude|effect)|"
+    r"skill_gem_level)", re.I
+)
+
+
+def passive_fact_offense_role(fact: dict[str, Any]) -> str | None:
+    """Classify a passive fact's direction without treating mechanic mention as offense."""
+    relation = fact.get("relation")
+    if fact.get("scope") == "incoming" or relation in {"prevents", "cannot", "removes"}:
+        return None
+    if relation in {"inflicts", "creates", "generates"}:
+        return "setup_control"
+    if relation == "consumes":
+        return "payoff"
+    if relation in {"converts", "provides", "modifies", "has_property"}:
+        evidence_parts = [
+            normalized_phrase(row.get("value"))
+            for row in fact.get("evidence") or []
+            if row.get("value")
+        ]
+        # Enemy resistance reduction is offensive; player/minion resistance is not.
+        if any(
+            PASSIVE_OFFENSIVE_EVIDENCE_RE.search(part)
+            and (not PASSIVE_NON_OFFENSIVE_EVIDENCE_RE.search(part) or "enemies_" in part)
+            for part in evidence_parts
+        ):
+            return "enabler"
+    return None
+
+
 def build_passive_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[str, Any]]:
     entities = []
     for passive in ctx.passives.get("nodes") or []:
@@ -801,8 +838,13 @@ def build_passive_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[
             )
 
         facts = apply_entity_overrides(ctx, entity_id, merge_facts(facts))
+        for fact in facts:
+            offense_role = passive_fact_offense_role(fact)
+            if offense_role:
+                fact["offense_role"] = offense_role
         tags = normalize_tag_list(passive.get("tags") or [], expand=False, match_keys=False)
-        access: dict[str, Any] = {"ascendancy": ascendancy} if ascendancy else {}
+        required_ascendancy = passive.get("requiredAscendancy") or ascendancy
+        access: dict[str, Any] = {"ascendancy": required_ascendancy} if required_ascendancy else {}
 
         entities.append(
             {
@@ -817,6 +859,8 @@ def build_passive_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[
                 "retrieval_terms": tags,
                 "facts": facts,
                 "compatibility": {"access": access},
+                **({"passive_tree_starts": passive["passiveTreeStarts"]} if passive.get("passiveTreeStarts") else {}),
+                **({"required_ascendancy": required_ascendancy} if required_ascendancy else {}),
                 "links": {
                     "ascendancy_id": passive.get("ascendancyId"),
                     "passive_skill_graph_id": raw.get("PassiveSkillGraphId"),
@@ -1170,7 +1214,7 @@ def compact_entity(entity: dict[str, Any]) -> dict[str, Any]:
     content_type = entity.get("content_type")
     projected = {
         key: entity[key]
-        for key in ("id", "content_type", "source_id", "name", "compatibility")
+        for key in ("id", "content_type", "source_id", "name", "compatibility", "passive_tree_starts", "required_ascendancy")
         if key in entity
     }
 

@@ -17,7 +17,7 @@ function selectAscendancy(data, fate, random = Math.random) {
   const banned = new Set(config.abominations);
   const favored = new Set(config.oaths);
   const candidates = Object.entries(data.Classes || {}).flatMap(([className, cls]) =>
-    (cls.ascendancies || []).filter((name) => !banned.has(name)).map((ascendancy) => ({ className, ascendancy, attributes: cls.attributes || {} }))
+    (cls.ascendancies || []).filter((name) => !banned.has(name)).map((ascendancy) => ({ className, ascendancy, attributes: cls.attributes || {}, passiveTreeStart: cls.passiveTreeStart }))
   );
   const preferred = candidates.filter((entry) => favored.has(entry.ascendancy));
   return randomItem(preferred.length ? preferred : candidates, random);
@@ -69,7 +69,7 @@ function drawBuild(dataWrap, { random = Math.random } = {}) {
   const attributes = normalizeAttributes(identity.attributes, weapon.attributes, ...offenseResult.picks.map((entry) => entry.attributes));
   let draw = {
     schema: 'randomancer-draw-v1', snapshotVersion: 2,
-    className: identity.className, ascendancy: identity.ascendancy,
+    className: identity.className, ascendancy: identity.ascendancy, passiveTreeStart: identity.passiveTreeStart,
     weaponFamily: weapon.name, weapon: weapon.name,
     ...offenseFields, attributes,
     buildName: selectBuildName({

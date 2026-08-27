@@ -2,6 +2,7 @@
   "Version": "unversioned",
   "Classes": {
     "Warrior": {
+      "passiveTreeStart": "str",
       "ascendancies": [
         "Titan",
         "Warbringer",
@@ -12,6 +13,7 @@
       }
     },
     "Mercenary": {
+      "passiveTreeStart": "str_dex",
       "ascendancies": [
         "Tactician",
         "Witchhunter",
@@ -23,6 +25,7 @@
       }
     },
     "Ranger": {
+      "passiveTreeStart": "dex",
       "ascendancies": [
         "Deadeye",
         "Pathfinder"
@@ -32,6 +35,7 @@
       }
     },
     "Huntress": {
+      "passiveTreeStart": "dex",
       "ascendancies": [
         "Amazon",
         "Ritualist",
@@ -42,6 +46,7 @@
       }
     },
     "Witch": {
+      "passiveTreeStart": "int",
       "ascendancies": [
         "Blood Mage",
         "Lich",
@@ -53,6 +58,7 @@
       }
     },
     "Sorceress": {
+      "passiveTreeStart": "int",
       "ascendancies": [
         "Chronomancer",
         "Stormweaver",
@@ -63,6 +69,7 @@
       }
     },
     "Monk": {
+      "passiveTreeStart": "dex_int",
       "ascendancies": [
         "Invoker",
         "Acolyte of Chayula",
@@ -74,6 +81,7 @@
       }
     },
     "Druid": {
+      "passiveTreeStart": "str_int",
       "ascendancies": [
         "Shaman",
         "Oracle"
