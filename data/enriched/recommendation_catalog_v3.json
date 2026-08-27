@@ -11,7 +11,7 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5128,
+    "fact_count": 5278,
     "fact_relation_counts": {
       "consumes": 356,
       "converts": 112,
@@ -19,21 +19,21 @@
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 672,
-      "inflicts": 166,
-      "modifies": 2244,
+      "inflicts": 156,
+      "modifies": 2308,
       "occupies": 444,
       "prevents": 375,
-      "provides": 322,
+      "provides": 415,
       "replaces": 27,
-      "requires": 63
+      "requires": 66
     },
     "candidate_role_counts": {
       "defense": 422,
-      "enabler": 1159,
+      "enabler": 1256,
       "payoff": 182,
       "primary_damage": 349,
       "recovery": 250,
-      "setup_control": 214,
+      "setup_control": 205,
       "utility": 206
     },
     "source_versions": {
@@ -27986,7 +27986,6 @@
       "name": "Incinerate",
       "candidate_roles": [
         "primary_damage",
-        "setup_control",
         "payoff"
       ],
       "retrieval_terms": [
@@ -28087,23 +28086,6 @@
             {
               "kind": "taxonomy_damage_type",
               "value": "fire"
-            }
-          ]
-        },
-        {
-          "relation": "inflicts",
-          "subject": "skill",
-          "confidence": "strong",
-          "mechanic": "ignite",
-          "scope": "outgoing",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Gain fuel by spending Mana on any Skill, then use the accumulated fuel to conjure a torrent of [Fire] from your hand, [Ignite|Igniting] enemies in front of you. The flames grow stronger the longer you [Channelling|Channel]. [Consume|Consumes] a [Fire] [ElementalInfusion|Infusion] if possible to also create [IgnitedGround|Ignited Ground]. Cannot gain fuel while using this skill."
-            },
-            {
-              "kind": "active_skill_description",
-              "value": "Gain fuel by spending Mana on any Skill, then use the accumulated fuel to conjure a torrent of [Fire] from your hand, [Ignite|Igniting] enemies in front of you. The flames grow stronger the longer you [Channelling|Channel]. [Consume|Consumes] a [Fire] [ElementalInfusion|Infusion] if possible to also create [IgnitedGround|Ignited Ground]. Cannot gain fuel while using this skill."
             }
           ]
         },
@@ -50953,14 +50935,6 @@
             {
               "kind": "stat_id",
               "value": "base_chance_to_poison_on_hit_%"
-            },
-            {
-              "kind": "skill_description",
-              "value": "Create an area of Toxic Bloom on the ground around you. While in the Bloom, you have increased Skill costs, Regenerate Life, and your [Projectile] [Attack|Attacks] attach a Toxic Pustule, which can be [Poison|Poisoned]. Pustules will [DetonationTime|Detonate] after a duration or when enough [Poison] has been applied, dealing more damage based on the stored [Poison] damage and applying [Poison] in an area around it."
-            },
-            {
-              "kind": "active_skill_description",
-              "value": "Create an area of Toxic Bloom on the ground around you. While in the Bloom, you have increased Skill costs, Regenerate Life, and your [Projectile] [Attack|Attacks] attach a Toxic Pustule, which can be [Poison|Poisoned]. Pustules will [DetonationTime|Detonate] after a duration or when enough [Poison] has been applied, dealing more damage based on the stored [Poison] damage and applying [Poison] in an area around it."
             }
           ]
         },
@@ -63861,7 +63835,6 @@
       "source_id": "AscendancySorceress1Notable7",
       "name": "Heavy Snows",
       "candidate_roles": [
-        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -63883,23 +63856,6 @@
             {
               "kind": "passive_ascendancy",
               "value": "Stormweaver"
-            }
-          ]
-        },
-        {
-          "relation": "inflicts",
-          "subject": "passive",
-          "confidence": "exact",
-          "mechanic": "chill",
-          "scope": "outgoing",
-          "evidence": [
-            {
-              "kind": "scraped_passive_line",
-              "value": "Targets can be affected by two of your Chill"
-            },
-            {
-              "kind": "scraped_passive_description",
-              "value": "Targets can be affected by two of your Chill Your Chills can Slow you inflict"
             }
           ]
         },
@@ -67296,7 +67252,6 @@
       "source_id": "AscendancySorceress1Notable6",
       "name": "Shaper of Storms",
       "candidate_roles": [
-        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -67321,19 +67276,6 @@
           ]
         },
         {
-          "relation": "inflicts",
-          "subject": "passive",
-          "confidence": "strong",
-          "mechanic": "shock",
-          "scope": "outgoing",
-          "evidence": [
-            {
-              "kind": "passive_line",
-              "value": "All damage can shock"
-            }
-          ]
-        },
-        {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
@@ -67353,7 +67295,6 @@
       "source_id": "AscendancySorceress1Notable8",
       "name": "Shaper of Winter",
       "candidate_roles": [
-        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -67374,19 +67315,6 @@
             {
               "kind": "passive_ascendancy",
               "value": "Stormweaver"
-            }
-          ]
-        },
-        {
-          "relation": "inflicts",
-          "subject": "passive",
-          "confidence": "strong",
-          "mechanic": "chill",
-          "scope": "outgoing",
-          "evidence": [
-            {
-              "kind": "passive_line",
-              "value": "All damage can chill"
             }
           ]
         },
@@ -67861,7 +67789,6 @@
       "source_id": "AscendancySorceress1Notable5",
       "name": "Strike Twice",
       "candidate_roles": [
-        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -67882,23 +67809,6 @@
             {
               "kind": "passive_ascendancy",
               "value": "Stormweaver"
-            }
-          ]
-        },
-        {
-          "relation": "inflicts",
-          "subject": "passive",
-          "confidence": "exact",
-          "mechanic": "shock",
-          "scope": "outgoing",
-          "evidence": [
-            {
-              "kind": "scraped_passive_line",
-              "value": "Targets can be affected by two of your Shock"
-            },
-            {
-              "kind": "scraped_passive_description",
-              "value": "Targets can be affected by two of your Shock s at the same time 25% less Magnitude of Shock you inflict"
             }
           ]
         },
@@ -105212,7 +105122,6 @@
       "source_id": "Metadata/Items/Gem/SupportGemAdmixture",
       "name": "Admixture",
       "candidate_roles": [
-        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -105269,19 +105178,6 @@
             {
               "kind": "taxonomy_damage_type",
               "value": "physical"
-            }
-          ]
-        },
-        {
-          "relation": "inflicts",
-          "subject": "supported_skill",
-          "confidence": "exact",
-          "mechanic": "bleed",
-          "scope": "outgoing",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports Skills which can cause Damaging [HitDamage|Hits]. [Bleeding] inflicted by those [HitDamage|Hits] is more effective against [Poison|Poisoned] Enemies, and [Poison] inflicted by Supported Skills is more effective against [Bleeding] Enemies."
             }
           ]
         },
@@ -110071,19 +109967,6 @@
             {
               "kind": "curated_override",
               "value": "Brittle Armour only breaks Armour against enemies Frozen by the supported skill."
-            }
-          ]
-        },
-        {
-          "relation": "inflicts",
-          "subject": "supported_skill",
-          "confidence": "strong",
-          "mechanic": "freeze",
-          "scope": "outgoing",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports Skills which can [HitDamage|Hit] enemies. [HitDamage|Hits] with Supported Skills which [Freeze] enemies cause [Physical] damage against them to [ArmourBreak|Break their Armour] while they remain [Freeze|Frozen]."
             }
           ]
         },
@@ -124806,7 +124689,6 @@
       "source_id": "Metadata/Items/Gems/SupportGemImmolate",
       "name": "Immolate",
       "candidate_roles": [
-        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -124846,19 +124728,6 @@
             {
               "kind": "taxonomy_damage_type",
               "value": "fire"
-            }
-          ]
-        },
-        {
-          "relation": "inflicts",
-          "subject": "supported_skill",
-          "confidence": "strong",
-          "mechanic": "ignite",
-          "scope": "outgoing",
-          "evidence": [
-            {
-              "kind": "skill_description",
-              "value": "Supports [Attack|Attacks], granting them extra [Fire] damage against [Ignite|Ignited] enemies but making them unable to [Ignite] enemies themselves."
             }
           ]
         },
@@ -144805,7 +144674,9 @@
       "content_type": "unique",
       "source_id": "Amor Mandragora||Changeling Talisman",
       "name": "Amor Mandragora",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "druidic_prowess",
         "hinder",
@@ -144835,6 +144706,19 @@
             {
               "kind": "unique_slot",
               "value": "Ezomyte Talisman"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 18 to 26 Physical Damage"
             }
           ]
         }
@@ -145180,7 +145064,9 @@
       "content_type": "unique",
       "source_id": "Asphyxia's Wrath||Broadhead Quiver",
       "name": "Asphyxia's Wrath",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "attack",
         "chill",
@@ -145213,6 +145099,36 @@
             {
               "kind": "unique_slot",
               "value": "Quiver"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "cold",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 4 to 7 Cold damage to Attack"
+            },
+            {
+              "kind": "unique_mod",
+              "value": "Attack Gain 7% of Damage as Extra Cold Damage"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 1 to 3 Physical Damage to Attack"
             }
           ]
         }
@@ -145410,7 +145326,9 @@
       "content_type": "unique",
       "source_id": "Atziri's Contempt||Pronged Spear",
       "name": "Atziri's Contempt",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "fire",
         "hit",
@@ -145432,6 +145350,19 @@
       },
       "facts": [
         {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "106% increased Physical Damage"
+            }
+          ]
+        },
+        {
           "relation": "occupies",
           "subject": "item",
           "confidence": "exact",
@@ -145440,6 +145371,19 @@
             {
               "kind": "unique_slot",
               "value": "Vaal Spear"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "fire",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 94 to 144 Fire Damage"
             }
           ]
         },
@@ -145455,6 +145399,19 @@
                 "Spear Throw",
                 "Shattering Spite"
               ]
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "lightning",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 1 to 200 Lightning Damage"
             }
           ]
         }
@@ -145518,7 +145475,9 @@
       "content_type": "unique",
       "source_id": "Atziri's Rule||Reflecting Staff",
       "name": "Atziri's Rule",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "extra",
         "intelligence",
@@ -145560,6 +145519,19 @@
               "value": [
                 "Mirror of Refraction"
               ]
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Spells which cost Life Gain 81% of Damage as Gain Physical Damage"
             }
           ]
         }
@@ -145796,7 +145768,9 @@
       "content_type": "unique",
       "source_id": "Beetlebite||Velour Shoes",
       "name": "Beetlebite",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "bleed",
         "energy_shield",
@@ -145817,6 +145791,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "thorns",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "100% increased Thorns damage"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -145881,6 +145868,18 @@
             {
               "kind": "unique_slot",
               "value": "Ezomyte Charm"
+            }
+          ]
+        },
+        {
+          "relation": "requires",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "ignite",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Creates IgnitedGround for 4 seconds when used, Ignite enemies as though dealing Fire damage equal to 500% of your maximum Life"
             }
           ]
         }
@@ -146032,7 +146031,9 @@
       "content_type": "unique",
       "source_id": "Berek's Respite||Two-Stone Ring",
       "name": "Berek's Respite",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "critical_damage_bonus",
         "dexterity",
@@ -146056,6 +146057,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "shock",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "23% increased CriticalDamageBonus while Shock"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -146116,6 +146130,19 @@
           "relation": "provides",
           "subject": "item",
           "confidence": "strong",
+          "mechanic": "chaos",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Attack Gain 13% of Physical Damage as extra Chaos Damage"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
           "mechanic": "electrocute",
           "scope": "outgoing",
           "evidence": [
@@ -146135,6 +146162,19 @@
             {
               "kind": "unique_mod",
               "value": "Chaos Damage from HitDamage also Contributes to Freeze Buildup"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Attack Gain 13% of Physical Damage as extra Chaos Damage"
             }
           ]
         }
@@ -146421,6 +146461,19 @@
           "relation": "modifies",
           "subject": "item",
           "confidence": "strong",
+          "mechanic": "ignite",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "85% increased Ignite BuffMagnitude"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
           "mechanic": "mana_regeneration",
           "evidence": [
             {
@@ -146462,7 +146515,6 @@
       "source_id": "Blackgleam||Fire Quiver",
       "name": "Blackgleam",
       "candidate_roles": [
-        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -146487,19 +146539,6 @@
       },
       "facts": [
         {
-          "relation": "inflicts",
-          "subject": "item",
-          "confidence": "strong",
-          "mechanic": "ignite",
-          "scope": "outgoing",
-          "evidence": [
-            {
-              "kind": "unique_mod",
-              "value": "Projectile Pierce all Ignite enemies"
-            }
-          ]
-        },
-        {
           "relation": "occupies",
           "subject": "item",
           "confidence": "exact",
@@ -146508,6 +146547,39 @@
             {
               "kind": "unique_slot",
               "value": "Quiver"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "fire",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 3 to 5 Fire damage to Attack"
+            },
+            {
+              "kind": "unique_mod",
+              "value": "Adds 5 to 6 Fire damage to Attack"
+            },
+            {
+              "kind": "unique_mod",
+              "value": "Attack Gain 8% of Damage as Extra Fire Damage"
+            }
+          ]
+        },
+        {
+          "relation": "requires",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "ignite",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Projectile Pierce all Ignite enemies"
             }
           ]
         }
@@ -146519,6 +146591,7 @@
       "source_id": "Blackheart||Iron Ring",
       "name": "Blackheart",
       "candidate_roles": [
+        "enabler",
         "recovery"
       ],
       "retrieval_terms": [
@@ -146562,6 +146635,32 @@
             {
               "kind": "unique_slot",
               "value": "Ring"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "chaos",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 6 to 8 Chaos Damage to Attack"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 1 to 4 Physical Damage to Attack"
             }
           ]
         },
@@ -146873,7 +146972,9 @@
       "content_type": "unique",
       "source_id": "Bones of Ullr||Lattice Sandals",
       "name": "Bones of Ullr",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "energy_shield",
         "minion",
@@ -146892,6 +146993,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "minion",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "23% increased Reservation Efficiency of Skills which create Undead Minion"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -146912,7 +147026,6 @@
       "source_id": "Brain Rattler||Studded Greatclub",
       "name": "Brain Rattler",
       "candidate_roles": [
-        "setup_control",
         "enabler"
       ],
       "retrieval_terms": [
@@ -146934,19 +147047,6 @@
       },
       "facts": [
         {
-          "relation": "inflicts",
-          "subject": "item",
-          "confidence": "strong",
-          "mechanic": "electrocute",
-          "scope": "outgoing",
-          "evidence": [
-            {
-              "kind": "unique_mod",
-              "value": "All damage with this Weapon causes Electrocute buildup"
-            }
-          ]
-        },
-        {
           "relation": "occupies",
           "subject": "item",
           "confidence": "exact",
@@ -146955,6 +147055,19 @@
             {
               "kind": "unique_slot",
               "value": "Ezomyte Mace"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "lightning",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 1 to 113 Lightning Damage"
             }
           ]
         }
@@ -147258,7 +147371,9 @@
       "content_type": "unique",
       "source_id": "Bronzebeard||Horned Crown",
       "name": "Bronzebeard",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "armour",
         "chill",
@@ -147283,6 +147398,45 @@
       },
       "facts": [
         {
+          "relation": "modifies",
+          "subject": "player",
+          "confidence": "strong",
+          "mechanic": "chill",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "48% reduced Effect of Chill on you"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "player",
+          "confidence": "strong",
+          "mechanic": "ignite",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "37% reduced BuffMagnitude of Ignite on you"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "player",
+          "confidence": "strong",
+          "mechanic": "shock",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "47% reduced BuffEffect of Shock on you"
+            }
+          ]
+        },
+        {
           "relation": "occupies",
           "subject": "item",
           "confidence": "exact",
@@ -147301,7 +147455,9 @@
       "content_type": "unique",
       "source_id": "Brutus' Lead Sprinkler||Morning Star",
       "name": "Brutus' Lead Sprinkler",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "strength",
         "mace"
@@ -147319,6 +147475,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "105% increased Physical Damage"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -147352,7 +147521,9 @@
       "content_type": "unique",
       "source_id": "Brynhand's Mark||Wooden Club",
       "name": "Brynhand's Mark",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "accuracy",
         "physical",
@@ -147382,6 +147553,19 @@
             {
               "kind": "unique_slot",
               "value": "Ezomyte Mace"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 11 to 18 Physical Damage"
             }
           ]
         }
@@ -147661,6 +147845,7 @@
       "source_id": "Call of the Brotherhood||Topaz Ring",
       "name": "Call of the Brotherhood",
       "candidate_roles": [
+        "enabler",
         "recovery"
       ],
       "retrieval_terms": [
@@ -147683,6 +147868,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "freeze",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "24% increased Freeze Buildup"
+            }
+          ]
+        },
         {
           "relation": "modifies",
           "subject": "item",
@@ -147714,7 +147912,9 @@
       "content_type": "unique",
       "source_id": "Candlemaker||Sombre Gloves",
       "name": "Candlemaker",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "cold_resistance",
         "energy_shield",
@@ -147735,6 +147935,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "fire",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "35% increased Fire Damage"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -147862,6 +148075,7 @@
       "source_id": "Cat O' Nine Tails||Utility Belt",
       "name": "Cat O' Nine Tails",
       "candidate_roles": [
+        "enabler",
         "recovery"
       ],
       "retrieval_terms": [
@@ -147919,6 +148133,32 @@
               "value": "29% increased Life Recovery rate"
             }
           ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Gain Physical Thorns damage equal to 8% - 12% of maximum Life"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "thorns",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Gain Physical Thorns damage equal to 8% - 12% of maximum Life"
+            }
+          ]
         }
       ]
     },
@@ -147927,7 +148167,9 @@
       "content_type": "unique",
       "source_id": "Chainsting||Hunting Spear",
       "name": "Chainsting",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "accuracy",
         "all_damage",
@@ -147979,6 +148221,19 @@
           ]
         },
         {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 14 to 24 Physical Damage"
+            }
+          ]
+        },
+        {
           "relation": "requires",
           "subject": "item",
           "confidence": "strong",
@@ -147998,6 +148253,7 @@
       "source_id": "Chernobog's Pillar||Blacksteel Tower Shield",
       "name": "Chernobog's Pillar",
       "candidate_roles": [
+        "enabler",
         "defense"
       ],
       "retrieval_terms": [
@@ -148048,6 +148304,19 @@
         {
           "relation": "provides",
           "subject": "item",
+          "confidence": "strong",
+          "mechanic": "fire",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Gain 1% of damage as Fire damage per 1% ChanceToBlock"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
           "confidence": "exact",
           "mechanic": "granted_skill",
           "evidence": [
@@ -148066,7 +148335,9 @@
       "content_type": "unique",
       "source_id": "Chober Chaber||Leaden Greathammer",
       "name": "Chober Chaber",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "minion",
         "physical",
@@ -148095,6 +148366,19 @@
             {
               "kind": "unique_slot",
               "value": "Mace"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 58 to 108 Physical Damage"
             }
           ]
         }
@@ -148799,6 +149083,7 @@
       "source_id": "Cracklecreep||Ruby Ring",
       "name": "Cracklecreep",
       "candidate_roles": [
+        "enabler",
         "recovery"
       ],
       "retrieval_terms": [
@@ -148820,6 +149105,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "fire",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "25% increased Fire Damage"
+            }
+          ]
+        },
         {
           "relation": "modifies",
           "subject": "item",
@@ -149198,6 +149496,7 @@
       "source_id": "Daevata's Wind||War Spear",
       "name": "Daevata's Wind",
       "candidate_roles": [
+        "enabler",
         "defense"
       ],
       "retrieval_terms": [
@@ -149254,6 +149553,19 @@
               "value": [
                 "Spear Throw"
               ]
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 12 to 25 Physical Damage"
             }
           ]
         }
@@ -150021,6 +150333,7 @@
       "source_id": "Doomfletch||Composite Bow",
       "name": "Doomfletch",
       "candidate_roles": [
+        "enabler",
         "recovery"
       ],
       "retrieval_terms": [
@@ -150065,6 +150378,23 @@
             {
               "kind": "unique_slot",
               "value": "Bow"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 7 to 11 Physical Damage"
+            },
+            {
+              "kind": "unique_mod",
+              "value": "Attack with this Weapon gain 100% of Physical damage as Gain damage of each ElementalDamage"
             }
           ]
         }
@@ -150200,7 +150530,9 @@
       "content_type": "unique",
       "source_id": "Double Vision||Dyad Crossbow",
       "name": "Double Vision",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "cold_surges",
         "critical_hit",
@@ -150244,6 +150576,19 @@
               "value": [
                 "Gemini Surge"
               ]
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 20 to 33 Physical Damage"
             }
           ]
         }
@@ -150443,6 +150788,7 @@
       "source_id": "Duality||Warding Quarterstaff",
       "name": "Duality",
       "candidate_roles": [
+        "enabler",
         "defense"
       ],
       "retrieval_terms": [
@@ -150472,6 +150818,19 @@
             {
               "kind": "unique_mod",
               "value": "Gain 767 Guard for 0.5 seconds per Combo expended when using Skills"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "206% increased Physical Damage"
             }
           ]
         },
@@ -150599,6 +150958,7 @@
       "source_id": "Dusk Vigil||Ashen Staff",
       "name": "Dusk Vigil",
       "candidate_roles": [
+        "enabler",
         "recovery"
       ],
       "retrieval_terms": [
@@ -150639,6 +150999,19 @@
             {
               "kind": "unique_slot",
               "value": "Ezomyte Staff"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "fire",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Gain 43% of Damage as Extra Fire Damage"
             }
           ]
         },
@@ -150774,6 +151147,19 @@
             {
               "kind": "unique_mod",
               "value": "27% increased Mana Regeneration Rate"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "shock",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "24% increased chance to Shock"
             }
           ]
         },
@@ -150977,7 +151363,9 @@
       "content_type": "unique",
       "source_id": "Empire's Grasp||Titan Mitts",
       "name": "Empire's Grasp",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "armour",
         "strength",
@@ -150996,6 +151384,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "17% increased Global Physical Damage"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -151221,6 +151622,7 @@
       "source_id": "Essentia Sanguis||Furtive Wraps",
       "name": "Essentia Sanguis",
       "candidate_roles": [
+        "enabler",
         "recovery"
       ],
       "retrieval_terms": [
@@ -151267,6 +151669,19 @@
             {
               "kind": "unique_mod",
               "value": "LifeLeech is StatConversion to EnergyShieldLeech"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "lightning",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 1 to 30 Lightning damage to Attack"
             }
           ]
         }
@@ -151347,7 +151762,9 @@
       "content_type": "unique",
       "source_id": "Evergrasping Ring||Pearl Ring",
       "name": "Evergrasping Ring",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "ally",
         "presence",
@@ -151375,6 +151792,23 @@
             {
               "kind": "unique_slot",
               "value": "Ring"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "chaos",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Allies in your Presence Gain 21% of Damage as Extra Chaos Damage"
+            },
+            {
+              "kind": "unique_mod",
+              "value": "Enemies in your Presence Gain 12% of Damage as Extra Chaos Damage"
             }
           ]
         }
@@ -151590,6 +152024,7 @@
       "source_id": "Fairgraves' Curse||Artillery Bow",
       "name": "Fairgraves' Curse",
       "candidate_roles": [
+        "enabler",
         "recovery"
       ],
       "retrieval_terms": [
@@ -151614,6 +152049,19 @@
       },
       "facts": [
         {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "ignite",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "16% increased Ignite BuffMagnitude"
+            }
+          ]
+        },
+        {
           "relation": "occupies",
           "subject": "item",
           "confidence": "exact",
@@ -151622,6 +152070,19 @@
             {
               "kind": "unique_slot",
               "value": "Bow"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "fire",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 91 to 126 Fire Damage"
             }
           ]
         },
@@ -152274,12 +152735,38 @@
           "relation": "provides",
           "subject": "item",
           "confidence": "strong",
+          "mechanic": "cold",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 9 to 17 Cold Damage"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
           "mechanic": "freeze",
           "scope": "outgoing",
           "evidence": [
             {
               "kind": "unique_mod",
               "value": "DamageTypes from HitDamage with this Weapon Contributes to Freeze Buildup"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 10 to 18 Physical Damage"
             }
           ]
         }
@@ -152290,7 +152777,9 @@
       "content_type": "unique",
       "source_id": "Fury of the King||Ashbark Talisman",
       "name": "Fury of the King",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "convert",
         "fire",
@@ -152321,6 +152810,19 @@
             {
               "kind": "unique_slot",
               "value": "Talisman"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "fire",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 556 to 653 Fire Damage"
             }
           ]
         },
@@ -153077,6 +153579,7 @@
       "source_id": "Grip of Winter||Firm Bracers",
       "name": "Grip of Winter",
       "candidate_roles": [
+        "enabler",
         "defense"
       ],
       "retrieval_terms": [
@@ -153103,6 +153606,19 @@
       "facts": [
         {
           "relation": "modifies",
+          "subject": "player",
+          "confidence": "strong",
+          "mechanic": "chill",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "22% increased BuffMagnitude of Chill you inflict"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
           "subject": "item",
           "confidence": "strong",
           "mechanic": "evasion",
@@ -153110,6 +153626,19 @@
             {
               "kind": "unique_mod",
               "value": "31% increased Evasion Rating"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "freeze",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "49% increased Freeze Buildup"
             }
           ]
         },
@@ -153124,6 +153653,19 @@
               "value": "Gloves"
             }
           ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "cold",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 5 to 6 Cold damage to Attack"
+            }
+          ]
         }
       ]
     },
@@ -153133,6 +153675,7 @@
       "source_id": "Guiding Palm of the Eye||Shrine Sceptre",
       "name": "Guiding Palm of the Eye",
       "candidate_roles": [
+        "enabler",
         "recovery"
       ],
       "retrieval_terms": [
@@ -153161,6 +153704,19 @@
           "relation": "modifies",
           "subject": "item",
           "confidence": "strong",
+          "mechanic": "cold",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Grants effect of UniqueShrineCold"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
           "mechanic": "life_regeneration",
           "evidence": [
             {
@@ -153178,6 +153734,19 @@
             {
               "kind": "unique_slot",
               "value": "Sceptre"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "cold",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Gain 25% of Damage as Extra Cold Damage"
             }
           ]
         },
@@ -153203,6 +153772,7 @@
       "source_id": "Guiding Palm of the Heart||Shrine Sceptre",
       "name": "Guiding Palm of the Heart",
       "candidate_roles": [
+        "enabler",
         "recovery"
       ],
       "retrieval_terms": [
@@ -153231,6 +153801,19 @@
           "relation": "modifies",
           "subject": "item",
           "confidence": "strong",
+          "mechanic": "fire",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Grants effect of UniqueShrineFire"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
           "mechanic": "life_regeneration",
           "evidence": [
             {
@@ -153248,6 +153831,19 @@
             {
               "kind": "unique_slot",
               "value": "Sceptre"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "fire",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Gain 25% of Damage as Extra Fire Damage"
             }
           ]
         },
@@ -153273,6 +153869,7 @@
       "source_id": "Guiding Palm of the Mind||Shrine Sceptre",
       "name": "Guiding Palm of the Mind",
       "candidate_roles": [
+        "enabler",
         "recovery"
       ],
       "retrieval_terms": [
@@ -153310,6 +153907,19 @@
           ]
         },
         {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "lightning",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Grants effect of UniqueShrineLightning"
+            }
+          ]
+        },
+        {
           "relation": "occupies",
           "subject": "item",
           "confidence": "exact",
@@ -153334,6 +153944,19 @@
               ]
             }
           ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "lightning",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Gain 25% of Damage as Extra Lightning Damage"
+            }
+          ]
         }
       ]
     },
@@ -153342,7 +153965,9 @@
       "content_type": "unique",
       "source_id": "Hand of Wisdom and Action||Spiral Wraps",
       "name": "Hand of Wisdom and Action",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "attack",
         "dexterity",
@@ -153371,6 +153996,19 @@
             {
               "kind": "unique_slot",
               "value": "Gloves"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "lightning",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 1 to 10 Lightning Damage to Attack per 20 Intelligence"
             }
           ]
         }
@@ -153462,7 +154100,9 @@
       "content_type": "unique",
       "source_id": "Heart of the Well||Diamond",
       "name": "Heart of the Well",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "critical_hit_chance",
         "minion",
@@ -153481,6 +154121,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "companion",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "21% increased Damage while your Companion is in your Presence"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -153565,6 +154218,7 @@
       "source_id": "Heatshiver||Velvet Cap",
       "name": "Heatshiver",
       "candidate_roles": [
+        "enabler",
         "defense"
       ],
       "retrieval_terms": [
@@ -153608,6 +154262,45 @@
             {
               "kind": "unique_slot",
               "value": "Helmet"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "chill",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Gain 1% of Cold damage as Extra Fire damage per 1% Chill BuffMagnitude on enemy"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "cold",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Gain 1% of Cold damage as Extra Fire damage per 1% Chill BuffMagnitude on enemy"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "fire",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Gain 1% of Cold damage as Extra Fire damage per 1% Chill BuffMagnitude on enemy"
             }
           ]
         }
@@ -153734,7 +154427,9 @@
       "content_type": "unique",
       "source_id": "Hoghunt||Felled Greatclub",
       "name": "Hoghunt",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "critical_hit",
         "physical",
@@ -153763,6 +154458,19 @@
             {
               "kind": "unique_slot",
               "value": "Ezomyte Mace"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 20 to 23 Physical Damage"
             }
           ]
         }
@@ -153829,6 +154537,7 @@
       "source_id": "Horror's Flight||Engraved Bracers",
       "name": "Horror's Flight",
       "candidate_roles": [
+        "enabler",
         "defense"
       ],
       "retrieval_terms": [
@@ -153879,6 +154588,19 @@
         {
           "relation": "provides",
           "subject": "item",
+          "confidence": "strong",
+          "mechanic": "chaos",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 23 to 35 Chaos Damage to Attack"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
           "confidence": "exact",
           "mechanic": "granted_skill",
           "evidence": [
@@ -153897,7 +154619,9 @@
       "content_type": "unique",
       "source_id": "Hrimnor's Hymn||Oak Greathammer",
       "name": "Hrimnor's Hymn",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "strength",
         "stun",
@@ -153916,6 +154640,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "100% increased Physical Damage"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -153936,6 +154673,7 @@
       "source_id": "Hyrri's Ire||Armoured Vest",
       "name": "Hyrri's Ire",
       "candidate_roles": [
+        "enabler",
         "defense"
       ],
       "retrieval_terms": [
@@ -153972,6 +154710,19 @@
           ]
         },
         {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "freeze",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "25% increased Freeze Duration on Enemies"
+            }
+          ]
+        },
+        {
           "relation": "occupies",
           "subject": "item",
           "confidence": "exact",
@@ -153982,6 +154733,19 @@
               "value": "Body Armour"
             }
           ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "cold",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Gain 15% of Damage as Extra Cold Damage"
+            }
+          ]
         }
       ]
     },
@@ -153990,7 +154754,9 @@
       "content_type": "unique",
       "source_id": "Hysseg's Claw||Familial Talisman",
       "name": "Hysseg's Claw",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "intelligence",
         "minion",
@@ -154010,6 +154776,32 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "minion",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "5% increased Damage per Minion"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "75% increased Physical Damage"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -154085,6 +154877,32 @@
           ]
         },
         {
+          "relation": "modifies",
+          "subject": "player",
+          "confidence": "strong",
+          "mechanic": "chill",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "DamageTypes taken from HitDamage while Poison Contributes to BuffMagnitude of Chill on you"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "player",
+          "confidence": "strong",
+          "mechanic": "poison",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "21% increased BuffMagnitude of Poison you inflict"
+            }
+          ]
+        },
+        {
           "relation": "occupies",
           "subject": "item",
           "confidence": "exact",
@@ -154093,6 +154911,23 @@
             {
               "kind": "unique_slot",
               "value": "Ring"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 1 to 4 Physical Damage to Attack"
+            },
+            {
+              "kind": "unique_mod",
+              "value": "Adds 5 to 13 Physical Damage to Attack"
             }
           ]
         },
@@ -154107,6 +154942,18 @@
               "value": "14% chance to Poison on HitDamage"
             }
           ]
+        },
+        {
+          "relation": "requires",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "poison",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "DamageTypes from HitDamage against Poison targets Contributes to Chill BuffMagnitude"
+            }
+          ]
         }
       ]
     },
@@ -154115,7 +154962,9 @@
       "content_type": "unique",
       "source_id": "Icetomb||Mail Vestments",
       "name": "Icetomb",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "cold_resistance",
         "intelligence",
@@ -154145,6 +154994,32 @@
             {
               "kind": "unique_slot",
               "value": "Body Armour"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "cold",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Gain Cold Thorns equal to 11% of your maximum Mana"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "thorns",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Gain Cold Thorns equal to 11% of your maximum Mana"
             }
           ]
         }
@@ -154696,7 +155571,9 @@
       "content_type": "unique",
       "source_id": "Jarngreipr||Ringmail Gauntlets",
       "name": "Jarngreipr",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "armour",
         "attack",
@@ -154727,6 +155604,19 @@
             {
               "kind": "unique_slot",
               "value": "Gloves"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 2 to 5 Physical Damage to Attack"
             }
           ]
         }
@@ -155365,7 +156255,9 @@
       "content_type": "unique",
       "source_id": "Levinstone||Topaz Ring",
       "name": "Levinstone",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "lightning_resistance",
         "magnitude",
@@ -155385,6 +156277,32 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "shock",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "16% increased chance to Shock"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "player",
+          "confidence": "strong",
+          "mechanic": "shock",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "14% increased BuffMagnitude of Shock you inflict"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -155594,7 +156512,9 @@
       "content_type": "unique",
       "source_id": "Liminal Coil||Twisted Wand",
       "name": "Liminal Coil",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "curse",
         "magnitudes",
@@ -155628,6 +156548,19 @@
         {
           "relation": "provides",
           "subject": "item",
+          "confidence": "strong",
+          "mechanic": "chaos",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Spell Hits Gain 23% of Damage as Extra Chaos Damage per Curse on target"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
           "confidence": "exact",
           "mechanic": "granted_skill",
           "evidence": [
@@ -155638,6 +156571,19 @@
               ]
             }
           ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Spell Hits Gain 27% of Damage as Extra Physical Damage per Curse on target"
+            }
+          ]
         }
       ]
     },
@@ -155646,7 +156592,9 @@
       "content_type": "unique",
       "source_id": "Lioneye's Glare||Heavy Bow",
       "name": "Lioneye's Glare",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "accuracy",
         "attack",
@@ -155668,6 +156616,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "207% increased Physical Damage"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -155725,7 +156686,9 @@
       "content_type": "unique",
       "source_id": "Loreweave||Ornate Ringmail",
       "name": "Loreweave",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "accuracy",
         "attack",
@@ -155761,6 +156724,19 @@
             {
               "kind": "unique_slot",
               "value": "Body Armour"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 1 to 11 Physical Damage to Attack"
             }
           ]
         }
@@ -156044,7 +157020,9 @@
       "content_type": "unique",
       "source_id": "Marohi Erqi||Totemic Greatclub",
       "name": "Marohi Erqi",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "accuracy",
         "crush",
@@ -156065,6 +157043,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "625% increased Physical Damage"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -156217,6 +157208,7 @@
       "source_id": "Matsya||Crescent Quarterstaff",
       "name": "Matsya",
       "candidate_roles": [
+        "enabler",
         "recovery"
       ],
       "retrieval_terms": [
@@ -156260,6 +157252,32 @@
             {
               "kind": "unique_slot",
               "value": "Quarterstaff"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "cold",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 9 to 12 Cold Damage"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "lightning",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 1 to 27 Lightning Damage"
             }
           ]
         }
@@ -156498,7 +157516,9 @@
       "content_type": "unique",
       "source_id": "Ming's Heart||Amethyst Ring",
       "name": "Ming's Heart",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "chaos_resistance",
         "energy_shield",
@@ -156528,6 +157548,19 @@
               "value": "Ring"
             }
           ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "chaos",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Gain 30% of Damage as Extra Chaos Damage"
+            }
+          ]
         }
       ]
     },
@@ -156536,7 +157569,9 @@
       "content_type": "unique",
       "source_id": "Mist Whisper||Makeshift Crossbow",
       "name": "Mist Whisper",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "attack",
         "chill",
@@ -156558,6 +157593,32 @@
       },
       "facts": [
         {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "chill",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "30% increased Chill Duration on Enemies"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "freeze",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "45% increased Freeze Buildup"
+            }
+          ]
+        },
+        {
           "relation": "occupies",
           "subject": "item",
           "confidence": "exact",
@@ -156566,6 +157627,19 @@
             {
               "kind": "unique_slot",
               "value": "Crossbow"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "cold",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 9 to 14 Cold Damage"
             }
           ]
         }
@@ -156670,6 +157744,19 @@
           ]
         },
         {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "poison",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "19% increased Poison Duration"
+            }
+          ]
+        },
+        {
           "relation": "occupies",
           "subject": "item",
           "confidence": "exact",
@@ -156692,6 +157779,19 @@
               "value": [
                 "Bursting Fen Toad"
               ]
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 8 to 17 Physical Damage to Attack"
             }
           ]
         },
@@ -156809,7 +157909,9 @@
       "content_type": "unique",
       "source_id": "Nazir's Judgement||Steelpoint Quarterstaff",
       "name": "Nazir's Judgement",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "accuracy",
         "daze",
@@ -156843,6 +157945,19 @@
               "value": "Quarterstaff"
             }
           ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 30 to 80 Physical Damage"
+            }
+          ]
         }
       ]
     },
@@ -156852,7 +157967,8 @@
       "source_id": "Nebuloch||Execratus Hammer",
       "name": "Nebuloch",
       "candidate_roles": [
-        "payoff"
+        "payoff",
+        "enabler"
       ],
       "retrieval_terms": [
         "attack",
@@ -156896,6 +158012,32 @@
             {
               "kind": "unique_slot",
               "value": "Mace"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "chaos",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 28 to 45 Chaos damage"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 39 to 78 Physical Damage"
             }
           ]
         }
@@ -157215,6 +158357,7 @@
       "source_id": "Northpaw||Suede Bracers",
       "name": "Northpaw",
       "candidate_roles": [
+        "enabler",
         "defense"
       ],
       "retrieval_terms": [
@@ -157259,6 +158402,19 @@
             {
               "kind": "unique_slot",
               "value": "Ezomyte Gloves"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 5 to 9 Physical Damage to Attack"
             }
           ]
         }
@@ -157480,7 +158636,9 @@
       "content_type": "unique",
       "source_id": "Olrovasara||Torment Club",
       "name": "Olrovasara",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "accuracy",
         "hit",
@@ -157509,6 +158667,19 @@
             {
               "kind": "unique_slot",
               "value": "Kalguuran Mace"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "lightning",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 1 to 65 Lightning Damage"
             }
           ]
         }
@@ -157595,7 +158766,9 @@
       "content_type": "unique",
       "source_id": "Painter's Servant||Torn Gloves",
       "name": "Painter's Servant",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "converted",
         "elemental_damage",
@@ -157625,6 +158798,45 @@
               "value": "Gloves"
             }
           ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "cold",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Gain 7% of ElementalDamage as Extra Cold Damage"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "fire",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Gain 6% of ElementalDamage as Extra Fire Damage"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "lightning",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Gain 5% of ElementalDamage as Extra Lightning Damage"
+            }
+          ]
         }
       ]
     },
@@ -157633,7 +158845,9 @@
       "content_type": "unique",
       "source_id": "Palm of the Dreamer||Shrine Sceptre",
       "name": "Palm of the Dreamer",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "ally",
         "attack",
@@ -157656,6 +158870,19 @@
       },
       "facts": [
         {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "chaos",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Grants effect of UniqueShrineChaos"
+            }
+          ]
+        },
+        {
           "relation": "occupies",
           "subject": "item",
           "confidence": "exact",
@@ -157664,6 +158891,19 @@
             {
               "kind": "unique_slot",
               "value": "Sceptre"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "chaos",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Gain 27% of Damage as Extra Chaos Damage"
             }
           ]
         },
@@ -157821,7 +159061,9 @@
       "content_type": "unique",
       "source_id": "Periphery||Heartwood Shortbow",
       "name": "Periphery",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "cold",
         "contributes",
@@ -157846,6 +159088,32 @@
       },
       "facts": [
         {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "freeze",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "ElementalDamage from HitDamage Contributes to Flammability, Ignite, and Chill BuffMagnitude, Freeze Buildup, and Shock Chance"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "shock",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "ElementalDamage from HitDamage Contributes to Flammability, Ignite, and Chill BuffMagnitude, Freeze Buildup, and Shock Chance"
+            }
+          ]
+        },
+        {
           "relation": "occupies",
           "subject": "item",
           "confidence": "exact",
@@ -157860,6 +159128,32 @@
         {
           "relation": "provides",
           "subject": "item",
+          "confidence": "strong",
+          "mechanic": "cold",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 37 to 72 Cold Damage"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "fire",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 59 to 79 Fire Damage"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
           "confidence": "exact",
           "mechanic": "granted_skill",
           "evidence": [
@@ -157868,6 +159162,19 @@
               "value": [
                 "Azmerian Swarms"
               ]
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "lightning",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 8 to 138 Lightning Damage"
             }
           ]
         }
@@ -158001,7 +159308,9 @@
       "content_type": "unique",
       "source_id": "Polcirkeln||Sapphire Ring",
       "name": "Polcirkeln",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "chill",
         "cold_resistance",
@@ -158023,6 +159332,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "cold",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "30% increased Cold Damage"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -158269,7 +159591,9 @@
       "content_type": "unique",
       "source_id": "Prized Pain||Iron Ring",
       "name": "Prized Pain",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "attack",
         "extra",
@@ -158302,6 +159626,19 @@
             {
               "kind": "unique_slot",
               "value": "Ring"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 1 to 4 Physical Damage to Attack"
             }
           ]
         }
@@ -158409,7 +159746,9 @@
       "content_type": "unique",
       "source_id": "Quecholli||Crumbling Maul",
       "name": "Quecholli",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "attribute",
         "critical_damage_bonus",
@@ -158430,6 +159769,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "116% increased Physical Damage"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -158612,7 +159964,9 @@
       "content_type": "unique",
       "source_id": "Rampart Raptor||Tense Crossbow",
       "name": "Rampart Raptor",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "attack",
         "crossbow"
@@ -158630,6 +159984,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "50% increased Physical Damage"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -158689,6 +160056,7 @@
       "source_id": "Rearguard||Blunt Quiver",
       "name": "Rearguard",
       "candidate_roles": [
+        "enabler",
         "defense"
       ],
       "retrieval_terms": [
@@ -158730,6 +160098,19 @@
             {
               "kind": "unique_slot",
               "value": "Vaal Quiver"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 11 to 17 Physical Damage to Attack"
             }
           ]
         }
@@ -158809,7 +160190,9 @@
       "content_type": "unique",
       "source_id": "Redemption||Trarthan Cannon",
       "name": "Redemption",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "cooldown_recovery_rate",
         "critical_damage_bonus",
@@ -158830,6 +160213,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "348% increased Physical Damage"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -159341,6 +160737,7 @@
       "source_id": "Ryslatha's Coil||Ornate Belt",
       "name": "Ryslatha's Coil",
       "candidate_roles": [
+        "enabler",
         "recovery"
       ],
       "retrieval_terms": [
@@ -159359,6 +160756,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "34% more maximum Physical Attack Damage"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -159390,7 +160800,9 @@
       "content_type": "unique",
       "source_id": "Sacred Flame||Shrine Sceptre",
       "name": "Sacred Flame",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "ally",
         "elemental_damage",
@@ -159421,6 +160833,23 @@
             {
               "kind": "unique_slot",
               "value": "Sceptre"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "fire",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Gain 55% of Damage as Extra Fire Damage"
+            },
+            {
+              "kind": "unique_mod",
+              "value": "Allies in your Presence Gain 21% of Damage as Extra Fire Damage"
             }
           ]
         },
@@ -159506,7 +160935,9 @@
       "content_type": "unique",
       "source_id": "Sadist's Mercy||Flanged Mace",
       "name": "Sadist's Mercy",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "critical_hit",
         "gruelling_madness",
@@ -159526,6 +160957,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "278% increased Physical Damage"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -159740,6 +161184,19 @@
         {
           "relation": "provides",
           "subject": "item",
+          "confidence": "strong",
+          "mechanic": "fire",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 39 to 51 Fire Damage"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
           "confidence": "exact",
           "mechanic": "granted_skill",
           "evidence": [
@@ -159748,6 +161205,19 @@
               "value": [
                 "Spear Throw"
               ]
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 24 to 29 Physical Damage"
             }
           ]
         },
@@ -160040,7 +161510,9 @@
       "content_type": "unique",
       "source_id": "Sculpted Suffering||Warpick",
       "name": "Sculpted Suffering",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "armour_break",
         "critical_damage_bonus",
@@ -160070,6 +161542,19 @@
             {
               "kind": "unique_slot",
               "value": "Mace"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 25 to 25 Physical Damage"
             }
           ]
         }
@@ -160161,7 +161646,9 @@
       "content_type": "unique",
       "source_id": "Seeing Stars||Marching Mace",
       "name": "Seeing Stars",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "cold",
         "lightning",
@@ -160191,6 +161678,32 @@
               "value": "Mace"
             }
           ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "cold",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 31 to 46 Cold Damage"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "lightning",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 5 to 83 Lightning Damage"
+            }
+          ]
         }
       ]
     },
@@ -160199,7 +161712,9 @@
       "content_type": "unique",
       "source_id": "Serle's Grit||Kalguuran Forgehammer",
       "name": "Serle's Grit",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "empower",
         "physical",
@@ -160242,6 +161757,19 @@
               "value": [
                 "Runic Tempering"
               ]
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 25 to 38 Physical Damage"
             }
           ]
         }
@@ -160586,7 +162114,9 @@
       "content_type": "unique",
       "source_id": "Shyaba||Temple Maul",
       "name": "Shyaba",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "always_hits",
         "light_radius",
@@ -160606,6 +162136,19 @@
       },
       "facts": [
         {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "89% increased Physical Damage"
+            }
+          ]
+        },
+        {
           "relation": "occupies",
           "subject": "item",
           "confidence": "exact",
@@ -160624,7 +162167,9 @@
       "content_type": "unique",
       "source_id": "Sierran Inheritance||Marabout Garb",
       "name": "Sierran Inheritance",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "all_damage",
         "chill",
@@ -160649,6 +162194,23 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "player",
+          "confidence": "strong",
+          "mechanic": "chill",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "DamageTypes taken from HitDamage Contributes to Magnitude of Chill inflicted on you"
+            },
+            {
+              "kind": "unique_mod",
+              "value": "The Effect of Chill on you is reversed"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -160969,7 +162531,9 @@
       "content_type": "unique",
       "source_id": "Skysliver||Winged Spear",
       "name": "Skysliver",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "damage_type",
         "lightning",
@@ -160989,6 +162553,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "shock",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "54% increased chance to Shock"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -161027,6 +162604,19 @@
               ]
             }
           ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "lightning",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 1 to 93 Lightning Damage"
+            }
+          ]
         }
       ]
     },
@@ -161036,6 +162626,7 @@
       "source_id": "Slivertongue||Zealot Bow",
       "name": "Slivertongue",
       "candidate_roles": [
+        "enabler",
         "recovery"
       ],
       "retrieval_terms": [
@@ -161093,6 +162684,19 @@
               "value": "ManaLeech 5.61% of Physical Damage as Mana"
             }
           ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 48 to 65 Physical Damage"
+            }
+          ]
         }
       ]
     },
@@ -161137,10 +162741,6 @@
             {
               "kind": "unique_mod",
               "value": "27% chance to Poison on HitDamage"
-            },
-            {
-              "kind": "unique_mod",
-              "value": "Targets can be affected by +1 of your Poison at the same time"
             }
           ]
         },
@@ -161388,6 +162988,7 @@
       "name": "Spire of Ire",
       "candidate_roles": [
         "payoff",
+        "enabler",
         "recovery"
       ],
       "retrieval_terms": [
@@ -161432,6 +163033,19 @@
             {
               "kind": "unique_slot",
               "value": "Spear"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "chaos",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 192 to 290 Chaos damage"
             }
           ]
         },
@@ -161521,6 +163135,19 @@
             {
               "kind": "unique_mod",
               "value": "21% chance to cause Bleeding on HitDamage"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "60% increased Physical Damage"
             }
           ]
         },
@@ -161657,6 +163284,19 @@
           ]
         },
         {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 2 to 6 Physical Damage"
+            }
+          ]
+        },
+        {
           "relation": "requires",
           "subject": "item",
           "confidence": "strong",
@@ -161675,7 +163315,9 @@
       "content_type": "unique",
       "source_id": "Splinterheart||Recurve Bow",
       "name": "Splinterheart",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "accuracy",
         "bow"
@@ -161693,6 +163335,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "133% increased Physical Damage"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -162003,7 +163658,9 @@
       "content_type": "unique",
       "source_id": "Surge of the Tide||Lumbering Talisman",
       "name": "Surge of the Tide",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "ancestrally_boosted",
         "shapeshifted",
@@ -162023,6 +163680,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "265% increased Physical Damage"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -162229,7 +163899,9 @@
       "content_type": "unique",
       "source_id": "Tangletongue||Forked Spear",
       "name": "Tangletongue",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "bifurcates_critical_hits",
         "converted",
@@ -162276,6 +163948,19 @@
               ]
             }
           ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 17 to 33 Physical Damage"
+            }
+          ]
         }
       ]
     },
@@ -162284,7 +163969,9 @@
       "content_type": "unique",
       "source_id": "Taryn's Shiver||Gelid Staff",
       "name": "Taryn's Shiver",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "freeze",
         "staff"
@@ -162302,6 +163989,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "freeze",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "30% increased Freeze Buildup"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -162845,6 +164545,19 @@
               "value": "Ezomyte Quarterstaff"
             }
           ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 12 to 16 Physical Damage"
+            }
+          ]
         }
       ]
     },
@@ -163001,7 +164714,9 @@
       "content_type": "unique",
       "source_id": "The Burden of Shadows||Chiming Staff",
       "name": "The Burden of Shadows",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "chaos_damage",
         "converted",
@@ -163029,6 +164744,19 @@
             {
               "kind": "unique_slot",
               "value": "Staff"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "chaos",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Skills gain 1% of Damage as Chaos per 3 Life Cost"
             }
           ]
         },
@@ -163303,6 +165031,7 @@
       "source_id": "The Dark Defiler||Rattling Sceptre",
       "name": "The Dark Defiler",
       "candidate_roles": [
+        "enabler",
         "recovery"
       ],
       "retrieval_terms": [
@@ -163349,6 +165078,19 @@
         {
           "relation": "provides",
           "subject": "item",
+          "confidence": "strong",
+          "mechanic": "chaos",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Gain 5% of Damage as Chaos Damage per Undead Minion"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
           "confidence": "exact",
           "mechanic": "granted_skill",
           "evidence": [
@@ -163357,6 +165099,19 @@
               "value": [
                 "Skeletal Warrior Minion"
               ]
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "minion",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Gain 5% of Damage as Chaos Damage per Undead Minion"
             }
           ]
         }
@@ -163532,6 +165287,19 @@
             {
               "kind": "unique_mod",
               "value": "LifeLeech 10% of Physical Damage as Life"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 35 to 43 Physical Damage"
             }
           ]
         },
@@ -163716,7 +165484,9 @@
       "content_type": "unique",
       "source_id": "The Flesh Poppet||Vicious Talisman",
       "name": "The Flesh Poppet",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "attribute",
         "modifier",
@@ -163736,6 +165506,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "97% increased Physical Damage"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -163859,6 +165642,7 @@
       "source_id": "The Hammer of Faith||Giant Maul",
       "name": "The Hammer of Faith",
       "candidate_roles": [
+        "enabler",
         "recovery"
       ],
       "retrieval_terms": [
@@ -163887,6 +165671,19 @@
             {
               "kind": "unique_mod",
               "value": "50% increased Mana Regeneration Rate"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "326% increased Physical Damage"
             }
           ]
         },
@@ -164095,6 +165892,7 @@
       "source_id": "The Last Lament||Desolate Crossbow",
       "name": "The Last Lament",
       "candidate_roles": [
+        "enabler",
         "recovery"
       ],
       "retrieval_terms": [
@@ -164115,6 +165913,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "277% increased Physical Damage"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -164391,6 +166202,7 @@
       "source_id": "The Ordained||Grand Spear",
       "name": "The Ordained",
       "candidate_roles": [
+        "enabler",
         "recovery"
       ],
       "retrieval_terms": [
@@ -164413,6 +166225,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "235% increased Physical Damage"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -164449,6 +166274,19 @@
             {
               "kind": "unique_mod",
               "value": "LifeLeech recovers based on your Lightning damage as well as Physical damage"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "lightning",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 1 to 336 Lightning Damage"
             }
           ]
         }
@@ -164744,7 +166582,9 @@
       "content_type": "unique",
       "source_id": "The Searing Touch||Pyrophyte Staff",
       "name": "The Searing Touch",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "ignite",
         "magnitude",
@@ -164764,6 +166604,32 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "fire",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "85% increased Fire Damage"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "ignite",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "100% increased Ignite BuffMagnitude"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -164797,7 +166663,9 @@
       "content_type": "unique",
       "source_id": "The Sentry||Gothic Quarterstaff",
       "name": "The Sentry",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "accuracy",
         "fire",
@@ -164841,6 +166709,19 @@
             {
               "kind": "unique_mod",
               "value": "No Physical Damage"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "fire",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 28 to 41 Fire Damage"
             }
           ]
         }
@@ -165093,6 +166974,32 @@
       },
       "facts": [
         {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "chill",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Cold Damage from HitDamage Contributes to Flammability and Ignite BuffMagnitude instead of Chill Magnitude or Freeze Buildup"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "freeze",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Cold Damage from HitDamage Contributes to Flammability and Ignite BuffMagnitude instead of Chill Magnitude or Freeze Buildup"
+            }
+          ]
+        },
+        {
           "relation": "occupies",
           "subject": "item",
           "confidence": "exact",
@@ -165163,7 +167070,9 @@
       "content_type": "unique",
       "source_id": "The Unborn Lich||Ravenous Staff",
       "name": "The Unborn Lich",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "desecrated_modifier",
         "projectile",
@@ -165192,6 +167101,19 @@
             {
               "kind": "unique_slot",
               "value": "Staff"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "chaos",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Gain 82% of Damage as Extra Chaos Damage"
             }
           ]
         },
@@ -165604,7 +167526,9 @@
       "content_type": "unique",
       "source_id": "Thunderfist||Utility Wraps",
       "name": "Thunderfist",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "critical_hit",
         "energy_shield",
@@ -165649,6 +167573,19 @@
               ]
             }
           ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "lightning",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 1 to 83 Lightning Damage to Unarmed Melee Hits"
+            }
+          ]
         }
       ]
     },
@@ -165657,7 +167594,9 @@
       "content_type": "unique",
       "source_id": "Tidebreaker||Pointed Maul",
       "name": "Tidebreaker",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "all_damage",
         "contributes",
@@ -165681,6 +167620,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "129% increased Physical Damage"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -165788,7 +167740,9 @@
       "content_type": "unique",
       "source_id": "Treefingers||Riveted Mitts",
       "name": "Treefingers",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "armour",
         "attack",
@@ -165821,6 +167775,19 @@
               "value": "Gloves"
             }
           ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 7 to 15 Physical Damage to Attack"
+            }
+          ]
         }
       ]
     },
@@ -165829,7 +167796,9 @@
       "content_type": "unique",
       "source_id": "Trenchtimbre||Spiked Club",
       "name": "Trenchtimbre",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "minion",
         "physical",
@@ -165859,6 +167828,19 @@
               "value": "Ezomyte Mace"
             }
           ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 15 to 24 Physical Damage"
+            }
+          ]
         }
       ]
     },
@@ -165867,7 +167849,9 @@
       "content_type": "unique",
       "source_id": "Trephina||Forge Maul",
       "name": "Trephina",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "critical_hit",
         "crush",
@@ -165900,6 +167884,19 @@
               "value": "Mace"
             }
           ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 12 to 22 Physical Damage"
+            }
+          ]
         }
       ]
     },
@@ -165908,7 +167905,9 @@
       "content_type": "unique",
       "source_id": "Twisted Empyrean||Aberrant Sledge",
       "name": "Twisted Empyrean",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "attack",
         "cold",
@@ -165930,6 +167929,19 @@
       },
       "facts": [
         {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "88% increased Physical Damage"
+            }
+          ]
+        },
+        {
           "relation": "occupies",
           "subject": "item",
           "confidence": "exact",
@@ -165938,6 +167950,19 @@
             {
               "kind": "unique_slot",
               "value": "Kalguuran Mace"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "cold",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 170 to 383 Cold Damage"
             }
           ]
         },
@@ -165962,7 +167987,9 @@
       "content_type": "unique",
       "source_id": "Tyranny's Grip||Ironhead Spear",
       "name": "Tyranny's Grip",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "attack",
         "hit",
@@ -165985,6 +168012,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "179% increased Physical Damage"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -166505,6 +168545,19 @@
           ]
         },
         {
+          "relation": "modifies",
+          "subject": "player",
+          "confidence": "strong",
+          "mechanic": "chill",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "DamageTypes taken from HitDamage while Bleeding Contributes to BuffMagnitude of Chill on you"
+            }
+          ]
+        },
+        {
           "relation": "occupies",
           "subject": "item",
           "confidence": "exact",
@@ -166513,6 +168566,23 @@
             {
               "kind": "unique_slot",
               "value": "Ring"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 1 to 4 Physical Damage to Attack"
+            },
+            {
+              "kind": "unique_mod",
+              "value": "Adds 5 to 10 Physical Damage to Attack"
             }
           ]
         },
@@ -166576,7 +168646,9 @@
       "content_type": "unique",
       "source_id": "Vestige of Darkness||Tenebrous Crown",
       "name": "Vestige of Darkness",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "armour",
         "blind",
@@ -166603,6 +168675,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "freeze",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Physical damage from HitDamage Contributes to Chill BuffMagnitude and Freeze"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -166876,7 +168961,9 @@
       "content_type": "unique",
       "source_id": "Voltaxic Rift||Fanatic Bow",
       "name": "Voltaxic Rift",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "contributes",
         "converted",
@@ -166906,6 +168993,19 @@
             {
               "kind": "unique_slot",
               "value": "Bow"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "lightning",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 1 to 406 Lightning Damage"
             }
           ]
         }
@@ -166979,7 +169079,9 @@
       "content_type": "unique",
       "source_id": "Wake of Destruction||Secured Leggings",
       "name": "Wake of Destruction",
-      "candidate_roles": [],
+      "candidate_roles": [
+        "enabler"
+      ],
       "retrieval_terms": [
         "armour",
         "attack",
@@ -167009,6 +169111,19 @@
             {
               "kind": "unique_slot",
               "value": "Boots"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "lightning",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "kind": "unique_mod",
+              "value": "Adds 1 to 47 Lightning damage to Attack"
             }
           ]
         }
