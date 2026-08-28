@@ -657,9 +657,11 @@
 }
 
 /* Stateless Daily / Weekly / Monthly Challenges presentation. */
-.contracts-button{ right:164px; display:grid; place-items:center; padding:0; line-height:1; color:#d85760; border-color:var(--challenge-crimson); text-shadow:0 0 10px var(--challenge-crimson); box-shadow:0 0 15px var(--challenge-crimson-soft); }
-.contracts-button__icon{display:block;font-size:17px;line-height:1;transform:translate(-1px,1px);text-shadow:0 0 3px var(--challenge-crimson);filter:drop-shadow(0 0 2px var(--challenge-crimson));}
-.contracts-button:hover,.contracts-button:focus-visible{ color:#fff; box-shadow:0 0 22px rgba(159,47,55,.65); }
+.contracts-button{right:164px;display:grid;place-items:center;padding:0;border:0;background:transparent;box-shadow:none;line-height:1;}
+.contracts-button__icon{display:block;width:28px;height:28px;object-fit:contain;filter:brightness(0) saturate(100%) invert(29%) sepia(42%) saturate(1642%) hue-rotate(306deg) brightness(104%) contrast(93%) drop-shadow(0 0 3px var(--challenge-crimson)) drop-shadow(0 0 7px var(--challenge-crimson-soft));transition:filter .12s ease,transform .12s ease;}
+.contracts-button:hover,.contracts-button:focus-visible{box-shadow:none;}
+.contracts-button:hover .contracts-button__icon,.contracts-button:focus-visible .contracts-button__icon{filter:brightness(0) saturate(100%) invert(48%) sepia(63%) saturate(947%) hue-rotate(306deg) brightness(103%) contrast(93%) drop-shadow(0 0 4px #d85760) drop-shadow(0 0 10px rgba(159,47,55,.8));transform:scale(1.08);}
+.contracts-button:focus-visible{outline:none;}
 body.contracts-open .asc-art,body.contracts-open .asc-art.show{opacity:.92!important;}
 .contracts-overlay{position:fixed;inset:0;z-index:8000;display:grid;place-items:center;padding:16px;}
 .contracts-overlay[hidden]{display:none;}
