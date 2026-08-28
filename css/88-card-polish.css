@@ -1,5 +1,5 @@
 /* Final card-first polish overrides. Keep these scoped to the primary Build stage
-   so legacy/public card proportions and mobile sizing remain unchanged. */
+   so established card proportions and mobile sizing remain unchanged. */
 
 @media (min-width:601px){
   .primary-build-card-stage{

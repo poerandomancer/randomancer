@@ -1,16 +1,12 @@
-import { APP_VERSION, formatWeaponLine } from './01-meta-and-domready.js';
-import { sharePublicCard } from './publicCardApi.js';
-import { buildPublicBuildCardRequest } from './publicCardBuilders.js';
+import { formatWeaponLine } from './01-meta-and-domready.js';
 import { buildGemDictionary, lookupGem } from './05-tags-and-scorer.js';
 import { getFamilySkillNames, resolveSkillFamily } from './17-skill-family-utils.js';
 import { getClassIconPath } from './ascendancy-visuals.js';
 
 const CARD_PARAM = 'card';
-const SHARED_CARD_PARAM = 'sharedCard';
 const CARD_TYPE_BUILD = 'build';
 const CARD_TYPE_CHALLENGE = 'challenge';
 const CARD_STATE_KEY = 'rm_card_overlay';
-const SHARED_LINK_CACHE_KEY = 'rm_shared_card_links_v1';
 const BUILD_SAVE_STORAGE_KEY = 'randomancer_saved_builds_v1';
 const CHALLENGE_SAVE_STORAGE_KEY = 'randomancer_saved_challenges_v1';
 const SKILL_TOOLTIP_KEYS = new Set(['ACTIVE_SKILL', 'SKILL', 'SUPPORT', 'PERSISTENT_BUFF', 'UNIQUE', 'PASSIVE', 'KEYSTONE', 'SKILL_FAMILY', 'SKILL_FAMILY_2']);
@@ -25,52 +21,6 @@ let closeOverlayTimer = null;
 let flipCleanupTimer = null;
 let uniqueSourceCache = null;
 let uniqueSourcePromise = null;
-let floatingPanelState = {
-  type: '',
-  cardType: '',
-  anchor: null
-};
-const shareUiState = {
-  [CARD_TYPE_BUILD]: { status: 'idle', url: null, errorMessage: null, feedbackMessage: '', feedbackTone: '', key: '' },
-  [CARD_TYPE_CHALLENGE]: { status: 'idle', url: null, errorMessage: null, feedbackMessage: '', feedbackTone: '', key: '' }
-};
-
-function readSharedLinkCache() {
-  try {
-    const raw = JSON.parse(localStorage.getItem(SHARED_LINK_CACHE_KEY) || '{}');
-    return {
-      [CARD_TYPE_BUILD]: raw?.[CARD_TYPE_BUILD] && typeof raw[CARD_TYPE_BUILD] === 'object' ? raw[CARD_TYPE_BUILD] : {},
-      [CARD_TYPE_CHALLENGE]: raw?.[CARD_TYPE_CHALLENGE] && typeof raw[CARD_TYPE_CHALLENGE] === 'object' ? raw[CARD_TYPE_CHALLENGE] : {}
-    };
-  } catch {
-    return { [CARD_TYPE_BUILD]: {}, [CARD_TYPE_CHALLENGE]: {} };
-  }
-}
-
-function writeSharedLinkCache(cache) {
-  try {
-    localStorage.setItem(SHARED_LINK_CACHE_KEY, JSON.stringify({
-      [CARD_TYPE_BUILD]: cache?.[CARD_TYPE_BUILD] || {},
-      [CARD_TYPE_CHALLENGE]: cache?.[CARD_TYPE_CHALLENGE] || {}
-    }));
-  } catch {}
-}
-
-function getCachedShareUrl(cardType, key) {
-  if (!key) return '';
-  const cache = readSharedLinkCache();
-  return String(cache?.[cardType]?.[key] || '');
-}
-
-function setCachedShareUrl(cardType, key, url) {
-  if (!key || !url) return;
-  const cache = readSharedLinkCache();
-  cache[cardType] = cache[cardType] && typeof cache[cardType] === 'object' ? cache[cardType] : {};
-  cache[cardType][key] = String(url);
-  writeSharedLinkCache(cache);
-}
-
-
 function prefersReducedMotion() {
   return window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
 }
@@ -96,7 +46,6 @@ function getOverlayMotionMs(overlay, name, fallback) {
 
 function finalizeOverlayClose(overlay, skipUrl) {
   clearOverlayTimers();
-  closeFloatingPanel();
   overlay.hidden = true;
   overlay.classList.remove('is-open', 'is-closing');
   document.body.classList.remove('card-overlay-open');
@@ -491,14 +440,13 @@ function renderDelimitedNames(values, variant = 'front') {
   return values.map((item, index) => `${index ? '<span class="rc-sep">, </span>' : ''}${renderInteractiveName(item, variant)}`).join('');
 }
 
-function renderActionButton({ action, label, icon, active = false, disabled = false, busy = false }) {
-  return `<button type="button" class="icon-btn card-action-btn${active ? ' is-active' : ''}${busy ? ' is-busy' : ''}" data-card-action="${escapeHtml(action)}" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}" ${disabled ? 'disabled' : ''} ${busy ? 'aria-busy="true"' : ''}><span aria-hidden="true">${icon}</span></button>`;
+function renderActionButton({ action, label, icon, active = false }) {
+  return `<button type="button" class="icon-btn card-action-btn${active ? ' is-active' : ''}" data-card-action="${escapeHtml(action)}" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><span aria-hidden="true">${icon}</span></button>`;
 }
 
-function renderCardHeader(actionsHtml, reactionHtml, title, subtitle) {
+function renderCardHeader(actionsHtml, title, subtitle) {
   return `
     <div class="rc-card__actions">${actionsHtml}</div>
-    ${reactionHtml ? `<div class="rc-card__reactions">${reactionHtml}</div>` : ''}
     <header class="rc-card__hero">
       <h2 class="rc-card__title">${escapeHtml(title || 'Card')}</h2>
       ${subtitle ? `<p class="rc-card__subtitle">${escapeHtml(subtitle)}</p>` : ''}
@@ -506,318 +454,7 @@ function renderCardHeader(actionsHtml, reactionHtml, title, subtitle) {
   `;
 }
 
-function getShareStateKey(type) {
-  if (type === CARD_TYPE_CHALLENGE) {
-    return window.RandomancerEncodeChallengeContract?.(window.CURRENT_CHALLENGE_CONTRACT) || '';
-  }
-  return window.RandomancerEncodeSnapshot?.(window.App?.state?.currentDraw) || '';
-}
-
-function createEmptyShareState(type) {
-  return {
-    status: 'idle',
-    url: null,
-    errorMessage: null,
-    feedbackMessage: '',
-    feedbackTone: '',
-    key: getShareStateKey(type)
-  };
-}
-
-function createZeroReactionCounts() {
-  return { fire: 0, cursed: 0, big_brain: 0, chaotic: 0 };
-}
-
-function normalizeReactionCounts(counts) {
-  const base = createZeroReactionCounts();
-  if (!counts || typeof counts !== 'object') return base;
-  Object.keys(base).forEach((key) => {
-    const value = Number(counts[key]);
-    base[key] = Number.isFinite(value) && value >= 0 ? value : 0;
-  });
-  return base;
-}
-
-function normalizeViewerReaction(value) {
-  return REACTION_TYPES.some((reaction) => reaction.id === value) ? value : null;
-}
-
-function createEmptyReactionState(type, overrides = {}) {
-  return {
-    status: 'idle',
-    slug: '',
-    counts: createZeroReactionCounts(),
-    viewerReaction: null,
-    busy: false,
-    key: getShareStateKey(type),
-    ...overrides
-  };
-}
-
-function getShareUiState(type) {
-  const cardType = type || getCardOverlay()?.dataset.cardType || CARD_TYPE_BUILD;
-  const expectedKey = getShareStateKey(cardType);
-  const current = shareUiState[cardType] || createEmptyShareState(cardType);
-  if (current.key !== expectedKey) {
-    const cachedUrl = getCachedShareUrl(cardType, expectedKey);
-    shareUiState[cardType] = cachedUrl
-      ? { ...createEmptyShareState(cardType), key: expectedKey, status: 'ready', url: cachedUrl }
-      : createEmptyShareState(cardType);
-  }
-  return shareUiState[cardType];
-}
-
-function resetShareUiState(type) {
-  const cardType = type || getCardOverlay()?.dataset.cardType || CARD_TYPE_BUILD;
-  shareUiState[cardType] = createEmptyShareState(cardType);
-}
-
-function setShareUiState(type, next = {}) {
-  const cardType = type || getCardOverlay()?.dataset.cardType || CARD_TYPE_BUILD;
-  const current = getShareUiState(cardType);
-  shareUiState[cardType] = {
-    ...current,
-    ...next,
-    key: next.key || current.key || getShareStateKey(cardType)
-  };
-  if (shareUiState[cardType].status === 'ready' && shareUiState[cardType].url) {
-    setCachedShareUrl(cardType, shareUiState[cardType].key, shareUiState[cardType].url);
-  }
-}
-
-function getSlugFromShareUrl(url) {
-  const raw = String(url || '').trim();
-  if (!raw) return '';
-  const match = raw.match(/\/([bc]-[a-z0-9]{8})(?:$|[/?#])/i);
-  return match ? match[1].toLowerCase() : '';
-}
-
-function getReactionUiState(type, options = {}) {
-  const cardType = type === CARD_TYPE_CHALLENGE ? CARD_TYPE_CHALLENGE : CARD_TYPE_BUILD;
-  const expectedKey = getShareStateKey(cardType);
-  const sharedSlug = String(options.slug || getSlugFromShareUrl(getShareUiState(cardType).url) || '').toLowerCase();
-  const current = reactionUiState[cardType] || createEmptyReactionState(cardType);
-  const keyChanged = current.key !== expectedKey;
-  const slugChanged = sharedSlug !== (current.slug || '');
-  if (slugChanged || (keyChanged && !sharedSlug)) {
-    reactionUiState[cardType] = createEmptyReactionState(cardType, { slug: sharedSlug, status: 'idle' });
-  }
-  return reactionUiState[cardType];
-}
-
-function setReactionUiState(type, next = {}) {
-  const cardType = type === CARD_TYPE_CHALLENGE ? CARD_TYPE_CHALLENGE : CARD_TYPE_BUILD;
-  const current = getReactionUiState(cardType, { slug: next.slug });
-  reactionUiState[cardType] = {
-    ...current,
-    ...next,
-    counts: next.counts ? normalizeReactionCounts(next.counts) : current.counts,
-    viewerReaction: Object.prototype.hasOwnProperty.call(next, 'viewerReaction') ? normalizeViewerReaction(next.viewerReaction) : current.viewerReaction,
-    key: next.key || current.key || getShareStateKey(cardType),
-    slug: (next.slug || current.slug || '').toLowerCase()
-  };
-}
-
-function normalizeReactionsResponse(data, fallbackSlug = '') {
-  const slug = String(data?.slug || fallbackSlug || '').toLowerCase();
-  return {
-    slug,
-    counts: normalizeReactionCounts(data?.counts),
-    viewerReaction: normalizeViewerReaction(data?.viewer_reaction)
-  };
-}
-
-function applyOptimisticReaction(state, reactionType) {
-  const prev = normalizeViewerReaction(state?.viewerReaction);
-  const nextViewerReaction = prev === reactionType ? null : reactionType;
-  const nextCounts = { ...normalizeReactionCounts(state?.counts) };
-  if (prev) nextCounts[prev] = Math.max(0, (nextCounts[prev] || 0) - 1);
-  if (nextViewerReaction) nextCounts[nextViewerReaction] = Math.max(0, (nextCounts[nextViewerReaction] || 0) + 1);
-  return { nextViewerReaction, nextCounts };
-}
-
-function renderShareStatus(type) {
-  return '';
-}
-
-function renderReactionRail(type) {
-  const cardType = type === CARD_TYPE_CHALLENGE ? CARD_TYPE_CHALLENGE : CARD_TYPE_BUILD;
-  const shareState = getShareUiState(cardType);
-  const slug = getSlugFromShareUrl(shareState.url);
-  const reactionState = getReactionUiState(cardType, { slug });
-  const isShared = Boolean(slug);
-  const disabledReason = 'Share to enable reactions';
-  const classes = [
-    'rc-reaction-rail',
-    isShared ? 'is-shared' : 'is-disabled',
-    reactionState.busy ? 'is-busy' : '',
-    reactionState.status === 'loading' ? 'is-loading' : ''
-  ].filter(Boolean).join(' ');
-  const rows = REACTION_TYPES.map((reaction) => {
-    const selected = isShared && reactionState.viewerReaction === reaction.id;
-    const count = reactionState.counts?.[reaction.id] ?? 0;
-    return `
-      <div class="rc-reaction-row${selected ? ' is-selected' : ''}">
-        <span class="rc-reaction-count" aria-live="polite"${isShared ? '' : ' aria-hidden="true"'}>${isShared ? count : ''}</span>
-        <button
-          type="button"
-          class="rc-reaction-btn${selected ? ' is-selected' : ''}"
-          data-card-action="react-card"
-          data-reaction-id="${reaction.id}"
-          data-reaction-disabled="${isShared ? '0' : '1'}"
-          role="radio"
-          aria-checked="${selected ? 'true' : 'false'}"
-          aria-disabled="${isShared ? 'false' : 'true'}"
-          aria-label="${isShared ? `React ${reaction.label}` : `${reaction.label} — ${disabledReason}`}"
-          title="${isShared ? reaction.label : disabledReason}"
-        ><span aria-hidden="true">${reaction.icon}</span></button>
-      </div>
-    `;
-  }).join('');
-
-  return `
-    <div class="${classes}" role="radiogroup" aria-label="Card reactions">
-      ${rows}
-    </div>
-  `;
-}
-
-async function fetchReactionsForCard(type, slug, options = {}) {
-  const cardType = type === CARD_TYPE_CHALLENGE ? CARD_TYPE_CHALLENGE : CARD_TYPE_BUILD;
-  const safeSlug = String(slug || '').trim().toLowerCase();
-  if (!safeSlug) {
-    setReactionUiState(cardType, createEmptyReactionState(cardType));
-    if (!options.skipRender) refreshOpenCardOverlay();
-    return false;
-  }
-  setReactionUiState(cardType, { slug: safeSlug, status: 'loading', busy: false });
-  if (!options.skipRender) refreshOpenCardOverlay();
-  try {
-    const response = await fetchCardReactions(safeSlug);
-    const normalized = normalizeReactionsResponse(response, safeSlug);
-    setReactionUiState(cardType, { slug: normalized.slug, status: 'ready', counts: normalized.counts, viewerReaction: normalized.viewerReaction, busy: false });
-    if (!options.skipRender) refreshOpenCardOverlay();
-    return true;
-  } catch (error) {
-    console.warn('[public-card] reaction fetch failed', error, { cardType, slug: safeSlug });
-    setReactionUiState(cardType, { slug: safeSlug, status: 'error', busy: false });
-    if (!options.skipRender) refreshOpenCardOverlay();
-    return false;
-  }
-}
-
-function setSharedCardSlug(type, slug) {
-  const cardType = type === CARD_TYPE_CHALLENGE ? CARD_TYPE_CHALLENGE : CARD_TYPE_BUILD;
-  const safeSlug = String(slug || '').trim().toLowerCase();
-  const shareUrl = safeSlug ? `https://therandomancer.com/s/${cardType === CARD_TYPE_CHALLENGE ? 'challenge' : 'build'}/${safeSlug}` : null;
-  setShareUiState(cardType, {
-    status: safeSlug ? 'ready' : 'idle',
-    url: shareUrl,
-    errorMessage: null,
-    feedbackMessage: '',
-    feedbackTone: ''
-  });
-  if (!safeSlug) {
-    syncUrlForSharedCardSlug('');
-    setReactionUiState(cardType, createEmptyReactionState(cardType));
-    return;
-  }
-  syncUrlForSharedCardSlug(safeSlug);
-  fetchReactionsForCard(cardType, safeSlug);
-}
-
-async function toggleReactionForCard(type, reactionType) {
-  const cardType = type === CARD_TYPE_CHALLENGE ? CARD_TYPE_CHALLENGE : CARD_TYPE_BUILD;
-  const shareState = getShareUiState(cardType);
-  const slug = getSlugFromShareUrl(shareState.url);
-  if (!slug) {
-    window.RandomancerShowToast?.('Share to enable reactions');
-    return;
-  }
-  const reactionState = getReactionUiState(cardType, { slug });
-  if (reactionState.busy) return;
-  const previousCounts = normalizeReactionCounts(reactionState.counts);
-  const previousViewerReaction = normalizeViewerReaction(reactionState.viewerReaction);
-  const optimistic = applyOptimisticReaction(reactionState, reactionType);
-  setReactionUiState(cardType, {
-    slug,
-    status: 'ready',
-    busy: true,
-    counts: optimistic.nextCounts,
-    viewerReaction: optimistic.nextViewerReaction
-  });
-  refreshOpenCardOverlay();
-  try {
-    const response = await toggleCardReaction(slug, reactionType);
-    const normalized = normalizeReactionsResponse(response, slug);
-    setReactionUiState(cardType, {
-      slug: normalized.slug || slug,
-      status: 'ready',
-      busy: false,
-      counts: normalized.counts,
-      viewerReaction: normalized.viewerReaction
-    });
-  } catch (error) {
-    console.warn('[public-card] reaction update failed', error, { cardType, slug, reactionType });
-    setReactionUiState(cardType, {
-      slug,
-      status: 'error',
-      busy: false,
-      counts: previousCounts,
-      viewerReaction: previousViewerReaction
-    });
-    window.RandomancerShowToast?.('Could not update reaction right now.');
-  }
-  refreshOpenCardOverlay();
-}
-
-async function shareCurrentCard(type, options = {}) {
-  const overlay = getCardOverlay();
-  const cardType = type === CARD_TYPE_CHALLENGE ? CARD_TYPE_CHALLENGE : CARD_TYPE_BUILD;
-  if (!overlay) return false;
-  const currentState = getShareUiState(cardType);
-  if (currentState.status === 'loading') return false;
-
-  if (cardType === CARD_TYPE_CHALLENGE) return false;
-  const body = buildPublicBuildCardRequest(window.App?.state?.currentDraw);
-
-  const missingPayload = !body?.payload?.snapshot?.ascendancy;
-  if (missingPayload) {
-    setShareUiState(cardType, { status: 'error', url: null, errorMessage: 'Open a card before sharing it.', feedbackMessage: '', feedbackTone: '' });
-    return false;
-  }
-
-  setShareUiState(cardType, { status: 'loading', errorMessage: null, feedbackMessage: '', feedbackTone: '' });
-
-  try {
-    const result = await sharePublicCard(body);
-    const shareUrl = result?.share_url || '';
-    if (!shareUrl) throw new Error('Share service did not return a share URL.');
-    setShareUiState(cardType, {
-      status: 'ready',
-      url: shareUrl,
-      errorMessage: null,
-      feedbackMessage: options.silent ? '' : 'Shared link ready.',
-      feedbackTone: 'success'
-    });
-    const sharedSlug = getSlugFromShareUrl(shareUrl);
-    if (sharedSlug) await fetchReactionsForCard(cardType, sharedSlug, { skipRender: true });
-    refreshOpenCardOverlay();
-    return true;
-  } catch (error) {
-    console.error('[public-card] share failed', error, { appVersion: APP_VERSION, cardType });
-    setShareUiState(cardType, {
-      status: 'error',
-      url: null,
-      errorMessage: error?.message || 'Could not share this card right now.',
-      feedbackMessage: '',
-      feedbackTone: ''
-    });
-    return false;
-  }
-}
-
-function renderBuildCard(model, face = 'front', actionsHtml = '', reactionHtml = '', stageClass = '') {
+function renderBuildCard(model, face = 'front', actionsHtml = '', stageClass = '') {
   const isBack = face === 'back';
   const style = model.artPath ? ` style="--card-art:url('${escapeHtml(model.artPath)}')"` : '';
   const flipLabel = isBack ? 'Back of build card. Click to flip to front.' : 'Front of build card. Click to flip to back.';
@@ -827,8 +464,7 @@ function renderBuildCard(model, face = 'front', actionsHtml = '', reactionHtml =
     return `
       <div class="card-stage card-stage--build ${stageClass}">
       <article class="rc-card rc-card--build rc-card--front" data-card-flip-surface="1" tabindex="0" role="button" aria-label="${escapeHtml(flipLabel)}"${style}>
-        ${renderCardHeader(actionsHtml, reactionHtml, model.title, model.subtitle)}
-        ${renderShareStatus(CARD_TYPE_BUILD)}
+        ${renderCardHeader(actionsHtml, model.title, model.subtitle)}
         <div class="rc-card__body rc-card__body--front">
           ${model.frontRows.filter((row) => row.values?.length).map((row) => `
             <section class="rc-print-row">
@@ -847,7 +483,7 @@ function renderBuildCard(model, face = 'front', actionsHtml = '', reactionHtml =
   return `
     <div class="card-stage card-stage--build ${stageClass}">
     <article class="rc-card rc-card--build rc-card--back" data-card-flip-surface="1" tabindex="0" role="button" aria-label="${escapeHtml(flipLabel)}"${style}>
-      ${renderCardHeader(actionsHtml, reactionHtml, model.title, model.subtitle)}
+      ${renderCardHeader(actionsHtml, model.title, model.subtitle)}
       ${renderShareStatus(CARD_TYPE_BUILD)}
       <div class="rc-card__body rc-card__body--back">
         ${model.backSections.filter((section) => section.values?.length).map((section) => `
@@ -878,12 +514,11 @@ function renderChallengeClause(clause) {
   `;
 }
 
-function renderChallengeCard(model, actionsHtml = '', reactionHtml = '', { showShareStatus = true } = {}) {
+function renderChallengeCard(model, actionsHtml = '') {
   return `
     <div class="card-stage">
     <article class="rc-card rc-card--challenge">
-      ${renderCardHeader(actionsHtml, reactionHtml, model.title, model.subtitle)}
-      ${showShareStatus ? renderShareStatus(CARD_TYPE_CHALLENGE) : ''}
+      ${renderCardHeader(actionsHtml, model.title, model.subtitle)}
       <div class="rc-card__body rc-card__body--challenge">
         ${model.clauses?.length ? `<div class="rc-contract">${model.clauses.map(renderChallengeClause).join('')}</div>` : ''}
       </div>
@@ -896,30 +531,10 @@ function getCardOverlay() {
   return document.getElementById('card-overlay');
 }
 
-function getShareUrl(type) {
-  return getShareUiState(type).url || '';
-}
-
-async function copyCurrentCardLink(type) {
-  const text = getShareUrl(type);
-  return text && window.RandomancerCopyTextToClipboard ? window.RandomancerCopyTextToClipboard(text) : false;
-}
-
 function syncUrlForOverlay(type, open) {
   const url = new URL(location.href);
   if (open) url.searchParams.set(CARD_PARAM, type);
   else url.searchParams.delete(CARD_PARAM);
-  history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
-}
-
-function syncUrlForSharedCardSlug(slug) {
-  const safeSlug = String(slug || '').trim().toLowerCase();
-  const url = new URL(location.href);
-  if (safeSlug) url.searchParams.set(SHARED_CARD_PARAM, safeSlug);
-  else url.searchParams.delete(SHARED_CARD_PARAM);
-  if (safeSlug && url.searchParams.get(CARD_PARAM) === safeSlug) {
-    url.searchParams.delete(CARD_PARAM);
-  }
   history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
 }
 
@@ -985,17 +600,8 @@ function renderBuildCardOverlay(face = 'front', options = {}) {
   if (!getUniqueSourceCollection().length && model.backSections.some((section) => section.label === 'Uniques' && section.values?.length)) {
     ensureUniqueSourceCollection().then(() => refreshOpenCardOverlay()).catch(() => {});
   }
-  const shareState = getShareUiState(CARD_TYPE_BUILD);
-  const sharedSlug = getSlugFromShareUrl(shareState.url);
-  const reactionState = getReactionUiState(CARD_TYPE_BUILD, { slug: sharedSlug });
-  if (sharedSlug && (reactionState.status === 'idle' || (reactionState.slug !== sharedSlug && reactionState.status !== 'loading'))) {
-    fetchReactionsForCard(CARD_TYPE_BUILD, sharedSlug, { skipRender: true }).then(() => refreshOpenCardOverlay()).catch(() => {});
-  }
-  const actions = [
-    renderActionButton({ action: 'share-card', label: shareState.status === 'loading' ? 'Sharing card' : 'Share', icon: shareState.status === 'loading' ? '…' : '↗', disabled: shareState.status === 'loading', busy: shareState.status === 'loading' }),
-    renderActionButton({ action: 'save', label: isSavedBuild() ? 'Saved' : 'Save', icon: isSavedBuild() ? '★' : '☆', active: isSavedBuild() })
-  ].join('');
-  setOverlayContent({ type: CARD_TYPE_BUILD, html: renderBuildCard(model, face, actions, '', options.stageClass || ''), face });
+  const actions = renderActionButton({ action: 'save', label: isSavedBuild() ? 'Saved' : 'Save', icon: isSavedBuild() ? '★' : '☆', active: isSavedBuild() });
+  setOverlayContent({ type: CARD_TYPE_BUILD, html: renderBuildCard(model, face, actions, options.stageClass || ''), face });
   return true;
 }
 
@@ -1005,17 +611,8 @@ function renderChallengeCardOverlay() {
     setOverlayContent({ type: CARD_TYPE_CHALLENGE, error: 'Challenge card could not be loaded.', html: '' });
     return false;
   }
-  const shareState = getShareUiState(CARD_TYPE_CHALLENGE);
-  const sharedSlug = getSlugFromShareUrl(shareState.url);
-  const reactionState = getReactionUiState(CARD_TYPE_CHALLENGE, { slug: sharedSlug });
-  if (sharedSlug && (reactionState.status === 'idle' || (reactionState.slug !== sharedSlug && reactionState.status !== 'loading'))) {
-    fetchReactionsForCard(CARD_TYPE_CHALLENGE, sharedSlug, { skipRender: true }).then(() => refreshOpenCardOverlay()).catch(() => {});
-  }
-  const actions = [
-    renderActionButton({ action: 'share-card', label: shareState.status === 'loading' ? 'Sharing card' : 'Share', icon: shareState.status === 'loading' ? '…' : '↗', disabled: shareState.status === 'loading', busy: shareState.status === 'loading' }),
-    renderActionButton({ action: 'save', label: isSavedChallenge() ? 'Saved' : 'Save', icon: isSavedChallenge() ? '★' : '☆', active: isSavedChallenge() })
-  ].join('');
-  setOverlayContent({ type: CARD_TYPE_CHALLENGE, html: renderChallengeCard(model, actions, ''), face: '' });
+  const actions = renderActionButton({ action: 'save', label: isSavedChallenge() ? 'Saved' : 'Save', icon: isSavedChallenge() ? '★' : '☆', active: isSavedChallenge() });
+  setOverlayContent({ type: CARD_TYPE_CHALLENGE, html: renderChallengeCard(model, actions), face: '' });
   return true;
 }
 
@@ -1032,7 +629,7 @@ function openCardOverlay(type, options = {}) {
   lastOpenFocus = document.activeElement;
   if (!options.skipUrl) syncUrlForOverlay(cardType, true);
   try { localStorage.setItem(CARD_STATE_KEY, cardType); } catch {}
-  overlay.querySelector('[data-card-action="share-card"], [data-card-action="save"]')?.focus();
+  overlay.querySelector('[data-card-action="save"]')?.focus();
   return okay;
 }
 
@@ -1057,92 +654,6 @@ function refreshOpenCardOverlay() {
   else renderBuildCardOverlay(overlay.dataset.cardFace || 'front');
 }
 
-function ensureFloatingPanel() {
-  let panel = document.getElementById('summary-floating-panel');
-  if (panel) return panel;
-  panel = document.createElement('div');
-  panel.id = 'summary-floating-panel';
-  panel.className = 'summary-floating-panel';
-  panel.hidden = true;
-  document.body.appendChild(panel);
-  return panel;
-}
-
-function positionFloatingPanel(anchor) {
-  const panel = ensureFloatingPanel();
-  if (!anchor) return;
-  const rect = anchor.getBoundingClientRect();
-  const width = Math.min(320, window.innerWidth - 24);
-  panel.style.width = `${width}px`;
-  const left = Math.min(window.innerWidth - width - 12, Math.max(12, rect.right - width));
-  panel.style.left = `${left}px`;
-  panel.style.top = `${Math.min(window.innerHeight - panel.offsetHeight - 12, rect.bottom + 10)}px`;
-}
-
-function getOverlayShareAnchor(cardType) {
-  const overlay = getCardOverlay();
-  if (!overlay || overlay.hidden) return null;
-  if ((overlay.dataset.cardType || '') !== (cardType || '')) return null;
-  return overlay.querySelector('[data-card-action="share-card"]');
-}
-
-function closeFloatingPanel() {
-  const panel = ensureFloatingPanel();
-  panel.hidden = true;
-  panel.innerHTML = '';
-  floatingPanelState = { type: '', cardType: '', anchor: null };
-}
-
-function renderSharePanel(cardType) {
-  const state = getShareUiState(cardType);
-  const shareBody = state.status === 'loading'
-    ? `<div class="card-share-popover__loading" role="status" aria-live="polite">Creating public share link…</div>`
-    : state.status === 'ready' && state.url
-      ? `<div class="card-share-popover__url">${escapeHtml(state.url)}</div>`
-      : state.status === 'error'
-        ? `<div class="card-share-status is-error" role="status" aria-live="polite">${escapeHtml(state.errorMessage || 'Could not generate a share link right now.')}</div>`
-        : `<div class="card-share-popover__loading" role="status" aria-live="polite">Preparing share link…</div>`;
-  const shareActions = state.status !== 'ready' || !state.url ? '' : `
-    <div class="card-share-popover__actions">
-      <button type="button" class="summary-utility-btn" data-panel-action="copy-link">Copy link</button>
-      <button type="button" class="summary-utility-btn" data-panel-action="open-link">Open link</button>
-      ${navigator.share ? `<button type="button" class="summary-utility-btn" data-panel-action="native-share">Share…</button>` : ''}
-    </div>
-  `;
-  const retryAction = state.status === 'error'
-    ? `<div class="card-share-popover__actions"><button type="button" class="summary-utility-btn" data-panel-action="retry-share">Retry</button></div>`
-    : '';
-  return `
-    <div class="summary-floating-panel__section">
-      <div class="summary-floating-panel__title">Share</div>
-      <p class="card-share-popover__helper">Shared links open this exact card in Randomancer.</p>
-      ${shareBody}
-      ${shareActions}
-      ${retryAction}
-      ${state.feedbackMessage ? `<div class="card-share-status${state.feedbackTone ? ` is-${escapeHtml(state.feedbackTone)}` : ''}" role="status" aria-live="polite">${escapeHtml(state.feedbackMessage)}</div>` : ''}
-    </div>
-  `;
-}
-
-async function openSharePanel(cardType, anchor) {
-  const panel = ensureFloatingPanel();
-  floatingPanelState = { type: 'share', cardType, anchor };
-  panel.innerHTML = renderSharePanel(cardType);
-  panel.hidden = false;
-  positionFloatingPanel(anchor);
-  const state = getShareUiState(cardType);
-  if (state.status === 'idle') {
-    panel.innerHTML = renderSharePanel(cardType);
-    positionFloatingPanel(anchor);
-    await shareCurrentCard(cardType, { silent: true });
-    if (floatingPanelState.type === 'share' && floatingPanelState.cardType === cardType) {
-      floatingPanelState.anchor = getOverlayShareAnchor(cardType) || floatingPanelState.anchor;
-      panel.innerHTML = renderSharePanel(cardType);
-      positionFloatingPanel(floatingPanelState.anchor);
-    }
-  }
-}
-
 function bindCardOverlayUI() {
   const overlay = getCardOverlay();
   if (!overlay || overlay.dataset.bound === '1') return;
@@ -1156,11 +667,6 @@ function bindCardOverlayUI() {
     }
     if (evt.target?.dataset?.close) closeCardOverlay();
     const action = evt.target.closest('[data-card-action]')?.dataset.cardAction;
-    if (action === 'share-card') {
-      openSharePanel(overlay.dataset.cardType, evt.target.closest('[data-card-action]'));
-      return;
-    }
-
     if (action === 'save') {
       if (overlay.dataset.cardType === CARD_TYPE_CHALLENGE) window.RandomancerSaveCurrentChallenge?.();
       else window.RandomancerSaveCurrentBuild?.();
@@ -1187,55 +693,14 @@ function bindCardOverlayUI() {
     if (el.contains(evt.target) || tooltipTarget?.contains?.(evt.target)) return;
     hideCardTooltip();
   });
-  document.addEventListener('pointerdown', (evt) => {
-    const panel = ensureFloatingPanel();
-    if (panel.hidden) return;
-    if (panel.contains(evt.target) || floatingPanelState.anchor?.contains?.(evt.target)) return;
-    closeFloatingPanel();
-  });
   document.addEventListener('keydown', (evt) => {
     if (evt.key === 'Escape' && !ensureFloatingPanel().hidden) {
-      closeFloatingPanel();
-      return;
+          return;
     }
     if (evt.key === 'Escape' && !overlay.hidden) closeCardOverlay();
   });
-  ensureFloatingPanel().addEventListener('click', (evt) => {
-    const action = evt.target.closest('[data-panel-action]')?.dataset.panelAction;
-    if (!action) return;
-    if (action === 'retry-share') {
-      resetShareUiState(floatingPanelState.cardType);
-      ensureFloatingPanel().innerHTML = renderSharePanel(floatingPanelState.cardType);
-      positionFloatingPanel(floatingPanelState.anchor);
-      openSharePanel(floatingPanelState.cardType, floatingPanelState.anchor);
-      return;
-    }
-    if (action === 'copy-link') {
-      copyCurrentCardLink(floatingPanelState.cardType).then((ok) => {
-        setShareUiState(floatingPanelState.cardType, {
-          feedbackMessage: ok ? 'Link copied to clipboard.' : 'Clipboard copy failed. You can still copy the URL manually.',
-          feedbackTone: ok ? 'success' : 'error'
-        });
-        ensureFloatingPanel().innerHTML = renderSharePanel(floatingPanelState.cardType);
-        positionFloatingPanel(floatingPanelState.anchor);
-      });
-      return;
-    }
-    if (action === 'open-link') {
-      const url = getShareUiState(floatingPanelState.cardType).url;
-      if (url) window.open(url, '_blank', 'noopener,noreferrer');
-      return;
-    }
-    if (action === 'native-share') {
-      const url = getShareUiState(floatingPanelState.cardType).url;
-      if (url && navigator.share) navigator.share({ url }).catch(() => {});
-    }
-  });
   window.addEventListener('resize', () => { if (tooltipTarget) requestAnimationFrame(() => positionTooltip(tooltipTarget)); });
   window.addEventListener('scroll', () => { if (tooltipTarget) requestAnimationFrame(() => positionTooltip(tooltipTarget)); }, true);
-  window.addEventListener('resize', () => {
-    if (!ensureFloatingPanel().hidden && floatingPanelState.anchor) positionFloatingPanel(floatingPanelState.anchor);
-  });
 }
 
 function scheduleSummaryRefresh() {
@@ -1275,8 +740,6 @@ document.addEventListener('DOMContentLoaded', () => {
 export {
   CARD_TYPE_BUILD,
   CARD_TYPE_CHALLENGE,
-  shareCurrentCard,
-  openSharePanel,
   deriveBuildCardModel,
   deriveChallengeCardModel,
   attachTooltipHandlers,
@@ -1284,8 +747,6 @@ export {
   openCardOverlay,
   closeCardOverlay,
   refreshOpenCardOverlay,
-  setSharedCardSlug,
-  getShareUrl,
   getViewMode,
   setViewMode,
   toggleViewMode,

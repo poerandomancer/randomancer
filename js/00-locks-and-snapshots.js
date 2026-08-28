@@ -7,14 +7,11 @@ import {
   setSkillsTabsAvailability,
   SUPPORT,
 } from './01-meta-and-domready.js';
-import { fetchPublicCardBySlug } from './publicCardApi.js';
-import { hydrateSharedBuildCard, validatePublicCardRecord } from './publicCardHydration.js';
 import {
   closeCardOverlay,
   getSummaryTextFromSnapshot,
   installSummaryAutoRefresh,
   openCardOverlay,
-  setSharedCardSlug,
   renderSummaryFromSnapshot
 } from './02-summary-view.js';
 import { buildGemDictionary, lookupGem } from './05-tags-and-scorer.js';
@@ -715,45 +712,12 @@ function renderSnapshotToDom(snap){
     try { return JSON.parse(JSON.stringify(value)); } catch { return null; }
   }
 
-  async function openSharedCardBySlug(slug){
-    const safeSlug = String(slug || '').trim().toLowerCase();
-    const slugPattern = /^b-[a-z0-9]{8}$/i;
-    if (!slugPattern.test(safeSlug)) throw new Error('Shared card slug was invalid.');
-
-    const shared = validatePublicCardRecord(await fetchPublicCardBySlug(safeSlug));
-
-    if (typeof window.RandomancerSetMode === 'function') window.RandomancerSetMode('standard');
-    const snapshot = hydrateSharedBuildCard(shared.payload);
-    document.dispatchEvent(new CustomEvent('randomancer:card-restore-start'));
-    if (typeof window.RandomancerRenderBuildSnapshot === 'function') {
-      window.RandomancerRenderBuildSnapshot(snapshot);
-    }
-    setSharedCardSlug('build', shared.slug);
-    openCardOverlay('build', { skipUrl: true });
-    return shared;
-  }
-
   async function autoLoadFromQuery(){
     // Other modules install the primary-card animation controller during the
     // same DOM-ready turn. Let those listeners mount before restoring a URL.
     await new Promise(resolve => requestAnimationFrame(resolve));
     const q = getQueryParams();
-    const slugPattern = /^b-[a-z0-9]{8}$/i;
-    const cardParam = q.get('card');
-    const requestedSharedCard = q.get('sharedCard');
-    const requestedCard = requestedSharedCard || (slugPattern.test(cardParam || '') ? cardParam : '');
-    const requestedOverlay = slugPattern.test(cardParam || '') ? '' : cardParam;
-
-    if (requestedCard && slugPattern.test(requestedCard)) {
-      window.RandomancerShowToast?.('Loading shared card…', 1800);
-      try {
-        await openSharedCardBySlug(requestedCard);
-        return;
-      } catch (error) {
-        console.warn('[public-card] shared restore failed', error);
-        window.RandomancerShowToast?.('Shared card could not be restored.');
-      }
-    }
+    const requestedOverlay = q.get('card');
 
     const challengeCode = q.get('challenge') || q.get('challengeCode');
     if (challengeCode) {
@@ -833,7 +797,6 @@ function renderSnapshotToDom(snap){
     renderSnapshotToDom(canonical);
     return true;
   };
-  window.RandomancerOpenSharedCardBySlug = (slug) => openSharedCardBySlug(slug);
   window.RandomancerUpdateBuildCodeUI = () => {
     const snap = currentSnap();
     const code = encodeSnapshot(snap);

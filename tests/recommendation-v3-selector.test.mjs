@@ -185,11 +185,6 @@ test('SUPPORT_CHAIN can use its full required capacity before one safe optimizer
   }
 });
 
-test('public-card serialization preserves three ordered support roles', () => {
-  const source = fs.readFileSync(new URL('../js/publicCardBuilders.js', import.meta.url), 'utf8');
-  assert.match(source, /support\.assignedRole/);
-  assert.match(source, /\}\)\.slice\(0, 3\)/);
-});
 
 test('bridge audit is compact and contains only native CARRIER cells', () => {
   const native = read('data/enriched/recommendation_native_coverage_v3.json');

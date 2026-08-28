@@ -19,7 +19,6 @@ test('saved primary-card actions render a filled star', () => {
 test('saved and linked card restores arm the standard card animation', () => {
   assert.match(snapshots, /applyChallengeCode[\s\S]*?randomancer:card-restore-start/);
   assert.match(snapshots, /applyBuildCode[\s\S]*?randomancer:card-restore-start/);
-  assert.match(snapshots, /openSharedCardBySlug[\s\S]*?randomancer:card-restore-start/);
   assert.match(snapshots, /autoLoadFromQuery[\s\S]*?requestAnimationFrame/);
   assert.match(stage, /randomancer:card-restore-start'[\s\S]*?armDrawAnimation\(\{ forceFresh: true \}\)/);
 });

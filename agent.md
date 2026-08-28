@@ -45,6 +45,11 @@ Primary Defense uses a topology-aware policy because its six outcomes map direct
 - If explicit user Fates or hard game compatibility remove every in-radius option, use only the nearest remaining legal ring distance rather than failing the roll.
 
 
+## Static application boundary
+
+- Randomancer has no application backend; runtime features remain client-side and static-host compatible.
+- Build and challenge sharing uses encoded client-side URLs, while saved builds and cards stay in browser storage.
+
 ## Key runtime boundaries
 
 - `js/06a-cohesion-selection.js` — shared normalized overlap, weighted probability, and ring-topology selection helpers.
