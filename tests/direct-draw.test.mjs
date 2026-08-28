@@ -12,6 +12,7 @@ const entry = await readFile(new URL('../core-script.js', import.meta.url), 'utf
 const modeSource = await readFile(new URL('../js/16-challenge-mode.js', import.meta.url), 'utf8');
 const primaryStageSource = await readFile(new URL('../js/24-primary-card-stage.js', import.meta.url), 'utf8');
 const controlsCss = await readFile(new URL('../css/20-controls.css', import.meta.url), 'utf8');
+const summaryCss = await readFile(new URL('../css/80-summary.css', import.meta.url), 'utf8');
 
 test('canonical Offense draw always contains exactly one concept', () => {
   for (let index = 0; index < 100; index += 1) {
@@ -121,4 +122,12 @@ test('standard, Challenge, and Codex entry points remain mounted without Legacy'
 
 test('the primary Challenge stage binds the shared interactive tooltip handlers', () => {
   assert.match(primaryStageSource, /attachTooltipHandlers\(stage\.querySelector\(`/);
+});
+
+test('the Contracts cards reuse delegated Challenge entity tooltips above the card stack', () => {
+  assert.match(modeSource, /getElementById\('contracts-overlay'\)/);
+  assert.match(modeSource, /closest\?\.\('\.task-val\.has-tip'\)/);
+  assert.match(modeSource, /SKILL_FAMILY_2/);
+  assert.match(summaryCss, /\.rc-tooltip\{[\s\S]*?z-index:8100/);
+  assert.match(summaryCss, /\.contracts-overlay\{[^}]*z-index:8000/);
 });
