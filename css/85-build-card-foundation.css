@@ -75,6 +75,8 @@
   gap:.75rem clamp(1.5rem, 7%, 3rem);
 }
 .rc-skill-group{
+  display:grid;
+  grid-template-columns:minmax(0, 1fr) auto minmax(0, 1fr);
   flex:0 0 min(12rem, 100%);
   min-width:min(9rem, 100%);
   max-width:100%;
@@ -82,12 +84,15 @@
   overflow-wrap:anywhere;
 }
 .rc-skill-group__skill{
+  grid-column:2;
   font-weight:600;
 }
 .rc-skill-group__supports{
   display:inline-grid;
-  max-width:calc(100% - .55rem);
-  margin:.18rem 0 0 .55rem;
+  grid-column:2 / 4;
+  justify-self:start;
+  max-width:100%;
+  margin:.18rem 0 0;
   padding-left:.85rem;
   text-align:left;
   color:var(--muted);
