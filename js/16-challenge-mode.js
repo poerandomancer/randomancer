@@ -490,10 +490,14 @@ function hideTooltip() {
 
 function initChallengeInlineTooltips() {
   if (__RC_TIP_BOUND) return;
-  __RC_TIP_BOUND = true;
 
-  const host = document.getElementById('challenge-contract-lines');
+  // Keep this delegated binding on the stable overlay. The Contracts renderer
+  // replaces each cadence card's line contents whenever the overlay opens, so
+  // binding the former Challenge Mode list (or an individual card) leaves the
+  // newly rendered labels inert.
+  const host = document.getElementById('contracts-overlay');
   if (!host) return;
+  __RC_TIP_BOUND = true;
 
   const isTipTarget = (evtTarget) => {
     const el = evtTarget?.closest?.('.task-val.has-tip');

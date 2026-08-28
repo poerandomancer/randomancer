@@ -539,7 +539,8 @@
 /* Reused tooltip language from Challenge Mode */
 .rc-tooltip{
   position:fixed;
-  z-index:6000;
+  /* The shared tooltip is portaled to body and must clear the Contracts overlay. */
+  z-index:8100;
   width:min(360px, calc(100vw - 20px));
   padding:.8rem .95rem;
   border-radius:14px;
