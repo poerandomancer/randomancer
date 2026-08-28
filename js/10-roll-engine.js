@@ -105,6 +105,12 @@ function drawBuild(dataWrap, { random = Math.random } = {}) {
 
 window.drawBuild = drawBuild;
 
+// Keep the atmospheric landing lede until the first successful draw, then
+// reclaim its space for the card for the remainder of this page session.
+document.addEventListener('randomancer:draw-complete', () => {
+  document.querySelector('.rc-header')?.classList.add('rc-header--collapsed');
+}, { once: true });
+
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('roll')?.addEventListener('click', async () => {
     const button = document.getElementById('roll'); const status = button?.querySelector('.roll-status');

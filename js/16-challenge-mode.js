@@ -851,6 +851,9 @@ async function handleChallengeDraw({ statusEl }) {
   });
 
   renderChallengeContract(contract);
+  document.dispatchEvent(new CustomEvent('randomancer:draw-complete', {
+    detail: { mode: MODES.CHALLENGE, contract }
+  }));
   if (statusEl) statusEl.textContent = '';
   return true;
 }
