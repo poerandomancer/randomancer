@@ -24,7 +24,7 @@ function buildPoeNinjaUrl(snap, leagueSlug) {
   if (weaponModes.length) params.set('weaponmode', weaponModes.join(','));
 
   const skills = recommendedSkillNames(snap);
-  if (skills.length) params.set('skills', skills.join(','));
+  if (skills.length) params.set('allskills', skills.join(','));
 
   return `https://poe.ninja/poe2/builds/${leagueSlug}?${params.toString()}`;
 }

@@ -72,7 +72,9 @@ test('skill collection handles 0, 1, 2, and 3+ names in deterministic snapshot o
   ];
   for (const [snap, names] of cases) {
     assert.deepEqual(recommendedSkillNames(snap), names);
-    assert.deepEqual(new URL(buildPoeNinjaUrl(snap, 'test-league')).searchParams.get('skills')?.split(',') || [], names);
+    const params = new URL(buildPoeNinjaUrl(snap, 'test-league')).searchParams;
+    assert.deepEqual(params.get('allskills')?.split(',') || [], names);
+    assert.equal(params.has('skills'), false);
   }
 });
 
@@ -86,8 +88,9 @@ test('skills include persistent buffs, discard blanks and duplicates, and exclud
     synergySupports: [{ name: 'Lightning Mastery' }]
   };
   const url = new URL(buildPoeNinjaUrl(snap, 'test-league'));
-  assert.deepEqual(url.searchParams.get('skills').split(','), ['Spark', 'Orb of Storms', 'Herald of Thunder']);
+  assert.deepEqual(url.searchParams.get('allskills').split(','), ['Spark', 'Orb of Storms', 'Herald of Thunder']);
+  assert.equal(url.searchParams.has('skills'), false);
   assert.equal(url.searchParams.get('class'), 'Stormweaver');
   assert.deepEqual(url.searchParams.get('weaponmode').split(','), expected.Wand);
-  for (const support of ['Acceleration', 'Arcane Tempo', 'Lightning Mastery']) assert.ok(!url.searchParams.get('skills').includes(support));
+  for (const support of ['Acceleration', 'Arcane Tempo', 'Lightning Mastery']) assert.ok(!url.searchParams.get('allskills').includes(support));
 });
