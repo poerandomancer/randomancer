@@ -89,7 +89,6 @@
   max-width:calc(100% - .55rem);
   margin:.18rem 0 0 .55rem;
   padding-left:.85rem;
-  border-left:1px solid rgba(212,170,80,.28);
   text-align:left;
   color:var(--muted);
   font-size:.78em;
@@ -104,8 +103,10 @@
 .rc-skill-group__support::before{
   content:"";
   position:absolute;
-  top:.78em;
-  right:calc(100% + .3rem);
+  top:0;
+  left:-.85rem;
   width:.55rem;
-  border-top:1px solid rgba(212,170,80,.28);
+  height:.78em;
+  border-left:1px solid rgba(212,170,80,.28);
+  border-bottom:1px solid rgba(212,170,80,.28);
 }
