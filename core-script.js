@@ -5,7 +5,7 @@
  * Module Map + Public API
  * 1) 01-meta-and-domready: selectors, DOM helpers, onDomReady, shared helpers, smoke check.
  * 2) 00-locks-and-snapshots: snapshots/build codes/saved builds.
- * 3) 02-summary-view: Build Card overlay + public share behavior.
+ * 3) 02-summary-view: local Build and Challenge Card overlays.
  * 4) 03-config-and-schema: Schema/Config/RulesEngine scaffolding.
  * 5) 04-app-state: window.App, bootstrap, and canonical draw state.
  * 6) 05-tags-and-scorer: tag normalization + scorer glue + dictionary builders.
