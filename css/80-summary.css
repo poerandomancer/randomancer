@@ -657,7 +657,7 @@
 
 /* Stateless Daily / Weekly / Monthly Challenges presentation. */
 .contracts-button{ right:164px; color:#d85760; border-color:var(--challenge-crimson); text-shadow:0 0 10px var(--challenge-crimson); box-shadow:0 0 15px var(--challenge-crimson-soft); }
-.contracts-button__icon{width:22px;height:22px;display:block;fill:currentColor;filter:drop-shadow(0 0 5px var(--challenge-crimson));}
+.contracts-button__icon{width:22px;height:22px;display:block;font-size:19px;line-height:22px;text-shadow:0 0 4px var(--challenge-crimson);filter:drop-shadow(0 0 3px var(--challenge-crimson));}
 .contracts-button:hover,.contracts-button:focus-visible{ color:#fff; box-shadow:0 0 22px rgba(159,47,55,.65); }
 body.contracts-open .asc-art,body.contracts-open .asc-art.show{opacity:.92!important;}
 .contracts-overlay{position:fixed;inset:0;z-index:8000;display:grid;place-items:center;padding:16px;}
