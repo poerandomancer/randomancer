@@ -47,6 +47,7 @@ function countChallengeFatesSelections(fates) {
 function updateBindFatesSummary(explicitMode){
   const summaryEl = document.getElementById('bind-fates-summary');
   const clearEl = document.getElementById('bind-fates-clear');
+  const endIconEl = document.getElementById('bind-fates-icon-end');
   const mode = explicitMode || ensureMode();
   const counts = mode === 'challenge'
     ? countChallengeFatesSelections(window.App?.getChallengeFates?.())
@@ -72,6 +73,7 @@ function updateBindFatesSummary(explicitMode){
     }
   }
   if (clearEl) clearEl.hidden = !hasSelections;
+  if (endIconEl) endIconEl.hidden = hasSelections;
 }
 
 function showBindFatesError(msg){
