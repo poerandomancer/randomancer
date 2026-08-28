@@ -690,10 +690,9 @@ body.contracts-open .asc-art,body.contracts-open .asc-art.show{opacity:.92!impor
   .contracts-close{top:2px;right:0}
   .contracts-stack{display:grid;grid-template:44px auto/1fr;align-content:center;justify-items:center;height:calc(96vh - 20px);margin-top:0}
   .contracts-cadence-tabs{position:relative;z-index:7;display:grid;grid-row:1;grid-column:1;grid-template-columns:repeat(3,1fr);width:min(310px,calc(100vw - 52px));border-bottom:1px solid rgba(159,47,55,.42)}
-  .contracts-cadence-tab{min-height:44px;padding:8px 5px 9px;border:1px solid rgba(181,151,87,.32);border-bottom-color:rgba(159,47,55,.28);border-radius:10px 10px 0 0;background:rgba(8,7,8,.72);color:#9d9693;font:600 .72rem/1 Georgia,'Times New Roman',serif;letter-spacing:.13em;text-transform:uppercase;cursor:pointer;transition:color .12s ease,background-color .12s ease,border-color .12s ease,text-shadow .12s ease,box-shadow .12s ease}
-  .contracts-cadence-tab + .contracts-cadence-tab{border-left:0}
-  .contracts-cadence-tab:hover{color:#c5bebe;background:rgba(20,14,15,.86)}
-  .contracts-cadence-tab.is-active{border-color:rgba(200,69,78,.72);color:#e26a72;background:rgba(26,12,14,.94);text-shadow:0 0 8px var(--challenge-crimson);box-shadow:inset 0 2px #c8454e,0 -3px 12px rgba(159,47,55,.3)}
+  .contracts-cadence-tab{min-height:44px;padding:8px 5px 9px;border:0;border-radius:10px 10px 0 0;background:rgba(8,7,8,.9);color:#8f8989;font:600 .72rem/1 Georgia,'Times New Roman',serif;letter-spacing:.13em;text-transform:uppercase;cursor:pointer;transition:color .12s ease,background-color .12s ease,text-shadow .12s ease,box-shadow .12s ease}
+  .contracts-cadence-tab:hover{color:#c5bebe;background:rgba(20,14,15,.96)}
+  .contracts-cadence-tab.is-active{color:#e26a72;background:rgba(26,12,14,.94);text-shadow:0 0 8px var(--challenge-crimson);box-shadow:inset 0 2px #c8454e,0 -3px 12px rgba(159,47,55,.3)}
   .contracts-cadence-tab:focus-visible{position:relative;z-index:1;outline:2px solid #e06a72;outline-offset:2px}
   .contracts-card{position:relative;top:auto;left:auto;grid-row:2;grid-column:1;width:min(330px,calc(100vw - 32px));padding:18px 20px 23px;transform:scale(.985);opacity:0;visibility:hidden;pointer-events:none;animation:none;transition:opacity .12s ease,transform .12s ease,border-color .12s ease,box-shadow .12s ease}
   .contracts-card.is-front{z-index:5;transform:scale(1);opacity:1;visibility:visible;pointer-events:auto}
