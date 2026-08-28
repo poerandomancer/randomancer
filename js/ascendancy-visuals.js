@@ -34,20 +34,20 @@ function getClassIconPath(className, ascendancy) {
 let ambianceRequest = 0;
 let activeLayer = 0;
 
-function updateAscendancyAmbiance(ascendancy) {
-  if (document.body?.dataset.mode === 'challenge') return Promise.resolve(false);
+function transitionAmbianceBackground(path) {
   const request = ++ambianceRequest;
   const host = document.getElementById('asc-art');
-  const path = getAscendancyBackgroundPath(ascendancy);
-  if (!host || !path) {
-    host?.classList.remove('show');
-    return Promise.resolve(false);
+  if (!host) return Promise.resolve(false);
+  if (!path) {
+    host.classList.remove('show');
+    delete host.dataset.ascPath;
+    return Promise.resolve(true);
   }
 
   return new Promise((resolve) => {
     const preload = new Image();
     preload.onload = () => {
-      if (request !== ambianceRequest || document.body?.dataset.mode === 'challenge') return resolve(false);
+      if (request !== ambianceRequest) return resolve(false);
       const layers = host.querySelectorAll('.asc-art__layer');
       const nextLayer = layers[1 - activeLayer];
       const oldLayer = layers[activeLayer];
@@ -68,6 +68,10 @@ function updateAscendancyAmbiance(ascendancy) {
   });
 }
 
+function updateAscendancyAmbiance(ascendancy) {
+  return transitionAmbianceBackground(getAscendancyBackgroundPath(ascendancy));
+}
+
 export {
   ASCENDANCY_BACKGROUND_PATHS,
   ASCENDANCY_BASE_CLASSES,
@@ -75,5 +79,6 @@ export {
   canonicalSlug,
   getAscendancyBackgroundPath,
   getClassIconPath,
+  transitionAmbianceBackground,
   updateAscendancyAmbiance
 };

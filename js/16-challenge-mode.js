@@ -1,6 +1,7 @@
 import { loadChallengeLibrary } from './15-challenge-engine.js';
 import { generateContracts, renewalLabel } from './contracts.js';
 import { getFamilySkillNames, resolveSkillFamily } from './17-skill-family-utils.js';
+import { transitionAmbianceBackground } from './ascendancy-visuals.js';
 
 let CHALLENGE_TEMPLATE_BY_ID = Object.create(null);
 
@@ -644,6 +645,7 @@ let contracts = null;
 let activeCadence = 'daily';
 let restoreFocus = null;
 let renewalTimer = null;
+let previousBackgroundPath = '';
 
 function getMode() {
   try {
@@ -703,11 +705,14 @@ function renderContractCard(card, item) {
 
 function selectContract(cadence, focus = false) {
   activeCadence = cadence;
+  const rearCards = [...document.querySelectorAll('.contracts-card')]
+    .filter(card => card.dataset.cadence !== cadence);
   document.querySelectorAll('.contracts-card').forEach(card => {
     const selected = card.dataset.cadence === cadence;
     card.classList.toggle('is-front', selected);
     card.setAttribute('aria-selected', String(selected));
-    card.style.setProperty('--stack-order', selected ? 3 : (card.dataset.cadence === 'weekly' ? 2 : 1));
+    card.style.setProperty('--stack-order', selected ? 3 : String(rearCards.indexOf(card) + 1));
+    card.style.setProperty('--fan-slot', selected ? 0 : (rearCards.indexOf(card) === 0 ? -1 : 1));
   });
   if (focus) document.querySelector(`.contracts-card[data-cadence="${cadence}"]`)?.focus();
 }
@@ -716,11 +721,16 @@ async function openContracts() {
   const overlay = document.getElementById('contracts-overlay');
   if (!overlay || !overlay.hidden) return;
   restoreFocus = document.activeElement;
+  const backgroundHost = document.getElementById('asc-art');
+  previousBackgroundPath = backgroundHost?.classList.contains('show')
+    ? (backgroundHost.dataset.ascPath || '')
+    : '';
   if (!contracts) contracts = await generateContracts(new Date());
   contracts.forEach(item => renderContractCard(overlay.querySelector(`[data-cadence="${item.period.cadence}"]`), item));
   selectContract('daily');
   overlay.hidden = false;
   document.body.classList.add('contracts-open');
+  transitionAmbianceBackground('/images/challenge-background-blur.webp');
   overlay.querySelector('.contracts-close')?.focus();
   renewalTimer = setInterval(() => contracts.forEach(item => {
     overlay.querySelector(`[data-cadence="${item.period.cadence}"] .contracts-card__renewal`).textContent = renewalLabel(item.period, new Date());
@@ -730,6 +740,7 @@ function closeContracts() {
   const overlay = document.getElementById('contracts-overlay');
   if (!overlay || overlay.hidden) return;
   overlay.hidden = true; document.body.classList.remove('contracts-open');
+  transitionAmbianceBackground(previousBackgroundPath);
   clearInterval(renewalTimer); renewalTimer = null;
   restoreFocus?.focus?.(); restoreFocus = null;
 }
