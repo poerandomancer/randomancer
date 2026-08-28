@@ -317,7 +317,7 @@ function deriveChallengeCardModel(contract) {
   if (!contract) return null;
   return {
     type: CARD_TYPE_CHALLENGE,
-    title: contract.title || 'Challenge Contract',
+    title: contract.title || 'Challenge',
     subtitle: contract.subtitle || '',
     clauses: (contract.tasks || []).map((task) => ({
       label: task.shortLabel || task.role || 'Clause',

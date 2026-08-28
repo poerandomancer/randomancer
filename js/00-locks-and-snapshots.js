@@ -151,7 +151,7 @@ import {
   function challengeSummaryText(contract){
     if (!contract) return '';
     const lines = (contract.tasks || []).map(t => `• ${t.line || ''}`.trim()).filter(Boolean);
-    return [contract.title || 'Challenge Contract', contract.subtitle || '', ...lines].filter(Boolean).join('\n');
+    return [contract.title || 'Challenge', contract.subtitle || '', ...lines].filter(Boolean).join('\n');
   }
 
   function setElText(sel, txt){ const el = document.querySelector(sel); if (el) el.textContent = txt || ''; }
@@ -572,7 +572,7 @@ function renderSnapshotToDom(snap){
     } else {
       const entry = {
         code,
-        name: contract.title || 'Challenge Contract',
+        name: contract.title || 'Challenge',
         meta: contract.subtitle || ''
       };
       const existing = list.filter(e => e.code !== code);
