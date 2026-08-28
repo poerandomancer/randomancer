@@ -105,11 +105,12 @@ function drawBuild(dataWrap, { random = Math.random } = {}) {
 
 window.drawBuild = drawBuild;
 
-// Keep the atmospheric landing lede until the first successful draw, then
-// reclaim its space for the card for the remainder of this page session.
-document.addEventListener('randomancer:draw-complete', () => {
-  document.querySelector('.rc-header')?.classList.add('rc-header--collapsed');
-}, { once: true });
+// Build and Challenge each keep their own landing lede until that mode has
+// completed its first draw. Codex is intentionally never collapsed.
+document.addEventListener('randomancer:draw-complete', (event) => {
+  const mode = event.detail?.mode === 'challenge' ? 'challenge' : 'build';
+  document.querySelector('.rc-header')?.classList.add(`rc-header--${mode}-lede-collapsed`);
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('roll')?.addEventListener('click', async () => {

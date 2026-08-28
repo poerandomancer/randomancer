@@ -16,7 +16,8 @@ header{
   opacity:1;
 }
 
-.rc-header.rc-header--collapsed .app-lede{
+body[data-mode="build"] .rc-header.rc-header--build-lede-collapsed .app-lede,
+body[data-mode="challenge"] .rc-header.rc-header--challenge-lede-collapsed .app-lede{
   max-height:0;
   min-height:0 !important;
   opacity:0;
