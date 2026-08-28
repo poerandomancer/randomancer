@@ -19,6 +19,7 @@ import {
 } from './02-summary-view.js';
 import { buildGemDictionary, lookupGem } from './05-tags-and-scorer.js';
 import { buildBuildContext } from './06-build-context.js';
+import { buildPoeNinjaUrl } from './poe-ninja.js';
 import { applyGemBorderFromReqWeights, grantLine, renderSupportCards } from './07-skills-render.js';
 import { ensureDataPreload } from './08-data-load.js';
 import { renderPassiveRecommendations } from './07-skills-render.js';
@@ -603,77 +604,8 @@ function renderSnapshotToDom(snap){
     btn.setAttribute('title', saved ? 'Saved' : 'Save');
   }
   
-  function normalizeHandedWeaponLabel(label) {
-	  return label
-		.replace(/-/g, " ")                 // One-handed → One handed
-		.replace(/\b\w/g, c => c.toUpperCase()); // → One Handed
-	}
-
-  
-  function normalizePoeNinjaWeaponMode(weapon, offhand) {
-	  const display = formatWeaponLine(weapon, offhand); 
-	  if (!display) return "";
-	
-	  const parts = display
-		.split(/&|\//g)
-		.map(s => s.trim())
-		.filter(Boolean);
-	
-	  // --------------------------------------------------
-	  // SINGLE WEAPON CASE
-	  // --------------------------------------------------
-	  if (parts.length === 1) {
-		return normalizeHandedWeaponLabel(parts[0]);
-	  }
-	
-	  // --------------------------------------------------
-	  // Dual same-weapon case
-	  // --------------------------------------------------
-	  if (
-		parts.length === 2 &&
-		parts[0].toLowerCase() === parts[1].toLowerCase()
-	  ) {
-		return `Dual ${normalizeHandedWeaponLabel(parts[0])}`;
-	  }
-	
-	  // --------------------------------------------------
-	  // Wand / Sceptre special-case
-	  // --------------------------------------------------
-	  const lower = parts.map(p => p.toLowerCase());
-	  const hasWand = lower.includes("wand");
-	  const hasSceptre = lower.includes("sceptre") || lower.includes("scepter");
-	
-	  if (hasWand && hasSceptre) return "Wand / Sceptre";
-	
-	  // --------------------------------------------------
-	  // DEFAULT MIXED-WEAPON CASE
-	  // 🔑 FIX: normalize EACH part before joining
-	  // --------------------------------------------------
-	  const normalizedParts = parts.map(normalizeHandedWeaponLabel);
-	  return normalizedParts.join(" / ");
-	}
-	
 	function buildPoeNinjaUrlFromSnapshot(snap) {
-	  if (!snap) return "";
-	
-	  const base = `https://poe.ninja/poe2/builds/${SUPPORT.league.poeNinjaSlug}`;
-	  const params = new URLSearchParams();
-	
-	  const asc = (snap.ascendancyName || snap.ascendancy || "").trim();
-	  if (asc) params.set("class", asc);
-	
-	  const weaponmode = normalizePoeNinjaWeaponMode(snap.weapon, snap.offhand);
-	  if (weaponmode) params.set("weaponmode", weaponmode);
-	
-	  const skills = Array.isArray(snap.recommendedSkills) ? snap.recommendedSkills : [];
-	  const skillNames = skills
-		.map(s => (s && typeof s === "object" ? s.name : String(s || "")))
-		.filter(Boolean)
-		.slice(0, 2);
-	
-	  if (skillNames.length) params.set("skills", skillNames.join(","));
-	
-	  return `${base}?${params.toString()}`;
+	  return buildPoeNinjaUrl(snap, SUPPORT.league.poeNinjaSlug);
 	}
 
 
