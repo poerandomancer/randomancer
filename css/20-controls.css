@@ -170,15 +170,15 @@ body.challenge-mode .challenge-empty-flavor{
 }
 
 .mode-segmented{
-  /* 3-state "ornate switch" — compact, stylized, mode-tinted */
+  /* Compact two-state ornate switch. */
   --mode-accent: var(--gold);
   --mode-accent-rgb: 200, 168, 107;
   --seg-index: 0;
-  --seg-count: 3;
+  --seg-count: 2;
 
   position: relative;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: stretch;
 
   height: 30px;
@@ -192,16 +192,10 @@ body.challenge-mode .challenge-empty-flavor{
     0 6px 18px rgba(0,0,0,0.30);
 }
 
-body[data-mode="challenge"] .mode-segmented{
-  --mode-accent: #bf4b55;
-  --mode-accent-rgb: 191, 75, 85;
-  --seg-index: 1;
-}
-
 body[data-mode="codex"] .mode-segmented{
   --mode-accent: var(--codex-ember);
   --mode-accent-rgb: var(--codex-ember-rgb, 196, 90, 42);
-  --seg-index: 2;
+  --seg-index: 1;
 }
 
 

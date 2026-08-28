@@ -654,3 +654,25 @@
   .rc-tooltip,
   .rc-tooltip.is-open{ transform: translate(-50%, 0) scale(1); }
 }
+
+/* Stateless Daily / Weekly / Monthly Contracts presentation. */
+.contracts-button{ right:164px; color:#d85760; border-color:var(--challenge-crimson); text-shadow:0 0 10px var(--challenge-crimson); box-shadow:0 0 15px var(--challenge-crimson-soft); }
+.contracts-button:hover,.contracts-button:focus-visible{ color:#fff; box-shadow:0 0 22px rgba(159,47,55,.65); }
+body.contracts-open .asc-art,body.contracts-open .asc-art.show{opacity:.92!important;}
+.contracts-overlay{position:fixed;inset:0;z-index:8000;display:grid;place-items:center;padding:16px;}
+.contracts-overlay[hidden]{display:none;}
+.contracts-backdrop{position:absolute;inset:0;background:rgba(5,4,5,.28);}
+.contracts-dialog{position:relative;width:min(920px,98vw);height:min(720px,94vh);padding:12px 20px;}
+.contracts-head{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:10;}
+.contracts-head h2{margin:0;color:#d85760;letter-spacing:.08em}.contracts-kicker{margin:0;color:#aaa;font-size:.78rem;text-transform:uppercase;letter-spacing:.14em}
+.contracts-close{width:44px;height:44px;border:1px solid var(--challenge-crimson);border-radius:50%;background:rgba(10,8,9,.8);color:#eee;font-size:2rem;line-height:1;cursor:pointer;}
+.contracts-stack{position:relative;height:620px;margin-top:4px;}
+.contracts-card{--stack-order:1;--fan-slot:0;position:absolute;top:8px;left:50%;width:min(360px,calc(100vw - 44px));aspect-ratio:806/1375;height:auto;padding:25px 24px 22px;text-align:left;color:#ddd;font:inherit;border:2px solid rgba(159,47,55,.5);border-radius:28px;cursor:pointer;background:linear-gradient(rgba(8,7,8,.74),rgba(8,7,8,.88)),url('/images/card-texture-back.png') center/cover;box-shadow:0 18px 45px rgba(0,0,0,.65);transform:translateX(calc(-50% + var(--fan-slot) * 235px)) translateY(30px) rotate(calc(var(--fan-slot) * 3deg)) scale(.94);transform-origin:50% 90%;z-index:var(--stack-order);transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;overflow:auto;}
+.contracts-card.is-front{transform:translateX(-50%) translateY(54px) rotate(0) scale(1);z-index:5;border-color:#c8454e;box-shadow:0 18px 50px rgba(0,0,0,.72),0 0 20px rgba(159,47,55,.48);}
+.contracts-card:focus-visible{outline:2px solid #e06a72;outline-offset:3px}
+.contracts-card__cadence{display:block;text-align:center;color:#d85760;text-transform:uppercase;font-weight:700;letter-spacing:.14em;font-size:1rem;line-height:1.1}
+.contracts-card__renewal{display:block;text-align:center;color:#aaa4a2;font-size:.78rem;margin:.25rem 0 1.15rem}
+.contracts-card__title{display:block;text-align:center;color:#eee;font-size:1.4rem;line-height:1.05;margin-bottom:1.2rem}
+.contracts-card__lines{display:block}.contracts-card__lines .summary-row{display:block;margin:0 0 1.1rem;line-height:1.18}.contracts-card__lines .summary-label{color:#d85760;text-transform:uppercase;font-size:.72rem;letter-spacing:.08em}.contracts-card__lines .task-val{color:#e26a72}.contracts-card__lines .has-tip{text-decoration:underline dotted;cursor:help}
+@media(max-width:700px){.contracts-button{display:block!important;right:58px;top:12px}.contracts-dialog{width:100%;height:96vh;padding:6px 0}.contracts-head{padding:0 8px}.contracts-stack{height:calc(96vh - 64px)}.contracts-card{top:40px;width:min(330px,calc(100vw - 32px));padding:23px 20px;transform:translateX(calc(-50% + var(--fan-slot) * 18px)) translateY(calc((var(--stack-order) - 1) * 42px)) scale(.96)}.contracts-card.is-front{transform:translateX(-50%) translateY(104px) scale(1)}}
+@media(prefers-reduced-motion:reduce){.contracts-card{transition:none}}
