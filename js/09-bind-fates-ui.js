@@ -46,16 +46,32 @@ function countChallengeFatesSelections(fates) {
 
 function updateBindFatesSummary(explicitMode){
   const summaryEl = document.getElementById('bind-fates-summary');
+  const clearEl = document.getElementById('bind-fates-clear');
   const mode = explicitMode || ensureMode();
   const counts = mode === 'challenge'
     ? countChallengeFatesSelections(window.App?.getChallengeFates?.())
     : countBindFatesSelections(window.App?.getBindFates ? window.App.getBindFates() : getBindFatesFromApp());
+  const hasOaths = counts.oaths > 0;
+  const hasAbominations = counts.abominations > 0;
+  const hasSelections = hasOaths || hasAbominations;
 
   if (summaryEl) {
-    summaryEl.textContent = (counts.oaths + counts.abominations) > 0
-      ? `${counts.oaths} Oath${counts.oaths === 1 ? '' : 's'} | ${counts.abominations} Abomination${counts.abominations === 1 ? '' : 's'}`
-      : 'No Fates Bound';
+    const oathEl = summaryEl.querySelector('.bind-fates-count--oaths');
+    const separatorEl = summaryEl.querySelector('.bind-fates-count-separator');
+    const abominationEl = summaryEl.querySelector('.bind-fates-count--abominations');
+
+    summaryEl.hidden = !hasSelections;
+    if (oathEl) {
+      oathEl.textContent = hasOaths ? String(counts.oaths) : '';
+      oathEl.hidden = !hasOaths;
+    }
+    if (separatorEl) separatorEl.hidden = !(hasOaths && hasAbominations);
+    if (abominationEl) {
+      abominationEl.textContent = hasAbominations ? String(counts.abominations) : '';
+      abominationEl.hidden = !hasAbominations;
+    }
   }
+  if (clearEl) clearEl.hidden = !hasSelections;
 }
 
 function showBindFatesError(msg){

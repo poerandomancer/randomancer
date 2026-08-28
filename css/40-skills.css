@@ -182,8 +182,8 @@ border-top: 1px dotted var(--gold);
   min-width:0;
   display:flex;
   align-items:center;
-  gap:0.35rem;
-  padding:2px 4px;
+  gap:0.3rem;
+  padding:2px 3px;
   border:0;
   background:transparent;
   color:var(--ink);
@@ -198,10 +198,10 @@ border-top: 1px dotted var(--gold);
   display:flex;
   flex-direction:row;
   align-items:baseline;
-  gap:0.55rem;
+  gap:0.4rem;
   flex:1 1 auto;
   min-width:0;
-  justify-content:space-between; /* label left, counters/summary right */
+  justify-content:space-between;
 }
 
 .bind-fates-label{
@@ -210,20 +210,30 @@ border-top: 1px dotted var(--gold);
   letter-spacing:.04em;
   font-size:0.94rem;
   white-space:nowrap;
+  color:var(--muted);
 }
 
 .bind-fates-summary{
-  font-family:'Cormorant Infant',serif;
-  color:var(--gold);
-  font-size:0.84rem;
-  letter-spacing:.02em;
+  display:inline-flex;
+  align-items:baseline;
+  gap:0.25rem;
+  font-family:inherit;
+  font-size:0.78rem;
+  font-variant-numeric:tabular-nums;
+  font-weight:500;
+  letter-spacing:0;
   white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
   margin-left:auto;
   text-align:right;
-  max-width:min(20rem, 48vw);
 }
+
+.bind-fates-summary[hidden],
+.bind-fates-summary [hidden],
+.bind-fates-clear[hidden]{ display:none; }
+
+.bind-fates-count--oaths{ color:#c8a86b; }
+.bind-fates-count-separator{ color:var(--muted); }
+.bind-fates-count--abominations{ color:#d46a6a; }
 
 .bind-fates-clear{
   appearance:none;
@@ -533,9 +543,9 @@ input:checked
 /* Slightly tighter on very small screens */
 @media (max-width: 480px){
   .bind-fates-row{ width:calc(100% - 1rem); }
-  .bind-fates-text{ gap:0.35rem; }
+  .bind-fates-text{ gap:0.3rem; }
   .bind-fates-label{ font-size:0.9rem; }
-  .bind-fates-summary{ max-width:38vw; font-size:0.8rem; }
+  .bind-fates-summary{ font-size:0.76rem; }
 }
 
 .bind-fates-modal[hidden]{ display:none; }
