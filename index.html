@@ -468,15 +468,20 @@ document.addEventListener('DOMContentLoaded', () => {
   <section class="contracts-dialog" role="dialog" aria-modal="true" aria-label="Challenges">
     <button class="contracts-close" type="button" aria-label="Close Challenges">×</button>
     <div class="contracts-stack" role="tablist" aria-label="Current Challenges">
-      <button class="contracts-card is-front" style="--fan-slot:-1" data-cadence="daily" type="button" role="tab" aria-selected="true">
+      <div class="contracts-cadence-tabs" role="tablist" aria-label="Select challenge cadence">
+        <button class="contracts-cadence-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="daily-contract" data-cadence="daily">Daily</button>
+        <button class="contracts-cadence-tab" type="button" role="tab" aria-selected="false" aria-controls="weekly-contract" data-cadence="weekly">Weekly</button>
+        <button class="contracts-cadence-tab" type="button" role="tab" aria-selected="false" aria-controls="monthly-contract" data-cadence="monthly">Monthly</button>
+      </div>
+      <button id="daily-contract" class="contracts-card is-front" style="--fan-slot:-1" data-cadence="daily" type="button" role="tab" aria-selected="true">
         <span class="contracts-card__cadence">Daily Challenge</span><span class="contracts-card__renewal"></span>
         <strong class="contracts-card__title"></strong><span class="contracts-card__lines challenge-contract-lines"></span>
       </button>
-      <button class="contracts-card" style="--fan-slot:0" data-cadence="weekly" type="button" role="tab" aria-selected="false">
+      <button id="weekly-contract" class="contracts-card" style="--fan-slot:0" data-cadence="weekly" type="button" role="tab" aria-selected="false">
         <span class="contracts-card__cadence">Weekly Challenge</span><span class="contracts-card__renewal"></span>
         <strong class="contracts-card__title"></strong><span class="contracts-card__lines challenge-contract-lines"></span>
       </button>
-      <button class="contracts-card" style="--fan-slot:1" data-cadence="monthly" type="button" role="tab" aria-selected="false">
+      <button id="monthly-contract" class="contracts-card" style="--fan-slot:1" data-cadence="monthly" type="button" role="tab" aria-selected="false">
         <span class="contracts-card__cadence">Monthly Challenge</span><span class="contracts-card__renewal"></span>
         <strong class="contracts-card__title"></strong><span class="contracts-card__lines challenge-contract-lines"></span>
       </button>
