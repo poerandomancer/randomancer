@@ -41,7 +41,8 @@
         "weaponSet": "{WEAPON}"
       }
     },
-    "weight": 7.0
+    "weight": 7.0,
+    "minSeverity": "mild"
   },
   {
     "id": "A5_class_plus_zero_defense",
@@ -84,7 +85,8 @@
         "primaryDefense": "{DEFENSE}"
       }
     },
-    "weight": 7.0
+    "weight": 7.0,
+    "minSeverity": "diabolical"
   },
   {
     "id": "A6_class_weapon_and_zero_defense",
@@ -146,7 +148,8 @@
         "primaryDefense": "{DEFENSE}"
       }
     },
-    "weight": 7.5
+    "weight": 7.5,
+    "minSeverity": "diabolical"
   },
   {
     "id": "A7_class_plus_keystone",
@@ -177,7 +180,8 @@
         "keystone": "{KEYSTONE}"
       }
     },
-    "weight": 7.0
+    "weight": 7.0,
+    "minSeverity": "mild"
   },
   {
     "id": "A8_class_plus_active_skill",
@@ -206,32 +210,8 @@
         "mainSkill": "{ACTIVE_SKILL}"
       }
     },
-    "weight": 6.67
-  },
-  {
-    "id": "A9_shapeshift_forms_only",
-    "role": "anchor",
-    "directive": "mandate",
-    "strength": "hard",
-    "domainTags": [
-      "skill_architecture",
-      "shapeshift",
-      "build_shape"
-    ],
-    "template": "Use only Shapeshift skills. Commit to {FORMS}.",
-    "shortLabel": "Bestial Vow",
-    "slots": {
-      "FORMS": {
-        "picker": "shapeshiftForms"
-      }
-    },
-    "effects": {
-      "locks": {
-        "mainDamageMode": "shapeshiftOnly",
-        "shapeshiftForms": "{FORMS}"
-      }
-    },
-    "weight": 6.0
+    "weight": 6.67,
+    "minSeverity": "cruel"
   },
   {
     "id": "A10_class_plus_skill_family",
@@ -264,7 +244,8 @@
         "mainDamageMode": "skillFamily"
       }
     },
-    "weight": 5.67
+    "weight": 5.67,
+    "minSeverity": "mild"
   },
   {
     "id": "A12_class_skill_family_and_defense",
@@ -309,7 +290,8 @@
         "primaryDefense": "{DEFENSE}"
       }
     },
-    "weight": 3.67
+    "weight": 3.67,
+    "minSeverity": "diabolical"
   },
   {
     "id": "A13_class_plus_unique_granted_skill",
@@ -343,7 +325,8 @@
         "requiredUnique": "{UNIQUE}"
       }
     },
-    "weight": 3.67
+    "weight": 3.67,
+    "minSeverity": "mild"
   },
   {
     "id": "A14_ascendancy_plus_unique_granted_skill",
@@ -354,7 +337,8 @@
       "identity_archetype",
       "unique_item_identity",
       "skill_architecture",
-      "build_shape"
+      "build_shape",
+      "explicit_ascendancy"
     ],
     "template": "Choose {ASCENDANCY}. Rely on {SKILL}, granted by {UNIQUE}.",
     "shortLabel": "Relic Reliance",
@@ -377,7 +361,8 @@
         "requiredUnique": "{UNIQUE}"
       }
     },
-    "weight": 2.0
+    "weight": 2.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "A15_split_discipline",
@@ -414,7 +399,8 @@
         "mainDamageMode": "splitCraftingTypes"
       }
     },
-    "weight": 4.67
+    "weight": 4.67,
+    "minSeverity": "mild"
   },
   {
     "id": "E1_no_charms",
@@ -436,7 +422,8 @@
     "categories": [
       "Gearing"
     ],
-    "weight": 5.67
+    "weight": 5.67,
+    "minSeverity": "mild"
   },
   {
     "id": "E2_no_flasks",
@@ -458,7 +445,8 @@
     "categories": [
       "Gearing"
     ],
-    "weight": 6.0
+    "weight": 6.0,
+    "minSeverity": "diabolical"
   },
   {
     "id": "F1_no_uniques",
@@ -483,7 +471,8 @@
     "categories": [
       "Gearing"
     ],
-    "weight": 5.67
+    "weight": 5.67,
+    "minSeverity": "mild"
   },
   {
     "id": "F3_ironman_normals_only_pickup",
@@ -512,32 +501,8 @@
     "categories": [
       "Gear Rarity"
     ],
-    "weight": 6.0
-  },
-  {
-    "id": "G2_default_weapon_skill_only",
-    "role": "twist",
-    "directive": "constraint",
-    "strength": "hard",
-    "domainTags": [
-      "skill_architecture",
-      "build_shape"
-    ],
-    "template": "Deal damage only with your default weapon attack. Do not use any other damaging active skills.",
-    "shortLabel": "The First Strike",
-    "effects": {
-      "locks": {
-        "mainDamageMode": "defaultWeapon",
-        "skillPolicy": "default_weapon_only"
-      }
-    },
-    "conflictTags": [
-      "skill_policy"
-    ],
-    "categories": [
-      "Skills"
-    ],
-    "weight": 6.0
+    "weight": 6.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "F4_normal_armor_slot",
@@ -566,7 +531,8 @@
     "categories": [
       "Gear Rarity"
     ],
-    "weight": 6.0
+    "weight": 6.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "O1_two_damage_skills_max",
@@ -593,7 +559,8 @@
     "categories": [
       "Skills"
     ],
-    "weight": 6.0
+    "weight": 6.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "O2_one_damage_skill_only",
@@ -620,7 +587,8 @@
     "categories": [
       "Skills"
     ],
-    "weight": 5.67
+    "weight": 5.67,
+    "minSeverity": "diabolical"
   },
   {
     "id": "P1_supports_one_per_skill",
@@ -647,7 +615,8 @@
     "categories": [
       "Skills"
     ],
-    "weight": 6.0
+    "weight": 6.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "P2_supports_three_total",
@@ -674,7 +643,8 @@
     "categories": [
       "Skills"
     ],
-    "weight": 6.0
+    "weight": 6.0,
+    "minSeverity": "diabolical"
   },
   {
     "id": "P3_recommended_supports_only",
@@ -698,7 +668,8 @@
     "categories": [
       "Skills"
     ],
-    "weight": 5.5
+    "weight": 5.5,
+    "minSeverity": "cruel"
   },
   {
     "id": "R1_even_attributes",
@@ -722,7 +693,8 @@
     "categories": [
       "Attributes"
     ],
-    "weight": 6.0
+    "weight": 6.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "S5_zero_element_resist",
@@ -746,7 +718,16 @@
     "categories": [
       "Defensive"
     ],
-    "weight": 6.0
+    "weight": 6.0,
+    "minSeverity": "diabolical",
+    "conflicts": [
+      {
+        "level": "hard",
+        "with": {
+          "domainTag": "explicit_ascendancy"
+        }
+      }
+    ]
   },
   {
     "id": "P4_no_heralds",
@@ -761,7 +742,8 @@
     "categories": [
       "Skills"
     ],
-    "weight": 5.67
+    "weight": 5.67,
+    "minSeverity": "mild"
   },
   {
     "id": "S3_charge_cycle",
@@ -777,7 +759,8 @@
     "categories": [
       "Defensive"
     ],
-    "weight": 5.67
+    "weight": 5.67,
+    "minSeverity": "mild"
   },
   {
     "id": "E5_no_amulet",
@@ -792,7 +775,8 @@
     "categories": [
       "Gearing"
     ],
-    "weight": 6.0
+    "weight": 6.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "E4_no_belt",
@@ -807,7 +791,8 @@
     "categories": [
       "Gearing"
     ],
-    "weight": 5.67
+    "weight": 5.67,
+    "minSeverity": "mild"
   },
   {
     "id": "Q1_no_persistent_buffs",
@@ -828,65 +813,8 @@
     "categories": [
       "Skills"
     ],
-    "weight": 5.67
-  },
-  {
-    "id": "J1_attribute_nodes_only",
-    "role": "twist",
-    "directive": "constraint",
-    "strength": "hard",
-    "domainTags": [
-      "passive_tree_constraint",
-      "attributes"
-    ],
-    "template": "On the passive tree, allocate only {ATTRIBUTE} attribute nodes.",
-    "shortLabel": "Single Virtue",
-    "slots": {
-      "ATTRIBUTE": {
-        "picker": "attribute"
-      }
-    },
-    "conflictTags": [
-      "attribute_constraint"
-    ],
-    "effects": {
-      "limits": {
-        "passivesAttributeOnly": "{ATTRIBUTE}"
-      }
-    },
-    "categories": [
-      "Passive Tree"
-    ],
-    "weight": 6.0
-  },
-  {
-    "id": "SF1_skill_family_damage_only",
-    "role": "twist",
-    "directive": "mandate",
-    "strength": "soft",
-    "domainTags": [
-      "skill_family",
-      "skill_architecture"
-    ],
-    "template": "Use at least one skill from the {SKILL_FAMILY} family.",
-    "shortLabel": "Bloodright",
-    "slots": {
-      "SKILL_FAMILY": {
-        "picker": "skillFamily"
-      }
-    },
-    "conflictTags": [
-      "skill_family_constraint"
-    ],
-    "effects": {
-      "locks": {
-        "skillFamily": "{SKILL_FAMILY}"
-      }
-    },
-    "categories": [
-      "Skills"
-    ],
-    "weight": 5.67
+    "weight": 5.67,
+    "minSeverity": "mild"
   },
   {
     "id": "J2_twin_virtues",
@@ -916,7 +844,8 @@
     "categories": [
       "Attributes"
     ],
-    "weight": 6.0
+    "weight": 6.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "F5_relic_cap",
@@ -940,7 +869,8 @@
     "categories": [
       "Gearing"
     ],
-    "weight": 5.33
+    "weight": 5.33,
+    "minSeverity": "mild"
   },
   {
     "id": "F6_blue_collar",
@@ -978,7 +908,8 @@
     "categories": [
       "Gear Rarity"
     ],
-    "weight": 6.0
+    "weight": 6.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "F7_two_magic_pieces",
@@ -1002,7 +933,8 @@
     "categories": [
       "Gear Rarity"
     ],
-    "weight": 5.33
+    "weight": 5.33,
+    "minSeverity": "mild"
   },
   {
     "id": "F8_unforged_steel",
@@ -1027,7 +959,8 @@
     "categories": [
       "Gear Rarity"
     ],
-    "weight": 6.0
+    "weight": 6.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "F9_rarity_mosaic",
@@ -1052,7 +985,8 @@
     "categories": [
       "Gear Rarity"
     ],
-    "weight": 5.0
+    "weight": 5.0,
+    "minSeverity": "mild"
   },
   {
     "id": "F10_rarity_rainbow",
@@ -1079,7 +1013,8 @@
     "categories": [
       "Gear Rarity"
     ],
-    "weight": 6.0
+    "weight": 6.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "S6_wounded_ward",
@@ -1111,7 +1046,8 @@
     "categories": [
       "Defensive"
     ],
-    "weight": 5.33
+    "weight": 5.33,
+    "minSeverity": "mild"
   },
   {
     "id": "S7_open_wound",
@@ -1143,7 +1079,8 @@
     "categories": [
       "Defensive"
     ],
-    "weight": 6.0
+    "weight": 6.0,
+    "minSeverity": "diabolical"
   },
   {
     "id": "S8_twofold_exposure",
@@ -1187,7 +1124,8 @@
     "categories": [
       "Defensive"
     ],
-    "weight": 6.0
+    "weight": 6.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "S9_capped_by_oath",
@@ -1219,7 +1157,8 @@
     "categories": [
       "Defensive"
     ],
-    "weight": 6.0
+    "weight": 6.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "S10_overcapped_76",
@@ -1243,7 +1182,8 @@
     "categories": [
       "Defensive"
     ],
-    "weight": 5.33
+    "weight": 5.33,
+    "minSeverity": "mild"
   },
   {
     "id": "F11_missing_something",
@@ -1264,7 +1204,8 @@
     "categories": [
       "Gearing"
     ],
-    "weight": 5.0
+    "weight": 5.0,
+    "minSeverity": "diabolical"
   },
   {
     "id": "I3_early_crown",
@@ -1288,7 +1229,8 @@
     "categories": [
       "Passive Tree"
     ],
-    "weight": 5.67
+    "weight": 5.67,
+    "minSeverity": "mild"
   },
   {
     "id": "E6_normal_charms_only",
@@ -1313,7 +1255,8 @@
     "categories": [
       "Gear Rarity"
     ],
-    "weight": 5.33
+    "weight": 5.33,
+    "minSeverity": "mild"
   },
   {
     "id": "E7_normal_flasks_only",
@@ -1338,7 +1281,8 @@
     "categories": [
       "Gear Rarity"
     ],
-    "weight": 5.33
+    "weight": 5.33,
+    "minSeverity": "mild"
   },
   {
     "id": "I4_three_keystones",
@@ -1362,7 +1306,8 @@
     "categories": [
       "Passive Tree"
     ],
-    "weight": 6.0
+    "weight": 6.0,
+    "minSeverity": "diabolical"
   },
   {
     "id": "I5_no_jewels",
@@ -1386,7 +1331,8 @@
     "categories": [
       "Passive Tree"
     ],
-    "weight": 5.33
+    "weight": 5.33,
+    "minSeverity": "mild"
   },
   {
     "id": "F12_magic_armor_slot",
@@ -1415,6 +1361,7 @@
     "categories": [
       "Gear Rarity"
     ],
-    "weight": 6.0
+    "weight": 6.0,
+    "minSeverity": "cruel"
   }
 ]
