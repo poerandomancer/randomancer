@@ -1,4 +1,3 @@
-import { Config, RulesEngine, Schema } from './03-config-and-schema.js';
 import { ensureDataPreload } from './08-data-load.js';
 
 // ===== App API =====
@@ -47,8 +46,6 @@ const App = window.App = (() => {
   const state = {
     DATA:   null,
     GEMS:   null,
-    SKILLS: null,
-    CONFIG: null,
 
     // The only canonical standard Build state.
     currentDraw: canonicalizeDraw(),
@@ -64,33 +61,13 @@ const App = window.App = (() => {
       anchors: { favor: [], ban: [] },
       twistCategories: { favor: [], ban: [] }
     },
-
-    // dev toggle for “single-entry” behavior
-    singleEntryMode: true
   };
 
-    async function bootstrap(){
-		// Reuse the same preload pipeline the UI uses
-		const { core, gems } = await ensureDataPreload();
-	
-		// loadData() stores the merged/enriched dataset on window.DATA
-		const data =
-		  (typeof window !== 'undefined' && window.DATA) ||
-		  core ||
-		  {};
-	
-		// Sanity check against the canonical schema
-		const chk = Schema.validateData(data);
-		if (!chk.ok) {
-		  console.warn("[schema] missing keys:", chk.missing);
-		}
-	
-		// Hydrate App state from the same data the rest of the app uses
-		state.DATA   = data;
-		state.GEMS   = gems;                 // enriched gems returned by loadData()
-		state.SKILLS = data.skills || null;  // raw skills saved by loadData()
-		state.CONFIG = Config.resolve(data);
-	  }
+  async function bootstrap(){
+    const { core, gems } = await ensureDataPreload();
+    state.DATA = window.DATA || core || {};
+    state.GEMS = gems;
+  }
 
   function getBindFates(){
     return state.bindFates;
@@ -128,33 +105,11 @@ const App = window.App = (() => {
   function exposeRuntimeData(){
     try{
       if (typeof window !== 'undefined') {
-        window.DATA = state.DATA; window.SKILL_GEMS = state.GEMS; window.SKILLS = state.SKILLS;
+        window.DATA = state.DATA; window.SKILL_GEMS = state.GEMS;
       }
     }catch(e){ console.warn("exposeRuntimeData failed:", e); }
   }
 
-  // Post-roll validator: thin wrapper over RulesEngine.enforce
-  function validateAndFix(config){
-    // Prefer an explicit config, then App.state.CONFIG, then a fresh resolve
-    const cfg =
-      config ||
-      state.CONFIG ||
-      (state.DATA ? Config.resolve(state.DATA) : null);
-
-    if (!cfg || !cfg.rules) return;
-
-    try {
-      // Single canonical validation path
-      RulesEngine.enforce(cfg, 25);
-    } catch (e) {
-      console.warn('[validateAndFix] error during enforcement', e);
-    }
-  }
-  
-  // Expose validator for v0.7.5 scaffolding and other callers
-  if (typeof window !== 'undefined') {
-    window.validateAndFix = validateAndFix;
-  }
 
   function replaceCurrentDraw(nextSnapshot){
     try {
@@ -176,8 +131,7 @@ const App = window.App = (() => {
     setBindFatesCategory,
     getChallengeFates,
     setChallengeFatesCategory,
-    setChallengeFates,
-    modules: { Config, RulesEngine }
+    setChallengeFates
   };
 })();
 
@@ -186,7 +140,6 @@ function getBindFatesFromApp(){
   return (App && App.state && App.state.bindFates) || {
     ascendancy: { oaths: [], abominations: [] },
     weapon:     { oaths: [], abominations: [] },
-    defensiveStrategy: { oaths: [], abominations: [] },
     combat:     { oaths: [], abominations: [] }
   };
 }

@@ -14,7 +14,7 @@ import {
   openCardOverlay,
   renderSummaryFromSnapshot
 } from './02-summary-view.js';
-import { buildGemDictionary, lookupGem } from './05-tags-and-scorer.js';
+import { buildGemDictionary, lookupGem } from './gem-utils.js';
 import { buildBuildContext } from './06-build-context.js';
 import { buildPoeNinjaUrl } from './poe-ninja.js';
 import { applyGemBorderFromReqWeights, grantLine, renderSupportCards } from './07-skills-render.js';
