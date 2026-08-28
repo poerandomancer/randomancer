@@ -716,7 +716,13 @@ function selectContract(cadence, focus = false) {
     card.setAttribute('aria-selected', String(selected));
     card.style.setProperty('--stack-order', selected ? 3 : 1);
   });
-  if (focus) document.querySelector(`.contracts-card[data-cadence="${cadence}"]`)?.focus();
+  document.querySelectorAll('.contracts-cadence-tab').forEach(tab => {
+    const selected = tab.dataset.cadence === cadence;
+    tab.classList.toggle('is-active', selected);
+    tab.setAttribute('aria-selected', String(selected));
+    tab.tabIndex = selected ? 0 : -1;
+  });
+  if (focus) document.querySelector(`.contracts-cadence-tab[data-cadence="${cadence}"]`)?.focus();
 }
 
 async function openContracts() {
@@ -730,14 +736,14 @@ async function openContracts() {
     ? (backgroundHost.dataset.ascPath || '')
     : '';
   if (!contracts) contracts = await generateContracts(new Date());
-  contracts.forEach(item => renderContractCard(overlay.querySelector(`[data-cadence="${item.period.cadence}"]`), item));
+  contracts.forEach(item => renderContractCard(overlay.querySelector(`.contracts-card[data-cadence="${item.period.cadence}"]`), item));
   selectContract('daily');
   overlay.hidden = false;
   document.body.classList.add('contracts-open');
   transitionAmbianceBackground('/images/challenge-background-blur.webp');
   overlay.querySelector('.contracts-close')?.focus();
   renewalTimer = setInterval(() => contracts.forEach(item => {
-    overlay.querySelector(`[data-cadence="${item.period.cadence}"] .contracts-card__renewal`).textContent = renewalLabel(item.period, new Date());
+    overlay.querySelector(`.contracts-card[data-cadence="${item.period.cadence}"] .contracts-card__renewal`).textContent = renewalLabel(item.period, new Date());
   }), 60000);
 }
 function closeContracts() {
@@ -770,6 +776,17 @@ async function init() {
   document.querySelector('.contracts-close')?.addEventListener('click', closeContracts);
   document.querySelector('.contracts-backdrop')?.addEventListener('click', closeContracts);
   document.querySelectorAll('.contracts-card').forEach(card => card.addEventListener('click', () => selectContract(card.dataset.cadence)));
+  document.querySelectorAll('.contracts-cadence-tab').forEach(tab => tab.addEventListener('click', () => selectContract(tab.dataset.cadence, true)));
+  document.querySelector('.contracts-cadence-tabs')?.addEventListener('keydown', e => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+    e.preventDefault();
+    const cadences = ['daily', 'weekly', 'monthly'];
+    let index = cadences.indexOf(activeCadence);
+    if (e.key === 'Home') index = 0;
+    else if (e.key === 'End') index = cadences.length - 1;
+    else index = (index + (e.key === 'ArrowRight' ? 1 : -1) + cadences.length) % cadences.length;
+    selectContract(cadences[index], true);
+  });
   document.addEventListener('keydown', e => {
     const overlay = document.getElementById('contracts-overlay');
     if (!overlay || overlay.hidden) return;
