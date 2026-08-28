@@ -63,7 +63,9 @@
   <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
-  <button id="contracts-button" class="rm-info-fab contracts-button" type="button" aria-label="Contracts" title="Contracts">☠</button>
+  <button id="contracts-button" class="rm-info-fab contracts-button" type="button" aria-label="Challenges" title="Challenges">
+    <svg class="contracts-button__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a8 8 0 0 0-8 8v3.1c0 1.5.8 2.8 2 3.5V20h4v-3h4v3h4v-3.4c1.2-.7 2-2 2-3.5V10a8 8 0 0 0-8-8Zm-3 11.5a2 2 0 1 1 0-4 2 2 0 0 1 0 4Zm6 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4ZM10.5 16l1.5-2 1.5 2h-3Z"/></svg>
+  </button>
   <button id="saved-fab" class="rm-info-fab saved-fab" aria-label="View Saved Builds" title="View Saved Builds">★</button>
   <button id="feedback-fab" class="rm-info-fab feedback-fab" aria-label="Provide Feedback" title="Provide Feedback" data-feedback-url="https://docs.google.com/forms/d/e/1FAIpQLSdYYeGkQhoIEDjRF4wpyItAqxcGgAK24JfAyA6XeAfTQz-AbA/viewform?usp=dialog">✉</button>
   <button id="info-fab" class="rm-info-fab" aria-label="About this tool" title="About">?</button>
@@ -463,22 +465,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <div id="contracts-overlay" class="contracts-overlay" hidden>
   <div class="contracts-backdrop" aria-hidden="true"></div>
-  <section class="contracts-dialog" role="dialog" aria-modal="true" aria-labelledby="contracts-title">
-    <header class="contracts-head">
-      <div><p class="contracts-kicker">Wraeclast's posted terms</p><h2 id="contracts-title">Contracts</h2></div>
-      <button class="contracts-close" type="button" aria-label="Close Contracts">×</button>
-    </header>
-    <div class="contracts-stack" role="tablist" aria-label="Current Contracts">
-      <button class="contracts-card is-front" data-cadence="daily" type="button" role="tab" aria-selected="true">
-        <span class="contracts-card__cadence">Daily Contract</span><span class="contracts-card__renewal"></span>
+  <section class="contracts-dialog" role="dialog" aria-modal="true" aria-label="Challenges">
+    <button class="contracts-close" type="button" aria-label="Close Challenges">×</button>
+    <div class="contracts-stack" role="tablist" aria-label="Current Challenges">
+      <button class="contracts-card is-front" style="--fan-slot:-1" data-cadence="daily" type="button" role="tab" aria-selected="true">
+        <span class="contracts-card__cadence">Daily Challenge</span><span class="contracts-card__renewal"></span>
         <strong class="contracts-card__title"></strong><span class="contracts-card__lines challenge-contract-lines"></span>
       </button>
-      <button class="contracts-card" data-cadence="weekly" type="button" role="tab" aria-selected="false">
-        <span class="contracts-card__cadence">Weekly Contract</span><span class="contracts-card__renewal"></span>
+      <button class="contracts-card" style="--fan-slot:0" data-cadence="weekly" type="button" role="tab" aria-selected="false">
+        <span class="contracts-card__cadence">Weekly Challenge</span><span class="contracts-card__renewal"></span>
         <strong class="contracts-card__title"></strong><span class="contracts-card__lines challenge-contract-lines"></span>
       </button>
-      <button class="contracts-card" data-cadence="monthly" type="button" role="tab" aria-selected="false">
-        <span class="contracts-card__cadence">Monthly Contract</span><span class="contracts-card__renewal"></span>
+      <button class="contracts-card" style="--fan-slot:1" data-cadence="monthly" type="button" role="tab" aria-selected="false">
+        <span class="contracts-card__cadence">Monthly Challenge</span><span class="contracts-card__renewal"></span>
         <strong class="contracts-card__title"></strong><span class="contracts-card__lines challenge-contract-lines"></span>
       </button>
     </div>

@@ -705,14 +705,11 @@ function renderContractCard(card, item) {
 
 function selectContract(cadence, focus = false) {
   activeCadence = cadence;
-  const rearCards = [...document.querySelectorAll('.contracts-card')]
-    .filter(card => card.dataset.cadence !== cadence);
   document.querySelectorAll('.contracts-card').forEach(card => {
     const selected = card.dataset.cadence === cadence;
     card.classList.toggle('is-front', selected);
     card.setAttribute('aria-selected', String(selected));
-    card.style.setProperty('--stack-order', selected ? 3 : String(rearCards.indexOf(card) + 1));
-    card.style.setProperty('--fan-slot', selected ? 0 : (rearCards.indexOf(card) === 0 ? -1 : 1));
+    card.style.setProperty('--stack-order', selected ? 3 : 1);
   });
   if (focus) document.querySelector(`.contracts-card[data-cadence="${cadence}"]`)?.focus();
 }
