@@ -1,6 +1,7 @@
 import { ensureDataPreload } from './08-data-load.js';
 import { resolveSkillFamily } from './17-skill-family-utils.js';
 import { toMatchKey } from './tag-normalization.js';
+import { minSeverityAllowed, normalizeChallengeSeverity } from './challenge-difficulty.js';
 
 const STACK_PLAN = ['anchor', 'twist', 'twist'];
 
@@ -315,7 +316,7 @@ async function buildPickerContext() {
   weaponLoadout.push('Empty Off-hand');
   weaponLoadoutLean['Empty Off-hand'] = 'str_dex_int';
 
-  // Ensure Unarmed can participate in match logic (also filtered below diabolical)
+  // Ensure Unarmed can participate in weapon match logic.
   weaponLoadoutLean.Unarmed = 'str_dex_int';
 
   // ----- Armor slots (used for Normal-rarity slot contract)
@@ -414,26 +415,6 @@ async function buildPickerContext() {
       .filter(Boolean)
   );
 
-  const rawForms = unique(
-    activeGems
-      .map(g => String(g?.description || ''))
-      .map(desc => {
-        const m = desc.match(/\[Shapeshift\]\s+into\s+an?\s+\[([^\]]+)\]/i);
-        return m ? m[1].trim() : null;
-      })
-      .filter(Boolean)
-  );
-
-  const shapeshiftForms = (() => {
-    const singles = rawForms.map(f => `${f} form`);
-    const pairs = [];
-    for (let i = 0; i < rawForms.length; i += 1) {
-      for (let j = i + 1; j < rawForms.length; j += 1) {
-        pairs.push(`${rawForms[i]} and ${rawForms[j]} forms`);
-      }
-    }
-    return unique([...singles, ...pairs]);
-  })();
   // ----- Skill Families (tag-based libraries; used for Challenge Mode pickers/tooltips)
   const skillFamily = unique(toArray(core.skillFamilyOptions || []));
   const challengePools = core.challengePools && typeof core.challengePools === 'object' ? core.challengePools : {};
@@ -520,7 +501,6 @@ async function buildPickerContext() {
     oneHandedMain,
     offHand,
     weaponLoadout: unique(weaponLoadout),
-    shapeshiftForms: unique(shapeshiftForms),
     armorSlot,
     ailment,
     theme,
@@ -730,9 +710,6 @@ function failsBanLockSanity(task, slotValues, state) {
     if (!/may not equip unique/i.test(text)) return true;
   }
 
-  // Default-attack-only should not coexist with tasks that mandate an active main skill.
-  if (state.locks?.mainDamageMode === 'defaultWeapon' && (slotValues.ACTIVE_SKILL || slotValues.SKILL_ARCHETYPE)) return true;
-
   return false;
 }
 
@@ -940,7 +917,8 @@ function buildContractTitle({ picks }) {
 // Generator
 // -------------------------
 
-async function generateChallengeContract({ maxAttempts = 140, challengeFates = null } = {}) {
+async function generateChallengeContract({ severity = 'diabolical', maxAttempts = 140, challengeFates = null } = {}) {
+  const normalizedSeverity = normalizeChallengeSeverity(severity);
   const rolePlan = STACK_PLAN;
 
   const library = await loadChallengeLibrary();
@@ -948,7 +926,9 @@ async function generateChallengeContract({ maxAttempts = 140, challengeFates = n
 
   const tasksByRole = rolePlan.map((role, index) => {
     const exactCount = rolePlan.filter(r => r === role).length;
-    const base = library.filter(task => task.role === role);
+    const base = library.filter(task =>
+      task.role === role && minSeverityAllowed(normalizedSeverity, task.minSeverity)
+    );
     return applyFatesToCandidates({ role, baseCandidates: base, fates: challengeFates, exactCount, index, rolePlan });
   });
 
@@ -1015,6 +995,7 @@ async function generateChallengeContract({ maxAttempts = 140, challengeFates = n
 
   return {
     mode: 'challenge',
+    severity: normalizedSeverity,
     title: buildContractTitle({ picks }),
     subtitle: picks.map(item => item.task.shortLabel).join(' • '),
     tasks: picks.map(item => ({
