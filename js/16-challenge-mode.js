@@ -645,6 +645,7 @@ let contracts = null;
 let activeCadence = 'daily';
 let restoreFocus = null;
 let renewalTimer = null;
+let contractsCloseTimer = null;
 let previousBackgroundPath = '';
 
 function getMode() {
@@ -717,6 +718,8 @@ function selectContract(cadence, focus = false) {
 async function openContracts() {
   const overlay = document.getElementById('contracts-overlay');
   if (!overlay || !overlay.hidden) return;
+  clearTimeout(contractsCloseTimer); contractsCloseTimer = null;
+  overlay.classList.remove('is-closing');
   restoreFocus = document.activeElement;
   const backgroundHost = document.getElementById('asc-art');
   previousBackgroundPath = backgroundHost?.classList.contains('show')
@@ -735,11 +738,17 @@ async function openContracts() {
 }
 function closeContracts() {
   const overlay = document.getElementById('contracts-overlay');
-  if (!overlay || overlay.hidden) return;
-  overlay.hidden = true; document.body.classList.remove('contracts-open');
+  if (!overlay || overlay.hidden || overlay.classList.contains('is-closing')) return;
+  overlay.classList.add('is-closing'); document.body.classList.remove('contracts-open');
   transitionAmbianceBackground(previousBackgroundPath);
   clearInterval(renewalTimer); renewalTimer = null;
-  restoreFocus?.focus?.(); restoreFocus = null;
+  const finishClose = () => {
+    overlay.hidden = true;
+    overlay.classList.remove('is-closing');
+    restoreFocus?.focus?.(); restoreFocus = null;
+    contractsCloseTimer = null;
+  };
+  contractsCloseTimer = setTimeout(finishClose, matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 220);
 }
 
 async function init() {
