@@ -239,12 +239,14 @@
             <img src="images/bind-the-fates.png" alt="The Randomancer – Path of Exile 2 build randomizer bind the fates icon" class="bind-fates-icon" aria-hidden="true">
             <div class="bind-fates-text">
               <span class="bind-fates-label">Bind the Fates</span>
-              <span id="bind-fates-summary" class="bind-fates-summary">
-                No Fates Bound
+              <span id="bind-fates-summary" class="bind-fates-summary" hidden>
+                <span class="bind-fates-count bind-fates-count--oaths" hidden></span>
+                <span class="bind-fates-count-separator" hidden>|</span>
+                <span class="bind-fates-count bind-fates-count--abominations" hidden></span>
               </span>
             </div>
           </button>
-          <button id="bind-fates-clear" class="bind-fates-clear" type="button" aria-label="Clear bound fates" title="Clear bound fates">×</button>
+          <button id="bind-fates-clear" class="bind-fates-clear" type="button" aria-label="Clear bound fates" title="Clear bound fates" hidden>×</button>
         </div>
         <span id="bind-fates-error" class="bind-fates-error" aria-live="polite"></span>
       </div>
