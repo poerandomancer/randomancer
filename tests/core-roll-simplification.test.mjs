@@ -27,3 +27,18 @@ test('standard UI has no Cohesion or randomized defense controls', async () => {
   assert.doesNotMatch(html, /id="defstrat"/);
   assert.doesNotMatch(html, /data-category="defensiveStrategy"/);
 });
+
+
+test('runtime graph excludes retired rules, pre-gate, and scorer systems', async () => {
+  const core = await readFile(new URL('../core-script.js', import.meta.url), 'utf8');
+  for (const retiredModule of ['03-config-and-schema', '05-tags-and-scorer', '11-pre-gate-and-sync']) {
+    assert.doesNotMatch(core, new RegExp(retiredModule));
+  }
+
+  const appState = await readFile(new URL('../js/04-app-state.js', import.meta.url), 'utf8');
+  assert.doesNotMatch(appState, /\b(?:Config|RulesEngine|validateAndFix|singleEntryMode)\b/);
+  assert.doesNotMatch(appState, /window\.SKILLS/);
+
+  const skillsRenderer = await readFile(new URL('../js/07-skills-render.js', import.meta.url), 'utf8');
+  assert.doesNotMatch(skillsRenderer, /\b(?:TAG_IDF|scoreGemSynergy|rollRecommendedSkills)\b/);
+});

@@ -1,5 +1,5 @@
 import { formatWeaponLine } from './01-meta-and-domready.js';
-import { buildGemDictionary, lookupGem } from './05-tags-and-scorer.js';
+import { buildGemDictionary, lookupGem } from './gem-utils.js';
 import { getClassIconPath } from './ascendancy-visuals.js';
 
 const CARD_TYPE_BUILD = 'build';

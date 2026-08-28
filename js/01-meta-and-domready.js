@@ -167,8 +167,7 @@ function runSmokeCheck(){
     'RandomancerUpdateBuildCodeUI',
     'RandomancerRefreshUniques',
     'RandomancerRenderUniquesFromNames',
-    'RandomancerInfo',
-    'getOrBuildIDF'
+    'RandomancerInfo'
   ];
   const missingExports = requiredExports.filter((key) => typeof window[key] === 'undefined');
   if (missingExports.length) {

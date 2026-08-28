@@ -192,9 +192,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
     if (category === 'weapon') {
       return deriveWeaponFamilies(data).map((family) => family.name);
     }
-    if (category === 'defensiveStrategy') {
-      return (data.DefensiveStrategies || []).map((strategy) => strategy?.name).filter(Boolean);
-    }
     if (category === 'combat') {
       return resolveRollableOffenseElements(data).map((entry) => ({
         name: entry.id,

@@ -1,4 +1,11 @@
-import { TagUtils, defensePseudoTags } from './05-tags-and-scorer.js';
+import { toMatchKey } from './tag-normalization.js';
+
+function defensePseudoTags(defenseName) {
+  const value = String(defenseName || '').toLowerCase();
+  return ['armour', 'evasion', 'energyshield'].filter((tag) =>
+    tag === 'energyshield' ? value.includes('energy') : value.includes(tag)
+  );
+}
 import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
 
 /* === Randomancer: Uniques Synergy — canonical engine (v0.8.2) === */
@@ -7,7 +14,7 @@ import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
   window.__u79_active = TOKEN; // last-wins flag
 
   // Use shared tag normalizer
-  const norm = (s) => TagUtils.norm(s);
+  const norm = (s) => toMatchKey(s);
 
   const splitNames = (s) => String(s||'')
     .replace(/\u00B7/g,'•')
