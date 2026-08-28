@@ -2,9 +2,9 @@ import { generateChallengeContract } from './15-challenge-engine.js';
 
 const CONTRACT_VERSION = 'v1';
 const CADENCES = [
-  { cadence: 'daily', severity: 'mild' },
-  { cadence: 'weekly', severity: 'cruel' },
-  { cadence: 'monthly', severity: 'diabolical' }
+  { cadence: 'daily', severity: 'mild', composition: ['anchor', 'twist'] },
+  { cadence: 'weekly', severity: 'cruel', composition: ['anchor', 'twist', 'twist'] },
+  { cadence: 'monthly', severity: 'diabolical', composition: ['anchor', 'twist', 'twist'] }
 ];
 
 function isoWeek(date) {
@@ -35,7 +35,7 @@ export async function generateContracts(now = new Date()) {
   for (const config of CADENCES) {
     const period=contractPeriod(config.cadence,now);
     const seed=`contract:${config.cadence}:${period.key}:${CONTRACT_VERSION}`;
-    const contract=await generateChallengeContract({severity:config.severity,random:seededRandom(seed)});
+    const contract=await generateChallengeContract({severity:config.severity,composition:config.composition,random:seededRandom(seed)});
     result.push({period,seed,contract});
   }
   return result;

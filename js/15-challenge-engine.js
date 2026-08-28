@@ -808,9 +808,9 @@ function buildContractTitle({ picks }) {
 // Generator
 // -------------------------
 
-async function generateChallengeContract({ severity = 'diabolical', maxAttempts = 140, challengeFates = null, random = Math.random } = {}) {
+async function generateChallengeContract({ severity = 'diabolical', composition = STACK_PLAN, maxAttempts = 140, challengeFates = null, random = Math.random } = {}) {
   const normalizedSeverity = normalizeChallengeSeverity(severity);
-  const rolePlan = STACK_PLAN;
+  const rolePlan = composition;
 
   const library = await loadChallengeLibrary();
   const pickerContext = await buildPickerContext();
