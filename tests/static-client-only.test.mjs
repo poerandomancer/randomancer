@@ -26,3 +26,10 @@ test('unique renderers retain poe.ninja actions without market controls', () => 
   assert.match(codex, /buildPoeNinjaUrl/);
   assert.match(codex, /data-pin-action="view-ninja"/);
 });
+
+test('challenge rendering targets cards rather than cadence selector tabs', () => {
+  const challenges = readFileSync(new URL('../js/16-challenge-mode.js', import.meta.url), 'utf8');
+  assert.match(challenges, /renderContractCard\(overlay\.querySelector\(`\.contracts-card\[data-cadence=/);
+  assert.match(challenges, /overlay\.querySelector\(`\.contracts-card\[data-cadence=.*\.contracts-card__renewal/);
+  assert.doesNotMatch(challenges, /renderContractCard\(overlay\.querySelector\(`\[data-cadence=/);
+});

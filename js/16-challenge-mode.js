@@ -736,14 +736,14 @@ async function openContracts() {
     ? (backgroundHost.dataset.ascPath || '')
     : '';
   if (!contracts) contracts = await generateContracts(new Date());
-  contracts.forEach(item => renderContractCard(overlay.querySelector(`[data-cadence="${item.period.cadence}"]`), item));
+  contracts.forEach(item => renderContractCard(overlay.querySelector(`.contracts-card[data-cadence="${item.period.cadence}"]`), item));
   selectContract('daily');
   overlay.hidden = false;
   document.body.classList.add('contracts-open');
   transitionAmbianceBackground('/images/challenge-background-blur.webp');
   overlay.querySelector('.contracts-close')?.focus();
   renewalTimer = setInterval(() => contracts.forEach(item => {
-    overlay.querySelector(`[data-cadence="${item.period.cadence}"] .contracts-card__renewal`).textContent = renewalLabel(item.period, new Date());
+    overlay.querySelector(`.contracts-card[data-cadence="${item.period.cadence}"] .contracts-card__renewal`).textContent = renewalLabel(item.period, new Date());
   }), 60000);
 }
 function closeContracts() {
