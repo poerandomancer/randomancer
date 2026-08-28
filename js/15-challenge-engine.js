@@ -1,4 +1,5 @@
 import { ensureDataPreload } from './08-data-load.js';
+import { deriveWeaponFamilies } from './06-equipment.js';
 import { resolveSkillFamily } from './17-skill-family-utils.js';
 import { toMatchKey } from './tag-normalization.js';
 import { minSeverityAllowed, normalizeChallengeSeverity } from './challenge-difficulty.js';
@@ -225,101 +226,14 @@ async function buildPickerContext() {
     .filter(Boolean)
     .filter(name => ['Armour', 'Evasion', 'Energy Shield'].includes(name));
 
-  // ----- Weapon Sets (derive from core weapons)
-  const weaponSetLean = {};
-  const weaponSets = [];
-
-  // Two-handed weapons as standalone weapon sets
-  const twoHanded = toArray(core.Weapons?.['Two-Handed']);
-  twoHanded.forEach(w => {
-    if (!w?.name) return;
-    weaponSets.push(w.name);
-    weaponSetLean[w.name] = leanKeyFromAttributes(w.attributes);
-  });
-
-  // One-handed + Off-hand combinations
-  const oneHanded = toArray(core.Weapons?.['One-Handed']);
-  const offHands = toArray(core.Weapons?.['Off-Hand']);
-
-  function sumAttrs(a, b) {
-    const out = { strength: 0, dexterity: 0, intelligence: 0 };
-    const add = src => {
-      if (!src || typeof src !== 'object') return;
-      out.strength += Number(src.strength || 0);
-      out.dexterity += Number(src.dexterity || 0);
-      out.intelligence += Number(src.intelligence || 0);
-    };
-    add(a);
-    add(b);
-    return out;
-  }
-
-  oneHanded.forEach(main => {
-    if (!main?.name) return;
-    offHands.forEach(off => {
-      const allowed = toArray(off?.['one-handed']);
-      if (!allowed.includes(main.name)) return;
-      if (!off?.name) return;
-
-      const label = `${main.name} & ${off.name}`;
-      weaponSets.push(label);
-      weaponSetLean[label] = leanKeyFromAttributes(sumAttrs(main.attributes, off.attributes));
-    });
-  });
-
-  // Always include Unarmed for explicit contracts
-  weaponSets.push('Unarmed');
-  weaponSetLean.Unarmed = null;
-
-  const weaponSet = unique(weaponSets);
-
-  // ----- Separate pools for 1H and Off-Hand (used by a few contracts)
-  const oneHandedMain = unique(oneHanded.map(w => w?.name).filter(Boolean));
-  const offHand = unique(offHands.map(w => w?.name).filter(Boolean));
-
-  // ----- Lean maps for 1H + Off-hand (used by weaponLoadout picker)
-  const oneHandedLean = {};
-  oneHanded.forEach(w => {
-    if (w?.name) oneHandedLean[w.name] = leanKeyFromAttributes(w.attributes);
-  });
-
-  const offHandLean = {};
-  offHands.forEach(w => {
-    if (w?.name) offHandLean[w.name] = leanKeyFromAttributes(w.attributes);
-  });
-
-  // ----- Weapon Loadouts (full / partial constraints)
+  // Challenges intentionally use the same canonical primary-weapon families
+  // displayed by normal Build rolls. The picker name remains part of the task
+  // catalog contract, but its values are families rather than loadouts.
   const weaponLoadoutLean = {};
-  const weaponLoadout = [];
-
-  const articleFor = (word) => (/^[aeiou]/i.test(String(word || '').trim()) ? 'an' : 'a');
-
-  // Full weapon sets
-  weaponSet.forEach(ws => {
-    weaponLoadout.push(ws);
-    weaponLoadoutLean[ws] = weaponSetLean[ws] || null;
+  const weaponLoadout = deriveWeaponFamilies(core).map(weapon => {
+    weaponLoadoutLean[weapon.name] = leanKeyFromAttributes(weapon.attributes);
+    return weapon.name;
   });
-
-  // Main-hand only (e.g. "a Wand")
-  oneHandedMain.forEach(mh => {
-    const phr = /^(a|an)\s/i.test(mh) ? mh : `${articleFor(mh)} ${mh}`;
-    weaponLoadout.push(phr);
-    weaponLoadoutLean[phr] = oneHandedLean[mh] || null;
-  });
-
-  // Off-hand only (e.g. "a Shield")
-  offHand.forEach(oh => {
-    const phr = /^(a|an)\s/i.test(oh) ? oh : `${articleFor(oh)} ${oh}`;
-    weaponLoadout.push(phr);
-    weaponLoadoutLean[phr] = offHandLean[oh] || null;
-  });
-
-  // Extended weapon loadouts available to the full Challenge pool
-  weaponLoadout.push('Empty Off-hand');
-  weaponLoadoutLean['Empty Off-hand'] = 'str_dex_int';
-
-  // Ensure Unarmed can participate in weapon match logic.
-  weaponLoadoutLean.Unarmed = 'str_dex_int';
 
   // ----- Armor slots (used for Normal-rarity slot contract)
   const armorSlot = ['Helmet', 'Body Armour', 'Gloves', 'Boots'];
@@ -499,10 +413,7 @@ async function buildPickerContext() {
     class: unique(classes),
     ascendancy: unique(ascendancies),
     defense: unique(defenses),
-    weaponSet,
-    oneHandedMain,
-    offHand,
-    weaponLoadout: unique(weaponLoadout),
+    weaponLoadout,
     armorSlot,
     ailment,
     theme,
@@ -534,7 +445,6 @@ async function buildPickerContext() {
       class: classLean,
       ascendancy: ascendancyLean,
       defense: defenseLean,
-      weaponSet: weaponSetLean,
       weaponLoadout: weaponLoadoutLean,
       ailment: ailmentLean
     }
@@ -796,27 +706,6 @@ function pickSlotValue(slotKey, slotConfig, slots, defs, context) {
     if (slotKey === 'SKILL') return entry.skillName || null;
     if (slotKey === 'UNIQUE') return entry.uniqueName || null;
     return null;
-  }
-
-  // Full-pool Challenge profile: all authored picker outcomes are eligible.
-  if (pickerName === 'weaponLoadout') {
-    const dualChance = 0.12;
-    if (dualChance && activeRandom() < dualChance && slots?.CLASS && Array.isArray(context.weaponSet)) {
-      const ws = toArray(context.weaponSet).filter(v => v && v !== 'Unarmed');
-      const classLean = context.__lean?.class?.[slots.CLASS] || null;
-      const wsLean = context.__lean?.weaponSet || {};
-
-      const pickAlt = (pool) => {
-        const matched = pickByMatch({ options: pool, optionLeanMap: wsLean, targetLeanKey: classLean, mode: 'alternate' });
-        return randomPick(matched.length ? matched : pool);
-      };
-
-      const set1 = pickAlt(ws);
-      const pool2 = ws.filter(v => v !== set1);
-      const set2 = pool2.length ? pickAlt(pool2) : null;
-      if (set1 && set2) return `Weapon Set I: ${set1}; Weapon Set II: ${set2}`;
-    }
-
   }
 
   // Basic filters

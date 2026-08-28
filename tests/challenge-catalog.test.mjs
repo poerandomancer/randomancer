@@ -3,8 +3,11 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import { minSeverityAllowed } from '../js/challenge-difficulty.js';
+import { deriveWeaponFamilies } from '../js/06-equipment.js';
 
 const tasks = JSON.parse(await readFile(new URL('../data/challenge_tasks.json', import.meta.url)));
+const core = JSON.parse(await readFile(new URL('../data/core-data.json', import.meta.url)));
+const challengeEngineSource = await readFile(new URL('../js/15-challenge-engine.js', import.meta.url), 'utf8');
 const byId = new Map(tasks.map(task => [task.id, task]));
 
 test('challenge catalog has the expected roles and minimum tiers', () => {
@@ -53,4 +56,15 @@ test('Unwarded conflicts with anchors marked as explicit Ascendancy choices', ()
     conflict.level === 'hard' && conflict.with?.domainTag === 'explicit_ascendancy'
   ));
   assert.ok(!byId.get('A4_class_plus_weapon').domainTags.includes('explicit_ascendancy'));
+});
+
+test('challenge weapons come only from the canonical Build weapon-family source', () => {
+  const familyNames = deriveWeaponFamilies(core).map(weapon => weapon.name);
+
+  assert.ok(familyNames.includes('Mace'));
+  assert.ok(!familyNames.includes('Unarmed'));
+  assert.ok(!familyNames.includes('Empty Off-hand'));
+  assert.match(challengeEngineSource, /deriveWeaponFamilies\(core\)/);
+  assert.doesNotMatch(challengeEngineSource, /Weapon Set I|Weapon Set II|dualChance/);
+  assert.doesNotMatch(challengeEngineSource, /weaponLoadout\.push\(['"](?:Unarmed|Empty Off-hand)/);
 });
