@@ -105,6 +105,13 @@ function drawBuild(dataWrap, { random = Math.random } = {}) {
 
 window.drawBuild = drawBuild;
 
+// Build and Challenge each keep their own landing lede until that mode has
+// completed its first draw. Codex is intentionally never collapsed.
+document.addEventListener('randomancer:draw-complete', (event) => {
+  const mode = event.detail?.mode === 'challenge' ? 'challenge' : 'build';
+  document.querySelector('.rc-header')?.classList.add(`rc-header--${mode}-lede-collapsed`);
+});
+
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('roll')?.addEventListener('click', async () => {
     const button = document.getElementById('roll'); const status = button?.querySelector('.roll-status');

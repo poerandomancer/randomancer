@@ -13,65 +13,21 @@ header{
 }
 
 .rc-header-extra{
-  overflow:hidden;
-  max-height:320px;
   opacity:1;
-  transition:max-height 220ms ease-out, opacity 220ms ease-out, margin 220ms ease-out;
 }
 
-.rc-header.rc-header--collapsed .rc-header-extra{
+body[data-mode="build"] .rc-header.rc-header--build-lede-collapsed .app-lede,
+body[data-mode="challenge"] .rc-header.rc-header--challenge-lede-collapsed .app-lede{
   max-height:0;
+  min-height:0 !important;
   opacity:0;
-  margin:0;
+  margin-top:0;
+  margin-bottom:0;
   pointer-events:none;
 }
 
-.rc-header.rc-header--no-anim .rc-header-extra,
-.rc-header.rc-header--no-anim .header-details-toggle__chevron{
+.rc-header.rc-header--no-anim .app-lede{
   transition:none !important;
-}
-
-.header-details-toggle{
-  border:0;
-  background:transparent;
-  color:var(--muted);
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  padding:0;
-  margin-top:.1rem;
-  opacity:0;
-  visibility:hidden;
-  pointer-events:none;
-  transition:color 160ms ease, opacity 140ms ease;
-}
-
-.rc-header.rc-header--collapsed .header-details-toggle{
-  opacity:1;
-  visibility:visible;
-  pointer-events:auto;
-}
-
-.header-details-toggle:hover{
-  color:var(--gold);
-}
-
-.header-details-toggle:focus-visible{
-  outline:1px solid rgba(200,168,107,.75);
-  outline-offset:2px;
-}
-
-.header-details-toggle__chevron{
-  font-size:.45rem;
-  line-height:1;
-  display:inline-block;
-  transform-origin:50% 50%;
-  transition:transform 220ms ease;
-}
-
-.rc-header.rc-header--collapsed .header-details-toggle__chevron{
-  transform:rotate(-90deg);
 }
 
 .title{
@@ -182,11 +138,15 @@ strong, b { font-weight: 600; }
 /* --- Header lede / onboarding blurb (replaces initial build name) --- */
 .app-lede{
   margin:-0.65rem auto .45rem;
+  overflow:hidden;
+  max-height:320px;
   max-width:74ch;
   color:var(--muted);
   font-size:1.02rem;
   line-height:1.35;
   text-align:center;
+  opacity:1;
+  transition:max-height 220ms ease-out, min-height 220ms ease-out, opacity 160ms ease-out, margin-top 220ms ease-out, margin-bottom 220ms ease-out;
 }
 .app-lede strong{ color:var(--gold); font-weight:600; }
 .app-lede p{ margin:0; }
@@ -232,9 +192,7 @@ strong, b { font-weight: 600; }
 }
 
 @media (prefers-reduced-motion: reduce){
-  .rc-header-extra,
-  .header-details-toggle,
-  .header-details-toggle__chevron,
+  .app-lede,
   .rc-reveal-fog{
     transition:none !important;
     animation:none !important;
