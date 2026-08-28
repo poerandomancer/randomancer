@@ -8,6 +8,7 @@ import { deriveWeaponFamilies } from '../js/06-equipment.js';
 const tasks = JSON.parse(await readFile(new URL('../data/challenge_tasks.json', import.meta.url)));
 const core = JSON.parse(await readFile(new URL('../data/core-data.json', import.meta.url)));
 const challengeEngineSource = await readFile(new URL('../js/15-challenge-engine.js', import.meta.url), 'utf8');
+const contractsSource = await readFile(new URL('../js/contracts.js', import.meta.url), 'utf8');
 const byId = new Map(tasks.map(task => [task.id, task]));
 
 test('challenge catalog has the expected roles and minimum tiers', () => {
@@ -27,6 +28,14 @@ test('difficulty eligibility includes every lower minimum tier', () => {
   assert.deepEqual(tasks.filter(task => minSeverityAllowed('mild', task.minSeverity)).length, 20);
   assert.deepEqual(tasks.filter(task => minSeverityAllowed('cruel', task.minSeverity)).length, 36);
   assert.deepEqual(tasks.filter(task => minSeverityAllowed('diabolical', task.minSeverity)).length, 46);
+});
+
+test('cadence configuration drives the finalized challenge compositions', () => {
+  assert.match(contractsSource, /cadence: 'daily', severity: 'mild', composition: \['anchor', 'twist'\]/);
+  assert.match(contractsSource, /cadence: 'weekly', severity: 'cruel', composition: \['anchor', 'twist', 'twist'\]/);
+  assert.match(contractsSource, /cadence: 'monthly', severity: 'diabolical', composition: \['anchor', 'twist', 'twist'\]/);
+  assert.match(contractsSource, /generateChallengeContract\(\{severity:config\.severity,composition:config\.composition,random:seededRandom\(seed\)\}\)/);
+  assert.match(challengeEngineSource, /const rolePlan = composition;/);
 });
 
 test('catalog cleanup and changed minimum tiers remain enforced', () => {
