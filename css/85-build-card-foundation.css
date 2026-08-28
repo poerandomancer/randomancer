@@ -66,3 +66,46 @@
   margin:auto 0;
   text-align:center;
 }
+
+.rc-skill-groups{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-items:flex-start;
+  gap:.75rem clamp(1.5rem, 7%, 3rem);
+}
+.rc-skill-group{
+  flex:0 0 min(12rem, 100%);
+  min-width:min(9rem, 100%);
+  max-width:100%;
+  text-align:center;
+  overflow-wrap:anywhere;
+}
+.rc-skill-group__skill{
+  font-weight:600;
+}
+.rc-skill-group__supports{
+  display:inline-grid;
+  max-width:calc(100% - .55rem);
+  margin:.18rem 0 0 .55rem;
+  padding-left:.85rem;
+  border-left:1px solid rgba(212,170,80,.28);
+  text-align:left;
+  color:var(--muted);
+  font-size:.78em;
+  line-height:1.45;
+}
+.rc-skill-group__support{
+  position:relative;
+  min-width:0;
+  padding:.08rem 0;
+  overflow-wrap:anywhere;
+}
+.rc-skill-group__support::before{
+  content:"";
+  position:absolute;
+  top:.78em;
+  right:calc(100% + .3rem);
+  width:.55rem;
+  border-top:1px solid rgba(212,170,80,.28);
+}
