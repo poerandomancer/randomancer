@@ -217,7 +217,8 @@ border-top: 1px dotted var(--gold);
   display:inline-flex;
   align-items:baseline;
   gap:0.25rem;
-  font-family:inherit;
+  font-family:'Cormorant Infant',serif;
+  font-style:italic;
   font-size:0.78rem;
   font-variant-numeric:tabular-nums;
   font-weight:500;
@@ -232,8 +233,8 @@ border-top: 1px dotted var(--gold);
 .bind-fates-clear[hidden]{ display:none; }
 
 .bind-fates-count--oaths{ color:#c8a86b; }
-.bind-fates-count-separator{ color:var(--muted); }
-.bind-fates-count--abominations{ color:#d46a6a; }
+.bind-fates-count-separator{ color:var(--muted); font-style:italic; }
+.bind-fates-count--abominations{ color:#bf4b55; }
 
 .bind-fates-clear{
   appearance:none;
