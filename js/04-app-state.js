@@ -56,11 +56,6 @@ const App = window.App = (() => {
       combat:     { oaths: [], abominations: [] }
     },
 
-    // Challenge-mode equivalent of Bind the Fates.
-    challengeFates: {
-      anchors: { favor: [], ban: [] },
-      twistCategories: { favor: [], ban: [] }
-    },
   };
 
   async function bootstrap(){
@@ -82,24 +77,6 @@ const App = window.App = (() => {
     };
   }
 
-  function getChallengeFates(){
-    return state.challengeFates;
-  }
-
-  function setChallengeFatesCategory(category, next){
-    if (!state.challengeFates[category]) return;
-    const safe = (arr) => Array.from(new Set((arr || []).filter(Boolean)));
-    state.challengeFates[category] = {
-      favor: safe(next?.favor),
-      ban: safe(next?.ban)
-    };
-  }
-
-  function setChallengeFates(next){
-    const src = next && typeof next === 'object' ? next : {};
-    setChallengeFatesCategory('anchors', src.anchors);
-    setChallengeFatesCategory('twistCategories', src.twistCategories);
-  }
 
 
   function exposeRuntimeData(){
@@ -129,9 +106,6 @@ const App = window.App = (() => {
     replaceCurrentDraw,
     getBindFates,
     setBindFatesCategory,
-    getChallengeFates,
-    setChallengeFatesCategory,
-    setChallengeFates
   };
 })();
 

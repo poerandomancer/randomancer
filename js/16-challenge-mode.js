@@ -1,19 +1,6 @@
-import { ensureDataPreload } from './08-data-load.js';
-import { generateChallengeContract, loadChallengeLibrary } from './15-challenge-engine.js';
+import { loadChallengeLibrary } from './15-challenge-engine.js';
+import { generateContracts, renewalLabel } from './contracts.js';
 import { getFamilySkillNames, resolveSkillFamily } from './17-skill-family-utils.js';
-
-const MODE_KEY = 'randomancer_mode';
-const MODE_TRANSITION_MS = 380;
-const MODES = {
-  STANDARD: 'standard',
-  CHALLENGE: 'challenge',
-  CODEX: 'codex'
-};
-let challengeHasRoll = false;
-
-const STANDARD_LEDE_HTML = '<strong>Draw Your Fate</strong> to randomly select an ascendancy, weapon, and one Offense concept. <strong>Flip the Card</strong> to reveal build ideas and suggestions. <strong>Bind the Fates</strong> to favor or ban certain options.';
-const CHALLENGE_LEDE_TEXT = '<strong>Challenge Mode</strong> draws three compatible Challenge cards: one anchor and two twists. Use <strong>Bind the Fates</strong> to favor or ban certain options.';
-const CODEX_LEDE_TEXT = '<strong>Codex Mode</strong> is a non-random library for browsing Path of Exile 2 data. Explore <strong>Ascendancy</strong>, <strong>Skills</strong>, <strong>Passives</strong>, and <strong>Gear</strong> with search and tags. <strong>Pin</strong> entries to create a poe.ninja filter to view endgame builds.<br><strong>---</strong><br>Select an entry to inspect full details.';
 
 let CHALLENGE_TEMPLATE_BY_ID = Object.create(null);
 
@@ -648,310 +635,131 @@ function initChallengeInlineTooltips() {
   }, true);
 }
 
-function stabilizeLedeHeight() {
-  const lede = document.getElementById('app-lede');
-  const instructions = lede?.querySelector('[data-app-lede-instructions]');
-  if (!lede || !instructions) return;
 
-  const previous = instructions.innerHTML;
-  const previousMinHeight = lede.style.minHeight;
-  lede.style.minHeight = '';
-
-  instructions.innerHTML = STANDARD_LEDE_HTML;
-  const standardHeight = lede.offsetHeight;
-
-  instructions.innerHTML = CHALLENGE_LEDE_TEXT;
-  const challengeHeight = lede.offsetHeight;
-
-  instructions.innerHTML = previous;
-  const targetHeight = Math.max(standardHeight, challengeHeight);
-  lede.style.minHeight = `${targetHeight}px`;
-
-  if (previousMinHeight && Number.parseFloat(previousMinHeight) > targetHeight) {
-    lede.style.minHeight = previousMinHeight;
-  }
-}
-
-function prefersReducedMotion() {
-  return window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
-}
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function runModeTransition(label, swapFn) {
-  const overlay = document.getElementById('modeTransition');
-  const labelEl = document.getElementById('modeTransitionLabel');
-  if (!overlay || prefersReducedMotion()) {
-    swapFn?.();
-    return;
-  }
-
-  if (labelEl) labelEl.textContent = label || '';
-  overlay.classList.add('is-on');
-  await sleep(MODE_TRANSITION_MS);
-  swapFn?.();
-  await sleep(MODE_TRANSITION_MS);
-  overlay.classList.remove('is-on');
-}
+const MODES = { STANDARD: 'standard', CODEX: 'codex' };
+const MODE_KEY = 'randomancer_mode';
+const STANDARD_LEDE_HTML = '<strong>Draw Your Fate</strong> to randomly select an ascendancy, weapon, and one Offense concept. <strong>Flip the Card</strong> to reveal build ideas and suggestions. <strong>Bind the Fates</strong> to favor or ban certain options.';
+const CODEX_LEDE_TEXT = '<strong>Codex Mode</strong> is a non-random library for browsing Path of Exile 2 data. Explore <strong>Ascendancy</strong>, <strong>Skills</strong>, <strong>Passives</strong>, and <strong>Gear</strong> with search and tags. <strong>Pin</strong> entries to create a poe.ninja filter to view endgame builds.<br><strong>---</strong><br>Select an entry to inspect full details.';
+let contracts = null;
+let activeCadence = 'daily';
+let restoreFocus = null;
+let renewalTimer = null;
 
 function getMode() {
   try {
-    const qp = new URLSearchParams(location.search);
-    const fromUrl = qp.get('mode');
-    if (fromUrl) return fromUrl === MODES.CHALLENGE || fromUrl === MODES.CODEX ? fromUrl : MODES.STANDARD;
-    const stored = localStorage.getItem(MODE_KEY);
-    if (stored === MODES.CHALLENGE || stored === MODES.CODEX) return stored;
-  } catch {}
-  return MODES.STANDARD;
+    if (new URLSearchParams(location.search).get('mode') === MODES.CODEX) return MODES.CODEX;
+    return localStorage.getItem(MODE_KEY) === MODES.CODEX ? MODES.CODEX : MODES.STANDARD;
+  } catch { return MODES.STANDARD; }
 }
-
 function setMode(mode) {
-  const next = [MODES.STANDARD, MODES.CHALLENGE, MODES.CODEX].includes(mode) ? mode : MODES.STANDARD;
+  const next = mode === MODES.CODEX ? MODES.CODEX : MODES.STANDARD;
   try { localStorage.setItem(MODE_KEY, next); } catch {}
   try {
     const params = new URLSearchParams(location.search);
-    if (next === MODES.STANDARD) params.delete('mode');
-    else params.set('mode', next);
-    history.replaceState(null, '', `${location.pathname}${params.toString() ? `?${params.toString()}` : ''}`);
+    next === MODES.CODEX ? params.set('mode', next) : params.delete('mode');
+    history.replaceState(null, '', `${location.pathname}${params.toString() ? `?${params}` : ''}`);
   } catch {}
-  try { document.dispatchEvent(new CustomEvent('randomancer:mode-change', { detail: { mode: next } })); } catch {}
+  document.body.dataset.mode = next === MODES.CODEX ? 'codex' : 'build';
+  document.body.classList.toggle('codex-mode', next === MODES.CODEX);
+  const codex = next === MODES.CODEX;
+  document.getElementById('codex-panel')?.classList.toggle('is-hidden', !codex);
+  ['primary-build-card-stage','build-roll-banner','build-panel','skills-panel','uniques-panel','passives-panel'].forEach(id => document.getElementById(id)?.classList.toggle('is-hidden', codex));
+  const empty = document.getElementById('empty-state');
+  empty?.classList.toggle('is-hidden', codex || document.getElementById('app')?.dataset.hasRoll === 'true');
+  document.getElementById('standard-controls')?.classList.toggle('is-hidden', codex);
+  const instructions = document.querySelector('[data-app-lede-instructions]');
+  if (instructions) instructions.innerHTML = codex ? CODEX_LEDE_TEXT : STANDARD_LEDE_HTML;
+  document.querySelectorAll('[data-mode-target]').forEach(btn => {
+    const on = btn.dataset.modeTarget === next;
+    btn.classList.toggle('is-active', on); btn.setAttribute('aria-selected', String(on));
+  });
+  document.dispatchEvent(new CustomEvent('randomancer:mode-change', { detail: { mode: next } }));
   return next;
 }
 
-function setChallengeVisibility(mode) {
-  const standardControls = document.getElementById('standard-controls');
-  const isChallenge = mode === MODES.CHALLENGE;
-  const isCodex = mode === MODES.CODEX;
-
-  if (standardControls) {
-    Array.from(standardControls.children || []).forEach((child) => {
-      const keepVisible = child.classList?.contains('bind-fates-row');
-      child.classList.toggle('is-hidden', (isChallenge && !keepVisible) || isCodex);
+function renderContractCard(card, item) {
+  card.querySelector('.contracts-card__title').textContent = item.contract.title;
+  card.querySelector('.contracts-card__renewal').textContent = renewalLabel(item.period, new Date());
+  const list = card.querySelector('.contracts-card__lines');
+  list.innerHTML = '';
+  item.contract.tasks.forEach(task => {
+    const row = document.createElement('div'); row.className = 'summary-row';
+    const label = document.createElement('span'); label.className = 'summary-label'; label.textContent = task.shortLabel || task.role;
+    const content = document.createElement('span'); content.className = 'summary-content';
+    const template = CHALLENGE_TEMPLATE_BY_ID[task.id];
+    const segments = template ? buildTemplateSegments(template, task.slots || {}) : null;
+    (segments || [{ t: task.line }]).forEach(seg => {
+      if (!seg.hi) return content.append(document.createTextNode(seg.t));
+      const value = document.createElement('span');
+      const tipKeys = ['ACTIVE_SKILL','SKILL','UNIQUE','KEYSTONE','SKILL_FAMILY','SKILL_FAMILY_2'];
+      value.className = tipKeys.includes(seg.k) ? 'task-val has-tip' : 'task-val';
+      value.textContent = seg.t;
+      if (tipKeys.includes(seg.k)) { value.dataset.slotKey = seg.k; value.tabIndex = 0; }
+      content.append(value);
     });
-  }
-  document.getElementById('roll')?.closest('.roll-sticky')?.classList.toggle('is-hidden', isCodex);
-}
-
-function setHeaderLede(mode) {
-  const lede = document.getElementById('app-lede');
-  const instructions = lede?.querySelector('[data-app-lede-instructions]');
-  if (!instructions) return;
-  if (mode === MODES.CHALLENGE) instructions.innerHTML = CHALLENGE_LEDE_TEXT;
-  else if (mode === MODES.CODEX) instructions.innerHTML = CODEX_LEDE_TEXT;
-  else instructions.innerHTML = STANDARD_LEDE_HTML;
-}
-
-function setChallengePanels(mode) {
-  const buildBanner = document.getElementById('build-roll-banner');
-  const buildPanel = document.getElementById('build-panel');
-  const skillsPanel = document.getElementById('skills-panel');
-  const uniquesPanel = document.getElementById('uniques-panel');
-  const passivesPanel = document.getElementById('passives-panel');
-  const emptyState = document.getElementById('empty-state');
-  const codexPanel = document.getElementById('codex-panel');
-  const hasStandardRoll = document.getElementById('app')?.dataset?.hasRoll === 'true';
-  const isChallenge = mode === MODES.CHALLENGE;
-  const isCodex = mode === MODES.CODEX;
-
-  const showStandardEmpty = !isChallenge && !isCodex && !hasStandardRoll;
-
-  buildBanner?.classList.toggle('is-hidden', isChallenge || isCodex);
-  buildPanel?.classList.toggle('is-hidden', isChallenge || isCodex);
-  skillsPanel?.classList.toggle('is-hidden', isChallenge || isCodex);
-  uniquesPanel?.classList.toggle('is-hidden', isChallenge || isCodex);
-  passivesPanel?.classList.toggle('is-hidden', isChallenge || isCodex);
-  codexPanel?.classList.toggle('is-hidden', !isCodex);
-
-  if (emptyState) {
-    emptyState.classList.toggle('is-hidden', !showStandardEmpty);
-  }
-
-}
-
-function renderChallengeContract(contract) {
-  if (!contract || typeof contract !== 'object') return;
-  const title = document.getElementById('challenge-contract-title');
-  const subtitle = document.getElementById('challenge-contract-subtitle');
-  const list = document.getElementById('challenge-contract-lines');
-
-  if (title) title.textContent = contract.title;
-  if (subtitle) subtitle.textContent = contract.subtitle;
-  if (list) {
-    list.innerHTML = '';
-    contract.tasks.forEach(task => {
-      const row = document.createElement('div');
-      row.className = 'summary-row';
-
-      const label = document.createElement('span');
-      label.className = 'summary-label';
-      label.textContent = String(task.shortLabel || task.role || 'Clause');
-
-      const dash = document.createElement('span');
-      dash.className = 'summary-dash';
-      dash.textContent = ' • ';
-
-      const content = document.createElement('span');
-			content.className = 'summary-content';
-			
-			// Build segments from the authoritative template (so saved codes highlight correctly)
-			const template = task?.id ? CHALLENGE_TEMPLATE_BY_ID[task.id] : null;
-			const segments = template ? buildTemplateSegments(template, task?.slots || {}) : null;
-			
-			if (Array.isArray(segments) && segments.length) {
-				segments.forEach(seg => {
-					if (!seg || seg.t == null) return;
-					if (seg.hi) {
-						const v = document.createElement('span');
-						const slotKey = seg.k;
-						const wantsTip =
-							slotKey === 'ACTIVE_SKILL' ||
-							slotKey === 'SKILL' ||
-							slotKey === 'UNIQUE' ||
-							slotKey === 'KEYSTONE' ||
-							slotKey === 'SKILL_FAMILY' ||
-							slotKey === 'SKILL_FAMILY_2';
-						v.className = wantsTip ? 'task-val has-tip' : 'task-val';
-						if (wantsTip) {
-							v.dataset.slotKey = slotKey;
-							v.tabIndex = 0;
-						}
-						v.textContent = seg.t;
-						content.appendChild(v);
-					} else {
-						content.appendChild(document.createTextNode(seg.t));
-					}
-				});
-			} else {
-				// Fallback (should be rare): render the prefilled line
-				content.textContent = task.line;
-			}
-			
-			row.append(label, dash, content);
-			list.appendChild(row);
-
-    });
-  }
-
-  challengeHasRoll = true;
-  window.CURRENT_CHALLENGE_CONTRACT = contract;
-  if (window.App?.setChallengeFates && contract?.challengeFates) {
-    window.App.setChallengeFates(contract.challengeFates);
-  }
-  try { document.dispatchEvent(new CustomEvent('randomancer:challenge-rendered')); } catch {}
-
-  setChallengePanels(getMode());
-}
-
-async function handleChallengeDraw({ statusEl }) {
-  await ensureDataPreload();
-  const contract = await generateChallengeContract({
-    challengeFates: window.App?.getChallengeFates?.()
-  });
-
-  renderChallengeContract(contract);
-  document.dispatchEvent(new CustomEvent('randomancer:draw-complete', {
-    detail: { mode: MODES.CHALLENGE, contract }
-  }));
-  if (statusEl) statusEl.textContent = '';
-  return true;
-}
-
-function syncMode(mode) {
-  const isChallenge = mode === MODES.CHALLENGE;
-  const isCodex = mode === MODES.CODEX;
-  const modeToggleControl = document.getElementById('randomancer-mode-control');
-  const app = document.getElementById('app');
-
-  document.body?.classList.toggle('challenge-mode', isChallenge);
-  document.body?.classList.toggle('codex-mode', isCodex);
-  if (document.body) document.body.dataset.mode = isChallenge ? 'challenge' : (isCodex ? 'codex' : 'build');
-  setHeaderLede(mode);
-  setChallengeVisibility(mode);
-  setChallengePanels(mode);
-
-  if (app && !isChallenge && app.dataset.hasRoll !== 'true') {
-    app.dataset.hasRoll = 'false';
-    const ascArt = document.getElementById('asc-art');
-    if (ascArt) {
-      ascArt.classList.remove('show');
-      ascArt.style.removeProperty('--asc-img');
-      delete ascArt.dataset.ascPath;
-    }
-  }
-
-  const rollText = document.querySelector('#roll .roll-text');
-  const rollButton = document.getElementById('roll');
-  const drawLabel = isChallenge ? 'Draw Challenge' : 'Draw Your Fate';
-  if (rollText) rollText.textContent = drawLabel;
-  rollButton?.setAttribute('aria-label', drawLabel);
-
-  modeToggleControl?.querySelectorAll('[data-mode-target]').forEach((btn) => {
-    const on = btn.dataset.modeTarget === mode;
-    btn.classList.toggle('is-active', on);
-    btn.setAttribute('aria-selected', on ? 'true' : 'false');
+    row.append(label, document.createTextNode(' • '), content); list.append(row);
   });
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
-  const modeControl = document.getElementById('randomancer-mode-control');
-  const initialMode = setMode(getMode());
+function selectContract(cadence, focus = false) {
+  activeCadence = cadence;
+  document.querySelectorAll('.contracts-card').forEach(card => {
+    const selected = card.dataset.cadence === cadence;
+    card.classList.toggle('is-front', selected);
+    card.setAttribute('aria-selected', String(selected));
+    card.style.setProperty('--stack-order', selected ? 3 : (card.dataset.cadence === 'weekly' ? 2 : 1));
+  });
+  if (focus) document.querySelector(`.contracts-card[data-cadence="${cadence}"]`)?.focus();
+}
 
-  stabilizeLedeHeight();
+async function openContracts() {
+  const overlay = document.getElementById('contracts-overlay');
+  if (!overlay || !overlay.hidden) return;
+  restoreFocus = document.activeElement;
+  if (!contracts) contracts = await generateContracts(new Date());
+  contracts.forEach(item => renderContractCard(overlay.querySelector(`[data-cadence="${item.period.cadence}"]`), item));
+  selectContract('daily');
+  overlay.hidden = false;
+  document.body.classList.add('contracts-open');
+  overlay.querySelector('.contracts-close')?.focus();
+  renewalTimer = setInterval(() => contracts.forEach(item => {
+    overlay.querySelector(`[data-cadence="${item.period.cadence}"] .contracts-card__renewal`).textContent = renewalLabel(item.period, new Date());
+  }), 60000);
+}
+function closeContracts() {
+  const overlay = document.getElementById('contracts-overlay');
+  if (!overlay || overlay.hidden) return;
+  overlay.hidden = true; document.body.classList.remove('contracts-open');
+  clearInterval(renewalTimer); renewalTimer = null;
+  restoreFocus?.focus?.(); restoreFocus = null;
+}
+
+async function init() {
   initChallengeInlineTooltips();
-  syncMode(initialMode);
-  try { document.dispatchEvent(new CustomEvent('randomancer:mode-change', { detail: { mode: initialMode } })); } catch {}
-
-  window.addEventListener('resize', stabilizeLedeHeight);
-
-  modeControl?.addEventListener('click', async (event) => {
-    const btn = event.target?.closest?.('[data-mode-target]');
-    if (!btn) return;
-    const targetMode = btn.dataset.modeTarget;
-    if (![MODES.STANDARD, MODES.CHALLENGE, MODES.CODEX].includes(targetMode)) return;
-    const label = targetMode === MODES.CHALLENGE
-      ? 'Entering Challenge Mode…'
-      : targetMode === MODES.CODEX ? 'Opening Codex…' : 'Returning to Build Mode…';
-
-    await runModeTransition(label, () => {
-      const nextMode = setMode(targetMode);
-      syncMode(nextMode);
-    });
-  });
-
-	try {
-		const lib = await loadChallengeLibrary();
-		CHALLENGE_TEMPLATE_BY_ID = Object.create(null);
-		(Array.isArray(lib) ? lib : []).forEach(t => {
-			if (t?.id && t?.template) CHALLENGE_TEMPLATE_BY_ID[t.id] = t.template;
-		});
-	} catch {}
-
-});
-
-window.RandomancerGetMode = getMode;
-
-window.RandomancerHandleRollOverride = async ({ statusEl }) => {
-  const mode = getMode();
-  if (mode !== MODES.CHALLENGE) return false;
-
+  setMode(getMode());
   try {
-    if (statusEl) statusEl.textContent = 'Drawing your challenge…';
-    await handleChallengeDraw({ statusEl });
-  } catch (err) {
-    console.error('[Randomancer][Challenge] draw failed', err);
-    if (statusEl) statusEl.textContent = 'Challenge generation failed. Try again.';
-  }
-  return true;
-};
-
-window.RandomancerRenderChallengeContract = (contract) => {
-  renderChallengeContract(contract);
-};
-
-window.RandomancerSetMode = (mode) => {
-  const next = setMode(mode);
-  syncMode(next);
-  return next;
-};
+    const lib = await loadChallengeLibrary();
+    CHALLENGE_TEMPLATE_BY_ID = Object.create(null);
+    lib.forEach(t => { if (t?.id && t?.template) CHALLENGE_TEMPLATE_BY_ID[t.id] = t.template; });
+  } catch {}
+  document.getElementById('randomancer-mode-control')?.addEventListener('click', e => {
+    const btn = e.target.closest('[data-mode-target]'); if (btn) setMode(btn.dataset.modeTarget);
+  });
+  document.getElementById('contracts-button')?.addEventListener('click', openContracts);
+  document.querySelector('.contracts-close')?.addEventListener('click', closeContracts);
+  document.querySelector('.contracts-backdrop')?.addEventListener('click', closeContracts);
+  document.querySelectorAll('.contracts-card').forEach(card => card.addEventListener('click', () => selectContract(card.dataset.cadence)));
+  document.addEventListener('keydown', e => {
+    const overlay = document.getElementById('contracts-overlay');
+    if (!overlay || overlay.hidden) return;
+    if (e.key === 'Escape') return closeContracts();
+    if (e.key !== 'Tab') return;
+    const focusable = [...overlay.querySelectorAll('button:not([disabled])')];
+    const first = focusable[0], last = focusable.at(-1);
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+}
+document.addEventListener('DOMContentLoaded', init);
+window.RandomancerGetMode = getMode;
+window.RandomancerSetMode = setMode;

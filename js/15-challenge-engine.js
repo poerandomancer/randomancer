@@ -15,9 +15,11 @@ function unique(items) {
   return [...new Set(toArray(items).filter(Boolean))];
 }
 
+let activeRandom = Math.random;
+
 function randomPick(items) {
   if (!items.length) return null;
-  return items[Math.floor(Math.random() * items.length)];
+  return items[Math.floor(activeRandom() * items.length)];
 }
 
 function weightedPick(items) {
@@ -25,7 +27,7 @@ function weightedPick(items) {
   if (!weighted.length) return null;
 
   const total = weighted.reduce((sum, item) => sum + Number(item.weight || 0), 0);
-  let roll = Math.random() * total;
+  let roll = activeRandom() * total;
 
   for (const item of weighted) {
     roll -= Number(item.weight || 0);
@@ -163,7 +165,7 @@ function pickByMatch({ options, optionLeanMap, targetLeanKey, mode }) {
     // For hybrids (e.g., dex_int), pick one component and match that.
     const parts = String(target).split('_').filter(Boolean);
     if (!parts.length) return [];
-    const chosen = parts.length === 1 ? parts[0] : parts[Math.floor(Math.random() * parts.length)];
+    const chosen = parts.length === 1 ? parts[0] : parts[Math.floor(activeRandom() * parts.length)];
     return options.filter(v => optionLeanMap?.[v] === chosen);
   }
 
@@ -799,7 +801,7 @@ function pickSlotValue(slotKey, slotConfig, slots, defs, context) {
   // Full-pool Challenge profile: all authored picker outcomes are eligible.
   if (pickerName === 'weaponLoadout') {
     const dualChance = 0.12;
-    if (dualChance && Math.random() < dualChance && slots?.CLASS && Array.isArray(context.weaponSet)) {
+    if (dualChance && activeRandom() < dualChance && slots?.CLASS && Array.isArray(context.weaponSet)) {
       const ws = toArray(context.weaponSet).filter(v => v && v !== 'Unarmed');
       const classLean = context.__lean?.class?.[slots.CLASS] || null;
       const wsLean = context.__lean?.weaponSet || {};
@@ -917,13 +919,16 @@ function buildContractTitle({ picks }) {
 // Generator
 // -------------------------
 
-async function generateChallengeContract({ severity = 'diabolical', maxAttempts = 140, challengeFates = null } = {}) {
+async function generateChallengeContract({ severity = 'diabolical', maxAttempts = 140, challengeFates = null, random = Math.random } = {}) {
   const normalizedSeverity = normalizeChallengeSeverity(severity);
   const rolePlan = STACK_PLAN;
 
   const library = await loadChallengeLibrary();
   const pickerContext = await buildPickerContext();
 
+  const previousRandom = activeRandom;
+  activeRandom = typeof random === 'function' ? random : Math.random;
+  try {
   const tasksByRole = rolePlan.map((role, index) => {
     const exactCount = rolePlan.filter(r => r === role).length;
     const base = library.filter(task =>
@@ -1013,12 +1018,14 @@ async function generateChallengeContract({ severity = 'diabolical', maxAttempts 
       twistCategories: { favor: [], ban: [] }
     }
   };
+  } finally {
+    activeRandom = previousRandom;
+  }
 }
 
-window.RandomancerChallenge = {
-  loadChallengeLibrary,
-  generateChallengeContract
-};
+if (typeof window !== 'undefined') {
+  window.RandomancerChallenge = { loadChallengeLibrary, generateChallengeContract };
+}
 
 export {
   loadChallengeLibrary,
