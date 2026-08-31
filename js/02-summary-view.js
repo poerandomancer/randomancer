@@ -103,6 +103,14 @@ function getGemDescription(entry) {
   return stripBracketMarkup(gem?.description || gem?.support_text || gem?.grants || '');
 }
 
+function getGemCraftingType(entry) {
+  const key = entry?.id || entry?.name || entry;
+  const gem = key ? lookupGem(getGemDict(), key) : null;
+  if (gem?.crafting_type) return String(gem.crafting_type).trim();
+  const types = Array.isArray(gem?.crafting?.types_raw) ? gem.crafting.types_raw.filter(Boolean) : [];
+  return types.map((type) => String(type).trim()).filter(Boolean).join(' / ');
+}
+
 function getPassiveDescription(name) {
   const node = (window.DATA?.passivesEnriched?.nodes || []).find((item) => item?.name === name) || null;
   return (Array.isArray(node?.lines) ? node.lines : []).map(stripBracketMarkup).filter(Boolean).join(' ');
@@ -179,16 +187,41 @@ function getUniqueRecord(name) {
   return getUniqueSourceCollection().find((item) => item?.name === name || item?.base_item?.display_name === name || item?.source?.label === name) || null;
 }
 
-function getUniqueTooltipPayload(name) {
+function formatUniqueRequirements(requirements) {
+  const req = requirements || {};
+  const parts = [['level', 'Level'], ['str', 'STR'], ['dex', 'DEX'], ['int', 'INT']]
+    .map(([key, label]) => {
+      const value = Number(req[key]);
+      return Number.isFinite(value) && value > 0 ? `${label} ${value}` : '';
+    })
+    .filter(Boolean);
+  return parts.length ? `Requires: ${parts.join(', ')}` : '';
+}
+
+function getUniqueSynergy(entry, snap) {
+  const evidence = Array.isArray(entry?.recommendationEvidence?.matches) ? entry.recommendationEvidence.matches : [];
+  const evidenceMechanic = evidence.map((match) => match?.mechanic).find(Boolean);
+  const focuses = [...(snap?.ailmentList || []), ...(snap?.tacticList || [])].filter(Boolean);
+  const tags = new Set((getUniqueRecord(entry?.name)?.tags || []).map((tag) => String(tag).toLowerCase()));
+  const mechanic = evidenceMechanic || focuses.find((focus) => tags.has(String(focus).toLowerCase()));
+  const label = String(mechanic || '').replace(/_/g, ' ').trim();
+  const playerLabel = label ? label[0].toUpperCase() + label.slice(1) : '';
+  return playerLabel ? `Synergizes with your ${playerLabel} focus.` : '';
+}
+
+function getUniqueTooltipPayload(entry, snap) {
+  const name = typeof entry === 'string' ? entry : entry?.name;
   const found = getUniqueRecord(name);
   const base = found?.base || found?.base_item?.display_name || found?.slot || '';
-  const lines = [base, ...(Array.isArray(found?.explicit_mods) ? found.explicit_mods : found?.lines || found?.explicit || [])]
-    .map(stripBracketMarkup)
-    .filter(Boolean)
-    .slice(0, 7);
+  const implicit = Array.isArray(found?.implicit_mods) ? found.implicit_mods : [];
+  const explicit = Array.isArray(found?.explicit_mods) ? found.explicit_mods : found?.lines || found?.explicit || [];
   return {
     title: name,
-    lines
+    meta: stripBracketMarkup(base),
+    requirements: formatUniqueRequirements(found?.requirements),
+    synergy: getUniqueSynergy(entry, snap),
+    flavour: (Array.isArray(found?.flavour_text) ? found.flavour_text : []).map(stripBracketMarkup).filter(Boolean),
+    modifiers: [...implicit, ...explicit].map(stripBracketMarkup).filter(Boolean)
   };
 }
 
@@ -198,7 +231,8 @@ function createNamedItem(name, slotKey, description, opts = {}) {
     slotKey,
     description: description || '',
     tipTitle: opts.tipTitle || name || '',
-    tipLines: Array.isArray(opts.tipLines) ? opts.tipLines.filter(Boolean) : (description ? [description] : [])
+    tipLines: Array.isArray(opts.tipLines) ? opts.tipLines.filter(Boolean) : (description ? [description] : []),
+    tipPayload: opts.tipPayload || null
   };
 }
 
@@ -233,7 +267,13 @@ function deriveBuildCardModel(snap) {
   const primaryWeapons = formatWeaponLine(snap.weapon, snap.offhand);
   const secondaryWeapons = snap.weapon2 || snap.offhand2 ? formatWeaponLine(snap.weapon2, snap.offhand2) : '';
   const skills = (snap.recommendedSkills || [])
-    .map((entry) => createNamedItem(getGemDisplayName(entry), 'ACTIVE_SKILL', getGemDescription(entry)))
+    .map((entry) => {
+      const name = getGemDisplayName(entry);
+      const description = getGemDescription(entry);
+      return createNamedItem(name, 'ACTIVE_SKILL', description, {
+        tipPayload: { title: name, meta: getGemCraftingType(entry), lines: description ? [description] : [] }
+      });
+    })
     .filter((item) => item.name)
     .slice(0, 2);
   const supports = dedupeNames(
@@ -242,8 +282,8 @@ function deriveBuildCardModel(snap) {
       .filter((item) => item.name)
   );
   const persistentBuffName = snap.recommendedPersistentBuff ? getGemDisplayName(snap.recommendedPersistentBuff) : '';
-  const uniqueNames = Array.isArray(snap.recommendedUniques)
-    ? snap.recommendedUniques.map((item) => typeof item === 'string' ? item : item?.name).filter(Boolean)
+  const uniqueEntries = Array.isArray(snap.recommendedUniques)
+    ? snap.recommendedUniques.filter((item) => typeof item === 'string' ? item : item?.name)
     : [];
   const passivesRaw = snap.passives || {};
   const passives = dedupeNames(
@@ -272,9 +312,11 @@ function deriveBuildCardModel(snap) {
       { label: 'Persistent Buff', values: persistentBuffName ? [createNamedItem(persistentBuffName, 'PERSISTENT_BUFF', getGemDescription(snap.recommendedPersistentBuff))] : [] },
       {
         label: 'Uniques',
-        values: uniqueNames.map((name) => {
-          const tooltip = getUniqueTooltipPayload(name);
-          return createNamedItem(name, 'UNIQUE', tooltip.lines.join(' '), { tipTitle: tooltip.title, tipLines: tooltip.lines });
+        values: uniqueEntries.map((entry) => {
+          const name = typeof entry === 'string' ? entry : entry.name;
+          const tooltip = getUniqueTooltipPayload(entry, snap);
+          const lines = [tooltip.meta, tooltip.requirements, tooltip.synergy, ...tooltip.flavour, ...tooltip.modifiers].filter(Boolean);
+          return createNamedItem(name, 'UNIQUE', lines.join(' '), { tipTitle: tooltip.title, tipLines: lines, tipPayload: tooltip });
         })
       },
       { label: 'Passives', values: passives }
@@ -374,9 +416,22 @@ function scheduleTooltipHide(delay = 200) {
 
 function renderTooltipPayload(payload) {
   const el = ensureTooltipEl();
+  const flavour = Array.isArray(payload.flavour) ? payload.flavour : [];
+  const modifiers = Array.isArray(payload.modifiers) ? payload.modifiers : [];
+  const isUnique = flavour.length || modifiers.length || payload.requirements || payload.synergy;
+  const body = isUnique ? `
+    ${payload.meta ? `<div class="rc-tooltip__meta">${escapeHtml(payload.meta)}</div>` : ''}
+    ${payload.requirements ? `<div class="rc-tooltip__requirements">${escapeHtml(payload.requirements)}</div>` : ''}
+    ${payload.synergy ? `<div class="rc-tooltip__separator"></div><div class="rc-tooltip__synergy">${escapeHtml(payload.synergy)}</div>` : ''}
+    ${flavour.length ? `<div class="rc-tooltip__flavour">${flavour.map((line) => `<div>${escapeHtml(line)}</div>`).join('')}</div>` : ''}
+    ${modifiers.length ? `<div class="rc-tooltip__separator"></div><div class="rc-tooltip__modifiers">${modifiers.map((line) => `<div>${escapeHtml(line)}</div>`).join('')}</div>` : ''}
+  ` : `
+    ${payload.meta ? `<div class="rc-tooltip__meta">${escapeHtml(payload.meta)}</div>` : ''}
+    <div class="rc-tooltip__lines">${(payload.lines || []).map((line) => `<div>${escapeHtml(line)}</div>`).join('')}<div class="rc-tooltip__fade" aria-hidden="true"></div></div>
+  `;
   el.innerHTML = `
     <div class="rc-tooltip__title">${escapeHtml(payload.title || '')}</div>
-    <div class="rc-tooltip__lines">${(payload.lines || []).map((line) => `<div>${escapeHtml(line)}</div>`).join('')}<div class="rc-tooltip__fade" aria-hidden="true"></div></div>
+    <div class="rc-tooltip__content">${body}</div>
     <div class="rc-tooltip__hint">Tap to pin</div>
   `;
 }
@@ -407,10 +462,14 @@ function showCardTooltipFor(target, pinned = false) {
     lines = JSON.parse(target?.dataset?.tipLines || '[]');
   } catch {}
   if (!lines.length && target?.dataset?.tipBody) lines = [target.dataset.tipBody];
-  if (!title || !lines.length) return;
+  let payload = null;
+  try {
+    payload = JSON.parse(target?.dataset?.tipPayload || 'null');
+  } catch {}
+  if (!title || (!lines.length && !payload)) return;
   tooltipTarget = target;
   tooltipPinned = pinned;
-  renderTooltipPayload({ title, lines });
+  renderTooltipPayload(payload || { title, lines });
   requestAnimationFrame(() => positionTooltip(target));
 }
 
@@ -431,6 +490,7 @@ function renderInteractiveName(item, variant = 'front') {
   if (classes.includes('has-tip')) {
     attrs.push(`data-tip-title="${escapeHtml(item.tipTitle || item.name)}"`);
     attrs.push(`data-tip-lines="${escapeHtml(JSON.stringify(item.tipLines || []))}"`);
+    if (item.tipPayload) attrs.push(`data-tip-payload="${escapeHtml(JSON.stringify(item.tipPayload))}"`);
     attrs.push('tabindex="0"');
   }
   return `<span ${attrs.join(' ')}>${escapeHtml(item?.name || '')}</span>`;
