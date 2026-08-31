@@ -674,6 +674,13 @@ function setMode(mode) {
   const empty = document.getElementById('empty-state');
   empty?.classList.toggle('is-hidden', codex || document.getElementById('app')?.dataset.hasRoll === 'true');
   document.getElementById('standard-controls')?.classList.toggle('is-hidden', codex);
+  const modeAction = document.getElementById('mode-header-action');
+  if (modeAction) {
+    const label = codex ? 'Return to Build' : 'Open Codex';
+    modeAction.classList.toggle('is-build-return', codex);
+    modeAction.setAttribute('aria-label', label);
+    modeAction.title = label;
+  }
   const instructions = document.querySelector('[data-app-lede-instructions]');
   if (instructions) instructions.innerHTML = codex ? CODEX_LEDE_TEXT : STANDARD_LEDE_HTML;
   document.querySelectorAll('[data-mode-target]').forEach(btn => {
@@ -769,8 +776,8 @@ async function init() {
     CHALLENGE_TEMPLATE_BY_ID = Object.create(null);
     lib.forEach(t => { if (t?.id && t?.template) CHALLENGE_TEMPLATE_BY_ID[t.id] = t.template; });
   } catch {}
-  document.getElementById('randomancer-mode-control')?.addEventListener('click', e => {
-    const btn = e.target.closest('[data-mode-target]'); if (btn) setMode(btn.dataset.modeTarget);
+  document.getElementById('mode-header-action')?.addEventListener('click', () => {
+    setMode(document.body.dataset.mode === 'codex' ? MODES.STANDARD : MODES.CODEX);
   });
   document.getElementById('contracts-button')?.addEventListener('click', openContracts);
   document.querySelector('.contracts-close')?.addEventListener('click', closeContracts);
