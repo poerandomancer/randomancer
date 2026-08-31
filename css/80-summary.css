@@ -542,6 +542,7 @@
   /* The shared tooltip is portaled to body and must clear the Contracts overlay. */
   z-index:8100;
   width:min(360px, calc(100vw - 20px));
+  box-sizing:border-box;
   padding:.8rem .95rem;
   border-radius:14px;
   border:1px solid rgba(212,170,80,0.22);
@@ -553,9 +554,23 @@
   transform: translate(-50%, 6px) scale(.985);
   transition: opacity .14s ease, transform .14s ease;
   will-change: transform, opacity;
+  max-height:calc(100vh - 20px);
+  overflow-y:auto;
+  overscroll-behavior:contain;
 }
 .rc-tooltip.is-open{ opacity:1; pointer-events:auto; transform: translate(-50%, 0) scale(1); }
 .rc-tooltip__title{ font-weight:700; color:var(--gold); margin-bottom:.45rem; }
+.rc-tooltip__content{ display:grid; gap:.35rem; }
+.rc-tooltip__meta{
+  margin-top:-.25rem;
+  color:rgba(236,227,214,.62);
+  font-size:.8rem;
+}
+.rc-tooltip__requirements{ color:rgba(244,223,174,.82); font-size:.82rem; }
+.rc-tooltip__separator{ height:1px; margin:.24rem 0; background:rgba(212,170,80,.18); }
+.rc-tooltip__synergy{ color:var(--silver); line-height:1.45; }
+.rc-tooltip__flavour{ color:rgba(236,227,214,.68); font-style:italic; line-height:1.4; }
+.rc-tooltip__modifiers{ display:grid; gap:.24rem; color:#f0e9dc; line-height:1.38; }
 .rc-tooltip__lines{ position:relative; display:grid; gap:.35rem; color:var(--silver); line-height:1.45; }
 .rc-tooltip__fade{ display:none; }
 .rc-tooltip__hint{ margin-top:.5rem; color:var(--muted); font-size:.75rem; }

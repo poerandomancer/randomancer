@@ -288,6 +288,10 @@ async function hydrateUniqueSynergyTooltips(snapshot = currentSnapshot()) {
 
     node.dataset.tipTitle = name;
     node.dataset.tipLines = JSON.stringify(lines);
+    try {
+      const payload = JSON.parse(node.dataset.tipPayload || 'null');
+      if (payload) node.dataset.tipPayload = JSON.stringify({ ...payload, synergy });
+    } catch {}
     node.classList.add('has-tip');
     if (!node.hasAttribute('tabindex')) node.setAttribute('tabindex', '0');
   });

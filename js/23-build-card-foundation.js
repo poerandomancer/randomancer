@@ -68,6 +68,13 @@ function getGemDescription(entry) {
   return stripMarkup(gem?.description || gem?.support_text || gem?.grants || '');
 }
 
+function getGemCraftingType(entry) {
+  const gem = getGem(entry);
+  if (gem?.crafting_type) return String(gem.crafting_type).trim();
+  const types = Array.isArray(gem?.crafting?.types_raw) ? gem.crafting.types_raw : [];
+  return cleanTooltipLines(types).join(' / ');
+}
+
 function getPassiveDescription(entry) {
   const name = entry?.name || '';
   const fromData = (window.DATA?.passivesEnriched?.nodes || []).find((node) => node?.name === name);
@@ -107,14 +114,29 @@ async function ensureBuildCardUniqueData() {
   return uniqueSourcePromise;
 }
 
-function getUniqueDescription(name) {
+function formatRequirements(requirements) {
+  const req = requirements || {};
+  const parts = [['level', 'Level'], ['str', 'STR'], ['dex', 'DEX'], ['int', 'INT']]
+    .map(([key, label]) => Number(req[key]) > 0 ? `${label} ${Number(req[key])}` : '')
+    .filter(Boolean);
+  return parts.length ? `Requires: ${parts.join(', ')}` : '';
+}
+
+function getUniqueTooltipPayload(name) {
   const items = getUniqueSourceCollection();
   const found = items.find((entry) => entry?.name === name || entry?.base_item?.display_name === name || entry?.source?.label === name);
-  const slot = found?.slot || found?.base_item?.slot || '';
   const base = found?.base || found?.base_item?.display_name || '';
+  const slot = found?.slot || found?.base_item?.slot || '';
   const implicit = found?.implicit_mods || found?.implicit || [];
   const explicit = found?.explicit_mods || found?.lines || found?.explicit || [];
-  return cleanTooltipLines([[base, slot].filter(Boolean).join(' · '), ...arrify(implicit), ...arrify(explicit)]).slice(0, 9);
+  return {
+    title: name,
+    meta: stripMarkup([base, slot].filter(Boolean).join(' · ')),
+    requirements: formatRequirements(found?.requirements),
+    synergy: '',
+    flavour: cleanTooltipLines(found?.flavour_text || found?.flavour || []),
+    modifiers: cleanTooltipLines([...arrify(implicit), ...arrify(explicit)])
+  };
 }
 
 function arrify(value) { return Array.isArray(value) ? value : (value ? [value] : []); }
@@ -127,6 +149,7 @@ function item(name, options = {}) {
     slotKey: options.slotKey || '',
     tipTitle: options.tipTitle || String(name || '').trim(),
     tipLines: Array.isArray(options.tipLines) ? options.tipLines.filter(Boolean) : [],
+    tipPayload: options.tipPayload || null,
     supports: Array.isArray(options.supports) ? options.supports : []
   };
 }
@@ -146,6 +169,11 @@ function deriveBuildCardModel(snapshot) {
       return item(getGemName(entry), {
         slotKey: 'ACTIVE_SKILL',
         tipLines: [getGemDescription(entry)].filter(Boolean),
+        tipPayload: {
+          title: getGemName(entry),
+          meta: getGemCraftingType(entry),
+          lines: [getGemDescription(entry)].filter(Boolean)
+        },
         supports: supports.map((support) => item(getGemName(support), {
           slotKey: 'SUPPORT',
           tipLines: [getGemDescription(support)].filter(Boolean)
@@ -159,7 +187,11 @@ function deriveBuildCardModel(snapshot) {
     .map((entry) => typeof entry === 'string' ? entry : entry?.name)
     .filter(Boolean)
     .slice(0, 3)
-    .map((name) => item(name, { slotKey: 'UNIQUE', tipLines: getUniqueDescription(name) }));
+    .map((name) => {
+      const tipPayload = getUniqueTooltipPayload(name);
+      const tipLines = [tipPayload.meta, tipPayload.requirements, ...tipPayload.flavour, ...tipPayload.modifiers].filter(Boolean);
+      return item(name, { slotKey: 'UNIQUE', tipLines, tipPayload });
+    });
 
   const passives = snap.passives && typeof snap.passives === 'object' ? snap.passives : {};
   const passiveIdeas = [
@@ -196,13 +228,14 @@ function deriveBuildCardModel(snapshot) {
 function renderName(entry, face) {
   const classes = ['rc-name'];
   if (face === BUILD_CARD_FACES.BACK) classes.push('rc-name--back');
-  const hasTip = entry?.tipLines?.length && TOOLTIP_KEYS.has(entry.slotKey);
+  const hasTip = (entry?.tipLines?.length || entry?.tipPayload) && TOOLTIP_KEYS.has(entry.slotKey);
   if (hasTip) classes.push('has-tip');
   const attrs = [`class="${classes.join(' ')}"`];
   if (hasTip) {
     attrs.push(`tabindex="0"`);
     attrs.push(`data-tip-title="${escapeHtml(entry.tipTitle || entry.name)}"`);
     attrs.push(`data-tip-lines="${escapeHtml(JSON.stringify(entry.tipLines))}"`);
+    if (entry.tipPayload) attrs.push(`data-tip-payload="${escapeHtml(JSON.stringify(entry.tipPayload))}"`);
   }
   const prefix = entry?.prefix ? `<span class="rc-name__prefix">${escapeHtml(entry.prefix)} — </span>` : '';
   const meta = entry?.meta ? `<span class="rc-name__meta">${escapeHtml(entry.meta)}</span>` : '';
@@ -308,14 +341,26 @@ function showBuildCardTooltip(target, pinned = false) {
   let lines = [];
   try { lines = JSON.parse(target?.dataset?.tipLines || '[]'); } catch {}
   const title = target?.dataset?.tipTitle || target?.textContent?.trim();
-  if (!title || !lines.length) return;
+  let payload = null;
+  try { payload = JSON.parse(target?.dataset?.tipPayload || 'null'); } catch {}
+  if (!title || (!lines.length && !payload)) return;
   const tooltip = ensureTooltip();
-  const renderedLines = lines.map((line) => {
+  const renderedLines = (payload?.lines || lines).map((line) => {
     const text = String(line || '');
     const synergyClass = /^Synergies:/i.test(text) ? ' rc-tooltip__line--synergy' : '';
     return `<div class="rc-tooltip__line${synergyClass}">${escapeHtml(text)}</div>`;
   }).join('');
-  tooltip.innerHTML = `<div class="rc-tooltip__title">${escapeHtml(title)}</div><div class="rc-tooltip__lines">${renderedLines}</div><div class="rc-tooltip__hint">Tap to pin</div>`;
+  const flavour = Array.isArray(payload?.flavour) ? payload.flavour : [];
+  const modifiers = Array.isArray(payload?.modifiers) ? payload.modifiers : [];
+  const structured = payload ? `
+    ${payload.meta ? `<div class="rc-tooltip__meta">${escapeHtml(payload.meta)}</div>` : ''}
+    ${payload.requirements ? `<div class="rc-tooltip__requirements">${escapeHtml(payload.requirements)}</div>` : ''}
+    ${payload.synergy ? `<div class="rc-tooltip__separator"></div><div class="rc-tooltip__synergy">${escapeHtml(payload.synergy)}</div>` : ''}
+    ${flavour.length ? `<div class="rc-tooltip__flavour">${flavour.map((line) => `<div>${escapeHtml(line)}</div>`).join('')}</div>` : ''}
+    ${modifiers.length ? `<div class="rc-tooltip__separator"></div><div class="rc-tooltip__modifiers">${modifiers.map((line) => `<div>${escapeHtml(line)}</div>`).join('')}</div>` : ''}
+    ${payload.lines?.length ? `<div class="rc-tooltip__lines">${renderedLines}</div>` : ''}
+  ` : `<div class="rc-tooltip__lines">${renderedLines}</div>`;
+  tooltip.innerHTML = `<div class="rc-tooltip__title">${escapeHtml(payload?.title || title)}</div><div class="rc-tooltip__content">${structured}</div><div class="rc-tooltip__hint">Tap to pin</div>`;
   tooltipTarget = target;
   tooltipPinned = pinned;
   tooltip.classList.add('is-open');
