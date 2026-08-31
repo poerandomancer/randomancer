@@ -91,6 +91,14 @@ strong, b { font-weight: 600; }
     top:0.9rem;
     left:max(0.75rem, env(safe-area-inset-left));
   }
+
+  header{
+    padding-top:4rem;
+  }
+
+  .title{
+    font-size:clamp(1.55rem, 8vw, 1.9rem);
+  }
 }
 
 

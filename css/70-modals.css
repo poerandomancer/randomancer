@@ -19,11 +19,12 @@
   opacity: 0.8;
   transition: transform .12s ease, box-shadow .12s ease, background .12s ease, opacity .12s ease;
 }
-/* Header floating action buttons (top-right) */
-.saved-fab{ right: calc(max(16px, env(safe-area-inset-right)) + 80px); }
-.feedback-fab{ right: calc(max(16px, env(safe-area-inset-right)) + 40px); }
+/* Header floating actions: Challenges · Codex/Build · Menu. */
+.saved-fab,
+.feedback-fab,
+#info-fab{ display:none; }
 .header-menu-fab{
-  display:none;
+  display:grid;
   right: max(16px, env(safe-area-inset-right));
   font-size:16px;
 
@@ -34,6 +35,31 @@
   /* tiny vertical nudge — adjust 0–2px to taste */
   padding-bottom: 4px;
 }
+
+.mode-header-action{
+  right:calc(max(16px, env(safe-area-inset-right)) + 42px);
+  display:grid;
+  place-items:center;
+  padding:0;
+  border:0;
+  background:transparent;
+  box-shadow:none;
+}
+.mode-header-action__icon{
+  width:24px;
+  height:24px;
+  fill:currentColor;
+  filter:drop-shadow(0 0 5px currentColor);
+  transition:transform .12s ease, filter .12s ease;
+}
+.mode-header-action__icon--codex{ color:var(--codex-ember); }
+.mode-header-action__icon--build{ display:none; color:var(--gold); }
+.mode-header-action.is-build-return .mode-header-action__icon--codex{ display:none; }
+.mode-header-action.is-build-return .mode-header-action__icon--build{ display:block; }
+.mode-header-action:hover,
+.mode-header-action:focus-visible{ box-shadow:none; }
+.mode-header-action:hover .mode-header-action__icon,
+.mode-header-action:focus-visible .mode-header-action__icon{ transform:scale(1.08); filter:drop-shadow(0 0 9px currentColor); }
 
 
 .rm-info-fab:hover{
@@ -99,15 +125,6 @@
 }
 .header-menu-label{
   color: rgba(255, 240, 210, .92);
-}
-
-/* On mobile, collapse the 3 header icons into a single menu button */
-@media (max-width: 640px){
-  #saved-fab,
-  #feedback-fab,
-  #info-fab{ display:none; }
-
-  #header-menu-fab{ display:grid; }
 }
 
 .rm-info-fab:focus{ outline: none; box-shadow: 0 0 0 2px rgba(202,164,95,.45); }
