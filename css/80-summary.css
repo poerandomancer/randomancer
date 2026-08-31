@@ -542,6 +542,7 @@
   /* The shared tooltip is portaled to body and must clear the Contracts overlay. */
   z-index:8100;
   width:min(360px, calc(100vw - 20px));
+  box-sizing:border-box;
   padding:.8rem .95rem;
   border-radius:14px;
   border:1px solid rgba(212,170,80,0.22);

@@ -5,8 +5,7 @@ import test from 'node:test';
 const snapshots = readFileSync(new URL('../js/00-locks-and-snapshots.js', import.meta.url), 'utf8');
 const stage = readFileSync(new URL('../js/24-primary-card-stage.js', import.meta.url), 'utf8');
 const polish = readFileSync(new URL('../js/25-card-polish.js', import.meta.url), 'utf8');
-const summary = readFileSync(new URL('../js/02-summary-view.js', import.meta.url), 'utf8');
-const summaryStyles = readFileSync(new URL('../css/80-summary.css', import.meta.url), 'utf8');
+const foundation = readFileSync(new URL('../js/23-build-card-foundation.js', import.meta.url), 'utf8');
 
 test('saved primary-card actions render a filled star', () => {
   assert.match(stage, /saved \? '★' : '☆'/);
@@ -30,16 +29,15 @@ test('new copied build links contain the canonical snapshot', () => {
   assert.match(snapshots, /short-lived compact-link implementation/);
 });
 
-test('Build Ideas tooltips surface enriched player-facing metadata conditionally', () => {
-  assert.match(summary, /gem\?\.crafting_type/);
-  assert.match(summary, /gem\?\.crafting\?\.types_raw/);
-  assert.match(summary, /\['level', 'Level'\], \['str', 'STR'\], \['dex', 'DEX'\], \['int', 'INT'\]/);
-  assert.match(summary, /found\?\.flavour_text/);
-  assert.match(summary, /\.\.\.implicit, \.\.\.explicit/);
-  assert.match(summary, /Array\.isArray\(payload\.flavour\) \? payload\.flavour/);
-  assert.match(summary, /flavour\.length \? `<div class="rc-tooltip__flavour"/);
-  assert.match(summary, /modifiers\.length \? `<div class="rc-tooltip__separator"/);
-  assert.doesNotMatch(summary, /data-tip-(?:score|tags|ontology|source)/);
-  assert.match(summaryStyles, /max-height:calc\(100vh - 20px\)/);
-  assert.match(summaryStyles, /overflow-y:auto/);
+test('primary Build Ideas tooltips use enriched skill and unique fields', () => {
+  assert.match(foundation, /gem\?\.crafting_type/);
+  assert.match(foundation, /gem\?\.crafting\?\.types_raw/);
+  assert.match(foundation, /found\?\.requirements/);
+  assert.match(foundation, /found\?\.flavour_text/);
+  assert.match(foundation, /modifiers: cleanTooltipLines/);
+  assert.match(foundation, /data-tip-payload/);
+  assert.match(foundation, /rc-tooltip__requirements/);
+  assert.match(foundation, /rc-tooltip__flavour/);
+  assert.match(foundation, /rc-tooltip__modifiers/);
+  assert.match(polish, /tipPayload[\s\S]*?synergy/);
 });
