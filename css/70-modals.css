@@ -60,7 +60,8 @@
 .mode-header-action__icon--build{
   display:none;
   color:#c8a86b;
-  filter:drop-shadow(0 0 3px #c8a86b) drop-shadow(0 0 7px rgba(200,168,107,.35));
+  object-fit:contain;
+  filter:brightness(0) saturate(100%) invert(71%) sepia(28%) saturate(739%) hue-rotate(358deg) brightness(91%) contrast(87%) drop-shadow(0 0 3px #c8a86b) drop-shadow(0 0 7px rgba(200,168,107,.35));
 }
 .mode-header-action.is-build-return .mode-header-action__icon--codex{ display:none; }
 .mode-header-action.is-build-return .mode-header-action__icon--build{ display:block; }
@@ -74,7 +75,7 @@
 }
 .mode-header-action:hover .mode-header-action__icon--build,
 .mode-header-action:focus-visible .mode-header-action__icon--build{
-  filter:drop-shadow(0 0 4px #d8bb7f) drop-shadow(0 0 10px rgba(200,168,107,.8));
+  filter:brightness(0) saturate(100%) invert(80%) sepia(20%) saturate(801%) hue-rotate(359deg) brightness(92%) contrast(86%) drop-shadow(0 0 4px #d8bb7f) drop-shadow(0 0 10px rgba(200,168,107,.8));
 }
 
 
