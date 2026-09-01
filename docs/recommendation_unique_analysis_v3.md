@@ -7,10 +7,10 @@ This deterministic report audits the implemented whole-item runtime semantics wh
 - Audited uniques: 131
 - With granted skills: 94; with granted effects: 0
 - Material granted-semantic gaps: 33
-- Previous empty cells: 108; new empty cells: 70; empty→non-empty: 39
+- Previous empty cells: 108; new empty cells: 73; empty→non-empty: 36
 - Existing non-empty winner changes: 10; runtime/top-band agreement: 131/135
-- Runtime semantics: 73 uniques, 255 promoted facts, 80226 bytes
-- Quality bands: one=50, two=9, three=7 (zero=69)
+- Runtime semantics: 73 uniques, 254 promoted facts, 80701 bytes
+- Quality bands: one=49, two=9, three=7 (zero=70)
 
 ## Ranking model
 
@@ -38,7 +38,7 @@ Slot type adds no semantic score. Bow and Quiver are equally family-legal, and r
 - Double Vision → Gemini Surge: AFFINITY_AMPLIFICATION:has_property:cold; AFFINITY_AMPLIFICATION:has_property:fire; AFFINITY_AMPLIFICATION:modifies:cold; AFFINITY_AMPLIFICATION:modifies:fire; BUILD_DEFINING_CAPABILITY:converts:cold; BUILD_DEFINING_CAPABILITY:converts:fire; offenses cold, fire; changes a proposed winner.
 - Dusk Vigil → Ember Fusillade, Firebolt: AFFINITY_AMPLIFICATION:has_property:fire; AFFINITY_AMPLIFICATION:modifies:lightning; BUILD_DEFINING_CAPABILITY:inflicts:ignite; PAYOFF_CONTEXT:consumes:lightning; offenses fire, ignite, lightning.
 - Earthbound → Lightning Bolt, Spark: AFFINITY_AMPLIFICATION:has_property:cold; AFFINITY_AMPLIFICATION:has_property:lightning; offenses cold, lightning.
-- Enezun's Charge → Volatile Dead: AFFINITY_AMPLIFICATION:has_property:fire; BUILD_DEFINING_CAPABILITY:inflicts:ignite; offenses fire, ignite.
+- Enezun's Charge → Volatile Dead: AFFINITY_AMPLIFICATION:has_property:fire; offenses fire.
 - Fairgraves' Curse → Phantasmal Arrow: AFFINITY_AMPLIFICATION:has_property:fire; AFFINITY_AMPLIFICATION:modifies:fire; AFFINITY_AMPLIFICATION:modifies:ignite; BUILD_DEFINING_CAPABILITY:converts:fire; BUILD_DEFINING_CAPABILITY:inflicts:ignite; offenses fire, ignite.
 - Fury of the King → Molten Crash: AFFINITY_AMPLIFICATION:modifies:fire; BUILD_DEFINING_CAPABILITY:converts:fire; offenses fire.
 - Guiding Palm of the Eye → Purity of Ice: AFFINITY_AMPLIFICATION:has_property:cold; offenses cold.
@@ -54,7 +54,8 @@ Slot type adds no semantic score. Bow and Quiver are equally family-legal, and r
 
 ## Empty results
 
-- GENUINELY_NO_RELEVANT_UNIQUE: 69
+- GENUINELY_NO_RELEVANT_UNIQUE: 70
+- ITEM_SEMANTIC_DATA_INCOMPLETENESS: 2
 - MISSING_GRANTED_SEMANTICS: 1
 
 Empty cells retain only up to three meaningful legal leads in the JSON artifact. No cell is force-filled. The dominant cause is absence or incompleteness of typed item semantics; granted behavior explains only the subset with a provable promoted fact.

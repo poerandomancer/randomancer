@@ -19686,6 +19686,19 @@
       "support": "Esh's Radiance",
       "family": "Esh's Radiance",
       "relation": "ADD_OR_GAIN",
+      "from": "lightning",
+      "to": "chaos",
+      "requirements": [
+        "requires:chaos"
+      ],
+      "availability": "LINEAGE_SUPPORT",
+      "eligibleForTier3": false,
+      "notes": null
+    },
+    {
+      "support": "Esh's Radiance",
+      "family": "Esh's Radiance",
+      "relation": "ADD_OR_GAIN",
       "from": null,
       "to": "shock",
       "requirements": [
@@ -19837,6 +19850,19 @@
       "support": "Tul's Stillness",
       "family": "Tul's Stillness",
       "relation": "ADD_OR_GAIN",
+      "from": "cold",
+      "to": "chaos",
+      "requirements": [
+        "requires:chaos"
+      ],
+      "availability": "LINEAGE_SUPPORT",
+      "eligibleForTier3": false,
+      "notes": null
+    },
+    {
+      "support": "Tul's Stillness",
+      "family": "Tul's Stillness",
+      "relation": "ADD_OR_GAIN",
       "from": null,
       "to": "freeze",
       "requirements": [
@@ -19858,10 +19884,34 @@
       "notes": null
     },
     {
+      "support": "Uul-Netol's Embrace",
+      "family": "Uul-Netol's Embrace",
+      "relation": "ADD_OR_GAIN",
+      "from": "physical",
+      "to": "chaos",
+      "requirements": [],
+      "availability": "LINEAGE_SUPPORT",
+      "eligibleForTier3": false,
+      "notes": null
+    },
+    {
       "support": "Xoph's Pyre",
       "family": "Xoph's Pyre",
       "relation": "ADD_OR_GAIN",
       "from": null,
+      "to": "chaos",
+      "requirements": [
+        "requires:chaos"
+      ],
+      "availability": "LINEAGE_SUPPORT",
+      "eligibleForTier3": false,
+      "notes": null
+    },
+    {
+      "support": "Xoph's Pyre",
+      "family": "Xoph's Pyre",
+      "relation": "ADD_OR_GAIN",
+      "from": "fire",
       "to": "chaos",
       "requirements": [
         "requires:chaos"

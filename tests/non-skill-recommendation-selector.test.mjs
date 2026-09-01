@@ -320,6 +320,39 @@ test('passive offensive anchors enforce direction, source, and delivery per fact
   assert.equal(sourced.some((entry) => entry.id === 'cold-from-lightning'), true);
 });
 
+test('actor scope, self-state conditions, and elemental source subsumption are directional', () => {
+  const scoped = (id, facts) => entity(id, 'passive', facts);
+  const candidates = catalog([
+    scoped('companion-poison', [{ ...fact('poison', 'inflicts'), delivery: 'companion' }]),
+    scoped('minion-poison', [{ ...fact('poison', 'inflicts'), delivery: 'minion' }]),
+    scoped('totem-poison', [{ ...fact('poison', 'inflicts'), delivery: 'totem' }]),
+    scoped('lightning-to-cold', [{ ...fact('cold'), from: 'lightning', scope: 'outgoing' }]),
+    scoped('while-ignited', [{ ...fact('fire'), condition: 'ignited' }])
+  ]);
+  const pack = (properties, sources = [], selfStates = []) => ({ ...pkg, packageProfile: {
+    finalOffense: ['poison', 'cold', 'fire'], primarySkill: { properties }, sourceMechanics: sources,
+    selfStates, bridgeMechanics: [], setupMechanics: [], corePieces: []
+  }});
+  const player = selectNonSkillRecommendations(candidates, { ...snap, offenseList: ['Poison'] },
+    pack(['attack'], ['elemental_damage'])).passives.notables.map((entry) => entry.id);
+  assert.equal(player.includes('companion-poison'), false);
+  assert.equal(player.includes('minion-poison'), false);
+  assert.equal(player.includes('totem-poison'), false);
+  assert.equal(player.includes('lightning-to-cold'), false);
+  assert.equal(player.includes('while-ignited'), false);
+  for (const actor of ['companion', 'minion', 'totem']) {
+    const selected = selectNonSkillRecommendations(catalog([candidates.entities.find((entry) => entry.id === `${actor}-poison`)]),
+      { ...snap, offenseList: ['Poison'] }, pack([actor])).passives.notables;
+    assert.equal(selected.length, 1);
+  }
+  const sourced = selectNonSkillRecommendations(catalog([candidates.entities.find((entry) => entry.id === 'lightning-to-cold')]),
+    { ...snap, offenseList: ['Cold'] }, pack(['attack'], ['lightning'])).passives.notables;
+  assert.equal(sourced.length, 1);
+  const conditioned = selectNonSkillRecommendations(catalog([candidates.entities.find((entry) => entry.id === 'while-ignited')]),
+    { ...snap, offenseList: ['Fire'] }, pack(['attack'], [], ['ignited'])).passives.notables;
+  assert.equal(conditioned.length, 1);
+});
+
 test('optional unique applicability is per fact and respects explicit delivery', () => {
   const unique = (id, facts) => entity(id, 'unique', facts, {
     compatibility: { access: {}, equipment: { slot: 'Ring', base: 'Iron Ring' } }

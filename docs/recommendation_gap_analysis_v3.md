@@ -137,6 +137,7 @@ Optimizers never establish validity. Supports that consume, prevent, or conditio
 | Electrocute | ADD_OR_GAIN | — | electrocute | STANDARD_SUPPORT | yes |
 | Eonyr's Thunder | ADD_OR_GAIN | — | electrocute | LINEAGE_SUPPORT | no |
 | Esh's Radiance | ADD_OR_GAIN | — | chaos | LINEAGE_SUPPORT | no |
+| Esh's Radiance | ADD_OR_GAIN | lightning | chaos | LINEAGE_SUPPORT | no |
 | Esh's Radiance | ADD_OR_GAIN | — | shock | LINEAGE_SUPPORT | no |
 | Extraction | ADD_OR_GAIN | — | chaos | STANDARD_SUPPORT | yes |
 | Fire Attunement | ADD_OR_GAIN | — | fire | STANDARD_SUPPORT | yes |
@@ -150,9 +151,12 @@ Optimizers never establish validity. Supports that consume, prevent, or conditio
 | Olroth's Hubris | ADD_OR_GAIN | — | freeze | LINEAGE_SUPPORT | no |
 | Styrn's Ferocity | CONVERT | physical | armour_break | LINEAGE_SUPPORT | no |
 | Tul's Stillness | ADD_OR_GAIN | — | chaos | LINEAGE_SUPPORT | no |
+| Tul's Stillness | ADD_OR_GAIN | cold | chaos | LINEAGE_SUPPORT | no |
 | Tul's Stillness | ADD_OR_GAIN | — | freeze | LINEAGE_SUPPORT | no |
 | Uul-Netol's Embrace | ADD_OR_GAIN | — | chaos | LINEAGE_SUPPORT | no |
+| Uul-Netol's Embrace | ADD_OR_GAIN | physical | chaos | LINEAGE_SUPPORT | no |
 | Xoph's Pyre | ADD_OR_GAIN | — | chaos | LINEAGE_SUPPORT | no |
+| Xoph's Pyre | ADD_OR_GAIN | fire | chaos | LINEAGE_SUPPORT | no |
 | Xoph's Pyre | ADD_OR_GAIN | — | ignite | LINEAGE_SUPPORT | no |
 
 ADD_OR_GAIN, CONVERT, and AILMENT_OR_MECHANIC_REPLACEMENT remain distinct. Lineage and seasonal supports are reported but are not ordinary Tier 3 candidates.
