@@ -11,7 +11,7 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5473,
+    "fact_count": 5474,
     "fact_relation_counts": {
       "consumes": 395,
       "converts": 127,
@@ -57901,7 +57901,7 @@
       "id": "passive:AscendancyHuntress2Notable2",
       "content_type": "ascendancy_passive",
       "source_id": "AscendancyHuntress2Notable2",
-      "name": "The Mórrigan's Guidance",
+      "name": "The M\u00f3rrigan's Guidance",
       "compatibility": {
         "access": {
           "ascendancy": "Spirit Walker"
@@ -62921,11 +62921,21 @@
       ],
       "facts": [
         {
+          "relation": "converts",
+          "subject": "passive",
+          "confidence": "exact",
+          "from": "physical",
+          "to": "elemental_damage",
+          "scope": "incoming",
+          "target": "self"
+        },
+        {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "physical",
-          "offense_role": "enabler"
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -104069,7 +104079,7 @@
       "id": "skill:Metadata/Items/Gem/SupportGemMorrigansInsight",
       "content_type": "support_gem",
       "source_id": "Metadata/Items/Gem/SupportGemMorrigansInsight",
-      "name": "Mórrigan's Insight",
+      "name": "M\u00f3rrigan's Insight",
       "compatibility": {
         "equipment": {
           "is_unrestricted": true
@@ -104092,7 +104102,7 @@
       },
       "support_family": {
         "id": "support-family:m_rrigan_s_insight",
-        "name": "Mórrigan's Insight",
+        "name": "M\u00f3rrigan's Insight",
         "tier": null
       },
       "retrieval_terms": [
@@ -104351,7 +104361,7 @@
       "id": "skill:Metadata/Items/Gems/SupportGemOisinsOath",
       "content_type": "support_gem",
       "source_id": "Metadata/Items/Gems/SupportGemOisinsOath",
-      "name": "Oisín's Oath",
+      "name": "Ois\u00edn's Oath",
       "compatibility": {
         "equipment": {
           "is_unrestricted": true
@@ -104370,7 +104380,7 @@
       },
       "support_family": {
         "id": "support-family:ois_n_s_oath",
-        "name": "Oisín's Oath",
+        "name": "Ois\u00edn's Oath",
         "tier": null
       },
       "retrieval_terms": [
@@ -116784,7 +116794,9 @@
               "value": "runtime",
               "kind": "unique_mod"
             }
-          ]
+          ],
+          "condition": "shock",
+          "condition_target": "self"
         },
         {
           "relation": "occupies",

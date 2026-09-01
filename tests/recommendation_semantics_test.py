@@ -93,6 +93,25 @@ class AilmentApplicationGrammarTests(unittest.TestCase):
         self.assertTrue(any(f.get("consumption") == "optional_payoff" for f in optional))
         self.assertTrue(any(f.get("consumption") == "required_input" for f in mandatory))
 
+    def test_incoming_damage_conversion_never_emits_an_outgoing_anchor(self):
+        for source in ("physical", "fire", "cold", "lightning", "chaos"):
+            destination = "cold" if source == "fire" else "fire"
+            facts = parse_evidence("stat_id", f"{source}_damage_taken_as_{destination}_damage", "passive")
+            self.assertTrue(any(f.get("relation") == "converts" and f.get("from") == source
+                                and f.get("scope") == "incoming" and f.get("target") == "self"
+                                for f in facts), (source, facts))
+            self.assertTrue(all(f.get("scope") == "incoming" for f in facts), (source, facts))
+        outgoing = parse_evidence("stat_id", "physical_damage_conversion_to_fire_damage", "passive")
+        self.assertTrue(any(f.get("relation") == "converts" and f.get("scope") == "outgoing"
+                            for f in outgoing), outgoing)
+
+    def test_unique_self_state_condition_is_distinct_from_enemy_state(self):
+        self_state = parse_evidence("unique_mod", "23% increased CriticalDamageBonus while Shock", "item")
+        self.assertTrue(any(f.get("condition") == "shock" and f.get("condition_target") == "self"
+                            for f in self_state), self_state)
+        enemy = parse_evidence("unique_mod", "Deal more Damage against Shocked enemies", "item")
+        self.assertFalse(any(f.get("condition_target") == "self" for f in enemy), enemy)
+
     def test_ailment_application_preserves_target_and_delivery(self):
         enemy = parse_evidence("unique_mod", "Spell Hits Poison enemies", "item")
         self.assertTrue(any(f.get("relation") == "inflicts" and f.get("target") == "enemy"
@@ -140,7 +159,7 @@ class GeneratedComponentPromotionTests(unittest.TestCase):
         semantic = lambda catalog: [(entity["id"], [{k: v for k, v in fact.items() if k != "evidence"} for fact in entity.get("facts") or []]) for entity in catalog["entities"]]
         self.assertEqual(semantic(self.full), semantic(self.runtime))
         self.assertEqual(2964, len(self.runtime["entities"]))
-        self.assertEqual(5403, sum(len(entity.get("facts") or []) for entity in self.runtime["entities"]))
+        self.assertEqual(5458, sum(len(entity.get("facts") or []) for entity in self.runtime["entities"]))
         for entity in self.runtime["entities"]:
             for fact in entity.get("facts") or []:
                 self.assertTrue(all(set(proof) <= {"kind", "value"} for proof in fact.get("evidence", [])))
@@ -174,6 +193,13 @@ class PassiveDirectionAndActorTests(unittest.TestCase):
             poison = [fact for fact in facts if fact.get("mechanic") == "poison"]
             self.assertTrue(poison)
             self.assertTrue(all(fact.get("delivery") == actor for fact in poison), poison)
+
+    def test_production_catalysis_retains_only_incoming_physical_evidence(self):
+        catalog = json.loads((Path(__file__).parents[1] / "data/enriched/recommendation_catalog_v3.json").read_text())
+        catalysis = next(entity for entity in catalog["entities"] if entity.get("name") == "Catalysis")
+        self.assertTrue(any(fact.get("relation") == "converts" and fact.get("scope") == "incoming"
+                            and fact.get("target") == "self" for fact in catalysis["facts"]))
+        self.assertFalse(any(fact.get("offense_role") for fact in catalysis["facts"]))
 
 
 if __name__ == "__main__":
