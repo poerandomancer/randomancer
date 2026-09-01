@@ -13,27 +13,27 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5278,
+    "fact_count": 5366,
     "fact_relation_counts": {
-      "consumes": 356,
-      "converts": 112,
+      "consumes": 395,
+      "converts": 127,
       "creates": 72,
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 672,
-      "inflicts": 156,
+      "inflicts": 187,
       "modifies": 2308,
       "occupies": 444,
-      "prevents": 375,
+      "prevents": 378,
       "provides": 415,
       "replaces": 27,
       "requires": 66
     },
     "candidate_role_counts": {
-      "defense": 422,
-      "enabler": 1256,
+      "defense": 423,
+      "enabler": 1260,
       "payoff": 182,
-      "primary_damage": 349,
+      "primary_damage": 346,
       "recovery": 250,
       "setup_control": 205,
       "utility": 206
@@ -43,8 +43,8 @@
       "offense_inventory": "OFFENSE_V1",
       "uniques": "poe2db_uniques_min_v4"
     },
-    "entities_with_facts": 2099,
-    "entities_without_facts": 865,
+    "entities_with_facts": 2100,
+    "entities_without_facts": 864,
     "semantic_completeness_warning_count": 2,
     "support_entities_with_allowed_types": 603,
     "support_entities_with_excluded_types": 237,
@@ -58,7 +58,7 @@
     "active_skills_requiring_unique_provider": 14,
     "passives_with_more_than_two_source_stats": 181,
     "passives_with_granted_skill_links": 50,
-    "ordinary_notables_with_weapon_requirements": 146,
+    "ordinary_notables_with_weapon_requirements": 122,
     "passive_weapon_requirements_represented": [
       "axe",
       "bow",
@@ -66,16 +66,13 @@
       "dagger",
       "flail",
       "mace",
-      "martial",
       "melee",
       "one_handed",
       "quarterstaff",
-      "sceptre",
       "shield",
       "spear",
       "staff",
       "sword",
-      "talisman",
       "two_handed",
       "wand"
     ],
@@ -761,11 +758,11 @@
     },
     "unique_modifiers": {
       "evidence_count": 2141,
-      "fact_count": 513,
-      "structured_count": 468,
+      "fact_count": 528,
+      "structured_count": 482,
       "unparsed_count": 575,
-      "recognized_unstructured_count": 1098,
-      "structured_rate": 0.2186,
+      "recognized_unstructured_count": 1084,
+      "structured_rate": 0.2251,
       "samples": {
         "recognized_unstructured": [
           {

@@ -293,12 +293,13 @@ function selectNonSkillRecommendations(catalog, snapshot = {}, recommendationPac
   const byType = (type) => analyzed.filter((candidate) => candidate.entity.content_type === type);
   const seed = options.selectionSeed ?? recommendationPackage?.selectionSeed ?? '';
   const requiredUnique = recommendationPackage?.coreUnique ? [{
-    id: recommendationPackage.coreUnique.id, name: recommendationPackage.coreUnique.name,
+    id: recommendationPackage.coreUnique.id, entityId: recommendationPackage.coreUnique.entityId, name: recommendationPackage.coreUnique.name,
     required: true, coreSolver: true, packageRole: 'unique_bridge',
     recommendationEvidence: { tier: 'BUILD_DEFINING_CAPABILITY', matches: recommendationPackage.bridgePath || [] }
   }] : [];
   const optionalUnique = selectUniqueRecommendation(catalog, snapshot, `${seed}:unique`)
-    .filter((entry) => !requiredUnique.some((required) => required.id === entry.id));
+    .filter((entry) => !requiredUnique.some((required) =>
+      token(required.entityId || required.id) === token(entry.entityId || entry.id)));
   return {
     recommendedUniques: [...requiredUnique, ...optionalUnique].slice(0, 1),
     recommendedJewelryUniques: selectJewelryRecommendations(catalog, snapshot, `${seed}:jewelry`),

@@ -1319,7 +1319,8 @@ function candidateDependencies(entity, offenseObligations = []) {
 
 function candidateSetupCosts(entity) {
   const mechanics = unique(asArray(entity?.facts)
-    .filter((fact) => fact?.relation === 'consumes' && HARD_CONFIDENCE.has(fact?.confidence))
+    .filter((fact) => fact?.relation === 'consumes' && HARD_CONFIDENCE.has(fact?.confidence)
+      && normalizeToken(fact?.consumption) === 'required_input')
     .map((fact) => normalizeToken(fact?.mechanic))
     .filter((mechanic) => STATEFUL_SETUP_MECHANICS.has(mechanic)));
   return mechanics.includes('charge') && mechanics.some((mechanic) => /^(?:endurance|frenzy|power)_charge$/.test(mechanic))
@@ -2293,10 +2294,18 @@ function uniqueCoreBridgeCandidates(catalog, legal, obligation, snapshot) {
     if (['shield', 'buckler', 'focus'].some((family) => equipmentText.includes(family))
       && !['mace', 'spear', 'wand', 'sceptre'].includes(rolledWeapon)) continue;
     for (const fact of facts) {
+      const relation = normalizeToken(fact.r);
+      if (relation === 'converts' && normalizeToken(fact.s) !== 'outgoing') continue;
+      if (relation === 'inflicts' && (normalizeToken(fact.a) === 'self'
+        || normalizeToken(fact.q) === 'condition')) continue;
       const source = normalizeToken(fact.f || fact.m);
       const target = normalizeToken(fact.t || fact.m);
       if (target !== offenseId && !asArray(obligation.mechanics).map(normalizeToken).includes(target)) continue;
       for (const candidate of legal) {
+        const deliveryScope = normalizeToken(fact.d);
+        const candidateTypes = new Set(asArray(candidate.entity?.source_evidence?.active_skill_types).map(normalizeToken));
+        if (deliveryScope === 'attack_hit' && !candidateTypes.has('attack')) continue;
+        if (deliveryScope === 'spell_hit' && !candidateTypes.has('spell')) continue;
         if (normalizeToken(fact.k) === 'granted_skill'
           && ![candidate.entity.id, candidate.entity.source_id].map(normalizeToken).includes(normalizeToken(fact.e))) continue;
         const sourceMatches = !source || source === offenseId || source === 'elemental_damage'
@@ -3083,6 +3092,9 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     sourceMechanics: unique(bridgePath.map((entry) => entry.from).filter(Boolean)),
     bridgeMechanics: unique(bridgePath.flatMap((entry) => [entry.from, entry.to]).filter(Boolean)),
     setupMechanics: unique(asArray(winner?.synergyEdges).map((edge) => edge.mechanic)),
+    optionalPayoffMechanics: unique(selectedCandidates.flatMap((candidate) => asArray(candidate?.entity?.facts)
+      .filter((fact) => fact?.relation === 'consumes' && normalizeToken(fact?.consumption) !== 'required_input')
+      .map((fact) => normalizeToken(fact?.mechanic)))),
     secondaryPurpose: supportingSkill?.assignedRole || null,
     corePieces: [coreUnique, ...supportResolution.assignments.flatMap((assignment) => assignment.supports)
       .filter((support) => support.assignedRole !== 'OPTIONAL_OFFENSE_OPTIMIZER')

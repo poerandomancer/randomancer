@@ -39,6 +39,11 @@ function categoryFor(fact, offense) {
   const relation = token(fact.relation); const mechanic = token(relation === 'converts' ? fact.to : fact.mechanic);
   const from = token(fact.from); const to = token(fact.to);
   const evidenceText = arr(fact.evidence).map((entry) => String(entry?.value || '')).join(' ');
+  // Incoming conversion and self/conditional ailment state remain useful facts,
+  // but can never be promoted as offensive item capabilities.
+  if (relation === 'converts' && token(fact.scope) !== 'outgoing') return null;
+  if (relation === 'inflicts' && (token(fact.target) === 'self' || token(fact.scope) === 'incoming'
+    || token(fact.application) === 'condition')) return null;
   if (['prevents', 'cannot', 'removes', 'replaces'].includes(relation) && fact.scope !== 'incoming'
     && (mechanic === offense || from === offense)) return 'CONTRADICTION_PREVENTION';
   if (relation === 'converts' && from === offense && to !== offense) return 'CONTRADICTION_PREVENTION';
@@ -61,7 +66,9 @@ function evidenceRecord(fact, offense, sourceType, sourceName, parentId, compone
   return {
     category, relation: token(fact.relation), mechanic: token(fact.mechanic) || null,
     from: token(fact.from) || null, to: token(fact.to) || null,
-    confidence: fact.confidence || 'strong',
+    confidence: fact.confidence || 'strong', scope: token(fact.scope) || null,
+    target: token(fact.target) || null, delivery: token(fact.delivery) || null,
+    application: token(fact.application) || null,
     provenance: { parentUniqueId: parentId, sourceType, sourceName, sourceEntityId: sourceEntityId || parentId,
       component: component || (String(evidence?.value || '').match(/explod|cloud|ground|burst|projectile/i)?.[0]?.toLowerCase() || null),
       evidenceKind: evidence?.kind || null }
@@ -165,7 +172,9 @@ function compactUniqueSemantics(catalog, rawItems, offenses) {
       if (!result.bestTier) continue;
       const facts = result.records.map((record) => ({
         c: record.category, r: record.relation, ...(record.mechanic ? { m: record.mechanic } : {}),
-        ...(record.from ? { f: record.from } : {}), ...(record.to ? { t: record.to } : {}),
+        ...(record.from ? { f: record.from } : {}), ...(record.to ? { t: record.to } : {}), ...(record.scope ? { s: record.scope } : {}),
+        ...(record.target ? { a: record.target } : {}), ...(record.delivery ? { d: record.delivery } : {}),
+        ...(record.application ? { q: record.application } : {}),
         k: record.provenance.sourceType,
         ...(record.provenance.sourceEntityId !== entity.id ? { e: record.provenance.sourceEntityId } : {}),
         ...(record.provenance.component ? { p: record.provenance.component } : {})

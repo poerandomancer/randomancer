@@ -650,6 +650,19 @@ def build_skill_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[st
         override = entity_override(ctx, entity_id)
         compatibility.update(override.get("compatibility") or {})
 
+        # Authoritative healing/revival-only minions are utility entities, not damage
+        # primaries merely because their skill creates a minion.
+        normalized_description = normalized_phrase(description)
+        explicit_damage_delivery = any(normalized_phrase(value).replace("_", "") in {
+            "attack", "damage", "damageovertime", "degenonlyspelldamage"
+        } for value in type_names) or bool(taxonomy_damage_types)
+        if (not explicit_damage_delivery
+                and re.search(r"(?:no_damage|support_only|heal(?:s|ing)?(?:_[a-z0-9]+){0,8}_reviv)", normalized_description)):
+            facts = merge_facts([*facts, make_fact(
+                "prevents", subject="skill", source_kind="description", source_value=description,
+                mechanic="damage", confidence="strong", condition="support_only",
+            )])
+
         roles = candidate_roles(
             content_type=content_type,
             facts=facts,
