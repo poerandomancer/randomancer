@@ -5,15 +5,15 @@
     "containingGrantedSkills": 94,
     "containingGrantedEffects": 0,
     "grantedSemanticsMateriallyChangeRelevance": 33,
-    "currentSelectorMissesStrongCandidate": 0,
+    "currentSelectorMissesStrongCandidate": 1,
     "previousEmptyCells": 108,
-    "emptyToNonEmpty": 40,
+    "emptyToNonEmpty": 39,
     "winnerChanges": 10,
-    "currentWinnerDiffers": 10,
-    "runtimeQualityBandAgreement": 133,
-    "currentEmptyCells": 69,
+    "currentWinnerDiffers": 11,
+    "runtimeQualityBandAgreement": 131,
+    "currentEmptyCells": 70,
     "legitimatelyEmptyCells": 69,
-    "emptyCellsGainStrongCandidate": 0,
+    "emptyCellsGainStrongCandidate": 1,
     "qualityBandCounts": {
       "1": 50,
       "2": 9,
@@ -21,26 +21,27 @@
     },
     "contradictionPreventionFindings": 22,
     "emptyCauses": {
-      "GENUINELY_NO_RELEVANT_UNIQUE": 69
+      "GENUINELY_NO_RELEVANT_UNIQUE": 69,
+      "MISSING_GRANTED_SEMANTICS": 1
     },
     "runtimeSelectorChanged": true,
     "namedItemOrCellExceptionsIntroduced": false,
     "runtimeSemantics": {
       "enrichedUniqueCount": 73,
-      "promotedFactCount": 254,
-      "bytes": 79348
+      "promotedFactCount": 255,
+      "bytes": 80226
     },
     "jewelry": {
       "eligibleRings": 37,
       "eligibleAmulets": 25,
       "enrichedWithGrantedSemantics": 1,
       "resultCounts": {
-        "0": 4,
+        "0": 5,
         "1": 8,
-        "2": 3
+        "2": 2
       },
       "combinations": {
-        "ringRing": 3,
+        "ringRing": 2,
         "ringAmulet": 0,
         "ringOnly": 7,
         "amuletOnly": 1
@@ -371,7 +372,7 @@
         "AFFINITY_AMPLIFICATION:has_property:chaos",
         "AFFINITY_AMPLIFICATION:has_property:physical"
       ],
-      "changesWinner": true
+      "changesWinner": false
     },
     {
       "uniqueId": "unique:Nightfall||Glacial Fortress",
@@ -539,7 +540,7 @@
         "AFFINITY_AMPLIFICATION:has_property:physical",
         "BUILD_DEFINING_CAPABILITY:inflicts:bleed"
       ],
-      "changesWinner": false
+      "changesWinner": true
     },
     {
       "uniqueId": "unique:Taryn's Shiver||Gelid Staff",
@@ -1404,23 +1405,8 @@
           "score": 306
         }
       ],
-      "selected": [
-        {
-          "id": "Blackheart||Iron Ring",
-          "name": "Blackheart",
-          "itemType": "Ring",
-          "tier": "STRONG_SPECIALIZATION",
-          "score": 306
-        },
-        {
-          "id": "Prized Pain||Iron Ring",
-          "name": "Prized Pain",
-          "itemType": "Ring",
-          "tier": "STRONG_SPECIALIZATION",
-          "score": 306
-        }
-      ],
-      "empty": false
+      "selected": [],
+      "empty": true
     },
     {
       "offenseId": "fire",
@@ -1529,15 +1515,15 @@
       ],
       "selected": [
         {
-          "id": "Blackheart||Iron Ring",
-          "name": "Blackheart",
+          "id": "Ming's Heart||Amethyst Ring",
+          "name": "Ming's Heart",
           "itemType": "Ring",
           "tier": "STRONG_SPECIALIZATION",
           "score": 306
         },
         {
-          "id": "Ming's Heart||Amethyst Ring",
-          "name": "Ming's Heart",
+          "id": "Evergrasping Ring||Pearl Ring",
+          "name": "Evergrasping Ring",
           "itemType": "Ring",
           "tier": "STRONG_SPECIALIZATION",
           "score": 306
@@ -4031,24 +4017,24 @@
       "offense": "Physical Damage",
       "previous": null,
       "current": {
-        "id": "Beyond Reach||Visceral Quiver",
-        "name": "Beyond Reach",
-        "score": 306,
+        "id": "Doomfletch||Composite Bow",
+        "name": "Doomfletch",
+        "score": 311,
         "tier": "STRONG_SPECIALIZATION"
       },
       "proposed": {
-        "id": "unique:Murkshaft||Toxic Quiver",
-        "name": "Murkshaft",
-        "slot": "Quiver",
-        "family": "quiver",
+        "id": "unique:Doomfletch||Composite Bow",
+        "name": "Doomfletch",
+        "slot": "Bow",
+        "family": "bow",
         "currentSelectorEligible": true,
-        "currentScore": 7,
-        "currentRank": 4,
+        "currentScore": 14,
+        "currentRank": 1,
         "proposedTier": "STRONG_SPECIALIZATION",
-        "proposedScore": 307,
+        "proposedScore": 311,
         "proposedRank": 1,
         "qualityBand": true,
-        "selectedCurrently": false,
+        "selectedCurrently": true,
         "contradiction": false,
         "evidence": [
           {
@@ -4063,38 +4049,38 @@
             "delivery": null,
             "application": null,
             "provenance": {
-              "parentUniqueId": "unique:Murkshaft||Toxic Quiver",
+              "parentUniqueId": "unique:Doomfletch||Composite Bow",
               "sourceType": "item_fact",
-              "sourceName": "Murkshaft",
-              "sourceEntityId": "unique:Murkshaft||Toxic Quiver",
+              "sourceName": "Doomfletch",
+              "sourceEntityId": "unique:Doomfletch||Composite Bow",
               "component": null,
               "evidenceKind": "unique_mod"
             }
           },
           {
-            "category": "AFFINITY_AMPLIFICATION",
-            "relation": "has_property",
+            "category": "STRONG_SPECIALIZATION",
+            "relation": "provides",
             "mechanic": "physical",
             "from": null,
             "to": null,
-            "confidence": "exact",
-            "scope": null,
+            "confidence": "strong",
+            "scope": "outgoing",
             "target": null,
-            "delivery": null,
+            "delivery": "attack",
             "application": null,
             "provenance": {
-              "parentUniqueId": "unique:Murkshaft||Toxic Quiver",
-              "sourceType": "granted_skill",
-              "sourceName": "Bursting Fen Toad",
-              "sourceEntityId": "skill:Metadata/Items/Gem/SkillGemExplodingPoisonToad",
+              "parentUniqueId": "unique:Doomfletch||Composite Bow",
+              "sourceType": "item_fact",
+              "sourceName": "Doomfletch",
+              "sourceEntityId": "unique:Doomfletch||Composite Bow",
               "component": null,
-              "evidenceKind": "active_skill_type"
+              "evidenceKind": "unique_mod"
             }
           }
         ],
         "rationale": "STRONG_SPECIALIZATION: provides via item_fact."
       },
-      "differs": true,
+      "differs": false,
       "previousEmpty": true,
       "currentEmpty": false,
       "richerSemanticsStrong": true,
@@ -4102,6 +4088,64 @@
       "runtimeInQualityBand": true,
       "qualityBandSize": 3,
       "candidates": [
+        {
+          "id": "unique:Doomfletch||Composite Bow",
+          "name": "Doomfletch",
+          "slot": "Bow",
+          "family": "bow",
+          "currentSelectorEligible": true,
+          "currentScore": 14,
+          "currentRank": 1,
+          "proposedTier": "STRONG_SPECIALIZATION",
+          "proposedScore": 311,
+          "proposedRank": 1,
+          "qualityBand": true,
+          "selectedCurrently": true,
+          "contradiction": false,
+          "evidence": [
+            {
+              "category": "STRONG_SPECIALIZATION",
+              "relation": "provides",
+              "mechanic": "physical",
+              "from": null,
+              "to": null,
+              "confidence": "strong",
+              "scope": "outgoing",
+              "target": null,
+              "delivery": null,
+              "application": null,
+              "provenance": {
+                "parentUniqueId": "unique:Doomfletch||Composite Bow",
+                "sourceType": "item_fact",
+                "sourceName": "Doomfletch",
+                "sourceEntityId": "unique:Doomfletch||Composite Bow",
+                "component": null,
+                "evidenceKind": "unique_mod"
+              }
+            },
+            {
+              "category": "STRONG_SPECIALIZATION",
+              "relation": "provides",
+              "mechanic": "physical",
+              "from": null,
+              "to": null,
+              "confidence": "strong",
+              "scope": "outgoing",
+              "target": null,
+              "delivery": "attack",
+              "application": null,
+              "provenance": {
+                "parentUniqueId": "unique:Doomfletch||Composite Bow",
+                "sourceType": "item_fact",
+                "sourceName": "Doomfletch",
+                "sourceEntityId": "unique:Doomfletch||Composite Bow",
+                "component": null,
+                "evidenceKind": "unique_mod"
+              }
+            }
+          ],
+          "rationale": "STRONG_SPECIALIZATION: provides via item_fact."
+        },
         {
           "id": "unique:Murkshaft||Toxic Quiver",
           "name": "Murkshaft",
@@ -4112,7 +4156,7 @@
           "currentRank": 4,
           "proposedTier": "STRONG_SPECIALIZATION",
           "proposedScore": 307,
-          "proposedRank": 1,
+          "proposedRank": 2,
           "qualityBand": true,
           "selectedCurrently": false,
           "contradiction": false,
@@ -4126,7 +4170,7 @@
               "confidence": "strong",
               "scope": "outgoing",
               "target": null,
-              "delivery": null,
+              "delivery": "attack",
               "application": null,
               "provenance": {
                 "parentUniqueId": "unique:Murkshaft||Toxic Quiver",
@@ -4167,10 +4211,10 @@
           "family": "quiver",
           "currentSelectorEligible": true,
           "currentScore": 7,
-          "currentRank": 1,
+          "currentRank": 2,
           "proposedTier": "STRONG_SPECIALIZATION",
           "proposedScore": 306,
-          "proposedRank": 2,
+          "proposedRank": 3,
           "qualityBand": true,
           "selectedCurrently": false,
           "contradiction": false,
@@ -4184,51 +4228,13 @@
               "confidence": "strong",
               "scope": "outgoing",
               "target": null,
-              "delivery": null,
+              "delivery": "attack",
               "application": null,
               "provenance": {
                 "parentUniqueId": "unique:Asphyxia's Wrath||Broadhead Quiver",
                 "sourceType": "item_fact",
                 "sourceName": "Asphyxia's Wrath",
                 "sourceEntityId": "unique:Asphyxia's Wrath||Broadhead Quiver",
-                "component": null,
-                "evidenceKind": "unique_mod"
-              }
-            }
-          ],
-          "rationale": "STRONG_SPECIALIZATION: provides via item_fact."
-        },
-        {
-          "id": "unique:Beyond Reach||Visceral Quiver",
-          "name": "Beyond Reach",
-          "slot": "Quiver",
-          "family": "quiver",
-          "currentSelectorEligible": true,
-          "currentScore": 7,
-          "currentRank": 2,
-          "proposedTier": "STRONG_SPECIALIZATION",
-          "proposedScore": 306,
-          "proposedRank": 3,
-          "qualityBand": true,
-          "selectedCurrently": true,
-          "contradiction": false,
-          "evidence": [
-            {
-              "category": "STRONG_SPECIALIZATION",
-              "relation": "provides",
-              "mechanic": "physical",
-              "from": null,
-              "to": null,
-              "confidence": "strong",
-              "scope": "outgoing",
-              "target": null,
-              "delivery": null,
-              "application": null,
-              "provenance": {
-                "parentUniqueId": "unique:Beyond Reach||Visceral Quiver",
-                "sourceType": "item_fact",
-                "sourceName": "Beyond Reach",
-                "sourceEntityId": "unique:Beyond Reach||Visceral Quiver",
                 "component": null,
                 "evidenceKind": "unique_mod"
               }
@@ -4535,7 +4541,7 @@
               "confidence": "strong",
               "scope": "outgoing",
               "target": null,
-              "delivery": null,
+              "delivery": "attack",
               "application": null,
               "provenance": {
                 "parentUniqueId": "unique:Blackgleam||Fire Quiver",
@@ -4710,7 +4716,7 @@
               "confidence": "strong",
               "scope": "outgoing",
               "target": null,
-              "delivery": null,
+              "delivery": "attack",
               "application": null,
               "provenance": {
                 "parentUniqueId": "unique:Asphyxia's Wrath||Broadhead Quiver",
@@ -4869,10 +4875,10 @@
       "offense": "Chaos Damage",
       "previous": null,
       "current": {
-        "id": "Beyond Reach||Visceral Quiver",
-        "name": "Beyond Reach",
-        "score": 306,
-        "tier": "STRONG_SPECIALIZATION"
+        "id": "Murkshaft||Toxic Quiver",
+        "name": "Murkshaft",
+        "score": 206,
+        "tier": "AFFINITY_AMPLIFICATION"
       },
       "proposed": {
         "id": "unique:Voltaxic Rift||Fanatic Bow",
@@ -4970,7 +4976,7 @@
           "proposedScore": 306,
           "proposedRank": 2,
           "qualityBand": false,
-          "selectedCurrently": true,
+          "selectedCurrently": false,
           "contradiction": false,
           "evidence": [
             {
@@ -4982,7 +4988,7 @@
               "confidence": "strong",
               "scope": "outgoing",
               "target": null,
-              "delivery": null,
+              "delivery": "attack",
               "application": null,
               "provenance": {
                 "parentUniqueId": "unique:Beyond Reach||Visceral Quiver",
@@ -5008,7 +5014,7 @@
           "proposedScore": 206,
           "proposedRank": 3,
           "qualityBand": false,
-          "selectedCurrently": false,
+          "selectedCurrently": true,
           "contradiction": false,
           "evidence": [
             {
@@ -5674,7 +5680,7 @@
               "confidence": "strong",
               "scope": "outgoing",
               "target": null,
-              "delivery": null,
+              "delivery": "generic_hit",
               "application": null,
               "provenance": {
                 "parentUniqueId": "unique:Periphery||Heartwood Shortbow",
@@ -5725,7 +5731,7 @@
             "confidence": "strong",
             "scope": "outgoing",
             "target": null,
-            "delivery": null,
+            "delivery": "generic_hit",
             "application": null,
             "provenance": {
               "parentUniqueId": "unique:Periphery||Heartwood Shortbow",
@@ -5771,7 +5777,7 @@
               "confidence": "strong",
               "scope": "outgoing",
               "target": null,
-              "delivery": null,
+              "delivery": "generic_hit",
               "application": null,
               "provenance": {
                 "parentUniqueId": "unique:Periphery||Heartwood Shortbow",
@@ -6862,10 +6868,10 @@
       "offense": "Physical Damage",
       "previous": null,
       "current": {
-        "id": "Atziri's Rule||Reflecting Staff",
-        "name": "Atziri's Rule",
-        "score": 306,
-        "tier": "STRONG_SPECIALIZATION"
+        "id": "The Raven's Flock||Perching Staff",
+        "name": "The Raven's Flock",
+        "score": 206,
+        "tier": "AFFINITY_AMPLIFICATION"
       },
       "proposed": {
         "id": "unique:Atziri's Rule||Reflecting Staff",
@@ -6879,7 +6885,7 @@
         "proposedScore": 306,
         "proposedRank": 1,
         "qualityBand": true,
-        "selectedCurrently": true,
+        "selectedCurrently": false,
         "contradiction": false,
         "evidence": [
           {
@@ -6891,7 +6897,7 @@
             "confidence": "strong",
             "scope": "outgoing",
             "target": null,
-            "delivery": null,
+            "delivery": "spell",
             "application": null,
             "provenance": {
               "parentUniqueId": "unique:Atziri's Rule||Reflecting Staff",
@@ -6905,12 +6911,12 @@
         ],
         "rationale": "STRONG_SPECIALIZATION: provides via item_fact."
       },
-      "differs": false,
+      "differs": true,
       "previousEmpty": true,
       "currentEmpty": false,
       "richerSemanticsStrong": true,
       "emptyClassification": null,
-      "runtimeInQualityBand": true,
+      "runtimeInQualityBand": false,
       "qualityBandSize": 1,
       "candidates": [
         {
@@ -6925,7 +6931,7 @@
           "proposedScore": 306,
           "proposedRank": 1,
           "qualityBand": true,
-          "selectedCurrently": true,
+          "selectedCurrently": false,
           "contradiction": false,
           "evidence": [
             {
@@ -6937,7 +6943,7 @@
               "confidence": "strong",
               "scope": "outgoing",
               "target": null,
-              "delivery": null,
+              "delivery": "spell",
               "application": null,
               "provenance": {
                 "parentUniqueId": "unique:Atziri's Rule||Reflecting Staff",
@@ -6963,7 +6969,7 @@
           "proposedScore": 206,
           "proposedRank": 2,
           "qualityBand": false,
-          "selectedCurrently": false,
+          "selectedCurrently": true,
           "contradiction": false,
           "evidence": [
             {
@@ -9401,10 +9407,10 @@
       "offense": "Physical Damage",
       "previous": null,
       "current": {
-        "id": "Liminal Coil||Twisted Wand",
-        "name": "Liminal Coil",
-        "score": 306,
-        "tier": "STRONG_SPECIALIZATION"
+        "id": "Sanguine Diviner||Bone Wand",
+        "name": "Sanguine Diviner",
+        "score": 206,
+        "tier": "AFFINITY_AMPLIFICATION"
       },
       "proposed": {
         "id": "unique:Liminal Coil||Twisted Wand",
@@ -9418,7 +9424,7 @@
         "proposedScore": 306,
         "proposedRank": 1,
         "qualityBand": true,
-        "selectedCurrently": true,
+        "selectedCurrently": false,
         "contradiction": false,
         "evidence": [
           {
@@ -9430,7 +9436,7 @@
             "confidence": "strong",
             "scope": "outgoing",
             "target": null,
-            "delivery": null,
+            "delivery": "spell",
             "application": null,
             "provenance": {
               "parentUniqueId": "unique:Liminal Coil||Twisted Wand",
@@ -9444,12 +9450,12 @@
         ],
         "rationale": "STRONG_SPECIALIZATION: provides via item_fact."
       },
-      "differs": false,
+      "differs": true,
       "previousEmpty": true,
       "currentEmpty": false,
       "richerSemanticsStrong": true,
       "emptyClassification": null,
-      "runtimeInQualityBand": true,
+      "runtimeInQualityBand": false,
       "qualityBandSize": 1,
       "candidates": [
         {
@@ -9464,7 +9470,7 @@
           "proposedScore": 306,
           "proposedRank": 1,
           "qualityBand": true,
-          "selectedCurrently": true,
+          "selectedCurrently": false,
           "contradiction": false,
           "evidence": [
             {
@@ -9476,7 +9482,7 @@
               "confidence": "strong",
               "scope": "outgoing",
               "target": null,
-              "delivery": null,
+              "delivery": "spell",
               "application": null,
               "provenance": {
                 "parentUniqueId": "unique:Liminal Coil||Twisted Wand",
@@ -10058,7 +10064,7 @@
             "confidence": "strong",
             "scope": "outgoing",
             "target": null,
-            "delivery": null,
+            "delivery": "spell",
             "application": null,
             "provenance": {
               "parentUniqueId": "unique:Liminal Coil||Twisted Wand",
@@ -10124,7 +10130,7 @@
               "confidence": "strong",
               "scope": "outgoing",
               "target": null,
-              "delivery": null,
+              "delivery": "spell",
               "application": null,
               "provenance": {
                 "parentUniqueId": "unique:Liminal Coil||Twisted Wand",
@@ -11810,7 +11816,7 @@
               "confidence": "strong",
               "scope": "outgoing",
               "target": null,
-              "delivery": null,
+              "delivery": "minion",
               "application": null,
               "provenance": {
                 "parentUniqueId": "unique:The Dark Defiler||Rattling Sceptre",
@@ -11847,12 +11853,7 @@
       "offenseId": "bleed",
       "offense": "Bleed",
       "previous": null,
-      "current": {
-        "id": "Sylvan's Effigy||Stoic Sceptre",
-        "name": "Sylvan's Effigy",
-        "score": 406,
-        "tier": "BUILD_DEFINING_CAPABILITY"
-      },
+      "current": null,
       "proposed": {
         "id": "unique:Sylvan's Effigy||Stoic Sceptre",
         "name": "Sylvan's Effigy",
@@ -11865,7 +11866,7 @@
         "proposedScore": 406,
         "proposedRank": 1,
         "qualityBand": true,
-        "selectedCurrently": true,
+        "selectedCurrently": false,
         "contradiction": false,
         "evidence": [
           {
@@ -11891,11 +11892,11 @@
         ],
         "rationale": "BUILD_DEFINING_CAPABILITY: inflicts via granted_skill."
       },
-      "differs": false,
+      "differs": true,
       "previousEmpty": true,
-      "currentEmpty": false,
+      "currentEmpty": true,
       "richerSemanticsStrong": true,
-      "emptyClassification": null,
+      "emptyClassification": "MISSING_GRANTED_SEMANTICS",
       "runtimeInQualityBand": true,
       "qualityBandSize": 1,
       "candidates": [
@@ -11911,7 +11912,7 @@
           "proposedScore": 406,
           "proposedRank": 1,
           "qualityBand": true,
-          "selectedCurrently": true,
+          "selectedCurrently": false,
           "contradiction": false,
           "evidence": [
             {

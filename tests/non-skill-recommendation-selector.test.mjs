@@ -297,6 +297,51 @@ test('package profile anchors passives and demand-only relations never create re
   assert.deepEqual(result.map((entry) => entry.id), ['payoff']);
 });
 
+test('passive offensive anchors enforce direction, source, and delivery per fact', () => {
+  const scoped = (id, facts) => entity(id, 'passive', facts);
+  const candidates = catalog([
+    scoped('self-ignite', [{ ...fact('ignite', 'modifies'), target: 'self', scope: 'incoming' }]),
+    scoped('outgoing-ignite', [{ ...fact('ignite', 'modifies'), target: 'enemy', scope: 'outgoing' }]),
+    scoped('cold-from-lightning', [{ ...fact('cold'), from: 'lightning', to: 'cold', scope: 'outgoing' }]),
+    scoped('attack-cold', [{ ...fact('cold'), delivery: 'attack' }]),
+    scoped('partial-cold', [{ ...fact('cold') }, { ...fact('cold'), delivery: 'projectile' }])
+  ]);
+  const profile = (properties, sources = []) => ({ ...pkg, packageProfile: {
+    finalOffense: ['cold', 'ignite'], primarySkill: { properties }, sourceMechanics: sources,
+    bridgeMechanics: [], setupMechanics: [], corePieces: []
+  }});
+  const spell = selectNonSkillRecommendations(candidates, { ...snap, offenseList: ['Cold'] }, profile(['spell'])).passives.notables;
+  assert.equal(spell.some((entry) => entry.id === 'self-ignite'), false);
+  assert.equal(spell.some((entry) => entry.id === 'cold-from-lightning'), false);
+  assert.equal(spell.some((entry) => entry.id === 'attack-cold'), false);
+  assert.equal(spell.some((entry) => entry.id === 'partial-cold'), true);
+  const sourced = selectNonSkillRecommendations(catalog([candidates.entities.find((entry) => entry.id === 'cold-from-lightning')]), { ...snap, offenseList: ['Cold'] },
+    profile(['attack'], ['lightning'])).passives.notables;
+  assert.equal(sourced.some((entry) => entry.id === 'cold-from-lightning'), true);
+});
+
+test('optional unique applicability is per fact and respects explicit delivery', () => {
+  const unique = (id, facts) => entity(id, 'unique', facts, {
+    compatibility: { access: {}, equipment: { slot: 'Ring', base: 'Iron Ring' } }
+  });
+  const candidates = catalog([
+    unique('attack-physical', [{ ...fact('physical'), delivery: 'attack' }]),
+    unique('spell-physical', [{ ...fact('physical'), delivery: 'spell' }]),
+    unique('minion-physical', [{ ...fact('physical'), delivery: 'minion' }]),
+    unique('thorns-physical', [{ ...fact('physical'), delivery: 'thorns' }]),
+    unique('mixed', [{ ...fact('physical'), delivery: 'attack' }, fact('chaos')])
+  ]);
+  const pack = (properties, offense) => ({ packageProfile: { finalOffense: [offense],
+    primarySkill: { properties }, sourceMechanics: [], bridgeMechanics: [], setupMechanics: [] } });
+  const spellPhysical = selectJewelryRecommendations(candidates, { offenseList: ['Physical'] }, pack(['spell'], 'physical'));
+  assert.equal(spellPhysical.some((entry) => entry.id === 'attack-physical'), false);
+  assert.equal(spellPhysical.some((entry) => entry.id === 'spell-physical'), true);
+  assert.equal(spellPhysical.some((entry) => entry.id === 'minion-physical'), false);
+  assert.equal(spellPhysical.some((entry) => entry.id === 'thorns-physical'), false);
+  assert.equal(selectJewelryRecommendations(candidates, { offenseList: ['Chaos'] }, pack(['spell'], 'chaos'))
+    .some((entry) => entry.id === 'mixed'), true);
+});
+
 test('production path enforces Void locality for Huntress while retaining Int eligibility', () => {
   const production = JSON.parse(fs.readFileSync(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url)));
   const voidEntity = production.entities.find((candidate) => candidate.name === 'Void' && candidate.content_type === 'passive');

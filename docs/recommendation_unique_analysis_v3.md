@@ -7,9 +7,9 @@ This deterministic report audits the implemented whole-item runtime semantics wh
 - Audited uniques: 131
 - With granted skills: 94; with granted effects: 0
 - Material granted-semantic gaps: 33
-- Previous empty cells: 108; new empty cells: 69; empty→non-empty: 40
-- Existing non-empty winner changes: 10; runtime/top-band agreement: 133/135
-- Runtime semantics: 73 uniques, 254 promoted facts, 79348 bytes
+- Previous empty cells: 108; new empty cells: 70; empty→non-empty: 39
+- Existing non-empty winner changes: 10; runtime/top-band agreement: 131/135
+- Runtime semantics: 73 uniques, 255 promoted facts, 80226 bytes
 - Quality bands: one=50, two=9, three=7 (zero=69)
 
 ## Ranking model
@@ -46,7 +46,7 @@ Slot type adds no semantic score. Bow and Quiver are equally family-legal, and r
 - Guiding Palm of the Mind → Purity of Lightning: AFFINITY_AMPLIFICATION:has_property:lightning; offenses lightning.
 - Hysseg's Claw → Cackling Companions: AFFINITY_AMPLIFICATION:has_property:physical; offenses physical.
 - Liminal Coil → Coiling Bolts: AFFINITY_AMPLIFICATION:has_property:chaos; offenses chaos.
-- Murkshaft → Bursting Fen Toad: AFFINITY_AMPLIFICATION:has_property:chaos; AFFINITY_AMPLIFICATION:has_property:physical; offenses chaos, physical; changes a proposed winner.
+- Murkshaft → Bursting Fen Toad: AFFINITY_AMPLIFICATION:has_property:chaos; AFFINITY_AMPLIFICATION:has_property:physical; offenses chaos, physical.
 - Nightfall → Soaring Midnight: AFFINITY_AMPLIFICATION:has_property:cold; AFFINITY_AMPLIFICATION:modifies:cold; BUILD_DEFINING_CAPABILITY:converts:cold; offenses cold.
 - Palm of the Dreamer → Impurity: AFFINITY_AMPLIFICATION:has_property:chaos; offenses chaos.
 - Periphery → Azmerian Swarms: AFFINITY_AMPLIFICATION:has_property:cold; AFFINITY_AMPLIFICATION:has_property:fire; AFFINITY_AMPLIFICATION:has_property:lightning; AFFINITY_AMPLIFICATION:has_property:physical; AFFINITY_AMPLIFICATION:modifies:physical; offenses cold, fire, lightning, physical.
@@ -55,6 +55,7 @@ Slot type adds no semantic score. Bow and Quiver are equally family-legal, and r
 ## Empty results
 
 - GENUINELY_NO_RELEVANT_UNIQUE: 69
+- MISSING_GRANTED_SEMANTICS: 1
 
 Empty cells retain only up to three meaningful legal leads in the JSON artifact. No cell is force-filled. The dominant cause is absence or incompleteness of typed item semantics; granted behavior explains only the subset with a provable promoted fact.
 
@@ -80,7 +81,7 @@ Incoming player immunity is not treated as an outgoing Offense contradiction. Di
 - Mace × Physical Damage: Brynhand's Mark, Chober Chaber, Frostbreath (3 in band).
 - Mace × Lightning Damage: Brain Rattler, Olrovasara, Seeing Stars (3 in band).
 - Quarterstaff × Physical Damage: Nazir's Judgement, The Blood Thorn (2 in band).
-- Bow × Physical Damage: Murkshaft, Asphyxia's Wrath, Beyond Reach (3 in band).
+- Bow × Physical Damage: Doomfletch, Murkshaft, Asphyxia's Wrath (3 in band).
 - Bow × Cold Damage: Periphery, Asphyxia's Wrath (2 in band).
 - Crossbow × Physical Damage: Rampart Raptor, Redemption, The Last Lament (3 in band).
 - Staff × Cold Damage: The Whispering Ice, Earthbound, Taryn's Shiver (3 in band).

@@ -140,7 +140,7 @@ class GeneratedComponentPromotionTests(unittest.TestCase):
         semantic = lambda catalog: [(entity["id"], [{k: v for k, v in fact.items() if k != "evidence"} for fact in entity.get("facts") or []]) for entity in catalog["entities"]]
         self.assertEqual(semantic(self.full), semantic(self.runtime))
         self.assertEqual(2964, len(self.runtime["entities"]))
-        self.assertEqual(5366, sum(len(entity.get("facts") or []) for entity in self.runtime["entities"]))
+        self.assertEqual(5403, sum(len(entity.get("facts") or []) for entity in self.runtime["entities"]))
         for entity in self.runtime["entities"]:
             for fact in entity.get("facts") or []:
                 self.assertTrue(all(set(proof) <= {"kind", "value"} for proof in fact.get("evidence", [])))

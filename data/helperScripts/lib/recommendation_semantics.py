@@ -620,6 +620,20 @@ def parse_stat_id(value: Any, subject: str = "player") -> list[dict[str, Any]]:
     if conversion:
         facts.append(conversion)
 
+    # Gain-as stats are directional even though they do not replace the source
+    # damage.  Retain both ends so recommendation consumers can require the
+    # upstream mechanic instead of treating the gained type as generic damage.
+    gain_as_damage = re.search(
+        r"(?:^|_)(physical|fire|cold|lightning|chaos)(?:_damage)?(?:_[a-z0-9]+){0,8}_to_gain_as_(physical|fire|cold|lightning|chaos)(?:_|$)",
+        normalized,
+    )
+    if gain_as_damage:
+        facts.append(make_fact(
+            "provides", subject=subject, source_kind="stat_id", source_value=value,
+            mechanic=gain_as_damage.group(2), confidence="exact", scope="outgoing",
+            from_mechanic=gain_as_damage.group(1), to_mechanic=gain_as_damage.group(2),
+        ))
+
     # These are structured application statements, despite being display/stat
     # identifiers rather than prose.  Match the grammatical family rather than
     # individual skills: refreshes frequently introduce the same semantics on
@@ -881,6 +895,11 @@ def parse_stat_id(value: Any, subject: str = "player") -> list[dict[str, Any]]:
                 )
             )
 
+    if "on_self" in normalized or "taken_from" in normalized or "damage_taken" in normalized:
+        for fact in facts:
+            if fact.get("relation") in {"inflicts", "modifies", "provides", "has_property"}:
+                fact["target"] = "self"
+                fact["scope"] = "incoming"
     return merge_facts(facts)
 
 
@@ -1156,13 +1175,22 @@ def parse_text(value: Any, source_kind: str, subject: str) -> list[dict[str, Any
     # These relations deliberately distinguish addition/gain, amplification,
     # and afflicted-target payoff from conversion or application capability.
     if source_kind == "unique_mod":
+        explicit_delivery = (
+            "attack" if re.search(r"(?:^|_)attacks?(?:_|$)", normalized)
+            else "spell" if re.search(r"(?:^|_)spells?(?:_|$)", normalized)
+            else "minion" if re.search(r"(?:^|_)minions?(?:_|$)", normalized)
+            else "thorns" if re.search(r"(?:^|_)thorns?(?:_|$)", normalized)
+            else "generic_hit" if re.search(r"(?:^|_)hits?(?:_|$)", normalized) else None
+        )
         for mechanic in OFFENSE_MECHANICS & set(mechanics_in(text)):
             if re.search(r"(?:^|_)(?:adds?|gain)(?:_[a-z0-9]+){0,8}(?:_as_extra)?(?:_[a-z0-9]+){0,4}_" + re.escape(mechanic) + r"(?:_|$)", normalized):
                 facts.append(make_fact("provides", subject=subject, source_kind=source_kind,
-                    source_value=text, mechanic=mechanic, confidence="strong", scope="outgoing"))
+                    source_value=text, mechanic=mechanic, confidence="strong", scope="outgoing",
+                    delivery=explicit_delivery))
             elif re.search(r"(?:^|_)(?:increased|more|magnitude|effect|penetrat|exposure)(?:_[a-z0-9]+){0,8}_" + re.escape(mechanic) + r"(?:_|$)", normalized):
                 facts.append(make_fact("modifies", subject=subject, source_kind=source_kind,
-                    source_value=text, mechanic=mechanic, confidence="strong", scope="outgoing"))
+                    source_value=text, mechanic=mechanic, confidence="strong", scope="outgoing",
+                    delivery=explicit_delivery))
             if re.search(r"(?:^|_)(?:against|all|affected_by|while|when|if)(?:_[a-z0-9]+){0,5}_" + re.escape(mechanic) + r"(?:d|ed)?_(?:enemy|enemies|target|targets)(?:_|$)", normalized):
                 facts.append(make_fact("requires", subject=subject, source_kind=source_kind,
                     source_value=text, mechanic=mechanic, confidence="strong"))
