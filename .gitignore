@@ -10,3 +10,6 @@ __pycache__/
 
 # Developer-only, on-demand recommendation provenance
 /data/enriched/debug/recommendation_catalog_v3_provenance.json
+
+# Developer-only recommendation audit exports
+/tmp/recommendation-audit.json
