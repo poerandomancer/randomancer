@@ -3098,6 +3098,10 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     primarySkill: primarySkill ? { entityId: primarySkill.entityId, name: primarySkill.name,
       properties: unique([primary?.weaponRelationship?.family, ...asArray(primary?.delivery?.skillTypes)].map(normalizeToken)) } : null,
     sourceMechanics: unique(bridgePath.map((entry) => entry.from).filter(Boolean)),
+    primarySourceMechanics: unique(asArray(primary?.entity?.facts)
+        .filter((fact) => normalizeToken(fact?.scope) !== 'incoming'
+          && !['prevents', 'requires', 'consumes'].includes(normalizeToken(fact?.relation)))
+        .flatMap((fact) => [fact?.mechanic, fact?.from].map(normalizeToken)).filter(Boolean)),
     bridgeMechanics: unique(bridgePath.flatMap((entry) => [entry.from, entry.to]).filter(Boolean)),
     setupMechanics: unique(asArray(winner?.synergyEdges).map((edge) => edge.mechanic)),
     optionalPayoffMechanics: unique(selectedCandidates.flatMap((candidate) => asArray(candidate?.entity?.facts)

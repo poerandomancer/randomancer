@@ -11,7 +11,7 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5364,
+    "fact_count": 5403,
     "fact_relation_counts": {
       "consumes": 395,
       "converts": 127,
@@ -20,10 +20,10 @@
       "generates": 60,
       "has_property": 672,
       "inflicts": 185,
-      "modifies": 2308,
+      "modifies": 2327,
       "occupies": 444,
       "prevents": 378,
-      "provides": 415,
+      "provides": 435,
       "replaces": 27,
       "requires": 66
     },
@@ -3223,6 +3223,8 @@
           "confidence": "strong",
           "mechanic": "energy_shield",
           "condition": "hit",
+          "target": "self",
+          "scope": "incoming",
           "evidence": [
             {
               "value": "runtime",
@@ -25781,6 +25783,8 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "lightning",
+          "target": "self",
+          "scope": "incoming",
           "evidence": [
             {
               "value": "runtime",
@@ -25793,6 +25797,8 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "shock",
+          "target": "self",
+          "scope": "incoming",
           "evidence": [
             {
               "value": "runtime",
@@ -34171,6 +34177,20 @@
             {
               "value": "against",
               "kind": "active_skill_short_description"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "runic_ward",
+          "target": "self",
+          "scope": "incoming",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
             }
           ]
         },
@@ -44700,6 +44720,20 @@
           ]
         },
         {
+          "relation": "modifies",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "lightning",
+          "target": "self",
+          "scope": "incoming",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
+            }
+          ]
+        },
+        {
           "relation": "prevents",
           "subject": "skill",
           "confidence": "exact",
@@ -47623,6 +47657,8 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "chaos",
+          "target": "self",
+          "scope": "incoming",
           "evidence": [
             {
               "value": "runtime",
@@ -50510,6 +50546,8 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "lightning",
+          "target": "self",
+          "scope": "incoming",
           "evidence": [
             {
               "value": "runtime",
@@ -50522,6 +50560,8 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "physical",
+          "target": "self",
+          "scope": "incoming",
           "evidence": [
             {
               "value": "runtime",
@@ -51769,37 +51809,49 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "chaos"
+          "mechanic": "chaos",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "cold"
+          "mechanic": "cold",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "damage_over_time"
+          "mechanic": "damage_over_time",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "fire"
+          "mechanic": "fire",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "lightning"
+          "mechanic": "lightning",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "physical"
+          "mechanic": "physical",
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -52036,31 +52088,41 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "cold"
+          "mechanic": "cold",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "damage_over_time"
+          "mechanic": "damage_over_time",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "fire"
+          "mechanic": "fire",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "lightning"
+          "mechanic": "lightning",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "physical"
+          "mechanic": "physical",
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -53016,8 +53078,7 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "chaos",
-          "offense_role": "enabler"
+          "mechanic": "chaos"
         }
       ]
     },
@@ -54257,8 +54318,7 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "cold",
-          "offense_role": "enabler"
+          "mechanic": "cold"
         },
         {
           "relation": "modifies",
@@ -54305,8 +54365,7 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "lightning",
-          "offense_role": "enabler"
+          "mechanic": "lightning"
         },
         {
           "relation": "modifies",
@@ -55235,13 +55294,17 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "fire"
+          "mechanic": "fire",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "physical"
+          "mechanic": "physical",
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -56542,8 +56605,7 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "physical",
-          "offense_role": "enabler"
+          "mechanic": "physical"
         },
         {
           "relation": "provides",
@@ -57763,6 +57825,14 @@
           "subject": "passive",
           "confidence": "exact",
           "mechanic": "warbringer"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "block",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
@@ -60812,7 +60882,9 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "cold"
+          "mechanic": "cold",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
@@ -60820,6 +60892,14 @@
           "confidence": "strong",
           "mechanic": "freeze",
           "offense_role": "enabler"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "freeze",
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -61339,8 +61419,7 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "chaos",
-          "offense_role": "enabler"
+          "mechanic": "chaos"
         },
         {
           "relation": "modifies",
@@ -61353,7 +61432,16 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "physical",
+          "mechanic": "physical"
+        },
+        {
+          "relation": "provides",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "chaos",
+          "from": "physical",
+          "to": "chaos",
+          "scope": "outgoing",
           "offense_role": "enabler"
         }
       ]
@@ -61377,8 +61465,7 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "cold",
-          "offense_role": "enabler"
+          "mechanic": "cold"
         },
         {
           "relation": "modifies",
@@ -61836,15 +61923,13 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "armour",
-          "offense_role": "enabler"
+          "mechanic": "armour"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "lightning",
-          "offense_role": "enabler"
+          "mechanic": "lightning"
         },
         {
           "relation": "modifies",
@@ -62041,14 +62126,22 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "fire",
-          "offense_role": "enabler"
+          "mechanic": "fire"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "physical",
+          "mechanic": "physical"
+        },
+        {
+          "relation": "provides",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "fire",
+          "from": "physical",
+          "to": "fire",
+          "scope": "outgoing",
           "offense_role": "enabler"
         }
       ]
@@ -62527,47 +62620,61 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "chill",
-          "condition": "chilled_enemies",
-          "offense_role": "enabler"
+          "condition": "chilled_enemies"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "cold",
-          "condition": "shocked_enemies",
-          "offense_role": "enabler"
+          "condition": "shocked_enemies"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "lightning",
-          "condition": "chilled_enemies",
-          "offense_role": "enabler"
+          "condition": "chilled_enemies"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "physical",
-          "condition": "chilled_enemies",
-          "offense_role": "enabler"
+          "condition": "chilled_enemies"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "physical",
-          "condition": "shocked_enemies",
-          "offense_role": "enabler"
+          "condition": "shocked_enemies"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "shock",
-          "condition": "shocked_enemies",
+          "condition": "shocked_enemies"
+        },
+        {
+          "relation": "provides",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "cold",
+          "from": "physical",
+          "to": "cold",
+          "scope": "outgoing",
+          "offense_role": "enabler"
+        },
+        {
+          "relation": "provides",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "lightning",
+          "from": "physical",
+          "to": "lightning",
+          "scope": "outgoing",
           "offense_role": "enabler"
         }
       ]
@@ -62748,22 +62855,21 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "armour",
-          "offense_role": "enabler"
+          "mechanic": "armour"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "chill",
-          "offense_role": "enabler"
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "cold",
-          "offense_role": "enabler"
+          "mechanic": "cold"
         },
         {
           "relation": "modifies",
@@ -62929,30 +63035,37 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "cold",
-          "condition": "frozen_enemies",
-          "offense_role": "enabler"
+          "condition": "frozen_enemies"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "fire",
-          "condition": "frozen_enemies",
-          "offense_role": "enabler"
+          "condition": "frozen_enemies"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "freeze",
-          "condition": "frozen_enemies",
-          "offense_role": "enabler"
+          "condition": "frozen_enemies"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "freeze",
+          "offense_role": "enabler"
+        },
+        {
+          "relation": "provides",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "fire",
+          "from": "cold",
+          "to": "fire",
+          "scope": "outgoing",
           "offense_role": "enabler"
         }
       ]
@@ -63915,14 +64028,22 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "fire",
-          "offense_role": "enabler"
+          "mechanic": "fire"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "physical",
+          "mechanic": "physical"
+        },
+        {
+          "relation": "provides",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "fire",
+          "from": "physical",
+          "to": "fire",
+          "scope": "outgoing",
           "offense_role": "enabler"
         }
       ]
@@ -63945,8 +64066,7 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "fire",
-          "offense_role": "enabler"
+          "mechanic": "fire"
         },
         {
           "relation": "modifies",
@@ -64332,8 +64452,7 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "physical",
-          "offense_role": "enabler"
+          "mechanic": "physical"
         }
       ]
     },
@@ -64855,8 +64974,7 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "fire",
-          "offense_role": "enabler"
+          "mechanic": "fire"
         }
       ]
     },
@@ -65321,8 +65439,7 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "chaos",
-          "offense_role": "enabler"
+          "mechanic": "chaos"
         },
         {
           "relation": "modifies",
@@ -65573,21 +65690,29 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "cold",
-          "offense_role": "enabler"
+          "mechanic": "cold"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "lightning",
-          "offense_role": "enabler"
+          "mechanic": "lightning"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "shock",
+          "offense_role": "enabler"
+        },
+        {
+          "relation": "provides",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "cold",
+          "from": "lightning",
+          "to": "cold",
+          "scope": "outgoing",
           "offense_role": "enabler"
         }
       ]
@@ -65969,8 +66094,7 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "lightning",
-          "offense_role": "enabler"
+          "mechanic": "lightning"
         },
         {
           "relation": "modifies",
@@ -66006,7 +66130,8 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "shock",
-          "offense_role": "enabler"
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -66029,8 +66154,7 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "lightning",
-          "condition": "shapeshifted",
-          "offense_role": "enabler"
+          "condition": "shapeshifted"
         }
       ]
     },
@@ -66053,15 +66177,23 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "lightning",
-          "condition": "dazed_enemies",
-          "offense_role": "enabler"
+          "condition": "dazed_enemies"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "physical",
-          "condition": "dazed_enemies",
+          "condition": "dazed_enemies"
+        },
+        {
+          "relation": "provides",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "lightning",
+          "from": "physical",
+          "to": "lightning",
+          "scope": "outgoing",
           "offense_role": "enabler"
         }
       ]
@@ -66111,23 +66243,30 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "electrocute",
-          "condition": "electrocuted",
-          "offense_role": "enabler"
+          "condition": "electrocuted"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "lightning",
-          "condition": "electrocuted",
-          "offense_role": "enabler"
+          "condition": "electrocuted"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "physical",
-          "condition": "electrocuted",
+          "condition": "electrocuted"
+        },
+        {
+          "relation": "provides",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "lightning",
+          "from": "physical",
+          "to": "lightning",
+          "scope": "outgoing",
           "offense_role": "enabler"
         }
       ]
@@ -66145,7 +66284,9 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "electrocute"
+          "mechanic": "electrocute",
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -66605,6 +66746,14 @@
           "confidence": "strong",
           "mechanic": "physical",
           "offense_role": "enabler"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -67166,8 +67315,7 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "cold",
-          "offense_role": "enabler"
+          "mechanic": "cold"
         },
         {
           "relation": "modifies",
@@ -67196,8 +67344,7 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "lightning",
-          "offense_role": "enabler"
+          "mechanic": "lightning"
         },
         {
           "relation": "modifies",
@@ -68330,6 +68477,14 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "ignite",
+          "target": "self",
+          "scope": "incoming"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "ignite",
           "offense_role": "enabler"
         }
       ]
@@ -68353,15 +68508,15 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "fire",
-          "condition": "on_ground_fire_burn",
-          "offense_role": "enabler"
+          "condition": "on_ground_fire_burn"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "ignite",
-          "offense_role": "enabler"
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -68394,8 +68549,7 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "fire",
-          "offense_role": "enabler"
+          "mechanic": "fire"
         }
       ]
     },
@@ -68802,15 +68956,21 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "chaos",
-          "offense_role": "enabler"
+          "mechanic": "chaos"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "minion"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "minion",
-          "offense_role": "enabler"
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -69175,23 +69335,22 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "chill",
-          "condition": "on_ground_ice_chill",
-          "offense_role": "enabler"
+          "condition": "on_ground_ice_chill"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "chill",
-          "offense_role": "enabler"
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "cold",
-          "condition": "on_ground_ice_chill",
-          "offense_role": "enabler"
+          "condition": "on_ground_ice_chill"
         }
       ]
     },
@@ -69214,8 +69373,7 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "cold",
-          "condition": "shapeshifted",
-          "offense_role": "enabler"
+          "condition": "shapeshifted"
         }
       ]
     },
@@ -69480,8 +69638,7 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "cold",
-          "offense_role": "enabler"
+          "mechanic": "cold"
         },
         {
           "relation": "modifies",
@@ -69914,8 +70071,7 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "cold",
-          "offense_role": "enabler"
+          "mechanic": "cold"
         }
       ]
     },
@@ -70320,22 +70476,21 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "armour",
-          "offense_role": "enabler"
+          "mechanic": "armour"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "fire",
-          "offense_role": "enabler"
+          "mechanic": "fire"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "ignite",
-          "offense_role": "enabler"
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
@@ -70955,20 +71110,36 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "chill",
+          "target": "self",
+          "scope": "incoming"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "chill",
           "offense_role": "enabler"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "cold",
-          "offense_role": "enabler"
+          "mechanic": "cold"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
+          "mechanic": "lightning"
+        },
+        {
+          "relation": "provides",
+          "subject": "passive",
+          "confidence": "exact",
           "mechanic": "lightning",
+          "from": "cold",
+          "to": "lightning",
+          "scope": "outgoing",
           "offense_role": "enabler"
         }
       ]
@@ -72725,8 +72896,7 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "chaos",
-          "offense_role": "enabler"
+          "mechanic": "chaos"
         },
         {
           "relation": "modifies",
@@ -72938,21 +73108,37 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "cold",
-          "offense_role": "enabler"
+          "mechanic": "cold"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "lightning",
-          "offense_role": "enabler"
+          "mechanic": "lightning"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "shock",
+          "target": "self",
+          "scope": "incoming"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "shock",
+          "offense_role": "enabler"
+        },
+        {
+          "relation": "provides",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "cold",
+          "from": "lightning",
+          "to": "cold",
+          "scope": "outgoing",
           "offense_role": "enabler"
         }
       ]
@@ -73349,14 +73535,22 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "chaos",
-          "offense_role": "enabler"
+          "mechanic": "chaos"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "physical",
+          "mechanic": "physical"
+        },
+        {
+          "relation": "provides",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "chaos",
+          "from": "physical",
+          "to": "chaos",
+          "scope": "outgoing",
           "offense_role": "enabler"
         }
       ]
@@ -73606,8 +73800,7 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "physical",
-          "offense_role": "enabler"
+          "mechanic": "physical"
         }
       ]
     },
@@ -74011,20 +74204,31 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "damage_over_time"
+          "mechanic": "damage_over_time",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "fire",
-          "offense_role": "enabler"
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "physical"
+          "mechanic": "fire"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -74093,8 +74297,7 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "fire",
-          "condition": "shapeshifted",
-          "offense_role": "enabler"
+          "condition": "shapeshifted"
         }
       ]
     },
@@ -74207,7 +74410,8 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "shock",
-          "offense_role": "enabler"
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "prevents",
@@ -74298,15 +74502,13 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "armour",
-          "offense_role": "enabler"
+          "mechanic": "armour"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "cold",
-          "offense_role": "enabler"
+          "mechanic": "cold"
         },
         {
           "relation": "modifies",
@@ -74581,8 +74783,7 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "chaos",
-          "offense_role": "enabler"
+          "mechanic": "chaos"
         }
       ]
     },
@@ -74751,7 +74952,8 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "ignite",
-          "offense_role": "enabler"
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -74943,15 +75145,23 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "fire",
-          "condition": "heavy_stunned",
-          "offense_role": "enabler"
+          "condition": "heavy_stunned"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "physical",
-          "condition": "heavy_stunned",
+          "condition": "heavy_stunned"
+        },
+        {
+          "relation": "provides",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "fire",
+          "from": "physical",
+          "to": "fire",
+          "scope": "outgoing",
           "offense_role": "enabler"
         }
       ]
@@ -75130,15 +75340,13 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "armour",
-          "offense_role": "enabler"
+          "mechanic": "armour"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "chaos",
-          "offense_role": "enabler"
+          "mechanic": "chaos"
         },
         {
           "relation": "modifies",
@@ -75521,8 +75729,7 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "armour",
-          "offense_role": "enabler"
+          "mechanic": "armour"
         },
         {
           "relation": "modifies",
@@ -76262,8 +76469,7 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "chaos",
-          "offense_role": "enabler"
+          "mechanic": "chaos"
         }
       ]
     },
@@ -76671,15 +76877,13 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "armour",
-          "offense_role": "enabler"
+          "mechanic": "armour"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "fire",
-          "offense_role": "enabler"
+          "mechanic": "fire"
         },
         {
           "relation": "modifies",
@@ -76814,7 +77018,9 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "minion"
+          "mechanic": "minion",
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -76954,8 +77160,7 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "chaos",
-          "offense_role": "enabler"
+          "mechanic": "chaos"
         }
       ]
     },
@@ -77310,15 +77515,13 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "physical",
-          "offense_role": "enabler"
+          "mechanic": "physical"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "thorns",
-          "offense_role": "enabler"
+          "mechanic": "thorns"
         }
       ]
     },
@@ -77447,8 +77650,7 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "chaos",
-          "offense_role": "enabler"
+          "mechanic": "chaos"
         },
         {
           "relation": "modifies",
@@ -78155,8 +78357,15 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
+          "mechanic": "ignite"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
           "mechanic": "ignite",
-          "offense_role": "enabler"
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -78424,15 +78633,23 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "cold",
-          "condition": "dazed_enemies",
-          "offense_role": "enabler"
+          "condition": "dazed_enemies"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "physical",
-          "condition": "dazed_enemies",
+          "condition": "dazed_enemies"
+        },
+        {
+          "relation": "provides",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "cold",
+          "from": "physical",
+          "to": "cold",
+          "scope": "outgoing",
           "offense_role": "enabler"
         }
       ]
@@ -78650,15 +78867,13 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "armour",
-          "offense_role": "enabler"
+          "mechanic": "armour"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "lightning",
-          "offense_role": "enabler"
+          "mechanic": "lightning"
         },
         {
           "relation": "modifies",
@@ -78672,7 +78887,8 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "shock",
-          "offense_role": "enabler"
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -79096,7 +79312,14 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "chill",
-          "offense_role": "enabler"
+          "target": "self",
+          "scope": "incoming"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "chill"
         }
       ]
     },
@@ -80435,6 +80658,14 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "shock",
+          "target": "self",
+          "scope": "incoming"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "shock",
           "offense_role": "enabler"
         }
       ]
@@ -80458,23 +80689,22 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "lightning",
-          "condition": "on_ground_lightning_shock",
-          "offense_role": "enabler"
+          "condition": "on_ground_lightning_shock"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "shock",
-          "condition": "on_ground_lightning_shock",
-          "offense_role": "enabler"
+          "condition": "on_ground_lightning_shock"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "shock",
-          "offense_role": "enabler"
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -81102,7 +81332,9 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "physical"
+          "mechanic": "physical",
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -81706,7 +81938,9 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "physical"
+          "mechanic": "physical",
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -82763,14 +82997,22 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "lightning",
-          "offense_role": "enabler"
+          "mechanic": "lightning"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "physical",
+          "mechanic": "physical"
+        },
+        {
+          "relation": "provides",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "lightning",
+          "from": "physical",
+          "to": "lightning",
+          "scope": "outgoing",
           "offense_role": "enabler"
         }
       ]
@@ -83007,7 +83249,8 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "bleed",
-          "offense_role": "enabler"
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -83315,8 +83558,7 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "fire",
-          "offense_role": "enabler"
+          "mechanic": "fire"
         },
         {
           "relation": "modifies",
@@ -83610,14 +83852,17 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "recoup"
+          "mechanic": "recoup",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "totem",
-          "offense_role": "enabler"
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "provides",
@@ -83881,15 +84126,13 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "cold",
-          "offense_role": "enabler"
+          "mechanic": "cold"
         },
         {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
-          "mechanic": "lightning",
-          "offense_role": "enabler"
+          "mechanic": "lightning"
         }
       ]
     },
@@ -87927,13 +88170,17 @@
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "freeze"
+          "mechanic": "freeze",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "physical"
+          "mechanic": "physical",
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -90420,7 +90667,9 @@
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "ignite"
+          "mechanic": "ignite",
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -94307,6 +94556,20 @@
           "relation": "provides",
           "subject": "supported_skill",
           "confidence": "exact",
+          "mechanic": "chaos",
+          "from": "lightning",
+          "to": "chaos",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "runtime"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "supported_skill",
+          "confidence": "exact",
           "mechanic": "shock",
           "condition": "chaos_damage",
           "evidence": [
@@ -95244,6 +95507,14 @@
           "subject": "supported_skill",
           "confidence": "strong",
           "mechanic": "minion"
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "minion",
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -95283,6 +95554,14 @@
           "subject": "supported_skill",
           "confidence": "strong",
           "mechanic": "minion"
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "minion",
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -97894,6 +98173,14 @@
         "helbryms_composure"
       ],
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "guard",
+          "target": "self",
+          "scope": "incoming"
+        },
         {
           "relation": "modifies",
           "subject": "supported_skill",
@@ -101378,7 +101665,9 @@
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "physical"
+          "mechanic": "physical",
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -101438,7 +101727,9 @@
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "physical"
+          "mechanic": "physical",
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -101493,7 +101784,9 @@
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "physical"
+          "mechanic": "physical",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "provides",
@@ -101574,7 +101867,9 @@
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "physical"
+          "mechanic": "physical",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "provides",
@@ -101636,6 +101931,14 @@
           "subject": "supported_skill",
           "confidence": "strong",
           "mechanic": "minion"
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "minion",
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -101675,6 +101978,14 @@
           "subject": "supported_skill",
           "confidence": "strong",
           "mechanic": "minion"
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "minion",
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -109054,7 +109365,9 @@
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "shock"
+          "mechanic": "shock",
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -109266,7 +109579,9 @@
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "physical"
+          "mechanic": "physical",
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -110337,6 +110652,20 @@
           "relation": "provides",
           "subject": "supported_skill",
           "confidence": "exact",
+          "mechanic": "chaos",
+          "from": "cold",
+          "to": "chaos",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "runtime"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "supported_skill",
+          "confidence": "exact",
           "mechanic": "freeze",
           "condition": "chaos_damage",
           "evidence": [
@@ -111351,13 +111680,17 @@
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "armour"
+          "mechanic": "armour",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "physical"
+          "mechanic": "physical",
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -111437,6 +111770,20 @@
           "subject": "supported_skill",
           "confidence": "exact",
           "mechanic": "chaos",
+          "evidence": [
+            {
+              "value": "runtime"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "mechanic": "chaos",
+          "from": "physical",
+          "to": "chaos",
+          "scope": "outgoing",
           "evidence": [
             {
               "value": "runtime"
@@ -112101,7 +112448,9 @@
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "freeze"
+          "mechanic": "freeze",
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -112526,6 +112875,20 @@
           "subject": "supported_skill",
           "confidence": "exact",
           "mechanic": "chaos",
+          "evidence": [
+            {
+              "value": "runtime"
+            }
+          ]
+        },
+        {
+          "relation": "provides",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "mechanic": "chaos",
+          "from": "fire",
+          "to": "chaos",
+          "scope": "outgoing",
           "evidence": [
             {
               "value": "runtime"
@@ -114009,6 +114372,7 @@
           "confidence": "strong",
           "mechanic": "cold",
           "scope": "outgoing",
+          "delivery": "attack",
           "evidence": [
             {
               "value": "runtime",
@@ -114022,6 +114386,7 @@
           "confidence": "strong",
           "mechanic": "physical",
           "scope": "outgoing",
+          "delivery": "attack",
           "evidence": [
             {
               "value": "runtime",
@@ -114358,6 +114723,7 @@
           "confidence": "strong",
           "mechanic": "physical",
           "scope": "outgoing",
+          "delivery": "spell",
           "evidence": [
             {
               "value": "runtime",
@@ -114581,6 +114947,7 @@
           "confidence": "strong",
           "mechanic": "thorns",
           "scope": "outgoing",
+          "delivery": "thorns",
           "evidence": [
             {
               "value": "runtime",
@@ -114850,6 +115217,7 @@
           "confidence": "strong",
           "mechanic": "chaos",
           "scope": "outgoing",
+          "delivery": "attack",
           "evidence": [
             {
               "value": "runtime",
@@ -114889,6 +115257,7 @@
           "confidence": "strong",
           "mechanic": "physical",
           "scope": "outgoing",
+          "delivery": "attack",
           "evidence": [
             {
               "value": "runtime",
@@ -115208,6 +115577,7 @@
           "confidence": "strong",
           "mechanic": "fire",
           "scope": "outgoing",
+          "delivery": "attack",
           "evidence": [
             {
               "value": "runtime",
@@ -115277,6 +115647,7 @@
           "confidence": "strong",
           "mechanic": "chaos",
           "scope": "outgoing",
+          "delivery": "attack",
           "evidence": [
             {
               "value": "runtime",
@@ -115290,6 +115661,7 @@
           "confidence": "strong",
           "mechanic": "physical",
           "scope": "outgoing",
+          "delivery": "attack",
           "evidence": [
             {
               "value": "runtime",
@@ -115582,6 +115954,7 @@
           "confidence": "strong",
           "mechanic": "minion",
           "scope": "outgoing",
+          "delivery": "minion",
           "evidence": [
             {
               "value": "runtime",
@@ -116552,6 +116925,7 @@
           "confidence": "strong",
           "mechanic": "physical",
           "scope": "outgoing",
+          "delivery": "thorns",
           "evidence": [
             {
               "value": "runtime",
@@ -116565,6 +116939,7 @@
           "confidence": "strong",
           "mechanic": "thorns",
           "scope": "outgoing",
+          "delivery": "thorns",
           "evidence": [
             {
               "value": "runtime",
@@ -118426,6 +118801,20 @@
               "kind": "unique_mod"
             }
           ]
+        },
+        {
+          "relation": "provides",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "physical",
+          "scope": "outgoing",
+          "delivery": "attack",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "unique_mod"
+            }
+          ]
         }
       ]
     },
@@ -119507,6 +119896,7 @@
           "confidence": "strong",
           "mechanic": "lightning",
           "scope": "outgoing",
+          "delivery": "attack",
           "evidence": [
             {
               "value": "runtime",
@@ -121160,6 +121550,7 @@
           "confidence": "strong",
           "mechanic": "cold",
           "scope": "outgoing",
+          "delivery": "attack",
           "evidence": [
             {
               "value": "runtime",
@@ -121451,6 +121842,7 @@
           "confidence": "strong",
           "mechanic": "lightning",
           "scope": "outgoing",
+          "delivery": "attack",
           "evidence": [
             {
               "value": "runtime",
@@ -121946,6 +122338,7 @@
           "confidence": "strong",
           "mechanic": "chaos",
           "scope": "outgoing",
+          "delivery": "attack",
           "evidence": [
             {
               "value": "runtime",
@@ -122106,6 +122499,7 @@
           "confidence": "strong",
           "mechanic": "minion",
           "scope": "outgoing",
+          "delivery": "minion",
           "evidence": [
             {
               "value": "runtime",
@@ -122191,6 +122585,7 @@
           "confidence": "strong",
           "mechanic": "chill",
           "scope": "outgoing",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -122229,6 +122624,7 @@
           "confidence": "strong",
           "mechanic": "physical",
           "scope": "outgoing",
+          "delivery": "attack",
           "evidence": [
             {
               "value": "runtime",
@@ -122298,6 +122694,7 @@
           "confidence": "strong",
           "mechanic": "cold",
           "scope": "outgoing",
+          "delivery": "thorns",
           "evidence": [
             {
               "value": "runtime",
@@ -122311,6 +122708,7 @@
           "confidence": "strong",
           "mechanic": "thorns",
           "scope": "outgoing",
+          "delivery": "thorns",
           "evidence": [
             {
               "value": "runtime",
@@ -122809,6 +123207,7 @@
           "confidence": "strong",
           "mechanic": "physical",
           "scope": "outgoing",
+          "delivery": "attack",
           "evidence": [
             {
               "value": "runtime",
@@ -123603,6 +124002,7 @@
           "confidence": "strong",
           "mechanic": "chaos",
           "scope": "outgoing",
+          "delivery": "spell",
           "evidence": [
             {
               "value": "runtime",
@@ -123628,6 +124028,7 @@
           "confidence": "strong",
           "mechanic": "physical",
           "scope": "outgoing",
+          "delivery": "spell",
           "evidence": [
             {
               "value": "runtime",
@@ -123750,6 +124151,7 @@
           "confidence": "strong",
           "mechanic": "physical",
           "scope": "outgoing",
+          "delivery": "attack",
           "evidence": [
             {
               "value": "runtime",
@@ -124635,6 +125037,7 @@
           "confidence": "strong",
           "mechanic": "physical",
           "scope": "outgoing",
+          "delivery": "attack",
           "evidence": [
             {
               "value": "runtime",
@@ -125158,6 +125561,7 @@
           "confidence": "strong",
           "mechanic": "physical",
           "scope": "outgoing",
+          "delivery": "attack",
           "evidence": [
             {
               "value": "runtime",
@@ -125785,6 +126189,7 @@
           "confidence": "strong",
           "mechanic": "freeze",
           "scope": "outgoing",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -125798,6 +126203,7 @@
           "confidence": "strong",
           "mechanic": "shock",
           "scope": "outgoing",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -126239,6 +126645,7 @@
           "confidence": "strong",
           "mechanic": "physical",
           "scope": "outgoing",
+          "delivery": "attack",
           "evidence": [
             {
               "value": "runtime",
@@ -126632,6 +127039,7 @@
           "confidence": "strong",
           "mechanic": "physical",
           "scope": "outgoing",
+          "delivery": "attack",
           "evidence": [
             {
               "value": "runtime",
@@ -127181,6 +127589,7 @@
           "confidence": "strong",
           "mechanic": "physical",
           "scope": "outgoing",
+          "delivery": "attack",
           "evidence": [
             {
               "value": "runtime",
@@ -128376,6 +128785,20 @@
         }
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "player",
+          "confidence": "strong",
+          "mechanic": "chill",
+          "scope": "outgoing",
+          "delivery": "generic_hit",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "unique_mod"
+            }
+          ]
+        },
         {
           "relation": "modifies",
           "subject": "player",
@@ -130815,6 +131238,7 @@
           "confidence": "strong",
           "mechanic": "chaos",
           "scope": "outgoing",
+          "delivery": "minion",
           "evidence": [
             {
               "value": "runtime",
@@ -130840,6 +131264,7 @@
           "confidence": "strong",
           "mechanic": "minion",
           "scope": "outgoing",
+          "delivery": "minion",
           "evidence": [
             {
               "value": "runtime",
@@ -132395,6 +132820,7 @@
           "confidence": "strong",
           "mechanic": "chill",
           "scope": "outgoing",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -132408,6 +132834,7 @@
           "confidence": "strong",
           "mechanic": "freeze",
           "scope": "outgoing",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -132902,6 +133329,7 @@
           "confidence": "strong",
           "mechanic": "lightning",
           "scope": "outgoing",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -133069,6 +133497,7 @@
           "confidence": "strong",
           "mechanic": "physical",
           "scope": "outgoing",
+          "delivery": "attack",
           "evidence": [
             {
               "value": "runtime",
@@ -133727,6 +134156,7 @@
           "confidence": "strong",
           "mechanic": "chill",
           "scope": "outgoing",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "against",
@@ -133752,6 +134182,7 @@
           "confidence": "strong",
           "mechanic": "physical",
           "scope": "outgoing",
+          "delivery": "attack",
           "evidence": [
             {
               "value": "runtime",
@@ -133829,6 +134260,7 @@
           "confidence": "strong",
           "mechanic": "freeze",
           "scope": "outgoing",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -134205,6 +134637,7 @@
           "confidence": "strong",
           "mechanic": "lightning",
           "scope": "outgoing",
+          "delivery": "attack",
           "evidence": [
             {
               "value": "runtime",

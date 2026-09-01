@@ -51,7 +51,8 @@ function contextMechanics(catalog, snapshot, recommendationPackage) {
     offense: new Set(offense.filter((value) => value && !GENERIC.has(value))),
     // New packages expose their intentional plan. Entity-wide semantics remain
     // only as a compatibility boundary for old snapshots.
-    package: new Set(profileMechanics || entities.flatMap(entityMechanics).filter((value) => value && !GENERIC.has(value)))
+    package: new Set(profileMechanics || entities.flatMap(entityMechanics).filter((value) => value && !GENERIC.has(value))),
+    recommendationPackage
   };
 }
 
@@ -139,12 +140,18 @@ function analyze(entity, snapshot, context) {
   if (contradicts(entity, essentials)) return null;
 
   const matches = [];
+  const recommendationPackage = context.recommendationPackage;
+  const sources = packageSourceMechanics(recommendationPackage);
   for (const fact of arr(entity.facts)) {
     if (entity.content_type === 'passive' && !PASSIVE_OFFENSE_ROLES.has(token(fact?.offense_role))) continue;
+    if ((entity.content_type === 'passive' || entity.content_type === 'ascendancy_passive')
+      && !factAppliesToPackage(fact, recommendationPackage, sources)) continue;
     const mechanic = token(fact?.relation === 'converts' ? fact.to : fact?.mechanic);
     if (!mechanic || GENERIC.has(mechanic) || !GOOD_RELATIONS.has(fact?.relation)) continue;
     const kind = context.offense.has(mechanic) ? 'offense' : context.package.has(mechanic) ? 'skill_support' : '';
     if (kind) matches.push({ kind, mechanic, relation: fact.relation,
+      delivery: fact.delivery || null, target: fact.target || null, scope: fact.scope || null,
+      sourceMechanic: fact.from || fact.sourceMechanic || null,
       weight: entity.content_type === 'passive' ? Math.max(5, IMPACT.get(fact.relation) || 0) : (IMPACT.get(fact.relation) || 0) });
   }
   if (!matches.length) return null;
@@ -171,7 +178,7 @@ function sourceMechanicMatches(required, sources) {
 function packageSourceMechanics(recommendationPackage) {
   const profile = recommendationPackage?.packageProfile;
   return new Set(uniq([
-    ...arr(profile?.sourceMechanics),
+    ...arr(profile?.sourceMechanics), ...arr(profile?.primarySourceMechanics),
     ...arr(recommendationPackage?.bridgePath).map((edge) => edge?.from),
     ...arr(recommendationPackage?.pieces).flatMap((piece) => arr(piece?.fulfilledObligations)
       .flatMap((proof) => [proof?.sourceMechanic, proof?.mechanic])),
@@ -180,22 +187,55 @@ function packageSourceMechanics(recommendationPackage) {
   ].map(token)));
 }
 
-function analyzeUnique(entity, offense, sourceMechanics = new Set()) {
+const DELIVERY_GROUPS = {
+  attack: new Set(['attack', 'attack_hit', 'melee', 'ranged']),
+  spell: new Set(['spell', 'spell_hit']), minion: new Set(['minion']),
+  projectile: new Set(['projectile']), totem: new Set(['totem']),
+  companion: new Set(['companion']), thorns: new Set(['thorns'])
+};
+
+function packageProperties(recommendationPackage) {
+  const profile = recommendationPackage?.packageProfile || {};
+  return new Set(uniq([
+    ...arr(profile?.primarySkill?.properties), ...arr(profile?.sourceMechanics),
+    ...arr(profile?.bridgeMechanics), ...arr(profile?.setupMechanics),
+    ...arr(profile?.finalOffense)
+  ].map(token)));
+}
+
+function factAppliesToPackage(fact, recommendationPackage, sources = packageSourceMechanics(recommendationPackage)) {
+  const scope = token(fact?.scope ?? fact?.s);
+  const target = token(fact?.target ?? fact?.a);
+  if (scope === 'incoming' || ['self', 'player'].includes(target)) return false;
+  const delivery = token(fact?.delivery ?? fact?.d);
+  if (delivery && !['skill', 'generic', 'generic_hit', 'hit'].includes(delivery)) {
+    const properties = packageProperties(recommendationPackage);
+    const group = Object.entries(DELIVERY_GROUPS).find(([, values]) => values.has(delivery))?.[0] || delivery;
+    if (!properties.has(group) && !properties.has(delivery)) return false;
+  }
+  const source = token(fact?.from ?? fact?.f ?? fact?.sourceMechanic);
+  if (source && !sourceMechanicMatches(source, sources)) return false;
+  return true;
+}
+
+function analyzeUnique(entity, offense, recommendationPackage = null) {
   if (entity?.content_type !== 'unique' || isExcluded(entity)) return null;
+  const sourceMechanics = packageSourceMechanics(recommendationPackage);
   const offenseId = [...offense][0];
   const compact = entity?.unique_offense_semantics?.[offenseId];
   if (compact?.tier === 'CONTRADICTION_PREVENTION') return null;
   const compactFacts = arr(compact?.facts);
-  const matches = compactFacts.filter((fact) => token(fact.r) !== 'converts'
-    || (token(fact.s) === 'outgoing' && sourceMechanicMatches(fact.f, sourceMechanics)))
+  const matches = compactFacts.filter((fact) => factAppliesToPackage(fact, recommendationPackage, sourceMechanics)
+    && (token(fact.r) !== 'converts' || token(fact.s) === 'outgoing'))
     .map((fact) => ({ kind: 'offense', mechanic: fact.m || fact.t || offenseId,
-      relation: fact.r, category: fact.c, sourceKind: fact.k, sourceEntity: fact.e || null }));
+      relation: fact.r, category: fact.c, sourceKind: fact.k, sourceEntity: fact.e || null,
+      delivery: fact.d || null, target: fact.a || null, scope: fact.s || null, sourceMechanic: fact.f || null }));
   // Catalog fixtures and older saved data can still use already-typed parent
   // facts. Production data always supplies generation-time compact semantics.
   if (!compact && contradicts(entity, offense)) return null;
   if (!compact) for (const fact of arr(entity.facts)) {
     const relation = token(fact?.relation); const mechanic = token(relation === 'converts' ? fact?.to : fact?.mechanic);
-    if (!mechanic || !offense.has(mechanic) || !GOOD_RELATIONS.has(relation)
+    if (!mechanic || !offense.has(mechanic) || !GOOD_RELATIONS.has(relation) || !factAppliesToPackage(fact, recommendationPackage, sourceMechanics)
       || (relation === 'converts' && (!sourceMechanicMatches(fact?.from, sourceMechanics)
         || token(fact?.scope) !== 'outgoing'))) continue;
     matches.push({ kind: 'offense', mechanic, relation, category:
@@ -220,8 +260,7 @@ function selectUniqueRecommendation(catalog, snapshot, recommendationPackage, se
   const eligibleFamilies = WEAPON_FAMILIES.get(rolledWeapon);
   const offense = rolledOffenseMechanics(snapshot);
   if (!eligibleFamilies || !offense.size) return [];
-  const sources = packageSourceMechanics(recommendationPackage);
-  const candidates = arr(catalog?.entities).map((entity) => analyzeUnique(entity, offense, sources)).filter(Boolean);
+  const candidates = arr(catalog?.entities).map((entity) => analyzeUnique(entity, offense, recommendationPackage)).filter(Boolean);
   const primary = candidates.filter((candidate) => eligibleFamilies.has(candidate.equipment.family));
   const fallback = ONE_HANDED_WEAPONS.has(rolledWeapon)
     ? candidates.filter((candidate) => OFF_HAND_WEAPONS.has(candidate.equipment.offHandFamily))
@@ -234,8 +273,10 @@ function selectUniqueRecommendation(catalog, snapshot, recommendationPackage, se
     id: entity.source_id || entity.id,
     name: entity.name,
     recommendationEvidence: { score, tier, qualityBandSize: band.length,
-      matches: matches.map(({ kind, mechanic, relation, category, sourceKind, sourceEntity }) =>
-        ({ kind, mechanic, relation, category, sourceKind, ...(sourceEntity ? { sourceEntity } : {}) })) }
+      matches: matches.map(({ kind, mechanic, relation, category, sourceKind, sourceEntity, delivery, target, scope, sourceMechanic }) =>
+        ({ kind, mechanic, relation, category, sourceKind, ...(sourceEntity ? { sourceEntity } : {}),
+          ...(delivery ? { delivery } : {}), ...(target ? { target } : {}), ...(scope ? { scope } : {}),
+          ...(sourceMechanic ? { sourceMechanic } : {}) })) }
   }));
 }
 
@@ -254,8 +295,10 @@ function recommendationEntry(candidate, bandSize) {
     name: entity.name,
     ...(itemType ? { itemType } : {}),
     recommendationEvidence: { score, tier, qualityBandSize: bandSize,
-      matches: matches.map(({ kind, mechanic, relation, category, sourceKind, sourceEntity }) =>
-        ({ kind, mechanic, relation, category, sourceKind, ...(sourceEntity ? { sourceEntity } : {}) })) }
+      matches: matches.map(({ kind, mechanic, relation, category, sourceKind, sourceEntity, delivery, target, scope, sourceMechanic }) =>
+        ({ kind, mechanic, relation, category, sourceKind, ...(sourceEntity ? { sourceEntity } : {}),
+          ...(delivery ? { delivery } : {}), ...(target ? { target } : {}), ...(scope ? { scope } : {}),
+          ...(sourceMechanic ? { sourceMechanic } : {}) })) }
   };
 }
 
@@ -269,7 +312,7 @@ function selectJewelryRecommendations(catalog, snapshot, recommendationPackage =
   if (!offense.size) return [];
   const ranked = arr(catalog?.entities)
     .filter((entity) => jewelrySlot(entity))
-    .map((entity) => analyzeUnique(entity, offense, packageSourceMechanics(recommendationPackage)))
+    .map((entity) => analyzeUnique(entity, offense, recommendationPackage))
     .filter(Boolean)
     .sort((a, b) => b.tierRank - a.tierRank || b.score - a.score || a.entity.id.localeCompare(b.entity.id));
   if (!ranked.length) return [];
@@ -313,7 +356,9 @@ function choose(pool, limit, seed, diversify) {
   return output.map(({ entity, score, matches }) => ({
     id: entity.source_id || entity.id,
     name: entity.name,
-    recommendationEvidence: { score, matches: matches.map(({ kind, mechanic, relation }) => ({ kind, mechanic, relation })) }
+    recommendationEvidence: { score, matches: matches.map(({ kind, mechanic, relation, delivery, target, scope, sourceMechanic }) =>
+      ({ kind, mechanic, relation, ...(delivery ? { delivery } : {}), ...(target ? { target } : {}),
+        ...(scope ? { scope } : {}), ...(sourceMechanic ? { sourceMechanic } : {}) })) }
   }));
 }
 

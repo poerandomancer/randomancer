@@ -803,7 +803,7 @@ def passive_stat_records(ctx: SourceContext, raw: dict[str, Any]) -> list[dict[s
 
 
 PASSIVE_NON_OFFENSIVE_EVIDENCE_RE = re.compile(
-    r"(?:^|_)(?:resistance|damage_taken|taking_damage|recover|recovery|recoup|"
+    r"(?:^|_)(?:resistance|base_armour|damage_taken|taking_damage|recover|recovery|recoup|"
     r"regenerat|immun|avoid|prevent|reduced_damage_taken)(?:_|$)", re.I
 )
 PASSIVE_OFFENSIVE_EVIDENCE_RE = re.compile(
@@ -829,6 +829,10 @@ def passive_fact_offense_role(fact: dict[str, Any]) -> str | None:
             for row in fact.get("evidence") or []
             if row.get("value")
         ]
+        # The parser emits a dedicated directional gain-as fact. Broad mechanic
+        # facts from the same stat must not discard its required source.
+        if any("_to_gain_as_" in part for part in evidence_parts) and not fact.get("from"):
+            return None
         # Enemy resistance reduction is offensive; player/minion resistance is not.
         if any(
             PASSIVE_OFFENSIVE_EVIDENCE_RE.search(part)
