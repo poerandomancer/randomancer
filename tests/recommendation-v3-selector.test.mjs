@@ -10,6 +10,7 @@ import {
   mergeRecommendationSkillCraftingV3,
   selectRecommendationPackageV3
 } from '../js/30-recommendation-v3-selector.js';
+import { mergeRecommendationUniqueSemanticsV3 } from '../js/31-non-skill-recommendation-selector.js';
 
 const read = (path) => JSON.parse(fs.readFileSync(new URL(`../${path}`, import.meta.url)));
 const offenseInventory = read('data/offense-inventory.json');
@@ -85,11 +86,43 @@ test('DIRECT is a singleton lexicographic runtime tier', () => {
   assert.equal(result.supportingSkill, null);
 });
 
+test('native elemental weapon packages expose DIRECT_NATIVE before bridge routes', () => {
+  for (const [weapon, offense] of [['Mace', 'fire'], ['Bow', 'lightning'], ['Quarterstaff', 'cold']]) {
+    const result = selectRecommendationPackageV3(catalog, { weapon, offenseSet: [offense] }, {
+      offenseInventory, selectionSeed: `native-${weapon}-${offense}`
+    });
+    assert.equal(result.solutionClass, 'DIRECT_NATIVE');
+    assert.equal(result.coreUnique, null);
+    assert.ok(result.packageProfile.finalOffense.includes(offense));
+    assert.ok(!result.supportAssignments.flatMap((entry) => entry.supports)
+      .some((support) => /Attunement/.test(support.name)));
+  }
+});
+
+test('authoritative item-fact conversions can form a required unique bridge', () => {
+  const uniqueCatalog = mergeRecommendationUniqueSemanticsV3(catalog, read('data/enriched/recommendation_unique_semantics_v3.json'));
+  const conversionExists = uniqueCatalog.entities.some((item) => item.content_type === 'unique'
+    && Object.values(item.unique_offense_semantics || {}).some((semantic) => (semantic.facts || []).some((fact) =>
+      fact.c === 'BUILD_DEFINING_CAPABILITY' && fact.r === 'converts' && fact.k === 'item_fact')));
+  assert.ok(conversionExists);
+  const found = ['Mace', 'Bow', 'Quarterstaff', 'Spear', 'Staff', 'Wand', 'Sceptre', 'Talisman', 'Crossbow']
+    .map((weapon) => selectRecommendationPackageV3(uniqueCatalog, { weapon, offenseSet: ['chaos'] }, {
+      offenseInventory, selectionSeed: `unique-${weapon}`
+    })).find((result) => result.coreUnique);
+  assert.ok(found, 'expected a production conversion unique to open a Chaos source-skill family');
+  assert.equal(found.solutionClass, 'ONE_BRIDGE');
+  assert.equal(found.coreUnique.required, true);
+  assert.ok(found.bridgePath.some((edge) => edge.type === 'unique' && edge.relation === 'converts'));
+  assert.ok(!found.supportAssignments.flatMap((entry) => entry.supports)
+    .some((support) => support.name === 'Chaos Attunement'));
+});
+
 test('one compatible enabling support forms CARRIER_BRIDGE ahead of fallback', () => {
   const result = selectRecommendationPackageV3(catalog, { weapon: 'Mace', offenseSet: ['bleed'] }, {
     offenseInventory, selectionSeed: 'bridge-regression'
   });
-  assert.equal(result.diagnostics.recommendationTier, 'CARRIER_BRIDGE');
+  assert.equal(result.diagnostics.recommendationTier, 'ONE_BRIDGE');
+  assert.equal(result.solutionClass, 'ONE_BRIDGE');
   assert.equal(result.pieces.length, 1);
   assert.equal(result.supportingSkill, null);
   const supports = result.supportAssignments.flatMap((entry) => entry.supports);
@@ -105,7 +138,7 @@ test('optional Offense optimizers attach after, and never participate in, fulfil
     ['Mace', 'ignite', 'DIRECT'],
     ['Spear', 'bleed', 'DIRECT'],
     ['Bow', 'poison', 'DIRECT'],
-    ['Mace', 'freeze', 'CARRIER_BRIDGE']
+    ['Mace', 'freeze', 'ONE_BRIDGE']
   ]) {
     const result = selectRecommendationPackageV3(catalog, { weapon, offenseSet: [offense] }, {
       offenseInventory, selectionSeed: `optimizer-${weapon}-${offense}`
@@ -250,7 +283,7 @@ test('support-added elemental damage closes through Hit ontology with prevention
     const result = selectRecommendationPackageV3(catalog, { weapon, offenseSet: [offense] }, {
       offenseInventory, selectionSeed: `derived-${weapon}-${offense}`
     });
-    assert.equal(result.diagnostics.recommendationTier, 'CARRIER_BRIDGE');
+    assert.equal(result.diagnostics.recommendationTier, 'ONE_BRIDGE');
     assert.ok(result.supportAssignments.flatMap((entry) => entry.supports)
       .some((entry) => entry.name === support));
     assert.equal(result.unresolved.length, 0);

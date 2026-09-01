@@ -278,6 +278,18 @@ test('limits, deduplicates weak interactions, is seeded, and permits empty categ
   assert.deepEqual(first.passives.ascendancyNodes, []);
 });
 
+test('package profile anchors passives and demand-only relations never create relevance', () => {
+  const result = selectNonSkillRecommendations(catalog([
+    entity('payoff', 'passive', [{ ...fact('freeze'), relation: 'modifies' }]),
+    entity('consumer', 'passive', [{ ...fact('infusion'), relation: 'consumes' }]),
+    entity('incidental', 'passive', ['unplanned_mechanic'])
+  ]), snap, { ...pkg, packageProfile: {
+    finalOffense: ['freeze'], weapon: 'bow', primarySkill: { properties: [] },
+    sourceMechanics: [], bridgeMechanics: [], setupMechanics: ['infusion'], corePieces: []
+  }}).passives.notables;
+  assert.deepEqual(result.map((entry) => entry.id), ['payoff']);
+});
+
 test('production path enforces Void locality for Huntress while retaining Int eligibility', () => {
   const production = JSON.parse(fs.readFileSync(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url)));
   const voidEntity = production.entities.find((candidate) => candidate.name === 'Void' && candidate.content_type === 'passive');

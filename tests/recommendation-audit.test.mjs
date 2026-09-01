@@ -13,4 +13,7 @@ test('recommendation audit is deterministic and covers the complete rollable mat
   assert.ok(Object.values(first.summary.countByWeapon).every((count) => count === 30));
   assert.ok(Object.values(first.summary.countByOffense).every((count) => count === 18));
   assert.ok(Object.values(first.summary.countByAscendancy).every((count) => count >= 11));
+  assert.equal(first.schemaVersion, 2);
+  assert.equal(Object.values(first.summary.solutionClass).reduce((sum, count) => sum + count, 0), 270);
+  assert.ok(first.cases.every((item) => item.recommendations.packageProfile));
 });
