@@ -208,9 +208,14 @@ function packageProperties(recommendationPackage) {
 function factAppliesToPackage(fact, recommendationPackage, sources = packageSourceMechanics(recommendationPackage)) {
   const scope = token(fact?.scope ?? fact?.s);
   const target = token(fact?.target ?? fact?.a);
-  if (scope === 'incoming' || ['self', 'player'].includes(target)) return false;
-  const condition = token(fact?.condition);
-  if (condition && !new Set(arr(recommendationPackage?.packageProfile?.selfStates).map(token)).has(condition)) return false;
+  if (scope === 'incoming') return false;
+  const state = (value) => ({ ignited: 'ignite', shocked: 'shock', chilled: 'chill', frozen: 'freeze',
+    poisoned: 'poison', bleeding: 'bleed' })[token(value)] || token(value);
+  const condition = state(fact?.condition ?? fact?.h);
+  const conditionTarget = token(fact?.condition_target ?? fact?.x) || (condition ? 'self' : '');
+  if (conditionTarget === 'self'
+    && !new Set(arr(recommendationPackage?.packageProfile?.selfStates).map(state)).has(condition)) return false;
+  if (['self', 'player'].includes(target) && conditionTarget !== 'self') return false;
   const delivery = token(fact?.delivery ?? fact?.d);
   if (delivery && !['skill', 'generic', 'generic_hit', 'hit'].includes(delivery)) {
     const properties = packageProperties(recommendationPackage);
@@ -233,7 +238,8 @@ function analyzeUnique(entity, offense, recommendationPackage = null) {
     && (token(fact.r) !== 'converts' || token(fact.s) === 'outgoing'))
     .map((fact) => ({ kind: 'offense', mechanic: fact.m || fact.t || offenseId,
       relation: fact.r, category: fact.c, sourceKind: fact.k, sourceEntity: fact.e || null,
-      delivery: fact.d || null, target: fact.a || null, scope: fact.s || null, sourceMechanic: fact.f || null }));
+      delivery: fact.d || null, target: fact.a || null, scope: fact.s || null, sourceMechanic: fact.f || null,
+      condition: fact.h || null, conditionTarget: fact.x || null }));
   // Catalog fixtures and older saved data can still use already-typed parent
   // facts. Production data always supplies generation-time compact semantics.
   if (!compact && contradicts(entity, offense)) return null;
@@ -277,10 +283,11 @@ function selectUniqueRecommendation(catalog, snapshot, recommendationPackage, se
     id: entity.source_id || entity.id,
     name: entity.name,
     recommendationEvidence: { score, tier, qualityBandSize: band.length,
-      matches: matches.map(({ kind, mechanic, relation, category, sourceKind, sourceEntity, delivery, target, scope, sourceMechanic }) =>
+      matches: matches.map(({ kind, mechanic, relation, category, sourceKind, sourceEntity, delivery, target, scope, sourceMechanic, condition, conditionTarget }) =>
         ({ kind, mechanic, relation, category, sourceKind, ...(sourceEntity ? { sourceEntity } : {}),
           ...(delivery ? { delivery } : {}), ...(target ? { target } : {}), ...(scope ? { scope } : {}),
-          ...(sourceMechanic ? { sourceMechanic } : {}) })) }
+          ...(sourceMechanic ? { sourceMechanic } : {}), ...(condition ? { condition } : {}),
+          ...(conditionTarget ? { conditionTarget } : {}) })) }
   }));
 }
 
@@ -299,10 +306,11 @@ function recommendationEntry(candidate, bandSize) {
     name: entity.name,
     ...(itemType ? { itemType } : {}),
     recommendationEvidence: { score, tier, qualityBandSize: bandSize,
-      matches: matches.map(({ kind, mechanic, relation, category, sourceKind, sourceEntity, delivery, target, scope, sourceMechanic }) =>
+      matches: matches.map(({ kind, mechanic, relation, category, sourceKind, sourceEntity, delivery, target, scope, sourceMechanic, condition, conditionTarget }) =>
         ({ kind, mechanic, relation, category, sourceKind, ...(sourceEntity ? { sourceEntity } : {}),
           ...(delivery ? { delivery } : {}), ...(target ? { target } : {}), ...(scope ? { scope } : {}),
-          ...(sourceMechanic ? { sourceMechanic } : {}) })) }
+          ...(sourceMechanic ? { sourceMechanic } : {}), ...(condition ? { condition } : {}),
+          ...(conditionTarget ? { conditionTarget } : {}) })) }
   };
 }
 

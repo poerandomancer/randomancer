@@ -375,6 +375,26 @@ test('optional unique applicability is per fact and respects explicit delivery',
     .some((entry) => entry.id === 'mixed'), true);
 });
 
+test('optional uniques require explicit player state per fact without confusing enemy shock', () => {
+  const conditioned = entity('self-shock', 'unique', [], { compatibility: { access: {}, equipment: { slot: 'Ring' } },
+    unique_offense_semantics: { shock: { tier: 'AFFINITY_AMPLIFICATION', strength: 206, facts: [
+      { c: 'AFFINITY_AMPLIFICATION', r: 'modifies', m: 'shock', h: 'shock', x: 'self', k: 'item_fact' }
+    ] } } });
+  const independent = entity('mixed-shock', 'unique', [], { compatibility: { access: {}, equipment: { slot: 'Ring' } },
+    unique_offense_semantics: { shock: { tier: 'AFFINITY_AMPLIFICATION', strength: 207, facts: [
+      { c: 'AFFINITY_AMPLIFICATION', r: 'modifies', m: 'shock', h: 'shock', x: 'self', k: 'item_fact' },
+      { c: 'AFFINITY_AMPLIFICATION', r: 'modifies', m: 'shock', k: 'item_fact' }
+    ] } } });
+  const pack = (selfStates = []) => ({ packageProfile: { finalOffense: ['shock'], primarySkill: { properties: [] },
+    sourceMechanics: [], bridgeMechanics: [], setupMechanics: ['shock'], selfStates } });
+  assert.deepEqual(selectJewelryRecommendations(catalog([conditioned]), { offenseList: ['Shock'] }, pack()), []);
+  const enabled = selectJewelryRecommendations(catalog([conditioned]), { offenseList: ['Shock'] }, pack(['shocked']));
+  assert.equal(enabled[0].recommendationEvidence.matches[0].conditionTarget, 'self');
+  const fallback = selectJewelryRecommendations(catalog([independent]), { offenseList: ['Shock'] }, pack());
+  assert.equal(fallback.length, 1);
+  assert.equal(fallback[0].recommendationEvidence.matches.length, 1);
+});
+
 test('production path enforces Void locality for Huntress while retaining Int eligibility', () => {
   const production = JSON.parse(fs.readFileSync(new URL('../data/enriched/recommendation_catalog_v3.json', import.meta.url)));
   const voidEntity = production.entities.find((candidate) => candidate.name === 'Void' && candidate.content_type === 'passive');

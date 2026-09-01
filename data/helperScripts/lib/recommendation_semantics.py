@@ -351,6 +351,18 @@ def _condition_from_normalized(normalized: str) -> str | None:
     return None
 
 
+def _self_state_condition(normalized: str) -> str | None:
+    """Return an explicitly player-owned ailment condition, if present."""
+    state = r"(ignite|ignited|shock|shocked|chill|chilled|freeze|frozen|poison|poisoned|bleed|bleeding)"
+    match = re.search(rf"(?:^|_)(?:while|when|if)_(?:you_are_)?{state}(?:_|$)", normalized)
+    if not match or re.search(r"(?:enemy|enemies|target|targets)", normalized):
+        return None
+    return {
+        "ignited": "ignite", "shocked": "shock", "chilled": "chill", "frozen": "freeze",
+        "poisoned": "poison", "bleeding": "bleed",
+    }.get(match.group(1), match.group(1))
+
+
 def _conversion_fact(value: Any, source_kind: str, subject: str) -> dict[str, Any] | None:
     normalized = normalized_phrase(value)
     left = right = ""
@@ -393,7 +405,8 @@ def _conversion_fact(value: Any, source_kind: str, subject: str) -> dict[str, An
     left = re.split(r"_(?:cannot|but|take|gain|lose)_", left, maxsplit=1)[0]
 
     from_mechanic = _conversion_endpoint(left, prefer="first" if relation == "replaces" else "last")
-    to_mechanic = _conversion_endpoint(right, prefer="last" if relation == "replaces" else "first")
+    to_mechanic = ("elemental_damage" if scope == "incoming" and re.search(r"(?:^|_)random_element(?:_|$)", right)
+                   else _conversion_endpoint(right, prefer="last" if relation == "replaces" else "first"))
     if not from_mechanic or not to_mechanic or from_mechanic == to_mechanic:
         return None
 
@@ -407,6 +420,7 @@ def _conversion_fact(value: Any, source_kind: str, subject: str) -> dict[str, An
         confidence="exact" if source_kind in {"stat_id", "active_skill_type"} else "strong",
         condition=_condition_from_normalized(normalized) if source_kind == "stat_id" else None,
         scope=scope or ("outgoing" if relation == "converts" and "damage" in normalized else None),
+        target="self" if scope == "incoming" else None,
     )
 
 
@@ -899,6 +913,7 @@ def parse_stat_id(value: Any, subject: str = "player") -> list[dict[str, Any]]:
     # generic mechanic loop must not turn mitigation into outgoing offense.
     defensive_self = bool(
         "on_self" in normalized or "taken_from" in normalized or "damage_taken" in normalized
+        or "_taken_as_" in normalized
         or re.search(r"(?:^|_)(?:armour|evasion|block|ailment_threshold|stun_threshold|damage_reduction_rating)(?:_|$)", normalized)
         or re.search(r"(?:^|_)self_(?:bleed|poison|ignite|shock|chill|freeze|ailment)(?:_|$)", normalized)
         or re.search(r"(?:^|_)(?:reduced|less).*(?:ailment|bleed|poison|ignite|shock|chill|freeze).*(?:duration|magnitude|effect|threshold)", normalized)
@@ -1200,6 +1215,7 @@ def parse_text(value: Any, source_kind: str, subject: str) -> list[dict[str, Any
             else "thorns" if re.search(r"(?:^|_)thorns?(?:_|$)", normalized)
             else "generic_hit" if re.search(r"(?:^|_)hits?(?:_|$)", normalized) else None
         )
+        self_state = _self_state_condition(normalized)
         for mechanic in OFFENSE_MECHANICS & set(mechanics_in(text)):
             if re.search(r"(?:^|_)(?:adds?|gain)(?:_[a-z0-9]+){0,8}(?:_as_extra)?(?:_[a-z0-9]+){0,4}_" + re.escape(mechanic) + r"(?:_|$)", normalized):
                 facts.append(make_fact("provides", subject=subject, source_kind=source_kind,
@@ -1208,7 +1224,9 @@ def parse_text(value: Any, source_kind: str, subject: str) -> list[dict[str, Any
             elif re.search(r"(?:^|_)(?:increased|more|magnitude|effect|penetrat|exposure)(?:_[a-z0-9]+){0,8}_" + re.escape(mechanic) + r"(?:_|$)", normalized):
                 facts.append(make_fact("modifies", subject=subject, source_kind=source_kind,
                     source_value=text, mechanic=mechanic, confidence="strong", scope="outgoing",
-                    delivery=explicit_delivery))
+                    delivery=explicit_delivery, condition=self_state))
+                if self_state:
+                    facts[-1]["condition_target"] = "self"
             if re.search(r"(?:^|_)(?:against|all|affected_by|while|when|if)(?:_[a-z0-9]+){0,5}_" + re.escape(mechanic) + r"(?:d|ed)?_(?:enemy|enemies|target|targets)(?:_|$)", normalized):
                 facts.append(make_fact("requires", subject=subject, source_kind=source_kind,
                     source_value=text, mechanic=mechanic, confidence="strong"))
@@ -1497,7 +1515,7 @@ def parse_evidence(source_kind: str, value: Any, subject: str) -> list[dict[str,
 def _semantic_key(fact: dict[str, Any]) -> tuple[Any, ...]:
     return tuple(
         (key, _hashable(fact.get(key)))
-        for key in ("relation", "subject", "mechanic", "from", "to", "condition", "scope", "target", "delivery", "consumption", "requires_any_mechanics", "quantity")
+        for key in ("relation", "subject", "mechanic", "from", "to", "condition", "condition_target", "scope", "target", "delivery", "consumption", "requires_any_mechanics", "quantity")
         if key in fact
     )
 

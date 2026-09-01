@@ -69,6 +69,7 @@ function evidenceRecord(fact, offense, sourceType, sourceName, parentId, compone
     confidence: fact.confidence || 'strong', scope: token(fact.scope) || null,
     target: token(fact.target) || null, delivery: token(fact.delivery) || null,
     application: token(fact.application) || null,
+    condition: token(fact.condition) || null, conditionTarget: token(fact.condition_target) || null,
     provenance: { parentUniqueId: parentId, sourceType, sourceName, sourceEntityId: sourceEntityId || parentId,
       component: component || (String(evidence?.value || '').match(/explod|cloud|ground|burst|projectile/i)?.[0]?.toLowerCase() || null),
       evidenceKind: evidence?.kind || null }
@@ -175,6 +176,8 @@ function compactUniqueSemantics(catalog, rawItems, offenses) {
         ...(record.from ? { f: record.from } : {}), ...(record.to ? { t: record.to } : {}), ...(record.scope ? { s: record.scope } : {}),
         ...(record.target ? { a: record.target } : {}), ...(record.delivery ? { d: record.delivery } : {}),
         ...(record.application ? { q: record.application } : {}),
+        ...(record.condition ? { h: record.condition } : {}),
+        ...(record.conditionTarget ? { x: record.conditionTarget } : {}),
         k: record.provenance.sourceType,
         ...(record.provenance.sourceEntityId !== entity.id ? { e: record.provenance.sourceEntityId } : {}),
         ...(record.provenance.component ? { p: record.provenance.component } : {})
