@@ -8,8 +8,8 @@ This deterministic report audits the implemented whole-item runtime semantics wh
 - With granted skills: 94; with granted effects: 0
 - Material granted-semantic gaps: 33
 - Previous empty cells: 108; new empty cells: 69; empty→non-empty: 40
-- Existing non-empty winner changes: 10; runtime/top-band agreement: 135/135
-- Runtime semantics: 73 uniques, 255 promoted facts, 80055 bytes
+- Existing non-empty winner changes: 10; runtime/top-band agreement: 133/135
+- Runtime semantics: 73 uniques, 254 promoted facts, 79348 bytes
 - Quality bands: one=50, two=9, three=7 (zero=69)
 
 ## Ranking model
@@ -35,7 +35,7 @@ Slot type adds no semantic score. Bow and Quiver are equally family-legal, and r
 - Atziri's Contempt → Shattering Spite: AFFINITY_AMPLIFICATION:has_property:fire; AFFINITY_AMPLIFICATION:has_property:lightning; AFFINITY_AMPLIFICATION:modifies:fire; AFFINITY_AMPLIFICATION:modifies:lightning; BUILD_DEFINING_CAPABILITY:converts:fire; BUILD_DEFINING_CAPABILITY:converts:lightning; offenses fire, lightning.
 - Brutus' Lead Sprinkler → Molten Shower: AFFINITY_AMPLIFICATION:has_property:fire; AFFINITY_AMPLIFICATION:modifies:fire; BUILD_DEFINING_CAPABILITY:converts:fire; offenses fire.
 - Cursecarver → Decompose: AFFINITY_AMPLIFICATION:has_property:chaos; AFFINITY_AMPLIFICATION:has_property:fire; AFFINITY_AMPLIFICATION:modifies:chaos; AFFINITY_AMPLIFICATION:modifies:poison; offenses chaos, fire, poison.
-- Double Vision → Gemini Surge: AFFINITY_AMPLIFICATION:has_property:cold; AFFINITY_AMPLIFICATION:has_property:fire; AFFINITY_AMPLIFICATION:modifies:cold; AFFINITY_AMPLIFICATION:modifies:fire; BUILD_DEFINING_CAPABILITY:converts:cold; BUILD_DEFINING_CAPABILITY:converts:fire; offenses cold, fire.
+- Double Vision → Gemini Surge: AFFINITY_AMPLIFICATION:has_property:cold; AFFINITY_AMPLIFICATION:has_property:fire; AFFINITY_AMPLIFICATION:modifies:cold; AFFINITY_AMPLIFICATION:modifies:fire; BUILD_DEFINING_CAPABILITY:converts:cold; BUILD_DEFINING_CAPABILITY:converts:fire; offenses cold, fire; changes a proposed winner.
 - Dusk Vigil → Ember Fusillade, Firebolt: AFFINITY_AMPLIFICATION:has_property:fire; AFFINITY_AMPLIFICATION:modifies:lightning; BUILD_DEFINING_CAPABILITY:inflicts:ignite; PAYOFF_CONTEXT:consumes:lightning; offenses fire, ignite, lightning.
 - Earthbound → Lightning Bolt, Spark: AFFINITY_AMPLIFICATION:has_property:cold; AFFINITY_AMPLIFICATION:has_property:lightning; offenses cold, lightning.
 - Enezun's Charge → Volatile Dead: AFFINITY_AMPLIFICATION:has_property:fire; BUILD_DEFINING_CAPABILITY:inflicts:ignite; offenses fire, ignite.

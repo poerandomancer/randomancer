@@ -11,7 +11,7 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5366,
+    "fact_count": 5364,
     "fact_relation_counts": {
       "consumes": 395,
       "converts": 127,
@@ -19,7 +19,7 @@
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 672,
-      "inflicts": 187,
+      "inflicts": 185,
       "modifies": 2308,
       "occupies": 444,
       "prevents": 378,
@@ -29,11 +29,11 @@
     },
     "candidate_role_counts": {
       "defense": 423,
-      "enabler": 1260,
+      "enabler": 1259,
       "payoff": 182,
       "primary_damage": 346,
       "recovery": 250,
-      "setup_control": 205,
+      "setup_control": 203,
       "utility": 206
     },
     "source_versions": {
@@ -3470,7 +3470,6 @@
         }
       },
       "candidate_roles": [
-        "setup_control",
         "utility"
       ],
       "retrieval_terms": [
@@ -3513,21 +3512,6 @@
             {
               "value": "runtime",
               "kind": "taxonomy_damage_type"
-            }
-          ]
-        },
-        {
-          "relation": "inflicts",
-          "subject": "skill",
-          "confidence": "strong",
-          "mechanic": "ignite",
-          "scope": "outgoing",
-          "target": "enemy",
-          "delivery": "skill",
-          "evidence": [
-            {
-              "value": "runtime explod",
-              "kind": "skill_description"
             }
           ]
         },
@@ -98999,7 +98983,7 @@
           "confidence": "exact",
           "mechanic": "bleed",
           "scope": "outgoing",
-          "target": "enemy",
+          "target": "self",
           "delivery": "attack_hit",
           "evidence": [
             {
@@ -116963,7 +116947,7 @@
           "confidence": "exact",
           "mechanic": "bleed",
           "scope": "outgoing",
-          "target": "enemy",
+          "target": "self",
           "delivery": "generic_hit",
           "evidence": [
             {
@@ -131879,21 +131863,6 @@
         }
       },
       "facts": [
-        {
-          "relation": "inflicts",
-          "subject": "item",
-          "confidence": "strong",
-          "mechanic": "chill",
-          "scope": "outgoing",
-          "target": "enemy",
-          "delivery": "generic_hit",
-          "evidence": [
-            {
-              "value": "runtime",
-              "kind": "unique_mod"
-            }
-          ]
-        },
         {
           "relation": "occupies",
           "subject": "item",

@@ -64,7 +64,7 @@ function compactCase(id, input, recommendation, nonSkills) {
     suppliedTargets: skill.suppliedTargets || []
   }));
   const compactEntries = (entries) => (entries || []).map((entry) => ({
-    name: entry.name, ...(entry.itemType ? { itemType: entry.itemType } : {}),
+    id: entry.entityId || entry.id, name: entry.name, ...(entry.itemType ? { itemType: entry.itemType } : {}),
     ...(compactEvidence(entry) ? { rationale: compactEvidence(entry) } : {})
   }));
   return {
@@ -103,7 +103,7 @@ function summarize(cases) {
     solutionClass: countNames(cases, (item) => [item.recommendations.solutionClass]),
     unresolvedByType: countNames(cases, (item) => item.unresolved.map((entry) => String(entry.obligationId).split(':')[0])),
     packagesUsingRequiredSecondarySkill: cases.filter((item) => item.recommendations.skills.slice(1)
-      .some((skill) => ['setup_control', 'enabler', 'payoff'].includes(skill.role))).length,
+      .some((skill) => skill.suppliedTargets.length > 0)).length,
     packagesUsingRequiredUniqueBridge: cases.filter((item) => item.recommendations.requiredUnique).length,
     packagesUsingRequiredEnablingSupports: cases.filter((item) => item.recommendations.skills.some((skill) =>
       skill.supports.some((support) => support.role !== 'OPTIONAL_OFFENSE_OPTIMIZER'))).length,

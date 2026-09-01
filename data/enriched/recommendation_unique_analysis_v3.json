@@ -9,8 +9,8 @@
     "previousEmptyCells": 108,
     "emptyToNonEmpty": 40,
     "winnerChanges": 10,
-    "currentWinnerDiffers": 8,
-    "runtimeQualityBandAgreement": 135,
+    "currentWinnerDiffers": 10,
+    "runtimeQualityBandAgreement": 133,
     "currentEmptyCells": 69,
     "legitimatelyEmptyCells": 69,
     "emptyCellsGainStrongCandidate": 0,
@@ -27,8 +27,8 @@
     "namedItemOrCellExceptionsIntroduced": false,
     "runtimeSemantics": {
       "enrichedUniqueCount": 73,
-      "promotedFactCount": 255,
-      "bytes": 80055
+      "promotedFactCount": 254,
+      "bytes": 79348
     },
     "jewelry": {
       "eligibleRings": 37,
@@ -36,13 +36,13 @@
       "enrichedWithGrantedSemantics": 1,
       "resultCounts": {
         "0": 4,
-        "1": 9,
-        "2": 2
+        "1": 8,
+        "2": 3
       },
       "combinations": {
-        "ringRing": 2,
+        "ringRing": 3,
         "ringAmulet": 0,
-        "ringOnly": 8,
+        "ringOnly": 7,
         "amuletOnly": 1
       },
       "variationOpportunities": 2
@@ -165,7 +165,7 @@
         "BUILD_DEFINING_CAPABILITY:converts:cold",
         "BUILD_DEFINING_CAPABILITY:converts:fire"
       ],
-      "changesWinner": false
+      "changesWinner": true
     },
     {
       "uniqueId": "unique:Dusk Vigil||Ashen Staff",
@@ -1471,11 +1471,11 @@
       ],
       "selected": [
         {
-          "id": "Call of the Brotherhood||Topaz Ring",
-          "name": "Call of the Brotherhood",
+          "id": "Polcirkeln||Sapphire Ring",
+          "name": "Polcirkeln",
           "itemType": "Ring",
-          "tier": "BUILD_DEFINING_CAPABILITY",
-          "score": 406
+          "tier": "AFFINITY_AMPLIFICATION",
+          "score": 206
         }
       ],
       "empty": false
@@ -1500,11 +1500,11 @@
       ],
       "selected": [
         {
-          "id": "Whisper of the Brotherhood||Sapphire Ring",
-          "name": "Whisper of the Brotherhood",
-          "itemType": "Ring",
-          "tier": "BUILD_DEFINING_CAPABILITY",
-          "score": 406
+          "id": "Choir of the Storm||Jade Amulet",
+          "name": "Choir of the Storm",
+          "itemType": "Amulet",
+          "tier": "AFFINITY_AMPLIFICATION",
+          "score": 211
         }
       ],
       "empty": false
@@ -1529,11 +1529,18 @@
       ],
       "selected": [
         {
-          "id": "Original Sin||Amethyst Ring",
-          "name": "Original Sin",
+          "id": "Blackheart||Iron Ring",
+          "name": "Blackheart",
           "itemType": "Ring",
-          "tier": "BUILD_DEFINING_CAPABILITY",
-          "score": 406
+          "tier": "STRONG_SPECIALIZATION",
+          "score": 306
+        },
+        {
+          "id": "Ming's Heart||Amethyst Ring",
+          "name": "Ming's Heart",
+          "itemType": "Ring",
+          "tier": "STRONG_SPECIALIZATION",
+          "score": 306
         }
       ],
       "empty": false
@@ -1630,26 +1637,26 @@
       "offense": "Chill",
       "eligibleRings": 37,
       "eligibleAmulets": 25,
-      "meaningfulCandidates": 3,
+      "meaningfulCandidates": 2,
       "contradictionRejections": 0,
-      "strongestTier": "BUILD_DEFINING_CAPABILITY",
+      "strongestTier": "AFFINITY_AMPLIFICATION",
       "qualityBandSize": 1,
       "qualityBand": [
         {
-          "id": "The Pandemonius||Lapis Amulet",
-          "name": "The Pandemonius",
-          "itemType": "Amulet",
-          "tier": "BUILD_DEFINING_CAPABILITY",
-          "score": 406
+          "id": "Icefang Orbit||Iron Ring",
+          "name": "Icefang Orbit",
+          "itemType": "Ring",
+          "tier": "AFFINITY_AMPLIFICATION",
+          "score": 206
         }
       ],
       "selected": [
         {
-          "id": "The Pandemonius||Lapis Amulet",
-          "name": "The Pandemonius",
-          "itemType": "Amulet",
-          "tier": "BUILD_DEFINING_CAPABILITY",
-          "score": 406
+          "id": "Icefang Orbit||Iron Ring",
+          "name": "Icefang Orbit",
+          "itemType": "Ring",
+          "tier": "AFFINITY_AMPLIFICATION",
+          "score": 206
         }
       ],
       "empty": false
@@ -4862,10 +4869,10 @@
       "offense": "Chaos Damage",
       "previous": null,
       "current": {
-        "id": "Voltaxic Rift||Fanatic Bow",
-        "name": "Voltaxic Rift",
-        "score": 406,
-        "tier": "BUILD_DEFINING_CAPABILITY"
+        "id": "Beyond Reach||Visceral Quiver",
+        "name": "Beyond Reach",
+        "score": 306,
+        "tier": "STRONG_SPECIALIZATION"
       },
       "proposed": {
         "id": "unique:Voltaxic Rift||Fanatic Bow",
@@ -4879,7 +4886,7 @@
         "proposedScore": 406,
         "proposedRank": 1,
         "qualityBand": true,
-        "selectedCurrently": true,
+        "selectedCurrently": false,
         "contradiction": false,
         "evidence": [
           {
@@ -4905,12 +4912,12 @@
         ],
         "rationale": "BUILD_DEFINING_CAPABILITY: converts via item_fact."
       },
-      "differs": false,
+      "differs": true,
       "previousEmpty": true,
       "currentEmpty": false,
       "richerSemanticsStrong": true,
       "emptyClassification": null,
-      "runtimeInQualityBand": true,
+      "runtimeInQualityBand": false,
       "qualityBandSize": 1,
       "candidates": [
         {
@@ -4925,7 +4932,7 @@
           "proposedScore": 406,
           "proposedRank": 1,
           "qualityBand": true,
-          "selectedCurrently": true,
+          "selectedCurrently": false,
           "contradiction": false,
           "evidence": [
             {
@@ -4963,7 +4970,7 @@
           "proposedScore": 306,
           "proposedRank": 2,
           "qualityBand": false,
-          "selectedCurrently": false,
+          "selectedCurrently": true,
           "contradiction": false,
           "evidence": [
             {
@@ -6286,10 +6293,10 @@
       "offense": "Cold Damage",
       "previous": null,
       "current": {
-        "id": "Double Vision||Dyad Crossbow",
-        "name": "Double Vision",
-        "score": 406,
-        "tier": "BUILD_DEFINING_CAPABILITY"
+        "id": "Mist Whisper||Makeshift Crossbow",
+        "name": "Mist Whisper",
+        "score": 306,
+        "tier": "STRONG_SPECIALIZATION"
       },
       "proposed": {
         "id": "unique:Double Vision||Dyad Crossbow",
@@ -6303,7 +6310,7 @@
         "proposedScore": 406,
         "proposedRank": 1,
         "qualityBand": true,
-        "selectedCurrently": true,
+        "selectedCurrently": false,
         "contradiction": false,
         "evidence": [
           {
@@ -6369,12 +6376,12 @@
         ],
         "rationale": "BUILD_DEFINING_CAPABILITY: converts via granted_skill."
       },
-      "differs": false,
+      "differs": true,
       "previousEmpty": true,
       "currentEmpty": false,
       "richerSemanticsStrong": true,
       "emptyClassification": null,
-      "runtimeInQualityBand": true,
+      "runtimeInQualityBand": false,
       "qualityBandSize": 1,
       "candidates": [
         {
@@ -6389,7 +6396,7 @@
           "proposedScore": 406,
           "proposedRank": 1,
           "qualityBand": true,
-          "selectedCurrently": true,
+          "selectedCurrently": false,
           "contradiction": false,
           "evidence": [
             {
@@ -6467,7 +6474,7 @@
           "proposedScore": 306,
           "proposedRank": 2,
           "qualityBand": false,
-          "selectedCurrently": false,
+          "selectedCurrently": true,
           "contradiction": false,
           "evidence": [
             {

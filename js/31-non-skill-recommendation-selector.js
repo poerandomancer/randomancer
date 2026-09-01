@@ -160,26 +160,50 @@ function rolledOffenseMechanics(snapshot) {
   return new Set([token(offense?.id || offense?.name || offense), ...arr(offense?.mechanics).map(token)].filter((value) => value && !GENERIC.has(value)));
 }
 
-function analyzeUnique(entity, offense) {
+function sourceMechanicMatches(required, sources) {
+  const mechanic = token(required);
+  if (!mechanic) return false;
+  if (sources.has(mechanic)) return true;
+  if (mechanic === 'elemental_damage') return ['fire', 'cold', 'lightning'].some((child) => sources.has(child));
+  return ['fire', 'cold', 'lightning'].includes(mechanic) && sources.has('elemental_damage');
+}
+
+function packageSourceMechanics(recommendationPackage) {
+  const profile = recommendationPackage?.packageProfile;
+  return new Set(uniq([
+    ...arr(profile?.sourceMechanics),
+    ...arr(recommendationPackage?.bridgePath).map((edge) => edge?.from),
+    ...arr(recommendationPackage?.pieces).flatMap((piece) => arr(piece?.fulfilledObligations)
+      .flatMap((proof) => [proof?.sourceMechanic, proof?.mechanic])),
+    ...arr(recommendationPackage?.pieces).flatMap((piece) => arr(piece?.supports)
+      .flatMap((support) => arr(support?.suppliedTargets).map((target) => target?.mechanic)))
+  ].map(token)));
+}
+
+function analyzeUnique(entity, offense, sourceMechanics = new Set()) {
   if (entity?.content_type !== 'unique' || isExcluded(entity)) return null;
   const offenseId = [...offense][0];
   const compact = entity?.unique_offense_semantics?.[offenseId];
   if (compact?.tier === 'CONTRADICTION_PREVENTION') return null;
   const compactFacts = arr(compact?.facts);
-  const matches = compactFacts.map((fact) => ({ kind: 'offense', mechanic: fact.m || fact.t || offenseId,
-    relation: fact.r, category: fact.c, sourceKind: fact.k, sourceEntity: fact.e || null }));
+  const matches = compactFacts.filter((fact) => token(fact.r) !== 'converts'
+    || (token(fact.s) === 'outgoing' && sourceMechanicMatches(fact.f, sourceMechanics)))
+    .map((fact) => ({ kind: 'offense', mechanic: fact.m || fact.t || offenseId,
+      relation: fact.r, category: fact.c, sourceKind: fact.k, sourceEntity: fact.e || null }));
   // Catalog fixtures and older saved data can still use already-typed parent
   // facts. Production data always supplies generation-time compact semantics.
   if (!compact && contradicts(entity, offense)) return null;
   if (!compact) for (const fact of arr(entity.facts)) {
     const relation = token(fact?.relation); const mechanic = token(relation === 'converts' ? fact?.to : fact?.mechanic);
-    if (!mechanic || !offense.has(mechanic) || !GOOD_RELATIONS.has(relation)) continue;
+    if (!mechanic || !offense.has(mechanic) || !GOOD_RELATIONS.has(relation)
+      || (relation === 'converts' && (!sourceMechanicMatches(fact?.from, sourceMechanics)
+        || token(fact?.scope) !== 'outgoing'))) continue;
     matches.push({ kind: 'offense', mechanic, relation, category:
       ['inflicts', 'creates', 'fulfills', 'converts'].includes(relation) ? 'BUILD_DEFINING_CAPABILITY'
         : ['provides', 'generates'].includes(relation) ? 'STRONG_SPECIALIZATION'
           : ['consumes', 'requires'].includes(relation) ? 'PAYOFF_CONTEXT' : 'AFFINITY_AMPLIFICATION' });
   }
-  const tier = compact?.tier || matches.sort((a, b) => (UNIQUE_TIER.get(b.category) || 0) - (UNIQUE_TIER.get(a.category) || 0))[0]?.category;
+  const tier = matches.sort((a, b) => (UNIQUE_TIER.get(b.category) || 0) - (UNIQUE_TIER.get(a.category) || 0))[0]?.category;
   if (!matches.length || !UNIQUE_TIER.has(tier)) return null;
   return {
     entity,
@@ -191,12 +215,13 @@ function analyzeUnique(entity, offense) {
   };
 }
 
-function selectUniqueRecommendation(catalog, snapshot, seed = '') {
+function selectUniqueRecommendation(catalog, snapshot, recommendationPackage, seed = '') {
   const rolledWeapon = rolledWeaponFamily(snapshot);
   const eligibleFamilies = WEAPON_FAMILIES.get(rolledWeapon);
   const offense = rolledOffenseMechanics(snapshot);
   if (!eligibleFamilies || !offense.size) return [];
-  const candidates = arr(catalog?.entities).map((entity) => analyzeUnique(entity, offense)).filter(Boolean);
+  const sources = packageSourceMechanics(recommendationPackage);
+  const candidates = arr(catalog?.entities).map((entity) => analyzeUnique(entity, offense, sources)).filter(Boolean);
   const primary = candidates.filter((candidate) => eligibleFamilies.has(candidate.equipment.family));
   const fallback = ONE_HANDED_WEAPONS.has(rolledWeapon)
     ? candidates.filter((candidate) => OFF_HAND_WEAPONS.has(candidate.equipment.offHandFamily))
@@ -234,12 +259,17 @@ function recommendationEntry(candidate, bandSize) {
   };
 }
 
-function selectJewelryRecommendations(catalog, snapshot, seed = '') {
+function selectJewelryRecommendations(catalog, snapshot, recommendationPackage = null, seed = '', excluded = new Set()) {
+  // Preserve the public helper's historical (catalog, snapshot, seed) shape.
+  if (typeof recommendationPackage === 'string') {
+    seed = recommendationPackage;
+    recommendationPackage = null;
+  }
   const offense = rolledOffenseMechanics(snapshot);
   if (!offense.size) return [];
   const ranked = arr(catalog?.entities)
     .filter((entity) => jewelrySlot(entity))
-    .map((entity) => analyzeUnique(entity, offense))
+    .map((entity) => analyzeUnique(entity, offense, packageSourceMechanics(recommendationPackage)))
     .filter(Boolean)
     .sort((a, b) => b.tierRank - a.tierRank || b.score - a.score || a.entity.id.localeCompare(b.entity.id));
   if (!ranked.length) return [];
@@ -253,7 +283,7 @@ function selectJewelryRecommendations(catalog, snapshot, seed = '') {
   for (const candidate of ordered) {
     const identity = token(candidate.entity.source_id || candidate.entity.id || candidate.entity.name);
     const slot = jewelrySlot(candidate.entity);
-    if (!identity || identities.has(identity) || (slot === 'Amulet' && amulets >= 1)) continue;
+    if (!identity || excluded.has(identity) || identities.has(identity) || (slot === 'Amulet' && amulets >= 1)) continue;
     selected.push(candidate); identities.add(identity);
     if (slot === 'Amulet') amulets += 1;
     if (selected.length === 2) break;
@@ -297,12 +327,21 @@ function selectNonSkillRecommendations(catalog, snapshot = {}, recommendationPac
     required: true, coreSolver: true, packageRole: 'unique_bridge',
     recommendationEvidence: { tier: 'BUILD_DEFINING_CAPABILITY', matches: recommendationPackage.bridgePath || [] }
   }] : [];
-  const optionalUnique = selectUniqueRecommendation(catalog, snapshot, `${seed}:unique`)
+  const optionalUnique = selectUniqueRecommendation(catalog, snapshot, recommendationPackage, `${seed}:unique`)
     .filter((entry) => !requiredUnique.some((required) =>
       token(required.entityId || required.id) === token(entry.entityId || entry.id)));
+  const recommendedUniques = [...requiredUnique, ...optionalUnique].slice(0, 1);
+  const canonicalIdentity = (entry) => {
+    const resolved = arr(catalog?.entities).find((entity) => [entity.id, entity.source_id]
+      .map(token).includes(token(entry?.entityId || entry?.id)));
+    return token(resolved?.source_id || resolved?.id || entry?.entityId || entry?.id);
+  };
+  const usedUniqueIds = new Set(recommendedUniques.map(canonicalIdentity).filter(Boolean));
   return {
-    recommendedUniques: [...requiredUnique, ...optionalUnique].slice(0, 1),
-    recommendedJewelryUniques: selectJewelryRecommendations(catalog, snapshot, `${seed}:jewelry`),
+    recommendedUniques,
+    recommendedJewelryUniques: selectJewelryRecommendations(
+      catalog, snapshot, recommendationPackage, `${seed}:jewelry`, usedUniqueIds
+    ),
     passives: {
       ascendancyNodes: choose(byType('ascendancy_passive'), 1, `${seed}:ascendancy`, false),
       notables: choose(byType('passive'), 3, `${seed}:notable`, true)

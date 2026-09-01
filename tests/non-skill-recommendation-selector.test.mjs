@@ -88,13 +88,16 @@ test('mace family covers one- and two-handed bases and primary beats off-hand fa
 
 test('unique selector accepts toward conversion and rejects contradictions and away conversion', () => {
   const bow = (id, mechanics) => entity(id, 'unique', mechanics, { compatibility: { access: {}, equipment: { slot: 'Bow', base: 'Bow' } } });
-  const conversion = { relation: 'converts', from: 'fire', to: 'freeze', confidence: 'exact' };
+  const conversion = { relation: 'converts', from: 'fire', to: 'freeze', scope: 'outgoing', confidence: 'exact' };
   const result = selectNonSkillRecommendations(catalog([
     bow('toward', [conversion]),
     bow('cannot', [fact('freeze'), { ...fact('freeze'), relation: 'cannot' }]),
     bow('away', [fact('freeze'), { relation: 'converts', from: 'freeze', to: 'fire' }])
-  ]), snap, pkg);
+  ]), snap, { ...pkg, packageProfile: { sourceMechanics: ['fire'] } });
   assert.deepEqual(result.recommendedUniques.map((item) => item.id), ['toward']);
+  assert.deepEqual(selectNonSkillRecommendations(catalog([
+    bow('toward', [conversion])
+  ]), snap, { ...pkg, packageProfile: { sourceMechanics: [] } }).recommendedUniques, []);
 });
 
 test('off-hand fallback is restricted to one-handed weapons and empty is valid', () => {
@@ -221,9 +224,13 @@ test('jewelry shares semantic tiers, granted facts, contradictions, and directio
   assert.equal(result[0].recommendationEvidence.matches[0].sourceEntity, 'skill:freeze');
   const raw = (id, facts) => entity(id, 'unique', facts, { compatibility: { access: {}, equipment: { slot: 'Ring', base: 'Gold Ring' } } });
   assert.deepEqual(selectJewelryRecommendations(catalog([
-    raw('toward', [{ relation: 'converts', from: 'fire', to: 'freeze' }]),
+    raw('toward', [{ relation: 'converts', from: 'fire', to: 'freeze', scope: 'outgoing' }]),
     raw('away', [fact('freeze'), { relation: 'converts', from: 'freeze', to: 'fire' }])
-  ]), snap, 'conversion').map((entry) => entry.id), ['toward']);
+  ]), snap, { packageProfile: { sourceMechanics: ['fire'] } }, 'conversion')
+    .map((entry) => entry.id), ['toward']);
+  assert.deepEqual(selectJewelryRecommendations(catalog([
+    raw('toward', [{ relation: 'converts', from: 'fire', to: 'freeze', scope: 'outgoing' }])
+  ]), snap, { packageProfile: { sourceMechanics: [] } }, 'no-source'), []);
 });
 
 test('jewelry selection is deterministic, varies within its band, and does not force weak slots', () => {
