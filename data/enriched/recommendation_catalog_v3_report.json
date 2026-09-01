@@ -13,7 +13,7 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5403,
+    "fact_count": 5473,
     "fact_relation_counts": {
       "consumes": 395,
       "converts": 127,
@@ -21,11 +21,11 @@
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 672,
-      "inflicts": 185,
-      "modifies": 2327,
+      "inflicts": 186,
+      "modifies": 2394,
       "occupies": 444,
       "prevents": 378,
-      "provides": 435,
+      "provides": 437,
       "replaces": 27,
       "requires": 66
     },

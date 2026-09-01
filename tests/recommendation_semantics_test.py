@@ -154,5 +154,27 @@ class GeneratedComponentPromotionTests(unittest.TestCase):
         self.assertFalse(self.capability("Blackgleam", "ignite"))
 
 
+class PassiveDirectionAndActorTests(unittest.TestCase):
+    def test_defensive_facts_are_preserved_and_directional(self):
+        for text, mechanic in [
+            ("base_evasion_rating", "evasion"),
+            ("base_block_chance", "block"),
+            ("self_bleed_duration", "bleed"),
+            ("ailment_threshold_from_evasion_rating", "evasion"),
+        ]:
+            facts = parse_evidence("stat_id", text, "passive")
+            matching = [fact for fact in facts if fact.get("mechanic") == mechanic]
+            self.assertTrue(matching, (text, facts))
+            self.assertTrue(all(fact.get("scope") == "incoming" and fact.get("target") == "self"
+                                for fact in matching), matching)
+
+    def test_actor_scope_is_retained(self):
+        for actor in ("companion", "minion", "totem"):
+            facts = parse_evidence("passive_line", f"{actor}s have chance to Poison on Hit", "passive")
+            poison = [fact for fact in facts if fact.get("mechanic") == "poison"]
+            self.assertTrue(poison)
+            self.assertTrue(all(fact.get("delivery") == actor for fact in poison), poison)
+
+
 if __name__ == "__main__":
     unittest.main()

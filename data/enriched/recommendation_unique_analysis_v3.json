@@ -7,43 +7,44 @@
     "grantedSemanticsMateriallyChangeRelevance": 33,
     "currentSelectorMissesStrongCandidate": 1,
     "previousEmptyCells": 108,
-    "emptyToNonEmpty": 39,
+    "emptyToNonEmpty": 36,
     "winnerChanges": 10,
     "currentWinnerDiffers": 11,
     "runtimeQualityBandAgreement": 131,
-    "currentEmptyCells": 70,
-    "legitimatelyEmptyCells": 69,
+    "currentEmptyCells": 73,
+    "legitimatelyEmptyCells": 72,
     "emptyCellsGainStrongCandidate": 1,
     "qualityBandCounts": {
-      "1": 50,
+      "1": 49,
       "2": 9,
       "3": 7
     },
     "contradictionPreventionFindings": 22,
     "emptyCauses": {
-      "GENUINELY_NO_RELEVANT_UNIQUE": 69,
+      "GENUINELY_NO_RELEVANT_UNIQUE": 70,
+      "ITEM_SEMANTIC_DATA_INCOMPLETENESS": 2,
       "MISSING_GRANTED_SEMANTICS": 1
     },
     "runtimeSelectorChanged": true,
     "namedItemOrCellExceptionsIntroduced": false,
     "runtimeSemantics": {
       "enrichedUniqueCount": 73,
-      "promotedFactCount": 255,
-      "bytes": 80226
+      "promotedFactCount": 254,
+      "bytes": 80701
     },
     "jewelry": {
       "eligibleRings": 37,
       "eligibleAmulets": 25,
       "enrichedWithGrantedSemantics": 1,
       "resultCounts": {
-        "0": 5,
-        "1": 8,
+        "0": 7,
+        "1": 6,
         "2": 2
       },
       "combinations": {
         "ringRing": 2,
         "ringAmulet": 0,
-        "ringOnly": 7,
+        "ringOnly": 5,
         "amuletOnly": 1
       },
       "variationOpportunities": 2
@@ -218,15 +219,13 @@
         "Wand"
       ],
       "offenses": [
-        "fire",
-        "ignite"
+        "fire"
       ],
       "grantedSources": [
         "Volatile Dead"
       ],
       "missingFacts": [
-        "AFFINITY_AMPLIFICATION:has_property:fire",
-        "BUILD_DEFINING_CAPABILITY:inflicts:ignite"
+        "AFFINITY_AMPLIFICATION:has_property:fire"
       ],
       "changesWinner": false
     },
@@ -1549,16 +1548,8 @@
           "score": 206
         }
       ],
-      "selected": [
-        {
-          "id": "Blackflame||Amethyst Ring",
-          "name": "Blackflame",
-          "itemType": "Ring",
-          "tier": "AFFINITY_AMPLIFICATION",
-          "score": 206
-        }
-      ],
-      "empty": false
+      "selected": [],
+      "empty": true
     },
     {
       "offenseId": "bleed",
@@ -1636,16 +1627,8 @@
           "score": 206
         }
       ],
-      "selected": [
-        {
-          "id": "Icefang Orbit||Iron Ring",
-          "name": "Icefang Orbit",
-          "itemType": "Ring",
-          "tier": "AFFINITY_AMPLIFICATION",
-          "score": 206
-        }
-      ],
-      "empty": false
+      "selected": [],
+      "empty": true
     },
     {
       "offenseId": "freeze",
@@ -5120,8 +5103,8 @@
             "from": null,
             "to": null,
             "confidence": "strong",
-            "scope": "outgoing",
-            "target": null,
+            "scope": "incoming",
+            "target": "self",
             "delivery": null,
             "application": null,
             "provenance": {
@@ -5206,8 +5189,8 @@
               "from": null,
               "to": null,
               "confidence": "strong",
-              "scope": "outgoing",
-              "target": null,
+              "scope": "incoming",
+              "target": "self",
               "delivery": null,
               "application": null,
               "provenance": {
@@ -5396,8 +5379,8 @@
             "from": null,
             "to": null,
             "confidence": "strong",
-            "scope": "outgoing",
-            "target": null,
+            "scope": "incoming",
+            "target": "self",
             "delivery": null,
             "application": null,
             "provenance": {
@@ -5522,8 +5505,8 @@
               "from": null,
               "to": null,
               "confidence": "strong",
-              "scope": "outgoing",
-              "target": null,
+              "scope": "incoming",
+              "target": "self",
               "delivery": null,
               "application": null,
               "provenance": {
@@ -5678,8 +5661,8 @@
               "from": null,
               "to": null,
               "confidence": "strong",
-              "scope": "outgoing",
-              "target": null,
+              "scope": "incoming",
+              "target": "self",
               "delivery": "generic_hit",
               "application": null,
               "provenance": {
@@ -5701,12 +5684,7 @@
       "offenseId": "shock",
       "offense": "Shock",
       "previous": null,
-      "current": {
-        "id": "Periphery||Heartwood Shortbow",
-        "name": "Periphery",
-        "score": 206,
-        "tier": "AFFINITY_AMPLIFICATION"
-      },
+      "current": null,
       "proposed": {
         "id": "unique:Periphery||Heartwood Shortbow",
         "name": "Periphery",
@@ -5719,7 +5697,7 @@
         "proposedScore": 206,
         "proposedRank": 1,
         "qualityBand": true,
-        "selectedCurrently": true,
+        "selectedCurrently": false,
         "contradiction": false,
         "evidence": [
           {
@@ -5729,8 +5707,8 @@
             "from": null,
             "to": null,
             "confidence": "strong",
-            "scope": "outgoing",
-            "target": null,
+            "scope": "incoming",
+            "target": "self",
             "delivery": "generic_hit",
             "application": null,
             "provenance": {
@@ -5745,11 +5723,11 @@
         ],
         "rationale": "AFFINITY_AMPLIFICATION: modifies via item_fact."
       },
-      "differs": false,
+      "differs": true,
       "previousEmpty": true,
-      "currentEmpty": false,
+      "currentEmpty": true,
       "richerSemanticsStrong": false,
-      "emptyClassification": null,
+      "emptyClassification": "ITEM_SEMANTIC_DATA_INCOMPLETENESS",
       "runtimeInQualityBand": true,
       "qualityBandSize": 1,
       "candidates": [
@@ -5765,7 +5743,7 @@
           "proposedScore": 206,
           "proposedRank": 1,
           "qualityBand": true,
-          "selectedCurrently": true,
+          "selectedCurrently": false,
           "contradiction": false,
           "evidence": [
             {
@@ -5775,8 +5753,8 @@
               "from": null,
               "to": null,
               "confidence": "strong",
-              "scope": "outgoing",
-              "target": null,
+              "scope": "incoming",
+              "target": "self",
               "delivery": "generic_hit",
               "application": null,
               "provenance": {
@@ -6593,12 +6571,7 @@
       "offenseId": "chill",
       "offense": "Chill",
       "previous": null,
-      "current": {
-        "id": "Mist Whisper||Makeshift Crossbow",
-        "name": "Mist Whisper",
-        "score": 206,
-        "tier": "AFFINITY_AMPLIFICATION"
-      },
+      "current": null,
       "proposed": {
         "id": "unique:Mist Whisper||Makeshift Crossbow",
         "name": "Mist Whisper",
@@ -6611,7 +6584,7 @@
         "proposedScore": 206,
         "proposedRank": 1,
         "qualityBand": true,
-        "selectedCurrently": true,
+        "selectedCurrently": false,
         "contradiction": false,
         "evidence": [
           {
@@ -6621,8 +6594,8 @@
             "from": null,
             "to": null,
             "confidence": "strong",
-            "scope": "outgoing",
-            "target": null,
+            "scope": "incoming",
+            "target": "self",
             "delivery": null,
             "application": null,
             "provenance": {
@@ -6637,11 +6610,11 @@
         ],
         "rationale": "AFFINITY_AMPLIFICATION: modifies via item_fact."
       },
-      "differs": false,
+      "differs": true,
       "previousEmpty": true,
-      "currentEmpty": false,
+      "currentEmpty": true,
       "richerSemanticsStrong": false,
-      "emptyClassification": null,
+      "emptyClassification": "ITEM_SEMANTIC_DATA_INCOMPLETENESS",
       "runtimeInQualityBand": true,
       "qualityBandSize": 1,
       "candidates": [
@@ -6657,7 +6630,7 @@
           "proposedScore": 206,
           "proposedRank": 1,
           "qualityBand": true,
-          "selectedCurrently": true,
+          "selectedCurrently": false,
           "contradiction": false,
           "evidence": [
             {
@@ -6667,8 +6640,8 @@
               "from": null,
               "to": null,
               "confidence": "strong",
-              "scope": "outgoing",
-              "target": null,
+              "scope": "incoming",
+              "target": "self",
               "delivery": null,
               "application": null,
               "provenance": {
@@ -8128,8 +8101,8 @@
               "from": null,
               "to": null,
               "confidence": "strong",
-              "scope": "outgoing",
-              "target": null,
+              "scope": "incoming",
+              "target": "self",
               "delivery": null,
               "application": null,
               "provenance": {
@@ -10307,97 +10280,16 @@
       "offenseId": "ignite",
       "offense": "Ignite",
       "previous": null,
-      "current": {
-        "id": "Enezun's Charge||Volatile Wand",
-        "name": "Enezun's Charge",
-        "score": 406,
-        "tier": "BUILD_DEFINING_CAPABILITY"
-      },
-      "proposed": {
-        "id": "unique:Enezun's Charge||Volatile Wand",
-        "name": "Enezun's Charge",
-        "slot": "Wand",
-        "family": "wand",
-        "currentSelectorEligible": false,
-        "currentScore": 0,
-        "currentRank": null,
-        "proposedTier": "BUILD_DEFINING_CAPABILITY",
-        "proposedScore": 406,
-        "proposedRank": 1,
-        "qualityBand": true,
-        "selectedCurrently": true,
-        "contradiction": false,
-        "evidence": [
-          {
-            "category": "BUILD_DEFINING_CAPABILITY",
-            "relation": "inflicts",
-            "mechanic": "ignite",
-            "from": null,
-            "to": null,
-            "confidence": "strong",
-            "scope": "outgoing",
-            "target": "enemy",
-            "delivery": "skill",
-            "application": null,
-            "provenance": {
-              "parentUniqueId": "unique:Enezun's Charge||Volatile Wand",
-              "sourceType": "granted_skill",
-              "sourceName": "Volatile Dead",
-              "sourceEntityId": "skill:Metadata/Items/Gems/SkillGemVolatileDead",
-              "component": "explod",
-              "evidenceKind": "skill_description"
-            }
-          }
-        ],
-        "rationale": "BUILD_DEFINING_CAPABILITY: inflicts via granted_skill."
-      },
+      "current": null,
+      "proposed": null,
       "differs": false,
       "previousEmpty": true,
-      "currentEmpty": false,
-      "richerSemanticsStrong": true,
-      "emptyClassification": null,
+      "currentEmpty": true,
+      "richerSemanticsStrong": false,
+      "emptyClassification": "GENUINELY_NO_RELEVANT_UNIQUE",
       "runtimeInQualityBand": true,
-      "qualityBandSize": 1,
-      "candidates": [
-        {
-          "id": "unique:Enezun's Charge||Volatile Wand",
-          "name": "Enezun's Charge",
-          "slot": "Wand",
-          "family": "wand",
-          "currentSelectorEligible": false,
-          "currentScore": 0,
-          "currentRank": null,
-          "proposedTier": "BUILD_DEFINING_CAPABILITY",
-          "proposedScore": 406,
-          "proposedRank": 1,
-          "qualityBand": true,
-          "selectedCurrently": true,
-          "contradiction": false,
-          "evidence": [
-            {
-              "category": "BUILD_DEFINING_CAPABILITY",
-              "relation": "inflicts",
-              "mechanic": "ignite",
-              "from": null,
-              "to": null,
-              "confidence": "strong",
-              "scope": "outgoing",
-              "target": "enemy",
-              "delivery": "skill",
-              "application": null,
-              "provenance": {
-                "parentUniqueId": "unique:Enezun's Charge||Volatile Wand",
-                "sourceType": "granted_skill",
-                "sourceName": "Volatile Dead",
-                "sourceEntityId": "skill:Metadata/Items/Gems/SkillGemVolatileDead",
-                "component": "explod",
-                "evidenceKind": "skill_description"
-              }
-            }
-          ],
-          "rationale": "BUILD_DEFINING_CAPABILITY: inflicts via granted_skill."
-        }
-      ]
+      "qualityBandSize": 0,
+      "candidates": []
     },
     {
       "weapon": "Wand",

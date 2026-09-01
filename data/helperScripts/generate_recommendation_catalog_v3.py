@@ -803,8 +803,9 @@ def passive_stat_records(ctx: SourceContext, raw: dict[str, Any]) -> list[dict[s
 
 
 PASSIVE_NON_OFFENSIVE_EVIDENCE_RE = re.compile(
-    r"(?:^|_)(?:resistance|base_armour|damage_taken|taking_damage|recover|recovery|recoup|"
-    r"regenerat|immun|avoid|prevent|reduced_damage_taken)(?:_|$)", re.I
+    r"(?:^|_)(?:resistance|base_armour|armour|evasion|block|ailment_threshold|stun_threshold|"
+    r"damage_taken|taking_damage|recover|recovery|recoup|regenerat|immun|avoid|prevent|"
+    r"mitigat|reduced_damage_taken)(?:_|$)", re.I
 )
 PASSIVE_OFFENSIVE_EVIDENCE_RE = re.compile(
     r"(?:(?:^|_)(?:[a-z0-9]+_)*damage(?:_|$)|additional_.+_damage|damage_as_|_damage_.*_to_gain_as_|"
@@ -920,7 +921,20 @@ def build_passive_entities(ctx: SourceContext, coverage: Coverage) -> list[dict[
             )
 
         facts = apply_entity_overrides(ctx, entity_id, merge_facts(facts))
+        # Prefer the most directional version of duplicate semantic evidence.
+        # Datamined ids are often broad while the retained display line tells
+        # us that the same mechanic is defensive or belongs to another actor.
+        directional_keys = {
+            (fact.get("relation"), fact.get("mechanic"), fact.get("from"), fact.get("to"))
+            for fact in facts
+            if fact.get("scope") == "incoming" or fact.get("delivery") in {"companion", "minion", "totem"}
+        }
         for fact in facts:
+            semantic_key = (fact.get("relation"), fact.get("mechanic"), fact.get("from"), fact.get("to"))
+            if semantic_key in directional_keys and not (
+                fact.get("scope") == "incoming" or fact.get("delivery") in {"companion", "minion", "totem"}
+            ):
+                continue
             offense_role = passive_fact_offense_role(fact)
             if offense_role:
                 fact["offense_role"] = offense_role

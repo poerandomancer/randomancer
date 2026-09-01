@@ -172,7 +172,9 @@ function sourceMechanicMatches(required, sources) {
   if (!mechanic) return false;
   if (sources.has(mechanic)) return true;
   if (mechanic === 'elemental_damage') return ['fire', 'cold', 'lightning'].some((child) => sources.has(child));
-  return ['fire', 'cold', 'lightning'].includes(mechanic) && sources.has('elemental_damage');
+  // Semantic subsumption is directional: a specific element proves its broad
+  // parent, but the parent cannot manufacture evidence for a specific child.
+  return false;
 }
 
 function packageSourceMechanics(recommendationPackage) {
@@ -207,6 +209,8 @@ function factAppliesToPackage(fact, recommendationPackage, sources = packageSour
   const scope = token(fact?.scope ?? fact?.s);
   const target = token(fact?.target ?? fact?.a);
   if (scope === 'incoming' || ['self', 'player'].includes(target)) return false;
+  const condition = token(fact?.condition);
+  if (condition && !new Set(arr(recommendationPackage?.packageProfile?.selfStates).map(token)).has(condition)) return false;
   const delivery = token(fact?.delivery ?? fact?.d);
   if (delivery && !['skill', 'generic', 'generic_hit', 'hit'].includes(delivery)) {
     const properties = packageProperties(recommendationPackage);

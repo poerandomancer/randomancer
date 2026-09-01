@@ -3092,16 +3092,26 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     relation: primary.uniqueBridgeProof.relation, from: primary.uniqueBridgeProof.sourceMechanic,
     to: primary.uniqueBridgeProof.mechanic }] : supportResolution.supportEdges.filter((edge) => edge.targetKind === 'offense')
     .map((edge) => ({ type: 'support', providerEntityId: edge.fromEntityId, relation: edge.relation, to: edge.mechanic }));
+  const primarySourceEvidence = unique(asArray(primary?.entity?.facts)
+    .filter((fact) => normalizeToken(fact?.scope) !== 'incoming'
+      && ['has_property', 'inflicts', 'creates', 'provides', 'generates', 'fulfills', 'converts']
+        .includes(normalizeToken(fact?.relation)))
+    .flatMap((fact) => {
+      const relation = normalizeToken(fact?.relation);
+      const mechanics = relation === 'converts' ? [fact?.from, fact?.to] : [fact?.mechanic];
+      return mechanics.map(normalizeToken).filter(Boolean).map((mechanic) =>
+        `${mechanic}|${relation}|${normalizeToken(fact?.subject || 'skill')}`);
+    })).map((entry) => {
+      const [mechanic, relation, source] = entry.split('|'); return { mechanic, relation, source };
+    });
   const packageProfile = {
     finalOffense: unique(offenseObligations.flatMap((entry) => entry.mechanics).map(normalizeToken)),
     weapon: normalizeToken(snapshot?.weaponFamily || snapshot?.weapon),
     primarySkill: primarySkill ? { entityId: primarySkill.entityId, name: primarySkill.name,
       properties: unique([primary?.weaponRelationship?.family, ...asArray(primary?.delivery?.skillTypes)].map(normalizeToken)) } : null,
     sourceMechanics: unique(bridgePath.map((entry) => entry.from).filter(Boolean)),
-    primarySourceMechanics: unique(asArray(primary?.entity?.facts)
-        .filter((fact) => normalizeToken(fact?.scope) !== 'incoming'
-          && !['prevents', 'requires', 'consumes'].includes(normalizeToken(fact?.relation)))
-        .flatMap((fact) => [fact?.mechanic, fact?.from].map(normalizeToken)).filter(Boolean)),
+    primarySourceMechanics: unique(primarySourceEvidence.map((entry) => entry.mechanic)),
+    primarySourceEvidence,
     bridgeMechanics: unique(bridgePath.flatMap((entry) => [entry.from, entry.to]).filter(Boolean)),
     setupMechanics: unique(asArray(winner?.synergyEdges).map((edge) => edge.mechanic)),
     optionalPayoffMechanics: unique(selectedCandidates.flatMap((candidate) => asArray(candidate?.entity?.facts)

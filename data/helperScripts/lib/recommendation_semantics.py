@@ -895,11 +895,29 @@ def parse_stat_id(value: Any, subject: str = "player") -> list[dict[str, Any]]:
                 )
             )
 
-    if "on_self" in normalized or "taken_from" in normalized or "damage_taken" in normalized:
+    # Preserve the beneficiary/direction carried by defensive stat ids. The
+    # generic mechanic loop must not turn mitigation into outgoing offense.
+    defensive_self = bool(
+        "on_self" in normalized or "taken_from" in normalized or "damage_taken" in normalized
+        or re.search(r"(?:^|_)(?:armour|evasion|block|ailment_threshold|stun_threshold|damage_reduction_rating)(?:_|$)", normalized)
+        or re.search(r"(?:^|_)self_(?:bleed|poison|ignite|shock|chill|freeze|ailment)(?:_|$)", normalized)
+        or re.search(r"(?:^|_)(?:reduced|less).*(?:ailment|bleed|poison|ignite|shock|chill|freeze).*(?:duration|magnitude|effect|threshold)", normalized)
+        or re.search(r"(?:^|_)(?:immune|immunity|avoid|mitigat).*(?:ailment|bleed|poison|ignite|shock|chill|freeze|debuff)", normalized)
+    )
+    if defensive_self:
         for fact in facts:
             if fact.get("relation") in {"inflicts", "modifies", "provides", "has_property"}:
                 fact["target"] = "self"
                 fact["scope"] = "incoming"
+
+    # Reuse delivery as the ontology's actor scope. This keeps companion,
+    # minion, and totem effects distinct from otherwise identical player facts.
+    actor = next((name for name in ("companion", "minion", "totem")
+                  if re.search(rf"(?:^|_){name}s?(?:_|$)", normalized)), None)
+    if actor:
+        for fact in facts:
+            if fact.get("relation") in {"inflicts", "creates", "generates", "provides", "modifies", "has_property"}:
+                fact["delivery"] = actor
     return merge_facts(facts)
 
 
@@ -1447,6 +1465,22 @@ def parse_text(value: Any, source_kind: str, subject: str) -> list[dict[str, Any
                     )
                 )
 
+    defensive_text = bool(
+        re.search(r"(?:^|_)(?:armour|evasion|block|ailment_threshold|damage_reduction_rating)(?:_|$)", normalized)
+        or re.search(r"(?:^|_)(?:self_)?(?:bleed|poison|ignite|shock|chill|freeze|ailment).*(?:duration|magnitude|threshold)(?:_|$)", normalized)
+        or re.search(r"(?:^|_)(?:immune|immunity|damage_taken|mitigat)(?:_|$)", normalized)
+    )
+    if defensive_text:
+        for fact in facts:
+            if fact.get("relation") in {"inflicts", "modifies", "provides", "has_property"}:
+                fact["target"] = "self"
+                fact["scope"] = "incoming"
+    actor = next((name for name in ("companion", "minion", "totem")
+                  if re.search(rf"(?:^|_){name}s?(?:_|$)", normalized)), None)
+    if actor:
+        for fact in facts:
+            if fact.get("relation") in {"inflicts", "creates", "generates", "provides", "modifies", "has_property"}:
+                fact["delivery"] = actor
     return merge_facts(facts)
 
 
