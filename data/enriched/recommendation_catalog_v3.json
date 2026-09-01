@@ -11,27 +11,27 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5278,
+    "fact_count": 5366,
     "fact_relation_counts": {
-      "consumes": 356,
-      "converts": 112,
+      "consumes": 395,
+      "converts": 127,
       "creates": 72,
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 672,
-      "inflicts": 156,
+      "inflicts": 187,
       "modifies": 2308,
       "occupies": 444,
-      "prevents": 375,
+      "prevents": 378,
       "provides": 415,
       "replaces": 27,
       "requires": 66
     },
     "candidate_role_counts": {
-      "defense": 422,
-      "enabler": 1256,
+      "defense": 423,
+      "enabler": 1260,
       "payoff": 182,
-      "primary_damage": 349,
+      "primary_damage": 346,
       "recovery": 250,
       "setup_control": 205,
       "utility": 206
@@ -277,6 +277,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "power_charge",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -425,6 +426,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "charge",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime explod",
@@ -437,6 +439,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "mana",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime explod",
@@ -449,6 +452,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "poison",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -801,6 +805,8 @@
           "confidence": "strong",
           "mechanic": "ignite",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime",
@@ -1056,6 +1062,33 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "endurance_charge",
+          "consumption": "optional_payoff",
+          "quantity": 3,
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "endurance_charge",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "active_skill_short_description"
             }
           ]
         },
@@ -1430,6 +1463,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "elemental_infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -1442,6 +1476,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -1454,6 +1489,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "lightning",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -1946,6 +1982,8 @@
           "confidence": "strong",
           "mechanic": "chill",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "attack_hit",
           "evidence": [
             {
               "value": "runtime ground",
@@ -2718,6 +2756,8 @@
           "confidence": "exact",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "attack_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -2803,6 +2843,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "elemental_infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime projectile",
@@ -2815,6 +2856,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "fire",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -2827,6 +2869,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -3076,6 +3119,19 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "frenzy_charge",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime projectile",
+              "kind": "skill_description"
             }
           ]
         },
@@ -3369,6 +3425,8 @@
           "confidence": "strong",
           "mechanic": "chill",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime explod",
@@ -3464,6 +3522,8 @@
           "confidence": "strong",
           "mechanic": "ignite",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime explod",
@@ -3622,6 +3682,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "charge",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime explod",
@@ -3634,6 +3695,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "mana",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime explod",
@@ -3929,8 +3991,22 @@
         {
           "relation": "consumes",
           "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "bleed",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
           "confidence": "exact",
           "mechanic": "detonation",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime explod",
@@ -4418,8 +4494,21 @@
           "mechanic": "power_charge",
           "evidence": [
             {
-              "value": "against",
+              "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "power_charge",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "against explod",
+              "kind": "skill_description"
             }
           ]
         },
@@ -4692,6 +4781,21 @@
           ]
         },
         {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "exact",
+          "mechanic": "poison",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "attack_hit",
+          "evidence": [
+            {
+              "value": "runtime explod",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
           "relation": "modifies",
           "subject": "skill",
           "confidence": "strong",
@@ -4871,6 +4975,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "mark",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -6289,6 +6394,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "charge",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -6389,6 +6495,19 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "power_charge",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
             }
           ]
         },
@@ -6575,6 +6694,7 @@
           "confidence": "exact",
           "mechanic": "fire",
           "condition": "heat_is_consumed",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -6843,6 +6963,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "elemental_infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -6855,6 +6976,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "fire",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -6867,6 +6989,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -8061,6 +8184,8 @@
           "confidence": "strong",
           "mechanic": "electrocute",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime explod",
@@ -9285,6 +9410,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "corpse",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime cloud",
@@ -9404,6 +9530,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "corpse",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime cloud",
@@ -10247,6 +10374,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "corpse",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -11211,6 +11339,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "freeze",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -11223,6 +11352,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "ignite",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -11235,6 +11365,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "shock",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -11509,6 +11640,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "elemental_ailments",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -11531,6 +11663,19 @@
         {
           "relation": "consumes",
           "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "freeze",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime ground",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
           "confidence": "exact",
           "mechanic": "ignite",
           "evidence": [
@@ -11543,12 +11688,38 @@
         {
           "relation": "consumes",
           "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "ignite",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime ground",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
           "confidence": "exact",
           "mechanic": "shock",
           "evidence": [
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "shock",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime ground",
+              "kind": "skill_description"
             }
           ]
         },
@@ -12126,6 +12297,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "elemental_infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -12138,6 +12310,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -12150,6 +12323,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "lightning",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -12241,6 +12415,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "elemental_infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -12253,6 +12428,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -12265,6 +12441,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "lightning",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -12413,6 +12590,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "life",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -12538,10 +12716,27 @@
           "confidence": "strong",
           "mechanic": "electrocute",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime",
               "kind": "skill_description"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "electrocute",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "active_skill_short_description"
             }
           ]
         },
@@ -12872,6 +13067,8 @@
           "confidence": "strong",
           "mechanic": "chill",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime",
@@ -12885,6 +13082,8 @@
           "confidence": "strong",
           "mechanic": "freeze",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime",
@@ -13202,6 +13401,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "charge",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime explod",
@@ -13214,6 +13414,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "mana",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime explod",
@@ -13325,6 +13526,7 @@
           "confidence": "exact",
           "mechanic": "fire",
           "condition": "heat_is_consumed",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -13601,6 +13803,19 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "frenzy_charge",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime explod",
+              "kind": "skill_description"
             }
           ]
         },
@@ -13900,6 +14115,21 @@
           ]
         },
         {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "exact",
+          "mechanic": "bleed",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
           "relation": "modifies",
           "subject": "skill",
           "confidence": "strong",
@@ -14068,6 +14298,19 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "power_charge",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime ground",
+              "kind": "skill_description"
             }
           ]
         },
@@ -14257,6 +14500,8 @@
           "confidence": "strong",
           "mechanic": "chill",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime ground",
@@ -14339,6 +14584,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "corpse",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -14705,6 +14951,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "elemental_infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime explod",
@@ -14717,6 +14964,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "fire",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -14729,6 +14977,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -14845,6 +15094,8 @@
           "confidence": "strong",
           "mechanic": "ignite",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime projectile",
@@ -14921,6 +15172,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "cold",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -14933,6 +15185,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "elemental_infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -14945,6 +15198,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "fire",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -14958,6 +15212,7 @@
           "confidence": "exact",
           "mechanic": "fire",
           "condition": "consumed_fire_infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -14970,6 +15225,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -14983,6 +15239,7 @@
           "confidence": "exact",
           "mechanic": "infusion",
           "condition": "consumed_fire_infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -14995,6 +15252,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "lightning",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -15218,6 +15476,19 @@
         {
           "relation": "consumes",
           "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "power_charge",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
           "confidence": "exact",
           "mechanic": "rage",
           "evidence": [
@@ -15400,6 +15671,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "elemental_infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime projectile",
@@ -15412,6 +15684,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -15424,6 +15697,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "lightning",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -15465,6 +15739,21 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "ignite",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "runtime projectile",
+              "kind": "active_skill_short_description"
             }
           ]
         },
@@ -15785,6 +16074,19 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "power_charge",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
             }
           ]
         },
@@ -16113,6 +16415,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "freeze",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime explod",
@@ -16328,6 +16631,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "mark",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -16799,6 +17103,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "cold",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -16811,6 +17116,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "elemental_infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime projectile",
@@ -16823,6 +17129,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -16944,6 +17251,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "elemental_infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "against explod",
@@ -16956,6 +17264,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -16968,6 +17277,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "lightning",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -17101,6 +17411,8 @@
           "confidence": "strong",
           "mechanic": "chill",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime projectile",
@@ -17196,6 +17508,8 @@
           "confidence": "strong",
           "mechanic": "freeze",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime",
@@ -17209,6 +17523,8 @@
           "confidence": "strong",
           "mechanic": "ignite",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime",
@@ -17470,6 +17786,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "charge",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime explod",
@@ -17482,6 +17799,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "mana",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime explod",
@@ -17507,6 +17825,8 @@
           "confidence": "strong",
           "mechanic": "shock",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "attack_hit",
           "evidence": [
             {
               "value": "runtime explod",
@@ -18144,6 +18464,21 @@
           ]
         },
         {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "poison",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "runtime cloud",
+              "kind": "active_skill_short_description"
+            }
+          ]
+        },
+        {
           "relation": "modifies",
           "subject": "skill",
           "confidence": "strong",
@@ -18305,6 +18640,21 @@
           ]
         },
         {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "poison",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "runtime burst",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
           "relation": "modifies",
           "subject": "skill",
           "confidence": "strong",
@@ -18458,6 +18808,8 @@
           "confidence": "strong",
           "mechanic": "shock",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime explod",
@@ -18812,6 +19164,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "energy_shield",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -19017,6 +19370,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "detonation",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime burst",
@@ -19031,8 +19385,21 @@
           "mechanic": "freeze",
           "evidence": [
             {
-              "value": "against",
+              "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "exact",
+          "mechanic": "freeze",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "against",
+              "kind": "stat_id"
             }
           ]
         },
@@ -19204,6 +19571,19 @@
           ]
         },
         {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "frenzy_charge",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime projectile",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
           "relation": "converts",
           "subject": "skill",
           "confidence": "exact",
@@ -19235,6 +19615,8 @@
           "confidence": "strong",
           "mechanic": "chill",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime projectile",
@@ -19425,6 +19807,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "life",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -20080,6 +20463,21 @@
           ]
         },
         {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "ignite",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "attack_hit",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
           "relation": "modifies",
           "subject": "skill",
           "confidence": "strong",
@@ -20234,6 +20632,21 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "ignite",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "attack_hit",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
             }
           ]
         },
@@ -20401,6 +20814,8 @@
           "confidence": "strong",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "attack_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -21593,6 +22008,8 @@
           "confidence": "strong",
           "mechanic": "chill",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "spell_hit",
           "evidence": [
             {
               "value": "runtime ground",
@@ -21955,6 +22372,19 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "exact",
+          "mechanic": "ignite",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
             }
           ]
         },
@@ -22799,6 +23229,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "cold",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -22811,6 +23242,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "elemental_infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime projectile",
@@ -22823,6 +23255,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -22848,6 +23281,8 @@
           "confidence": "strong",
           "mechanic": "chill",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime projectile",
@@ -23448,6 +23883,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "chill",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -23464,6 +23900,19 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "exact",
+          "mechanic": "freeze",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
             }
           ]
         },
@@ -23698,10 +24147,27 @@
           "confidence": "strong",
           "mechanic": "ignite",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime",
               "kind": "skill_description"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "ignite",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "active_skill_short_description"
             }
           ]
         },
@@ -23773,6 +24239,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "elemental_infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime ground",
@@ -23785,6 +24252,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "fire",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -23797,6 +24265,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -24363,6 +24832,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "corpse",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime burst",
@@ -24780,7 +25250,21 @@
           "relation": "consumes",
           "subject": "skill",
           "confidence": "exact",
+          "mechanic": "armour_break",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "exact",
           "mechanic": "stun",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -25571,6 +26055,19 @@
           ]
         },
         {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "frenzy_charge",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime burst",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
           "relation": "converts",
           "subject": "skill",
           "confidence": "exact",
@@ -25756,6 +26253,8 @@
           "confidence": "strong",
           "mechanic": "shock",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime explod",
@@ -27732,6 +28231,19 @@
           ]
         },
         {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "exact",
+          "mechanic": "rage",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
+            }
+          ]
+        },
+        {
           "relation": "converts",
           "subject": "skill",
           "confidence": "exact",
@@ -28385,6 +28897,19 @@
           ]
         },
         {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "exact",
+          "mechanic": "power_charge",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
+            }
+          ]
+        },
+        {
           "relation": "converts",
           "subject": "skill",
           "confidence": "exact",
@@ -28578,6 +29103,8 @@
           "confidence": "strong",
           "mechanic": "ignite",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime burst",
@@ -29173,10 +29700,27 @@
           "confidence": "strong",
           "mechanic": "freeze",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime",
               "kind": "skill_description"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "freeze",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "active_skill_short_description"
             }
           ]
         },
@@ -29279,6 +29823,8 @@
           "confidence": "strong",
           "mechanic": "ignite",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime explod",
@@ -29395,6 +29941,19 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "power_charge",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
             }
           ]
         },
@@ -29524,6 +30083,8 @@
           "confidence": "strong",
           "mechanic": "poison",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime",
@@ -29925,6 +30486,21 @@
             {
               "value": "runtime",
               "kind": "stat_id"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "poison",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
+          "evidence": [
+            {
+              "value": "runtime burst",
+              "kind": "skill_description"
             }
           ]
         },
@@ -30381,6 +30957,19 @@
           ]
         },
         {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "exact",
+          "mechanic": "shock",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
+            }
+          ]
+        },
+        {
           "relation": "converts",
           "subject": "skill",
           "confidence": "exact",
@@ -30514,6 +31103,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "corpse",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -30526,6 +31116,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "power_charge",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -31167,6 +31758,19 @@
           ]
         },
         {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "frenzy_charge",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
           "relation": "modifies",
           "subject": "skill",
           "confidence": "strong",
@@ -31509,6 +32113,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "corpse",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -31525,6 +32130,19 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "power_charge",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
             }
           ]
         },
@@ -31637,13 +32255,28 @@
         {
           "relation": "inflicts",
           "subject": "skill",
-          "confidence": "exact",
+          "confidence": "strong",
           "mechanic": "bleed",
           "scope": "outgoing",
           "evidence": [
             {
               "value": "runtime",
               "kind": "stat_id"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "exact",
+          "mechanic": "bleed",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
             }
           ]
         },
@@ -31823,13 +32456,28 @@
         {
           "relation": "inflicts",
           "subject": "skill",
-          "confidence": "exact",
+          "confidence": "strong",
           "mechanic": "bleed",
           "scope": "outgoing",
           "evidence": [
             {
               "value": "runtime",
               "kind": "stat_id"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "exact",
+          "mechanic": "bleed",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "runtime explod",
+              "kind": "skill_description"
             }
           ]
         },
@@ -32026,6 +32674,8 @@
           "confidence": "strong",
           "mechanic": "poison",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "attack_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -32529,6 +33179,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "power_charge",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -33629,9 +34280,7 @@
           "is_unrestricted": true
         }
       },
-      "candidate_roles": [
-        "primary_damage"
-      ],
+      "candidate_roles": [],
       "retrieval_terms": [
         "channelling",
         "channel",
@@ -34425,6 +35074,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "armour_break",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -34437,6 +35087,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "freeze",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -34449,6 +35100,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "ignite",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -34461,6 +35113,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "shock",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -34595,6 +35248,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "charge",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime explod",
@@ -34607,6 +35261,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "mana",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime explod",
@@ -35277,6 +35932,19 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "shock",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime ground",
+              "kind": "skill_description"
             }
           ]
         },
@@ -36149,6 +36817,19 @@
           ]
         },
         {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "exact",
+          "mechanic": "shock",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
+            }
+          ]
+        },
+        {
           "relation": "converts",
           "subject": "skill",
           "confidence": "exact",
@@ -36405,6 +37086,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "freeze",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -36487,7 +37169,6 @@
         }
       },
       "candidate_roles": [
-        "primary_damage",
         "utility"
       ],
       "retrieval_terms": [
@@ -36537,6 +37218,19 @@
             {
               "value": "runtime",
               "kind": "stat_id"
+            }
+          ]
+        },
+        {
+          "relation": "prevents",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "damage",
+          "condition": "support_only",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "description"
             }
           ]
         }
@@ -37226,6 +37920,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -37562,8 +38257,21 @@
           "mechanic": "freeze",
           "evidence": [
             {
-              "value": "against",
+              "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "freeze",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "against",
+              "kind": "skill_description"
             }
           ]
         },
@@ -37574,8 +38282,21 @@
           "mechanic": "ignite",
           "evidence": [
             {
-              "value": "against",
+              "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "ignite",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "against",
+              "kind": "skill_description"
             }
           ]
         },
@@ -37586,8 +38307,21 @@
           "mechanic": "shock",
           "evidence": [
             {
-              "value": "against",
+              "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "shock",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "against",
+              "kind": "skill_description"
             }
           ]
         },
@@ -37780,6 +38514,19 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "freeze",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime explod",
+              "kind": "skill_description"
             }
           ]
         },
@@ -38625,6 +39372,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "elemental_infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime projectile",
@@ -38735,6 +39483,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "elemental_infusion",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime projectile",
@@ -38936,6 +39685,19 @@
               "kind": "active_skill_type"
             }
           ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "frenzy_charge",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime explod",
+              "kind": "skill_description"
+            }
+          ]
         }
       ],
       "source_evidence": {
@@ -39039,6 +39801,8 @@
           "confidence": "exact",
           "mechanic": "freeze",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime ground",
@@ -39052,6 +39816,8 @@
           "confidence": "exact",
           "mechanic": "ignite",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime ground",
@@ -39065,6 +39831,8 @@
           "confidence": "exact",
           "mechanic": "shock",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime ground",
@@ -39398,7 +40166,35 @@
           "relation": "consumes",
           "subject": "skill",
           "confidence": "exact",
+          "mechanic": "endurance_charge",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "endurance_charge",
+          "consumption": "optional_payoff",
+          "quantity": 3,
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "active_skill_short_description"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "exact",
           "mechanic": "life",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -39422,7 +40218,21 @@
           "relation": "consumes",
           "subject": "skill",
           "confidence": "exact",
+          "mechanic": "power_charge",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "exact",
           "mechanic": "totem",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -39740,7 +40550,21 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "frenzy_charge",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "exact",
+          "mechanic": "frenzy_charge",
           "condition": "frenzy_charges_consumed",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -40230,6 +41054,8 @@
           "confidence": "strong",
           "mechanic": "chill",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime",
@@ -40368,6 +41194,19 @@
           ]
         },
         {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "frenzy_charge",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime ground",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
           "relation": "converts",
           "subject": "skill",
           "confidence": "exact",
@@ -40399,6 +41238,8 @@
           "confidence": "strong",
           "mechanic": "shock",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime ground",
@@ -40732,6 +41573,21 @@
           ]
         },
         {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "shock",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
           "relation": "modifies",
           "subject": "skill",
           "confidence": "strong",
@@ -40997,6 +41853,8 @@
           "confidence": "strong",
           "mechanic": "ignite",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime",
@@ -41644,7 +42502,6 @@
         }
       },
       "candidate_roles": [
-        "primary_damage",
         "defense"
       ],
       "retrieval_terms": [
@@ -42452,6 +43309,8 @@
           "confidence": "strong",
           "mechanic": "shock",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime",
@@ -43074,6 +43933,21 @@
             {
               "value": "runtime",
               "kind": "stat_id"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "poison",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
             }
           ]
         },
@@ -44172,6 +45046,8 @@
           "confidence": "strong",
           "mechanic": "poison",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime",
@@ -44449,6 +45325,8 @@
           "confidence": "strong",
           "mechanic": "shock",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime ground",
@@ -44648,6 +45526,7 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "corpse",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -44673,6 +45552,8 @@
           "confidence": "strong",
           "mechanic": "ignite",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime explod",
@@ -44999,6 +45880,36 @@
           ]
         },
         {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "electrocute",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
+          "evidence": [
+            {
+              "value": "runtime projectile",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "electrocute",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "runtime projectile",
+              "kind": "active_skill_short_description"
+            }
+          ]
+        },
+        {
           "relation": "modifies",
           "subject": "skill",
           "confidence": "strong",
@@ -45162,6 +46073,8 @@
           "confidence": "strong",
           "mechanic": "electrocute",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -45284,6 +46197,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "mark",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -45803,6 +46717,8 @@
           "confidence": "strong",
           "mechanic": "freeze",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime",
@@ -46070,6 +46986,19 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "frenzy_charge",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
             }
           ]
         },
@@ -46520,6 +47449,19 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "consumes",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "frenzy_charge",
+          "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
             }
           ]
         },
@@ -47097,6 +48039,21 @@
           ]
         },
         {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "bleed",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "runtime ground",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
           "relation": "modifies",
           "subject": "skill",
           "confidence": "strong",
@@ -47439,6 +48396,8 @@
           "confidence": "strong",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime",
@@ -47986,6 +48945,8 @@
           "confidence": "strong",
           "mechanic": "poison",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime cloud",
@@ -49438,6 +50399,8 @@
           "confidence": "strong",
           "mechanic": "ignite",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime ground",
@@ -52309,6 +53272,7 @@
           "confidence": "exact",
           "mechanic": "charge",
           "condition": "charge_is_consumed",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -52316,6 +53280,7 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "charge",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -52324,6 +53289,7 @@
           "confidence": "exact",
           "mechanic": "lightning",
           "condition": "charge_is_consumed",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -53289,6 +54255,8 @@
           "confidence": "strong",
           "mechanic": "chill",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "offense_role": "setup_control"
         },
         {
@@ -53297,6 +54265,8 @@
           "confidence": "strong",
           "mechanic": "freeze",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "offense_role": "setup_control"
         },
         {
@@ -53343,6 +54313,8 @@
           "confidence": "strong",
           "mechanic": "shock",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "offense_role": "setup_control"
         },
         {
@@ -54193,6 +55165,8 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "mana",
+          "consumption": "optional_payoff",
+          "quantity": 25,
           "offense_role": "payoff"
         },
         {
@@ -54865,6 +55839,7 @@
           "subject": "passive",
           "confidence": "exact",
           "mechanic": "power_charge",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -55548,6 +56523,7 @@
           "subject": "passive",
           "confidence": "exact",
           "mechanic": "charge",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -55555,6 +56531,7 @@
           "subject": "passive",
           "confidence": "exact",
           "mechanic": "life_flask",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -55562,6 +56539,7 @@
           "subject": "passive",
           "confidence": "exact",
           "mechanic": "physical",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -56201,6 +57179,7 @@
           "confidence": "exact",
           "mechanic": "charge",
           "condition": "charge_is_consumed",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -56208,6 +57187,7 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "charge",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -56216,6 +57196,7 @@
           "confidence": "exact",
           "mechanic": "cold",
           "condition": "charge_is_consumed",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -56224,6 +57205,7 @@
           "confidence": "exact",
           "mechanic": "fire",
           "condition": "charge_is_consumed",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -56232,6 +57214,7 @@
           "confidence": "exact",
           "mechanic": "lightning",
           "condition": "charge_is_consumed",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -59947,6 +60930,8 @@
           "confidence": "strong",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "offense_role": "setup_control"
         },
         {
@@ -60190,9 +61175,19 @@
         {
           "relation": "inflicts",
           "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "bleed",
+          "scope": "outgoing",
+          "offense_role": "setup_control"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "passive",
           "confidence": "exact",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "offense_role": "setup_control"
         },
         {
@@ -60430,6 +61425,16 @@
           "confidence": "exact",
           "mechanic": "poison",
           "scope": "outgoing",
+          "offense_role": "setup_control"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "poison",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "offense_role": "setup_control"
         },
         {
@@ -61751,6 +62756,8 @@
           "confidence": "strong",
           "mechanic": "chill",
           "scope": "outgoing",
+          "target": "self",
+          "delivery": "skill",
           "offense_role": "setup_control"
         },
         {
@@ -62071,6 +63078,16 @@
           "offense_role": "setup_control"
         },
         {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "poison",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "offense_role": "setup_control"
+        },
+        {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
@@ -62169,6 +63186,7 @@
           "subject": "passive",
           "confidence": "exact",
           "mechanic": "charge",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         }
       ]
@@ -62860,6 +63878,16 @@
           "mechanic": "poison",
           "condition": "non_poisoned_enemies",
           "scope": "outgoing",
+          "offense_role": "setup_control"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "poison",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "offense_role": "setup_control"
         },
         {
@@ -65442,6 +66470,7 @@
           "confidence": "exact",
           "mechanic": "infusion",
           "condition": "have_consumed_infusion_recently",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -65449,6 +66478,7 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "infusion",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         }
       ]
@@ -66331,6 +67361,7 @@
           "subject": "passive",
           "confidence": "exact",
           "mechanic": "infusion",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         }
       ]
@@ -67189,6 +68220,16 @@
           "offense_role": "setup_control"
         },
         {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "poison",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
+          "offense_role": "setup_control"
+        },
+        {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
@@ -67354,6 +68395,7 @@
           "subject": "passive",
           "confidence": "exact",
           "mechanic": "endurance_charge",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -67361,6 +68403,7 @@
           "subject": "passive",
           "confidence": "exact",
           "mechanic": "fire",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -68803,6 +69846,7 @@
           "subject": "passive",
           "confidence": "exact",
           "mechanic": "endurance_charge",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -68810,6 +69854,7 @@
           "subject": "passive",
           "confidence": "exact",
           "mechanic": "life_recovery",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -69283,6 +70328,8 @@
           "confidence": "strong",
           "mechanic": "ignite",
           "scope": "outgoing",
+          "target": "self",
+          "delivery": "skill",
           "offense_role": "setup_control"
         },
         {
@@ -70565,6 +71612,7 @@
           "confidence": "exact",
           "mechanic": "elemental_infusion",
           "condition": "you_consume_an_elemental_infusion",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -70572,6 +71620,7 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "elemental_infusion",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -70580,6 +71629,7 @@
           "confidence": "exact",
           "mechanic": "power_charge",
           "condition": "you_consume_an_elemental_infusion",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         }
       ]
@@ -71017,6 +72067,7 @@
           "subject": "passive",
           "confidence": "exact",
           "mechanic": "life",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         }
       ]
@@ -71042,6 +72093,7 @@
           "confidence": "exact",
           "mechanic": "life",
           "condition": "reverting_to_recover_x_maximum_life_per_rage",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -71050,6 +72102,7 @@
           "confidence": "exact",
           "mechanic": "rage",
           "condition": "reverting_to_recover_x_maximum_life_per_rage",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -71057,6 +72110,7 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "rage",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         }
       ]
@@ -72608,6 +73662,7 @@
           "subject": "passive",
           "confidence": "exact",
           "mechanic": "corpse",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         }
       ]
@@ -73801,6 +74856,7 @@
           "subject": "passive",
           "confidence": "exact",
           "mechanic": "power_charge",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         }
       ]
@@ -74166,6 +75222,18 @@
           "confidence": "strong",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "offense_role": "setup_control"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "bleed",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "attack_hit",
           "offense_role": "setup_control"
         },
         {
@@ -76227,6 +77295,7 @@
           "confidence": "exact",
           "mechanic": "ammunition",
           "condition": "reloaded_recently",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -76234,6 +77303,7 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "ammunition",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         }
       ]
@@ -76866,6 +77936,7 @@
           "confidence": "exact",
           "mechanic": "evasion",
           "condition": "consumed_frenzy_charge_recently",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -76874,6 +77945,7 @@
           "confidence": "exact",
           "mechanic": "frenzy_charge",
           "condition": "consumed_frenzy_charge_recently",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -76881,6 +77953,7 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "frenzy_charge",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -76940,6 +78013,7 @@
           "subject": "passive",
           "confidence": "exact",
           "mechanic": "charge",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         }
       ]
@@ -78777,6 +79851,8 @@
           "confidence": "strong",
           "mechanic": "shock",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "offense_role": "setup_control"
         },
         {
@@ -80192,6 +81268,7 @@
           "subject": "passive",
           "confidence": "exact",
           "mechanic": "charge",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         }
       ]
@@ -80211,6 +81288,7 @@
           "confidence": "exact",
           "mechanic": "frenzy_charge",
           "condition": "consumed_frenzy_charge_recently",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -80218,6 +81296,7 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "frenzy_charge",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         }
       ]
@@ -80514,6 +81593,7 @@
           "subject": "passive",
           "confidence": "exact",
           "mechanic": "charge",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         }
       ]
@@ -82605,6 +83685,7 @@
           "confidence": "exact",
           "mechanic": "ammunition",
           "condition": "reloaded_recently",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -82612,6 +83693,7 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "ammunition",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         }
       ]
@@ -82631,6 +83713,7 @@
           "confidence": "exact",
           "mechanic": "critical_hits",
           "condition": "consumed_power_charge_recently",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -82638,6 +83721,7 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "critical_hits",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -82646,6 +83730,7 @@
           "confidence": "exact",
           "mechanic": "mana",
           "condition": "you_consume_a_power_charge",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -82654,6 +83739,7 @@
           "confidence": "exact",
           "mechanic": "power_charge",
           "condition": "you_consume_a_power_charge",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -82662,6 +83748,7 @@
           "confidence": "exact",
           "mechanic": "power_charge",
           "condition": "consumed_power_charge_recently",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -82669,6 +83756,7 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "power_charge",
+          "consumption": "optional_payoff",
           "offense_role": "payoff"
         },
         {
@@ -82978,7 +84066,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "curse"
+          "mechanic": "curse",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
@@ -82990,7 +84079,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "power_charge"
+          "mechanic": "power_charge",
+          "consumption": "optional_payoff"
         }
       ]
     },
@@ -83701,19 +84791,22 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "charge"
+          "mechanic": "charge",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "lightning"
+          "mechanic": "lightning",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "mana"
+          "mechanic": "mana",
+          "consumption": "optional_payoff"
         }
       ]
     },
@@ -83762,19 +84855,22 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "charge"
+          "mechanic": "charge",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "lightning"
+          "mechanic": "lightning",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "mana"
+          "mechanic": "mana",
+          "consumption": "optional_payoff"
         }
       ]
     },
@@ -83856,7 +84952,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "ammunition"
+          "mechanic": "ammunition",
+          "consumption": "optional_payoff"
         }
       ]
     },
@@ -83895,7 +84992,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "ammunition"
+          "mechanic": "ammunition",
+          "consumption": "optional_payoff"
         }
       ]
     },
@@ -83934,7 +85032,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "ammunition"
+          "mechanic": "ammunition",
+          "consumption": "optional_payoff"
         }
       ]
     },
@@ -85169,7 +86268,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "armour_break"
+          "mechanic": "armour_break",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "has_property",
@@ -85489,7 +86589,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "freeze"
+          "mechanic": "freeze",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "has_property",
@@ -85567,7 +86668,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "chill"
+          "mechanic": "chill",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
@@ -85579,7 +86681,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "freeze"
+          "mechanic": "freeze",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "has_property",
@@ -85719,9 +86822,23 @@
         {
           "relation": "inflicts",
           "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "bleed",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
           "confidence": "exact",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "allowing it to inflict"
@@ -85779,9 +86896,23 @@
         {
           "relation": "inflicts",
           "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "bleed",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
           "confidence": "exact",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "allowing it to inflict"
@@ -85839,9 +86970,23 @@
         {
           "relation": "inflicts",
           "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "bleed",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
           "confidence": "exact",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "allowing it to inflict"
@@ -87211,6 +88356,8 @@
           "confidence": "strong",
           "mechanic": "poison",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "reference only"
@@ -87960,6 +89107,8 @@
           "confidence": "strong",
           "mechanic": "shock",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "reference only"
@@ -88718,6 +89867,13 @@
           "subject": "supported_skill",
           "confidence": "strong",
           "mechanic": "minion"
+        },
+        {
+          "relation": "prevents",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "damage",
+          "condition": "support_only"
         }
       ]
     },
@@ -88895,19 +90051,22 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "bleed"
+          "mechanic": "bleed",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "charge"
+          "mechanic": "charge",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "life_flask"
+          "mechanic": "life_flask",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "inflicts",
@@ -88915,6 +90074,8 @@
           "confidence": "exact",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "reference only"
@@ -88972,19 +90133,22 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "bleed"
+          "mechanic": "bleed",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "charge"
+          "mechanic": "charge",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "life_flask"
+          "mechanic": "life_flask",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "inflicts",
@@ -88992,6 +90156,8 @@
           "confidence": "exact",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "reference only"
@@ -89372,7 +90538,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "corpse"
+          "mechanic": "corpse",
+          "consumption": "optional_payoff"
         }
       ]
     },
@@ -89422,7 +90589,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "armour_break"
+          "mechanic": "armour_break",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "has_property",
@@ -89817,7 +90985,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "chill"
+          "mechanic": "chill",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
@@ -89829,7 +90998,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "power_charge"
+          "mechanic": "power_charge",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "has_property",
@@ -89843,6 +91013,8 @@
           "confidence": "strong",
           "mechanic": "chill",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "reference only"
@@ -90230,7 +91402,15 @@
         "minion",
         "offerings"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "prevents",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "damage",
+          "condition": "support_only"
+        }
+      ]
     },
     {
       "id": "skill:Metadata/Items/Gem/SupportGemDaressosPassion",
@@ -90429,7 +91609,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "daze"
+          "mechanic": "daze",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "prevents",
@@ -90530,6 +91711,8 @@
           "confidence": "exact",
           "mechanic": "poison",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "reference only"
@@ -90590,6 +91773,8 @@
           "confidence": "exact",
           "mechanic": "poison",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "reference only"
@@ -90806,6 +91991,8 @@
           "confidence": "exact",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "reference only"
@@ -90866,6 +92053,8 @@
           "confidence": "exact",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "reference only"
@@ -91568,13 +92757,15 @@
           "subject": "supported_skill",
           "confidence": "exact",
           "mechanic": "ailment",
-          "condition": "ailment_consumed"
+          "condition": "ailment_consumed",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "ailment"
+          "mechanic": "ailment",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
@@ -91587,7 +92778,8 @@
           "subject": "supported_skill",
           "confidence": "exact",
           "mechanic": "damage_over_time",
-          "condition": "ailment_consumed"
+          "condition": "ailment_consumed",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
@@ -91953,7 +93145,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "shock"
+          "mechanic": "shock",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "has_property",
@@ -92193,7 +93386,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "elemental_ailments"
+          "mechanic": "elemental_ailments",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
@@ -92205,7 +93399,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "freeze"
+          "mechanic": "freeze",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
@@ -92217,7 +93412,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "ignite"
+          "mechanic": "ignite",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
@@ -92229,7 +93425,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "shock"
+          "mechanic": "shock",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "has_property",
@@ -92979,6 +94176,8 @@
           "confidence": "exact",
           "mechanic": "poison",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "allowing it to inflict"
@@ -93392,7 +94591,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "mark"
+          "mechanic": "mark",
+          "consumption": "optional_payoff"
         }
       ]
     },
@@ -93796,7 +94996,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "armour_break"
+          "mechanic": "armour_break",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "prevents",
@@ -94161,7 +95362,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "frenzy_charge"
+          "mechanic": "frenzy_charge",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "prevents",
@@ -94800,13 +96002,15 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "ignite"
+          "mechanic": "ignite",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "minion"
+          "mechanic": "minion",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "has_property",
@@ -95276,6 +96480,8 @@
           "confidence": "strong",
           "mechanic": "freeze",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "reference only"
@@ -95397,7 +96603,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "frenzy_charge"
+          "mechanic": "frenzy_charge",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
@@ -95599,13 +96806,15 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "freeze"
+          "mechanic": "freeze",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "ignite"
+          "mechanic": "ignite",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "has_property",
@@ -95976,7 +97185,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "corpse"
+          "mechanic": "corpse",
+          "consumption": "optional_payoff"
         }
       ]
     },
@@ -96134,7 +97344,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "bleed"
+          "mechanic": "bleed",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "has_property",
@@ -96631,7 +97842,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "charge"
+          "mechanic": "charge",
+          "consumption": "optional_payoff"
         }
       ]
     },
@@ -97077,6 +98289,8 @@
           "confidence": "strong",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "reference only"
@@ -97770,7 +98984,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "bleed"
+          "mechanic": "bleed",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "has_property",
@@ -97784,6 +98999,8 @@
           "confidence": "exact",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "attack_hit",
           "evidence": [
             {
               "value": "reference only"
@@ -98184,7 +99401,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "elemental_infusion"
+          "mechanic": "elemental_infusion",
+          "consumption": "required_input"
         },
         {
           "relation": "prevents",
@@ -98449,14 +99667,16 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "endurance_charge"
+          "mechanic": "endurance_charge",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
           "mechanic": "endurance_charge",
-          "condition": "consumed_endurance_charge"
+          "condition": "consumed_endurance_charge",
+          "consumption": "optional_payoff"
         }
       ]
     },
@@ -99924,6 +101144,8 @@
           "confidence": "exact",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "reference only"
@@ -100035,7 +101257,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "mana"
+          "mechanic": "mana",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "has_property",
@@ -101134,7 +102357,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "freeze"
+          "mechanic": "freeze",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "has_property",
@@ -102080,13 +103304,15 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "charge"
+          "mechanic": "charge",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "strong",
-          "mechanic": "endurance_charge"
+          "mechanic": "endurance_charge",
+          "consumption": "optional_payoff"
         }
       ]
     },
@@ -102599,6 +103825,20 @@
           ]
         },
         {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "poison",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        },
+        {
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
@@ -102652,6 +103892,20 @@
           "confidence": "exact",
           "mechanic": "poison",
           "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "poison",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "allowing it to inflict"
@@ -102716,6 +103970,20 @@
           "evidence": [
             {
               "value": "allowing it to inflict"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "mechanic": "poison",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
+          "evidence": [
+            {
+              "value": "reference only"
             }
           ]
         },
@@ -102893,7 +104161,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "critical_hits"
+          "mechanic": "critical_hits",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
@@ -102905,7 +104174,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "power_charge"
+          "mechanic": "power_charge",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "modifies",
@@ -103179,20 +104449,23 @@
           "subject": "supported_skill",
           "confidence": "exact",
           "mechanic": "chaos",
-          "condition": "corpse_consumed_on_use"
-        },
-        {
-          "relation": "consumes",
-          "subject": "supported_skill",
-          "confidence": "exact",
-          "mechanic": "corpse"
+          "condition": "corpse_consumed_on_use",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
           "mechanic": "corpse",
-          "condition": "corpse_consumed_on_use"
+          "consumption": "optional_payoff"
+        },
+        {
+          "relation": "consumes",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "mechanic": "corpse",
+          "condition": "corpse_consumed_on_use",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "has_property",
@@ -103246,13 +104519,15 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "chaos"
+          "mechanic": "chaos",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "corpse"
+          "mechanic": "corpse",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "has_property",
@@ -103939,7 +105214,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "rage"
+          "mechanic": "rage",
+          "consumption": "optional_payoff"
         }
       ]
     },
@@ -103991,7 +105267,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "rage"
+          "mechanic": "rage",
+          "consumption": "optional_payoff"
         }
       ]
     },
@@ -104130,13 +105407,15 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "endurance_charge"
+          "mechanic": "endurance_charge",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "life"
+          "mechanic": "life",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "prevents",
@@ -105347,6 +106626,8 @@
           "confidence": "strong",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "attack_hit",
           "evidence": [
             {
               "value": "reference only"
@@ -105560,7 +106841,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "armour_break"
+          "mechanic": "armour_break",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
@@ -106303,6 +107585,8 @@
           "confidence": "exact",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "attack_hit",
           "evidence": [
             {
               "value": "reference only"
@@ -107365,6 +108649,8 @@
           "confidence": "strong",
           "mechanic": "shock",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "reference only"
@@ -108318,6 +109604,8 @@
           "confidence": "exact",
           "mechanic": "poison",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "reference only"
@@ -108515,6 +109803,8 @@
           "confidence": "strong",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "attack_hit",
           "evidence": [
             {
               "value": "reference only"
@@ -109130,7 +110420,8 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "armour_break"
+          "mechanic": "armour_break",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
@@ -109148,13 +110439,15 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "frenzy_charge"
+          "mechanic": "frenzy_charge",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "physical"
+          "mechanic": "physical",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "has_property",
@@ -109502,13 +110795,15 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "armour"
+          "mechanic": "armour",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "maim"
+          "mechanic": "maim",
+          "consumption": "optional_payoff"
         },
         {
           "relation": "has_property",
@@ -112467,6 +113762,23 @@
           "confidence": "strong",
           "mechanic": "poison",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "unique_mod"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "poison",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "spell_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -113090,6 +114402,19 @@
       },
       "facts": [
         {
+          "relation": "converts",
+          "subject": "item",
+          "confidence": "strong",
+          "from": "mana",
+          "to": "life",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "unique_mod"
+            }
+          ]
+        },
+        {
           "relation": "modifies",
           "subject": "item",
           "confidence": "strong",
@@ -113317,6 +114642,8 @@
           "confidence": "strong",
           "mechanic": "ignite",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime ground",
@@ -114220,6 +115547,20 @@
       },
       "facts": [
         {
+          "relation": "converts",
+          "subject": "item",
+          "confidence": "strong",
+          "from": "fire",
+          "to": "cold",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "unique_mod"
+            }
+          ]
+        },
+        {
           "relation": "occupies",
           "subject": "item",
           "confidence": "exact",
@@ -114981,6 +116322,20 @@
       },
       "facts": [
         {
+          "relation": "converts",
+          "subject": "item",
+          "confidence": "strong",
+          "from": "lightning",
+          "to": "cold",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "unique_mod"
+            }
+          ]
+        },
+        {
           "relation": "modifies",
           "subject": "item",
           "confidence": "strong",
@@ -115608,6 +116963,8 @@
           "confidence": "exact",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -117701,6 +119058,8 @@
           "confidence": "strong",
           "mechanic": "shock",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
           "evidence": [
             {
               "value": "runtime",
@@ -117783,6 +119142,8 @@
           "confidence": "exact",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -118119,6 +119480,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "converts",
+          "subject": "item",
+          "confidence": "strong",
+          "from": "life_leech",
+          "to": "energy_shield_leech",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "unique_mod"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -119244,6 +120618,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "converts",
+          "subject": "item",
+          "confidence": "strong",
+          "from": "life",
+          "to": "energy_shield",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "unique_mod"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -120805,6 +122192,8 @@
           "confidence": "strong",
           "mechanic": "poison",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -123210,6 +124599,8 @@
           "confidence": "strong",
           "mechanic": "poison",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "attack_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -123425,6 +124816,7 @@
           "subject": "item",
           "confidence": "strong",
           "mechanic": "charge",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -124067,6 +125459,20 @@
       },
       "facts": [
         {
+          "relation": "converts",
+          "subject": "item",
+          "confidence": "strong",
+          "from": "elemental_damage",
+          "to": "chaos",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "unique_mod"
+            }
+          ]
+        },
+        {
           "relation": "occupies",
           "subject": "item",
           "confidence": "exact",
@@ -124098,6 +125504,48 @@
         }
       },
       "facts": [
+        {
+          "relation": "converts",
+          "subject": "item",
+          "confidence": "strong",
+          "from": "elemental_damage",
+          "to": "cold",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "unique_mod"
+            }
+          ]
+        },
+        {
+          "relation": "converts",
+          "subject": "item",
+          "confidence": "strong",
+          "from": "elemental_damage",
+          "to": "fire",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "unique_mod"
+            }
+          ]
+        },
+        {
+          "relation": "converts",
+          "subject": "item",
+          "confidence": "strong",
+          "from": "elemental_damage",
+          "to": "lightning",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "unique_mod"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -124494,6 +125942,8 @@
           "confidence": "strong",
           "mechanic": "poison",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -126062,6 +127512,8 @@
           "confidence": "strong",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -126240,11 +127692,26 @@
       },
       "facts": [
         {
+          "relation": "converts",
+          "subject": "item",
+          "confidence": "strong",
+          "from": "mana",
+          "to": "life",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "unique_mod"
+            }
+          ]
+        },
+        {
           "relation": "inflicts",
           "subject": "item",
           "confidence": "exact",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -127372,6 +128839,8 @@
           "confidence": "strong",
           "mechanic": "poison",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -127604,6 +129073,7 @@
           "subject": "player",
           "confidence": "strong",
           "mechanic": "charge",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -127699,6 +129169,8 @@
           "confidence": "strong",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -127793,6 +129265,8 @@
           "confidence": "exact",
           "mechanic": "poison",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -128369,6 +129843,19 @@
       },
       "facts": [
         {
+          "relation": "converts",
+          "subject": "item",
+          "confidence": "strong",
+          "from": "mana",
+          "to": "life",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "unique_mod"
+            }
+          ]
+        },
+        {
           "relation": "occupies",
           "subject": "item",
           "confidence": "exact",
@@ -128860,6 +130347,8 @@
           "confidence": "strong",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -129033,6 +130522,19 @@
         }
       },
       "facts": [
+        {
+          "relation": "converts",
+          "subject": "item",
+          "confidence": "strong",
+          "from": "mana",
+          "to": "life",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "unique_mod"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -129418,6 +130920,7 @@
           "subject": "item",
           "confidence": "strong",
           "mechanic": "corpse",
+          "consumption": "optional_payoff",
           "evidence": [
             {
               "value": "runtime",
@@ -129463,6 +130966,8 @@
           "confidence": "strong",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -130101,6 +131606,8 @@
           "subject": "item",
           "confidence": "strong",
           "mechanic": "charge",
+          "consumption": "optional_payoff",
+          "quantity": 10,
           "evidence": [
             {
               "value": "runtime",
@@ -130113,6 +131620,8 @@
           "subject": "item",
           "confidence": "strong",
           "mechanic": "life_flask",
+          "consumption": "optional_payoff",
+          "quantity": 10,
           "evidence": [
             {
               "value": "runtime",
@@ -130376,6 +131885,8 @@
           "confidence": "strong",
           "mechanic": "chill",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -132104,6 +133615,20 @@
       },
       "facts": [
         {
+          "relation": "converts",
+          "subject": "item",
+          "confidence": "strong",
+          "from": "fire",
+          "to": "lightning",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "unique_mod"
+            }
+          ]
+        },
+        {
           "relation": "occupies",
           "subject": "item",
           "confidence": "exact",
@@ -132218,6 +133743,8 @@
           "confidence": "exact",
           "mechanic": "bleed",
           "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "generic_hit",
           "evidence": [
             {
               "value": "runtime",
@@ -132577,6 +134104,20 @@
       },
       "facts": [
         {
+          "relation": "converts",
+          "subject": "item",
+          "confidence": "strong",
+          "from": "lightning",
+          "to": "chaos",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "unique_mod"
+            }
+          ]
+        },
+        {
           "relation": "occupies",
           "subject": "item",
           "confidence": "exact",
@@ -132854,6 +134395,20 @@
         }
       },
       "facts": [
+        {
+          "relation": "converts",
+          "subject": "item",
+          "confidence": "strong",
+          "from": "cold",
+          "to": "lightning",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "unique_mod"
+            }
+          ]
+        },
         {
           "relation": "modifies",
           "subject": "item",

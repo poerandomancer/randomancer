@@ -6,10 +6,10 @@ This deterministic report audits the implemented whole-item runtime semantics wh
 
 - Audited uniques: 131
 - With granted skills: 94; with granted effects: 0
-- Material granted-semantic gaps: 32
+- Material granted-semantic gaps: 33
 - Previous empty cells: 108; new empty cells: 69; empty→non-empty: 40
 - Existing non-empty winner changes: 10; runtime/top-band agreement: 135/135
-- Runtime semantics: 73 uniques, 250 promoted facts, 74309 bytes
+- Runtime semantics: 73 uniques, 255 promoted facts, 80055 bytes
 - Quality bands: one=50, two=9, three=7 (zero=69)
 
 ## Ranking model
@@ -47,10 +47,10 @@ Slot type adds no semantic score. Bow and Quiver are equally family-legal, and r
 - Hysseg's Claw → Cackling Companions: AFFINITY_AMPLIFICATION:has_property:physical; offenses physical.
 - Liminal Coil → Coiling Bolts: AFFINITY_AMPLIFICATION:has_property:chaos; offenses chaos.
 - Murkshaft → Bursting Fen Toad: AFFINITY_AMPLIFICATION:has_property:chaos; AFFINITY_AMPLIFICATION:has_property:physical; offenses chaos, physical; changes a proposed winner.
+- Nightfall → Soaring Midnight: AFFINITY_AMPLIFICATION:has_property:cold; AFFINITY_AMPLIFICATION:modifies:cold; BUILD_DEFINING_CAPABILITY:converts:cold; offenses cold.
 - Palm of the Dreamer → Impurity: AFFINITY_AMPLIFICATION:has_property:chaos; offenses chaos.
 - Periphery → Azmerian Swarms: AFFINITY_AMPLIFICATION:has_property:cold; AFFINITY_AMPLIFICATION:has_property:fire; AFFINITY_AMPLIFICATION:has_property:lightning; AFFINITY_AMPLIFICATION:has_property:physical; AFFINITY_AMPLIFICATION:modifies:physical; offenses cold, fire, lightning, physical.
 - Runeseeker's Call → The Stars Answer: AFFINITY_AMPLIFICATION:has_property:cold; AFFINITY_AMPLIFICATION:has_property:physical; offenses cold, physical.
-- Sacred Flame → Purity of Fire: AFFINITY_AMPLIFICATION:has_property:fire; offenses fire.
 
 ## Empty results
 
@@ -64,14 +64,14 @@ Empty cells retain only up to three meaningful legal leads in the JSON artifact.
 - Kaltenhalt is rejected for Mace × physical: converts physical→cold.
 - Nightfall is rejected for Mace × physical: converts physical→cold.
 - Twisted Empyrean is rejected for Mace × physical: converts physical→cold.
-- Nightfall is rejected for Mace × fire: converts fire→cold.
-- Nightfall is rejected for Mace × lightning: converts lightning→cold.
 - The Sentry is rejected for Quarterstaff × physical: prevents physical.
 - Fairgraves' Curse is rejected for Bow × physical: converts physical→fire.
+- Voltaxic Rift is rejected for Bow × lightning: converts lightning→chaos.
 - Double Vision is rejected for Crossbow × physical: converts physical→cold, converts physical→fire.
 - The Unborn Lich is rejected for Staff × ignite: prevents ignite.
 - The Whispering Ice is rejected for Staff × chill: prevents chill.
 - The Whispering Ice is rejected for Staff × freeze: prevents freeze.
+- Fury of the King is rejected for Talisman × physical: converts physical→fire.
 
 Incoming player immunity is not treated as an outgoing Offense contradiction. Directionally adverse item or skill conversion remains a hard rejection.
 
@@ -82,13 +82,13 @@ Incoming player immunity is not treated as an outgoing Offense contradiction. Di
 - Quarterstaff × Physical Damage: Nazir's Judgement, The Blood Thorn (2 in band).
 - Bow × Physical Damage: Murkshaft, Asphyxia's Wrath, Beyond Reach (3 in band).
 - Bow × Cold Damage: Periphery, Asphyxia's Wrath (2 in band).
-- Bow × Lightning Damage: Periphery, Voltaxic Rift (2 in band).
 - Crossbow × Physical Damage: Rampart Raptor, Redemption, The Last Lament (3 in band).
 - Staff × Cold Damage: The Whispering Ice, Earthbound, Taryn's Shiver (3 in band).
 - Staff × Lightning Damage: Earthbound, Dusk Vigil (2 in band).
 - Staff × Chaos Damage: The Burden of Shadows, The Unborn Lich (2 in band).
 - Wand × Fire Damage: Cursecarver, Adonia's Ego, Enezun's Charge (3 in band).
 - Wand × Cold Damage: Adonia's Ego, Runeseeker's Call (2 in band).
+- Sceptre × Fire Damage: Guiding Palm of the Heart, Sacred Flame (2 in band).
 
 Only candidates in the strongest represented tier and within 10 strength points enter a band; the band is capped at three. 16 cells can vary by seed.
 

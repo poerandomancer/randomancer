@@ -105,6 +105,14 @@ test('authoritative item-fact conversions can form a required unique bridge', ()
     && Object.values(item.unique_offense_semantics || {}).some((semantic) => (semantic.facts || []).some((fact) =>
       fact.c === 'BUILD_DEFINING_CAPABILITY' && fact.r === 'converts' && fact.k === 'item_fact')));
   assert.ok(conversionExists);
+  const originalSin = uniqueCatalog.entities.find((item) => item.name === 'Original Sin');
+  assert.ok(originalSin?.unique_offense_semantics?.chaos?.facts.some((fact) =>
+    fact.r === 'converts' && fact.f === 'elemental_damage' && fact.t === 'chaos' && fact.s === 'outgoing'));
+  for (const name of ['Lightning Coil', 'Cloak of Flame', "Apep's Supremacy"]) {
+    const defensive = uniqueCatalog.entities.find((item) => item.name === name);
+    assert.ok(!(defensive?.unique_offense_semantics?.chaos?.facts || []).some((fact) =>
+      fact.r === 'converts' && fact.s !== 'outgoing'));
+  }
   const found = ['Mace', 'Bow', 'Quarterstaff', 'Spear', 'Staff', 'Wand', 'Sceptre', 'Talisman', 'Crossbow']
     .map((weapon) => selectRecommendationPackageV3(uniqueCatalog, { weapon, offenseSet: ['chaos'] }, {
       offenseInventory, selectionSeed: `unique-${weapon}`

@@ -83,6 +83,24 @@ class AilmentApplicationGrammarTests(unittest.TestCase):
                 entity_id="skill:test", sources=[{"kind": "description", "value": text}], facts=[]
             ))
 
+    def test_conversion_direction_and_consumption_contract(self):
+        incoming = parse_evidence("unique_mod", "50% of Physical Damage taken as Lightning Damage", "item")
+        outgoing = parse_evidence("unique_mod", "100% of Elemental Damage Conversion to Chaos Damage", "item")
+        self.assertTrue(any(f.get("relation") == "converts" and f.get("scope") == "incoming" for f in incoming))
+        self.assertTrue(any(f.get("relation") == "converts" and f.get("scope") == "outgoing" for f in outgoing))
+        optional = parse_evidence("description", "Can consume a Power Charge to gain an additional projectile", "skill")
+        mandatory = parse_evidence("description", "Must consume a Power Charge", "skill")
+        self.assertTrue(any(f.get("consumption") == "optional_payoff" for f in optional))
+        self.assertTrue(any(f.get("consumption") == "required_input" for f in mandatory))
+
+    def test_ailment_application_preserves_target_and_delivery(self):
+        enemy = parse_evidence("unique_mod", "Spell Hits Poison enemies", "item")
+        self.assertTrue(any(f.get("relation") == "inflicts" and f.get("target") == "enemy"
+                            and f.get("delivery") == "spell_hit" for f in enemy), enemy)
+        conditioned = parse_evidence("unique_mod", "Deal more Damage against Poisoned enemies", "item")
+        self.assertFalse(any(f.get("relation") == "inflicts" for f in conditioned), conditioned)
+
+
 
 class GeneratedComponentPromotionTests(unittest.TestCase):
     @classmethod
@@ -104,10 +122,10 @@ class GeneratedComponentPromotionTests(unittest.TestCase):
         gas = self.capability("Gas Arrow", "poison")
         barrier = self.capability("Voltaic Barrier", "electrocute")
         bleed = self.capability("Exsanguinate", "bleed")
-        self.assertEqual(1, len(gas), gas)
-        self.assertEqual(2, len(barrier), barrier)
-        self.assertEqual(1, len(bleed), bleed)
-        self.assertTrue(any(e.get("component") == "Gas Arrow" for e in gas[0]["evidence"]))
+        self.assertEqual(2, len(gas), gas)
+        self.assertEqual(4, len(barrier), barrier)
+        self.assertEqual(2, len(bleed), bleed)
+        self.assertTrue(any(e.get("component") == "Gas Arrow" for fact in gas for e in fact.get("evidence", [])))
         self.assertTrue(any(
             e.get("component", "").startswith("statset:")
             for fact in barrier for e in fact["evidence"]
@@ -115,17 +133,17 @@ class GeneratedComponentPromotionTests(unittest.TestCase):
         self.assertTrue(any(e.get("kind") == "stat_id" for e in bleed[0]["evidence"]))
         for fact in gas + barrier + bleed:
             self.assertTrue(all(e.get("parent_entity_id") for e in fact["evidence"]))
-        semantic_keys = [(fact["relation"], fact.get("mechanic"), fact.get("subject"), fact.get("scope")) for fact in gas + barrier + bleed]
+        semantic_keys = [(fact["relation"], fact.get("mechanic"), fact.get("subject"), fact.get("scope"), fact.get("target"), fact.get("delivery")) for fact in gas + barrier + bleed]
         self.assertEqual(len(semantic_keys), len(set(semantic_keys)))
 
     def test_runtime_projection_preserves_normalized_semantics(self):
         semantic = lambda catalog: [(entity["id"], [{k: v for k, v in fact.items() if k != "evidence"} for fact in entity.get("facts") or []]) for entity in catalog["entities"]]
         self.assertEqual(semantic(self.full), semantic(self.runtime))
         self.assertEqual(2964, len(self.runtime["entities"]))
-        self.assertEqual(5278, sum(len(entity.get("facts") or []) for entity in self.runtime["entities"]))
+        self.assertEqual(5366, sum(len(entity.get("facts") or []) for entity in self.runtime["entities"]))
         for entity in self.runtime["entities"]:
             for fact in entity.get("facts") or []:
-                self.assertTrue(all(set(proof) <= {"kind", "value"} for proof in fact["evidence"]))
+                self.assertTrue(all(set(proof) <= {"kind", "value"} for proof in fact.get("evidence", [])))
 
     def test_non_applicators_stay_excluded(self):
         self.assertFalse(self.capability("Shockchain Arrow", "shock"))

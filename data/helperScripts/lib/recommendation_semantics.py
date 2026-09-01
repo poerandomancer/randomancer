@@ -309,6 +309,11 @@ def make_fact(
     confidence: str = "strong",
     condition: str | None = None,
     scope: str | None = None,
+    target: str | None = None,
+    delivery: str | None = None,
+    consumption: str | None = None,
+    requires_any_mechanics: list[str] | None = None,
+    quantity: int | None = None,
 ) -> dict[str, Any]:
     fact: dict[str, Any] = {
         "relation": relation,
@@ -326,6 +331,16 @@ def make_fact(
         fact["condition"] = condition
     if scope:
         fact["scope"] = scope
+    if target:
+        fact["target"] = target
+    if delivery:
+        fact["delivery"] = delivery
+    if consumption:
+        fact["consumption"] = consumption
+    if requires_any_mechanics:
+        fact["requires_any_mechanics"] = requires_any_mechanics
+    if quantity is not None:
+        fact["quantity"] = quantity
     return fact
 
 
@@ -346,6 +361,8 @@ def _conversion_fact(value: Any, source_kind: str, subject: str) -> dict[str, An
         left, right = normalized.split("_converted_to_", 1)
     elif "_convert_to_" in normalized:
         left, right = normalized.split("_convert_to_", 1)
+    elif "_conversion_to_" in normalized:
+        left, right = normalized.split("_conversion_to_", 1)
     elif "_taken_as_" in normalized:
         left, right = normalized.split("_taken_as_", 1)
         scope = "incoming"
@@ -776,6 +793,7 @@ def parse_stat_id(value: Any, subject: str = "player") -> list[dict[str, Any]]:
                         mechanic="armour_break" if mechanic == "fully_broken_armour" else mechanic,
                         confidence="exact",
                         condition=_condition_from_normalized(normalized),
+                        consumption="required_input" if re.search(r"(?:requires?|must|cannot_use_unless)(?:_|$)", normalized) else "optional_payoff",
                     )
                 )
 
@@ -1106,6 +1124,8 @@ def _text_ailment_facts(
                     mechanic=mechanic,
                     confidence="exact" if "always" in normalized or "inflict" in normalized else "strong",
                     scope="outgoing",
+                    target="self" if re.search(r"(?:you_are|player_is|inflicted_(?:on|with)_you|on_self)(?:_|$)", normalized) else "enemy",
+                    delivery="attack_hit" if "attack" in normalized else ("spell_hit" if "spell" in normalized else ("generic_hit" if "hit" in normalized else "skill")),
                 )
             )
     return facts
@@ -1157,8 +1177,14 @@ def parse_text(value: Any, source_kind: str, subject: str) -> list[dict[str, Any
 
     if "consume" in normalized:
         consumed = _consume_mechanics_from_text(normalized)
+        compound_charge_options = [mechanic for mechanic in consumed if mechanic in {
+            "power_charge", "frenzy_charge", "endurance_charge"
+        }]
+        if len(compound_charge_options) > 1 and re.search(r"(?:and_or|or)", normalized):
+            consumed = ["charge"]
         if "elemental_infusion" in consumed:
             consumed = ["elemental_infusion"]
+        quantity_match = re.search(r"consume(?:s|d)?_(?:up_to_)?([0-9]+)", normalized)
         for mechanic in consumed:
             if mechanic not in {"damage", "attack", "spell", "hit"}:
                 facts.append(
@@ -1169,6 +1195,9 @@ def parse_text(value: Any, source_kind: str, subject: str) -> list[dict[str, Any
                         source_value=text,
                         mechanic="armour_break" if mechanic == "fully_broken_armour" else mechanic,
                         confidence="strong",
+                        consumption="required_input" if re.search(r"(?:requires?|must|cannot_use_unless)(?:_|$)", normalized) else "optional_payoff",
+                        requires_any_mechanics=compound_charge_options if mechanic == "charge" else None,
+                        quantity=int(quantity_match.group(1)) if quantity_match else None,
                     )
                 )
 
@@ -1396,7 +1425,7 @@ def parse_evidence(source_kind: str, value: Any, subject: str) -> list[dict[str,
 def _semantic_key(fact: dict[str, Any]) -> tuple[Any, ...]:
     return tuple(
         (key, _hashable(fact.get(key)))
-        for key in ("relation", "subject", "mechanic", "from", "to", "condition", "scope")
+        for key in ("relation", "subject", "mechanic", "from", "to", "condition", "scope", "target", "delivery", "consumption", "requires_any_mechanics", "quantity")
         if key in fact
     )
 
@@ -1478,7 +1507,11 @@ def candidate_roles(
             and not active_types & {"offering", "meta", "triggered"}
         )
     )
-    if content_type == "active_skill" and is_primary_damage_candidate:
+    has_unconditional_no_damage = any(
+        fact.get("relation") == "prevents" and fact.get("mechanic") == "damage"
+        and fact.get("condition") != "base_effect_only" for fact in facts_list
+    )
+    if content_type == "active_skill" and is_primary_damage_candidate and not has_unconditional_no_damage:
         roles.add("primary_damage")
     if "inflicts" in relations or "generates" in relations or ({"curse", "mark", "maim", "wall", "hazard"} & mechanics):
         roles.add("setup_control")
