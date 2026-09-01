@@ -13,7 +13,7 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5366,
+    "fact_count": 5364,
     "fact_relation_counts": {
       "consumes": 395,
       "converts": 127,
@@ -21,7 +21,7 @@
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 672,
-      "inflicts": 187,
+      "inflicts": 185,
       "modifies": 2308,
       "occupies": 444,
       "prevents": 378,
@@ -31,11 +31,11 @@
     },
     "candidate_role_counts": {
       "defense": 423,
-      "enabler": 1260,
+      "enabler": 1259,
       "payoff": 182,
       "primary_damage": 346,
       "recovery": 250,
-      "setup_control": 205,
+      "setup_control": 203,
       "utility": 206
     },
     "source_versions": {
@@ -349,7 +349,7 @@
     },
     "skill_descriptions": {
       "evidence_count": 1893,
-      "fact_count": 645,
+      "fact_count": 643,
       "structured_count": 503,
       "unparsed_count": 262,
       "recognized_unstructured_count": 1128,
@@ -758,11 +758,11 @@
     },
     "unique_modifiers": {
       "evidence_count": 2141,
-      "fact_count": 528,
-      "structured_count": 482,
+      "fact_count": 527,
+      "structured_count": 481,
       "unparsed_count": 575,
-      "recognized_unstructured_count": 1084,
-      "structured_rate": 0.2251,
+      "recognized_unstructured_count": 1085,
+      "structured_rate": 0.2247,
       "samples": {
         "recognized_unstructured": [
           {

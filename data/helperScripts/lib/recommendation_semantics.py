@@ -965,7 +965,14 @@ def _has_explicit_ailment_application(normalized: str, terms: str) -> bool:
     verb_application = re.search(rf"(?:^|_)(?:{terms})_(?:enemy|enemies|target|targets)(?:_|$)", normalized)
     if verb_application:
         prefix = normalized[:verb_application.start()].rstrip("_")
-        return not re.search(r"(?:against|while|when|if|already)(?:_[a-z0-9]+){0,4}$", prefix)
+        # Scraped modifiers sometimes lose an ailment suffix (for example,
+        # "Blind Chill enemies" for "Blind Chilled enemies").  A preceding
+        # effect verb makes the ailment phrase that verb's target condition,
+        # not a second application supplied by the item.
+        return not re.search(
+            r"(?:against|while|when|if|already|blind|hinder|maim)(?:_[a-z0-9]+){0,4}$",
+            prefix,
+        )
     return False
 
 
@@ -1124,7 +1131,10 @@ def _text_ailment_facts(
                     mechanic=mechanic,
                     confidence="exact" if "always" in normalized or "inflict" in normalized else "strong",
                     scope="outgoing",
-                    target="self" if re.search(r"(?:you_are|player_is|inflicted_(?:on|with)_you|on_self)(?:_|$)", normalized) else "enemy",
+                    target="self" if re.search(
+                        r"(?:you_are|player_is|inflicted_(?:on|with)_you|on_self|to_be_inflicted_with)(?:_|$)",
+                        normalized,
+                    ) else "enemy",
                     delivery="attack_hit" if "attack" in normalized else ("spell_hit" if "spell" in normalized else ("generic_hit" if "hit" in normalized else "skill")),
                 )
             )

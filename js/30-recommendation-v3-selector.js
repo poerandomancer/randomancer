@@ -2276,6 +2276,22 @@ function packageConstructionComplete(candidate, offenseObligations) {
 const CORE_UNIQUE_RELATIONS = new Set(['converts', 'provides', 'generates', 'inflicts', 'creates', 'fulfills']);
 const CORE_UNIQUE_WEAPON_FAMILIES = new Set(['bow', 'crossbow', 'mace', 'quarterstaff', 'spear', 'staff', 'wand', 'sceptre', 'talisman']);
 
+function uniqueBridgeFactCompatibleWithSkill(fact, candidate) {
+  const relation = normalizeToken(fact?.r);
+  if (relation === 'converts' && normalizeToken(fact?.s) !== 'outgoing') return false;
+  if (relation === 'inflicts') {
+    if (normalizeToken(fact?.s) !== 'outgoing' || normalizeToken(fact?.a) !== 'enemy'
+      || normalizeToken(fact?.q) === 'condition') return false;
+  }
+  const deliveryScope = normalizeToken(fact?.d);
+  const candidateTypes = new Set(asArray(candidate?.entity?.source_evidence?.active_skill_types).map(normalizeToken));
+  if (deliveryScope === 'attack_hit' && !candidateTypes.has('attack')) return false;
+  if (deliveryScope === 'spell_hit' && !candidateTypes.has('spell')) return false;
+  if (normalizeToken(fact?.k) === 'granted_skill'
+    && ![candidate?.entity?.id, candidate?.entity?.source_id].map(normalizeToken).includes(normalizeToken(fact?.e))) return false;
+  return true;
+}
+
 function uniqueCoreBridgeCandidates(catalog, legal, obligation, snapshot) {
   const offenseId = normalizeToken(obligation?.mechanics?.[0] || obligation?.id?.replace(/^offense:/, ''));
   const rolledWeapon = normalizeToken(snapshot?.weaponFamily || snapshot?.weapon).replace(/^(one|two)_handed_/, '');
@@ -2295,19 +2311,11 @@ function uniqueCoreBridgeCandidates(catalog, legal, obligation, snapshot) {
       && !['mace', 'spear', 'wand', 'sceptre'].includes(rolledWeapon)) continue;
     for (const fact of facts) {
       const relation = normalizeToken(fact.r);
-      if (relation === 'converts' && normalizeToken(fact.s) !== 'outgoing') continue;
-      if (relation === 'inflicts' && (normalizeToken(fact.a) === 'self'
-        || normalizeToken(fact.q) === 'condition')) continue;
       const source = normalizeToken(fact.f || fact.m);
       const target = normalizeToken(fact.t || fact.m);
       if (target !== offenseId && !asArray(obligation.mechanics).map(normalizeToken).includes(target)) continue;
       for (const candidate of legal) {
-        const deliveryScope = normalizeToken(fact.d);
-        const candidateTypes = new Set(asArray(candidate.entity?.source_evidence?.active_skill_types).map(normalizeToken));
-        if (deliveryScope === 'attack_hit' && !candidateTypes.has('attack')) continue;
-        if (deliveryScope === 'spell_hit' && !candidateTypes.has('spell')) continue;
-        if (normalizeToken(fact.k) === 'granted_skill'
-          && ![candidate.entity.id, candidate.entity.source_id].map(normalizeToken).includes(normalizeToken(fact.e))) continue;
+        if (!uniqueBridgeFactCompatibleWithSkill(fact, candidate)) continue;
         const sourceMatches = !source || source === offenseId || source === 'elemental_damage'
           ? (source !== 'elemental_damage' || candidate.hardFacts.some((skillFact) =>
             ['fire', 'cold', 'lightning', 'elemental_damage'].some((mechanic) => baseFactSuppliesMechanic(skillFact, mechanic))))

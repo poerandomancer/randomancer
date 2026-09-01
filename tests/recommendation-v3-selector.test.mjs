@@ -125,6 +125,18 @@ test('authoritative item-fact conversions can form a required unique bridge', ()
     .some((support) => support.name === 'Chaos Attunement'));
 });
 
+test('production ailment bridge facts require enemy-targeted offensive application', () => {
+  const uniqueCatalog = mergeRecommendationUniqueSemanticsV3(catalog, read('data/enriched/recommendation_unique_semantics_v3.json'));
+  for (const [name, offense] of [['The Pandemonius', 'chill'], ['Coat of Red', 'bleed']]) {
+    const item = uniqueCatalog.entities.find((entity) => entity.name === name);
+    assert.ok(!(item?.unique_offense_semantics?.[offense]?.facts || []).some((fact) =>
+      fact.r === 'inflicts' && fact.s === 'outgoing' && fact.a === 'enemy'));
+  }
+  const snakebite = uniqueCatalog.entities.find((entity) => entity.name === 'Snakebite');
+  assert.ok(snakebite?.unique_offense_semantics?.poison?.facts.some((fact) =>
+    fact.r === 'inflicts' && fact.s === 'outgoing' && fact.a === 'enemy' && fact.d === 'generic_hit'));
+});
+
 test('one compatible enabling support forms CARRIER_BRIDGE ahead of fallback', () => {
   const result = selectRecommendationPackageV3(catalog, { weapon: 'Mace', offenseSet: ['bleed'] }, {
     offenseInventory, selectionSeed: 'bridge-regression'
