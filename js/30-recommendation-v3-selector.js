@@ -2253,7 +2253,8 @@ function buildRankedSkillPackages(pool, offenseObligations) {
     }
   }
   return packages.sort((a, b) =>
-    b.fulfilled.length - a.fulfilled.length
+    Number(packageConstructionComplete(b, offenseObligations)) - Number(packageConstructionComplete(a, offenseObligations))
+    || b.fulfilled.length - a.fulfilled.length
     || (b.primary.weaponRelationship?.rank || 0) - (a.primary.weaponRelationship?.rank || 0)
     || b.score - a.score
     || b.synergyEdges.length - a.synergyEdges.length
@@ -2263,6 +2264,55 @@ function buildRankedSkillPackages(pool, offenseObligations) {
     || String(a.supporting?.entity?.name || '').localeCompare(String(b.supporting?.entity?.name || ''))
     || String(a.id).localeCompare(String(b.id))
   );
+}
+
+function packageConstructionComplete(candidate, offenseObligations) {
+  return candidate?.fulfilled?.length === offenseObligations.length
+    && !candidate.unresolvedDependencies.length
+    && !candidate.unresolvedSetupCosts.length;
+}
+
+const CORE_UNIQUE_RELATIONS = new Set(['converts', 'provides', 'generates', 'inflicts', 'creates', 'fulfills']);
+const CORE_UNIQUE_WEAPON_FAMILIES = new Set(['bow', 'crossbow', 'mace', 'quarterstaff', 'spear', 'staff', 'wand', 'sceptre', 'talisman']);
+
+function uniqueCoreBridgeCandidates(catalog, legal, obligation, snapshot) {
+  const offenseId = normalizeToken(obligation?.mechanics?.[0] || obligation?.id?.replace(/^offense:/, ''));
+  const rolledWeapon = normalizeToken(snapshot?.weaponFamily || snapshot?.weapon).replace(/^(one|two)_handed_/, '');
+  if (!offenseId || !rolledWeapon) return [];
+  const output = [];
+  for (const uniqueEntity of asArray(catalog?.entities).filter((entity) => entity?.content_type === 'unique'
+    && isRecommendationContentAllowedV3(entity))) {
+    const semantics = uniqueEntity.unique_offense_semantics?.[offenseId];
+    const facts = asArray(semantics?.facts).filter((fact) => CORE_UNIQUE_RELATIONS.has(normalizeToken(fact?.r))
+      && normalizeToken(fact?.c) === 'build_defining_capability');
+    if (!facts.length || semantics?.tier !== 'BUILD_DEFINING_CAPABILITY') continue;
+    const equipment = uniqueEntity.compatibility?.equipment || {};
+    const equipmentText = normalizeToken(`${equipment.slot || ''} ${equipment.base || ''} ${equipment.weapon_family || ''}`);
+    const otherWeapon = [...CORE_UNIQUE_WEAPON_FAMILIES].find((family) => equipmentText.includes(family));
+    if (otherWeapon && otherWeapon !== rolledWeapon) continue;
+    if (['shield', 'buckler', 'focus'].some((family) => equipmentText.includes(family))
+      && !['mace', 'spear', 'wand', 'sceptre'].includes(rolledWeapon)) continue;
+    for (const fact of facts) {
+      const source = normalizeToken(fact.f || fact.m);
+      const target = normalizeToken(fact.t || fact.m);
+      if (target !== offenseId && !asArray(obligation.mechanics).map(normalizeToken).includes(target)) continue;
+      for (const candidate of legal) {
+        if (normalizeToken(fact.k) === 'granted_skill'
+          && ![candidate.entity.id, candidate.entity.source_id].map(normalizeToken).includes(normalizeToken(fact.e))) continue;
+        const sourceMatches = !source || source === offenseId || source === 'elemental_damage'
+          ? (source !== 'elemental_damage' || candidate.hardFacts.some((skillFact) =>
+            ['fire', 'cold', 'lightning', 'elemental_damage'].some((mechanic) => baseFactSuppliesMechanic(skillFact, mechanic))))
+          : candidate.hardFacts.some((skillFact) => baseFactSuppliesMechanic(skillFact, source));
+        if (!sourceMatches) continue;
+        const proof = { obligationId: obligation.id, relation: normalizeToken(fact.r), confidence: 'strong',
+          mechanic: target, completionType: 'unique', providerKind: 'unique', providerEntityId: uniqueEntity.id,
+          providerSourceId: uniqueEntity.source_id, providerName: uniqueEntity.name, sourceMechanic: source };
+        output.push({ candidate: { ...candidate, fulfilled: [...candidate.fulfilled, proof], coreUnique: uniqueEntity,
+          uniqueBridgeProof: proof }, unique: uniqueEntity, proof });
+      }
+    }
+  }
+  return output;
 }
 
 function suppliedTargetsForSupporting(packageCandidate) {
@@ -2900,6 +2950,10 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
   const bridgePackages = tierAnalysis.bridges
     .map((entry) => evaluateSkillPackage(entry.candidate, null, offenseObligations))
     .filter(Boolean);
+  const uniqueBridges = tierAnalysis.direct.length ? [] : offenseObligations.flatMap((obligation) =>
+    uniqueCoreBridgeCandidates(catalog, tierAnalysis.legal, obligation, snapshot));
+  const uniqueBridgePackages = uniqueBridges.map((entry) => evaluateSkillPackage(entry.candidate, null, offenseObligations))
+    .filter(Boolean);
   const supportChainPackages = tierAnalysis.supportChains
     .map((entry) => evaluateSkillPackage(entry.candidate, null, offenseObligations))
     .filter(Boolean);
@@ -2907,12 +2961,14 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
   // present in the ranking when a simpler solution exists.
   const recommendationTier = directPackages.length
     ? 'DIRECT'
-    : bridgePackages.length ? 'CARRIER_BRIDGE'
+    : (bridgePackages.length || uniqueBridgePackages.length) ? 'ONE_BRIDGE'
       : supportChainPackages.length ? 'SUPPORT_CHAIN' : 'FALLBACK';
   const rankedPackages = recommendationTier === 'DIRECT'
     ? buildRankedSkillPackages(tierAnalysis.direct, offenseObligations).filter((entry) => !entry.supporting)
-    : ['CARRIER_BRIDGE', 'SUPPORT_CHAIN'].includes(recommendationTier)
-      ? (recommendationTier === 'CARRIER_BRIDGE' ? bridgePackages : supportChainPackages).sort((a, b) =>
+    : ['ONE_BRIDGE', 'SUPPORT_CHAIN'].includes(recommendationTier)
+      ? (recommendationTier === 'ONE_BRIDGE' ? [...bridgePackages, ...uniqueBridgePackages] : supportChainPackages).sort((a, b) =>
+        Number(packageConstructionComplete(b, offenseObligations)) - Number(packageConstructionComplete(a, offenseObligations))
+        ||
         (b.primary.weaponRelationship?.rank || 0) - (a.primary.weaponRelationship?.rank || 0)
         || b.score - a.score || String(a.id).localeCompare(String(b.id)))
       : buildRankedSkillPackages(viablePool, offenseObligations);
@@ -3009,6 +3065,30 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
   } : null;
   const pieces = [primarySkill, supportingSkill].filter(Boolean);
   const shortlistedPrimaryIds = new Set(shortlist.map((candidate) => candidate.primary.entity.id));
+  const solutionClass = recommendationTier === 'DIRECT' ? 'DIRECT_NATIVE'
+    : recommendationTier === 'SUPPORT_CHAIN' ? 'MULTI_BRIDGE' : recommendationTier === 'ONE_BRIDGE' ? 'ONE_BRIDGE' : 'INCOMPLETE';
+  const coreUnique = primary?.coreUnique ? {
+    id: primary.coreUnique.source_id || primary.coreUnique.id, entityId: primary.coreUnique.id,
+    name: primary.coreUnique.name, required: true, coreSolver: true, packageRole: 'unique_bridge'
+  } : null;
+  const bridgePath = primary?.uniqueBridgeProof ? [{ type: 'unique', provider: primary.uniqueBridgeProof.providerName,
+    relation: primary.uniqueBridgeProof.relation, from: primary.uniqueBridgeProof.sourceMechanic,
+    to: primary.uniqueBridgeProof.mechanic }] : supportResolution.supportEdges.filter((edge) => edge.targetKind === 'offense')
+    .map((edge) => ({ type: 'support', providerEntityId: edge.fromEntityId, relation: edge.relation, to: edge.mechanic }));
+  const packageProfile = {
+    finalOffense: unique(offenseObligations.flatMap((entry) => entry.mechanics).map(normalizeToken)),
+    weapon: normalizeToken(snapshot?.weaponFamily || snapshot?.weapon),
+    primarySkill: primarySkill ? { entityId: primarySkill.entityId, name: primarySkill.name,
+      properties: unique([primary?.weaponRelationship?.family, ...asArray(primary?.delivery?.skillTypes)].map(normalizeToken)) } : null,
+    sourceMechanics: unique(bridgePath.map((entry) => entry.from).filter(Boolean)),
+    bridgeMechanics: unique(bridgePath.flatMap((entry) => [entry.from, entry.to]).filter(Boolean)),
+    setupMechanics: unique(asArray(winner?.synergyEdges).map((edge) => edge.mechanic)),
+    secondaryPurpose: supportingSkill?.assignedRole || null,
+    corePieces: [coreUnique, ...supportResolution.assignments.flatMap((assignment) => assignment.supports)
+      .filter((support) => support.assignedRole !== 'OPTIONAL_OFFENSE_OPTIMIZER')
+      .map((support) => ({ id: support.sourceId || support.entityId, name: support.name, required: true,
+        coreSolver: true, packageRole: 'support_bridge' }))].filter(Boolean)
+  };
 
   return {
     schemaVersion: RECOMMENDATION_PACKAGE_V3_SCHEMA,
@@ -3016,6 +3096,10 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     status: primarySkill ? (unresolved.length ? 'partial' : 'complete') : 'unresolved',
     context: model.context,
     obligations: model.obligations,
+    solutionClass,
+    coreUnique,
+    bridgePath,
+    packageProfile,
     primarySkill,
     supportingSkill,
     pieces,

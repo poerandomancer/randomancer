@@ -20,8 +20,8 @@ const ONE_HANDED_WEAPONS = new Set(['sceptre', 'wand', 'spear', 'mace']);
 const OFF_HAND_WEAPONS = new Set(['shield', 'buckler', 'focus']);
 const UNIQUE_TIER = new Map([['PAYOFF_CONTEXT', 1], ['AFFINITY_AMPLIFICATION', 2],
   ['STRONG_SPECIALIZATION', 3], ['BUILD_DEFINING_CAPABILITY', 4]]);
-const GOOD_RELATIONS = new Set(['fulfills', 'inflicts', 'creates', 'provides', 'generates', 'consumes', 'converts', 'modifies', 'has_property']);
-const IMPACT = new Map([['fulfills', 8], ['inflicts', 8], ['creates', 8], ['provides', 7], ['generates', 7], ['consumes', 7], ['converts', 7], ['has_property', 5], ['modifies', 4]]);
+const GOOD_RELATIONS = new Set(['fulfills', 'inflicts', 'creates', 'provides', 'generates', 'converts', 'modifies', 'has_property']);
+const IMPACT = new Map([['fulfills', 8], ['inflicts', 8], ['creates', 8], ['provides', 7], ['generates', 7], ['converts', 7], ['has_property', 5], ['modifies', 4]]);
 const PASSIVE_OFFENSE_ROLES = new Set(['primary_damage', 'setup_control', 'payoff', 'enabler']);
 
 const arr = (value) => Array.isArray(value) ? value : [];
@@ -41,9 +41,17 @@ function contextMechanics(catalog, snapshot, recommendationPackage) {
   const selected = arr(recommendationPackage?.pieces).concat(arr(recommendationPackage?.supportAssignments).flatMap((entry) => arr(entry?.supports)));
   const ids = new Set(selected.flatMap((entry) => [entry?.entityId, entry?.sourceId]).filter(Boolean));
   const entities = arr(catalog?.entities).filter((entity) => ids.has(entity.id) || ids.has(entity.source_id));
+  const profile = recommendationPackage?.packageProfile;
+  const profileMechanics = profile ? uniq([
+    ...arr(profile.finalOffense), profile.weapon,
+    ...arr(profile.primarySkill?.properties), ...arr(profile.sourceMechanics),
+    ...arr(profile.bridgeMechanics), ...arr(profile.setupMechanics)
+  ].map(token).filter((value) => value && !GENERIC.has(value))) : null;
   return {
     offense: new Set(offense.filter((value) => value && !GENERIC.has(value))),
-    package: new Set(entities.flatMap(entityMechanics).filter((value) => value && !GENERIC.has(value)))
+    // New packages expose their intentional plan. Entity-wide semantics remain
+    // only as a compatibility boundary for old snapshots.
+    package: new Set(profileMechanics || entities.flatMap(entityMechanics).filter((value) => value && !GENERIC.has(value)))
   };
 }
 
@@ -284,8 +292,15 @@ function selectNonSkillRecommendations(catalog, snapshot = {}, recommendationPac
   const analyzed = arr(catalog?.entities).map((entity) => analyze(entity, snapshot, context)).filter(Boolean);
   const byType = (type) => analyzed.filter((candidate) => candidate.entity.content_type === type);
   const seed = options.selectionSeed ?? recommendationPackage?.selectionSeed ?? '';
+  const requiredUnique = recommendationPackage?.coreUnique ? [{
+    id: recommendationPackage.coreUnique.id, name: recommendationPackage.coreUnique.name,
+    required: true, coreSolver: true, packageRole: 'unique_bridge',
+    recommendationEvidence: { tier: 'BUILD_DEFINING_CAPABILITY', matches: recommendationPackage.bridgePath || [] }
+  }] : [];
+  const optionalUnique = selectUniqueRecommendation(catalog, snapshot, `${seed}:unique`)
+    .filter((entry) => !requiredUnique.some((required) => required.id === entry.id));
   return {
-    recommendedUniques: selectUniqueRecommendation(catalog, snapshot, `${seed}:unique`),
+    recommendedUniques: [...requiredUnique, ...optionalUnique].slice(0, 1),
     recommendedJewelryUniques: selectJewelryRecommendations(catalog, snapshot, `${seed}:jewelry`),
     passives: {
       ascendancyNodes: choose(byType('ascendancy_passive'), 1, `${seed}:ascendancy`, false),

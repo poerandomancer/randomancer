@@ -13,7 +13,7 @@ import { mergeRecommendationUniqueSemanticsV3, selectNonSkillRecommendations } f
 
 export const AUDIT_SEED = 'randomancer-recommendation-audit-v1';
 export const AUDIT_REPETITIONS = 2;
-const SCHEMA_VERSION = 1;
+const SCHEMA_VERSION = 2;
 
 const readJson = async (root, path) => JSON.parse(await readFile(new URL(path, root), 'utf8'));
 
@@ -72,6 +72,11 @@ function compactCase(id, input, recommendation, nonSkills) {
     input,
     recommendations: {
       status: recommendation.status,
+      solutionClass: recommendation.solutionClass,
+      coreSolverPieces: (recommendation.packageProfile?.corePieces || []).map(({ name, packageRole }) => ({ name, role: packageRole })),
+      requiredUnique: Boolean(recommendation.coreUnique),
+      bridgePath: recommendation.bridgePath || [],
+      packageProfile: recommendation.packageProfile || null,
       skills,
       ascendancyPassives: compactEntries(nonSkills.passives?.ascendancyNodes),
       notables: compactEntries(nonSkills.passives?.notables),
@@ -94,6 +99,16 @@ function summarize(cases) {
       passivesAndNotables: countNames(cases, (item) => [...item.recommendations.ascendancyPassives, ...item.recommendations.notables].map((entry) => entry.name)),
       uniques: countNames(cases, (item) => item.recommendations.uniques.map((entry) => entry.name))
     },
+    packageStatus: countNames(cases, (item) => [item.recommendations.status]),
+    solutionClass: countNames(cases, (item) => [item.recommendations.solutionClass]),
+    unresolvedByType: countNames(cases, (item) => item.unresolved.map((entry) => String(entry.obligationId).split(':')[0])),
+    packagesUsingRequiredSecondarySkill: cases.filter((item) => item.recommendations.skills.slice(1)
+      .some((skill) => ['setup_control', 'enabler', 'payoff'].includes(skill.role))).length,
+    packagesUsingRequiredUniqueBridge: cases.filter((item) => item.recommendations.requiredUnique).length,
+    packagesUsingRequiredEnablingSupports: cases.filter((item) => item.recommendations.skills.some((skill) =>
+      skill.supports.some((support) => support.role !== 'OPTIONAL_OFFENSE_OPTIMIZER'))).length,
+    passiveRecommendationCountDistribution: countNames(cases, (item) => [String(
+      item.recommendations.ascendancyPassives.length + item.recommendations.notables.length)]),
     casesWithNoSkillRecommendation: cases.filter((item) => skillNames(item).length === 0).length,
     casesWithFewerThanTwoSkillRecommendations: cases.filter((item) => skillNames(item).length < 2).length,
     casesWithUnresolvedObligations: cases.filter((item) => item.unresolved.length > 0).length
