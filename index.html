@@ -71,7 +71,7 @@
     <img class="mode-header-action__icon mode-header-action__icon--build" src="images/build-icon.png" alt="" aria-hidden="true">
   </button>
   <button id="saved-fab" class="rm-info-fab saved-fab" aria-label="View Saved Builds" title="View Saved Builds">★</button>
-  <button id="feedback-fab" class="rm-info-fab feedback-fab" aria-label="Provide Feedback" title="Provide Feedback" data-feedback-url="https://docs.google.com/forms/d/e/1FAIpQLSdYYeGkQhoIEDjRF4wpyItAqxcGgAK24JfAyA6XeAfTQz-AbA/viewform?usp=dialog">✉</button>
+  <button id="feedback-fab" class="rm-info-fab feedback-fab" aria-label="Provide Feedback" title="Provide Feedback" data-feedback-embed-url="https://docs.google.com/forms/d/e/1FAIpQLScmlkvdZzaSooFc8f9D38v_RKLOx5OUAmSweqI7lDuqxx0oNQ/viewform?embedded=true">✉</button>
   <button id="info-fab" class="rm-info-fab" aria-label="About this tool" title="About">?</button>
 
   <!-- Persistent utilities menu -->
@@ -83,12 +83,26 @@
     </button>
     <button type="button" class="header-menu-item" data-action="feedback" role="menuitem">
       <span class="header-menu-ico" aria-hidden="true">✉</span>
-      <span class="header-menu-label">Contact</span>
+      <span class="header-menu-label">Feedback</span>
     </button>
     <button type="button" class="header-menu-item" data-action="info" role="menuitem">
       <span class="header-menu-ico" aria-hidden="true">?</span>
       <span class="header-menu-label">Help</span>
     </button>
+  </div>
+  <!-- Feedback Lightbox; the iframe src is assigned only when this is first opened. -->
+  <div id="feedback-overlay" class="rm-info-overlay feedback-overlay" hidden>
+    <div class="rm-info-backdrop" data-close="1"></div>
+    <div class="rm-info-dialog feedback-dialog" role="dialog" aria-modal="true" aria-labelledby="feedback-title">
+      <div class="rm-info-head">
+        <h3 id="feedback-title">Feedback</h3>
+        <button id="feedback-close" class="rm-info-close" type="button" aria-label="Close Feedback">×</button>
+      </div>
+      <iframe id="feedback-frame" class="feedback-frame" title="Randomancer feedback form"></iframe>
+      <div class="feedback-fallback">
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLScmlkvdZzaSooFc8f9D38v_RKLOx5OUAmSweqI7lDuqxx0oNQ/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer">Open form in a new tab</a>
+      </div>
+    </div>
   </div>
   <!-- Saved Builds Lightbox -->
   <div id="saved-overlay" class="rm-info-overlay saved-overlay" hidden>
