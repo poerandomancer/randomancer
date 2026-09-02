@@ -71,7 +71,7 @@
     <img class="mode-header-action__icon mode-header-action__icon--build" src="images/build-icon.png" alt="" aria-hidden="true">
   </button>
   <button id="saved-fab" class="rm-info-fab saved-fab" aria-label="View Saved Builds" title="View Saved Builds">★</button>
-  <button id="feedback-fab" class="rm-info-fab feedback-fab" aria-label="Provide Feedback" title="Provide Feedback" data-feedback-embed-url="https://docs.google.com/forms/d/e/1FAIpQLScmlkvdZzaSooFc8f9D38v_RKLOx5OUAmSweqI7lDuqxx0oNQ/viewform?embedded=true">✉</button>
+  <button id="feedback-fab" class="rm-info-fab feedback-fab" aria-label="Provide Feedback" title="Provide Feedback">✉</button>
   <button id="info-fab" class="rm-info-fab" aria-label="About this tool" title="About">?</button>
 
   <!-- Persistent utilities menu -->
@@ -90,7 +90,7 @@
       <span class="header-menu-label">Help</span>
     </button>
   </div>
-  <!-- Feedback Lightbox; the iframe src is assigned only when this is first opened. -->
+  <!-- Native feedback poll; its cross-origin response loads only in the hidden target iframe. -->
   <div id="feedback-overlay" class="rm-info-overlay feedback-overlay" hidden>
     <div class="rm-info-backdrop" data-close="1"></div>
     <div class="rm-info-dialog feedback-dialog" role="dialog" aria-modal="true" aria-labelledby="feedback-title">
@@ -98,10 +98,45 @@
         <h3 id="feedback-title">Feedback</h3>
         <button id="feedback-close" class="rm-info-close" type="button" aria-label="Close Feedback">×</button>
       </div>
-      <iframe id="feedback-frame" class="feedback-frame" title="Randomancer feedback form"></iframe>
-      <div class="feedback-fallback">
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLScmlkvdZzaSooFc8f9D38v_RKLOx5OUAmSweqI7lDuqxx0oNQ/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer">Open form in a new tab</a>
+      <div id="feedback-form-view" class="feedback-form-view">
+        <form id="feedback-form" method="POST" target="feedback-submit-target">
+          <fieldset class="feedback-question feedback-rating-fieldset">
+            <legend>How are we doing?</legend>
+            <p class="feedback-helper" id="feedback-rating-help">Overall, how would you rate your experience with The Randomancer?</p>
+            <div class="feedback-stars" role="radiogroup" aria-describedby="feedback-rating-help">
+              <input id="feedback-rating-1" type="radio" required><label for="feedback-rating-1" aria-label="1 out of 5 stars">☆</label>
+              <input id="feedback-rating-2" type="radio"><label for="feedback-rating-2" aria-label="2 out of 5 stars">☆</label>
+              <input id="feedback-rating-3" type="radio"><label for="feedback-rating-3" aria-label="3 out of 5 stars">☆</label>
+              <input id="feedback-rating-4" type="radio"><label for="feedback-rating-4" aria-label="4 out of 5 stars">☆</label>
+              <input id="feedback-rating-5" type="radio"><label for="feedback-rating-5" aria-label="5 out of 5 stars">☆</label>
+            </div>
+          </fieldset>
+          <fieldset class="feedback-question">
+            <legend>What would you like to see next?</legend>
+            <p class="feedback-helper">Select any features you’d be interested in.</p>
+            <div class="feedback-features">
+              <label><input type="checkbox" data-feature-index="0"> <span>Defensive Build Recommendations</span></label>
+              <label><input type="checkbox" data-feature-index="1"> <span>Passive Tree Visualization</span></label>
+              <label><input type="checkbox" data-feature-index="2"> <span>A Randomancer Discord Community</span></label>
+              <label><input type="checkbox" data-feature-index="3"> <span>Better Build Sharing</span></label>
+            </div>
+          </fieldset>
+          <div class="feedback-question">
+            <label class="feedback-question-title" for="feedback-text">Anything else?</label>
+            <p class="feedback-helper" id="feedback-text-help">Ideas, issues, suggestions, or whatever's on your mind.</p>
+            <textarea id="feedback-text" rows="3" aria-describedby="feedback-text-help"></textarea>
+          </div>
+          <div class="feedback-actions">
+            <button id="feedback-submit" class="feedback-submit" type="submit">Submit Feedback</button>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLScmlkvdZzaSooFc8f9D38v_RKLOx5OUAmSweqI7lDuqxx0oNQ/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer">Open full form</a>
+          </div>
+        </form>
       </div>
+      <div id="feedback-success" class="feedback-success" role="status" tabindex="-1" hidden>
+        <p class="feedback-success-title">The Fates have heard you.</p>
+        <p>Thanks for helping shape The Randomancer.</p>
+      </div>
+      <iframe id="feedback-submit-target" name="feedback-submit-target" hidden aria-hidden="true" title="Feedback submission response"></iframe>
     </div>
   </div>
   <!-- Saved Builds Lightbox -->
