@@ -273,12 +273,12 @@ test('rejects generic, contradictory, DNT, prototype, inaccessible, and seasonal
   assert.deepEqual(selectNonSkillRecommendations(catalog(blocked), snap, pkg).passives.notables, []);
 });
 
-test('limits, deduplicates weak interactions, is seeded, and permits empty categories', () => {
+test('surfaces same-signature strong passive alternatives, is seeded, and stays bounded', () => {
   const candidates = Array.from({ length: 7 }, (_, index) => entity(`n${index}`, 'passive', [index < 4 ? 'freeze' : 'chill']));
   const first = selectNonSkillRecommendations(catalog(candidates), snap, pkg, { selectionSeed: 'same' });
   const second = selectNonSkillRecommendations(catalog(candidates), snap, pkg, { selectionSeed: 'same' });
   assert.deepEqual(first, second);
-  assert.ok(first.passives.notables.length <= 3);
+  assert.equal(first.passives.notables.length, 3);
   assert.equal(new Set(first.passives.notables.map((entry) => entry.id)).size, first.passives.notables.length);
   assert.ok(first.passives.notables.every((entry) => entry.recommendationEvidence.matches.length));
   assert.deepEqual(first.recommendedUniques, []);

@@ -401,7 +401,10 @@ function selectNonSkillRecommendations(catalog, snapshot = {}, recommendationPac
     ),
     passives: {
       ascendancyNodes: choose(byType('ascendancy_passive'), 1, `${seed}:ascendancy`, false),
-      notables: choose(byType('passive'), 3, `${seed}:notable`, true)
+      // Same-signature notables are useful alternative tree routes. The strong
+      // score band and locality/applicability gates, rather than complementarity,
+      // determine whether they are surfaced.
+      notables: choose(byType('passive'), 3, `${seed}:notable`, false)
     }
   };
   if (options.richnessAudit) result.candidateDiagnostics = {

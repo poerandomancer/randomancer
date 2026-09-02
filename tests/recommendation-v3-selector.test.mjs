@@ -77,13 +77,30 @@ test('explicit capability and inherent affinity rank only already-valid DIRECT c
   assert.equal(repeated.primarySkill.entityId, repeatedAgain.primarySkill.entityId);
 });
 
-test('DIRECT is a singleton lexicographic runtime tier', () => {
+test('DIRECT solves a singleton core before appending top-band alternatives', () => {
   const result = selectRecommendationPackageV3(catalog, { weapon: 'Spear', offenseSet: ['bleed'] }, {
     offenseInventory, selectionSeed: 'direct-regression'
   });
   assert.equal(result.diagnostics.recommendationTier, 'DIRECT');
-  assert.equal(result.pieces.length, 1);
+  assert.ok(result.pieces.length >= 1 && result.pieces.length <= 3);
+  assert.equal(result.pieces[0].entityId, result.primarySkill.entityId);
   assert.equal(result.supportingSkill, null);
+});
+
+test('skill richness uses only the solved tier top band and preserves its anchor', () => {
+  const result = selectRecommendationPackageV3(catalog, { weapon: 'Bow', offenseSet: ['poison'] }, {
+    offenseInventory, selectionSeed: 'richness-band', richnessAudit: true
+  });
+  const topBandIds = new Set(result.diagnostics.richness.skillCandidates
+    .filter((candidate) => candidate.inTopBand).map((candidate) => candidate.entityId));
+  assert.ok(result.pieces.length > 1 && result.pieces.length <= 3);
+  assert.equal(result.pieces[0].entityId, result.primarySkill.entityId);
+  assert.ok(result.pieces.every((skill) => topBandIds.has(skill.entityId)));
+
+  const poolLimited = selectRecommendationPackageV3(catalog, { weapon: 'Mace', offenseSet: ['companions'] }, {
+    offenseInventory, selectionSeed: 'pool-limited'
+  });
+  assert.deepEqual(poolLimited.pieces.map((skill) => skill.name), ['Tame Beast']);
 });
 
 test('native elemental weapon packages expose DIRECT_NATIVE before bridge routes', () => {
@@ -143,15 +160,15 @@ test('one compatible enabling support forms CARRIER_BRIDGE ahead of fallback', (
   });
   assert.equal(result.diagnostics.recommendationTier, 'ONE_BRIDGE');
   assert.equal(result.solutionClass, 'ONE_BRIDGE');
-  assert.equal(result.pieces.length, 1);
+  assert.ok(result.pieces.length >= 1 && result.pieces.length <= 3);
   assert.equal(result.supportingSkill, null);
-  const supports = result.supportAssignments.flatMap((entry) => entry.supports);
+  const supports = result.supportAssignments[0].supports;
   assert.equal(supports.filter((support) => support.assignedRole !== 'OPTIONAL_OFFENSE_OPTIMIZER').length, 1);
-  assert.ok(supports.length <= MAX_TOTAL_SUPPORTS);
+  assert.ok(result.supportAssignments.every((entry) => entry.supports.length <= MAX_TOTAL_SUPPORTS));
 });
 
 test('optional Offense optimizers attach after, and never participate in, fulfillment', () => {
-  assert.deepEqual([MAX_REQUIRED_SUPPORTS, MAX_OPTIMIZER_SUPPORTS, MAX_TOTAL_SUPPORTS], [2, 1, 3]);
+  assert.deepEqual([MAX_REQUIRED_SUPPORTS, MAX_OPTIMIZER_SUPPORTS, MAX_TOTAL_SUPPORTS], [2, 3, 3]);
   for (const [weapon, offense, tier] of [
     ['Quarterstaff', 'freeze', 'DIRECT'],
     ['Crossbow', 'shock', 'DIRECT'],
@@ -170,7 +187,7 @@ test('optional Offense optimizers attach after, and never participate in, fulfil
     assert.deepEqual(optimizer.fulfilledObligations, []);
     assert.deepEqual(optimizer.suppliedTargets, []);
     assert.equal(supports.at(-1).assignedRole, 'OPTIONAL_OFFENSE_OPTIMIZER');
-    assert.ok(supports.length <= MAX_TOTAL_SUPPORTS);
+    assert.ok(result.supportAssignments.every((entry) => entry.supports.length <= MAX_TOTAL_SUPPORTS));
     assert.equal(result.unresolved.length, 0);
   }
 });
@@ -193,7 +210,7 @@ test('optimizer is deterministic, family-safe, and conservative for damage ident
   assert.equal(chain.diagnostics.recommendationTier, 'SUPPORT_CHAIN');
   assert.equal(chain.diagnostics.assignedRequiredSupportCount, 2);
   assert.ok(chain.diagnostics.assignedOptimizerSupportCount <= 1);
-  assert.ok(chain.supportAssignments.flatMap((entry) => entry.supports).length <= 3);
+  assert.ok(chain.supportAssignments.every((entry) => entry.supports.length <= 3));
 });
 
 test('SUPPORT_CHAIN can use its full required capacity before one safe optimizer', () => {
@@ -220,7 +237,7 @@ test('SUPPORT_CHAIN can use its full required capacity before one safe optimizer
   });
   const safe = run();
   assert.equal(safe.diagnostics.recommendationTier, 'SUPPORT_CHAIN');
-  assert.deepEqual(safe.supportAssignments.flatMap((entry) => entry.supports).map((support) => support.assignedRole), [
+  assert.deepEqual(safe.supportAssignments[0].supports.map((support) => support.assignedRole), [
     'REQUIRED_PREREQUISITE_SUPPORT', 'REQUIRED_ENABLE_SUPPORT', 'OPTIONAL_OFFENSE_OPTIMIZER'
   ]);
   assert.equal(safe.diagnostics.assignedRequiredSupportCount, 2);
@@ -345,7 +362,7 @@ test('bounded SUPPORT_CHAIN resolves Mace Electrocute in semantic support order'
     { weapon: 'Mace', offenseSet: ['electrocute'] },
     { offenseInventory, selectionSeed: 'support-chain-regression' });
   assert.equal(result.diagnostics.recommendationTier, 'SUPPORT_CHAIN');
-  assert.deepEqual(result.supportAssignments.flatMap((entry) => entry.supports)
+  assert.deepEqual(result.supportAssignments[0].supports
     .map((support) => [support.name, support.assignedRole]), [
     ['Lightning Attunement', 'REQUIRED_PREREQUISITE_SUPPORT'],
     ['Electrocute', 'REQUIRED_ENABLE_SUPPORT']
