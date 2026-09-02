@@ -6,8 +6,9 @@ const PRIMARY_QUALITY_BAND = 12;
 const COMPANION_QUALITY_BAND = 8;
 const PACKAGE_QUALITY_BAND = 12;
 const MAX_REQUIRED_SUPPORTS = 2;
-const MAX_OPTIMIZER_SUPPORTS = 1;
+const MAX_OPTIMIZER_SUPPORTS = 3;
 const MAX_TOTAL_SUPPORTS = 3;
+const MAX_DISPLAYED_SKILLS = 3;
 // Compatibility alias for consumers which used the old required-support cap.
 const MAX_SUPPORTS_PER_SKILL = MAX_REQUIRED_SUPPORTS;
 const RECOMMENDATION_EXCLUDED_SOURCE_TAGS = new Set(['kalguuran']);
@@ -2641,7 +2642,6 @@ function eligibleOptionalOptimizersV3(catalog, selected, assignments, offenseObl
   // required-only construction is independently complete and legal.
   if (requiredCount > MAX_REQUIRED_SUPPORTS || requiredResolution.requiredConstructionComplete !== true
     || offenseObligations.some((obligation) => !allOffenseFulfilled.has(obligation.id))) return [];
-  const usedFamilies = new Set(assignments.flatMap((assignment) => assignment.supports.map((support) => support.familyId)));
   const offenseIds = unique(offenseObligations.map((obligation) => normalizeToken(obligation.offenseId || obligation.mechanics?.[0])));
   if (offenseIds.some((offenseId) => DAMAGE_TYPE_MECHANICS.has(offenseId))) return [];
   const candidates = [];
@@ -2652,7 +2652,8 @@ function eligibleOptionalOptimizersV3(catalog, selected, assignments, offenseObl
       .filter((entity) => supportAvailability(entity) !== 'lineage'))) {
       const offenseId = offenseIds.find((id) => optimizerRoleV3(support, id) === 'OPTIONAL_OFFENSE_OPTIMIZER');
       if (!offenseId || !supportTargetsSkill(support, candidate.entity)) continue;
-      if (usedFamilies.has(supportFamilyId(support))) continue;
+      const assignment = assignments.find((entry) => entry.skillEntityId === candidate.entity.id);
+      if (asArray(assignment?.supports).some((entry) => entry.familyId === supportFamilyId(support))) continue;
       // An optimizer must neither need/provide prerequisite proof nor alter prevention/consumption.
       if (supportRequirementFacts(support).length) continue;
       if (hardSupportedSkillFacts(support).some((fact) => ['prevents', 'consumes'].includes(fact?.relation))) continue;
@@ -2666,28 +2667,45 @@ function eligibleOptionalOptimizersV3(catalog, selected, assignments, offenseObl
   return candidates;
 }
 
+function optionalSupportPairIsCompatibleV3(skill, support, attachedSupports, catalog) {
+  const entitiesById = new Map(asArray(catalog?.entities).map((entity) => [entity.id, entity]));
+  const attached = asArray(attachedSupports).map((entry) => entitiesById.get(entry.entityId) || entry).filter(Boolean);
+  if (attached.some((entry) => supportFamilyId(entry) === supportFamilyId(support))) return false;
+  const combined = [...attached, support];
+  if (!supportPackageRequirementsAreMet(skill, combined)) return false;
+  const prevented = new Set(combined.flatMap((entry) => hardSupportedSkillFacts(entry)
+    .filter((fact) => normalizeToken(fact?.relation) === 'prevents').flatMap(factMechanics)));
+  if (!prevented.size) return true;
+  return !combined.some((entry) => hardSupportedSkillFacts(entry).some((fact) =>
+    normalizeToken(fact?.relation) !== 'prevents'
+    && factMechanics(fact).some((mechanic) => prevented.has(mechanic))));
+}
+
 function attachOptionalOptimizerV3(catalog, selected, assignments, offenseObligations, requiredResolution) {
-  const requiredCount = requiredResolution.assignedSupportCount;
   const candidates = eligibleOptionalOptimizersV3(catalog, selected, assignments, offenseObligations, requiredResolution);
-  const chosen = candidates[0] || null;
-  if (!chosen || requiredCount + MAX_OPTIMIZER_SUPPORTS > MAX_TOTAL_SUPPORTS) return null;
-  const assignment = assignments.find((entry) => entry.skillEntityId === chosen.candidate.entity.id);
-  if (!assignment) return null;
-  assignment.supports.push({
-    entityId: chosen.support.id,
-    sourceId: chosen.support.source_id,
-    name: chosen.support.name,
-    contentType: chosen.support.content_type,
-    familyId: supportFamilyId(chosen.support),
-    familyName: chosen.support?.support_family?.name || chosen.support.name,
-    tier: supportTier(chosen.support) || null,
-    availability: supportAvailability(chosen.support),
-    assignedRole: 'OPTIONAL_OFFENSE_OPTIMIZER',
-    fulfilledObligations: [],
-    suppliedTargets: [],
-    prerequisiteMechanics: []
-  });
-  return chosen;
+  const selectedOptimizers = [];
+  for (const candidate of selected) {
+    const assignment = assignments.find((entry) => entry.skillEntityId === candidate.entity.id);
+    const skillCandidates = candidates.filter((entry) => entry.candidate.entity.id === candidate.entity.id);
+    const topSemanticBand = Math.floor((skillCandidates[0]?.priority || 0) / 100);
+    for (const chosen of skillCandidates) {
+      if (!assignment || assignment.supports.length >= MAX_TOTAL_SUPPORTS
+        || selectedOptimizers.filter((entry) => entry.candidate.entity.id === candidate.entity.id).length >= MAX_OPTIMIZER_SUPPORTS) break;
+      // Confidence decay is the existing optimizer semantic band: never descend
+      // from the strongest application/effect/duration/payoff lane merely to fill space.
+      if (Math.floor(chosen.priority / 100) !== topSemanticBand) break;
+      if (!optionalSupportPairIsCompatibleV3(candidate.entity, chosen.support, assignment.supports, catalog)) continue;
+      assignment.supports.push({
+        entityId: chosen.support.id, sourceId: chosen.support.source_id, name: chosen.support.name,
+        contentType: chosen.support.content_type, familyId: supportFamilyId(chosen.support),
+        familyName: chosen.support?.support_family?.name || chosen.support.name,
+        tier: supportTier(chosen.support) || null, availability: supportAvailability(chosen.support),
+        assignedRole: 'OPTIONAL_OFFENSE_OPTIMIZER', fulfilledObligations: [], suppliedTargets: [], prerequisiteMechanics: []
+      });
+      selectedOptimizers.push(chosen);
+    }
+  }
+  return selectedOptimizers;
 }
 
 function assignSupportPackagesV3(catalog, winner, offenseObligations) {
@@ -2794,7 +2812,7 @@ function assignSupportPackagesV3(catalog, winner, offenseObligations) {
       winnerCombination.resolvedDemands.some((resolved) => supportDemandKey(resolved) === supportDemandKey(target)))
   };
   const optimizerCandidates = eligibleOptionalOptimizersV3(catalog, selected, assignments, offenseObligations, requiredResolution);
-  const optimizer = attachOptionalOptimizerV3(catalog, selected, assignments, offenseObligations, requiredResolution);
+  const optimizers = attachOptionalOptimizerV3(catalog, selected, assignments, offenseObligations, requiredResolution);
   const supportEdges = winnerCombination.chosen.flatMap((packageCandidate) => [
     ...packageCandidate.fulfilled.map((proof) => ({
       fromEntityId: proof.providerEntityId,
@@ -2820,9 +2838,10 @@ function assignSupportPackagesV3(catalog, winner, offenseObligations) {
     fulfilled: winnerCombination.fulfilled,
     resolvedDemandKeys: new Set(winnerCombination.resolvedDemands.map(supportDemandKey)),
     supportEdges,
-    assignedSupportCount: winnerCombination.supportCount + (optimizer ? 1 : 0),
+    assignedSupportCount: winnerCombination.supportCount + optimizers.length,
     assignedRequiredSupportCount: winnerCombination.supportCount,
-    assignedOptimizerSupportCount: optimizer ? 1 : 0,
+    assignedOptimizerSupportCount: optimizers.length,
+    requiredConstructionComplete: requiredResolution.requiredConstructionComplete,
     optimizerCandidates,
     evaluatedPackages: packagesBySkill.reduce((sum, packages) => sum + packages.length, 0)
   };
@@ -2932,6 +2951,40 @@ function classifySelectedOffenseCoverage(obligation, selectedCandidates, winner,
   );
 }
 
+function skillChoiceSignature(packageCandidate) {
+  const candidate = packageCandidate?.primary;
+  return unique([
+    candidate?.weaponRelationship?.family,
+    ...asArray(candidate?.delivery?.skillTypes),
+    ...asArray(candidate?.fulfilled).map((proof) => proof.mechanic),
+    ...asArray(candidate?.carriers).map((proof) => `${proof.mechanic}:${proof.completionType || 'native'}`)
+  ].map(normalizeToken)).sort().join('|');
+}
+
+function selectRichnessSkillPackages(shortlist, winner, recommendationTier, selectionSeed) {
+  const core = [winner?.primary, winner?.supporting].filter(Boolean);
+  if (recommendationTier === 'FALLBACK' || core.length >= MAX_DISPLAYED_SKILLS) return [];
+  const usedIds = new Set(core.map((candidate) => candidate.entity.id));
+  const usedSignatures = new Set([skillChoiceSignature(winner)]);
+  const coreUniqueId = winner?.primary?.coreUnique?.id || null;
+  const pool = shortlist.filter((entry) => !entry.supporting && !usedIds.has(entry.primary.entity.id)
+    // A required unique is global equipment state: alternates must use exactly
+    // the bridge already chosen by the core package (or no unique at all).
+    && (entry.primary?.coreUnique?.id || null) === coreUniqueId);
+  const output = [];
+  while (output.length + core.length < MAX_DISPLAYED_SKILLS && pool.length) {
+    // Novel mechanics/delivery are preferred, but never required. Seeded order
+    // remains the final tie-break so equivalent top-band choices retain variation.
+    pool.sort((a, b) => Number(usedSignatures.has(skillChoiceSignature(a))) - Number(usedSignatures.has(skillChoiceSignature(b)))
+      || stableHash32(`${selectionSeed}:rich-skill:${output.length}:${a.primary.entity.id}`)
+        - stableHash32(`${selectionSeed}:rich-skill:${output.length}:${b.primary.entity.id}`));
+    const chosen = pool.shift();
+    output.push(chosen);
+    usedSignatures.add(skillChoiceSignature(chosen));
+  }
+  return output;
+}
+
 function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
   const validation = validateRecommendationCatalogV3(catalog);
   if (!validation.ok) {
@@ -3000,7 +3053,20 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
       : buildRankedSkillPackages(viablePool, offenseObligations);
   const { winner, shortlist, qualityBand } = choosePackageCandidate(rankedPackages, options);
   const supportResolution = assignSupportPackagesV3(catalog, winner, offenseObligations);
-  const selectedCandidates = [winner?.primary, winner?.supporting].filter(Boolean);
+  const coreSelectedCandidates = [winner?.primary, winner?.supporting].filter(Boolean);
+  // Package solving is complete above. Alternatives are appended only from that
+  // winning tier's existing shortlist and cannot feed back into its score or class.
+  const richnessPackages = selectRichnessSkillPackages(
+    shortlist, winner, recommendationTier, options.selectionSeed ?? ''
+  );
+  const richnessResolutions = richnessPackages.map((entry) => ({
+    package: entry,
+    resolution: assignSupportPackagesV3(catalog, entry, offenseObligations)
+  })).filter((entry) => entry.resolution.requiredConstructionComplete !== false);
+  const displayRichnessPackages = richnessResolutions.map((entry) => entry.package);
+  const selectedCandidates = [...coreSelectedCandidates, ...displayRichnessPackages.map((entry) => entry.primary)];
+  const displayAssignments = [supportResolution, ...richnessResolutions.map((entry) => entry.resolution)]
+    .flatMap((entry) => entry.assignments);
   const fulfilledIds = new Set([
     ...asArray(winner?.fulfilled).map((entry) => entry.obligationId),
     ...asArray(supportResolution.fulfilled).map((entry) => entry.obligationId)
@@ -3026,7 +3092,7 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     if (supportResolution.resolvedDemandKeys.has(
       supportDemandKey({ ...unresolvedDependency, relation: 'requires' })
     )) continue;
-    const candidate = selectedCandidates.find((entry) => entry.entity.id === unresolvedDependency.entityId);
+    const candidate = coreSelectedCandidates.find((entry) => entry.entity.id === unresolvedDependency.entityId);
     const isPrimary = candidate?.entity.id === winner?.primary?.entity.id;
     unresolved.push({
       obligationId: `${isPrimary ? 'dependency' : 'supporting_dependency'}:${unresolvedDependency.mechanic}`,
@@ -3039,7 +3105,7 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     if (supportResolution.resolvedDemandKeys.has(
       supportDemandKey({ ...unresolvedSetup, relation: 'consumes' })
     )) continue;
-    const candidate = selectedCandidates.find((entry) => entry.entity.id === unresolvedSetup.entityId);
+    const candidate = coreSelectedCandidates.find((entry) => entry.entity.id === unresolvedSetup.entityId);
     const isPrimary = candidate?.entity.id === winner?.primary?.entity.id;
     unresolved.push({
       obligationId: `${isPrimary ? 'setup' : 'supporting_setup'}:${unresolvedSetup.mechanic}`,
@@ -3051,10 +3117,10 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
   const primary = winner?.primary || null;
   const supporting = winner?.supporting || null;
   const supportingTargets = suppliedTargetsForSupporting(winner);
-  const supportsFor = (candidate) => supportResolution.assignments
+  const supportsFor = (candidate) => displayAssignments
     .find((assignment) => assignment.skillEntityId === candidate?.entity?.id)?.supports || [];
   const offenseCoverage = offenseObligations.map((obligation) =>
-    classifySelectedOffenseCoverage(obligation, selectedCandidates, winner, supportResolution)
+    classifySelectedOffenseCoverage(obligation, coreSelectedCandidates, winner, supportResolution)
   );
   const primarySkill = primary ? {
     entityId: primary.entity.id,
@@ -3089,7 +3155,18 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     score: supporting.individualScore,
     packageScore: winner.score
   } : null;
-  const pieces = [primarySkill, supportingSkill].filter(Boolean);
+  const alternateSkills = displayRichnessPackages.map((entry) => {
+    const candidate = entry.primary;
+    return {
+      entityId: candidate.entity.id, sourceId: candidate.entity.source_id, name: candidate.entity.name,
+      contentType: candidate.entity.content_type, assignedRole: 'primary_damage',
+      fulfilledObligations: candidate.fulfilled, carrierObligations: candidate.carriers,
+      dependencies: candidate.dependencies, setupCosts: candidate.setupCosts, delivery: candidate.delivery,
+      weaponRelationship: candidate.weaponRelationship, criticalAffinity: candidate.criticalAffinity,
+      supports: supportsFor(candidate), score: candidate.individualScore, packageScore: entry.score
+    };
+  });
+  const pieces = [primarySkill, supportingSkill, ...alternateSkills].filter(Boolean);
   const richnessSkillCandidates = options.richnessAudit ? rankedPackages.map((candidate) => ({
     entityId: candidate.primary.entity.id,
     name: candidate.primary.entity.name,
@@ -3105,7 +3182,8 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     ].map(normalizeToken)).sort().join('|')
   })) : null;
   const richnessOptimizerCandidates = options.richnessAudit
-    ? asArray(supportResolution.optimizerCandidates).map((entry) => ({
+    ? [supportResolution, ...richnessResolutions.map((entry) => entry.resolution)]
+      .flatMap((resolution) => asArray(resolution.optimizerCandidates)).map((entry) => ({
       skillEntityId: entry.candidate.entity.id, skillName: entry.candidate.entity.name,
       entityId: entry.support.id, name: entry.support.name, familyId: supportFamilyId(entry.support),
       priority: entry.priority, semanticBand: Math.floor(entry.priority / 100)
@@ -3143,7 +3221,7 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     primarySourceEvidence,
     bridgeMechanics: unique(bridgePath.flatMap((entry) => [entry.from, entry.to]).filter(Boolean)),
     setupMechanics: unique(asArray(winner?.synergyEdges).map((edge) => edge.mechanic)),
-    optionalPayoffMechanics: unique(selectedCandidates.flatMap((candidate) => asArray(candidate?.entity?.facts)
+    optionalPayoffMechanics: unique(coreSelectedCandidates.flatMap((candidate) => asArray(candidate?.entity?.facts)
       .filter((fact) => fact?.relation === 'consumes' && normalizeToken(fact?.consumption) !== 'required_input')
       .map((fact) => normalizeToken(fact?.mechanic)))),
     secondaryPurpose: supportingSkill?.assignedRole || null,
@@ -3168,7 +3246,7 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     pieces,
     packageScore: winner?.score ?? null,
     synergyEdges: asArray(winner?.synergyEdges),
-    supportAssignments: supportResolution.assignments,
+    supportAssignments: displayAssignments,
     supportEdges: supportResolution.supportEdges,
     supportFulfilledObligations: supportResolution.fulfilled,
     unresolved,
@@ -3188,8 +3266,11 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
       rankedCompanionCandidates: Math.max(0, viablePool.length - 1),
       shortlistedCompanionCandidates: shortlist.filter((candidate) => candidate.supporting).length,
       assignedSupportCount: supportResolution.assignedSupportCount,
+      displayedSupportCount: displayAssignments.reduce((sum, entry) => sum + entry.supports.length, 0),
       assignedRequiredSupportCount: supportResolution.assignedRequiredSupportCount,
       assignedOptimizerSupportCount: supportResolution.assignedOptimizerSupportCount,
+      displayedOptimizerSupportCount: [supportResolution, ...richnessResolutions.map((entry) => entry.resolution)]
+        .reduce((sum, entry) => sum + entry.assignedOptimizerSupportCount, 0),
       evaluatedSupportPackages: supportResolution.evaluatedPackages,
       offenseCoverage,
       recommendationTier,
@@ -3214,7 +3295,7 @@ function adaptRecommendationPackageV3ToSnapshot(packageResult) {
     recommendationPackage: packageResult || null
   };
   if (skills.length) {
-    adapted.recommendedSkills = skills.slice(0, 2).map((skill) => ({
+    adapted.recommendedSkills = skills.slice(0, MAX_DISPLAYED_SKILLS).map((skill) => ({
       id: skill.sourceId || skill.entityId,
       name: skill.name,
       recommendationPackage: {
@@ -3253,6 +3334,7 @@ export {
   MAX_REQUIRED_SUPPORTS,
   MAX_OPTIMIZER_SUPPORTS,
   MAX_TOTAL_SUPPORTS,
+  MAX_DISPLAYED_SKILLS,
   MAX_SUPPORTS_PER_SKILL,
   adaptRecommendationPackageV3ToSnapshot,
   buildRecommendationObligationsV3,
@@ -3265,6 +3347,7 @@ export {
   mergeRecommendationGrantedSkillAccessV3,
   mergeRecommendationSkillCraftingV3,
   optimizerRoleV3,
+  optionalSupportPairIsCompatibleV3,
   selectRecommendationPackageV3,
   validateRecommendationGrantedSkillAccessV3,
   validateRecommendationSkillCraftingV3,

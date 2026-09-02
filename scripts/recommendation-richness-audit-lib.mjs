@@ -9,13 +9,13 @@ const median = (values) => { const sorted = [...values].sort((a, b) => a - b); r
 const round = (value) => Math.round(value * 100) / 100;
 const distribution = (values) => ({ zero: values.filter((v) => v === 0).length, one: values.filter((v) => v === 1).length,
   two: values.filter((v) => v === 2).length, threePlus: values.filter((v) => v >= 3).length });
-const classification = (selected, strong, distinct) => strong <= 1 ? 'POOL_LIMITED'
-  : strong <= selected ? 'ALREADY_RICH' : distinct <= selected ? 'DIVERSITY_LIMITED' : 'SELECTOR_LIMITED';
+const classification = (selected, strong, limit = Infinity) => strong <= 1 ? 'POOL_LIMITED'
+  : Math.min(strong, limit) <= selected ? 'ALREADY_RICH' : 'SELECTOR_LIMITED';
 const compactRank = (candidate, best, index) => ({ rank: index + 1, name: candidate.name, score: candidate.score ?? candidate.priority,
   absoluteGap: best - (candidate.score ?? candidate.priority), relativeGap: best ? round((best - (candidate.score ?? candidate.priority)) / Math.abs(best)) : 0 });
 
 function depth(candidates, selectedNames, bandPredicate = (candidate) => candidate.inTopBand,
-  distinctKey = (candidate) => candidate.familyId || candidate.entityId) {
+  distinctKey = (candidate) => candidate.familyId || candidate.entityId, limit = Infinity) {
   const byEntity = new Map();
   for (const candidate of candidates) {
     const prior = byEntity.get(candidate.entityId);
@@ -28,7 +28,7 @@ function depth(candidates, selectedNames, bandPredicate = (candidate) => candida
   const best = deduped[0]?.score ?? deduped[0]?.priority ?? 0;
   const selectedCount = new Set(selectedNames).size;
   return { selectedCount, eligibleCount: deduped.length, topQualityBandCount: strong.length,
-    meaningfullyDistinctCount: distinct, classification: classification(selectedCount, strong.length, distinct),
+    meaningfullyDistinctCount: distinct, classification: classification(selectedCount, strong.length, limit),
     selectedScore: deduped.find((candidate) => selectedNames.includes(candidate.name))?.score ?? null,
     strongest: deduped.slice(0, 5).map((candidate, index) => compactRank(candidate, best, index)) };
 }
@@ -58,18 +58,19 @@ export async function generateRecommendationRichnessAudit(options = {}) {
     const adapted = { ...snapshot, ...adaptRecommendationPackageV3ToSnapshot(recommendation) };
     const nonSkills = selectNonSkillRecommendations(data.catalog, adapted, recommendation, { selectionSeed, richnessAudit: true });
     const skillCandidates = recommendation.diagnostics.richness?.skillCandidates || [];
-    const skills = depth(skillCandidates, (recommendation.pieces || []).map((entry) => entry.name));
+    const skills = depth(skillCandidates, (recommendation.pieces || []).map((entry) => entry.name),
+      (candidate) => candidate.inTopBand, (candidate) => candidate.entityId, 3);
     skills.sameSolutionClassCount = new Set(skillCandidates.map((entry) => entry.entityId)).size;
     const passiveCandidates = [...(nonSkills.candidateDiagnostics?.ascendancyPassives || []), ...(nonSkills.candidateDiagnostics?.notables || [])]
       .sort((a, b) => b.score - a.score || a.name.localeCompare(b.name));
     const passiveBest = passiveCandidates[0]?.score || 0;
     const passives = depth(passiveCandidates, [...(nonSkills.passives.ascendancyNodes || []), ...(nonSkills.passives.notables || [])].map((entry) => entry.name),
-      (candidate) => candidate.score >= passiveBest - 4, (candidate) => candidate.signature);
+      (candidate) => candidate.score >= passiveBest - 4, (candidate) => candidate.entityId, 3);
     const supportDepth = (recommendation.pieces || []).map((skill) => {
       const candidates = (recommendation.diagnostics.richness?.optimizerCandidates || []).filter((entry) => entry.skillEntityId === skill.entityId);
       const bestBand = candidates[0]?.semanticBand;
       const result = depth(candidates, (skill.supports || []).filter((entry) => entry.assignedRole === 'OPTIONAL_OFFENSE_OPTIMIZER').map((entry) => entry.name),
-        (candidate) => candidate.semanticBand === bestBand);
+        (candidate) => candidate.semanticBand === bestBand, (candidate) => candidate.familyId, Math.max(0, 3 - (skill.supports || []).filter((entry) => entry.assignedRole !== 'OPTIONAL_OFFENSE_OPTIMIZER').length));
       return { skill: skill.name, requiredSupportCount: (skill.supports || []).filter((entry) => entry.assignedRole !== 'OPTIONAL_OFFENSE_OPTIMIZER').length, ...result };
     });
     cases.push({ id: `AUDIT-${String(caseNumber).padStart(3, '0')}`, input: { weapon: weapon.name, offense: offense.name,
@@ -81,10 +82,14 @@ export async function generateRecommendationRichnessAudit(options = {}) {
   }
   const summary = { totalCases: cases.length, skills: summarizeCategory(cases, 'skills'), passives: summarizeCategory(cases, 'passives'),
     optionalSupports: summarizeCategory(cases, 'optionalSupports') };
+  const supportDepths = cases.flatMap((item) => item.depth.optionalSupports);
   summary.optimizerRichness = { selectedSkills: summary.optionalSupports.observations,
     withTwoPlusStrong: cases.flatMap((item) => item.depth.optionalSupports).filter((entry) => entry.topQualityBandCount >= 2).length,
     withThreePlusStrong: cases.flatMap((item) => item.depth.optionalSupports).filter((entry) => entry.topQualityBandCount >= 3).length,
-    leavingStrongUnused: cases.flatMap((item) => item.depth.optionalSupports).filter((entry) => entry.selectedCount < entry.topQualityBandCount).length };
+    selectorLimited: supportDepths.filter((entry) => entry.classification === 'SELECTOR_LIMITED').length,
+    leavingStrongUnused: supportDepths.filter((entry) => entry.selectedCount < entry.topQualityBandCount).length,
+    presentationCeilingLimited: supportDepths.filter((entry) => entry.classification === 'ALREADY_RICH'
+      && entry.selectedCount < entry.topQualityBandCount).length };
   const informative = [...cases].sort((a, b) => {
     const score = (item) => 3 * Number(item.depth.skills.classification === 'SELECTOR_LIMITED') + 2 * Number(item.depth.passives.classification === 'SELECTOR_LIMITED')
       + item.depth.optionalSupports.filter((entry) => entry.classification === 'SELECTOR_LIMITED').length + Number(item.production.requiredUnique) + Number(item.production.supports.some((s) => s.role !== 'OPTIONAL_OFFENSE_OPTIMIZER'));
@@ -106,5 +111,5 @@ export function renderRecommendationRichnessReport(audit) {
     const supports = item.depth.optionalSupports.flatMap((entry) => unselected(entry, item.production.supports.map((support) => support.name)));
     return `### ${item.id} — ${item.input.weapon} + ${item.input.offense}\n\n- Production skills: ${item.production.skills.join(', ') || 'none'}; supports: ${item.production.supports.map((support) => `${support.name} [${support.role}]`).join(', ') || 'none'}; passives: ${item.production.passives.join(', ') || 'none'}; required unique: ${item.production.requiredUnique || 'none'}.\n- Depth: skills ${item.depth.skills.topQualityBandCount} strong/${item.depth.skills.eligibleCount} eligible (${item.depth.skills.classification}); passives ${item.depth.passives.topQualityBandCount}/${item.depth.passives.eligibleCount} (${item.depth.passives.classification}); optional supports ${item.depth.optionalSupports.reduce((sum, entry) => sum + entry.topQualityBandCount, 0)}/${item.depth.optionalSupports.reduce((sum, entry) => sum + entry.eligibleCount, 0)}.\n- Strong unselected: skills ${unselected(item.depth.skills, item.production.skills).join(', ') || 'none'}; passives ${unselected(item.depth.passives, item.production.passives).join(', ') || 'none'}; supports ${supports.join(', ') || 'none'}.\n`;
   }).join('\n');
-  return `# Recommendation richness audit\n\nDevelopment-only output for the canonical ${audit.summary.totalCases}-case corpus and seed \`${audit.seed}\`. Required solver supports are excluded from optional-support depth. Candidate bands reuse production package/passive/optimizer ranking concepts; no selector setting is changed.\n\n${category('Skills', audit.summary.skills)}\n${category('Passives/notables', audit.summary.passives)}\n${category('Optional optimizer supports', audit.summary.optionalSupports)}\n## Optimizer-specific result\n\n- Selected skills observed: ${audit.summary.optimizerRichness.selectedSkills}.\n- Skills with 2+ strong optional optimizers: ${audit.summary.optimizerRichness.withTwoPlusStrong}; with 3+: ${audit.summary.optimizerRichness.withThreePlusStrong}.\n- Skills leaving a strong optimizer unused: ${audit.summary.optimizerRichness.leavingStrongUnused}.\n- Distinct support families are counted as non-duplicates, but the compact semantic priority shows many candidates occupy the same application/effect/duration/payoff lane. Treat complementarity as requiring a future pairwise conflict audit, not as proven here.\n\n## Interpretation\n\nThe data supports investigating confidence-decay policies rather than quotas: continue through the existing top band, require a distinct entity/family and compatibility, and stop at the existing quality falloff. Skill and passive candidates should still require independent direct/package anchors. Optional supports should additionally require pairwise non-conflict and a distinct optimization purpose. The zero/one bands remain naturally sparse.\n\n## Representative cases\n\n${cases}`;
+  return `# Recommendation richness audit\n\nDevelopment-only output for the canonical ${audit.summary.totalCases}-case corpus and seed \`${audit.seed}\`. Required solver supports are excluded from optional-support depth. Candidate bands reuse production package/passive/optimizer ranking concepts; no selector setting is changed.\n\n${category('Skills', audit.summary.skills)}\n${category('Passives/notables', audit.summary.passives)}\n${category('Optional optimizer supports', audit.summary.optionalSupports)}\n## Optimizer-specific result\n\n- Selected skills observed: ${audit.summary.optimizerRichness.selectedSkills}.\n- Skills with 2+ strong optional optimizers: ${audit.summary.optimizerRichness.withTwoPlusStrong}; with 3+: ${audit.summary.optimizerRichness.withThreePlusStrong}.\n- Selector-limited skills: ${audit.summary.optimizerRichness.selectorLimited}; presentation-ceiling-limited skills: ${audit.summary.optimizerRichness.presentationCeilingLimited}.\n- Skills leaving a strong optimizer unused beyond the safety ceiling: ${audit.summary.optimizerRichness.leavingStrongUnused}.\n- Distinct support families are counted as non-duplicates, but the compact semantic priority shows many candidates occupy the same application/effect/duration/payoff lane. Treat complementarity as requiring a future pairwise conflict audit, not as proven here.\n\n## Interpretation\n\nThe data supports investigating confidence-decay policies rather than quotas: continue through the existing top band, require a distinct entity/family and compatibility, and stop at the existing quality falloff. Skill and passive candidates should still require independent direct/package anchors. Optional supports should additionally require pairwise non-conflict and a distinct optimization purpose. The zero/one bands remain naturally sparse.\n\n## Representative cases\n\n${cases}`;
 }
