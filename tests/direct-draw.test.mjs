@@ -107,17 +107,19 @@ test('obsolete standard controls and migration runtimes are absent', () => {
   assert.doesNotMatch(entry, /27-offense-runtime|28-primary-equipment-runtime|29-selection-frequency-runtime|31-recommendation-v3-runtime/);
 });
 
-test('standard, Challenge, and Codex entry points remain mounted without Legacy', () => {
+test('standard and Codex entry points remain mounted without Legacy', () => {
   for (const id of ['build-panel', 'codex-panel']) assert.match(html, new RegExp(`id="${id}"`));
   assert.match(primaryStageSource, /primary-build-card-stage/);
   assert.doesNotMatch(html, /data-mode-target="legacy"|id="legacy-(?:panel|controls)"/);
   assert.doesNotMatch(entry, /21-legacy-mode/);
   assert.doesNotMatch(modeSource, /MODES\.LEGACY|RandomancerLegacy|legacy-mode/);
-  assert.match(modeSource, /if \(fromUrl\) return .*MODES\.STANDARD/);
-  assert.match(modeSource, /const initialMode = setMode\(getMode\(\)\)/);
-  assert.match(controlsCss, /--seg-count:\s*3/);
-  assert.match(controlsCss, /grid-template-columns:\s*repeat\(3,/);
-  assert.doesNotMatch(controlsCss, /--seg-count:\s*4|grid-template-columns:\s*repeat\(4,/);
+  assert.match(modeSource, /new URLSearchParams\(location\.search\)\.get\(['"]mode['"]\)\s*===\s*MODES\.CODEX/);
+  assert.match(modeSource, /localStorage\.getItem\(MODE_KEY\)\s*===\s*MODES\.CODEX\s*\?\s*MODES\.CODEX\s*:\s*MODES\.STANDARD/);
+  assert.match(modeSource, /catch\s*\{\s*return MODES\.STANDARD;?\s*\}/);
+  assert.match(modeSource, /setMode\(getMode\(\)\)/);
+  assert.match(controlsCss, /--seg-count:\s*2/);
+  assert.match(controlsCss, /grid-template-columns:\s*repeat\(2,/);
+  assert.doesNotMatch(controlsCss, /--seg-count:\s*[34]|grid-template-columns:\s*repeat\([34],/);
 });
 
 test('the primary Challenge stage binds the shared interactive tooltip handlers', () => {
