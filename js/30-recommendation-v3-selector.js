@@ -3200,27 +3200,6 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     };
   });
   const pieces = [primarySkill, supportingSkill, ...alternateSkills].filter(Boolean);
-  const richnessSkillCandidates = options.richnessAudit ? rankedPackages.map((candidate) => ({
-    entityId: candidate.primary.entity.id,
-    name: candidate.primary.entity.name,
-    score: candidate.score,
-    solutionTier: recommendationTier,
-    inTopBand: shortlist.includes(candidate),
-    signature: unique([
-      candidate.primary.weaponRelationship?.family,
-      ...asArray(candidate.primary.delivery?.skillTypes),
-      ...asArray(candidate.primary.fulfilled).map((proof) => proof.mechanic),
-      ...asArray(candidate.primary.carriers).map((proof) => `${proof.mechanic}:${proof.completionType || 'native'}`),
-      candidate.supportingRole
-    ].map(normalizeToken)).sort().join('|')
-  })) : null;
-  const richnessOptimizerCandidates = options.richnessAudit
-    ? [supportResolution, ...richnessResolutions.map((entry) => entry.resolution)]
-      .flatMap((resolution) => asArray(resolution.optimizerCandidates)).map((entry) => ({
-      skillEntityId: entry.candidate.entity.id, skillName: entry.candidate.entity.name,
-      entityId: entry.support.id, name: entry.support.name, familyId: supportFamilyId(entry.support),
-      priority: entry.priority, semanticBand: Math.floor(entry.priority / 100)
-    })) : null;
   const shortlistedPrimaryIds = new Set(shortlist.map((candidate) => candidate.primary.entity.id));
   const solutionClass = recommendationTier === 'DIRECT' ? 'DIRECT_NATIVE'
     : recommendationTier === 'SUPPORT_CHAIN' ? 'MULTI_BRIDGE' : recommendationTier === 'ONE_BRIDGE' ? 'ONE_BRIDGE' : 'INCOMPLETE';
@@ -3312,10 +3291,7 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
           chain.candidate.entity.id === primary?.entity.id)?.proof || null
       } : {}),
       qualityBand,
-      companionQualityBand: COMPANION_QUALITY_BAND,
-      ...(options.richnessAudit ? {
-        richness: { skillCandidates: richnessSkillCandidates, optimizerCandidates: richnessOptimizerCandidates }
-      } : {})
+      companionQualityBand: COMPANION_QUALITY_BAND
     }
   };
 }

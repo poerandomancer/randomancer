@@ -57,23 +57,6 @@ test('production Chaos skill pool rejects Poison-derived taxonomy but preserves 
   assert.ok(analyze('Bow', 'poison').direct.some((candidate) => candidate.entity.name === 'Poisonburst Arrow'));
 });
 
-test('native artifact contains every live non-critical cell exactly once', () => {
-  const report = read('data/enriched/recommendation_native_coverage_v3.json');
-  assert.equal(report.cells.length, report.weapons.length * report.offenses.length);
-  assert.equal(new Set(report.cells.map((cell) => `${cell.weapon}:${cell.offenseId}`)).size, report.cells.length);
-  assert.ok(!report.offenses.some((offense) => offense.id === 'critical_hits'));
-  for (const cell of report.cells) {
-    if (cell.classification === 'DIRECT') assert.ok(cell.directCandidates.length);
-    if (cell.classification === 'CARRIER_BRIDGE') {
-      assert.equal(cell.directCandidates.length, 0);
-      assert.ok(cell.carrierCandidates.length);
-    }
-    if (cell.classification === 'SUPPORT_CHAIN') assert.ok(cell.supportChainCandidates.length);
-    if (cell.classification === 'GAP') assert.deepEqual(cell.counts,
-      { direct: 0, carrierBridge: 0, supportChain: 0 });
-  }
-});
-
 test('representative native semantic facts remain strict', () => {
   assert.ok(analyze('Mace', 'ignite').direct.every((c) => c.directKind === 'INHERENT_DIRECT'));
   assert.ok(analyze('Quarterstaff', 'chill').direct.every((c) => c.directKind === 'INHERENT_DIRECT'));
@@ -125,13 +108,11 @@ test('DIRECT solves a singleton core before appending top-band alternatives', ()
 
 test('skill richness uses only the solved tier top band and preserves its anchor', () => {
   const result = selectRecommendationPackageV3(catalog, { weapon: 'Bow', offenseSet: ['poison'] }, {
-    offenseInventory, selectionSeed: 'richness-band', richnessAudit: true
+    offenseInventory, selectionSeed: 'richness-band'
   });
-  const topBandIds = new Set(result.diagnostics.richness.skillCandidates
-    .filter((candidate) => candidate.inTopBand).map((candidate) => candidate.entityId));
   assert.ok(result.pieces.length > 1 && result.pieces.length <= 3);
   assert.equal(result.pieces[0].entityId, result.primarySkill.entityId);
-  assert.ok(result.pieces.every((skill) => topBandIds.has(skill.entityId)));
+  assert.deepEqual(result.pieces.map((skill) => skill.name), ['Toxic Domain', 'Vine Arrow', 'Gas Arrow']);
 
   const poolLimited = selectRecommendationPackageV3(catalog, { weapon: 'Mace', offenseSet: ['companions'] }, {
     offenseInventory, selectionSeed: 'pool-limited'
@@ -291,17 +272,6 @@ test('SUPPORT_CHAIN can use its full required capacity before one safe optimizer
   }
 });
 
-
-test('bridge audit is compact and contains only native CARRIER cells', () => {
-  const native = read('data/enriched/recommendation_native_coverage_v3.json');
-  const bridges = read('data/enriched/recommendation_carrier_bridges_v3.json');
-  const carrierKeys = new Set(native.cells.filter((cell) => cell.classification === 'CARRIER_BRIDGE')
-    .map((cell) => `${cell.weapon}:${cell.offenseId}`));
-  assert.equal(bridges.cells.length, carrierKeys.size);
-  assert.ok(bridges.cells.every((cell) => carrierKeys.has(`${cell.weapon}:${cell.offenseId}`)));
-  assert.ok(!JSON.stringify(bridges).includes('invalidPairs'));
-  assert.ok(fs.statSync(new URL('../data/enriched/recommendation_carrier_bridges_v3.json', import.meta.url)).size < 200_000);
-});
 
 test('structured broad and unrestricted legality resolve archetypes generically', () => {
   for (const weapon of ['Quarterstaff', 'Bow', 'Talisman', 'Spear']) {

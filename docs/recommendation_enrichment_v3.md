@@ -29,19 +29,17 @@ The catalog is the data boundary consumed by the package solver. The current run
 
 ## Reproducible generation
 
-Run `make recommendation-v3` from the repository root to rebuild the complete
-local recommendation-v3 artifact graph and its deterministic 270-case audit.
-The canonical order is catalog generation and validation, unique semantics and
-analysis, native coverage, gap analysis, then the audit. Gap analysis
-intentionally consumes native coverage; all three analysis stages consume the
-catalog. Use `make recommendation-v3-check` in CI or before committing to run
+Run `make recommendation-v3` from the repository root to rebuild the runtime
+recommendation-v3 artifacts. Run `make recommendation-audit` separately for
+the deterministic 270-case regression audit.
+The canonical order is catalog generation and validation followed by compact
+unique runtime semantics generation. Use `make recommendation-v3-check` in CI or before committing to run
 the same pipeline and fail when any tracked generated artifact differs.
 
 The canonical source inputs are the committed enriched skill, passive, and
 unique datasets; datamined skill relationships; recommendation ontology and
 configuration overrides; offense inventory; and core weapon data. The catalog,
-compact unique semantics, unique/coverage/gap analyses, their Markdown reports,
-and the audit output are derived data. No recommendation-v3 generation step
+compact unique semantics, and the audit output in `tmp/` are derived data. No recommendation-v3 generation step
 uses the network, timestamps, machine-local paths, random selection, or an
 untracked cache.
 
