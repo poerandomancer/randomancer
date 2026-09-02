@@ -27,6 +27,24 @@ Scraping and datamining provide evidence. They do not decide whether incidental 
 
 The catalog is the data boundary consumed by the package solver. The current runtime slice builds and scores complete one- or two-skill packages, then assigns zero, one, or two typed bridge supports to each selected skill. Broader survivability assignment remains a later slice.
 
+## Reproducible generation
+
+Run `make recommendation-v3` from the repository root to rebuild the complete
+local recommendation-v3 artifact graph and its deterministic 270-case audit.
+The canonical order is catalog generation and validation, unique semantics and
+analysis, native coverage, gap analysis, then the audit. Gap analysis
+intentionally consumes native coverage; all three analysis stages consume the
+catalog. Use `make recommendation-v3-check` in CI or before committing to run
+the same pipeline and fail when any tracked generated artifact differs.
+
+The canonical source inputs are the committed enriched skill, passive, and
+unique datasets; datamined skill relationships; recommendation ontology and
+configuration overrides; offense inventory; and core weapon data. The catalog,
+compact unique semantics, unique/coverage/gap analyses, their Markdown reports,
+and the audit output are derived data. No recommendation-v3 generation step
+uses the network, timestamps, machine-local paths, random selection, or an
+untracked cache.
+
 ## Runtime migration slice
 
 The package selector is the default recommendation workflow and its catalog loads during normal application startup.

@@ -80,8 +80,8 @@
     "GAP": 0
   },
   "directCandidateCounts": {
-    "explicit": 414,
-    "inherent": 121
+    "explicit": 402,
+    "inherent": 124
   },
   "changedClassifications": [
     {
@@ -131,13 +131,6 @@
       "offenseId": "ignite",
       "offense": "Ignite",
       "from": "GAP",
-      "to": "DIRECT"
-    },
-    {
-      "weapon": "Bow",
-      "offenseId": "electrocute",
-      "offense": "Electrocute",
-      "from": "CARRIER_BRIDGE",
       "to": "DIRECT"
     },
     {
@@ -197,11 +190,7 @@
       "to": "DIRECT"
     }
   ],
-  "newlyExtractedCapabilities": [
-    "Electrocuting Arrow",
-    "Gas Grenade",
-    "Poisonburst Arrow"
-  ],
+  "newlyExtractedCapabilities": [],
   "affinityOnlySkills": [
     "Acidic Concoction",
     "Decompose",
@@ -2037,24 +2026,6 @@
           ]
         },
         {
-          "id": "skill:Metadata/Items/Gems/SkillGemSkeletalCleric",
-          "name": "Skeletal Cleric",
-          "proofType": "explicit",
-          "evidence": [
-            {
-              "relation": "creates",
-              "mechanic": "minion",
-              "confidence": "exact",
-              "proofType": "explicit",
-              "globalRule": null,
-              "damageEvidence": null,
-              "affinity": [
-                "modifies:minion:strong"
-              ]
-            }
-          ]
-        },
-        {
           "id": "skill:Metadata/Items/Gems/SkillGemSkeletalFrostMage",
           "name": "Skeletal Frost Mage",
           "proofType": "explicit",
@@ -2163,7 +2134,7 @@
       ],
       "carrierCandidates": [],
       "counts": {
-        "direct": 12,
+        "direct": 11,
         "carrierBridge": 0,
         "supportChain": 0
       }
@@ -3798,24 +3769,6 @@
           ]
         },
         {
-          "id": "skill:Metadata/Items/Gems/SkillGemSkeletalCleric",
-          "name": "Skeletal Cleric",
-          "proofType": "explicit",
-          "evidence": [
-            {
-              "relation": "creates",
-              "mechanic": "minion",
-              "confidence": "exact",
-              "proofType": "explicit",
-              "globalRule": null,
-              "damageEvidence": null,
-              "affinity": [
-                "modifies:minion:strong"
-              ]
-            }
-          ]
-        },
-        {
           "id": "skill:Metadata/Items/Gems/SkillGemSkeletalFrostMage",
           "name": "Skeletal Frost Mage",
           "proofType": "explicit",
@@ -3924,7 +3877,7 @@
       ],
       "carrierCandidates": [],
       "counts": {
-        "direct": 12,
+        "direct": 11,
         "carrierBridge": 0,
         "supportChain": 0
       }
@@ -5073,7 +5026,7 @@
       "offenseId": "electrocute",
       "offense": "Electrocute",
       "classification": "DIRECT",
-      "baselineClassification": "CARRIER_BRIDGE",
+      "baselineClassification": "DIRECT",
       "directCandidates": [
         {
           "id": "skill:Metadata/Items/Gem/SkillGemElectrocutingArrow",
@@ -5177,24 +5130,6 @@
         {
           "id": "skill:Metadata/Items/Gems/SkillGemSkeletalBrute",
           "name": "Skeletal Brute",
-          "proofType": "explicit",
-          "evidence": [
-            {
-              "relation": "creates",
-              "mechanic": "minion",
-              "confidence": "exact",
-              "proofType": "explicit",
-              "globalRule": null,
-              "damageEvidence": null,
-              "affinity": [
-                "modifies:minion:strong"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "skill:Metadata/Items/Gems/SkillGemSkeletalCleric",
-          "name": "Skeletal Cleric",
           "proofType": "explicit",
           "evidence": [
             {
@@ -5319,7 +5254,7 @@
       ],
       "carrierCandidates": [],
       "counts": {
-        "direct": 12,
+        "direct": 11,
         "carrierBridge": 0,
         "supportChain": 0
       }
@@ -6816,24 +6751,6 @@
           ]
         },
         {
-          "id": "skill:Metadata/Items/Gems/SkillGemSkeletalCleric",
-          "name": "Skeletal Cleric",
-          "proofType": "explicit",
-          "evidence": [
-            {
-              "relation": "creates",
-              "mechanic": "minion",
-              "confidence": "exact",
-              "proofType": "explicit",
-              "globalRule": null,
-              "damageEvidence": null,
-              "affinity": [
-                "modifies:minion:strong"
-              ]
-            }
-          ]
-        },
-        {
           "id": "skill:Metadata/Items/Gems/SkillGemSkeletalFrostMage",
           "name": "Skeletal Frost Mage",
           "proofType": "explicit",
@@ -6942,7 +6859,7 @@
       ],
       "carrierCandidates": [],
       "counts": {
-        "direct": 12,
+        "direct": 11,
         "carrierBridge": 0,
         "supportChain": 0
       }
@@ -7868,15 +7785,15 @@
         {
           "id": "skill:Metadata/Items/Gems/SkillGemIncinerate",
           "name": "Incinerate",
-          "proofType": "explicit",
+          "proofType": "inherent",
           "evidence": [
             {
-              "relation": "inflicts",
+              "relation": "fulfills",
               "mechanic": "ignite",
               "confidence": "strong",
-              "proofType": "explicit",
-              "globalRule": null,
-              "damageEvidence": null,
+              "proofType": "inherent",
+              "globalRule": "fire_hit_to_ignite",
+              "damageEvidence": "has_property:fire:exact",
               "affinity": [
                 "modifies:ignite:strong"
               ]
@@ -9294,24 +9211,6 @@
           ]
         },
         {
-          "id": "skill:Metadata/Items/Gems/SkillGemSkeletalCleric",
-          "name": "Skeletal Cleric",
-          "proofType": "explicit",
-          "evidence": [
-            {
-              "relation": "creates",
-              "mechanic": "minion",
-              "confidence": "exact",
-              "proofType": "explicit",
-              "globalRule": null,
-              "damageEvidence": null,
-              "affinity": [
-                "modifies:minion:strong"
-              ]
-            }
-          ]
-        },
-        {
           "id": "skill:Metadata/Items/Gems/SkillGemSkeletalFrostMage",
           "name": "Skeletal Frost Mage",
           "proofType": "explicit",
@@ -9438,7 +9337,7 @@
       ],
       "carrierCandidates": [],
       "counts": {
-        "direct": 12,
+        "direct": 11,
         "carrierBridge": 0,
         "supportChain": 0
       }
@@ -10698,24 +10597,6 @@
           ]
         },
         {
-          "id": "skill:Metadata/Items/Gems/SkillGemSkeletalCleric",
-          "name": "Skeletal Cleric",
-          "proofType": "explicit",
-          "evidence": [
-            {
-              "relation": "creates",
-              "mechanic": "minion",
-              "confidence": "exact",
-              "proofType": "explicit",
-              "globalRule": null,
-              "damageEvidence": null,
-              "affinity": [
-                "modifies:minion:strong"
-              ]
-            }
-          ]
-        },
-        {
           "id": "skill:Metadata/Items/Gems/SkillGemSkeletalFrostMage",
           "name": "Skeletal Frost Mage",
           "proofType": "explicit",
@@ -10824,7 +10705,7 @@
       ],
       "carrierCandidates": [],
       "counts": {
-        "direct": 13,
+        "direct": 12,
         "carrierBridge": 0,
         "supportChain": 0
       }
@@ -11712,15 +11593,15 @@
         {
           "id": "skill:Metadata/Items/Gems/SkillGemIncinerate",
           "name": "Incinerate",
-          "proofType": "explicit",
+          "proofType": "inherent",
           "evidence": [
             {
-              "relation": "inflicts",
+              "relation": "fulfills",
               "mechanic": "ignite",
               "confidence": "strong",
-              "proofType": "explicit",
-              "globalRule": null,
-              "damageEvidence": null,
+              "proofType": "inherent",
+              "globalRule": "fire_hit_to_ignite",
+              "damageEvidence": "has_property:fire:exact",
               "affinity": [
                 "modifies:ignite:strong"
               ]
@@ -13138,24 +13019,6 @@
           ]
         },
         {
-          "id": "skill:Metadata/Items/Gems/SkillGemSkeletalCleric",
-          "name": "Skeletal Cleric",
-          "proofType": "explicit",
-          "evidence": [
-            {
-              "relation": "creates",
-              "mechanic": "minion",
-              "confidence": "exact",
-              "proofType": "explicit",
-              "globalRule": null,
-              "damageEvidence": null,
-              "affinity": [
-                "modifies:minion:strong"
-              ]
-            }
-          ]
-        },
-        {
           "id": "skill:Metadata/Items/Gems/SkillGemSkeletalFrostMage",
           "name": "Skeletal Frost Mage",
           "proofType": "explicit",
@@ -13282,7 +13145,7 @@
       ],
       "carrierCandidates": [],
       "counts": {
-        "direct": 12,
+        "direct": 11,
         "carrierBridge": 0,
         "supportChain": 0
       }
@@ -14155,15 +14018,15 @@
         {
           "id": "skill:Metadata/Items/Gems/SkillGemIncinerate",
           "name": "Incinerate",
-          "proofType": "explicit",
+          "proofType": "inherent",
           "evidence": [
             {
-              "relation": "inflicts",
+              "relation": "fulfills",
               "mechanic": "ignite",
               "confidence": "strong",
-              "proofType": "explicit",
-              "globalRule": null,
-              "damageEvidence": null,
+              "proofType": "inherent",
+              "globalRule": "fire_hit_to_ignite",
+              "damageEvidence": "has_property:fire:exact",
               "affinity": [
                 "modifies:ignite:strong"
               ]
@@ -15581,24 +15444,6 @@
           ]
         },
         {
-          "id": "skill:Metadata/Items/Gems/SkillGemSkeletalCleric",
-          "name": "Skeletal Cleric",
-          "proofType": "explicit",
-          "evidence": [
-            {
-              "relation": "creates",
-              "mechanic": "minion",
-              "confidence": "exact",
-              "proofType": "explicit",
-              "globalRule": null,
-              "damageEvidence": null,
-              "affinity": [
-                "modifies:minion:strong"
-              ]
-            }
-          ]
-        },
-        {
           "id": "skill:Metadata/Items/Gems/SkillGemSkeletalFrostMage",
           "name": "Skeletal Frost Mage",
           "proofType": "explicit",
@@ -15725,7 +15570,7 @@
       ],
       "carrierCandidates": [],
       "counts": {
-        "direct": 12,
+        "direct": 11,
         "carrierBridge": 0,
         "supportChain": 0
       }
@@ -16784,24 +16629,6 @@
           ]
         },
         {
-          "id": "skill:Metadata/Items/Gems/SkillGemSkeletalCleric",
-          "name": "Skeletal Cleric",
-          "proofType": "explicit",
-          "evidence": [
-            {
-              "relation": "creates",
-              "mechanic": "minion",
-              "confidence": "exact",
-              "proofType": "explicit",
-              "globalRule": null,
-              "damageEvidence": null,
-              "affinity": [
-                "modifies:minion:strong"
-              ]
-            }
-          ]
-        },
-        {
           "id": "skill:Metadata/Items/Gems/SkillGemSkeletalFrostMage",
           "name": "Skeletal Frost Mage",
           "proofType": "explicit",
@@ -16910,7 +16737,7 @@
       ],
       "carrierCandidates": [],
       "counts": {
-        "direct": 12,
+        "direct": 11,
         "carrierBridge": 0,
         "supportChain": 0
       }
