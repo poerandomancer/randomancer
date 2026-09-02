@@ -13,16 +13,16 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5473,
+    "fact_count": 5458,
     "fact_relation_counts": {
       "consumes": 395,
-      "converts": 127,
+      "converts": 128,
       "creates": 72,
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 672,
       "inflicts": 186,
-      "modifies": 2394,
+      "modifies": 2378,
       "occupies": 444,
       "prevents": 378,
       "provides": 437,
@@ -81,11 +81,11 @@
   "coverage": {
     "passive_descriptions": {
       "evidence_count": 2495,
-      "fact_count": 298,
+      "fact_count": 299,
       "unparsed_count": 657,
-      "recognized_unstructured_count": 1566,
-      "structured_count": 272,
-      "structured_rate": 0.109,
+      "recognized_unstructured_count": 1565,
+      "structured_count": 273,
+      "structured_rate": 0.1094,
       "samples": {
         "recognized_unstructured": [
           {
@@ -215,7 +215,7 @@
     },
     "passive_stats": {
       "evidence_count": 2294,
-      "fact_count": 1433,
+      "fact_count": 1434,
       "unparsed_count": 456,
       "structured_count": 1069,
       "recognized_unstructured_count": 769,

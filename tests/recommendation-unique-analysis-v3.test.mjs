@@ -71,10 +71,12 @@ test('contradiction overrides positives and conversion remains directional', () 
   const blocked = analyzeWholeUnique(unique([fact('inflicts', 'ignite'), fact('prevents', 'ignite')]), 'ignite', sources([]));
   assert.equal(blocked.contradiction, true);
   assert.deepEqual(rankCandidates([{ id: 'blocked', name: 'Blocked', ...blocked }]), []);
-  const toward = analyzeWholeUnique(unique([{ relation: 'converts', from: 'physical', to: 'fire' }]), 'fire', sources([]));
-  const away = analyzeWholeUnique(unique([{ relation: 'converts', from: 'fire', to: 'cold' }]), 'fire', sources([]));
+  const toward = analyzeWholeUnique(unique([{ relation: 'converts', from: 'physical', to: 'fire', scope: 'outgoing' }]), 'fire', sources([]));
+  const away = analyzeWholeUnique(unique([{ relation: 'converts', from: 'fire', to: 'cold', scope: 'outgoing' }]), 'fire', sources([]));
+  const incoming = analyzeWholeUnique(unique([{ relation: 'converts', from: 'physical', to: 'fire', scope: 'incoming', target: 'self' }]), 'fire', sources([]));
   assert.equal(toward.bestTier, 'BUILD_DEFINING_CAPABILITY');
   assert.equal(away.bestTier, 'CONTRADICTION_PREVENTION');
+  assert.equal(incoming.bestTier, null);
 });
 
 test('Bow and Quiver legality carries no slot priority', () => {

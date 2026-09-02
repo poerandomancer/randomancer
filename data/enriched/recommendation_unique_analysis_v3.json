@@ -30,7 +30,7 @@
     "runtimeSemantics": {
       "enrichedUniqueCount": 73,
       "promotedFactCount": 254,
-      "bytes": 80701
+      "bytes": 80792
     },
     "jewelry": {
       "eligibleRings": 37,
@@ -42,8 +42,8 @@
         "2": 2
       },
       "combinations": {
-        "ringRing": 2,
-        "ringAmulet": 0,
+        "ringRing": 1,
+        "ringAmulet": 1,
         "ringOnly": 5,
         "amuletOnly": 1
       },
@@ -711,6 +711,8 @@
           "target": null,
           "delivery": null,
           "application": null,
+          "condition": null,
+          "conditionTarget": null,
           "provenance": {
             "parentUniqueId": "unique:Brutus' Lead Sprinkler||Morning Star",
             "sourceType": "granted_skill",
@@ -739,6 +741,8 @@
           "target": null,
           "delivery": null,
           "application": null,
+          "condition": null,
+          "conditionTarget": null,
           "provenance": {
             "parentUniqueId": "unique:Kaltenhalt||Ridged Buckler",
             "sourceType": "item_fact",
@@ -767,6 +771,8 @@
           "target": null,
           "delivery": null,
           "application": null,
+          "condition": null,
+          "conditionTarget": null,
           "provenance": {
             "parentUniqueId": "unique:Nightfall||Glacial Fortress",
             "sourceType": "granted_skill",
@@ -795,6 +801,8 @@
           "target": null,
           "delivery": null,
           "application": null,
+          "condition": null,
+          "conditionTarget": null,
           "provenance": {
             "parentUniqueId": "unique:Twisted Empyrean||Aberrant Sledge",
             "sourceType": "granted_skill",
@@ -823,6 +831,8 @@
           "target": null,
           "delivery": null,
           "application": null,
+          "condition": null,
+          "conditionTarget": null,
           "provenance": {
             "parentUniqueId": "unique:The Sentry||Gothic Quarterstaff",
             "sourceType": "item_fact",
@@ -851,6 +861,8 @@
           "target": null,
           "delivery": null,
           "application": null,
+          "condition": null,
+          "conditionTarget": null,
           "provenance": {
             "parentUniqueId": "unique:Fairgraves' Curse||Artillery Bow",
             "sourceType": "granted_skill",
@@ -879,6 +891,8 @@
           "target": null,
           "delivery": null,
           "application": null,
+          "condition": null,
+          "conditionTarget": null,
           "provenance": {
             "parentUniqueId": "unique:Voltaxic Rift||Fanatic Bow",
             "sourceType": "item_fact",
@@ -907,6 +921,8 @@
           "target": null,
           "delivery": null,
           "application": null,
+          "condition": null,
+          "conditionTarget": null,
           "provenance": {
             "parentUniqueId": "unique:Double Vision||Dyad Crossbow",
             "sourceType": "granted_skill",
@@ -927,6 +943,8 @@
           "target": null,
           "delivery": null,
           "application": null,
+          "condition": null,
+          "conditionTarget": null,
           "provenance": {
             "parentUniqueId": "unique:Double Vision||Dyad Crossbow",
             "sourceType": "granted_skill",
@@ -955,6 +973,8 @@
           "target": null,
           "delivery": null,
           "application": null,
+          "condition": null,
+          "conditionTarget": null,
           "provenance": {
             "parentUniqueId": "unique:The Unborn Lich||Ravenous Staff",
             "sourceType": "granted_skill",
@@ -983,6 +1003,8 @@
           "target": null,
           "delivery": null,
           "application": null,
+          "condition": null,
+          "conditionTarget": null,
           "provenance": {
             "parentUniqueId": "unique:The Whispering Ice||Permafrost Staff",
             "sourceType": "granted_skill",
@@ -1011,6 +1033,8 @@
           "target": null,
           "delivery": null,
           "application": null,
+          "condition": null,
+          "conditionTarget": null,
           "provenance": {
             "parentUniqueId": "unique:The Whispering Ice||Permafrost Staff",
             "sourceType": "granted_skill",
@@ -1039,6 +1063,8 @@
           "target": null,
           "delivery": null,
           "application": null,
+          "condition": null,
+          "conditionTarget": null,
           "provenance": {
             "parentUniqueId": "unique:Fury of the King||Ashbark Talisman",
             "sourceType": "granted_skill",
@@ -1067,6 +1093,8 @@
           "target": null,
           "delivery": null,
           "application": null,
+          "condition": null,
+          "conditionTarget": null,
           "provenance": {
             "parentUniqueId": "unique:Kaltenhalt||Ridged Buckler",
             "sourceType": "item_fact",
@@ -1095,6 +1123,8 @@
           "target": null,
           "delivery": null,
           "application": null,
+          "condition": null,
+          "conditionTarget": null,
           "provenance": {
             "parentUniqueId": "unique:Nightfall||Glacial Fortress",
             "sourceType": "granted_skill",
@@ -1123,6 +1153,8 @@
           "target": null,
           "delivery": null,
           "application": null,
+          "condition": null,
+          "conditionTarget": null,
           "provenance": {
             "parentUniqueId": "unique:Kaltenhalt||Ridged Buckler",
             "sourceType": "item_fact",
@@ -1151,6 +1183,8 @@
           "target": null,
           "delivery": null,
           "application": null,
+          "condition": null,
+          "conditionTarget": null,
           "provenance": {
             "parentUniqueId": "unique:Nightfall||Glacial Fortress",
             "sourceType": "granted_skill",
@@ -1179,6 +1213,8 @@
           "target": null,
           "delivery": null,
           "application": null,
+          "condition": null,
+          "conditionTarget": null,
           "provenance": {
             "parentUniqueId": "unique:Atziri's Contempt||Pronged Spear",
             "sourceType": "granted_skill",
@@ -1199,6 +1235,8 @@
           "target": null,
           "delivery": null,
           "application": null,
+          "condition": null,
+          "conditionTarget": null,
           "provenance": {
             "parentUniqueId": "unique:Atziri's Contempt||Pronged Spear",
             "sourceType": "granted_skill",
@@ -1227,6 +1265,8 @@
           "target": null,
           "delivery": null,
           "application": null,
+          "condition": null,
+          "conditionTarget": null,
           "provenance": {
             "parentUniqueId": "unique:Kaltenhalt||Ridged Buckler",
             "sourceType": "item_fact",
@@ -1255,6 +1295,8 @@
           "target": null,
           "delivery": null,
           "application": null,
+          "condition": null,
+          "conditionTarget": null,
           "provenance": {
             "parentUniqueId": "unique:Nightfall||Glacial Fortress",
             "sourceType": "granted_skill",
@@ -1283,6 +1325,8 @@
           "target": null,
           "delivery": null,
           "application": null,
+          "condition": null,
+          "conditionTarget": null,
           "provenance": {
             "parentUniqueId": "unique:Skysliver||Winged Spear",
             "sourceType": "item_fact",
@@ -1311,6 +1355,8 @@
           "target": null,
           "delivery": null,
           "application": null,
+          "condition": null,
+          "conditionTarget": null,
           "provenance": {
             "parentUniqueId": "unique:Spire of Ire||Helix Spear",
             "sourceType": "granted_skill",
@@ -1331,6 +1377,8 @@
           "target": null,
           "delivery": null,
           "application": null,
+          "condition": null,
+          "conditionTarget": null,
           "provenance": {
             "parentUniqueId": "unique:Spire of Ire||Helix Spear",
             "sourceType": "item_fact",
@@ -1359,6 +1407,8 @@
           "target": null,
           "delivery": null,
           "application": null,
+          "condition": null,
+          "conditionTarget": null,
           "provenance": {
             "parentUniqueId": "unique:The Ordained||Grand Spear",
             "sourceType": "granted_skill",
@@ -1700,11 +1750,11 @@
           "score": 211
         },
         {
-          "id": "Berek's Respite||Two-Stone Ring",
-          "name": "Berek's Respite",
-          "itemType": "Ring",
+          "id": "Choir of the Storm||Jade Amulet",
+          "name": "Choir of the Storm",
+          "itemType": "Amulet",
           "tier": "AFFINITY_AMPLIFICATION",
-          "score": 206
+          "score": 211
         }
       ],
       "empty": false
@@ -1800,6 +1850,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Brynhand's Mark||Wooden Club",
               "sourceType": "item_fact",
@@ -1846,6 +1898,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Brynhand's Mark||Wooden Club",
                 "sourceType": "item_fact",
@@ -1884,6 +1938,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Chober Chaber||Leaden Greathammer",
                 "sourceType": "item_fact",
@@ -1922,6 +1978,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Frostbreath||Slim Mace",
                 "sourceType": "item_fact",
@@ -1973,6 +2031,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Brutus' Lead Sprinkler||Morning Star",
               "sourceType": "granted_skill",
@@ -1993,6 +2053,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Brutus' Lead Sprinkler||Morning Star",
               "sourceType": "granted_skill",
@@ -2013,6 +2075,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Brutus' Lead Sprinkler||Morning Star",
               "sourceType": "granted_skill",
@@ -2059,6 +2123,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Brutus' Lead Sprinkler||Morning Star",
                 "sourceType": "granted_skill",
@@ -2079,6 +2145,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Brutus' Lead Sprinkler||Morning Star",
                 "sourceType": "granted_skill",
@@ -2099,6 +2167,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Brutus' Lead Sprinkler||Morning Star",
                 "sourceType": "granted_skill",
@@ -2155,6 +2225,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Twisted Empyrean||Aberrant Sledge",
               "sourceType": "granted_skill",
@@ -2175,6 +2247,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Twisted Empyrean||Aberrant Sledge",
               "sourceType": "item_fact",
@@ -2195,6 +2269,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Twisted Empyrean||Aberrant Sledge",
               "sourceType": "granted_skill",
@@ -2215,6 +2291,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Twisted Empyrean||Aberrant Sledge",
               "sourceType": "granted_skill",
@@ -2261,6 +2339,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Twisted Empyrean||Aberrant Sledge",
                 "sourceType": "granted_skill",
@@ -2281,6 +2361,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Twisted Empyrean||Aberrant Sledge",
                 "sourceType": "item_fact",
@@ -2301,6 +2383,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Twisted Empyrean||Aberrant Sledge",
                 "sourceType": "granted_skill",
@@ -2321,6 +2405,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Twisted Empyrean||Aberrant Sledge",
                 "sourceType": "granted_skill",
@@ -2359,6 +2445,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Frostbreath||Slim Mace",
                 "sourceType": "item_fact",
@@ -2397,6 +2485,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Seeing Stars||Marching Mace",
                 "sourceType": "item_fact",
@@ -2448,6 +2538,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Brain Rattler||Studded Greatclub",
               "sourceType": "item_fact",
@@ -2494,6 +2586,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Brain Rattler||Studded Greatclub",
                 "sourceType": "item_fact",
@@ -2532,6 +2626,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Olrovasara||Torment Club",
                 "sourceType": "item_fact",
@@ -2570,6 +2666,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Seeing Stars||Marching Mace",
                 "sourceType": "item_fact",
@@ -2626,6 +2724,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Nebuloch||Execratus Hammer",
               "sourceType": "item_fact",
@@ -2672,6 +2772,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Nebuloch||Execratus Hammer",
                 "sourceType": "item_fact",
@@ -2744,6 +2846,8 @@
             "target": "enemy",
             "delivery": "generic_hit",
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:The Empty Roar||Cultist Greathammer",
               "sourceType": "item_fact",
@@ -2790,6 +2894,8 @@
               "target": "enemy",
               "delivery": "generic_hit",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:The Empty Roar||Cultist Greathammer",
                 "sourceType": "item_fact",
@@ -2846,6 +2952,8 @@
             "target": "enemy",
             "delivery": "skill",
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Apep's Supremacy||Voodoo Focus",
               "sourceType": "item_fact",
@@ -2866,6 +2974,8 @@
             "target": "enemy",
             "delivery": "spell_hit",
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Apep's Supremacy||Voodoo Focus",
               "sourceType": "item_fact",
@@ -2912,6 +3022,8 @@
               "target": "enemy",
               "delivery": "skill",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Apep's Supremacy||Voodoo Focus",
                 "sourceType": "item_fact",
@@ -2932,6 +3044,8 @@
               "target": "enemy",
               "delivery": "spell_hit",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Apep's Supremacy||Voodoo Focus",
                 "sourceType": "item_fact",
@@ -2983,6 +3097,8 @@
             "target": "enemy",
             "delivery": "skill",
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Twisted Empyrean||Aberrant Sledge",
               "sourceType": "granted_skill",
@@ -3029,6 +3145,8 @@
               "target": "enemy",
               "delivery": "skill",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Twisted Empyrean||Aberrant Sledge",
                 "sourceType": "granted_skill",
@@ -3085,6 +3203,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Frostbreath||Slim Mace",
               "sourceType": "item_fact",
@@ -3131,6 +3251,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Frostbreath||Slim Mace",
                 "sourceType": "item_fact",
@@ -3169,6 +3291,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Twisted Empyrean||Aberrant Sledge",
                 "sourceType": "granted_skill",
@@ -3305,6 +3429,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Nazir's Judgement||Steelpoint Quarterstaff",
               "sourceType": "item_fact",
@@ -3351,6 +3477,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Nazir's Judgement||Steelpoint Quarterstaff",
                 "sourceType": "item_fact",
@@ -3389,6 +3517,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:The Blood Thorn||Wrapped Quarterstaff",
                 "sourceType": "item_fact",
@@ -3427,6 +3557,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Duality||Warding Quarterstaff",
                 "sourceType": "item_fact",
@@ -3478,6 +3610,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:The Sentry||Gothic Quarterstaff",
               "sourceType": "item_fact",
@@ -3524,6 +3658,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:The Sentry||Gothic Quarterstaff",
                 "sourceType": "item_fact",
@@ -3575,6 +3711,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Matsya||Crescent Quarterstaff",
               "sourceType": "item_fact",
@@ -3621,6 +3759,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Matsya||Crescent Quarterstaff",
                 "sourceType": "item_fact",
@@ -3672,6 +3812,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Matsya||Crescent Quarterstaff",
               "sourceType": "item_fact",
@@ -3718,6 +3860,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Matsya||Crescent Quarterstaff",
                 "sourceType": "item_fact",
@@ -3806,6 +3950,8 @@
             "target": "enemy",
             "delivery": "generic_hit",
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:The Blood Thorn||Wrapped Quarterstaff",
               "sourceType": "item_fact",
@@ -3852,6 +3998,8 @@
               "target": "enemy",
               "delivery": "generic_hit",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:The Blood Thorn||Wrapped Quarterstaff",
                 "sourceType": "item_fact",
@@ -4031,6 +4179,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Doomfletch||Composite Bow",
               "sourceType": "item_fact",
@@ -4051,6 +4201,8 @@
             "target": null,
             "delivery": "attack",
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Doomfletch||Composite Bow",
               "sourceType": "item_fact",
@@ -4097,6 +4249,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Doomfletch||Composite Bow",
                 "sourceType": "item_fact",
@@ -4117,6 +4271,8 @@
               "target": null,
               "delivery": "attack",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Doomfletch||Composite Bow",
                 "sourceType": "item_fact",
@@ -4155,6 +4311,8 @@
               "target": null,
               "delivery": "attack",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Murkshaft||Toxic Quiver",
                 "sourceType": "item_fact",
@@ -4175,6 +4333,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Murkshaft||Toxic Quiver",
                 "sourceType": "granted_skill",
@@ -4213,6 +4373,8 @@
               "target": null,
               "delivery": "attack",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Asphyxia's Wrath||Broadhead Quiver",
                 "sourceType": "item_fact",
@@ -4264,6 +4426,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Fairgraves' Curse||Artillery Bow",
               "sourceType": "granted_skill",
@@ -4284,6 +4448,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Fairgraves' Curse||Artillery Bow",
               "sourceType": "item_fact",
@@ -4304,6 +4470,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Fairgraves' Curse||Artillery Bow",
               "sourceType": "granted_skill",
@@ -4324,6 +4492,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Fairgraves' Curse||Artillery Bow",
               "sourceType": "granted_skill",
@@ -4370,6 +4540,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Fairgraves' Curse||Artillery Bow",
                 "sourceType": "granted_skill",
@@ -4390,6 +4562,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Fairgraves' Curse||Artillery Bow",
                 "sourceType": "item_fact",
@@ -4410,6 +4584,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Fairgraves' Curse||Artillery Bow",
                 "sourceType": "granted_skill",
@@ -4430,6 +4606,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Fairgraves' Curse||Artillery Bow",
                 "sourceType": "granted_skill",
@@ -4468,6 +4646,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Periphery||Heartwood Shortbow",
                 "sourceType": "item_fact",
@@ -4488,6 +4668,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Periphery||Heartwood Shortbow",
                 "sourceType": "granted_skill",
@@ -4526,6 +4708,8 @@
               "target": null,
               "delivery": "attack",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Blackgleam||Fire Quiver",
                 "sourceType": "item_fact",
@@ -4577,6 +4761,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Periphery||Heartwood Shortbow",
               "sourceType": "item_fact",
@@ -4597,6 +4783,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Periphery||Heartwood Shortbow",
               "sourceType": "granted_skill",
@@ -4643,6 +4831,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Periphery||Heartwood Shortbow",
                 "sourceType": "item_fact",
@@ -4663,6 +4853,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Periphery||Heartwood Shortbow",
                 "sourceType": "granted_skill",
@@ -4701,6 +4893,8 @@
               "target": null,
               "delivery": "attack",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Asphyxia's Wrath||Broadhead Quiver",
                 "sourceType": "item_fact",
@@ -4752,6 +4946,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Periphery||Heartwood Shortbow",
               "sourceType": "item_fact",
@@ -4772,6 +4968,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Periphery||Heartwood Shortbow",
               "sourceType": "granted_skill",
@@ -4818,6 +5016,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Periphery||Heartwood Shortbow",
                 "sourceType": "item_fact",
@@ -4838,6 +5038,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Periphery||Heartwood Shortbow",
                 "sourceType": "granted_skill",
@@ -4889,6 +5091,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Voltaxic Rift||Fanatic Bow",
               "sourceType": "item_fact",
@@ -4935,6 +5139,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Voltaxic Rift||Fanatic Bow",
                 "sourceType": "item_fact",
@@ -4973,6 +5179,8 @@
               "target": null,
               "delivery": "attack",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Beyond Reach||Visceral Quiver",
                 "sourceType": "item_fact",
@@ -5011,6 +5219,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Murkshaft||Toxic Quiver",
                 "sourceType": "granted_skill",
@@ -5067,6 +5277,8 @@
             "target": "enemy",
             "delivery": "skill",
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Fairgraves' Curse||Artillery Bow",
               "sourceType": "granted_skill",
@@ -5087,6 +5299,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Fairgraves' Curse||Artillery Bow",
               "sourceType": "granted_skill",
@@ -5107,6 +5321,8 @@
             "target": "self",
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Fairgraves' Curse||Artillery Bow",
               "sourceType": "item_fact",
@@ -5153,6 +5369,8 @@
               "target": "enemy",
               "delivery": "skill",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Fairgraves' Curse||Artillery Bow",
                 "sourceType": "granted_skill",
@@ -5173,6 +5391,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Fairgraves' Curse||Artillery Bow",
                 "sourceType": "granted_skill",
@@ -5193,6 +5413,8 @@
               "target": "self",
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Fairgraves' Curse||Artillery Bow",
                 "sourceType": "item_fact",
@@ -5231,6 +5453,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Blackgleam||Fire Quiver",
                 "sourceType": "item_fact",
@@ -5303,6 +5527,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Murkshaft||Toxic Quiver",
               "sourceType": "granted_skill",
@@ -5323,6 +5549,8 @@
             "target": "enemy",
             "delivery": "attack_hit",
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Murkshaft||Toxic Quiver",
               "sourceType": "granted_skill",
@@ -5343,6 +5571,8 @@
             "target": "enemy",
             "delivery": "attack_hit",
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Murkshaft||Toxic Quiver",
               "sourceType": "item_fact",
@@ -5363,6 +5593,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Murkshaft||Toxic Quiver",
               "sourceType": "granted_skill",
@@ -5383,6 +5615,8 @@
             "target": "self",
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Murkshaft||Toxic Quiver",
               "sourceType": "item_fact",
@@ -5429,6 +5663,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Murkshaft||Toxic Quiver",
                 "sourceType": "granted_skill",
@@ -5449,6 +5685,8 @@
               "target": "enemy",
               "delivery": "attack_hit",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Murkshaft||Toxic Quiver",
                 "sourceType": "granted_skill",
@@ -5469,6 +5707,8 @@
               "target": "enemy",
               "delivery": "attack_hit",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Murkshaft||Toxic Quiver",
                 "sourceType": "item_fact",
@@ -5489,6 +5729,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Murkshaft||Toxic Quiver",
                 "sourceType": "granted_skill",
@@ -5509,6 +5751,8 @@
               "target": "self",
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Murkshaft||Toxic Quiver",
                 "sourceType": "item_fact",
@@ -5581,6 +5825,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Beyond Reach||Visceral Quiver",
               "sourceType": "item_fact",
@@ -5627,6 +5873,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Beyond Reach||Visceral Quiver",
                 "sourceType": "item_fact",
@@ -5665,6 +5913,8 @@
               "target": "self",
               "delivery": "generic_hit",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Periphery||Heartwood Shortbow",
                 "sourceType": "item_fact",
@@ -5711,6 +5961,8 @@
             "target": "self",
             "delivery": "generic_hit",
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Periphery||Heartwood Shortbow",
               "sourceType": "item_fact",
@@ -5757,6 +6009,8 @@
               "target": "self",
               "delivery": "generic_hit",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Periphery||Heartwood Shortbow",
                 "sourceType": "item_fact",
@@ -5813,6 +6067,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Beyond Reach||Visceral Quiver",
               "sourceType": "item_fact",
@@ -5859,6 +6115,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Beyond Reach||Visceral Quiver",
                 "sourceType": "item_fact",
@@ -5958,6 +6216,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Rampart Raptor||Tense Crossbow",
               "sourceType": "item_fact",
@@ -6004,6 +6264,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Rampart Raptor||Tense Crossbow",
                 "sourceType": "item_fact",
@@ -6042,6 +6304,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Redemption||Trarthan Cannon",
                 "sourceType": "item_fact",
@@ -6080,6 +6344,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:The Last Lament||Desolate Crossbow",
                 "sourceType": "item_fact",
@@ -6131,6 +6397,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Double Vision||Dyad Crossbow",
               "sourceType": "granted_skill",
@@ -6151,6 +6419,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Double Vision||Dyad Crossbow",
               "sourceType": "granted_skill",
@@ -6171,6 +6441,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Double Vision||Dyad Crossbow",
               "sourceType": "granted_skill",
@@ -6217,6 +6489,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Double Vision||Dyad Crossbow",
                 "sourceType": "granted_skill",
@@ -6237,6 +6511,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Double Vision||Dyad Crossbow",
                 "sourceType": "granted_skill",
@@ -6257,6 +6533,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Double Vision||Dyad Crossbow",
                 "sourceType": "granted_skill",
@@ -6308,6 +6586,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Double Vision||Dyad Crossbow",
               "sourceType": "granted_skill",
@@ -6328,6 +6608,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Double Vision||Dyad Crossbow",
               "sourceType": "granted_skill",
@@ -6348,6 +6630,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Double Vision||Dyad Crossbow",
               "sourceType": "granted_skill",
@@ -6394,6 +6678,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Double Vision||Dyad Crossbow",
                 "sourceType": "granted_skill",
@@ -6414,6 +6700,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Double Vision||Dyad Crossbow",
                 "sourceType": "granted_skill",
@@ -6434,6 +6722,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Double Vision||Dyad Crossbow",
                 "sourceType": "granted_skill",
@@ -6472,6 +6762,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Mist Whisper||Makeshift Crossbow",
                 "sourceType": "item_fact",
@@ -6598,6 +6890,8 @@
             "target": "self",
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Mist Whisper||Makeshift Crossbow",
               "sourceType": "item_fact",
@@ -6644,6 +6938,8 @@
               "target": "self",
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Mist Whisper||Makeshift Crossbow",
                 "sourceType": "item_fact",
@@ -6695,6 +6991,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Mist Whisper||Makeshift Crossbow",
               "sourceType": "item_fact",
@@ -6741,6 +7039,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Mist Whisper||Makeshift Crossbow",
                 "sourceType": "item_fact",
@@ -6872,6 +7172,8 @@
             "target": null,
             "delivery": "spell",
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Atziri's Rule||Reflecting Staff",
               "sourceType": "item_fact",
@@ -6918,6 +7220,8 @@
               "target": null,
               "delivery": "spell",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Atziri's Rule||Reflecting Staff",
                 "sourceType": "item_fact",
@@ -6956,6 +7260,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:The Raven's Flock||Perching Staff",
                 "sourceType": "granted_skill",
@@ -7007,6 +7313,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Dusk Vigil||Ashen Staff",
               "sourceType": "item_fact",
@@ -7027,6 +7335,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Dusk Vigil||Ashen Staff",
               "sourceType": "granted_skill",
@@ -7047,6 +7357,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Dusk Vigil||Ashen Staff",
               "sourceType": "granted_skill",
@@ -7067,6 +7379,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Dusk Vigil||Ashen Staff",
               "sourceType": "granted_skill",
@@ -7113,6 +7427,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Dusk Vigil||Ashen Staff",
                 "sourceType": "item_fact",
@@ -7133,6 +7449,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Dusk Vigil||Ashen Staff",
                 "sourceType": "granted_skill",
@@ -7153,6 +7471,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Dusk Vigil||Ashen Staff",
                 "sourceType": "granted_skill",
@@ -7173,6 +7493,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Dusk Vigil||Ashen Staff",
                 "sourceType": "granted_skill",
@@ -7211,6 +7533,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:The Searing Touch||Pyrophyte Staff",
                 "sourceType": "granted_skill",
@@ -7231,6 +7555,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:The Searing Touch||Pyrophyte Staff",
                 "sourceType": "item_fact",
@@ -7269,6 +7595,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:The Unborn Lich||Ravenous Staff",
                 "sourceType": "granted_skill",
@@ -7320,6 +7648,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:The Whispering Ice||Permafrost Staff",
               "sourceType": "granted_skill",
@@ -7340,6 +7670,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:The Whispering Ice||Permafrost Staff",
               "sourceType": "granted_skill",
@@ -7386,6 +7718,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:The Whispering Ice||Permafrost Staff",
                 "sourceType": "granted_skill",
@@ -7406,6 +7740,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:The Whispering Ice||Permafrost Staff",
                 "sourceType": "granted_skill",
@@ -7444,6 +7780,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Earthbound||Voltaic Staff",
                 "sourceType": "granted_skill",
@@ -7482,6 +7820,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Taryn's Shiver||Gelid Staff",
                 "sourceType": "granted_skill",
@@ -7533,6 +7873,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Earthbound||Voltaic Staff",
               "sourceType": "granted_skill",
@@ -7553,6 +7895,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Earthbound||Voltaic Staff",
               "sourceType": "granted_skill",
@@ -7573,6 +7917,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Earthbound||Voltaic Staff",
               "sourceType": "granted_skill",
@@ -7593,6 +7939,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Earthbound||Voltaic Staff",
               "sourceType": "granted_skill",
@@ -7639,6 +7987,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Earthbound||Voltaic Staff",
                 "sourceType": "granted_skill",
@@ -7659,6 +8009,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Earthbound||Voltaic Staff",
                 "sourceType": "granted_skill",
@@ -7679,6 +8031,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Earthbound||Voltaic Staff",
                 "sourceType": "granted_skill",
@@ -7699,6 +8053,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Earthbound||Voltaic Staff",
                 "sourceType": "granted_skill",
@@ -7737,6 +8093,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Dusk Vigil||Ashen Staff",
                 "sourceType": "granted_skill",
@@ -7757,6 +8115,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Dusk Vigil||Ashen Staff",
                 "sourceType": "granted_skill",
@@ -7777,6 +8137,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Dusk Vigil||Ashen Staff",
                 "sourceType": "granted_skill",
@@ -7797,6 +8159,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Dusk Vigil||Ashen Staff",
                 "sourceType": "granted_skill",
@@ -7848,6 +8212,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:The Burden of Shadows||Chiming Staff",
               "sourceType": "item_fact",
@@ -7894,6 +8260,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:The Burden of Shadows||Chiming Staff",
                 "sourceType": "item_fact",
@@ -7932,6 +8300,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:The Unborn Lich||Ravenous Staff",
                 "sourceType": "item_fact",
@@ -7970,6 +8340,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:The Raven's Flock||Perching Staff",
                 "sourceType": "granted_skill",
@@ -8021,6 +8393,8 @@
             "target": "enemy",
             "delivery": "skill",
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Dusk Vigil||Ashen Staff",
               "sourceType": "granted_skill",
@@ -8067,6 +8441,8 @@
               "target": "enemy",
               "delivery": "skill",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Dusk Vigil||Ashen Staff",
                 "sourceType": "granted_skill",
@@ -8105,6 +8481,8 @@
               "target": "self",
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:The Searing Touch||Pyrophyte Staff",
                 "sourceType": "item_fact",
@@ -8204,6 +8582,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Taryn's Shiver||Gelid Staff",
               "sourceType": "granted_skill",
@@ -8224,6 +8604,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Taryn's Shiver||Gelid Staff",
               "sourceType": "item_fact",
@@ -8270,6 +8652,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Taryn's Shiver||Gelid Staff",
                 "sourceType": "granted_skill",
@@ -8290,6 +8674,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Taryn's Shiver||Gelid Staff",
                 "sourceType": "item_fact",
@@ -8346,6 +8732,8 @@
             "target": "enemy",
             "delivery": "skill",
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Earthbound||Voltaic Staff",
               "sourceType": "item_fact",
@@ -8366,6 +8754,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Earthbound||Voltaic Staff",
               "sourceType": "granted_skill",
@@ -8386,6 +8776,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Earthbound||Voltaic Staff",
               "sourceType": "granted_skill",
@@ -8406,6 +8798,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Earthbound||Voltaic Staff",
               "sourceType": "granted_skill",
@@ -8426,6 +8820,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Earthbound||Voltaic Staff",
               "sourceType": "item_fact",
@@ -8472,6 +8868,8 @@
               "target": "enemy",
               "delivery": "skill",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Earthbound||Voltaic Staff",
                 "sourceType": "item_fact",
@@ -8492,6 +8890,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Earthbound||Voltaic Staff",
                 "sourceType": "granted_skill",
@@ -8512,6 +8912,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Earthbound||Voltaic Staff",
                 "sourceType": "granted_skill",
@@ -8532,6 +8934,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Earthbound||Voltaic Staff",
                 "sourceType": "granted_skill",
@@ -8552,6 +8956,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Earthbound||Voltaic Staff",
                 "sourceType": "item_fact",
@@ -8667,6 +9073,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Amor Mandragora||Changeling Talisman",
               "sourceType": "item_fact",
@@ -8713,6 +9121,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Amor Mandragora||Changeling Talisman",
                 "sourceType": "item_fact",
@@ -8751,6 +9161,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Hysseg's Claw||Familial Talisman",
                 "sourceType": "granted_skill",
@@ -8771,6 +9183,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Hysseg's Claw||Familial Talisman",
                 "sourceType": "item_fact",
@@ -8809,6 +9223,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Spiteful Floret||Nettle Talisman",
                 "sourceType": "item_fact",
@@ -8860,6 +9276,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Fury of the King||Ashbark Talisman",
               "sourceType": "granted_skill",
@@ -8880,6 +9298,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Fury of the King||Ashbark Talisman",
               "sourceType": "item_fact",
@@ -8900,6 +9320,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Fury of the King||Ashbark Talisman",
               "sourceType": "granted_skill",
@@ -8946,6 +9368,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Fury of the King||Ashbark Talisman",
                 "sourceType": "granted_skill",
@@ -8966,6 +9390,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Fury of the King||Ashbark Talisman",
                 "sourceType": "item_fact",
@@ -8986,6 +9412,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Fury of the King||Ashbark Talisman",
                 "sourceType": "granted_skill",
@@ -9106,6 +9534,8 @@
             "target": "enemy",
             "delivery": "generic_hit",
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Spiteful Floret||Nettle Talisman",
               "sourceType": "item_fact",
@@ -9126,6 +9556,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": "hitting_bleeding_enemies_once_every_x_ms",
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Spiteful Floret||Nettle Talisman",
               "sourceType": "granted_skill",
@@ -9146,6 +9578,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Spiteful Floret||Nettle Talisman",
               "sourceType": "granted_skill",
@@ -9192,6 +9626,8 @@
               "target": "enemy",
               "delivery": "generic_hit",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Spiteful Floret||Nettle Talisman",
                 "sourceType": "item_fact",
@@ -9212,6 +9648,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": "hitting_bleeding_enemies_once_every_x_ms",
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Spiteful Floret||Nettle Talisman",
                 "sourceType": "granted_skill",
@@ -9232,6 +9670,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Spiteful Floret||Nettle Talisman",
                 "sourceType": "granted_skill",
@@ -9411,6 +9851,8 @@
             "target": null,
             "delivery": "spell",
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Liminal Coil||Twisted Wand",
               "sourceType": "item_fact",
@@ -9457,6 +9899,8 @@
               "target": null,
               "delivery": "spell",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Liminal Coil||Twisted Wand",
                 "sourceType": "item_fact",
@@ -9495,6 +9939,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Adonia's Ego||Siphoning Wand",
                 "sourceType": "granted_skill",
@@ -9533,6 +9979,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Runeseeker's Call||Runemastered Runic Fork",
                 "sourceType": "granted_skill",
@@ -9584,6 +10032,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Cursecarver||Acrid Wand",
               "sourceType": "granted_skill",
@@ -9604,6 +10054,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Cursecarver||Acrid Wand",
               "sourceType": "granted_skill",
@@ -9650,6 +10102,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Cursecarver||Acrid Wand",
                 "sourceType": "granted_skill",
@@ -9670,6 +10124,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Cursecarver||Acrid Wand",
                 "sourceType": "granted_skill",
@@ -9708,6 +10164,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Adonia's Ego||Siphoning Wand",
                 "sourceType": "granted_skill",
@@ -9746,6 +10204,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Enezun's Charge||Volatile Wand",
                 "sourceType": "granted_skill",
@@ -9802,6 +10262,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Adonia's Ego||Siphoning Wand",
               "sourceType": "granted_skill",
@@ -9848,6 +10310,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Adonia's Ego||Siphoning Wand",
                 "sourceType": "granted_skill",
@@ -9886,6 +10350,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Runeseeker's Call||Runemastered Runic Fork",
                 "sourceType": "granted_skill",
@@ -9937,6 +10403,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Adonia's Ego||Siphoning Wand",
               "sourceType": "granted_skill",
@@ -9983,6 +10451,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Adonia's Ego||Siphoning Wand",
                 "sourceType": "granted_skill",
@@ -10039,6 +10509,8 @@
             "target": null,
             "delivery": "spell",
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Liminal Coil||Twisted Wand",
               "sourceType": "item_fact",
@@ -10059,6 +10531,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Liminal Coil||Twisted Wand",
               "sourceType": "granted_skill",
@@ -10105,6 +10579,8 @@
               "target": null,
               "delivery": "spell",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Liminal Coil||Twisted Wand",
                 "sourceType": "item_fact",
@@ -10125,6 +10601,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Liminal Coil||Twisted Wand",
                 "sourceType": "granted_skill",
@@ -10163,6 +10641,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Cursecarver||Acrid Wand",
                 "sourceType": "granted_skill",
@@ -10183,6 +10663,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Cursecarver||Acrid Wand",
                 "sourceType": "granted_skill",
@@ -10203,6 +10685,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Cursecarver||Acrid Wand",
                 "sourceType": "granted_skill",
@@ -10223,6 +10707,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Cursecarver||Acrid Wand",
                 "sourceType": "granted_skill",
@@ -10261,6 +10747,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:The Wicked Quill||Withered Wand",
                 "sourceType": "granted_skill",
@@ -10333,6 +10821,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Sanguine Diviner||Bone Wand",
               "sourceType": "granted_skill",
@@ -10353,6 +10843,8 @@
             "target": "enemy",
             "delivery": "generic_hit",
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Sanguine Diviner||Bone Wand",
               "sourceType": "item_fact",
@@ -10373,6 +10865,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Sanguine Diviner||Bone Wand",
               "sourceType": "granted_skill",
@@ -10419,6 +10913,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Sanguine Diviner||Bone Wand",
                 "sourceType": "granted_skill",
@@ -10439,6 +10935,8 @@
               "target": "enemy",
               "delivery": "generic_hit",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Sanguine Diviner||Bone Wand",
                 "sourceType": "item_fact",
@@ -10459,6 +10957,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Sanguine Diviner||Bone Wand",
                 "sourceType": "granted_skill",
@@ -10515,6 +11015,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Cursecarver||Acrid Wand",
               "sourceType": "granted_skill",
@@ -10535,6 +11037,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Cursecarver||Acrid Wand",
               "sourceType": "granted_skill",
@@ -10581,6 +11085,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Cursecarver||Acrid Wand",
                 "sourceType": "granted_skill",
@@ -10601,6 +11107,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Cursecarver||Acrid Wand",
                 "sourceType": "granted_skill",
@@ -10673,6 +11181,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Kaltenhalt||Ridged Buckler",
               "sourceType": "item_fact",
@@ -10719,6 +11229,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Kaltenhalt||Ridged Buckler",
                 "sourceType": "item_fact",
@@ -10850,6 +11362,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Sylvan's Effigy||Stoic Sceptre",
               "sourceType": "granted_skill",
@@ -10896,6 +11410,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Sylvan's Effigy||Stoic Sceptre",
                 "sourceType": "granted_skill",
@@ -10947,6 +11463,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Guiding Palm of the Heart||Shrine Sceptre",
               "sourceType": "item_fact",
@@ -10967,6 +11485,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Guiding Palm of the Heart||Shrine Sceptre",
               "sourceType": "granted_skill",
@@ -10987,6 +11507,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Guiding Palm of the Heart||Shrine Sceptre",
               "sourceType": "item_fact",
@@ -11033,6 +11555,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Guiding Palm of the Heart||Shrine Sceptre",
                 "sourceType": "item_fact",
@@ -11053,6 +11577,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Guiding Palm of the Heart||Shrine Sceptre",
                 "sourceType": "granted_skill",
@@ -11073,6 +11599,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Guiding Palm of the Heart||Shrine Sceptre",
                 "sourceType": "item_fact",
@@ -11111,6 +11639,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Sacred Flame||Shrine Sceptre",
                 "sourceType": "item_fact",
@@ -11131,6 +11661,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Sacred Flame||Shrine Sceptre",
                 "sourceType": "granted_skill",
@@ -11187,6 +11719,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Guiding Palm of the Eye||Shrine Sceptre",
               "sourceType": "item_fact",
@@ -11207,6 +11741,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Guiding Palm of the Eye||Shrine Sceptre",
               "sourceType": "granted_skill",
@@ -11227,6 +11763,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Guiding Palm of the Eye||Shrine Sceptre",
               "sourceType": "item_fact",
@@ -11273,6 +11811,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Guiding Palm of the Eye||Shrine Sceptre",
                 "sourceType": "item_fact",
@@ -11293,6 +11833,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Guiding Palm of the Eye||Shrine Sceptre",
                 "sourceType": "granted_skill",
@@ -11313,6 +11855,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Guiding Palm of the Eye||Shrine Sceptre",
                 "sourceType": "item_fact",
@@ -11364,6 +11908,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Guiding Palm of the Mind||Shrine Sceptre",
               "sourceType": "item_fact",
@@ -11384,6 +11930,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Guiding Palm of the Mind||Shrine Sceptre",
               "sourceType": "granted_skill",
@@ -11404,6 +11952,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Guiding Palm of the Mind||Shrine Sceptre",
               "sourceType": "item_fact",
@@ -11450,6 +12000,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Guiding Palm of the Mind||Shrine Sceptre",
                 "sourceType": "item_fact",
@@ -11470,6 +12022,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Guiding Palm of the Mind||Shrine Sceptre",
                 "sourceType": "granted_skill",
@@ -11490,6 +12044,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Guiding Palm of the Mind||Shrine Sceptre",
                 "sourceType": "item_fact",
@@ -11546,6 +12102,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Palm of the Dreamer||Shrine Sceptre",
               "sourceType": "item_fact",
@@ -11566,6 +12124,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Palm of the Dreamer||Shrine Sceptre",
               "sourceType": "granted_skill",
@@ -11586,6 +12146,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Palm of the Dreamer||Shrine Sceptre",
               "sourceType": "item_fact",
@@ -11632,6 +12194,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Palm of the Dreamer||Shrine Sceptre",
                 "sourceType": "item_fact",
@@ -11652,6 +12216,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Palm of the Dreamer||Shrine Sceptre",
                 "sourceType": "granted_skill",
@@ -11672,6 +12238,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Palm of the Dreamer||Shrine Sceptre",
                 "sourceType": "item_fact",
@@ -11710,6 +12278,8 @@
               "target": null,
               "delivery": "minion",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:The Dark Defiler||Rattling Sceptre",
                 "sourceType": "item_fact",
@@ -11772,6 +12342,8 @@
             "target": "enemy",
             "delivery": "attack_hit",
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Sylvan's Effigy||Stoic Sceptre",
               "sourceType": "granted_skill",
@@ -11818,6 +12390,8 @@
               "target": "enemy",
               "delivery": "attack_hit",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Sylvan's Effigy||Stoic Sceptre",
                 "sourceType": "granted_skill",
@@ -11874,6 +12448,8 @@
             "target": "enemy",
             "delivery": "skill",
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Apep's Supremacy||Voodoo Focus",
               "sourceType": "item_fact",
@@ -11894,6 +12470,8 @@
             "target": "enemy",
             "delivery": "spell_hit",
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Apep's Supremacy||Voodoo Focus",
               "sourceType": "item_fact",
@@ -11940,6 +12518,8 @@
               "target": "enemy",
               "delivery": "skill",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Apep's Supremacy||Voodoo Focus",
                 "sourceType": "item_fact",
@@ -11960,6 +12540,8 @@
               "target": "enemy",
               "delivery": "spell_hit",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Apep's Supremacy||Voodoo Focus",
                 "sourceType": "item_fact",
@@ -12032,6 +12614,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Kaltenhalt||Ridged Buckler",
               "sourceType": "item_fact",
@@ -12078,6 +12662,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Kaltenhalt||Ridged Buckler",
                 "sourceType": "item_fact",
@@ -12209,6 +12795,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Chainsting||Hunting Spear",
               "sourceType": "item_fact",
@@ -12255,6 +12843,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Chainsting||Hunting Spear",
                 "sourceType": "item_fact",
@@ -12293,6 +12883,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Daevata's Wind||War Spear",
                 "sourceType": "item_fact",
@@ -12331,6 +12923,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Saitha's Spear||Barbed Spear",
                 "sourceType": "item_fact",
@@ -12382,6 +12976,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Atziri's Contempt||Pronged Spear",
               "sourceType": "granted_skill",
@@ -12402,6 +12998,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Atziri's Contempt||Pronged Spear",
               "sourceType": "item_fact",
@@ -12422,6 +13020,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Atziri's Contempt||Pronged Spear",
               "sourceType": "granted_skill",
@@ -12442,6 +13042,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Atziri's Contempt||Pronged Spear",
               "sourceType": "granted_skill",
@@ -12488,6 +13090,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Atziri's Contempt||Pronged Spear",
                 "sourceType": "granted_skill",
@@ -12508,6 +13112,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Atziri's Contempt||Pronged Spear",
                 "sourceType": "item_fact",
@@ -12528,6 +13134,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Atziri's Contempt||Pronged Spear",
                 "sourceType": "granted_skill",
@@ -12548,6 +13156,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Atziri's Contempt||Pronged Spear",
                 "sourceType": "granted_skill",
@@ -12586,6 +13196,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Saitha's Spear||Barbed Spear",
                 "sourceType": "item_fact",
@@ -12642,6 +13254,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Kaltenhalt||Ridged Buckler",
               "sourceType": "item_fact",
@@ -12688,6 +13302,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Kaltenhalt||Ridged Buckler",
                 "sourceType": "item_fact",
@@ -12726,6 +13342,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Nightfall||Glacial Fortress",
                 "sourceType": "granted_skill",
@@ -12746,6 +13364,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Nightfall||Glacial Fortress",
                 "sourceType": "granted_skill",
@@ -12766,6 +13386,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Nightfall||Glacial Fortress",
                 "sourceType": "granted_skill",
@@ -12817,6 +13439,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Atziri's Contempt||Pronged Spear",
               "sourceType": "granted_skill",
@@ -12837,6 +13461,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Atziri's Contempt||Pronged Spear",
               "sourceType": "item_fact",
@@ -12857,6 +13483,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Atziri's Contempt||Pronged Spear",
               "sourceType": "granted_skill",
@@ -12877,6 +13505,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Atziri's Contempt||Pronged Spear",
               "sourceType": "granted_skill",
@@ -12923,6 +13553,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Atziri's Contempt||Pronged Spear",
                 "sourceType": "granted_skill",
@@ -12943,6 +13575,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Atziri's Contempt||Pronged Spear",
                 "sourceType": "item_fact",
@@ -12963,6 +13597,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Atziri's Contempt||Pronged Spear",
                 "sourceType": "granted_skill",
@@ -12983,6 +13619,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Atziri's Contempt||Pronged Spear",
                 "sourceType": "granted_skill",
@@ -13021,6 +13659,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:The Ordained||Grand Spear",
                 "sourceType": "granted_skill",
@@ -13041,6 +13681,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:The Ordained||Grand Spear",
                 "sourceType": "item_fact",
@@ -13061,6 +13703,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:The Ordained||Grand Spear",
                 "sourceType": "granted_skill",
@@ -13081,6 +13725,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:The Ordained||Grand Spear",
                 "sourceType": "granted_skill",
@@ -13119,6 +13765,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Skysliver||Winged Spear",
                 "sourceType": "item_fact",
@@ -13175,6 +13823,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Spire of Ire||Helix Spear",
               "sourceType": "granted_skill",
@@ -13195,6 +13845,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Spire of Ire||Helix Spear",
               "sourceType": "item_fact",
@@ -13215,6 +13867,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Spire of Ire||Helix Spear",
               "sourceType": "granted_skill",
@@ -13235,6 +13889,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Spire of Ire||Helix Spear",
               "sourceType": "granted_skill",
@@ -13281,6 +13937,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Spire of Ire||Helix Spear",
                 "sourceType": "granted_skill",
@@ -13301,6 +13959,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Spire of Ire||Helix Spear",
                 "sourceType": "item_fact",
@@ -13321,6 +13981,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Spire of Ire||Helix Spear",
                 "sourceType": "granted_skill",
@@ -13341,6 +14003,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Spire of Ire||Helix Spear",
                 "sourceType": "granted_skill",
@@ -13413,6 +14077,8 @@
             "target": "enemy",
             "delivery": "generic_hit",
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Saitha's Spear||Barbed Spear",
               "sourceType": "item_fact",
@@ -13459,6 +14125,8 @@
               "target": "enemy",
               "delivery": "generic_hit",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Saitha's Spear||Barbed Spear",
                 "sourceType": "item_fact",
@@ -13515,6 +14183,8 @@
             "target": "enemy",
             "delivery": "generic_hit",
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Splinter of Lorrata||Hardwood Spear",
               "sourceType": "item_fact",
@@ -13561,6 +14231,8 @@
               "target": "enemy",
               "delivery": "generic_hit",
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Splinter of Lorrata||Hardwood Spear",
                 "sourceType": "item_fact",
@@ -13633,6 +14305,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Kaltenhalt||Ridged Buckler",
               "sourceType": "item_fact",
@@ -13679,6 +14353,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Kaltenhalt||Ridged Buckler",
                 "sourceType": "item_fact",
@@ -13730,6 +14406,8 @@
             "target": null,
             "delivery": null,
             "application": null,
+            "condition": null,
+            "conditionTarget": null,
             "provenance": {
               "parentUniqueId": "unique:Skysliver||Winged Spear",
               "sourceType": "item_fact",
@@ -13776,6 +14454,8 @@
               "target": null,
               "delivery": null,
               "application": null,
+              "condition": null,
+              "conditionTarget": null,
               "provenance": {
                 "parentUniqueId": "unique:Skysliver||Winged Spear",
                 "sourceType": "item_fact",

@@ -9,7 +9,7 @@ This deterministic report audits the implemented whole-item runtime semantics wh
 - Material granted-semantic gaps: 33
 - Previous empty cells: 108; new empty cells: 73; empty→non-empty: 36
 - Existing non-empty winner changes: 10; runtime/top-band agreement: 131/135
-- Runtime semantics: 73 uniques, 254 promoted facts, 80701 bytes
+- Runtime semantics: 73 uniques, 254 promoted facts, 80792 bytes
 - Quality bands: one=49, two=9, three=7 (zero=70)
 
 ## Ranking model
