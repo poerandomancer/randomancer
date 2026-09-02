@@ -106,7 +106,10 @@ const DAMAGE_TYPE_AFFINITIES = Object.freeze({
   fire: ['ignite', 'detonation'],
   cold: ['chill', 'freeze'],
   lightning: ['shock', 'electrocute'],
-  chaos: ['poison']
+  // Poison is mechanically Chaos damage, but it is a distinct rolled build
+  // intention.  Keep the inverse carrier relationship for Poison obligations;
+  // a Chaos obligation must not manufacture Poison package context.
+  chaos: []
 });
 const CARRIER_RELATIONS = new Set(['fulfills', 'has_property', 'converts']);
 const PACKAGE_CANDIDATE_ROLES = new Set(['primary_damage', 'setup_control', 'payoff', 'enabler', 'utility']);
@@ -854,11 +857,41 @@ function factMechanics(fact) {
   return unique([normalizeToken(fact?.mechanic)]);
 }
 
-function factMatchesObligation(fact, obligation) {
+function factSourceKind(fact) {
+  return normalizeToken(fact?.source_kind || fact?.sourceKind || fact?.k
+    || asArray(fact?.evidence)[0]?.kind);
+}
+
+function isIndependentChaosEvidenceV3(entity, fact) {
+  const relation = normalizeToken(fact?.relation || fact?.r);
+  const targetMechanics = unique([
+    ...factMechanics(fact),
+    normalizeToken(fact?.m),
+    normalizeToken(fact?.t)
+  ]);
+  if (!targetMechanics.includes('chaos')) return true;
+  if (relation === 'converts' && normalizeToken(fact?.to || fact?.t) === 'chaos') return true;
+
+  const facts = asArray(entity?.facts);
+  const hasPoisonSemantics = facts.some((candidate) =>
+    factMechanics(candidate).includes('poison') || normalizeToken(candidate?.condition) === 'poison');
+  if (!hasPoisonSemantics) return true;
+
+  const broadTaxonomySources = new Set(['active_skill_type', 'taxonomy_damage_type']);
+  const independentlyTypedChaos = facts.some((candidate) => {
+    if (!factMechanics(candidate).includes('chaos')) return false;
+    if (candidate?.relation === 'converts' && normalizeToken(candidate?.to) === 'chaos') return true;
+    return !broadTaxonomySources.has(factSourceKind(candidate));
+  });
+  return independentlyTypedChaos || !broadTaxonomySources.has(factSourceKind(fact));
+}
+
+function factMatchesObligation(fact, obligation, entity = null) {
   if (!fact || obligation?.kind !== 'offense') return false;
   if (!HARD_CONFIDENCE.has(fact.confidence)) return false;
   if (!asArray(obligation.allowedRelations).includes(fact.relation)) return false;
   const allowedMechanics = new Set(asArray(obligation.mechanics).map(normalizeToken));
+  if (allowedMechanics.has('chaos') && entity && !isIndependentChaosEvidenceV3(entity, fact)) return false;
   return factMechanics(fact).some((mechanic) => allowedMechanics.has(mechanic));
 }
 
@@ -1036,7 +1069,7 @@ function supportProofForObligation(entity, supports, obligation) {
   const proofs = [];
   for (const support of supports) {
     for (const fact of actionableSupportFacts(support)) {
-      if (!factMatchesObligation(fact, obligation)
+      if (!factMatchesObligation(fact, obligation, support)
         || !supportFactExplicitlyEnables(fact)
         || !supportFactConditionIsMet(fact, entity, supports)) continue;
       const mechanic = factMechanics(fact)[0] || '';
@@ -1094,7 +1127,7 @@ function supportCompletionProof(entity, obligation, index) {
       .map((fact) => normalizeToken(fact?.mechanic))
       .filter((mechanic) => !supportPackageSuppliesMechanic(entity, single, mechanic));
     const conditionMechanics = actionableSupportFacts(terminal)
-      .filter((fact) => factMatchesObligation(fact, obligation))
+      .filter((fact) => factMatchesObligation(fact, obligation, terminal))
       .map((fact) => normalizeToken(fact?.condition))
       .filter((condition) => condition.endsWith('_damage'))
       .map((condition) => condition.slice(0, -'_damage'.length))
@@ -1488,7 +1521,7 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalP
   let exactCarrierProofs = 0;
   for (const obligation of offenseObligations) {
     const proofs = facts.filter((fact) =>
-      factMatchesObligation(fact, obligation)
+      factMatchesObligation(fact, obligation, entity)
       && factIsUsableForCandidate(entity, fact, obligation)
     );
     if (proofs.length) {
@@ -1935,7 +1968,7 @@ function adjacentOffenseFacts(candidate, offenseObligations) {
     ['modifies', 'provides', 'converts'].includes(fact?.relation)
     && factMechanics(fact).some((mechanic) => mechanics.has(mechanic))
     && !offenseObligations.some((obligation) =>
-      factMatchesObligation(fact, obligation) || factMatchesCarrier(fact, obligation)
+      factMatchesObligation(fact, obligation, candidate.entity) || factMatchesCarrier(fact, obligation)
     )
   );
 }
@@ -3343,6 +3376,7 @@ export {
   evaluateCompatibilityV3,
   evaluateDeliveryCompatibilityV3,
   isEquipmentCompatibleV3,
+  isIndependentChaosEvidenceV3,
   isRecommendationContentAllowedV3,
   mergeRecommendationGrantedSkillAccessV3,
   mergeRecommendationSkillCraftingV3,

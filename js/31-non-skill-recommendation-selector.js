@@ -1,7 +1,7 @@
 // Conservative selection for catalog entities which are not gems.  This consumes the
 // same facts and compatibility records as the skill package selector; it deliberately
 // does not attempt to infer a second build model from display text.
-import { isRecommendationContentAllowedV3 } from './30-recommendation-v3-selector.js';
+import { isIndependentChaosEvidenceV3, isRecommendationContentAllowedV3 } from './30-recommendation-v3-selector.js';
 
 const GENERIC = new Set(['damage', 'hit', 'attack', 'attributes', 'attribute', 'strength', 'dexterity', 'intelligence', 'armour', 'evasion', 'energy_shield', 'life', 'mana', 'defence', 'defenses']);
 const SEASONAL = new Set(['kalguuran', 'prototype', 'inaccessible', 'dnt', 'dnt_unused', 'coming_soon', 'derived_template']);
@@ -148,6 +148,8 @@ function analyze(entity, snapshot, context) {
       && !factAppliesToPackage(fact, recommendationPackage, sources)) continue;
     const mechanic = token(fact?.relation === 'converts' ? fact.to : fact?.mechanic);
     if (!mechanic || GENERIC.has(mechanic) || !GOOD_RELATIONS.has(fact?.relation)) continue;
+    if (context.offense.has('chaos') && mechanic === 'chaos'
+      && !isIndependentChaosEvidenceV3(entity, fact)) continue;
     const kind = context.offense.has(mechanic) ? 'offense' : context.package.has(mechanic) ? 'skill_support' : '';
     if (kind) matches.push({ kind, mechanic, relation: fact.relation,
       delivery: fact.delivery || null, target: fact.target || null, scope: fact.scope || null,
@@ -234,7 +236,8 @@ function analyzeUnique(entity, offense, recommendationPackage = null) {
   const compact = entity?.unique_offense_semantics?.[offenseId];
   if (compact?.tier === 'CONTRADICTION_PREVENTION') return null;
   const compactFacts = arr(compact?.facts);
-  const matches = compactFacts.filter((fact) => factAppliesToPackage(fact, recommendationPackage, sourceMechanics)
+  const matches = compactFacts.filter((fact) => isIndependentChaosEvidenceV3(entity, fact)
+    && factAppliesToPackage(fact, recommendationPackage, sourceMechanics)
     && (token(fact.r) !== 'converts' || token(fact.s) === 'outgoing'))
     .map((fact) => ({ kind: 'offense', mechanic: fact.m || fact.t || offenseId,
       relation: fact.r, category: fact.c, sourceKind: fact.k, sourceEntity: fact.e || null,
@@ -245,7 +248,8 @@ function analyzeUnique(entity, offense, recommendationPackage = null) {
   if (!compact && contradicts(entity, offense)) return null;
   if (!compact) for (const fact of arr(entity.facts)) {
     const relation = token(fact?.relation); const mechanic = token(relation === 'converts' ? fact?.to : fact?.mechanic);
-    if (!mechanic || !offense.has(mechanic) || !GOOD_RELATIONS.has(relation) || !factAppliesToPackage(fact, recommendationPackage, sourceMechanics)
+    if (!mechanic || !offense.has(mechanic) || !GOOD_RELATIONS.has(relation)
+      || !isIndependentChaosEvidenceV3(entity, fact) || !factAppliesToPackage(fact, recommendationPackage, sourceMechanics)
       || (relation === 'converts' && (!sourceMechanicMatches(fact?.from, sourceMechanics)
         || token(fact?.scope) !== 'outgoing'))) continue;
     matches.push({ kind: 'offense', mechanic, relation, category:

@@ -14,6 +14,27 @@ const snap = { ascendancy: 'Invoker', weaponFamily: 'Bow', offenseList: ['Freeze
 const pkg = { selectionSeed: 'fixed', pieces: [{ entityId: 'skill' }] };
 const catalog = (entities) => ({ entities: [entity('skill', 'active_skill', ['freeze']), ...entities] });
 
+test('Poison-only non-skill semantics cannot establish Chaos relevance', () => {
+  const poisonFact = { relation: 'modifies', mechanic: 'poison', confidence: 'exact', offense_role: 'primary_damage' };
+  const chaosFact = { relation: 'has_property', mechanic: 'chaos', confidence: 'exact', offense_role: 'primary_damage',
+    evidence: [{ kind: 'taxonomy_damage_type', value: 'Chaos' }] };
+  const poisonPassive = entity('poison-passive', 'passive', [poisonFact]);
+  const poisonedEnemyPassive = entity('poisoned-enemy', 'passive', [{ ...poisonFact, condition: 'poisoned' }]);
+  const derivedPassive = entity('derived-chaos', 'passive', [poisonFact, chaosFact]);
+  const independentPassive = entity('independent-chaos', 'passive', [poisonFact,
+    { relation: 'modifies', mechanic: 'chaos', confidence: 'exact', offense_role: 'primary_damage', source_kind: 'stat_id' }]);
+  const result = selectNonSkillRecommendations(catalog([
+    poisonPassive, poisonedEnemyPassive, derivedPassive, independentPassive
+  ]), { ...snap, offenseList: ['Chaos'] }, { ...pkg, packageProfile: { finalOffense: ['chaos'], sourceMechanics: ['chaos'] } });
+  assert.deepEqual(result.passives.notables.map((entry) => entry.id), ['independent-chaos']);
+
+  const poisonUnique = entity('poison-unique', 'unique', [poisonFact, chaosFact], {
+    compatibility: { access: {}, equipment: { slot: 'Weapon', base: 'Bow' } }
+  });
+  assert.deepEqual(selectNonSkillRecommendations(catalog([poisonUnique]),
+    { ...snap, offenseList: ['Chaos'] }, pkg).recommendedUniques, []);
+});
+
 test('owns ascendancy, excludes keystones, and enforces unique weapon family', () => {
   const result = selectNonSkillRecommendations(catalog([
     entity('invoker', 'ascendancy_passive', ['freeze'], { compatibility: { access: { ascendancy: 'Invoker' } } }),
