@@ -2631,7 +2631,7 @@ function optimizerPriority(support, offenseId) {
   return semanticRank * 100 + supportTier(support);
 }
 
-function attachOptionalOptimizerV3(catalog, selected, assignments, offenseObligations, requiredResolution) {
+function eligibleOptionalOptimizersV3(catalog, selected, assignments, offenseObligations, requiredResolution) {
   const requiredCount = requiredResolution.assignedSupportCount;
   const allOffenseFulfilled = new Set([
     ...asArray(selected?.flatMap((candidate) => candidate.fulfilled)).map((proof) => proof.obligationId),
@@ -2640,10 +2640,10 @@ function attachOptionalOptimizerV3(catalog, selected, assignments, offenseObliga
   // This is the removal proof: optimizer search cannot begin until the active skill and
   // required-only construction is independently complete and legal.
   if (requiredCount > MAX_REQUIRED_SUPPORTS || requiredResolution.requiredConstructionComplete !== true
-    || offenseObligations.some((obligation) => !allOffenseFulfilled.has(obligation.id))) return null;
+    || offenseObligations.some((obligation) => !allOffenseFulfilled.has(obligation.id))) return [];
   const usedFamilies = new Set(assignments.flatMap((assignment) => assignment.supports.map((support) => support.familyId)));
   const offenseIds = unique(offenseObligations.map((obligation) => normalizeToken(obligation.offenseId || obligation.mechanics?.[0])));
-  if (offenseIds.some((offenseId) => DAMAGE_TYPE_MECHANICS.has(offenseId))) return null;
+  if (offenseIds.some((offenseId) => DAMAGE_TYPE_MECHANICS.has(offenseId))) return [];
   const candidates = [];
   for (const candidate of selected) {
     for (const support of collapseSupportVariants(asArray(catalog?.entities)
@@ -2663,6 +2663,12 @@ function attachOptionalOptimizerV3(catalog, selected, assignments, offenseObliga
     || supportTier(b.support) - supportTier(a.support)
     || String(a.support.name).localeCompare(String(b.support.name))
     || String(a.candidate.entity.id).localeCompare(String(b.candidate.entity.id)));
+  return candidates;
+}
+
+function attachOptionalOptimizerV3(catalog, selected, assignments, offenseObligations, requiredResolution) {
+  const requiredCount = requiredResolution.assignedSupportCount;
+  const candidates = eligibleOptionalOptimizersV3(catalog, selected, assignments, offenseObligations, requiredResolution);
   const chosen = candidates[0] || null;
   if (!chosen || requiredCount + MAX_OPTIMIZER_SUPPORTS > MAX_TOTAL_SUPPORTS) return null;
   const assignment = assignments.find((entry) => entry.skillEntityId === chosen.candidate.entity.id);
@@ -2781,12 +2787,14 @@ function assignSupportPackagesV3(catalog, winner, offenseObligations) {
         : []
     };
   });
-  const optimizer = attachOptionalOptimizerV3(catalog, selected, assignments, offenseObligations, {
+  const requiredResolution = {
     ...winnerCombination,
     assignedSupportCount: winnerCombination.supportCount,
     requiredConstructionComplete: demandTargets.every((target) =>
       winnerCombination.resolvedDemands.some((resolved) => supportDemandKey(resolved) === supportDemandKey(target)))
-  });
+  };
+  const optimizerCandidates = eligibleOptionalOptimizersV3(catalog, selected, assignments, offenseObligations, requiredResolution);
+  const optimizer = attachOptionalOptimizerV3(catalog, selected, assignments, offenseObligations, requiredResolution);
   const supportEdges = winnerCombination.chosen.flatMap((packageCandidate) => [
     ...packageCandidate.fulfilled.map((proof) => ({
       fromEntityId: proof.providerEntityId,
@@ -2815,6 +2823,7 @@ function assignSupportPackagesV3(catalog, winner, offenseObligations) {
     assignedSupportCount: winnerCombination.supportCount + (optimizer ? 1 : 0),
     assignedRequiredSupportCount: winnerCombination.supportCount,
     assignedOptimizerSupportCount: optimizer ? 1 : 0,
+    optimizerCandidates,
     evaluatedPackages: packagesBySkill.reduce((sum, packages) => sum + packages.length, 0)
   };
 }
@@ -3081,6 +3090,26 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     packageScore: winner.score
   } : null;
   const pieces = [primarySkill, supportingSkill].filter(Boolean);
+  const richnessSkillCandidates = options.richnessAudit ? rankedPackages.map((candidate) => ({
+    entityId: candidate.primary.entity.id,
+    name: candidate.primary.entity.name,
+    score: candidate.score,
+    solutionTier: recommendationTier,
+    inTopBand: shortlist.includes(candidate),
+    signature: unique([
+      candidate.primary.weaponRelationship?.family,
+      ...asArray(candidate.primary.delivery?.skillTypes),
+      ...asArray(candidate.primary.fulfilled).map((proof) => proof.mechanic),
+      ...asArray(candidate.primary.carriers).map((proof) => `${proof.mechanic}:${proof.completionType || 'native'}`),
+      candidate.supportingRole
+    ].map(normalizeToken)).sort().join('|')
+  })) : null;
+  const richnessOptimizerCandidates = options.richnessAudit
+    ? asArray(supportResolution.optimizerCandidates).map((entry) => ({
+      skillEntityId: entry.candidate.entity.id, skillName: entry.candidate.entity.name,
+      entityId: entry.support.id, name: entry.support.name, familyId: supportFamilyId(entry.support),
+      priority: entry.priority, semanticBand: Math.floor(entry.priority / 100)
+    })) : null;
   const shortlistedPrimaryIds = new Set(shortlist.map((candidate) => candidate.primary.entity.id));
   const solutionClass = recommendationTier === 'DIRECT' ? 'DIRECT_NATIVE'
     : recommendationTier === 'SUPPORT_CHAIN' ? 'MULTI_BRIDGE' : recommendationTier === 'ONE_BRIDGE' ? 'ONE_BRIDGE' : 'INCOMPLETE';
@@ -3169,7 +3198,10 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
           chain.candidate.entity.id === primary?.entity.id)?.proof || null
       } : {}),
       qualityBand,
-      companionQualityBand: COMPANION_QUALITY_BAND
+      companionQualityBand: COMPANION_QUALITY_BAND,
+      ...(options.richnessAudit ? {
+        richness: { skillCandidates: richnessSkillCandidates, optimizerCandidates: richnessOptimizerCandidates }
+      } : {})
     }
   };
 }

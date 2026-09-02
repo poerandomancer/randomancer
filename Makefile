@@ -1,4 +1,4 @@
-.PHONY: normalize-tags-check normalize-tags-strict normalize-tags-audit recommendation-data recommendation-data-check recommendation-selector-check recommendation-critical-profiles recommendation-coverage recommendation-gap-analysis recommendation-provenance recommendation-v3 recommendation-v3-check
+.PHONY: normalize-tags-check normalize-tags-strict normalize-tags-audit recommendation-data recommendation-data-check recommendation-selector-check recommendation-critical-profiles recommendation-coverage recommendation-gap-analysis recommendation-provenance recommendation-v3 recommendation-v3-check recommendation-richness-audit
 
 normalize-tags-check:
 	python data/helperScripts/generate_tag_rules_js.py
@@ -40,3 +40,6 @@ recommendation-v3:
 
 recommendation-v3-check:
 	./scripts/generate-recommendation-v3.sh --check
+
+recommendation-richness-audit:
+	node scripts/recommendation-richness-audit.mjs
