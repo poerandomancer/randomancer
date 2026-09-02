@@ -9,12 +9,6 @@
       "weapon_identity",
       "build_shape"
     ],
-    "minSeverity": "mild",
-    "weights": {
-      "mild": 8,
-      "cruel": 7,
-      "diabolical": 6
-    },
     "template": "Choose {CLASS}. Wield {WEAPON}.",
     "shortLabel": "Oath of Arms",
     "slots": {
@@ -46,7 +40,9 @@
         "class": "{CLASS}",
         "weaponSet": "{WEAPON}"
       }
-    }
+    },
+    "weight": 7.0,
+    "minSeverity": "mild"
   },
   {
     "id": "A5_class_plus_zero_defense",
@@ -58,12 +54,6 @@
       "defense_philosophy",
       "build_shape"
     ],
-    "minSeverity": "mild",
-    "weights": {
-      "mild": 8,
-      "cruel": 7,
-      "diabolical": 6
-    },
     "template": "Choose {CLASS}. Maintain {DEFENSE}.",
     "shortLabel": "Hollow Aegis",
     "slots": {
@@ -94,7 +84,9 @@
       "bans": {
         "primaryDefense": "{DEFENSE}"
       }
-    }
+    },
+    "weight": 7.0,
+    "minSeverity": "diabolical"
   },
   {
     "id": "A6_class_weapon_and_zero_defense",
@@ -107,12 +99,6 @@
       "defense_philosophy",
       "build_shape"
     ],
-    "minSeverity": "cruel",
-    "weights": {
-      "mild": 0,
-      "cruel": 7,
-      "diabolical": 8
-    },
     "template": "Choose {CLASS}. Wield {WEAPON}. Maintain {DEFENSE}.",
     "shortLabel": "Cracked Shell",
     "slots": {
@@ -161,7 +147,9 @@
       "bans": {
         "primaryDefense": "{DEFENSE}"
       }
-    }
+    },
+    "weight": 7.5,
+    "minSeverity": "diabolical"
   },
   {
     "id": "A7_class_plus_keystone",
@@ -173,12 +161,6 @@
       "passive_tree_constraint",
       "build_architecture"
     ],
-    "minSeverity": "mild",
-    "weights": {
-      "mild": 7,
-      "cruel": 7,
-      "diabolical": 7
-    },
     "template": "Choose {CLASS}. Allocate {KEYSTONE} on the passive tree.",
     "shortLabel": "Keystone Covenant",
     "slots": {
@@ -197,7 +179,9 @@
         "class": "{CLASS}",
         "keystone": "{KEYSTONE}"
       }
-    }
+    },
+    "weight": 7.0,
+    "minSeverity": "mild"
   },
   {
     "id": "A8_class_plus_active_skill",
@@ -209,12 +193,6 @@
       "skill_architecture",
       "build_shape"
     ],
-    "minSeverity": "mild",
-    "weights": {
-      "mild": 7,
-      "cruel": 7,
-      "diabolical": 6
-    },
     "template": "Choose {CLASS}. Make {ACTIVE_SKILL} your signature skill.",
     "shortLabel": "Signature Rite",
     "slots": {
@@ -231,37 +209,9 @@
         "mainDamageMode": "activeSkill",
         "mainSkill": "{ACTIVE_SKILL}"
       }
-    }
-  },
-  {
-    "id": "A9_shapeshift_forms_only",
-    "role": "anchor",
-    "directive": "mandate",
-    "strength": "hard",
-    "domainTags": [
-      "skill_architecture",
-      "shapeshift",
-      "build_shape"
-    ],
-    "minSeverity": "cruel",
-    "weights": {
-      "mild": 0,
-      "cruel": 5,
-      "diabolical": 7
     },
-    "template": "Use only Shapeshift skills. Commit to {FORMS}.",
-    "shortLabel": "Bestial Vow",
-    "slots": {
-      "FORMS": {
-        "picker": "shapeshiftForms"
-      }
-    },
-    "effects": {
-      "locks": {
-        "mainDamageMode": "shapeshiftOnly",
-        "shapeshiftForms": "{FORMS}"
-      }
-    }
+    "weight": 6.67,
+    "minSeverity": "cruel"
   },
   {
     "id": "A10_class_plus_skill_family",
@@ -274,12 +224,6 @@
       "skill_architecture",
       "build_shape"
     ],
-    "minSeverity": "mild",
-    "weights": {
-      "mild": 6,
-      "cruel": 6,
-      "diabolical": 5
-    },
     "template": "Choose {CLASS}. Then {SKILL_FAMILY_RULE} {SKILL_FAMILY}.",
     "shortLabel": "Lineage Oath",
     "slots": {
@@ -299,7 +243,9 @@
         "skillFamily": "{SKILL_FAMILY}",
         "mainDamageMode": "skillFamily"
       }
-    }
+    },
+    "weight": 5.67,
+    "minSeverity": "mild"
   },
   {
     "id": "A12_class_skill_family_and_defense",
@@ -313,12 +259,6 @@
       "defense_philosophy",
       "build_shape"
     ],
-    "minSeverity": "mild",
-    "weights": {
-      "mild": 4,
-      "cruel": 4,
-      "diabolical": 3
-    },
     "template": "Choose {CLASS}. Then {SKILL_FAMILY_RULE} {SKILL_FAMILY}. Maintain {DEFENSE}.",
     "shortLabel": "Lineage Bulwark",
     "slots": {
@@ -349,7 +289,9 @@
       "bans": {
         "primaryDefense": "{DEFENSE}"
       }
-    }
+    },
+    "weight": 3.67,
+    "minSeverity": "diabolical"
   },
   {
     "id": "A13_class_plus_unique_granted_skill",
@@ -362,12 +304,6 @@
       "skill_architecture",
       "build_shape"
     ],
-    "minSeverity": "mild",
-    "weights": {
-      "mild": 5,
-      "cruel": 5,
-      "diabolical": 1
-    },
     "template": "Choose {CLASS}. Rely on {SKILL}, granted by {UNIQUE}.",
     "shortLabel": "Relic Reliance",
     "slots": {
@@ -388,7 +324,9 @@
         "mainSkill": "{SKILL}",
         "requiredUnique": "{UNIQUE}"
       }
-    }
+    },
+    "weight": 3.67,
+    "minSeverity": "mild"
   },
   {
     "id": "A14_ascendancy_plus_unique_granted_skill",
@@ -399,14 +337,9 @@
       "identity_archetype",
       "unique_item_identity",
       "skill_architecture",
-      "build_shape"
+      "build_shape",
+      "explicit_ascendancy"
     ],
-    "minSeverity": "cruel",
-    "weights": {
-      "mild": 1,
-      "cruel": 1,
-      "diabolical": 4
-    },
     "template": "Choose {ASCENDANCY}. Rely on {SKILL}, granted by {UNIQUE}.",
     "shortLabel": "Relic Reliance",
     "slots": {
@@ -427,7 +360,9 @@
         "mainSkill": "{SKILL}",
         "requiredUnique": "{UNIQUE}"
       }
-    }
+    },
+    "weight": 2.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "A15_split_discipline",
@@ -439,12 +374,6 @@
       "crafting_type",
       "build_shape"
     ],
-    "minSeverity": "mild",
-    "weights": {
-      "mild": 5,
-      "cruel": 5,
-      "diabolical": 4
-    },
     "template": "Use at least one {CRAFTINGTYPE} skill and at least one {CRAFTINGTYPE_2} skill.",
     "shortLabel": "Split Discipline",
     "slots": {
@@ -469,7 +398,9 @@
       "locks": {
         "mainDamageMode": "splitCraftingTypes"
       }
-    }
+    },
+    "weight": 4.67,
+    "minSeverity": "mild"
   },
   {
     "id": "E1_no_charms",
@@ -480,12 +411,6 @@
       "itemization_constraint",
       "utility_removal"
     ],
-    "minSeverity": "mild",
-    "weights": {
-      "mild": 7,
-      "cruel": 6,
-      "diabolical": 4
-    },
     "template": "Do not equip any Charms.",
     "shortLabel": "Charmless Pact",
     "effects": {
@@ -496,7 +421,9 @@
     },
     "categories": [
       "Gearing"
-    ]
+    ],
+    "weight": 5.67,
+    "minSeverity": "mild"
   },
   {
     "id": "E2_no_flasks",
@@ -507,12 +434,6 @@
       "itemization_constraint",
       "utility_removal"
     ],
-    "minSeverity": "diabolical",
-    "weights": {
-      "mild": 0,
-      "cruel": 0,
-      "diabolical": 6
-    },
     "template": "Do not equip any Flasks.",
     "shortLabel": "Dry Covenant",
     "effects": {
@@ -523,7 +444,9 @@
     },
     "categories": [
       "Gearing"
-    ]
+    ],
+    "weight": 6.0,
+    "minSeverity": "diabolical"
   },
   {
     "id": "F1_no_uniques",
@@ -534,12 +457,6 @@
       "itemization_constraint",
       "rarity_rules"
     ],
-    "minSeverity": "mild",
-    "weights": {
-      "mild": 7,
-      "cruel": 6,
-      "diabolical": 4
-    },
     "template": "Do not equip any Unique items.",
     "shortLabel": "No Relics",
     "effects": {
@@ -553,7 +470,9 @@
     },
     "categories": [
       "Gearing"
-    ]
+    ],
+    "weight": 5.67,
+    "minSeverity": "mild"
   },
   {
     "id": "F3_ironman_normals_only_pickup",
@@ -564,14 +483,8 @@
       "progression_economy",
       "itemization_constraint"
     ],
-    "minSeverity": "cruel",
-    "weights": {
-      "mild": 0,
-      "cruel": 6,
-      "diabolical": 6
-    },
     "template": "Loot only Normal gear. Do not use vendors. Do not trade. Craft everything yourself.",
-    "shortLabel": "Scavenger’s Oath",
+    "shortLabel": "Scavenger\u2019s Oath",
     "effects": {
       "bans": {
         "vendors": true,
@@ -587,37 +500,9 @@
     },
     "categories": [
       "Gear Rarity"
-    ]
-  },
-  {
-    "id": "G2_default_weapon_skill_only",
-    "role": "twist",
-    "directive": "constraint",
-    "strength": "hard",
-    "domainTags": [
-      "skill_architecture",
-      "build_shape"
     ],
-    "minSeverity": "cruel",
-    "weights": {
-      "mild": 0,
-      "cruel": 6,
-      "diabolical": 6
-    },
-    "template": "Deal damage only with your default weapon attack. Do not use any other damaging active skills.",
-    "shortLabel": "The First Strike",
-    "effects": {
-      "locks": {
-        "mainDamageMode": "defaultWeapon",
-        "skillPolicy": "default_weapon_only"
-      }
-    },
-    "conflictTags": [
-      "skill_policy"
-    ],
-    "categories": [
-      "Skills"
-    ]
+    "weight": 6.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "F4_normal_armor_slot",
@@ -628,12 +513,6 @@
       "itemization_constraint",
       "rarity_rules"
     ],
-    "minSeverity": "cruel",
-    "weights": {
-      "mild": 0,
-      "cruel": 6,
-      "diabolical": 6
-    },
     "template": "Equip a Normal-rarity {ARMOR_SLOT}.",
     "shortLabel": "Humble Plate",
     "slots": {
@@ -651,7 +530,9 @@
     },
     "categories": [
       "Gear Rarity"
-    ]
+    ],
+    "weight": 6.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "O1_two_damage_skills_max",
@@ -662,12 +543,6 @@
       "skill_architecture",
       "build_shape"
     ],
-    "minSeverity": "cruel",
-    "weights": {
-      "mild": 0,
-      "cruel": 6,
-      "diabolical": 6
-    },
     "template": "Use at most 2 damaging active skills.",
     "shortLabel": "Twofold Arsenal",
     "effects": {
@@ -683,7 +558,9 @@
     ],
     "categories": [
       "Skills"
-    ]
+    ],
+    "weight": 6.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "O2_one_damage_skill_only",
@@ -694,12 +571,6 @@
       "skill_architecture",
       "build_shape"
     ],
-    "minSeverity": "mild",
-    "weights": {
-      "mild": 7,
-      "cruel": 6,
-      "diabolical": 4
-    },
     "template": "Use only 1 damaging active skill.",
     "shortLabel": "Monomancy",
     "effects": {
@@ -715,7 +586,9 @@
     ],
     "categories": [
       "Skills"
-    ]
+    ],
+    "weight": 5.67,
+    "minSeverity": "diabolical"
   },
   {
     "id": "P1_supports_one_per_skill",
@@ -726,12 +599,6 @@
       "skill_architecture",
       "itemization_constraint"
     ],
-    "minSeverity": "cruel",
-    "weights": {
-      "mild": 0,
-      "cruel": 6,
-      "diabolical": 6
-    },
     "template": "Socket at most 1 Support Gem into any given skill.",
     "shortLabel": "Thin Weave",
     "effects": {
@@ -747,7 +614,9 @@
     ],
     "categories": [
       "Skills"
-    ]
+    ],
+    "weight": 6.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "P2_supports_three_total",
@@ -758,12 +627,6 @@
       "skill_architecture",
       "itemization_constraint"
     ],
-    "minSeverity": "diabolical",
-    "weights": {
-      "mild": 0,
-      "cruel": 0,
-      "diabolical": 6
-    },
     "template": "Across your entire build, socket at most 3 Support Gems in total.",
     "shortLabel": "Three Threads",
     "effects": {
@@ -779,7 +642,9 @@
     ],
     "categories": [
       "Skills"
-    ]
+    ],
+    "weight": 6.0,
+    "minSeverity": "diabolical"
   },
   {
     "id": "P3_recommended_supports_only",
@@ -790,12 +655,6 @@
       "skill_architecture",
       "itemization_constraint"
     ],
-    "minSeverity": "cruel",
-    "weights": {
-      "mild": 0,
-      "cruel": 5,
-      "diabolical": 6
-    },
     "template": "Only socket Support Gems that appear in each skill's recommended support list.",
     "shortLabel": "Guided Weave",
     "effects": {
@@ -808,7 +667,9 @@
     ],
     "categories": [
       "Skills"
-    ]
+    ],
+    "weight": 5.5,
+    "minSeverity": "cruel"
   },
   {
     "id": "R1_even_attributes",
@@ -819,12 +680,6 @@
       "attributes",
       "build_architecture"
     ],
-    "minSeverity": "cruel",
-    "weights": {
-      "mild": 0,
-      "cruel": 6,
-      "diabolical": 6
-    },
     "template": "Keep Strength, Dexterity, and Intelligence within 10 points of one another.",
     "shortLabel": "Balanced Ledger",
     "effects": {
@@ -837,7 +692,9 @@
     ],
     "categories": [
       "Attributes"
-    ]
+    ],
+    "weight": 6.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "S5_zero_element_resist",
@@ -848,14 +705,8 @@
       "defense",
       "resistance"
     ],
-    "minSeverity": "diabolical",
     "template": "Maintain {ELEMENT} Resistance at 0%.",
     "shortLabel": "Unwarded",
-    "weights": {
-      "mild": 0,
-      "cruel": 0,
-      "diabolical": 6
-    },
     "slots": {
       "ELEMENT": {
         "picker": "elementResist"
@@ -866,6 +717,16 @@
     ],
     "categories": [
       "Defensive"
+    ],
+    "weight": 6.0,
+    "minSeverity": "diabolical",
+    "conflicts": [
+      {
+        "level": "hard",
+        "with": {
+          "domainTag": "explicit_ascendancy"
+        }
+      }
     ]
   },
   {
@@ -876,17 +737,13 @@
     "domainTags": [
       "skills"
     ],
-    "minSeverity": "mild",
     "template": "Do not use any Herald skills.",
     "shortLabel": "Mute Choir",
-    "weights": {
-      "mild": 7,
-      "cruel": 6,
-      "diabolical": 4
-    },
     "categories": [
       "Skills"
-    ]
+    ],
+    "weight": 5.67,
+    "minSeverity": "mild"
   },
   {
     "id": "S3_charge_cycle",
@@ -897,17 +754,13 @@
       "skills",
       "charges"
     ],
-    "minSeverity": "mild",
     "template": "Commit to a charge cycle: generate and spend Frenzy, Endurance, and/or Power charges regularly.",
     "shortLabel": "Circuit of Charges",
-    "weights": {
-      "mild": 7,
-      "cruel": 6,
-      "diabolical": 4
-    },
     "categories": [
       "Defensive"
-    ]
+    ],
+    "weight": 5.67,
+    "minSeverity": "mild"
   },
   {
     "id": "E5_no_amulet",
@@ -917,17 +770,13 @@
     "domainTags": [
       "gear"
     ],
-    "minSeverity": "cruel",
     "template": "Do not equip any Amulets.",
     "shortLabel": "Bare Throat",
-    "weights": {
-      "mild": 0,
-      "cruel": 6,
-      "diabolical": 6
-    },
     "categories": [
       "Gearing"
-    ]
+    ],
+    "weight": 6.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "E4_no_belt",
@@ -937,17 +786,13 @@
     "domainTags": [
       "gear"
     ],
-    "minSeverity": "mild",
     "template": "Do not equip any Belts.",
     "shortLabel": "Unbelted",
-    "weights": {
-      "mild": 7,
-      "cruel": 6,
-      "diabolical": 4
-    },
     "categories": [
       "Gearing"
-    ]
+    ],
+    "weight": 5.67,
+    "minSeverity": "mild"
   },
   {
     "id": "Q1_no_persistent_buffs",
@@ -958,12 +803,6 @@
       "skill_architecture",
       "resource_model"
     ],
-    "minSeverity": "mild",
-    "weights": {
-      "mild": 7,
-      "cruel": 6,
-      "diabolical": 4
-    },
     "template": "Do not use any persistent buff skills.",
     "shortLabel": "Fleeting Boons",
     "effects": {
@@ -973,75 +812,9 @@
     },
     "categories": [
       "Skills"
-    ]
-  },
-  {
-    "id": "J1_attribute_nodes_only",
-    "role": "twist",
-    "directive": "constraint",
-    "strength": "hard",
-    "domainTags": [
-      "passive_tree_constraint",
-      "attributes"
     ],
-    "minSeverity": "cruel",
-    "weights": {
-      "mild": 0,
-      "cruel": 6,
-      "diabolical": 6
-    },
-    "template": "On the passive tree, allocate only {ATTRIBUTE} attribute nodes.",
-    "shortLabel": "Single Virtue",
-    "slots": {
-      "ATTRIBUTE": {
-        "picker": "attribute"
-      }
-    },
-    "conflictTags": [
-      "attribute_constraint"
-    ],
-    "effects": {
-      "limits": {
-        "passivesAttributeOnly": "{ATTRIBUTE}"
-      }
-    },
-    "categories": [
-      "Passive Tree"
-    ]
-  },
-  {
-    "id": "SF1_skill_family_damage_only",
-    "role": "twist",
-    "directive": "mandate",
-    "strength": "soft",
-    "domainTags": [
-      "skill_family",
-      "skill_architecture"
-    ],
-    "minSeverity": "mild",
-    "weights": {
-      "mild": 5,
-      "cruel": 6,
-      "diabolical": 6
-    },
-    "template": "Use at least one skill from the {SKILL_FAMILY} family.",
-    "shortLabel": "Bloodright",
-    "slots": {
-      "SKILL_FAMILY": {
-        "picker": "skillFamily"
-      }
-    },
-    "conflictTags": [
-      "skill_family_constraint"
-    ],
-    "effects": {
-      "locks": {
-        "skillFamily": "{SKILL_FAMILY}"
-      }
-    },
-    "categories": [
-      "Skills"
-    ]
+    "weight": 5.67,
+    "minSeverity": "mild"
   },
   {
     "id": "J2_twin_virtues",
@@ -1052,12 +825,6 @@
       "attributes",
       "build_architecture"
     ],
-    "minSeverity": "cruel",
-    "weights": {
-      "mild": 0,
-      "cruel": 6,
-      "diabolical": 6
-    },
     "template": "Keep {ATTRIBUTE} and {ATTRIBUTE_2} within 10 points of each other.",
     "shortLabel": "Twin Virtues",
     "slots": {
@@ -1076,7 +843,9 @@
     ],
     "categories": [
       "Attributes"
-    ]
+    ],
+    "weight": 6.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "F5_relic_cap",
@@ -1087,12 +856,6 @@
       "itemization_constraint",
       "rarity_rules"
     ],
-    "minSeverity": "mild",
-    "weights": {
-      "mild": 6,
-      "cruel": 6,
-      "diabolical": 4
-    },
     "template": "Equip at most 1 Unique item.",
     "shortLabel": "Relic Cap",
     "conflictTags": [
@@ -1105,7 +868,9 @@
     },
     "categories": [
       "Gearing"
-    ]
+    ],
+    "weight": 5.33,
+    "minSeverity": "mild"
   },
   {
     "id": "F6_blue_collar",
@@ -1116,12 +881,6 @@
       "itemization_constraint",
       "rarity_rules"
     ],
-    "minSeverity": "cruel",
-    "weights": {
-      "mild": 0,
-      "cruel": 6,
-      "diabolical": 6
-    },
     "template": "Equip Magic-rarity {ARMOR_SLOT} and Magic-rarity {ARMOR_SLOT_2}.",
     "shortLabel": "Blue Collar",
     "slots": {
@@ -1148,7 +907,9 @@
     },
     "categories": [
       "Gear Rarity"
-    ]
+    ],
+    "weight": 6.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "F7_two_magic_pieces",
@@ -1159,12 +920,6 @@
       "itemization_constraint",
       "rarity_rules"
     ],
-    "minSeverity": "mild",
-    "weights": {
-      "mild": 6,
-      "cruel": 6,
-      "diabolical": 4
-    },
     "template": "Equip at least 2 Magic-rarity gear pieces.",
     "shortLabel": "Blue Collar II",
     "conflictTags": [
@@ -1177,7 +932,9 @@
     },
     "categories": [
       "Gear Rarity"
-    ]
+    ],
+    "weight": 5.33,
+    "minSeverity": "mild"
   },
   {
     "id": "F8_unforged_steel",
@@ -1189,12 +946,6 @@
       "itemization_constraint",
       "rarity_rules"
     ],
-    "minSeverity": "cruel",
-    "weights": {
-      "mild": 0,
-      "cruel": 6,
-      "diabolical": 6
-    },
     "template": "Do not equip Rare Weapons.",
     "shortLabel": "Unforged Steel",
     "conflictTags": [
@@ -1207,7 +958,9 @@
     },
     "categories": [
       "Gear Rarity"
-    ]
+    ],
+    "weight": 6.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "F9_rarity_mosaic",
@@ -1218,12 +971,6 @@
       "itemization_constraint",
       "rarity_rules"
     ],
-    "minSeverity": "mild",
-    "weights": {
-      "mild": 6,
-      "cruel": 5,
-      "diabolical": 4
-    },
     "template": "Equip at least 1 Normal item and at least 1 Magic item.",
     "shortLabel": "Rarity Mosaic",
     "conflictTags": [
@@ -1237,7 +984,9 @@
     },
     "categories": [
       "Gear Rarity"
-    ]
+    ],
+    "weight": 5.0,
+    "minSeverity": "mild"
   },
   {
     "id": "F10_rarity_rainbow",
@@ -1248,12 +997,6 @@
       "itemization_constraint",
       "rarity_rules"
     ],
-    "minSeverity": "cruel",
-    "weights": {
-      "mild": 0,
-      "cruel": 6,
-      "diabolical": 6
-    },
     "template": "Equip at least 1 Normal, 1 Magic, 1 Rare, and 1 Unique item.",
     "shortLabel": "Rarity Rainbow",
     "conflictTags": [
@@ -1269,7 +1012,9 @@
     },
     "categories": [
       "Gear Rarity"
-    ]
+    ],
+    "weight": 6.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "S6_wounded_ward",
@@ -1280,12 +1025,6 @@
       "defense",
       "resistance"
     ],
-    "minSeverity": "mild",
-    "weights": {
-      "mild": 6,
-      "cruel": 6,
-      "diabolical": 4
-    },
     "template": "Keep your {ELEMENT} Resistance at or below 50%.",
     "shortLabel": "Wounded Ward",
     "slots": {
@@ -1306,7 +1045,9 @@
     },
     "categories": [
       "Defensive"
-    ]
+    ],
+    "weight": 5.33,
+    "minSeverity": "mild"
   },
   {
     "id": "S7_open_wound",
@@ -1317,12 +1058,6 @@
       "defense",
       "resistance"
     ],
-    "minSeverity": "diabolical",
-    "weights": {
-      "mild": 0,
-      "cruel": 0,
-      "diabolical": 6
-    },
     "template": "Keep your {ELEMENT} Resistance at or below 25%.",
     "shortLabel": "Open Wound",
     "slots": {
@@ -1343,7 +1078,9 @@
     },
     "categories": [
       "Defensive"
-    ]
+    ],
+    "weight": 6.0,
+    "minSeverity": "diabolical"
   },
   {
     "id": "S8_twofold_exposure",
@@ -1354,12 +1091,6 @@
       "defense",
       "resistance"
     ],
-    "minSeverity": "cruel",
-    "weights": {
-      "mild": 0,
-      "cruel": 6,
-      "diabolical": 6
-    },
     "template": "Keep your {ELEMENT} and {ELEMENT_2} Resistances at or below 50%.",
     "shortLabel": "Twofold Exposure",
     "slots": {
@@ -1392,7 +1123,9 @@
     },
     "categories": [
       "Defensive"
-    ]
+    ],
+    "weight": 6.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "S9_capped_by_oath",
@@ -1403,12 +1136,6 @@
       "defense",
       "resistance"
     ],
-    "minSeverity": "cruel",
-    "weights": {
-      "mild": 0,
-      "cruel": 6,
-      "diabolical": 6
-    },
     "template": "Raise your maximum {ELEMENT} Resistance to 80%.",
     "shortLabel": "Capped by Oath",
     "slots": {
@@ -1429,7 +1156,9 @@
     },
     "categories": [
       "Defensive"
-    ]
+    ],
+    "weight": 6.0,
+    "minSeverity": "cruel"
   },
   {
     "id": "S10_overcapped_76",
@@ -1440,12 +1169,6 @@
       "defense",
       "resistance"
     ],
-    "minSeverity": "mild",
-    "weights": {
-      "mild": 6,
-      "cruel": 6,
-      "diabolical": 4
-    },
     "template": "Raise your maximum Elemental Resistances to at least 76%.",
     "shortLabel": "Overcapped",
     "conflictTags": [
@@ -1458,7 +1181,9 @@
     },
     "categories": [
       "Defensive"
-    ]
+    ],
+    "weight": 5.33,
+    "minSeverity": "mild"
   },
   {
     "id": "F11_missing_something",
@@ -1469,12 +1194,6 @@
       "itemization_constraint",
       "build_shape"
     ],
-    "minSeverity": "diabolical",
-    "weights": {
-      "mild": 0,
-      "cruel": 0,
-      "diabolical": 5
-    },
     "template": "Leave one gear slot empty for the entire run.",
     "shortLabel": "Missing Something?",
     "effects": {
@@ -1484,7 +1203,9 @@
     },
     "categories": [
       "Gearing"
-    ]
+    ],
+    "weight": 5.0,
+    "minSeverity": "diabolical"
   },
   {
     "id": "I3_early_crown",
@@ -1495,12 +1216,6 @@
       "passive_tree_constraint",
       "build_architecture"
     ],
-    "minSeverity": "mild",
-    "weights": {
-      "mild": 6,
-      "cruel": 6,
-      "diabolical": 5
-    },
     "template": "Allocate your first Keystone by level 20.",
     "shortLabel": "The Early Crown",
     "conflictTags": [
@@ -1513,7 +1228,9 @@
     },
     "categories": [
       "Passive Tree"
-    ]
+    ],
+    "weight": 5.67,
+    "minSeverity": "mild"
   },
   {
     "id": "E6_normal_charms_only",
@@ -1525,12 +1242,6 @@
       "rarity_rules",
       "utility_removal"
     ],
-    "minSeverity": "mild",
-    "weights": {
-      "mild": 6,
-      "cruel": 6,
-      "diabolical": 4
-    },
     "template": "Equip only Normal-rarity Charms.",
     "shortLabel": "Humble Charms",
     "conflictTags": [
@@ -1543,7 +1254,9 @@
     },
     "categories": [
       "Gear Rarity"
-    ]
+    ],
+    "weight": 5.33,
+    "minSeverity": "mild"
   },
   {
     "id": "E7_normal_flasks_only",
@@ -1555,12 +1268,6 @@
       "rarity_rules",
       "utility_removal"
     ],
-    "minSeverity": "mild",
-    "weights": {
-      "mild": 6,
-      "cruel": 6,
-      "diabolical": 4
-    },
     "template": "Equip only Normal-rarity Flasks.",
     "shortLabel": "Plain Draughts",
     "conflictTags": [
@@ -1573,7 +1280,9 @@
     },
     "categories": [
       "Gear Rarity"
-    ]
+    ],
+    "weight": 5.33,
+    "minSeverity": "mild"
   },
   {
     "id": "I4_three_keystones",
@@ -1584,12 +1293,6 @@
       "passive_tree_constraint",
       "build_architecture"
     ],
-    "minSeverity": "diabolical",
-    "weights": {
-      "mild": 0,
-      "cruel": 0,
-      "diabolical": 6
-    },
     "template": "Allocate at least 3 Keystones on the passive tree.",
     "shortLabel": "Three Crowns",
     "conflictTags": [
@@ -1602,7 +1305,9 @@
     },
     "categories": [
       "Passive Tree"
-    ]
+    ],
+    "weight": 6.0,
+    "minSeverity": "diabolical"
   },
   {
     "id": "I5_no_jewels",
@@ -1613,12 +1318,6 @@
       "passive_tree_constraint",
       "itemization_constraint"
     ],
-    "minSeverity": "mild",
-    "weights": {
-      "mild": 6,
-      "cruel": 6,
-      "diabolical": 4
-    },
     "template": "Do not socket any Jewels in the passive tree.",
     "shortLabel": "No Jewels",
     "conflictTags": [
@@ -1631,7 +1330,9 @@
     },
     "categories": [
       "Passive Tree"
-    ]
+    ],
+    "weight": 5.33,
+    "minSeverity": "mild"
   },
   {
     "id": "F12_magic_armor_slot",
@@ -1642,12 +1343,6 @@
       "itemization_constraint",
       "rarity_rules"
     ],
-    "minSeverity": "cruel",
-    "weights": {
-      "mild": 0,
-      "cruel": 6,
-      "diabolical": 6
-    },
     "template": "Equip a Magic-rarity {ARMOR_SLOT}.",
     "shortLabel": "Blue Plate",
     "slots": {
@@ -1665,6 +1360,8 @@
     },
     "categories": [
       "Gear Rarity"
-    ]
+    ],
+    "weight": 6.0,
+    "minSeverity": "cruel"
   }
 ]

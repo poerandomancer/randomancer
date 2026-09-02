@@ -1,5 +1,13 @@
 import { buildPassiveIndex } from './07-skills-render.js';
 import { buildSkillFamilyIndex, resolveSkillFamily } from './17-skill-family-utils.js';
+import {
+  mergeRecommendationGrantedSkillAccessV3,
+  mergeRecommendationSkillCraftingV3,
+  validateRecommendationGrantedSkillAccessV3,
+  validateRecommendationSkillCraftingV3,
+  validateRecommendationCatalogV3
+} from './30-recommendation-v3-selector.js';
+import { mergeRecommendationUniqueSemanticsV3 } from './31-non-skill-recommendation-selector.js';
 
 // ---------- async data loader ----------
 async function loadJSON(path) {
@@ -56,7 +64,27 @@ function ensureDataPreload(){
 // ---------- data initialization ----------
 async function loadData() {
   try {
+    // The package selector is the standard recommendation workflow, so its
+    // supporting data is always loaded with the core application data.
+    const recommendationCatalogPromise = tryLoad('data/enriched/recommendation_catalog_v3.json');
+    const recommendationSkillCraftingPromise = tryLoad('data/enriched/recommendation_skill_crafting_v3.json');
+    const recommendationCriticalProfilesPromise = tryLoad('data/config/recommendation_critical_profiles_v3.json');
+    const recommendationGrantedSkillAccessPromise = tryLoad('data/enriched/recommendation_granted_skill_access_v3.json');
+    const recommendationUniqueSemanticsPromise = tryLoad('data/enriched/recommendation_unique_semantics_v3.json');
+    const flavorManifestPromise = tryLoad('randomancer_flavor_manifest.json');
     const core = await loadJSON('data/core-data.json');
+
+    // Canonical Build Offense vocabulary. Keep it separate on disk from the
+    // legacy Ailments/Tactics pools while exposing a convenient runtime view.
+    const offenseInventoryRaw = await tryLoad('data/offense-inventory.json');
+    const offenseInventory = (
+      offenseInventoryRaw &&
+      typeof offenseInventoryRaw === 'object' &&
+      !Array.isArray(offenseInventoryRaw) &&
+      Array.isArray(offenseInventoryRaw.elements)
+    ) ? offenseInventoryRaw : { version: null, categories: [], elements: [] };
+    core.OffenseInventory = offenseInventory;
+    core.Offense = offenseInventory.elements;
 
     // Pre-enriched passives (unchanged)
     const passivesEnriched = await tryLoad('data/enriched/passives_enriched.json');
@@ -127,6 +155,35 @@ async function loadData() {
       };
     });
 
+    const recommendationCatalogRaw = await recommendationCatalogPromise;
+    const recommendationSkillCraftingRaw = await recommendationSkillCraftingPromise;
+    const recommendationCriticalProfilesRaw = await recommendationCriticalProfilesPromise;
+    const recommendationGrantedSkillAccessRaw = await recommendationGrantedSkillAccessPromise;
+    const recommendationUniqueSemanticsRaw = await recommendationUniqueSemanticsPromise;
+    const flavorManifest = await flavorManifestPromise;
+    const recommendationSkillCraftingValidation = validateRecommendationSkillCraftingV3(recommendationSkillCraftingRaw);
+    const recommendationCatalogWithCrafting = recommendationSkillCraftingValidation.ok
+      ? mergeRecommendationSkillCraftingV3(recommendationCatalogRaw, recommendationSkillCraftingRaw)
+      : recommendationCatalogRaw;
+    const recommendationCatalogValidation = validateRecommendationCatalogV3(recommendationCatalogWithCrafting);
+    const recommendationGrantedSkillAccessValidation = validateRecommendationGrantedSkillAccessV3(recommendationGrantedSkillAccessRaw);
+    const recommendationGrantedSkillAccessV3 = recommendationGrantedSkillAccessValidation.ok
+      ? recommendationGrantedSkillAccessRaw
+      : null;
+    const recommendationCatalogWithAccess = recommendationCatalogValidation.ok && recommendationSkillCraftingValidation.ok
+      ? mergeRecommendationGrantedSkillAccessV3(recommendationCatalogWithCrafting, recommendationGrantedSkillAccessV3)
+      : null;
+    const recommendationCatalogV3 = mergeRecommendationUniqueSemanticsV3(recommendationCatalogWithAccess, recommendationUniqueSemanticsRaw);
+    if (!recommendationCatalogValidation.ok) {
+      console.warn(`[Recommendation v3] Catalog unavailable: ${recommendationCatalogValidation.reason}`);
+    }
+    if (!recommendationSkillCraftingValidation.ok) {
+      console.warn(`[Recommendation v3] Skill crafting map unavailable: ${recommendationSkillCraftingValidation.reason}`);
+    }
+    if (!recommendationGrantedSkillAccessValidation.ok) {
+      console.warn(`[Recommendation v3] Granted skill access unavailable: ${recommendationGrantedSkillAccessValidation.reason}`);
+    }
+
     window.DATA = {
       ...core,
       gems,
@@ -141,14 +198,28 @@ async function loadData() {
       skillFamilyOptions,
       ascendancyCatalog,
       ascendancyByName,
-      challengePools
+      challengePools,
+      flavorManifest,
+      recommendationCatalogV3,
+      recommendationGrantedSkillAccessV3,
+      recommendationCriticalProfilesV3: recommendationCriticalProfilesRaw || {}
     };
     console.log("[Global DATA initialized]", window.DATA);
 
-    return { core, gems, passivesEnriched, passiveIndex };
+    return {
+      core,
+      gems,
+      passivesEnriched,
+      passiveIndex,
+      offenseInventory,
+      flavorManifest,
+      recommendationCatalogV3,
+      recommendationGrantedSkillAccessV3,
+      recommendationCriticalProfilesV3: recommendationCriticalProfilesRaw || {}
+    };
   } catch (err) {
     console.error("[loadData] Failed to load core data:", err);
-    return { core: {}, gems: [] };
+    return { core: {}, gems: [], offenseInventory: { version: null, categories: [], elements: [] } };
   }
 }
 

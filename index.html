@@ -14,7 +14,7 @@
 
   <title>The Randomancer – Path of Exile 2 Build Randomizer & PoE2 Build Generator</title>
 
-  <meta name="description" content="The Randomancer is a Path of Exile 2 build randomizer that generates themed, high-cohesion PoE2 builds with skills, passives, oaths, and uniques in one click." />
+  <meta name="description" content="The Randomancer is a Path of Exile 2 build randomizer that generates themed PoE2 builds with skills, passives, oaths, and uniques in one click." />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="canonical" href="https://therandomancer.com/">
@@ -23,13 +23,13 @@
 	<meta property="og:type" content="website">
 	<meta property="og:url" content="https://therandomancer.com/">
 	<meta property="og:title" content="The Randomancer – Path of Exile 2 Build Randomizer">
-	<meta property="og:description" content="Generate fully-themed PoE2 builds with skills, passives, oaths, uniques, and cohesion scoring in one click.">
+	<meta property="og:description" content="Generate fully-themed PoE2 builds with skills, passives, oaths, and uniques in one click.">
 	<meta property="og:image" content="https://therandomancer.com/images/randomancer-banner-og.png">
 	
 	<!-- Twitter -->
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:title" content="The Randomancer – PoE 2 Build Generator">
-	<meta name="twitter:description" content="Random Path of Exile 2 builds with cohesion scoring and themed loadouts.">
+	<meta name="twitter:description" content="Random Path of Exile 2 builds with smart recommendations and themed loadouts.">
 	<meta name="twitter:image" content="https://therandomancer.com/images/randomancer-banner-og.png">
 	
 	<script type="application/ld+json">
@@ -63,30 +63,81 @@
   <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
+  <button id="contracts-button" class="rm-info-fab contracts-button" type="button" aria-label="Challenges" title="Challenges">
+    <img class="contracts-button__icon" src="images/challenge-icon.png" alt="" aria-hidden="true">
+  </button>
+  <button id="mode-header-action" class="rm-info-fab mode-header-action" type="button" aria-label="Open the Archive" title="Open the Archive">
+    <img class="mode-header-action__icon mode-header-action__icon--codex" src="images/codex-icon.png" alt="" aria-hidden="true">
+    <img class="mode-header-action__icon mode-header-action__icon--build" src="images/build-icon.png" alt="" aria-hidden="true">
+  </button>
   <button id="saved-fab" class="rm-info-fab saved-fab" aria-label="View Saved Builds" title="View Saved Builds">★</button>
-  <button id="trending-fab" class="rm-info-fab trending-fab" aria-label="Trending Cards" title="Trending Cards" aria-haspopup="dialog" aria-expanded="false">Trending</button>
-  <button id="feedback-fab" class="rm-info-fab feedback-fab" aria-label="Provide Feedback" title="Provide Feedback" data-feedback-url="https://docs.google.com/forms/d/e/1FAIpQLSdYYeGkQhoIEDjRF4wpyItAqxcGgAK24JfAyA6XeAfTQz-AbA/viewform?usp=dialog">✉</button>
+  <button id="feedback-fab" class="rm-info-fab feedback-fab" aria-label="Provide Feedback" title="Provide Feedback">✉</button>
   <button id="info-fab" class="rm-info-fab" aria-label="About this tool" title="About">?</button>
 
-  <!-- Mobile menu (replaces the individual header icons on small screens) -->
+  <!-- Persistent utilities menu -->
   <button id="header-menu-fab" class="rm-info-fab header-menu-fab" aria-label="Menu" title="Menu" aria-haspopup="menu" aria-expanded="false">☰</button>
   <div id="header-menu" class="header-menu" role="menu" hidden>
-    <button type="button" class="header-menu-item" data-action="trending" role="menuitem">
-      <span class="header-menu-ico" aria-hidden="true">↗</span>
-      <span class="header-menu-label">Trending Cards</span>
-    </button>
     <button type="button" class="header-menu-item" data-action="saved" role="menuitem">
       <span class="header-menu-ico" aria-hidden="true">★</span>
       <span class="header-menu-label">Saved Builds</span>
+    </button>
+    <button type="button" class="header-menu-item" data-action="feedback" role="menuitem">
+      <span class="header-menu-ico" aria-hidden="true">✉</span>
+      <span class="header-menu-label">Feedback</span>
     </button>
     <button type="button" class="header-menu-item" data-action="info" role="menuitem">
       <span class="header-menu-ico" aria-hidden="true">?</span>
       <span class="header-menu-label">About</span>
     </button>
-    <button type="button" class="header-menu-item" data-action="feedback" role="menuitem">
-      <span class="header-menu-ico" aria-hidden="true">✉</span>
-      <span class="header-menu-label">Provide Feedback</span>
-    </button>
+  </div>
+  <!-- Native feedback poll; its cross-origin response loads only in the hidden target iframe. -->
+  <div id="feedback-overlay" class="rm-info-overlay feedback-overlay" hidden>
+    <div class="rm-info-backdrop" data-close="1"></div>
+    <div class="rm-info-dialog feedback-dialog" role="dialog" aria-modal="true" aria-labelledby="feedback-title">
+      <div class="rm-info-head">
+        <h3 id="feedback-title">Feedback</h3>
+        <button id="feedback-close" class="rm-info-close" type="button" aria-label="Close Feedback">×</button>
+      </div>
+      <div id="feedback-form-view" class="feedback-form-view">
+        <form id="feedback-form" method="POST" target="feedback-submit-target">
+          <fieldset class="feedback-question feedback-rating-fieldset">
+            <legend>How are we doing?</legend>
+            <p class="feedback-helper" id="feedback-rating-help">Overall, how would you rate your experience with The Randomancer?</p>
+            <div class="feedback-stars" role="radiogroup" aria-describedby="feedback-rating-help">
+              <input id="feedback-rating-1" type="radio" required><label for="feedback-rating-1" aria-label="1 out of 5 stars">☆</label>
+              <input id="feedback-rating-2" type="radio"><label for="feedback-rating-2" aria-label="2 out of 5 stars">☆</label>
+              <input id="feedback-rating-3" type="radio"><label for="feedback-rating-3" aria-label="3 out of 5 stars">☆</label>
+              <input id="feedback-rating-4" type="radio"><label for="feedback-rating-4" aria-label="4 out of 5 stars">☆</label>
+              <input id="feedback-rating-5" type="radio"><label for="feedback-rating-5" aria-label="5 out of 5 stars">☆</label>
+            </div>
+          </fieldset>
+          <fieldset class="feedback-question">
+            <legend>What would you like to see next?</legend>
+            <p class="feedback-helper">Select any features you’d be interested in.</p>
+            <div class="feedback-features">
+              <label><input type="checkbox" data-feature-index="0"> <span>Defensive Build Recommendations</span></label>
+              <label><input type="checkbox" data-feature-index="1"> <span>Passive Tree Visualization</span></label>
+              <label><input type="checkbox" data-feature-index="2"> <span>A Randomancer Discord Community</span></label>
+              <label><input type="checkbox" data-feature-index="3"> <span>Better Build Sharing</span></label>
+            </div>
+          </fieldset>
+          <div class="feedback-question">
+            <label class="feedback-question-title" for="feedback-text">Anything else?</label>
+            <p class="feedback-helper" id="feedback-text-help">Ideas, issues, suggestions, or whatever's on your mind.</p>
+            <textarea id="feedback-text" rows="3" aria-describedby="feedback-text-help"></textarea>
+          </div>
+          <div class="feedback-actions">
+            <button id="feedback-submit" class="feedback-submit" type="submit">Submit Feedback</button>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLScmlkvdZzaSooFc8f9D38v_RKLOx5OUAmSweqI7lDuqxx0oNQ/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer">Open full form</a>
+          </div>
+        </form>
+      </div>
+      <div id="feedback-success" class="feedback-success" role="status" tabindex="-1" hidden>
+        <p class="feedback-success-title">The Fates have heard you.</p>
+        <p>Thanks for helping shape The Randomancer.</p>
+      </div>
+      <iframe id="feedback-submit-target" name="feedback-submit-target" hidden aria-hidden="true" title="Feedback submission response"></iframe>
+    </div>
   </div>
   <!-- Saved Builds Lightbox -->
   <div id="saved-overlay" class="rm-info-overlay saved-overlay" hidden>
@@ -147,18 +198,10 @@
           <div id="bind-fates-list-weapon" class="bind-fates-list"></div>
         </section>
         <hr class="bind-fates-divider">
-        <section class="bind-fates-section" data-category="defensiveStrategy">
-          <div class="bind-fates-section-head">
-            <h4>Defensive Strategy</h4>
-            <p class="bind-fates-hint">Favor the protections you will rely on, or bar strategies you want fate to avoid.</p>
-          </div>
-          <div id="bind-fates-list-defensive-strategy" class="bind-fates-list"></div>
-        </section>
-        <hr class="bind-fates-divider">
         <section class="bind-fates-section" data-category="combat">
           <div class="bind-fates-section-head">
             <h4>Combat Mechanics</h4>
-            <p class="bind-fates-hint">Favor certain ailments or tactics, or name those that are forbidden.</p>
+            <p class="bind-fates-hint">Favor Offense concepts, or name those that are forbidden.</p>
           </div>
           <div id="bind-fates-list-combat" class="bind-fates-list"></div>
         </section>
@@ -175,87 +218,81 @@
       </div>
       <div id="rm-info-content" class="rm-info-content">
 <h4>About this Tool</h4>
-<p>This build-randomizing tool is intended to inspire creativity and experimentation within the world of Path of Exile 2. Hopefully it will provide some relief to the general 'meta fatigue' and unlock more possibilities and fun within the game.  Feel free to use this to set a challenge for yourself, or as more of a springboard for some new build ideas.</p>
-<p>This tool is far from perfect, and is really more of a fun prototype that I've been playing around with. If you have any thoughts, feedback, suggestions for features, bugs, etc. feel free to reach out to <a href="mailto:poerandomancer@gmail.com">poerandomancer@gmail.com</a>. I would love to hear your thoughts.</p>
-<p>To keep up with developer updates and new feature releases, follow on <a href="https://x.com/PoeRandomancer">X</a>.</p> 
-<p>Check out the project on <a href="https://github.com/poerandomancer/randomancer">GitHub</a>.</p>
+<p>The Randomancer is a Path of Exile 2 build randomizer built to inspire creativity, experimentation, and a little relief from meta fatigue. Use it to set yourself a challenge, shake up your usual habits, or simply spark an idea for a build you might never have considered otherwise.</p>
+<p>The Randomancer is an ongoing passion project, and feedback is always welcome. If you run into a bug or have an idea, suggestion, or other feedback, reach out at <a href="mailto:poerandomancer@gmail.com">poerandomancer@gmail.com</a>.</p>
+<p>For development updates and new releases, follow The Randomancer on <a href="https://x.com/PoeRandomancer">X</a>, or check out the project on <a href="https://github.com/poerandomancer/randomancer">GitHub</a>.</p>
+<p>If you'd like to help support the ongoing hosting, maintenance, and development of The Randomancer, you can <a href="https://github.com/sponsors/poerandomancer" target="_blank" rel="noopener noreferrer">support the project through GitHub Sponsors</a>.</p>
 
 <h4>About Me</h4>
-<p>I found myself daydreaming about my Path of Exile 2 'LeechBreak Crossbow Titan' build one Tuesday afternoon, during a very slow and very boring sprint planning meeting at work. Like many of you I am a recent Path of Exile 2 convert, and now I often find myself obsessing over enigmatic mathematical interactions between obscure mechanics, all draped in fantastical grimdark pageantry.  My imagination has truly been hijacked by this incredible game.</p>
-<p>I slowly began to realize the true open-ended potential of buildcrafting, and why so many people have been enjoying the first Path of Exile for so many years.  Seeking inspiration for unusual and creative approaches to playing the game, I stumbled upon the asmology Build Roulette tool (found here: <a href="https://www.asmology.com/path-of-exile-ii/build-roulette/" target="_blank" rel="noopener">https://www.asmology.com/path-of-exile-ii/build-roulette/</a>). A nifty little online widget to randomize one ascendancy and one skill, to inject some challenge and creativity into the experience.</p>
-<p>Back to my boring Tuesday afternoon meeting, it occurred to me that there is some more opportunity here for creative inspiration. The breadth of interactions to explore within POE2 feel nearly endless, and I was looking for something new to try.</p>
+<p>I found myself daydreaming about my Path of Exile 2 “LeechBreak Crossbow Titan” build one Tuesday afternoon during a very slow, very boring sprint planning meeting at work.</p>
+<p>Like many of you, I’m a relatively recent Path of Exile 2 convert, and I quickly found myself obsessing over strange mathematical interactions between obscure mechanics, all wrapped in fantastical grimdark pageantry. My imagination has been thoroughly hijacked by this game.</p>
+<p>As I started to understand the open-ended potential of buildcrafting—and why people have been playing the original Path of Exile for so many years—I went looking for ways to inspire unusual builds. That led me to the excellent <a href="https://www.asmology.com/path-of-exile-ii/build-roulette/" target="_blank" rel="noopener">asmology Build Roulette tool</a>, a simple randomizer for an ascendancy and skill that injects a little challenge and creativity into the game.</p>
+<p>Back in that boring Tuesday meeting, I started wondering how much further that idea could go. Path of Exile 2 has a seemingly endless web of mechanics and interactions to explore, and I wanted something that could nudge me toward combinations I might never think to try on my own.</p>
 <p>So I made this.</p>
-<p>At the same time, I had a general curiosity regarding the software capabilities of ChatGPT. Yes, this was built with the aid of AI. Sorry. I am a software developer by trade, and I had a clear vision and general technical notion of how I would accomplish this, so it seemed like a decent sandbox to see what all the fuss was about. Turns out, if you have a very specific end goal in mind and a fairly simple project, AI is kinda like having a junior developer in your back pocket. A junior developer who is great at brainstorming, but also has debilitating short-term memory loss and a frustratingly unshakable misplaced confidence. Great for a quick dry-run on concepts, horrific at iteration and refinement. I ended up needing to intervene at several points with some manual refactors, but ultimately... this is what I ended up with. A pretty fun little project, and an interesting development cycle.</p>
 
 <hr class="rm-info-hr">
 
-<p class="rm-disclaimer"><small>This is a non-profit, fan-made project and is in no way affiliated with or endorsed by Grinding Gear Games the creators of Path of Exile and Path of Exile 2. All rights to the original intellectual property (IP), including but not limited to characters, settings, and storylines, belong to their respective owners. We do not claim ownership of the original IP. This work is created for entertainment and transformational purposes only, under the principles of Fair Use. No commercial use or profit is being made from this project.</small></p>
+<p class="rm-disclaimer"><small>This is a free, fan-made project and is in no way affiliated with or endorsed by Grinding Gear Games. Path of Exile and Path of Exile 2 and their associated intellectual property belong to their respective owners. Optional sponsorships support the ongoing hosting, maintenance, and development of The Randomancer.</small></p>
 </div>
     </div>
   </div>
 
-  <div id="asc-art" class="asc-art" aria-hidden="true"></div>
+  <div id="asc-art" class="asc-art" aria-hidden="true">
+    <div class="asc-art__layer"></div>
+    <div class="asc-art__layer"></div>
+  </div>
   <div id="app" data-has-roll="false">
     <header id="app-header" class="rc-header">
-      <div class="patch-indicator" aria-label="Supported Path of Exile 2 patch">
-        Supports POE2 · <strong>v0.5.x</strong> ·
-        <a class="patch-indicator__social-link" href="https://github.com/poerandomancer/randomancer" target="_blank" rel="noopener noreferrer" aria-label="Randomancer GitHub repository">
-          <svg class="patch-indicator__social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <div class="header-socials" aria-label="Randomancer social links">
+        <a class="header-socials__link" href="https://github.com/poerandomancer/randomancer" target="_blank" rel="noopener noreferrer" aria-label="View Randomancer on GitHub" title="View Randomancer on GitHub">
+          <svg class="header-socials__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
             <path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.24c-3.34.73-4.04-1.42-4.04-1.42-.55-1.38-1.33-1.75-1.33-1.75-1.08-.74.08-.72.08-.72 1.2.08 1.82 1.21 1.82 1.21 1.06 1.81 2.79 1.29 3.47.99.11-.77.41-1.29.75-1.59-2.66-.3-5.46-1.32-5.46-5.88 0-1.3.47-2.37 1.22-3.2-.12-.3-.53-1.53.12-3.19 0 0 .99-.32 3.24 1.22a11.33 11.33 0 0 1 5.9 0c2.25-1.54 3.24-1.22 3.24-1.22.65 1.66.24 2.89.12 3.19.76.83 1.22 1.9 1.22 3.2 0 4.57-2.81 5.58-5.49 5.88.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 12 .5Z"/>
           </svg>
         </a>
-        <a class="patch-indicator__social-link" href="https://x.com/PoeRandomancer" target="_blank" rel="noopener noreferrer" aria-label="Randomancer on X">
-          <svg class="patch-indicator__social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <a class="header-socials__link" href="https://x.com/PoeRandomancer" target="_blank" rel="noopener noreferrer" aria-label="Follow Randomancer on X" title="Follow Randomancer on X">
+          <svg class="header-socials__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
             <path d="M18.9 2H22l-6.77 7.74L23.2 22h-6.24l-4.88-6.84L6.08 22H3l7.23-8.25L2.6 2h6.4l4.4 6.17L18.9 2Zm-1.1 18h1.73L8.06 3.9H6.2L17.8 20Z"/>
+          </svg>
+        </a>
+        <a class="header-socials__link" href="https://github.com/sponsors/poerandomancer" target="_blank" rel="noopener noreferrer" aria-label="Support the Randomancer" title="Support the Randomancer">
+          <svg class="header-socials__icon header-socials__icon--heart" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z"/>
           </svg>
         </a>
       </div>
 
       <div class="rc-header-topbar">
         <h1 class="title">The Randomancer</h1>
-        <button
-          id="header-details-toggle"
-          class="header-details-toggle"
-          type="button"
-          aria-label="Toggle header details"
-          aria-expanded="true"
-          title="Toggle header details"
-        >
-          <span class="header-details-toggle__chevron" aria-hidden="true">▼</span>
-        </button>
       </div>
 
       <div id="rc-header-extra" class="rc-header-extra">
         <h2 class="subtitle">Conjure the Impossible. Defy the Meta.</h2>
         <div id="app-lede" class="app-lede" role="note" aria-label="How to use the Randomancer">
-          Tune <strong>Cohesion</strong> for tighter themes or wilder chaos. Use <strong>Bind the Fates</strong> to favor or ban certain options. Toggle <strong>Weapon Set II</strong> for an additional weapon set, and choose <strong>Combat Mechanics</strong>: 1-3 for ailment/tactic depth.<br>
-          <strong>---</strong><br>
-          Click <strong>Roll Your Fate</strong> to begin.
+          <p class="app-lede__instructions" data-app-lede-instructions><strong>Draw Your Fate</strong> to randomly select an ascendancy, weapon, and one Offense concept. <strong>Flip the Card</strong> to reveal build ideas and suggestions. <strong>Bind the Fates</strong> to favor or ban certain options.</p>
+          <p class="app-lede__flavor"><strong data-app-lede-flavor>Not all experiments survive their creators.</strong></p>
         </div>
       </div>
 
-      <div class="roll-sticky">
-        <button id="roll" class="roll-btn roll-btn">
-          <img src="images/dice.png" alt="The Randomancer – Path of Exile 2 build randomizer thrice dice icon" class="btn-ico">
-          <span class="roll-text">Roll Your Fate</span>
-          <span class="roll-status" aria-live="polite"></span>
-        </button>
-        <button id="resumeRollBtn" class="resume-roll-btn is-hidden" type="button" aria-label="Resume last Build" title="Resume last Build">
-          <svg class="resume-roll-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M12 7v5l3 2" />
-            <path d="M20.5 12a8.5 8.5 0 1 1-2.49-6.01" />
-            <path d="M20.5 4.5v3.75h-3.75" />
-          </svg>
-        </button>
-      </div>
 
-      <div class="controls-rail mode-switch-under-roll">
-        <div class="mode-switch-row" role="group" aria-label="Randomancer mode">
-          <div id="randomancer-mode-control" class="mode-segmented" role="tablist" aria-label="Randomancer mode switcher">
-            <button class="mode-segment is-active" type="button" role="tab" aria-selected="true" data-mode-target="standard">Build</button>
-            <button class="mode-segment" type="button" role="tab" aria-selected="false" data-mode-target="challenge">Challenge</button>
-            <button class="mode-segment" type="button" role="tab" aria-selected="false" data-mode-target="codex">Codex</button>
-            <button class="mode-segment" type="button" role="tab" aria-selected="false" data-mode-target="legacy">Legacy</button>
+      <div class="controls-rail">
+        <div id="standard-controls">
+          <div class="bind-fates-row">
+            <div id="bind-fates-bar" class="bind-fates" aria-expanded="false">
+              <button class="bind-fates-toggle" type="button" aria-label="Open Bind the Fates">
+                <img src="images/bind-the-fates.png" alt="The Randomancer – Path of Exile 2 build randomizer bind the fates icon" class="bind-fates-icon" aria-hidden="true">
+                <div class="bind-fates-text">
+                  <span class="bind-fates-label">Bind the Fates</span>
+                  <span id="bind-fates-summary" class="bind-fates-summary" hidden>
+                    <span class="bind-fates-count bind-fates-count--oaths" hidden></span>
+                    <span class="bind-fates-count-separator" hidden>|</span>
+                    <span class="bind-fates-count bind-fates-count--abominations" hidden></span>
+                  </span>
+                </div>
+                <img id="bind-fates-icon-end" src="images/bind-the-fates.png" alt="" class="bind-fates-icon bind-fates-icon--end" aria-hidden="true">
+              </button>
+              <button id="bind-fates-clear" class="bind-fates-clear" type="button" aria-label="Clear bound fates" title="Clear bound fates" hidden>×</button>
+            </div>
+            <span id="bind-fates-error" class="bind-fates-error" aria-live="polite"></span>
           </div>
         </div>
       </div>
@@ -263,117 +300,22 @@
 
 
     <main>
-      <div class="controls-rail">
-      <div id="standard-controls">
-    
-      <div class="cohesion-slider cohesion-bar-wrapper" data-cohesion-constrained="false">
-                  <div class="mode-labels">
-                        <span>Cohesive</span><span>Chaotic</span>
-                  </div>
-                  <!-- Continuous slider: 0–100 mapped to threshold 1.00 → 0.00 -->
-		  <input
-			type="range"
-			id="cohesionRange"
-			min="0"
-			max="100"
-			step="1"
-			value="25"
-			aria-label="Cohesion threshold"
-		  >
-                </div>
-
-      <div class="bind-fates-row">
-        <div id="bind-fates-bar" class="bind-fates" aria-expanded="false">
-          <button class="bind-fates-toggle" type="button" aria-label="Open Bind the Fates">
-            <img src="images/bind-the-fates.png" alt="The Randomancer – Path of Exile 2 build randomizer bind the fates icon" class="bind-fates-icon" aria-hidden="true">
-            <div class="bind-fates-text">
-              <span class="bind-fates-label">Bind the Fates</span>
-              <span id="bind-fates-summary" class="bind-fates-summary">
-                No Fates Bound
-              </span>
-            </div>
-          </button>
-          <button id="bind-fates-clear" class="bind-fates-clear" type="button" aria-label="Clear bound fates" title="Clear bound fates">×</button>
-        </div>
-        <span id="bind-fates-error" class="bind-fates-error" aria-live="polite"></span>
-      </div>
-      
-      <div class="control-item weapon-set2-control">
-		  <label class="toggle-label">
-			<input
-			  type="checkbox"
-			  id="weapon-set2-toggle"
-			  aria-label="Include Weapon Set II">
-			<span class="toggle-ui"></span>
-			<span class="toggle-text">Weapon Set II</span>
-
-		  </label>
-		
-			<button id="mechanics-count-btn" class="rm-dotstep" type="button" aria-label="Combat mechanics: 2" aria-pressed="false">
-			  <span class="rm-dotstep__label toggle-text">Combat Mechanics</span>
-			  <span class="rm-dotstep__dots" aria-hidden="true">
-				<span class="rm-dotstep__dot" data-dot="1"></span>
-				<span class="rm-dotstep__dot" data-dot="2"></span>
-				<span class="rm-dotstep__dot" data-dot="3"></span>
-			  </span>
-			</button>
-		</div>
-
-      </div>
-
-
-
-      <div id="legacy-controls" class="control-item weapon-set2-control legacy-controls is-hidden" aria-label="Legacy Mode controls">
-        <div class="legacy-controls-stack">
-          <div id="legacy-basis-row" class="legacy-selector-row" role="button" tabindex="0" aria-label="Identity selector">
-            <span class="legacy-selector-label">Identity:</span>
-            <div class="legacy-selector-options">
-              <span class="legacy-selector-option" data-choice="class">Class</span>
-              <span class="legacy-selector-option" data-choice="ascendancy">Ascendancy</span>
-            </div>
-          </div>
-          <div id="legacy-format-row" class="legacy-selector-row" role="button" tabindex="0" aria-label="Offense selector">
-            <span class="legacy-selector-label">Offense:</span>
-            <div class="legacy-selector-options">
-              <span class="legacy-selector-option" data-choice="weapons">Weapons</span>
-              <span class="legacy-selector-option" data-choice="skills">Skills</span>
-            </div>
-          </div>
-          <div id="legacy-damage-row" class="legacy-selector-row" role="button" tabindex="0" aria-label="Damage Type selector">
-            <span class="legacy-selector-label">Damage Type:</span>
-            <div class="legacy-selector-options">
-              <span class="legacy-selector-option" data-choice="off">Off</span>
-              <span class="legacy-selector-option" data-choice="on">On</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div id="challenge-controls" class="control-item weapon-set2-control challenge-controls is-hidden" aria-label="Challenge Mode controls">
-        <button id="challenge-task-count-btn" class="rm-dotstep mechanics-like-btn" type="button" aria-label="Tasks: 2">
-          <span class="rm-dotstep__label toggle-text">Tasks</span>
-          <span class="rm-dotstep__dots" aria-hidden="true">
-            <span class="rm-dotstep__dot" data-dot="1"></span>
-            <span class="rm-dotstep__dot" data-dot="2"></span>
-            <span class="rm-dotstep__dot" data-dot="3"></span>
-          </span>
-        </button>
-        <button id="challenge-severity-btn" class="rm-dotstep mechanics-like-btn" type="button" aria-label="Severity: Cruel">
-          <span class="rm-dotstep__label toggle-text">Severity</span>
-          <span class="rm-dotstep__dots" aria-hidden="true">
-            <span id="challenge-severity-value" class="rm-dotstep__value">Cruel</span>
-          </span>
-        </button>
-      </div>
-      </div>
-
       <div id="results-stage" class="results-stage">
-        <hr id="challenge-empty-divider" class="gold subtle challenge-empty-divider is-hidden" aria-hidden="true"/>
-        <div id="challenge-empty-flavor" class="challenge-empty-flavor is-hidden" aria-live="polite"></div>
-
-      <section id="codex-panel" class="panel codex-panel is-hidden" aria-label="Codex Library">
+      <section id="primary-build-card-stage" class="primary-build-card-stage" aria-label="Randomized Build Card">
+        <div class="primary-build-card-stage__inner">
+          <div class="primary-build-card-stage__slot">
+            <button id="roll" class="deck-draw-tab" type="button" aria-label="Draw Your Fate">
+              <span class="roll-text">Draw Your Fate</span>
+              <span class="roll-status" aria-live="polite"></span>
+            </button>
+            <div id="primary-build-card-mount" class="primary-build-card-stage__mount" aria-live="polite"></div>
+            <div class="primary-build-card-stage__transition-back" data-primary-transition-back aria-hidden="true"></div>
+          </div>
+        </div>
+      </section>
+      <section id="codex-panel" class="panel codex-panel is-hidden" aria-label="The Archive">
         <div class="codex-header">
-          <div class="build-panel-tabs codex-pillars" role="tablist" aria-label="Codex pillars">
+          <div class="build-panel-tabs codex-pillars" role="tablist" aria-label="Archive categories">
             <button class="skills-tab is-active" type="button" role="tab" data-codex-pillar="ascendancy" aria-selected="true">Ascendancy</button>
             <button class="skills-tab" type="button" role="tab" data-codex-pillar="skills" aria-selected="false">Skills</button>
             <button class="skills-tab" type="button" role="tab" data-codex-pillar="passives" aria-selected="false">Passives</button>
@@ -381,11 +323,11 @@
             <button id="codex-pinned-tab" class="skills-tab codex-pinned-tab" type="button" role="tab" data-codex-pillar="pinned" aria-selected="false">Pinned (0)</button>
           </div>
           <div class="codex-filter-row">
-            <input id="codex-search" type="search" placeholder="Search names, descriptions, tags…" autocomplete="off" />
+            <input id="codex-search" type="search" placeholder="Search the Archive…" autocomplete="off" />
             <button id="codex-clear-tags" type="button">Clear</button>
             <span id="codex-results-count" class="codex-results-count">0 results</span>
           </div>
-          <div id="codex-tag-chips" class="codex-tag-chips" aria-label="Codex tag filters"></div>
+          <div id="codex-tag-chips" class="codex-tag-chips" aria-label="Archive tag filters"></div>
         </div>
         <div class="codex-layout">
           <div id="codex-list" class="codex-list" aria-live="polite">
@@ -401,26 +343,6 @@
       </section>
 
 
-
-      <section id="legacy-panel" class="panel legacy-panel is-hidden" aria-label="Legacy Seed Output">
-        <div id="legacy-output" class="legacy-output" aria-live="polite">
-          <div class="legacy-line"><span class="legacy-k">Status:</span> <span class="legacy-v legacy-v--muted">Awaiting legacy roll.</span></div>
-        </div>
-      </section>
-
-      <section id="challenge-panel" class="panel is-hidden" aria-label="Challenge Contract">
-        <div class="panel-actions panel-actions--build" aria-label="Challenge utilities">
-          <button id="challenge-actions-save" class="icon-btn card-action-btn build-panel-action" type="button" aria-label="Save" title="Save"><span aria-hidden="true">☆</span></button>
-        </div>
-        <div id="challenge-contract-output" class="challenge-contract-output" aria-live="polite">
-          <div class="build-title-block">
-            <h3 id="challenge-contract-title" class="build-name"></h3>
-            <p id="challenge-contract-subtitle" class="build-subtext"></p>
-            <button id="challenge-open-card" class="build-card-launch-link" type="button">Share Challenge Card</button>
-          </div>
-          <div id="challenge-contract-lines" class="summary-panel challenge-contract-lines"></div>
-        </div>
-      </section>
 
       <section id="build-panel" class="panel">
         <div class="panel-actions panel-actions--build" aria-label="Build utilities">
@@ -444,11 +366,8 @@
             <div><span class="label">Class</span><span id="class"></span></div>
             <div><span class="label">Ascendancy</span><span id="ascendancy"></span></div>
             <div class="wide">
-              <span class="label">Weapons</span>
-              <div class="weapon-sets">
-                <span id="weapons"></span>
-                <span id="weapons-set2" hidden></span>
-              </div>
+              <span class="label">Weapon</span>
+              <span id="weapons"></span>
             </div>
           </div>
         </div>
@@ -456,27 +375,11 @@
         <div class="sect">
           <div class="sect-head section-header">
             <div class="section-title-row">
-              <h3 class="section-title">Combat Mechanics</h3>
+              <h3 class="section-title">Offense</h3>
             </div>
             <div class="underline"></div>
           </div>
-          <div class="grid two">
-            <div class="wide"><span class="label">Ailments</span><span id="ailments"></span></div>
-            <div class="wide"><span class="label">Tactics</span><span id="tactics"></span></div>
-          </div>
-        </div>
-        <hr class="gold subtle"/>
-        <div class="sect">
-          <div class="sect-head section-header">
-            <div class="section-title-row">
-              <h3 class="section-title">Survivability</h3>
-            </div>
-            <div class="underline"></div>
-          </div>
-          <div class="grid two">
-            <div><span class="label">Defense</span><span id="defense"></span></div>
-            <div><span class="label">Defensive Strategy</span><span id="defstrat"></span></div>
-          </div>
+          <div class="grid two"><div class="wide"><span class="label">Concepts</span><span id="offense"></span></div></div>
         </div>
         <hr class="gold subtle"/>
         <div class="sect">
@@ -522,7 +425,7 @@
 
     </main>
     <footer class="foot">
-	  <small class="version"></small>
+	  <small class="supported-patch"></small>
 	  <p>
 		The Randomancer is a fan-made Path of Exile 2 build randomizer and PoE 2 challenge
 		generator. Not affiliated with or endorsed by Grinding Gear Games.
@@ -598,6 +501,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <div id="modeTransition" class="mode-transition" aria-hidden="true">
   <div id="modeTransitionLabel" class="mode-transition__label"></div>
+</div>
+
+<div id="contracts-overlay" class="contracts-overlay" hidden>
+  <div class="contracts-backdrop" aria-hidden="true"></div>
+  <section class="contracts-dialog" role="dialog" aria-modal="true" aria-label="Challenges">
+    <button class="contracts-close" type="button" aria-label="Close Challenges">×</button>
+    <div class="contracts-stack" role="tablist" aria-label="Current Challenges">
+      <div class="contracts-cadence-tabs" role="tablist" aria-label="Select challenge cadence">
+        <button class="contracts-cadence-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="daily-contract" data-cadence="daily">Daily</button>
+        <button class="contracts-cadence-tab" type="button" role="tab" aria-selected="false" aria-controls="weekly-contract" data-cadence="weekly">Weekly</button>
+        <button class="contracts-cadence-tab" type="button" role="tab" aria-selected="false" aria-controls="monthly-contract" data-cadence="monthly">Monthly</button>
+      </div>
+      <button id="daily-contract" class="contracts-card is-front" style="--fan-slot:-1" data-cadence="daily" type="button" role="tab" aria-selected="true">
+        <span class="contracts-card__cadence">Daily Challenge</span><span class="contracts-card__renewal"></span>
+        <strong class="contracts-card__title"></strong><span class="contracts-card__lines challenge-contract-lines"></span>
+      </button>
+      <button id="weekly-contract" class="contracts-card" style="--fan-slot:0" data-cadence="weekly" type="button" role="tab" aria-selected="false">
+        <span class="contracts-card__cadence">Weekly Challenge</span><span class="contracts-card__renewal"></span>
+        <strong class="contracts-card__title"></strong><span class="contracts-card__lines challenge-contract-lines"></span>
+      </button>
+      <button id="monthly-contract" class="contracts-card" style="--fan-slot:1" data-cadence="monthly" type="button" role="tab" aria-selected="false">
+        <span class="contracts-card__cadence">Monthly Challenge</span><span class="contracts-card__renewal"></span>
+        <strong class="contracts-card__title"></strong><span class="contracts-card__lines challenge-contract-lines"></span>
+      </button>
+    </div>
+  </section>
 </div>
 
 <div id="card-overlay" class="rm-info-overlay card-overlay" hidden>

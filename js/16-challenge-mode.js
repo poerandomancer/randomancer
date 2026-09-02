@@ -1,28 +1,7 @@
-import { ensureDataPreload } from './08-data-load.js';
-import { generateChallengeContract, loadChallengeLibrary } from './15-challenge-engine.js';
+import { loadChallengeLibrary } from './15-challenge-engine.js';
+import { generateContracts, renewalLabel } from './contracts.js';
 import { getFamilySkillNames, resolveSkillFamily } from './17-skill-family-utils.js';
-
-const MODE_KEY = 'randomancer_mode';
-const STASHED_BUILD_KEY = 'stashedBuildState';
-const STASHED_CHALLENGE_KEY = 'stashedChallengeState';
-const MODE_TRANSITION_MS = 380;
-const MODES = {
-  STANDARD: 'standard',
-  CHALLENGE: 'challenge',
-  CODEX: 'codex',
-  LEGACY: 'legacy'
-};
-const SEVERITY_ORDER = ['mild', 'cruel', 'diabolical'];
-let challengeHasRoll = false;
-let challengeTaskCount = 2;
-let challengeSeverity = 'cruel';
-let stashedBuildState = null;
-let stashedChallengeState = null;
-
-const STANDARD_LEDE_HTML = 'Tune <strong>Cohesion</strong> for tighter themes or wilder chaos. Use <strong>Bind the Fates</strong> to favor or ban certain options. Toggle <strong>Weapon Set II</strong> for an additional weapon set, and choose <strong>Combat Mechanics</strong>: 1-3 for ailment/tactic depth.<br><strong>---</strong><br>Click <strong>Roll Your Fate</strong> to begin.';
-const CHALLENGE_LEDE_TEXT = '<strong>Challenge Mode</strong> rolls a <strong>Contract</strong>, not a build. Use <strong>Bind the Fates</strong> to favor or ban certain options. Choose 1–3 <strong>Tasks</strong>, set <strong>Severity</strong>, then <strong>Draft a Contract</strong> to receive a stacked set of constraints to overcome.<br><strong>---</strong><br>Click <strong>Draft Contract</strong> to begin.';
-const CODEX_LEDE_TEXT = '<strong>Codex Mode</strong> is a non-random library for browsing Path of Exile 2 data. Explore <strong>Ascendancy</strong>, <strong>Skills</strong>, <strong>Passives</strong>, and <strong>Gear</strong> with search and tags. <strong>Pin</strong> entries to create a poe.ninja filter to view endgame builds.<br><strong>---</strong><br>Select an entry to inspect full details.';
-const LEGACY_LEDE_TEXT = '<strong>Legacy Mode</strong> rolls a sparse old-school build seed. Choose <strong>Class</strong> or <strong>Ascendancy</strong>, cycle the <strong>Weapons/Skills</strong> format selector, and optionally enable a <strong>Damage Type</strong>. Every result is fully random, with no cohesion, no defensive guidance, and no curated synergy.<br><strong>---</strong><br>Click <strong>Roll Your Fate</strong> to generate a minimal prompt.';
+import { transitionAmbianceBackground } from './ascendancy-visuals.js';
 
 let CHALLENGE_TEMPLATE_BY_ID = Object.create(null);
 
@@ -94,7 +73,6 @@ function buildTemplateSegments(template, slots) {
 
   return out;
 }
-
 
 // -------------------------
 // Inline tooltips for Contract values (Active Skills / Keystones)
@@ -280,7 +258,6 @@ function getTooltipPayload(slotKey, value) {
     if (!lines.length) return null;
     return { title: value, lines };
   }
-
 
   if (slotKey === 'SKILL_FAMILY' || slotKey === 'SKILL_FAMILY_2') {
     const core = window.DATA || {};
@@ -513,10 +490,14 @@ function hideTooltip() {
 
 function initChallengeInlineTooltips() {
   if (__RC_TIP_BOUND) return;
-  __RC_TIP_BOUND = true;
 
-  const host = document.getElementById('challenge-contract-lines');
+  // Keep this delegated binding on the stable overlay. The Contracts renderer
+  // replaces each cadence card's line contents whenever the overlay opens, so
+  // binding the former Challenge Mode list (or an individual card) leaves the
+  // newly rendered labels inert.
+  const host = document.getElementById('contracts-overlay');
   if (!host) return;
+  __RC_TIP_BOUND = true;
 
   const isTipTarget = (evtTarget) => {
     const el = evtTarget?.closest?.('.task-val.has-tip');
@@ -660,543 +641,170 @@ function initChallengeInlineTooltips() {
 }
 
 
-function stabilizeLedeHeight() {
-  const lede = document.getElementById('app-lede');
-  if (!lede) return;
-
-  const previous = lede.innerHTML;
-  const previousMinHeight = lede.style.minHeight;
-  lede.style.minHeight = '';
-
-  lede.innerHTML = STANDARD_LEDE_HTML;
-  const standardHeight = lede.offsetHeight;
-
-  lede.innerHTML = CHALLENGE_LEDE_TEXT;
-  const challengeHeight = lede.offsetHeight;
-
-  lede.innerHTML = LEGACY_LEDE_TEXT;
-  const legacyHeight = lede.offsetHeight;
-
-  lede.innerHTML = previous;
-  const targetHeight = Math.max(standardHeight, challengeHeight, legacyHeight);
-  lede.style.minHeight = `${targetHeight}px`;
-
-  if (previousMinHeight && Number.parseFloat(previousMinHeight) > targetHeight) {
-    lede.style.minHeight = previousMinHeight;
-  }
-}
-
-function prefersReducedMotion() {
-  return window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
-}
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function runModeTransition(label, swapFn) {
-  const overlay = document.getElementById('modeTransition');
-  const labelEl = document.getElementById('modeTransitionLabel');
-  if (!overlay || prefersReducedMotion()) {
-    swapFn?.();
-    return;
-  }
-
-  if (labelEl) labelEl.textContent = label || '';
-  overlay.classList.add('is-on');
-  await sleep(MODE_TRANSITION_MS);
-  swapFn?.();
-  await sleep(MODE_TRANSITION_MS);
-  overlay.classList.remove('is-on');
-}
-
-function cloneJsonSafe(value) {
-  if (!value || typeof value !== 'object') return null;
-  try {
-    if (typeof structuredClone === 'function') return structuredClone(value);
-  } catch {}
-  try { return JSON.parse(JSON.stringify(value)); } catch { return null; }
-}
-
-function persistStash() {
-  try {
-    if (stashedBuildState) localStorage.setItem(STASHED_BUILD_KEY, JSON.stringify(stashedBuildState));
-    else localStorage.removeItem(STASHED_BUILD_KEY);
-    if (stashedChallengeState) localStorage.setItem(STASHED_CHALLENGE_KEY, JSON.stringify(stashedChallengeState));
-    else localStorage.removeItem(STASHED_CHALLENGE_KEY);
-  } catch {}
-}
-
-function hydrateStash() {
-  try {
-    stashedBuildState = JSON.parse(localStorage.getItem(STASHED_BUILD_KEY) || 'null');
-    stashedChallengeState = JSON.parse(localStorage.getItem(STASHED_CHALLENGE_KEY) || 'null');
-    if (!isValidStashableBuildState(stashedBuildState)) stashedBuildState = null;
-    if (!isValidStashableChallengeState(stashedChallengeState)) stashedChallengeState = null;
-    persistStash();
-  } catch {
-    stashedBuildState = null;
-    stashedChallengeState = null;
-  }
-}
-
-function isValidStashableBuildState(snap) {
-  if (!snap || typeof snap !== 'object') return false;
-  const hasCoreIdentity = !!(snap.className || snap.ascendancy || snap.buildName);
-  const hasCoreSelections = !!(snap.weapon || snap.defense || snap.tactics || snap.ailments);
-  const hasSkills = Array.isArray(snap.recommendedSkills) && snap.recommendedSkills.length > 0;
-  return hasCoreIdentity || hasCoreSelections || hasSkills;
-}
-
-function isValidStashableChallengeState(contract) {
-  if (!contract || typeof contract !== 'object') return false;
-  const hasTitle = typeof contract.title === 'string' && contract.title.trim().length > 0;
-  const hasTasks = Array.isArray(contract.tasks) && contract.tasks.length > 0;
-  return hasTitle && hasTasks;
-}
-
-function clearChallengeResultsToEmpty() {
-  challengeHasRoll = false;
-  window.CURRENT_CHALLENGE_CONTRACT = null;
-  const title = document.getElementById('challenge-contract-title');
-  const subtitle = document.getElementById('challenge-contract-subtitle');
-  const list = document.getElementById('challenge-contract-lines');
-  if (title) title.textContent = '';
-  if (subtitle) subtitle.textContent = '';
-  if (list) list.innerHTML = '';
-}
-
-function updateResumePrompts(mode) {
-  const app = document.getElementById('app');
-  const hasBuildRoll = app?.dataset?.hasRoll === 'true';
-  const resumeBtn = document.getElementById('resumeRollBtn');
-
-  const showBuildResume = mode === MODES.STANDARD && !hasBuildRoll && !!stashedBuildState;
-  const showChallengeResume = mode === MODES.CHALLENGE && !challengeHasRoll && !!stashedChallengeState;
-  const isChallengeResume = showChallengeResume && !showBuildResume;
-
-  if (!resumeBtn) return;
-  const show = showBuildResume || showChallengeResume;
-  resumeBtn.classList.toggle('is-hidden', !show);
-  if (!show) return;
-
-  const label = isChallengeResume ? 'Resume last Contract' : 'Resume last Build';
-  resumeBtn.setAttribute('title', label);
-  resumeBtn.setAttribute('aria-label', label);
-  resumeBtn.dataset.resumeMode = isChallengeResume ? MODES.CHALLENGE : MODES.STANDARD;
-}
-
-function stashCurrentBuildState() {
-  const hasBuildRoll = document.getElementById('app')?.dataset?.hasRoll === 'true';
-  if (!hasBuildRoll) return;
-  const snap = typeof window.RandomancerGetCurrentBuildSnapshot === 'function'
-    ? window.RandomancerGetCurrentBuildSnapshot()
-    : cloneJsonSafe(window.App?.state?.currentRoll || window.CURRENT_ROLL);
-  if (!isValidStashableBuildState(snap)) return;
-  stashedBuildState = snap;
-  persistStash();
-}
-
-function stashCurrentChallengeState() {
-  if (!challengeHasRoll) return;
-  const contract = cloneJsonSafe(window.CURRENT_CHALLENGE_CONTRACT);
-  if (!isValidStashableChallengeState(contract)) return;
-  stashedChallengeState = contract;
-  persistStash();
-}
+const MODES = { STANDARD: 'standard', CODEX: 'codex' };
+const MODE_KEY = 'randomancer_mode';
+const STANDARD_LEDE_HTML = '<strong>Draw Your Fate</strong> to randomly select an ascendancy, weapon, and one Offense concept. <strong>Flip the Card</strong> to reveal build ideas and suggestions. <strong>Bind the Fates</strong> to favor or ban certain options.';
+const CODEX_LEDE_TEXT = '<strong>The Archive</strong> is a non-random library for browsing Path of Exile 2 data. Explore <strong>Ascendancy</strong>, <strong>Skills</strong>, <strong>Passives</strong>, and <strong>Gear</strong> with search and tags. <strong>Pin</strong> entries to create a poe.ninja filter to view endgame builds.<br><strong>---</strong><br>Select an entry to inspect full details.';
+let contracts = null;
+let activeCadence = 'daily';
+let restoreFocus = null;
+let renewalTimer = null;
+let contractsCloseTimer = null;
+let previousBackgroundPath = '';
 
 function getMode() {
   try {
-    const qp = new URLSearchParams(location.search);
-    const fromUrl = qp.get('mode');
-    if (fromUrl === MODES.CHALLENGE || fromUrl === MODES.CODEX || fromUrl === MODES.LEGACY) return fromUrl;
-    const stored = localStorage.getItem(MODE_KEY);
-    if (stored === MODES.CHALLENGE || stored === MODES.CODEX || stored === MODES.LEGACY) return stored;
-  } catch {}
-  return MODES.STANDARD;
+    if (new URLSearchParams(location.search).get('mode') === MODES.CODEX) return MODES.CODEX;
+    return localStorage.getItem(MODE_KEY) === MODES.CODEX ? MODES.CODEX : MODES.STANDARD;
+  } catch { return MODES.STANDARD; }
 }
-
 function setMode(mode) {
-  const next = [MODES.STANDARD, MODES.CHALLENGE, MODES.CODEX, MODES.LEGACY].includes(mode) ? mode : MODES.STANDARD;
+  const next = mode === MODES.CODEX ? MODES.CODEX : MODES.STANDARD;
   try { localStorage.setItem(MODE_KEY, next); } catch {}
   try {
     const params = new URLSearchParams(location.search);
-    if (next === MODES.STANDARD) params.delete('mode');
-    else params.set('mode', next);
-    history.replaceState(null, '', `${location.pathname}${params.toString() ? `?${params.toString()}` : ''}`);
+    next === MODES.CODEX ? params.set('mode', next) : params.delete('mode');
+    history.replaceState(null, '', `${location.pathname}${params.toString() ? `?${params}` : ''}`);
   } catch {}
-  try { document.dispatchEvent(new CustomEvent('randomancer:mode-change', { detail: { mode: next } })); } catch {}
+  document.body.dataset.mode = next === MODES.CODEX ? 'codex' : 'build';
+  document.body.classList.toggle('codex-mode', next === MODES.CODEX);
+  const codex = next === MODES.CODEX;
+  document.getElementById('codex-panel')?.classList.toggle('is-hidden', !codex);
+  ['primary-build-card-stage','build-roll-banner','build-panel','skills-panel','uniques-panel','passives-panel'].forEach(id => document.getElementById(id)?.classList.toggle('is-hidden', codex));
+  const empty = document.getElementById('empty-state');
+  empty?.classList.toggle('is-hidden', codex || document.getElementById('app')?.dataset.hasRoll === 'true');
+  document.getElementById('standard-controls')?.classList.toggle('is-hidden', codex);
+  const modeAction = document.getElementById('mode-header-action');
+  if (modeAction) {
+    const label = codex ? 'Return to Build' : 'Open the Archive';
+    modeAction.classList.toggle('is-build-return', codex);
+    modeAction.setAttribute('aria-label', label);
+    modeAction.title = label;
+  }
+  const instructions = document.querySelector('[data-app-lede-instructions]');
+  if (instructions) instructions.innerHTML = codex ? CODEX_LEDE_TEXT : STANDARD_LEDE_HTML;
+  document.querySelectorAll('[data-mode-target]').forEach(btn => {
+    const on = btn.dataset.modeTarget === next;
+    btn.classList.toggle('is-active', on); btn.setAttribute('aria-selected', String(on));
+  });
+  document.dispatchEvent(new CustomEvent('randomancer:mode-change', { detail: { mode: next } }));
   return next;
 }
 
-function setChallengeVisibility(mode) {
-  const standardControls = document.getElementById('standard-controls');
-  const challengeControls = document.getElementById('challenge-controls');
-  const legacyControls = document.getElementById('legacy-controls');
-  const isChallenge = mode === MODES.CHALLENGE;
-  const isCodex = mode === MODES.CODEX;
-  const isLegacy = mode === MODES.LEGACY;
-
-  if (standardControls) {
-    Array.from(standardControls.children || []).forEach((child) => {
-      const keepVisible = child.classList?.contains('bind-fates-row');
-      child.classList.toggle('is-hidden', (isChallenge && !keepVisible) || isCodex || isLegacy);
+function renderContractCard(card, item) {
+  card.querySelector('.contracts-card__title').textContent = item.contract.title;
+  card.querySelector('.contracts-card__renewal').textContent = renewalLabel(item.period, new Date());
+  const list = card.querySelector('.contracts-card__lines');
+  list.innerHTML = '';
+  item.contract.tasks.forEach(task => {
+    const row = document.createElement('div'); row.className = 'summary-row';
+    const label = document.createElement('span'); label.className = 'summary-label'; label.textContent = task.shortLabel || task.role;
+    const content = document.createElement('span'); content.className = 'summary-content';
+    const template = CHALLENGE_TEMPLATE_BY_ID[task.id];
+    const segments = template ? buildTemplateSegments(template, task.slots || {}) : null;
+    (segments || [{ t: task.line }]).forEach(seg => {
+      if (!seg.hi) return content.append(document.createTextNode(seg.t));
+      const value = document.createElement('span');
+      const tipKeys = ['ACTIVE_SKILL','SKILL','UNIQUE','KEYSTONE','SKILL_FAMILY','SKILL_FAMILY_2'];
+      value.className = tipKeys.includes(seg.k) ? 'task-val has-tip' : 'task-val';
+      value.textContent = seg.t;
+      if (tipKeys.includes(seg.k)) { value.dataset.slotKey = seg.k; value.tabIndex = 0; }
+      content.append(value);
     });
-  }
-  challengeControls?.classList.toggle('is-hidden', !isChallenge);
-  legacyControls?.classList.toggle('is-hidden', !isLegacy);
-  document.getElementById('roll')?.closest('.roll-sticky')?.classList.toggle('is-hidden', isCodex);
-}
-
-function setHeaderLede(mode) {
-  const lede = document.getElementById('app-lede');
-  if (!lede) return;
-  if (mode === MODES.CHALLENGE) lede.innerHTML = CHALLENGE_LEDE_TEXT;
-  else if (mode === MODES.CODEX) lede.innerHTML = CODEX_LEDE_TEXT;
-  else if (mode === MODES.LEGACY) lede.innerHTML = LEGACY_LEDE_TEXT;
-  else lede.innerHTML = STANDARD_LEDE_HTML;
-}
-
-function setChallengePanels(mode) {
-  const challengePanel = document.getElementById('challenge-panel');
-  const challengeDivider = document.getElementById('challenge-empty-divider');
-  const challengeFlavor = document.getElementById('challenge-empty-flavor');
-  const buildBanner = document.getElementById('build-roll-banner');
-  const buildPanel = document.getElementById('build-panel');
-  const skillsPanel = document.getElementById('skills-panel');
-  const uniquesPanel = document.getElementById('uniques-panel');
-  const passivesPanel = document.getElementById('passives-panel');
-  const emptyState = document.getElementById('empty-state');
-  const codexPanel = document.getElementById('codex-panel');
-  const legacyPanel = document.getElementById('legacy-panel');
-  const hasStandardRoll = document.getElementById('app')?.dataset?.hasRoll === 'true';
-  const legacyHasRoll = typeof window.RandomancerLegacyHasRoll === 'function' && window.RandomancerLegacyHasRoll();
-  const isChallenge = mode === MODES.CHALLENGE;
-  const isCodex = mode === MODES.CODEX;
-  const isLegacy = mode === MODES.LEGACY;
-
-  const showChallengeEmpty = isChallenge && !challengeHasRoll;
-  const showChallengePanel = isChallenge && challengeHasRoll;
-  const showLegacyPanel = isLegacy && legacyHasRoll;
-  const showLegacyEmpty = isLegacy && !legacyHasRoll;
-  const showStandardEmpty = !isChallenge && !isCodex && !isLegacy && !hasStandardRoll;
-
-  challengePanel?.classList.toggle('is-hidden', !showChallengePanel);
-  challengeDivider?.classList.toggle('is-hidden', !showChallengeEmpty);
-  challengeFlavor?.classList.toggle('is-hidden', !showChallengeEmpty);
-  buildBanner?.classList.toggle('is-hidden', isChallenge || isCodex || isLegacy);
-  buildPanel?.classList.toggle('is-hidden', isChallenge || isCodex || isLegacy);
-  skillsPanel?.classList.toggle('is-hidden', isChallenge || isCodex || isLegacy);
-  uniquesPanel?.classList.toggle('is-hidden', isChallenge || isCodex || isLegacy);
-  passivesPanel?.classList.toggle('is-hidden', isChallenge || isCodex || isLegacy);
-  codexPanel?.classList.toggle('is-hidden', !isCodex);
-  legacyPanel?.classList.toggle('is-hidden', !showLegacyPanel);
-
-  if (emptyState) {
-    emptyState.classList.toggle('is-hidden', !(showStandardEmpty || showLegacyEmpty));
-    const title = emptyState.querySelector('.empty-title');
-    if (title && showLegacyEmpty) {
-      title.textContent = 'Awaiting Legacy Seed...';
-    } else if (title && showStandardEmpty && title.textContent === 'Awaiting Legacy Seed...') {
-      const pool = Array.isArray(window.RandomancerIntroLines) ? window.RandomancerIntroLines : [];
-      title.textContent = pool.length ? pool[Math.floor(Math.random() * pool.length)] : 'The Fates Await...';
-    }
-  }
-
-  updateResumePrompts(mode);
-}
-
-function setChallengeFlavorLine() {
-  const challengeFlavor = document.getElementById('challenge-empty-flavor');
-  if (!challengeFlavor) return;
-  const pool = Array.isArray(window.RandomancerIntroLines) ? window.RandomancerIntroLines : [];
-  if (!pool.length) return;
-  challengeFlavor.textContent = pool[Math.floor(Math.random() * pool.length)];
-}
-
-function renderChallengeContract(contract) {
-  if (!contract || typeof contract !== 'object') return;
-  const title = document.getElementById('challenge-contract-title');
-  const subtitle = document.getElementById('challenge-contract-subtitle');
-  const list = document.getElementById('challenge-contract-lines');
-
-  if (title) title.textContent = contract.title;
-  if (subtitle) subtitle.textContent = contract.subtitle;
-  if (list) {
-    list.innerHTML = '';
-    contract.tasks.forEach(task => {
-      const row = document.createElement('div');
-      row.className = 'summary-row';
-
-      const label = document.createElement('span');
-      label.className = 'summary-label';
-      label.textContent = String(task.shortLabel || task.role || 'Clause');
-
-      const dash = document.createElement('span');
-      dash.className = 'summary-dash';
-      dash.textContent = ' • ';
-
-      const content = document.createElement('span');
-			content.className = 'summary-content';
-			
-			// Build segments from the authoritative template (so saved codes highlight correctly)
-			const template = task?.id ? CHALLENGE_TEMPLATE_BY_ID[task.id] : null;
-			const segments = template ? buildTemplateSegments(template, task?.slots || {}) : null;
-			
-			if (Array.isArray(segments) && segments.length) {
-				segments.forEach(seg => {
-					if (!seg || seg.t == null) return;
-					if (seg.hi) {
-						const v = document.createElement('span');
-						const slotKey = seg.k;
-						const wantsTip =
-							slotKey === 'ACTIVE_SKILL' ||
-							slotKey === 'SKILL' ||
-							slotKey === 'UNIQUE' ||
-							slotKey === 'KEYSTONE' ||
-							slotKey === 'SKILL_FAMILY' ||
-							slotKey === 'SKILL_FAMILY_2';
-						v.className = wantsTip ? 'task-val has-tip' : 'task-val';
-						if (wantsTip) {
-							v.dataset.slotKey = slotKey;
-							v.tabIndex = 0;
-						}
-						v.textContent = seg.t;
-						content.appendChild(v);
-					} else {
-						content.appendChild(document.createTextNode(seg.t));
-					}
-				});
-			} else {
-				// Fallback (should be rare): render the prefilled line
-				content.textContent = task.line;
-			}
-			
-			row.append(label, dash, content);
-			list.appendChild(row);
-
-    });
-  }
-
-  challengeHasRoll = true;
-  window.CURRENT_CHALLENGE_CONTRACT = contract;
-  if (window.App?.setChallengeFates && contract?.challengeFates) {
-    window.App.setChallengeFates(contract.challengeFates);
-  }
-  try { document.dispatchEvent(new CustomEvent('randomancer:challenge-rendered')); } catch {}
-
-  setChallengePanels(getMode());
-}
-
-function updateChallengeTaskButton() {
-  const btn = document.getElementById('challenge-task-count-btn');
-  if (!btn) return;
-  btn.setAttribute('aria-label', `Tasks: ${challengeTaskCount}`);
-  btn.querySelectorAll('.rm-dotstep__dot').forEach(dot => {
-    const n = Number(dot.dataset.dot || 0);
-    dot.classList.toggle('is-on', n <= challengeTaskCount);
+    row.append(label, document.createTextNode(' • '), content); list.append(row);
   });
 }
 
-function titleCaseSeverity(value) {
-  return value ? value.charAt(0).toUpperCase() + value.slice(1) : '';
-}
-
-function updateChallengeSeverityButton() {
-  const btn = document.getElementById('challenge-severity-btn');
-  const text = document.getElementById('challenge-severity-value');
-  if (btn) btn.setAttribute('aria-label', `Severity: ${titleCaseSeverity(challengeSeverity)}`);
-  if (text) text.textContent = titleCaseSeverity(challengeSeverity);
-}
-
-function bindChallengeControls() {
-  const taskBtn = document.getElementById('challenge-task-count-btn');
-  const severityBtn = document.getElementById('challenge-severity-btn');
-
-  taskBtn?.addEventListener('click', () => {
-    challengeTaskCount = challengeTaskCount >= 3 ? 1 : challengeTaskCount + 1;
-    updateChallengeTaskButton();
+function selectContract(cadence, focus = false) {
+  activeCadence = cadence;
+  document.querySelectorAll('.contracts-card').forEach(card => {
+    const selected = card.dataset.cadence === cadence;
+    card.classList.toggle('is-front', selected);
+    card.setAttribute('aria-selected', String(selected));
+    card.style.setProperty('--stack-order', selected ? 3 : 1);
   });
-
-  severityBtn?.addEventListener('click', () => {
-    const idx = SEVERITY_ORDER.indexOf(challengeSeverity);
-    challengeSeverity = SEVERITY_ORDER[(idx + 1) % SEVERITY_ORDER.length];
-    updateChallengeSeverityButton();
+  document.querySelectorAll('.contracts-cadence-tab').forEach(tab => {
+    const selected = tab.dataset.cadence === cadence;
+    tab.classList.toggle('is-active', selected);
+    tab.setAttribute('aria-selected', String(selected));
+    tab.tabIndex = selected ? 0 : -1;
   });
-
-  updateChallengeTaskButton();
-  updateChallengeSeverityButton();
+  if (focus) document.querySelector(`.contracts-cadence-tab[data-cadence="${cadence}"]`)?.focus();
 }
 
-async function handleChallengeRoll({ statusEl }) {
-  await ensureDataPreload();
-  const contract = await generateChallengeContract({
-    taskCount: challengeTaskCount,
-    severity: challengeSeverity,
-    challengeFates: window.App?.getChallengeFates?.()
-  });
-
-  renderChallengeContract(contract);
-  if (statusEl) statusEl.textContent = '';
-  return true;
+async function openContracts() {
+  const overlay = document.getElementById('contracts-overlay');
+  if (!overlay || !overlay.hidden) return;
+  clearTimeout(contractsCloseTimer); contractsCloseTimer = null;
+  overlay.classList.remove('is-closing');
+  restoreFocus = document.activeElement;
+  const backgroundHost = document.getElementById('asc-art');
+  previousBackgroundPath = backgroundHost?.classList.contains('show')
+    ? (backgroundHost.dataset.ascPath || '')
+    : '';
+  if (!contracts) contracts = await generateContracts(new Date());
+  contracts.forEach(item => renderContractCard(overlay.querySelector(`.contracts-card[data-cadence="${item.period.cadence}"]`), item));
+  selectContract('daily');
+  overlay.hidden = false;
+  document.body.classList.add('contracts-open');
+  transitionAmbianceBackground('/images/challenge-background-blur.webp');
+  overlay.querySelector('.contracts-close')?.focus();
+  renewalTimer = setInterval(() => contracts.forEach(item => {
+    overlay.querySelector(`.contracts-card[data-cadence="${item.period.cadence}"] .contracts-card__renewal`).textContent = renewalLabel(item.period, new Date());
+  }), 60000);
+}
+function closeContracts() {
+  const overlay = document.getElementById('contracts-overlay');
+  if (!overlay || overlay.hidden || overlay.classList.contains('is-closing')) return;
+  overlay.classList.add('is-closing'); document.body.classList.remove('contracts-open');
+  transitionAmbianceBackground(previousBackgroundPath);
+  clearInterval(renewalTimer); renewalTimer = null;
+  const finishClose = () => {
+    overlay.hidden = true;
+    overlay.classList.remove('is-closing');
+    restoreFocus?.focus?.(); restoreFocus = null;
+    contractsCloseTimer = null;
+  };
+  contractsCloseTimer = setTimeout(finishClose, matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 220);
 }
 
-function syncMode(mode) {
-  const isChallenge = mode === MODES.CHALLENGE;
-  const isCodex = mode === MODES.CODEX;
-  const isLegacy = mode === MODES.LEGACY;
-  const modeToggleControl = document.getElementById('randomancer-mode-control');
-  const app = document.getElementById('app');
-
-  document.body?.classList.toggle('challenge-mode', isChallenge);
-  document.body?.classList.toggle('codex-mode', isCodex);
-  document.body?.classList.toggle('legacy-mode', isLegacy);
-  if (document.body) document.body.dataset.mode = isChallenge ? 'challenge' : (isCodex ? 'codex' : (isLegacy ? 'legacy' : 'build'));
-  setHeaderLede(mode);
-  setChallengeVisibility(mode);
-  setChallengePanels(mode);
-
-  if (app && !isChallenge && !isLegacy && app.dataset.hasRoll !== 'true') {
-    app.dataset.hasRoll = 'false';
-    const ascArt = document.getElementById('asc-art');
-    if (ascArt) {
-      ascArt.classList.remove('show');
-      ascArt.style.removeProperty('--asc-img');
-      delete ascArt.dataset.ascPath;
-    }
-  }
-
-  const rollText = document.querySelector('#roll .roll-text');
-  if (rollText) rollText.textContent = isChallenge ? 'Draft Contract' : 'Roll Your Fate';
-
-  if (isLegacy && typeof window.RandomancerLegacyRenderLast === 'function') {
-    window.RandomancerLegacyRenderLast();
-  }
-
-  modeToggleControl?.querySelectorAll('[data-mode-target]').forEach((btn) => {
-    const on = btn.dataset.modeTarget === mode;
-    btn.classList.toggle('is-active', on);
-    btn.setAttribute('aria-selected', on ? 'true' : 'false');
-  });
-}
-
-document.addEventListener('DOMContentLoaded', async () => {
-  const modeControl = document.getElementById('randomancer-mode-control');
-  const initialMode = getMode();
-
-  hydrateStash();
-  stabilizeLedeHeight();
-  setChallengeFlavorLine();
-  bindChallengeControls();
+async function init() {
   initChallengeInlineTooltips();
-  syncMode(initialMode);
-  try { document.dispatchEvent(new CustomEvent('randomancer:mode-change', { detail: { mode: initialMode } })); } catch {}
-
-  window.addEventListener('resize', stabilizeLedeHeight);
-
-
-  const resumeRollBtn = document.getElementById('resumeRollBtn');
-  resumeRollBtn?.addEventListener('click', () => {
-    const target = resumeRollBtn.dataset.resumeMode;
-    if (target === MODES.STANDARD) {
-      if (!stashedBuildState) return;
-      if (typeof window.RandomancerRenderBuildSnapshot === 'function') {
-        window.RandomancerRenderBuildSnapshot(cloneJsonSafe(stashedBuildState));
-        stashedBuildState = null;
-        persistStash();
-        updateResumePrompts(MODES.STANDARD);
-      }
-      return;
-    }
-
-    if (target === MODES.CHALLENGE) {
-      if (!stashedChallengeState) return;
-      renderChallengeContract(cloneJsonSafe(stashedChallengeState));
-      stashedChallengeState = null;
-      persistStash();
-      updateResumePrompts(MODES.CHALLENGE);
-    }
-  });
-
-  modeControl?.addEventListener('click', async (event) => {
-    const btn = event.target?.closest?.('[data-mode-target]');
-    if (!btn) return;
-    const targetMode = btn.dataset.modeTarget;
-    if (![MODES.STANDARD, MODES.CHALLENGE, MODES.CODEX, MODES.LEGACY].includes(targetMode)) return;
-    const label = targetMode === MODES.CHALLENGE
-      ? 'Entering Challenge Mode…'
-      : targetMode === MODES.CODEX ? 'Opening Codex…' : targetMode === MODES.LEGACY ? 'Entering Legacy Mode…' : 'Returning to Build Mode…';
-
-    await runModeTransition(label, () => {
-      const nextMode = setMode(targetMode);
-      syncMode(nextMode);
-    });
-  });
-
-  document.addEventListener('randomancer:legacy-roll', () => {
-    if (getMode() !== MODES.LEGACY) return;
-    setChallengePanels(MODES.LEGACY);
-  });
-
-	try {
-		const lib = await loadChallengeLibrary();
-		CHALLENGE_TEMPLATE_BY_ID = Object.create(null);
-		(Array.isArray(lib) ? lib : []).forEach(t => {
-			if (t?.id && t?.template) CHALLENGE_TEMPLATE_BY_ID[t.id] = t.template;
-		});
-	} catch {}
-
-});
-
-
-window.RandomancerPrepareBuildRoll = () => {
-  stashCurrentChallengeState();
-  clearChallengeResultsToEmpty();
-  updateResumePrompts(MODES.STANDARD);
-};
-
-window.RandomancerPrepareChallengeRoll = () => {
-  stashCurrentBuildState();
-  if (typeof window.RandomancerClearBuildResults === 'function') {
-    window.RandomancerClearBuildResults();
-  }
-  updateResumePrompts(MODES.CHALLENGE);
-};
-
-window.RandomancerGetMode = getMode;
-window.RandomancerClearChallengeResults = clearChallengeResultsToEmpty;
-window.RandomancerAfterBuildRoll = () => {
-  updateResumePrompts(MODES.STANDARD);
-};
-
-
-window.RandomancerHandleRollOverride = async ({ statusEl }) => {
-  const mode = getMode();
-  if (mode === MODES.LEGACY && typeof window.RandomancerHandleLegacyRollOverride === 'function') {
-    return window.RandomancerHandleLegacyRollOverride({ statusEl });
-  }
-
-  if (mode !== MODES.CHALLENGE) return false;
-
+  setMode(getMode());
   try {
-    if (typeof window.RandomancerPrepareChallengeRoll === 'function') {
-      window.RandomancerPrepareChallengeRoll();
-    }
-    if (statusEl) statusEl.textContent = 'Forging your contract…';
-    await handleChallengeRoll({ statusEl });
-  } catch (err) {
-    console.error('[Randomancer][Challenge] roll failed', err);
-    if (statusEl) statusEl.textContent = 'Challenge generation failed. Try again.';
-  }
-  return true;
-};
-
-window.RandomancerRenderChallengeContract = (contract) => {
-  renderChallengeContract(contract);
-};
-
-window.RandomancerSetMode = (mode) => {
-  const next = setMode(mode);
-  syncMode(next);
-  return next;
-};
+    const lib = await loadChallengeLibrary();
+    CHALLENGE_TEMPLATE_BY_ID = Object.create(null);
+    lib.forEach(t => { if (t?.id && t?.template) CHALLENGE_TEMPLATE_BY_ID[t.id] = t.template; });
+  } catch {}
+  document.getElementById('mode-header-action')?.addEventListener('click', () => {
+    setMode(document.body.dataset.mode === 'codex' ? MODES.STANDARD : MODES.CODEX);
+  });
+  document.getElementById('contracts-button')?.addEventListener('click', openContracts);
+  document.querySelector('.contracts-close')?.addEventListener('click', closeContracts);
+  document.querySelector('.contracts-backdrop')?.addEventListener('click', closeContracts);
+  document.querySelectorAll('.contracts-card').forEach(card => card.addEventListener('click', () => selectContract(card.dataset.cadence)));
+  document.querySelectorAll('.contracts-cadence-tab').forEach(tab => tab.addEventListener('click', () => selectContract(tab.dataset.cadence, true)));
+  document.querySelector('.contracts-cadence-tabs')?.addEventListener('keydown', e => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+    e.preventDefault();
+    const cadences = ['daily', 'weekly', 'monthly'];
+    let index = cadences.indexOf(activeCadence);
+    if (e.key === 'Home') index = 0;
+    else if (e.key === 'End') index = cadences.length - 1;
+    else index = (index + (e.key === 'ArrowRight' ? 1 : -1) + cadences.length) % cadences.length;
+    selectContract(cadences[index], true);
+  });
+  document.addEventListener('keydown', e => {
+    const overlay = document.getElementById('contracts-overlay');
+    if (!overlay || overlay.hidden) return;
+    if (e.key === 'Escape') return closeContracts();
+    if (e.key !== 'Tab') return;
+    const focusable = [...overlay.querySelectorAll('button:not([disabled])')];
+    const first = focusable[0], last = focusable.at(-1);
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+}
+document.addEventListener('DOMContentLoaded', init);
+window.RandomancerGetMode = getMode;
+window.RandomancerSetMode = setMode;

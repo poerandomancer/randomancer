@@ -1,6 +1,12 @@
-import { TagUtils, defensePseudoTags } from './05-tags-and-scorer.js';
+import { toMatchKey } from './tag-normalization.js';
+
+function defensePseudoTags(defenseName) {
+  const value = String(defenseName || '').toLowerCase();
+  return ['armour', 'evasion', 'energyshield'].filter((tag) =>
+    tag === 'energyshield' ? value.includes('energy') : value.includes(tag)
+  );
+}
 import { adaptPoe2dbUniquesPayload } from './19-uniques-adapter.js';
-import { ensureMarketBadgeDelegation, hydrateMarketBadges, renderMarketBadgeMarkup } from './features/market-price.js';
 
 /* === Randomancer: Uniques Synergy — canonical engine (v0.8.2) === */
 (function(){
@@ -8,7 +14,7 @@ import { ensureMarketBadgeDelegation, hydrateMarketBadges, renderMarketBadgeMark
   window.__u79_active = TOKEN; // last-wins flag
 
   // Use shared tag normalizer
-  const norm = (s) => TagUtils.norm(s);
+  const norm = (s) => toMatchKey(s);
 
   const splitNames = (s) => String(s||'')
     .replace(/\u00B7/g,'•')
@@ -100,14 +106,9 @@ import { ensureMarketBadgeDelegation, hydrateMarketBadges, renderMarketBadgeMark
 	  // 1) Explicit snapshot (from App.onRoll or direct call)
 	  if (snap && typeof snap === 'object') return snap;
 	
-	  // 2) App.state.currentRoll (DOM-driven snapshot)
+	  // 2) App.state.currentDraw (DOM-driven snapshot)
 	  const App = window.App;
-	  if (App && App.state && App.state.currentRoll) return App.state.currentRoll;
-	
-	  // 3) Fallback to global CURRENT_ROLL if we’re using that
-	  if (window.CURRENT_ROLL && typeof window.CURRENT_ROLL === 'object') {
-		return window.CURRENT_ROLL;
-	  }
+	  if (App && App.state && App.state.currentDraw) return App.state.currentDraw;
 	
 	  return null;
 	}
@@ -628,8 +629,8 @@ function weaponSlotAllowed(it, slotAllow){
 	  if (r) s += Math.min(0.6, r * 0.2);
 	}
 
-    // Attribute leaning (very light; stronger at higher cohesion)
-    const th = (typeof window.cohesionThreshold === 'number') ? window.cohesionThreshold : 0.75;
+    // Attribute leaning (very light; stronger at higher affinity)
+    const th = (typeof window.baseSelectionWeight === 'number') ? window.baseSelectionWeight : 0.75;
     const attr = it?.meta?.attributes;
     const rollAttr = state?.rollAttr;
     if (attr && rollAttr){
@@ -753,7 +754,7 @@ function weaponSlotAllowed(it, slotAllow){
     if (ub) s += Math.min(0.45, ub);
 
     // Attribute leaning (very light; a nudge, not a driver)
-    const th = (typeof window.cohesionThreshold === 'number') ? window.cohesionThreshold : 0.75;
+    const th = (typeof window.baseSelectionWeight === 'number') ? window.baseSelectionWeight : 0.75;
     const attr = it?.meta?.attributes;
     const rollAttr = state?.rollAttr;
     if (attr && rollAttr){
@@ -1060,7 +1061,6 @@ function ensureUniqueSection(){
   }
 
   function renderUniques(items, rolledSet){
-    ensureMarketBadgeDelegation();
     const grid = ensureUniqueSection();
     if (!grid) {
       setTimeout(() => renderUniques(items, rolledSet), 120);
@@ -1079,7 +1079,6 @@ function ensureUniqueSection(){
 
       return `
         <div class="unique-card">
-          ${renderMarketBadgeMarkup(it, { context: 'build' })}
           <div class="unique-header">
             <div class="unique-name">${it.name}</div>
             <div class="unique-base">${it.base}</div>
@@ -1103,7 +1102,6 @@ function ensureUniqueSection(){
 
     }).join('');
 
-    hydrateMarketBadges(grid);
   }
 
 
@@ -1122,8 +1120,8 @@ function ensureUniqueSection(){
                 const picks = pickPasses(items, rolled, snap);
                 maybeLogUniqueTagDiagnostics(items, rolledSet);
 
-                if (window.App && typeof window.App.mergeCurrentRoll === 'function') {
-                  window.App.mergeCurrentRoll({ recommendedUniques: picks.map(p => p.name) });
+                if (window.App && typeof window.App.mergeCurrentDraw === 'function') {
+                  window.App.mergeCurrentDraw({ recommendedUniques: picks.map(p => p.name) });
                 }
                 if (typeof window.RandomancerUpdateBuildCodeUI === 'function') {
                   window.RandomancerUpdateBuildCodeUI();
@@ -1153,7 +1151,7 @@ function ensureUniqueSection(){
 		  const snap =
 			(snapOrRolledSet && typeof snapOrRolledSet === 'object')
 			  ? snapOrRolledSet
-			  : (window.App?.state?.currentRoll || window.CURRENT_ROLL || {});
+			  : (window.App?.state?.currentDraw || {});
 		  const rolled = rolledByCategory(snap || {});
 		  rolledSet = new Set([
 			...(rolled?.tactics || []),

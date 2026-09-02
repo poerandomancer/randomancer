@@ -36,6 +36,8 @@ PROFILE_STEP_NAMES: dict[str, list[str]] = {
         "enrich_skills",
         "enrich_passives",
         "scrape_poe2db_uniques_min",
+        "generate_recommendation_catalog_v3",
+        "validate_recommendation_catalog_v3",
         "generate_challenge_pools",
         "generate_keystone_tooltips",
         "validate_tag_normalization",
@@ -45,6 +47,8 @@ PROFILE_STEP_NAMES: dict[str, list[str]] = {
         "generate_tag_rules_js",
         "enrich_skills",
         "enrich_passives",
+        "generate_recommendation_catalog_v3",
+        "validate_recommendation_catalog_v3",
         "generate_challenge_pools",
         "validate_tag_normalization",
         "audit_tag_vocab",
@@ -55,12 +59,15 @@ PROFILE_STEP_NAMES: dict[str, list[str]] = {
         "audit_tag_vocab",
     ],
     "verify-only": [
+        "validate_recommendation_catalog_v3",
         "validate_tag_normalization",
         "audit_tag_vocab",
     ],
     "skills-only": [
         "generate_tag_rules_js",
         "enrich_skills",
+        "generate_recommendation_catalog_v3",
+        "validate_recommendation_catalog_v3",
         "generate_challenge_pools",
         "validate_tag_normalization",
         "audit_tag_vocab",
@@ -68,17 +75,25 @@ PROFILE_STEP_NAMES: dict[str, list[str]] = {
     "passives-only": [
         "generate_tag_rules_js",
         "enrich_passives",
+        "generate_recommendation_catalog_v3",
+        "validate_recommendation_catalog_v3",
         "validate_tag_normalization",
         "audit_tag_vocab",
     ],
     "uniques-only": [
         "scrape_poe2db_uniques_min",
+        "generate_recommendation_catalog_v3",
+        "validate_recommendation_catalog_v3",
         "generate_challenge_pools",
         "validate_tag_normalization",
         "audit_tag_vocab",
     ],
     "keystones-only": [
         "generate_keystone_tooltips",
+    ],
+    "recommendations-only": [
+        "generate_recommendation_catalog_v3",
+        "validate_recommendation_catalog_v3",
     ],
 }
 
@@ -190,6 +205,32 @@ def build_steps(ctx: PipelineContext) -> list[PipelineStep]:
             required=True,
             networked=True,
             description="Refresh the runtime uniques scrape from PoE2DB.",
+        ),
+        "generate_recommendation_catalog_v3": PipelineStep(
+            name="generate_recommendation_catalog_v3",
+            command=[py, p("generate_recommendation_catalog_v3.py")],
+            outputs=[
+                ctx.repo_root / "data/enriched/recommendation_catalog_v3.json",
+                ctx.repo_root / "data/enriched/recommendation_catalog_v3_report.json",
+                ctx.repo_root / "data/enriched/recommendation_granted_skill_access_v3.json",
+                ctx.repo_root / "data/enriched/recommendation_skill_crafting_v3.json",
+            ],
+            summary_artifact_keys=[
+                "recommendation_catalog_v3",
+                "recommendation_catalog_v3_report",
+                "recommendation_granted_skill_access_v3",
+                "recommendation_skill_crafting_v3",
+            ],
+            required=True,
+            description="Build the additive semantic recommendation catalog from current enriched and datamined sources.",
+        ),
+        "validate_recommendation_catalog_v3": PipelineStep(
+            name="validate_recommendation_catalog_v3",
+            command=[py, p("validate_recommendation_catalog_v3.py")],
+            outputs=[],
+            summary_artifact_keys=[],
+            required=True,
+            description="Validate recommendation v3 schema, source parity, and semantic regression fixtures.",
         ),
         "generate_challenge_pools": PipelineStep(
             name="generate_challenge_pools",

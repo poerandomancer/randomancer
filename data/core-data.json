@@ -2,6 +2,8 @@
   "Version": "unversioned",
   "Classes": {
     "Warrior": {
+      "passiveTreeCharacterId": 6,
+      "passiveTreeStart": "str",
       "ascendancies": [
         "Titan",
         "Warbringer",
@@ -12,6 +14,8 @@
       }
     },
     "Mercenary": {
+      "passiveTreeCharacterId": 9,
+      "passiveTreeStart": "str_dex",
       "ascendancies": [
         "Tactician",
         "Witchhunter",
@@ -23,6 +27,8 @@
       }
     },
     "Ranger": {
+      "passiveTreeCharacterId": 2,
+      "passiveTreeStart": "dex",
       "ascendancies": [
         "Deadeye",
         "Pathfinder"
@@ -32,6 +38,8 @@
       }
     },
     "Huntress": {
+      "passiveTreeCharacterId": 8,
+      "passiveTreeStart": "dex",
       "ascendancies": [
         "Amazon",
         "Ritualist",
@@ -42,6 +50,8 @@
       }
     },
     "Witch": {
+      "passiveTreeCharacterId": 1,
+      "passiveTreeStart": "int",
       "ascendancies": [
         "Blood Mage",
         "Lich",
@@ -53,6 +63,8 @@
       }
     },
     "Sorceress": {
+      "passiveTreeCharacterId": 7,
+      "passiveTreeStart": "int",
       "ascendancies": [
         "Chronomancer",
         "Stormweaver",
@@ -63,6 +75,8 @@
       }
     },
     "Monk": {
+      "passiveTreeCharacterId": 10,
+      "passiveTreeStart": "dex_int",
       "ascendancies": [
         "Invoker",
         "Acolyte of Chayula",
@@ -74,6 +88,8 @@
       }
     },
     "Druid": {
+      "passiveTreeCharacterId": 11,
+      "passiveTreeStart": "str_int",
       "ascendancies": [
         "Shaman",
         "Oracle"
@@ -538,9 +554,9 @@
         "chaos damage"
       ],
       "attributes": {
-        "strength": 0.25,
-        "dexterity": 0.25,
-        "intelligence": 0.5
+        "strength": 0.1,
+        "dexterity": 0.1,
+        "intelligence": 0.8
       }
     }
   ],
@@ -623,7 +639,7 @@
         "Armour & Evasion",
         "Evasion & Energy Shield"
       ],
-      "enableMinionsWeaponRule": true,
+      "enableMinionsWeaponRule": false,
       "minionsRequiresWeapon": [
         "Sceptre"
       ],

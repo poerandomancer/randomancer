@@ -113,16 +113,6 @@ main .panel + .panel{
   z-index: 5;
 }
 
-.challenge-contract-output{
-  margin: .2rem 0 0;
-  padding: 0;
-}
-
-.challenge-contract-output .build-title-block{
-  margin-top:.15rem;
-}
-
-.challenge-contract-lines{
   margin-top:.55rem;
 }
 
@@ -142,48 +132,4 @@ body.challenge-mode hr.gold.subtle{
 body[data-mode="challenge"] .label,
 body.challenge-mode .label{
   color:#8e96a2;
-}
-
-.legacy-panel{
-  margin-top: 14px;
-  font-family: SFMono-Regular, ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-  border-color: rgba(var(--legacy-green-rgb), 0.38);
-  background: rgba(8, 12, 10, 0.92);
-}
-
-.legacy-panel::before{
-  background: linear-gradient(180deg, rgba(35,55,40,0.12), rgba(0,0,0,0.65));
-}
-
-.legacy-output{
-  display:flex;
-  flex-direction:column;
-  gap:.55rem;
-  color:#dde5de;
-}
-
-.legacy-line{
-  font-size:.9rem;
-  letter-spacing:.01em;
-}
-
-.legacy-k{
-  color: rgba(var(--legacy-green-rgb), 0.95);
-}
-
-.legacy-v{
-  color: #ecf3ed;
-}
-
-.legacy-v--muted{
-  color:#a7b0aa;
-}
-
-.legacy-contract{
-  margin-top: .5rem;
-  padding-top: .5rem;
-  border-top: 1px solid rgba(var(--legacy-green-rgb), 0.25);
-  color: #9daaa1;
-  font-size: .82rem;
-  line-height: 1.45;
 }

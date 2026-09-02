@@ -555,23 +555,3 @@ body[data-mode="codex"] .codex-inspector h3{
 .codex-panel .codex-row[open] .codex-row-copy small{
   display:none;
 }
-
-/* ===== v0.8.5: Market estimate badge (Codex expanded unique body) ===== */
-.codex-panel .codex-unique-body {
-  position: relative;
-  padding-top: .1rem;
-}
-
-.codex-panel .codex-unique-body .market-badge {
-  top: .2rem;
-  right: .2rem;
-}
-
-.codex-panel .codex-unique-body .market-badge__button {
-  width: 32px;
-  height: 32px;
-}
-
-.codex-panel .codex-unique-body .market-badge__label {
-  font-size: .62rem;
-}

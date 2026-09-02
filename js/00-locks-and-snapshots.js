@@ -7,22 +7,20 @@ import {
   setSkillsTabsAvailability,
   SUPPORT,
 } from './01-meta-and-domready.js';
-import { fetchPublicCardBySlug } from './publicCardApi.js';
-import { hydrateSharedBuildCard, hydrateSharedChallengeCard, validatePublicCardRecord } from './publicCardHydration.js';
 import {
   closeCardOverlay,
   getSummaryTextFromSnapshot,
   installSummaryAutoRefresh,
   openCardOverlay,
-  setSharedCardSlug,
   renderSummaryFromSnapshot
 } from './02-summary-view.js';
-import { buildGemDictionary, lookupGem } from './05-tags-and-scorer.js';
-import { buildBuildContext } from './06-cohesion.js';
+import { buildGemDictionary, lookupGem } from './gem-utils.js';
+import { buildBuildContext } from './06-build-context.js';
+import { buildPoeNinjaUrl } from './poe-ninja.js';
 import { applyGemBorderFromReqWeights, grantLine, renderSupportCards } from './07-skills-render.js';
 import { ensureDataPreload } from './08-data-load.js';
 import { renderPassiveRecommendations } from './07-skills-render.js';
-import { updateAscArt } from './10-roll-engine.js';
+import { updateAscendancyAmbiance } from './ascendancy-visuals.js';
 import {
   pickRecommendedAscendancyNodes,
   pickRecommendedKeystones,
@@ -42,7 +40,7 @@ import {
     try { return decodeURIComponent(escape(atob(str))); } catch { return ''; }
   };
 
-  const currentSnap = () => (window.App?.state?.currentRoll) ? window.App.state.currentRoll : null;
+  const currentSnap = () => (window.App?.state?.currentDraw) ? window.App.state.currentDraw : null;
   const currentChallenge = () => (window.CURRENT_CHALLENGE_CONTRACT && typeof window.CURRENT_CHALLENGE_CONTRACT === 'object') ? window.CURRENT_CHALLENGE_CONTRACT : null;
   const savedOverlay = document.getElementById('saved-overlay');
   const savedCloseBtn = document.getElementById('saved-close');
@@ -55,118 +53,37 @@ import {
     try { return localStorage.getItem('randomancer_mode') === 'challenge'; } catch { return false; }
   };
 
-  function encodeSnapshot(snap){
-    if (!snap || typeof snap !== 'object') return '';
-    
-    const compact = {
-      v: snap.snapshotVersion || 1,
-      c: snap.className || '',
-      a: snap.ascendancy || '',
-      ai: snap.ascendancyId ?? null,
-      w: snap.weapon || '',
-      o: snap.offhand || '',
-      w2: snap.weapon2 || '',
-      o2: snap.offhand2 || '',
-      al: Array.isArray(snap.ailmentList) ? snap.ailmentList : [],
-      tl: Array.isArray(snap.tacticList) ? snap.tacticList : [],
-      d: snap.defense || '',
-      ds: snap.defStrat || '',
-      b: snap.buildName || '',
-      f: snap.flavor || '',
-      attr: snap.attributes || { strength:0, dexterity:0, intelligence:0 },
-      rs: Array.isArray(snap.recommendedSkills) ? snap.recommendedSkills : [],
-      rs2: Array.isArray(snap.recommendedSkills2) ? snap.recommendedSkills2 : [],
-      ss: Array.isArray(snap.synergySupports) ? snap.synergySupports : [],
-      ss2: Array.isArray(snap.synergySupports2) ? snap.synergySupports2 : [],
-      pb: snap.recommendedPersistentBuff || null,
-      u: Array.isArray(snap.recommendedUniques)
-        ? snap.recommendedUniques.map(u => (typeof u === 'string' ? u : (u && typeof u === 'object' ? u.name : null))).filter(Boolean)
-        : [],
-
-      // passives (packed) so rehydrated builds preserve these panels
-      p: (() => {
-        const pass = snap.passives;
-        if (!pass || typeof pass !== 'object') return null;
-
-        const packNode = (n) => {
-          if (!n || typeof n !== 'object') return null;
-          return {
-            name: n.name || '',
-            lines: Array.isArray(n.lines) ? n.lines.slice(0, 16) : [],
-            tags: Array.isArray(n.tags) ? n.tags.slice(0, 24) : [],
-            icon: n.icon || ''
-          };
-        };
-
-        const packList = (arr, max) =>
-          Array.isArray(arr) ? arr.slice(0, max).map(packNode).filter(Boolean) : [];
-
-        return {
-          a: packList(pass.ascendancyNodes, 2),
-          k: packList(pass.keystones, 2),
-          n: packList(pass.notables, 8)
-        };
-      })()
-
-    };
-
-    return safeBtoa(JSON.stringify(compact));
+  function encodeSnapshot(draw){
+    if (!draw || draw.schema !== 'randomancer-draw-v1') return '';
+    return safeBtoa(JSON.stringify(draw));
   }
 
   function decodeSnapshot(code){
     if (!code) return null;
-    const json = safeAtob(code);
-    if (!json) return null;
     try {
-      const raw = JSON.parse(json);
+      const draw = JSON.parse(safeAtob(code));
+      if (draw?.schema === 'randomancer-draw-v1') return draw;
+
+      // Links produced by the short-lived compact-link implementation use
+      // abbreviated keys. Continue accepting them so already-copied links do
+      // not become dead links.
+      if (!draw || typeof draw !== 'object' || (!draw.c && !draw.b)) return null;
       return {
-        snapshotVersion: raw.v || 1,
-        className: raw.c || '',
-        ascendancy: raw.a || '',
-        ascendancyId: raw.ai ?? null,
-        weapon: raw.w || '',
-        offhand: raw.o || '',
-        weapon2: raw.w2 || '',
-        offhand2: raw.o2 || '',
-        ailments: (raw.al || []).join(' & '),
-        tactics: (raw.tl || []).join(' & '),
-        ailmentList: raw.al || [],
-        tacticList: raw.tl || [],
-        defense: raw.d || '',
-        defStrat: raw.ds || '',
-        buildName: raw.b || '',
-        flavor: raw.f || '',
-        attributes: raw.attr || { strength:0, dexterity:0, intelligence:0 },
-        recommendedSkills: raw.rs || [],
-        recommendedSkills2: raw.rs2 || [],
-        synergySupports: raw.ss || [],
-        synergySupports2: raw.ss2 || [],
-        recommendedPersistentBuff: raw.pb || null,
-        recommendedUniques: raw.u || [],
-
-        passives: (() => {
-          const p = raw.p;
-          if (!p || typeof p !== 'object') return null;
-
-          // v2 packed shape: { a, k, n }
-          if ('a' in p || 'k' in p || 'n' in p) {
-            return {
-              ascendancyNodes: Array.isArray(p.a) ? p.a : [],
-              keystones: Array.isArray(p.k) ? p.k : [],
-              notables: Array.isArray(p.n) ? p.n : []
-            };
-          }
-
-          // legacy / dev shape (already expanded)
-          if (p.ascendancyNodes || p.keystones || p.notables) return p;
-
-          return null;
-        })()
+        schema: 'randomancer-draw-v1',
+        snapshotVersion: 2,
+        className: draw.c || '', ascendancy: draw.a || '', ascendancyId: draw.ai,
+        weapon: draw.w || '', offhand: draw.o || '', weapon2: draw.w2 || '', offhand2: draw.o2 || '',
+        ailmentList: Array.isArray(draw.al) ? draw.al : [], tacticList: Array.isArray(draw.tl) ? draw.tl : [],
+        defense: draw.d || '', defStrat: draw.ds || '', buildName: draw.b || '', flavor: draw.f || '',
+        attributes: draw.attr || {}, recommendedSkills: draw.rs || [], recommendedSkills2: draw.rs2 || [],
+        recommendedUniques: draw.u || [],
+        recommendedJewelryUniques: Array.isArray(draw.ju) ? draw.ju.map((entry) => typeof entry === 'string'
+          ? entry : ({ name: entry?.n || '', ...(entry?.t ? { itemType: entry.t } : {}) })).filter((entry) => entry && (typeof entry === 'string' || entry.name)) : [],
+        passives: draw.p ? {
+          ascendancyNodes: draw.p.a || [], keystones: draw.p.k || [], notables: draw.p.n || []
+        } : undefined
       };
-    } catch (e) {
-      console.warn('[build code] decode failed', e);
-      return null;
-    }
+    } catch { return null; }
   }
 
   function encodeChallengeContract(contract){
@@ -175,8 +92,6 @@ import {
       v: 1,
       title: contract.title || '',
       subtitle: contract.subtitle || '',
-      severity: contract.severity || 'cruel',
-      taskCount: Number(contract.taskCount) || 2,
       tasks: Array.isArray(contract.tasks)
         ? contract.tasks.map(t => ({
             id: t?.id || '',
@@ -204,8 +119,6 @@ import {
         mode: 'challenge',
         title: raw.title || '',
         subtitle: raw.subtitle || '',
-        severity: raw.severity || 'cruel',
-        taskCount: Number(raw.taskCount) || 2,
         tasks: Array.isArray(raw.tasks) ? raw.tasks : [],
         challengeFates: raw.cf && typeof raw.cf === 'object'
           ? raw.cf
@@ -222,6 +135,7 @@ import {
     if (typeof window.RandomancerSetMode === 'function') {
       window.RandomancerSetMode('challenge');
     }
+    document.dispatchEvent(new CustomEvent('randomancer:card-restore-start'));
     const render = () => {
       if (typeof window.RandomancerRenderChallengeContract === 'function') {
         window.RandomancerRenderChallengeContract(contract);
@@ -237,7 +151,7 @@ import {
   function challengeSummaryText(contract){
     if (!contract) return '';
     const lines = (contract.tasks || []).map(t => `• ${t.line || ''}`.trim()).filter(Boolean);
-    return [contract.title || 'Challenge Contract', contract.subtitle || '', ...lines].filter(Boolean).join('\n');
+    return [contract.title || 'Challenge', contract.subtitle || '', ...lines].filter(Boolean).join('\n');
   }
 
   function setElText(sel, txt){ const el = document.querySelector(sel); if (el) el.textContent = txt || ''; }
@@ -413,7 +327,7 @@ function renderSnapshotToDom(snap){
     if (!snap) return;
     setElText('#class', snap.className || '');
     setElText('#ascendancy', snap.ascendancy || '');
-    updateAscArt(snap.ascendancy || '');
+    updateAscendancyAmbiance(snap.ascendancy || '');
     const appEl = document.getElementById('app');
     if (appEl) appEl.dataset.hasRoll = 'true';
     const weaponsTxt = formatWeaponLine(snap.weapon, snap.offhand);
@@ -449,7 +363,7 @@ function renderSnapshotToDom(snap){
     setSkillsTabsAvailability(hasSet2);
     setActiveSkillsTab('1');
     try {
-      renderPassiveRecommendations((window.App && window.App.state && window.App.state.currentRoll) || snap, window.DATA);
+      renderPassiveRecommendations((window.App && window.App.state && window.App.state.currentDraw) || snap, window.DATA);
     } catch (e) {
       console.warn('[render] passives panel failed', e);
     }
@@ -469,6 +383,7 @@ function renderSnapshotToDom(snap){
   if (!snap) return false;
 
   const dataWrap = await ensureDataPreload();
+  document.dispatchEvent(new CustomEvent('randomancer:card-restore-start'));
 
   // Back-compat: older build codes didn't store passives; rebuild them from the snapshot context.
   if (!snap.passives) {
@@ -492,10 +407,10 @@ function renderSnapshotToDom(snap){
 
   // Replace global roll state so restored snapshots do not leak prior roll fields.
   const rollPayload = { ...snap };
-  if (window.App?.replaceCurrentRoll) {
-    window.App.replaceCurrentRoll(rollPayload);
-  } else if (window.App?.mergeCurrentRoll) {
-    window.App.mergeCurrentRoll(rollPayload);
+  if (window.App?.replaceCurrentDraw) {
+    window.App.replaceCurrentDraw(rollPayload);
+  } else if (window.App?.mergeCurrentDraw) {
+    window.App.mergeCurrentDraw(rollPayload);
   }
 
   renderSnapshotToDom(rollPayload);
@@ -520,6 +435,16 @@ function renderSnapshotToDom(snap){
   }
   function persistSavedChallenges(list){
     try { localStorage.setItem(CHALLENGE_STORAGE_KEY, JSON.stringify(list.slice(0, MAX_SAVED))); } catch {}
+  }
+
+  function isBuildSaved(snapshot = currentSnap()){
+    const code = encodeSnapshot(snapshot);
+    return !!(code && loadSaved().some(entry => entry.code === code));
+  }
+
+  function isChallengeSaved(contract = currentChallenge()){
+    const code = encodeChallengeContract(contract);
+    return !!(code && loadSavedChallenges().some(entry => entry.code === code));
   }
 
   function syncSaveButtonState(code){
@@ -647,8 +572,8 @@ function renderSnapshotToDom(snap){
     } else {
       const entry = {
         code,
-        name: contract.title || 'Challenge Contract',
-        meta: [contract.severity, contract.subtitle].filter(Boolean).join(' • ')
+        name: contract.title || 'Challenge',
+        meta: contract.subtitle || ''
       };
       const existing = list.filter(e => e.code !== code);
       existing.unshift(entry);
@@ -676,83 +601,13 @@ function renderSnapshotToDom(snap){
     btn.setAttribute('title', saved ? 'Saved' : 'Save');
   }
   
-  function normalizeHandedWeaponLabel(label) {
-	  return label
-		.replace(/-/g, " ")                 // One-handed → One handed
-		.replace(/\b\w/g, c => c.toUpperCase()); // → One Handed
-	}
-
-  
-  function normalizePoeNinjaWeaponMode(weapon, offhand) {
-	  const display = formatWeaponLine(weapon, offhand); 
-	  if (!display) return "";
-	
-	  const parts = display
-		.split(/&|\//g)
-		.map(s => s.trim())
-		.filter(Boolean);
-	
-	  // --------------------------------------------------
-	  // SINGLE WEAPON CASE
-	  // --------------------------------------------------
-	  if (parts.length === 1) {
-		return normalizeHandedWeaponLabel(parts[0]);
-	  }
-	
-	  // --------------------------------------------------
-	  // Dual same-weapon case
-	  // --------------------------------------------------
-	  if (
-		parts.length === 2 &&
-		parts[0].toLowerCase() === parts[1].toLowerCase()
-	  ) {
-		return `Dual ${normalizeHandedWeaponLabel(parts[0])}`;
-	  }
-	
-	  // --------------------------------------------------
-	  // Wand / Sceptre special-case
-	  // --------------------------------------------------
-	  const lower = parts.map(p => p.toLowerCase());
-	  const hasWand = lower.includes("wand");
-	  const hasSceptre = lower.includes("sceptre") || lower.includes("scepter");
-	
-	  if (hasWand && hasSceptre) return "Wand / Sceptre";
-	
-	  // --------------------------------------------------
-	  // DEFAULT MIXED-WEAPON CASE
-	  // 🔑 FIX: normalize EACH part before joining
-	  // --------------------------------------------------
-	  const normalizedParts = parts.map(normalizeHandedWeaponLabel);
-	  return normalizedParts.join(" / ");
-	}
-	
 	function buildPoeNinjaUrlFromSnapshot(snap) {
-	  if (!snap) return "";
-	
-	  const base = `https://poe.ninja/poe2/builds/${SUPPORT.league.poeNinjaSlug}`;
-	  const params = new URLSearchParams();
-	
-	  const asc = (snap.ascendancyName || snap.ascendancy || "").trim();
-	  if (asc) params.set("class", asc);
-	
-	  const weaponmode = normalizePoeNinjaWeaponMode(snap.weapon, snap.offhand);
-	  if (weaponmode) params.set("weaponmode", weaponmode);
-	
-	  const skills = Array.isArray(snap.recommendedSkills) ? snap.recommendedSkills : [];
-	  const skillNames = skills
-		.map(s => (s && typeof s === "object" ? s.name : String(s || "")))
-		.filter(Boolean)
-		.slice(0, 2);
-	
-	  if (skillNames.length) params.set("skills", skillNames.join(","));
-	
-	  return `${base}?${params.toString()}`;
+	  return buildPoeNinjaUrl(snap, SUPPORT.league.poeNinjaSlug);
 	}
 
 
   function bindUI(){
     const buildViewCardBtn = document.getElementById('build-open-card');
-    const challengeViewCardBtn = document.getElementById('challenge-open-card');
     const buildSaveBtn = document.getElementById('build-actions-save');
     const buildPoeBtn = document.getElementById('build-actions-poe');
     const challengeSaveBtn = document.getElementById('challenge-actions-save');
@@ -761,13 +616,12 @@ function renderSnapshotToDom(snap){
     installSummaryAutoRefresh();
 
     buildViewCardBtn?.addEventListener('click', () => openCardOverlay('build'));
-    challengeViewCardBtn?.addEventListener('click', () => openCardOverlay('challenge'));
     buildSaveBtn?.addEventListener('click', () => {
       saveCurrentBuild();
       window.RandomancerShowToast?.('Saved locally.');
     });
     buildPoeBtn?.addEventListener('click', () => {
-      const snap = window.App?.state?.currentRoll || window.CURRENT_ROLL;
+      const snap = window.App?.state?.currentDraw;
       const url = window.RandomancerBuildPoeNinjaUrl?.(snap);
       if (url) window.open(url, '_blank', 'noopener,noreferrer');
     });
@@ -858,79 +712,12 @@ function renderSnapshotToDom(snap){
     try { return JSON.parse(JSON.stringify(value)); } catch { return null; }
   }
 
-  function clearBuildResultsToEmpty(){
-    const appEl = document.getElementById('app');
-    if (appEl) appEl.dataset.hasRoll = 'false';
-    const ascArt = document.getElementById('asc-art');
-    if (ascArt) {
-      ascArt.classList.remove('show');
-      ascArt.style.removeProperty('--asc-img');
-      delete ascArt.dataset.ascPath;
-    }
-    const ids = [
-      'class','ascendancy','weapons','weapons-set2','defense','defstrat','ailments','tactics','build-name','build-subtext',
-      'balance-bar','balance-text'
-    ];
-    ids.forEach(id => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      if (id === 'balance-bar') {
-        el.style.removeProperty('width');
-      } else {
-        el.textContent = '';
-      }
-    });
-    const ws2 = document.getElementById('weapons-set2');
-    if (ws2) ws2.hidden = true;
-    if (window.App?.state) window.App.state.currentRoll = null;
-    window.CURRENT_ROLL = null;
-  }
-
-  async function openSharedCardBySlug(slug){
-    const safeSlug = String(slug || '').trim().toLowerCase();
-    const slugPattern = /^[bc]-[a-z0-9]{8}$/i;
-    if (!slugPattern.test(safeSlug)) throw new Error('Shared card slug was invalid.');
-
-    const shared = validatePublicCardRecord(await fetchPublicCardBySlug(safeSlug));
-    if (shared.card_kind === 'challenge') {
-      if (typeof window.RandomancerSetMode === 'function') window.RandomancerSetMode('challenge');
-      const contract = hydrateSharedChallengeCard(shared.payload);
-      if (typeof window.RandomancerRenderChallengeContract === 'function') {
-        window.RandomancerRenderChallengeContract(contract);
-      }
-      setSharedCardSlug('challenge', shared.slug);
-      openCardOverlay('challenge', { skipUrl: true });
-      return shared;
-    }
-
-    if (typeof window.RandomancerSetMode === 'function') window.RandomancerSetMode('standard');
-    const snapshot = hydrateSharedBuildCard(shared.payload);
-    if (typeof window.RandomancerRenderBuildSnapshot === 'function') {
-      window.RandomancerRenderBuildSnapshot(snapshot);
-    }
-    setSharedCardSlug('build', shared.slug);
-    openCardOverlay('build', { skipUrl: true });
-    return shared;
-  }
-
   async function autoLoadFromQuery(){
+    // Other modules install the primary-card animation controller during the
+    // same DOM-ready turn. Let those listeners mount before restoring a URL.
+    await new Promise(resolve => requestAnimationFrame(resolve));
     const q = getQueryParams();
-    const slugPattern = /^[bc]-[a-z0-9]{8}$/i;
-    const cardParam = q.get('card');
-    const requestedSharedCard = q.get('sharedCard');
-    const requestedCard = requestedSharedCard || (slugPattern.test(cardParam || '') ? cardParam : '');
-    const requestedOverlay = slugPattern.test(cardParam || '') ? '' : cardParam;
-
-    if (requestedCard && slugPattern.test(requestedCard)) {
-      window.RandomancerShowToast?.('Loading shared card…', 1800);
-      try {
-        await openSharedCardBySlug(requestedCard);
-        return;
-      } catch (error) {
-        console.warn('[public-card] shared restore failed', error);
-        window.RandomancerShowToast?.('Shared card could not be restored.');
-      }
-    }
+    const requestedOverlay = q.get('card');
 
     const challengeCode = q.get('challenge') || q.get('challengeCode');
     if (challengeCode) {
@@ -990,6 +777,8 @@ function renderSnapshotToDom(snap){
 
 
   window.RandomancerEncodeChallengeContract = encodeChallengeContract;
+  window.RandomancerIsBuildSaved = isBuildSaved;
+  window.RandomancerIsChallengeSaved = isChallengeSaved;
   window.RandomancerApplyChallengeCode = applyChallengeCode;
   window.RandomancerSaveCurrentBuild = saveCurrentBuild;
   window.RandomancerSaveCurrentChallenge = saveCurrentChallenge;
@@ -1003,14 +792,11 @@ function renderSnapshotToDom(snap){
     if (!snap || typeof snap !== 'object') return false;
     const safeSnap = cloneJsonSafe(snap) || { ...snap };
     let canonical = safeSnap;
-    if (window.App?.replaceCurrentRoll) canonical = window.App.replaceCurrentRoll(safeSnap) || safeSnap;
-    else if (window.App?.mergeCurrentRoll) canonical = window.App.mergeCurrentRoll({ ...safeSnap }) || safeSnap;
-    window.CURRENT_ROLL = cloneJsonSafe(canonical) || { ...canonical };
+    if (window.App?.replaceCurrentDraw) canonical = window.App.replaceCurrentDraw(safeSnap) || safeSnap;
+    else if (window.App?.mergeCurrentDraw) canonical = window.App.mergeCurrentDraw({ ...safeSnap }) || safeSnap;
     renderSnapshotToDom(canonical);
     return true;
   };
-  window.RandomancerClearBuildResults = clearBuildResultsToEmpty;
-  window.RandomancerOpenSharedCardBySlug = (slug) => openSharedCardBySlug(slug);
   window.RandomancerUpdateBuildCodeUI = () => {
     const snap = currentSnap();
     const code = encodeSnapshot(snap);

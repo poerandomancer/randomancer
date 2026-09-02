@@ -1,15 +1,10 @@
 import { ensureDataPreload } from './08-data-load.js';
+import { deriveWeaponFamilies } from './06-equipment.js';
 import { resolveSkillFamily } from './17-skill-family-utils.js';
 import { toMatchKey } from './tag-normalization.js';
+import { minSeverityAllowed, normalizeChallengeSeverity } from './challenge-difficulty.js';
 
-const SEVERITY_ORDER = { mild: 1, cruel: 2, diabolical: 3 };
-
-// V2: no more "taboo" role — 2 tasks is anchor+twist; 3 tasks is anchor+twist+twist
-const STACK_PLAN = {
-  1: ['anchor'],
-  2: ['anchor', 'twist'],
-  3: ['anchor', 'twist', 'twist']
-};
+const STACK_PLAN = ['anchor', 'twist', 'twist'];
 
 let challengeLibraryPromise = null;
 
@@ -21,20 +16,22 @@ function unique(items) {
   return [...new Set(toArray(items).filter(Boolean))];
 }
 
+let activeRandom = Math.random;
+
 function randomPick(items) {
   if (!items.length) return null;
-  return items[Math.floor(Math.random() * items.length)];
+  return items[Math.floor(activeRandom() * items.length)];
 }
 
-function weightedPick(items, severity) {
-  const weighted = items.filter(item => Number(item?.weights?.[severity] || 0) > 0);
+function weightedPick(items) {
+  const weighted = items.filter(item => Number(item?.weight || 0) > 0);
   if (!weighted.length) return null;
 
-  const total = weighted.reduce((sum, item) => sum + Number(item.weights?.[severity] || 0), 0);
-  let roll = Math.random() * total;
+  const total = weighted.reduce((sum, item) => sum + Number(item.weight || 0), 0);
+  let roll = activeRandom() * total;
 
   for (const item of weighted) {
-    roll -= Number(item.weights?.[severity] || 0);
+    roll -= Number(item.weight || 0);
     if (roll <= 0) return item;
   }
   return weighted[weighted.length - 1];
@@ -169,7 +166,7 @@ function pickByMatch({ options, optionLeanMap, targetLeanKey, mode }) {
     // For hybrids (e.g., dex_int), pick one component and match that.
     const parts = String(target).split('_').filter(Boolean);
     if (!parts.length) return [];
-    const chosen = parts.length === 1 ? parts[0] : parts[Math.floor(Math.random() * parts.length)];
+    const chosen = parts.length === 1 ? parts[0] : parts[Math.floor(activeRandom() * parts.length)];
     return options.filter(v => optionLeanMap?.[v] === chosen);
   }
 
@@ -229,101 +226,14 @@ async function buildPickerContext() {
     .filter(Boolean)
     .filter(name => ['Armour', 'Evasion', 'Energy Shield'].includes(name));
 
-  // ----- Weapon Sets (derive from core weapons)
-  const weaponSetLean = {};
-  const weaponSets = [];
-
-  // Two-handed weapons as standalone weapon sets
-  const twoHanded = toArray(core.Weapons?.['Two-Handed']);
-  twoHanded.forEach(w => {
-    if (!w?.name) return;
-    weaponSets.push(w.name);
-    weaponSetLean[w.name] = leanKeyFromAttributes(w.attributes);
-  });
-
-  // One-handed + Off-hand combinations
-  const oneHanded = toArray(core.Weapons?.['One-Handed']);
-  const offHands = toArray(core.Weapons?.['Off-Hand']);
-
-  function sumAttrs(a, b) {
-    const out = { strength: 0, dexterity: 0, intelligence: 0 };
-    const add = src => {
-      if (!src || typeof src !== 'object') return;
-      out.strength += Number(src.strength || 0);
-      out.dexterity += Number(src.dexterity || 0);
-      out.intelligence += Number(src.intelligence || 0);
-    };
-    add(a);
-    add(b);
-    return out;
-  }
-
-  oneHanded.forEach(main => {
-    if (!main?.name) return;
-    offHands.forEach(off => {
-      const allowed = toArray(off?.['one-handed']);
-      if (!allowed.includes(main.name)) return;
-      if (!off?.name) return;
-
-      const label = `${main.name} & ${off.name}`;
-      weaponSets.push(label);
-      weaponSetLean[label] = leanKeyFromAttributes(sumAttrs(main.attributes, off.attributes));
-    });
-  });
-
-  // Always include Unarmed for explicit contracts
-  weaponSets.push('Unarmed');
-  weaponSetLean.Unarmed = null;
-
-  const weaponSet = unique(weaponSets);
-
-  // ----- Separate pools for 1H and Off-Hand (used by a few contracts)
-  const oneHandedMain = unique(oneHanded.map(w => w?.name).filter(Boolean));
-  const offHand = unique(offHands.map(w => w?.name).filter(Boolean));
-
-  // ----- Lean maps for 1H + Off-hand (used by weaponLoadout picker)
-  const oneHandedLean = {};
-  oneHanded.forEach(w => {
-    if (w?.name) oneHandedLean[w.name] = leanKeyFromAttributes(w.attributes);
-  });
-
-  const offHandLean = {};
-  offHands.forEach(w => {
-    if (w?.name) offHandLean[w.name] = leanKeyFromAttributes(w.attributes);
-  });
-
-  // ----- Weapon Loadouts (full / partial constraints)
+  // Challenges intentionally use the same canonical primary-weapon families
+  // displayed by normal Build rolls. The picker name remains part of the task
+  // catalog contract, but its values are families rather than loadouts.
   const weaponLoadoutLean = {};
-  const weaponLoadout = [];
-
-  const articleFor = (word) => (/^[aeiou]/i.test(String(word || '').trim()) ? 'an' : 'a');
-
-  // Full weapon sets
-  weaponSet.forEach(ws => {
-    weaponLoadout.push(ws);
-    weaponLoadoutLean[ws] = weaponSetLean[ws] || null;
+  const weaponLoadout = deriveWeaponFamilies(core).map(weapon => {
+    weaponLoadoutLean[weapon.name] = leanKeyFromAttributes(weapon.attributes);
+    return weapon.name;
   });
-
-  // Main-hand only (e.g. "a Wand")
-  oneHandedMain.forEach(mh => {
-    const phr = /^(a|an)\s/i.test(mh) ? mh : `${articleFor(mh)} ${mh}`;
-    weaponLoadout.push(phr);
-    weaponLoadoutLean[phr] = oneHandedLean[mh] || null;
-  });
-
-  // Off-hand only (e.g. "a Shield")
-  offHand.forEach(oh => {
-    const phr = /^(a|an)\s/i.test(oh) ? oh : `${articleFor(oh)} ${oh}`;
-    weaponLoadout.push(phr);
-    weaponLoadoutLean[phr] = offHandLean[oh] || null;
-  });
-
-  // Diabolical-only extras (filtered out below diabolical severity in pickSlotValue)
-  weaponLoadout.push('Empty Off-hand');
-  weaponLoadoutLean['Empty Off-hand'] = 'str_dex_int';
-
-  // Ensure Unarmed can participate in match logic (also filtered below diabolical)
-  weaponLoadoutLean.Unarmed = 'str_dex_int';
 
   // ----- Armor slots (used for Normal-rarity slot contract)
   const armorSlot = ['Helmet', 'Body Armour', 'Gloves', 'Boots'];
@@ -421,26 +331,6 @@ async function buildPickerContext() {
       .filter(Boolean)
   );
 
-  const rawForms = unique(
-    activeGems
-      .map(g => String(g?.description || ''))
-      .map(desc => {
-        const m = desc.match(/\[Shapeshift\]\s+into\s+an?\s+\[([^\]]+)\]/i);
-        return m ? m[1].trim() : null;
-      })
-      .filter(Boolean)
-  );
-
-  const shapeshiftForms = (() => {
-    const singles = rawForms.map(f => `${f} form`);
-    const pairs = [];
-    for (let i = 0; i < rawForms.length; i += 1) {
-      for (let j = i + 1; j < rawForms.length; j += 1) {
-        pairs.push(`${rawForms[i]} and ${rawForms[j]} forms`);
-      }
-    }
-    return unique([...singles, ...pairs]);
-  })();
   // ----- Skill Families (tag-based libraries; used for Challenge Mode pickers/tooltips)
   const skillFamily = unique(toArray(core.skillFamilyOptions || []));
   const challengePools = core.challengePools && typeof core.challengePools === 'object' ? core.challengePools : {};
@@ -523,11 +413,7 @@ async function buildPickerContext() {
     class: unique(classes),
     ascendancy: unique(ascendancies),
     defense: unique(defenses),
-    weaponSet,
-    oneHandedMain,
-    offHand,
-    weaponLoadout: unique(weaponLoadout),
-    shapeshiftForms: unique(shapeshiftForms),
+    weaponLoadout,
     armorSlot,
     ailment,
     theme,
@@ -559,7 +445,6 @@ async function buildPickerContext() {
       class: classLean,
       ascendancy: ascendancyLean,
       defense: defenseLean,
-      weaponSet: weaponSetLean,
       weaponLoadout: weaponLoadoutLean,
       ailment: ailmentLean
     }
@@ -567,7 +452,7 @@ async function buildPickerContext() {
 }
 
 // -------------------------
-// Template + severity helpers
+// Template helpers
 // -------------------------
 
 function fillTemplate(template, slots) {
@@ -628,10 +513,6 @@ function applySkillFamilyRules(slots, context) {
   }
 }
 
-function minSeverityAllowed(userSeverity, taskSeverity) {
-  return (SEVERITY_ORDER[userSeverity] || 0) >= (SEVERITY_ORDER[taskSeverity] || 0);
-}
-
 // -------------------------
 // Conflicts (V2: directive + domainTags)
 // -------------------------
@@ -650,12 +531,11 @@ function matchesWith(task, matcher) {
   return true;
 }
 
-function conflictRejects(level, severity) {
-  if (level === 'hard') return true;
-  return level === 'soft' && severity === 'diabolical';
+function conflictRejects(level) {
+  return level === 'hard' || level === 'soft';
 }
 
-function hasConflict(candidate, selected, severity) {
+function hasConflict(candidate, selected) {
   const candTags = new Set(toArray(candidate?.conflictTags));
   for (const existing of selected) {
     // Conflict tags: simple overlap-based hard conflicts (e.g. support_policy, skill_policy)
@@ -667,12 +547,12 @@ function hasConflict(candidate, selected, severity) {
 
     // Structured conflicts (optional, for future fine-grained rules)
     for (const conflict of toArray(candidate.conflicts)) {
-      if (matchesWith(existing.task, conflict.with) && conflictRejects(conflict.level, severity)) {
+      if (matchesWith(existing.task, conflict.with) && conflictRejects(conflict.level)) {
         return true;
       }
     }
     for (const conflict of toArray(existing.task?.conflicts)) {
-      if (matchesWith(candidate, conflict.with) && conflictRejects(conflict.level, severity)) {
+      if (matchesWith(candidate, conflict.with) && conflictRejects(conflict.level)) {
         return true;
       }
     }
@@ -741,9 +621,6 @@ function failsBanLockSanity(task, slotValues, state) {
     // Allow the banning task itself.
     if (!/may not equip unique/i.test(text)) return true;
   }
-
-  // Default-attack-only should not coexist with tasks that mandate an active main skill.
-  if (state.locks?.mainDamageMode === 'defaultWeapon' && (slotValues.ACTIVE_SKILL || slotValues.SKILL_ARCHETYPE)) return true;
 
   return false;
 }
@@ -816,7 +693,6 @@ function resolveMatchOptions({ pickerName, options, optionLeanMap, defs, slots, 
 function pickSlotValue(slotKey, slotConfig, slots, defs, context) {
   const pickerName = slotConfig?.picker;
   let options = toArray(context[pickerName]);
-  const severity = context.__severity || 'cruel';
 
   if (pickerName === 'strictUniqueGrantedSkill') {
     const current = slots.__strictUniqueGrantedEntry;
@@ -830,32 +706,6 @@ function pickSlotValue(slotKey, slotConfig, slots, defs, context) {
     if (slotKey === 'SKILL') return entry.skillName || null;
     if (slotKey === 'UNIQUE') return entry.uniqueName || null;
     return null;
-  }
-
-  // Picker-specific, severity-aware behavior
-  if (pickerName === 'weaponLoadout') {
-    // Occasionally require two weapon sets (Cruel/Diabolical only)
-    const dualChance = severity === 'diabolical' ? 0.18 : (severity === 'cruel' ? 0.08 : 0);
-    if (dualChance && Math.random() < dualChance && slots?.CLASS && Array.isArray(context.weaponSet)) {
-      const ws = toArray(context.weaponSet).filter(v => v && v !== 'Unarmed');
-      const classLean = context.__lean?.class?.[slots.CLASS] || null;
-      const wsLean = context.__lean?.weaponSet || {};
-
-      const pickAlt = (pool) => {
-        const matched = pickByMatch({ options: pool, optionLeanMap: wsLean, targetLeanKey: classLean, mode: 'alternate' });
-        return randomPick(matched.length ? matched : pool);
-      };
-
-      const set1 = pickAlt(ws);
-      const pool2 = ws.filter(v => v !== set1);
-      const set2 = pool2.length ? pickAlt(pool2) : null;
-      if (set1 && set2) return `Weapon Set I: ${set1}; Weapon Set II: ${set2}`;
-    }
-
-    // Diabolical-only extras
-    if (severity !== 'diabolical') {
-      options = options.filter(v => v !== 'Unarmed' && v !== 'Empty Off-hand');
-    }
   }
 
   // Basic filters
@@ -937,12 +787,8 @@ function resolveSlots(task, context, maxRetries = 40) {
 // Title helper
 // -------------------------
 
-function buildContractTitle({ picks, severity }) {
-  const poolBySeverity = {
-    mild: ['Wayward', 'Unquiet', 'Odd', 'Restless'],
-    cruel: ['Cursed', 'Bloodbound', 'Blight-Touched', 'Grim'],
-    diabolical: ['Doomsworn', 'Maledict', 'Abyssal', 'Accursed']
-  };
+function buildContractTitle({ picks }) {
+  const epithets = ['Wayward', 'Unquiet', 'Cursed', 'Bloodbound', 'Grim', 'Doomsworn', 'Maledict', 'Abyssal'];
   const nouns = ['Contract', 'Covenant', 'Edict', 'Writ', 'Decree', 'Oath'];
   const ids = picks.map(p => p.task.id);
 
@@ -955,25 +801,28 @@ function buildContractTitle({ picks, severity }) {
   if (ids.includes('G1_unarmed')) return 'The Empty Hand Oath';
   if (ids.includes('F3_ironman_normals_only_pickup')) return 'The Ironman Covenant';
 
-  return `The ${randomPick(poolBySeverity[severity] || poolBySeverity.cruel)} ${randomPick(nouns)}`;
+  return `The ${randomPick(epithets)} ${randomPick(nouns)}`;
 }
 
 // -------------------------
 // Generator
 // -------------------------
 
-async function generateChallengeContract({ taskCount = 2, severity = 'cruel', maxAttempts = 140, challengeFates = null } = {}) {
-  const normalizedCount = [1, 2, 3].includes(Number(taskCount)) ? Number(taskCount) : 2;
-  const normalizedSeverity = SEVERITY_ORDER[severity] ? severity : 'cruel';
-  const rolePlan = STACK_PLAN[normalizedCount];
+async function generateChallengeContract({ severity = 'diabolical', composition = STACK_PLAN, maxAttempts = 140, challengeFates = null, random = Math.random } = {}) {
+  const normalizedSeverity = normalizeChallengeSeverity(severity);
+  const rolePlan = composition;
 
   const library = await loadChallengeLibrary();
   const pickerContext = await buildPickerContext();
-  pickerContext.__severity = normalizedSeverity;
 
+  const previousRandom = activeRandom;
+  activeRandom = typeof random === 'function' ? random : Math.random;
+  try {
   const tasksByRole = rolePlan.map((role, index) => {
     const exactCount = rolePlan.filter(r => r === role).length;
-    const base = library.filter(task => task.role === role && minSeverityAllowed(normalizedSeverity, task.minSeverity));
+    const base = library.filter(task =>
+      task.role === role && minSeverityAllowed(normalizedSeverity, task.minSeverity)
+    );
     return applyFatesToCandidates({ role, baseCandidates: base, fates: challengeFates, exactCount, index, rolePlan });
   });
 
@@ -1009,13 +858,13 @@ async function generateChallengeContract({ taskCount = 2, severity = 'cruel', ma
     const queue = [...candidates];
     while (queue.length) {
       attempts.count += 1;
-      const picked = weightedPick(queue, normalizedSeverity);
+      const picked = weightedPick(queue);
       const chosen = picked || queue[0];
       queue.splice(queue.findIndex(item => item.id === chosen.id), 1);
 
       const slots = resolveSlots(chosen, pickerContext);
       if (!slots) continue;
-      if (hasConflict(chosen, selected, normalizedSeverity)) continue;
+      if (hasConflict(chosen, selected)) continue;
       if (failsLockCollision(chosen, slots, state)) continue;
 
       const nextState = cloneState(state);
@@ -1041,8 +890,7 @@ async function generateChallengeContract({ taskCount = 2, severity = 'cruel', ma
   return {
     mode: 'challenge',
     severity: normalizedSeverity,
-    taskCount: normalizedCount,
-    title: buildContractTitle({ picks, severity: normalizedSeverity }),
+    title: buildContractTitle({ picks }),
     subtitle: picks.map(item => item.task.shortLabel).join(' • '),
     tasks: picks.map(item => ({
       id: item.task.id,
@@ -1059,12 +907,14 @@ async function generateChallengeContract({ taskCount = 2, severity = 'cruel', ma
       twistCategories: { favor: [], ban: [] }
     }
   };
+  } finally {
+    activeRandom = previousRandom;
+  }
 }
 
-window.RandomancerChallenge = {
-  loadChallengeLibrary,
-  generateChallengeContract
-};
+if (typeof window !== 'undefined') {
+  window.RandomancerChallenge = { loadChallengeLibrary, generateChallengeContract };
+}
 
 export {
   loadChallengeLibrary,

@@ -1,0 +1,147 @@
+{
+  "version": "OFFENSE_V1",
+  "categories": [
+    "Damage Type",
+    "Ailment",
+    "Scaling",
+    "Archetype"
+  ],
+  "elements": [
+    {
+      "id": "physical",
+      "name": "Physical Damage",
+      "category": "Damage Type",
+      "tags": ["physical", "physical damage", "damage"],
+      "attributes": {"strength": 0.5, "dexterity": 0.5},
+      "relations": {"reinforcing": ["bleed"], "secondary": ["poison"]}
+    },
+    {
+      "id": "fire",
+      "name": "Fire Damage",
+      "category": "Damage Type",
+      "tags": ["fire", "fire damage", "elemental", "damage"],
+      "attributes": {"strength": 0.5, "intelligence": 0.5},
+      "relations": {"reinforcing": ["ignite"]}
+    },
+    {
+      "id": "cold",
+      "name": "Cold Damage",
+      "category": "Damage Type",
+      "tags": ["cold", "cold damage", "elemental", "damage"],
+      "attributes": {"dexterity": 0.5, "intelligence": 0.5},
+      "relations": {"reinforcing": ["chill", "freeze"]}
+    },
+    {
+      "id": "lightning",
+      "name": "Lightning Damage",
+      "category": "Damage Type",
+      "tags": ["lightning", "lightning damage", "elemental", "damage"],
+      "attributes": {"dexterity": 0.5, "intelligence": 0.5},
+      "relations": {"reinforcing": ["shock", "electrocute"]}
+    },
+    {
+      "id": "chaos",
+      "name": "Chaos Damage",
+      "category": "Damage Type",
+      "tags": ["chaos", "chaos damage", "damage"],
+      "cohesionNeutral": true,
+      "attributes": {"strength": 0.3, "dexterity": 0.3, "intelligence": 0.4},
+      "relations": {"reinforcing": ["poison"]}
+    },
+    {
+      "id": "ignite",
+      "name": "Ignite",
+      "category": "Ailment",
+      "tags": ["ignite", "fire", "ailment", "damaging ailment", "damage over time"],
+      "attributes": {"strength": 0.5, "intelligence": 0.5},
+      "relations": {"reinforcing": ["fire"]}
+    },
+    {
+      "id": "bleed",
+      "name": "Bleed",
+      "aliases": ["Bleeding"],
+      "category": "Ailment",
+      "tags": ["bleed", "bleeding", "physical", "ailment", "damaging ailment", "damage over time"],
+      "attributes": {"strength": 0.5, "dexterity": 0.5},
+      "relations": {"reinforcing": ["physical"]}
+    },
+    {
+      "id": "poison",
+      "name": "Poison",
+      "category": "Ailment",
+      "tags": ["poison", "chaos", "physical", "ailment", "damaging ailment", "damage over time"],
+      "attributes": {"strength": 0.5, "dexterity": 0.5},
+      "relations": {"reinforcing": ["chaos"], "secondary": ["physical"]}
+    },
+    {
+      "id": "chill",
+      "name": "Chill",
+      "category": "Ailment",
+      "tags": ["chill", "cold", "ailment", "slow"],
+      "attributes": {"dexterity": 0.5, "intelligence": 0.5},
+      "relations": {"reinforcing": ["cold", "freeze"]}
+    },
+    {
+      "id": "freeze",
+      "name": "Freeze",
+      "category": "Ailment",
+      "tags": ["freeze", "cold", "ailment", "control"],
+      "attributes": {"dexterity": 0.5, "intelligence": 0.5},
+      "relations": {"reinforcing": ["cold", "chill"]}
+    },
+    {
+      "id": "shock",
+      "name": "Shock",
+      "category": "Ailment",
+      "tags": ["shock", "lightning", "ailment", "damage amplification"],
+      "attributes": {"dexterity": 0.5, "intelligence": 0.5},
+      "relations": {"reinforcing": ["lightning"]}
+    },
+    {
+      "id": "electrocute",
+      "name": "Electrocute",
+      "aliases": ["Electrocution"],
+      "category": "Ailment",
+      "tags": ["electrocute", "electrocution", "lightning", "ailment", "control", "buildup"],
+      "attributes": {"dexterity": 0.5, "intelligence": 0.5},
+      "relations": {"reinforcing": ["lightning"]}
+    },
+    {
+      "id": "critical_hits",
+      "name": "Critical Hits",
+      "aliases": ["Critical Hit", "Crit"],
+      "category": "Scaling",
+      "tags": ["crit", "critical", "critical hit", "critical hits", "critical damage"],
+      "cohesionNeutral": true,
+      "attributes": {},
+      "relations": {}
+    },
+    {
+      "id": "minions",
+      "name": "Minions",
+      "aliases": ["Minion", "Minions/Companions"],
+      "category": "Archetype",
+      "tags": ["minion", "minions", "summon", "summons", "ally", "allies"],
+      "attributes": {"intelligence": 1.0},
+      "relations": {}
+    },
+    {
+      "id": "companions",
+      "name": "Companions",
+      "aliases": ["Companion"],
+      "category": "Archetype",
+      "tags": ["companion", "companions", "beast", "beasts", "summon", "summons", "ally", "allies"],
+      "attributes": {"dexterity": 1.0},
+      "relations": {}
+    },
+    {
+      "id": "totems",
+      "name": "Totems",
+      "aliases": ["Totem"],
+      "category": "Archetype",
+      "tags": ["totem", "totems", "proxy"],
+      "attributes": {"strength": 1.0},
+      "relations": {}
+    }
+  ]
+}

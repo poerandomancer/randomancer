@@ -22,9 +22,6 @@
   --codex-ember-rgb: 196, 90, 42;
   --codex-ember-soft: rgba(196,90,42,0.35);
   --codex-ember-weak: rgba(196,90,42,0.12);
-  --legacy-green: #7ebc84;
-  --legacy-green-rgb: 126, 188, 132;
-  --legacy-green-soft: rgba(126,188,132,0.32);
 }
 
 body[data-mode="build"]{
@@ -43,11 +40,7 @@ body[data-mode="codex"]{
   --edge: var(--codex-ember-soft);
 }
 
-body[data-mode="legacy"]{
-  --mode-accent: var(--legacy-green);
-  --gold: var(--legacy-green);
-  --edge: var(--legacy-green-soft);
-}
+
 
 *{ box-sizing:border-box; }
 
@@ -78,24 +71,14 @@ body[data-mode="challenge"]{
   background: var(--bg) url('/images/challenge-background.png') center/cover no-repeat fixed;
 }
 
-body.legacy-mode,
-body[data-mode="legacy"]{
-  background:
-    radial-gradient(120% 85% at 50% 8%, rgba(52,75,58,0.20), rgba(0,0,0,0) 60%),
-    linear-gradient(180deg, #0b0e0c 0%, #090b0a 100%);
-}
 
 .asc-art{
   position:fixed; inset:0; opacity:0; pointer-events:none;
   --asc-fade-ms: 1100ms;
   transition:opacity var(--asc-fade-ms) ease;
-  background-image:
-    linear-gradient(135deg, rgba(0,0,0,0.25), rgba(0,0,0,0.6)),
-    var(--asc-img);
-  background-position:center; background-size:cover; background-repeat:no-repeat;
+  overflow:hidden;
 }
-.asc-art::after{
-  content:"";
+.asc-art__layer{
   position:absolute;
   inset:0;
   pointer-events:none;
@@ -103,12 +86,13 @@ body[data-mode="legacy"]{
   transition:opacity var(--asc-fade-ms) ease;
   background-image:
     linear-gradient(135deg, rgba(0,0,0,0.25), rgba(0,0,0,0.6)),
-    var(--asc-next-img);
+    var(--asc-layer-img);
   background-position:center;
   background-size:cover;
   background-repeat:no-repeat;
+  will-change:opacity;
 }
-.asc-art.is-crossfading::after{ opacity: .92; }
+.asc-art__layer.is-visible{ opacity:1; }
 .asc-art.show{ opacity:.92; }
 
 body.challenge-mode .asc-art,
@@ -208,13 +192,7 @@ body[data-mode="challenge"] #app::after{
 
 }
 
-body.legacy-mode #app::after,
-body[data-mode="legacy"] #app::after{
-  opacity: 1;
-  background:
-    radial-gradient(130% 80% at 52% 20%, rgba(91,129,98,0.12), rgba(0,0,0,0) 60%),
-    linear-gradient(180deg, rgba(10,16,12,0.55) 0%, rgba(5,8,6,0.74) 100%);
-}
+
 
 
 #app > *{
@@ -253,6 +231,7 @@ body[data-mode="legacy"] #app::after{
 @media (prefers-reduced-motion: reduce){
   .mode-transition{ transition: none; }
   .asc-art,
+  .asc-art__layer,
   #app,
   #app::after,
   .mode-toggle,

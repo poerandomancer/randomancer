@@ -1,37 +1,3 @@
-.roll-btn{
-  margin-top:.5rem; padding:.7rem 1.1rem;
-  border-radius:var(--radius);
-  border:1px solid var(--edge);
-  background:rgba(24,24,26,.55);
-  color:var(--ink);
-  cursor:pointer;
-  display:inline-flex;
-  align-items:center;
-  gap:.45rem;
-}
-
-.roll-sticky{
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.roll-btn .roll-text{
-  white-space:nowrap;
-}
-
-.roll-btn .roll-status{
-  font-size:.8rem;
-  color:var(--muted);
-  opacity:0;
-  transition:opacity .25s ease;
-}
-
-.roll-btn.is-loading .roll-status{
-  opacity:1;
-}
-
 .is-hidden{ display:none !important; }
 
 .controls-rail{
@@ -41,7 +7,7 @@
 
 .mode-switch-under-roll .mode-switch-row{
   justify-content:center;
-  margin:.45rem 0 .65rem;
+  margin:.25rem 0 .4rem;
 }
 
 .mode-switch-row{
@@ -134,8 +100,8 @@ body.challenge-mode .mode-toggle input:checked + .toggle-ui{
   box-shadow:0 0 8px rgba(159,47,55,0.55), inset 0 0 2px rgba(255,255,255,0.25);
 }
 
-body[data-mode="challenge"] :is(.rm-dotstep, .mechanics-like-btn, .roll-btn):focus-visible,
-body.challenge-mode :is(.rm-dotstep, .mechanics-like-btn, .roll-btn):focus-visible{
+body[data-mode="challenge"] :is(.rm-dotstep, .mechanics-like-btn, .deck-draw-tab):focus-visible,
+body.challenge-mode :is(.rm-dotstep, .mechanics-like-btn, .deck-draw-tab):focus-visible{
   outline:1px solid rgba(159,47,55,0.85);
   outline-offset:2px;
 }
@@ -146,16 +112,8 @@ body.challenge-mode .challenge-empty-flavor{
   text-shadow:0 0 8px rgba(0,0,0,0.88);
 }
 
-.challenge-controls{ margin:0.15rem auto 0.85rem; }
 
-#challenge-severity-btn{ margin-left:auto; }
 
-#challenge-severity-value{
-  font-size:.88rem;
-  letter-spacing:.06em;
-  text-transform:uppercase;
-  line-height:1;
-}
 
 .challenge-empty-divider{ margin:.9rem 0 0; }
 
@@ -173,215 +131,54 @@ body.challenge-mode .challenge-empty-flavor{
   max-width:min(900px, 92vw);
 }
 
-.legacy-controls{
-  margin: 0.15rem auto 0.85rem;
-  padding: 0;
-  display: block;
-  width: 100% !important;
-  max-width: none !important;
-}
 
-body[data-mode="legacy"] main > .controls-rail{
-  width: 100%;
-}
 
-.legacy-controls-stack{
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  gap:8px;
-}
 
-.legacy-selector-row{
-  display:inline-flex;
-  align-items:center;
-  gap:12px;
-  font-family: SFMono-Regular, ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-  font-size:.84rem;
-  line-height:1.3;
-  cursor:pointer;
-  border-radius:6px;
-  padding:2px 0;
-  transition: background-color .16s ease, filter .16s ease;
-}
 
-.legacy-selector-row:hover{
-  background: rgba(var(--legacy-green-rgb), 0.06);
-}
 
-.legacy-selector-row:active{
-  filter: brightness(.96);
-}
 
-.legacy-selector-label{
-  color:#b2bdb4;
-  min-width: 110px;
-}
 
-.legacy-selector-options{
-  display:inline-flex;
-  align-items:center;
-  gap:18px;
-}
 
-.legacy-selector-option{
-  color:#9ca8a0;
-  font-family: inherit;
-  font-size:.86rem;
-  line-height:1.2;
-  transition: color .16s ease, text-shadow .16s ease;
-}
 
-.legacy-selector-option::before,
-.legacy-selector-option::after{
-  content: '';
-}
 
-.legacy-selector-option.is-selected::before{ content: '['; color: rgba(var(--legacy-green-rgb), 0.95); }
-.legacy-selector-option.is-selected::after{ content: ']'; color: rgba(var(--legacy-green-rgb), 0.95); }
 
-.legacy-selector-option.is-selected{
-  color:#edf6ef;
-  text-shadow: 0 0 6px rgba(var(--legacy-green-rgb), 0.2);
-}
 
-.legacy-selector-row:focus-visible{
-  outline:1px solid rgba(var(--legacy-green-rgb), 0.8);
-  outline-offset:2px;
-  border-radius:2px;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @media (max-width: 580px){
-  .legacy-selector-row{
-    gap:10px;
-    font-size:.82rem;
-  }
-  .legacy-selector-label{ min-width: 98px; }
-  .legacy-selector-options{ gap:14px; }
+
+
+
 }
 
 @media (max-width: 520px){
   .controls-rail{ width:calc(100% - 20px); }
   .mode-switch-row{ margin-bottom:.45rem; }
-  .resume-roll-btn{
-    left: calc(50% + 84px);
-  }
-}
-
-.resume-roll-btn{
-  position: absolute;
-  left: calc(50% + clamp(90px, 12.2vw, 124px));
-  top: 50%;
-  transform: translateY(-50%);
-  width: 32px;
-  height: 32px;
-  border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--mode-accent, var(--gold)) 48%, rgba(255,255,255,0.22));
-  background: rgba(14,14,18,0.72);
-  color: color-mix(in srgb, var(--mode-accent, var(--gold)) 88%, #f2e9d7 12%);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 14px rgba(0,0,0,0.35);
-  cursor: pointer;
-  transition: transform .16s ease, border-color .2s ease, opacity .2s ease;
-}
-
-.resume-roll-btn__icon{
-  width: 14px;
-  height: 14px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2.1;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.resume-roll-btn:hover{
-  transform: translateY(calc(-50% - 1px));
-}
-
-.resume-roll-btn:focus-visible{
-  outline: 1px solid color-mix(in srgb, var(--mode-accent, var(--gold)) 80%, white 20%);
-  outline-offset: 2px;
-}
-
-/* ================================
-   Roll + Resume alignment (desktop/base)
-   Keep Roll centered, tuck Resume close
-================================== */
-
-:root{
-  --resume-btn-size: 30px; /* smaller than current 32px */
-  --resume-btn-gap: 10px;  /* tighter spacing */
-}
-
-/* IMPORTANT: no gap here (mobile file currently adds one) */
-.roll-sticky{
-  gap: 0 !important;
-}
-
-/* Balance spacer so Roll stays dead-center when Resume is visible */
-.roll-sticky::before{
-  content: "";
-  width: 0;
-  flex: 0 0 auto;
-}
-
-.roll-sticky:has(#resumeRollBtn:not(.is-hidden))::before{
-  width: calc(var(--resume-btn-size) + var(--resume-btn-gap));
-}
-
-/* Make resume participate in layout (NOT absolutely positioned) */
-#resumeRollBtn.resume-roll-btn{
-  position: static !important;
-  left: auto !important;
-  top: auto !important;
-  transform: none !important;
-
-  width: var(--resume-btn-size) !important;
-  height: var(--resume-btn-size) !important;
-
-  margin-left: var(--resume-btn-gap) !important;
-  padding: 0 !important;
-}
-
-/* Fix hover transform (old rule assumed translateY(-50%)) */
-#resumeRollBtn.resume-roll-btn:hover{
-  transform: translateY(-1px) !important;
-}
-
-/* Icon scale */
-#resumeRollBtn .resume-roll-btn__icon{
-  width: 13px !important;
-  height: 13px !important;
-}
-
-/* Keep Roll + Resume perfectly vertically aligned inside the sticky cluster */
-.roll-sticky{
-  margin-top: .5rem; /* preserve the original spacing that used to live on .roll-btn */
-}
-
-.roll-sticky .roll-btn{
-  margin-top: 0 !important; /* remove the offset that was pulling Roll down */
-}
-
-#resumeRollBtn.resume-roll-btn{
-  margin-top: 0 !important; /* ensure resume isn’t offset either */
-  align-self: center;       /* extra belt-and-suspenders */
 }
 
 .mode-segmented{
-  /* 3-state "ornate switch" — compact, stylized, mode-tinted */
+  /* Compact two-state ornate switch. */
   --mode-accent: var(--gold);
   --mode-accent-rgb: 200, 168, 107;
   --seg-index: 0;
-  --seg-count: 4;
+  --seg-count: 2;
 
   position: relative;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: stretch;
 
   height: 30px;
@@ -395,23 +192,13 @@ body[data-mode="legacy"] main > .controls-rail{
     0 6px 18px rgba(0,0,0,0.30);
 }
 
-body[data-mode="challenge"] .mode-segmented{
-  --mode-accent: #bf4b55;
-  --mode-accent-rgb: 191, 75, 85;
-  --seg-index: 1;
-}
-
 body[data-mode="codex"] .mode-segmented{
   --mode-accent: var(--codex-ember);
   --mode-accent-rgb: var(--codex-ember-rgb, 196, 90, 42);
-  --seg-index: 2;
+  --seg-index: 1;
 }
 
-body[data-mode="legacy"] .mode-segmented{
-  --mode-accent: var(--legacy-green);
-  --mode-accent-rgb: var(--legacy-green-rgb, 126, 188, 132);
-  --seg-index: 3;
-}
+
 
 /* Soft, subtle fading gradient "thumb" (not a solid pill) */
 .mode-segmented::before{

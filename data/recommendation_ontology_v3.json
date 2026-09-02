@@ -1,0 +1,233 @@
+{
+  "schema_version": "recommendation-ontology-v3.0.0",
+  "description": "Semantic vocabulary for solution-oriented Build Ideas. Cohesion is intentionally absent: recommendation compatibility is always optimized.",
+  "relations": [
+    {
+      "id": "fulfills",
+      "description": "Directly satisfies the named mechanic or Fate obligation."
+    },
+    {
+      "id": "inflicts",
+      "description": "Causes the named ailment or control state."
+    },
+    {
+      "id": "provides",
+      "description": "Creates a mechanic, resource, defensive layer, or recovery loop."
+    },
+    {
+      "id": "modifies",
+      "description": "Improves or changes a mechanic without proving that the entity creates it."
+    },
+    {
+      "id": "requires",
+      "description": "Needs the named mechanic, state, resource, equipment, or access condition."
+    },
+    {
+      "id": "consumes",
+      "description": "Spends or removes the named setup state or resource."
+    },
+    {
+      "id": "generates",
+      "description": "Produces the named setup state or resource."
+    },
+    {
+      "id": "converts",
+      "description": "Transforms one named mechanic or damage type into another."
+    },
+    {
+      "id": "replaces",
+      "description": "Makes one mechanic operate as another instead."
+    },
+    {
+      "id": "prevents",
+      "description": "Explicitly disables, forbids, or removes access to the named mechanic."
+    },
+    {
+      "id": "exclusive_to",
+      "description": "Restricts access to a named ascendancy or other exclusive source."
+    },
+    {
+      "id": "occupies",
+      "description": "Consumes an equipment or other mutually exclusive slot."
+    },
+    {
+      "id": "creates",
+      "description": "Creates a proxy, minion, totem, object, or persistent setup element."
+    },
+    {
+      "id": "has_property",
+      "description": "Authoritatively classifies the entity without asserting that it fulfills an obligation."
+    }
+  ],
+  "confidence_levels": [
+    {
+      "id": "exact",
+      "description": "Direct structured source field or unambiguous explicit clause."
+    },
+    {
+      "id": "strong",
+      "description": "Deterministic interpretation with a clear native mechanical relationship."
+    },
+    {
+      "id": "inferred",
+      "description": "Useful interpretation that must not alone establish a hard compatibility claim."
+    }
+  ],
+  "candidate_roles": [
+    {
+      "id": "primary_damage",
+      "description": "Candidate for the package's principal damage delivery."
+    },
+    {
+      "id": "setup_control",
+      "description": "Applies a state, debuff, or control effect used by another piece."
+    },
+    {
+      "id": "payoff",
+      "description": "Consumes or rewards a setup state."
+    },
+    {
+      "id": "enabler",
+      "description": "Makes another package element legal, reliable, or materially stronger."
+    },
+    {
+      "id": "defense",
+      "description": "Adds avoidance, mitigation, a buffer, or resilience."
+    },
+    {
+      "id": "recovery",
+      "description": "Restores Life, Energy Shield, Mana, or another sustaining resource."
+    },
+    {
+      "id": "utility",
+      "description": "Adds mobility, reservation, convenience, or situational support."
+    }
+  ],
+  "subjects": [
+    "player",
+    "skill",
+    "supported_skill",
+    "item",
+    "passive",
+    "minion",
+    "enemy",
+    "damage"
+  ],
+  "offense_semantics": [
+    {
+      "source": "poison",
+      "relation": "native_damage_type",
+      "target": "chaos",
+      "fulfills_source_from_target": false,
+      "description": "Poison has a native Chaos relationship; generic Chaos damage does not establish Poison fulfillment."
+    },
+    {
+      "source": "ignite",
+      "relation": "native_damage_type",
+      "target": "fire",
+      "fulfills_source_from_target": true,
+      "requires_hit": true,
+      "proof_type": "inherent",
+      "description": "Fire Hit damage has inherent Ignite capability."
+    },
+    {
+      "source": "bleed",
+      "relation": "native_damage_type",
+      "target": "physical",
+      "fulfills_source_from_target": false
+    },
+    {
+      "source": "chill",
+      "relation": "native_affinity",
+      "target": "cold",
+      "fulfills_source_from_target": true,
+      "requires_hit": true,
+      "proof_type": "inherent",
+      "description": "Cold Hit damage has inherent Chill capability."
+    },
+    {
+      "source": "freeze",
+      "relation": "native_affinity",
+      "target": "cold",
+      "fulfills_source_from_target": true,
+      "requires_hit": true,
+      "proof_type": "inherent",
+      "description": "Cold Hit damage inherently contributes to Freeze buildup."
+    },
+    {
+      "source": "shock",
+      "relation": "native_affinity",
+      "target": "lightning",
+      "fulfills_source_from_target": true,
+      "requires_hit": true,
+      "proof_type": "inherent",
+      "description": "Lightning Hit damage has inherent Shock capability."
+    },
+    {
+      "source": "electrocute",
+      "relation": "native_affinity",
+      "target": "lightning",
+      "fulfills_source_from_target": false
+    }
+  ],
+  "survivability_families": [
+    {
+      "id": "avoidance",
+      "mechanics": [
+        "block",
+        "deflection",
+        "evasion"
+      ]
+    },
+    {
+      "id": "mitigation",
+      "mechanics": [
+        "armour",
+        "damage_reduction",
+        "damage_taken_as",
+        "guard"
+      ]
+    },
+    {
+      "id": "buffer",
+      "mechanics": [
+        "energy_shield",
+        "runic_ward",
+        "protective_pool"
+      ]
+    },
+    {
+      "id": "recovery",
+      "mechanics": [
+        "life_leech",
+        "energy_shield_leech",
+        "life_regeneration",
+        "recoup",
+        "recharge",
+        "recovery_on_hit",
+        "recovery_on_kill"
+      ]
+    },
+    {
+      "id": "resilience",
+      "mechanics": [
+        "ailment_avoidance",
+        "stun_avoidance",
+        "resistance",
+        "maximum_resistance"
+      ]
+    },
+    {
+      "id": "emergency_sustain",
+      "mechanics": [
+        "flask_recovery",
+        "low_life_recovery",
+        "damage_triggered_recovery"
+      ]
+    }
+  ],
+  "package_obligations": {
+    "survivability": "Find a credible complementary defensive layer and a credible recovery loop unless the selected package already supplies them.",
+    "unresolved_policy": "Report an unresolved requirement instead of filling a content-type quota with a weak recommendation."
+  }
+}
