@@ -411,12 +411,6 @@ function selectNonSkillRecommendations(catalog, snapshot = {}, recommendationPac
       notables: choose(byType('passive'), 3, `${seed}:notable`, false)
     }
   };
-  if (options.richnessAudit) result.candidateDiagnostics = {
-    ascendancyPassives: byType('ascendancy_passive').sort((a, b) => b.score - a.score || a.entity.id.localeCompare(b.entity.id))
-      .map(({ entity, score, signature }) => ({ entityId: entity.id, name: entity.name, score, signature })),
-    notables: byType('passive').sort((a, b) => b.score - a.score || a.entity.id.localeCompare(b.entity.id))
-      .map(({ entity, score, signature }) => ({ entityId: entity.id, name: entity.name, score, signature }))
-  };
   return result;
 }
 
