@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import test from 'node:test';
 import {
   analyzeRecommendationCellV3,
+  isIndependentChaosEvidenceV3,
   MAX_OPTIMIZER_SUPPORTS,
   MAX_REQUIRED_SUPPORTS,
   MAX_TOTAL_SUPPORTS,
@@ -20,6 +21,41 @@ catalog = mergeRecommendationSkillCraftingV3(catalog, read('data/enriched/recomm
 const analyze = (weapon, offense) => analyzeRecommendationCellV3(
   catalog, { weapon, offenseSet: [offense] }, { offenseInventory }
 );
+
+test('Poison-derived Chaos taxonomy is directional and independent Chaos proof survives', () => {
+  const poison = { relation: 'inflicts', mechanic: 'poison', confidence: 'exact' };
+  const taxonomyChaos = { relation: 'has_property', mechanic: 'chaos', confidence: 'exact',
+    evidence: [{ kind: 'active_skill_type', value: 'Chaos' }] };
+  const poisonOnly = { facts: [poison, taxonomyChaos] };
+  assert.equal(isIndependentChaosEvidenceV3(poisonOnly, taxonomyChaos), false);
+
+  const directChaos = { relation: 'fulfills', mechanic: 'chaos', confidence: 'exact',
+    evidence: [{ kind: 'stat_id', value: 'base_chaos_damage' }] };
+  const mixed = { facts: [poison, taxonomyChaos, directChaos] };
+  assert.equal(isIndependentChaosEvidenceV3(mixed, taxonomyChaos), true);
+  assert.equal(isIndependentChaosEvidenceV3(mixed, directChaos), true);
+
+  const chaosDot = { relation: 'provides', mechanic: 'chaos', confidence: 'exact',
+    evidence: [{ kind: 'skill_description', value: 'Deals Chaos damage over time' }] };
+  const conversion = { relation: 'converts', from: 'physical', to: 'chaos', confidence: 'exact' };
+  const gain = { relation: 'provides', mechanic: 'chaos', confidence: 'exact',
+    source_kind: 'stat_id' };
+  for (const fact of [chaosDot, conversion, gain]) {
+    assert.equal(isIndependentChaosEvidenceV3({ facts: [poison, fact] }, fact), true);
+  }
+});
+
+test('production Chaos skill pool rejects Poison-derived taxonomy but preserves mixed semantics', () => {
+  const bowChaos = analyze('Bow', 'chaos').direct.map((candidate) => candidate.entity.name);
+  assert.ok(!bowChaos.includes('Poisonburst Arrow'));
+  assert.ok(!bowChaos.includes('Gas Arrow'));
+  assert.ok(!bowChaos.includes('Toxic Domain'));
+  const decompose = catalog.entities.find((candidate) => candidate.name === 'Decompose');
+  const decomposeChaos = decompose.facts.find((fact) => fact.mechanic === 'chaos'
+    && fact.relation === 'modifies');
+  assert.equal(isIndependentChaosEvidenceV3(decompose, decomposeChaos), true);
+  assert.ok(analyze('Bow', 'poison').direct.some((candidate) => candidate.entity.name === 'Poisonburst Arrow'));
+});
 
 test('native artifact contains every live non-critical cell exactly once', () => {
   const report = read('data/enriched/recommendation_native_coverage_v3.json');

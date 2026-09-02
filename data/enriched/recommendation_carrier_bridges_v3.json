@@ -1856,6 +1856,152 @@
     },
     {
       "weapon": "Bow",
+      "offenseId": "chaos",
+      "offense": "Chaos Damage",
+      "carriers": [
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemDetonatingArrow",
+          "name": "Detonating Arrow"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemElectrocutingArrow",
+          "name": "Electrocuting Arrow"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemEscapeShot",
+          "name": "Escape Shot"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemFreezingSalvo",
+          "name": "Freezing Salvo"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemGasArrow",
+          "name": "Gas Arrow"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemIceShot",
+          "name": "Ice Shot"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemLightningArrow",
+          "name": "Lightning Arrow"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemLightningRod",
+          "name": "Lightning Rod"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemMagneticSalvo",
+          "name": "Magnetic Salvo"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemPoisonBurstArrow",
+          "name": "Poisonburst Arrow"
+        }
+      ],
+      "complete": [
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemDetonatingArrow",
+          "carrier": "Detonating Arrow",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemElectrocutingArrow",
+          "carrier": "Electrocuting Arrow",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemEscapeShot",
+          "carrier": "Escape Shot",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemFreezingSalvo",
+          "carrier": "Freezing Salvo",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemGasArrow",
+          "carrier": "Gas Arrow",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemIceShot",
+          "carrier": "Ice Shot",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemLightningArrow",
+          "carrier": "Lightning Arrow",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemLightningRod",
+          "carrier": "Lightning Rod",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemMagneticSalvo",
+          "carrier": "Magnetic Salvo",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemPoisonBurstArrow",
+          "carrier": "Poisonburst Arrow",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        }
+      ],
+      "counts": {
+        "considered": 38,
+        "complete": 19,
+        "partial": 0,
+        "invalid": 19
+      },
+      "unresolvedReason": null
+    },
+    {
+      "weapon": "Bow",
       "offenseId": "bleed",
       "offense": "Bleed",
       "carriers": [
@@ -1997,6 +2143,152 @@
         "complete": 19,
         "partial": 76,
         "invalid": 76
+      },
+      "unresolvedReason": null
+    },
+    {
+      "weapon": "Crossbow",
+      "offenseId": "chaos",
+      "offense": "Chaos Damage",
+      "carriers": [
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemArmourPiercingRounds",
+          "name": "Armour Piercing Rounds"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemClusterGrenade",
+          "name": "Cluster Grenade"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemExplosiveGrenade",
+          "name": "Explosive Grenade"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemExplosiveShot",
+          "name": "Explosive Shot"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemFlashGrenade",
+          "name": "Flash Grenade"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemFragmentationRounds",
+          "name": "Fragmentation Rounds"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemGalvanicShards",
+          "name": "Galvanic Shards"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemGasGrenade",
+          "name": "Gas Grenade"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemGlacialBolt",
+          "name": "Glacial Bolt"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemHailstormRounds",
+          "name": "Hailstorm Rounds"
+        }
+      ],
+      "complete": [
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemArmourPiercingRounds",
+          "carrier": "Armour Piercing Rounds",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemClusterGrenade",
+          "carrier": "Cluster Grenade",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemExplosiveGrenade",
+          "carrier": "Explosive Grenade",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemExplosiveShot",
+          "carrier": "Explosive Shot",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemFlashGrenade",
+          "carrier": "Flash Grenade",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemFragmentationRounds",
+          "carrier": "Fragmentation Rounds",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemGalvanicShards",
+          "carrier": "Galvanic Shards",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemGasGrenade",
+          "carrier": "Gas Grenade",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemGlacialBolt",
+          "carrier": "Glacial Bolt",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemHailstormRounds",
+          "carrier": "Hailstorm Rounds",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        }
+      ],
+      "counts": {
+        "considered": 44,
+        "complete": 22,
+        "partial": 0,
+        "invalid": 22
       },
       "unresolvedReason": null
     },
@@ -3874,6 +4166,152 @@
         "complete": 8,
         "partial": 0,
         "invalid": 26
+      },
+      "unresolvedReason": null
+    },
+    {
+      "weapon": "Spear",
+      "offenseId": "chaos",
+      "offense": "Chaos Damage",
+      "carriers": [
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemBloodHunt",
+          "name": "Blood Hunt"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemCullTheWeak",
+          "name": "Cull The Weak"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemDisengage",
+          "name": "Disengage"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemElementalSundering",
+          "name": "Elemental Sundering"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemExplosiveSpear",
+          "name": "Explosive Spear"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemFangsOfFrost",
+          "name": "Fangs of Frost"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemGlacialLance",
+          "name": "Glacial Lance"
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemLightningSpear",
+          "name": "Lightning Spear"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemPrimalStrikes",
+          "name": "Primal Strikes"
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemRake",
+          "name": "Rake"
+        }
+      ],
+      "complete": [
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemBloodHunt",
+          "carrier": "Blood Hunt",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemCullTheWeak",
+          "carrier": "Cull The Weak",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemDisengage",
+          "carrier": "Disengage",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemElementalSundering",
+          "carrier": "Elemental Sundering",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemExplosiveSpear",
+          "carrier": "Explosive Spear",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemFangsOfFrost",
+          "carrier": "Fangs of Frost",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemGlacialLance",
+          "carrier": "Glacial Lance",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gems/SkillGemLightningSpear",
+          "carrier": "Lightning Spear",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemPrimalStrikes",
+          "carrier": "Primal Strikes",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        },
+        {
+          "carrierId": "skill:Metadata/Items/Gem/SkillGemRake",
+          "carrier": "Rake",
+          "supportId": "skill:Metadata/Items/Gems/SupportGemChaosInfusion",
+          "support": "Chaos Attunement",
+          "family": "Chaos Attunement",
+          "tier": null,
+          "evidence": "support_completes:chaos:exact"
+        }
+      ],
+      "counts": {
+        "considered": 40,
+        "complete": 20,
+        "partial": 0,
+        "invalid": 20
       },
       "unresolvedReason": null
     },

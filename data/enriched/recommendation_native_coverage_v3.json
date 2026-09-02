@@ -74,13 +74,13 @@
     }
   ],
   "totals": {
-    "DIRECT": 105,
-    "CARRIER_BRIDGE": 29,
+    "DIRECT": 102,
+    "CARRIER_BRIDGE": 32,
     "SUPPORT_CHAIN": 1,
     "GAP": 0
   },
   "directCandidateCounts": {
-    "explicit": 402,
+    "explicit": 394,
     "inherent": 124
   },
   "changedClassifications": [
@@ -4338,94 +4338,147 @@
       "weapon": "Bow",
       "offenseId": "chaos",
       "offense": "Chaos Damage",
-      "classification": "DIRECT",
-      "baselineClassification": "DIRECT",
-      "directCandidates": [
+      "classification": "CARRIER_BRIDGE",
+      "baselineClassification": "CARRIER_BRIDGE",
+      "directCandidates": [],
+      "carrierCandidates": [
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemDetonatingArrow",
+          "name": "Detonating Arrow",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemElectrocutingArrow",
+          "name": "Electrocuting Arrow",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemEscapeShot",
+          "name": "Escape Shot",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemFreezingSalvo",
+          "name": "Freezing Salvo",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
         {
           "id": "skill:Metadata/Items/Gem/SkillGemGasArrow",
           "name": "Gas Arrow",
-          "proofType": "explicit",
           "evidence": [
-            {
-              "relation": "has_property",
-              "mechanic": "chaos",
-              "confidence": "exact",
-              "proofType": "explicit",
-              "globalRule": null,
-              "damageEvidence": null,
-              "affinity": []
-            }
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemIceShot",
+          "name": "Ice Shot",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemLightningArrow",
+          "name": "Lightning Arrow",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemLightningRod",
+          "name": "Lightning Rod",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemMagneticSalvo",
+          "name": "Magnetic Salvo",
+          "evidence": [
+            "support_completes:chaos:exact"
           ]
         },
         {
           "id": "skill:Metadata/Items/Gem/SkillGemPoisonBurstArrow",
           "name": "Poisonburst Arrow",
-          "proofType": "explicit",
           "evidence": [
-            {
-              "relation": "has_property",
-              "mechanic": "chaos",
-              "confidence": "exact",
-              "proofType": "explicit",
-              "globalRule": null,
-              "damageEvidence": null,
-              "affinity": []
-            }
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemRainOfArrows",
+          "name": "Rain of Arrows",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemShockchainArrow",
+          "name": "Shockchain Arrow",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemSnipe",
+          "name": "Snipe",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemSpiralVolley",
+          "name": "Spiral Volley",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemStormcallerArrow",
+          "name": "Stormcaller Arrow",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemTornadoShot",
+          "name": "Tornado Shot",
+          "evidence": [
+            "support_completes:chaos:exact"
           ]
         },
         {
           "id": "skill:Metadata/Items/Gem/SkillGemToxicDomain",
           "name": "Toxic Domain",
-          "proofType": "explicit",
           "evidence": [
-            {
-              "relation": "has_property",
-              "mechanic": "chaos",
-              "confidence": "exact",
-              "proofType": "explicit",
-              "globalRule": null,
-              "damageEvidence": null,
-              "affinity": []
-            }
+            "support_completes:chaos:exact"
           ]
         },
         {
           "id": "skill:Metadata/Items/Gem/SkillGemToxicGrowth",
           "name": "Toxic Growth",
-          "proofType": "explicit",
           "evidence": [
-            {
-              "relation": "has_property",
-              "mechanic": "chaos",
-              "confidence": "exact",
-              "proofType": "explicit",
-              "globalRule": null,
-              "damageEvidence": null,
-              "affinity": []
-            }
+            "support_completes:chaos:exact"
           ]
         },
         {
           "id": "skill:Metadata/Items/Gem/SkillGemVineArrow",
           "name": "Vine Arrow",
-          "proofType": "explicit",
           "evidence": [
-            {
-              "relation": "has_property",
-              "mechanic": "chaos",
-              "confidence": "exact",
-              "proofType": "explicit",
-              "globalRule": null,
-              "damageEvidence": null,
-              "affinity": []
-            }
+            "support_completes:chaos:exact"
           ]
         }
       ],
-      "carrierCandidates": [],
       "counts": {
-        "direct": 5,
-        "carrierBridge": 0,
+        "direct": 0,
+        "carrierBridge": 19,
         "supportChain": 0
       }
     },
@@ -5881,46 +5934,168 @@
       "weapon": "Crossbow",
       "offenseId": "chaos",
       "offense": "Chaos Damage",
-      "classification": "DIRECT",
-      "baselineClassification": "DIRECT",
-      "directCandidates": [
+      "classification": "CARRIER_BRIDGE",
+      "baselineClassification": "CARRIER_BRIDGE",
+      "directCandidates": [],
+      "carrierCandidates": [
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemArmourPiercingRounds",
+          "name": "Armour Piercing Rounds",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemClusterGrenade",
+          "name": "Cluster Grenade",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemExplosiveGrenade",
+          "name": "Explosive Grenade",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemExplosiveShot",
+          "name": "Explosive Shot",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemFlashGrenade",
+          "name": "Flash Grenade",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemFragmentationRounds",
+          "name": "Fragmentation Rounds",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemGalvanicShards",
+          "name": "Galvanic Shards",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
         {
           "id": "skill:Metadata/Items/Gem/SkillGemGasGrenade",
           "name": "Gas Grenade",
-          "proofType": "explicit",
           "evidence": [
-            {
-              "relation": "has_property",
-              "mechanic": "chaos",
-              "confidence": "exact",
-              "proofType": "explicit",
-              "globalRule": null,
-              "damageEvidence": null,
-              "affinity": []
-            }
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemGlacialBolt",
+          "name": "Glacial Bolt",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemHailstormRounds",
+          "name": "Hailstorm Rounds",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemHighVelocityRounds",
+          "name": "High Velocity Rounds",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemIceShards",
+          "name": "Ice Shards",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemIncendiaryShot",
+          "name": "Incendiary Shot",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemOilGrenade",
+          "name": "Oil Grenade",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemPermafrostBolts",
+          "name": "Permafrost Bolts",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemPlasmaBlast",
+          "name": "Plasma Blast",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemRapidShot",
+          "name": "Rapid Shot",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemShockburstRounds",
+          "name": "Shockburst Rounds",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemSiegeCascade",
+          "name": "Siege Cascade",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemStormblastBolts",
+          "name": "Stormblast Bolts",
+          "evidence": [
+            "support_completes:chaos:exact"
           ]
         },
         {
           "id": "skill:Metadata/Items/Gem/SkillGemToxicDomain",
           "name": "Toxic Domain",
-          "proofType": "explicit",
           "evidence": [
-            {
-              "relation": "has_property",
-              "mechanic": "chaos",
-              "confidence": "exact",
-              "proofType": "explicit",
-              "globalRule": null,
-              "damageEvidence": null,
-              "affinity": []
-            }
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemVoltaicGrenade",
+          "name": "Voltaic Grenade",
+          "evidence": [
+            "support_completes:chaos:exact"
           ]
         }
       ],
-      "carrierCandidates": [],
       "counts": {
-        "direct": 2,
-        "carrierBridge": 0,
+        "direct": 0,
+        "carrierBridge": 22,
         "supportChain": 0
       }
     },
@@ -16071,30 +16246,154 @@
       "weapon": "Spear",
       "offenseId": "chaos",
       "offense": "Chaos Damage",
-      "classification": "DIRECT",
-      "baselineClassification": "DIRECT",
-      "directCandidates": [
+      "classification": "CARRIER_BRIDGE",
+      "baselineClassification": "CARRIER_BRIDGE",
+      "directCandidates": [],
+      "carrierCandidates": [
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemBloodHunt",
+          "name": "Blood Hunt",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemCullTheWeak",
+          "name": "Cull The Weak",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemDisengage",
+          "name": "Disengage",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemElementalSundering",
+          "name": "Elemental Sundering",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemExplosiveSpear",
+          "name": "Explosive Spear",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemFangsOfFrost",
+          "name": "Fangs of Frost",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemGlacialLance",
+          "name": "Glacial Lance",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemLightningSpear",
+          "name": "Lightning Spear",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemPrimalStrikes",
+          "name": "Primal Strikes",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemRake",
+          "name": "Rake",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemRapidAssault",
+          "name": "Rapid Assault",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemSpearOfSolaris",
+          "name": "Spear of Solaris",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemSpearfield",
+          "name": "Spearfield",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemStormLance",
+          "name": "Storm Lance",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemThunderousLeap",
+          "name": "Thunderous Leap",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
         {
           "id": "skill:Metadata/Items/Gem/SkillGemToxicDomain",
           "name": "Toxic Domain",
-          "proofType": "explicit",
           "evidence": [
-            {
-              "relation": "has_property",
-              "mechanic": "chaos",
-              "confidence": "exact",
-              "proofType": "explicit",
-              "globalRule": null,
-              "damageEvidence": null,
-              "affinity": []
-            }
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemTwister",
+          "name": "Twister",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gems/SkillGemWhirlingSlash",
+          "name": "Whirling Slash",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemWhirlwindLance",
+          "name": "Whirlwind Lance",
+          "evidence": [
+            "support_completes:chaos:exact"
+          ]
+        },
+        {
+          "id": "skill:Metadata/Items/Gem/SkillGemWindSerpentsFury",
+          "name": "Wind Serpent's Fury",
+          "evidence": [
+            "support_completes:chaos:exact"
           ]
         }
       ],
-      "carrierCandidates": [],
       "counts": {
-        "direct": 1,
-        "carrierBridge": 0,
+        "direct": 0,
+        "carrierBridge": 20,
         "supportChain": 0
       }
     },
