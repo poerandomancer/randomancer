@@ -644,7 +644,7 @@ function initChallengeInlineTooltips() {
 const MODES = { STANDARD: 'standard', CODEX: 'codex' };
 const MODE_KEY = 'randomancer_mode';
 const STANDARD_LEDE_HTML = '<strong>Draw Your Fate</strong> to randomly select an ascendancy, weapon, and one Offense concept. <strong>Flip the Card</strong> to reveal build ideas and suggestions. <strong>Bind the Fates</strong> to favor or ban certain options.';
-const CODEX_LEDE_TEXT = '<strong>Codex Mode</strong> is a non-random library for browsing Path of Exile 2 data. Explore <strong>Ascendancy</strong>, <strong>Skills</strong>, <strong>Passives</strong>, and <strong>Gear</strong> with search and tags. <strong>Pin</strong> entries to create a poe.ninja filter to view endgame builds.<br><strong>---</strong><br>Select an entry to inspect full details.';
+const CODEX_LEDE_TEXT = '<strong>The Archive</strong> is a non-random library for browsing Path of Exile 2 data. Explore <strong>Ascendancy</strong>, <strong>Skills</strong>, <strong>Passives</strong>, and <strong>Gear</strong> with search and tags. <strong>Pin</strong> entries to create a poe.ninja filter to view endgame builds.<br><strong>---</strong><br>Select an entry to inspect full details.';
 let contracts = null;
 let activeCadence = 'daily';
 let restoreFocus = null;
@@ -676,7 +676,7 @@ function setMode(mode) {
   document.getElementById('standard-controls')?.classList.toggle('is-hidden', codex);
   const modeAction = document.getElementById('mode-header-action');
   if (modeAction) {
-    const label = codex ? 'Return to Build' : 'Open Codex';
+    const label = codex ? 'Return to Build' : 'Open the Archive';
     modeAction.classList.toggle('is-build-return', codex);
     modeAction.setAttribute('aria-label', label);
     modeAction.title = label;

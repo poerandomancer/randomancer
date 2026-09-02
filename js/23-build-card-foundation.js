@@ -312,7 +312,7 @@ function renderBuildCard(model, options = {}) {
         ${renderHeader(model, options.actionsHtml || '')}
         <div class="rc-card__body rc-card__body--back">
           <div class="rc-card-ideas__intro">Optional starting points, not build requirements.</div>
-          ${sections.length ? sections.map((section) => `<section class="rc-print-block"><div class="rc-print-block__label">${escapeHtml(section.label)}</div><div class="rc-print-block__value">${section.label === 'Skill Ideas' ? renderSkillGroups(section.values, face) : renderValues(section.values, face)}</div></section>`).join('') : '<div class="rc-card-ideas__empty">No strong build ideas were found for this roll.</div>'}
+          ${sections.length ? sections.map((section) => `<section class="rc-print-block${section.label === 'Skill Ideas' ? ' rc-print-block--skills' : ''}"><div class="rc-print-block__label">${escapeHtml(section.label)}</div><div class="rc-print-block__value">${section.label === 'Skill Ideas' ? renderSkillGroups(section.values, face) : renderValues(section.values, face)}</div></section>`).join('') : '<div class="rc-card-ideas__empty">No strong build ideas were found for this roll.</div>'}
         </div>
         ${footer}
       </article>
