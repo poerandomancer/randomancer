@@ -72,14 +72,19 @@
   flex-wrap:wrap;
   justify-content:center;
   align-items:flex-start;
-  gap:.75rem clamp(1.5rem, 7%, 3rem);
+  gap:.75rem clamp(.9rem, 4%, 1.5rem);
+  width:100%;
+}
+.rc-print-block--skills .rc-print-block__value{
+  width:100%;
+  max-width:none;
 }
 .rc-skill-group{
   display:grid;
   grid-template-columns:minmax(0, 1fr) auto minmax(0, 1fr);
-  flex:0 0 min(12rem, 100%);
-  min-width:min(9rem, 100%);
-  max-width:100%;
+  flex:1 1 10rem;
+  min-width:min(10rem, 100%);
+  max-width:14rem;
   text-align:center;
   overflow-wrap:anywhere;
 }
@@ -114,4 +119,11 @@
   height:.78em;
   border-left:1px solid rgba(212,170,80,.28);
   border-bottom:1px solid rgba(212,170,80,.28);
+}
+
+@media (max-width:420px){
+  .rc-skill-group{
+    flex-basis:100%;
+    max-width:100%;
+  }
 }

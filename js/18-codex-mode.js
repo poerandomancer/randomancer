@@ -683,7 +683,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       state.uniquesLoadWarning = '';
       return mapped;
     } catch {
-      state.uniquesLoadWarning = 'Uniques dataset unavailable. Generate and commit data/enriched/poe2db_uniques_min.json to enable Codex uniques browsing.';
+      state.uniquesLoadWarning = 'Uniques dataset unavailable. Generate and commit data/enriched/poe2db_uniques_min.json to enable unique browsing in the Archive.';
       return [];
     }
   }
