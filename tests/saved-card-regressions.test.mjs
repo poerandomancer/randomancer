@@ -6,6 +6,7 @@ const snapshots = readFileSync(new URL('../js/00-locks-and-snapshots.js', import
 const stage = readFileSync(new URL('../js/24-primary-card-stage.js', import.meta.url), 'utf8');
 const polish = readFileSync(new URL('../js/25-card-polish.js', import.meta.url), 'utf8');
 const foundation = readFileSync(new URL('../js/23-build-card-foundation.js', import.meta.url), 'utf8');
+const summaryView = readFileSync(new URL('../js/02-summary-view.js', import.meta.url), 'utf8');
 
 test('saved primary-card actions render a filled star', () => {
   assert.match(stage, /saved \? '★' : '☆'/);
@@ -40,4 +41,12 @@ test('primary Build Ideas tooltips use enriched skill and unique fields', () => 
   assert.match(foundation, /rc-tooltip__flavour/);
   assert.match(foundation, /rc-tooltip__modifiers/);
   assert.match(polish, /tipPayload[\s\S]*?synergy/);
+});
+
+test('Build Ideas tooltip ownership is cleared across card renders', () => {
+  assert.match(summaryView, /function setOverlayContent[\s\S]*?hideCardTooltip\(\);[\s\S]*?body\.innerHTML =/);
+  assert.match(summaryView, /if \(!target\?\.isConnected\) return/);
+  assert.match(summaryView, /target !== tooltipTarget/);
+  assert.match(summaryView, /tooltipTarget && !tooltipTarget\.isConnected/);
+  assert.match(summaryView, /if \(tooltipTarget === el\) hideCardTooltip\(\)/);
 });
