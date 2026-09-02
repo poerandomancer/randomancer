@@ -1,21 +1,45 @@
 /* === Feedback link + Mobile header menu (v0.8.2a) === */
 (function(){
-  function getFeedbackUrl(){
-    return (document.getElementById('feedback-fab')?.dataset?.feedbackUrl || '').trim();
+  function getFeedbackEmbedUrl(){
+    return (document.getElementById('feedback-fab')?.dataset?.feedbackEmbedUrl || '').trim();
   }
 
-  function openFeedback(){
-    const url = getFeedbackUrl();
+  let feedbackReturnFocus = null;
+
+  function openFeedback(returnFocus){
+    const overlay = document.getElementById('feedback-overlay');
+    const frame = document.getElementById('feedback-frame');
+    if (!overlay || !frame) return;
+
+    const url = getFeedbackEmbedUrl();
     if (!url || url.includes('REPLACE_ME')) {
-      console.warn('[feedback] Please set data-feedback-url on #feedback-fab (index.html).');
+      console.warn('[feedback] Please set data-feedback-embed-url on #feedback-fab (index.html).');
       return;
     }
-    window.open(url, '_blank', 'noopener');
+
+    feedbackReturnFocus = returnFocus || document.activeElement;
+    if (!frame.getAttribute('src')) frame.setAttribute('src', url);
+    overlay.hidden = false;
+    document.getElementById('feedback-close')?.focus?.();
+  }
+
+  function closeFeedback(){
+    const overlay = document.getElementById('feedback-overlay');
+    if (!overlay || overlay.hidden) return;
+    overlay.hidden = true;
+    feedbackReturnFocus?.focus?.();
+    feedbackReturnFocus = null;
   }
 
   function init(){
     const feedbackFab = document.getElementById('feedback-fab');
-    feedbackFab?.addEventListener('click', openFeedback);
+    feedbackFab?.addEventListener('click', () => openFeedback(feedbackFab));
+
+    const feedbackOverlay = document.getElementById('feedback-overlay');
+    const feedbackClose = document.getElementById('feedback-close');
+    feedbackOverlay?.addEventListener('click', (e) => {
+      if (e.target === feedbackClose || e.target?.dataset?.close) closeFeedback();
+    });
 
     const menuFab = document.getElementById('header-menu-fab');
     const menu = document.getElementById('header-menu');
@@ -55,7 +79,7 @@
 
       if (action === 'saved') document.getElementById('saved-fab')?.click();
       else if (action === 'info') document.getElementById('info-fab')?.click();
-      else if (action === 'feedback') openFeedback();
+      else if (action === 'feedback') openFeedback(menuFab);
     });
 
     // Close when clicking anywhere outside the menu / button
@@ -68,7 +92,10 @@
 
     // ESC closes the menu
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && isOpen()) {
+      if (e.key !== 'Escape') return;
+      if (feedbackOverlay && !feedbackOverlay.hidden) {
+        closeFeedback();
+      } else if (isOpen()) {
         closeMenu();
         menuFab.focus?.();
       }
