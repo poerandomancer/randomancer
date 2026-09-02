@@ -14,7 +14,7 @@ let tooltipEl = null;
 let tooltipTarget = null;
 let tooltipPinned = false;
 let tooltipHideTimer = null;
-let hoverTrigger = false;
+let hoverTrigger = null;
 let hoverPanel = false;
 let lastOpenFocus = null;
 let closeOverlayTimer = null;
@@ -367,6 +367,10 @@ function scheduleTooltipHide(delay = 200) {
   clearTooltipHideTimer();
   tooltipHideTimer = setTimeout(() => {
     tooltipHideTimer = null;
+    if (tooltipTarget && !tooltipTarget.isConnected) {
+      hideCardTooltip();
+      return;
+    }
     if (tooltipPinned || hoverTrigger || hoverPanel) return;
     hideCardTooltip();
   }, delay);
@@ -383,7 +387,11 @@ function renderTooltipPayload(payload) {
 
 function positionTooltip(target) {
   const el = ensureTooltipEl();
-  if (!target) return;
+  if (!target || target !== tooltipTarget) return;
+  if (!target.isConnected) {
+    hideCardTooltip();
+    return;
+  }
   el.style.left = '-9999px';
   el.style.top = '-9999px';
   el.classList.add('is-open');
@@ -401,6 +409,7 @@ function positionTooltip(target) {
 }
 
 function showCardTooltipFor(target, pinned = false) {
+  if (!target?.isConnected) return;
   const title = target?.dataset?.tipTitle || target?.textContent?.trim();
   let lines = [];
   try {
@@ -418,7 +427,7 @@ function hideCardTooltip() {
   ensureTooltipEl().classList.remove('is-open');
   tooltipTarget = null;
   tooltipPinned = false;
-  hoverTrigger = false;
+  hoverTrigger = null;
   hoverPanel = false;
   clearTooltipHideTimer();
 }
@@ -546,7 +555,8 @@ function attachTooltipHandlers(root) {
     if (tooltipPinned || (evt.pointerType && evt.pointerType !== 'mouse')) return;
     const el = evt.target.closest(selector);
     if (!el || !root.contains(el)) return;
-    hoverTrigger = true;
+    if (el.contains(evt.relatedTarget)) return;
+    hoverTrigger = el;
     clearTooltipHideTimer();
     showCardTooltipFor(el, false);
   });
@@ -554,7 +564,8 @@ function attachTooltipHandlers(root) {
     if (tooltipPinned || (evt.pointerType && evt.pointerType !== 'mouse')) return;
     const el = evt.target.closest(selector);
     if (!el || !root.contains(el)) return;
-    hoverTrigger = false;
+    if (el.contains(evt.relatedTarget)) return;
+    if (hoverTrigger === el) hoverTrigger = null;
     scheduleTooltipHide();
   });
   root.addEventListener('focusin', (evt) => {
@@ -565,7 +576,7 @@ function attachTooltipHandlers(root) {
   root.addEventListener('focusout', (evt) => {
     const el = evt.target.closest(selector);
     if (!el || !root.contains(el)) return;
-    hideCardTooltip();
+    if (tooltipTarget === el) hideCardTooltip();
   });
   root.addEventListener('pointerdown', (evt) => {
     const el = evt.target.closest(selector);
@@ -579,6 +590,9 @@ function attachTooltipHandlers(root) {
 function setOverlayContent({ type, html, error = '', face = '' }) {
   const overlay = getCardOverlay();
   if (!overlay) return;
+  // Replacing the card does not dispatch pointerout/focusout for removed nodes.
+  // End their body-level tooltip lifecycle before destroying those nodes.
+  hideCardTooltip();
   overlay.dataset.cardType = type || '';
   overlay.dataset.cardFace = face || '';
   const body = overlay.querySelector('#card-overlay-body');
