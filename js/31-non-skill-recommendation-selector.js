@@ -394,7 +394,7 @@ function selectNonSkillRecommendations(catalog, snapshot = {}, recommendationPac
     return token(resolved?.source_id || resolved?.id || entry?.entityId || entry?.id);
   };
   const usedUniqueIds = new Set(recommendedUniques.map(canonicalIdentity).filter(Boolean));
-  return {
+  const result = {
     recommendedUniques,
     recommendedJewelryUniques: selectJewelryRecommendations(
       catalog, snapshot, recommendationPackage, `${seed}:jewelry`, usedUniqueIds
@@ -404,6 +404,13 @@ function selectNonSkillRecommendations(catalog, snapshot = {}, recommendationPac
       notables: choose(byType('passive'), 3, `${seed}:notable`, true)
     }
   };
+  if (options.richnessAudit) result.candidateDiagnostics = {
+    ascendancyPassives: byType('ascendancy_passive').sort((a, b) => b.score - a.score || a.entity.id.localeCompare(b.entity.id))
+      .map(({ entity, score, signature }) => ({ entityId: entity.id, name: entity.name, score, signature })),
+    notables: byType('passive').sort((a, b) => b.score - a.score || a.entity.id.localeCompare(b.entity.id))
+      .map(({ entity, score, signature }) => ({ entityId: entity.id, name: entity.name, score, signature }))
+  };
+  return result;
 }
 
 function mergeRecommendationUniqueSemanticsV3(catalog, payload) {
