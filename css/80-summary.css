@@ -273,6 +273,9 @@
   45%,55%{ opacity:.2; }
 }
 .rc-card{
+  --rc-light-str:0;
+  --rc-light-dex:0;
+  --rc-light-int:0;
   position:relative;
   transform-origin:50% 50%;
   backface-visibility:hidden;
@@ -289,9 +292,15 @@
     linear-gradient(180deg, rgba(255,244,218,0.05), rgba(255,244,218,0.01) 24%, rgba(7,6,8,0.28) 100%),
     linear-gradient(160deg, rgba(35,25,23,0.98), rgba(15,12,14,0.99));
   box-shadow:
-    inset 0 0 0 1px rgba(255,245,218,0.07),
-    inset 0 1px 0 rgba(255,255,255,0.05),
-    0 28px 64px rgba(0,0,0,0.34);
+    inset 1px 1px 0 rgba(255,245,218,0.13),
+    inset -1px -2px 0 rgba(38,22,15,0.42),
+    inset 0 0 0 1px rgba(224,183,94,0.1),
+    0 2px 0 rgba(255,229,169,0.08),
+    2px 8px 2px rgba(15,8,7,0.28),
+    0 28px 64px rgba(0,0,0,0.38),
+    0 0 44px rgba(190,58,45,var(--rc-light-str)),
+    0 0 48px rgba(54,156,82,var(--rc-light-dex)),
+    0 0 48px rgba(62,105,205,var(--rc-light-int));
 }
 .rc-card[data-card-flip-surface="1"]{ cursor:pointer; }
 .rc-card[data-card-flip-surface="1"]:focus-visible{
@@ -346,22 +355,27 @@
 }
 .rc-card::after{
   background:
+    radial-gradient(ellipse 88% 34% at 50% 17%, rgba(255,232,180,0.095), transparent 72%),
+    linear-gradient(135deg, rgba(255,244,211,0.055), transparent 32%, rgba(5,4,6,0.13) 100%),
     linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0) 24%),
     radial-gradient(circle at 18% 22%, rgba(255,246,214,0.10) 0, rgba(255,246,214,0.02) 12%, transparent 38%),
     radial-gradient(circle at 78% 74%, rgba(34,24,18,0.18) 0, rgba(34,24,18,0.06) 18%, transparent 46%),
     repeating-linear-gradient(115deg, rgba(255,244,218,0.028) 0 2px, rgba(28,21,18,0.03) 2px 4px, transparent 4px 9px),
     url('/images/card-texture-front.png') center/cover no-repeat;
-  background-blend-mode: screen, soft-light, multiply, soft-light, normal;
+  background-blend-mode: screen, soft-light, screen, soft-light, multiply, soft-light, normal;
   opacity:.64;
   mix-blend-mode:soft-light;
   filter: contrast(1.46) brightness(.9) saturate(1);
 }
 .rc-card--build.rc-card--front::before{
   background:
+    radial-gradient(circle at 50% 42%, rgba(190,58,45,var(--rc-light-str)), transparent 45%),
+    radial-gradient(circle at 50% 42%, rgba(54,156,82,var(--rc-light-dex)), transparent 45%),
+    radial-gradient(circle at 50% 42%, rgba(62,105,205,var(--rc-light-int)), transparent 45%),
     radial-gradient(circle at 50% 42%, rgba(255,235,187,0.1), transparent 42%),
     linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.62)),
     var(--card-art) center 44%/72% auto no-repeat;
-  background-blend-mode:soft-light, multiply, screen;
+  background-blend-mode:soft-light, soft-light, soft-light, soft-light, multiply, screen;
   filter:saturate(.55) sepia(.22) brightness(.62);
   opacity:.48;
 }
@@ -437,8 +451,8 @@
   font-weight:600;
   line-height:1.16;
   letter-spacing:.035em;
-  color:#f5dfae;
-  text-shadow: 0 2px 20px rgba(0,0,0,0.36);
+  color:#f9e5b8;
+  text-shadow:0 1px 0 rgba(255,244,213,.08), 0 2px 20px rgba(0,0,0,0.4), 0 0 16px rgba(210,158,66,.08);
 }
 .rc-card__subtitle{
   margin:.7rem auto 0;

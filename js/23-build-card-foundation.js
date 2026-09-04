@@ -269,6 +269,17 @@ function renderBalance(balance) {
   `;
 }
 
+function renderAttributeLightStyle(balance, artPath) {
+  const b = normalizeBalance(balance);
+  const style = [
+    `--rc-light-str:${(b.strength * 0.2).toFixed(3)}`,
+    `--rc-light-dex:${(b.dexterity * 0.18).toFixed(3)}`,
+    `--rc-light-int:${(b.intelligence * 0.2).toFixed(3)}`
+  ];
+  if (artPath) style.push(`--card-art:url('${escapeHtml(artPath)}')`);
+  return ` style="${style.join(';')}"`;
+}
+
 function renderHeader(model, actionsHtml) {
   return `
     ${actionsHtml ? `<div class="rc-card__actions">${actionsHtml}</div>` : ''}
@@ -283,7 +294,7 @@ function renderBuildCard(model, options = {}) {
   if (!model) return '';
   const face = options.face === BUILD_CARD_FACES.BACK ? BUILD_CARD_FACES.BACK : BUILD_CARD_FACES.FRONT;
   const isBack = face === BUILD_CARD_FACES.BACK;
-  const style = model.artPath ? ` style="--card-art:url('${escapeHtml(model.artPath)}')"` : '';
+  const style = renderAttributeLightStyle(model.balance, model.artPath);
   const label = isBack ? 'Return to Build' : 'Flip for Build Ideas';
   const flipCue = `<button type="button" class="card-flip-indicator" data-card-action="flip" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}">↺</button>`;
   const footer = `<footer class="rc-card__fineprint">${escapeHtml(label)}</footer>`;
