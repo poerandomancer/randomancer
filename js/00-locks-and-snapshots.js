@@ -520,16 +520,14 @@ function renderSnapshotToDom(snap){
     const savedTitle = document.getElementById('saved-title');
     const savedSubtitle = document.querySelector('.saved-subtitle');
     const savedFabEl = document.getElementById('saved-fab');
-    const menuSavedLabel = document.querySelector('.header-menu-item[data-action="saved"] .header-menu-label');
-
     const noun = challengeMode ? 'Challenges' : 'Builds';
     if (savedTitle) savedTitle.textContent = `Saved ${noun}`;
     if (savedSubtitle) savedSubtitle.textContent = `Preserves your last 10 Saved ${noun}`;
     if (savedFabEl) {
-      savedFabEl.setAttribute('aria-label', `View Saved ${noun}`);
-      savedFabEl.setAttribute('title', `View Saved ${noun}`);
+      const label = `Saved ${noun}`;
+      savedFabEl.setAttribute('aria-label', label);
+      savedFabEl.setAttribute('title', label);
     }
-    if (menuSavedLabel) menuSavedLabel.textContent = `Saved ${noun}`;
   }
 
   function saveCurrentBuild(){

@@ -1,4 +1,4 @@
-/* === Feedback link + Mobile header menu (v0.8.2a) === */
+/* === Feedback modal controller (v0.8.2a) === */
 (function(){
   // Verified Google Forms integration contract. Keep these opaque field IDs and
   // exact option values together; the poll intentionally submits nothing else.
@@ -113,69 +113,8 @@
       });
     }
 
-    const menuFab = document.getElementById('header-menu-fab');
-    const menu = document.getElementById('header-menu');
-    if (!menuFab || !menu) return;
-
-    const isOpen = () => !menu.hidden;
-
-    function openMenu(){
-      menu.hidden = false;
-      menuFab.setAttribute('aria-expanded', 'true');
-      const first = menu.querySelector('.header-menu-item');
-      first?.focus?.();
-    }
-
-    function closeMenu(){
-      menu.hidden = true;
-      menuFab.setAttribute('aria-expanded', 'false');
-    }
-
-    function toggleMenu(){
-      if (isOpen()) closeMenu();
-      else openMenu();
-    }
-
-    menuFab.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      toggleMenu();
-    });
-
-    menu.addEventListener('click', (e) => {
-      const item = e.target?.closest?.('.header-menu-item');
-      if (!item) return;
-
-      const action = item.dataset.action;
-      closeMenu();
-
-      if (action === 'saved') document.getElementById('saved-fab')?.click();
-      else if (action === 'info') document.getElementById('info-fab')?.click();
-      else if (action === 'feedback') openFeedback(menuFab);
-    });
-
-    // Close when clicking anywhere outside the menu / button
-    document.addEventListener('click', (e) => {
-      if (!isOpen()) return;
-      const t = e.target;
-      if (t === menuFab || menu.contains(t)) return;
-      closeMenu();
-    });
-
-    // ESC closes the menu
     document.addEventListener('keydown', (e) => {
-      if (e.key !== 'Escape') return;
-      if (feedbackOverlay && !feedbackOverlay.hidden) {
-        closeFeedback();
-      } else if (isOpen()) {
-        closeMenu();
-        menuFab.focus?.();
-      }
-    });
-
-    // If the viewport changes while open, just close it
-    window.addEventListener('resize', () => {
-      if (isOpen()) closeMenu();
+      if (e.key === 'Escape' && feedbackOverlay && !feedbackOverlay.hidden) closeFeedback();
     });
   }
 

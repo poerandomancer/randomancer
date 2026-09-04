@@ -63,32 +63,17 @@
   <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
-  <button id="contracts-button" class="rm-info-fab contracts-button" type="button" aria-label="Challenges" title="Challenges">
-    <img class="contracts-button__icon" src="images/challenge-icon.png" alt="" aria-hidden="true">
-  </button>
-  <button id="mode-header-action" class="rm-info-fab mode-header-action" type="button" aria-label="Open the Archive" title="Open the Archive">
-    <img class="mode-header-action__icon mode-header-action__icon--codex" src="images/codex-icon.png" alt="" aria-hidden="true">
-    <img class="mode-header-action__icon mode-header-action__icon--build" src="images/build-icon.png" alt="" aria-hidden="true">
-  </button>
-  <button id="saved-fab" class="rm-info-fab saved-fab" aria-label="View Saved Builds" title="View Saved Builds">★</button>
-  <button id="feedback-fab" class="rm-info-fab feedback-fab" aria-label="Provide Feedback" title="Provide Feedback">✉</button>
-  <button id="info-fab" class="rm-info-fab" aria-label="About this tool" title="About">?</button>
-
-  <!-- Persistent utilities menu -->
-  <button id="header-menu-fab" class="rm-info-fab header-menu-fab" aria-label="Menu" title="Menu" aria-haspopup="menu" aria-expanded="false">☰</button>
-  <div id="header-menu" class="header-menu" role="menu" hidden>
-    <button type="button" class="header-menu-item" data-action="saved" role="menuitem">
-      <span class="header-menu-ico" aria-hidden="true">★</span>
-      <span class="header-menu-label">Saved Builds</span>
+  <div class="header-actions" role="group" aria-label="Randomancer controls">
+    <button id="contracts-button" class="rm-info-fab contracts-button" type="button" aria-label="Challenge" title="Challenge">
+      <img class="contracts-button__icon" src="images/challenge-icon.png" alt="" aria-hidden="true">
     </button>
-    <button type="button" class="header-menu-item" data-action="feedback" role="menuitem">
-      <span class="header-menu-ico" aria-hidden="true">✉</span>
-      <span class="header-menu-label">Feedback</span>
+    <button id="mode-header-action" class="rm-info-fab mode-header-action" type="button" aria-label="The Archive" title="The Archive">
+      <img class="mode-header-action__icon mode-header-action__icon--codex" src="images/codex-icon.png" alt="" aria-hidden="true">
+      <img class="mode-header-action__icon mode-header-action__icon--build" src="images/build-icon.png" alt="" aria-hidden="true">
     </button>
-    <button type="button" class="header-menu-item" data-action="info" role="menuitem">
-      <span class="header-menu-ico" aria-hidden="true">?</span>
-      <span class="header-menu-label">About</span>
-    </button>
+    <button id="saved-fab" class="rm-info-fab saved-fab" type="button" aria-label="Saved Builds" title="Saved Builds">★</button>
+    <button id="feedback-fab" class="rm-info-fab feedback-fab header-actions__utility" type="button" aria-label="Feedback" title="Feedback">✉</button>
+    <button id="info-fab" class="rm-info-fab" type="button" aria-label="About" title="About">?</button>
   </div>
   <!-- Native feedback poll; its cross-origin response loads only in the hidden target iframe. -->
   <div id="feedback-overlay" class="rm-info-overlay feedback-overlay" hidden>
