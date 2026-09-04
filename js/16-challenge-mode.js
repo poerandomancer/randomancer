@@ -676,7 +676,7 @@ function setMode(mode) {
   document.getElementById('standard-controls')?.classList.toggle('is-hidden', codex);
   const modeAction = document.getElementById('mode-header-action');
   if (modeAction) {
-    const label = codex ? 'Return to Build' : 'Open the Archive';
+    const label = codex ? 'Return to Build' : 'The Archive';
     modeAction.classList.toggle('is-build-return', codex);
     modeAction.setAttribute('aria-label', label);
     modeAction.title = label;
