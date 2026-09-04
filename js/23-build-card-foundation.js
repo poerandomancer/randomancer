@@ -283,7 +283,20 @@ function renderBuildCard(model, options = {}) {
   if (!model) return '';
   const face = options.face === BUILD_CARD_FACES.BACK ? BUILD_CARD_FACES.BACK : BUILD_CARD_FACES.FRONT;
   const isBack = face === BUILD_CARD_FACES.BACK;
-  const style = model.artPath ? ` style="--card-art:url('${escapeHtml(model.artPath)}')"` : '';
+  const balance = normalizeBalance(model.balance);
+  const cardProperties = [
+    model.artPath ? `--card-art:url('${escapeHtml(model.artPath)}')` : '',
+    `--rc-ambient-str:${Math.round(balance.strength * 100)}%`,
+    `--rc-ambient-dex:${Math.round(balance.dexterity * 100)}%`,
+    `--rc-ambient-int:${Math.round(balance.intelligence * 100)}%`,
+    `--rc-glow-str:${(balance.strength * 13).toFixed(2)}%`,
+    `--rc-glow-dex:${(balance.dexterity * 12).toFixed(2)}%`,
+    `--rc-glow-int:${(balance.intelligence * 14).toFixed(2)}%`,
+    `--rc-sigil-str:${(balance.strength * 10).toFixed(2)}%`,
+    `--rc-sigil-dex:${(balance.dexterity * 9).toFixed(2)}%`,
+    `--rc-sigil-int:${(balance.intelligence * 11).toFixed(2)}%`
+  ].filter(Boolean).join(';');
+  const style = ` style="${cardProperties}"`;
   const label = isBack ? 'Return to Build' : 'Flip for Build Ideas';
   const flipCue = `<button type="button" class="card-flip-indicator" data-card-action="flip" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}">↺</button>`;
   const footer = `<footer class="rc-card__fineprint">${escapeHtml(label)}</footer>`;

@@ -557,7 +557,8 @@ test('build card renders skill, unique, ascendancy, and notable tooltip content'
   };
   const { deriveBuildCardModel, renderBuildCard, BUILD_CARD_FACES } = await import('../js/23-build-card-foundation.js');
   const model = deriveBuildCardModel({
-    ascendancy: 'Invoker', weaponFamily: 'Bow', offenseList: ['Freeze'], attributes: {},
+    ascendancy: 'Invoker', weaponFamily: 'Bow', offenseList: ['Freeze'],
+    attributes: { strength: 2, dexterity: 3, intelligence: 5 },
     recommendedSkills: [{ id: 'skill-id', name: 'Ice Skill', recommendationPackage: {
       assignedRole: 'primary_damage',
       supports: [{ id: 'support-id', name: 'Cold Support' }]
@@ -577,6 +578,8 @@ test('build card renders skill, unique, ascendancy, and notable tooltip content'
   assert.doesNotMatch(html, /Primary|Supports:/);
   assert.match(html, /rc-skill-group__skill[\s\S]*Ice Skill[\s\S]*rc-skill-group__supports[\s\S]*Cold Support/);
   assert.match(html, /data-tip-title="Cold Support"[\s\S]*Support effect/);
+  assert.match(html, /--rc-ambient-str:20%;--rc-ambient-dex:30%;--rc-ambient-int:50%/);
+  assert.match(html, /--rc-glow-str:2\.60%;--rc-glow-dex:3\.60%;--rc-glow-int:7\.00%/);
   for (const text of ['Expert Bow · Weapon', 'Cold implicit', 'Freeze mod', 'Ascendancy Passive', 'Asc effect', 'Notable Passive', 'Notable effect']) {
     assert.match(html, new RegExp(text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }

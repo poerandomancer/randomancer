@@ -85,9 +85,9 @@ body[data-mode="challenge"]{
   opacity:0;
   transition:opacity var(--asc-fade-ms) ease;
   background-image:
-    linear-gradient(135deg, rgba(0,0,0,0.25), rgba(0,0,0,0.6)),
+    linear-gradient(135deg, rgba(0,0,0,0.21), rgba(0,0,0,0.52)),
     var(--asc-layer-img);
-  background-position:center;
+  background-position:center 38%;
   background-size:cover;
   background-repeat:no-repeat;
   will-change:opacity;
@@ -143,7 +143,7 @@ body[data-mode="codex"] .asc-art.show{
   min-height:100%;
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
-  background: rgba(0,0,0,.28);
+  background: rgba(0,0,0,.245);
   isolation:isolate;
   transition: background-color .5s ease, filter .5s ease;
 }

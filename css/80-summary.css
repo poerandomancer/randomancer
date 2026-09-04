@@ -273,6 +273,18 @@
   45%,55%{ opacity:.2; }
 }
 .rc-card{
+  --rc-attribute-str:rgb(176 48 48);
+  --rc-attribute-dex:rgb(45 122 45);
+  --rc-attribute-int:rgb(47 79 157);
+  --rc-ambient-str:33%;
+  --rc-ambient-dex:34%;
+  --rc-ambient-int:33%;
+  --rc-glow-str:4.29%;
+  --rc-glow-dex:4.08%;
+  --rc-glow-int:4.62%;
+  --rc-sigil-str:3.3%;
+  --rc-sigil-dex:3.06%;
+  --rc-sigil-int:3.63%;
   position:relative;
   transform-origin:50% 50%;
   backface-visibility:hidden;
@@ -284,22 +296,30 @@
   aspect-ratio: 806 / 1375;
   min-height:0;
   color: var(--ink);
-  border:2px solid rgba(212,170,80,0.28);
+  border:2px solid rgba(212,170,80,0.31);
   background:
     linear-gradient(180deg, rgba(255,244,218,0.05), rgba(255,244,218,0.01) 24%, rgba(7,6,8,0.28) 100%),
     linear-gradient(160deg, rgba(35,25,23,0.98), rgba(15,12,14,0.99));
   box-shadow:
-    inset 0 0 0 1px rgba(255,245,218,0.07),
-    inset 0 1px 0 rgba(255,255,255,0.05),
-    0 28px 64px rgba(0,0,0,0.34);
+    inset 0 0 0 1px rgba(232,190,105,0.13),
+    inset 1px 2px 0 rgba(255,247,220,0.10),
+    inset -2px -3px 5px rgba(4,3,4,0.32),
+    0 30px 66px rgba(0,0,0,0.42),
+    -10px -5px 38px color-mix(in srgb, var(--rc-attribute-str) var(--rc-glow-str), transparent),
+    0 1px 42px color-mix(in srgb, var(--rc-attribute-dex) var(--rc-glow-dex), transparent),
+    11px 5px 40px color-mix(in srgb, var(--rc-attribute-int) var(--rc-glow-int), transparent);
 }
 .rc-card[data-card-flip-surface="1"]{ cursor:pointer; }
 .rc-card[data-card-flip-surface="1"]:focus-visible{
   outline:none;
   box-shadow:
-    inset 0 0 0 1px rgba(255,245,218,0.07),
-    inset 0 1px 0 rgba(255,255,255,0.05),
-    0 28px 64px rgba(0,0,0,0.34),
+    inset 0 0 0 1px rgba(232,190,105,0.13),
+    inset 1px 2px 0 rgba(255,247,220,0.10),
+    inset -2px -3px 5px rgba(4,3,4,0.32),
+    0 30px 66px rgba(0,0,0,0.42),
+    -10px -5px 38px color-mix(in srgb, var(--rc-attribute-str) var(--rc-glow-str), transparent),
+    0 1px 42px color-mix(in srgb, var(--rc-attribute-dex) var(--rc-glow-dex), transparent),
+    11px 5px 40px color-mix(in srgb, var(--rc-attribute-int) var(--rc-glow-int), transparent),
     0 0 0 2px rgba(255,225,159,0.28);
 }
 .card-flip-indicator{
@@ -346,22 +366,26 @@
 }
 .rc-card::after{
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0) 24%),
+    radial-gradient(ellipse 82% 34% at 50% 17%, rgba(255,239,199,0.09), transparent 72%),
+    linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0) 28%, rgba(8,6,7,0.12) 100%),
     radial-gradient(circle at 18% 22%, rgba(255,246,214,0.10) 0, rgba(255,246,214,0.02) 12%, transparent 38%),
     radial-gradient(circle at 78% 74%, rgba(34,24,18,0.18) 0, rgba(34,24,18,0.06) 18%, transparent 46%),
     repeating-linear-gradient(115deg, rgba(255,244,218,0.028) 0 2px, rgba(28,21,18,0.03) 2px 4px, transparent 4px 9px),
     url('/images/card-texture-front.png') center/cover no-repeat;
-  background-blend-mode: screen, soft-light, multiply, soft-light, normal;
+  background-blend-mode: screen, screen, soft-light, multiply, soft-light, normal;
   opacity:.64;
   mix-blend-mode:soft-light;
   filter: contrast(1.46) brightness(.9) saturate(1);
 }
 .rc-card--build.rc-card--front::before{
   background:
+    radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--rc-attribute-str) var(--rc-sigil-str), transparent), transparent 39%),
+    radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--rc-attribute-dex) var(--rc-sigil-dex), transparent), transparent 42%),
+    radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--rc-attribute-int) var(--rc-sigil-int), transparent), transparent 45%),
     radial-gradient(circle at 50% 42%, rgba(255,235,187,0.1), transparent 42%),
     linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.62)),
     var(--card-art) center 44%/72% auto no-repeat;
-  background-blend-mode:soft-light, multiply, screen;
+  background-blend-mode:screen, screen, screen, soft-light, multiply, screen;
   filter:saturate(.55) sepia(.22) brightness(.62);
   opacity:.48;
 }
@@ -437,8 +461,8 @@
   font-weight:600;
   line-height:1.16;
   letter-spacing:.035em;
-  color:#f5dfae;
-  text-shadow: 0 2px 20px rgba(0,0,0,0.36);
+  color:#f8e5b8;
+  text-shadow:0 1px 0 rgba(255,247,220,.08), 0 2px 20px rgba(0,0,0,0.36), 0 0 16px rgba(218,174,83,.09);
 }
 .rc-card__subtitle{
   margin:.7rem auto 0;
