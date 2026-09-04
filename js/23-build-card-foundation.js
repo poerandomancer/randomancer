@@ -272,9 +272,9 @@ function renderBalance(balance) {
 function renderAttributeLightStyle(balance, artPath) {
   const b = normalizeBalance(balance);
   const style = [
-    `--rc-light-str:${(b.strength * 0.2).toFixed(3)}`,
-    `--rc-light-dex:${(b.dexterity * 0.18).toFixed(3)}`,
-    `--rc-light-int:${(b.intelligence * 0.2).toFixed(3)}`
+    `--rc-light-str:${(b.strength * 0.42).toFixed(3)}`,
+    `--rc-light-dex:${(b.dexterity * 0.38).toFixed(3)}`,
+    `--rc-light-int:${(b.intelligence * 0.42).toFixed(3)}`
   ];
   if (artPath) style.push(`--card-art:url('${escapeHtml(artPath)}')`);
   return ` style="${style.join(';')}"`;

@@ -62,7 +62,7 @@ img, video { max-width: 100%; height: auto; }
   }
 
   .asc-art__layer {
-    background-position: 50% 24%;
+    background-position: 58% 18%;
   }
 
   .asc-art.show {
@@ -75,7 +75,7 @@ img, video { max-width: 100%; height: auto; }
   #app {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    background: rgba(0,0,0,0.49);
+    background: rgba(0,0,0,0.4);
   }
 }
 
