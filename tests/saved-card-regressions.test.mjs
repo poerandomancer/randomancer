@@ -50,3 +50,19 @@ test('Build Ideas tooltip ownership is cleared across card renders', () => {
   assert.match(summaryView, /tooltipTarget && !tooltipTarget\.isConnected/);
   assert.match(summaryView, /if \(tooltipTarget === el\) hideCardTooltip\(\)/);
 });
+
+test('build cards present an in-card flip CTA without duplicate keyboard flips', () => {
+  for (const source of [foundation, summaryView]) {
+    assert.match(source, /FLIP CARD FOR BUILD IDEAS/);
+    assert.match(source, /Skills · Supports · Passives · Uniques/);
+    assert.match(source, /Return to Build/);
+    assert.doesNotMatch(source, /card-flip-indicator/);
+    assert.doesNotMatch(source, /rc-card__fineprint/);
+    assert.match(source, /event\.target !== surface|evt\.target !== flipSurface/);
+  }
+
+  const rows = foundation.indexOf('model.frontRows.filter');
+  const cta = foundation.indexOf('${renderFlipCta(false)}', rows);
+  const balance = foundation.indexOf('${renderBalance(model.balance)}', cta);
+  assert.ok(rows < cta && cta < balance, 'front CTA must render after build rows and before Balance');
+});

@@ -265,8 +265,12 @@ body[data-mode="build"] #rc-reveal-fog{
 .primary-build-card-stage .rc-card{
   width:100%;
 }
-.primary-build-card-stage .card-flip-indicator{
-  right:-18px;
+.primary-build-card-stage__mount.is-dealing .rc-card__flip-cta{
+  animation:rc-flip-cta-arrival 700ms 620ms ease-out both;
+}
+@keyframes rc-flip-cta-arrival{
+  0%,100%{ color:var(--gold); text-shadow:none; }
+  45%{ color:#fff0c9; text-shadow:0 0 9px rgba(240,185,76,.7), 0 0 22px rgba(240,185,76,.3); }
 }
 
 @media (max-width:600px){
@@ -281,10 +285,7 @@ body[data-mode="build"] #rc-reveal-fog{
   .primary-card-deck{
     width:min(var(--primary-card-width), calc(100vw - 28px));
   }
-  .primary-build-card-stage .card-flip-indicator{
-    right:-11px;
-    font-size:30px;
-  }
+  .primary-build-card-stage .rc-card__flip-cta{ padding:.62rem .3rem .58rem; }
 }
 
 @media (max-height:720px) and (min-width:601px){

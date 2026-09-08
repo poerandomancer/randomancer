@@ -463,12 +463,20 @@ function renderCardHeader(actionsHtml, title, subtitle) {
   `;
 }
 
+function renderFlipCta(isBack = false) {
+  const label = isBack ? 'Return to Build' : 'Flip card for Build Ideas';
+  return `
+    <button type="button" class="rc-card__flip-cta${isBack ? ' rc-card__flip-cta--back' : ''}" data-card-action="flip" aria-label="${escapeHtml(label)}">
+      <span class="rc-card__flip-primary"><span class="rc-card__flip-arrow" aria-hidden="true">↻</span> ${isBack ? 'Return to Build' : 'FLIP CARD FOR BUILD IDEAS'}</span>
+      ${isBack ? '' : '<span class="rc-card__flip-subtext">Skills · Supports · Passives · Uniques</span>'}
+    </button>
+  `;
+}
+
 function renderBuildCard(model, face = 'front', actionsHtml = '', stageClass = '') {
   const isBack = face === 'back';
   const style = model.artPath ? ` style="--card-art:url('${escapeHtml(model.artPath)}')"` : '';
   const flipLabel = isBack ? 'Back of build card. Click to flip to front.' : 'Front of build card. Click to flip to back.';
-  const flipCue = `<button type="button" class="card-flip-indicator" data-card-action="flip" aria-label="${escapeHtml(flipLabel)}" title="Flip card">↺</button>`;
-  const flipFooter = `<footer class="rc-card__fineprint">Flip over card for more details.</footer>`;
   if (!isBack) {
     return `
       <div class="card-stage card-stage--build ${stageClass}">
@@ -481,10 +489,9 @@ function renderBuildCard(model, face = 'front', actionsHtml = '', stageClass = '
               <div class="rc-print-row__value">${renderDelimitedNames(row.values, 'front')}</div>
             </section>
           `).join('')}
+          ${renderFlipCta(false)}
         </div>
-        ${flipFooter}
       </article>
-      ${flipCue}
       </div>
     `;
   }
@@ -501,10 +508,9 @@ function renderBuildCard(model, face = 'front', actionsHtml = '', stageClass = '
             <div class="rc-print-block__value">${renderDelimitedNames(section.values, 'back')}</div>
           </section>
         `).join('')}
+        ${renderFlipCta(true)}
       </div>
-      ${flipFooter}
     </article>
-    ${flipCue}
     </div>
   `;
 }
@@ -695,7 +701,8 @@ function bindCardOverlayUI() {
     }
   });
   overlay.addEventListener('keydown', (evt) => {
-    if (!evt.target.closest('[data-card-flip-surface="1"]')) return;
+    const flipSurface = evt.target.closest('[data-card-flip-surface="1"]');
+    if (!flipSurface || evt.target !== flipSurface) return;
     if (evt.key !== 'Enter' && evt.key !== ' ') return;
     evt.preventDefault();
     renderBuildCardOverlay(overlay.dataset.cardFace === 'back' ? 'front' : 'back', { stageClass: prefersReducedMotion() ? '' : 'is-flipping' });
