@@ -290,14 +290,22 @@ function renderHeader(model, actionsHtml) {
   `;
 }
 
+function renderFlipCta(isBack = false) {
+  const label = isBack ? 'Return to Build' : 'Flip card for Build Ideas';
+  return `
+    <button type="button" class="rc-card__flip-cta${isBack ? ' rc-card__flip-cta--back' : ''}" data-card-action="flip" aria-label="${escapeHtml(label)}">
+      <span class="rc-card__flip-primary"><span class="rc-card__flip-arrow" aria-hidden="true">↻</span> ${isBack ? 'Return to Build' : 'FLIP CARD FOR BUILD IDEAS'}</span>
+      ${isBack ? '' : '<span class="rc-card__flip-subtext">Skills · Supports · Passives · Uniques</span>'}
+    </button>
+  `;
+}
+
 function renderBuildCard(model, options = {}) {
   if (!model) return '';
   const face = options.face === BUILD_CARD_FACES.BACK ? BUILD_CARD_FACES.BACK : BUILD_CARD_FACES.FRONT;
   const isBack = face === BUILD_CARD_FACES.BACK;
   const style = renderAttributeLightStyle(model.balance, model.artPath);
   const label = isBack ? 'Return to Build' : 'Flip for Build Ideas';
-  const flipCue = `<button type="button" class="card-flip-indicator" data-card-action="flip" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}">↺</button>`;
-  const footer = `<footer class="rc-card__fineprint">${escapeHtml(label)}</footer>`;
   const stageClass = options.stageClass || '';
 
   if (!isBack) {
@@ -307,11 +315,10 @@ function renderBuildCard(model, options = {}) {
           ${renderHeader(model, options.actionsHtml || '')}
           <div class="rc-card__body rc-card__body--front">
             ${model.frontRows.filter((row) => row.values?.length).map((row) => `<section class="rc-print-row"><div class="rc-print-row__label">${escapeHtml(row.label)}</div><div class="rc-print-row__value">${renderValues(row.values, face)}</div></section>`).join('')}
+            ${renderFlipCta(false)}
             ${renderBalance(model.balance)}
           </div>
-          ${footer}
         </article>
-        ${flipCue}
       </div>
     `;
   }
@@ -324,10 +331,9 @@ function renderBuildCard(model, options = {}) {
         <div class="rc-card__body rc-card__body--back">
           <div class="rc-card-ideas__intro">Optional starting points, not build requirements.</div>
           ${sections.length ? sections.map((section) => `<section class="rc-print-block${section.label === 'Skill Ideas' ? ' rc-print-block--skills' : ''}"><div class="rc-print-block__label">${escapeHtml(section.label)}</div><div class="rc-print-block__value">${section.label === 'Skill Ideas' ? renderSkillGroups(section.values, face) : renderValues(section.values, face)}</div></section>`).join('') : '<div class="rc-card-ideas__empty">No strong build ideas were found for this roll.</div>'}
+          ${renderFlipCta(true)}
         </div>
-        ${footer}
       </article>
-      ${flipCue}
     </div>
   `;
 }
@@ -435,7 +441,8 @@ function bindInteractions(root) {
     flip();
   });
   root.addEventListener('keydown', (event) => {
-    if (!event.target.closest('[data-card-flip-surface="1"]')) return;
+    const surface = event.target.closest('[data-card-flip-surface="1"]');
+    if (!surface || event.target !== surface) return;
     if (event.key !== 'Enter' && event.key !== ' ') return;
     event.preventDefault();
     flip();
