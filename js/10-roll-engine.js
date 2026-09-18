@@ -7,7 +7,7 @@ import { adaptRecommendationPackageV3ToSnapshot, selectRecommendationPackageV3, 
 import { selectNonSkillRecommendations } from './31-non-skill-recommendation-selector.js';
 import { selectBuildFlavor } from './build-flavor.js';
 import { selectBuildName } from './build-name.js';
-import { updateAscendancyAmbiance } from './ascendancy-visuals.js';
+import { selectAscendancyBackgroundComposition, updateAscendancyAmbiance } from './ascendancy-visuals.js';
 
 const randomItem = (items, random = Math.random) => items[Math.floor(random() * items.length)] || null;
 const cleanFate = (fate = {}) => ({ oaths: fate.oaths || [], abominations: fate.abominations || [] });
@@ -49,7 +49,7 @@ function paintDraw(draw, fates) {
   const balance = document.getElementById('balance-text');
   if (balance) balance.textContent = `Strength ${Math.round(s*100)}% | Dexterity ${Math.round(d*100)}% | Intelligence ${Math.round(draw.attributes.intelligence*100)}%`;
   const app = document.getElementById('app'); if (app) app.dataset.hasRoll = 'true';
-  updateAscendancyAmbiance(draw.ascendancy);
+  updateAscendancyAmbiance(draw.ascendancy, draw.ascendancyBackgroundComposition);
   renderSummaryFromSnapshot(draw);
 }
 
@@ -71,6 +71,7 @@ function drawBuild(dataWrap, { random = Math.random } = {}) {
     schema: 'randomancer-draw-v1', snapshotVersion: 2,
     className: identity.className, ascendancy: identity.ascendancy, passiveTreeStart: identity.passiveTreeStart,
     passiveTreeCharacterId: identity.passiveTreeCharacterId,
+    ascendancyBackgroundComposition: selectAscendancyBackgroundComposition(random),
     weaponFamily: weapon.name, weapon: weapon.name,
     ...offenseFields, attributes,
     buildName: selectBuildName({

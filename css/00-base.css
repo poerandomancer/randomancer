@@ -95,6 +95,12 @@ body[data-mode="challenge"]{
 .asc-art__layer.is-visible{ opacity:1; }
 .asc-art.show{ opacity:.92; }
 
+@media (min-width: 1024px) {
+  .asc-art[data-asc-composition="high-left"] .asc-art__layer { background-position:35% 38%; }
+  .asc-art[data-asc-composition="high-center"] .asc-art__layer { background-position:50% 33%; }
+  .asc-art[data-asc-composition="high-right"] .asc-art__layer { background-position:65% 38%; }
+}
+
 body.challenge-mode .asc-art,
 body.challenge-mode .asc-art.show,
 body[data-mode="challenge"] .asc-art,

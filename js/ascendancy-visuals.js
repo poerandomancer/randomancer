@@ -18,6 +18,8 @@ const CLASS_ICON_PATHS = Object.freeze(Object.fromEntries(
     .map((classSlug) => [classSlug, `/images/classes/${classSlug}.webp`])
 ));
 
+const ASCENDANCY_BACKGROUND_COMPOSITIONS = Object.freeze(['high-left', 'high-center', 'high-right']);
+
 function canonicalSlug(value) {
   return String(value || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }
@@ -34,10 +36,19 @@ function getClassIconPath(className, ascendancy) {
 let ambianceRequest = 0;
 let activeLayer = 0;
 
-function transitionAmbianceBackground(path) {
+function selectAscendancyBackgroundComposition(random = Math.random) {
+  const roll = random();
+  if (roll < 0.4) return 'high-left';
+  if (roll < 0.6) return 'high-center';
+  return 'high-right';
+}
+
+function transitionAmbianceBackground(path, composition = '') {
   const request = ++ambianceRequest;
   const host = document.getElementById('asc-art');
   if (!host) return Promise.resolve(false);
+  if (ASCENDANCY_BACKGROUND_COMPOSITIONS.includes(composition)) host.dataset.ascComposition = composition;
+  else delete host.dataset.ascComposition;
   if (!path) {
     host.classList.remove('show');
     delete host.dataset.ascPath;
@@ -68,17 +79,19 @@ function transitionAmbianceBackground(path) {
   });
 }
 
-function updateAscendancyAmbiance(ascendancy) {
-  return transitionAmbianceBackground(getAscendancyBackgroundPath(ascendancy));
+function updateAscendancyAmbiance(ascendancy, composition) {
+  return transitionAmbianceBackground(getAscendancyBackgroundPath(ascendancy), composition);
 }
 
 export {
   ASCENDANCY_BACKGROUND_PATHS,
+  ASCENDANCY_BACKGROUND_COMPOSITIONS,
   ASCENDANCY_BASE_CLASSES,
   CLASS_ICON_PATHS,
   canonicalSlug,
   getAscendancyBackgroundPath,
   getClassIconPath,
+  selectAscendancyBackgroundComposition,
   transitionAmbianceBackground,
   updateAscendancyAmbiance
 };

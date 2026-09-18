@@ -72,6 +72,7 @@ import {
         schema: 'randomancer-draw-v1',
         snapshotVersion: 2,
         className: draw.c || '', ascendancy: draw.a || '', ascendancyId: draw.ai,
+        ascendancyBackgroundComposition: draw.abc || '',
         weapon: draw.w || '', offhand: draw.o || '', weapon2: draw.w2 || '', offhand2: draw.o2 || '',
         ailmentList: Array.isArray(draw.al) ? draw.al : [], tacticList: Array.isArray(draw.tl) ? draw.tl : [],
         defense: draw.d || '', defStrat: draw.ds || '', buildName: draw.b || '', flavor: draw.f || '',
@@ -327,7 +328,7 @@ function renderSnapshotToDom(snap){
     if (!snap) return;
     setElText('#class', snap.className || '');
     setElText('#ascendancy', snap.ascendancy || '');
-    updateAscendancyAmbiance(snap.ascendancy || '');
+    updateAscendancyAmbiance(snap.ascendancy || '', snap.ascendancyBackgroundComposition);
     const appEl = document.getElementById('app');
     if (appEl) appEl.dataset.hasRoll = 'true';
     const weaponsTxt = formatWeaponLine(snap.weapon, snap.offhand);
