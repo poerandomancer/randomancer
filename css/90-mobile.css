@@ -44,13 +44,9 @@ img, video { max-width: 100%; height: auto; }
     background-position: center top;
   }
 
-  /* 2) Let the ascendancy art track the document instead of the viewport */
-  body {
-    position: relative;
-  }
-
+  /* 2) Keep the ascendancy art anchored to the viewport while scrolling */
   .asc-art {
-    position: absolute;   /* instead of fixed on mobile */
+    position: fixed;
     inset: 0;
     /* keep layering and image behavior the same */
     background-size: cover;
