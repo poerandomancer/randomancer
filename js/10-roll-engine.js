@@ -7,6 +7,7 @@ import { adaptRecommendationPackageV3ToSnapshot, selectRecommendationPackageV3, 
 import { selectNonSkillRecommendations } from './31-non-skill-recommendation-selector.js';
 import { selectBuildFlavor } from './build-flavor.js';
 import { selectBuildName } from './build-name.js';
+import { buildPresentationContext } from './build-presentation-context.js';
 import { updateAscendancyAmbiance } from './ascendancy-visuals.js';
 
 const randomItem = (items, random = Math.random) => items[Math.floor(random() * items.length)] || null;
@@ -67,25 +68,22 @@ function drawBuild(dataWrap, { random = Math.random } = {}) {
   }
   const offenseFields = buildOffenseSnapshotFields(offenseResult.picks);
   const attributes = normalizeAttributes(identity.attributes, weapon.attributes, ...offenseResult.picks.map((entry) => entry.attributes));
+  const presentationContext = buildPresentationContext({
+    className: identity.className,
+    ascendancy: identity.ascendancy,
+    weapon: weapon.name,
+    offense: offenseResult.picks[0]?.name
+  });
+  const buildNameManifest = dataWrap?.buildNameManifest || data.buildNameManifest || window.DATA?.buildNameManifest;
+  const flavorManifest = dataWrap?.flavorManifest || data.flavorManifest || window.DATA?.flavorManifest;
   let draw = {
     schema: 'randomancer-draw-v1', snapshotVersion: 2,
     className: identity.className, ascendancy: identity.ascendancy, passiveTreeStart: identity.passiveTreeStart,
     passiveTreeCharacterId: identity.passiveTreeCharacterId,
     weaponFamily: weapon.name, weapon: weapon.name,
     ...offenseFields, attributes,
-    buildName: selectBuildName({
-      ascendancy: identity.ascendancy,
-      weapon: weapon.name,
-      offense: offenseResult.picks[0]?.name,
-      random
-    }),
-    flavor: selectBuildFlavor(dataWrap?.flavorManifest || data.flavorManifest || window.DATA?.flavorManifest, {
-      className: identity.className,
-      ascendancy: identity.ascendancy,
-      weapon: weapon.name,
-      offense: offenseResult.picks[0]?.name,
-      random
-    }),
+    buildName: selectBuildName(buildNameManifest, presentationContext, { random }),
+    flavor: selectBuildFlavor(flavorManifest, presentationContext, { random }),
     recommendationPackage: null, recommendedUniques: [], passives: null
   };
   const catalog = data.recommendationCatalogV3 || window.DATA?.recommendationCatalogV3;
