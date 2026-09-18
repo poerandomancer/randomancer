@@ -75,6 +75,7 @@ body[data-mode="challenge"]{
 .asc-art{
   position:fixed; inset:0; opacity:0; pointer-events:none;
   --asc-fade-ms: 1100ms;
+  background:#000;
   transition:opacity var(--asc-fade-ms) ease;
   overflow:hidden;
 }
@@ -96,7 +97,7 @@ body[data-mode="challenge"]{
 .asc-art.show{ opacity:.92; }
 
 @media (min-width: 1024px) {
-  .asc-art__layer { background-position:56% clamp(-220px, -14vh, -120px); }
+  .asc-art__layer { background-position:56% clamp(-200px, -12vh, -100px); }
 }
 
 body.challenge-mode .asc-art,
