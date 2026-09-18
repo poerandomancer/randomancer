@@ -59,7 +59,6 @@ function buildCompactSnapshotPayload(snapshot) {
 
   put('c', snap.className || '');
   put('a', snap.ascendancy || '');
-  put('abc', snap.ascendancyBackgroundComposition || '');
   if (snap.ascendancyId != null) put('ai', snap.ascendancyId);
   put('w', snap.weapon || '');
   put('o', snap.offhand || '');

@@ -17,7 +17,6 @@ const App = window.App = (() => {
       schema: src.schema === 'randomancer-draw-v1' ? src.schema : 'randomancer-draw-v1',
       className: src.className || '',
       ascendancy: src.ascendancy || '',
-      ascendancyBackgroundComposition: src.ascendancyBackgroundComposition || '',
       weaponFamily: src.weaponFamily || src.weapon || '',
       weapon: src.weaponFamily || src.weapon || '',
       offense: src.offense || '',

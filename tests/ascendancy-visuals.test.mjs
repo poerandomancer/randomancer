@@ -6,8 +6,7 @@ import {
   ASCENDANCY_BACKGROUND_PATHS,
   ASCENDANCY_BASE_CLASSES,
   getAscendancyBackgroundPath,
-  getClassIconPath,
-  selectAscendancyBackgroundComposition
+  getClassIconPath
 } from '../js/ascendancy-visuals.js';
 
 test('every current ascendancy has a pre-blurred ambiance asset', async () => {
@@ -16,15 +15,6 @@ test('every current ascendancy has a pre-blurred ambiance asset', async () => {
   await Promise.all(Object.values(ASCENDANCY_BACKGROUND_PATHS).map((path) => access(`.${path}`)));
   assert.equal(getAscendancyBackgroundPath('Smith of Kitava'), '/images/ascendancies/smith-of-kitava-blur.webp');
   assert.equal(getAscendancyBackgroundPath('Unknown Ascendancy'), '');
-});
-
-test('desktop ambiance composition uses 40/20/40 weighted buckets', () => {
-  assert.equal(selectAscendancyBackgroundComposition(() => 0), 'high-left');
-  assert.equal(selectAscendancyBackgroundComposition(() => 0.3999), 'high-left');
-  assert.equal(selectAscendancyBackgroundComposition(() => 0.4), 'high-center');
-  assert.equal(selectAscendancyBackgroundComposition(() => 0.5999), 'high-center');
-  assert.equal(selectAscendancyBackgroundComposition(() => 0.6), 'high-right');
-  assert.equal(selectAscendancyBackgroundComposition(() => 0.9999), 'high-right');
 });
 
 test('class icon lookup uses explicit class metadata and ascendancy fallback', async () => {
