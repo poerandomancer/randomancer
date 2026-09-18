@@ -96,7 +96,7 @@ body[data-mode="challenge"]{
 .asc-art.show{ opacity:.92; }
 
 @media (min-width: 1024px) {
-  .asc-art__layer { background-position:56% 16%; }
+  .asc-art__layer { background-position:56% 5%; }
 }
 
 body.challenge-mode .asc-art,
