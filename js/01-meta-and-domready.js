@@ -31,13 +31,13 @@ const Dom = (() => {
 })();
 
 // App metadata
-const APP_VERSION = '0.8.4.5';
+const APP_VERSION = '0.8.5';
 
 const SUPPORT = Object.freeze({
-  poe2Patch: "0.4.0",
+  poe2Patch: "0.5.x",
   league: {
-    name: "Fate of the Vaal",
-    poeNinjaSlug: "vaal",
+    name: "Runes of Aldur",
+    poeNinjaSlug: "runesofaldur",
   },
 });
 
@@ -56,9 +56,9 @@ function onDomReady(fn) {
 }
 
 onDomReady(() => {
-  const el = document.querySelector('.version');
+  const el = document.querySelector('.supported-patch');
   if (el) {
-    el.textContent = `Randomancer v${APP_VERSION}`;
+    el.textContent = `Supports POE2 · v${SUPPORT.poe2Patch} · ${SUPPORT.league.name}`;
   }
 });
 
@@ -66,12 +66,9 @@ function formatWeaponLine(weapon, offhand){
   const w = (weapon || '').trim();
   const o = (offhand || '').trim();
 
-  // Bow builds always imply a Quiver (even if offhand is not explicitly set in data)
-  if (w && /^bow$/i.test(w)) {
-    const q = 'Quiver';
-    if (!o || /quiver/i.test(o) === false) return `${w} & ${q}`;
-    return `${w} & ${o}`;
-  }
+  // Primary equipment-family rolls should display Bow as Bow; Quiver remains
+  // an optional configuration detail rather than part of the rolled identity.
+  if (w && /^bow$/i.test(w) && !o) return w;
 
   if (w && o) return `${w} & ${o}`;
   return w || o || '';
@@ -163,15 +160,14 @@ const DEBUG_SMOKE_CHECK = false;
 function runSmokeCheck(){
   const requiredExports = [
     'App',
-    'rollBuild',
+    'drawBuild',
     'scheduleSummaryRefresh',
     'RandomancerEncodeSnapshot',
     'RandomancerApplyBuildCode',
     'RandomancerUpdateBuildCodeUI',
     'RandomancerRefreshUniques',
     'RandomancerRenderUniquesFromNames',
-    'RandomancerInfo',
-    'getOrBuildIDF'
+    'RandomancerInfo'
   ];
   const missingExports = requiredExports.filter((key) => typeof window[key] === 'undefined');
   if (missingExports.length) {
@@ -180,7 +176,6 @@ function runSmokeCheck(){
 
   const requiredNodes = {
     rollButton: '#roll',
-    cohesionSlider: '#cohesionRange',
     buildViewCard: '#build-view-card',
     bindFatesModal: '#bind-fates-modal',
     savedOverlay: '#saved-overlay',

@@ -25,11 +25,14 @@ def normalize_id(label: str) -> str:
 
 
 def is_placeholder_skill(skill: dict[str, Any]) -> bool:
+    source_tags = {str(tag).strip().lower() for tag in (skill.get('source_tags') or [])}
+    if 'derived_template' in source_tags:
+        return True
     text = ' '.join(
         str(skill.get(k, '') or '')
         for k in ('name', 'description', 'support_text', 'id')
     )
-    return bool(re.search(r'\b(dnt|unused|placeholder|coming\s*soon|\?\?\?)\b', text, re.I))
+    return bool(re.search(r'\b(dnt|unused|placeholder|coming\s*soon|\?\?\?)\b|\{\d+\}', text, re.I))
 
 
 def display_name(skill: dict[str, Any]) -> str:
@@ -59,6 +62,18 @@ def build_unique_index(uniques_payload: dict[str, Any]) -> dict[str, dict[str, A
             continue
         out[name.lower()] = item
     return out
+
+
+def granted_skill_names(unique: dict[str, Any]) -> list[str]:
+    names = []
+    for granted in (unique.get('granted_skills') or []):
+        if isinstance(granted, dict):
+            name = str(granted.get('name') or '').strip()
+        else:
+            name = str(granted or '').strip()
+        if name:
+            names.append(name)
+    return names
 
 
 def summarize_unique(unique: dict[str, Any], skill_name: str) -> str:
@@ -111,6 +126,18 @@ def generate_pools(skills: list[dict[str, Any]], uniques_payload: dict[str, Any]
 
         unique = unique_by_name.get(unique_name.lower(), {})
         skill = by_skill_name.get(skill_name.lower(), {})
+
+        if not unique:
+            raise ValueError(f'Challenge override unique not found: {unique_name}')
+
+        granted_names = granted_skill_names(unique)
+        granted_keys = {normalize_id(name) for name in granted_names}
+        if normalize_id(skill_name) not in granted_keys:
+            available = ', '.join(granted_names) or 'none'
+            raise ValueError(
+                f'Challenge override is stale: {unique_name} does not grant {skill_name} '
+                f'(current granted skills: {available})'
+            )
 
         required_level = int(row.get('requiredLevel') or unique.get('required_level') or 0)
         slot = unique.get('slot')

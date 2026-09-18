@@ -43,300 +43,269 @@
     "All gas, no guide.",
     "For when respeccing once just isn’t enough."
   ],
-  "fallback_flavor": [
-    "Every exile is a bad idea refined.",
-    "Wraeclast shapes steel and souls the same way.",
-    "Some paths are chosen. This one was rolled.",
-    "The gods watch. The map device does not care.",
-    "Between hope and horror lies one more build."
-  ],
-  "class_flavor": {
-    "Warrior": {
-      "base": [
-        "Karui war-songs, Eternal shields, one steady heartbeat.",
-        "Steel sings loudest when swung with purpose.",
-        "Hearts of iron, hands of scarred flesh.",
-        "War is their language; victory is their accent.",
-        "Let armour crack before conviction does."
+  "build_flavor": {
+    "fallback": [
+      "Steel, instinct, and strange conviction.",
+      "Power takes many shapes.",
+      "Resolve begins where certainty ends.",
+      "Every road narrows eventually.",
+      "Some paths must be carved."
+    ],
+    "classes": {
+      "Warrior": [
+        "Born of war, bound by honor.",
+        "Strength tempered by flame.",
+        "Steel answers steel.",
+        "Iron before fear.",
+        "Scars outlast hesitation.",
+        "Strength speaks plainly."
       ],
-      "named_lore": [
-        "Kaom carved his legend in flesh; you’ll etch yours across Wraeclast.",
-        "Rakiata would approve of this axe, if not of your sanity.",
-        "Valako hears every warcry; Tukohama counts every corpse.",
-        "Ngamahu feeds the forge, and you feed the battlefield.",
-        "Karui blood, Tasalio’s tide, and a very bad day for armour.",
-        "Tukohama builds fortresses; you turn them into anecdotes."
+      "Ranger": [
+        "Swift as shadow, silent as dusk.",
+        "The hunt never ends.",
+        "An arrow is a promise.",
+        "The horizon has no shelter.",
+        "Wind favors the watchful.",
+        "Distance sharpens intent."
       ],
-      "lore_mode": [
-        "Ngamakanui raised you; Wraeclast sharpened you.",
-        "Kaom broke the Eternal Empire; you break whatever’s left.",
-        "Karui chiefs pray to Hinekora. Warriors like you give her work.",
-        "Voll’s legions marched in order; your enemies leave in pieces.",
-        "Ngamahu feeds the forge; you feed the funeral pyres.",
-        "Tukohama builds fortresses, Tasalio raises waves, and you bring the storm in between.",
-        "Maraketh riders charge. Karui warriors like you make them reconsider."
+      "Witch": [
+        "Wisdom is a double-edged curse.",
+        "Power whispers, and she listens.",
+        "A pact is still a blade.",
+        "Secrets have sharp edges.",
+        "The dark always answers.",
+        "Knowledge exacts its price."
+      ],
+      "Sorceress": [
+        "Lightning is a prayer with teeth.",
+        "Stars remember those who dare.",
+        "Time bends for the bold.",
+        "Storm follows the gesture.",
+        "Frost keeps perfect counsel.",
+        "Fire rewards certainty."
+      ],
+      "Monk": [
+        "Every strike, a meditation.",
+        "Balance through battle.",
+        "Stillness is a weapon.",
+        "Breath before impact.",
+        "Discipline outlives fury.",
+        "Motion begins in silence."
+      ],
+      "Huntress": [
+        "The wild answers in kind.",
+        "Footfalls like falling leaves.",
+        "Fangs bared to fate.",
+        "Instinct leaves no footprints.",
+        "The quarry always learns last.",
+        "Silence favors the hunter."
+      ],
+      "Mercenary": [
+        "Gold buys blades, not mercy.",
+        "No banner, only resolve.",
+        "Contracts are written in scars.",
+        "Every problem has a price.",
+        "Cold judgment, clean work.",
+        "Survival settles every account."
+      ],
+      "Druid": [
+        "Roots remember. Storms obey.",
+        "The grove speaks; the world listens.",
+        "Fate is read in bark and bone.",
+        "Wild blood remembers.",
+        "Bone yields. Nature does not.",
+        "The old shapes endure."
       ]
     },
-    "Ranger": {
-      "base": [
-        "Arrows write histories in bone and bark.",
-        "Tracks in the dust, death in the wind.",
-        "The first warning is the last feather.",
-        "The wild draws lines; she crosses all of them.",
-        "Predators hunt. Rangers finish."
-      ],
-      "named_lore": [
-        "Marceus Lioneye trained soldiers; Hyrri trained survivors.",
-        "Hyrri’s ghost nods whenever the arrow finds a throat.",
-        "Lioneye would call this overkill. He lacked imagination.",
-        "From Sarn’s walls to Wraeclast’s wilds, the bow still decides who speaks.",
-        "Lunaris watches the hunt; Solaris judges the shot.",
-        "Karui trackers listen for Hinekora; you listen for the twang of the last bowstring."
-      ],
-      "lore_mode": [
-        "Marceus Lioneye held Sarn’s walls; you hold the killing fields.",
-        "Hyrri’s last arrow never fell to the ground. Yours rarely need a second.",
-        "Maraketh wind-riders fear no charge—only the arrow they never saw.",
-        "Lioneye trained soldiers; Hyrri trained ghosts. You learn from both.",
-        "From Sarn’s battlements to Karui shores, the bow has always decided who walks away.",
-        "Rhoas trample the careless—your arrows teach them manners.",
-        "Out here, every feathered shaft is a signed letter from Lioneye’s old playbook."
-      ]
-    },
-    "Huntress": {
-      "base": [
-        "Hinekora counts every footprint and every corpse.",
-        "The forest keeps her secrets and her dead.",
-        "She names her spears and forgets her fears.",
-        "Moonlit branches, daylight scars.",
-        "The pack howls; she answers alone."
-      ],
-      "named_lore": [
-        "Hinekora counts each kill; you just stack them.",
-        "Rakiata taught axes to dance; you taught spears to stalk.",
-        "Karui hunters follow Tasalio’s tides; you follow the blood.",
-        "When Hinekora dreams of prey, she dreams of you.",
-        "Tukohama builds fortresses; you draw their weak points in the dirt.",
-        "Kaom hunted tribes; you hunt whatever’s foolish enough to move."
-      ],
-      "lore_mode": [
-        "Hinekora counts your kills in a language the living never hear.",
-        "Karui hunters stalk with Rakiata’s patience and Ngamahu’s temper. You favour both.",
-        "Azmeri shamans listen to the woods breathe; you listen for the last gasp.",
-        "On Ngamakanui, they chase boars. Here, you chase whatever thinks it’s the predator.",
-        "Tukohama builds palisades; you map the gaps before the first spear flies.",
-        "When Karui storytellers boast of hunts, they quietly hope you’re not in the audience.",
-        "Azmeri myths speak of beasts that cannot be tracked. Your footprints say otherwise."
-      ]
-    },
-    "Witch": {
-      "base": [
-        "Vaal whispers, Oriathan scriptures, her own conclusions.",
-        "Knowledge is a kindness she cannot afford.",
-        "Her books are bound in promises and regrets.",
-        "Every syllable pulls on something beneath reality.",
-        "The dead listen when she speaks firmly enough."
-      ],
-      "named_lore": [
-        "Atziri sought perfection; you seek better results.",
-        "Doryani twisted Vaal flesh; you twist whatever’s left.",
-        "Malachai took notes; you take liberties.",
-        "The Vaal carved history into stone; you carve it into souls.",
-        "When Atziri whispers from the past, you whisper back with new experiments.",
-        "Doryani had theories. You have practical demonstrations."
-      ],
-      "lore_mode": [
-        "Atziri ruled an empire; you rule whatever’s left of her nightmares.",
-        "Doryani carved knowledge into Vaal flesh—your notes are less merciful.",
-        "Malachai rewrote Oriath in blood; you prefer smaller, more frequent edits.",
-        "Azmeri seers stare into the dark. You persuade it to stare back.",
-        "Vaal architects raised obsidian monuments; you raise less stable things.",
-        "Atziri sought perfection; you seek repeatable, weaponised failure.",
-        "Doryani chased ultimate power. You chase what happens after that."
-      ]
-    },
-    "Sorceress": {
-      "base": [
-        "Storms obey a confident gesture.",
-        "She charts constellations in seared nerve endings.",
-        "Between heartbeat and thunderclap, she makes a choice.",
-        "Frost, flame, and storm—three tempers, one will.",
-        "The sky itself is just more range."
-      ],
-      "named_lore": [
-        "Solaris burns, Lunaris blinds; you orchestrate the eclipse.",
-        "Innocence fell, Sin smiled, and your crits filled the silence.",
-        "Oriath forged zealots; Wraeclast forged you.",
-        "Sin offers power, Solaris offers light, and you accept everything.",
-        "When Lunaris dances across the sky, you keep the tempo.",
-        "Innocence preached restraint; your spellbook missed that sermon."
-      ],
-      "lore_mode": [
-        "Innocence burned Oriath; you learned to strike a little cleaner.",
-        "Sin whispers in every crit; Solaris and Lunaris argue over the lighting.",
-        "Templar courts preached restraint—your spellbook skipped that chapter.",
-        "Oriath forged zealots for Dominus; Wraeclast forged you for everything else.",
-        "Solaris blinds, Lunaris deceives, and you choreograph the finale.",
-        "Kitava devoured Oriath; your storms sort through what he spat back out.",
-        "Innocence demanded purity. Your mana pool didn’t get the message."
-      ]
-    },
-    "Monk": {
-      "base": [
-        "Chayula dreams; he walks the edges.",
-        "Breath in, blades out.",
-        "His scars are prayers that were answered.",
-        "Stillness breaks bones as cleanly as motion.",
-        "Patience is the sharpest weapon he carries."
-      ],
-      "named_lore": [
-        "Chayula’s whispers are loudest when you are silent.",
-        "Esh, Tul, Xoph, Uul-Netol—four nightmares, one steady breath.",
-        "Oriath wrote sermons; you wrote scars.",
-        "When Chayula bends reality, you bend back.",
-        "Uul-Netol cracks the earth; you crack the cultist.",
-        "Tul chills the spirit; you warm it with broken bones."
-      ],
-      "lore_mode": [
-        "Azmeri ascetics starve the body; you starve your doubts.",
-        "Chayula folds reality in on itself. You unfold it with your fists.",
-        "Esh crackles in every doubt, Tul chills every breath; you exhale discipline.",
-        "Xoph’s embers tempt rage; you box it, label it, and break jaws with it.",
-        "Uul-Netol splits stone like kindling. You do the same to ideology.",
-        "Templar cloisters wrote sermons; Azmeri mountains wrote you.",
-        "Breach lords offer power without peace. You bring peace without survivors."
-      ]
-    },
-    "Mercenary": {
-      "base": [
-        "Oriath taught him debt; Wraeclast taught him terms.",
-        "Contracts end. Consequences do not.",
-        "Gold glitters; steel convinces.",
-        "They sell violence, not loyalty.",
-        "The only flag they salute is survival."
-      ],
-      "named_lore": [
-        "Oriath pays in coin; Wraeclast pays in scars.",
-        "Theopolis signs the contracts; you stain them red.",
-        "Innocence preached virtue; your employer preached hazard pay.",
-        "Kitava ate Oriath; you pick through what’s left.",
-        "From Sarn’s gutters to Wraeclast’s ruins, the job stays the same.",
-        "Victario staged revolutions; you stage cleanups."
-      ],
-      "lore_mode": [
-        "Victario stirred rebellions; you tidy up what’s left of them.",
-        "Theopolis writes laws, Oriath enforces them, and you invoice both.",
-        "Dominus had his Blackguards; you’re a one-person contract.",
-        "Kitava ate Oriath—someone still has to get paid.",
-        "From Sarn’s gutters to Theopolis’ marble halls, bloodstains look the same.",
-        "Templar lords argue doctrine while you negotiate hazard pay.",
-        "Victario rallied the people. You remind them what a missed payment costs."
-      ]
-    }
-  },
-  "ascendancy_flavor": {
-    "Warrior": {
+    "ascendancies": {
       "Titan": [
-        "Titan: Valako marks the blow, Tasalio holds the ground, and you turn both into aftershocks.",
-        "Titan: Voll built legions to stand firm; you are a one-person landslide.",
-        "Titan: When the earth remembers a battle, it remembers your slams first."
+        "A mountain with a heartbeat.",
+        "Unmoved. Unbroken.",
+        "The earth yields first.",
+        "Strength becomes geological.",
+        "Impact answers everything.",
+        "Mass needs no argument.",
+        "Stone learns fear."
       ],
       "Warbringer": [
-        "Warbringer: Kaom’s warcries shook empires; yours shake what’s left of them.",
-        "Warbringer: Valako counts the fallen, Tukohama counts the scars, and you keep their attention.",
-        "Warbringer: Karui drums announce armies; your roar announces conclusions."
+        "The drums of war follow close.",
+        "A banner is a blade.",
+        "One roar changes the field.",
+        "Fear becomes momentum.",
+        "Battle answers the call.",
+        "Silence before the warcry.",
+        "Victory arrives shouting."
       ],
       "Smith of Kitava": [
-        "Smith of Kitava: You hammer steel the way Kitava chews cities—slow, loud, and thorough.",
-        "Smith of Kitava: Oriath fed Kitava; you feed the forge with everything that crawls out.",
-        "Smith of Kitava: Every spark from your anvil is a prayer that Kitava absolutely answers."
-      ]
-    },
-    "Ranger": {
-      "Deadeye": [
-        "Deadeye: Lioneye needed walls; you only need a horizon.",
-        "Deadeye: Hyrri’s last shot became legend; yours never live long enough to be told.",
-        "Deadeye: Solaris lights the target, Lunaris bends the path, and you never miss either."
-      ],
-      "Pathfinder": [
-        "Pathfinder: Tasalio guides the current; your flasks guide the slaughter.",
-        "Pathfinder: Maraketh scouts read tracks; you read the colour of every puddle you leave behind.",
-        "Pathfinder: Hinekora sees the path ahead; your toxins decorate it."
-      ]
-    },
-    "Huntress": {
-      "Amazon": [
-        "Amazon: Maraketh riders fear few things; a spear in each hand is one of them.",
-        "Amazon: Rakiata taught Karui spears to dance; you taught them to hunt gods.",
-        "Amazon: From Ngamakanui shores to Oriath’s ruins, every thrown spear signs your name."
-      ],
-      "Ritualist": [
-        "Ritualist: Hinekora counts the dead; you arrange them in pleasing circles.",
-        "Ritualist: Azmeri shamans whisper to spirits; you negotiate in blood and ash.",
-        "Ritualist: When the moon rises over Wraeclast, your altars wake up hungry."
-      ]
-    },
-    "Witch": {
-      "Blood Mage": [
-        "Blood Mage: Doryani measured power in screams; you prefer more precise litres.",
-        "Blood Mage: Atziri traded life for worship; you trade it wholesale for damage.",
-        "Blood Mage: Every cast redraws the line between ‘vital resource’ and ‘excess inventory.’"
-      ],
-      "Lich": [
-        "Lich: Malachai wrote his notes in lives; you write yours in what remains afterward.",
-        "Lich: Oriath fears undeath; Wraeclast just calls it job security.",
-        "Lich: When Innocence fell, something kept moving. You took notes."
-      ],
-      "Infernalist": [
-        "Infernalist: Ngamahu loves a good blaze; you love a world that doesn’t stop burning.",
-        "Infernalist: Atziri played with fire; you rewrote the rules for ‘acceptable sacrifice.’",
-        "Infernalist: Solaris shines, Lunaris wanes, and your hellfire ignores both schedules."
-      ],
-      "Abyssal Lich": [
-        "Abyssal Lich: Vaal ruins have a bottom; the pit you’re staring into does not.",
-        "Abyssal Lich: Chayula dreams in violet; you dream in whatever’s left after the void is done.",
-        "Abyssal Lich: Hinekora knows how you die; the abyss just wants to replay it."
-      ]
-    },
-    "Sorceress": {
-      "Stormweaver": [
-        "Stormweaver: Solaris provides the light, Lunaris provides the rhythm, and you conduct the screaming.",
-        "Stormweaver: Lioneye’s Legion feared siege engines; they never met your weather.",
-        "Stormweaver: Valako thunders approval every time you overkill something."
-      ],
-      "Chronomancer": [
-        "Chronomancer: Atziri rewrote history; you rewrite the part where you should have died.",
-        "Chronomancer: Dominus thought time was on his side; you turned it into a consumable.",
-        "Chronomancer: When Hinekora shows the future, you pause, edit, and rewind."
-      ]
-    },
-    "Monk": {
-      "Invoker": [
-        "Invoker: Esh crackles in your knuckles, Xoph smolders in your stance, Tul waits patiently in your breath.",
-        "Invoker: Azmeri monasteries taught restraint; Wraeclast taught better applications.",
-        "Invoker: Every strike is a sermon; every elemental echo is the amen."
-      ],
-      "Acolyte of Chayula": [
-        "Acolyte of Chayula: Chayula’s lullaby is a scream only you find soothing.",
-        "Acolyte of Chayula: Reality frays at the edges; you pull on the loose threads.",
-        "Acolyte of Chayula: When others wake from nightmares, you mark them as training."
-      ]
-    },
-    "Mercenary": {
-      "Witch Hunter": [
-        "Witch Hunter: Theopolis writes edicts; you write full stops at the end of sorcerers.",
-        "Witch Hunter: Victario roused the people; you quiet the heretics.",
-        "Witch Hunter: Dominus loved loyal hounds; you prefer rabid ones with crossbows."
-      ],
-      "Gemling Legionnaire": [
-        "Gemling Legionnaire: Oriath’s gems broke armies; you break whatever survives the shattering.",
-        "Gemling Legionnaire: Theopolis bred you for obedience; Wraeclast retrained you for efficiency.",
-        "Gemling Legionnaire: Every socket in your gear is a reminder of how much they underestimated you."
+        "Forge-fire in the veins.",
+        "Hammered into legend.",
+        "Steel remembers the hammer.",
+        "Every spark seeks purpose.",
+        "War completes the forging.",
+        "Heat gives iron a voice.",
+        "The anvil follows to battle."
       ],
       "Tactician": [
-        "Tactician: Victario planned revolutions; you plan ambushes that actually work.",
-        "Tactician: Lioneye trusted walls; you trust lines of fire and a good choke point.",
-        "Tactician: When the battle looks even, it’s because your traps are perfectly placed."
+        "Victory is a calculation.",
+        "The battlefield is a board.",
+        "Position decides the outcome.",
+        "Preparation becomes pressure.",
+        "Every angle has a cost.",
+        "One signal changes everything.",
+        "Retreat was already accounted for."
+      ],
+      "Witchhunter": [
+        "No hex goes unanswered.",
+        "Purity by fire.",
+        "Every spell leaves an opening.",
+        "The unnatural leaves tracks.",
+        "Certainty cuts through sorcery.",
+        "No omen escapes judgment.",
+        "Magic bleeds like anything else."
+      ],
+      "Gemling Legionnaire": [
+        "Facets catch every fate.",
+        "A legion in crystal.",
+        "Power finds another socket.",
+        "Flesh learns new geometry.",
+        "Light under the skin.",
+        "Versatility becomes armor.",
+        "Every gift finds room."
+      ],
+      "Deadeye": [
+        "One shot. One verdict.",
+        "Distance is mercy.",
+        "The horizon narrows.",
+        "Every angle is exposed.",
+        "Intent travels farther.",
+        "Precision leaves no refuge.",
+        "The path was chosen already."
+      ],
+      "Pathfinder": [
+        "Every trail has teeth.",
+        "The wild is a map of scars.",
+        "Dosage decides the difference.",
+        "Poison is only preparation.",
+        "Every vial has an answer.",
+        "Survival travels bottled.",
+        "The path remembers every toxin."
+      ],
+      "Amazon": [
+        "Steel-sister of the sun.",
+        "Spearpoint prophecy.",
+        "Precision outruns brute force.",
+        "Every opening has an edge.",
+        "Speed sharpens strength.",
+        "The duel ends early.",
+        "Grace lands hard."
+      ],
+      "Ritualist": [
+        "Circles close. Blood binds.",
+        "Rites carved in night.",
+        "Blood speaks where breath cannot.",
+        "Every offering leaves an echo.",
+        "Pain given purpose.",
+        "The circle remembers.",
+        "Debts prefer living vessels."
+      ],
+      "Blood Mage": [
+        "Crimson is currency.",
+        "Life traded for power.",
+        "Every heartbeat has a price.",
+        "Blood answers blood.",
+        "Pain becomes precision.",
+        "Power waits beneath the ribs.",
+        "Nothing living is free."
+      ],
+      "Lich": [
+        "Death is a door left open.",
+        "A crown of bone and silence.",
+        "Cold patience outlives breath.",
+        "Decay keeps perfect time.",
+        "Warmth was a fair trade.",
+        "The grave has discipline.",
+        "Silence survives the body."
+      ],
+      "Infernalist": [
+        "Flame speaks first.",
+        "Ash writes the epilogue.",
+        "Hunger answers hunger.",
+        "The furnace waits within.",
+        "Mercy burns quickly.",
+        "Heat remembers every bargain.",
+        "Something monstrous stirs."
+      ],
+      "Abyssal Lich": [
+        "Starless depths answer back.",
+        "The void keeps its promises.",
+        "Death casts deeper shadows.",
+        "Souls become raw material.",
+        "Curses outlive mercy.",
+        "The dark has another floor.",
+        "Bottomless hunger looks outward."
+      ],
+      "Chronomancer": [
+        "Seconds are weapons.",
+        "Time, broken to purpose.",
+        "The future already answered.",
+        "Mistakes belong to discarded moments.",
+        "One second is enough.",
+        "The present remains negotiable.",
+        "Tomorrow arrives early."
+      ],
+      "Stormweaver": [
+        "Thunder in the lungs.",
+        "The sky is a spellbook.",
+        "Storm gathers with intent.",
+        "Lightning seeks another path.",
+        "Frost sharpens the thunder.",
+        "Weather becomes a weapon.",
+        "The air remembers the charge."
+      ],
+      "Disciple of Varashta": [
+        "Wards within wards.",
+        "Oaths etched in starlight.",
+        "Bound spirits await command.",
+        "Every vessel holds a promise.",
+        "Silent servants, sudden ruin.",
+        "Elements answer old debts.",
+        "Authority needs no voice."
+      ],
+      "Invoker": [
+        "Breath, stance, strike.",
+        "A mantra with teeth.",
+        "Discipline gathers elements.",
+        "Impact completes the form.",
+        "Power follows perfect motion.",
+        "Balance invites the storm.",
+        "Every strike carries a current."
+      ],
+      "Acolyte of Chayula": [
+        "The Breach watches.",
+        "Shadow is devotion.",
+        "Darkness rewards stillness.",
+        "Chaos obeys a quiet mind.",
+        "The void offers shelter.",
+        "Night gathers close.",
+        "Discipline survives the dark."
+      ],
+      "Shaman": [
+        "Ancestors at your shoulder.",
+        "Spirits carry the strike.",
+        "Wild blood answers.",
+        "Storm speaks through bone.",
+        "Every shape remembers.",
+        "The old voices gather.",
+        "Fang, root, thunder."
+      ],
+      "Oracle": [
+        "Omens do not lie.",
+        "The future already blinked.",
+        "Possible futures crowd close.",
+        "Chance loses its mystery.",
+        "The present was chosen.",
+        "Every path leaves an omen.",
+        "Tomorrow casts a shadow."
       ]
     }
   }

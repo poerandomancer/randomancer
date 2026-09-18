@@ -1,0 +1,501 @@
+{
+  "schema_version": "recommendation-fact-overrides-v3.0.0",
+  "description": "Curated additions and suppressions for facts that cannot be interpreted safely from source data. Entity keys use the stable IDs emitted by recommendation_catalog_v3.json.",
+  "entities": {
+    "skill:Metadata/Items/Gem/SkillGemSiphonElements": {
+      "reason": "Siphon Elements creates Infusion Remnants only after the player Freezes, Shocks, or Ignites a target; the trigger text does not make Siphon Elements an ailment applicator.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "freeze"
+        },
+        {
+          "relation": "generates",
+          "mechanic": "infusion"
+        },
+        {
+          "relation": "generates",
+          "mechanic": "remnant"
+        }
+      ],
+      "add_facts": [
+        {
+          "relation": "generates",
+          "subject": "skill",
+          "mechanic": "infusion",
+          "condition": "after_elemental_ailment_application",
+          "requires_any_mechanics": [
+            "freeze",
+            "shock",
+            "ignite"
+          ],
+          "confidence": "exact"
+        },
+        {
+          "relation": "generates",
+          "subject": "skill",
+          "mechanic": "remnant",
+          "condition": "after_elemental_ailment_application",
+          "requires_any_mechanics": [
+            "freeze",
+            "shock",
+            "ignite"
+          ],
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SkillGemTameBeast": {
+      "reason": "Tame Beast transforms after a rare Beast capture and then summons that Beast as a reviving Companion.",
+      "add_facts": [
+        {
+          "relation": "creates",
+          "subject": "skill",
+          "mechanic": "companion",
+          "condition": "after_beast_capture",
+          "confidence": "exact"
+        },
+        {
+          "relation": "creates",
+          "subject": "skill",
+          "mechanic": "minion",
+          "condition": "after_beast_capture",
+          "confidence": "exact"
+        }
+      ],
+      "compatibility": {
+        "equipment": {
+          "is_unrestricted": true
+        }
+      }
+    },
+    "skill:Metadata/Items/Gems/SkillGemRhoaMount": {
+      "reason": "Rhoa Mount explicitly requires wielding a Bow or Spear even though the retained equipment record is unrestricted.",
+      "compatibility": {
+        "equipment": {
+          "is_unrestricted": false,
+          "mainhand_tags_any_of": [
+            "bow",
+            "spear"
+          ],
+          "offhand_tags_any_of": [],
+          "allowed_weapon_tags_any_of": [
+            "bow",
+            "spear"
+          ],
+          "display": "Requires Bow or Spear"
+        }
+      }
+    },
+    "skill:Metadata/Items/Gems/SkillGemWolfPounce": {
+      "reason": "Pounce triggers Predator's Mark; its activation triggers the nested Summon Wolf skill, which creates a Wolf Minion that serves as the Talisman companion-style route.",
+      "add_facts": [
+        {
+          "relation": "creates",
+          "subject": "skill",
+          "mechanic": "minion",
+          "condition": "predators_mark_activation",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "nested_active_skill",
+              "value": "Predator's Mark -> Summon Wolf"
+            }
+          ]
+        },
+        {
+          "relation": "creates",
+          "subject": "skill",
+          "mechanic": "companion",
+          "condition": "predators_mark_activation",
+          "confidence": "exact",
+          "evidence": [
+            {
+              "kind": "nested_active_skill",
+              "value": "Predator's Mark -> Summon Wolf"
+            }
+          ]
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SupportGemLivingLightning": {
+      "reason": "Living Lightning creates temporary Minions when the supported skill deals Lightning damage.",
+      "add_facts": [
+        {
+          "relation": "creates",
+          "subject": "supported_skill",
+          "mechanic": "minion",
+          "confidence": "exact"
+        },
+        {
+          "relation": "requires",
+          "subject": "supported_skill",
+          "mechanic": "lightning",
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SupportGemLivingLightningTwo": {
+      "reason": "Living Lightning II creates temporary Minions when the supported skill deals Lightning damage.",
+      "add_facts": [
+        {
+          "relation": "creates",
+          "subject": "supported_skill",
+          "mechanic": "minion",
+          "confidence": "exact"
+        },
+        {
+          "relation": "requires",
+          "subject": "supported_skill",
+          "mechanic": "lightning",
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SupportGemBreachlordsRift": {
+      "reason": "Breachlord's Rift only breaks Armour when the supported skill Freezes or Electrocutes; those prerequisites must remain attached to the application fact.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "armour_break"
+        }
+      ],
+      "add_facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "mechanic": "armour_break",
+          "requires_any_mechanics": [
+            "freeze",
+            "electrocute"
+          ],
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemBrittleArmour": {
+      "reason": "Brittle Armour only breaks Armour against enemies Frozen by the supported skill.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "armour_break"
+        }
+      ],
+      "add_facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "mechanic": "armour_break",
+          "requires_any_mechanics": [
+            "freeze"
+          ],
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemCorrosion": {
+      "reason": "Corrosion breaks Armour through Poison applied by the supported skill, so Poison is a prerequisite rather than independent Armour Break application.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "armour_break"
+        }
+      ],
+      "add_facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "mechanic": "armour_break",
+          "requires_any_mechanics": [
+            "poison"
+          ],
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemEternalFlame": {
+      "reason": "Eternal Flame modifies existing Ignites; it does not independently grant Ignite application.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "ignite"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemFireExposure": {
+      "reason": "Fire Exposure applies Exposure when the supported skill Ignites; it does not independently grant Ignite application.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "ignite"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemFrostNexus": {
+      "reason": "Frost Nexus creates Chilled Ground around enemies Frozen by the supported skill, so Freeze is a prerequisite for its Chill route.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "chill"
+        }
+      ],
+      "add_facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "mechanic": "chill",
+          "requires_any_mechanics": [
+            "freeze"
+          ],
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemLightningExposure": {
+      "reason": "Lightning Exposure applies Exposure when the supported skill Shocks; it does not independently grant Shock application.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "shock"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SupportGemOutmaneuver": {
+      "reason": "Outmaneuver only breaks Armour against Parried enemies.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "armour_break"
+        }
+      ],
+      "add_facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "mechanic": "armour_break",
+          "requires_any_mechanics": [
+            "parried"
+          ],
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemOlrothsHubris": {
+      "reason": "Olroth's Hubris allows Physical damage to contribute to Freeze buildup; the supported skill does not gain unconditional Freeze application.",
+      "suppress_facts": [
+        {
+          "relation": "provides",
+          "mechanic": "freeze",
+          "condition": null
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemEnvenomThree": {
+      "reason": "Poison III strengthens Poison against Bleeding enemies; its Bleed reference is a target condition, not Bleed application.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "bleed"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemCoursingCurrent": {
+      "reason": "Shock Conduction spreads an existing Shock and does not independently create the first Shock.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "shock"
+        }
+      ],
+      "add_facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "mechanic": "shock",
+          "requires_any_mechanics": [
+            "shock"
+          ],
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemCoursingCurrentTwo": {
+      "reason": "Shock Conduction II spreads an existing Shock or Shocks Drenched enemies; it does not independently create the first Shock without either state.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "shock"
+        }
+      ],
+      "add_facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "mechanic": "shock",
+          "requires_any_mechanics": [
+            "shock",
+            "drenched"
+          ],
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SupportGemShockingLeap": {
+      "reason": "Shocking Leap creates Shocked Ground only after the supported skill Critically Hits, so it is not unconditional Shock application.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "shock"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemSpreadingFrost": {
+      "reason": "Spreading Frost Chills nearby enemies after the supported skill Freezes; it neither grants Freeze nor provides unconditional Chill.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "freeze"
+        },
+        {
+          "relation": "inflicts",
+          "mechanic": "chill"
+        }
+      ],
+      "add_facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "mechanic": "chill",
+          "requires_any_mechanics": [
+            "freeze"
+          ],
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemThrillOfTheKillTwo": {
+      "reason": "Thrill of the Kill II grants Shock chance only after culling an already Shocked enemy; it does not independently create the first Shock.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "shock"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SupportGemTulsStillness": {
+      "reason": "Tul's Stillness allows Chaos damage to contribute to Freeze buildup; its unconditional provision is Chaos damage, not Freeze application.",
+      "suppress_facts": [
+        {
+          "relation": "provides",
+          "mechanic": "freeze",
+          "condition": null
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SupportGemSkitteringStone": {
+      "reason": "Skittering Stone I releases stone Minions from shatterable earthen objects created by the supported skill.",
+      "add_facts": [
+        {
+          "relation": "creates",
+          "subject": "supported_skill",
+          "mechanic": "minion",
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gem/SupportGemSkitteringStoneTwo": {
+      "reason": "Skittering Stone II releases stone Minions from shatterable earthen objects created by the supported skill.",
+      "add_facts": [
+        {
+          "relation": "creates",
+          "subject": "supported_skill",
+          "mechanic": "minion",
+          "confidence": "exact"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemLacerateFour": {
+      "reason": "Bleed IV explicitly prevents the supported skill from inflicting Bleed; its Bleed reference describes a target condition, not application.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "bleed"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SupportGemLastingShock": {
+      "reason": "Lasting Shock reduces the supported skill's existing Shock application frequency and extends duration; it does not provide Shock application.",
+      "suppress_facts": [
+        {
+          "relation": "inflicts",
+          "mechanic": "shock"
+        }
+      ]
+    },
+    "skill:Metadata/Items/Gems/SkillGemSpellTotem": {
+      "reason": "Spell Totem is a complete active package only when paired with an eligible socketed Spell.",
+      "add_candidate_roles": [
+        "primary_damage"
+      ],
+      "compatibility": {
+        "equipment": {
+          "is_unrestricted": false,
+          "mainhand_tags_any_of": [
+            "staff",
+            "wand",
+            "sceptre"
+          ],
+          "offhand_tags_any_of": [],
+          "allowed_weapon_tags_any_of": [
+            "staff",
+            "wand",
+            "sceptre"
+          ],
+          "display": "Caster weapon recommendation"
+        },
+        "meta_payload": {
+          "mechanic": "socketed_spell",
+          "allowed_skill_types_any_of": [
+            "Spell"
+          ],
+          "excluded_skill_types": [
+            "Cooldown"
+          ]
+        }
+      }
+    },
+    "skill:Metadata/Items/Gems/SkillGemAncestralWarriorTotem": {
+      "reason": "Ancestral Warrior Totem requires an eligible socketed Mace attack as its damage payload.",
+      "add_candidate_roles": [
+        "primary_damage"
+      ],
+      "compatibility": {
+        "meta_payload": {
+          "mechanic": "socketed_mace_skill",
+          "allowed_skill_types_any_of": [
+            "Attack"
+          ],
+          "excluded_skill_types": [
+            "Channel",
+            "Cooldown"
+          ]
+        }
+      }
+    },
+    "skill:Metadata/Items/Gem/SkillGemMortarCannon": {
+      "reason": "Mortar Cannon requires an eligible socketed Grenade skill as its damage payload.",
+      "add_candidate_roles": [
+        "primary_damage"
+      ],
+      "compatibility": {
+        "meta_payload": {
+          "mechanic": "socketed_grenade",
+          "allowed_skill_types_any_of": [
+            "Grenade"
+          ],
+          "excluded_skill_types": []
+        }
+      }
+    }
+  }
+}

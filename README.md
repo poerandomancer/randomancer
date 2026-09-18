@@ -1,5 +1,7 @@
 # Randomancer update pipeline skeleton (v3)
 
+Randomancer is a static client application; builds, challenge cards, local saves, and shareable build codes are handled entirely in the browser.
+
 This pass remains intentionally **orchestration-only**.
 
 It does **not** replace or rewrite the logic inside your existing helper scripts. Instead, it:

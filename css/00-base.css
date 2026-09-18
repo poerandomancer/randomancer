@@ -40,6 +40,8 @@ body[data-mode="codex"]{
   --edge: var(--codex-ember-soft);
 }
 
+
+
 *{ box-sizing:border-box; }
 
 
@@ -69,30 +71,28 @@ body[data-mode="challenge"]{
   background: var(--bg) url('/images/challenge-background.png') center/cover no-repeat fixed;
 }
 
+
 .asc-art{
   position:fixed; inset:0; opacity:0; pointer-events:none;
   --asc-fade-ms: 1100ms;
   transition:opacity var(--asc-fade-ms) ease;
-  background-image:
-    linear-gradient(135deg, rgba(0,0,0,0.25), rgba(0,0,0,0.6)),
-    var(--asc-img);
-  background-position:center; background-size:cover; background-repeat:no-repeat;
+  overflow:hidden;
 }
-.asc-art::after{
-  content:"";
+.asc-art__layer{
   position:absolute;
   inset:0;
   pointer-events:none;
   opacity:0;
   transition:opacity var(--asc-fade-ms) ease;
   background-image:
-    linear-gradient(135deg, rgba(0,0,0,0.25), rgba(0,0,0,0.6)),
-    var(--asc-next-img);
-  background-position:center;
+    linear-gradient(135deg, rgba(0,0,0,0.16), rgba(0,0,0,0.44)),
+    var(--asc-layer-img);
+  background-position:56% 40%;
   background-size:cover;
   background-repeat:no-repeat;
+  will-change:opacity;
 }
-.asc-art.is-crossfading::after{ opacity: .92; }
+.asc-art__layer.is-visible{ opacity:1; }
 .asc-art.show{ opacity:.92; }
 
 body.challenge-mode .asc-art,
@@ -143,7 +143,7 @@ body[data-mode="codex"] .asc-art.show{
   min-height:100%;
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
-  background: rgba(0,0,0,.28);
+  background: rgba(0,0,0,.19);
   isolation:isolate;
   transition: background-color .5s ease, filter .5s ease;
 }
@@ -193,6 +193,8 @@ body[data-mode="challenge"] #app::after{
 }
 
 
+
+
 #app > *{
   position:relative;
   z-index:1;
@@ -229,6 +231,7 @@ body[data-mode="challenge"] #app::after{
 @media (prefers-reduced-motion: reduce){
   .mode-transition{ transition: none; }
   .asc-art,
+  .asc-art__layer,
   #app,
   #app::after,
   .mode-toggle,

@@ -34,9 +34,14 @@ const SLOT_MAP = new Map([
   ['soulcore', 'soulcore']
 ]);
 
+const FACTION_SLOT_PREFIX_RE = /^(?:ezomyte|kalguuran|vaal)\s+/i;
+
+function normalizeUniqueSlotLabel(slotLabel) {
+  return String(slotLabel || '').trim().replace(FACTION_SLOT_PREFIX_RE, '');
+}
 
 function normalizeUniqueSlot(slotLabel) {
-  const key = String(slotLabel || '').trim().toLowerCase();
+  const key = normalizeUniqueSlotLabel(slotLabel).toLowerCase();
   return SLOT_MAP.get(key) || null;
 }
 
@@ -127,6 +132,7 @@ function adaptPoe2dbUniquesPayload(payload) {
 export {
   adaptPoe2dbUniquesPayload,
   normalizeUniqueSlot,
+  normalizeUniqueSlotLabel,
   normalizeUniqueTagsForBuild,
   transformPoe2dbUnique
 };

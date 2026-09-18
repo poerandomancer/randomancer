@@ -1,7 +1,8 @@
 import { getBindFatesFromApp } from './04-app-state.js';
-import { sliderValueToThreshold, thresholdToSliderValue } from './06-cohesion.js';
+import { deriveWeaponFamilies } from './06-equipment.js';
 import { ensureDataPreload } from './08-data-load.js';
 import { loadChallengeLibrary } from './15-challenge-engine.js';
+import { resolveRollableOffenseElements } from './26-offense-roll.js';
 
 const BIND_FATES_STORAGE_KEY = 'randomancer_bind_fates_v1';
 const CHALLENGE_FATES_STORAGE_KEY = 'randomancer_challenge_fates_v1';
@@ -45,16 +46,34 @@ function countChallengeFatesSelections(fates) {
 
 function updateBindFatesSummary(explicitMode){
   const summaryEl = document.getElementById('bind-fates-summary');
+  const clearEl = document.getElementById('bind-fates-clear');
+  const endIconEl = document.getElementById('bind-fates-icon-end');
   const mode = explicitMode || ensureMode();
   const counts = mode === 'challenge'
     ? countChallengeFatesSelections(window.App?.getChallengeFates?.())
     : countBindFatesSelections(window.App?.getBindFates ? window.App.getBindFates() : getBindFatesFromApp());
+  const hasOaths = counts.oaths > 0;
+  const hasAbominations = counts.abominations > 0;
+  const hasSelections = hasOaths || hasAbominations;
 
   if (summaryEl) {
-    summaryEl.textContent = (counts.oaths + counts.abominations) > 0
-      ? `${counts.oaths} Oath${counts.oaths === 1 ? '' : 's'} | ${counts.abominations} Abomination${counts.abominations === 1 ? '' : 's'}`
-      : 'No Fates Bound';
+    const oathEl = summaryEl.querySelector('.bind-fates-count--oaths');
+    const separatorEl = summaryEl.querySelector('.bind-fates-count-separator');
+    const abominationEl = summaryEl.querySelector('.bind-fates-count--abominations');
+
+    summaryEl.hidden = !hasSelections;
+    if (oathEl) {
+      oathEl.textContent = hasOaths ? String(counts.oaths) : '';
+      oathEl.hidden = !hasOaths;
+    }
+    if (separatorEl) separatorEl.hidden = !(hasOaths && hasAbominations);
+    if (abominationEl) {
+      abominationEl.textContent = hasAbominations ? String(counts.abominations) : '';
+      abominationEl.hidden = !hasAbominations;
+    }
   }
+  if (clearEl) clearEl.hidden = !hasSelections;
+  if (endIconEl) endIconEl.hidden = hasSelections;
 }
 
 function showBindFatesError(msg){
@@ -85,32 +104,6 @@ function writeJsonStorage(key, value) {
 
 // ---------- wireup ----------
 document.addEventListener('DOMContentLoaded', ()=>{
-  const slider = document.getElementById('cohesionRange');
-
-  const applyThreshold = (t) => {
-    if (window.App && typeof window.App.setCohesion === 'function') {
-      window.App.setCohesion(t);
-    }
-  };
-
-  if (slider) {
-    let initialThreshold = 3/4;
-    try {
-      const st = window.App && window.App.state;
-      if (st && typeof st.cohesionThreshold === 'number') {
-        initialThreshold = st.cohesionThreshold;
-      }
-    } catch (e) {}
-
-    slider.value = String(thresholdToSliderValue(initialThreshold));
-    applyThreshold(initialThreshold);
-
-    slider.addEventListener('input', (e) => {
-      const t = sliderValueToThreshold(e.target.value);
-      applyThreshold(t);
-    });
-  }
-
   const bindBar = document.getElementById('bind-fates-bar');
   const toggleBtn = bindBar?.querySelector('.bind-fates-toggle');
   const clearBtn = document.getElementById('bind-fates-clear');
@@ -128,7 +121,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const standardSections = {
     ascendancy: { listEl: document.getElementById('bind-fates-list-ascendancy'), heading: 'Ascendancy', hint: 'Swear Oaths to favored ascendancies, or name Abominations that fate will never grant.' },
     weapon: { listEl: document.getElementById('bind-fates-list-weapon'), heading: 'Weapon', hint: 'Bind yourself to chosen arms, or curse weapons you will never wield.' },
-    combat: { listEl: document.getElementById('bind-fates-list-combat'), heading: 'Combat Mechanics', hint: 'Favor certain ailments or tactics, or name those that are forbidden.' }
+    combat: { listEl: document.getElementById('bind-fates-list-combat'), heading: 'Combat Mechanics', hint: 'Favor Offense concepts, or name those that are forbidden.' }
   };
 
   const challengeSections = {
@@ -215,14 +208,14 @@ document.addEventListener('DOMContentLoaded', ()=>{
       return Array.from(ascSet).sort();
     }
     if (category === 'weapon') {
-      const two = Array.isArray(data.Weapons?.['Two-Handed']) ? data.Weapons['Two-Handed'] : [];
-      const one = Array.isArray(data.Weapons?.['One-Handed']) ? data.Weapons['One-Handed'] : [];
-      return [...two, ...one].map((w) => w.name);
+      return deriveWeaponFamilies(data).map((family) => family.name);
     }
     if (category === 'combat') {
-      const ail = (data.Ailments || []).map((a) => ({ name: a.name, kind: 'ailment' }));
-      const tac = (data.Tactics || []).map((t) => ({ name: t.name, kind: 'tactic' }));
-      return [...ail, ...tac];
+      return resolveRollableOffenseElements(data).map((entry) => ({
+        name: entry.id,
+        label: entry.name,
+        kind: 'offense'
+      }));
     }
     return [];
   };
@@ -250,6 +243,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     if (combat) combat.hidden = isChallenge;
     if (dividerEls[1]) dividerEls[1].hidden = isChallenge;
+    if (dividerEls[2]) dividerEls[2].hidden = isChallenge;
 
     const setMeta = (sectionEl, heading, hint) => {
       const meta = getSectionMeta(sectionEl);

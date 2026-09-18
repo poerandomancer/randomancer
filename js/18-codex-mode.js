@@ -1,5 +1,5 @@
 import { ensureDataPreload } from './08-data-load.js';
-import { ensureMarketBadgeDelegation, hydrateMarketBadges, renderMarketBadgeMarkup } from './features/market-price.js';
+import { normalizeUniqueSlotLabel } from './19-uniques-adapter.js';
 import { canonicalizeTag, displayTag, isNoiseTag } from './tag-normalization.js';
 
 const state = {
@@ -259,7 +259,6 @@ function renderUniqueBody(entry) {
   const flavour = Array.isArray(entry.extraFields?.flavourText) ? entry.extraFields.flavourText.filter(Boolean) : [];
   return `
     <div class="codex-unique-body">
-      ${renderMarketBadgeMarkup({ name: entry.name }, { context: 'codex' })}
       ${reqLine ? `<p><strong>Requirements:</strong> ${mark(reqLine)}</p>` : ''}
       ${implicit}
       ${explicit}
@@ -331,7 +330,6 @@ function renderList() {
   }
 
   els.listMount.innerHTML = `<div class="codex-list-scroll">${warningHtml}${html}</div>`;
-  hydrateMarketBadges(els.listMount);
   applyAccordionState();
   initExclusiveAccordion(els.listMount, { detailsSelector: 'details.rc-acc', allowNoneOpen: true });
 }
@@ -429,6 +427,9 @@ function buildIndex() {
   function isBrowsableSkill(gem) {
     const hay = `${gem?.name || ''} ${gem?.id || ''} ${gem?.base_item?.display_name || ''} ${gem?.description || ''} ${gem?.support_text || ''}`.toLowerCase();
     if (!hay.trim()) return false;
+    const sourceTags = Array.isArray(gem?.source_tags) ? gem.source_tags : [];
+    if (sourceTags.some((tag) => canonicalizeTag(tag) === 'derived_template')) return false;
+    if (/\{\d+\}/.test(hay)) return false;
     if (hay.includes('dnt')) return false;
     if (hay.includes('unused')) return false;
     if (hay.includes('playtest')) return false;
@@ -510,7 +511,8 @@ function buildIndex() {
   uniques.forEach((u) => {
     const name = u?.name;
     if (!name) return;
-    const slot = u?.slot || 'Unknown';
+    const sourceSlot = String(u?.slot || '').trim();
+    const slot = normalizeUniqueSlotLabel(sourceSlot) || 'Unknown';
     const base = u?.base || '';
     const implicitMods = Array.isArray(u?.implicit_mods) ? u.implicit_mods.filter(Boolean) : [];
     const explicitMods = Array.isArray(u?.explicit_mods) ? u.explicit_mods.filter(Boolean) : [];
@@ -529,6 +531,7 @@ function buildIndex() {
       tags,
       extraFields: {
         slot,
+        sourceSlot,
         base,
         requirements: u?.requirements || {},
         implicitMods,
@@ -569,7 +572,6 @@ function buildIndex() {
 }
 
 function bind() {
-  ensureMarketBadgeDelegation();
   els.panel = document.getElementById('codex-panel');
   els.search = document.getElementById('codex-search');
   els.tags = document.getElementById('codex-tag-chips');
@@ -681,7 +683,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       state.uniquesLoadWarning = '';
       return mapped;
     } catch {
-      state.uniquesLoadWarning = 'Uniques dataset unavailable. Generate and commit data/enriched/poe2db_uniques_min.json to enable Codex uniques browsing.';
+      state.uniquesLoadWarning = 'Uniques dataset unavailable. Generate and commit data/enriched/poe2db_uniques_min.json to enable unique browsing in the Archive.';
       return [];
     }
   }

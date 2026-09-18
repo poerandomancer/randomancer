@@ -4,7 +4,7 @@
     "Id": "Blight&ArcaneSurge",
     "Description": "Grants a temporary buff after spending enough mana with Blight. The buff grants Blight more spell damage, and mana regeneration for sustaining casting.",
     "VideoURL1": "http://web.poecdn.com/public/videos/Blight/Blight+Arcane%20Surge.bk2 ",
-    "SkillGemsKey": 140,
+    "SkillGemsKey": 144,
     "VideoURL2": "http://down.qq.com/poe/videos/skills/Blight/Blight+ArcaneSurge.bk2",
     "CharactersKeys": []
   },
@@ -13,7 +13,7 @@
     "Id": "Blight&ControlledDestruction",
     "Description": "Grants more spell damage but reduces critical strike chance. However, Blight cannot critically hit meaning Controlled Destruction gives more spell damage with no drawbacks.",
     "VideoURL1": "http://web.poecdn.com/public/videos/Blight/Blight+Controlled%20Destruction.bk2 ",
-    "SkillGemsKey": 111,
+    "SkillGemsKey": 112,
     "VideoURL2": "http://down.qq.com/poe/videos/skills/Blight/Blight+ControlledDestruction.bk2",
     "CharactersKeys": []
   },
@@ -67,7 +67,7 @@
     "Id": "FreezingPulse&ControlledDestruction",
     "Description": "Grants more spell damage to Freezing Pulse but reduces critical strike chance. The more spell damage provided by this support allows a direct and stable increase in damage not contingent on critical strikes.",
     "VideoURL1": "http://web.poecdn.com/public/videos/FreezingPulse/FreezingPulse+ControlledDestruction.bk2 ",
-    "SkillGemsKey": 111,
+    "SkillGemsKey": 112,
     "VideoURL2": "http://down.qq.com/poe/videos/skills/FreezingPulse/FreezingPulse+ControlledDestruction.bk2",
     "CharactersKeys": []
   },
@@ -112,7 +112,7 @@
     "Id": "LightingTendrils&ControlledDestruction",
     "Description": "Grants more spell damage to Lightning Tendrils but reduces critical strike chance. The more spell damage provided by this support allows a direct and stable increase in damage, not contingent on critical strikes.",
     "VideoURL1": "http://web.poecdn.com/public/videos/LightningTendrils/LightningTendrils+ControlledDestruction.bk2 ",
-    "SkillGemsKey": 111,
+    "SkillGemsKey": 112,
     "VideoURL2": "http://down.qq.com/poe/videos/skills/LightningTendrils/LightningTendrils+ControlledDestruction.bk2",
     "CharactersKeys": []
   },
@@ -121,7 +121,7 @@
     "Id": "LightingTendrils&ElementalFocus",
     "Description": "Removes the ability for Lightning Tendrils to inflict elemental ailments, such as shock, on enemies. However, it significantly boosts Lightning Tendril's elemental damage.",
     "VideoURL1": "http://web.poecdn.com/public/videos/LightningTendrils/LightningTendrils+ElementalFocus_1.bk2 ",
-    "SkillGemsKey": 114,
+    "SkillGemsKey": 115,
     "VideoURL2": "http://down.qq.com/poe/videos/skills/LightningTendrils/LightingTendrils+ElementalFocus.bk2",
     "CharactersKeys": []
   },
@@ -211,7 +211,7 @@
     "Id": "Fireball&ControlledDestruction",
     "Description": "Grants more spell damage to Fireball but reduces critical strike chance. The more spell damage provided by this support allows a direct and stable increase in damage not contingent on critical strikes.",
     "VideoURL1": "http://web.poecdn.com/public/videos/Fireball/Fireball+ControlledDestruction.bk2",
-    "SkillGemsKey": 111,
+    "SkillGemsKey": 112,
     "VideoURL2": "http://down.qq.com/poe/videos/skills/Fireball/Fireball+ControlledDestruction.bk2",
     "CharactersKeys": []
   },
@@ -238,7 +238,7 @@
     "Id": "Fireball&IgniteProliferate",
     "Description": "Increases the chance to inflict ignites on enemies with Fireball, whilst also enabling ignites to spread to nearby enemies.",
     "VideoURL1": "http://web.poecdn.com/public/videos/Fireball/Fireball+IgniteProliferation.bk2",
-    "SkillGemsKey": 125,
+    "SkillGemsKey": 129,
     "VideoURL2": "http://down.qq.com/poe/videos/skills/Fireball/Fireball+IgniteProliferation.bk2",
     "CharactersKeys": []
   },
@@ -382,7 +382,7 @@
     "Id": "EtheralKnives&ControlledDestruction",
     "Description": "Grants more spell damage to Ethereal Knives but reduces critical strike chance. The more spell damage provided by this support allows a direct and stable increase in damage not contingent on critical strikes.",
     "VideoURL1": "http://web.poecdn.com/public/videos/EtherealKnives/EtherealKnives+ControlledDestruction.bk2",
-    "SkillGemsKey": 111,
+    "SkillGemsKey": 112,
     "VideoURL2": "http://down.qq.com/poe/videos/skills/EtherealKnives/EtherealKnives+ControlledDestruction.bk2",
     "CharactersKeys": []
   },
@@ -463,7 +463,7 @@
     "Id": "ExplosiveTrap&ControlledDestruction",
     "Description": "Grants more spell damage to Explosive Trap but reduces critical strike chance. The more spell damage provided by this support allows a direct and stable increase in damage not contingent on critical strikes.",
     "VideoURL1": "http://web.poecdn.com/public/videos/ExplosiveTrap/ExplosiveTrap+ControlledDestruction.bk2",
-    "SkillGemsKey": 111,
+    "SkillGemsKey": 112,
     "VideoURL2": "http://down.qq.com/poe/videos/skills/ExplosiveTrap/ExplosiveTrap+ControlledDestruction.bk2",
     "CharactersKeys": []
   },
@@ -472,7 +472,7 @@
     "Id": "ExplosiveTrap&ElementalFocus",
     "Description": "Removes the ability for Explosive Trap to inflict elemental ailments, such as ignite, on enemies. However, it significantly increases the amount of elemental damage Explosive Trap does. Converting all physical damage from Explosive Trap to elemental damage maximizes the benefit this support provides.",
     "VideoURL1": "http://web.poecdn.com/public/videos/ExplosiveTrap/ExplosiveTrap+ElementalFocus.bk2",
-    "SkillGemsKey": 114,
+    "SkillGemsKey": 115,
     "VideoURL2": "http://down.qq.com/poe/videos/skills/ExplosiveTrap/ExplosiveTrap+ElementalFocus.bk2",
     "CharactersKeys": []
   },
@@ -598,7 +598,7 @@
     "Id": "SpectralThrow&ChanceToBleed",
     "Description": "Increases the chance of inflicting the bleed ailment on enemies with Spectral Throw. Bleeding deals physical damage over time, with more damage dealt to moving targets. This support also adds a small amount of flat physical damage to Spectral Throw.",
     "VideoURL1": "http://web.poecdn.com/public/videos/SpectralThrow/SpectralThrow+ChancetoBleed.bk2",
-    "SkillGemsKey": 126,
+    "SkillGemsKey": 130,
     "VideoURL2": "http://down.qq.com/poe/videos/skills/SpectralThrow/SpectralThrow+ChancetoBleed.bk2",
     "CharactersKeys": []
   },
@@ -616,7 +616,7 @@
     "Id": "SpectralThrow&Maim",
     "Description": "Grants Spectral Throw a chance to Maim enemies on hit. Maimed enemies have reduced movement speed and take increased physical damage. This support also gives more physical damage with Spectral Throw.",
     "VideoURL1": "http://web.poecdn.com/public/videos/SpectralThrow/SpectralThrow+Maim.bk2",
-    "SkillGemsKey": 133,
+    "SkillGemsKey": 137,
     "VideoURL2": "http://down.qq.com/poe/videos/skills/SpectralThrow/SpectralThrow+Maim.bk2",
     "CharactersKeys": []
   },
@@ -814,7 +814,7 @@
     "Id": "GroundSlam&Brutality",
     "Description": "Greatly increases the physical damage of Ground Slam but means you cannot deal chaos or elemental damage. Use this support with a strong physical damage weapon. ",
     "VideoURL1": "http://web.poecdn.com/public/videos/GroundSlam/GroundSlam+Brutality.bk2",
-    "SkillGemsKey": 136,
+    "SkillGemsKey": 140,
     "VideoURL2": "http://down.qq.com/poe/videos/skills/GroundSlam/GroundSlam+Brutality.bk2",
     "CharactersKeys": []
   },
@@ -823,7 +823,7 @@
     "Id": "GroundSlam&ChanceToBleed",
     "Description": "Increases the chance of inflicting the bleed ailment on enemies with Ground Slam. Bleeding deals physical damage over time, with more damage dealt to moving targets. This support also adds a small amount of flat physical damage to Ground Slam. ",
     "VideoURL1": "http://web.poecdn.com/public/videos/GroundSlam/GroundSlam+ChancetoBleed.bk2",
-    "SkillGemsKey": 126,
+    "SkillGemsKey": 130,
     "VideoURL2": "http://down.qq.com/poe/videos/skills/GroundSlam/GroundSlam+ChancetoBleed.bk2",
     "CharactersKeys": []
   },
@@ -841,7 +841,7 @@
     "Id": "GroundSlam&Maim",
     "Description": "Grants Ground Slam a chance to Maim enemies on hit. Maimed enemies have reduced movement speed and take increased physical damage. This support also gives more physical damage with Ground Slam. ",
     "VideoURL1": "http://web.poecdn.com/public/videos/GroundSlam/GroundSlam+Maim.bk2",
-    "SkillGemsKey": 133,
+    "SkillGemsKey": 137,
     "VideoURL2": "http://down.qq.com/poe/videos/skills/GroundSlam/GroundSlam+Maim.bk2",
     "CharactersKeys": []
   },
@@ -877,7 +877,7 @@
     "Id": "HeavyStrike&Brutality",
     "Description": "Greatly increases the physical damage of Heavy Strike but means you cannot deal chaos or elemental damage. Use this support with a strong physical damage weapon.",
     "VideoURL1": "http://web.poecdn.com/public/videos/HeavyStrike/HeavyStrike+Brutality.bk2",
-    "SkillGemsKey": 136,
+    "SkillGemsKey": 140,
     "VideoURL2": "http://down.qq.com/poe/videos/skills/HeavyStrike/HeavyStrike+Brutality.bk2",
     "CharactersKeys": []
   },
@@ -886,7 +886,7 @@
     "Id": "HeavyStrike&ChanceToBleed",
     "Description": "Increases the chance of inflicting the bleed ailment on enemies with Heavy Strike. Bleeding deals physical damage over time, with more damage dealt to moving targets. This support also adds a small amount of flat physical damage to Heavy Strike.",
     "VideoURL1": "http://web.poecdn.com/public/videos/HeavyStrike/HeavyStrike+ChancetoBleed.bk2",
-    "SkillGemsKey": 126,
+    "SkillGemsKey": 130,
     "VideoURL2": "http://down.qq.com/poe/videos/skills/HeavyStrike/HeavyStrike+ChancetoBleed.bk2",
     "CharactersKeys": []
   },
@@ -922,7 +922,7 @@
     "Id": "Cleave&ChanceToBleed",
     "Description": "Increases the chance of inflicting the bleed ailment on enemies with Cleave. Bleeding deals physical damage over time, with more damage dealt to moving targets. This support also adds a small amount of flat physical damage to Cleave.",
     "VideoURL1": "http://web.poecdn.com/public/videos/Cleave/Cleave+ChancetoBleed.bk2",
-    "SkillGemsKey": 126,
+    "SkillGemsKey": 130,
     "VideoURL2": "http://down.qq.com/poe/videos/skills/Cleave/Cleave+ChancetoBleed.bk2",
     "CharactersKeys": []
   },
@@ -949,7 +949,7 @@
     "Id": "Cleave&Maim",
     "Description": "Grants Cleave a chance to Maim enemies on hit. Maimed enemies have reduced movement speed and take increased physical damage. This support also gives more physical damage with Cleave.",
     "VideoURL1": "http://web.poecdn.com/public/videos/Cleave/Cleave+Maim.bk2",
-    "SkillGemsKey": 133,
+    "SkillGemsKey": 137,
     "VideoURL2": "http://down.qq.com/poe/videos/skills/Cleave/Cleave+Maim.bk2",
     "CharactersKeys": []
   },
@@ -985,7 +985,7 @@
     "Id": "DoubleStrike&ChanceToBleed",
     "Description": "Increases the chance of inflicting the bleed ailment on enemies with Double Strike. Bleeding deals physical damage over time, with more damage dealt to moving targets. This support also adds a small amount of flat physical damage to Double Strike.",
     "VideoURL1": "http://web.poecdn.com/public/videos/DoubleStrike/DoubleStrike+ChancetoBleed.bk2",
-    "SkillGemsKey": 126,
+    "SkillGemsKey": 130,
     "VideoURL2": "http://down.qq.com/poe/videos/skills/DoubleStrike/Doublestrike+ChancetoBleed.bk2",
     "CharactersKeys": []
   },
@@ -1075,7 +1075,7 @@
     "Id": "MoltenStrike&ElementalFocus",
     "Description": "Removes the ability for Molten Strike to inflict elemental ailments, such as ignite, on enemies. However, it significantly boosts the amount of elemental damage Molten Strike does. Converting all physical damage from Molten Strike to elemental damage maximizes the benefit this support provides.",
     "VideoURL1": "http://web.poecdn.com/public/videos/MoltenStrike/MoltenStrike+ElementalFocus.bk2",
-    "SkillGemsKey": 114,
+    "SkillGemsKey": 115,
     "VideoURL2": "http://down.qq.com/poe/videos/skills/MoltenStrike/MoltenStrike+ElementalFocus.bk2",
     "CharactersKeys": []
   },
@@ -1147,7 +1147,7 @@
     "Id": "CausticArrow&WitheringTouch",
     "Description": "Grants extra chaos damage based on your physical damage. It also has a chance to inflict the Withered debuff which causes enemies to take 6% increased chaos damage per Wither stack (up to 15). ",
     "VideoURL1": "http://web.poecdn.com/public/videos/CausticArrow/CausticArrow+WitheringTouch.bk2",
-    "SkillGemsKey": 142,
+    "SkillGemsKey": 146,
     "VideoURL2": "http://down.qq.com/poe/videos/skills/CausticArrow/CausticArrow+WitheringTouch.bk2",
     "CharactersKeys": []
   },
@@ -1210,7 +1210,7 @@
     "Id": "Smite&ElementalFocus",
     "Description": "Removes the ability for Smite to inflict elemental ailments, such as shock, on enemies. However, it significantly boosts the amount of elemental damage Smite does. Converting all physical damage from Smite to elemental damage maximizes the benefit this support provides.",
     "VideoURL1": "http://web.poecdn.com/public/videos/Smite/Smite+ElementalFocus.bk2",
-    "SkillGemsKey": 114,
+    "SkillGemsKey": 115,
     "VideoURL2": "http://down.qq.com/poe/videos/skills/Smite/Smite+ElementalFocus.bk2",
     "CharactersKeys": []
   },
@@ -1246,7 +1246,7 @@
     "Id": "Frostbolt&ControlledDestruction",
     "Description": "Grants more spell damage to Frostbolt but reduces critical strike chance. The more spell damage provided by this support allows a direct and stable increase in damage not contingent on critical strikes.",
     "VideoURL1": "http://web.poecdn.com/public/videos/Frostbolt/Frostbolt+ControlledDestruction.bk2",
-    "SkillGemsKey": 111,
+    "SkillGemsKey": 112,
     "VideoURL2": "http://down.qq.com/poe/videos/skills/Frostbolt/Frostbolt%20+%20Controlled%20Destruction.bk2",
     "CharactersKeys": []
   },
@@ -1372,7 +1372,7 @@
     "Id": "SplitArrow&ChanceToBleed",
     "Description": "Increases the chance of inflicting the bleed ailment on enemies with Split Arrow. Bleeding deals physical damage over time, with more damage dealt to moving targets. This support also adds a small amount of flat physical damage to Split Arrow.",
     "VideoURL1": "http://web.poecdn.com/public/videos/SplitArrow/SplitArrow+ChancetoBleed.bk2",
-    "SkillGemsKey": 126,
+    "SkillGemsKey": 130,
     "VideoURL2": "http://down.qq.com/poe/videos/skills/SplitArrow/SplitArrow+FasterAttacks.bk2",
     "CharactersKeys": []
   },
@@ -1408,7 +1408,7 @@
     "Id": "PurifyingFlame&ControlledDestruction",
     "Description": "Grants more spell damage to Purifying Flame but reduces critical strike chance. The more spell damage provided by this support allows a direct and stable increase in damage not contingent on critical strikes.",
     "VideoURL1": "http://web.poecdn.com/public/videos/PurifyingFlame/PF+ControlledDestruction.bk2",
-    "SkillGemsKey": 111,
+    "SkillGemsKey": 112,
     "VideoURL2": "https://down.qq.com/poe/videos/skills/PurifyingFlames/PurifyingFlames+ControlledDestructionCN.bk2",
     "CharactersKeys": []
   },
@@ -1417,7 +1417,7 @@
     "Id": "PurifyingFlame&Unleash",
     "Description": "Slowly grants charges of Purifying Flame over time. These expend when cast to unleash repeat effects of the skill, rapidly damaging enemies multiple times. The damage of the unleashed casts are slightly reduced.",
     "VideoURL1": "http://web.poecdn.com/public/videos/PurifyingFlame/PF+Unleash.bk2",
-    "SkillGemsKey": 145,
+    "SkillGemsKey": 149,
     "VideoURL2": "https://down.qq.com/poe/videos/skills/PurifyingFlames/PurifyingFlames+UnleashCN.bk2",
     "CharactersKeys": []
   },
@@ -1426,7 +1426,7 @@
     "Id": "PurifyingFlame&ElementalFocus",
     "Description": "Removes the ability for Purifying Flame to inflict elemental ailments, such as ignite, on enemies. However, it significantly increases the amount of elemental damage Purifying Flame does. Converting all physical damage from Purifying Flame to elemental damage maximizes the benefit this support provides.",
     "VideoURL1": "http://web.poecdn.com/public/videos/PurifyingFlame/PF+EF.bk2",
-    "SkillGemsKey": 114,
+    "SkillGemsKey": 115,
     "VideoURL2": "https://down.qq.com/poe/videos/skills/PurifyingFlames/PurifyingFlames+ElementalFocusCN.bk2",
     "CharactersKeys": []
   },
@@ -1552,7 +1552,7 @@
     "Id": "Perforate&Maim",
     "Description": "Support Perforate with this gem to Maim enemies, dealing more physical damage and slowing their movement. Use this to slow monsters and make them easier to avoid.",
     "VideoURL1": "http://web.poecdn.com/public/videos/Perforate/EPerforateMaim.bk2",
-    "SkillGemsKey": 133,
+    "SkillGemsKey": 137,
     "VideoURL2": "https://down.qq.com/poe/videos/skills/TPerforateMaim.bk2",
     "CharactersKeys": []
   },
@@ -1570,7 +1570,7 @@
     "Id": "Perforate&CloseCombat",
     "Description": "Close Combat improves your damage against monsters close to you. As Perforate only hits nearby enemies (without Sand stance), this support is a valuable way to increase your damage.\n\nTravel Skills are also quicker after you hit enemies with this gem. Travel skills move you quickly to avoid danger.",
     "VideoURL1": "http://web.poecdn.com/public/videos/Perforate/EPerforateClosecombat.bk2",
-    "SkillGemsKey": 147,
+    "SkillGemsKey": 151,
     "VideoURL2": "https://down.qq.com/poe/videos/skills/TPerforateCloseCombat.bk2",
     "CharactersKeys": []
   },
@@ -1588,7 +1588,7 @@
     "Id": "Perforate&Brutality",
     "Description": "Cause Perforate to deal much more physical damage, but reduce any elemental damage it deals to zero.\n\nTry not to get any modifiers that grant lightning, fire, cold or chaos damage with this support gem. Only physical damage will be increased by this gem.",
     "VideoURL1": "http://web.poecdn.com/public/videos/Perforate/EPerforateBrutality.bk2",
-    "SkillGemsKey": 136,
+    "SkillGemsKey": 140,
     "VideoURL2": "https://down.qq.com/poe/videos/skills/TPerforateBrutality.bk2",
     "CharactersKeys": []
   },
@@ -1750,7 +1750,7 @@
     "Id": "SplittingSteel&Brutality",
     "Description": "Cause Splitting Steel to deal much more physical damage, but no elemental damage.\n\nTry not to get additional lightning, fire, cold or chaos damage with this support gem, as they will be reduced to zero.",
     "VideoURL1": "http://web.poecdn.com/public/videos/ShatteringSteel/ESplitBrutality.bk2",
-    "SkillGemsKey": 136,
+    "SkillGemsKey": 140,
     "VideoURL2": "http://down.qq.com/poe/videos/tutorial/TSplitImpale.bk2",
     "CharactersKeys": []
   },
@@ -1777,7 +1777,7 @@
     "Id": "SplittingSteel&Maim",
     "Description": "Support Splitting Steel with this gem to Maim enemies, dealing more physical damage and slowing their movement. Slow monsters to make them easier to avoid.",
     "VideoURL1": "http://web.poecdn.com/public/videos/ShatteringSteel/ESplitMaim.bk2",
-    "SkillGemsKey": 133,
+    "SkillGemsKey": 137,
     "VideoURL2": "http://down.qq.com/poe/videos/tutorial/TSplitMaim.bk2",
     "CharactersKeys": []
   },
@@ -1831,7 +1831,7 @@
     "Id": "ShieldCrush&Brutality",
     "Description": "Greatly increases the physical damage caused by Shield Crush at the price of Shield Crush being unable to deal chaos or elemental damage when supported by this gem.",
     "VideoURL1": "http://web.poecdn.com/public/videos/ShieldCrush/ShieldCrushMeleePhysBrutality.bk2",
-    "SkillGemsKey": 136,
+    "SkillGemsKey": 140,
     "VideoURL2": "http://down.qq.com/poe/videos/tutorial/ShieldCrushMeleePhysBrutality.bk2",
     "CharactersKeys": []
   }
