@@ -9,6 +9,7 @@ import {
   deriveChallengeCardModel,
   renderChallengeCard
 } from './02-summary-view.js';
+import { getPendingSnapshotReadiness } from './primary-card-roll-freshness.js';
 
 const STAGE_ID = 'primary-build-card-stage';
 const MOUNT_ID = 'primary-build-card-mount';
@@ -26,6 +27,7 @@ let uniqueHydrationKey = '';
 let pendingRoll = null;
 let pendingRollTimer = 0;
 let revealTimer = 0;
+let freshnessTimer = 0;
 let transitionCleanupTimer = 0;
 
 function isBuildMode() {
@@ -353,6 +355,10 @@ function clearPendingRoll() {
     window.clearTimeout(revealTimer);
     revealTimer = 0;
   }
+  if (freshnessTimer) {
+    window.clearTimeout(freshnessTimer);
+    freshnessTimer = 0;
+  }
   if (transitionCleanupTimer) {
     window.clearTimeout(transitionCleanupTimer);
     transitionCleanupTimer = 0;
@@ -408,11 +414,17 @@ function armDrawAnimation({ forceFresh = false } = {}) {
   }, ROLL_TIMEOUT_MS);
 }
 
-function pendingRollHasFreshSnapshot() {
-  if (!pendingRoll || !hasUsableBuild(pendingRoll.latestSnapshot)) return false;
+function pendingRollSnapshotReadiness() {
+  if (!pendingRoll || !hasUsableBuild(pendingRoll.latestSnapshot)) {
+    return { ready: false, retryAfter: null };
+  }
   const latestIdentity = getBuildIdentity(pendingRoll.latestSnapshot);
-  if (latestIdentity && latestIdentity !== pendingRoll.startIdentity) return true;
-  return (performance.now() - pendingRoll.startedAt) >= SAME_IDENTITY_FALLBACK_MS;
+  return getPendingSnapshotReadiness(
+    pendingRoll,
+    latestIdentity,
+    performance.now(),
+    SAME_IDENTITY_FALLBACK_MS
+  );
 }
 
 function minimumRevealAt() {
@@ -424,14 +436,28 @@ function minimumRevealAt() {
 }
 
 function maybeRevealPendingRoll() {
-  if (!pendingRoll || !pendingRollHasFreshSnapshot()) return;
+  if (!pendingRoll) return;
+  const readiness = pendingRollSnapshotReadiness();
+  if (!readiness.ready) {
+    if (readiness.retryAfter !== null && !freshnessTimer) {
+      freshnessTimer = window.setTimeout(() => {
+        freshnessTimer = 0;
+        maybeRevealPendingRoll();
+      }, readiness.retryAfter);
+    }
+    return;
+  }
+  if (freshnessTimer) {
+    window.clearTimeout(freshnessTimer);
+    freshnessTimer = 0;
+  }
   if (pendingRoll.hadResult && !prefersReducedMotion() && !pendingRoll.advanceStartedAt) return;
 
   const delay = Math.max(0, minimumRevealAt() - performance.now());
   if (revealTimer) window.clearTimeout(revealTimer);
   revealTimer = window.setTimeout(() => {
     revealTimer = 0;
-    if (!pendingRoll || !pendingRollHasFreshSnapshot()) return;
+    if (!pendingRoll || !pendingRollSnapshotReadiness().ready) return;
     revealPendingRoll(pendingRoll.latestSnapshot);
   }, delay);
 }
@@ -454,6 +480,10 @@ function revealPendingRoll(snapshot) {
   if (revealTimer) {
     window.clearTimeout(revealTimer);
     revealTimer = 0;
+  }
+  if (freshnessTimer) {
+    window.clearTimeout(freshnessTimer);
+    freshnessTimer = 0;
   }
 
   pendingRoll = null;
