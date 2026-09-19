@@ -84,3 +84,23 @@ Important caveat: semantic stability is intentionally conservative. It is design
 - `generate_keystone_tooltips` is invoked with `--allow-fallback`.
 - The pipeline now fails that step if `data/enriched/keystone_tooltips.json` is written but contains zero entries.
 - Python 3.9 compatibility: removed `dataclass(slots=True)` usage in the wrapper modules.
+# Build presentation assets
+
+Build titles are composed from `randomancer_build_names.json`. Vocabulary is grouped by
+ascendancy, normalized weapon, offense family, and exact-offense override. Keep words in
+their grammatical role (`adjective`, `identity`, `noun`, `motif`, or `possessiveMotif`); templates
+may use placeholders such as `{ascendancy.adjective}`, `{weapon.identity}`, and
+`{offense.noun}`. A template is automatically skipped when any required role is absent.
+Exact offense entries can declare `inherits` to layer specific words over a family. Add
+`collisionKeys` to object-form terms when two choices should never appear together.
+
+Complete build subtitles live under `build_flavor` in
+`randomancer_flavor_manifest.json`. The configurable pool weights choose between sparse
+`Ascendancy:family` combinations, ascendancy, exact/family offense, weapon, and class
+pools. Every array item must be a finished sentence: subtitle selection never joins
+fragments. New vocabulary, templates, Poison lines, or combination lines require only a
+JSON edit; retain the documented role/pool names and valid JSON.
+
+For an editorial review across rotating ascendancies, weapons, offense families, and
+exact-offense overrides, run `node scripts/sample-build-names.mjs`. Pass a number to
+change the sample size, for example `node scripts/sample-build-names.mjs 120`.

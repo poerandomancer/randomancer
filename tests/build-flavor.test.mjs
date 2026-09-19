@@ -71,3 +71,24 @@ test('selected flavor remains a stored snapshot outcome through render and hydra
   assert.match(hydrationSource, /flavor:\s*draw\.f\s*\|\|\s*['"]['"]/);
   assert.match(hydrationSource, /#build-subtext[^\n]+snap\.flavor/);
 });
+
+test('weighted contextual pools select complete authored phrases unchanged', () => {
+  const base={build_flavor:{settings:{poolWeights:{combination:0,ascendancy:0,offense:0,weapon:0,class:0}},ascendancies:{Chronomancer:['Asc complete.']},weapons:{Bow:['Weapon complete.']},offenseFamilies:{chaos:['Chaos complete.']},offenseOverrides:{Poison:['Poison complete.']},combinations:{'Chronomancer:chaos':['Combination complete.']},classes:{Sorceress:['Class complete.']},fallback:['Fallback complete.']}};
+  const context={className:'Sorceress',ascendancy:'Chronomancer',weapon:'Bow',offense:'Poison'};
+  for(const [type, expected] of [['combination','Combination complete.'],['ascendancy','Asc complete.'],['weapon','Weapon complete.'],['class','Class complete.']]) {
+    const fixture=structuredClone(base); fixture.build_flavor.settings.poolWeights[type]=1;
+    assert.equal(selectBuildFlavor(fixture,context,{random:()=>0}),expected);
+  }
+  const offense=structuredClone(base); offense.build_flavor.settings.poolWeights.offense=1;
+  assert.equal(selectBuildFlavor(offense,context,{random:()=>0}),'Poison complete.');
+  assert.equal(selectBuildFlavor(offense,context,{random:()=>.999}),'Chaos complete.');
+});
+
+test('manifest weights, contextual pools, and complete phrases remain data-owned',()=>{
+  assert.ok(manifest.build_flavor.settings.poolWeights.ascendancy > manifest.build_flavor.settings.poolWeights.weapon);
+  assert.ok(manifest.build_flavor.weapons.Bow.length);
+  assert.ok(manifest.build_flavor.offenseFamilies.chaos.length);
+  assert.ok(manifest.build_flavor.offenseOverrides.Poison.length);
+  assert.ok(manifest.build_flavor.combinations['Chronomancer:cold'].length);
+  assert.doesNotMatch(selectorSource,/Winter waits|Distance sharpens|Patience makes/);
+});

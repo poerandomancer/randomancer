@@ -44,6 +44,15 @@
     "For when respeccing once just isn’t enough."
   ],
   "build_flavor": {
+    "settings": {
+      "poolWeights": {
+        "combination": 15,
+        "ascendancy": 50,
+        "offense": 20,
+        "weapon": 10,
+        "class": 5
+      }
+    },
     "fallback": [
       "Steel, instinct, and strange conviction.",
       "Power takes many shapes.",
@@ -306,6 +315,136 @@
         "The present was chosen.",
         "Every path leaves an omen.",
         "Tomorrow casts a shadow."
+      ],
+      "Spirit Walker": [
+        "The veil is only another road.",
+        "Ancestors keep pace."
+      ],
+      "Martial Artist": [
+        "Discipline makes motion inevitable.",
+        "The open hand conceals no weakness."
+      ]
+    },
+    "weapons": {
+      "Mace": [
+        "Some arguments require weight.",
+        "Iron settles the matter."
+      ],
+      "Quarterstaff": [
+        "Balance turns defense into motion.",
+        "The reed bends, then strikes."
+      ],
+      "Bow": [
+        "Distance sharpens intent.",
+        "An arrow remembers its purpose."
+      ],
+      "Crossbow": [
+        "One bolt can end the debate.",
+        "The mechanism waits without fear."
+      ],
+      "Staff": [
+        "Power needs a steady hand.",
+        "The rune points the way."
+      ],
+      "Talisman": [
+        "The beast is never far away.",
+        "Old teeth remember old laws."
+      ],
+      "Wand": [
+        "A gesture becomes a sentence.",
+        "Small instruments command great power."
+      ],
+      "Sceptre": [
+        "Authority has an edge.",
+        "The crown answers darker laws."
+      ],
+      "Spear": [
+        "Reach decides the first exchange.",
+        "The point arrives before doubt."
+      ],
+      "Shield": [
+        "Hold fast, then advance.",
+        "A wall can learn to hunt."
+      ],
+      "Buckler": [
+        "A quick guard leaves room to answer."
+      ],
+      "Focus": [
+        "Clarity is its own weapon."
+      ]
+    },
+    "offenseFamilies": {
+      "physical": [
+        "Force needs no translation.",
+        "Stone yields to conviction."
+      ],
+      "fire": [
+        "Ash is proof enough.",
+        "Every victory leaves an ember."
+      ],
+      "cold": [
+        "Winter leaves little room for error.",
+        "Frost keeps its own counsel."
+      ],
+      "lightning": [
+        "Thunder announces no compromise.",
+        "The storm chooses its own path."
+      ],
+      "chaos": [
+        "Some wounds refuse to heal.",
+        "The void always asks for more."
+      ],
+      "bleed": [
+        "The deepest cuts speak softly.",
+        "Red debts are paid in full."
+      ],
+      "minions": [
+        "No one walks alone forever.",
+        "The many answer as one."
+      ]
+    },
+    "offenseOverrides": {
+      "Poison": [
+        "Patience makes the deadliest venom."
+      ],
+      "Freeze": [
+        "Stillness can be absolute."
+      ],
+      "Chill": [
+        "Cold begins as a warning."
+      ],
+      "Shock": [
+        "One spark rewrites the moment."
+      ],
+      "Electrocute": [
+        "The current permits no appeal."
+      ],
+      "Ignite": [
+        "A single spark is sufficient."
+      ],
+      "Companions": [
+        "The pack keeps its own counsel."
+      ],
+      "Totems": [
+        "Old idols still remember power."
+      ]
+    },
+    "combinations": {
+      "Chronomancer:cold": [
+        "Winter waits for no hour.",
+        "Even frost must obey the clock."
+      ],
+      "Chronomancer:chaos": [
+        "Time leaves stranger wounds."
+      ],
+      "Smith of Kitava:fire": [
+        "The forge follows into battle."
+      ],
+      "Stormweaver:lightning": [
+        "The storm recognizes its maker."
+      ],
+      "Blood Mage:bleed": [
+        "Every wound is an invitation."
       ]
     }
   }

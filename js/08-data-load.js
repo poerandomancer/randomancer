@@ -72,6 +72,7 @@ async function loadData() {
     const recommendationGrantedSkillAccessPromise = tryLoad('data/enriched/recommendation_granted_skill_access_v3.json');
     const recommendationUniqueSemanticsPromise = tryLoad('data/enriched/recommendation_unique_semantics_v3.json');
     const flavorManifestPromise = tryLoad('randomancer_flavor_manifest.json');
+    const buildNameManifestPromise = tryLoad('randomancer_build_names.json');
     const core = await loadJSON('data/core-data.json');
 
     // Canonical Build Offense vocabulary. Keep it separate on disk from the
@@ -161,6 +162,7 @@ async function loadData() {
     const recommendationGrantedSkillAccessRaw = await recommendationGrantedSkillAccessPromise;
     const recommendationUniqueSemanticsRaw = await recommendationUniqueSemanticsPromise;
     const flavorManifest = await flavorManifestPromise;
+    const buildNameManifest = await buildNameManifestPromise;
     const recommendationSkillCraftingValidation = validateRecommendationSkillCraftingV3(recommendationSkillCraftingRaw);
     const recommendationCatalogWithCrafting = recommendationSkillCraftingValidation.ok
       ? mergeRecommendationSkillCraftingV3(recommendationCatalogRaw, recommendationSkillCraftingRaw)
@@ -200,6 +202,7 @@ async function loadData() {
       ascendancyByName,
       challengePools,
       flavorManifest,
+      buildNameManifest,
       recommendationCatalogV3,
       recommendationGrantedSkillAccessV3,
       recommendationCriticalProfilesV3: recommendationCriticalProfilesRaw || {}
@@ -213,6 +216,7 @@ async function loadData() {
       passiveIndex,
       offenseInventory,
       flavorManifest,
+      buildNameManifest,
       recommendationCatalogV3,
       recommendationGrantedSkillAccessV3,
       recommendationCriticalProfilesV3: recommendationCriticalProfilesRaw || {}

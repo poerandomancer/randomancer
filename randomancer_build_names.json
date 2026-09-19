@@ -1,0 +1,1382 @@
+{
+  "version": 2,
+  "settings": {
+    "maxCharacters": 36,
+    "maxWords": 5,
+    "maxAttempts": 32,
+    "recentHistorySize": 9
+  },
+  "fallback": {
+    "ascendancy": "The Unwritten Pilgrim",
+    "generic": "The Unwritten Fate"
+  },
+  "templateWeights": {
+    "ascendancy_weapon_offense": 42,
+    "ascendancy_weapon": 20,
+    "weapon_offense": 20,
+    "ascendancy_offense": 18
+  },
+  "templates": {
+    "ascendancy_weapon": [
+      {
+        "pattern": "The {ascendancy.adjective} {weapon.identity}",
+        "weight": 3
+      },
+      {
+        "pattern": "The {weapon.adjective} {ascendancy.identity}",
+        "weight": 2
+      },
+      {
+        "pattern": "The {weapon.identity} of {ascendancy.motif}",
+        "weight": 2
+      },
+      {
+        "pattern": "{ascendancy.possessiveMotif}'s {weapon.identity}",
+        "weight": 1
+      }
+    ],
+    "weapon_offense": [
+      {
+        "pattern": "The {offense.adjective} {weapon.identity}",
+        "weight": 3
+      },
+      {
+        "pattern": "The {weapon.adjective} {offense.identity}",
+        "weight": 2
+      },
+      {
+        "pattern": "The {weapon.identity} of {offense.motif}",
+        "weight": 2
+      },
+      {
+        "pattern": "{offense.possessiveMotif}'s {weapon.identity}",
+        "weight": 1
+      }
+    ],
+    "ascendancy_offense": [
+      {
+        "pattern": "The {offense.adjective} {ascendancy.identity}",
+        "weight": 3
+      },
+      {
+        "pattern": "The {ascendancy.adjective} {offense.identity}",
+        "weight": 3
+      },
+      {
+        "pattern": "The {ascendancy.identity} of {offense.motif}",
+        "weight": 2
+      },
+      {
+        "pattern": "The {offense.identity} of {ascendancy.motif}",
+        "weight": 2
+      },
+      {
+        "pattern": "{offense.possessiveMotif}'s {ascendancy.identity}",
+        "weight": 1
+      }
+    ],
+    "ascendancy_weapon_offense": [
+      {
+        "pattern": "The {ascendancy.adjective} {offense.noun} {weapon.identity}",
+        "weight": 3
+      },
+      {
+        "pattern": "The {offense.adjective} {weapon.identity} of {ascendancy.motif}",
+        "weight": 2
+      },
+      {
+        "pattern": "{ascendancy.possessiveMotif}'s {offense.adjective} {weapon.identity}",
+        "weight": 2
+      },
+      {
+        "pattern": "{offense.possessiveMotif}'s {ascendancy.adjective} {weapon.identity}",
+        "weight": 1
+      }
+    ]
+  },
+  "ascendancies": {
+    "Titan": {
+      "adjective": [
+        "Colossal",
+        "Granitic",
+        "Unshaken",
+        "Mighty"
+      ],
+      "identity": [
+        "Colossus",
+        "Juggernaut",
+        "Giant",
+        "Pillar"
+      ],
+      "motif": [
+        "the Mountain",
+        "the Monolith",
+        "Endless Stone",
+        "the Unbroken Earth"
+      ],
+      "possessiveMotif": [
+        "Stone",
+        "The Mountain",
+        "The Monolith"
+      ]
+    },
+    "Warbringer": {
+      "adjective": [
+        "Ancestral",
+        "Defiant",
+        "Savage",
+        "Unconquered"
+      ],
+      "identity": [
+        "Warmonger",
+        "Chieftain",
+        "Raider",
+        "Oathbreaker"
+      ],
+      "motif": [
+        "the Ancestors",
+        "the War Cry",
+        "the Broken Truce",
+        "Old Vengeance"
+      ],
+      "possessiveMotif": [
+        "War",
+        "Vengeance",
+        "The Ancestors"
+      ]
+    },
+    "Smith of Kitava": {
+      "adjective": [
+        "Forged",
+        "Molten",
+        "Tempered",
+        "Kitavan"
+      ],
+      "identity": [
+        "Smith",
+        "Artificer",
+        "Forgemaster",
+        "Hammerer"
+      ],
+      "motif": [
+        "the Forge",
+        "the Furnace",
+        "Red Iron",
+        "Kitava"
+      ],
+      "possessiveMotif": [
+        "The Forge",
+        "The Furnace",
+        "Kitava"
+      ]
+    },
+    "Tactician": {
+      "adjective": [
+        "Measured",
+        "Cunning",
+        "Resolute",
+        "Deliberate"
+      ],
+      "identity": [
+        "Strategist",
+        "Commander",
+        "Vanguard",
+        "Marshal"
+      ],
+      "motif": [
+        "the Long Campaign",
+        "the Final Order",
+        "the War Table",
+        "Victory"
+      ],
+      "possessiveMotif": [
+        "Victory",
+        "The Campaign",
+        "The Last Order"
+      ]
+    },
+    "Witchhunter": {
+      "adjective": [
+        "Vigilant",
+        "Ruthless",
+        "Incorruptible",
+        "Relentless"
+      ],
+      "identity": [
+        "Inquisitor",
+        "Pursuer",
+        "Exorcist",
+        "Huntsman"
+      ],
+      "motif": [
+        "the Witch Pyre",
+        "the Last Trial",
+        "Judgment",
+        "the Guilty"
+      ],
+      "possessiveMotif": [
+        "Judgment",
+        "The Pyre",
+        "The Last Trial"
+      ]
+    },
+    "Gemling Legionnaire": {
+      "adjective": [
+        "Prismatic",
+        "Faceted",
+        "Resplendent",
+        "Perfected"
+      ],
+      "identity": [
+        "Legionnaire",
+        "Centurion",
+        "Gemkeeper",
+        "Paragon"
+      ],
+      "motif": [
+        "the Legion",
+        "the Living Gem",
+        "the Thousand Facets",
+        "the Prism"
+      ],
+      "possessiveMotif": [
+        "The Legion",
+        "The Prism",
+        "The Living Gem"
+      ]
+    },
+    "Deadeye": {
+      "adjective": [
+        "Unerring",
+        "Distant",
+        "Keen",
+        "Watchful"
+      ],
+      "identity": [
+        "Marksman",
+        "Sharpsight",
+        "Sentinel",
+        "Farstrider"
+      ],
+      "motif": [
+        "the Far Horizon",
+        "the Bullseye",
+        "the Last Flight",
+        "Open Sky"
+      ],
+      "possessiveMotif": [
+        "The Horizon",
+        "The Bullseye",
+        "Open Sky"
+      ]
+    },
+    "Pathfinder": {
+      "adjective": [
+        "Wayward",
+        "Fleet",
+        "Untamed",
+        "Wandering"
+      ],
+      "identity": [
+        "Wayfinder",
+        "Trailblazer",
+        "Scout",
+        "Wanderer"
+      ],
+      "motif": [
+        "the Long Road",
+        "the Wilds",
+        "the Hidden Path",
+        "No Horizon"
+      ],
+      "possessiveMotif": [
+        "The Wilds",
+        "The Road",
+        "The Hidden Path"
+      ]
+    },
+    "Amazon": {
+      "adjective": [
+        "Untamed",
+        "Valiant",
+        "Sunlit",
+        "Fierce"
+      ],
+      "identity": [
+        "Huntress",
+        "Valkyrie",
+        "Champion",
+        "Warrior"
+      ],
+      "motif": [
+        "the Great Hunt",
+        "the Spear Dance",
+        "the Dawn",
+        "the First Tribe"
+      ],
+      "possessiveMotif": [
+        "The Hunt",
+        "Dawn",
+        "The First Tribe"
+      ]
+    },
+    "Ritualist": {
+      "adjective": [
+        "Ritual",
+        "Feral",
+        "Moonlit",
+        "Wild"
+      ],
+      "identity": [
+        "Skinwalker",
+        "Wildspeaker",
+        "Celebrant",
+        "Hierophant"
+      ],
+      "motif": [
+        "the Old Rite",
+        "the Full Moon",
+        "the Wild Blood",
+        "the Sacred Grove"
+      ],
+      "possessiveMotif": [
+        "The Moon",
+        "The Old Rite",
+        "Wild Blood"
+      ]
+    },
+    "Spirit Walker": {
+      "adjective": [
+        "Ethereal",
+        "Ancestral",
+        "Veiled",
+        "Restless"
+      ],
+      "identity": [
+        "Medium",
+        "Guide",
+        "Wanderer",
+        "Soulkeeper"
+      ],
+      "motif": [
+        "the Veil",
+        "the Ancestors",
+        "the Spirit Road",
+        "the Other Side"
+      ],
+      "possessiveMotif": [
+        "The Veil",
+        "The Ancestors",
+        "The Spirit Road"
+      ]
+    },
+    "Blood Mage": {
+      "adjective": [
+        "Crimson",
+        "Hungry",
+        "Sanguine",
+        "Sacrificial"
+      ],
+      "identity": [
+        "Hemomancer",
+        "Chirurgeon",
+        "Martyr",
+        "Devourer"
+      ],
+      "motif": [
+        "the Red Chalice",
+        "the First Wound",
+        "Living Blood",
+        "the Crimson Rite"
+      ],
+      "possessiveMotif": [
+        "Blood",
+        "The Chalice",
+        "The First Wound"
+      ]
+    },
+    "Lich": {
+      "adjective": [
+        "Deathless",
+        "Pale",
+        "Sepulchral",
+        "Undying"
+      ],
+      "identity": [
+        "Lich",
+        "Gravekeeper",
+        "Revenant",
+        "Necromancer"
+      ],
+      "motif": [
+        "the Open Grave",
+        "the Tomb",
+        "the Last Breath",
+        "Death"
+      ],
+      "possessiveMotif": [
+        "The Grave",
+        "Death",
+        "The Tomb"
+      ]
+    },
+    "Infernalist": {
+      "adjective": [
+        "Infernal",
+        "Burning",
+        "Damned",
+        "Fiendish"
+      ],
+      "identity": [
+        "Demonbinder",
+        "Hellion",
+        "Diabolist",
+        "Temptress"
+      ],
+      "motif": [
+        "the Inferno",
+        "the Burning Pact",
+        "the Pit",
+        "Damnation"
+      ],
+      "possessiveMotif": [
+        "The Inferno",
+        "The Pit",
+        "Damnation"
+      ]
+    },
+    "Abyssal Lich": {
+      "adjective": [
+        "Abyssal",
+        "Depthless",
+        "Drowned",
+        "Deathless"
+      ],
+      "identity": [
+        "Abysswalker",
+        "Lich",
+        "Dreadlord",
+        "Graveseer"
+      ],
+      "motif": [
+        "the Abyss",
+        "the Lightless Deep",
+        "the Sunken Grave",
+        "the Depths"
+      ],
+      "possessiveMotif": [
+        "The Abyss",
+        "The Depths",
+        "The Sunken Grave"
+      ]
+    },
+    "Chronomancer": {
+      "adjective": [
+        "Temporal",
+        "Patient",
+        "Forgotten",
+        "Unfading"
+      ],
+      "identity": [
+        "Timekeeper",
+        "Witness",
+        "Augur",
+        "Wayfarer"
+      ],
+      "motif": [
+        "the Last Hour",
+        "Lost Time",
+        "Tomorrow",
+        "the Turning Wheel"
+      ],
+      "possessiveMotif": [
+        "Tomorrow",
+        "Lost Time",
+        "The Last Hour"
+      ]
+    },
+    "Stormweaver": {
+      "adjective": [
+        "Tempestuous",
+        "Restless",
+        "Radiant",
+        "Howling"
+      ],
+      "identity": [
+        "Stormweaver",
+        "Conduit",
+        "Herald",
+        "Skyseer"
+      ],
+      "motif": [
+        "the Tempest",
+        "the First Thunder",
+        "the Open Sky",
+        "the Coming Storm"
+      ],
+      "possessiveMotif": [
+        "The Tempest",
+        "Thunder",
+        "The Open Sky"
+      ]
+    },
+    "Disciple of Varashta": {
+      "adjective": [
+        "Disciplined",
+        "Serene",
+        "Ascetic",
+        "Weightless"
+      ],
+      "identity": [
+        "Disciple",
+        "Ascetic",
+        "Windwalker",
+        "Pilgrim"
+      ],
+      "motif": [
+        "the High Path",
+        "the Summit",
+        "the Empty Hand",
+        "Varashta"
+      ],
+      "possessiveMotif": [
+        "The Summit",
+        "The High Path",
+        "Varashta"
+      ]
+    },
+    "Invoker": {
+      "adjective": [
+        "Resonant",
+        "Lucid",
+        "Centered",
+        "Harmonic"
+      ],
+      "identity": [
+        "Invoker",
+        "Mystic",
+        "Cantor",
+        "Sage"
+      ],
+      "motif": [
+        "the Mantra",
+        "the Silent Bell",
+        "Perfect Balance",
+        "the Inner Flame"
+      ],
+      "possessiveMotif": [
+        "The Mantra",
+        "The Bell",
+        "Balance"
+      ]
+    },
+    "Acolyte of Chayula": {
+      "adjective": [
+        "Chayulan",
+        "Silent",
+        "Nocturnal",
+        "Devout"
+      ],
+      "identity": [
+        "Acolyte",
+        "Voidwalker",
+        "Dreamer",
+        "Apostle"
+      ],
+      "motif": [
+        "the Breach",
+        "the Endless Night",
+        "Chayula",
+        "the Waking Dream"
+      ],
+      "possessiveMotif": [
+        "The Breach",
+        "Night",
+        "Chayula"
+      ]
+    },
+    "Martial Artist": {
+      "adjective": [
+        "Disciplined",
+        "Fluid",
+        "Centered",
+        "Unarmed"
+      ],
+      "identity": [
+        "Master",
+        "Striker",
+        "Duelist",
+        "Adept"
+      ],
+      "motif": [
+        "the Open Hand",
+        "the Perfect Form",
+        "the Flowing Step",
+        "Discipline"
+      ],
+      "possessiveMotif": [
+        "The Open Hand",
+        "Discipline",
+        "Perfect Form"
+      ]
+    },
+    "Shaman": {
+      "adjective": [
+        "Primal",
+        "Ancient",
+        "Totemic",
+        "Wild"
+      ],
+      "identity": [
+        "Shaman",
+        "Bonespeaker",
+        "Elder",
+        "Wildcaller"
+      ],
+      "motif": [
+        "the Ancestors",
+        "the Sacred Grove",
+        "the Old Gods",
+        "Root and Bone"
+      ],
+      "possessiveMotif": [
+        "The Ancestors",
+        "The Old Gods",
+        "The Old Ways"
+      ]
+    },
+    "Oracle": {
+      "adjective": [
+        "Fated",
+        "Prescient",
+        "Uncertain",
+        "Visionary"
+      ],
+      "identity": [
+        "Oracle",
+        "Augur",
+        "Prophet",
+        "Haruspex"
+      ],
+      "motif": [
+        "the Omen",
+        "a Thousand Futures",
+        "the Chosen Path",
+        "Tomorrow"
+      ],
+      "possessiveMotif": [
+        "Fate",
+        "Tomorrow",
+        "The Omen"
+      ]
+    }
+  },
+  "weapons": {
+    "Mace": {
+      "adjective": [
+        "Crushing",
+        "Implacable",
+        "Heavy",
+        "Iron"
+      ],
+      "identity": [
+        "Breaker",
+        "Juggernaut",
+        "Penitent",
+        "Headsman",
+        "Brute"
+      ],
+      "motif": [
+        "the Hammer",
+        "the Anvil",
+        "the Crushing Blow"
+      ],
+      "possessiveMotif": [
+        "The Hammer",
+        "The Anvil"
+      ]
+    },
+    "Quarterstaff": {
+      "adjective": [
+        "Balanced",
+        "Whirling",
+        "Supple",
+        "Swift"
+      ],
+      "identity": [
+        "Adept",
+        "Duelist",
+        "Wanderer",
+        "Pilgrim",
+        "Striker"
+      ],
+      "motif": [
+        "the Turning Staff",
+        "the Reed",
+        "the Open Road"
+      ],
+      "possessiveMotif": [
+        "The Reed",
+        "The Open Road"
+      ]
+    },
+    "Bow": {
+      "adjective": [
+        "Distant",
+        "Patient",
+        "Keen",
+        "Silent"
+      ],
+      "identity": [
+        "Hunter",
+        "Marksman",
+        "Stalker",
+        "Ranger",
+        "Wanderer",
+        "Outrider"
+      ],
+      "motif": [
+        "the Hunt",
+        "the Arrow",
+        "the Far Horizon",
+        "the Long Road"
+      ],
+      "possessiveMotif": [
+        "The Hunt",
+        "The Arrow",
+        "The Horizon"
+      ]
+    },
+    "Crossbow": {
+      "adjective": [
+        "Patient",
+        "Relentless",
+        "Measured",
+        "Iron"
+      ],
+      "identity": [
+        "Arbalist",
+        "Bolter",
+        "Sentry",
+        "Hunter",
+        "Mechanist"
+      ],
+      "motif": [
+        "the Final Bolt",
+        "the Trigger",
+        "the Iron Sight"
+      ],
+      "possessiveMotif": [
+        "The Bolt",
+        "The Iron Sight"
+      ]
+    },
+    "Staff": {
+      "adjective": [
+        "Arcane",
+        "Learned",
+        "Runic",
+        "Wise"
+      ],
+      "identity": [
+        "Sage",
+        "Magus",
+        "Scholar",
+        "Wanderer",
+        "Seer"
+      ],
+      "motif": [
+        "the Crooked Staff",
+        "the Spire",
+        "the Ancient Rune"
+      ],
+      "possessiveMotif": [
+        "The Spire",
+        "The Rune"
+      ]
+    },
+    "Talisman": {
+      "adjective": [
+        "Primal",
+        "Feral",
+        "Moonlit",
+        "Ancient"
+      ],
+      "identity": [
+        "Beastcaller",
+        "Skinwalker",
+        "Shaman",
+        "Wildling",
+        "Druid"
+      ],
+      "motif": [
+        "the Fang",
+        "the Wild Shape",
+        "the Sacred Grove"
+      ],
+      "possessiveMotif": [
+        "The Fang",
+        "The Wilds"
+      ]
+    },
+    "Wand": {
+      "adjective": [
+        "Arcane",
+        "Subtle",
+        "Eldritch",
+        "Quick"
+      ],
+      "identity": [
+        "Arcanist",
+        "Heretic",
+        "Magician",
+        "Channeler",
+        "Seer"
+      ],
+      "motif": [
+        "the Final Spark",
+        "the Secret Rune",
+        "the Whispered Word"
+      ],
+      "possessiveMotif": [
+        "The Spark",
+        "The Rune"
+      ]
+    },
+    "Sceptre": {
+      "adjective": [
+        "Regal",
+        "Profane",
+        "Imperious",
+        "Occult"
+      ],
+      "identity": [
+        "Hierophant",
+        "Occultist",
+        "Apostate",
+        "Sovereign",
+        "Prelate"
+      ],
+      "motif": [
+        "the Black Crown",
+        "the Edict",
+        "the Hidden Throne"
+      ],
+      "possessiveMotif": [
+        "The Crown",
+        "The Edict"
+      ]
+    },
+    "Spear": {
+      "adjective": [
+        "Valiant",
+        "Swift",
+        "Piercing",
+        "Vigilant"
+      ],
+      "identity": [
+        "Lancer",
+        "Vanguard",
+        "Sentinel",
+        "Hunter",
+        "Harrier"
+      ],
+      "motif": [
+        "the First Strike",
+        "the Hunt",
+        "the Vanguard",
+        "the Spear"
+      ],
+      "possessiveMotif": [
+        "The Hunt",
+        "The Vanguard"
+      ]
+    },
+    "Shield": {
+      "adjective": [
+        "Steadfast",
+        "Resolute",
+        "Iron",
+        "Vigilant"
+      ],
+      "identity": [
+        "Guardian",
+        "Sentinel",
+        "Bulwark",
+        "Defender"
+      ],
+      "motif": [
+        "the Last Wall",
+        "the Bulwark",
+        "the Unbroken Line"
+      ],
+      "possessiveMotif": [
+        "The Wall",
+        "The Bulwark"
+      ]
+    },
+    "Buckler": {
+      "adjective": [
+        "Nimble",
+        "Defiant",
+        "Quick",
+        "Watchful"
+      ],
+      "identity": [
+        "Duelist",
+        "Skirmisher",
+        "Guardian",
+        "Fencer"
+      ],
+      "motif": [
+        "the Riposte",
+        "the Silver Rim",
+        "the Sudden Turn"
+      ],
+      "possessiveMotif": [
+        "The Riposte",
+        "The Silver Rim"
+      ]
+    },
+    "Focus": {
+      "adjective": [
+        "Lucid",
+        "Crystal",
+        "Focused",
+        "Attentive"
+      ],
+      "identity": [
+        "Channeler",
+        "Seer",
+        "Mystic",
+        "Visionary"
+      ],
+      "motif": [
+        "the Crystal Lens",
+        "the Inner Eye",
+        "Perfect Clarity"
+      ],
+      "possessiveMotif": [
+        "The Crystal",
+        "The Inner Eye"
+      ]
+    }
+  },
+  "offenseFamilies": {
+    "physical": {
+      "adjective": [
+        "Brutal",
+        "Iron",
+        "Relentless",
+        "Crushing",
+        "Mortal"
+      ],
+      "noun": [
+        "Impact",
+        "Steel",
+        "Ruin",
+        "Force"
+      ],
+      "identity": [
+        "Breaker",
+        "Conqueror",
+        "Destroyer",
+        "Champion"
+      ],
+      "motif": [
+        "the Crushing Blow",
+        "Broken Stone",
+        "the Iron Law",
+        "Sheer Force"
+      ],
+      "possessiveMotif": [
+        "Iron",
+        "Ruin",
+        "The Crushing Blow"
+      ]
+    },
+    "fire": {
+      "adjective": [
+        "Ashen",
+        "Scarlet",
+        "Burning",
+        "Fierce",
+        "Cinder"
+      ],
+      "noun": [
+        "Ember",
+        "Pyre",
+        "Furnace",
+        "Flame"
+      ],
+      "identity": [
+        "Brand",
+        "Martyr",
+        "Herald",
+        "Keeper"
+      ],
+      "motif": [
+        "the Last Ember",
+        "the Pyre",
+        "the Furnace",
+        "Scarlet Flame"
+      ],
+      "possessiveMotif": [
+        "The Pyre",
+        "Flame",
+        "The Last Ember"
+      ]
+    },
+    "cold": {
+      "adjective": [
+        "Pale",
+        "Still",
+        "Frozen",
+        "Wintry",
+        "Silent"
+      ],
+      "noun": [
+        "Frost",
+        "Rime",
+        "Winter",
+        "Silence"
+      ],
+      "identity": [
+        "Seer",
+        "Warden",
+        "Watcher",
+        "Revenant"
+      ],
+      "motif": [
+        "the Long Winter",
+        "the White Silence",
+        "the First Frost",
+        "Pale Dawn"
+      ],
+      "possessiveMotif": [
+        "Winter",
+        "The Frost",
+        "The White Silence"
+      ]
+    },
+    "lightning": {
+      "adjective": [
+        "Radiant",
+        "Restless",
+        "Fulminant",
+        "Sudden",
+        "Electric"
+      ],
+      "noun": [
+        "Spark",
+        "Thunder",
+        "Tempest",
+        "Charge"
+      ],
+      "identity": [
+        "Herald",
+        "Conduit",
+        "Seer",
+        "Messenger"
+      ],
+      "motif": [
+        "the Final Spark",
+        "the First Thunder",
+        "the Tempest",
+        "Sudden Light"
+      ],
+      "possessiveMotif": [
+        "Thunder",
+        "The Tempest",
+        "The Final Spark"
+      ]
+    },
+    "chaos": {
+      "adjective": [
+        "Withering",
+        "Abyssal",
+        "Hollow",
+        "Profane",
+        "Twisted"
+      ],
+      "noun": [
+        "Blight",
+        "Decay",
+        "Venom",
+        "Ruin",
+        "Abyss"
+      ],
+      "identity": [
+        "Apostate",
+        "Heretic",
+        "Defiler",
+        "Harbinger"
+      ],
+      "motif": [
+        "the Void",
+        "Black Bloom",
+        "the Abyss",
+        "Slow Ruin"
+      ],
+      "possessiveMotif": [
+        "The Void",
+        "Black Bloom",
+        "The Abyss"
+      ]
+    },
+    "bleed": {
+      "adjective": [
+        "Scarlet",
+        "Ravenous",
+        "Cruel",
+        "Sanguine",
+        "Red"
+      ],
+      "noun": [
+        "Blood",
+        "Wound",
+        "Hunger",
+        "Tribute"
+      ],
+      "identity": [
+        "Butcher",
+        "Reaver",
+        "Martyr",
+        "Headsman"
+      ],
+      "motif": [
+        "the Open Wound",
+        "the Red Feast",
+        "Blood Tribute",
+        "the Last Cut"
+      ],
+      "possessiveMotif": [
+        "Blood",
+        "The Red Feast",
+        "The Last Cut"
+      ]
+    },
+    "minions": {
+      "adjective": [
+        "Deathless",
+        "Numberless",
+        "Obedient",
+        "Teeming",
+        "Unquiet"
+      ],
+      "noun": [
+        "Host",
+        "Legion",
+        "Horde",
+        "Procession"
+      ],
+      "identity": [
+        "Shepherd",
+        "Master",
+        "General",
+        "Caretaker"
+      ],
+      "motif": [
+        "the Endless Host",
+        "the Open Grave",
+        "the Faithful Dead",
+        "Many Voices"
+      ],
+      "possessiveMotif": [
+        "The Host",
+        "The Grave",
+        "The Procession"
+      ]
+    }
+  },
+  "offenseOverrides": {
+    "Poison": {
+      "inherits": "chaos",
+      "adjective": [
+        "Venomous",
+        "Toxic",
+        "Patient"
+      ],
+      "noun": [
+        "Venom",
+        "Toxin"
+      ],
+      "identity": [
+        "Poisoner",
+        "Alchemist"
+      ],
+      "motif": [
+        "the Serpent Cup",
+        "Slow Death"
+      ],
+      "possessiveMotif": [
+        "Venom",
+        "The Serpent"
+      ]
+    },
+    "Freeze": {
+      "inherits": "cold",
+      "adjective": [
+        "Frozen",
+        "Glacial",
+        "Unmoving"
+      ],
+      "noun": [
+        "Ice",
+        "Stillness"
+      ],
+      "identity": [
+        "Preserver",
+        "Revenant"
+      ],
+      "motif": [
+        "Perfect Stillness",
+        "the Frozen Moment"
+      ],
+      "possessiveMotif": [
+        "Ice",
+        "Stillness"
+      ]
+    },
+    "Chill": {
+      "inherits": "cold",
+      "adjective": [
+        "Pale",
+        "Breathless",
+        "Fading"
+      ],
+      "noun": [
+        "Hoarfrost",
+        "Dusk"
+      ],
+      "motif": [
+        "the Cold Breath",
+        "Fading Warmth"
+      ],
+      "possessiveMotif": [
+        "Frost",
+        "The Cold"
+      ]
+    },
+    "Shock": {
+      "inherits": "lightning",
+      "adjective": [
+        "Sudden",
+        "Charged",
+        "Startling"
+      ],
+      "noun": [
+        "Voltage",
+        "Spark"
+      ],
+      "identity": [
+        "Conduit",
+        "Messenger"
+      ],
+      "motif": [
+        "the First Spark",
+        "Sudden Light"
+      ],
+      "possessiveMotif": [
+        "The Spark",
+        "Lightning"
+      ]
+    },
+    "Electrocute": {
+      "inherits": "lightning",
+      "adjective": [
+        "Galvanic",
+        "Charged",
+        "Lethal"
+      ],
+      "noun": [
+        "Current",
+        "Voltage"
+      ],
+      "identity": [
+        "Executioner",
+        "Conduit"
+      ],
+      "motif": [
+        "the Killing Current",
+        "the Final Charge"
+      ],
+      "possessiveMotif": [
+        "The Current",
+        "The Final Charge"
+      ]
+    },
+    "Ignite": {
+      "inherits": "fire",
+      "adjective": [
+        "Kindled",
+        "Burning",
+        "Fevered"
+      ],
+      "noun": [
+        "Kindling",
+        "Ember"
+      ],
+      "identity": [
+        "Incendiary",
+        "Firebrand"
+      ],
+      "motif": [
+        "the First Flame",
+        "Kindled Wrath"
+      ],
+      "possessiveMotif": [
+        "Flame",
+        "The Ember"
+      ]
+    },
+    "Companions": {
+      "inherits": "minions",
+      "adjective": [
+        "Loyal",
+        "Wild",
+        "Feral"
+      ],
+      "noun": [
+        "Pack",
+        "Pride"
+      ],
+      "identity": [
+        "Packmaster",
+        "Keeper"
+      ],
+      "motif": [
+        "the Faithful Pack",
+        "the Great Hunt"
+      ],
+      "possessiveMotif": [
+        "The Pack",
+        "The Hunt"
+      ]
+    },
+    "Totems": {
+      "inherits": "minions",
+      "adjective": [
+        "Ancient",
+        "Sacred",
+        "Watchful"
+      ],
+      "noun": [
+        "Idol",
+        "Totem"
+      ],
+      "identity": [
+        "Carver",
+        "Keeper"
+      ],
+      "motif": [
+        "the Silent Idol",
+        "the Old Gods"
+      ],
+      "possessiveMotif": [
+        "The Idol",
+        "The Old Gods"
+      ]
+    }
+  }
+}
