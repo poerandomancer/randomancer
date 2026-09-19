@@ -82,6 +82,48 @@ function validName(value, settings) {
     && value.length <= settings.maxCharacters && significantWords.length <= settings.maxWords);
 }
 
+function playfulSpecificity(match, context) {
+  if (!match || typeof match !== 'object') return 0;
+  const hasAscendancy = typeof match.ascendancy === 'string';
+  const hasWeapon = typeof match.weapon === 'string';
+  const hasExactOffense = typeof match.offense === 'string';
+  const hasOffenseFamily = typeof match.offenseFamily === 'string';
+  if (hasExactOffense === hasOffenseFamily) {
+    if (!(hasAscendancy && hasWeapon) || hasExactOffense) return 0;
+  }
+  if (hasAscendancy && match.ascendancy !== context.ascendancy) return 0;
+  if (hasWeapon && match.weapon !== context.weapon.key) return 0;
+  if (hasExactOffense && match.offense !== context.offense.raw) return 0;
+  if (hasOffenseFamily && match.offenseFamily.toLowerCase() !== context.offense.family) return 0;
+
+  if (hasAscendancy && hasWeapon && hasExactOffense) return 7;
+  if (hasAscendancy && hasWeapon && hasOffenseFamily) return 6;
+  if (hasAscendancy && hasExactOffense) return 5;
+  if (hasWeapon && hasExactOffense) return 4;
+  if (hasAscendancy && hasWeapon) return 3;
+  if (hasAscendancy && hasOffenseFamily) return 2;
+  if (hasWeapon && hasOffenseFamily) return 1;
+  return 0;
+}
+
+function selectPlayfulName(manifest, context, settings, random) {
+  const playful = manifest?.playfulNames;
+  const chance = Number(playful?.settings?.chance);
+  if (!Number.isFinite(chance) || chance <= 0) return '';
+  const matches = list(playful.entries).map((entry) => ({
+    entry,
+    specificity: playfulSpecificity(entry?.match, context)
+  })).filter(({ specificity }) => specificity > 0);
+  const highestSpecificity = Math.max(0, ...matches.map(({ specificity }) => specificity));
+  const candidates = matches
+    .filter(({ specificity }) => specificity === highestSpecificity)
+    .flatMap(({ entry }) => list(entry.names))
+    .map((name) => typeof name === 'string' ? name.trim().replace(/\s+/g, ' ') : '')
+    .filter((name) => validName(name, settings) && !recentNames.includes(name));
+  if (!candidates.length || roll(random) >= Math.min(1, chance)) return '';
+  return pick(candidates, random);
+}
+
 function safeFallback(value, defaultValue) {
   const cleaned = typeof value === 'string' ? value.trim().replace(/\s+/g, ' ') : '';
   return cleaned && !/[{}]|undefined/i.test(cleaned) && !/\b(?:of|the|a|an)\s*$/i.test(cleaned) ? cleaned : defaultValue;
@@ -94,6 +136,12 @@ function selectBuildName(manifest, rawContext, options = {}) {
   const context = buildPresentationContext(rawContext || {});
   const random = options.random;
   const settings = { maxCharacters: 36, maxWords: 5, maxAttempts: 24, recentHistorySize: 9, ...(manifest?.settings || {}) };
+  const playfulName = selectPlayfulName(manifest, context, settings, random);
+  if (playfulName) {
+    recentNames.push(playfulName);
+    while (recentNames.length > settings.recentHistorySize) recentNames.shift();
+    return playfulName;
+  }
   const vocab = vocabulary(manifest, context);
   const families = Object.entries(manifest?.templates || {}).map(([key, templates]) => ({
     key,
