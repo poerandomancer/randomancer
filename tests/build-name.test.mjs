@@ -56,6 +56,58 @@ test('recent exact duplicates reroll and retry cap remains finite', () => {
   assert.equal(selectBuildName(fixture,{ascendancy:'A',weapon:'Bow'},{random}),'The Second Archer');
 });
 
+function playfulFixture(entries, chance = 1) {
+  return {
+    settings:{maxCharacters:40,maxWords:6,maxAttempts:2,recentHistorySize:9},
+    playfulNames:{settings:{chance},entries},
+    templateWeights:{normal:1},
+    templates:{normal:[{pattern:'The {ascendancy.identity} Standard',weight:1}]},
+    ascendancies:{A:{identity:['Normal']}},
+    fallback:{ascendancy:'The Normal Fallback'}
+  };
+}
+
+test('eligible playful names respect matching context and configured probability', () => {
+  const fixture=playfulFixture([{match:{ascendancy:'A',weapon:'Bow'},names:['Long Shot']}]);
+  resetRecentBuildNames();
+  assert.equal(selectBuildName(fixture,{ascendancy:'A',weapon:'Bow',offense:'Fire'},{random:()=>0}),'Long Shot');
+  resetRecentBuildNames();
+  assert.equal(selectBuildName(fixture,{ascendancy:'B',weapon:'Bow',offense:'Fire'},{random:()=>0}),'The Normal Fallback');
+  resetRecentBuildNames();
+  assert.equal(selectBuildName({...fixture,playfulNames:{...fixture.playfulNames,settings:{chance:.15}}},{ascendancy:'A',weapon:'Bow',offense:'Fire'},{random:()=>.15}),'The Normal Standard');
+});
+
+test('three-input playful matches outrank broader entries and preserve authored display strings', () => {
+  const fixture=playfulFixture([
+    {match:{ascendancy:'A',weapon:'Bow'},names:['Broad Name']},
+    {match:{ascendancy:'A',weapon:'Bow',offense:'Shock'},names:['Live Wire']}
+  ]);
+  resetRecentBuildNames();
+  assert.equal(selectBuildName(fixture,{ascendancy:'A',weapon:'Bow',offense:'Shock'},{random:()=>0}),'Live Wire');
+});
+
+test('exact offense and explicitly authored offense-family matches stay distinct', () => {
+  const fixture=playfulFixture([
+    {match:{ascendancy:'A',offense:'Freeze'},names:['Freeze Frame']},
+    {match:{ascendancy:'A',offenseFamily:'cold'},names:['Cold Front']}
+  ]);
+  resetRecentBuildNames();
+  assert.equal(selectBuildName(fixture,{ascendancy:'A',weapon:'Bow',offense:'Freeze'},{random:()=>0}),'Freeze Frame');
+  resetRecentBuildNames();
+  assert.equal(selectBuildName(fixture,{ascendancy:'A',weapon:'Bow',offense:'Chill'},{random:()=>0}),'Cold Front');
+});
+
+test('playful names share recent-name protection and malformed authored values fail safely', () => {
+  const fixture=playfulFixture([{match:{ascendancy:'A',weapon:'Bow'},names:['First Pick','Second Pick']}]);
+  resetRecentBuildNames();
+  assert.equal(selectBuildName(fixture,{ascendancy:'A',weapon:'Bow'},{random:()=>0}),'First Pick');
+  assert.equal(selectBuildName(fixture,{ascendancy:'A',weapon:'Bow'},{random:()=>0}),'Second Pick');
+
+  const malformed=playfulFixture([{match:{ascendancy:'A',weapon:'Bow'},names:[' ',null,'Bad {placeholder}','x'.repeat(80)]}]);
+  resetRecentBuildNames();
+  assert.equal(selectBuildName(malformed,{ascendancy:'A',weapon:'Bow'},{random:()=>0}),'The Normal Standard');
+});
+
 test('weapon normalization and live vocabulary coverage are complete', () => {
   assert.equal(weaponDisplayName(' Two-handed Mace '),'Mace');
   for(const {ascendancies} of Object.values(core.Classes)) for(const name of ascendancies) assert.ok(manifest.ascendancies[name]?.adjective?.length && manifest.ascendancies[name]?.identity?.length, name);

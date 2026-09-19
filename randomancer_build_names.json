@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "settings": {
     "maxCharacters": 36,
     "maxWords": 5,
@@ -9,6 +9,185 @@
   "fallback": {
     "ascendancy": "The Unwritten Pilgrim",
     "generic": "The Unwritten Fate"
+  },
+  "playfulNames": {
+    "settings": {
+      "chance": 0.15
+    },
+    "entries": [
+      {
+        "match": {
+          "ascendancy": "Chronomancer",
+          "weapon": "Mace"
+        },
+        "names": [
+          "The Crushomancer"
+        ]
+      },
+      {
+        "match": {
+          "ascendancy": "Chronomancer",
+          "offense": "Freeze"
+        },
+        "names": [
+          "Freeze Frame"
+        ]
+      },
+      {
+        "match": {
+          "ascendancy": "Chronomancer",
+          "offenseFamily": "lightning"
+        },
+        "names": [
+          "Split Second"
+        ]
+      },
+      {
+        "match": {
+          "ascendancy": "Oracle",
+          "offense": "Shock"
+        },
+        "names": [
+          "Future Shock"
+        ]
+      },
+      {
+        "match": {
+          "ascendancy": "Oracle",
+          "weapon": "Bow"
+        },
+        "names": [
+          "The Long Shot"
+        ]
+      },
+      {
+        "match": {
+          "ascendancy": "Stormweaver",
+          "offense": "Shock"
+        },
+        "names": [
+          "Live Wire"
+        ]
+      },
+      {
+        "match": {
+          "ascendancy": "Stormweaver",
+          "offenseFamily": "cold"
+        },
+        "names": [
+          "Cold Front"
+        ]
+      },
+      {
+        "match": {
+          "ascendancy": "Titan",
+          "weapon": "Mace"
+        },
+        "names": [
+          "Heavy Hitter"
+        ]
+      },
+      {
+        "match": {
+          "ascendancy": "Titan",
+          "weapon": "Crossbow"
+        },
+        "names": [
+          "Heavy Artillery"
+        ]
+      },
+      {
+        "match": {
+          "ascendancy": "Titan",
+          "offenseFamily": "physical"
+        },
+        "names": [
+          "Mass Appeal"
+        ]
+      },
+      {
+        "match": {
+          "ascendancy": "Warbringer",
+          "offenseFamily": "minions"
+        },
+        "names": [
+          "The Underling Wrangler"
+        ]
+      },
+      {
+        "match": {
+          "ascendancy": "Lich",
+          "offenseFamily": "minions"
+        },
+        "names": [
+          "Grave Shift"
+        ]
+      },
+      {
+        "match": {
+          "ascendancy": "Blood Mage",
+          "offense": "Bleed"
+        },
+        "names": [
+          "Blood Work"
+        ]
+      },
+      {
+        "match": {
+          "ascendancy": "Blood Mage",
+          "weapon": "Bow"
+        },
+        "names": [
+          "Bloodshot"
+        ]
+      },
+      {
+        "match": {
+          "ascendancy": "Smith of Kitava",
+          "offense": "Ignite"
+        },
+        "names": [
+          "Trial by Fire"
+        ]
+      },
+      {
+        "match": {
+          "ascendancy": "Deadeye",
+          "weapon": "Bow",
+          "offenseFamily": "fire"
+        },
+        "names": [
+          "Hotshot"
+        ]
+      },
+      {
+        "match": {
+          "ascendancy": "Tactician",
+          "weapon": "Crossbow"
+        },
+        "names": [
+          "Bolt Action"
+        ]
+      },
+      {
+        "match": {
+          "ascendancy": "Pathfinder",
+          "offense": "Poison"
+        },
+        "names": [
+          "Toxic Trail"
+        ]
+      },
+      {
+        "match": {
+          "ascendancy": "Acolyte of Chayula",
+          "offenseFamily": "chaos"
+        },
+        "names": [
+          "Breach of Contract"
+        ]
+      }
+    ]
   },
   "templateWeights": {
     "ascendancy_weapon_offense": 42,
