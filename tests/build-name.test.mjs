@@ -18,14 +18,14 @@ test('all four data-defined template families compose valid concise output', () 
     const name = selectBuildName(onlyFamily(family), context, { random:()=>0 });
     assert.match(name, /^The /); assert.doesNotMatch(name, /[{}]|undefined|\s{2,}/);
     assert.ok(name.length <= manifest.settings.maxCharacters);
-    assert.ok(name.split(/\s+/).length <= manifest.settings.maxWords);
+    assert.ok(name.split(/\s+/).filter(word => !/^(?:the|a|an|of)$/i.test(word)).length <= manifest.settings.maxWords);
   }
 });
 
 test('three-input and two-input templates use exactly their declared dimensions', () => {
-  const fixture={settings:{maxCharacters:80,maxWords:10,recentHistorySize:0},templateWeights:{ascendancy_weapon_offense:1},templates:{ascendancy_weapon_offense:[{pattern:'{ascendancy.adjective} {weapon.bearer} {offense.noun}',weight:1}]},ascendancies:{A:{adjective:['ASC']}},weapons:{W:{bearer:['WEAPON']}},offenseFamilies:{chaos:{noun:['OFFENSE']}}};
+  const fixture={settings:{maxCharacters:80,maxWords:10,recentHistorySize:0},templateWeights:{ascendancy_weapon_offense:1},templates:{ascendancy_weapon_offense:[{pattern:'{ascendancy.adjective} {weapon.identity} {offense.noun}',weight:1}]},ascendancies:{A:{adjective:['ASC']}},weapons:{W:{identity:['WEAPON']}},offenseFamilies:{chaos:{noun:['OFFENSE']}}};
   assert.equal(selectBuildName(fixture,{ascendancy:'A',weapon:'W',offense:'Chaos'},{random:()=>0}),'ASC WEAPON OFFENSE');
-  fixture.templateWeights={ascendancy_weapon:1}; fixture.templates={ascendancy_weapon:[{pattern:'{ascendancy.adjective} {weapon.bearer}',weight:1}]};
+  fixture.templateWeights={ascendancy_weapon:1}; fixture.templates={ascendancy_weapon:[{pattern:'{ascendancy.adjective} {weapon.identity}',weight:1}]};
   assert.equal(selectBuildName(fixture,{ascendancy:'A',weapon:'W',offense:'Chaos'},{random:()=>0}),'ASC WEAPON');
 });
 
@@ -34,11 +34,12 @@ test('exact offense overrides inherit family vocabulary', () => {
   resetRecentBuildNames();
   assert.match(selectBuildName(fixture,context,{random:()=>0}),/Venomous/);
   resetRecentBuildNames();
-  assert.match(selectBuildName(fixture,context,{random:()=>.999}),/Withering|Void-Touched|Blackened/);
+  const inherited = selectBuildName(fixture,context,{random:()=>.999});
+  assert.ok(manifest.offenseFamilies.chaos.adjective.some((word) => inherited.includes(typeof word === 'string' ? word : word.text)));
 });
 
 test('missing slots make templates ineligible and malformed manifests safely fall back', () => {
-  const bad={templateWeights:{x:1},templates:{x:[{pattern:'The {weapon.bearer}',weight:1}]},fallback:{generic:'The Unwritten Fate'}};
+  const bad={templateWeights:{x:1},templates:{x:[{pattern:'The {weapon.identity}',weight:1}]},fallback:{generic:'The Unwritten Fate'}};
   assert.equal(selectBuildName(bad,{}, {random:()=>0}),'The Unwritten Fate');
   assert.equal(selectBuildName(null,{}),'The Unwritten Fate');
 });
@@ -49,7 +50,7 @@ test('limits and collision keys reject bad candidates without unbounded looping'
 });
 
 test('recent exact duplicates reroll and retry cap remains finite', () => {
-  const fixture={settings:{maxCharacters:40,maxWords:5,maxAttempts:4,recentHistorySize:9},templateWeights:{x:1},templates:{x:[{pattern:'The {ascendancy.adjective} {weapon.bearer}',weight:1}]},ascendancies:{A:{adjective:['First','Second']}},weapons:{Bow:{bearer:['Archer']}}};
+  const fixture={settings:{maxCharacters:40,maxWords:5,maxAttempts:4,recentHistorySize:9},templateWeights:{x:1},templates:{x:[{pattern:'The {ascendancy.adjective} {weapon.identity}',weight:1}]},ascendancies:{A:{adjective:['First','Second']}},weapons:{Bow:{identity:['Archer']}}};
   resetRecentBuildNames(); let values=[0,0,0,0,0,0,.9,0]; const random=()=>values.shift()??0;
   assert.equal(selectBuildName(fixture,{ascendancy:'A',weapon:'Bow'},{random}),'The First Archer');
   assert.equal(selectBuildName(fixture,{ascendancy:'A',weapon:'Bow'},{random}),'The Second Archer');
@@ -59,7 +60,32 @@ test('weapon normalization and live vocabulary coverage are complete', () => {
   assert.equal(weaponDisplayName(' Two-handed Mace '),'Mace');
   for(const {ascendancies} of Object.values(core.Classes)) for(const name of ascendancies) assert.ok(manifest.ascendancies[name]?.adjective?.length && manifest.ascendancies[name]?.identity?.length, name);
   const weapons=new Set(Object.values(core.Weapons).flat().map(x=>x.name).filter(Boolean).map(weaponDisplayName));
-  for(const weapon of weapons) assert.ok(manifest.weapons[weapon]?.adjective?.length && manifest.weapons[weapon]?.bearer?.length,weapon);
+  for(const weapon of weapons) assert.ok(manifest.weapons[weapon]?.adjective?.length && manifest.weapons[weapon]?.identity?.length,weapon);
+});
+
+test('authored vocabulary broadly supports poetic templates without synthetic-compound dependence', () => {
+  const concepts = [
+    ...Object.values(manifest.ascendancies),
+    ...Object.values(manifest.weapons),
+    ...Object.values(manifest.offenseFamilies)
+  ];
+  for (const concept of concepts) {
+    assert.ok(concept.adjective?.length, 'missing adjective vocabulary');
+    assert.ok(concept.identity?.length, 'missing identity vocabulary');
+    assert.ok(concept.motif?.length, 'missing motif vocabulary');
+    assert.ok(concept.possessiveMotif?.length, 'missing possessive motif vocabulary');
+  }
+  const vocabulary = concepts.flatMap((concept) => Object.values(concept).flat()).filter((value) => typeof value === 'string');
+  assert.ok(vocabulary.filter((value) => value.includes('-')).length / vocabulary.length < 0.1);
+});
+
+test('multi-word motifs and curated possessive motifs remain atomic template values', () => {
+  const ofFixture={...onlyFamily('ascendancy_weapon'),templates:{ascendancy_weapon:[{pattern:'The {weapon.identity} of {ascendancy.motif}',weight:1}]}};
+  resetRecentBuildNames();
+  assert.equal(selectBuildName(ofFixture,context,{random:()=>0}),'The Hunter of the Last Hour');
+  const possessive={...onlyFamily('ascendancy_weapon'),templates:{ascendancy_weapon:[{pattern:"{ascendancy.possessiveMotif}'s {weapon.identity}",weight:1}]}};
+  resetRecentBuildNames();
+  assert.equal(selectBuildName(possessive,context,{random:()=>0}),"Tomorrow's Hunter");
 });
 
 test('draw construction stores the selected asset-generated name',()=>{

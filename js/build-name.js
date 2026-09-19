@@ -53,7 +53,14 @@ function eligible(template, vocab) {
 
 function hasCollision(terms) {
   const keys = terms.flatMap((entry) => entry.collisions).map((key) => key.toLowerCase());
-  return new Set(keys).size !== keys.length;
+  if (new Set(keys).size !== keys.length) return true;
+  const words = terms.map((entry) => entry.text.toLowerCase().match(/[a-z]{4,}/g) || []);
+  for (let left = 0; left < words.length; left += 1) {
+    for (let right = left + 1; right < words.length; right += 1) {
+      if (words[left].some((a) => words[right].some((b) => a === b || a.startsWith(b) || b.startsWith(a)))) return true;
+    }
+  }
+  return false;
 }
 
 function render(template, vocab, random) {
@@ -70,8 +77,9 @@ function render(template, vocab, random) {
 }
 
 function validName(value, settings) {
+  const significantWords = String(value).split(/\s+/).filter((word) => !/^(?:the|a|an|of)$/i.test(word));
   return Boolean(value && !/[{}]|undefined/i.test(value) && !/\b(?:of|the|a|an)\s*$/i.test(value)
-    && value.length <= settings.maxCharacters && value.split(/\s+/).length <= settings.maxWords);
+    && value.length <= settings.maxCharacters && significantWords.length <= settings.maxWords);
 }
 
 function safeFallback(value, defaultValue) {
