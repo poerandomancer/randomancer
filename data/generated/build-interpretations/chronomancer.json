@@ -1,0 +1,1050 @@
+{
+  "schemaVersion": 1,
+  "generatedFor": {
+    "ascendancy": "Chronomancer",
+    "weaponCoverage": [
+      "Mace"
+    ]
+  },
+  "sourceContext": {
+    "patch": "Repository release-data snapshot at 304bd5d (2026-09-24); upstream game patch label is not stored in core data",
+    "catalogVersion": "recommendation-catalog-v3.0.0 / OFFENSE_V1",
+    "generatedAt": "2026-09-24",
+    "notes": "Experimental vertical-slice interpretation catalog. No runtime consumer is added. External URLs are recorded for follow-up, but were unreachable in the generation environment; repository catalog restrictions are authoritative."
+  },
+  "validation": {
+    "offenseSource": "data/offense-inventory.json",
+    "expectedOffenseCount": 15,
+    "entitySource": "data/enriched/recommendation_catalog_v3.json",
+    "knownUncertainties": [
+      "core-data.json reports an unversioned game-data patch",
+      "Stone Elemental creation is visible in datamined skill types but not normalized into a creates:minion catalog fact",
+      "Companion and several conversion-dependent interpretations intentionally avoid naming an unverified enabler"
+    ],
+    "excludedEvidence": [
+      "Non-rollable inventory concepts (critical_hits / Critical Hits)",
+      "Seasonal kalguuran-tagged recommendation entities",
+      "DNT/unused entities",
+      "Path of Exile 1 mechanics"
+    ],
+    "offenseSelectorSource": "js/26-offense-roll.js"
+  },
+  "interpretations": {
+    "mace": {
+      "physical": {
+        "offense": "Physical Damage",
+        "assessment": "natural",
+        "solutions": [
+          {
+            "id": "physical-aftershock-reset",
+            "title": "Resettable Aftershock Bruiser",
+            "summary": "Now and Again is the relevant Chronomancer bridge: occasional cooldown recovery gives a second use of a high-impact mace button, rather than pretending the ascendancy directly scales attack damage. Build around a high-physical two-handed mace and Earthquake: plant the initial hit, reposition during the delay, then let the aftershock carry clear and boss damage. Armour Breaker can prepare durable targets and Sunder is a credible faster-payoff alternative when waiting for aftershocks is unsafe. Keep conversion low so physical scaling, armour interaction, and the weapon’s large local damage all point in one direction. Attack speed should be sufficient to make the character responsive, but the build values damage per hit, area, and cooldown utility more than frantic attacking. This is one of the cleanest slices because the mace is both the legal carrier and the best source of base physical damage; Chronomancer contributes tempo and safety instead of an artificial damage gimmick.",
+            "playstyle": "Break armour when needed, place Earthquake, move through the delayed detonation, and use a reset high-impact attack on priority targets.",
+            "defense": "Use armour from strength gear, cap resistances, and let Apex of the Moment slow nearby enemies while you commit to long mace animations.",
+            "priorities": [
+              "high local physical mace damage",
+              "area and attack speed sufficient for safe slams",
+              "strength, accuracy, physical penetration or armour interaction"
+            ],
+            "entities": [
+              {
+                "id": "skill:Metadata/Items/Gems/SkillGemEarthquake",
+                "name": "Earthquake",
+                "type": "skill",
+                "role": "primary delayed physical slam"
+              },
+              {
+                "id": "skill:Metadata/Items/Gems/SkillGemArmourBreaker",
+                "name": "Armour Breaker",
+                "type": "skill",
+                "role": "physical setup against armoured targets"
+              },
+              {
+                "id": "skill:Metadata/Items/Gems/SkillGemSunder",
+                "name": "Sunder",
+                "type": "skill",
+                "role": "faster physical payoff option"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable5",
+                "name": "Now and Again",
+                "type": "ascendancy_passive",
+                "role": "occasionally repeats a cooldown attack"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable7",
+                "name": "Apex of the Moment",
+                "type": "ascendancy_passive",
+                "role": "defensive slow around the melee character"
+              }
+            ],
+            "evidence": {
+              "randomancer": [
+                "data/enriched/recommendation_catalog_v3.json",
+                "data/offense-inventory.json"
+              ],
+              "externalSources": [
+                {
+                  "title": "Path of Exile 2 game updates",
+                  "url": "https://www.pathofexile.com/forum/view-forum/2212",
+                  "use": "Intended primary patch-history check; network access was unavailable in the generation environment, so repository data remains authoritative."
+                },
+                {
+                  "title": "PoE2DB skill gems",
+                  "url": "https://poe2db.tw/us/Skill_Gems",
+                  "use": "Intended external cross-check; network access was unavailable in the generation environment, so no claim depends on it."
+                }
+              ]
+            },
+            "caveats": []
+          }
+        ]
+      },
+      "fire": {
+        "offense": "Fire Damage",
+        "assessment": "natural",
+        "solutions": [
+          {
+            "id": "fire-forge-cycle",
+            "title": "Forge-and-Reset Fire Slammer",
+            "summary": "Now and Again is the relevant Chronomancer bridge: occasional cooldown recovery gives a second use of a high-impact mace button, rather than pretending the ascendancy directly scales attack damage. Forge Hammer provides the direct bridge: the catalog records physical-to-fire conversion and an Any Mace requirement. Use it as the large timed hit, then fill with Molten Blast or another converted mace attack while fissures and fire area damage work. A physical mace still supplies the attack base, but gearing should finish the fire plan rather than splitting equally between physical and fire. Herald of Ash is useful for clear and gives the catalog an explicit fire/ignite secondary axis; it is not the reason the main attack is legal. The appealing Chronomancer angle is cycling the impactful cooldown sooner and slowing the battlefield during its commitment window.",
+            "playstyle": "Drop Forge Hammer into a pack or boss window, attack with Molten Blast between cooldowns, and exploit a recovered cooldown immediately.",
+            "defense": "Use armour from strength gear, cap resistances, and let Apex of the Moment slow nearby enemies while you commit to long mace animations.",
+            "priorities": [
+              "high physical DPS mace before conversion",
+              "fire damage, elemental penetration, area damage",
+              "attack speed and mana sustain"
+            ],
+            "entities": [
+              {
+                "id": "skill:Metadata/Items/Gem/SkillGemForgeHammer",
+                "name": "Forge Hammer",
+                "type": "skill",
+                "role": "primary converting fire slam"
+              },
+              {
+                "id": "skill:Metadata/Items/Gem/SkillGemMoltenBlast",
+                "name": "Molten Blast",
+                "type": "skill",
+                "role": "fire-converting filler and range"
+              },
+              {
+                "id": "skill:Metadata/Items/Gems/SkillGemHeraldOfAsh",
+                "name": "Herald of Ash",
+                "type": "skill",
+                "role": "fire clear layer"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable5",
+                "name": "Now and Again",
+                "type": "ascendancy_passive",
+                "role": "cooldown recovery for Forge Hammer"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable7",
+                "name": "Apex of the Moment",
+                "type": "ascendancy_passive",
+                "role": "close-range safety"
+              }
+            ],
+            "evidence": {
+              "randomancer": [
+                "data/enriched/recommendation_catalog_v3.json",
+                "data/offense-inventory.json"
+              ],
+              "externalSources": [
+                {
+                  "title": "Path of Exile 2 game updates",
+                  "url": "https://www.pathofexile.com/forum/view-forum/2212",
+                  "use": "Intended primary patch-history check; network access was unavailable in the generation environment, so repository data remains authoritative."
+                },
+                {
+                  "title": "PoE2DB skill gems",
+                  "url": "https://poe2db.tw/us/Skill_Gems",
+                  "use": "Intended external cross-check; network access was unavailable in the generation environment, so no claim depends on it."
+                }
+              ]
+            },
+            "caveats": []
+          }
+        ]
+      },
+      "cold": {
+        "offense": "Cold Damage",
+        "assessment": "workable",
+        "solutions": [
+          {
+            "id": "cold-starborn-control",
+            "title": "Starborn Cold Control",
+            "summary": "Now and Again is the relevant Chronomancer bridge: occasional cooldown recovery gives a second use of a high-impact mace button, rather than pretending the ascendancy directly scales attack damage. Starborn Onslaught is the catalog’s unusually useful mace-native cold route: it converts physical toward cold, carries cold and physical properties, inflicts chill, and modifies freeze. That is stronger evidence than forcing an unrestricted spell beside an otherwise decorative mace. Scale the weapon’s physical base, conversion, cold attack damage, and ailment magnitude; use the repeated hits and chill to make slow mace commitments safer. Herald of Ice can reward frozen-pack kills, but its own hit is recorded as unable to freeze, so freeze application must come from the attack rather than the herald. Chronomancer reinforces the control identity through nearby slowing and can recycle a separate cooldown attack for burst.",
+            "playstyle": "Drive Starborn Onslaught through packs, use chilled or frozen windows to remain in melee, and reserve the reset for a burst mace attack.",
+            "defense": "Use armour from strength gear, cap resistances, and let Apex of the Moment slow nearby enemies while you commit to long mace animations.",
+            "priorities": [
+              "physical mace DPS feeding conversion",
+              "cold damage and cold penetration",
+              "freeze buildup or ailment magnitude without sacrificing accuracy"
+            ],
+            "entities": [
+              {
+                "id": "skill:Metadata/Items/Gems/SkillGemStarbornOnslaught",
+                "name": "Starborn Onslaught",
+                "type": "skill",
+                "role": "mace-native cold carrier"
+              },
+              {
+                "id": "skill:Metadata/Items/Gems/SkillGemHeraldOfIce",
+                "name": "Herald of Ice",
+                "type": "skill",
+                "role": "cold shatter clear, not the freeze source"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable5",
+                "name": "Now and Again",
+                "type": "ascendancy_passive",
+                "role": "burst cooldown utility"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable7",
+                "name": "Apex of the Moment",
+                "type": "ascendancy_passive",
+                "role": "stacks battlefield slowing with chill"
+              }
+            ],
+            "evidence": {
+              "randomancer": [
+                "data/enriched/recommendation_catalog_v3.json",
+                "data/offense-inventory.json"
+              ],
+              "externalSources": [
+                {
+                  "title": "Path of Exile 2 game updates",
+                  "url": "https://www.pathofexile.com/forum/view-forum/2212",
+                  "use": "Intended primary patch-history check; network access was unavailable in the generation environment, so repository data remains authoritative."
+                },
+                {
+                  "title": "PoE2DB skill gems",
+                  "url": "https://poe2db.tw/us/Skill_Gems",
+                  "use": "Intended external cross-check; network access was unavailable in the generation environment, so no claim depends on it."
+                }
+              ]
+            },
+            "caveats": [
+              "Herald of Ice is explicitly not presented as a freeze applicator."
+            ]
+          }
+        ]
+      },
+      "lightning": {
+        "offense": "Lightning Damage",
+        "assessment": "experimental",
+        "solutions": [
+          {
+            "id": "lightning-converted-hammer",
+            "title": "Converted Storm Hammer",
+            "summary": "Now and Again is the relevant Chronomancer bridge: occasional cooldown recovery gives a second use of a high-impact mace button, rather than pretending the ascendancy directly scales attack damage. Current permanent mace skills in the catalog do not expose a clean native lightning attack comparable to the fire and cold options, so this interpretation depends on obtaining substantial physical-to-lightning conversion or added lightning from gear and generic gem choices. Start with a fast, reliable mace carrier such as Rolling Slam rather than naming a spell that would make Mace cosmetic. Herald of Thunder can add lightning clear after shocks are established, but its catalog facts say the herald itself prevents shock; the main converted mace hit must apply the ailment. Scale the mace base, conversion, lightning penetration, and attack speed, with enough accuracy and shock magnitude for consistent payoff. Chronomancer’s value remains tempo: recovered cooldowns can repeat a heavy supplemental mace hit, while nearby slow buys room for rolling attack sequences.",
+            "playstyle": "Maintain converted lightning hits with Rolling Slam, establish shocks from the attack, then let Herald of Thunder supplement clear.",
+            "defense": "Use armour from strength gear, cap resistances, and let Apex of the Moment slow nearby enemies while you commit to long mace animations.",
+            "priorities": [
+              "physical mace base plus reliable conversion or added lightning",
+              "lightning penetration and shock magnitude",
+              "attack speed, accuracy, and elemental damage with attacks"
+            ],
+            "entities": [
+              {
+                "id": "skill:Metadata/Items/Gems/SkillGemRollingSlam",
+                "name": "Rolling Slam",
+                "type": "skill",
+                "role": "repeatable mace carrier"
+              },
+              {
+                "id": "skill:Metadata/Items/Gems/SkillGemHeraldOfThunder",
+                "name": "Herald of Thunder",
+                "type": "skill",
+                "role": "secondary lightning clear"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable5",
+                "name": "Now and Again",
+                "type": "ascendancy_passive",
+                "role": "supplemental cooldown tempo"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable7",
+                "name": "Apex of the Moment",
+                "type": "ascendancy_passive",
+                "role": "melee safety"
+              }
+            ],
+            "evidence": {
+              "randomancer": [
+                "data/enriched/recommendation_catalog_v3.json",
+                "data/offense-inventory.json"
+              ],
+              "externalSources": [
+                {
+                  "title": "Path of Exile 2 game updates",
+                  "url": "https://www.pathofexile.com/forum/view-forum/2212",
+                  "use": "Intended primary patch-history check; network access was unavailable in the generation environment, so repository data remains authoritative."
+                },
+                {
+                  "title": "PoE2DB skill gems",
+                  "url": "https://poe2db.tw/us/Skill_Gems",
+                  "use": "Intended external cross-check; network access was unavailable in the generation environment, so no claim depends on it."
+                }
+              ]
+            },
+            "caveats": [
+              "Requires an external conversion or added-damage bridge; the catalog does not identify a permanent native lightning mace primary.",
+              "Herald of Thunder cannot be the shock source."
+            ]
+          }
+        ]
+      },
+      "chaos": {
+        "offense": "Chaos Damage",
+        "assessment": "difficult",
+        "solutions": [
+          {
+            "id": "chaos-mace-bridge",
+            "title": "Corrupted Physical Hammer",
+            "summary": "Now and Again is the relevant Chronomancer bridge: occasional cooldown recovery gives a second use of a high-impact mace button, rather than pretending the ascendancy directly scales attack damage. Treat this as a conversion build, not a native mace archetype. Begin with a high-physical mace and a straightforward carrier such as Mace Strike, then obtain a verified source of physical-to-chaos conversion or substantial added chaos before committing passive points. Herald of Plague is catalogued as chaos utility and can support proliferation-style clearing, but it does not solve the primary hit’s conversion by itself. Poison is an optional consequence only if application and chance are separately supplied; pure chaos hit scaling and poison scaling should not be mixed casually. The Chronomancer offers no direct chaos multiplier, so its defensible contribution is control and the ability to repeat a cooldown payoff when conversion gear is assembled.",
+            "playstyle": "Strike with a converted physical mace, use the chaos utility layer to spread pressure through packs, and reserve recovered cooldowns for rares.",
+            "defense": "Use armour from strength gear, cap resistances, and let Apex of the Moment slow nearby enemies while you commit to long mace animations.",
+            "priorities": [
+              "high physical mace base and a verified chaos conversion source",
+              "chaos damage or poison investment—choose a primary scaling plan",
+              "accuracy, attack speed, and chaos resistance reduction"
+            ],
+            "entities": [
+              {
+                "id": "skill:Metadata/Items/Gem/SkillGemPlayerDefault1HMace",
+                "name": "Mace Strike",
+                "type": "skill",
+                "role": "uncomplicated physical attack carrier"
+              },
+              {
+                "id": "skill:Metadata/Items/Gem/SkillGemHeraldOfPlague",
+                "name": "Herald of Plague",
+                "type": "skill",
+                "role": "secondary chaos utility"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable5",
+                "name": "Now and Again",
+                "type": "ascendancy_passive",
+                "role": "cooldown tempo"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable7",
+                "name": "Apex of the Moment",
+                "type": "ascendancy_passive",
+                "role": "defensive control"
+              }
+            ],
+            "evidence": {
+              "randomancer": [
+                "data/enriched/recommendation_catalog_v3.json",
+                "data/offense-inventory.json"
+              ],
+              "externalSources": [
+                {
+                  "title": "Path of Exile 2 game updates",
+                  "url": "https://www.pathofexile.com/forum/view-forum/2212",
+                  "use": "Intended primary patch-history check; network access was unavailable in the generation environment, so repository data remains authoritative."
+                },
+                {
+                  "title": "PoE2DB skill gems",
+                  "url": "https://poe2db.tw/us/Skill_Gems",
+                  "use": "Intended external cross-check; network access was unavailable in the generation environment, so no claim depends on it."
+                }
+              ]
+            },
+            "caveats": [
+              "No native permanent chaos mace primary is established in the catalog; conversion must be verified on the acquired item or mechanic."
+            ]
+          }
+        ]
+      },
+      "ignite": {
+        "offense": "Ignite",
+        "assessment": "natural",
+        "solutions": [
+          {
+            "id": "ignite-perfect-window",
+            "title": "Perfect-Ignite Time Window",
+            "summary": "Now and Again is the relevant Chronomancer bridge: occasional cooldown recovery gives a second use of a high-impact mace button, rather than pretending the ascendancy directly scales attack damage. Perfect Strike supplies a mace-legal physical-to-fire hit whose deliberate timing suits an ailment build: invest in one large fire hit rather than rapid weak ignites. Ancestral Cry is particularly strong catalog evidence because it explicitly inflicts and modifies ignite while empowering a later attack; use it to prepare the heavy strike rather than as damage itself. Herald of Ash adds fire clear, but the Perfect Strike hit should remain the boss-ignite engine. Prioritize weapon base damage, fire conversion, ignite magnitude and duration, then fire exposure or resistance reduction from verified generic sources. Chronomancer can turn a recovered cooldown into another empowered damage window and its slow makes precise release timing less punishing.",
+            "playstyle": "Use Ancestral Cry, line up Perfect Strike for a large ignite, then kite while the burn runs; repeat on a recovered burst window.",
+            "defense": "Use armour from strength gear, cap resistances, and let Apex of the Moment slow nearby enemies while you commit to long mace animations.",
+            "priorities": [
+              "large physical mace base converted to fire",
+              "ignite magnitude and duration",
+              "fire resistance reduction and reliable accuracy"
+            ],
+            "entities": [
+              {
+                "id": "skill:Metadata/Items/Gem/SkillGemPerfectStrike",
+                "name": "Perfect Strike",
+                "type": "skill",
+                "role": "large converting ignite carrier"
+              },
+              {
+                "id": "skill:Metadata/Items/Gem/SkillGemAncestralCry",
+                "name": "Ancestral Cry",
+                "type": "skill",
+                "role": "explicit ignite setup and attack empowerment"
+              },
+              {
+                "id": "skill:Metadata/Items/Gems/SkillGemHeraldOfAsh",
+                "name": "Herald of Ash",
+                "type": "skill",
+                "role": "secondary burning clear"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable5",
+                "name": "Now and Again",
+                "type": "ascendancy_passive",
+                "role": "extra burst windows"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable7",
+                "name": "Apex of the Moment",
+                "type": "ascendancy_passive",
+                "role": "space for timing the strike"
+              }
+            ],
+            "evidence": {
+              "randomancer": [
+                "data/enriched/recommendation_catalog_v3.json",
+                "data/offense-inventory.json"
+              ],
+              "externalSources": [
+                {
+                  "title": "Path of Exile 2 game updates",
+                  "url": "https://www.pathofexile.com/forum/view-forum/2212",
+                  "use": "Intended primary patch-history check; network access was unavailable in the generation environment, so repository data remains authoritative."
+                },
+                {
+                  "title": "PoE2DB skill gems",
+                  "url": "https://poe2db.tw/us/Skill_Gems",
+                  "use": "Intended external cross-check; network access was unavailable in the generation environment, so no claim depends on it."
+                }
+              ]
+            },
+            "caveats": []
+          }
+        ]
+      },
+      "bleed": {
+        "offense": "Bleed",
+        "assessment": "workable",
+        "solutions": [
+          {
+            "id": "bleed-heavy-hit",
+            "title": "Temporal Bleed Maul",
+            "summary": "Now and Again is the relevant Chronomancer bridge: occasional cooldown recovery gives a second use of a high-impact mace button, rather than pretending the ascendancy directly scales attack damage. Use a high-physical mace and the largest dependable hit you can land, with Earthquake as the preferred carrier because its delayed cadence lets you disengage while bleeding works. Bleed chance and magnitude still need to come from generic supports, passives, or gear; native physical damage is not itself application. Herald of Blood is valuable catalog evidence because it explicitly inflicts bleed and consumes bleeds for its payoff, creating a clearing layer once the primary attack establishes the ailment. Avoid conversion because it erodes the physical base the bleed plan needs. Chronomancer does not directly scale bleed, but control around the character and occasional cooldown recovery make repeated heavy-hit windows safer.",
+            "playstyle": "Plant Earthquake, let its heavy physical hit establish bleed, move while damage runs, and use Herald of Blood’s bleed interaction for packs.",
+            "defense": "Use armour from strength gear, cap resistances, and let Apex of the Moment slow nearby enemies while you commit to long mace animations.",
+            "priorities": [
+              "unconverted physical mace damage",
+              "verified bleed chance and bleed magnitude",
+              "duration, area, and accuracy"
+            ],
+            "entities": [
+              {
+                "id": "skill:Metadata/Items/Gems/SkillGemEarthquake",
+                "name": "Earthquake",
+                "type": "skill",
+                "role": "heavy physical bleed carrier"
+              },
+              {
+                "id": "skill:Metadata/Items/Gem/SkillGemHeraldOfBlood",
+                "name": "Herald of Blood",
+                "type": "skill",
+                "role": "bleed-based clearing payoff"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable5",
+                "name": "Now and Again",
+                "type": "ascendancy_passive",
+                "role": "extra cooldown window"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable7",
+                "name": "Apex of the Moment",
+                "type": "ascendancy_passive",
+                "role": "close-range control"
+              }
+            ],
+            "evidence": {
+              "randomancer": [
+                "data/enriched/recommendation_catalog_v3.json",
+                "data/offense-inventory.json"
+              ],
+              "externalSources": [
+                {
+                  "title": "Path of Exile 2 game updates",
+                  "url": "https://www.pathofexile.com/forum/view-forum/2212",
+                  "use": "Intended primary patch-history check; network access was unavailable in the generation environment, so repository data remains authoritative."
+                },
+                {
+                  "title": "PoE2DB skill gems",
+                  "url": "https://poe2db.tw/us/Skill_Gems",
+                  "use": "Intended external cross-check; network access was unavailable in the generation environment, so no claim depends on it."
+                }
+              ]
+            },
+            "caveats": [
+              "Bleed application must be supplied separately; physical damage alone does not fulfill it."
+            ]
+          }
+        ]
+      },
+      "poison": {
+        "offense": "Poison",
+        "assessment": "difficult",
+        "solutions": [
+          {
+            "id": "poison-fast-mace",
+            "title": "Fast-Hit Venom Mace",
+            "summary": "Now and Again is the relevant Chronomancer bridge: occasional cooldown recovery gives a second use of a high-impact mace button, rather than pretending the ascendancy directly scales attack damage. Poison asks a strength weapon to pursue an ailment more naturally served by other weapon families. Use a relatively fast one-handed mace and Mace Strike as the honest carrier, then secure actual poison chance plus enough physical or chaos damage to seed poisons. Herald of Plague can support pack coverage, but the catalog does not claim it makes every mace hit poison. Do not build around slow stun-only payoffs: poison wants repeatable contact, duration, and stack maintenance. Scale attack speed, ailment magnitude, duration, and chaos resistance reduction while retaining enough weapon damage and accuracy. Chronomancer mostly supplies defensive time control; recovered cooldowns are secondary rather than the engine.",
+            "playstyle": "Apply repeated poisons with a fast mace attack, keep stacks active on bosses, and use Herald of Plague for pack utility.",
+            "defense": "Use armour from strength gear, cap resistances, and let Apex of the Moment slow nearby enemies while you commit to long mace animations.",
+            "priorities": [
+              "fast accurate one-handed mace",
+              "verified poison chance, magnitude, and duration",
+              "physical or chaos attack damage and chaos resistance reduction"
+            ],
+            "entities": [
+              {
+                "id": "skill:Metadata/Items/Gem/SkillGemPlayerDefault1HMace",
+                "name": "Mace Strike",
+                "type": "skill",
+                "role": "repeatable poison carrier"
+              },
+              {
+                "id": "skill:Metadata/Items/Gem/SkillGemHeraldOfPlague",
+                "name": "Herald of Plague",
+                "type": "skill",
+                "role": "chaos/poison clearing utility"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable5",
+                "name": "Now and Again",
+                "type": "ascendancy_passive",
+                "role": "secondary cooldown utility"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable7",
+                "name": "Apex of the Moment",
+                "type": "ascendancy_passive",
+                "role": "melee control"
+              }
+            ],
+            "evidence": {
+              "randomancer": [
+                "data/enriched/recommendation_catalog_v3.json",
+                "data/offense-inventory.json"
+              ],
+              "externalSources": [
+                {
+                  "title": "Path of Exile 2 game updates",
+                  "url": "https://www.pathofexile.com/forum/view-forum/2212",
+                  "use": "Intended primary patch-history check; network access was unavailable in the generation environment, so repository data remains authoritative."
+                },
+                {
+                  "title": "PoE2DB skill gems",
+                  "url": "https://poe2db.tw/us/Skill_Gems",
+                  "use": "Intended external cross-check; network access was unavailable in the generation environment, so no claim depends on it."
+                }
+              ]
+            },
+            "caveats": [
+              "The catalog does not expose a native poison mace attack; explicit application is mandatory."
+            ]
+          }
+        ]
+      },
+      "chill": {
+        "offense": "Chill",
+        "assessment": "natural",
+        "solutions": [
+          {
+            "id": "chill-starborn",
+            "title": "Frozen-Time Vanguard",
+            "summary": "Now and Again is the relevant Chronomancer bridge: occasional cooldown recovery gives a second use of a high-impact mace button, rather than pretending the ascendancy directly scales attack damage. Starborn Onslaught directly inflicts chill while converting mace physical damage toward cold, so the rolled weapon and offense share a real carrier. Build for frequent enough hits to keep chill present, cold penetration, and ailment magnitude rather than pursuing maximum slow from Chronomancer alone. Apex of the Moment complements chill as a separate nearby-enemy slow, creating room to sustain the skill’s attack pattern. Herald of Ice is optional pack payoff after freezes, not required for chill. A physical mace remains valuable because conversion inherits its base; avoid fire conversion that competes with the plan.",
+            "playstyle": "Sweep with Starborn Onslaught to chill immediately, stay close while layered slowing suppresses retaliation, and reposition between sequences.",
+            "defense": "Layer armour and energy shield where practical, cap resistances, and combine Apex of the Moment with chill rather than treating either as immunity.",
+            "priorities": [
+              "physical mace DPS feeding cold conversion",
+              "chill magnitude and cold penetration",
+              "attack speed, accuracy, and elemental attack damage"
+            ],
+            "entities": [
+              {
+                "id": "skill:Metadata/Items/Gems/SkillGemStarbornOnslaught",
+                "name": "Starborn Onslaught",
+                "type": "skill",
+                "role": "direct chill-inflicting mace attack"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable7",
+                "name": "Apex of the Moment",
+                "type": "ascendancy_passive",
+                "role": "additional nearby slow"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable5",
+                "name": "Now and Again",
+                "type": "ascendancy_passive",
+                "role": "cooldown flexibility"
+              }
+            ],
+            "evidence": {
+              "randomancer": [
+                "data/enriched/recommendation_catalog_v3.json",
+                "data/offense-inventory.json"
+              ],
+              "externalSources": [
+                {
+                  "title": "Path of Exile 2 game updates",
+                  "url": "https://www.pathofexile.com/forum/view-forum/2212",
+                  "use": "Intended primary patch-history check; network access was unavailable in the generation environment, so repository data remains authoritative."
+                },
+                {
+                  "title": "PoE2DB skill gems",
+                  "url": "https://poe2db.tw/us/Skill_Gems",
+                  "use": "Intended external cross-check; network access was unavailable in the generation environment, so no claim depends on it."
+                }
+              ]
+            },
+            "caveats": []
+          }
+        ]
+      },
+      "freeze": {
+        "offense": "Freeze",
+        "assessment": "workable",
+        "solutions": [
+          {
+            "id": "freeze-starborn",
+            "title": "Starborn Freeze Breaker",
+            "summary": "Now and Again is the relevant Chronomancer bridge: occasional cooldown recovery gives a second use of a high-impact mace button, rather than pretending the ascendancy directly scales attack damage. Use Starborn Onslaught as the mace-legal cold carrier and invest beyond simple chill into freeze buildup or equivalent ailment threshold pressure. The catalog says the skill modifies freeze, while Herald of Ice converts to cold but prevents its own freeze; that distinction keeps the recommendation mechanically honest. Freeze becomes a control and clear enabler rather than guaranteed boss shutdown. Keep a heavy physical mace base for conversion, add cold penetration and attack speed, and do not sacrifice accuracy. Chronomancer’s nearby slow helps generate the sequence of hits required before a freeze lands.",
+            "playstyle": "Build freeze pressure with Starborn Onslaught, shatter normal packs through Herald of Ice, and treat bosses as cold-hit targets when freeze thresholds are too high.",
+            "defense": "Use armour from strength gear, cap resistances, and let Apex of the Moment slow nearby enemies while you commit to long mace animations.",
+            "priorities": [
+              "physical-to-cold attack scaling",
+              "freeze buildup or ailment magnitude",
+              "cold penetration, attack speed, and accuracy"
+            ],
+            "entities": [
+              {
+                "id": "skill:Metadata/Items/Gems/SkillGemStarbornOnslaught",
+                "name": "Starborn Onslaught",
+                "type": "skill",
+                "role": "freeze-capable cold mace carrier"
+              },
+              {
+                "id": "skill:Metadata/Items/Gems/SkillGemHeraldOfIce",
+                "name": "Herald of Ice",
+                "type": "skill",
+                "role": "shatter payoff, not freeze application"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable7",
+                "name": "Apex of the Moment",
+                "type": "ascendancy_passive",
+                "role": "control during buildup"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable5",
+                "name": "Now and Again",
+                "type": "ascendancy_passive",
+                "role": "burst utility"
+              }
+            ],
+            "evidence": {
+              "randomancer": [
+                "data/enriched/recommendation_catalog_v3.json",
+                "data/offense-inventory.json"
+              ],
+              "externalSources": [
+                {
+                  "title": "Path of Exile 2 game updates",
+                  "url": "https://www.pathofexile.com/forum/view-forum/2212",
+                  "use": "Intended primary patch-history check; network access was unavailable in the generation environment, so repository data remains authoritative."
+                },
+                {
+                  "title": "PoE2DB skill gems",
+                  "url": "https://poe2db.tw/us/Skill_Gems",
+                  "use": "Intended external cross-check; network access was unavailable in the generation environment, so no claim depends on it."
+                }
+              ]
+            },
+            "caveats": [
+              "Freeze reliability falls sharply against high ailment thresholds."
+            ]
+          }
+        ]
+      },
+      "shock": {
+        "offense": "Shock",
+        "assessment": "experimental",
+        "solutions": [
+          {
+            "id": "shock-conversion",
+            "title": "Shock-First Rolling Maul",
+            "summary": "Now and Again is the relevant Chronomancer bridge: occasional cooldown recovery gives a second use of a high-impact mace button, rather than pretending the ascendancy directly scales attack damage. Because the permanent catalog lacks a native lightning mace primary, convert or add enough lightning to Rolling Slam that its hits can genuinely shock. The main attack—not Herald of Thunder—must establish shock, since the catalog records the herald as preventing its own shock. Once shocks are reliable, Herald of Thunder becomes a secondary clear layer. Favor hit damage and shock magnitude over damage-over-time stats, and verify the chosen conversion source before allocating deeply. Apex of the Moment reduces pressure while the rolling sequence connects; Now and Again can recycle a separate heavy cooldown hit that benefits from shock’s increased damage taken window.",
+            "playstyle": "Roll through targets with lightning-scaled mace hits, establish shock, then spend a reset heavy attack while the debuff is active.",
+            "defense": "Use armour from strength gear, cap resistances, and let Apex of the Moment slow nearby enemies while you commit to long mace animations.",
+            "priorities": [
+              "verified lightning conversion or added lightning",
+              "large lightning hit and shock magnitude",
+              "lightning penetration, accuracy, and attack speed"
+            ],
+            "entities": [
+              {
+                "id": "skill:Metadata/Items/Gems/SkillGemRollingSlam",
+                "name": "Rolling Slam",
+                "type": "skill",
+                "role": "mace carrier for converted lightning"
+              },
+              {
+                "id": "skill:Metadata/Items/Gems/SkillGemHeraldOfThunder",
+                "name": "Herald of Thunder",
+                "type": "skill",
+                "role": "post-shock clear payoff"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable5",
+                "name": "Now and Again",
+                "type": "ascendancy_passive",
+                "role": "burst during shock"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable7",
+                "name": "Apex of the Moment",
+                "type": "ascendancy_passive",
+                "role": "control"
+              }
+            ],
+            "evidence": {
+              "randomancer": [
+                "data/enriched/recommendation_catalog_v3.json",
+                "data/offense-inventory.json"
+              ],
+              "externalSources": [
+                {
+                  "title": "Path of Exile 2 game updates",
+                  "url": "https://www.pathofexile.com/forum/view-forum/2212",
+                  "use": "Intended primary patch-history check; network access was unavailable in the generation environment, so repository data remains authoritative."
+                },
+                {
+                  "title": "PoE2DB skill gems",
+                  "url": "https://poe2db.tw/us/Skill_Gems",
+                  "use": "Intended external cross-check; network access was unavailable in the generation environment, so no claim depends on it."
+                }
+              ]
+            },
+            "caveats": [
+              "Herald of Thunder cannot apply the required shock."
+            ]
+          }
+        ]
+      },
+      "electrocute": {
+        "offense": "Electrocute",
+        "assessment": "difficult",
+        "solutions": [
+          {
+            "id": "electrocute-buildup",
+            "title": "Improvised Electro-Maul",
+            "summary": "Now and Again is the relevant Chronomancer bridge: occasional cooldown recovery gives a second use of a high-impact mace button, rather than pretending the ascendancy directly scales attack damage. Electrocute is harder than shock because the current permanent catalog’s explicit mace-delivered electrocute option is seasonal-tagged and therefore excluded by Randomancer’s own recommendation contract. Do not use that skill here. Instead, a permanent character would need a verified generic source that lets lightning mace hits build Electrocution, plus physical-to-lightning conversion or substantial added lightning on a repeatable carrier such as Rolling Slam. This is a requirements-first interpretation: acquire and validate the application source before investing in buildup, duration, or payoff. Chronomancer’s slow helps keep targets inside repeated attacks and its cooldown recovery can create a damage window after control lands, but neither notable supplies Electrocution.",
+            "playstyle": "Accumulate Electrocution with converted Rolling Slam hits, exploit the control window with a heavy mace payoff, and disengage before buildup falls away.",
+            "defense": "Use armour from strength gear, cap resistances, and let Apex of the Moment slow nearby enemies while you commit to long mace animations.",
+            "priorities": [
+              "a verified permanent Electrocution application source",
+              "lightning conversion, buildup, and duration",
+              "attack speed, accuracy, and lightning penetration"
+            ],
+            "entities": [
+              {
+                "id": "skill:Metadata/Items/Gems/SkillGemRollingSlam",
+                "name": "Rolling Slam",
+                "type": "skill",
+                "role": "repeatable buildup carrier"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable5",
+                "name": "Now and Again",
+                "type": "ascendancy_passive",
+                "role": "post-control burst utility"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable7",
+                "name": "Apex of the Moment",
+                "type": "ascendancy_passive",
+                "role": "control while building the ailment"
+              }
+            ],
+            "evidence": {
+              "randomancer": [
+                "data/enriched/recommendation_catalog_v3.json",
+                "data/offense-inventory.json"
+              ],
+              "externalSources": [
+                {
+                  "title": "Path of Exile 2 game updates",
+                  "url": "https://www.pathofexile.com/forum/view-forum/2212",
+                  "use": "Intended primary patch-history check; network access was unavailable in the generation environment, so repository data remains authoritative."
+                },
+                {
+                  "title": "PoE2DB skill gems",
+                  "url": "https://poe2db.tw/us/Skill_Gems",
+                  "use": "Intended external cross-check; network access was unavailable in the generation environment, so no claim depends on it."
+                }
+              ]
+            },
+            "caveats": [
+              "Randomancer’s only explicit catalogued mace Electrocution skill is seasonal-tagged and intentionally excluded.",
+              "Generic application source remains a gearing validation requirement."
+            ]
+          }
+        ]
+      },
+      "minions": {
+        "offense": "Minions",
+        "assessment": "experimental",
+        "solutions": [
+          {
+            "id": "earthshatter-stone-host",
+            "title": "Earthshatter Stone Host",
+            "summary": "Now and Again is the relevant Chronomancer bridge: occasional cooldown recovery gives a second use of a high-impact mace button, rather than pretending the ascendancy directly scales attack damage. Earthshatter is the honest bridge because its current skill types explicitly include the ability to create Stone Elementals while still requiring a mace. Treat the mace attack and the created allies as one package: slam fissures to deal physical damage and generate the temporary minion presence, then use warcry interaction to detonate or advance the battlefield plan. Scale enough mace damage that the character remains functional when allies are absent, while taking only minion modifiers that demonstrably affect the created elementals. Chronomancer contributes pacing and safety rather than minion scaling; cooldown recovery is most useful on supporting warcries or a heavy attack. This is experimental because the enriched facts do not fully structure the Stone Elemental creation relationship, even though the datamined skill type exposes it.",
+            "playstyle": "Create fissures with Earthshatter, use warcry timing to turn the terrain into damage and Stone Elemental pressure, then repeat from a controlled position.",
+            "defense": "Use armour from strength gear, cap resistances, and let Apex of the Moment slow nearby enemies while you commit to long mace animations.",
+            "priorities": [
+              "physical mace damage and area",
+              "verified modifiers for the created Stone Elementals",
+              "warcry recovery and enough strength/accuracy"
+            ],
+            "entities": [
+              {
+                "id": "skill:Metadata/Items/Gems/SkillGemEarthshatter",
+                "name": "Earthshatter",
+                "type": "skill",
+                "role": "mace attack and Stone Elemental route"
+              },
+              {
+                "id": "skill:Metadata/Items/Gem/SkillGemAncestralCry",
+                "name": "Ancestral Cry",
+                "type": "skill",
+                "role": "warcry interaction and attack empowerment"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable5",
+                "name": "Now and Again",
+                "type": "ascendancy_passive",
+                "role": "cooldown pacing"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable7",
+                "name": "Apex of the Moment",
+                "type": "ascendancy_passive",
+                "role": "space for setup"
+              }
+            ],
+            "evidence": {
+              "randomancer": [
+                "data/enriched/recommendation_catalog_v3.json",
+                "data/offense-inventory.json"
+              ],
+              "externalSources": [
+                {
+                  "title": "Path of Exile 2 game updates",
+                  "url": "https://www.pathofexile.com/forum/view-forum/2212",
+                  "use": "Intended primary patch-history check; network access was unavailable in the generation environment, so repository data remains authoritative."
+                },
+                {
+                  "title": "PoE2DB skill gems",
+                  "url": "https://poe2db.tw/us/Skill_Gems",
+                  "use": "Intended external cross-check; network access was unavailable in the generation environment, so no claim depends on it."
+                }
+              ]
+            },
+            "caveats": [
+              "Stone Elemental semantics are present in skill types but incompletely represented as typed creation facts."
+            ]
+          }
+        ]
+      },
+      "companions": {
+        "offense": "Companions",
+        "assessment": "difficult",
+        "solutions": [
+          {
+            "id": "companion-and-maul",
+            "title": "Companion-Assisted Maul",
+            "summary": "Now and Again is the relevant Chronomancer bridge: occasional cooldown recovery gives a second use of a high-impact mace button, rather than pretending the ascendancy directly scales attack damage. No permanent, Chronomancer-accessible catalog entity was found that turns a mace attack into a Companion, so keep the two roles explicit rather than inventing synergy. The character uses Earthquake with a real physical mace as the primary damage loop; a separately sourced, current Companion supplies distraction, utility, or supplemental damage. Invest first in the mace plan and defenses, then only in generic Companion scaling that is verified to affect the chosen ally. Apex of the Moment can protect both the setup space and the player, while Now and Again supports a cooldown-heavy slam package. This interpretation meaningfully uses all three ingredients, but the offense is parallel rather than fused: the mace remains the player carrier and the Companion is a second axis.",
+            "playstyle": "Place Earthquake while the Companion occupies enemies, move through the delayed aftershock, and use recovered cooldowns to reinforce boss windows.",
+            "defense": "Use armour from strength gear, cap resistances, and let Apex of the Moment slow nearby enemies while you commit to long mace animations.",
+            "priorities": [
+              "physical mace DPS and area",
+              "only verified generic Companion modifiers",
+              "armour, resistances, and sustain for close-range play"
+            ],
+            "entities": [
+              {
+                "id": "skill:Metadata/Items/Gems/SkillGemEarthquake",
+                "name": "Earthquake",
+                "type": "skill",
+                "role": "player-delivered mace damage"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable5",
+                "name": "Now and Again",
+                "type": "ascendancy_passive",
+                "role": "cooldown support"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable7",
+                "name": "Apex of the Moment",
+                "type": "ascendancy_passive",
+                "role": "control for player and ally positioning"
+              }
+            ],
+            "evidence": {
+              "randomancer": [
+                "data/enriched/recommendation_catalog_v3.json",
+                "data/offense-inventory.json"
+              ],
+              "externalSources": [
+                {
+                  "title": "Path of Exile 2 game updates",
+                  "url": "https://www.pathofexile.com/forum/view-forum/2212",
+                  "use": "Intended primary patch-history check; network access was unavailable in the generation environment, so repository data remains authoritative."
+                },
+                {
+                  "title": "PoE2DB skill gems",
+                  "url": "https://poe2db.tw/us/Skill_Gems",
+                  "use": "Intended external cross-check; network access was unavailable in the generation environment, so no claim depends on it."
+                }
+              ]
+            },
+            "caveats": [
+              "No canonical Companion entity is named because the catalog did not validate a permanent Chronomancer-accessible mace-linked option."
+            ]
+          }
+        ]
+      },
+      "totems": {
+        "offense": "Totems",
+        "assessment": "natural",
+        "solutions": [
+          {
+            "id": "shockwave-clockwork",
+            "title": "Clockwork Shockwave Totems",
+            "summary": "Now and Again is the relevant Chronomancer bridge: occasional cooldown recovery gives a second use of a high-impact mace button, rather than pretending the ascendancy directly scales attack damage. Shockwave Totem is a direct mace-compatible martial skill that creates a totem, making this the cleanest archetype bridge in the slice. Let the totems deliver repeated physical shockwaves while the Chronomancer repositions and uses time control to keep enemies within their area. Scale totem damage, placement speed, area, and the mace stats the skill actually inherits; do not assume ordinary player attack speed applies unless the current tooltip confirms it. Now and Again can support cooldown-bearing utility but should not be sold as resetting the totem’s independent attacks. Apex of the Moment is the stronger identity node here because slowing nearby enemies improves totem uptime and placement safety.",
+            "playstyle": "Place Shockwave Totems ahead of packs, circle enemies inside their coverage, and replace them as the fight moves.",
+            "defense": "Use a shield with a one-handed mace if the skill and chosen setup permit it, cap resistances, and rely on distance plus Apex of the Moment rather than face-tanking.",
+            "priorities": [
+              "totem damage and placement speed",
+              "physical damage and area that explicitly apply to the totem",
+              "spirit or resource requirements and defensive shield stats"
+            ],
+            "entities": [
+              {
+                "id": "skill:Metadata/Items/Gems/SkillGemShockwaveTotem",
+                "name": "Shockwave Totem",
+                "type": "skill",
+                "role": "direct mace-required totem damage"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable7",
+                "name": "Apex of the Moment",
+                "type": "ascendancy_passive",
+                "role": "keeps enemies in shockwave coverage"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable5",
+                "name": "Now and Again",
+                "type": "ascendancy_passive",
+                "role": "utility cooldown flexibility"
+              }
+            ],
+            "evidence": {
+              "randomancer": [
+                "data/enriched/recommendation_catalog_v3.json",
+                "data/offense-inventory.json"
+              ],
+              "externalSources": [
+                {
+                  "title": "Path of Exile 2 game updates",
+                  "url": "https://www.pathofexile.com/forum/view-forum/2212",
+                  "use": "Intended primary patch-history check; network access was unavailable in the generation environment, so repository data remains authoritative."
+                },
+                {
+                  "title": "PoE2DB skill gems",
+                  "url": "https://poe2db.tw/us/Skill_Gems",
+                  "use": "Intended external cross-check; network access was unavailable in the generation environment, so no claim depends on it."
+                }
+              ]
+            },
+            "caveats": []
+          },
+          {
+            "id": "ancestral-charge-totem",
+            "title": "Endurance-Fuelled Ancestral Totem",
+            "summary": "Now and Again is the relevant Chronomancer bridge: occasional cooldown recovery gives a second use of a high-impact mace button, rather than pretending the ascendancy directly scales attack damage. Ancestral Warrior Totem is a genuinely distinct route: the catalog says it requires Any Mace, creates an attack totem, and can consume Endurance Charges as an optional payoff. Socket a compatible mace attack that is neither channelled nor cooldown-based, then build a charge-generation loop so the summon can receive its enhanced form. Unlike Shockwave Totem’s fixed shockwave identity, this path is modular and charge hungry; the selected socketed attack determines whether physical, fire, or another supported scaling direction is sensible. Chronomancer provides control during setup and occasional utility cooldown recovery, but does not solve charges. This is powerful only when the charge economy is reliable.",
+            "playstyle": "Generate Endurance Charges, summon the empowered Ancestral Warrior Totem with a compatible mace attack, then fight around its active window.",
+            "defense": "Use armour from strength gear, cap resistances, and let Apex of the Moment slow nearby enemies while you commit to long mace animations.",
+            "priorities": [
+              "reliable Endurance Charge generation",
+              "totem and socketed mace-attack scaling",
+              "duration, placement safety, and resource sustain"
+            ],
+            "entities": [
+              {
+                "id": "skill:Metadata/Items/Gems/SkillGemAncestralWarriorTotem",
+                "name": "Ancestral Warrior Totem",
+                "type": "skill",
+                "role": "charge-consuming modular attack totem"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable7",
+                "name": "Apex of the Moment",
+                "type": "ascendancy_passive",
+                "role": "setup safety"
+              },
+              {
+                "id": "passive:AscendancySorceress2Notable5",
+                "name": "Now and Again",
+                "type": "ascendancy_passive",
+                "role": "utility cooldown flexibility"
+              }
+            ],
+            "evidence": {
+              "randomancer": [
+                "data/enriched/recommendation_catalog_v3.json",
+                "data/offense-inventory.json"
+              ],
+              "externalSources": [
+                {
+                  "title": "Path of Exile 2 game updates",
+                  "url": "https://www.pathofexile.com/forum/view-forum/2212",
+                  "use": "Intended primary patch-history check; network access was unavailable in the generation environment, so repository data remains authoritative."
+                },
+                {
+                  "title": "PoE2DB skill gems",
+                  "url": "https://poe2db.tw/us/Skill_Gems",
+                  "use": "Intended external cross-check; network access was unavailable in the generation environment, so no claim depends on it."
+                }
+              ]
+            },
+            "caveats": [
+              "The socketed attack must satisfy the catalog’s attack requirement and exclusions for channelled and cooldown skills."
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
