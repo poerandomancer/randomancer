@@ -13,3 +13,6 @@ __pycache__/
 
 # Developer-only recommendation audit exports
 /tmp/recommendation-audit.json
+/tmp/recommendation-audit-baseline.json
+/tmp/recommendation-diversity-audit.json
+/tmp/recommendation-audit-comparison.json

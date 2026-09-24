@@ -73,10 +73,13 @@ function compactCase(id, input, recommendation, nonSkills) {
     recommendations: {
       status: recommendation.status,
       solutionClass: recommendation.solutionClass,
+      coreProviders: (recommendation.coreProviders || []).map(({ id, name, providerType, packageRole, slot }) =>
+        ({ id, name, providerType, packageRole, ...(slot ? { slot } : {}) })),
       coreSolverPieces: (recommendation.packageProfile?.corePieces || []).map(({ name, packageRole }) => ({ name, role: packageRole })),
       requiredUnique: Boolean(recommendation.coreUnique),
       bridgePath: recommendation.bridgePath || [],
       packageProfile: recommendation.packageProfile || null,
+      diagnostics: recommendation.diagnostics || null,
       skills,
       ascendancyPassives: compactEntries(nonSkills.passives?.ascendancyNodes),
       notables: compactEntries(nonSkills.passives?.notables),
@@ -88,6 +91,19 @@ function compactCase(id, input, recommendation, nonSkills) {
 
 function summarize(cases) {
   const skillNames = (item) => item.recommendations.skills.map((entry) => entry.name);
+  const signature = (item) => JSON.stringify({
+    primary: item.recommendations.skills[0]?.name || null,
+    supporting: item.recommendations.skills.slice(1).filter((skill) => skill.suppliedTargets.length).map((skill) => skill.name).sort(),
+    providers: item.recommendations.coreProviders.map((provider) => provider.id || provider.name).sort(),
+    supports: item.recommendations.skills.flatMap((skill) => skill.supports
+      .filter((support) => support.role !== 'OPTIONAL_OFFENSE_OPTIMIZER').map((support) => support.name)).sort()
+  });
+  const signaturesByRoll = new Map();
+  for (const item of cases) {
+    const key = `${item.input.weapon}|${item.input.offense}`;
+    if (!signaturesByRoll.has(key)) signaturesByRoll.set(key, new Set());
+    signaturesByRoll.get(key).add(signature(item));
+  }
   return {
     totalCases: cases.length,
     countByWeapon: countNames(cases, (item) => [item.input.weapon]),
@@ -101,6 +117,23 @@ function summarize(cases) {
     },
     packageStatus: countNames(cases, (item) => [item.recommendations.status]),
     solutionClass: countNames(cases, (item) => [item.recommendations.solutionClass]),
+    directNativeSelections: cases.filter((item) => item.recommendations.solutionClass === 'DIRECT_NATIVE').length,
+    bridgedSelections: cases.filter((item) => item.recommendations.solutionClass !== 'DIRECT_NATIVE').length,
+    multiProviderPackages: cases.filter((item) => item.recommendations.coreProviders.length > 1).length,
+    providerCountDistribution: countNames(cases, (item) => [String(item.recommendations.coreProviders.length)]),
+    requiredUniqueCountDistribution: countNames(cases, (item) => [String(item.recommendations.coreProviders
+      .filter((provider) => provider.providerType === 'unique').length)]),
+    requiredSupportCountDistribution: countNames(cases, (item) => [String(
+      item.recommendations.diagnostics?.assignedRequiredSupportCount || 0)]),
+    averageComplexityCost: cases.reduce((sum, item) => sum + Number(item.recommendations.diagnostics?.complexityCost || 0), 0) / cases.length,
+    maxComplexityCost: Math.max(...cases.map((item) => Number(item.recommendations.diagnostics?.complexityCost || 0))),
+    coreProviderFrequency: countNames(cases, (item) => item.recommendations.coreProviders.map((provider) => provider.name)),
+    distinctPackageSignaturesPerRoll: Object.fromEntries([...signaturesByRoll].map(([key, values]) => [key, values.size])),
+    rollsWithOneSignature: [...signaturesByRoll].filter(([, values]) => values.size === 1).map(([key]) => key),
+    providerConflictCases: cases.filter((item) => item.recommendations.diagnostics?.providerCompatibility?.ok === false).length,
+    missingSurfacedRequiredProviderCases: cases.filter((item) => item.recommendations.coreProviders
+      .filter((provider) => provider.providerType === 'unique')
+      .some((provider) => !item.recommendations.uniques.some((uniqueEntry) => uniqueEntry.name === provider.name))).length,
     unresolvedByType: countNames(cases, (item) => item.unresolved.map((entry) => String(entry.obligationId).split(':')[0])),
     packagesUsingRequiredSecondarySkill: cases.filter((item) => item.recommendations.skills.slice(1)
       .some((skill) => skill.suppliedTargets.length > 0)).length,
