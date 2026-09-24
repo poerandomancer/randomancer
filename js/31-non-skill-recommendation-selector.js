@@ -390,11 +390,14 @@ function selectNonSkillRecommendations(catalog, snapshot = {}, recommendationPac
   const analyzed = arr(catalog?.entities).map((entity) => analyze(entity, snapshot, context)).filter(Boolean);
   const byType = (type) => analyzed.filter((candidate) => candidate.entity.content_type === type);
   const seed = options.selectionSeed ?? recommendationPackage?.selectionSeed ?? '';
-  const requiredUnique = recommendationPackage?.coreUnique ? [{
-    id: recommendationPackage.coreUnique.id, entityId: recommendationPackage.coreUnique.entityId, name: recommendationPackage.coreUnique.name,
-    required: true, coreSolver: true, packageRole: recommendationPackage.coreUnique.packageRole || 'unique_bridge',
-    recommendationEvidence: { tier: 'BUILD_DEFINING_CAPABILITY', matches: recommendationPackage.bridgePath || [] }
-  }] : [];
+  const requiredUnique = arr(recommendationPackage?.coreProviders)
+    .filter((provider) => provider?.required && provider?.providerType === 'unique')
+    .map((provider) => ({
+      id: provider.id, entityId: provider.entityId, name: provider.name, itemType: provider.slot || null,
+      required: true, coreSolver: true, packageRole: provider.packageRole || 'unique_bridge',
+      recommendationEvidence: { tier: 'BUILD_DEFINING_CAPABILITY', matches: (recommendationPackage.bridgePath || [])
+        .filter((edge) => token(edge.provider) === token(provider.name)) }
+    }));
   const requiredKeystones = arr(recommendationPackage?.coreProviders)
     .filter((provider) => provider?.required && provider?.providerType === 'keystone')
     .map((provider) => ({ id: provider.id, name: provider.name, required: true,
@@ -402,7 +405,8 @@ function selectNonSkillRecommendations(catalog, snapshot = {}, recommendationPac
   const optionalUnique = selectUniqueRecommendation(catalog, snapshot, recommendationPackage, `${seed}:unique`)
     .filter((entry) => !requiredUnique.some((required) =>
       token(required.entityId || required.id) === token(entry.entityId || entry.id)));
-  const recommendedUniques = [...requiredUnique, ...optionalUnique].slice(0, 1);
+  // Required construction pieces outrank the historical one-item display cap.
+  const recommendedUniques = [...requiredUnique, ...optionalUnique.slice(0, Math.max(0, 1 - requiredUnique.length))];
   const canonicalIdentity = (entry) => {
     const resolved = arr(catalog?.entities).find((entity) => [entity.id, entity.source_id]
       .map(token).includes(token(entry?.entityId || entry?.id)));

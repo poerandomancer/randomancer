@@ -5,6 +5,18 @@ const RECOMMENDATION_SKILL_CRAFTING_V3_SCHEMA = 'recommendation-skill-crafting-v
 const PRIMARY_QUALITY_BAND = 12;
 const COMPANION_QUALITY_BAND = 8;
 const PACKAGE_QUALITY_BAND = 12;
+// Construction complexity is deliberately small and bounded. It is applied only
+// after legality/completeness and never turns an incomplete route into a viable one.
+const SOLUTION_COMPLEXITY = Object.freeze({
+  coreProvider: 3,
+  requiredUnique: 2,
+  accessTransformation: 3,
+  requiredSupport: 2,
+  bridgeStep: 1,
+  maximumCost: 18,
+  semanticScoreScale: 1000,
+  selectionQualityBand: 17
+});
 const MAX_REQUIRED_SUPPORTS = 2;
 const MAX_OPTIMIZER_SUPPORTS = 3;
 const MAX_TOTAL_SUPPORTS = 3;
@@ -134,7 +146,7 @@ const WEAPON_ACCESS_BRIDGES = Object.freeze([
     provider: Object.freeze({ type: 'keystone', name: 'Hollow Palm Technique',
       sourceId: 'passive_keystone_hollow_palm_technique' }) }),
   Object.freeze({ rolledFamily: 'unarmed', effectiveFamily: 'mace',
-    provider: Object.freeze({ type: 'unique', name: 'Facebreaker', sourceId: 'Facebreaker||Stocky Mitts' }) })
+    provider: Object.freeze({ type: 'unique', name: 'Facebreaker', sourceId: 'Facebreaker||Stocky Mitts', slot: 'Gloves' }) })
 ]);
 const COMPANION_SKILL_PREFERENCE_SCORE = Object.freeze({
   tame_beast: 90
@@ -1688,7 +1700,7 @@ function analyzePackageCandidateWithAccess(entity, offenseObligations, snapshot,
       accessBridge: null,
       coreProvider: { type: 'unique', name: source.unique_name || source.uniqueName,
         sourceId: source.unique_id || source.uniqueId, relationship: 'grants_skill',
-        grantedSkill: entity.name, grantedSkillEntityId: entity.id }
+        grantedSkill: entity.name, grantedSkillEntityId: entity.id, slot: source.slot || null }
     })) : [];
   const candidates = [...weaponAccessProfilesV3(snapshot), ...providerProfiles].map((profile) => {
     const candidate = analyzePackageCandidate(entity, offenseObligations, profile.snapshot, criticalProfiles, supportIndex);
@@ -2373,6 +2385,106 @@ function packageConstructionComplete(candidate, offenseObligations) {
     && !candidate.unresolvedSetupCosts.length;
 }
 
+function providerIdentity(provider) {
+  return normalizeToken(provider?.sourceId || provider?.source_id || provider?.entityId || provider?.id || provider?.name);
+}
+
+function providerSlot(provider) {
+  if (provider?.providerType === 'keystone') return 'keystone';
+  const value = normalizeToken(provider?.slot || provider?.equipment?.slot || provider?.compatibility?.equipment?.slot);
+  if (value.includes('helmet')) return 'helmet';
+  if (value.includes('body') || value.includes('armour')) return 'body_armour';
+  if (value.includes('glove') || value.includes('mitt') || value.includes('wrap')) return 'gloves';
+  if (value.includes('boot')) return 'boots';
+  if (value.includes('belt')) return 'belt';
+  if (value.includes('amulet')) return 'amulet';
+  if (value.includes('ring')) return 'ring';
+  if (value.includes('weapon')) return 'weapon';
+  if (value.includes('shield') || value.includes('focus') || value.includes('buckler')) return 'off_hand';
+  return value || null;
+}
+
+function dedupeCoreProviders(providers = []) {
+  const seen = new Set();
+  return providers.filter((provider) => {
+    const id = providerIdentity(provider);
+    if (!id || seen.has(id)) return false;
+    seen.add(id);
+    return true;
+  });
+}
+
+function validateCoreProviderCompatibility(providers = []) {
+  const canonical = dedupeCoreProviders(providers);
+  const counts = new Map();
+  const capacities = { ring: 2, keystone: Infinity };
+  for (const provider of canonical) {
+    const slot = providerSlot(provider);
+    if (!slot) continue;
+    counts.set(slot, (counts.get(slot) || 0) + 1);
+    if (counts.get(slot) > (capacities[slot] ?? 1)) {
+      return { ok: false, reason: `Required providers exceed ${slot} equipment capacity.`, providers: canonical };
+    }
+  }
+  return { ok: true, reason: null, providers: canonical };
+}
+
+function rawProvidersForCandidate(candidate) {
+  const providers = [];
+  if (candidate?.accessBridge?.provider) providers.push({
+    ...candidate.accessBridge.provider,
+    id: candidate.accessBridge.provider.sourceId || candidate.accessBridge.provider.name,
+    providerType: candidate.accessBridge.provider.type,
+    packageRole: 'weapon_access',
+    satisfies: `Access to ${candidate.accessBridge.effectiveSkillFamily}`,
+    slot: candidate.accessBridge.provider.slot || null
+  });
+  if (candidate?.coreProvider) providers.push({
+    ...candidate.coreProvider, id: candidate.coreProvider.sourceId, providerType: candidate.coreProvider.type,
+    packageRole: 'granted_skill_provider', satisfies: `Grants ${candidate.coreProvider.grantedSkill}`,
+    slot: candidate.coreProvider.slot || null
+  });
+  if (candidate?.coreUnique) providers.push({
+    ...candidate.coreUnique, id: candidate.coreUnique.source_id || candidate.coreUnique.id,
+    entityId: candidate.coreUnique.id, providerType: 'unique', packageRole: 'unique_bridge',
+    satisfies: candidate.uniqueBridgeProof?.obligationId,
+    slot: candidate.coreUnique.compatibility?.equipment?.slot
+  });
+  return dedupeCoreProviders(providers);
+}
+
+function annotatePackageComplexity(candidate) {
+  const providers = dedupeCoreProviders([
+    ...rawProvidersForCandidate(candidate?.primary), ...rawProvidersForCandidate(candidate?.supporting)
+  ]);
+  const compatibility = validateCoreProviderCompatibility(providers);
+  const requiredUniqueCount = providers.filter((provider) => provider.providerType === 'unique').length;
+  const accessTransformations = providers.filter((provider) => provider.packageRole === 'weapon_access').length;
+  const requiredSupportCount = unique(asArray(candidate?.carriers)
+    .filter((proof) => proof.completionType === 'support').map((proof) => proof.obligationId)).length;
+  const bridgeCount = providers.length + requiredSupportCount;
+  const cost = Math.min(SOLUTION_COMPLEXITY.maximumCost,
+    providers.length * SOLUTION_COMPLEXITY.coreProvider
+    + requiredUniqueCount * SOLUTION_COMPLEXITY.requiredUnique
+    + accessTransformations * SOLUTION_COMPLEXITY.accessTransformation
+    + requiredSupportCount * SOLUTION_COMPLEXITY.requiredSupport
+    + bridgeCount * SOLUTION_COMPLEXITY.bridgeStep);
+  const grantedSkillAuthority = providers.some((provider) => provider.packageRole === 'granted_skill_provider') ? 10 : 0;
+  return { ...candidate, requiredProviders: providers, providerCompatibility: compatibility,
+    complexityCost: cost, rawScore: candidate.score,
+    selectionScore: candidate.score / SOLUTION_COMPLEXITY.semanticScoreScale - cost + grantedSkillAuthority };
+}
+
+function sortCompetitivePackages(packages, offenseObligations) {
+  return packages.map(annotatePackageComplexity)
+    .filter((candidate) => candidate.providerCompatibility.ok)
+    .sort((a, b) => Number(packageConstructionComplete(b, offenseObligations)) - Number(packageConstructionComplete(a, offenseObligations))
+      || b.fulfilled.length - a.fulfilled.length
+      || (b.primary.weaponRelationship?.rank || 0) - (a.primary.weaponRelationship?.rank || 0)
+      || b.selectionScore - a.selectionScore
+      || String(a.id).localeCompare(String(b.id)));
+}
+
 const CORE_UNIQUE_RELATIONS = new Set(['converts', 'provides', 'generates', 'inflicts', 'creates', 'fulfills']);
 const CORE_UNIQUE_WEAPON_FAMILIES = new Set(['bow', 'crossbow', 'mace', 'quarterstaff', 'spear', 'staff', 'wand', 'sceptre', 'talisman']);
 
@@ -2462,12 +2574,12 @@ function choosePackageCandidate(ranked, options = {}) {
   const requestedBand = Number(options.packageQualityBand ?? options.qualityBand);
   const qualityBand = Number.isFinite(requestedBand) && requestedBand >= 0
     ? requestedBand
-    : PACKAGE_QUALITY_BAND;
+    : SOLUTION_COMPLEXITY.selectionQualityBand;
   const topWeaponRank = top.primary?.weaponRelationship?.rank || 0;
   const shortlist = ranked.filter((candidate) =>
     candidate.fulfilled.length === top.fulfilled.length
     && (candidate.primary?.weaponRelationship?.rank || 0) === topWeaponRank
-    && top.score - candidate.score <= qualityBand);
+    && (top.selectionScore ?? top.score) - (candidate.selectionScore ?? candidate.score) <= qualityBand);
   let pool = shortlist;
   const previousEntityId = String(options.previousPrimaryEntityId || '');
   if (previousEntityId && shortlist.length > 1) {
@@ -2479,7 +2591,7 @@ function choosePackageCandidate(ranked, options = {}) {
     return { winner: pool[0], shortlist, qualityBand };
   }
   const weights = pool.map((candidate) =>
-    Math.max(1, qualityBand + 1 - (top.score - candidate.score))
+    Math.max(1, qualityBand + 1 - ((top.selectionScore ?? top.score) - (candidate.selectionScore ?? candidate.score)))
   );
   const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
   let target = (stableHash32(`${options.selectionSeed}:skill_package`) / 0x100000000) * totalWeight;
@@ -3065,16 +3177,15 @@ function selectRichnessSkillPackages(shortlist, winner, recommendationTier, sele
   if (recommendationTier === 'FALLBACK' || core.length >= MAX_DISPLAYED_SKILLS) return [];
   const usedIds = new Set(core.map((candidate) => candidate.entity.id));
   const usedSignatures = new Set([skillChoiceSignature(winner)]);
-  const coreUniqueId = winner?.primary?.coreUnique?.id || null;
-  const accessProviderId = winner?.primary?.accessBridge?.provider?.sourceId
-    || winner?.primary?.coreProvider?.sourceId || null;
+  const providerSetKey = (entry) => dedupeCoreProviders(entry?.requiredProviders || [
+    ...rawProvidersForCandidate(entry?.primary), ...rawProvidersForCandidate(entry?.supporting)
+  ]).map(providerIdentity).sort().join('|');
+  const winnerProviderSet = providerSetKey(winner);
   const pool = shortlist.filter((entry) => !entry.supporting && !usedIds.has(entry.primary.entity.id)
-    // A required unique is global equipment state: alternates must use exactly
-    // the bridge already chosen by the core package (or no unique at all).
-    && (entry.primary?.coreUnique?.id || null) === coreUniqueId);
-  const providerSafePool = pool.filter((entry) =>
-    ((entry.primary?.accessBridge?.provider?.sourceId || entry.primary?.coreProvider?.sourceId || null)
-      === accessProviderId));
+    // Required providers are global equipment state. Alternates must work with
+    // exactly that canonical construction, rather than silently swapping gear.
+    && providerSetKey(entry) === winnerProviderSet);
+  const providerSafePool = pool;
   const output = [];
   while (output.length + core.length < MAX_DISPLAYED_SKILLS && providerSafePool.length) {
     // Novel mechanics/delivery are preferred, but never required. Seeded order
@@ -3133,30 +3244,32 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
   const bridgePackages = tierAnalysis.bridges
     .map((entry) => evaluateSkillPackage(entry.candidate, null, offenseObligations))
     .filter(Boolean);
-  const uniqueBridges = tierAnalysis.direct.length ? [] : offenseObligations.flatMap((obligation) =>
+  const uniqueBridges = offenseObligations.flatMap((obligation) =>
     uniqueCoreBridgeCandidates(catalog, tierAnalysis.legal, obligation, snapshot));
   const uniqueBridgePackages = uniqueBridges.map((entry) => evaluateSkillPackage(entry.candidate, null, offenseObligations))
     .filter(Boolean);
   const supportChainPackages = tierAnalysis.supportChains
     .map((entry) => evaluateSkillPackage(entry.candidate, null, offenseObligations))
     .filter(Boolean);
-  // Tier choice is lexicographic, not a score bonus: lower tiers are never
-  // present in the ranking when a simpler solution exists.
-  const recommendationTier = directPackages.length
-    ? 'DIRECT'
-    : (bridgePackages.length || uniqueBridgePackages.length) ? 'ONE_BRIDGE'
-      : supportChainPackages.length ? 'SUPPORT_CHAIN' : 'FALLBACK';
-  const rankedPackages = recommendationTier === 'DIRECT'
-    ? buildRankedSkillPackages(tierAnalysis.direct, offenseObligations).filter((entry) => !entry.supporting)
-    : ['ONE_BRIDGE', 'SUPPORT_CHAIN'].includes(recommendationTier)
-      ? (recommendationTier === 'ONE_BRIDGE' ? [...bridgePackages, ...uniqueBridgePackages] : supportChainPackages).sort((a, b) =>
-        Number(packageConstructionComplete(b, offenseObligations)) - Number(packageConstructionComplete(a, offenseObligations))
-        ||
-        (b.primary.weaponRelationship?.rank || 0) - (a.primary.weaponRelationship?.rank || 0)
-        || b.score - a.score || String(a.id).localeCompare(String(b.id)))
-      : buildRankedSkillPackages(viablePool, offenseObligations);
+  const completeCompetitive = [...directPackages, ...bridgePackages, ...uniqueBridgePackages, ...supportChainPackages]
+    .filter((candidate) => packageConstructionComplete(candidate, offenseObligations));
+  const rankedPackages = completeCompetitive.length
+    ? sortCompetitivePackages(completeCompetitive, offenseObligations)
+    : sortCompetitivePackages([...bridgePackages, ...uniqueBridgePackages, ...supportChainPackages].length
+      ? [...bridgePackages, ...uniqueBridgePackages, ...supportChainPackages]
+      : buildRankedSkillPackages(viablePool, offenseObligations), offenseObligations);
   const { winner, shortlist, qualityBand } = choosePackageCandidate(rankedPackages, options);
+  let recommendationTier = winner?.primary?.coreUnique || winner?.primary?.uniqueBridgeProof || winner?.primary?.accessBridge
+    || winner?.primary?.coreProvider || winner?.supporting?.coreProvider ? 'ONE_BRIDGE'
+    : supportChainPackages.some((entry) => entry.id === winner?.id) ? 'SUPPORT_CHAIN'
+      : directPackages.some((entry) => entry.id === winner?.id) ? 'DIRECT' : 'FALLBACK';
   const supportResolution = assignSupportPackagesV3(catalog, winner, offenseObligations);
+  if ((supportResolution.assignedRequiredSupportCount > 0 || supportResolution.supportEdges.some((edge) => edge.targetKind === 'offense'))
+    && recommendationTier === 'FALLBACK') {
+    recommendationTier = supportResolution.assignedRequiredSupportCount > 1 ? 'SUPPORT_CHAIN' : 'ONE_BRIDGE';
+  }
+  if (recommendationTier === 'FALLBACK' && asArray(winner?.carriers)
+    .some((proof) => proof.completionType === 'support')) recommendationTier = 'ONE_BRIDGE';
   const coreSelectedCandidates = [winner?.primary, winner?.supporting].filter(Boolean);
   // Package solving is complete above. Alternatives are appended only from that
   // winning tier's existing shortlist and cannot feed back into its score or class.
@@ -3278,13 +3391,17 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     : recommendationTier === 'SUPPORT_CHAIN' ? 'MULTI_BRIDGE' : recommendationTier === 'ONE_BRIDGE' ? 'ONE_BRIDGE' : 'INCOMPLETE';
   const coreUnique = primary?.coreUnique ? {
     id: primary.coreUnique.source_id || primary.coreUnique.id, entityId: primary.coreUnique.id,
-    name: primary.coreUnique.name, required: true, coreSolver: true, packageRole: 'unique_bridge'
+    name: primary.coreUnique.name, providerType: 'unique', required: true, coreSolver: true,
+    packageRole: 'unique_bridge', satisfies: primary.uniqueBridgeProof?.obligationId,
+    slot: primary.coreUnique.compatibility?.equipment?.slot || null
   } : null;
   const accessProvider = primary?.accessBridge ? {
     id: primary.accessBridge.provider.sourceId, name: primary.accessBridge.provider.name,
     providerType: primary.accessBridge.provider.type, required: true, coreSolver: true,
     packageRole: 'weapon_access', rolledWeapon: primary.accessBridge.rolledWeapon,
-    effectiveSkillFamily: primary.accessBridge.effectiveSkillFamily
+    effectiveSkillFamily: primary.accessBridge.effectiveSkillFamily,
+    satisfies: `Access to ${primary.accessBridge.effectiveSkillFamily}`,
+    slot: primary.accessBridge.provider.slot || null
   } : null;
   const grantedSource = primary?.coreProvider || supporting?.coreProvider || null;
   const grantedProvider = grantedSource ? {
@@ -3292,21 +3409,23 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     name: grantedSource.name, providerType: grantedSource.type, required: true,
     coreSolver: true, packageRole: 'granted_skill_provider',
     grantedSkill: grantedSource.grantedSkill,
-    grantedSkillEntityId: grantedSource.grantedSkillEntityId
+    grantedSkillEntityId: grantedSource.grantedSkillEntityId,
+    satisfies: `Grants ${grantedSource.grantedSkill}`,
+    slot: grantedSource.slot || null
   } : null;
-  const selectedCoreProvider = accessProvider || grantedProvider || coreUnique;
-  const requiredCoreUnique = selectedCoreProvider?.providerType === 'unique'
-    ? selectedCoreProvider : coreUnique;
-  const bridgePath = primary?.accessBridge ? [{ type: 'weapon_access', provider: accessProvider.name,
+  const coreProviders = dedupeCoreProviders([accessProvider, grantedProvider, coreUnique].filter(Boolean));
+  const requiredCoreUnique = coreProviders.find((provider) => provider.providerType === 'unique') || null;
+  const bridgePath = [...(primary?.accessBridge ? [{ type: 'weapon_access', provider: accessProvider.name,
     providerType: accessProvider.providerType, from: accessProvider.rolledWeapon,
     to: accessProvider.effectiveSkillFamily }]
-    : grantedProvider ? [{ type: 'granted_skill', provider: grantedProvider.name,
+    : []), ...(grantedProvider ? [{ type: 'granted_skill', provider: grantedProvider.name,
       providerType: 'unique', relation: 'grants', to: grantedProvider.grantedSkill,
       grantedSkillEntityId: grantedProvider.grantedSkillEntityId }]
-    : primary?.uniqueBridgeProof ? [{ type: 'unique', provider: primary.uniqueBridgeProof.providerName,
+    : []), ...(primary?.uniqueBridgeProof ? [{ type: 'unique', bridgeKind: 'conversion', provider: primary.uniqueBridgeProof.providerName,
     relation: primary.uniqueBridgeProof.relation, from: primary.uniqueBridgeProof.sourceMechanic,
-    to: primary.uniqueBridgeProof.mechanic }] : supportResolution.supportEdges.filter((edge) => edge.targetKind === 'offense')
-    .map((edge) => ({ type: 'support', providerEntityId: edge.fromEntityId, relation: edge.relation, to: edge.mechanic }));
+    to: primary.uniqueBridgeProof.mechanic }]
+    : []), ...supportResolution.supportEdges.filter((edge) => edge.targetKind === 'offense')
+    .map((edge) => ({ type: 'support', providerEntityId: edge.fromEntityId, relation: edge.relation, to: edge.mechanic }))];
   const primarySourceEvidence = unique(asArray(primary?.entity?.facts)
     .filter((fact) => normalizeToken(fact?.scope) !== 'incoming'
       && ['has_property', 'inflicts', 'creates', 'provides', 'generates', 'fulfills', 'converts']
@@ -3333,7 +3452,7 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
       .filter((fact) => fact?.relation === 'consumes' && normalizeToken(fact?.consumption) !== 'required_input')
       .map((fact) => normalizeToken(fact?.mechanic)))),
     secondaryPurpose: supportingSkill?.assignedRole || null,
-    corePieces: [selectedCoreProvider, ...supportResolution.assignments.flatMap((assignment) => assignment.supports)
+    corePieces: [...coreProviders, ...supportResolution.assignments.flatMap((assignment) => assignment.supports)
       .filter((support) => support.assignedRole !== 'OPTIONAL_OFFENSE_OPTIMIZER')
       .map((support) => ({ id: support.sourceId || support.entityId, name: support.name, required: true,
         coreSolver: true, packageRole: 'support_bridge' }))].filter(Boolean)
@@ -3347,13 +3466,15 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     obligations: model.obligations,
     solutionClass,
     coreUnique: requiredCoreUnique,
-    coreProviders: [selectedCoreProvider].filter(Boolean),
+    coreProviders,
     bridgePath,
     packageProfile,
     primarySkill,
     supportingSkill,
     pieces,
     packageScore: winner?.score ?? null,
+    rawPackageScore: winner?.rawScore ?? winner?.score ?? null,
+    adjustedSelectionScore: winner?.selectionScore ?? winner?.score ?? null,
     synergyEdges: asArray(winner?.synergyEdges),
     supportAssignments: displayAssignments,
     supportEdges: supportResolution.supportEdges,
@@ -3383,6 +3504,25 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
       evaluatedSupportPackages: supportResolution.evaluatedPackages,
       offenseCoverage,
       recommendationTier,
+      solutionKind: coreProviders.length || bridgePath.length ? 'bridged' : 'direct_native',
+      providerCount: coreProviders.length,
+      requiredUniqueCount: coreProviders.filter((provider) => provider.providerType === 'unique').length,
+      requiredSupportCount: supportResolution.assignedRequiredSupportCount,
+      bridgeCount: bridgePath.length,
+      complexityCost: winner?.complexityCost || 0,
+      rawPackageScore: winner?.rawScore ?? winner?.score ?? null,
+      adjustedSelectionScore: winner?.selectionScore ?? winner?.score ?? null,
+      completeProviderSet: coreProviders.map((provider) => ({ id: provider.id, name: provider.name,
+        providerType: provider.providerType, packageRole: provider.packageRole, slot: provider.slot || null })),
+      providerCompatibility: validateCoreProviderCompatibility(coreProviders),
+      competitiveCandidates: rankedPackages.slice(0, 25).map((candidate) => ({
+        primarySkill: candidate.primary.entity.name,
+        providers: (candidate.requiredProviders || []).map((provider) => provider.name),
+        complete: packageConstructionComplete(candidate, offenseObligations),
+        rawScore: candidate.rawScore ?? candidate.score,
+        complexityCost: candidate.complexityCost || 0,
+        adjustedSelectionScore: candidate.selectionScore ?? candidate.score
+      })),
       ...(recommendationTier === 'SUPPORT_CHAIN' ? {
         supportChain: tierAnalysis.supportChains.find((chain) =>
           chain.candidate.entity.id === primary?.entity.id)?.proof || null
@@ -3437,6 +3577,7 @@ export {
   PRIMARY_QUALITY_BAND,
   COMPANION_QUALITY_BAND,
   PACKAGE_QUALITY_BAND,
+  SOLUTION_COMPLEXITY,
   MAX_REQUIRED_SUPPORTS,
   MAX_OPTIMIZER_SUPPORTS,
   MAX_TOTAL_SUPPORTS,
@@ -3451,6 +3592,8 @@ export {
   isEquipmentCompatibleV3,
   isIndependentChaosEvidenceV3,
   isRecommendationContentAllowedV3,
+  dedupeCoreProviders,
+  validateCoreProviderCompatibility,
   mergeRecommendationGrantedSkillAccessV3,
   mergeRecommendationSkillCraftingV3,
   optimizerRoleV3,
