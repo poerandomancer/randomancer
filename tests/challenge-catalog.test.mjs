@@ -71,7 +71,7 @@ test('challenge weapons come only from the canonical Build weapon-family source'
   const familyNames = deriveWeaponFamilies(core).map(weapon => weapon.name);
 
   assert.ok(familyNames.includes('Mace'));
-  assert.ok(!familyNames.includes('Unarmed'));
+  assert.ok(familyNames.includes('Unarmed'));
   assert.ok(!familyNames.includes('Empty Off-hand'));
   assert.match(challengeEngineSource, /deriveWeaponFamilies\(core\)/);
   assert.doesNotMatch(challengeEngineSource, /Weapon Set I|Weapon Set II|dualChance/);

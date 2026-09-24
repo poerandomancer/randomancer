@@ -129,6 +129,13 @@ const DEFAULT_ACTIVE_SKILL_NAMES = new Set([
   'punch',
   'spear_throw'
 ]);
+const WEAPON_ACCESS_BRIDGES = Object.freeze([
+  Object.freeze({ rolledFamily: 'unarmed', effectiveFamily: 'quarterstaff',
+    provider: Object.freeze({ type: 'keystone', name: 'Hollow Palm Technique',
+      sourceId: 'passive_keystone_hollow_palm_technique' }) }),
+  Object.freeze({ rolledFamily: 'unarmed', effectiveFamily: 'mace',
+    provider: Object.freeze({ type: 'unique', name: 'Facebreaker', sourceId: 'Facebreaker||Stocky Mitts' }) })
+]);
 const COMPANION_SKILL_PREFERENCE_SCORE = Object.freeze({
   tame_beast: 90
 });
@@ -593,10 +600,23 @@ function isDefaultOrBasicActiveSkill(entity) {
   return sourceId.includes('skillgemplayerdefault') || DEFAULT_ACTIVE_SKILL_NAMES.has(name);
 }
 
-function hasNormalActiveSkillCrafting(entity) {
+function hasNormalActiveSkillCrafting(entity, snapshot = {}) {
+  const nativeUnarmedPunch = normalizeToken(entity?.name) === 'punch'
+    && primaryWeaponFamily(snapshot) === 'unarmed';
   return entity?.content_type === 'active_skill'
-    && craftingTypeTokens(entity).size > 0
-    && !isDefaultOrBasicActiveSkill(entity);
+    && (nativeUnarmedPunch || (craftingTypeTokens(entity).size > 0 && !isDefaultOrBasicActiveSkill(entity)));
+}
+
+function weaponAccessProfilesV3(snapshot = {}) {
+  const rolledFamily = primaryWeaponFamily(snapshot);
+  const native = [{ snapshot, accessBridge: null }];
+  if (rolledFamily !== 'unarmed') return native;
+  return [...native, ...WEAPON_ACCESS_BRIDGES.map((rule) => ({
+    snapshot: { ...snapshot, weapon: rule.effectiveFamily, weaponFamily: rule.effectiveFamily,
+      rolledWeapon: snapshot.weapon, rolledWeaponFamily: rolledFamily },
+    accessBridge: { rolledWeapon: rolledFamily, effectiveSkillFamily: rule.effectiveFamily,
+      provider: rule.provider }
+  }))];
 }
 
 function entityHasHardMechanic(entity, mechanic, relations = null) {
@@ -748,7 +768,7 @@ function evaluateDeliveryCompatibilityV3(entity, snapshot = {}) {
 
 function evaluateCraftingDeliveryCompatibilityV3(entity, snapshot = {}, offenseObligations = []) {
   if (entity?.content_type !== 'active_skill') return { ok: true, reason: '' };
-  if (!hasNormalActiveSkillCrafting(entity)) {
+  if (!hasNormalActiveSkillCrafting(entity, snapshot)) {
     return { ok: false, reason: 'active skill is not in the normal craftable skill gem pool' };
   }
 
@@ -803,11 +823,11 @@ function evaluatePackagePieceDeliveryV3(entity, snapshot = {}) {
   };
 }
 
-function isDirectlyUsableActive(entity, offenseObligations = []) {
+function isDirectlyUsableActive(entity, offenseObligations = [], snapshot = {}) {
   if (!entity || entity.content_type !== 'active_skill') return false;
   if (!asArray(entity.candidate_roles).includes('primary_damage')) return false;
   if (!isSelectableSkillName(entity.name)) return false;
-  if (!hasNormalActiveSkillCrafting(entity)) return false;
+  if (!hasNormalActiveSkillCrafting(entity, snapshot)) return false;
   if (isBlockedPersistentOrReservationActive(entity, offenseObligations)) return false;
 
   const types = activeSkillTypes(entity);
@@ -1216,7 +1236,7 @@ function analyzeSupportFirstGapCellV3(catalog, snapshot = {}, options = {}) {
     if (!crafting.ok) failures.push(crafting.reason);
     const pieceDelivery = evaluatePackagePieceDeliveryV3(entity, snapshot);
     if (!pieceDelivery.ok) failures.push(pieceDelivery.reason);
-    if (!isDirectlyUsableActive(entity, offenseObligations)) failures.push('not a runtime-usable primary active');
+    if (!isDirectlyUsableActive(entity, offenseObligations, snapshot)) failures.push('not a runtime-usable primary active');
     if (failures.length) continue;
 
     const proof = supportCompletionProof(entity, obligation, index);
@@ -1484,7 +1504,8 @@ function inheritedWeaponPhysicalFactV3(entity, snapshot = {}) {
   ].map(normalizeToken));
   // An explicit structured weapon requirement is the proof that this Attack
   // uses the rolled weapon. Unrestricted Attacks remain conservative here.
-  if (!allowed.has(weapon.family)) return null;
+  const nativePunch = weapon.family === 'unarmed' && normalizeToken(entity?.name) === 'punch';
+  if (!allowed.has(weapon.family) && !nativePunch) return null;
   const hardFacts = asArray(entity?.facts).filter((fact) => HARD_CONFIDENCE.has(fact?.confidence));
   if (hardFacts.some((fact) => fact.relation === 'prevents'
     && normalizeToken(fact.mechanic) === 'physical')) return null;
@@ -1500,7 +1521,8 @@ function inheritedWeaponPhysicalFactV3(entity, snapshot = {}) {
 }
 
 function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalProfiles = {}, supportIndex = null) {
-  if (!isUsablePackageActive(entity, offenseObligations)) return null;
+  if (!isUsablePackageActive(entity, offenseObligations)
+    && !(normalizeToken(entity?.name) === 'punch' && primaryWeaponFamily(snapshot) === 'unarmed')) return null;
   const compatibility = evaluateCompatibilityV3(entity, snapshot);
   if (!compatibility.ok) return null;
   const craftingDelivery = evaluateCraftingDeliveryCompatibilityV3(entity, snapshot, offenseObligations);
@@ -1598,7 +1620,7 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalP
       confidence: demandConfidence('consumes', mechanic)
     }))
   ];
-  const delivery = isDirectlyUsableActive(entity, offenseObligations)
+  const delivery = isDirectlyUsableActive(entity, offenseObligations, snapshot)
     ? evaluateDeliveryCompatibilityV3(entity, snapshot)
     : { ok: false, reason: 'not a directly usable primary damage skill', evidence: null };
   const touchedMechanics = unique(hardFacts.flatMap((fact) => [
@@ -1634,6 +1656,15 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalP
       + criticalEvidence.affinity.score
       + specificityScore
   };
+}
+
+function analyzePackageCandidateWithAccess(entity, offenseObligations, snapshot, criticalProfiles = {}, supportIndex = null) {
+  const candidates = weaponAccessProfilesV3(snapshot).map((profile) => {
+    const candidate = analyzePackageCandidate(entity, offenseObligations, profile.snapshot, criticalProfiles, supportIndex);
+    return candidate ? { ...candidate, accessBridge: profile.accessBridge } : null;
+  }).filter(Boolean);
+  return candidates.sort((a, b) => Number(!b.accessBridge) - Number(!a.accessBridge)
+    || (b.weaponRelationship?.rank || 0) - (a.weaponRelationship?.rank || 0))[0] || null;
 }
 
 function globalOffenseRules(catalog) {
@@ -1708,7 +1739,7 @@ function analyzeRecommendationCellV3(catalog, snapshot = {}, options = {}) {
   const index = supportIndexForCatalog(catalog);
   const legal = asArray(catalog?.entities)
     .filter((entity) => entity?.content_type === 'active_skill')
-    .map((entity) => analyzePackageCandidate(entity, obligations, snapshot, options.criticalProfiles || {}, null))
+    .map((entity) => analyzePackageCandidateWithAccess(entity, obligations, snapshot, options.criticalProfiles || {}, null))
     .filter((candidate) => candidate?.primaryEligible);
   const rules = globalOffenseRules(catalog);
   const direct = legal.map((candidate) => {
@@ -1826,7 +1857,7 @@ function analyzeRecommendationCellV3(catalog, snapshot = {}, options = {}) {
 function buildViableSkillPool(catalog, offenseObligations, snapshot, criticalProfiles = {}) {
   const supportIndex = supportIndexForCatalog(catalog);
   const analyses = asArray(catalog?.entities)
-    .map((entity) => analyzePackageCandidate(entity, offenseObligations, snapshot, criticalProfiles, supportIndex))
+    .map((entity) => analyzePackageCandidateWithAccess(entity, offenseObligations, snapshot, criticalProfiles, supportIndex))
     .filter(Boolean);
   const seedMechanics = new Set(offenseObligations.flatMap((obligation) => [
     ...asArray(obligation.mechanics),
@@ -3000,18 +3031,21 @@ function selectRichnessSkillPackages(shortlist, winner, recommendationTier, sele
   const usedIds = new Set(core.map((candidate) => candidate.entity.id));
   const usedSignatures = new Set([skillChoiceSignature(winner)]);
   const coreUniqueId = winner?.primary?.coreUnique?.id || null;
+  const accessProviderId = winner?.primary?.accessBridge?.provider?.sourceId || null;
   const pool = shortlist.filter((entry) => !entry.supporting && !usedIds.has(entry.primary.entity.id)
     // A required unique is global equipment state: alternates must use exactly
     // the bridge already chosen by the core package (or no unique at all).
     && (entry.primary?.coreUnique?.id || null) === coreUniqueId);
+  const providerSafePool = pool.filter((entry) =>
+    (entry.primary?.accessBridge?.provider?.sourceId || null) === accessProviderId);
   const output = [];
-  while (output.length + core.length < MAX_DISPLAYED_SKILLS && pool.length) {
+  while (output.length + core.length < MAX_DISPLAYED_SKILLS && providerSafePool.length) {
     // Novel mechanics/delivery are preferred, but never required. Seeded order
     // remains the final tie-break so equivalent top-band choices retain variation.
-    pool.sort((a, b) => Number(usedSignatures.has(skillChoiceSignature(a))) - Number(usedSignatures.has(skillChoiceSignature(b)))
+    providerSafePool.sort((a, b) => Number(usedSignatures.has(skillChoiceSignature(a))) - Number(usedSignatures.has(skillChoiceSignature(b)))
       || stableHash32(`${selectionSeed}:rich-skill:${output.length}:${a.primary.entity.id}`)
         - stableHash32(`${selectionSeed}:rich-skill:${output.length}:${b.primary.entity.id}`));
-    const chosen = pool.shift();
+    const chosen = providerSafePool.shift();
     output.push(chosen);
     usedSignatures.add(skillChoiceSignature(chosen));
   }
@@ -3167,6 +3201,7 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     setupCosts: primary.setupCosts,
     delivery: primary.delivery,
     weaponRelationship: primary.weaponRelationship,
+    weaponAccess: primary.accessBridge,
     criticalAffinity: primary.criticalAffinity,
     supports: supportsFor(primary),
     score: primary.individualScore,
@@ -3201,13 +3236,25 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
   });
   const pieces = [primarySkill, supportingSkill, ...alternateSkills].filter(Boolean);
   const shortlistedPrimaryIds = new Set(shortlist.map((candidate) => candidate.primary.entity.id));
-  const solutionClass = recommendationTier === 'DIRECT' ? 'DIRECT_NATIVE'
+  const solutionClass = primary?.accessBridge ? 'ACCESS_BRIDGE'
+    : recommendationTier === 'DIRECT' ? 'DIRECT_NATIVE'
     : recommendationTier === 'SUPPORT_CHAIN' ? 'MULTI_BRIDGE' : recommendationTier === 'ONE_BRIDGE' ? 'ONE_BRIDGE' : 'INCOMPLETE';
   const coreUnique = primary?.coreUnique ? {
     id: primary.coreUnique.source_id || primary.coreUnique.id, entityId: primary.coreUnique.id,
     name: primary.coreUnique.name, required: true, coreSolver: true, packageRole: 'unique_bridge'
   } : null;
-  const bridgePath = primary?.uniqueBridgeProof ? [{ type: 'unique', provider: primary.uniqueBridgeProof.providerName,
+  const accessProvider = primary?.accessBridge ? {
+    id: primary.accessBridge.provider.sourceId, name: primary.accessBridge.provider.name,
+    providerType: primary.accessBridge.provider.type, required: true, coreSolver: true,
+    packageRole: 'weapon_access', rolledWeapon: primary.accessBridge.rolledWeapon,
+    effectiveSkillFamily: primary.accessBridge.effectiveSkillFamily
+  } : null;
+  const requiredCoreUnique = accessProvider?.providerType === 'unique'
+    ? { ...accessProvider, entityId: `unique:${accessProvider.id}` } : coreUnique;
+  const bridgePath = primary?.accessBridge ? [{ type: 'weapon_access', provider: accessProvider.name,
+    providerType: accessProvider.providerType, from: accessProvider.rolledWeapon,
+    to: accessProvider.effectiveSkillFamily }]
+    : primary?.uniqueBridgeProof ? [{ type: 'unique', provider: primary.uniqueBridgeProof.providerName,
     relation: primary.uniqueBridgeProof.relation, from: primary.uniqueBridgeProof.sourceMechanic,
     to: primary.uniqueBridgeProof.mechanic }] : supportResolution.supportEdges.filter((edge) => edge.targetKind === 'offense')
     .map((edge) => ({ type: 'support', providerEntityId: edge.fromEntityId, relation: edge.relation, to: edge.mechanic }));
@@ -3237,7 +3284,7 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
       .filter((fact) => fact?.relation === 'consumes' && normalizeToken(fact?.consumption) !== 'required_input')
       .map((fact) => normalizeToken(fact?.mechanic)))),
     secondaryPurpose: supportingSkill?.assignedRole || null,
-    corePieces: [coreUnique, ...supportResolution.assignments.flatMap((assignment) => assignment.supports)
+    corePieces: [accessProvider || coreUnique, ...supportResolution.assignments.flatMap((assignment) => assignment.supports)
       .filter((support) => support.assignedRole !== 'OPTIONAL_OFFENSE_OPTIMIZER')
       .map((support) => ({ id: support.sourceId || support.entityId, name: support.name, required: true,
         coreSolver: true, packageRole: 'support_bridge' }))].filter(Boolean)
@@ -3250,7 +3297,8 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     context: model.context,
     obligations: model.obligations,
     solutionClass,
-    coreUnique,
+    coreUnique: requiredCoreUnique,
+    coreProviders: [accessProvider || coreUnique].filter(Boolean),
     bridgePath,
     packageProfile,
     primarySkill,

@@ -388,6 +388,10 @@ function selectNonSkillRecommendations(catalog, snapshot = {}, recommendationPac
     required: true, coreSolver: true, packageRole: 'unique_bridge',
     recommendationEvidence: { tier: 'BUILD_DEFINING_CAPABILITY', matches: recommendationPackage.bridgePath || [] }
   }] : [];
+  const requiredKeystones = arr(recommendationPackage?.coreProviders)
+    .filter((provider) => provider?.required && provider?.providerType === 'keystone')
+    .map((provider) => ({ id: provider.id, name: provider.name, required: true,
+      coreSolver: true, packageRole: provider.packageRole || 'weapon_access' }));
   const optionalUnique = selectUniqueRecommendation(catalog, snapshot, recommendationPackage, `${seed}:unique`)
     .filter((entry) => !requiredUnique.some((required) =>
       token(required.entityId || required.id) === token(entry.entityId || entry.id)));
@@ -398,18 +402,20 @@ function selectNonSkillRecommendations(catalog, snapshot = {}, recommendationPac
     return token(resolved?.source_id || resolved?.id || entry?.entityId || entry?.id);
   };
   const usedUniqueIds = new Set(recommendedUniques.map(canonicalIdentity).filter(Boolean));
+  const passives = {
+    ascendancyNodes: choose(byType('ascendancy_passive'), 1, `${seed}:ascendancy`, false),
+    // Same-signature notables are useful alternative tree routes. The strong
+    // score band and locality/applicability gates, rather than complementarity,
+    // determine whether they are surfaced.
+    notables: choose(byType('passive'), 3, `${seed}:notable`, false)
+  };
+  if (requiredKeystones.length) passives.keystones = requiredKeystones;
   const result = {
     recommendedUniques,
     recommendedJewelryUniques: selectJewelryRecommendations(
       catalog, snapshot, recommendationPackage, `${seed}:jewelry`, usedUniqueIds
     ),
-    passives: {
-      ascendancyNodes: choose(byType('ascendancy_passive'), 1, `${seed}:ascendancy`, false),
-      // Same-signature notables are useful alternative tree routes. The strong
-      // score band and locality/applicability gates, rather than complementarity,
-      // determine whether they are surfaced.
-      notables: choose(byType('passive'), 3, `${seed}:notable`, false)
-    }
+    passives
   };
   return result;
 }

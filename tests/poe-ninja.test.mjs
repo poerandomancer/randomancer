@@ -24,14 +24,15 @@ const expected = {
     'Sceptre', 'Sceptre / Buckler', 'Sceptre / Focus', 'Sceptre / Shield', 'Sceptre / Unknown',
     'Unknown / Sceptre', 'Wand / Sceptre', 'Spear / Sceptre', 'Mace / Sceptre',
     'Two Handed Mace / Sceptre', 'Talisman / Sceptre'
-  ]
+  ],
+  Unarmed: []
 };
 
 test('every rollable weapon family has the exact poe.ninja weapon-mode mapping', () => {
   const families = deriveWeaponFamilies(core);
   assert.deepEqual(families.map(({ name }) => name).sort(), Object.keys(expected).sort());
   for (const family of families) {
-    assert.ok(family.poeNinjaModes.length > 0, `${family.name} has no modes`);
+    if (family.name !== 'Unarmed') assert.ok(family.poeNinjaModes.length > 0, `${family.name} has no modes`);
     assert.deepEqual(family.poeNinjaModes, expected[family.name]);
     assert.deepEqual(poeNinjaModesByWeaponFamily[family.name], expected[family.name]);
   }
