@@ -30,6 +30,29 @@ test('new copied build links contain the canonical snapshot', () => {
   assert.match(snapshots, /short-lived compact-link implementation/);
 });
 
+test('compact build snapshots preserve required keystones in the decoder p.k field', async () => {
+  globalThis.document = { readyState: 'loading', addEventListener() {} };
+  globalThis.window = {};
+  const { buildCompactSnapshotPayload } = await import('../js/25-card-polish.js');
+  const payload = buildCompactSnapshotPayload({
+    className: 'Monk',
+    passives: {
+      ascendancyNodes: [{ name: 'I Am the Blizzard' }],
+      keystones: [{ name: 'Hollow Palm Technique', required: true, coreSolver: true }],
+      notables: [{ name: 'Cold Nature' }]
+    }
+  });
+  assert.deepEqual(payload.p.k, [{ name: 'Hollow Palm Technique' }]);
+  const transported = JSON.parse(Buffer.from(JSON.stringify(payload)).toString('utf8'));
+  const decodedPassives = {
+    ascendancyNodes: transported.p.a || [],
+    keystones: transported.p.k || [],
+    notables: transported.p.n || []
+  };
+  assert.deepEqual(decodedPassives.keystones, [{ name: 'Hollow Palm Technique' }]);
+  assert.match(snapshots, /keystones: draw\.p\.k \|\| \[\]/);
+});
+
 test('primary Build Ideas tooltips use enriched skill and unique fields', () => {
   assert.match(foundation, /gem\?\.crafting_type/);
   assert.match(foundation, /gem\?\.crafting\?\.types_raw/);

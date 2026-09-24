@@ -100,9 +100,11 @@ function buildCompactSnapshotPayload(snapshot) {
   const passives = snap.passives && typeof snap.passives === 'object' ? snap.passives : null;
   if (passives) {
     const asc = (passives.ascendancyNodes || []).map(compactNamedEntry).filter(Boolean).slice(0, 2);
+    const keystones = (passives.keystones || []).map(compactNamedEntry).filter(Boolean);
     const notables = (passives.notables || []).map(compactNamedEntry).filter(Boolean).slice(0, 3);
     const packed = {};
     if (asc.length) packed.a = asc;
+    if (keystones.length) packed.k = keystones;
     if (notables.length) packed.n = notables;
     if (Object.keys(packed).length) out.p = packed;
   }

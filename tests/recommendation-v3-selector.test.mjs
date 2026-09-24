@@ -54,6 +54,19 @@ test('Unarmed access packages preserve the roll and surface their required provi
   assert.ok(nonSkills.passives.keystones.some((passive) => passive.name === 'Hollow Palm Technique'));
 });
 
+test('production Invoker / Unarmed / Chill preserves Hollow Palm for presentation', () => {
+  const result = selectRecommendationPackageV3(catalog, {
+    ascendancy: 'Invoker', weapon: 'Unarmed', offenseSet: ['chill']
+  }, { offenseInventory, selectionSeed: 'invoker-unarmed-chill' });
+  const nonSkills = selectNonSkillRecommendations(catalog, {
+    ascendancy: 'Invoker', weapon: 'Unarmed', offenseSet: ['chill']
+  }, result);
+  assert.equal(result.packageProfile.weapon, 'unarmed');
+  assert.equal(result.primarySkill.weaponAccess.effectiveSkillFamily, 'quarterstaff');
+  assert.equal(result.primarySkill.weaponAccess.provider.name, 'Hollow Palm Technique');
+  assert.ok(nonSkills.passives.keystones.some((entry) => entry.name === 'Hollow Palm Technique'));
+});
+
 test('Thunderfist is authoritative granted access for Crackling Palm', () => {
   const cracklingPalm = catalog.entities.find((entity) => entity.name === 'Crackling Palm');
   assert.equal(evaluateCompatibilityV3(cracklingPalm, { weapon: 'Unarmed' }).ok, false);

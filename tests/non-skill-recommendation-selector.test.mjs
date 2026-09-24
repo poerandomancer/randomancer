@@ -549,6 +549,7 @@ test('build card renders skill, unique, ascendancy, and notable tooltip content'
       ],
       passivesEnriched: { nodes: [
         { name: 'Cold Ascendancy', lines: ['Asc effect'] },
+        { name: 'Hollow Palm Technique', lines: ['You count as Dual Wielding while Unencumbered'] },
         { name: 'Cold Notable', lines: ['Notable effect'] }
       ] },
       uniques: [{ name: 'Cold Bow', base: 'Expert Bow', slot: 'Weapon', implicit_mods: ['Cold implicit'], explicit_mods: ['Freeze mod'] }]
@@ -565,19 +566,24 @@ test('build card renders skill, unique, ascendancy, and notable tooltip content'
     recommendedUniques: [{ id: 'cold-bow', name: 'Cold Bow', recommendationEvidence: {} }],
     passives: {
       ascendancyNodes: [{ id: 'asc', name: 'Cold Ascendancy', recommendationEvidence: {} }],
+      keystones: [{ id: 'hollow-palm', name: 'Hollow Palm Technique', required: true, coreSolver: true }],
       notables: [{ id: 'notable', name: 'Cold Notable', recommendationEvidence: {} }]
     }
   });
   const html = renderBuildCard(model, { face: BUILD_CARD_FACES.BACK });
   assert.match(html, /Unique Ideas[\s\S]*Cold Bow/);
   assert.match(html, /Ascendancy — [\s\S]*Cold Ascendancy/);
+  assert.match(html, /Keystone — [\s\S]*Hollow Palm Technique/);
+  assert.match(html, /data-tip-title="Hollow Palm Technique"[\s\S]*Keystone Passive[\s\S]*You count as Dual Wielding/);
+  assert.ok(html.indexOf('Cold Ascendancy') < html.indexOf('Hollow Palm Technique'));
+  assert.ok(html.indexOf('Hollow Palm Technique') < html.indexOf('Cold Notable'));
   assert.doesNotMatch(html, /Notable —/);
   assert.match(html, /Cold Notable/);
   assert.match(html, /Ice Skill[\s\S]*tabindex="0"|tabindex="0"[\s\S]*Ice Skill/);
   assert.doesNotMatch(html, /Primary|Supports:/);
   assert.match(html, /rc-skill-group__skill[\s\S]*Ice Skill[\s\S]*rc-skill-group__supports[\s\S]*Cold Support/);
   assert.match(html, /data-tip-title="Cold Support"[\s\S]*Support effect/);
-  for (const text of ['Expert Bow · Weapon', 'Cold implicit', 'Freeze mod', 'Ascendancy Passive', 'Asc effect', 'Notable Passive', 'Notable effect']) {
+  for (const text of ['Expert Bow · Weapon', 'Cold implicit', 'Freeze mod', 'Ascendancy Passive', 'Asc effect', 'Keystone Passive', 'Notable Passive', 'Notable effect']) {
     assert.match(html, new RegExp(text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
 });
