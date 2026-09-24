@@ -35,6 +35,30 @@ test('Poison-only non-skill semantics cannot establish Chaos relevance', () => {
     { ...snap, offenseList: ['Chaos'] }, pkg).recommendedUniques, []);
 });
 
+test('Thunderfist compact semantics retain Unarmed-only delivery', () => {
+  const semantics = JSON.parse(fs.readFileSync(new URL(
+    '../data/enriched/recommendation_unique_semantics_v3.json', import.meta.url
+  ))).byUniqueId['Thunderfist||Utility Wraps'].lightning;
+  assert.ok(semantics.facts.length > 0);
+  assert.ok(semantics.facts.some((entry) => entry.w?.includes('unarmed')));
+
+  const thunderfist = entity('thunderfist', 'unique', [], {
+    name: 'Thunderfist',
+    compatibility: { access: {}, equipment: { slot: 'Gloves', base: 'Utility Wraps' } },
+    unique_offense_semantics: { lightning: semantics }
+  });
+  const packageFor = (weapon) => ({ ...pkg, packageProfile: {
+    weapon, finalOffense: ['lightning'], sourceMechanics: ['lightning'],
+    primarySkill: { properties: [weapon, 'attack'] }
+  } });
+  const bow = selectNonSkillRecommendations(catalog([thunderfist]), {
+    weaponFamily: 'Bow', offenseSet: ['lightning']
+  }, packageFor('bow'));
+  assert.ok(!bow.recommendedUniques.some((entry) => entry.name === 'Thunderfist'));
+  // Gloves remain outside ordinary weapon-base unique matching; the core
+  // granted-skill provider lane is what surfaces Thunderfist for Unarmed.
+});
+
 test('owns ascendancy, excludes keystones, and enforces unique weapon family', () => {
   const result = selectNonSkillRecommendations(catalog([
     entity('invoker', 'ascendancy_passive', ['freeze'], { compatibility: { access: { ascendancy: 'Invoker' } } }),

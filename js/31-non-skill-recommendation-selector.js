@@ -14,6 +14,7 @@ const WEAPON_FAMILIES = new Map([
   ['wand', new Set(['wand'])],
   ['sceptre', new Set(['sceptre'])],
   ['talisman', new Set(['talisman'])],
+  ['unarmed', new Set(['unarmed'])],
   ['mace', new Set(['mace'])]
 ]);
 const ONE_HANDED_WEAPONS = new Set(['sceptre', 'wand', 'spear', 'mace']);
@@ -218,6 +219,9 @@ function factAppliesToPackage(fact, recommendationPackage, sources = packageSour
   if (conditionTarget === 'self'
     && !new Set(arr(recommendationPackage?.packageProfile?.selfStates).map(state)).has(condition)) return false;
   if (['self', 'player'].includes(target) && conditionTarget !== 'self') return false;
+  const requiredWeaponFamilies = arr(fact?.weaponFamilies ?? fact?.w).map(token);
+  if (requiredWeaponFamilies.length
+    && !requiredWeaponFamilies.includes(token(recommendationPackage?.packageProfile?.weapon))) return false;
   const delivery = token(fact?.delivery ?? fact?.d);
   if (delivery && !['skill', 'generic', 'generic_hit', 'hit'].includes(delivery)) {
     const properties = packageProperties(recommendationPackage);
@@ -236,6 +240,9 @@ function analyzeUnique(entity, offense, recommendationPackage = null) {
   const compact = entity?.unique_offense_semantics?.[offenseId];
   if (compact?.tier === 'CONTRADICTION_PREVENTION') return null;
   const compactFacts = arr(compact?.facts);
+  const compactWeaponFamilies = uniq(compactFacts.flatMap((fact) => arr(fact?.w)).map(token));
+  if (compactWeaponFamilies.length
+    && !compactWeaponFamilies.includes(token(recommendationPackage?.packageProfile?.weapon))) return null;
   const matches = compactFacts.filter((fact) => isIndependentChaosEvidenceV3(entity, fact)
     && factAppliesToPackage(fact, recommendationPackage, sourceMechanics)
     && (token(fact.r) !== 'converts' || token(fact.s) === 'outgoing'))
