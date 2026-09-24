@@ -385,7 +385,7 @@ function selectNonSkillRecommendations(catalog, snapshot = {}, recommendationPac
   const seed = options.selectionSeed ?? recommendationPackage?.selectionSeed ?? '';
   const requiredUnique = recommendationPackage?.coreUnique ? [{
     id: recommendationPackage.coreUnique.id, entityId: recommendationPackage.coreUnique.entityId, name: recommendationPackage.coreUnique.name,
-    required: true, coreSolver: true, packageRole: 'unique_bridge',
+    required: true, coreSolver: true, packageRole: recommendationPackage.coreUnique.packageRole || 'unique_bridge',
     recommendationEvidence: { tier: 'BUILD_DEFINING_CAPABILITY', matches: recommendationPackage.bridgePath || [] }
   }] : [];
   const requiredKeystones = arr(recommendationPackage?.coreProviders)

@@ -67,12 +67,30 @@ test('production Invoker / Unarmed / Chill preserves Hollow Palm for presentatio
   assert.ok(nonSkills.passives.keystones.some((entry) => entry.name === 'Hollow Palm Technique'));
 });
 
-test('Thunderfist is authoritative granted access for Crackling Palm', () => {
+test('Unarmed Lightning automatically discovers Thunderfist-granted Crackling Palm', () => {
   const cracklingPalm = catalog.entities.find((entity) => entity.name === 'Crackling Palm');
   assert.equal(evaluateCompatibilityV3(cracklingPalm, { weapon: 'Unarmed' }).ok, false);
   assert.equal(evaluateCompatibilityV3(cracklingPalm, {
     weapon: 'Unarmed', recommendedUniques: ['Thunderfist']
   }).ok, true);
+  const result = selectRecommendationPackageV3(catalog, {
+    weapon: 'Unarmed', offenseSet: ['lightning']
+  }, { offenseInventory, selectionSeed: 'auto-thunder-0' });
+  assert.equal(result.primarySkill.name, 'Crackling Palm');
+  assert.equal(result.coreUnique.name, 'Thunderfist');
+  assert.equal(result.coreUnique.required, true);
+  assert.equal(result.coreUnique.packageRole, 'granted_skill_provider');
+  assert.ok(result.bridgePath.some((edge) => edge.type === 'granted_skill'
+    && edge.provider === 'Thunderfist' && edge.to === 'Crackling Palm'));
+  const nonSkills = selectNonSkillRecommendations(catalog, {
+    weapon: 'Unarmed', offenseSet: ['lightning']
+  }, result);
+  assert.equal(nonSkills.recommendedUniques[0].name, 'Thunderfist');
+
+  const bow = selectRecommendationPackageV3(catalog, {
+    weapon: 'Bow', offenseSet: ['lightning']
+  }, { offenseInventory, selectionSeed: 'auto-thunder-0' });
+  assert.notEqual(bow.coreUnique?.name, 'Thunderfist');
 });
 
 test('Poison-derived Chaos taxonomy is directional and independent Chaos proof survives', () => {

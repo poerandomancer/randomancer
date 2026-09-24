@@ -434,6 +434,21 @@ function selectedUniqueNames(snapshot = {}) {
   return names;
 }
 
+function authoritativeUniqueGrantedSources(entity) {
+  const access = entity?.compatibility?.access || {};
+  if (!access.requires_granted_source) return [];
+  return asArray(access.granted_sources).filter((source) =>
+    normalizeToken(source?.kind) === 'unique'
+    && (source?.unique_name || source?.uniqueName)
+    && (source?.unique_id || source?.uniqueId));
+}
+
+function selectedUniqueGrantedProvider(entity, snapshot = {}) {
+  const selected = selectedUniqueNames(snapshot);
+  return authoritativeUniqueGrantedSources(entity).find((source) =>
+    selected.has(normalizeToken(source.unique_name || source.uniqueName))) || null;
+}
+
 function grantedSourceMatchesSnapshot(source, snapshot = {}) {
   const kind = normalizeToken(source?.kind);
   if (kind === 'ascendancy_passive') {
@@ -588,6 +603,9 @@ function martialWeaponRelationshipV3(entity, snapshot = {}) {
     ...asArray(equipment.mainhand_tags_any_of),
     ...asArray(equipment.allowed_weapon_tags_any_of)
   ].map(normalizeToken));
+  if (allowed.includes(weapon.family)) {
+    return { tier: 'EXACT_NATIVE', rank: 2 };
+  }
   if (requirement.includes('any_martial_weapon') || allowed.length > 1) {
     return { tier: 'EXPLICIT_BROAD_LEGALITY', rank: 1 };
   }
@@ -604,7 +622,8 @@ function hasNormalActiveSkillCrafting(entity, snapshot = {}) {
   const nativeUnarmedPunch = normalizeToken(entity?.name) === 'punch'
     && primaryWeaponFamily(snapshot) === 'unarmed';
   return entity?.content_type === 'active_skill'
-    && (nativeUnarmedPunch || (craftingTypeTokens(entity).size > 0 && !isDefaultOrBasicActiveSkill(entity)));
+    && (nativeUnarmedPunch || selectedUniqueGrantedProvider(entity, snapshot)
+      || (craftingTypeTokens(entity).size > 0 && !isDefaultOrBasicActiveSkill(entity)));
 }
 
 function weaponAccessProfilesV3(snapshot = {}) {
@@ -678,8 +697,9 @@ function isPersistentOrReservationActive(entity) {
     || terms.has('spirit');
 }
 
-function isBlockedPersistentOrReservationActive(entity, offenseObligations = []) {
+function isBlockedPersistentOrReservationActive(entity, offenseObligations = [], snapshot = {}) {
   if (!isPersistentOrReservationActive(entity)) return false;
+  if (selectedUniqueGrantedProvider(entity, snapshot)) return false;
   if (activeSkillTypes(entity).has('hasreservation')
     && rolledArchetypeMechanics(offenseObligations).has('companion')) return true;
   if (isExplicitSpiritActive(entity)) return true;
@@ -788,7 +808,7 @@ function evaluateCraftingDeliveryCompatibilityV3(entity, snapshot = {}, offenseO
   // Reservation-bearing and otherwise blocked persistent skills deliberately
   // remain outside this exemption.
   if (createsRolledArchetype(entity, offenseObligations)
-    && !isBlockedPersistentOrReservationActive(entity, offenseObligations)) {
+    && !isBlockedPersistentOrReservationActive(entity, offenseObligations, snapshot)) {
     return { ok: true, reason: '', weapon, relationship: { tier: 'ARCHETYPE_CREATOR' } };
   }
 
@@ -828,7 +848,7 @@ function isDirectlyUsableActive(entity, offenseObligations = [], snapshot = {}) 
   if (!asArray(entity.candidate_roles).includes('primary_damage')) return false;
   if (!isSelectableSkillName(entity.name)) return false;
   if (!hasNormalActiveSkillCrafting(entity, snapshot)) return false;
-  if (isBlockedPersistentOrReservationActive(entity, offenseObligations)) return false;
+  if (isBlockedPersistentOrReservationActive(entity, offenseObligations, snapshot)) return false;
 
   const types = activeSkillTypes(entity);
   const createsDamageProxy = asArray(entity.facts).some((fact) =>
@@ -838,7 +858,8 @@ function isDirectlyUsableActive(entity, offenseObligations = [], snapshot = {}) 
   );
   const createsRolledProxy = createsDamageProxy && createsRolledArchetype(entity, offenseObligations);
   for (const blocked of DIRECT_USE_ALWAYS_BLOCKED_TYPES) if (types.has(blocked)) return false;
-  if (!createsDamageProxy && Array.from(DIRECT_USE_PROXY_ALLOWED_TYPES).some((type) => types.has(type))) {
+  if (!createsDamageProxy && !selectedUniqueGrantedProvider(entity, snapshot)
+    && Array.from(DIRECT_USE_PROXY_ALLOWED_TYPES).some((type) => types.has(type))) {
     return false;
   }
   const hasNativeDamageDelivery = types.has('attack')
@@ -1480,11 +1501,11 @@ function stableHash32(value) {
   return hash >>> 0;
 }
 
-function isUsablePackageActive(entity, offenseObligations = []) {
+function isUsablePackageActive(entity, offenseObligations = [], snapshot = {}) {
   if (!entity || entity.content_type !== 'active_skill') return false;
   if (!isSelectableSkillName(entity.name) || !isRecommendationContentAllowedV3(entity)) return false;
-  if (!hasNormalActiveSkillCrafting(entity)) return false;
-  if (isBlockedPersistentOrReservationActive(entity, offenseObligations)) return false;
+  if (!hasNormalActiveSkillCrafting(entity, snapshot)) return false;
+  if (isBlockedPersistentOrReservationActive(entity, offenseObligations, snapshot)) return false;
   const roles = new Set(asArray(entity.candidate_roles));
   if (!Array.from(PACKAGE_CANDIDATE_ROLES).some((role) => roles.has(role))) return false;
 
@@ -1521,7 +1542,7 @@ function inheritedWeaponPhysicalFactV3(entity, snapshot = {}) {
 }
 
 function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalProfiles = {}, supportIndex = null) {
-  if (!isUsablePackageActive(entity, offenseObligations)
+  if (!isUsablePackageActive(entity, offenseObligations, snapshot)
     && !(normalizeToken(entity?.name) === 'punch' && primaryWeaponFamily(snapshot) === 'unarmed')) return null;
   const compatibility = evaluateCompatibilityV3(entity, snapshot);
   if (!compatibility.ok) return null;
@@ -1659,11 +1680,22 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalP
 }
 
 function analyzePackageCandidateWithAccess(entity, offenseObligations, snapshot, criticalProfiles = {}, supportIndex = null) {
-  const candidates = weaponAccessProfilesV3(snapshot).map((profile) => {
+  const providerProfiles = primaryWeaponFamily(snapshot) === 'unarmed'
+    ? authoritativeUniqueGrantedSources(entity).map((source) => ({
+      snapshot: { ...snapshot, recommendedUniques: [
+        ...asArray(snapshot.recommendedUniques), source.unique_name || source.uniqueName
+      ] },
+      accessBridge: null,
+      coreProvider: { type: 'unique', name: source.unique_name || source.uniqueName,
+        sourceId: source.unique_id || source.uniqueId, relationship: 'grants_skill',
+        grantedSkill: entity.name, grantedSkillEntityId: entity.id }
+    })) : [];
+  const candidates = [...weaponAccessProfilesV3(snapshot), ...providerProfiles].map((profile) => {
     const candidate = analyzePackageCandidate(entity, offenseObligations, profile.snapshot, criticalProfiles, supportIndex);
-    return candidate ? { ...candidate, accessBridge: profile.accessBridge } : null;
+    return candidate ? { ...candidate, accessBridge: profile.accessBridge,
+      coreProvider: profile.coreProvider || null } : null;
   }).filter(Boolean);
-  return candidates.sort((a, b) => Number(!b.accessBridge) - Number(!a.accessBridge)
+  return candidates.sort((a, b) => Number(!b.accessBridge && !b.coreProvider) - Number(!a.accessBridge && !a.coreProvider)
     || (b.weaponRelationship?.rank || 0) - (a.weaponRelationship?.rank || 0))[0] || null;
 }
 
@@ -1761,6 +1793,9 @@ function analyzeRecommendationCellV3(catalog, snapshot = {}, options = {}) {
         directProofs.push({ ...inherent, affinityFacts });
       }
     }
+    // Authoritative item-granted access is itself strong specialization
+    // evidence: the provider exists specifically to make this skill available.
+    if (candidate.coreProvider?.relationship === 'grants_skill') affinityScore += 3;
     if (!obligations.length || directProofs.length !== obligations.length) return null;
     const explicitCount = directProofs.filter((proof) => proof.proofType === 'explicit').length;
     const directPreferenceScore = explicitCount * 100 + affinityScore;
@@ -3031,13 +3066,15 @@ function selectRichnessSkillPackages(shortlist, winner, recommendationTier, sele
   const usedIds = new Set(core.map((candidate) => candidate.entity.id));
   const usedSignatures = new Set([skillChoiceSignature(winner)]);
   const coreUniqueId = winner?.primary?.coreUnique?.id || null;
-  const accessProviderId = winner?.primary?.accessBridge?.provider?.sourceId || null;
+  const accessProviderId = winner?.primary?.accessBridge?.provider?.sourceId
+    || winner?.primary?.coreProvider?.sourceId || null;
   const pool = shortlist.filter((entry) => !entry.supporting && !usedIds.has(entry.primary.entity.id)
     // A required unique is global equipment state: alternates must use exactly
     // the bridge already chosen by the core package (or no unique at all).
     && (entry.primary?.coreUnique?.id || null) === coreUniqueId);
   const providerSafePool = pool.filter((entry) =>
-    (entry.primary?.accessBridge?.provider?.sourceId || null) === accessProviderId);
+    ((entry.primary?.accessBridge?.provider?.sourceId || entry.primary?.coreProvider?.sourceId || null)
+      === accessProviderId));
   const output = [];
   while (output.length + core.length < MAX_DISPLAYED_SKILLS && providerSafePool.length) {
     // Novel mechanics/delivery are preferred, but never required. Seeded order
@@ -3236,7 +3273,7 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
   });
   const pieces = [primarySkill, supportingSkill, ...alternateSkills].filter(Boolean);
   const shortlistedPrimaryIds = new Set(shortlist.map((candidate) => candidate.primary.entity.id));
-  const solutionClass = primary?.accessBridge ? 'ACCESS_BRIDGE'
+  const solutionClass = (primary?.accessBridge || primary?.coreProvider || supporting?.coreProvider) ? 'ACCESS_BRIDGE'
     : recommendationTier === 'DIRECT' ? 'DIRECT_NATIVE'
     : recommendationTier === 'SUPPORT_CHAIN' ? 'MULTI_BRIDGE' : recommendationTier === 'ONE_BRIDGE' ? 'ONE_BRIDGE' : 'INCOMPLETE';
   const coreUnique = primary?.coreUnique ? {
@@ -3249,11 +3286,23 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     packageRole: 'weapon_access', rolledWeapon: primary.accessBridge.rolledWeapon,
     effectiveSkillFamily: primary.accessBridge.effectiveSkillFamily
   } : null;
-  const requiredCoreUnique = accessProvider?.providerType === 'unique'
-    ? { ...accessProvider, entityId: `unique:${accessProvider.id}` } : coreUnique;
+  const grantedSource = primary?.coreProvider || supporting?.coreProvider || null;
+  const grantedProvider = grantedSource ? {
+    id: grantedSource.sourceId, entityId: `unique:${grantedSource.sourceId}`,
+    name: grantedSource.name, providerType: grantedSource.type, required: true,
+    coreSolver: true, packageRole: 'granted_skill_provider',
+    grantedSkill: grantedSource.grantedSkill,
+    grantedSkillEntityId: grantedSource.grantedSkillEntityId
+  } : null;
+  const selectedCoreProvider = accessProvider || grantedProvider || coreUnique;
+  const requiredCoreUnique = selectedCoreProvider?.providerType === 'unique'
+    ? selectedCoreProvider : coreUnique;
   const bridgePath = primary?.accessBridge ? [{ type: 'weapon_access', provider: accessProvider.name,
     providerType: accessProvider.providerType, from: accessProvider.rolledWeapon,
     to: accessProvider.effectiveSkillFamily }]
+    : grantedProvider ? [{ type: 'granted_skill', provider: grantedProvider.name,
+      providerType: 'unique', relation: 'grants', to: grantedProvider.grantedSkill,
+      grantedSkillEntityId: grantedProvider.grantedSkillEntityId }]
     : primary?.uniqueBridgeProof ? [{ type: 'unique', provider: primary.uniqueBridgeProof.providerName,
     relation: primary.uniqueBridgeProof.relation, from: primary.uniqueBridgeProof.sourceMechanic,
     to: primary.uniqueBridgeProof.mechanic }] : supportResolution.supportEdges.filter((edge) => edge.targetKind === 'offense')
@@ -3284,7 +3333,7 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
       .filter((fact) => fact?.relation === 'consumes' && normalizeToken(fact?.consumption) !== 'required_input')
       .map((fact) => normalizeToken(fact?.mechanic)))),
     secondaryPurpose: supportingSkill?.assignedRole || null,
-    corePieces: [accessProvider || coreUnique, ...supportResolution.assignments.flatMap((assignment) => assignment.supports)
+    corePieces: [selectedCoreProvider, ...supportResolution.assignments.flatMap((assignment) => assignment.supports)
       .filter((support) => support.assignedRole !== 'OPTIONAL_OFFENSE_OPTIMIZER')
       .map((support) => ({ id: support.sourceId || support.entityId, name: support.name, required: true,
         coreSolver: true, packageRole: 'support_bridge' }))].filter(Boolean)
@@ -3298,7 +3347,7 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     obligations: model.obligations,
     solutionClass,
     coreUnique: requiredCoreUnique,
-    coreProviders: [accessProvider || coreUnique].filter(Boolean),
+    coreProviders: [selectedCoreProvider].filter(Boolean),
     bridgePath,
     packageProfile,
     primarySkill,
