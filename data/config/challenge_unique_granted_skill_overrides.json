@@ -1,5 +1,6 @@
 {
   "strictUniqueGrantedSkills": [
+    { "uniqueName": "Thunderfist", "skillName": "Crackling Palm", "requiredLevel": 65, "category": "nonweapon" },
     { "uniqueName": "Double Vision", "skillName": "Gemini Surge", "requiredLevel": 20, "category": "weapon" },
     { "uniqueName": "Hysseg's Claw", "skillName": "Cackling Companions", "requiredLevel": 22, "category": "weapon" },
     { "uniqueName": "Fairgraves' Curse", "skillName": "Phantasmal Arrow", "requiredLevel": 52, "category": "weapon" },

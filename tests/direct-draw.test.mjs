@@ -81,7 +81,7 @@ test('Bind the Fates weapon options exactly match the core Build weapon categori
   const coreWeaponCategories = equipment.deriveWeaponFamilies(core).map((family) => family.name);
 
   assert.deepEqual(coreWeaponCategories, [
-    'Mace', 'Quarterstaff', 'Bow', 'Crossbow', 'Staff', 'Talisman', 'Wand', 'Sceptre', 'Spear'
+    'Mace', 'Quarterstaff', 'Bow', 'Crossbow', 'Staff', 'Talisman', 'Wand', 'Sceptre', 'Spear', 'Unarmed'
   ]);
   assert.match(uiSource, /return deriveWeaponFamilies\(data\)\.map\(\(family\) => family\.name\);/);
   assert.doesNotMatch(uiSource, /data\.Weapons\?\.\['(?:Two|One)-Handed'\]/);

@@ -239,7 +239,6 @@ function renderPassiveRecommendations(currentDraw, dataWrap) {
     ? passives.ascendancyNodes.slice(0, 2)
     : [];
 
-  // ⛔ Keystones still exist in data, but we don't display them for now
   const keystones = Array.isArray(passives.keystones)
     ? passives.keystones.slice(0, 2)
     : [];
@@ -248,8 +247,7 @@ function renderPassiveRecommendations(currentDraw, dataWrap) {
     ? passives.notables.slice(0, 8)
     : [];
 
-  // When keystones are hidden, only check asc + notables to decide if the panel is empty
-  if (!ascendancyNodes.length && !notables.length) {
+  if (!ascendancyNodes.length && !keystones.length && !notables.length) {
     hideAll();
     return;
   }
@@ -257,9 +255,8 @@ function renderPassiveRecommendations(currentDraw, dataWrap) {
   grid.innerHTML = '';
   panel.classList.remove('hidden');
 
-  // Inner cross: we *reserve* top/bottom slots for keystones, but just don't fill them.
   const ascSlots = ['4 / 3', '4 / 5']; // left / right
-  const keySlots = ['3 / 4', '5 / 4']; // top / bottom (unused for now, kept for future)
+  const keySlots = ['3 / 4', '5 / 4']; // top / bottom
 
   // Outer star ring (notables) – unchanged
   const noteSlots = [
@@ -284,10 +281,9 @@ function renderPassiveRecommendations(currentDraw, dataWrap) {
     place(node, 'ascendancy', ascSlots[idx] || null)
   );
 
-  // 🔇 Keystones intentionally not rendered:
-  // keystones.forEach((node, idx) =>
-  //   place(node, 'keystone', keySlots[idx] || null)
-  // );
+  keystones.forEach((node, idx) =>
+    place(node, 'keystone', keySlots[idx] || null)
+  );
 
   notables.forEach((node, idx) =>
     place(node, 'notable', noteSlots[idx] || null)

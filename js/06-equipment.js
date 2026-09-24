@@ -27,7 +27,10 @@ const poeNinjaModesByWeaponFamily = Object.freeze({
     'Sceptre', 'Sceptre / Buckler', 'Sceptre / Focus', 'Sceptre / Shield', 'Sceptre / Unknown',
     'Unknown / Sceptre', 'Wand / Sceptre', 'Spear / Sceptre', 'Mace / Sceptre',
     'Two Handed Mace / Sceptre', 'Talisman / Sceptre'
-  ])
+  ]),
+  // poe.ninja currently has no no-weapon mode; retaining the explicit empty
+  // mapping prevents the integration vocabulary from defining rollability.
+  Unarmed: Object.freeze([])
 });
 
 const familyName = (raw) => String(raw?.name || raw || '').trim()
@@ -45,6 +48,13 @@ function deriveWeaponFamilies(data) {
     entry.attributes = { ...entry.attributes, ...(source.attributes || {}) };
     families.set(name, entry);
   }
+  // Unarmed has no physical base-item row, but it is a real primary delivery
+  // family. Keep it synthetic here so every consumer (rolls, Bind the Fates,
+  // challenges and audits) shares the same canonical pool.
+  families.set('Unarmed', {
+    id: 'unarmed', name: 'Unarmed', aliases: ['No Weapon'],
+    tags: ['unarmed', 'melee'], attributes: {}, poeNinjaModes: []
+  });
   for (const entry of families.values()) entry.poeNinjaModes = [...(poeNinjaModesByWeaponFamily[entry.name] || [])];
   return [...families.values()];
 }

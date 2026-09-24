@@ -567,6 +567,27 @@
         }
       ]
     },
+    "skill:Metadata/Items/Gems/SkillGemCracklingPalm": {
+      "requires_unique_provider": true,
+      "requires_granted_source": true,
+      "granted_sources": [
+        {
+          "kind": "unique",
+          "unique_name": "Thunderfist",
+          "unique_id": "Thunderfist||Utility Wraps",
+          "slot": "Gloves",
+          "base": "Utility Wraps",
+          "requirements": {
+            "level": 65,
+            "str": null,
+            "dex": 44,
+            "int": 44
+          },
+          "granted_level": 18,
+          "source_value": "Level 18 Crackling Palm"
+        }
+      ]
+    },
     "skill:Metadata/Items/Gems/SkillGemFuturePast": {
       "requires_unique_provider": true,
       "requires_granted_source": true,

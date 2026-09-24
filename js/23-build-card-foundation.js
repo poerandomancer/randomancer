@@ -4,7 +4,7 @@ import { getClassIconPath } from './ascendancy-visuals.js';
 
 const CARD_TYPE_BUILD = 'build';
 const BUILD_CARD_FACES = Object.freeze({ FRONT: 'front', BACK: 'back' });
-const TOOLTIP_KEYS = new Set(['ACTIVE_SKILL', 'SUPPORT', 'UNIQUE', 'ASCENDANCY_PASSIVE', 'NOTABLE']);
+const TOOLTIP_KEYS = new Set(['ACTIVE_SKILL', 'SUPPORT', 'UNIQUE', 'ASCENDANCY_PASSIVE', 'KEYSTONE', 'NOTABLE']);
 const mountedCards = new WeakMap();
 
 let tooltipEl = null;
@@ -194,13 +194,24 @@ function deriveBuildCardModel(snapshot) {
     });
 
   const passives = snap.passives && typeof snap.passives === 'object' ? snap.passives : {};
+  const ascendancyIdeas = (passives.ascendancyNodes || []).slice(0, 1).map((entry) => item(entry?.name, {
+    prefix: 'Ascendancy',
+    slotKey: 'ASCENDANCY_PASSIVE',
+    tipLines: ['Ascendancy Passive', ...getPassiveDescription(entry)]
+  }));
+  // Required providers take precedence over optional notables. Four entries
+  // retains the established card density, while never truncating keystones if
+  // a future package legitimately requires more than the remaining slots.
+  const keystoneIdeas = (passives.keystones || []).map((entry) => item(entry?.name, {
+    prefix: 'Keystone',
+    slotKey: 'KEYSTONE',
+    tipLines: ['Keystone Passive', ...getPassiveDescription(entry)]
+  }));
+  const optionalNotableSlots = Math.max(0, 4 - ascendancyIdeas.length - keystoneIdeas.length);
   const passiveIdeas = [
-    ...(passives.ascendancyNodes || []).slice(0, 1).map((entry) => item(entry?.name, {
-      prefix: 'Ascendancy',
-      slotKey: 'ASCENDANCY_PASSIVE',
-      tipLines: ['Ascendancy Passive', ...getPassiveDescription(entry)]
-    })),
-    ...(passives.notables || []).slice(0, 3).map((entry) => item(entry?.name, {
+    ...ascendancyIdeas,
+    ...keystoneIdeas,
+    ...(passives.notables || []).slice(0, optionalNotableSlots).map((entry) => item(entry?.name, {
       slotKey: 'NOTABLE',
       tipLines: ['Notable Passive', ...getPassiveDescription(entry)]
     }))

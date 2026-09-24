@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import test from 'node:test';
 import {
   analyzeRecommendationCellV3,
+  evaluateCompatibilityV3,
   isIndependentChaosEvidenceV3,
   MAX_OPTIMIZER_SUPPORTS,
   MAX_REQUIRED_SUPPORTS,
@@ -11,7 +12,7 @@ import {
   mergeRecommendationSkillCraftingV3,
   selectRecommendationPackageV3
 } from '../js/30-recommendation-v3-selector.js';
-import { mergeRecommendationUniqueSemanticsV3 } from '../js/31-non-skill-recommendation-selector.js';
+import { mergeRecommendationUniqueSemanticsV3, selectNonSkillRecommendations } from '../js/31-non-skill-recommendation-selector.js';
 
 const read = (path) => JSON.parse(fs.readFileSync(new URL(`../${path}`, import.meta.url)));
 const offenseInventory = read('data/offense-inventory.json');
@@ -21,6 +22,76 @@ catalog = mergeRecommendationSkillCraftingV3(catalog, read('data/enriched/recomm
 const analyze = (weapon, offense) => analyzeRecommendationCellV3(
   catalog, { weapon, offenseSet: [offense] }, { offenseInventory }
 );
+
+test('Unarmed keeps native and provider-granted weapon access distinct', () => {
+  const physical = analyze('Unarmed', 'physical');
+  const punch = physical.legal.find((candidate) => candidate.entity.name === 'Punch');
+  assert.ok(punch?.primaryEligible);
+  assert.equal(punch.accessBridge, null);
+
+  const cold = analyze('Unarmed', 'cold');
+  const iceStrike = cold.legal.find((candidate) => candidate.entity.name === 'Ice Strike');
+  assert.equal(iceStrike.accessBridge.rolledWeapon, 'unarmed');
+  assert.equal(iceStrike.accessBridge.effectiveSkillFamily, 'quarterstaff');
+  assert.equal(iceStrike.accessBridge.provider.name, 'Hollow Palm Technique');
+
+  const ignite = analyze('Unarmed', 'ignite');
+  const perfectStrike = ignite.legal.find((candidate) => candidate.entity.name === 'Perfect Strike');
+  assert.equal(perfectStrike.accessBridge.effectiveSkillFamily, 'mace');
+  assert.equal(perfectStrike.accessBridge.provider.name, 'Facebreaker');
+  assert.ok(!analyze('Bow', 'physical').legal.some((candidate) => candidate.entity.name === 'Punch'));
+});
+
+test('Unarmed access packages preserve the roll and surface their required provider', () => {
+  const result = selectRecommendationPackageV3(catalog, { weapon: 'Unarmed', offenseSet: ['cold'] }, {
+    offenseInventory, selectionSeed: 'unarmed-cold'
+  });
+  assert.equal(result.packageProfile.weapon, 'unarmed');
+  assert.equal(result.solutionClass, 'ACCESS_BRIDGE');
+  assert.equal(result.coreProviders[0].name, 'Hollow Palm Technique');
+  assert.equal(result.coreProviders[0].required, true);
+  const nonSkills = selectNonSkillRecommendations(catalog, { weapon: 'Unarmed', offenseSet: ['cold'] }, result);
+  assert.ok(nonSkills.passives.keystones.some((passive) => passive.name === 'Hollow Palm Technique'));
+});
+
+test('production Invoker / Unarmed / Chill preserves Hollow Palm for presentation', () => {
+  const result = selectRecommendationPackageV3(catalog, {
+    ascendancy: 'Invoker', weapon: 'Unarmed', offenseSet: ['chill']
+  }, { offenseInventory, selectionSeed: 'invoker-unarmed-chill' });
+  const nonSkills = selectNonSkillRecommendations(catalog, {
+    ascendancy: 'Invoker', weapon: 'Unarmed', offenseSet: ['chill']
+  }, result);
+  assert.equal(result.packageProfile.weapon, 'unarmed');
+  assert.equal(result.primarySkill.weaponAccess.effectiveSkillFamily, 'quarterstaff');
+  assert.equal(result.primarySkill.weaponAccess.provider.name, 'Hollow Palm Technique');
+  assert.ok(nonSkills.passives.keystones.some((entry) => entry.name === 'Hollow Palm Technique'));
+});
+
+test('Unarmed Lightning automatically discovers Thunderfist-granted Crackling Palm', () => {
+  const cracklingPalm = catalog.entities.find((entity) => entity.name === 'Crackling Palm');
+  assert.equal(evaluateCompatibilityV3(cracklingPalm, { weapon: 'Unarmed' }).ok, false);
+  assert.equal(evaluateCompatibilityV3(cracklingPalm, {
+    weapon: 'Unarmed', recommendedUniques: ['Thunderfist']
+  }).ok, true);
+  const result = selectRecommendationPackageV3(catalog, {
+    weapon: 'Unarmed', offenseSet: ['lightning']
+  }, { offenseInventory, selectionSeed: 'auto-thunder-0' });
+  assert.equal(result.primarySkill.name, 'Crackling Palm');
+  assert.equal(result.coreUnique.name, 'Thunderfist');
+  assert.equal(result.coreUnique.required, true);
+  assert.equal(result.coreUnique.packageRole, 'granted_skill_provider');
+  assert.ok(result.bridgePath.some((edge) => edge.type === 'granted_skill'
+    && edge.provider === 'Thunderfist' && edge.to === 'Crackling Palm'));
+  const nonSkills = selectNonSkillRecommendations(catalog, {
+    weapon: 'Unarmed', offenseSet: ['lightning']
+  }, result);
+  assert.equal(nonSkills.recommendedUniques[0].name, 'Thunderfist');
+
+  const bow = selectRecommendationPackageV3(catalog, {
+    weapon: 'Bow', offenseSet: ['lightning']
+  }, { offenseInventory, selectionSeed: 'auto-thunder-0' });
+  assert.notEqual(bow.coreUnique?.name, 'Thunderfist');
+});
 
 test('Poison-derived Chaos taxonomy is directional and independent Chaos proof survives', () => {
   const poison = { relation: 'inflicts', mechanic: 'poison', confidence: 'exact' };

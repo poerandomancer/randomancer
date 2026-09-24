@@ -14,6 +14,7 @@ const WEAPON_FAMILIES = new Map([
   ['wand', new Set(['wand'])],
   ['sceptre', new Set(['sceptre'])],
   ['talisman', new Set(['talisman'])],
+  ['unarmed', new Set(['unarmed'])],
   ['mace', new Set(['mace'])]
 ]);
 const ONE_HANDED_WEAPONS = new Set(['sceptre', 'wand', 'spear', 'mace']);
@@ -218,6 +219,9 @@ function factAppliesToPackage(fact, recommendationPackage, sources = packageSour
   if (conditionTarget === 'self'
     && !new Set(arr(recommendationPackage?.packageProfile?.selfStates).map(state)).has(condition)) return false;
   if (['self', 'player'].includes(target) && conditionTarget !== 'self') return false;
+  const requiredWeaponFamilies = arr(fact?.weaponFamilies ?? fact?.w).map(token);
+  if (requiredWeaponFamilies.length
+    && !requiredWeaponFamilies.includes(token(recommendationPackage?.packageProfile?.weapon))) return false;
   const delivery = token(fact?.delivery ?? fact?.d);
   if (delivery && !['skill', 'generic', 'generic_hit', 'hit'].includes(delivery)) {
     const properties = packageProperties(recommendationPackage);
@@ -236,6 +240,9 @@ function analyzeUnique(entity, offense, recommendationPackage = null) {
   const compact = entity?.unique_offense_semantics?.[offenseId];
   if (compact?.tier === 'CONTRADICTION_PREVENTION') return null;
   const compactFacts = arr(compact?.facts);
+  const compactWeaponFamilies = uniq(compactFacts.flatMap((fact) => arr(fact?.w)).map(token));
+  if (compactWeaponFamilies.length
+    && !compactWeaponFamilies.includes(token(recommendationPackage?.packageProfile?.weapon))) return null;
   const matches = compactFacts.filter((fact) => isIndependentChaosEvidenceV3(entity, fact)
     && factAppliesToPackage(fact, recommendationPackage, sourceMechanics)
     && (token(fact.r) !== 'converts' || token(fact.s) === 'outgoing'))
@@ -385,9 +392,13 @@ function selectNonSkillRecommendations(catalog, snapshot = {}, recommendationPac
   const seed = options.selectionSeed ?? recommendationPackage?.selectionSeed ?? '';
   const requiredUnique = recommendationPackage?.coreUnique ? [{
     id: recommendationPackage.coreUnique.id, entityId: recommendationPackage.coreUnique.entityId, name: recommendationPackage.coreUnique.name,
-    required: true, coreSolver: true, packageRole: 'unique_bridge',
+    required: true, coreSolver: true, packageRole: recommendationPackage.coreUnique.packageRole || 'unique_bridge',
     recommendationEvidence: { tier: 'BUILD_DEFINING_CAPABILITY', matches: recommendationPackage.bridgePath || [] }
   }] : [];
+  const requiredKeystones = arr(recommendationPackage?.coreProviders)
+    .filter((provider) => provider?.required && provider?.providerType === 'keystone')
+    .map((provider) => ({ id: provider.id, name: provider.name, required: true,
+      coreSolver: true, packageRole: provider.packageRole || 'weapon_access' }));
   const optionalUnique = selectUniqueRecommendation(catalog, snapshot, recommendationPackage, `${seed}:unique`)
     .filter((entry) => !requiredUnique.some((required) =>
       token(required.entityId || required.id) === token(entry.entityId || entry.id)));
@@ -398,18 +409,20 @@ function selectNonSkillRecommendations(catalog, snapshot = {}, recommendationPac
     return token(resolved?.source_id || resolved?.id || entry?.entityId || entry?.id);
   };
   const usedUniqueIds = new Set(recommendedUniques.map(canonicalIdentity).filter(Boolean));
+  const passives = {
+    ascendancyNodes: choose(byType('ascendancy_passive'), 1, `${seed}:ascendancy`, false),
+    // Same-signature notables are useful alternative tree routes. The strong
+    // score band and locality/applicability gates, rather than complementarity,
+    // determine whether they are surfaced.
+    notables: choose(byType('passive'), 3, `${seed}:notable`, false)
+  };
+  if (requiredKeystones.length) passives.keystones = requiredKeystones;
   const result = {
     recommendedUniques,
     recommendedJewelryUniques: selectJewelryRecommendations(
       catalog, snapshot, recommendationPackage, `${seed}:jewelry`, usedUniqueIds
     ),
-    passives: {
-      ascendancyNodes: choose(byType('ascendancy_passive'), 1, `${seed}:ascendancy`, false),
-      // Same-signature notables are useful alternative tree routes. The strong
-      // score band and locality/applicability gates, rather than complementarity,
-      // determine whether they are surfaced.
-      notables: choose(byType('passive'), 3, `${seed}:notable`, false)
-    }
+    passives
   };
   return result;
 }

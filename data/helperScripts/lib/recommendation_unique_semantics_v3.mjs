@@ -22,7 +22,17 @@ function categoryFor(fact, offense) {
   return null;
 }
 
-function evidenceRecord(fact, offense, sourceType, sourceName, parentId, component = null, sourceEntityId = null) {
+function weaponFamiliesForFact(fact, raw) {
+  if (!arr(fact?.evidence).some((entry) => entry?.kind === 'unique_mod')) return [];
+  const mechanic = token(fact?.mechanic);
+  return [...new Set(arr(raw?.explicit_mods).flatMap((line) => {
+    const normalized = token(line);
+    if (mechanic && !normalized.includes(mechanic)) return [];
+    return /(?:^|_)unarmed(?:_|$)/.test(normalized) ? ['unarmed'] : [];
+  }))];
+}
+
+function evidenceRecord(fact, offense, sourceType, sourceName, parentId, component = null, sourceEntityId = null, raw = null) {
   const category = categoryFor(fact, offense);
   if (!category) return null;
   const evidence = arr(fact.evidence)[0];
@@ -32,6 +42,7 @@ function evidenceRecord(fact, offense, sourceType, sourceName, parentId, compone
     scope: token(fact.scope) || null, target: token(fact.target) || null,
     delivery: token(fact.delivery) || null, application: token(fact.application) || null,
     condition: token(fact.condition) || null, conditionTarget: token(fact.condition_target) || null,
+    weaponFamilies: weaponFamiliesForFact(fact, raw),
     provenance: { sourceType, sourceEntityId: sourceEntityId || parentId,
       component: component || (String(evidence?.value || '').match(/explod|cloud|ground|burst|projectile/i)?.[0]?.toLowerCase() || null) }
   };
@@ -41,7 +52,7 @@ function analyzeUnique(entity, offense, sources) {
   const raw = sources.rawByKey.get(entity.source_id) || {};
   const records = [];
   const add = (fact, type, name, component, sourceEntityId) => {
-    const record = evidenceRecord(fact, offense, type, name, entity.id, component, sourceEntityId);
+    const record = evidenceRecord(fact, offense, type, name, entity.id, component, sourceEntityId, raw);
     if (record) records.push(record);
   };
   for (const fact of arr(entity.facts)) add(fact, 'item_fact', entity.name);
@@ -86,6 +97,7 @@ export function compactUniqueSemantics(catalog, rawItems, offenses) {
         ...(record.from ? { f: record.from } : {}), ...(record.to ? { t: record.to } : {}),
         ...(record.scope ? { s: record.scope } : {}), ...(record.target ? { a: record.target } : {}),
         ...(record.delivery ? { d: record.delivery } : {}), ...(record.application ? { q: record.application } : {}),
+        ...(record.weaponFamilies.length ? { w: record.weaponFamilies } : {}),
         ...(record.condition ? { h: record.condition } : {}), ...(record.conditionTarget ? { x: record.conditionTarget } : {}),
         k: record.provenance.sourceType,
         ...(record.provenance.sourceEntityId !== entity.id ? { e: record.provenance.sourceEntityId } : {}),
