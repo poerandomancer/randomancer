@@ -154,7 +154,7 @@ function item(name, options = {}) {
   };
 }
 
-function deriveBuildCardModel(snapshot) {
+function deriveBuildCardModel(snapshot, includeSolutions = true) {
   const snap = snapshot && typeof snapshot === 'object' ? snapshot : null;
   if (!snap) return null;
 
@@ -217,7 +217,7 @@ function deriveBuildCardModel(snapshot) {
     }))
   ].filter((entry) => entry.name);
 
-  return {
+  const model = {
     type: CARD_TYPE_BUILD,
     title: snap.buildName || [snap.className, snap.ascendancy].filter(Boolean).join(' '),
     subtitle: snap.flavor || '',
@@ -234,6 +234,12 @@ function deriveBuildCardModel(snapshot) {
       { label: 'Passive Ideas', values: passiveIdeas }
     ]
   };
+  const solutionSnapshots = includeSolutions && Array.isArray(snap.recommendationSolutions)
+    ? snap.recommendationSolutions.filter(Boolean).slice(0, 3) : [];
+  if (solutionSnapshots.length > 1) {
+    model.solutions = solutionSnapshots.map((solution) => deriveBuildCardModel({ ...snap, ...solution }, false));
+  }
+  return model;
 }
 
 function renderName(entry, face) {
@@ -318,6 +324,9 @@ function renderBuildCard(model, options = {}) {
   const style = renderAttributeLightStyle(model.balance, model.artPath);
   const label = isBack ? 'Return to Build' : 'Flip for Build Ideas';
   const stageClass = options.stageClass || '';
+  const solutionCount = Array.isArray(model.solutions) ? model.solutions.length : 0;
+  const solutionIndex = solutionCount ? Math.max(0, Math.min(solutionCount - 1, Number(options.solutionIndex) || 0)) : 0;
+  const displayedModel = solutionCount ? model.solutions[solutionIndex] : model;
 
   if (!isBack) {
     return `
@@ -334,14 +343,23 @@ function renderBuildCard(model, options = {}) {
     `;
   }
 
-  const sections = model.backSections.filter((section) => section.values?.length);
+  const sections = displayedModel.backSections.filter((section) => section.values?.length);
+  const navigation = solutionCount > 1 ? `
+    <button type="button" class="rc-card-ideas__nav rc-card-ideas__nav--previous" data-card-action="solution-prev" aria-label="Previous build idea"><span aria-hidden="true">‹</span></button>
+    <button type="button" class="rc-card-ideas__nav rc-card-ideas__nav--next" data-card-action="solution-next" aria-label="Next build idea"><span aria-hidden="true">›</span></button>
+  ` : '';
+  const dots = solutionCount > 1 ? `<div class="rc-card-ideas__dots" role="status" aria-label="Build idea ${solutionIndex + 1} of ${solutionCount}">${model.solutions.map((_, index) => `<span class="rc-card-ideas__dot${index === solutionIndex ? ' is-active' : ''}" aria-hidden="true"></span>`).join('')}</div>` : '';
   return `
     <div class="card-stage card-stage--build ${stageClass}">
       <article class="rc-card rc-card--build rc-card--back" data-card-flip-surface="1" tabindex="0" role="button" aria-label="${escapeHtml(label)}"${style}>
         ${renderHeader(model, options.actionsHtml || '')}
         <div class="rc-card__body rc-card__body--back">
           <div class="rc-card-ideas__intro">Optional starting points, not build requirements.</div>
-          ${sections.length ? sections.map((section) => `<section class="rc-print-block${section.label === 'Skill Ideas' ? ' rc-print-block--skills' : ''}"><div class="rc-print-block__label">${escapeHtml(section.label)}</div><div class="rc-print-block__value">${section.label === 'Skill Ideas' ? renderSkillGroups(section.values, face) : renderValues(section.values, face)}</div></section>`).join('') : '<div class="rc-card-ideas__empty">No strong build ideas were found for this roll.</div>'}
+          ${navigation}
+          <div class="rc-card-ideas__solution" data-solution-index="${solutionIndex}">
+            ${sections.length ? sections.map((section) => `<section class="rc-print-block${section.label === 'Skill Ideas' ? ' rc-print-block--skills' : ''}"><div class="rc-print-block__label">${escapeHtml(section.label)}</div><div class="rc-print-block__value">${section.label === 'Skill Ideas' ? renderSkillGroups(section.values, face) : renderValues(section.values, face)}</div></section>`).join('') : '<div class="rc-card-ideas__empty">No strong build ideas were found for this roll.</div>'}
+          </div>
+          ${dots}
           ${renderFlipCta(true)}
         </div>
       </article>
@@ -445,6 +463,18 @@ function bindInteractions(root) {
     if (actionEl && root.contains(actionEl)) {
       const action = actionEl.dataset.cardAction || '';
       if (action === 'flip') return flip();
+      if (action === 'solution-prev' || action === 'solution-next') {
+        const state = mountedCards.get(root);
+        const count = state?.model?.solutions?.length || 0;
+        if (!state || count < 2) return;
+        const delta = action === 'solution-next' ? 1 : -1;
+        const solutionIndex = (state.solutionIndex + delta + count) % count;
+        hideBuildCardTooltip();
+        return mountBuildCard(root, state.model, {
+          ...state.options, face: BUILD_CARD_FACES.BACK, solutionIndex,
+          solutionDirection: delta > 0 ? 'next' : 'previous'
+        });
+      }
       return mountedCards.get(root)?.options?.onAction?.(action, actionEl, event);
     }
     const surface = event.target.closest('[data-card-flip-surface="1"]');
@@ -464,12 +494,20 @@ function mountBuildCard(root, model, options = {}) {
   if (!root || !model) return false;
   const face = options.face === BUILD_CARD_FACES.BACK ? BUILD_CARD_FACES.BACK : BUILD_CARD_FACES.FRONT;
   const animate = Boolean(options.animate) && !window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
-  const storedOptions = { ...options, face, animate: false };
-  mountedCards.set(root, { model, face, options: storedOptions });
+  const prior = mountedCards.get(root);
+  const solutionCount = model.solutions?.length || 0;
+  const requestedIndex = options.solutionIndex ?? (prior?.model === model ? prior.solutionIndex : 0);
+  const solutionIndex = solutionCount ? Math.max(0, Math.min(solutionCount - 1, Number(requestedIndex) || 0)) : 0;
+  const storedOptions = { ...options, face, animate: false, solutionIndex, solutionDirection: null };
+  mountedCards.set(root, { model, face, solutionIndex, options: storedOptions });
   root.dataset.cardFace = face;
-  root.innerHTML = renderBuildCard(model, { ...options, face, stageClass: animate ? 'is-flipping' : (options.stageClass || '') });
+  const directionClass = options.solutionDirection === 'next' ? 'is-solution-next'
+    : options.solutionDirection === 'previous' ? 'is-solution-previous' : '';
+  root.innerHTML = renderBuildCard(model, { ...options, face, solutionIndex,
+    stageClass: animate ? 'is-flipping' : (directionClass || options.stageClass || '') });
   bindInteractions(root);
   if (animate) window.setTimeout(() => root.querySelector('.card-stage--build')?.classList.remove('is-flipping'), 340);
+  if (directionClass) window.setTimeout(() => root.querySelector('.card-stage--build')?.classList.remove(directionClass), 180);
   return true;
 }
 
