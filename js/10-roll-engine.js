@@ -92,6 +92,22 @@ function drawBuild(dataWrap, { random = Math.random } = {}) {
     const recommendation = selectRecommendationPackageV3(catalog, draw, { offenseInventory: data.OffenseInventory || {}, criticalProfiles: data.recommendationCriticalProfilesV3 || {}, selectionSeed: selectionSeed() });
     draw = { ...draw, ...adaptRecommendationPackageV3ToSnapshot(recommendation) };
     draw = { ...draw, ...selectNonSkillRecommendations(catalog, draw, recommendation, { selectionSeed: recommendation.selectionSeed }) };
+    draw.recommendationSolutions = (recommendation.solutions || [recommendation]).map((solution, index) => {
+      const skillSnapshot = adaptRecommendationPackageV3ToSnapshot(solution);
+      if (index === 0) return {
+        ...skillSnapshot,
+        recommendedUniques: draw.recommendedUniques,
+        recommendedJewelryUniques: draw.recommendedJewelryUniques,
+        passives: draw.passives
+      };
+      const solutionSnapshot = { ...draw, ...skillSnapshot, recommendationSolutions: undefined };
+      return {
+        ...skillSnapshot,
+        ...selectNonSkillRecommendations(catalog, solutionSnapshot, solution, {
+          selectionSeed: `${recommendation.selectionSeed || ''}:solution:${index}`
+        })
+      };
+    });
   } else {
     draw.recommendationError = validation.reason || 'Recommendation catalog is unavailable.';
   }

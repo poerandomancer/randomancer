@@ -8,6 +8,8 @@ import {
   MAX_OPTIMIZER_SUPPORTS,
   MAX_REQUIRED_SUPPORTS,
   MAX_TOTAL_SUPPORTS,
+  MAX_RECOMMENDATION_SOLUTIONS,
+  diversifyRecommendationPackages,
   mergeRecommendationGrantedSkillAccessV3,
   mergeRecommendationSkillCraftingV3,
   selectRecommendationPackageV3,
@@ -24,6 +26,44 @@ catalog = mergeRecommendationSkillCraftingV3(catalog, read('data/enriched/recomm
 const analyze = (weapon, offense) => analyzeRecommendationCellV3(
   catalog, { weapon, offenseSet: [offense] }, { offenseInventory }
 );
+
+test('recommendation solutions diversify complete packages without padding duplicates', () => {
+  const result = selectRecommendationPackageV3(catalog, {
+    weapon: 'Unarmed', offenseSet: ['companions']
+  }, { offenseInventory, selectionSeed: 'multi-solution-regression' });
+  assert.equal(result.solutions.length, 2);
+  assert.equal(result.solutions[0].primarySkill.name, result.primarySkill.name);
+  assert.notEqual(result.solutions[0].primarySkill.name, result.solutions[1].primarySkill.name);
+  for (const solution of result.solutions) {
+    assert.ok(solution.pieces.length);
+    assert.ok(solution.packageProfile);
+    assert.ok(Array.isArray(solution.supportAssignments));
+  }
+
+  const single = selectRecommendationPackageV3(catalog, {
+    weapon: 'Bow', offenseSet: ['fire']
+  }, { offenseInventory, selectionSeed: 'single-solution-regression' });
+  assert.equal(single.solutions.length, 1);
+});
+
+test('diversification rejects near-duplicates and hard-caps results at three', () => {
+  const candidate = (id, primary, delivery, score = 100) => ({
+    id, score, selectionScore: score, fulfilled: [{ obligationId: 'offense:test' }],
+    primary: { entity: { id: primary }, delivery: { skillTypes: delivery }, weaponRelationship: { family: 'bow' } },
+    supporting: null, supportingRole: null, synergyEdges: [], requiredProviders: []
+  });
+  const winner = candidate('a', 'skill-a', ['attack', 'projectile']);
+  const supportSwap = candidate('b', 'skill-b', ['attack', 'projectile'], 99);
+  const distinctDelivery = candidate('c', 'skill-c', ['attack', 'channelled'], 98);
+  const distinctSetup = { ...candidate('d', 'skill-d', ['attack', 'projectile'], 97),
+    synergyEdges: [{ demandRelation: 'consumes', mechanic: 'freeze', supplyRelation: 'inflicts' }] };
+  const fourthDirection = candidate('e', 'skill-e', ['spell'], 96);
+  const retained = diversifyRecommendationPackages(
+    [winner, supportSwap, distinctDelivery, distinctSetup, fourthDirection], winner
+  );
+  assert.deepEqual(retained.map((entry) => entry.id), ['a', 'c', 'd']);
+  assert.equal(retained.length, MAX_RECOMMENDATION_SOLUTIONS);
+});
 
 test('Unarmed keeps native and provider-granted weapon access distinct', () => {
   const physical = analyze('Unarmed', 'physical');

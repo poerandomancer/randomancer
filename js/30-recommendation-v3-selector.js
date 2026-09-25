@@ -21,6 +21,8 @@ const MAX_REQUIRED_SUPPORTS = 2;
 const MAX_OPTIMIZER_SUPPORTS = 3;
 const MAX_TOTAL_SUPPORTS = 3;
 const MAX_DISPLAYED_SKILLS = 3;
+const MAX_RECOMMENDATION_SOLUTIONS = 3;
+const ALTERNATE_SOLUTION_QUALITY_BAND = 12;
 // Compatibility alias for consumers which used the old required-support cap.
 const MAX_SUPPORTS_PER_SKILL = MAX_REQUIRED_SUPPORTS;
 const RECOMMENDATION_EXCLUDED_SOURCE_TAGS = new Set(['kalguuran']);
@@ -2602,6 +2604,61 @@ function choosePackageCandidate(ranked, options = {}) {
   return { winner: pool[pool.length - 1], shortlist, qualityBand };
 }
 
+function candidateDirection(candidate) {
+  const providers = asArray(candidate?.requiredProviders).map(providerIdentity).filter(Boolean).sort();
+  const setup = asArray(candidate?.synergyEdges).map((edge) => [
+    normalizeToken(edge?.demandRelation), normalizeToken(edge?.mechanic),
+    normalizeToken(edge?.supplyRelation)
+  ].join(':')).sort();
+  const delivery = unique([
+    ...asArray(candidate?.primary?.delivery?.skillTypes),
+    ...asArray(candidate?.primary?.dependencies).map((entry) => entry?.mechanic),
+    ...asArray(candidate?.primary?.setupCosts).map((entry) => entry?.mechanic),
+    candidate?.primary?.weaponRelationship?.family,
+    candidate?.primary?.entity?.archetype,
+    candidate?.supportingRole
+  ].map(normalizeToken)).sort();
+  return {
+    primary: candidate?.primary?.entity?.id || '',
+    supporting: candidate?.supporting?.entity?.id || '',
+    providers: providers.join('|'),
+    setup: setup.join('|'),
+    delivery: delivery.join('|')
+  };
+}
+
+function mechanicallyDistinctPackage(candidate, retained) {
+  const direction = candidateDirection(candidate);
+  return retained.every((existing) => {
+    const other = candidateDirection(existing);
+    if (direction.providers !== other.providers) return true;
+    if (direction.setup !== other.setup) return true;
+    if (direction.delivery !== other.delivery) return true;
+    // A different secondary is substantial only when it changes the package's
+    // setup/payoff role; support and filler swaps deliberately collapse here.
+    return direction.supporting !== other.supporting
+      && normalizeToken(candidate?.supportingRole) !== normalizeToken(existing?.supportingRole);
+  });
+}
+
+function diversifyRecommendationPackages(ranked, winner, options = {}) {
+  if (!winner) return [];
+  const requestedBand = Number(options.alternateSolutionQualityBand);
+  const qualityBand = Number.isFinite(requestedBand) && requestedBand >= 0
+    ? requestedBand : ALTERNATE_SOLUTION_QUALITY_BAND;
+  const winnerScore = winner.selectionScore ?? winner.score;
+  const retained = [winner];
+  for (const candidate of ranked) {
+    if (retained.length >= MAX_RECOMMENDATION_SOLUTIONS) break;
+    if (candidate === winner || candidate.id === winner.id) continue;
+    if (candidate.fulfilled.length !== winner.fulfilled.length) continue;
+    if (winnerScore - (candidate.selectionScore ?? candidate.score) > qualityBand) continue;
+    if (!mechanicallyDistinctPackage(candidate, retained)) continue;
+    retained.push(candidate);
+  }
+  return retained;
+}
+
 function supportDemandKey(target) {
   const mechanics = unique(asArray(target?.anyMechanics).map(normalizeToken)).sort();
   return `${target.entityId}:${target.relation}:${mechanics.length ? mechanics.join('|') : target.mechanic}`;
@@ -3258,7 +3315,12 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     : sortCompetitivePackages([...bridgePackages, ...uniqueBridgePackages, ...supportChainPackages].length
       ? [...bridgePackages, ...uniqueBridgePackages, ...supportChainPackages]
       : buildRankedSkillPackages(viablePool, offenseObligations), offenseObligations);
-  const { winner, shortlist, qualityBand } = choosePackageCandidate(rankedPackages, options);
+  const forcedWinner = options._forcedPackageId
+    ? rankedPackages.find((candidate) => candidate.id === options._forcedPackageId) || null
+    : null;
+  const choice = choosePackageCandidate(rankedPackages, options);
+  const winner = forcedWinner || choice.winner;
+  const { shortlist, qualityBand } = choice;
   let recommendationTier = winner?.primary?.coreUnique || winner?.primary?.uniqueBridgeProof || winner?.primary?.accessBridge
     || winner?.primary?.coreProvider || winner?.supporting?.coreProvider ? 'ONE_BRIDGE'
     : supportChainPackages.some((entry) => entry.id === winner?.id) ? 'SUPPORT_CHAIN'
@@ -3458,7 +3520,7 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
         coreSolver: true, packageRole: 'support_bridge' }))].filter(Boolean)
   };
 
-  return {
+  const result = {
     schemaVersion: RECOMMENDATION_PACKAGE_V3_SCHEMA,
     selectionSeed: options.selectionSeed ?? null,
     status: primarySkill ? (unresolved.length ? 'partial' : 'complete') : 'unresolved',
@@ -3531,6 +3593,19 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
       companionQualityBand: COMPANION_QUALITY_BAND
     }
   };
+  if (!options._singleSolution) {
+    const retained = diversifyRecommendationPackages(rankedPackages, winner, options);
+    const firstSolution = { ...result, diagnostics: { ...result.diagnostics } };
+    result.solutions = retained.map((candidate, index) => index === 0 ? firstSolution
+      : selectRecommendationPackageV3(catalog, snapshot, {
+        ...options,
+        _singleSolution: true,
+        _forcedPackageId: candidate.id,
+        selectionSeed: options.selectionSeed == null ? options.selectionSeed : `${options.selectionSeed}:solution:${index}`
+      }));
+    result.diagnostics.retainedSolutions = result.solutions.length;
+  }
+  return result;
 }
 
 function adaptRecommendationPackageV3ToSnapshot(packageResult) {
@@ -3566,6 +3641,10 @@ function adaptRecommendationPackageV3ToSnapshot(packageResult) {
       }
     }));
   }
+  if (asArray(packageResult?.solutions).length) {
+    adapted.recommendationSolutions = packageResult.solutions.map((solution) =>
+      adaptRecommendationPackageV3ToSnapshot(solution));
+  }
   return adapted;
 }
 
@@ -3582,6 +3661,8 @@ export {
   MAX_OPTIMIZER_SUPPORTS,
   MAX_TOTAL_SUPPORTS,
   MAX_DISPLAYED_SKILLS,
+  MAX_RECOMMENDATION_SOLUTIONS,
+  ALTERNATE_SOLUTION_QUALITY_BAND,
   MAX_SUPPORTS_PER_SKILL,
   adaptRecommendationPackageV3ToSnapshot,
   buildRecommendationObligationsV3,
@@ -3598,6 +3679,8 @@ export {
   mergeRecommendationSkillCraftingV3,
   optimizerRoleV3,
   optionalSupportPairIsCompatibleV3,
+  mechanicallyDistinctPackage,
+  diversifyRecommendationPackages,
   selectRecommendationPackageV3,
   validateRecommendationGrantedSkillAccessV3,
   validateRecommendationSkillCraftingV3,
