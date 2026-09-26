@@ -13,6 +13,10 @@ const App = window.App = (() => {
   function canonicalizeDraw(input = {}) {
     const src = (input && typeof input === 'object') ? input : {};
     const attrs = (src.attributes && typeof src.attributes === 'object') ? src.attributes : {};
+    const recommendationSolutions = Array.isArray(src.recommendationSolutions)
+      ? src.recommendationSolutions.slice(0, 3).filter((solution) => solution && typeof solution === 'object')
+        .map(({ recommendationSolutions: _nestedSolutions, ...solution }) => solution)
+      : [];
     return {
       schema: src.schema === 'randomancer-draw-v1' ? src.schema : 'randomancer-draw-v1',
       className: src.className || '',
@@ -39,6 +43,7 @@ const App = window.App = (() => {
       recommendationPackage: src.recommendationPackage && typeof src.recommendationPackage === 'object'
         ? src.recommendationPackage
         : null,
+      recommendationSolutions,
       snapshotVersion: 2
     };
   }

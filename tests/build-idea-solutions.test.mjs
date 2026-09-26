@@ -6,6 +6,7 @@ globalThis.window = { DATA: { gems: [], passivesEnriched: { nodes: [] } } };
 globalThis.document = { addEventListener() {} };
 
 const { deriveBuildCardModel, renderBuildCard } = await import('../js/23-build-card-foundation.js');
+await import('../js/04-app-state.js');
 const source = readFileSync(new URL('../js/23-build-card-foundation.js', import.meta.url), 'utf8');
 
 const base = {
@@ -44,4 +45,26 @@ test('navigation wraps, card flips preserve selection, and a new model resets it
   assert.match(source, /prior\?\.model === model \? prior\.solutionIndex : 0/);
   assert.match(source, /solution-prev[\s\S]*solution-next/);
   assert.match(source, /hideBuildCardTooltip\(\);[\s\S]*mountBuildCard/);
+});
+
+test('canonical application state preserves bounded solutions for the live card renderer', () => {
+  const solutions = [
+    { recommendedSkills: [{ name: 'Tame Beast' }] },
+    { recommendedSkills: [{ name: 'Cackling Companions' }] },
+    { recommendedSkills: [{ name: 'Skeletal Brute' }] },
+    { recommendedSkills: [{ name: 'Discarded Fourth Idea' }] }
+  ];
+  solutions[0].recommendationSolutions = [{ recommendedSkills: [{ name: 'Nested Idea' }] }];
+
+  const canonical = window.App.replaceCurrentDraw({ ...base, recommendationSolutions: solutions });
+  assert.equal(canonical.recommendationSolutions.length, 3);
+  assert.equal(canonical.recommendationSolutions[0].recommendationSolutions, undefined);
+
+  const model = deriveBuildCardModel(window.App.state.currentDraw);
+  assert.equal(model.solutions.length, 3);
+  const html = renderBuildCard(model, { face: 'back', solutionIndex: 1 });
+  assert.match(html, /Build idea 2 of 3/);
+  assert.match(html, /Cackling Companions/);
+  assert.match(html, /Previous build idea/);
+  assert.match(html, /Next build idea/);
 });
