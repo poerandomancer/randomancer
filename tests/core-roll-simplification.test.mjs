@@ -9,15 +9,15 @@ const testableOffenseSource = offenseSource.replace(
 );
 const offenseModule = await import(`data:text/javascript;base64,${Buffer.from(testableOffenseSource).toString('base64')}`);
 
-test('Critical Hits remains available as data but cannot be rolled as Offense', () => {
+test('Critical Hits is a canonical rollable Offense', () => {
   const criticalHits = { id: 'critical_hits', name: 'Critical Hits', category: 'Scaling' };
   const totems = { id: 'totems', name: 'Totems', category: 'Archetype' };
   const data = { Offense: [criticalHits, totems] };
 
   assert.equal(offenseModule.resolveOffenseElements(data).includes(criticalHits), true);
-  assert.equal(offenseModule.isRollableOffense(criticalHits), false);
+  assert.equal(offenseModule.isRollableOffense(criticalHits), true);
   assert.equal(offenseModule.isRollableOffense(totems), true);
-  assert.deepEqual(offenseModule.selectOffense({ data }).picks, [totems]);
+  assert.deepEqual(offenseModule.selectOffense({ data }).picks, [criticalHits]);
 });
 
 test('standard UI has no Cohesion or randomized defense controls', async () => {

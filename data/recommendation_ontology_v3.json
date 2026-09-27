@@ -168,6 +168,20 @@
       "relation": "native_affinity",
       "target": "lightning",
       "fulfills_source_from_target": false
+    },
+    {
+      "source": "heavy_stun",
+      "relation": "buildup_state",
+      "target": "stun",
+      "fulfills_source_from_target": false,
+      "description": "Generic Stun references do not establish a Heavy Stun identity; explicit buildup, application, or payoff evidence is required."
+    },
+    {
+      "source": "armour_break",
+      "relation": "setup_payoff_state",
+      "target": "physical",
+      "fulfills_source_from_target": false,
+      "description": "Physical damage alone does not establish Armour Break; typed application or a legal semantic bridge is required."
     }
   ],
   "survivability_families": [

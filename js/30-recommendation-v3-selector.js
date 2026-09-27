@@ -33,6 +33,7 @@ const DIRECT_USE_ALWAYS_BLOCKED_TYPES = new Set([
 const DIRECT_USE_PROXY_ALLOWED_TYPES = new Set(['hasreservation', 'persistent']);
 const STATEFUL_SETUP_MECHANICS = new Set([
   'armour_break',
+  'heavy_stun',
   'bleed',
   'charge',
   'corpse',
@@ -96,6 +97,8 @@ const OFFENSE_MECHANICS = Object.freeze({
   shock: ['shock'],
   electrocute: ['electrocute'],
   critical_hits: ['critical_hits'],
+  heavy_stun: ['heavy_stun'],
+  armour_break: ['armour_break'],
   minions: ['minion'],
   companions: ['companion'],
   totems: ['totem']
@@ -126,7 +129,7 @@ const DAMAGE_TYPE_AFFINITIES = Object.freeze({
 const CARRIER_RELATIONS = new Set(['fulfills', 'has_property', 'converts']);
 const PACKAGE_CANDIDATE_ROLES = new Set(['primary_damage', 'setup_control', 'payoff', 'enabler', 'utility']);
 const SUPPLY_RELATIONS = new Set(['fulfills', 'inflicts', 'creates', 'provides', 'generates']);
-const SUPPORT_ACTION_RELATIONS = new Set(['fulfills', 'inflicts', 'creates', 'provides', 'generates', 'converts']);
+const SUPPORT_ACTION_RELATIONS = new Set(['fulfills', 'inflicts', 'creates', 'provides', 'generates', 'converts', 'modifies']);
 const SUPPORT_UNCONDITIONAL_PROVISION_RELATIONS = new Set(['fulfills', 'provides', 'generates', 'converts']);
 const SUPPORT_INDEX_CACHE = new WeakMap();
 const CASTER_CRAFTING_SCHOOLS = new Set(['occult', 'elemental', 'primal']);
@@ -331,6 +334,8 @@ function allowedRelationsForOffense(category) {
       return ['fulfills', 'inflicts', 'provides'];
     case 'scaling':
       return ['fulfills', 'modifies', 'provides', 'has_property'];
+    case 'mechanic':
+      return ['fulfills', 'inflicts', 'creates', 'provides', 'modifies'];
     case 'archetype':
       return ['fulfills', 'creates', 'provides'];
     default:
@@ -987,8 +992,8 @@ function optimizerRoleV3(support, offenseId) {
   const target = normalizeToken(offenseId);
   const facts = hardSupportedSkillFacts(support);
   if (facts.some((fact) => fact?.relation === 'prevents' && factMechanics(fact).includes(target))) return 'PREVENTION';
-  if (facts.some((fact) => fact?.relation === 'consumes' && factMechanics(fact).includes(target))) return 'CONSUMER';
-  if (facts.some((fact) => fact?.relation === 'requires' && factMechanics(fact).includes(target))) return 'CONDITIONAL';
+  if (facts.some((fact) => ['consumes', 'requires'].includes(fact?.relation)
+    && factMechanics(fact).includes(target))) return 'POST_FULFILLMENT_PAYOFF';
   if (facts.some((fact) => fact?.relation === 'modifies'
     && factMechanics(fact).includes(target) && normalizeToken(fact?.condition))) return 'CONDITIONAL';
   if (facts.some((fact) => fact?.relation === 'modifies' && factMechanics(fact).includes(target))) {
@@ -1146,14 +1151,18 @@ function supportProofForObligation(entity, supports, obligation) {
 }
 
 function supportFactExplicitlyEnables(fact) {
+  if (fact?.relation === 'modifies') {
+    return factMechanics(fact).includes('heavy_stun') && normalizeToken(fact?.scope) === 'outgoing';
+  }
   if (!['inflicts', 'creates', 'provides', 'generates', 'converts', 'fulfills'].includes(fact?.relation)) return false;
+  if (fact?.relation === 'inflicts' && normalizeToken(fact?.scope) === 'outgoing') return true;
   const evidence = asArray(fact?.evidence).map((entry) => String(entry?.value || '').toLowerCase()).filter(Boolean);
   if (!evidence.length) return false;
   // Exact parser facts can still describe scaling or payoff.  A bridge needs
   // affirmative capability language, rather than merely mentioning an ailment.
   return fact.relation !== 'inflicts'
     || evidence.some((value) =>
-      /(?:causing|allowing) it to inflict|giving it a chance to|base_chance_to_(?:inflict_bleeding|poison_on_hit)/.test(value)
+      /(?:causing|allowing) it to inflict|causing (?:those )?hits? to break armour|causing them to apply broken armour|giving it a chance to|base_chance_to_(?:inflict_bleeding|poison_on_hit)/.test(value)
       && !/skills? (?:which|that) can|inflicted (?:by|with)|shocking an enemy|chance_to_(?:shock|ignite)_\+%_final/.test(value)
       && !/(?:causing it to .*inflict more (?:potent|powerful))/.test(value)
     );
@@ -2835,7 +2844,9 @@ function optimizerPriority(support, offenseId) {
     .flatMap((fact) => asArray(fact?.evidence).map((entry) => String(entry?.value || '')))
     .join(' ').toLowerCase();
   // Application is intentionally preferred over chance, effect, duration, and payoff.
-  const semanticRank = /buildup|application|appl(?:y|ies|ied)/.test(text) ? 5
+  const payoff = hardSupportedSkillFacts(support).some((fact) =>
+    ['requires', 'consumes'].includes(fact?.relation) && factMechanics(fact).includes(normalizeToken(offenseId)));
+  const semanticRank = payoff ? 6 : /buildup|application|appl(?:y|ies|ied)/.test(text) ? 5
     : /chance/.test(text) ? 4
       : /magnitude|effect/.test(text) ? 3
         : /duration|lasts|persistence/.test(text) ? 2
@@ -2861,14 +2872,19 @@ function eligibleOptionalOptimizersV3(catalog, selected, assignments, offenseObl
       .filter((entity) => entity?.content_type === 'support_gem')
       .filter((entity) => isSelectableSkillName(entity?.name) && isRecommendationContentAllowedV3(entity))
       .filter((entity) => supportAvailability(entity) !== 'lineage'))) {
-      const offenseId = offenseIds.find((id) => optimizerRoleV3(support, id) === 'OPTIONAL_OFFENSE_OPTIMIZER');
+      const offenseId = offenseIds.find((id) => ['OPTIONAL_OFFENSE_OPTIMIZER', 'POST_FULFILLMENT_PAYOFF']
+        .includes(optimizerRoleV3(support, id)));
       if (!offenseId || !supportTargetsSkill(support, candidate.entity)) continue;
       const assignment = assignments.find((entry) => entry.skillEntityId === candidate.entity.id);
       if (asArray(assignment?.supports).some((entry) => entry.familyId === supportFamilyId(support))) continue;
-      // An optimizer must neither need/provide prerequisite proof nor alter prevention/consumption.
-      if (supportRequirementFacts(support).length) continue;
-      if (hardSupportedSkillFacts(support).some((fact) => ['prevents', 'consumes'].includes(fact?.relation))) continue;
-      candidates.push({ candidate, support, offenseId, priority: optimizerPriority(support, offenseId) });
+      const role = optimizerRoleV3(support, offenseId);
+      const requirements = supportRequirementFacts(support);
+      // The bounded post-fulfillment lane accepts only a demand for the rolled
+      // mechanic. It does not recursively traverse arbitrary prerequisites.
+      if (requirements.some((fact) => !factMechanics(fact).includes(offenseId))) continue;
+      if (role !== 'POST_FULFILLMENT_PAYOFF'
+        && hardSupportedSkillFacts(support).some((fact) => ['prevents', 'consumes'].includes(fact?.relation))) continue;
+      candidates.push({ candidate, support, offenseId, role, priority: optimizerPriority(support, offenseId) });
     }
   }
   candidates.sort((a, b) => b.priority - a.priority
@@ -2878,12 +2894,14 @@ function eligibleOptionalOptimizersV3(catalog, selected, assignments, offenseObl
   return candidates;
 }
 
-function optionalSupportPairIsCompatibleV3(skill, support, attachedSupports, catalog) {
+function optionalSupportPairIsCompatibleV3(skill, support, attachedSupports, catalog, fulfilledMechanics = new Set()) {
   const entitiesById = new Map(asArray(catalog?.entities).map((entity) => [entity.id, entity]));
   const attached = asArray(attachedSupports).map((entry) => entitiesById.get(entry.entityId) || entry).filter(Boolean);
   if (attached.some((entry) => supportFamilyId(entry) === supportFamilyId(support))) return false;
   const combined = [...attached, support];
-  if (!supportPackageRequirementsAreMet(skill, combined)) return false;
+  if (!supportRequirementFacts(support).every((fact) =>
+    fulfilledMechanics.has(normalizeToken(fact?.mechanic))
+      || supportPackageSuppliesMechanic(skill, combined, normalizeToken(fact?.mechanic)))) return false;
   const prevented = new Set(combined.flatMap((entry) => hardSupportedSkillFacts(entry)
     .filter((fact) => normalizeToken(fact?.relation) === 'prevents').flatMap(factMechanics)));
   if (!prevented.size) return true;
@@ -2895,6 +2913,7 @@ function optionalSupportPairIsCompatibleV3(skill, support, attachedSupports, cat
 function attachOptionalOptimizerV3(catalog, selected, assignments, offenseObligations, requiredResolution) {
   const candidates = eligibleOptionalOptimizersV3(catalog, selected, assignments, offenseObligations, requiredResolution);
   const selectedOptimizers = [];
+  const fulfilledMechanics = new Set(offenseObligations.map((entry) => normalizeToken(entry.mechanics?.[0])));
   for (const candidate of selected) {
     const assignment = assignments.find((entry) => entry.skillEntityId === candidate.entity.id);
     const skillCandidates = candidates.filter((entry) => entry.candidate.entity.id === candidate.entity.id);
@@ -2905,13 +2924,18 @@ function attachOptionalOptimizerV3(catalog, selected, assignments, offenseObliga
       // Confidence decay is the existing optimizer semantic band: never descend
       // from the strongest application/effect/duration/payoff lane merely to fill space.
       if (Math.floor(chosen.priority / 100) !== topSemanticBand) break;
-      if (!optionalSupportPairIsCompatibleV3(candidate.entity, chosen.support, assignment.supports, catalog)) continue;
+      if (chosen.role === 'POST_FULFILLMENT_PAYOFF'
+        && selectedOptimizers.some((entry) => entry.role === 'POST_FULFILLMENT_PAYOFF')) continue;
+      if (!optionalSupportPairIsCompatibleV3(candidate.entity, chosen.support, assignment.supports, catalog, fulfilledMechanics)) continue;
       assignment.supports.push({
         entityId: chosen.support.id, sourceId: chosen.support.source_id, name: chosen.support.name,
         contentType: chosen.support.content_type, familyId: supportFamilyId(chosen.support),
         familyName: chosen.support?.support_family?.name || chosen.support.name,
         tier: supportTier(chosen.support) || null, availability: supportAvailability(chosen.support),
-        assignedRole: 'OPTIONAL_OFFENSE_OPTIMIZER', fulfilledObligations: [], suppliedTargets: [], prerequisiteMechanics: []
+        assignedRole: chosen.role, fulfilledObligations: [], suppliedTargets: chosen.role === 'POST_FULFILLMENT_PAYOFF'
+          ? [{ targetId: `payoff:${chosen.offenseId}`, targetKind: 'payoff', obligationId: null,
+            relation: 'requires', confidence: 'strong', mechanic: chosen.offenseId }]
+          : [], prerequisiteMechanics: []
       });
       selectedOptimizers.push(chosen);
     }

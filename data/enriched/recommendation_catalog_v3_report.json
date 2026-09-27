@@ -13,7 +13,7 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5458,
+    "fact_count": 5578,
     "fact_relation_counts": {
       "consumes": 395,
       "converts": 128,
@@ -21,21 +21,21 @@
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 672,
-      "inflicts": 186,
-      "modifies": 2378,
+      "inflicts": 205,
+      "modifies": 2460,
       "occupies": 444,
       "prevents": 378,
       "provides": 437,
       "replaces": 27,
-      "requires": 66
+      "requires": 85
     },
     "candidate_role_counts": {
       "defense": 423,
-      "enabler": 1259,
+      "enabler": 1279,
       "payoff": 182,
       "primary_damage": 346,
       "recovery": 250,
-      "setup_control": 203,
+      "setup_control": 221,
       "utility": 206
     },
     "source_versions": {
@@ -43,15 +43,15 @@
       "offense_inventory": "OFFENSE_V1",
       "uniques": "poe2db_uniques_min_v4"
     },
-    "entities_with_facts": 2100,
-    "entities_without_facts": 864,
+    "entities_with_facts": 2129,
+    "entities_without_facts": 835,
     "semantic_completeness_warning_count": 2,
     "support_entities_with_allowed_types": 603,
     "support_entities_with_excluded_types": 237,
     "support_family_count": 474,
     "tiered_support_family_count": 121,
     "tiered_support_entity_count": 280,
-    "support_entities_with_bridge_facts": 83,
+    "support_entities_with_bridge_facts": 91,
     "support_entities_with_conflicts": 39,
     "active_skills_with_granted_access": 41,
     "active_skills_with_crafting_metadata": 261,
@@ -81,11 +81,11 @@
   "coverage": {
     "passive_descriptions": {
       "evidence_count": 2495,
-      "fact_count": 299,
+      "fact_count": 303,
       "unparsed_count": 657,
-      "recognized_unstructured_count": 1565,
-      "structured_count": 273,
-      "structured_rate": 0.1094,
+      "recognized_unstructured_count": 1561,
+      "structured_count": 277,
+      "structured_rate": 0.111,
       "samples": {
         "recognized_unstructured": [
           {
@@ -215,11 +215,11 @@
     },
     "passive_stats": {
       "evidence_count": 2294,
-      "fact_count": 1434,
+      "fact_count": 1463,
       "unparsed_count": 456,
-      "structured_count": 1069,
-      "recognized_unstructured_count": 769,
-      "structured_rate": 0.466,
+      "structured_count": 1093,
+      "recognized_unstructured_count": 745,
+      "structured_rate": 0.4765,
       "samples": {
         "recognized_unstructured": [
           {
@@ -246,11 +246,6 @@
             "entity_id": "passive:AscendancyMercenary1Notable1",
             "kind": "stat_id",
             "value": "tactician_spirit_reservation_+%_final_for_permanent_buffs"
-          },
-          {
-            "entity_id": "passive:AscendancyWarrior2Notable1",
-            "kind": "stat_id",
-            "value": "armour_break_damage_%_dealt_as_armour_break"
           },
           {
             "entity_id": "passive:AscendancyHuntress3Notable7",
@@ -281,6 +276,11 @@
             "entity_id": "passive:AscendancyWitch1Notable2",
             "kind": "stat_id",
             "value": "life_reserved_by_stat_only_for_midnight_bargain_and_infernalist_%"
+          },
+          {
+            "entity_id": "passive:AscendancyWitch1Notable3",
+            "kind": "stat_id",
+            "value": "ascendancy_beidats_will_spirit_+_per_X_maximum_life"
           }
         ],
         "unparsed": [
@@ -349,11 +349,11 @@
     },
     "skill_descriptions": {
       "evidence_count": 1893,
-      "fact_count": 643,
-      "structured_count": 503,
+      "fact_count": 689,
+      "structured_count": 537,
       "unparsed_count": 262,
-      "recognized_unstructured_count": 1128,
-      "structured_rate": 0.2657,
+      "recognized_unstructured_count": 1094,
+      "structured_rate": 0.2837,
       "samples": {
         "recognized_unstructured": [
           {
@@ -483,11 +483,11 @@
     },
     "skill_stats": {
       "evidence_count": 6000,
-      "fact_count": 1821,
+      "fact_count": 1878,
       "unparsed_count": 2287,
-      "structured_count": 1284,
-      "recognized_unstructured_count": 2429,
-      "structured_rate": 0.214,
+      "structured_count": 1322,
+      "recognized_unstructured_count": 2391,
+      "structured_rate": 0.2203,
       "samples": {
         "recognized_unstructured": [
           {
@@ -758,11 +758,11 @@
     },
     "unique_modifiers": {
       "evidence_count": 2141,
-      "fact_count": 527,
-      "structured_count": 481,
+      "fact_count": 530,
+      "structured_count": 483,
       "unparsed_count": 575,
-      "recognized_unstructured_count": 1085,
-      "structured_rate": 0.2247,
+      "recognized_unstructured_count": 1083,
+      "structured_rate": 0.2256,
       "samples": {
         "recognized_unstructured": [
           {

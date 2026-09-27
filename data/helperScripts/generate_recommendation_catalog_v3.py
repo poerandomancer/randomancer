@@ -1264,7 +1264,8 @@ RUNTIME_DESCRIPTION_EXCLUSION_RE = re.compile(
     r"^\s*\[?(?:DNT(?:-UNUSED)?|UNUSED|Coming\s+Soon)\]?", re.IGNORECASE
 )
 RUNTIME_SUPPORT_ENABLE_RE = re.compile(
-    r"(?:causing|allowing) it to inflict|giving it a chance to|base_chance_to_(?:inflict_bleeding|poison_on_hit)",
+    r"(?:causing|allowing) it to inflict|causing (?:those )?hits? to break armour|"
+    r"causing them to apply broken armour|giving it a chance to|base_chance_to_(?:inflict_bleeding|poison_on_hit)",
     re.IGNORECASE,
 )
 RUNTIME_SUPPORT_FALSE_POSITIVE_RE = re.compile(
@@ -1294,11 +1295,9 @@ def _runtime_fact_evidence(fact: dict[str, Any], content_type: str) -> list[dict
             and fact.get("relation") in RUNTIME_SUPPORT_ACTION_RELATIONS:
         if fact.get("relation") != "inflicts":
             return [{"value": "runtime"}]
-        enabled = any(
-            RUNTIME_SUPPORT_ENABLE_RE.search(value)
-            and not RUNTIME_SUPPORT_FALSE_POSITIVE_RE.search(value)
-            and not RUNTIME_SUPPORT_POTENCY_RE.search(value)
-            for value in values
+        enabled = fact.get("scope") == "outgoing" and any(
+            not RUNTIME_SUPPORT_FALSE_POSITIVE_RE.search(value)
+            and not RUNTIME_SUPPORT_POTENCY_RE.search(value) for value in values
         )
         return [{"value": "allowing it to inflict" if enabled else "reference only"}]
 

@@ -30,6 +30,8 @@ OFFENSE_MECHANICS = {
     "shock",
     "electrocute",
     "critical_hits",
+    "heavy_stun",
+    "armour_break",
     "minion",
     "companion",
     "totem",
@@ -119,7 +121,8 @@ MECHANIC_ALIASES: list[tuple[str, tuple[str, ...]]] = [
     ("shock", ("shocked", "shock", "shocks")),
     ("electrocute", ("electrocute", "electrocution", "electrocuted")),
     ("ailment", ("ailments", "ailment")),
-    ("stun", ("heavy stun", "heavy_stun", "stunned", "stun")),
+    ("heavy_stun", ("heavy stunning", "heavy stun", "heavy_stun", "heavystun")),
+    ("stun", ("stunned", "stun")),
     ("warcry", ("warcries", "warcry")),
     ("curse", ("curses", "curse")),
     ("mark", ("marks", "mark")),
@@ -183,6 +186,7 @@ COMPOUND_SUPPRESSIONS: dict[str, set[str]] = {
     "chaos": {"damage"},
     "life_leech": {"life"},
     "critical_hits": {"hit"},
+    "heavy_stun": {"stun"},
     "critical_damage": {"damage"},
     "maximum_resistance": {"resistance"},
     "elemental_resistance": {"elemental_damage", "resistance"},
@@ -1303,7 +1307,7 @@ def parse_text(value: Any, source_kind: str, subject: str) -> list[dict[str, Any
 
         armour_break_application = re.search(
             r"(?:^|_)armour_break_(?:break|breaks|breaking)(?:_[a-z0-9]+){0,5}_armour(?:_|$)"
-            r"|(?:^|_)(?:break|breaks|breaking)_(?:enemy|enemies|target|targets|their)_armour(?:_|$)",
+            r"|(?:^|_)(?:break|breaks|breaking)_(?:(?:enemy|enemies|target|targets|their)_)?armour(?:_|$)",
             normalized,
         )
         armour_break_prefix = ""
@@ -1327,6 +1331,28 @@ def parse_text(value: Any, source_kind: str, subject: str) -> list[dict[str, Any
                     scope="outgoing",
                 )
             )
+
+        # Heavy Stun is the completed state produced by Stun buildup. Treat
+        # explicit buildup as generation evidence and explicit "when Heavy
+        # Stun" clauses as directed payoff requirements.
+        if re.search(r"(?:build|builds|building)(?:_[a-z0-9]+){0,4}_stun", normalized):
+            facts.append(make_fact("modifies", subject=subject, source_kind=source_kind,
+                source_value=text, mechanic="heavy_stun", confidence="strong", scope="outgoing"))
+        if "heavy_stun" in normalized:
+            if re.search(r"(?:cause|causes|causing|apply|applies|inflict|inflicts)(?:_[a-z0-9]+){0,8}_heavy_stun", normalized):
+                facts.append(make_fact("inflicts", subject=subject, source_kind=source_kind,
+                    source_value=text, mechanic="heavy_stun", confidence="strong", scope="outgoing"))
+            if re.search(r"(?:when|after|against)(?:_[a-z0-9]+){0,8}_heavy_stun", normalized):
+                facts.append(make_fact("requires", subject=subject, source_kind=source_kind,
+                    source_value=text, mechanic="heavy_stun", confidence="strong"))
+
+        # Typed trigger/payoff phrasing for Broken Armour is distinct from the
+        # application parser above and must never be mistaken for application.
+        if "armour_break" in normalized and re.search(
+            r"(?:when|after|against)(?:_[a-z0-9]+){0,10}_(?:armour_break|fully_break|broken_armour)", normalized
+        ):
+            facts.append(make_fact("requires", subject=subject, source_kind=source_kind,
+                source_value=text, mechanic="armour_break", confidence="strong"))
 
         if re.search(
             r"(?:cause|causes|causing)(?:_[a-z0-9]+){0,5}_grenade(?:_grenades)?"
@@ -1490,9 +1516,18 @@ def parse_text(value: Any, source_kind: str, subject: str) -> list[dict[str, Any
     )
     if defensive_text:
         for fact in facts:
+            # Breaking an enemy's Armour is offensive even though the prose
+            # necessarily contains the defensive noun "Armour".
+            if fact.get("mechanic") == "armour_break" and fact.get("scope") == "outgoing":
+                continue
             if fact.get("relation") in {"inflicts", "modifies", "provides", "has_property"}:
                 fact["target"] = "self"
                 fact["scope"] = "incoming"
+    if not is_prohibition and 'armour_break_application' in locals() and armour_break_application:
+        for fact in facts:
+            if fact.get("relation") == "inflicts" and fact.get("mechanic") == "armour_break":
+                fact.pop("target", None)
+                fact["scope"] = "outgoing"
     actor = next((name for name in ("companion", "minion", "totem")
                   if re.search(rf"(?:^|_){name}s?(?:_|$)", normalized)), None)
     if actor:

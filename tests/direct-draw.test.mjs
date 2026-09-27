@@ -25,8 +25,8 @@ test('canonical Offense draw always contains exactly one concept', () => {
   }
 });
 
-test('Critical Hits is excluded from standard draws', () => {
-  assert.equal(offense.isRollableOffense({ id: 'critical_hits', name: 'Critical Hits' }), false);
+test('build-defining mechanic identities are included in standard draws', () => {
+  assert.equal(offense.isRollableOffense({ id: 'critical_hits', name: 'Critical Hits' }), true);
 });
 
 test('Bind the Fates combat options use every rollable Offense ID and no others', async () => {
@@ -37,7 +37,9 @@ test('Bind the Fates combat options use every rollable Offense ID and no others'
   const expectedIds = inventory.elements.filter(offense.isRollableOffense).map((entry) => entry.id);
   const bindFatesIds = offense.resolveRollableOffenseElements({ OffenseInventory: inventory }).map((entry) => entry.id);
   assert.deepEqual(bindFatesIds, expectedIds);
-  assert.ok(!bindFatesIds.includes('critical_hits'));
+  assert.ok(bindFatesIds.includes('critical_hits'));
+  assert.ok(bindFatesIds.includes('heavy_stun'));
+  assert.ok(bindFatesIds.includes('armour_break'));
 });
 
 test('a requested legacy count cannot produce multiple Offense concepts', () => {

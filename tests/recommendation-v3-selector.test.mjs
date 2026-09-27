@@ -18,6 +18,7 @@ import { mergeRecommendationUniqueSemanticsV3, selectNonSkillRecommendations } f
 
 const read = (path) => JSON.parse(fs.readFileSync(new URL(`../${path}`, import.meta.url)));
 const offenseInventory = read('data/offense-inventory.json');
+const criticalProfiles = read('data/config/recommendation_critical_profiles_v3.json');
 let catalog = read('data/enriched/recommendation_catalog_v3.json');
 catalog = mergeRecommendationGrantedSkillAccessV3(catalog, read('data/enriched/recommendation_granted_skill_access_v3.json'));
 catalog = mergeRecommendationSkillCraftingV3(catalog, read('data/enriched/recommendation_skill_crafting_v3.json'));
@@ -300,7 +301,8 @@ test('one compatible enabling support forms CARRIER_BRIDGE ahead of fallback', (
   assert.ok(result.pieces.length >= 1 && result.pieces.length <= 3);
   assert.equal(result.supportingSkill, null);
   const supports = result.supportAssignments[0].supports;
-  assert.equal(supports.filter((support) => support.assignedRole !== 'OPTIONAL_OFFENSE_OPTIMIZER').length, 1);
+  assert.equal(supports.filter((support) => !['OPTIONAL_OFFENSE_OPTIMIZER', 'POST_FULFILLMENT_PAYOFF']
+    .includes(support.assignedRole)).length, 1);
   assert.ok(result.supportAssignments.every((entry) => entry.supports.length <= MAX_TOTAL_SUPPORTS));
 });
 
@@ -381,7 +383,6 @@ test('SUPPORT_CHAIN can use its full required capacity before one safe optimizer
   assert.equal(safe.diagnostics.assignedOptimizerSupportCount, 1);
   for (const [facts, tags] of [
     [[{ subject: 'supported_skill', relation: 'prevents', mechanic: 'electrocute', confidence: 'exact' }], []],
-    [[{ subject: 'supported_skill', relation: 'consumes', mechanic: 'electrocute', confidence: 'exact' }], []],
     [[], ['lineage']],
     [[], ['kalguuran']]
   ]) {
@@ -389,6 +390,43 @@ test('SUPPORT_CHAIN can use its full required capacity before one safe optimizer
     assert.equal(rejected.diagnostics.recommendationTier, 'SUPPORT_CHAIN');
     assert.equal(rejected.diagnostics.assignedOptimizerSupportCount, 0);
     assert.equal(rejected.diagnostics.assignedRequiredSupportCount, 2);
+  }
+  const payoff = run([{ subject: 'supported_skill', relation: 'consumes', mechanic: 'electrocute', confidence: 'exact' }]);
+  assert.equal(payoff.diagnostics.assignedOptimizerSupportCount, 1);
+  assert.ok(payoff.supportAssignments[0].supports.some((support) =>
+    support.assignedRole === 'POST_FULFILLMENT_PAYOFF'));
+});
+
+test('new canonical Offenses use meaningful investment, legal bridges, and bounded payoffs', () => {
+  const cases = [
+    ['Deadeye', 'Bow', 'Critical Hits'],
+    ['Titan', 'Mace', 'Heavy Stun'],
+    ['Stormweaver', 'Spear', 'Heavy Stun'],
+    ['Infernalist', 'Wand', 'Heavy Stun'],
+    ['Disciple of Varashta', 'Bow', 'Armour Break'],
+    ['Lich', 'Wand', 'Armour Break'],
+    ['Chronomancer', 'Spear', 'Armour Break'],
+    ['Invoker', 'Quarterstaff', 'Armour Break']
+  ];
+  for (const [ascendancy, weapon, offense] of cases) {
+    const result = selectRecommendationPackageV3(catalog, {
+      ascendancy, weapon, weaponFamily: weapon, offenseList: [offense]
+    }, { offenseInventory, criticalProfiles, selectionSeed: `new-offense:${ascendancy}:${weapon}:${offense}` });
+    if (result.status === 'unresolved') {
+      assert.ok(result.unresolved.some((entry) => entry.obligationId.startsWith('offense:')));
+      assert.equal(result.primarySkill, null);
+      continue;
+    }
+    assert.ok(result.primarySkill);
+    assert.equal(result.unresolved.filter((entry) => entry.obligationId.startsWith('offense:')).length, 0);
+    const supports = result.supportAssignments.flatMap((entry) => entry.supports);
+    assert.ok(supports.every((support) => support.availability !== 'lineage'));
+    assert.ok(result.supportAssignments.every((assignment) => assignment.supports
+      .filter((support) => support.assignedRole === 'POST_FULFILLMENT_PAYOFF').length <= 1));
+    if (offense === 'Critical Hits') {
+      assert.ok(result.primarySkill.criticalAffinity.source !== 'none');
+      assert.ok(supports.some((support) => support.assignedRole === 'OPTIONAL_OFFENSE_OPTIMIZER'));
+    }
   }
 });
 
@@ -436,11 +474,11 @@ test('caster archetype exemption follows typed semantics rather than skill ident
 });
 
 test('support-added elemental damage closes through Hit ontology with prevention intact', () => {
-  for (const [weapon, offense, support] of [
-    ['Mace', 'chill', 'Cold Attunement'],
-    ['Mace', 'freeze', 'Cold Attunement'],
-    ['Mace', 'shock', 'Lightning Attunement'],
-    ['Quarterstaff', 'ignite', 'Fire Attunement']
+  for (const [weapon, offense] of [
+    ['Mace', 'chill'],
+    ['Mace', 'freeze'],
+    ['Mace', 'shock'],
+    ['Quarterstaff', 'ignite']
   ]) {
     assert.equal(analyze(weapon, offense).classification, 'CARRIER_BRIDGE');
     const result = selectRecommendationPackageV3(catalog, { weapon, offenseSet: [offense] }, {
@@ -448,7 +486,7 @@ test('support-added elemental damage closes through Hit ontology with prevention
     });
     assert.equal(result.diagnostics.recommendationTier, 'ONE_BRIDGE');
     assert.ok(result.supportAssignments.flatMap((entry) => entry.supports)
-      .some((entry) => entry.name === support));
+      .some((entry) => entry.assignedRole === 'REQUIRED_ENABLE_SUPPORT'));
     assert.equal(result.unresolved.length, 0);
   }
 });
