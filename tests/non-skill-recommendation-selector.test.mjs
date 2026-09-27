@@ -203,7 +203,8 @@ test('stronger Bow and Quiver win neutrally while primary families beat fallback
   const wand = selectNonSkillRecommendations(catalog([
     semanticUnique('wand-primary', 'Wand', 'freeze', 'PAYOFF_CONTEXT', 101, [{ c: 'PAYOFF_CONTEXT', r: 'requires', m: 'freeze', k: 'item_fact' }]),
     semanticUnique('focus-fallback', 'Focus', 'freeze', 'BUILD_DEFINING_CAPABILITY', 450, [{ c: 'BUILD_DEFINING_CAPABILITY', r: 'inflicts', m: 'freeze', k: 'item_fact' }])
-  ]), { ...snap, weaponFamily: 'Wand' }, pkg);
+  ]), { ...snap, weaponFamily: 'Wand' }, { ...pkg,
+    diagnostics: { offenseCoverage: [{ obligationId: 'offense:freeze', mechanic: 'freeze', state: 'active_direct' }] } });
   assert.equal(wand.recommendedUniques[0].id, 'wand-primary');
 });
 
@@ -561,6 +562,37 @@ test('passive offense matching requires an explicitly offensive semantic role', 
     passive('ignite-protection', 'ignite', 'defense')
   ]), { ...snap, offenseList: ['Chaos'] }, null, { selectionSeed: 'semantic-direction' });
   assert.deepEqual(result.passives.notables, []);
+});
+
+test('passive payoff requires package proof of the demanded rolled mechanic', () => {
+  const payoff = entity('heavy-stun-payoff', 'passive', [{
+    relation: 'requires', mechanic: 'heavy_stun', confidence: 'strong'
+  }]);
+  const snapshot = { ...snap, offenseList: ['Heavy Stun'] };
+  const unresolved = { ...pkg, packageProfile: { finalOffense: ['heavy_stun'] },
+    diagnostics: { offenseCoverage: [{ obligationId: 'offense:heavy_stun', mechanic: 'heavy_stun', state: 'carrier_only' }] } };
+  assert.deepEqual(selectNonSkillRecommendations(catalog([payoff]), snapshot, unresolved).passives.notables, []);
+  const proven = { ...unresolved,
+    diagnostics: { offenseCoverage: [{ obligationId: 'offense:heavy_stun', mechanic: 'heavy_stun', state: 'support_assigned' }] } };
+  assert.deepEqual(selectNonSkillRecommendations(catalog([payoff]), snapshot, proven).passives.notables
+    .map((entry) => entry.id), ['heavy-stun-payoff']);
+});
+
+test('passive one-step transformation requires a supplied source and matching delivery', () => {
+  const transform = entity('crit-spell-break', 'passive', [{
+    relation: 'inflicts', mechanic: 'armour_break', confidence: 'strong', offense_role: 'setup_control',
+    scope: 'outgoing', delivery: 'spell', requires_any_mechanics: ['critical_hits']
+  }], { passive_tree_starts: ['dex'] });
+  const snapshot = { ...snap, offenseList: ['Armour Break'] };
+  const pack = (properties, sources) => ({ ...pkg, packageProfile: {
+    finalOffense: ['armour_break'], primarySkill: { properties }, primarySourceMechanics: sources
+  } });
+  assert.deepEqual(selectNonSkillRecommendations(catalog([transform]), snapshot,
+    pack(['spell'], [])).passives.notables, []);
+  assert.deepEqual(selectNonSkillRecommendations(catalog([transform]), snapshot,
+    pack(['attack'], ['critical_hits'])).passives.notables, []);
+  assert.deepEqual(selectNonSkillRecommendations(catalog([transform]), snapshot,
+    pack(['spell'], ['critical_hits'])).passives.notables.map((entry) => entry.id), ['crit-spell-break']);
 });
 
 test('build card renders skill, unique, ascendancy, and notable tooltip content', async () => {

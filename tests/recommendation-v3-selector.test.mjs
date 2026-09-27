@@ -172,14 +172,17 @@ test('explicit capability and inherent affinity rank only already-valid DIRECT c
   assert.equal(repeated.primarySkill.entityId, repeatedAgain.primarySkill.entityId);
 });
 
-test('DIRECT solves a singleton core before appending top-band alternatives', () => {
+test('DIRECT solves a core before optionally adding one explicit active payoff', () => {
   const result = selectRecommendationPackageV3(catalog, { weapon: 'Spear', offenseSet: ['bleed'] }, {
     offenseInventory, selectionSeed: 'direct-regression'
   });
-  assert.equal(result.diagnostics.recommendationTier, 'DIRECT');
+  assert.ok(['DIRECT', 'POST_FULFILLMENT_PAYOFF'].includes(result.diagnostics.recommendationTier));
   assert.ok(result.pieces.length >= 1 && result.pieces.length <= 3);
   assert.equal(result.pieces[0].entityId, result.primarySkill.entityId);
-  assert.equal(result.supportingSkill, null);
+  if (result.supportingSkill) {
+    assert.equal(result.supportingSkill.assignedRole, 'payoff');
+    assert.ok(result.synergyEdges.some((edge) => ['requires', 'consumes'].includes(edge.demandRelation)));
+  }
 });
 
 test('skill richness uses only the solved tier top band and preserves its anchor', () => {
@@ -322,10 +325,12 @@ test('optional Offense optimizers attach after, and never participate in, fulfil
     const supports = result.supportAssignments.flatMap((entry) => entry.supports);
     const optimizer = supports.find((support) => support.assignedRole === 'OPTIONAL_OFFENSE_OPTIMIZER');
     if (!optimizer) continue;
-    assert.equal(result.diagnostics.recommendationTier, tier);
+    assert.ok([tier, 'POST_FULFILLMENT_PAYOFF'].includes(result.diagnostics.recommendationTier));
     assert.deepEqual(optimizer.fulfilledObligations, []);
     assert.deepEqual(optimizer.suppliedTargets, []);
-    assert.equal(supports.at(-1).assignedRole, 'OPTIONAL_OFFENSE_OPTIMIZER');
+    const optimizerAssignment = result.supportAssignments.find((assignment) =>
+      assignment.supports.some((support) => support.assignedRole === 'OPTIONAL_OFFENSE_OPTIMIZER'));
+    assert.equal(optimizerAssignment.supports.at(-1).assignedRole, 'OPTIONAL_OFFENSE_OPTIMIZER');
     assert.ok(result.supportAssignments.every((entry) => entry.supports.length <= MAX_TOTAL_SUPPORTS));
     assert.equal(result.unresolved.length, 0);
   }
@@ -412,11 +417,9 @@ test('new canonical Offenses use meaningful investment, legal bridges, and bound
     const result = selectRecommendationPackageV3(catalog, {
       ascendancy, weapon, weaponFamily: weapon, offenseList: [offense]
     }, { offenseInventory, criticalProfiles, selectionSeed: `new-offense:${ascendancy}:${weapon}:${offense}` });
-    if (result.status === 'unresolved') {
-      assert.ok(result.unresolved.some((entry) => entry.obligationId.startsWith('offense:')));
-      assert.equal(result.primarySkill, null);
-      continue;
-    }
+    // Catalog audit: every listed production cell has a bounded normal-support
+    // route, so unresolved output is a discovery failure rather than an allowed fallback.
+    assert.equal(result.status, 'complete', `${ascendancy} / ${weapon} / ${offense}`);
     assert.ok(result.primarySkill);
     assert.equal(result.unresolved.filter((entry) => entry.obligationId.startsWith('offense:')).length, 0);
     const supports = result.supportAssignments.flatMap((entry) => entry.supports);
@@ -428,6 +431,40 @@ test('new canonical Offenses use meaningful investment, legal bridges, and bound
       assert.ok(supports.some((support) => support.assignedRole === 'OPTIONAL_OFFENSE_OPTIMIZER'));
     }
   }
+});
+
+test('secondary skill plus conditional support is discovered as one bounded package', () => {
+  const names = new Set(['Escape Shot', 'Lightning Rod', 'Brittle Armour', 'Armour Explosion']);
+  const fixture = {
+    ...catalog,
+    entities: catalog.entities.filter((entity) => names.has(entity.name)).map((entity) =>
+      entity.name === 'Escape Shot' ? { ...entity, candidate_roles: ['setup_control'] } : entity)
+  };
+  const result = selectRecommendationPackageV3(fixture, { weapon: 'Bow', offenseList: ['Armour Break'] }, {
+    offenseInventory, criticalProfiles, selectionSeed: 'secondary-support-bundle'
+  });
+  assert.equal(result.status, 'complete');
+  assert.equal(result.diagnostics.recommendationTier, 'SECONDARY_SUPPORT_BUNDLE');
+  assert.equal(result.supportingSkill.assignedRole, 'setup_control');
+  assert.ok(result.synergyEdges.some((edge) => edge.mechanic === 'freeze'
+    && edge.demandRelation === 'requires'));
+  assert.ok(result.supportAssignments.some((assignment) => assignment.supports.some((support) =>
+    support.assignedRole === 'REQUIRED_ENABLE_SUPPORT'
+      && support.fulfilledObligations.some((proof) => proof.mechanic === 'armour_break'))));
+  assert.ok(result.supportAssignments.every((assignment) => assignment.supports.length <= MAX_TOTAL_SUPPORTS));
+});
+
+test('post-fulfillment active payoff consumes the proven rolled mechanic', () => {
+  const names = new Set(['Armour Piercing Rounds', 'High Velocity Rounds']);
+  const fixture = { ...catalog, entities: catalog.entities.filter((entity) => names.has(entity.name)) };
+  const result = selectRecommendationPackageV3(fixture, { weapon: 'Crossbow', offenseList: ['Armour Break'] }, {
+    offenseInventory, criticalProfiles, selectionSeed: 'active-payoff'
+  });
+  assert.equal(result.status, 'complete');
+  assert.equal(result.diagnostics.recommendationTier, 'POST_FULFILLMENT_PAYOFF');
+  assert.equal(result.supportingSkill.assignedRole, 'payoff');
+  assert.ok(result.synergyEdges.some((edge) => edge.mechanic === 'armour_break'
+    && edge.demandRelation === 'consumes'));
 });
 
 

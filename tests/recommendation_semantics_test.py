@@ -93,6 +93,21 @@ class AilmentApplicationGrammarTests(unittest.TestCase):
         self.assertTrue(any(f.get("consumption") == "optional_payoff" for f in optional))
         self.assertTrue(any(f.get("consumption") == "required_input" for f in mandatory))
 
+    def test_armour_break_transformations_preserve_typed_source_and_delivery(self):
+        cases = [
+            ("10% Armour Break equal to Physical Damage dealt on Critical Strike with Spells",
+             "critical_hits", "spell"),
+            ("50% Break Armour on Pin", "pin", None),
+            ("50% Armour Break of Armour on Heavy Stunning", "heavy_stun", None),
+        ]
+        for text, source, delivery in cases:
+            facts = parse_evidence("passive_line", text, "passive")
+            matches = [fact for fact in facts if fact.get("relation") == "inflicts"
+                       and fact.get("mechanic") == "armour_break"]
+            self.assertTrue(matches, (text, facts))
+            self.assertIn(source, matches[0].get("requires_any_mechanics") or [])
+            self.assertEqual(delivery, matches[0].get("delivery"))
+
     def test_incoming_damage_conversion_never_emits_an_outgoing_anchor(self):
         for source in ("physical", "fire", "cold", "lightning", "chaos"):
             destination = "cold" if source == "fire" else "fire"
@@ -159,7 +174,7 @@ class GeneratedComponentPromotionTests(unittest.TestCase):
         semantic = lambda catalog: [(entity["id"], [{k: v for k, v in fact.items() if k != "evidence"} for fact in entity.get("facts") or []]) for entity in catalog["entities"]]
         self.assertEqual(semantic(self.full), semantic(self.runtime))
         self.assertEqual(2964, len(self.runtime["entities"]))
-        self.assertEqual(5578, sum(len(entity.get("facts") or []) for entity in self.runtime["entities"]))
+        self.assertEqual(5580, sum(len(entity.get("facts") or []) for entity in self.runtime["entities"]))
         for entity in self.runtime["entities"]:
             for fact in entity.get("facts") or []:
                 self.assertTrue(all(set(proof) <= {"kind", "value"} for proof in fact.get("evidence", [])))

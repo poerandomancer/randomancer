@@ -1092,35 +1092,36 @@ function unconditionalSupportFactSuppliesMechanic(fact, mechanic) {
     && factMechanics(fact).includes(mechanic);
 }
 
-function supportPackageSuppliesMechanic(entity, supports, mechanic) {
+function supportPackageSuppliesMechanic(entity, supports, mechanic, externalMechanics = new Set()) {
   const target = normalizeToken(mechanic);
   if (!target) return false;
+  if (externalMechanics.has(target)) return true;
   if (asArray(entity?.facts).some((fact) => baseFactSuppliesMechanic(fact, target))) return true;
   return supports.some((support) =>
     actionableSupportFacts(support).some((fact) => unconditionalSupportFactSuppliesMechanic(fact, target))
   );
 }
 
-function supportFactConditionIsMet(fact, entity, supports) {
+function supportFactConditionIsMet(fact, entity, supports, externalMechanics = new Set()) {
   const anyMechanics = unique(asArray(fact?.requires_any_mechanics).map(normalizeToken));
-  if (anyMechanics.length && !anyMechanics.some((mechanic) => supportPackageSuppliesMechanic(entity, supports, mechanic))) {
+  if (anyMechanics.length && !anyMechanics.some((mechanic) => supportPackageSuppliesMechanic(entity, supports, mechanic, externalMechanics))) {
     return false;
   }
   const condition = normalizeToken(fact?.condition);
   if (!condition) return true;
   if (condition.endsWith('_damage')) {
-    return supportPackageSuppliesMechanic(entity, supports, condition.slice(0, -'_damage'.length));
+    return supportPackageSuppliesMechanic(entity, supports, condition.slice(0, -'_damage'.length), externalMechanics);
   }
-  return supportPackageSuppliesMechanic(entity, supports, condition);
+  return supportPackageSuppliesMechanic(entity, supports, condition, externalMechanics);
 }
 
-function supportPackageRequirementsAreMet(entity, supports) {
+function supportPackageRequirementsAreMet(entity, supports, externalMechanics = new Set()) {
   return supports.every((support) => supportRequirementFacts(support).every((fact) =>
-    supportPackageSuppliesMechanic(entity, supports, normalizeToken(fact?.mechanic))
+    supportPackageSuppliesMechanic(entity, supports, normalizeToken(fact?.mechanic), externalMechanics)
   ));
 }
 
-function supportProofForObligation(entity, supports, obligation) {
+function supportProofForObligation(entity, supports, obligation, externalMechanics = new Set()) {
   const prevented = new Set(supports.flatMap((support) => hardSupportedSkillFacts(support)
     .filter((fact) => fact?.relation === 'prevents')
     .flatMap(factMechanics)));
@@ -1129,7 +1130,7 @@ function supportProofForObligation(entity, supports, obligation) {
     for (const fact of actionableSupportFacts(support)) {
       if (!factMatchesObligation(fact, obligation, support)
         || !supportFactExplicitlyEnables(fact)
-        || !supportFactConditionIsMet(fact, entity, supports)) continue;
+        || !supportFactConditionIsMet(fact, entity, supports, externalMechanics)) continue;
       const mechanic = factMechanics(fact)[0] || '';
       if (!mechanic || prevented.has(mechanic)) continue;
       proofs.push({
@@ -1156,6 +1157,8 @@ function supportFactExplicitlyEnables(fact) {
   }
   if (!['inflicts', 'creates', 'provides', 'generates', 'converts', 'fulfills'].includes(fact?.relation)) return false;
   if (fact?.relation === 'inflicts' && normalizeToken(fact?.scope) === 'outgoing') return true;
+  if (fact?.relation === 'inflicts' && fact?.confidence === 'exact'
+    && asArray(fact?.requires_any_mechanics).length > 0) return true;
   const evidence = asArray(fact?.evidence).map((entry) => String(entry?.value || '').toLowerCase()).filter(Boolean);
   if (!evidence.length) return false;
   // Exact parser facts can still describe scaling or payoff.  A bridge needs
@@ -1452,10 +1455,7 @@ function criticalProfileForEntity(entity, criticalProfiles = {}) {
 }
 
 function criticalEvidenceForEntity(entity, offenseObligations, criticalProfiles = {}) {
-  if (!offenseObligations.some((obligation) => obligation.id === 'offense:critical_hits')) {
-    return { facts: [], affinity: { source: 'none', baseCritChance: null, score: 0 } };
-  }
-
+  const rolledCritical = offenseObligations.some((obligation) => obligation.id === 'offense:critical_hits');
   const profile = criticalProfileForEntity(entity, criticalProfiles);
   const types = new Set(asArray(entity?.source_evidence?.active_skill_types).map(normalizeToken));
   const explicitInteraction = asArray(entity?.facts).some((fact) =>
@@ -1467,13 +1467,13 @@ function criticalEvidenceForEntity(entity, offenseObligations, criticalProfiles 
   if (profile) {
     const baseScore = Math.max(0, Math.min(30, Math.round((profile.baseCritChance - 5) * 3)));
     return {
-      facts: [{
+      facts: rolledCritical ? [{
         relation: 'has_property',
         subject: 'skill',
         mechanic: 'critical_hits',
         confidence: 'exact',
         evidence_source: 'base_critical_hit_chance'
-      }],
+      }] : [],
       affinity: {
         ...profile,
         score: baseScore + (explicitInteraction ? 8 : 0)
@@ -1486,13 +1486,13 @@ function criticalEvidenceForEntity(entity, offenseObligations, criticalProfiles 
   // intrinsic skill value, it must not be treated as a high-base-crit skill.
   if (types.has('attack') && !types.has('nonweaponattack')) {
     return {
-      facts: [{
+      facts: rolledCritical ? [{
         relation: 'has_property',
         subject: 'skill',
         mechanic: 'critical_hits',
         confidence: 'strong',
         evidence_source: 'weapon_critical_hit_chance'
-      }],
+      }] : [],
       affinity: { source: 'weapon', baseCritChance: null, sourceUrl: '', score: 10 }
     };
   }
@@ -1574,7 +1574,13 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalP
   const criticalEvidence = criticalEvidenceForEntity(entity, offenseObligations, criticalProfiles);
   const inheritedPhysical = inheritedWeaponPhysicalFactV3(entity, snapshot);
   const facts = [...asArray(entity.facts), ...criticalEvidence.facts, ...[inheritedPhysical].filter(Boolean)];
-  if (offenseObligations.some((obligation) => facts.some((fact) => factPreventsObligation(fact, obligation)))) {
+  const payoffOnlyForPreventedOffense = offenseObligations.every((obligation) => {
+    const mechanics = new Set(asArray(obligation.mechanics).map(normalizeToken));
+    return facts.some((fact) => ['requires', 'consumes'].includes(fact?.relation)
+      && factMechanics(fact).some((mechanic) => mechanics.has(mechanic)));
+  });
+  if (!payoffOnlyForPreventedOffense
+    && offenseObligations.some((obligation) => facts.some((fact) => factPreventsObligation(fact, obligation)))) {
     return null;
   }
 
@@ -1645,6 +1651,10 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalP
 
   const dependencies = candidateDependencies(entity, offenseObligations);
   const setupCosts = candidateSetupCosts(entity);
+  const optionalPayoffCosts = unique(hardFacts
+    .filter((fact) => fact?.relation === 'consumes'
+      && normalizeToken(fact?.consumption) !== 'required_input')
+    .flatMap(factMechanics));
   const demandConfidence = (relation, mechanic) => hardFacts.some((fact) =>
     fact?.relation === relation
     && normalizeToken(fact?.mechanic) === mechanic
@@ -1660,6 +1670,12 @@ function analyzePackageCandidate(entity, offenseObligations, snapshot, criticalP
       mechanic,
       relation: 'consumes',
       confidence: demandConfidence('consumes', mechanic)
+    })),
+    ...optionalPayoffCosts.map((mechanic) => ({
+      mechanic,
+      relation: 'consumes',
+      confidence: demandConfidence('consumes', mechanic),
+      optionalPayoff: true
     }))
   ];
   const delivery = isDirectlyUsableActive(entity, offenseObligations, snapshot)
@@ -1919,7 +1935,24 @@ function buildViableSkillPool(catalog, offenseObligations, snapshot, criticalPro
     ...asArray(obligation.mechanics),
     ...asArray(obligation.carrierMechanics)
   ]).map(normalizeToken));
+  // Conditional support routes expose one bounded predecessor mechanic to the
+  // active-skill retrieval closure (for example Freeze -> Armour Break). This
+  // makes setup skills discoverable without pre-attaching every support.
+  for (const obligation of offenseObligations) {
+    for (const support of unique(asArray(obligation.mechanics).flatMap((mechanic) =>
+      asArray(supportIndex.byEffectMechanic.get(normalizeToken(mechanic)))))) {
+      for (const mechanic of [
+        ...supportRequirementFacts(support).flatMap(factMechanics),
+        ...actionableSupportFacts(support).flatMap((fact) => asArray(fact?.requires_any_mechanics).map(normalizeToken))
+      ]) seedMechanics.add(mechanic);
+    }
+  }
   const included = new Set();
+  const conditionalOffenseSupports = unique(offenseObligations.flatMap((obligation) =>
+    asArray(obligation.mechanics).flatMap((mechanic) =>
+      asArray(supportIndex.byEffectMechanic.get(normalizeToken(mechanic)))
+    ))).filter((support) => supportRequirementFacts(support).length
+      || actionableSupportFacts(support).some((fact) => asArray(fact?.requires_any_mechanics).length));
 
   // Begin with skills tied to a rolled Offense, then make a narrow closure over
   // their explicit prerequisites and stateful setup costs. This retrieves
@@ -1931,7 +1964,9 @@ function buildViableSkillPool(catalog, offenseObligations, snapshot, criticalPro
       const offenseRelevant = candidate.fulfilled.length > 0 || candidate.carriers.length > 0;
       const related = candidate.touchedMechanics.some((mechanic) => seedMechanics.has(mechanic))
         || candidate.supplies.some((entry) => seedMechanics.has(entry.mechanic))
-        || candidate.demands.some((entry) => seedMechanics.has(entry.mechanic));
+        || candidate.demands.some((entry) => seedMechanics.has(entry.mechanic))
+        || (candidate.primaryEligible && conditionalOffenseSupports.some((support) =>
+          supportTargetsSkill(support, candidate.entity)));
       if (!offenseRelevant && !related) continue;
       if (!included.has(candidate.entity.id)) {
         included.add(candidate.entity.id);
@@ -2307,9 +2342,13 @@ function evaluateSkillPackage(primary, supporting, offenseObligations) {
     ? assignSupportingRole(primary, supportingView, synergyEdges, offenseObligations)
     : null;
   const complementaryRole = supporting && supportingRole !== 'secondary_damage';
+  const rolledMechanics = new Set(offenseObligations.flatMap((entry) => entry.mechanics).map(normalizeToken));
+  const postFulfillmentPayoffCount = synergyEdges.filter((edge) => rolledMechanics.has(edge.mechanic)
+    && ['requires', 'consumes'].includes(edge.demandRelation)).length;
   const directCoverageComplete = offenseObligations.length > 0 && fulfilledIds.size === offenseObligations.length;
-  const criticalAffinityScore = primary.criticalAffinity.score
-    + (supporting ? Math.round(supporting.criticalAffinity.score * 0.5) : 0);
+  const criticalAffinityScore = offenseObligations.some((entry) => entry.id === 'offense:critical_hits')
+    ? primary.criticalAffinity.score + (supporting ? Math.round(supporting.criticalAffinity.score * 0.5) : 0)
+    : 0;
   const archetypeSpecificityScore = primary.archetypeSpecificityScore
     + (supporting ? Math.round(supporting.archetypeSpecificityScore * 0.5) : 0);
 
@@ -2351,6 +2390,7 @@ function evaluateSkillPackage(primary, supporting, offenseObligations) {
     fulfilled,
     carriers,
     synergyEdges,
+    postFulfillmentPayoffCount,
     supportingAdjacentFacts,
     unresolvedDependencies,
     unresolvedSetupCosts,
@@ -2472,12 +2512,14 @@ function annotatePackageComplexity(candidate) {
   const requiredSupportCount = unique(asArray(candidate?.carriers)
     .filter((proof) => proof.completionType === 'support').map((proof) => proof.obligationId)).length;
   const bridgeCount = providers.length + requiredSupportCount;
+  const bundleStepCount = ['SECONDARY_SUPPORT_BUNDLE', 'POST_FULFILLMENT_ACTIVE_PAYOFF']
+    .includes(candidate?.discoveryKind) ? 1 : 0;
   const cost = Math.min(SOLUTION_COMPLEXITY.maximumCost,
     providers.length * SOLUTION_COMPLEXITY.coreProvider
     + requiredUniqueCount * SOLUTION_COMPLEXITY.requiredUnique
     + accessTransformations * SOLUTION_COMPLEXITY.accessTransformation
     + requiredSupportCount * SOLUTION_COMPLEXITY.requiredSupport
-    + bridgeCount * SOLUTION_COMPLEXITY.bridgeStep);
+    + (bridgeCount + bundleStepCount) * SOLUTION_COMPLEXITY.bridgeStep);
   const grantedSkillAuthority = providers.some((provider) => provider.packageRole === 'granted_skill_provider') ? 10 : 0;
   return { ...candidate, requiredProviders: providers, providerCompatibility: compatibility,
     complexityCost: cost, rawScore: candidate.score,
@@ -2589,7 +2631,10 @@ function choosePackageCandidate(ranked, options = {}) {
     candidate.fulfilled.length === top.fulfilled.length
     && (candidate.primary?.weaponRelationship?.rank || 0) === topWeaponRank
     && (top.selectionScore ?? top.score) - (candidate.selectionScore ?? candidate.score) <= qualityBand);
-  let pool = shortlist;
+  const bestPayoffCount = Math.max(...shortlist.map((candidate) => candidate.postFulfillmentPayoffCount || 0));
+  let pool = bestPayoffCount > 0
+    ? shortlist.filter((candidate) => (candidate.postFulfillmentPayoffCount || 0) === bestPayoffCount)
+    : shortlist;
   const previousEntityId = String(options.previousPrimaryEntityId || '');
   if (previousEntityId && shortlist.length > 1) {
     const alternatives = shortlist.filter((candidate) => candidate.primary.entity.id !== previousEntityId);
@@ -2635,13 +2680,14 @@ function analyzeSupportPackageForSkill(
   supports,
   offenseObligations,
   unresolvedOffenseIds,
-  demandTargets
+  demandTargets,
+  externalMechanics = new Set()
 ) {
   if (!candidate) return null;
   const families = supports.map(supportFamilyId);
   if (new Set(families).size !== families.length) return null;
   if (supports.some((support) => !supportTargetsSkill(support, candidate.entity))) return null;
-  if (!supportPackageRequirementsAreMet(candidate.entity, supports)) return null;
+  if (!supportPackageRequirementsAreMet(candidate.entity, supports, externalMechanics)) return null;
 
   const prevented = new Set(supports.flatMap((support) => hardSupportedSkillFacts(support)
     .filter((fact) => fact?.relation === 'prevents')
@@ -2650,7 +2696,7 @@ function analyzeSupportPackageForSkill(
 
   const fulfilled = offenseObligations
     .filter((obligation) => unresolvedOffenseIds.has(obligation.id))
-    .map((obligation) => supportProofForObligation(candidate.entity, supports, obligation)
+    .map((obligation) => supportProofForObligation(candidate.entity, supports, obligation, externalMechanics)
       || asArray(candidate.carriers).find((proof) =>
         proof.obligationId === obligation.id
         && proof.completionType === 'support_derived_ontology'
@@ -2719,12 +2765,18 @@ function analyzeSupportPackageForSkill(
       relation: target.supplyRelation,
       confidence: target.confidence
     }), 0);
+  const externallyRequiredMechanics = unique(supports.flatMap((support) => [
+    ...supportRequirementFacts(support).flatMap(factMechanics),
+    ...actionableSupportFacts(support).flatMap((fact) => asArray(fact?.requires_any_mechanics).map(normalizeToken))
+  ])).filter((mechanic) => externalMechanics.has(mechanic)
+    && !supportPackageSuppliesMechanic(candidate.entity, supports, mechanic));
   return {
     candidate,
     supports,
     fulfilled,
     resolvedDemands,
     supportRequirementEdges,
+    externallyRequiredMechanics,
     prevented: Array.from(prevented),
     evidenceScore,
     tierScore: supports.reduce((sum, support) => sum + supportTier(support), 0)
@@ -2766,7 +2818,8 @@ function enumerateSupportPackagesForSkill(
   index,
   offenseObligations,
   unresolvedOffenseIds,
-  demandTargets
+  demandTargets,
+  externalMechanics = new Set()
 ) {
   const supports = relevantSupportsForSkill(
     candidate,
@@ -2791,7 +2844,8 @@ function enumerateSupportPackagesForSkill(
       set,
       offenseObligations,
       unresolvedOffenseIds,
-      demandTargets
+      demandTargets,
+      externalMechanics
     ))
     .filter(Boolean);
   const byIds = new Map(analyzed.map((entry) => [
@@ -2813,6 +2867,130 @@ function enumerateSupportPackagesForSkill(
       return Array.from(keys).some((key) => !subsetKeys.has(key));
     });
   });
+}
+
+// Discover a bounded cross-skill construction before package ranking. This is
+// intentionally limited to one setup skill plus one normal support package on
+// the damage skill. The bundle must use a typed mechanic supplied by the setup
+// skill and must complete the rolled Offense; it is not a general graph walk.
+function discoverSecondarySupportBundlePackages(catalog, legalCandidates, offenseObligations) {
+  const index = supportIndexForCatalog(catalog);
+  const unresolved = new Set(offenseObligations.map((entry) => entry.id));
+  const packages = [];
+  const seen = new Set();
+  for (const setup of legalCandidates) {
+    const externalMechanics = new Set(setup.supplies
+      .filter((supply) => SUPPLY_RELATIONS.has(supply.relation))
+      .map((supply) => supply.mechanic).filter(Boolean));
+    if (!externalMechanics.size) continue;
+    for (const damage of legalCandidates) {
+      if (damage.entity.id === setup.entity.id || !damage.primaryEligible) continue;
+      const terminals = unique(offenseObligations.flatMap((obligation) =>
+        asArray(obligation.mechanics).flatMap((mechanic) =>
+          asArray(index.byEffectMechanic.get(normalizeToken(mechanic))))
+      )).filter((support) => supportTargetsSkill(support, damage.entity));
+      const rawSets = [];
+      for (const terminal of terminals) {
+        const prerequisites = unique([
+          ...supportRequirementFacts(terminal).flatMap(factMechanics),
+          ...actionableSupportFacts(terminal).flatMap((fact) =>
+            asArray(fact?.requires_any_mechanics).map(normalizeToken))
+        ]);
+        if (!prerequisites.some((mechanic) => externalMechanics.has(mechanic))) continue;
+        rawSets.push([terminal]);
+        const unmet = prerequisites.filter((mechanic) => !externalMechanics.has(mechanic)
+          && !supportPackageSuppliesMechanic(damage.entity, [terminal], mechanic));
+        for (const mechanic of unmet) {
+          for (const provider of asArray(index.bySupplyMechanic.get(mechanic))) {
+            if (provider.id !== terminal.id && supportTargetsSkill(provider, damage.entity)
+              && supportFamilyId(provider) !== supportFamilyId(terminal)) rawSets.push([terminal, provider]);
+          }
+        }
+      }
+      const supportPackages = rawSets
+        .map((supports) => analyzeSupportPackageForSkill(
+          damage, supports, offenseObligations, unresolved, [], externalMechanics
+        ))
+        .filter((entry) => entry?.fulfilled.length > 0 && entry.externallyRequiredMechanics.length > 0);
+      for (const bundle of supportPackages) {
+        const bundleId = `${damage.entity.id}:${setup.entity.id}:${bundle.supports.map((support) => support.id).sort().join('+')}`;
+        if (seen.has(bundleId)) continue;
+        seen.add(bundleId);
+        const demands = unique([...damage.demands.map((entry) => JSON.stringify(entry)),
+          ...bundle.externallyRequiredMechanics.map((mechanic) => JSON.stringify({
+            mechanic, relation: 'requires', confidence: 'strong', source: 'support_bundle'
+          }))]).map((entry) => JSON.parse(entry));
+        const fulfilledMechanics = bundle.fulfilled.map((proof) => normalizeToken(proof.mechanic));
+        const bundledDamage = {
+          ...damage,
+          demands,
+          fulfilled: bestProofByObligation([{ fulfilled: [...damage.fulfilled, ...bundle.fulfilled] }], 'fulfilled'),
+          carriers: bestProofByObligation([{ carriers: [...damage.carriers, ...bundle.fulfilled.map((proof) => ({
+            ...proof, completionType: 'support_bundle', supportEntityIds: bundle.supports.map((support) => support.id),
+            supportSourceIds: bundle.supports.map((support) => support.source_id),
+            supportNames: bundle.supports.map((support) => support.name),
+            prerequisiteMechanics: bundle.externallyRequiredMechanics
+          }))] }], 'carriers'),
+          supplies: [...damage.supplies, ...fulfilledMechanics.map((mechanic) => ({
+            mechanic, relation: 'provides', confidence: 'strong', requiresAnyMechanics: []
+          }))],
+          preassignedSupportIds: bundle.supports.map((support) => support.id),
+          supportBundle: {
+            supportIds: bundle.supports.map((support) => support.id),
+            supportNames: bundle.supports.map((support) => support.name),
+            externalMechanics: bundle.externallyRequiredMechanics
+          }
+        };
+        const evaluated = evaluateSkillPackage(bundledDamage, setup, offenseObligations);
+        if (evaluated?.synergyEdges.some((edge) => bundle.externallyRequiredMechanics.includes(edge.mechanic))) {
+          packages.push({ ...evaluated, discoveryKind: 'SECONDARY_SUPPORT_BUNDLE' });
+        }
+      }
+    }
+  }
+  return packages;
+}
+
+function discoverPostFulfillmentActivePackages(baseCandidates, pool, offenseObligations) {
+  const offenseMechanics = new Set(offenseObligations.flatMap((entry) => entry.mechanics).map(normalizeToken));
+  const packages = [];
+  for (const base of baseCandidates) {
+    if (!base?.primary || base.supporting || base.fulfilled.length !== offenseObligations.length) continue;
+    const primary = {
+      ...base.primary,
+      supplies: [...base.primary.supplies, ...[...offenseMechanics].map((mechanic) => ({
+        mechanic, relation: 'provides', confidence: 'strong', requiresAnyMechanics: []
+      }))]
+    };
+    for (const payoff of pool) {
+      if (payoff.entity.id === primary.entity.id) continue;
+      const explicitPayoff = payoff.demands.some((demand) => offenseMechanics.has(demand.mechanic)
+        && ['requires', 'consumes'].includes(demand.relation));
+      if (!explicitPayoff) continue;
+      const evaluated = evaluateSkillPackage(primary, payoff, offenseObligations);
+      if (evaluated?.synergyEdges.some((edge) => offenseMechanics.has(edge.mechanic)
+        && ['requires', 'consumes'].includes(edge.demandRelation))) {
+        packages.push({ ...evaluated, discoveryKind: 'POST_FULFILLMENT_ACTIVE_PAYOFF' });
+      }
+    }
+  }
+  return packages;
+}
+
+function materializeSupportBridgePackage(entry, offenseObligations) {
+  const supportIds = unique(asArray(entry?.proof?.supportEntityIds).length
+    ? entry.proof.supportEntityIds : [entry?.support?.id]);
+  if (!entry?.candidate || !entry?.proof || !supportIds.length) return null;
+  const primary = {
+    ...entry.candidate,
+    fulfilled: bestProofByObligation([{ fulfilled: [...entry.candidate.fulfilled, entry.proof] }], 'fulfilled'),
+    supplies: [...entry.candidate.supplies, {
+      mechanic: normalizeToken(entry.proof.mechanic), relation: 'provides', confidence: entry.proof.confidence,
+      requiresAnyMechanics: []
+    }],
+    preassignedSupportIds: supportIds
+  };
+  return evaluateSkillPackage(primary, null, offenseObligations);
 }
 
 function supportEntryForAssignment(support, packageCandidate) {
@@ -2878,6 +3056,7 @@ function eligibleOptionalOptimizersV3(catalog, selected, assignments, offenseObl
       const assignment = assignments.find((entry) => entry.skillEntityId === candidate.entity.id);
       if (asArray(assignment?.supports).some((entry) => entry.familyId === supportFamilyId(support))) continue;
       const role = optimizerRoleV3(support, offenseId);
+      if (role === 'POST_FULFILLMENT_PAYOFF' && requiredResolution.activePayoffSelected) continue;
       const requirements = supportRequirementFacts(support);
       // The bounded post-fulfillment lane accepts only a demand for the rolled
       // mechanic. It does not recursively traverse arbitrary prerequisites.
@@ -2959,6 +3138,9 @@ function assignSupportPackagesV3(catalog, winner, offenseObligations) {
   const unresolvedOffenseIds = new Set(offenseObligations
     .map((obligation) => obligation.id)
     .filter((id) => !alreadyFulfilled.has(id)));
+  for (const candidate of selected.filter((entry) => asArray(entry.preassignedSupportIds).length)) {
+    for (const proof of asArray(candidate.fulfilled)) unresolvedOffenseIds.add(proof.obligationId);
+  }
   const demandTargets = [
     ...asArray(winner.unresolvedDependencies).map((target) => ({
       ...target,
@@ -2970,13 +3152,16 @@ function assignSupportPackagesV3(catalog, winner, offenseObligations) {
     }))
   ];
   const index = supportIndexForCatalog(catalog);
-  const packagesBySkill = selected.map((candidate) => enumerateSupportPackagesForSkill(
-    candidate,
-    index,
-    offenseObligations,
-    unresolvedOffenseIds,
-    demandTargets
-  ));
+  const packagesBySkill = selected.map((candidate) => {
+    const externalMechanics = new Set(asArray(winner.synergyEdges)
+      .filter((edge) => edge.toEntityId === candidate.entity.id)
+      .map((edge) => normalizeToken(edge.mechanic)));
+    const requiredIds = new Set(asArray(candidate.preassignedSupportIds));
+    return enumerateSupportPackagesForSkill(
+      candidate, index, offenseObligations, unresolvedOffenseIds, demandTargets, externalMechanics
+    ).filter((entry) => !requiredIds.size || [...requiredIds].every((id) =>
+      entry.supports.some((support) => support.id === id)));
+  });
   const combinations = [];
   const visit = (position, chosen, usedFamilies) => {
     if (position >= packagesBySkill.length) {
@@ -3043,6 +3228,7 @@ function assignSupportPackagesV3(catalog, winner, offenseObligations) {
   const requiredResolution = {
     ...winnerCombination,
     assignedSupportCount: winnerCombination.supportCount,
+    activePayoffSelected: (winner.postFulfillmentPayoffCount || 0) > 0,
     requiredConstructionComplete: demandTargets.every((target) =>
       winnerCombination.resolvedDemands.some((resolved) => supportDemandKey(resolved) === supportDemandKey(target)))
   };
@@ -3268,6 +3454,9 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
   const bridgePackages = tierAnalysis.bridges
     .map((entry) => evaluateSkillPackage(entry.candidate, null, offenseObligations))
     .filter(Boolean);
+  const materializedBridgePackages = tierAnalysis.bridges
+    .map((entry) => materializeSupportBridgePackage(entry, offenseObligations))
+    .filter(Boolean);
   const uniqueBridges = offenseObligations.flatMap((obligation) =>
     uniqueCoreBridgeCandidates(catalog, tierAnalysis.legal, obligation, snapshot));
   const uniqueBridgePackages = uniqueBridges.map((entry) => evaluateSkillPackage(entry.candidate, null, offenseObligations))
@@ -3275,7 +3464,15 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
   const supportChainPackages = tierAnalysis.supportChains
     .map((entry) => evaluateSkillPackage(entry.candidate, null, offenseObligations))
     .filter(Boolean);
-  const completeCompetitive = [...directPackages, ...bridgePackages, ...uniqueBridgePackages, ...supportChainPackages]
+  const secondarySupportBundlePackages = discoverSecondarySupportBundlePackages(
+    catalog, viablePool, offenseObligations
+  );
+  const activePayoffPackages = discoverPostFulfillmentActivePackages(
+    [...directPackages, ...materializedBridgePackages], viablePool, offenseObligations
+  );
+  const completeCompetitive = [...directPackages, ...bridgePackages, ...materializedBridgePackages,
+    ...uniqueBridgePackages, ...supportChainPackages,
+    ...secondarySupportBundlePackages, ...activePayoffPackages]
     .filter((candidate) => packageConstructionComplete(candidate, offenseObligations));
   const rankedPackages = completeCompetitive.length
     ? sortCompetitivePackages(completeCompetitive, offenseObligations)
@@ -3285,7 +3482,9 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
   const { winner, shortlist, qualityBand } = choosePackageCandidate(rankedPackages, options);
   let recommendationTier = winner?.primary?.coreUnique || winner?.primary?.uniqueBridgeProof || winner?.primary?.accessBridge
     || winner?.primary?.coreProvider || winner?.supporting?.coreProvider ? 'ONE_BRIDGE'
-    : supportChainPackages.some((entry) => entry.id === winner?.id) ? 'SUPPORT_CHAIN'
+    : secondarySupportBundlePackages.some((entry) => entry.id === winner?.id) ? 'SECONDARY_SUPPORT_BUNDLE'
+      : activePayoffPackages.some((entry) => entry.id === winner?.id) ? 'POST_FULFILLMENT_PAYOFF'
+      : supportChainPackages.some((entry) => entry.id === winner?.id) ? 'SUPPORT_CHAIN'
       : directPackages.some((entry) => entry.id === winner?.id) ? 'DIRECT' : 'FALLBACK';
   const supportResolution = assignSupportPackagesV3(catalog, winner, offenseObligations);
   if ((supportResolution.assignedRequiredSupportCount > 0 || supportResolution.supportEdges.some((edge) => edge.targetKind === 'offense'))
@@ -3468,7 +3667,10 @@ function selectRecommendationPackageV3(catalog, snapshot = {}, options = {}) {
     primarySkill: primarySkill ? { entityId: primarySkill.entityId, name: primarySkill.name,
       properties: unique([primary?.weaponRelationship?.family, ...asArray(primary?.delivery?.skillTypes)].map(normalizeToken)) } : null,
     sourceMechanics: unique(bridgePath.map((entry) => entry.from).filter(Boolean)),
-    primarySourceMechanics: unique(primarySourceEvidence.map((entry) => entry.mechanic)),
+    primarySourceMechanics: unique([
+      ...primarySourceEvidence.map((entry) => entry.mechanic),
+      ...(Number(primary?.criticalAffinity?.baseCritChance) > 5 ? ['critical_hits'] : [])
+    ]),
     primarySourceEvidence,
     bridgeMechanics: unique(bridgePath.flatMap((entry) => [entry.from, entry.to]).filter(Boolean)),
     setupMechanics: unique(asArray(winner?.synergyEdges).map((edge) => edge.mechanic)),

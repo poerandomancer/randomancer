@@ -1307,7 +1307,8 @@ def parse_text(value: Any, source_kind: str, subject: str) -> list[dict[str, Any
 
         armour_break_application = re.search(
             r"(?:^|_)armour_break_(?:break|breaks|breaking)(?:_[a-z0-9]+){0,5}_armour(?:_|$)"
-            r"|(?:^|_)(?:break|breaks|breaking)_(?:(?:enemy|enemies|target|targets|their)_)?armour(?:_|$)",
+            r"|(?:^|_)(?:break|breaks|breaking)_(?:(?:enemy|enemies|target|targets|their)_)?armour(?:_|$)"
+            r"|(?:^|_)armour_break(?:_[a-z0-9]+){0,8}_on_(?:critical|crit|pin|heavy_stun|heavy_stunning)(?:_|$)",
             normalized,
         )
         armour_break_prefix = ""
@@ -1320,6 +1321,13 @@ def parse_text(value: Any, source_kind: str, subject: str) -> list[dict[str, Any
             or re.search(r"(?:when|if|after)_(?:they|you|an?_enemy|the_enemy|the_target)(?:_[a-z0-9]+){0,5}$", armour_break_prefix)
         )
         if armour_break_application and not armour_break_is_context_only:
+            transformation_requirements = []
+            if re.search(r"(?:^|_)on_(?:critical|crit)(?:_|$)", normalized):
+                transformation_requirements.append("critical_hits")
+            if re.search(r"(?:^|_)on_pin(?:_|$)", normalized):
+                transformation_requirements.append("pin")
+            if re.search(r"(?:^|_)on_heavy_(?:stun|stunning)(?:_|$)|(?:^|_)on_heavy_stun(?:_|$)", normalized):
+                transformation_requirements.append("heavy_stun")
             facts.append(
                 make_fact(
                     "inflicts",
@@ -1329,6 +1337,8 @@ def parse_text(value: Any, source_kind: str, subject: str) -> list[dict[str, Any
                     mechanic="armour_break",
                     confidence="strong",
                     scope="outgoing",
+                    delivery="spell" if re.search(r"(?:^|_)with_spells?(?:_|$)", normalized) else None,
+                    requires_any_mechanics=transformation_requirements or None,
                 )
             )
 
