@@ -43,3 +43,24 @@ skill. Passive, ascendancy, and unique payoff facts using `requires` or `consume
 eligible only when package diagnostics prove the demanded Offense. Passive
 transformations are one step only: their typed source requirement and delivery must
 both be present in the selected package.
+
+## Enrichment contract for setup transformations
+
+Candidate retrieval terms are search aids, not fulfillment evidence. A setup state is
+usable by bounded discovery only when authoritative structured data or conservative
+grammar produces a directed fact such as `inflicts(state_a)`, with outgoing enemy
+scope. References to afflicted enemies, effect or duration scaling, consumption, and
+prevention remain non-applicative.
+
+Compound consume-to-produce clauses materialize both sides of their causal contract:
+
+```text
+setup skill -> inflicts state A
+supported skill -> consumes state A
+supported skill -> produces Offense B (requires_any_mechanics: [state A])
+```
+
+The conditional requirement prevents the output from masquerading as an unconditional
+Offense source. Recommendation-v3 may then compose the provider and transformer within
+its existing two-active/two-required-support bound, and optionally attach one explicit
+payoff. This applies to the grammar class generally; it is not an entity-pair recipe.

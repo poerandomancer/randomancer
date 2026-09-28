@@ -454,6 +454,27 @@ test('secondary skill plus conditional support is discovered as one bounded pack
   assert.ok(result.supportAssignments.every((assignment) => assignment.supports.length <= MAX_TOTAL_SUPPORTS));
 });
 
+test('production Maim provider composes with a conditional Armour Break support bundle', () => {
+  const names = new Set(['Spearfield', 'Whirling Slash', 'Undermine', 'Armour Explosion']);
+  const fixture = {
+    ...catalog,
+    entities: catalog.entities.filter((entity) => names.has(entity.name)).map((entity) =>
+      entity.name === 'Spearfield' ? { ...entity, candidate_roles: ['setup_control'] } : entity)
+  };
+  const result = selectRecommendationPackageV3(fixture, { weapon: 'Spear', offenseList: ['Armour Break'] }, {
+    offenseInventory, criticalProfiles, selectionSeed: 'production-maim-armour-break'
+  });
+  assert.equal(result.status, 'complete');
+  assert.equal(result.diagnostics.recommendationTier, 'SECONDARY_SUPPORT_BUNDLE');
+  assert.ok(result.synergyEdges.some((edge) => edge.mechanic === 'maim'
+    && edge.supplyRelation === 'inflicts' && edge.demandRelation === 'requires'));
+  assert.ok(result.supportAssignments.some((assignment) => assignment.supports.some((support) =>
+    support.name === 'Undermine'
+      && support.prerequisiteMechanics.includes('maim')
+      && support.fulfilledObligations.some((proof) => proof.mechanic === 'armour_break'))));
+  assert.ok(result.supportAssignments.every((assignment) => assignment.supports.length <= MAX_TOTAL_SUPPORTS));
+});
+
 test('post-fulfillment active payoff consumes the proven rolled mechanic', () => {
   const names = new Set(['Armour Piercing Rounds', 'High Velocity Rounds']);
   const fixture = { ...catalog, entities: catalog.entities.filter((entity) => names.has(entity.name)) };
