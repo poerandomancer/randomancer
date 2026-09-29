@@ -92,7 +92,8 @@ function drawBuild(dataWrap, { random = Math.random } = {}) {
     const recommendation = selectRecommendationPackageV3(catalog, draw, { offenseInventory: data.OffenseInventory || {}, criticalProfiles: data.recommendationCriticalProfilesV3 || {}, selectionSeed: selectionSeed() });
     // Keep the package result as a temporary diagnostics/compatibility boundary,
     // but present independently-ranked discovery leads rather than its prescribed package.
-    const leads = selectBuildLeads(catalog, draw, { selectionSeed: recommendation.selectionSeed });
+    const leads = selectBuildLeads(catalog, draw, { selectionSeed: recommendation.selectionSeed,
+      offenseInventory: data.OffenseInventory || {}, criticalProfiles: data.recommendationCriticalProfilesV3 || {} });
     draw = { ...draw, recommendationPackage: recommendation, ...adaptBuildLeadsToSnapshot(leads) };
   } else {
     draw.recommendationError = validation.reason || 'Recommendation catalog is unavailable.';

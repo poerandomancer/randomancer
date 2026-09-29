@@ -11,10 +11,17 @@ const entity = (id, contentType, facts, extra = {}) => ({ id, source_id: id, nam
 const maceCompatibility = { equipment: { allowed_weapon_tags_any_of: ['mace'] } };
 const snapshot = { ascendancy: 'Chronomancer', weapon: 'Mace', weaponFamily: 'Mace', offenseSet: ['cold'], passiveTreeStart: 'str_int' };
 const catalog = (entities) => ({ _meta: { schema_version: 'recommendation-catalog-v3.0.0' }, entities });
+const active = (id, mechanic = 'cold', weapon = 'mace', extra = {}) => entity(id, 'active_skill', [
+  fact('has_property', mechanic, { confidence: 'exact' }), fact('fulfills', mechanic)
+], { candidate_roles: ['primary_damage'], compatibility: { equipment: { requirement_id: weapon,
+  mainhand_tags_any_of: [weapon], allowed_weapon_tags_any_of: [weapon] } },
+source_evidence: { active_skill_types: ['Attack', titleCase(weapon), titleCase(mechanic)],
+  crafting: { types_raw: [titleCase(weapon)], weapon_affinities: [weapon] } }, ...extra });
+const titleCase = (value) => value[0].toUpperCase() + value.slice(1);
 
 test('explicit Weapon + Offense skills are Direct Fits and outrank generic single-tag tools', () => {
-  const direct = entity('cold-hammer', 'active_skill', [fact('fulfills', 'cold')], { compatibility: maceCompatibility });
-  const generic = entity('cold-number', 'support_gem', [fact('modifies', 'cold')]);
+  const direct = active('cold-hammer');
+  const generic = entity('cold-number', 'passive', [fact('modifies', 'cold')]);
   const result = selectBuildLeads(catalog([generic, direct]), snapshot, { selectionSeed: 'same' });
   assert.equal(result.categories.directFits[0].id, 'cold-hammer');
   assert.ok(result.categories.directFits[0].score > result.categories.usefulTools[0].score);
@@ -22,7 +29,7 @@ test('explicit Weapon + Offense skills are Direct Fits and outrank generic singl
 
 test('a roll without a direct skill leaves Direct Fits absent rather than filling it', () => {
   const result = selectBuildLeads(catalog([
-    entity('cold-support', 'support_gem', [fact('inflicts', 'cold')])
+    entity('cold-tool', 'unique', [fact('provides', 'cold')])
   ]), snapshot);
   assert.equal(result.categories.directFits, undefined);
   assert.equal(result.categories.enablers.length, 1);
@@ -30,9 +37,9 @@ test('a roll without a direct skill leaves Direct Fits absent rather than fillin
 
 test('conversion and gain/provision facts are enablers while prior-state requirements are payoffs', () => {
   const result = selectBuildLeads(catalog([
-    entity('conversion', 'support_gem', [fact('converts', null, { from: 'fire', to: 'cold' })]),
-    entity('extra-cold', 'support_gem', [fact('provides', 'cold')]),
-    entity('frozen-payoff', 'active_skill', [fact('requires', 'cold')])
+    entity('conversion', 'unique', [fact('converts', null, { from: 'fire', to: 'cold' })]),
+    entity('extra-cold', 'unique', [fact('provides', 'cold')]),
+    entity('frozen-payoff', 'passive', [fact('requires', 'cold')])
   ]), snapshot);
   assert.deepEqual(new Set(result.categories.enablers.map((lead) => lead.id)), new Set(['conversion', 'extra-cold']));
   assert.deepEqual(result.categories.payoffs.map((lead) => lead.id), ['frozen-payoff']);
@@ -41,8 +48,8 @@ test('conversion and gain/provision facts are enablers while prior-state require
 
 test('prevents facts reject contradictory candidates', () => {
   const result = selectBuildLeads(catalog([
-    entity('contradiction', 'support_gem', [fact('inflicts', 'cold'), fact('prevents', 'cold')]),
-    entity('safe', 'support_gem', [fact('inflicts', 'cold')])
+    entity('contradiction', 'unique', [fact('inflicts', 'cold'), fact('prevents', 'cold')]),
+    entity('safe', 'unique', [fact('inflicts', 'cold')])
   ]), snapshot);
   assert.deepEqual(result.categories.enablers.map((lead) => lead.id), ['safe']);
 });
@@ -57,7 +64,7 @@ test('item tools, granted-skill semantics, and keystones can surface', () => {
 });
 
 test('empty categories are omitted and category counts are threshold-driven rather than quotas', () => {
-  const one = selectBuildLeads(catalog([entity('only', 'support_gem', [fact('inflicts', 'cold')])]), snapshot);
+  const one = selectBuildLeads(catalog([entity('only', 'unique', [fact('inflicts', 'cold')])]), snapshot);
   assert.deepEqual(Object.keys(one.categories), ['enablers']);
   assert.equal(one.categories.enablers.length, 1);
   assert.equal(BUILD_LEAD_COPY.categories.enablers, 'Ways to Enable');
@@ -66,8 +73,8 @@ test('empty categories are omitted and category counts are threshold-driven rath
 
 test('small typed producer-to-payoff chains surface without a package', () => {
   const result = selectBuildLeads(catalog([
-    entity('forge', 'support_gem', [fact('creates', 'cold')], { name: 'Forge' }),
-    entity('payoff', 'active_skill', [fact('requires', 'cold')], { name: 'Payoff' })
+    entity('forge', 'unique', [fact('creates', 'cold')], { name: 'Forge' }),
+    entity('payoff', 'passive', [fact('requires', 'cold')], { name: 'Payoff' })
   ]), snapshot);
   assert.equal(result.categories.connections[0].name, 'Forge → Payoff');
   assert.match(result.categories.connections[0].explanation, /Creates Cold/);
@@ -90,7 +97,7 @@ test('ascendancy access and current-content exclusions remain hard gates', () =>
 });
 
 test('selection is deterministic and caps only independently qualified candidates', () => {
-  const entities = Array.from({ length: 8 }, (_, index) => entity(`support-${index}`, 'support_gem', [fact('inflicts', 'cold')]));
+  const entities = Array.from({ length: 8 }, (_, index) => entity(`tool-${index}`, 'unique', [fact('inflicts', 'cold')]));
   const first = selectBuildLeads(catalog(entities), snapshot, { selectionSeed: 'fate' });
   const second = selectBuildLeads(catalog(entities), snapshot, { selectionSeed: 'fate' });
   assert.deepEqual(first, second);
@@ -105,7 +112,8 @@ test('one-hop ailment neighbors and a controlled conversion source can establish
     entity('fire-mace', 'active_skill', [fact('has_property', 'fire')], { compatibility: maceCompatibility })
   ]), snapshot);
   assert.equal(result.categories.usefulTools.find((lead) => lead.id === 'freeze-buildup')?.relevancePath.distance, 1);
-  assert.ok(result.categories.connections.some((lead) => lead.name === 'fire-mace → fire-to-cold → Cold'));
+  assert.equal(leadNames(result).includes('fire-mace'), false);
+  assert.equal(result.categories.connections, undefined);
 });
 
 test('semantic role is primary while entity type remains presentation metadata', () => {
@@ -117,7 +125,50 @@ test('semantic role is primary while entity type remains presentation metadata',
   assert.equal(result.categories.enablers[0].contentType, 'unique');
 });
 
+test('hard applicability rejects cross-family unique weapons and passives before relevance', () => {
+  const result = selectBuildLeads(catalog([
+    entity('cold-bow', 'unique', [fact('provides', 'cold')], { compatibility: { equipment: { slot: 'Bow', base: 'Cold Bow' } } }),
+    entity('cold-gloves', 'unique', [fact('provides', 'cold')], { compatibility: { equipment: { slot: 'Gloves' } } }),
+    entity('bow-passive', 'passive', [fact('modifies', 'cold')], { passive_tree_starts: ['str_int'],
+      compatibility: { passive_weapon: { compatible_weapon_family_ids: ['bow'], unresolved_requirements: [], fail_closed: false } } }),
+    entity('mace-passive', 'passive', [fact('modifies', 'cold')], { passive_tree_starts: ['str_int'],
+      compatibility: { passive_weapon: { compatible_weapon_family_ids: ['mace'], unresolved_requirements: [], fail_closed: false } } })
+  ]), snapshot);
+  assert.equal(leadNames(result).includes('cold-bow'), false);
+  assert.equal(leadNames(result).includes('bow-passive'), false);
+  assert.ok(leadNames(result).includes('cold-gloves'));
+  assert.ok(leadNames(result).includes('mace-passive'));
+});
+
+test('supports require a plausible target in the rolled weapon ecosystem', () => {
+  const carrier = active('cold-hammer');
+  const support = (id, targetType) => entity(id, 'support_gem', [fact('modifies', 'cold')], {
+    compatibility: { equipment: { is_unrestricted: true }, target_skill: { allowed_skill_types_any_of: [targetType] } }
+  });
+  const result = selectBuildLeads(catalog([carrier, support('attack-support', 'Attack'), support('bow-support', 'Bow')]), snapshot);
+  assert.ok(leadNames(result).includes('attack-support'));
+  assert.equal(leadNames(result).includes('bow-support'), false);
+});
+
+test('granted active skills require an actually available granting source', () => {
+  const granted = (id, sourceAscendancy) => active(id, 'cold', 'mace', { compatibility: {
+    access: { requires_granted_source: true, granted_sources: [{ kind: 'ascendancy_passive', ascendancy: sourceAscendancy }] },
+    equipment: { requirement_id: 'Mace', mainhand_tags_any_of: ['mace'], allowed_weapon_tags_any_of: ['mace'] }
+  } });
+  const result = selectBuildLeads(catalog([granted('chronomancer-skill', 'Chronomancer'), granted('invoker-skill', 'Invoker')]), snapshot);
+  assert.ok(leadNames(result).includes('chronomancer-skill'));
+  assert.equal(leadNames(result).includes('invoker-skill'), false);
+
+  const uniqueGranted = active('item-skill', 'cold', 'mace', { compatibility: {
+    access: { requires_granted_source: true, granted_sources: [{ kind: 'unique', unique_name: 'Provider', unique_id: 'Provider||Gloves' }] },
+    equipment: { requirement_id: 'Mace', mainhand_tags_any_of: ['mace'], allowed_weapon_tags_any_of: ['mace'] }
+  } });
+  assert.equal(leadNames(selectBuildLeads(catalog([uniqueGranted]), snapshot)).includes('item-skill'), false);
+  assert.ok(leadNames(selectBuildLeads(catalog([uniqueGranted]), { ...snapshot, recommendedUniques: ['Provider'] })).includes('item-skill'));
+});
+
 const readProduction = (path) => JSON.parse(fs.readFileSync(new URL(path, import.meta.url)));
+const offenseInventory = readProduction('../data/offense-inventory.json');
 let productionCatalog = readProduction('../data/enriched/recommendation_catalog_v3.json');
 productionCatalog = mergeRecommendationSkillCraftingV3(productionCatalog,
   readProduction('../data/enriched/recommendation_skill_crafting_v3.json'));
@@ -126,7 +177,8 @@ productionCatalog = mergeRecommendationGrantedSkillAccessV3(productionCatalog,
 productionCatalog = mergeRecommendationUniqueSemanticsV3(productionCatalog,
   readProduction('../data/enriched/recommendation_unique_semantics_v3.json'));
 const productionFate = (ascendancy, weapon, offense, passiveTreeStart, seed = 'production-regression') =>
-  selectBuildLeads(productionCatalog, { ascendancy, weapon, weaponFamily: weapon, offenseSet: [offense], passiveTreeStart }, { selectionSeed: seed });
+  selectBuildLeads(productionCatalog, { ascendancy, weapon, weaponFamily: weapon, offenseSet: [offense], passiveTreeStart },
+    { selectionSeed: seed, offenseInventory });
 const categoryCount = (result) => Object.keys(result.categories).length;
 const leadNames = (result) => Object.values(result.categories).flat().map((lead) => lead.name);
 
@@ -155,5 +207,38 @@ test('production native, awkward, ailment, and archetype Fates retain distinct u
 
   const archetype = productionFate('Chronomancer', 'Mace', 'totems', 'str_int');
   assert.ok(archetype.categories.enablers.some((lead) => lead.name === 'Shockwave Totem'));
-  assert.ok(archetype.categories.connections.length >= 1);
+});
+
+test('production applicability audit keeps skills, unique weapons, ascendancies, and passives inside Fate boundaries', () => {
+  const cases = [
+    ['Chronomancer', 'Mace', 'cold', 'str_int'], ['Deadeye', 'Bow', 'poison', 'dex'],
+    ['Warbringer', 'Mace', 'electrocute', 'str'], ['Invoker', 'Quarterstaff', 'freeze', 'dex_int'],
+    ['Chronomancer', 'Mace', 'totems', 'str_int']
+  ];
+  const byId = new Map(productionCatalog.entities.map((entry) => [entry.id, entry]));
+  const weaponFamilies = ['quarterstaff', 'crossbow', 'sceptre', 'talisman', 'staff', 'wand', 'spear', 'flail', 'dagger', 'claw', 'sword', 'mace', 'axe', 'bow'];
+  for (const [ascendancy, weapon, offense, start] of cases) {
+    const result = productionFate(ascendancy, weapon, offense, start, 'applicability-audit');
+    for (const lead of Object.values(result.categories).flat().filter((entry) => entry.entityId)) {
+      const source = byId.get(lead.entityId);
+      assert.ok(source, `${lead.name} resolves to a catalog entity`);
+      if (source.content_type === 'ascendancy_passive') {
+        assert.equal(source.required_ascendancy || source.compatibility?.access?.ascendancy, ascendancy);
+      }
+      if (source.content_type === 'unique') {
+        const equipment = source.compatibility?.equipment || {};
+        const text = [equipment.slot, equipment.base, equipment.weapon_family].join(' ').toLowerCase();
+        const family = weaponFamilies.find((candidate) => new RegExp(`(^|[^a-z])${candidate}([^a-z]|$)`).test(text));
+        if (family) assert.equal(family, weapon.toLowerCase(), `${lead.name} matches ${weapon}`);
+      }
+      if (source.content_type === 'passive' && source.compatibility?.passive_weapon) {
+        assert.ok(source.compatibility.passive_weapon.compatible_weapon_family_ids.includes(weapon.toLowerCase()));
+      }
+    }
+  }
+  const coldMace = productionFate('Chronomancer', 'Mace', 'cold', 'str_int', 'applicability-audit');
+  const coldMaceNames = leadNames(coldMace);
+  assert.equal(coldMaceNames.includes('Firestorm'), false);
+  assert.equal(coldMaceNames.includes('Skeletal Brute'), false);
+  assert.equal(Object.values(coldMace.categories).flat().some((lead) => lead.contentType === 'active_skill'), false);
 });

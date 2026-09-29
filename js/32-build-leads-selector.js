@@ -1,6 +1,9 @@
 import {
-  isEquipmentCompatibleV3,
-  isRecommendationContentAllowedV3
+  analyzeRecommendationCellV3,
+  evaluateCompatibilityV3,
+  isRecommendationContentAllowedV3,
+  supportPackageRequirementsAreMet,
+  supportTargetsSkill
 } from './30-recommendation-v3-selector.js';
 
 const BUILD_LEADS_SCHEMA = 'build-leads-v1.1.0';
@@ -82,6 +85,20 @@ function belongsToAscendancy(entity, snapshot) {
 
 function passiveAccessible(entity, snapshot) {
   if (!['passive', 'keystone'].includes(entity?.content_type)) return true;
+  const access = entity?.compatibility?.access || {};
+  const requiredAscendancy = token(entity?.required_ascendancy || access.ascendancy);
+  if (requiredAscendancy && requiredAscendancy !== token(snapshot?.ascendancyName || snapshot?.ascendancy)) return false;
+  const rolledClassId = Number(snapshot?.passiveTreeCharacterId);
+  const rolledClass = token(snapshot?.className);
+  const overrideClassId = Number(access.passive_tree_character_id ?? entity?.class_override?.characterId);
+  const overrideClass = token(access.class_name || entity?.class_override?.className);
+  if ((Number.isFinite(overrideClassId) || overrideClass)
+    && !((Number.isFinite(rolledClassId) && rolledClassId === overrideClassId)
+      || (!Number.isFinite(rolledClassId) && rolledClass && rolledClass === overrideClass))) return false;
+  const replacedIds = arr(access.overridden_for_passive_tree_character_ids || entity?.overridden_for_class_ids).map(Number);
+  const replacedClasses = arr(access.overridden_for_classes || entity?.overridden_for_classes).map(token);
+  if ((Number.isFinite(rolledClassId) && replacedIds.includes(rolledClassId))
+    || (!Number.isFinite(rolledClassId) && rolledClass && replacedClasses.includes(rolledClass))) return false;
   const starts = arr(entity?.passive_tree_starts).map(token).filter(Boolean);
   if (starts.length && (!snapshot?.passiveTreeStart || !starts.includes(token(snapshot.passiveTreeStart)))) return false;
   const weaponRule = entity?.compatibility?.passive_weapon;
@@ -97,23 +114,6 @@ function uniqueWeaponFamily(entity) {
   // Check longer names first so Quarterstaff is never mistaken for Staff.
   return WEAPON_FAMILIES.find((family) => values.some((value) => value === family
     || value.startsWith(`${family}_`) || value.endsWith(`_${family}`) || value.includes(`_${family}_`))) || '';
-}
-
-function grantedSourceAvailable(entity, snapshot) {
-  const access = entity?.compatibility?.access || {};
-  if (!access.requires_granted_source) return true;
-  const sources = arr(access.granted_sources);
-  if (!sources.length) return false;
-  const ascendancy = token(snapshot?.ascendancyName || snapshot?.ascendancy);
-  const weapon = rolledWeapon(snapshot);
-  return sources.some((source) => {
-    if (source.kind === 'ascendancy_passive') return token(source.ascendancy) === ascendancy;
-    if (source.kind !== 'unique') return false;
-    const values = [source.slot, source.base].map(token);
-    const sourceFamily = WEAPON_FAMILIES.find((family) => values.some((value) => value === family
-      || value.startsWith(`${family}_`) || value.endsWith(`_${family}`) || value.includes(`_${family}_`)));
-    return !sourceFamily || sourceFamily === weapon;
-  });
 }
 
 function contradictsFate(entity, relevantMechanics) {
@@ -137,14 +137,33 @@ function explicitWeaponEvidence(entity, snapshot) {
     || value.endsWith(`_${weapon}`) || value.includes(`_${weapon}_`));
 }
 
-function isLegalEntity(entity, snapshot, relevantMechanics) {
+function baseApplicability(entity, snapshot, relevantMechanics) {
   if (!entity || sourceBlocked(entity) || !belongsToAscendancy(entity, snapshot)
     || !passiveAccessible(entity, snapshot) || contradictsFate(entity, relevantMechanics)) return false;
   if (['active_skill', 'support_gem', 'unique'].includes(entity.content_type)
-    && !isEquipmentCompatibleV3(entity, snapshot)) return false;
+    && !evaluateCompatibilityV3(entity, snapshot).ok) return false;
   const itemFamily = uniqueWeaponFamily(entity);
   if (itemFamily && itemFamily !== rolledWeapon(snapshot)) return false;
-  return grantedSourceAvailable(entity, snapshot);
+  return true;
+}
+
+// Applicability is deliberately resolved before the semantic graph exists. In
+// particular, graph distance can never make an inaccessible skill or an
+// incompatible support legal.
+function buildApplicableEntities(catalog, snapshot, relevantMechanics, options) {
+  const entities = arr(catalog?.entities);
+  const base = entities.filter((entity) => baseApplicability(entity, snapshot, relevantMechanics));
+  const skillAnalysis = analyzeRecommendationCellV3(catalog, snapshot, {
+    offenseInventory: options.offenseInventory || {}, criticalProfiles: options.criticalProfiles || {}
+  });
+  const directSkillIds = new Set(arr(skillAnalysis.direct).map((candidate) => candidate.entity.id));
+  const plausibleCarriers = arr(skillAnalysis.legal);
+  return base.filter((entity) => {
+    if (entity.content_type === 'active_skill') return directSkillIds.has(entity.id);
+    if (entity.content_type !== 'support_gem') return true;
+    return plausibleCarriers.some((candidate) => supportTargetsSkill(entity, candidate.entity)
+      && supportPackageRequirementsAreMet(candidate.entity, [entity]));
+  });
 }
 
 // Establish a deliberately small neighborhood: native offense affinities are one
@@ -333,7 +352,7 @@ function selectBuildLeads(catalog, snapshot = {}, options = {}) {
   const offense = offenseMechanics(snapshot);
   const seed = options.selectionSeed || '';
   const preliminaryMechanics = new Set([...offense, ...[...offense].flatMap((mechanic) => arr(OFFENSE_NEIGHBORS[mechanic]))]);
-  const legalEntities = arr(catalog?.entities).filter((entity) => isLegalEntity(entity, snapshot, preliminaryMechanics));
+  const legalEntities = buildApplicableEntities(catalog, snapshot, preliminaryMechanics, options);
   const neighborhood = buildSemanticNeighborhood(legalEntities, offense);
   neighborhood.weapon = rolledWeapon(snapshot);
   // Re-run contradiction checks now that controlled conversion sources are known.

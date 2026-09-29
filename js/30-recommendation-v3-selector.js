@@ -3824,6 +3824,8 @@ export {
   mergeRecommendationSkillCraftingV3,
   optimizerRoleV3,
   optionalSupportPairIsCompatibleV3,
+  supportPackageRequirementsAreMet,
+  supportTargetsSkill,
   selectRecommendationPackageV3,
   validateRecommendationGrantedSkillAccessV3,
   validateRecommendationSkillCraftingV3,

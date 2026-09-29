@@ -26,6 +26,25 @@ weapon/equipment, granted-source, passive-tree, ascendancy, and contradiction ch
 are hard gates. Relevance is evaluated only after those gates. Exact or strong typed
 facts create graph edges; retrieval tags never establish relevance.
 
+Applicability and relevance are separate passes. The applicability pass first asks
+whether an entity can belong to the rolled Fate:
+
+* Active skills must appear in the existing v3 cell analyzer's direct pool. This
+  reuses granted access, current-content, crafting-pool, equipment delivery, and
+  martial/caster boundaries. A conversion neighborhood cannot promote another skill.
+* Support gems must target at least one primary-eligible v3 skill in the rolled weapon
+  ecosystem and satisfy their typed prerequisites on that carrier.
+* Unique weapons must resolve to the exact canonical rolled weapon family. Other
+  uniques retain shared content, access, equipment, and contradiction checks.
+* Ascendancy passives require exact ownership. Ordinary passives and keystones retain
+  class overrides, tree-start locality, and passive weapon requirements.
+* Granted skills use the shared v3 compatibility evaluator, so an ascendancy source
+  must match and a unique-granted skill is not independently available unless its
+  provider is actually present in the snapshot.
+
+Only this applicable entity set becomes graph input. Connections also use that set,
+so a valid semantic edge cannot legalize an invalid endpoint.
+
 * **Direct Fits** have explicit rolled-weapon evidence plus direct Offense identity or
   production. They can be skills, matching unique weapons, or granted-skill providers.
 * **Ways to Enable** apply or provide the Offense, or explicitly convert another
@@ -69,20 +88,20 @@ do not both need to clear individual display thresholds.
 
 With the current release catalog and a fixed reporting seed:
 
-* **Chronomancer + Mace + Cold** now produces three item Direct Fits (Twisted Empyrean,
-  Seeing Stars, and Frostbreath), six Ways to Enable, five Payoffs, seven Useful Tools
-  including Rime and Cold Penetration, and five connections. It does not manufacture a
-  Direct Fit skill.
+* **Chronomancer + Mace + Cold** produces three item Direct Fits (Twisted Empyrean,
+  Seeing Stars, and Frostbreath), six Ways to Enable, seven Useful Tools, and four
+  connections. It surfaces no active skills: Firestorm and Skeletal Brute are excluded
+  by the v3 skill applicability boundary.
 * **Deadeye + Bow + Poison** produces four Direct Fits (Vine Arrow, Poisonburst Arrow,
-  Gas Arrow, and Toxic Growth), multiple explicit Poison enablers, six qualified
-  Unique Tools, a payoff, and causal connections.
-* **Invoker + Quarterstaff + Freeze** produces Wave of Frost as a Direct Fit, several
-  Freeze enablers, four Unique Tools, the owned `I am the Blizzard...` hook, payoffs,
-  and causal connections.
-* **Warbringer + Mace + Electrocute** has no forced Direct Fit but surfaces six
-  enablers, five payoffs, seven tools, and five explicit connections.
+  Gas Arrow, and Toxic Growth), six enablers, three payoffs, seven tools, and five
+  causal connections.
+* **Invoker + Quarterstaff + Freeze** produces Wave of Frost as a Direct Fit, Ice
+  Strike and Shattering Palm as applicable active enablers, the owned
+  `I am the Blizzard...` hook, tools, and causal connections.
+* **Warbringer + Mace + Electrocute** surfaces no active skills, but retains six
+  enablers, seven tools, and two explicit connections.
 * **Chronomancer + Mace + Totems** surfaces Ancestral Warrior Totem and Shockwave Totem
-  as enablers, Spell Totem as a payoff, and setup/payoff connections.
+  as the two applicable active-skill enablers, plus seven useful tools.
 
 Remaining limitations are data-visible rather than papered over: some facts use broad
 damage types where a specific Chill/Freeze fact would improve precision; Minion facts
