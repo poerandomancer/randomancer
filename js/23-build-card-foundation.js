@@ -122,9 +122,22 @@ function formatRequirements(requirements) {
   return parts.length ? `Requires: ${parts.join(', ')}` : '';
 }
 
+function getBuildCardUniqueNames(snapshot) {
+  const snap = snapshot && typeof snapshot === 'object' ? snapshot : {};
+  return [
+    ...arrify(snap.recommendedUniques).slice(0, 1),
+    ...arrify(snap.recommendedJewelryUniques).slice(0, 2)
+  ]
+    .map((entry) => typeof entry === 'string' ? entry : entry?.name)
+    .map((name) => String(name || '').trim())
+    .filter(Boolean)
+    .slice(0, 3);
+}
+
 function getUniqueTooltipPayload(name) {
   const items = getUniqueSourceCollection();
   const found = items.find((entry) => entry?.name === name || entry?.base_item?.display_name === name || entry?.source?.label === name);
+  if (!found) return null;
   const base = found?.base || found?.base_item?.display_name || '';
   const slot = found?.slot || found?.base_item?.slot || '';
   const implicit = found?.implicit_mods || found?.implicit || [];
@@ -183,15 +196,13 @@ function deriveBuildCardModel(snapshot) {
   );
   const skills = skillItems(snap.recommendedSkills);
 
-  const uniques = [...(snap.recommendedUniques || []).slice(0, 1), ...(snap.recommendedJewelryUniques || []).slice(0, 2)]
-    .map((entry) => typeof entry === 'string' ? entry : entry?.name)
-    .filter(Boolean)
-    .slice(0, 3)
-    .map((name) => {
-      const tipPayload = getUniqueTooltipPayload(name);
-      const tipLines = [tipPayload.meta, tipPayload.requirements, ...tipPayload.flavour, ...tipPayload.modifiers].filter(Boolean);
-      return item(name, { slotKey: 'UNIQUE', tipLines, tipPayload });
-    });
+  const uniques = getBuildCardUniqueNames(snap).map((name) => {
+    const tipPayload = getUniqueTooltipPayload(name);
+    const tipLines = tipPayload
+      ? [tipPayload.meta, tipPayload.requirements, ...tipPayload.flavour, ...tipPayload.modifiers].filter(Boolean)
+      : [];
+    return item(name, { slotKey: 'UNIQUE', tipLines, tipPayload });
+  });
 
   const passives = snap.passives && typeof snap.passives === 'object' ? snap.passives : {};
   const ascendancyIdeas = (passives.ascendancyNodes || []).slice(0, 1).map((entry) => item(entry?.name, {
@@ -493,6 +504,7 @@ if (typeof window !== 'undefined') {
     mount: mountBuildCard,
     mountSnapshot: mountBuildCardSnapshot,
     ensureUniqueData: ensureBuildCardUniqueData,
+    getUniqueNames: getBuildCardUniqueNames,
     summaryText: getBuildCardSummaryText
   });
   document.addEventListener('pointerdown', (event) => {
@@ -511,6 +523,7 @@ export {
   mountBuildCard,
   mountBuildCardSnapshot,
   ensureBuildCardUniqueData,
+  getBuildCardUniqueNames,
   bindInteractions as bindBuildCardInteractions,
   hideBuildCardTooltip,
   getBuildCardSummaryText

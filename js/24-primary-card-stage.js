@@ -1,6 +1,7 @@
 import {
   BUILD_CARD_FACES,
   ensureBuildCardUniqueData,
+  getBuildCardUniqueNames,
   hideBuildCardTooltip,
   mountBuildCardSnapshot
 } from './23-build-card-foundation.js';
@@ -234,12 +235,7 @@ function clearDealClass(mount) {
 }
 
 function getUniqueDataKey(snapshot) {
-  const names = Array.isArray(snapshot?.recommendedUniques)
-    ? snapshot.recommendedUniques
-        .map((entry) => typeof entry === 'string' ? entry : entry?.name)
-        .filter(Boolean)
-        .slice(0, 3)
-    : [];
+  const names = getBuildCardUniqueNames(snapshot);
   if (!names.length) return '';
   return [snapshot?.buildName || '', snapshot?.ascendancy || '', ...names].join('|');
 }
@@ -250,11 +246,17 @@ function hydrateUniqueTooltips(snapshot) {
   uniqueHydrationKey = key;
 
   ensureBuildCardUniqueData().then((items) => {
-    if (!items?.length || !isBuildMode() || pendingRoll) return;
+    if (!items?.length) {
+      if (uniqueHydrationKey === key) uniqueHydrationKey = '';
+      return;
+    }
+    if (!isBuildMode() || pendingRoll) return;
     const current = getCurrentSnapshot();
     if (getUniqueDataKey(current) !== key) return;
     renderCurrentBuild({ animate: false });
-  }).catch(() => {});
+  }).catch(() => {
+    if (uniqueHydrationKey === key) uniqueHydrationKey = '';
+  });
 }
 
 function renderCurrentBuild({ animate = false, forceFront = false, snapshot = null, suppressDeal = false } = {}) {
