@@ -66,6 +66,19 @@ test('primary Build Ideas tooltips use enriched skill and unique fields', () => 
   assert.match(polish, /tipPayload[\s\S]*?synergy/);
 });
 
+test('primary Build Ideas hydrate every visible unique and retry failed loads', () => {
+  assert.match(foundation, /function getBuildCardUniqueNames\(snapshot\)/);
+  assert.match(foundation, /arrify\(snap\.recommendedUniques\)\.slice\(0, 1\)/);
+  assert.match(foundation, /arrify\(snap\.recommendedJewelryUniques\)\.slice\(0, 2\)/);
+  assert.match(foundation, /const uniques = getBuildCardUniqueNames\(snap\)/);
+  assert.match(foundation, /if \(!found\) return null/);
+  assert.match(foundation, /const tipLines = tipPayload[\s\S]*?\? \[tipPayload\.meta/);
+  assert.match(stage, /getBuildCardUniqueNames,[\s\S]*?from '.\/23-build-card-foundation\.js'/);
+  assert.match(stage, /const names = getBuildCardUniqueNames\(snapshot\)/);
+  assert.match(stage, /if \(!items\?\.length\)[\s\S]*?uniqueHydrationKey === key[\s\S]*?uniqueHydrationKey = ''/);
+  assert.match(stage, /\.catch\(\(\) => \{[\s\S]*?uniqueHydrationKey === key[\s\S]*?uniqueHydrationKey = ''/);
+});
+
 test('Build Ideas tooltip ownership is cleared across card renders', () => {
   assert.match(summaryView, /function setOverlayContent[\s\S]*?hideCardTooltip\(\);[\s\S]*?body\.innerHTML =/);
   assert.match(summaryView, /if \(!target\?\.isConnected\) return/);
