@@ -21,8 +21,8 @@ const ONE_HANDED_WEAPONS = new Set(['sceptre', 'wand', 'spear', 'mace']);
 const OFF_HAND_WEAPONS = new Set(['shield', 'buckler', 'focus']);
 const UNIQUE_TIER = new Map([['PAYOFF_CONTEXT', 1], ['AFFINITY_AMPLIFICATION', 2],
   ['STRONG_SPECIALIZATION', 3], ['BUILD_DEFINING_CAPABILITY', 4]]);
-const GOOD_RELATIONS = new Set(['fulfills', 'inflicts', 'creates', 'provides', 'generates', 'converts', 'modifies', 'has_property']);
-const IMPACT = new Map([['fulfills', 8], ['inflicts', 8], ['creates', 8], ['provides', 7], ['generates', 7], ['converts', 7], ['has_property', 5], ['modifies', 4]]);
+const GOOD_RELATIONS = new Set(['fulfills', 'inflicts', 'creates', 'provides', 'generates', 'converts', 'modifies', 'has_property', 'requires', 'consumes']);
+const IMPACT = new Map([['fulfills', 8], ['inflicts', 8], ['creates', 8], ['provides', 7], ['generates', 7], ['converts', 7], ['requires', 6], ['consumes', 6], ['has_property', 5], ['modifies', 4]]);
 const PASSIVE_OFFENSE_ROLES = new Set(['primary_damage', 'setup_control', 'payoff', 'enabler']);
 
 const arr = (value) => Array.isArray(value) ? value : [];
@@ -53,7 +53,10 @@ function contextMechanics(catalog, snapshot, recommendationPackage) {
     // New packages expose their intentional plan. Entity-wide semantics remain
     // only as a compatibility boundary for old snapshots.
     package: new Set(profileMechanics || entities.flatMap(entityMechanics).filter((value) => value && !GENERIC.has(value))),
-    recommendationPackage
+    recommendationPackage,
+    provenOffense: new Set(arr(recommendationPackage?.diagnostics?.offenseCoverage)
+      .filter((entry) => ['active_direct', 'support_assigned'].includes(token(entry?.state)))
+      .map((entry) => token(entry?.mechanic || String(entry?.obligationId || '').replace(/^offense:/, ''))))
   };
 }
 
@@ -144,11 +147,15 @@ function analyze(entity, snapshot, context) {
   const recommendationPackage = context.recommendationPackage;
   const sources = packageSourceMechanics(recommendationPackage);
   for (const fact of arr(entity.facts)) {
-    if (entity.content_type === 'passive' && !PASSIVE_OFFENSE_ROLES.has(token(fact?.offense_role))) continue;
+    const relation = token(fact?.relation);
+    const payoffRelation = ['requires', 'consumes'].includes(relation);
+    if (entity.content_type === 'passive' && !PASSIVE_OFFENSE_ROLES.has(token(fact?.offense_role))
+      && !(payoffRelation && context.provenOffense.has(token(fact?.mechanic)))) continue;
     if ((entity.content_type === 'passive' || entity.content_type === 'ascendancy_passive')
       && !factAppliesToPackage(fact, recommendationPackage, sources)) continue;
     const mechanic = token(fact?.relation === 'converts' ? fact.to : fact?.mechanic);
     if (!mechanic || GENERIC.has(mechanic) || !GOOD_RELATIONS.has(fact?.relation)) continue;
+    if (payoffRelation && !context.provenOffense.has(mechanic)) continue;
     if (context.offense.has('chaos') && mechanic === 'chaos'
       && !isIndependentChaosEvidenceV3(entity, fact)) continue;
     const kind = context.offense.has(mechanic) ? 'offense' : context.package.has(mechanic) ? 'skill_support' : '';
@@ -192,6 +199,13 @@ function packageSourceMechanics(recommendationPackage) {
   ].map(token)));
 }
 
+function packageProvesMechanic(recommendationPackage, mechanic) {
+  const target = token(mechanic);
+  return arr(recommendationPackage?.diagnostics?.offenseCoverage).some((entry) =>
+    ['active_direct', 'support_assigned'].includes(token(entry?.state))
+    && token(entry?.mechanic || String(entry?.obligationId || '').replace(/^offense:/, '')) === target);
+}
+
 const DELIVERY_GROUPS = {
   attack: new Set(['attack', 'attack_hit', 'melee', 'ranged']),
   spell: new Set(['spell', 'spell_hit']), minion: new Set(['minion']),
@@ -230,6 +244,8 @@ function factAppliesToPackage(fact, recommendationPackage, sources = packageSour
   }
   const source = token(fact?.from ?? fact?.f ?? fact?.sourceMechanic);
   if (source && !sourceMechanicMatches(source, sources)) return false;
+  const requiredMechanics = arr(fact?.requires_any_mechanics ?? fact?.y).map(token).filter(Boolean);
+  if (requiredMechanics.length && !requiredMechanics.some((mechanic) => sourceMechanicMatches(mechanic, sources))) return false;
   return true;
 }
 
@@ -244,6 +260,7 @@ function analyzeUnique(entity, offense, recommendationPackage = null) {
   if (compactWeaponFamilies.length
     && !compactWeaponFamilies.includes(token(recommendationPackage?.packageProfile?.weapon))) return null;
   const matches = compactFacts.filter((fact) => isIndependentChaosEvidenceV3(entity, fact)
+    && (!['requires', 'consumes'].includes(token(fact?.r)) || packageProvesMechanic(recommendationPackage, fact?.m))
     && factAppliesToPackage(fact, recommendationPackage, sourceMechanics)
     && (token(fact.r) !== 'converts' || token(fact.s) === 'outgoing'))
     .map((fact) => ({ kind: 'offense', mechanic: fact.m || fact.t || offenseId,
@@ -256,6 +273,7 @@ function analyzeUnique(entity, offense, recommendationPackage = null) {
   if (!compact) for (const fact of arr(entity.facts)) {
     const relation = token(fact?.relation); const mechanic = token(relation === 'converts' ? fact?.to : fact?.mechanic);
     if (!mechanic || !offense.has(mechanic) || !GOOD_RELATIONS.has(relation)
+      || (['requires', 'consumes'].includes(relation) && !packageProvesMechanic(recommendationPackage, mechanic))
       || !isIndependentChaosEvidenceV3(entity, fact) || !factAppliesToPackage(fact, recommendationPackage, sourceMechanics)
       || (relation === 'converts' && (!sourceMechanicMatches(fact?.from, sourceMechanics)
         || token(fact?.scope) !== 'outgoing'))) continue;

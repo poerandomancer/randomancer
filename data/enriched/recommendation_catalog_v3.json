@@ -11,29 +11,29 @@
       "support_gem": 633,
       "unique": 444
     },
-    "fact_count": 5458,
+    "fact_count": 5664,
     "fact_relation_counts": {
-      "consumes": 395,
+      "consumes": 394,
       "converts": 128,
-      "creates": 72,
+      "creates": 81,
       "exclusive_to": 215,
       "generates": 60,
       "has_property": 672,
-      "inflicts": 186,
-      "modifies": 2378,
+      "inflicts": 283,
+      "modifies": 2460,
       "occupies": 444,
       "prevents": 378,
       "provides": 437,
       "replaces": 27,
-      "requires": 66
+      "requires": 85
     },
     "candidate_role_counts": {
       "defense": 423,
-      "enabler": 1259,
+      "enabler": 1279,
       "payoff": 182,
       "primary_damage": 346,
       "recovery": 250,
-      "setup_control": 203,
+      "setup_control": 280,
       "utility": 206
     },
     "source_versions": {
@@ -109,6 +109,16 @@
         "id": "critical_hits",
         "name": "Critical Hits",
         "category": "Scaling"
+      },
+      {
+        "id": "heavy_stun",
+        "name": "Heavy Stun",
+        "category": "Mechanic"
+      },
+      {
+        "id": "armour_break",
+        "name": "Armour Break",
+        "category": "Mechanic"
       },
       {
         "id": "minions",
@@ -2087,8 +2097,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "armour_break",
-          "scope": "incoming",
-          "target": "self",
+          "scope": "outgoing",
           "evidence": [
             {
               "value": "runtime",
@@ -2169,8 +2178,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "armour_break",
-          "scope": "incoming",
-          "target": "self",
+          "scope": "outgoing",
           "evidence": [
             {
               "value": "runtime",
@@ -2226,7 +2234,8 @@
         }
       },
       "candidate_roles": [
-        "primary_damage"
+        "primary_damage",
+        "setup_control"
       ],
       "retrieval_terms": [
         "strength",
@@ -2262,6 +2271,36 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "maim",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "totem",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "pin",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "totem",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
             }
           ]
         },
@@ -2888,6 +2927,24 @@
           ]
         },
         {
+          "relation": "creates",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "ignite",
+          "scope": "outgoing",
+          "target": "enemy",
+          "requires_any_mechanics": [
+            "fire",
+            "elemental_infusion"
+          ],
+          "evidence": [
+            {
+              "value": "runtime projectile",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
           "relation": "has_property",
           "subject": "skill",
           "confidence": "exact",
@@ -3440,8 +3497,8 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "chill",
-          "scope": "incoming",
-          "target": "self",
+          "scope": "outgoing",
+          "target": "enemy",
           "delivery": "skill",
           "evidence": [
             {
@@ -4132,6 +4189,18 @@
               "kind": "stat_id"
             }
           ]
+        },
+        {
+          "relation": "requires",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
+            }
+          ]
         }
       ],
       "source_evidence": {
@@ -4411,7 +4480,8 @@
         }
       },
       "candidate_roles": [
-        "primary_damage"
+        "primary_damage",
+        "setup_control"
       ],
       "retrieval_terms": [
         "strength",
@@ -4426,7 +4496,21 @@
         "primedstun",
         "primed_for_stun"
       ],
-      "facts": [],
+      "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
+            }
+          ]
+        }
+      ],
       "source_evidence": {
         "active_skill_types": [
           "Area",
@@ -4836,6 +4920,7 @@
       },
       "candidate_roles": [
         "primary_damage",
+        "setup_control",
         "utility"
       ],
       "retrieval_terms": [
@@ -4911,6 +4996,21 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "maim",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "companion",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
             }
           ]
         },
@@ -5831,6 +5931,18 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
             }
           ]
         },
@@ -9428,6 +9540,40 @@
           ]
         },
         {
+          "relation": "creates",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "ignite",
+          "scope": "outgoing",
+          "target": "enemy",
+          "requires_any_mechanics": [
+            "corpse"
+          ],
+          "evidence": [
+            {
+              "value": "runtime cloud",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
+          "relation": "creates",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "poison",
+          "scope": "outgoing",
+          "target": "enemy",
+          "requires_any_mechanics": [
+            "corpse"
+          ],
+          "evidence": [
+            {
+              "value": "runtime cloud",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
           "relation": "has_property",
           "subject": "skill",
           "confidence": "exact",
@@ -9540,6 +9686,40 @@
           "confidence": "strong",
           "mechanic": "corpse",
           "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime cloud",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
+          "relation": "creates",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "ignite",
+          "scope": "outgoing",
+          "target": "enemy",
+          "requires_any_mechanics": [
+            "corpse"
+          ],
+          "evidence": [
+            {
+              "value": "runtime cloud",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
+          "relation": "creates",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "poison",
+          "scope": "outgoing",
+          "target": "enemy",
+          "requires_any_mechanics": [
+            "corpse"
+          ],
           "evidence": [
             {
               "value": "runtime cloud",
@@ -14803,8 +14983,7 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "armour_break",
-          "scope": "incoming",
-          "target": "self",
+          "scope": "outgoing",
           "evidence": [
             {
               "value": "runtime",
@@ -15989,7 +16168,8 @@
         }
       },
       "candidate_roles": [
-        "primary_damage"
+        "primary_damage",
+        "setup_control"
       ],
       "retrieval_terms": [
         "strength",
@@ -16011,7 +16191,37 @@
         "stun",
         "stunning"
       ],
-      "facts": [],
+      "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "exact",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
+            }
+          ]
+        }
+      ],
       "source_evidence": {
         "active_skill_types": [
           "Area",
@@ -19642,8 +19852,8 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "chill",
-          "scope": "incoming",
-          "target": "self",
+          "scope": "outgoing",
+          "target": "enemy",
           "delivery": "skill",
           "evidence": [
             {
@@ -20130,7 +20340,33 @@
         "heavy_stunning",
         "slamming"
       ],
-      "facts": [],
+      "facts": [
+        {
+          "relation": "modifies",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "runtime ground",
+              "kind": "skill_description"
+            }
+          ]
+        }
+      ],
       "source_evidence": {
         "active_skill_types": [
           "Area",
@@ -21305,6 +21541,7 @@
         }
       },
       "candidate_roles": [
+        "setup_control",
         "utility"
       ],
       "retrieval_terms": [
@@ -21330,6 +21567,21 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "hinder",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
             }
           ]
         },
@@ -22535,6 +22787,7 @@
       },
       "candidate_roles": [
         "primary_damage",
+        "setup_control",
         "utility"
       ],
       "retrieval_terms": [
@@ -22561,6 +22814,19 @@
         "shockwave"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "against",
+              "kind": "skill_description"
+            }
+          ]
+        },
         {
           "relation": "prevents",
           "subject": "skill",
@@ -24305,6 +24571,24 @@
           ]
         },
         {
+          "relation": "creates",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "ignite",
+          "scope": "outgoing",
+          "target": "enemy",
+          "requires_any_mechanics": [
+            "fire",
+            "elemental_infusion"
+          ],
+          "evidence": [
+            {
+              "value": "runtime ground",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
           "relation": "has_property",
           "subject": "skill",
           "confidence": "exact",
@@ -25208,6 +25492,32 @@
           "relation": "modifies",
           "subject": "skill",
           "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "target": "self",
+          "scope": "incoming",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "skill",
+          "confidence": "strong",
           "mechanic": "physical",
           "target": "self",
           "scope": "incoming",
@@ -25307,6 +25617,20 @@
           "confidence": "exact",
           "mechanic": "stun",
           "consumption": "optional_payoff",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming",
           "evidence": [
             {
               "value": "runtime",
@@ -27140,6 +27464,7 @@
         }
       },
       "candidate_roles": [
+        "setup_control",
         "recovery"
       ],
       "retrieval_terms": [
@@ -27155,6 +27480,21 @@
         "hindering"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "hinder",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
+            }
+          ]
+        },
         {
           "relation": "modifies",
           "subject": "skill",
@@ -29488,6 +29828,7 @@
       },
       "candidate_roles": [
         "primary_damage",
+        "setup_control",
         "defense"
       ],
       "retrieval_terms": [
@@ -29524,6 +29865,20 @@
           ]
         },
         {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "scope": "incoming",
+          "target": "self",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
           "relation": "modifies",
           "subject": "skill",
           "confidence": "strong",
@@ -29548,6 +29903,18 @@
             {
               "value": "runtime",
               "kind": "skill_description"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
             }
           ]
         },
@@ -31543,6 +31910,7 @@
       },
       "candidate_roles": [
         "primary_damage",
+        "setup_control",
         "utility"
       ],
       "retrieval_terms": [
@@ -31575,6 +31943,31 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
             }
           ]
         }
@@ -32070,6 +32463,18 @@
           "relation": "modifies",
           "subject": "skill",
           "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "skill",
+          "confidence": "strong",
           "mechanic": "physical",
           "target": "self",
           "scope": "incoming",
@@ -32541,8 +32946,23 @@
           "subject": "skill",
           "confidence": "exact",
           "mechanic": "bleed",
-          "scope": "incoming",
-          "target": "self",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "runtime explod",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "maim",
+          "scope": "outgoing",
+          "target": "enemy",
           "delivery": "skill",
           "evidence": [
             {
@@ -33019,7 +33439,7 @@
           "relation": "prevents",
           "subject": "skill",
           "confidence": "exact",
-          "mechanic": "stun",
+          "mechanic": "heavy_stun",
           "condition": "this_buff_is_active_you_cannot_be_light_stun_light_stunned_but_block_blocking_too_much_damage_may_heavy_stun_heavy_stun_you",
           "scope": "incoming",
           "evidence": [
@@ -33567,6 +33987,18 @@
           ]
         },
         {
+          "relation": "modifies",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
+            }
+          ]
+        },
+        {
           "relation": "provides",
           "subject": "skill",
           "confidence": "exact",
@@ -33628,6 +34060,7 @@
       },
       "candidate_roles": [
         "primary_damage",
+        "setup_control",
         "utility"
       ],
       "retrieval_terms": [
@@ -33694,6 +34127,20 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "scope": "outgoing",
+          "delivery": "companion",
+          "evidence": [
+            {
+              "value": "against",
+              "kind": "skill_description"
             }
           ]
         },
@@ -34274,6 +34721,18 @@
             {
               "value": "against",
               "kind": "active_skill_short_description"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
             }
           ]
         },
@@ -38270,12 +38729,25 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "armour_break",
-          "scope": "incoming",
-          "target": "self",
+          "scope": "outgoing",
           "evidence": [
             {
               "value": "runtime",
               "kind": "skill_description"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
             }
           ]
         },
@@ -38298,6 +38770,18 @@
           "mechanic": "fire",
           "target": "self",
           "scope": "incoming",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
           "evidence": [
             {
               "value": "runtime",
@@ -39399,7 +39883,8 @@
         }
       },
       "candidate_roles": [
-        "primary_damage"
+        "primary_damage",
+        "setup_control"
       ],
       "retrieval_terms": [
         "intelligence",
@@ -39446,6 +39931,21 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "hinder",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "runtime projectile",
+              "kind": "skill_description"
             }
           ]
         }
@@ -40086,7 +40586,8 @@
         }
       },
       "candidate_roles": [
-        "primary_damage"
+        "primary_damage",
+        "setup_control"
       ],
       "retrieval_terms": [
         "dexterity",
@@ -40102,6 +40603,20 @@
         "maiming"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "exact",
+          "mechanic": "maim",
+          "scope": "outgoing",
+          "target": "enemy",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
+            }
+          ]
+        },
         {
           "relation": "prevents",
           "subject": "skill",
@@ -40984,6 +41499,7 @@
       },
       "candidate_roles": [
         "primary_damage",
+        "setup_control",
         "utility"
       ],
       "retrieval_terms": [
@@ -41020,6 +41536,19 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "active_skill_short_description"
             }
           ]
         }
@@ -44415,7 +44944,8 @@
         }
       },
       "candidate_roles": [
-        "primary_damage"
+        "primary_damage",
+        "setup_control"
       ],
       "retrieval_terms": [
         "dexterity",
@@ -44441,6 +44971,20 @@
         "elemental_ground_surfaces"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "exact",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
+            }
+          ]
+        },
         {
           "relation": "modifies",
           "subject": "skill",
@@ -44965,6 +45509,7 @@
       },
       "candidate_roles": [
         "primary_damage",
+        "setup_control",
         "utility"
       ],
       "retrieval_terms": [
@@ -44997,6 +45542,21 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "daze",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "against ground",
+              "kind": "skill_description"
             }
           ]
         },
@@ -45720,6 +46280,23 @@
           ]
         },
         {
+          "relation": "creates",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "ignite",
+          "scope": "outgoing",
+          "target": "enemy",
+          "requires_any_mechanics": [
+            "corpse"
+          ],
+          "evidence": [
+            {
+              "value": "runtime explod",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
           "relation": "has_property",
           "subject": "skill",
           "confidence": "exact",
@@ -45736,8 +46313,8 @@
           "subject": "skill",
           "confidence": "strong",
           "mechanic": "ignite",
-          "scope": "incoming",
-          "target": "self",
+          "scope": "outgoing",
+          "target": "enemy",
           "delivery": "skill",
           "evidence": [
             {
@@ -47048,7 +47625,8 @@
         }
       },
       "candidate_roles": [
-        "primary_damage"
+        "primary_damage",
+        "setup_control"
       ],
       "retrieval_terms": [
         "dexterity",
@@ -47070,6 +47648,21 @@
         "knockback"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
+            }
+          ]
+        },
         {
           "relation": "modifies",
           "subject": "skill",
@@ -47237,6 +47830,7 @@
       },
       "candidate_roles": [
         "primary_damage",
+        "setup_control",
         "utility"
       ],
       "retrieval_terms": [
@@ -47310,6 +47904,21 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "maim",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "companion",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
             }
           ]
         },
@@ -47413,7 +48022,8 @@
         }
       },
       "candidate_roles": [
-        "primary_damage"
+        "primary_damage",
+        "setup_control"
       ],
       "retrieval_terms": [
         "dexterity",
@@ -47429,6 +48039,21 @@
         "knocked_back"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "daze",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "skill_description"
+            }
+          ]
+        },
         {
           "relation": "modifies",
           "subject": "skill",
@@ -50595,14 +51220,41 @@
           "relation": "inflicts",
           "subject": "skill",
           "confidence": "strong",
+          "mechanic": "armour_break",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "runtime ground",
+              "kind": "skill_description"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
           "mechanic": "ignite",
-          "scope": "incoming",
-          "target": "self",
+          "scope": "outgoing",
+          "target": "enemy",
           "delivery": "skill",
           "evidence": [
             {
               "value": "runtime ground",
               "kind": "skill_description"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "stat_id"
             }
           ]
         },
@@ -50869,6 +51521,7 @@
       },
       "candidate_roles": [
         "primary_damage",
+        "setup_control",
         "utility"
       ],
       "retrieval_terms": [
@@ -50905,6 +51558,21 @@
             {
               "value": "runtime",
               "kind": "active_skill_type"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "skill",
+          "confidence": "strong",
+          "mechanic": "hinder",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "minion",
+          "evidence": [
+            {
+              "value": "against",
+              "kind": "skill_description"
             }
           ]
         },
@@ -52130,6 +52798,22 @@
           "subject": "passive",
           "confidence": "exact",
           "mechanic": "warbringer"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "scope": "outgoing",
+          "offense_role": "setup_control"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -53195,6 +53879,12 @@
           "subject": "passive",
           "confidence": "exact",
           "mechanic": "titan"
+        },
+        {
+          "relation": "requires",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "heavy_stun"
         }
       ]
     },
@@ -54664,8 +55354,8 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "armour_break",
-          "scope": "incoming",
-          "target": "self"
+          "scope": "outgoing",
+          "offense_role": "setup_control"
         },
         {
           "relation": "modifies",
@@ -60872,6 +61562,14 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
           "mechanic": "energy_shield",
           "condition": "not_on_low_energy_shield",
           "target": "self",
@@ -60898,7 +61596,15 @@
         "str",
         "str_int"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "condition": "shapeshifted_are_intimidated_for_x_seconds"
+        }
+      ]
     },
     {
       "id": "passive:DeliriumAnoint_BastionOfLight",
@@ -60918,7 +61624,18 @@
           "fail_closed": false
         }
       },
-      "facts": []
+      "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "offense_role": "setup_control"
+        }
+      ]
     },
     {
       "id": "passive:druid_class_start20",
@@ -61403,7 +62120,27 @@
         "str",
         "str_dex"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "offense_role": "setup_control"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "offense_role": "setup_control"
+        }
+      ]
     },
     {
       "id": "passive:attack16",
@@ -61419,6 +62156,15 @@
         "int"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "offense_role": "setup_control"
+        },
         {
           "relation": "requires",
           "subject": "passive",
@@ -61891,15 +62637,6 @@
           "offense_role": "setup_control"
         },
         {
-          "relation": "inflicts",
-          "subject": "passive",
-          "confidence": "strong",
-          "mechanic": "poison",
-          "scope": "incoming",
-          "target": "self",
-          "delivery": "companion"
-        },
-        {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
@@ -62175,6 +62912,14 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "armour",
+          "target": "self",
+          "scope": "incoming"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "armour_break",
           "target": "self",
           "scope": "incoming"
         },
@@ -63195,6 +63940,15 @@
         "access": {}
       },
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "offense_role": "setup_control"
+        },
         {
           "relation": "prevents",
           "subject": "passive",
@@ -64409,7 +65163,14 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "heavy_stun"
+        }
+      ]
     },
     {
       "id": "passive:criticals3",
@@ -64585,6 +65346,15 @@
       },
       "facts": [
         {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "maim",
+          "scope": "outgoing",
+          "target": "enemy",
+          "offense_role": "setup_control"
+        },
+        {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
@@ -64701,6 +65471,14 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
           "mechanic": "physical",
           "offense_role": "enabler"
         }
@@ -64719,7 +65497,16 @@
         "str",
         "str_dex"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
+        }
+      ]
     },
     {
       "id": "passive:slow_attacks10",
@@ -64884,6 +65671,26 @@
       ],
       "facts": [
         {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "scope": "outgoing",
+          "delivery": "spell",
+          "requires_any_mechanics": [
+            "critical_hits"
+          ],
+          "offense_role": "setup_control"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
+        },
+        {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
@@ -65031,6 +65838,25 @@
         "str_int"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "daze",
+          "scope": "outgoing",
+          "target": "enemy",
+          "offense_role": "setup_control"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "daze",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "offense_role": "setup_control"
+        },
         {
           "relation": "modifies",
           "subject": "passive",
@@ -65399,6 +66225,12 @@
           "mechanic": "block",
           "target": "self",
           "scope": "incoming"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "heavy_stun"
         }
       ]
     },
@@ -65962,7 +66794,27 @@
         "dex_int",
         "str_dex"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "offense_role": "setup_control"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "offense_role": "setup_control"
+        }
+      ]
     },
     {
       "id": "passive:criticals80",
@@ -66025,6 +66877,25 @@
       ],
       "facts": [
         {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "offense_role": "setup_control"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "offense_role": "setup_control"
+        },
+        {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
@@ -66057,6 +66928,16 @@
         "access": {}
       },
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "daze",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "offense_role": "setup_control"
+        },
         {
           "relation": "modifies",
           "subject": "passive",
@@ -66746,6 +67627,16 @@
         "int"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "daze",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "offense_role": "setup_control"
+        },
         {
           "relation": "modifies",
           "subject": "passive",
@@ -67730,6 +68621,17 @@
       },
       "facts": [
         {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "scope": "outgoing",
+          "requires_any_mechanics": [
+            "pin"
+          ],
+          "offense_role": "setup_control"
+        },
+        {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
@@ -68293,7 +69195,17 @@
         "str",
         "str_dex"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "condition": "enemies_affected_by_ailments",
+          "target": "self",
+          "scope": "incoming"
+        }
+      ]
     },
     {
       "id": "passive:cold_penetration23",
@@ -68621,6 +69533,16 @@
       ],
       "facts": [
         {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "pin",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "offense_role": "setup_control"
+        },
+        {
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
@@ -68633,6 +69555,12 @@
           "confidence": "strong",
           "mechanic": "freeze",
           "condition": "pinned_heavy_stunned_frozen_or_electrocuted"
+        },
+        {
+          "relation": "requires",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "heavy_stun"
         }
       ]
     },
@@ -69389,6 +70317,12 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
+          "mechanic": "heavy_stun"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
           "mechanic": "life_recovery"
         },
         {
@@ -69908,6 +70842,16 @@
         "int"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "offense_role": "setup_control"
+        },
         {
           "relation": "modifies",
           "subject": "passive",
@@ -70681,7 +71625,14 @@
         "str_dex",
         "str_int"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "heavy_stun"
+        }
+      ]
     },
     {
       "id": "passive:endurance_charges8",
@@ -71057,6 +72008,16 @@
         "str_dex"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "daze",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "offense_role": "setup_control"
+        },
         {
           "relation": "modifies",
           "subject": "passive",
@@ -71618,7 +72579,27 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "hinder",
+          "scope": "outgoing",
+          "target": "enemy",
+          "offense_role": "setup_control"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "hinder",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "offense_role": "setup_control"
+        }
+      ]
     },
     {
       "id": "passive:hazards20",
@@ -72280,7 +73261,17 @@
         "str_dex",
         "str_int"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "maim",
+          "scope": "outgoing",
+          "target": "enemy",
+          "offense_role": "setup_control"
+        }
+      ]
     },
     {
       "id": "passive:curses5",
@@ -73160,7 +74151,16 @@
         "str_dex",
         "str_int"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
+        }
+      ]
     },
     {
       "id": "passive:all_attributes10",
@@ -73359,6 +74359,14 @@
           "subject": "passive",
           "confidence": "strong",
           "mechanic": "armour",
+          "target": "self",
+          "scope": "incoming"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "armour_break",
           "target": "self",
           "scope": "incoming"
         },
@@ -74062,7 +75070,37 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "maim",
+          "scope": "outgoing",
+          "target": "enemy",
+          "offense_role": "setup_control"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "maim",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "offense_role": "setup_control"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "maim",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "attack_hit",
+          "offense_role": "setup_control"
+        }
+      ]
     },
     {
       "id": "passive:accuracy19",
@@ -74422,7 +75460,17 @@
         "dex_int",
         "str_dex"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "maim",
+          "scope": "outgoing",
+          "target": "enemy",
+          "offense_role": "setup_control"
+        }
+      ]
     },
     {
       "id": "passive:mana18",
@@ -74640,6 +75688,14 @@
         "access": {}
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
+        },
         {
           "relation": "modifies",
           "subject": "passive",
@@ -74995,6 +76051,15 @@
         "access": {}
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming",
+          "delivery": "minion"
+        },
         {
           "relation": "modifies",
           "subject": "passive",
@@ -76529,7 +77594,16 @@
         "str_dex",
         "str_int"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
+        }
+      ]
     },
     {
       "id": "passive:pin10",
@@ -77361,6 +78435,33 @@
         "str_int"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "maim",
+          "scope": "outgoing",
+          "target": "enemy",
+          "offense_role": "setup_control"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "maim",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "offense_role": "setup_control"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
+        },
         {
           "relation": "prevents",
           "subject": "enemy",
@@ -78292,6 +79393,13 @@
           "mechanic": "block",
           "target": "self",
           "scope": "incoming"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "condition": "youve_successfully_parried_recently"
         }
       ]
     },
@@ -78441,7 +79549,17 @@
         "str",
         "str_int"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "condition": "wet",
+          "target": "self",
+          "scope": "incoming"
+        }
+      ]
     },
     {
       "id": "passive:crossbow14",
@@ -78531,7 +79649,16 @@
         "str_dex",
         "str_int"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
+        }
+      ]
     },
     {
       "id": "passive:deflect22",
@@ -78947,6 +80074,15 @@
         "str_dex"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "offense_role": "setup_control"
+        },
         {
           "relation": "requires",
           "subject": "passive",
@@ -79641,7 +80777,35 @@
         "str_dex",
         "str_int"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "scope": "outgoing",
+          "requires_any_mechanics": [
+            "heavy_stun"
+          ],
+          "offense_role": "setup_control"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "target": "self",
+          "scope": "incoming"
+        }
+      ]
     },
     {
       "id": "passive:daze_17",
@@ -79657,6 +80821,16 @@
         "int"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "daze",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "offense_role": "setup_control"
+        },
         {
           "relation": "modifies",
           "subject": "passive",
@@ -81058,6 +82232,15 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming",
+          "delivery": "minion"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
           "mechanic": "minion",
           "target": "self",
           "scope": "incoming",
@@ -81087,7 +82270,17 @@
         "dex_int",
         "str_dex"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "condition": "enemies_affected_by_ailments",
+          "target": "self",
+          "scope": "incoming"
+        }
+      ]
     },
     {
       "id": "passive:ranged35",
@@ -81947,7 +83140,18 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "daze",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "offense_role": "setup_control"
+        }
+      ]
     },
     {
       "id": "passive:duelist_minions11",
@@ -82018,6 +83222,15 @@
         "int"
       ],
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "condition": "enemies_affected_by_ailments",
+          "target": "self",
+          "scope": "incoming"
+        },
         {
           "relation": "modifies",
           "subject": "passive",
@@ -82518,6 +83731,14 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
           "mechanic": "physical",
           "offense_role": "enabler"
         }
@@ -82678,6 +83899,14 @@
         "access": {}
       },
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
+        },
         {
           "relation": "modifies",
           "subject": "passive",
@@ -83896,6 +85125,14 @@
           "relation": "modifies",
           "subject": "passive",
           "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
+        },
+        {
+          "relation": "modifies",
+          "subject": "passive",
+          "confidence": "strong",
           "mechanic": "physical",
           "target": "self",
           "scope": "incoming"
@@ -84095,7 +85332,14 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [
+        {
+          "relation": "requires",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "heavy_stun"
+        }
+      ]
     },
     {
       "id": "passive:oracle_crab_claw5",
@@ -84268,7 +85512,18 @@
       "compatibility": {
         "access": {}
       },
-      "facts": []
+      "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "offense_role": "setup_control"
+        }
+      ]
     },
     {
       "id": "passive:companions6",
@@ -85068,6 +86323,35 @@
       ],
       "facts": [
         {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "exact",
+          "mechanic": "hinder",
+          "scope": "outgoing",
+          "target": "enemy",
+          "offense_role": "setup_control"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "hinder",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "offense_role": "setup_control"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "passive",
+          "confidence": "strong",
+          "mechanic": "hinder",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "spell_hit",
+          "offense_role": "setup_control"
+        },
+        {
           "relation": "requires",
           "subject": "passive",
           "confidence": "strong",
@@ -85628,7 +86912,22 @@
         "hitdamage",
         "hit"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "skill:Metadata/Items/Gem/SupportGemAcrimony",
@@ -86993,13 +88292,20 @@
           "subject": "supported_skill",
           "confidence": "strong",
           "mechanic": "armour_break",
-          "scope": "incoming",
-          "target": "self",
+          "scope": "outgoing",
           "evidence": [
             {
-              "value": "reference only"
+              "value": "allowing it to inflict"
             }
           ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
@@ -87061,13 +88367,20 @@
           "subject": "supported_skill",
           "confidence": "strong",
           "mechanic": "armour_break",
-          "scope": "incoming",
-          "target": "self",
+          "scope": "outgoing",
           "evidence": [
             {
-              "value": "reference only"
+              "value": "allowing it to inflict"
             }
           ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
@@ -87129,13 +88442,20 @@
           "subject": "supported_skill",
           "confidence": "strong",
           "mechanic": "armour_break",
-          "scope": "incoming",
-          "target": "self",
+          "scope": "outgoing",
           "evidence": [
             {
-              "value": "reference only"
+              "value": "allowing it to inflict"
             }
           ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
@@ -87173,7 +88493,28 @@
         "mace",
         "armour_break"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
+        }
+      ]
     },
     {
       "id": "skill:Metadata/Items/Gems/SupportGemDemolisherTwo",
@@ -87201,7 +88542,28 @@
         "mace",
         "armour_break"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
+        }
+      ]
     },
     {
       "id": "skill:Metadata/Items/Gem/SupportGemArmourExplosion",
@@ -87256,6 +88618,12 @@
           "mechanic": "armour",
           "target": "self",
           "scope": "incoming"
+        },
+        {
+          "relation": "requires",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break"
         }
       ]
     },
@@ -87573,7 +88941,32 @@
         "crossbow",
         "heavy_stun"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun"
+        },
+        {
+          "relation": "requires",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun"
+        }
+      ]
     },
     {
       "id": "skill:Metadata/Items/Gem/SupportGemBarbs",
@@ -87765,10 +89158,34 @@
           "consumption": "optional_payoff"
         },
         {
+          "relation": "creates",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "scope": "outgoing",
+          "target": "enemy",
+          "requires_any_mechanics": [
+            "fully_broken_armour"
+          ],
+          "evidence": [
+            {
+              "value": "runtime"
+            }
+          ]
+        },
+        {
           "relation": "has_property",
           "subject": "supported_skill",
           "confidence": "exact",
           "mechanic": "physical"
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "prevents",
@@ -88163,7 +89580,7 @@
         {
           "relation": "consumes",
           "subject": "supported_skill",
-          "confidence": "exact",
+          "confidence": "strong",
           "mechanic": "chill",
           "consumption": "optional_payoff"
         },
@@ -88185,6 +89602,22 @@
           "subject": "supported_skill",
           "confidence": "exact",
           "mechanic": "cold"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "mechanic": "chill",
+          "scope": "outgoing",
+          "target": "enemy",
+          "requires_any_mechanics": [
+            "freeze"
+          ],
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
         },
         {
           "relation": "modifies",
@@ -88594,7 +90027,35 @@
         "hit",
         "blind"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "skill:Metadata/Items/Gems/SupportGemBlindTwo",
@@ -88628,7 +90089,35 @@
         "hit",
         "blind"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "skill:Metadata/Items/Gem/SupportGemBlindside",
@@ -88668,6 +90157,19 @@
         "blind"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        },
         {
           "relation": "modifies",
           "subject": "supported_skill",
@@ -89252,7 +90754,22 @@
         "fully_breaks",
         "armour"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
+        },
+        {
+          "relation": "requires",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break"
+        }
+      ]
     },
     {
       "id": "skill:Metadata/Items/Gems/SupportGemBreakPosture",
@@ -89285,7 +90802,36 @@
         "armour_break",
         "break_armour"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "daze",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "attack_hit",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
+        },
+        {
+          "relation": "requires",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break"
+        }
+      ]
     },
     {
       "id": "skill:Metadata/Items/Gem/SupportGemBrink",
@@ -89318,6 +90864,13 @@
         "heavy_stun"
       ],
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "scope": "outgoing"
+        },
         {
           "relation": "prevents",
           "subject": "supported_skill",
@@ -89359,6 +90912,13 @@
         "stun"
       ],
       "facts": [
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "scope": "outgoing"
+        },
         {
           "relation": "prevents",
           "subject": "supported_skill",
@@ -89450,6 +91010,14 @@
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
           "mechanic": "freeze",
           "target": "self",
           "scope": "incoming"
@@ -89461,6 +91029,12 @@
           "mechanic": "physical",
           "target": "self",
           "scope": "incoming"
+        },
+        {
+          "relation": "requires",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break"
         }
       ]
     },
@@ -90147,6 +91721,20 @@
           "mechanic": "fire"
         },
         {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "companion",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        },
+        {
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
@@ -90624,7 +92212,7 @@
           "delivery": "skill",
           "evidence": [
             {
-              "value": "reference only"
+              "value": "allowing it to inflict"
             }
           ]
         },
@@ -91594,7 +93182,7 @@
           "delivery": "generic_hit",
           "evidence": [
             {
-              "value": "reference only"
+              "value": "allowing it to inflict"
             }
           ]
         },
@@ -91676,7 +93264,7 @@
           "delivery": "generic_hit",
           "evidence": [
             {
-              "value": "reference only"
+              "value": "allowing it to inflict"
             }
           ]
         },
@@ -91732,6 +93320,24 @@
           "mechanic": "runic_ward"
         },
         {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun"
+        },
+        {
           "relation": "requires",
           "subject": "supported_skill",
           "confidence": "strong",
@@ -91784,6 +93390,20 @@
           "subject": "supported_skill",
           "confidence": "exact",
           "mechanic": "physical"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "daze",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "spell_hit",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
         },
         {
           "relation": "modifies",
@@ -92135,6 +93755,14 @@
               "value": "reference only"
             }
           ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
@@ -92523,6 +94151,22 @@
           "consumption": "optional_payoff"
         },
         {
+          "relation": "creates",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "chill",
+          "scope": "outgoing",
+          "target": "enemy",
+          "requires_any_mechanics": [
+            "power_charge"
+          ],
+          "evidence": [
+            {
+              "value": "runtime"
+            }
+          ]
+        },
+        {
           "relation": "has_property",
           "subject": "supported_skill",
           "confidence": "exact",
@@ -92538,7 +94182,7 @@
           "delivery": "skill",
           "evidence": [
             {
-              "value": "reference only"
+              "value": "allowing it to inflict"
             }
           ]
         },
@@ -93076,7 +94720,22 @@
         "warcry",
         "daze"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "daze",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "skill:Metadata/Items/Gem/SupportGemDazzle",
@@ -93939,12 +95598,39 @@
       ],
       "facts": [
         {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "scope": "incoming",
+          "target": "self",
+          "evidence": [
+            {
+              "value": "reference only"
+            }
+          ]
+        },
+        {
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
           "mechanic": "armour",
           "target": "self",
           "scope": "incoming"
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "target": "self",
+          "scope": "incoming"
+        },
+        {
+          "relation": "requires",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun"
         }
       ]
     },
@@ -94226,7 +95912,20 @@
         "crossbow",
         "heavy_stun"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun"
+        },
+        {
+          "relation": "requires",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun"
+        }
+      ]
     },
     {
       "id": "skill:Metadata/Items/Gems/SupportGemDrainAilments",
@@ -94679,6 +96378,20 @@
           "subject": "supported_skill",
           "confidence": "exact",
           "mechanic": "lightning"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "hinder",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
         },
         {
           "relation": "modifies",
@@ -95266,7 +96979,32 @@
         "endurance_charge",
         "heavy_stun"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun"
+        },
+        {
+          "relation": "requires",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun"
+        }
+      ]
     },
     {
       "id": "skill:Metadata/Items/Gem/SupportGemEnduringImpactTwo",
@@ -95302,7 +97040,32 @@
         "endurance_charge",
         "heavy_stun"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun"
+        },
+        {
+          "relation": "requires",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun"
+        }
+      ]
     },
     {
       "id": "skill:Metadata/Items/Gems/SupportGemEnergyBarrier",
@@ -95703,8 +97466,8 @@
           "subject": "supported_skill",
           "confidence": "exact",
           "mechanic": "poison",
-          "scope": "incoming",
-          "target": "self",
+          "scope": "outgoing",
+          "target": "enemy",
           "delivery": "generic_hit",
           "evidence": [
             {
@@ -96550,6 +98313,12 @@
           "confidence": "exact",
           "mechanic": "armour_break",
           "scope": "outgoing"
+        },
+        {
+          "relation": "requires",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break"
         }
       ]
     },
@@ -98051,7 +99820,7 @@
           "delivery": "generic_hit",
           "evidence": [
             {
-              "value": "reference only"
+              "value": "allowing it to inflict"
             }
           ]
         },
@@ -99710,6 +101479,20 @@
           "subject": "supported_skill",
           "confidence": "exact",
           "mechanic": "chaos"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "hinder",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "minion",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
         }
       ]
     },
@@ -99872,7 +101655,7 @@
           "delivery": "generic_hit",
           "evidence": [
             {
-              "value": "reference only"
+              "value": "allowing it to inflict"
             }
           ]
         }
@@ -100432,7 +102215,20 @@
         "slam",
         "shockwave"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun"
+        },
+        {
+          "relation": "requires",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun"
+        }
+      ]
     },
     {
       "id": "skill:Metadata/Items/Gem/SupportGemImpale",
@@ -102385,7 +104181,22 @@
         "pinned",
         "pin"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "pin",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "skill:Metadata/Items/Gem/SupportGemLongFuse",
@@ -102695,6 +104506,33 @@
           "confidence": "exact",
           "mechanic": "maim",
           "scope": "outgoing"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "mechanic": "maim",
+          "scope": "outgoing",
+          "target": "enemy",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "maim",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "attack_hit",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
         }
       ]
     },
@@ -102986,6 +104824,26 @@
           "mechanic": "physical"
         },
         {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
+        },
+        {
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
@@ -103047,6 +104905,26 @@
           "subject": "supported_skill",
           "confidence": "exact",
           "mechanic": "physical"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
@@ -104460,7 +106338,21 @@
         "hit",
         "daze"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "mechanic": "daze",
+          "scope": "outgoing",
+          "target": "enemy",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "skill:Metadata/Items/Gem/SupportGemOutmaneuver",
@@ -104522,6 +106414,15 @@
               "value": "reference only"
             }
           ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "condition": "parried_enemies",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
@@ -104710,6 +106611,20 @@
         "daze"
       ],
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "daze",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "attack_hit",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        },
         {
           "relation": "modifies",
           "subject": "supported_skill",
@@ -105226,6 +107141,20 @@
           "mechanic": "physical"
         },
         {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "pin",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        },
+        {
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
@@ -105284,6 +107213,20 @@
           "subject": "supported_skill",
           "confidence": "exact",
           "mechanic": "physical"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "pin",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
         },
         {
           "relation": "modifies",
@@ -105348,6 +107291,20 @@
           "subject": "supported_skill",
           "confidence": "exact",
           "mechanic": "physical"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "pin",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
         },
         {
           "relation": "modifies",
@@ -105861,7 +107818,14 @@
         "heavy_stun",
         "heavy_stunning"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun"
+        }
+      ]
     },
     {
       "id": "skill:Metadata/Items/Gems/SupportGemPracticalMagicTwo",
@@ -105898,7 +107862,14 @@
         "heavy_stun",
         "heavy_stunning"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun"
+        }
+      ]
     },
     {
       "id": "skill:Metadata/Items/Gem/SupportGemPracticedCombo",
@@ -107812,13 +109783,20 @@
           "subject": "supported_skill",
           "confidence": "strong",
           "mechanic": "armour_break",
-          "scope": "incoming",
-          "target": "self",
+          "scope": "outgoing",
           "evidence": [
             {
-              "value": "reference only"
+              "value": "allowing it to inflict"
             }
           ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
         }
       ]
     },
@@ -108283,7 +110261,7 @@
           "delivery": "attack_hit",
           "evidence": [
             {
-              "value": "reference only"
+              "value": "allowing it to inflict"
             }
           ]
         },
@@ -108507,6 +110485,14 @@
           "subject": "supported_skill",
           "confidence": "strong",
           "mechanic": "runic_ward"
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "prevents",
@@ -110769,7 +112755,15 @@
         "hit",
         "stun"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "scope": "outgoing"
+        }
+      ]
     },
     {
       "id": "skill:Metadata/Items/Gems/SupportGemOverpowerTwo",
@@ -110803,7 +112797,15 @@
         "hit",
         "stun"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "scope": "outgoing"
+        }
+      ]
     },
     {
       "id": "skill:Metadata/Items/Gems/SupportGemOverpowerThree",
@@ -110837,7 +112839,15 @@
         "hit",
         "stun"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "scope": "outgoing"
+        }
+      ]
     },
     {
       "id": "skill:Metadata/Items/Gem/SupportGemKnightsAnthem",
@@ -110935,13 +112945,20 @@
           "subject": "supported_skill",
           "confidence": "strong",
           "mechanic": "armour_break",
-          "scope": "incoming",
-          "target": "self",
+          "scope": "outgoing",
           "evidence": [
             {
-              "value": "reference only"
+              "value": "allowing it to inflict"
             }
           ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
@@ -110950,6 +112967,12 @@
           "mechanic": "physical",
           "target": "self",
           "scope": "incoming"
+        },
+        {
+          "relation": "requires",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break"
         }
       ]
     },
@@ -110986,6 +113009,15 @@
           "subject": "supported_skill",
           "confidence": "strong",
           "mechanic": "block",
+          "target": "self",
+          "scope": "incoming"
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "condition": "performing_action",
           "target": "self",
           "scope": "incoming"
         }
@@ -111224,10 +113256,25 @@
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "condition": "ignited_and_fully_armour_broken",
+          "target": "self",
+          "scope": "incoming"
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
           "mechanic": "ignite",
           "condition": "ignited_and_fully_armour_broken",
           "target": "self",
           "scope": "incoming"
+        },
+        {
+          "relation": "requires",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break"
         }
       ]
     },
@@ -111504,7 +113551,7 @@
           "delivery": "attack_hit",
           "evidence": [
             {
-              "value": "reference only"
+              "value": "allowing it to inflict"
             }
           ]
         },
@@ -112174,13 +114221,35 @@
           "subject": "supported_skill",
           "confidence": "strong",
           "mechanic": "armour_break",
-          "scope": "incoming",
-          "target": "self",
+          "scope": "outgoing",
+          "requires_any_mechanics": [
+            "frenzy_charge"
+          ],
           "evidence": [
             {
-              "value": "reference only"
+              "value": "allowing it to inflict"
             }
           ]
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
@@ -112475,7 +114544,17 @@
         "support",
         "stun"
       ],
-      "facts": []
+      "facts": [
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "condition": "performing_action",
+          "target": "self",
+          "scope": "incoming"
+        }
+      ]
     },
     {
       "id": "skill:Metadata/Items/Gem/SupportGemUndermine",
@@ -112518,13 +114597,6 @@
           "relation": "consumes",
           "subject": "supported_skill",
           "confidence": "exact",
-          "mechanic": "armour",
-          "consumption": "optional_payoff"
-        },
-        {
-          "relation": "consumes",
-          "subject": "supported_skill",
-          "confidence": "exact",
           "mechanic": "maim",
           "consumption": "optional_payoff"
         },
@@ -112533,6 +114605,22 @@
           "subject": "supported_skill",
           "confidence": "exact",
           "mechanic": "physical"
+        },
+        {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "exact",
+          "mechanic": "armour_break",
+          "scope": "outgoing",
+          "target": "enemy",
+          "requires_any_mechanics": [
+            "maim"
+          ],
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
         },
         {
           "relation": "modifies",
@@ -113100,10 +115188,30 @@
           "mechanic": "physical"
         },
         {
+          "relation": "inflicts",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "allowing it to inflict"
+            }
+          ]
+        },
+        {
           "relation": "modifies",
           "subject": "supported_skill",
           "confidence": "strong",
           "mechanic": "armour",
+          "target": "self",
+          "scope": "incoming"
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
           "target": "self",
           "scope": "incoming"
         },
@@ -113169,13 +115277,20 @@
           "subject": "supported_skill",
           "confidence": "strong",
           "mechanic": "armour_break",
-          "scope": "incoming",
-          "target": "self",
+          "scope": "outgoing",
           "evidence": [
             {
               "value": "reference only"
             }
           ]
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "armour_break",
+          "target": "self",
+          "scope": "incoming"
         },
         {
           "relation": "modifies",
@@ -113263,6 +115378,12 @@
           "subject": "supported_skill",
           "confidence": "strong",
           "mechanic": "guard"
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun"
         }
       ]
     },
@@ -113305,6 +115426,12 @@
           "subject": "supported_skill",
           "confidence": "strong",
           "mechanic": "guard"
+        },
+        {
+          "relation": "modifies",
+          "subject": "supported_skill",
+          "confidence": "strong",
+          "mechanic": "heavy_stun"
         }
       ]
     },
@@ -115464,6 +117591,21 @@
         }
       },
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "hinder",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "unique_mod"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -126553,6 +128695,21 @@
       "facts": [
         {
           "relation": "inflicts",
+          "subject": "player",
+          "confidence": "strong",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "unique_mod"
+            }
+          ]
+        },
+        {
+          "relation": "inflicts",
           "subject": "item",
           "confidence": "strong",
           "mechanic": "poison",
@@ -126729,6 +128886,19 @@
       },
       "facts": [
         {
+          "relation": "modifies",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "scope": "outgoing",
+          "evidence": [
+            {
+              "value": "against",
+              "kind": "unique_mod"
+            }
+          ]
+        },
+        {
           "relation": "occupies",
           "subject": "item",
           "confidence": "exact",
@@ -126749,6 +128919,18 @@
           "evidence": [
             {
               "value": "runtime",
+              "kind": "unique_mod"
+            }
+          ]
+        },
+        {
+          "relation": "requires",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "evidence": [
+            {
+              "value": "against",
               "kind": "unique_mod"
             }
           ]
@@ -129662,6 +131844,21 @@
         }
       },
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "unique_mod"
+            }
+          ]
+        },
         {
           "relation": "occupies",
           "subject": "item",
@@ -133937,6 +136134,21 @@
       },
       "facts": [
         {
+          "relation": "inflicts",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "unique_mod"
+            }
+          ]
+        },
+        {
           "relation": "occupies",
           "subject": "item",
           "confidence": "exact",
@@ -135252,6 +137464,18 @@
               "kind": "unique_mod"
             }
           ]
+        },
+        {
+          "relation": "requires",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "heavy_stun",
+          "evidence": [
+            {
+              "value": "against",
+              "kind": "unique_mod"
+            }
+          ]
         }
       ]
     },
@@ -135915,6 +138139,21 @@
         }
       },
       "facts": [
+        {
+          "relation": "inflicts",
+          "subject": "item",
+          "confidence": "strong",
+          "mechanic": "blind",
+          "scope": "outgoing",
+          "target": "enemy",
+          "delivery": "skill",
+          "evidence": [
+            {
+              "value": "runtime",
+              "kind": "unique_mod"
+            }
+          ]
+        },
         {
           "relation": "modifies",
           "subject": "item",

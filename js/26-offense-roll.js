@@ -1,7 +1,5 @@
-const NON_ROLLABLE_OFFENSE_IDS = new Set(['critical_hits', 'critical_hit']);
-
 const offenseNames = (entry) => [entry?.id, entry?.name, ...(entry?.aliases || [])].map((value) => String(value || '').trim()).filter(Boolean);
-const isRollableOffense = (entry) => !offenseNames(entry).some((value) => NON_ROLLABLE_OFFENSE_IDS.has(value.toLowerCase().replace(/[^a-z0-9]+/g, '_')));
+const isRollableOffense = (entry) => Boolean(entry && entry.rollable !== false);
 
 function resolveOffenseElements(data = window.DATA || {}) {
   return (Array.isArray(data.Offense) ? data.Offense : data.OffenseInventory?.elements || []).filter(Boolean);

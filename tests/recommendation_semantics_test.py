@@ -71,6 +71,41 @@ class AilmentApplicationGrammarTests(unittest.TestCase):
         consumed = parse_evidence("stat_id", "base_consume_enemy_shock_on_hit", "skill")
         self.assertFalse(any(f.get("relation") == "inflicts" and f.get("mechanic") == "shock" for f in consumed), consumed)
 
+    def test_setup_control_application_is_directional_and_conservative(self):
+        structured = parse_evidence("stat_id", "global_maim_on_hit", "skill")
+        described = parse_evidence("skill_description", "The explosion damages and Maims enemies.", "skill")
+        for facts in (structured, described):
+            matching = [fact for fact in facts if fact.get("relation") == "inflicts"
+                        and fact.get("mechanic") == "maim"]
+            self.assertTrue(matching, facts)
+            self.assertTrue(all(fact.get("scope") == "outgoing" and fact.get("target") == "enemy"
+                                for fact in matching), matching)
+
+        for text in (
+            "50% increased Damage against Maimed enemies.",
+            "Consumes Maim on Hit.",
+            "Supported Skills cannot Maim.",
+            "50% increased Maim effect and duration.",
+        ):
+            facts = parse_evidence("skill_description", text, "skill")
+            self.assertFalse(any(fact.get("relation") == "inflicts" and fact.get("mechanic") == "maim"
+                                 for fact in facts), (text, facts))
+
+    def test_consume_to_produce_preserves_conditional_causality(self):
+        facts = parse_evidence(
+            "stat_id", "consume_maim_on_hit_to_break_%_armour", "supported_skill"
+        )
+        self.assertTrue(any(fact.get("relation") == "consumes" and fact.get("mechanic") == "maim"
+                            for fact in facts), facts)
+        outputs = [fact for fact in facts if fact.get("relation") == "inflicts"
+                   and fact.get("mechanic") == "armour_break"]
+        self.assertEqual(1, len(outputs), facts)
+        self.assertEqual(["maim"], outputs[0].get("requires_any_mechanics"))
+        self.assertEqual("outgoing", outputs[0].get("scope"))
+        self.assertEqual("enemy", outputs[0].get("target"))
+        self.assertFalse(any(fact.get("relation") == "consumes" and fact.get("mechanic") == "armour"
+                             for fact in facts), facts)
+
     def test_completeness_warning_is_conservative_and_deterministic(self):
         sources = [{"kind": "description", "component": "Poison Cloud", "value": "Poisons enemies."}]
         expected = semantic_completeness_warnings(entity_id="skill:test", sources=sources, facts=[])
@@ -92,6 +127,21 @@ class AilmentApplicationGrammarTests(unittest.TestCase):
         mandatory = parse_evidence("description", "Must consume a Power Charge", "skill")
         self.assertTrue(any(f.get("consumption") == "optional_payoff" for f in optional))
         self.assertTrue(any(f.get("consumption") == "required_input" for f in mandatory))
+
+    def test_armour_break_transformations_preserve_typed_source_and_delivery(self):
+        cases = [
+            ("10% Armour Break equal to Physical Damage dealt on Critical Strike with Spells",
+             "critical_hits", "spell"),
+            ("50% Break Armour on Pin", "pin", None),
+            ("50% Armour Break of Armour on Heavy Stunning", "heavy_stun", None),
+        ]
+        for text, source, delivery in cases:
+            facts = parse_evidence("passive_line", text, "passive")
+            matches = [fact for fact in facts if fact.get("relation") == "inflicts"
+                       and fact.get("mechanic") == "armour_break"]
+            self.assertTrue(matches, (text, facts))
+            self.assertIn(source, matches[0].get("requires_any_mechanics") or [])
+            self.assertEqual(delivery, matches[0].get("delivery"))
 
     def test_incoming_damage_conversion_never_emits_an_outgoing_anchor(self):
         for source in ("physical", "fire", "cold", "lightning", "chaos"):
@@ -159,10 +209,35 @@ class GeneratedComponentPromotionTests(unittest.TestCase):
         semantic = lambda catalog: [(entity["id"], [{k: v for k, v in fact.items() if k != "evidence"} for fact in entity.get("facts") or []]) for entity in catalog["entities"]]
         self.assertEqual(semantic(self.full), semantic(self.runtime))
         self.assertEqual(2964, len(self.runtime["entities"]))
-        self.assertEqual(5458, sum(len(entity.get("facts") or []) for entity in self.runtime["entities"]))
+        self.assertEqual(5664, sum(len(entity.get("facts") or []) for entity in self.runtime["entities"]))
         for entity in self.runtime["entities"]:
             for fact in entity.get("facts") or []:
                 self.assertTrue(all(set(proof) <= {"kind", "value"} for proof in fact.get("evidence", [])))
+
+    def test_production_setup_provider_and_conditional_transformer_are_typed(self):
+        spearfield = self.by_name["Spearfield"]
+        maim = [fact for fact in spearfield["facts"] if fact.get("relation") == "inflicts"
+                and fact.get("mechanic") == "maim"]
+        self.assertTrue(maim, spearfield["facts"])
+        self.assertTrue(all(fact.get("scope") == "outgoing" and fact.get("target") == "enemy"
+                            and fact.get("confidence") in {"exact", "strong"} for fact in maim), maim)
+
+        undermine = self.by_name["Undermine"]
+        self.assertTrue(any(fact.get("relation") == "consumes" and fact.get("mechanic") == "maim"
+                            for fact in undermine["facts"]), undermine["facts"])
+        outputs = [fact for fact in undermine["facts"] if fact.get("relation") == "inflicts"
+                   and fact.get("mechanic") == "armour_break"]
+        self.assertTrue(outputs, undermine["facts"])
+        self.assertTrue(all("maim" in (fact.get("requires_any_mechanics") or [])
+                            for fact in outputs), outputs)
+
+        accessible_maim_skills = [entity for entity in self.full["entities"]
+            if entity.get("content_type") == "active_skill"
+            and not any(term in (entity.get("name") or "").lower() for term in ("[dnt]", "prototype"))
+            and any(fact.get("relation") == "inflicts" and fact.get("mechanic") == "maim"
+                    and fact.get("scope") == "outgoing" and fact.get("confidence") in {"exact", "strong"}
+                    for fact in entity.get("facts") or [])]
+        self.assertTrue(accessible_maim_skills)
 
     def test_non_applicators_stay_excluded(self):
         self.assertFalse(self.capability("Shockchain Arrow", "shock"))

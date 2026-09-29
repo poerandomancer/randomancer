@@ -30,6 +30,8 @@ OFFENSE_MECHANICS = {
     "shock",
     "electrocute",
     "critical_hits",
+    "heavy_stun",
+    "armour_break",
     "minion",
     "companion",
     "totem",
@@ -119,11 +121,13 @@ MECHANIC_ALIASES: list[tuple[str, tuple[str, ...]]] = [
     ("shock", ("shocked", "shock", "shocks")),
     ("electrocute", ("electrocute", "electrocution", "electrocuted")),
     ("ailment", ("ailments", "ailment")),
-    ("stun", ("heavy stun", "heavy_stun", "stunned", "stun")),
+    ("heavy_stun", ("heavy stunning", "heavy stun", "heavy_stun", "heavystun")),
+    ("stun", ("stunned", "stun")),
     ("warcry", ("warcries", "warcry")),
     ("curse", ("curses", "curse")),
     ("mark", ("marks", "mark")),
     ("maim", ("maimed", "maim")),
+    ("hinder", ("hindered", "hindering", "hinders", "hinder")),
     ("blind", ("blinded", "blind")),
     ("pin", ("pinned", "pin")),
     ("daze", ("dazed", "daze")),
@@ -183,6 +187,7 @@ COMPOUND_SUPPRESSIONS: dict[str, set[str]] = {
     "chaos": {"damage"},
     "life_leech": {"life"},
     "critical_hits": {"hit"},
+    "heavy_stun": {"stun"},
     "critical_damage": {"damage"},
     "maximum_resistance": {"resistance"},
     "elemental_resistance": {"elemental_damage", "resistance"},
@@ -613,6 +618,63 @@ def parse_taxonomy_damage_type(value: Any, subject: str = "skill") -> list[dict[
     ]
 
 
+def _consume_to_produce_facts(
+    value: Any, *, source_kind: str, subject: str, confidence: str
+) -> list[dict[str, Any]]:
+    """Parse one explicit consume-X-to-produce-Y clause without graph inference."""
+    normalized = normalized_phrase(value)
+    consumed = _consume_mechanics_from_text(normalized)
+    if not consumed:
+        return []
+    causal = re.search(
+        r"(?:consume|consumes|consuming|consumed)(?:_[a-z0-9]+){1,16}?"
+        r"_(?:to|causing|causes|cause)(?:_[a-z0-9]+){0,5}_"
+        r"(break|breaking|inflict|inflicts|apply|applies|create|creates|generate|generates|trigger|triggers)(?:_|$)",
+        normalized,
+    )
+    # Some authoritative descriptions use "..., Breaking ... in doing so"
+    # instead of the word "to". Requiring the causal tail avoids promoting an
+    # unrelated mechanic mentioned in a later sentence.
+    if not causal and "in_doing_so" in normalized:
+        causal = re.search(
+            r"(?:consume|consumes|consuming|consumed)(?:_[a-z0-9]+){1,20}?_"
+            r"(break|breaking|inflict|inflicts|apply|applies|create|creates|generate|generates|trigger|triggers)(?:_|$)",
+            normalized,
+        )
+    if not causal:
+        return []
+    tail = normalized[causal.start(1):]
+    outputs = mechanics_in(tail)
+    verb = causal.group(1)
+    if verb in {"break", "breaking"} and "armour" in mechanics_in(tail):
+        outputs = ["armour_break", *outputs]
+    conditional_enemy_outputs = {
+        "armour_break", "heavy_stun", "maim", "pin", "blind", "daze", "hinder",
+        "bleed", "poison", "ignite", "chill", "freeze", "shock", "electrocute",
+    }
+    outputs = list(dict.fromkeys(
+        "armour_break" if mechanic == "fully_broken_armour" else mechanic
+        for mechanic in outputs
+        if mechanic in conditional_enemy_outputs
+    ))
+    relation = "inflicts" if verb in {"break", "breaking", "inflict", "inflicts", "apply", "applies"} else "creates"
+    return [
+        make_fact(
+            relation,
+            subject=subject,
+            source_kind=source_kind,
+            source_value=value,
+            mechanic=output,
+            confidence=confidence,
+            scope="outgoing",
+            target="enemy",
+            requires_any_mechanics=consumed,
+        )
+        for output in outputs
+        if output not in consumed
+    ]
+
+
 def parse_stat_id(value: Any, subject: str = "player") -> list[dict[str, Any]]:
     normalized = normalized_phrase(value)
     if not normalized:
@@ -671,6 +733,24 @@ def parse_stat_id(value: Any, subject: str = "player") -> list[dict[str, Any]]:
             "inflicts", subject=subject, source_kind="stat_id", source_value=value,
             mechanic=mechanic, confidence="exact", scope="outgoing",
         ))
+
+    setup_application = re.search(
+        r"(?:^|_)(?:global_|local_|main_hand_|off_hand_|base_|support_|virtual_)*"
+        r"(?:chance_to_|chance_to_apply_|apply_)?(maim|pin|blind|daze|hinder)(?:ed)?"
+        r"(?:_on_hit|_on_critical_strike|_enemy|_enemies|_for_duration)(?:_|$)",
+        normalized,
+    )
+    if setup_application and "consume" not in normalized and not re.search(
+        r"(?:cannot|prevent|prevents|against|increased|more|effect|duration|threshold)(?:_|$)", normalized
+    ):
+        facts.append(make_fact(
+            "inflicts", subject=subject, source_kind="stat_id", source_value=value,
+            mechanic=setup_application.group(1), confidence="exact", scope="outgoing", target="enemy",
+        ))
+
+    facts.extend(_consume_to_produce_facts(
+        value, source_kind="stat_id", subject=subject, confidence="exact"
+    ))
 
     direct_ailment_eligibility = re.search(
         r"(?:^|_)(?:base_)?(?:physical|fire|cold|lightning|chaos)_damage_can_"
@@ -810,7 +890,17 @@ def parse_stat_id(value: Any, subject: str = "player") -> list[dict[str, Any]]:
         return merge_facts(facts)
 
     if "consume" in normalized:
+        conditional_outputs = {
+            fact.get("mechanic") for fact in facts
+            if fact.get("requires_any_mechanics") and fact.get("relation") in {"inflicts", "creates"}
+        }
         for mechanic in mechanics_in(value):
+            # In "consume Maim to break Armour", Armour names the causal
+            # output rather than another consumed input.
+            if mechanic in conditional_outputs or (
+                mechanic == "armour" and "armour_break" in conditional_outputs
+            ):
+                continue
             if mechanic not in {"damage", "attack", "spell", "hit"}:
                 facts.append(
                     make_fact(
@@ -921,6 +1011,14 @@ def parse_stat_id(value: Any, subject: str = "player") -> list[dict[str, Any]]:
     )
     if defensive_self:
         for fact in facts:
+            # A structured consume-to-break stat names Armour because it
+            # transforms an enemy state, not because it modifies the player's
+            # defensive Armour. Preserve that explicitly causal output.
+            if fact.get("mechanic") == "armour_break" and fact.get("scope") == "outgoing":
+                continue
+            if fact.get("relation") == "inflicts" and fact.get("scope") == "outgoing" \
+                    and fact.get("target") == "enemy":
+                continue
             if fact.get("relation") in {"inflicts", "modifies", "provides", "has_property"}:
                 fact["target"] = "self"
                 fact["scope"] = "incoming"
@@ -1193,6 +1291,56 @@ def _text_ailment_facts(
     return facts
 
 
+SETUP_CONTROL_TEXT_TERMS = {
+    "maim": r"maim|maims|maiming|maimed",
+    "pin": r"pin|pins|pinning|pinned",
+    "blind": r"blind|blinds|blinding|blinded",
+    "daze": r"daze|dazes|dazing|dazed",
+    "hinder": r"hinder|hinders|hindering|hindered",
+}
+
+
+def _text_setup_control_facts(
+    text: str, normalized: str, *, source_kind: str, subject: str
+) -> list[dict[str, Any]]:
+    if re.search(r"(?:^|_)(?:cannot|prevent|prevents|consume|consumes|consuming)(?:_|$)", normalized):
+        return []
+    facts: list[dict[str, Any]] = []
+    for mechanic, terms in SETUP_CONTROL_TEXT_TERMS.items():
+        explicit_verb = re.search(
+            rf"(?:^|_)(?:apply|applies|applying|inflict|inflicts|inflicting|cause|causes|causing|chance_to)"
+            rf"(?:_[a-z0-9]+){{0,7}}_(?:{terms})(?:_[a-z0-9]+){{0,3}}_(?:enemy|enemies|target|targets|them)(?:_|$)",
+            normalized,
+        )
+        direct_result = re.search(
+            rf"(?:^|_)(?:{terms})(?:_[a-z0-9]+){{0,2}}_(?:enemy|enemies|target|targets|them)(?:_|$)",
+            normalized,
+        )
+        enemy_passive = re.search(
+            rf"(?:^|_)(?:enemy|enemies|target|targets)(?:_[a-z0-9]+){{0,6}}_(?:are_)?(?:{terms})(?:_|$)",
+            normalized,
+        )
+        effect_delivery = re.search(
+            rf"(?:^|_)(?:{terms})(?:_[a-z0-9]+){{0,2}}_(?:bolt|bolts|explosion|projectile|projectiles)(?:_|$)",
+            normalized,
+        )
+        if not any((explicit_verb, direct_result, enemy_passive, effect_delivery)):
+            continue
+        # Afflicted-enemy payoff/scaling clauses are references, not application.
+        match = explicit_verb or direct_result or enemy_passive or effect_delivery
+        prefix = normalized[:match.start()].rstrip("_")
+        if re.search(r"(?:against|while|when|if|increased|more|effect|duration|threshold)(?:_[a-z0-9]+){0,5}$", prefix):
+            continue
+        facts.append(make_fact(
+            "inflicts", subject=subject, source_kind=source_kind, source_value=text,
+            mechanic=mechanic, confidence="strong", scope="outgoing", target="enemy",
+            delivery="attack_hit" if "attack" in normalized else (
+                "spell_hit" if "spell" in normalized else "skill"
+            ),
+        ))
+    return facts
+
+
 def parse_text(value: Any, source_kind: str, subject: str) -> list[dict[str, Any]]:
     text = str(value or "").strip()
     normalized = normalized_phrase(text)
@@ -1275,6 +1423,14 @@ def parse_text(value: Any, source_kind: str, subject: str) -> list[dict[str, Any
                     )
                 )
 
+    # Compound clauses carry two directed facts: their input is consumed and
+    # their output is available only when that input exists. Keep this outside
+    # the global prohibition guard because a support can validly say both
+    # "consume A to produce B" and "cannot itself inflict A".
+    facts.extend(_consume_to_produce_facts(
+        text, source_kind=source_kind, subject=subject, confidence="strong"
+    ))
+
     stored_damage_requirement = re.search(
         r"(?:store|stores|stored|storing)(?:_[a-z0-9]+){0,10}_(ignite|bleed|poison)_damage_(?:you_)?(?:deal|dealt)",
         normalized,
@@ -1300,10 +1456,19 @@ def parse_text(value: Any, source_kind: str, subject: str) -> list[dict[str, Any
                 subject=subject,
             )
         )
+        facts.extend(
+            _text_setup_control_facts(
+                text,
+                normalized,
+                source_kind=source_kind,
+                subject=subject,
+            )
+        )
 
         armour_break_application = re.search(
             r"(?:^|_)armour_break_(?:break|breaks|breaking)(?:_[a-z0-9]+){0,5}_armour(?:_|$)"
-            r"|(?:^|_)(?:break|breaks|breaking)_(?:enemy|enemies|target|targets|their)_armour(?:_|$)",
+            r"|(?:^|_)(?:break|breaks|breaking)_(?:(?:enemy|enemies|target|targets|their)_)?armour(?:_|$)"
+            r"|(?:^|_)armour_break(?:_[a-z0-9]+){0,8}_on_(?:critical|crit|pin|heavy_stun|heavy_stunning)(?:_|$)",
             normalized,
         )
         armour_break_prefix = ""
@@ -1316,6 +1481,13 @@ def parse_text(value: Any, source_kind: str, subject: str) -> list[dict[str, Any
             or re.search(r"(?:when|if|after)_(?:they|you|an?_enemy|the_enemy|the_target)(?:_[a-z0-9]+){0,5}$", armour_break_prefix)
         )
         if armour_break_application and not armour_break_is_context_only:
+            transformation_requirements = []
+            if re.search(r"(?:^|_)on_(?:critical|crit)(?:_|$)", normalized):
+                transformation_requirements.append("critical_hits")
+            if re.search(r"(?:^|_)on_pin(?:_|$)", normalized):
+                transformation_requirements.append("pin")
+            if re.search(r"(?:^|_)on_heavy_(?:stun|stunning)(?:_|$)|(?:^|_)on_heavy_stun(?:_|$)", normalized):
+                transformation_requirements.append("heavy_stun")
             facts.append(
                 make_fact(
                     "inflicts",
@@ -1325,8 +1497,32 @@ def parse_text(value: Any, source_kind: str, subject: str) -> list[dict[str, Any
                     mechanic="armour_break",
                     confidence="strong",
                     scope="outgoing",
+                    delivery="spell" if re.search(r"(?:^|_)with_spells?(?:_|$)", normalized) else None,
+                    requires_any_mechanics=transformation_requirements or None,
                 )
             )
+
+        # Heavy Stun is the completed state produced by Stun buildup. Treat
+        # explicit buildup as generation evidence and explicit "when Heavy
+        # Stun" clauses as directed payoff requirements.
+        if re.search(r"(?:build|builds|building)(?:_[a-z0-9]+){0,4}_stun", normalized):
+            facts.append(make_fact("modifies", subject=subject, source_kind=source_kind,
+                source_value=text, mechanic="heavy_stun", confidence="strong", scope="outgoing"))
+        if "heavy_stun" in normalized:
+            if re.search(r"(?:cause|causes|causing|apply|applies|inflict|inflicts)(?:_[a-z0-9]+){0,8}_heavy_stun", normalized):
+                facts.append(make_fact("inflicts", subject=subject, source_kind=source_kind,
+                    source_value=text, mechanic="heavy_stun", confidence="strong", scope="outgoing"))
+            if re.search(r"(?:when|after|against)(?:_[a-z0-9]+){0,8}_heavy_stun", normalized):
+                facts.append(make_fact("requires", subject=subject, source_kind=source_kind,
+                    source_value=text, mechanic="heavy_stun", confidence="strong"))
+
+        # Typed trigger/payoff phrasing for Broken Armour is distinct from the
+        # application parser above and must never be mistaken for application.
+        if "armour_break" in normalized and re.search(
+            r"(?:when|after|against)(?:_[a-z0-9]+){0,10}_(?:armour_break|fully_break|broken_armour)", normalized
+        ):
+            facts.append(make_fact("requires", subject=subject, source_kind=source_kind,
+                source_value=text, mechanic="armour_break", confidence="strong"))
 
         if re.search(
             r"(?:cause|causes|causing)(?:_[a-z0-9]+){0,5}_grenade(?:_grenades)?"
@@ -1490,9 +1686,24 @@ def parse_text(value: Any, source_kind: str, subject: str) -> list[dict[str, Any
     )
     if defensive_text:
         for fact in facts:
+            # Breaking an enemy's Armour is offensive even though the prose
+            # necessarily contains the defensive noun "Armour".
+            if fact.get("mechanic") == "armour_break" and fact.get("scope") == "outgoing":
+                continue
+            # Explicit enemy application remains offensive even when another
+            # sentence in the same joined description discusses a defensive
+            # threshold, duration, or Armour value.
+            if fact.get("relation") == "inflicts" and fact.get("scope") == "outgoing" \
+                    and fact.get("target") == "enemy":
+                continue
             if fact.get("relation") in {"inflicts", "modifies", "provides", "has_property"}:
                 fact["target"] = "self"
                 fact["scope"] = "incoming"
+    if not is_prohibition and 'armour_break_application' in locals() and armour_break_application:
+        for fact in facts:
+            if fact.get("relation") == "inflicts" and fact.get("mechanic") == "armour_break":
+                fact.pop("target", None)
+                fact["scope"] = "outgoing"
     actor = next((name for name in ("companion", "minion", "totem")
                   if re.search(rf"(?:^|_){name}s?(?:_|$)", normalized)), None)
     if actor:

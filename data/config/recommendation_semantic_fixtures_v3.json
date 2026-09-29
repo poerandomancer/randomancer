@@ -778,6 +778,27 @@
       "condition": "base_effect_only"
     },
     {
+      "entity_name": "Spearfield",
+      "relation": "inflicts",
+      "mechanic": "maim",
+      "scope": "outgoing",
+      "target": "enemy"
+    },
+    {
+      "entity_name": "Undermine",
+      "relation": "consumes",
+      "mechanic": "maim"
+    },
+    {
+      "entity_name": "Undermine",
+      "relation": "inflicts",
+      "mechanic": "armour_break",
+      "scope": "outgoing",
+      "requires_any_mechanics": [
+        "maim"
+      ]
+    },
+    {
       "entity_name": "Galvanic Shards",
       "relation": "prevents",
       "mechanic": "damage",

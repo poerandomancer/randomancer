@@ -4,6 +4,7 @@
     "Damage Type",
     "Ailment",
     "Scaling",
+    "Mechanic",
     "Archetype"
   ],
   "elements": [
@@ -115,6 +116,24 @@
       "cohesionNeutral": true,
       "attributes": {},
       "relations": {}
+    },
+    {
+      "id": "heavy_stun",
+      "name": "Heavy Stun",
+      "aliases": ["Heavy Stunning"],
+      "category": "Mechanic",
+      "tags": ["heavy stun", "stun", "buildup", "control", "payoff"],
+      "attributes": {"strength": 0.6, "dexterity": 0.2, "intelligence": 0.2},
+      "relations": {}
+    },
+    {
+      "id": "armour_break",
+      "name": "Armour Break",
+      "aliases": ["Broken Armour", "Break Armour"],
+      "category": "Mechanic",
+      "tags": ["armour break", "broken armour", "physical", "setup", "payoff"],
+      "attributes": {"strength": 0.5, "dexterity": 0.3, "intelligence": 0.2},
+      "relations": {"secondary": ["physical"]}
     },
     {
       "id": "minions",
