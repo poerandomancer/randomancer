@@ -148,6 +148,9 @@ test('supports require a plausible target in the rolled weapon ecosystem', () =>
   const result = selectBuildLeads(catalog([carrier, support('attack-support', 'Attack'), support('bow-support', 'Bow')]), snapshot);
   assert.ok(leadNames(result).includes('attack-support'));
   assert.equal(leadNames(result).includes('bow-support'), false);
+  assert.deepEqual(result.categories.supportIdeas.map((lead) => lead.id), ['attack-support']);
+  assert.equal(result.categories.supportIdeas[0].semanticRole, 'usefulTools');
+  assert.equal(BUILD_LEAD_COPY.categories.supportIdeas, 'Support Ideas');
 });
 
 test('granted active skills require an actually available granting source', () => {
@@ -241,4 +244,41 @@ test('production applicability audit keeps skills, unique weapons, ascendancies,
   assert.equal(coldMaceNames.includes('Firestorm'), false);
   assert.equal(coldMaceNames.includes('Skeletal Brute'), false);
   assert.equal(Object.values(coldMace.categories).flat().some((lead) => lead.contentType === 'active_skill'), false);
+});
+
+test('production Unarmed Physical preserves both modeled v3 access bridges and their providers', () => {
+  const result = productionFate('Chronomancer', 'Unarmed', 'physical', 'str_int', 'unarmed-access');
+  const skills = Object.values(result.categories).flat().filter((lead) => lead.contentType === 'active_skill');
+  const bridged = skills.filter((lead) => lead.skillAccess?.accessBridge);
+  assert.ok(bridged.some((lead) => lead.skillAccess.accessBridge.provider.name === 'Facebreaker'));
+  assert.ok(bridged.some((lead) => lead.skillAccess.accessBridge.provider.name === 'Hollow Palm Technique'));
+  assert.ok(bridged.some((lead) => lead.skillAccess.accessBridge.effectiveSkillFamily === 'mace'));
+  assert.ok(bridged.some((lead) => lead.skillAccess.accessBridge.effectiveSkillFamily === 'quarterstaff'));
+  assert.ok(bridged.every((lead) => ['mace', 'quarterstaff'].includes(lead.skillAccess.accessBridge.effectiveSkillFamily)));
+  assert.ok(bridged.every((lead) => lead.explanation.includes(lead.skillAccess.accessBridge.provider.name)));
+});
+
+test('production caster Physical restores v3 spell ecosystems without leaking martial attacks', () => {
+  const byId = new Map(productionCatalog.entities.map((entry) => [entry.id, entry]));
+  for (const weapon of ['Staff', 'Wand']) {
+    const result = productionFate('Chronomancer', weapon, 'physical', 'str_int', `caster-${weapon}`);
+    const skills = Object.values(result.categories).flat().filter((lead) => lead.contentType === 'active_skill');
+    assert.ok(skills.some((lead) => ['Bone Cage', 'Bonestorm', 'Entangle', 'Thrashing Vines', 'Tornado'].includes(lead.name)));
+    assert.ok(skills.every((lead) => {
+      const types = byId.get(lead.entityId)?.source_evidence?.active_skill_types || [];
+      return types.includes('Spell') || types.includes('Minion');
+    }));
+    assert.equal(skills.some((lead) => ['Armour Breaker', 'Rolling Slam', 'Sunder'].includes(lead.name)), false);
+  }
+});
+
+test('production Support Ideas remain visible without a displayed active skill', () => {
+  const result = productionFate('Chronomancer', 'Mace', 'cold', 'str_int', 'support-independent');
+  assert.equal(Object.values(result.categories).flat().some((lead) => lead.contentType === 'active_skill'), false);
+  assert.ok(result.categories.supportIdeas.length > 0);
+  assert.ok(result.categories.supportIdeas.some((lead) => lead.name === 'Cold Attunement'));
+  assert.ok(result.categories.supportIdeas.length <= 4);
+  assert.ok(result.categories.supportIdeas.every((lead) => lead.contentType === 'support_gem'));
+  assert.equal(leadNames(result).includes('Firestorm'), false);
+  assert.equal(leadNames(result).includes('Skeletal Brute'), false);
 });

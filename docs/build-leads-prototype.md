@@ -15,8 +15,8 @@ and the typed facts used as evidence. A mechanical connection instead contains t
 ordered entity names and the shared causal mechanic.
 
 The provisional semantic categories and all presentation copy are centralized in
-`BUILD_LEAD_COPY`: Direct Fits, Ways to Enable, Payoffs, Useful Tools, and Mechanical
-Connections. Entity type is separate metadata (`Skill`, `Support`, `Unique`, `Passive`,
+`BUILD_LEAD_COPY`: Direct Fits, Ways to Enable, Payoffs, Useful Tools, Support Ideas,
+and Mechanical Connections. Entity type is separate metadata (`Skill`, `Support`, `Unique`, `Passive`,
 `Keystone`, `Ascendancy Passive`, or `Granted Skill`) and is displayed beside the name.
 
 ## Selection and roles
@@ -31,9 +31,15 @@ whether an entity can belong to the rolled Fate:
 
 * Active skills must appear in the existing v3 cell analyzer's direct pool. This
   reuses granted access, current-content, crafting-pool, equipment delivery, and
-  martial/caster boundaries. A conversion neighborhood cannot promote another skill.
+  martial/caster boundaries. Build Leads consumes the resolved candidate instead of
+  rechecking raw equipment: modeled Unarmed → Mace/Quarterstaff access bridges and
+  caster spell delivery therefore survive. Bridge, provider, weapon-relationship, and
+  direct-proof metadata are retained on the lead. A semantic conversion neighborhood
+  still cannot promote another skill.
 * Support gems must target at least one primary-eligible v3 skill in the rolled weapon
-  ecosystem and satisfy their typed prerequisites on that carrier.
+  ecosystem and satisfy their typed prerequisites on that carrier. Qualified supports
+  are placed in a sparse, capped `supportIdeas` view even if none of those carriers is
+  displayed as an active-skill lead.
 * Unique weapons must resolve to the exact canonical rolled weapon family. Other
   uniques retain shared content, access, equipment, and contradiction checks.
 * Ascendancy passives require exact ownership. Ordinary passives and keystones retain
@@ -54,6 +60,8 @@ so a valid semantic edge cannot legalize an invalid endpoint.
 * **Useful Tools** modify the rolled mechanic or a close native neighbor, or are a
   weapon-native option opened by a real conversion source. They remain below direct
   fits and strong enablers.
+* **Support Ideas** retain their underlying semantic role as metadata while receiving
+  a dedicated player-facing section. This does not create or attach support packages.
 
 The graph starts at the rolled Offense. Native typed affinities such as Cold → Chill /
 Freeze are distance one. An exact/strong outgoing `converts` or `replaces` edge into a
@@ -91,7 +99,8 @@ With the current release catalog and a fixed reporting seed:
 * **Chronomancer + Mace + Cold** produces three item Direct Fits (Twisted Empyrean,
   Seeing Stars, and Frostbreath), six Ways to Enable, seven Useful Tools, and four
   connections. It surfaces no active skills: Firestorm and Skeletal Brute are excluded
-  by the v3 skill applicability boundary.
+  by the v3 skill applicability boundary. Support Ideas remain visible independently,
+  including Cold Attunement.
 * **Deadeye + Bow + Poison** produces four Direct Fits (Vine Arrow, Poisonburst Arrow,
   Gas Arrow, and Toxic Growth), six enablers, three payoffs, seven tools, and five
   causal connections.
@@ -102,6 +111,11 @@ With the current release catalog and a fixed reporting seed:
   enablers, seven tools, and two explicit connections.
 * **Chronomancer + Mace + Totems** surfaces Ancestral Warrior Totem and Shockwave Totem
   as the two applicable active-skill enablers, plus seven useful tools.
+* **Unarmed + Physical** draws from both explicitly modeled access profiles. Resolved
+  leads retain Facebreaker for Mace skills and Hollow Palm Technique for Quarterstaff
+  skills; unrelated weapon ecosystems remain unavailable.
+* **Staff/Wand + Physical** surface v3-approved caster skills such as Bone Cage,
+  Bonestorm, Tornado, and Thrashing Vines. Martial Mace attacks remain excluded.
 
 Remaining limitations are data-visible rather than papered over: some facts use broad
 damage types where a specific Chill/Freeze fact would improve precision; Minion facts

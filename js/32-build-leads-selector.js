@@ -16,6 +16,7 @@ const BUILD_LEAD_COPY = Object.freeze({
     enablers: 'Ways to Enable',
     payoffs: 'Payoffs',
     usefulTools: 'Useful Tools',
+    supportIdeas: 'Support Ideas',
     connections: 'Mechanical Connections'
   })
 });
@@ -33,8 +34,10 @@ const PAYOFF_RELATIONS = new Set(['requires', 'consumes']);
 const AMPLIFIER_RELATIONS = new Set(['modifies', 'has_property']);
 const WEAPON_FAMILIES = ['quarterstaff', 'crossbow', 'sceptre', 'talisman', 'staff', 'wand', 'spear',
   'flail', 'dagger', 'claw', 'sword', 'mace', 'axe', 'bow'];
-const ROLE_MINIMUMS = Object.freeze({ directFits: 78, enablers: 62, payoffs: 50, usefulTools: 42, connections: 68 });
-const TYPE_CAPS = Object.freeze({ directFits: 6, enablers: 6, payoffs: 5, usefulTools: 7, connections: 5 });
+const ROLE_MINIMUMS = Object.freeze({ directFits: 78, enablers: 62, payoffs: 50, usefulTools: 42,
+  supportIdeas: 42, connections: 68 });
+const TYPE_CAPS = Object.freeze({ directFits: 6, enablers: 6, payoffs: 5, usefulTools: 7,
+  supportIdeas: 4, connections: 5 });
 const OFFENSE_NEIGHBORS = Object.freeze({
   cold: ['chill', 'freeze'], fire: ['ignite'], lightning: ['shock', 'electrocute'],
   physical: ['bleed', 'armour_break', 'heavy_stun'], chaos: ['poison'],
@@ -140,7 +143,9 @@ function explicitWeaponEvidence(entity, snapshot) {
 function baseApplicability(entity, snapshot, relevantMechanics) {
   if (!entity || sourceBlocked(entity) || !belongsToAscendancy(entity, snapshot)
     || !passiveAccessible(entity, snapshot) || contradictsFate(entity, relevantMechanics)) return false;
-  if (['active_skill', 'support_gem', 'unique'].includes(entity.content_type)
+  // Active skills are resolved against v3 access profiles below. Reapplying raw
+  // equipment compatibility here would erase intentional Unarmed bridges.
+  if (['support_gem', 'unique'].includes(entity.content_type)
     && !evaluateCompatibilityV3(entity, snapshot).ok) return false;
   const itemFamily = uniqueWeaponFamily(entity);
   if (itemFamily && itemFamily !== rolledWeapon(snapshot)) return false;
@@ -158,12 +163,14 @@ function buildApplicableEntities(catalog, snapshot, relevantMechanics, options) 
   });
   const directSkillIds = new Set(arr(skillAnalysis.direct).map((candidate) => candidate.entity.id));
   const plausibleCarriers = arr(skillAnalysis.legal);
-  return base.filter((entity) => {
+  const applicable = base.filter((entity) => {
     if (entity.content_type === 'active_skill') return directSkillIds.has(entity.id);
     if (entity.content_type !== 'support_gem') return true;
     return plausibleCarriers.some((candidate) => supportTargetsSkill(entity, candidate.entity)
       && supportPackageRequirementsAreMet(candidate.entity, [entity]));
   });
+  return { entities: applicable, skillCandidates: new Map(arr(skillAnalysis.direct)
+    .map((candidate) => [candidate.entity.id, candidate])) };
 }
 
 // Establish a deliberately small neighborhood: native offense affinities are one
@@ -218,20 +225,20 @@ function explainPath(entity, path, role, weapon) {
   return `${title(path.relation)} ${mechanic}${path.distance ? ' through a related mechanic' : ''}.`;
 }
 
-function roleCandidate(entity, path, weaponMatch) {
+function roleCandidate(entity, path, weaponMatch, resolvedSkill) {
   const relation = path.relation;
   const direct = path.distance === 0;
   const classification = relation === 'has_property' ? 'identity' : relation;
   if (PAYOFF_RELATIONS.has(relation)) return { role: 'payoffs', base: direct ? 61 : 55, classification };
   if (relation === 'converts' || relation === 'replaces') return { role: 'enablers', base: direct ? 76 : 68, classification: 'transformation' };
   if (PRODUCER_RELATIONS.has(relation)) {
-    if (weaponMatch && direct && ['active_skill', 'unique'].includes(entity.content_type)) {
+    if ((weaponMatch || resolvedSkill) && direct && ['active_skill', 'unique'].includes(entity.content_type)) {
       return { role: 'directFits', base: 73, classification: 'multi_axis_direct' };
     }
     return { role: 'enablers', base: direct ? 65 : 57, classification: 'application' };
   }
   if (AMPLIFIER_RELATIONS.has(relation)) {
-    if (weaponMatch && direct && ['active_skill', 'unique'].includes(entity.content_type)) {
+    if ((weaponMatch || resolvedSkill) && direct && ['active_skill', 'unique'].includes(entity.content_type)) {
       return { role: 'directFits', base: 69, classification: 'multi_axis_identity' };
     }
     return { role: 'usefulTools', base: direct ? 50 : 48, classification: 'amplifier' };
@@ -239,14 +246,14 @@ function roleCandidate(entity, path, weaponMatch) {
   return null;
 }
 
-function analyzeEntity(entity, snapshot, neighborhood) {
-  const weaponMatch = explicitWeaponEvidence(entity, snapshot);
+function analyzeEntity(entity, snapshot, neighborhood, resolvedSkill = null) {
+  const weaponMatch = explicitWeaponEvidence(entity, snapshot) || Boolean(resolvedSkill?.accessBridge);
   const paths = arr(entity.facts).map((fact) => ({ fact, path: pathForFact(fact, neighborhood) }))
     .filter((entry) => entry.path).map(({ fact, path }) => ({ ...path, fact }));
   const candidates = paths.map((path) => {
-    const roleInfo = roleCandidate(entity, path, weaponMatch);
+    const roleInfo = roleCandidate(entity, path, weaponMatch, resolvedSkill);
     if (!roleInfo) return null;
-    const multiAxis = weaponMatch ? 24 : 0;
+    const multiAxis = (weaponMatch || resolvedSkill) ? 24 : 0;
     const ownedAscendancy = entity.content_type === 'ascendancy_passive' ? 12 : 0;
     const granted = arr(entity.facts).some((fact) => fact.relation === 'provides' && token(fact.mechanic) === 'granted_skill') ? 5 : 0;
     const distancePenalty = path.distance * 5;
@@ -257,11 +264,26 @@ function analyzeEntity(entity, snapshot, neighborhood) {
   candidates.sort((a, b) => b.score - a.score);
   const primary = candidates.find((candidate) => candidate.score >= ROLE_MINIMUMS[candidate.role]);
   if (!primary) return null;
+  const semanticRole = primary.role;
+  const accessExplanation = resolvedSkill?.accessBridge
+    ? `${resolvedSkill.accessBridge.provider.name} opens the ${title(resolvedSkill.accessBridge.effectiveSkillFamily)} skill ecosystem to Unarmed.`
+    : resolvedSkill?.coreProvider
+      ? `${resolvedSkill.coreProvider.name} grants access to this skill.`
+      : '';
   return {
     id: entity.source_id || entity.id, entityId: entity.id, name: entity.name,
     entityType: entityType(entity), contentType: entity.content_type,
-    role: primary.role, score: primary.score, axes: 1 + Number(weaponMatch),
-    explanation: explainPath(entity, primary.path, primary.role, rolledWeapon(snapshot)),
+    role: entity.content_type === 'support_gem' ? 'supportIdeas' : semanticRole,
+    semanticRole, score: primary.score, axes: 1 + Number(weaponMatch || resolvedSkill),
+    explanation: accessExplanation || explainPath(entity, primary.path, semanticRole, rolledWeapon(snapshot)),
+    ...(resolvedSkill ? { skillAccess: {
+      accessBridge: resolvedSkill.accessBridge || null,
+      coreProvider: resolvedSkill.coreProvider || null,
+      weaponRelationship: resolvedSkill.weaponRelationship || null,
+      directKind: resolvedSkill.directKind || null,
+      directProofs: arr(resolvedSkill.directProofs).map((proof) => ({ obligationId: proof.obligationId,
+        mechanic: proof.mechanic, relation: proof.relation, proofType: proof.proofType }))
+    } } : {}),
     relevancePath: { distance: primary.path.distance, relation: primary.path.relation,
       mechanic: primary.path.mechanic, sourceMechanic: primary.path.sourceMechanic || null,
       classification: primary.classification },
@@ -285,7 +307,16 @@ function selectCategory(items, category, seed) {
   const selected = [];
   let twoHopTools = 0;
   const connectionEndpoints = new Map();
+  if (category === 'directFits') {
+    const bridgeGroups = new Map();
+    for (const item of ranked) {
+      const provider = item.skillAccess?.accessBridge?.provider?.name;
+      if (provider && !bridgeGroups.has(provider)) bridgeGroups.set(provider, item);
+    }
+    selected.push(...bridgeGroups.values());
+  }
   for (const item of ranked) {
+    if (selected.includes(item)) continue;
     // Two-hop source options are valuable discovery, but must not crowd direct
     // amplifiers out of Useful Tools merely because many skills share a source.
     if (category === 'usefulTools' && item.relevancePath?.distance === 2) {
@@ -352,14 +383,17 @@ function selectBuildLeads(catalog, snapshot = {}, options = {}) {
   const offense = offenseMechanics(snapshot);
   const seed = options.selectionSeed || '';
   const preliminaryMechanics = new Set([...offense, ...[...offense].flatMap((mechanic) => arr(OFFENSE_NEIGHBORS[mechanic]))]);
-  const legalEntities = buildApplicableEntities(catalog, snapshot, preliminaryMechanics, options);
+  const applicability = buildApplicableEntities(catalog, snapshot, preliminaryMechanics, options);
+  const legalEntities = applicability.entities;
   const neighborhood = buildSemanticNeighborhood(legalEntities, offense);
   neighborhood.weapon = rolledWeapon(snapshot);
   // Re-run contradiction checks now that controlled conversion sources are known.
   const graphEntities = legalEntities.filter((entity) => !contradictsFate(entity, new Set(neighborhood.distance.keys())));
-  const analyzed = graphEntities.map((entity) => analyzeEntity(entity, snapshot, neighborhood)).filter(Boolean);
+  const analyzed = graphEntities.map((entity) => analyzeEntity(
+    entity, snapshot, neighborhood, applicability.skillCandidates.get(entity.id) || null
+  )).filter(Boolean);
   const categories = {};
-  for (const category of ['directFits', 'enablers', 'payoffs', 'usefulTools']) {
+  for (const category of ['directFits', 'enablers', 'payoffs', 'usefulTools', 'supportIdeas']) {
     const selected = selectCategory(analyzed.filter((lead) => lead.role === category), category, `${seed}:${category}`);
     if (selected.length) categories[category] = selected;
   }
@@ -372,9 +406,9 @@ function selectBuildLeads(catalog, snapshot = {}, options = {}) {
 
 function adaptBuildLeadsToSnapshot(result) {
   const categories = result?.categories || {};
-  const all = unique(['directFits', 'enablers', 'payoffs', 'usefulTools']
+  const all = unique(['directFits', 'enablers', 'payoffs', 'usefulTools', 'supportIdeas']
     .flatMap((category) => arr(categories[category]))
-    .map((entry) => entry.entityId)).map((id) => ['directFits', 'enablers', 'payoffs', 'usefulTools']
+    .map((entry) => entry.entityId)).map((id) => ['directFits', 'enablers', 'payoffs', 'usefulTools', 'supportIdeas']
       .flatMap((category) => arr(categories[category])).find((entry) => entry.entityId === id));
   return {
     buildLeads: result,
