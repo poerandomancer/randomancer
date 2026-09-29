@@ -1,10 +1,11 @@
 import { formatWeaponLine } from './01-meta-and-domready.js';
 import { buildGemDictionary, lookupGem } from './gem-utils.js';
 import { getClassIconPath } from './ascendancy-visuals.js';
+import { BUILD_LEAD_COPY } from './32-build-leads-selector.js';
 
 const CARD_TYPE_BUILD = 'build';
 const BUILD_CARD_FACES = Object.freeze({ FRONT: 'front', BACK: 'back' });
-const TOOLTIP_KEYS = new Set(['ACTIVE_SKILL', 'SUPPORT', 'UNIQUE', 'ASCENDANCY_PASSIVE', 'KEYSTONE', 'NOTABLE']);
+const TOOLTIP_KEYS = new Set(['ACTIVE_SKILL', 'SUPPORT', 'UNIQUE', 'ASCENDANCY_PASSIVE', 'KEYSTONE', 'NOTABLE', 'BUILD_LEAD']);
 const mountedCards = new WeakMap();
 
 let tooltipEl = null;
@@ -217,6 +218,18 @@ function deriveBuildCardModel(snapshot) {
     }))
   ].filter((entry) => entry.name);
 
+  const leadSlot = (entry) => ({ active_skill: 'ACTIVE_SKILL', support_gem: 'SUPPORT', unique: 'UNIQUE',
+    ascendancy_passive: 'ASCENDANCY_PASSIVE', keystone: 'KEYSTONE', passive: 'NOTABLE' }[entry?.contentType] || 'BUILD_LEAD');
+  const leadSections = snapshot.buildLeads?.categories
+    ? Object.entries(BUILD_LEAD_COPY.categories).map(([key, label]) => ({
+      label,
+      values: (snapshot.buildLeads.categories[key] || []).map((entry) => item(entry.name, {
+        slotKey: leadSlot(entry),
+        tipLines: [entry.explanation].filter(Boolean)
+      }))
+    })).filter((section) => section.values.length)
+    : null;
+
   return {
     type: CARD_TYPE_BUILD,
     title: snap.buildName || [snap.className, snap.ascendancy].filter(Boolean).join(' '),
@@ -228,7 +241,9 @@ function deriveBuildCardModel(snapshot) {
       { label: 'Offense', values: offense.map((name) => item(name)) }
     ],
     balance: normalizeBalance(snap.attributes),
-    backSections: [
+    backHeading: BUILD_LEAD_COPY.heading,
+    backSubheading: leadSections ? BUILD_LEAD_COPY.subheading : 'Optional starting points, not build requirements.',
+    backSections: leadSections || [
       { label: 'Skill Ideas', values: skills },
       { label: 'Unique Ideas', values: uniques },
       { label: 'Passive Ideas', values: passiveIdeas }
@@ -302,10 +317,10 @@ function renderHeader(model, actionsHtml) {
 }
 
 function renderFlipCta(isBack = false) {
-  const label = isBack ? 'Return to Build' : 'Flip card for Build Ideas';
+  const label = isBack ? 'Return to Build' : 'Flip card for Build Leads';
   return `
     <button type="button" class="rc-card__flip-cta${isBack ? ' rc-card__flip-cta--back' : ''}" data-card-action="flip" aria-label="${escapeHtml(label)}">
-      <span class="rc-card__flip-primary"><span class="rc-card__flip-arrow" aria-hidden="true">↻</span> ${isBack ? 'Return to Build' : 'FLIP CARD FOR BUILD IDEAS'}</span>
+      <span class="rc-card__flip-primary"><span class="rc-card__flip-arrow" aria-hidden="true">↻</span> ${isBack ? 'Return to Build' : 'FLIP CARD FOR BUILD LEADS'}</span>
       ${isBack ? '' : '<span class="rc-card__flip-subtext">Skills · Supports · Passives · Uniques</span>'}
     </button>
   `;
@@ -316,7 +331,7 @@ function renderBuildCard(model, options = {}) {
   const face = options.face === BUILD_CARD_FACES.BACK ? BUILD_CARD_FACES.BACK : BUILD_CARD_FACES.FRONT;
   const isBack = face === BUILD_CARD_FACES.BACK;
   const style = renderAttributeLightStyle(model.balance, model.artPath);
-  const label = isBack ? 'Return to Build' : 'Flip for Build Ideas';
+  const label = isBack ? 'Return to Build' : 'Flip for Build Leads';
   const stageClass = options.stageClass || '';
 
   if (!isBack) {
@@ -340,7 +355,7 @@ function renderBuildCard(model, options = {}) {
       <article class="rc-card rc-card--build rc-card--back" data-card-flip-surface="1" tabindex="0" role="button" aria-label="${escapeHtml(label)}"${style}>
         ${renderHeader(model, options.actionsHtml || '')}
         <div class="rc-card__body rc-card__body--back">
-          <div class="rc-card-ideas__intro">Optional starting points, not build requirements.</div>
+          <div class="rc-card-ideas__intro"><strong>${escapeHtml(model.backHeading || BUILD_LEAD_COPY.heading)}</strong><br>${escapeHtml(model.backSubheading || 'Optional starting points, not build requirements.')}</div>
           ${sections.length ? sections.map((section) => `<section class="rc-print-block${section.label === 'Skill Ideas' ? ' rc-print-block--skills' : ''}"><div class="rc-print-block__label">${escapeHtml(section.label)}</div><div class="rc-print-block__value">${section.label === 'Skill Ideas' ? renderSkillGroups(section.values, face) : renderValues(section.values, face)}</div></section>`).join('') : '<div class="rc-card-ideas__empty">No strong build ideas were found for this roll.</div>'}
           ${renderFlipCta(true)}
         </div>

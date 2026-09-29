@@ -3,8 +3,8 @@ import { renderSummaryFromSnapshot } from './02-summary-view.js';
 import { dataReady, ensureDataPreload } from './08-data-load.js';
 import { deriveWeaponFamilies, pickWeaponFamily } from './06-equipment.js';
 import { buildOffenseSnapshotFields, selectOffense } from './26-offense-roll.js';
-import { adaptRecommendationPackageV3ToSnapshot, selectRecommendationPackageV3, validateRecommendationCatalogV3 } from './30-recommendation-v3-selector.js';
-import { selectNonSkillRecommendations } from './31-non-skill-recommendation-selector.js';
+import { selectRecommendationPackageV3, validateRecommendationCatalogV3 } from './30-recommendation-v3-selector.js';
+import { adaptBuildLeadsToSnapshot, selectBuildLeads } from './32-build-leads-selector.js';
 import { selectBuildFlavor } from './build-flavor.js';
 import { selectBuildName } from './build-name.js';
 import { buildPresentationContext } from './build-presentation-context.js';
@@ -90,8 +90,10 @@ function drawBuild(dataWrap, { random = Math.random } = {}) {
   const validation = validateRecommendationCatalogV3(catalog);
   if (validation.ok) {
     const recommendation = selectRecommendationPackageV3(catalog, draw, { offenseInventory: data.OffenseInventory || {}, criticalProfiles: data.recommendationCriticalProfilesV3 || {}, selectionSeed: selectionSeed() });
-    draw = { ...draw, ...adaptRecommendationPackageV3ToSnapshot(recommendation) };
-    draw = { ...draw, ...selectNonSkillRecommendations(catalog, draw, recommendation, { selectionSeed: recommendation.selectionSeed }) };
+    // Keep the package result as a temporary diagnostics/compatibility boundary,
+    // but present independently-ranked discovery leads rather than its prescribed package.
+    const leads = selectBuildLeads(catalog, draw, { selectionSeed: recommendation.selectionSeed });
+    draw = { ...draw, recommendationPackage: recommendation, ...adaptBuildLeadsToSnapshot(leads) };
   } else {
     draw.recommendationError = validation.reason || 'Recommendation catalog is unavailable.';
   }
