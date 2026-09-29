@@ -7,70 +7,86 @@ no longer adapted into the player-facing recommendations.
 
 ## Result shape
 
-`selectBuildLeads()` returns a `build-leads-v1.0.0` object with the selection seed,
+`selectBuildLeads()` returns a `build-leads-v1.1.0` object with the selection seed,
 the normalized Fate axes, and a sparse `categories` object. Categories with no lead
 above the threshold do not exist. Each entity lead contains its catalog identity,
 content type, semantic role, score, number of matched axes, deterministic explanation,
 and the typed facts used as evidence. A mechanical connection instead contains the
 ordered entity names and the shared causal mechanic.
 
-The provisional categories and all presentation copy are centralized in
-`BUILD_LEAD_COPY`: Direct Fits, Ways to Enable, Mechanical Connections, Unique Tools,
-Support Ideas, Passive Leads, Ascendancy Hooks, and Payoffs.
+The provisional semantic categories and all presentation copy are centralized in
+`BUILD_LEAD_COPY`: Direct Fits, Ways to Enable, Payoffs, Useful Tools, and Mechanical
+Connections. Entity type is separate metadata (`Skill`, `Support`, `Unique`, `Passive`,
+`Keystone`, `Ascendancy Passive`, or `Granted Skill`) and is displayed beside the name.
 
 ## Selection and roles
 
-The selector starts with the enriched v3 catalog and preserves its content, access,
-weapon/equipment, passive-tree, ascendancy, and contradiction gates. Exact or strong
-typed facts are required. Generic retrieval tags do not establish relevance.
+The selector first builds a legal graph from the enriched v3 catalog. Content, access,
+weapon/equipment, granted-source, passive-tree, ascendancy, and contradiction checks
+are hard gates. Relevance is evaluated only after those gates. Exact or strong typed
+facts create graph edges; retrieval tags never establish relevance.
 
-* **Direct Fits** are active skills with explicit rolled-weapon evidence and an action
-  fact (`fulfills`, `inflicts`, `creates`, `provides`, or `generates`) for the Offense.
+* **Direct Fits** have explicit rolled-weapon evidence plus direct Offense identity or
+  production. They can be skills, matching unique weapons, or granted-skill providers.
 * **Ways to Enable** apply or provide the Offense, or explicitly convert another
   mechanic into it. They establish a route that was not already present.
 * **Payoffs** have `requires` or `consumes` evidence. They use an established state and
   are deliberately classified after, rather than as, first-step enablers.
-* **Supporting tools** use explicit modification/property evidence. Uniques, passives,
-  and owned ascendancy nodes retain type-specific presentation categories.
+* **Useful Tools** modify the rolled mechanic or a close native neighbor, or are a
+  weapon-native option opened by a real conversion source. They remain below direct
+  fits and strong enablers.
 
-Scores reward an additional 30 points for each rolled axis beyond Offense, 38 for an
-explicit conversion, 30 for application/provision, 24 for a payoff, and 12 for an
-amplifier. This makes explicit Weapon + Offense evidence outrank a generic one-axis
-modifier. The current display threshold is 42.
+The graph starts at the rolled Offense. Native typed affinities such as Cold → Chill /
+Freeze are distance one. An exact/strong outgoing `converts` or `replaces` edge into a
+distance-zero/one mechanic may expose its source at distance two. This permits a real
+Fire → Cold converter to make a Fire Mace option discoverable without arbitrarily
+expanding through every tag. `provides`, `creates`, `generates`, `inflicts`, `grants`,
+`enables`, `requires`, `consumes`, `modifies`, and `has_property` edges are then scored
+according to semantic role and path distance.
 
-There are no minimum counts or fallback fillers. Per-category maximums only constrain
-display density and differ by category. Selection randomness is seed-stable and is
-only used to order already-qualified candidates inside an eight-point quality band.
-Consequently a category can contain one lead, several leads, or be absent altogether.
+Scoring uses absolute, role-specific minimums. Direct multi-axis identity and
+application score highest, transformations and application mechanisms establish
+enablers, downstream requirements establish payoffs, and modifiers qualify as useful
+tools at a lower threshold. Weapon and owned-ascendancy axes add bonuses, while each
+semantic hop incurs a penalty.
+
+There are no minimum counts, winner-relative bands, or fallback fillers. Every item is
+first tested against its role's absolute minimum. Per-category maximums constrain only
+display density. Seeded randomness breaks exact-score ties after qualification; a high
+winner cannot remove another independently qualified lead. Consequently a category can
+contain one lead, several leads, or be absent altogether.
 
 ## Mechanical connections
 
-A connection is formed only when one qualified entity has exact/strong
+A connection is formed from the broader legal graph when one entity has exact/strong
 `creates`/`provides`/`generates`/`inflicts` evidence and another qualified entity has
 exact/strong `requires`/`consumes` evidence for the same normalized mechanic. The
-result is a two-entity causal edge, not a package. It may coexist with its endpoint
-entities when both remain useful independently.
+result is a two-entity causal edge, not a package. Conversion connections also join an
+explicit converter to a weapon-native entity on its source side. Connection endpoints
+do not both need to clear individual display thresholds.
 
 ## Current data observations
 
 With the current release catalog and a fixed reporting seed:
 
-* **Chronomancer + Mace + Cold** produces no Direct Fits or Ascendancy Hooks. It does
-  surface Cold enablers, Frostbreath and Seeing Stars as Unique Tools, several payoffs,
-  and typed producer-to-payoff connections. This appropriately exposes that the
-  catalog currently has weak direct Cold/Mace and Chronomancer evidence rather than
-  manufacturing a primary skill.
+* **Chronomancer + Mace + Cold** now produces three item Direct Fits (Twisted Empyrean,
+  Seeing Stars, and Frostbreath), six Ways to Enable, five Payoffs, seven Useful Tools
+  including Rime and Cold Penetration, and five connections. It does not manufacture a
+  Direct Fit skill.
 * **Deadeye + Bow + Poison** produces four Direct Fits (Vine Arrow, Poisonburst Arrow,
   Gas Arrow, and Toxic Growth), multiple explicit Poison enablers, six qualified
   Unique Tools, a payoff, and causal connections.
 * **Invoker + Quarterstaff + Freeze** produces Wave of Frost as a Direct Fit, several
   Freeze enablers, four Unique Tools, the owned `I am the Blizzard...` hook, payoffs,
   and causal connections.
-* **Infernalist + Sceptre + Minions** currently produces no qualified categories. This
-  reveals a catalog limitation: much Minion data describes actors, delivery, or broad
-  tags without exact/strong facts directly naming the rolled `minion` mechanic.
+* **Warbringer + Mace + Electrocute** has no forced Direct Fit but surfaces six
+  enablers, five payoffs, seven tools, and five explicit connections.
+* **Chronomancer + Mace + Totems** surfaces Ancestral Warrior Totem and Shockwave Totem
+  as enablers, Spell Totem as a payoff, and setup/payoff connections.
 
-The benchmark also shows that some catalog facts use a broad damage type where a more
-specific Chill/Freeze fact would improve explanations and role precision. The
-prototype intentionally does not infer through those gaps or hard-code benchmark
-entities.
+Remaining limitations are data-visible rather than papered over: some facts use broad
+damage types where a specific Chill/Freeze fact would improve precision; Minion facts
+remain substantially sparser than Totem facts; and the committed Twisted Empyrean
+entity does not currently carry the `kalguuran` provenance tag consumed by the shared
+release filter. The selector continues to call that filter and adds no replacement
+availability assumption or hard-coded benchmark substitution.

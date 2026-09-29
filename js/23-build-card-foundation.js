@@ -224,6 +224,7 @@ function deriveBuildCardModel(snapshot) {
     ? Object.entries(BUILD_LEAD_COPY.categories).map(([key, label]) => ({
       label,
       values: (snapshot.buildLeads.categories[key] || []).map((entry) => item(entry.name, {
+        prefix: entry.entityType ? entry.entityType.toUpperCase() : '',
         slotKey: leadSlot(entry),
         tipLines: [entry.explanation].filter(Boolean)
       }))
