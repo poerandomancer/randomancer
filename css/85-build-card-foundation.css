@@ -21,10 +21,10 @@
 .rc-card-balance__label{
   margin-bottom:.35rem;
   color:var(--gold);
-  font-size:.72rem;
-  letter-spacing:.12em;
+  font-size:.66rem;
+  letter-spacing:.18em;
   text-transform:uppercase;
-  font-weight:500;
+  font-weight:400;
 }
 .rc-card-balance__bar{
   height:6px;
@@ -91,7 +91,7 @@
 }
 .rc-skill-group__skill{
   grid-column:2;
-  font-weight:500;
+  font-weight:400;
 }
 .rc-skill-group__supports{
   display:inline-grid;
