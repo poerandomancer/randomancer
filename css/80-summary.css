@@ -283,6 +283,10 @@
   --rc-card-title:#f4dfae;
   --rc-card-meta:rgba(226,202,151,.72);
   --rc-card-text:rgba(242,237,228,.94);
+  --rc-card-edge-dye:
+    radial-gradient(ellipse at center, transparent 52%, rgba(200,54,42,calc(var(--rc-light-str) * .28)) 100%),
+    radial-gradient(ellipse at center, transparent 52%, rgba(48,164,77,calc(var(--rc-light-dex) * .28)) 100%),
+    radial-gradient(ellipse at center, transparent 52%, rgba(54,104,220,calc(var(--rc-light-int) * .28)) 100%);
   position:relative;
   transform-origin:50% 50%;
   backface-visibility:hidden;
@@ -296,6 +300,7 @@
   color: var(--ink);
   border:1px solid var(--rc-card-border);
   background:
+    var(--rc-card-edge-dye),
     radial-gradient(ellipse 92% 38% at 50% 14%, rgba(255,225,164,0.1), transparent 72%),
     linear-gradient(180deg, rgba(255,244,218,0.07), rgba(255,244,218,0.012) 30%, rgba(7,6,8,0.28) 100%),
     linear-gradient(160deg, var(--rc-card-surface-top), var(--rc-card-surface-bottom));
@@ -359,6 +364,7 @@
 }
 .rc-card--build.rc-card--back{
   background:
+    var(--rc-card-edge-dye),
     linear-gradient(180deg, rgba(255,244,218,0.03), rgba(255,244,218,0.01) 24%, rgba(0,0,0,0.18) 100%),
     linear-gradient(160deg, rgba(0,0,0,0.98), rgba(6,6,8,0.99));
 }
