@@ -276,6 +276,13 @@
   --rc-light-str:0;
   --rc-light-dex:0;
   --rc-light-int:0;
+  --rc-card-surface-top:rgba(43,31,27,.88);
+  --rc-card-surface-bottom:rgba(13,11,13,.92);
+  --rc-card-border:rgba(224,184,96,.34);
+  --rc-card-divider:rgba(218,177,94,.16);
+  --rc-card-title:#f4dfae;
+  --rc-card-meta:rgba(226,202,151,.72);
+  --rc-card-text:rgba(242,237,228,.94);
   position:relative;
   transform-origin:50% 50%;
   backface-visibility:hidden;
@@ -287,11 +294,13 @@
   aspect-ratio: 806 / 1375;
   min-height:0;
   color: var(--ink);
-  border:2px solid rgba(220,178,86,0.38);
+  border:1px solid var(--rc-card-border);
   background:
     radial-gradient(ellipse 92% 38% at 50% 14%, rgba(255,225,164,0.1), transparent 72%),
-    linear-gradient(180deg, rgba(255,244,218,0.08), rgba(255,244,218,0.015) 30%, rgba(7,6,8,0.38) 100%),
-    linear-gradient(160deg, rgba(35,25,23,0.98), rgba(15,12,14,0.99));
+    linear-gradient(180deg, rgba(255,244,218,0.07), rgba(255,244,218,0.012) 30%, rgba(7,6,8,0.28) 100%),
+    linear-gradient(160deg, var(--rc-card-surface-top), var(--rc-card-surface-bottom));
+  -webkit-backdrop-filter:blur(1.5px) saturate(.9);
+  backdrop-filter:blur(1.5px) saturate(.9);
   box-shadow:
     inset 1px 1px 0 rgba(255,245,218,0.22),
     inset -2px -3px 0 rgba(30,16,12,0.58),
@@ -349,26 +358,28 @@
   opacity:.56;
 }
 .rc-card--build.rc-card--back{
-  background:
-    linear-gradient(180deg, rgba(255,244,218,0.03), rgba(255,244,218,0.01) 24%, rgba(0,0,0,0.18) 100%),
-    linear-gradient(160deg, rgba(0,0,0,0.98), rgba(6,6,8,0.99));
+  --rc-card-surface-top:rgba(38,29,26,.9);
+  --rc-card-surface-bottom:rgba(12,11,13,.93);
 }
 .rc-card--build.rc-card--back::before{
   background:
     radial-gradient(circle at 50% 18%, rgba(255,235,187,0.08), transparent 28%),
-    linear-gradient(180deg, rgba(0,0,0,0.14), rgba(0,0,0,0.2));
+    linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0.24)),
+    var(--card-art) center 44%/72% auto no-repeat;
+  background-blend-mode:soft-light, multiply, screen;
+  filter:saturate(.55) sepia(.2) brightness(.58);
+  opacity:.28;
 }
 .rc-card--build.rc-card--back::after{
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.018), rgba(255,255,255,0) 24%),
-    radial-gradient(circle at 20% 20%, rgba(255,246,214,0.04) 0, rgba(255,246,214,0.01) 12%, transparent 38%),
-    radial-gradient(circle at 78% 74%, rgba(34,24,18,0.12) 0, rgba(34,24,18,0.04) 18%, transparent 46%),
-    repeating-linear-gradient(115deg, rgba(255,244,218,0.02) 0 2px, rgba(28,21,18,0.028) 2px 4px, transparent 4px 9px),
-    url('/images/card-texture-back.png') center/cover no-repeat;
-  background-blend-mode: screen, soft-light, multiply, soft-light, normal;
-  opacity:.5;
-  mix-blend-mode:normal;
-  filter: contrast(1.2) brightness(.68) saturate(.8);
+    radial-gradient(ellipse 90% 38% at 50% 16%, rgba(255,232,180,0.12), transparent 72%),
+    linear-gradient(135deg, rgba(255,244,211,0.07), transparent 34%, rgba(5,4,6,0.18) 100%),
+    repeating-linear-gradient(115deg, rgba(255,244,218,0.024) 0 2px, rgba(28,21,18,0.03) 2px 4px, transparent 4px 9px),
+    url('/images/card-texture-front.png') center/cover no-repeat;
+  background-blend-mode:screen, soft-light, soft-light, normal;
+  opacity:.46;
+  mix-blend-mode:soft-light;
+  filter:contrast(1.3) brightness(.82) saturate(.85);
 }
 .rc-card--challenge::before{
   background:
@@ -408,10 +419,10 @@
 .rc-card__hero::after{
   content:"";
   display:block;
-  width:84px;
+  width:76px;
   height:1px;
   margin:.9rem auto 0;
-  background: linear-gradient(90deg, transparent, rgba(244,223,174,0.7), transparent);
+  background:linear-gradient(90deg, transparent, var(--rc-card-divider), rgba(244,223,174,.38), var(--rc-card-divider), transparent);
 }
 .rc-card__title{
   margin:0;
@@ -419,14 +430,16 @@
   font-size: clamp(1.28rem, 2.9vw, 1.82rem);
   font-weight:600;
   line-height:1.16;
-  letter-spacing:.035em;
-  color:#ffe9b8;
-  text-shadow:0 1px 0 rgba(255,248,224,.16), 0 2px 20px rgba(0,0,0,0.44), 0 0 20px rgba(221,169,74,.16);
+  letter-spacing:.045em;
+  color:var(--rc-card-title);
+  text-shadow:0 1px 12px rgba(0,0,0,.34);
 }
 .rc-card__subtitle{
   margin:.7rem auto 0;
   max-width:25rem;
-  color: rgba(236,227,214,0.88);
+  color:rgba(236,227,214,.76);
+  font-style:italic;
+  font-weight:400;
   line-height:1.5;
   font-size:.92rem;
 }
@@ -448,8 +461,8 @@
   margin:.12rem 0 0;
   padding:.72rem .45rem .66rem;
   border:0;
-  border-top:1px solid rgba(212,170,80,.28);
-  border-bottom:1px solid rgba(212,170,80,.28);
+  border-top:1px solid var(--rc-card-divider);
+  border-bottom:1px solid var(--rc-card-divider);
   background:linear-gradient(90deg, transparent, rgba(168,119,39,.075), transparent);
   color:var(--gold);
   font:inherit;
@@ -462,7 +475,7 @@
   font-size:clamp(.9rem, 2.5vw, 1rem);
   font-weight:600;
   line-height:1.3;
-  letter-spacing:.065em;
+  letter-spacing:.045em;
 }
 .rc-card__flip-arrow{ display:inline-block; }
 .rc-card__flip-subtext{
@@ -493,7 +506,7 @@
 .rc-print-block,
 .rc-contract__clause{
   padding:.58rem 0 .68rem;
-  border-top:1px solid rgba(212,170,80,0.14);
+  border-top:1px solid var(--rc-card-divider);
 }
 .rc-card__body > :first-child,
 .rc-contract > :first-child{
@@ -502,7 +515,8 @@
 }
 .rc-print-row__label,
 .rc-print-block__label{
-  color: rgba(244,223,174,0.78);
+  color:var(--rc-card-meta);
+  font-weight:500;
   text-transform:uppercase;
   letter-spacing:.16em;
   font-size:.68rem;
@@ -512,14 +526,16 @@
 .rc-print-block__value,
 .rc-contract__line{
   line-height:1.62;
-  color:#f2ede4;
+  color:var(--rc-card-text);
+  font-weight:400;
   max-width:30rem;
   margin:0 auto;
 }
 .rc-print-block__value{ margin-top:.15rem; }
 
 .rc-name{
-  color:#f5eee0;
+  color:var(--rc-card-text);
+  font-weight:400;
   white-space:normal;
 }
 .rc-name.has-tip{
@@ -652,7 +668,16 @@
   .card-overlay .rm-info-dialog{ width:min(400px, calc(100% - 30px)); }
   .card-overlay__body,
   .card-overlay__error{ width:min(calc(100vw - 32px), 360px); }
-  .rc-card{ padding:.9rem .82rem .88rem; border-radius:24px; }
+  .rc-card{
+    --rc-card-surface-top:rgba(43,31,27,.93);
+    --rc-card-surface-bottom:rgba(13,11,13,.96);
+    padding:.9rem .82rem .88rem;
+    border-radius:24px;
+  }
+  .rc-card--build.rc-card--back{
+    --rc-card-surface-top:rgba(38,29,26,.94);
+    --rc-card-surface-bottom:rgba(12,11,13,.97);
+  }
   .rc-card__actions{ top:.58rem; right:.5rem; }
   .rc-card__hero{ padding:2.55rem 1.7rem .92rem; }
   .rc-card__title{ font-size: clamp(1.18rem, 5vw, 1.58rem); }

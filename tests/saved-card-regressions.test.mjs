@@ -89,7 +89,7 @@ test('Build Ideas tooltip ownership is cleared across card renders', () => {
 
 test('build cards present an in-card flip CTA without duplicate keyboard flips', () => {
   for (const source of [foundation, summaryView]) {
-    assert.match(source, /FLIP CARD FOR BUILD IDEAS/);
+    assert.match(source, /Flip for Build Ideas/);
     assert.match(source, /Skills · Supports · Passives · Uniques/);
     assert.match(source, /Return to Build/);
     assert.doesNotMatch(source, /card-flip-indicator/);

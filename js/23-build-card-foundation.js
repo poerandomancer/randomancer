@@ -316,7 +316,7 @@ function renderFlipCta(isBack = false) {
   const label = isBack ? 'Return to Build' : 'Flip card for Build Ideas';
   return `
     <button type="button" class="rc-card__flip-cta${isBack ? ' rc-card__flip-cta--back' : ''}" data-card-action="flip" aria-label="${escapeHtml(label)}">
-      <span class="rc-card__flip-primary"><span class="rc-card__flip-arrow" aria-hidden="true">↻</span> ${isBack ? 'Return to Build' : 'FLIP CARD FOR BUILD IDEAS'}</span>
+      <span class="rc-card__flip-primary"><span class="rc-card__flip-arrow" aria-hidden="true">↻</span> ${isBack ? 'Return to Build' : 'Flip for Build Ideas'}</span>
       ${isBack ? '' : '<span class="rc-card__flip-subtext">Skills · Supports · Passives · Uniques</span>'}
     </button>
   `;

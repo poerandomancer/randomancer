@@ -24,6 +24,7 @@
   font-size:.72rem;
   letter-spacing:.12em;
   text-transform:uppercase;
+  font-weight:500;
 }
 .rc-card-balance__bar{
   height:6px;
@@ -90,7 +91,7 @@
 }
 .rc-skill-group__skill{
   grid-column:2;
-  font-weight:600;
+  font-weight:500;
 }
 .rc-skill-group__supports{
   display:inline-grid;
