@@ -358,28 +358,26 @@
   opacity:.56;
 }
 .rc-card--build.rc-card--back{
-  --rc-card-surface-top:rgba(38,29,26,.9);
-  --rc-card-surface-bottom:rgba(12,11,13,.93);
+  background:
+    linear-gradient(180deg, rgba(255,244,218,0.03), rgba(255,244,218,0.01) 24%, rgba(0,0,0,0.18) 100%),
+    linear-gradient(160deg, rgba(0,0,0,0.98), rgba(6,6,8,0.99));
 }
 .rc-card--build.rc-card--back::before{
   background:
     radial-gradient(circle at 50% 18%, rgba(255,235,187,0.08), transparent 28%),
-    linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0.24)),
-    var(--card-art) center 44%/72% auto no-repeat;
-  background-blend-mode:soft-light, multiply, screen;
-  filter:saturate(.55) sepia(.2) brightness(.58);
-  opacity:.28;
+    linear-gradient(180deg, rgba(0,0,0,0.14), rgba(0,0,0,0.2));
 }
 .rc-card--build.rc-card--back::after{
   background:
-    radial-gradient(ellipse 90% 38% at 50% 16%, rgba(255,232,180,0.12), transparent 72%),
-    linear-gradient(135deg, rgba(255,244,211,0.07), transparent 34%, rgba(5,4,6,0.18) 100%),
-    repeating-linear-gradient(115deg, rgba(255,244,218,0.024) 0 2px, rgba(28,21,18,0.03) 2px 4px, transparent 4px 9px),
-    url('/images/card-texture-front.png') center/cover no-repeat;
-  background-blend-mode:screen, soft-light, soft-light, normal;
-  opacity:.46;
-  mix-blend-mode:soft-light;
-  filter:contrast(1.3) brightness(.82) saturate(.85);
+    linear-gradient(180deg, rgba(255,255,255,0.018), rgba(255,255,255,0) 24%),
+    radial-gradient(circle at 20% 20%, rgba(255,246,214,0.04) 0, rgba(255,246,214,0.01) 12%, transparent 38%),
+    radial-gradient(circle at 78% 74%, rgba(34,24,18,0.12) 0, rgba(34,24,18,0.04) 18%, transparent 46%),
+    repeating-linear-gradient(115deg, rgba(255,244,218,0.02) 0 2px, rgba(28,21,18,0.028) 2px 4px, transparent 4px 9px),
+    url('/images/card-texture-back.png') center/cover no-repeat;
+  background-blend-mode:screen, soft-light, multiply, soft-light, normal;
+  opacity:.5;
+  mix-blend-mode:normal;
+  filter:contrast(1.2) brightness(.68) saturate(.8);
 }
 .rc-card--challenge::before{
   background:
@@ -689,10 +687,6 @@
     --rc-card-surface-bottom:rgba(13,11,13,.96);
     padding:.9rem .82rem .88rem;
     border-radius:24px;
-  }
-  .rc-card--build.rc-card--back{
-    --rc-card-surface-top:rgba(38,29,26,.94);
-    --rc-card-surface-bottom:rgba(12,11,13,.97);
   }
   .rc-card__actions{ top:.58rem; right:.5rem; }
   .rc-card__hero{ padding:2.55rem 1.7rem .92rem; }
