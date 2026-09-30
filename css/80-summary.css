@@ -365,6 +365,7 @@
 .rc-card--build.rc-card--back{
   background:
     var(--rc-card-edge-dye),
+    radial-gradient(ellipse 92% 38% at 50% 14%, rgba(255,225,164,0.1), transparent 72%),
     linear-gradient(180deg, rgba(255,244,218,0.03), rgba(255,244,218,0.01) 24%, rgba(0,0,0,0.18) 100%),
     linear-gradient(160deg, rgba(0,0,0,0.98), rgba(6,6,8,0.99));
 }
